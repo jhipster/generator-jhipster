@@ -18,7 +18,7 @@ Rds.prototype.createDatabase = function createDatabase(params, callback) {
             const rdsSecurityGroupId = data.rdsSecurityGroupId;
 
             if (!rdsSecurityGroupId) {
-                callback(null, { message: `Database ${dbName} already exists` });
+                callback(null, { message: `Database ${dbName} already exists (based on security group)` });
             } else {
                 authorizeSecurityGroupIngress({ rdsSecurityGroupId }, (err) => {
                     if (err) {

@@ -160,10 +160,10 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>) {
         result.subscribe((res: HttpResponse<I<%= entityAngularName %>>) =>
-            this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+            this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
-    private onSaveSuccess(result: I<%= entityAngularName %>) {
+    private onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }

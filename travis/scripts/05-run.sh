@@ -44,9 +44,7 @@ launchCurlOrProtractor() {
     until [ "$retryCount" -ge "$maxRetry" ]
     do
         result=0
-        if [[ -f "gulpfile.js" ]]; then
-            gulp itest --no-notification
-        elif [[ -f "tsconfig.json" ]]; then
+        if [[ -f "tsconfig.json" ]]; then
             ls -al node_modules/webdriver-manager/selenium/
             yarn e2e
         fi

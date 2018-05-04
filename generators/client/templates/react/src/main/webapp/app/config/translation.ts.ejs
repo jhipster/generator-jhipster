@@ -40,6 +40,17 @@ const savedLocale = Storage.local.get('locale', '<%= nativeLanguage %>');
 TranslatorContext.setDefaultLocale('<%= nativeLanguage %>');
 TranslatorContext.setRenderInnerTextForMissingKeys(false);
 
+<%_ if(enableI18nRTL) { _%>
+const languages: any = {
+  <%_ getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value)).forEach((ln, i) => { _%>
+    '<%= ln.value %>': { name: '<%= ln.dispName %>', rtl: <%= ln.rtl || false %> }<%= i !== languages.length - 1 ? ',' : '' %>
+  <%_ }); _%>
+  // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
+};
+
+export const isRTL = (lang: string): boolean => languages[lang] && languages[lang].rtl;
+<%_ } _%>
+
 export const locales = Object.keys(translations);
 
 export const registerLocales = store => {

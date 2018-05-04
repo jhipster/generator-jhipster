@@ -26,7 +26,6 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
         // TODO To remove after final Spring Boot 2 release
         maven { url "https://repo.spring.io/milestone" }
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -198,18 +197,19 @@ repositories {
     <%_ } _%>
     // TODO To remove after final Spring Boot 2 release
     maven { url "https://repo.spring.io/milestone" }
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
 dependencies {
+    // Use ", version: jhipster_dependencies_version, changing: true" if you want
+    // to use a SNAPSHOT release instead of a stable release
+    compile group: "io.github.jhipster", name: "jhipster-framework"
+
     // TODO To remove after final Spring Boot 2 release
     compile "javax.xml.bind:jaxb-api"
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
-    // TODO remove the "changing: true" when the JHipster server library is released
-    compile group: "io.github.jhipster", name: "jhipster", version: jhipster_dependencies_version, changing: true
     compile "io.dropwizard.metrics:metrics-core"
     <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
     compile "io.dropwizard.metrics:metrics-jcache"
@@ -297,7 +297,7 @@ dependencies {
     compile "net.java.dev.jna:jna"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%>"
+    compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     compile "org.springframework.cloud:spring-cloud-stream"
@@ -308,7 +308,7 @@ dependencies {
     compile ("org.springframework.boot:spring-boot-starter-web") {
         exclude module: 'spring-boot-starter-tomcat'
     }
-    <%_ if (reactive === true) { _%>
+    <%_ if (applicationType === 'reactive') { _%>
     compile "org.springframework.boot:spring-boot-starter-webflux"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-undertow"
@@ -318,7 +318,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.zalando:problem-spring-web"
     <%_ if (databaseType === 'cassandra') { _%>
-    compile "com.google.guava:guava:18.0"
     compile "com.datastax.cassandra:cassandra-driver-core"
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
@@ -362,6 +361,9 @@ dependencies {
     compile "org.springframework.security:spring-security-jwt"
         <%_ } _%>
     <%_ } _%>
+    <%_ if (authenticationType === 'session') { _%>
+    compile "com.google.guava:guava"
+    <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     compile "io.jsonwebtoken:jjwt"
     <%_ } _%>
@@ -371,10 +373,10 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     compile "com.github.mongobee:mongobee"
-    compile "com.google.guava:guava"
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
-        compile "com.github.differentway:couchmove"
+    compile "com.github.differentway:couchmove"
+    compile "com.couchbase.client:java-client"
     <%_ } _%>
     compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'

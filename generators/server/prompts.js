@@ -163,10 +163,6 @@ function askForServerSideOpts(meta) {
                         name: 'MongoDB'
                     },
                     {
-                        value: 'cassandra',
-                        name: 'Cassandra'
-                    },
-                    {
                         value: 'couchbase',
                         name: '[BETA] Couchbase'
                     }
@@ -177,6 +173,12 @@ function askForServerSideOpts(meta) {
                     opts.push({
                         value: 'no',
                         name: 'No database'
+                    });
+                }
+                if (response.authenticationType !== 'oauth2') {
+                    opts.push({
+                        value: 'cassandra',
+                        name: 'Cassandra'
                     });
                 }
                 return opts;
@@ -225,7 +227,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'infinispan',
-                    name: '[BETA] Yes, with the Infinispan (hybrid cache, for multiple nodes)'
+                    name: '[BETA] Yes, with the Infinispan implementation (hybrid cache, for multiple nodes)'
                 },
                 {
                     value: 'no',
@@ -335,10 +337,6 @@ function askForOptionalItems(meta) {
     const applicationType = this.applicationType;
     const choices = [];
     const defaultChoice = [];
-    choices.push({
-        name: 'Reactive APIs, using Spring Webflux',
-        value: 'reactive:true'
-    });
     if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
         choices.push({
             name: 'Search engine using Elasticsearch',
@@ -374,7 +372,6 @@ function askForOptionalItems(meta) {
     if (choices.length > 0) {
         this.prompt(PROMPTS).then((prompt) => {
             this.serverSideOptions = prompt.serverSideOptions;
-            this.reactive = this.getOptionFromArray(this.serverSideOptions, 'reactive');
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
             this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');

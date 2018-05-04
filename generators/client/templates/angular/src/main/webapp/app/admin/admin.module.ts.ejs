@@ -28,7 +28,6 @@ import { <%=angularXAppName%>SharedModule } from 'app/shared';
 import {
     adminState,
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-    AuditResolvePagingParams,
     AuditsComponent,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
@@ -59,7 +58,6 @@ import {
     <%_ } _%>
     LogsService,
     <%_ if (!skipUserManagement) { _%>
-    UserResolvePagingParams,
     UserMgmtResolve,
     UserResolve
     <%_ } _%>
@@ -104,7 +102,6 @@ import {
     ],
     providers: [
         <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-        AuditResolvePagingParams,
         AuditsService,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>ConfigurationService,
@@ -115,7 +112,6 @@ import {
         <%_ } _%>
         LogsService,
         <%_ if (!skipUserManagement) { _%>
-        UserResolvePagingParams,
         UserResolve,
         UserMgmtResolve
         <%_ } _%>

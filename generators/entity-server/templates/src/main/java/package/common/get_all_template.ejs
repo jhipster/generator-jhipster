@@ -72,7 +72,7 @@
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
         <%_ } _%>
     <%_ } _%>
-        return new ResponseEntity<>(<% if (!viaService && dto === 'mapstruct' && fieldsContainOwnerManyToMany) { %><%= entityListToDtoListReference %>(page.getContent())<% } else { %>page.getContent()<% } %>, headers, HttpStatus.OK);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     <%_ } _%>
     }
 <%_ } _%>

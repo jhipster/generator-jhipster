@@ -818,7 +818,8 @@ describe('JHipster generator', () => {
 
             it('creates expected files with default application name', () => {
                 assert.file([
-                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`
+                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/ApplicationWebXml.java`
                 ]);
                 assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`, /public class Application/);
             });

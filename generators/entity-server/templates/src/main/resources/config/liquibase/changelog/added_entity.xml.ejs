@@ -47,7 +47,11 @@
         Added the entity <%= entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-1" author="jhipster">
+        <%_ if (typeof javadoc == 'undefined') { _%>
         <createTable tableName="<%= entityTableName %>">
+        <%_ } else { _%>
+        <createTable tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
+        <%_ } _%>
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (idx in fields) {
@@ -101,7 +105,11 @@
                 }
             }
             %>
+            <%_ if (typeof fields[idx].javadoc == 'undefined') { _%>
             <column name="<%=columnName %>" type="<%=columnType %>">
+            <%_ } else { _%>
+            <column name="<%=columnName %>" type="<%=columnType %>" remarks="<%- formatAsLiquibaseRemarks(fields[idx].javadoc) %>">
+            <%_ } _%>
                 <%_ if (unique) { _%>
                 <constraints nullable="<%= nullable %>" unique="true" />
                 <%_ } else { _%>

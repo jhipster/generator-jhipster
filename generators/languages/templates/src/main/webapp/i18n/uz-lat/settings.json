@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "[<b>{{username}}</b>] sozlamalari",
+        "form": {
+            "firstname": "Ism",
+            "firstname.placeholder": "Ismingiz",
+            "lastname": "Familiya",
+            "lastname.placeholder": "Familiyangiz",
+            "language": "Til",
+            "button": "Saqlash"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Xatolik yuz berdi!</strong> Sozlamalar saqlanmadi.",
+                "emailexists": "<strong>Email band!</strong> Iltimos, boshqasini kiriting."
+            },
+            "success": "<strong>Sozlamalar saqlandi!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Ism kiriting.",
+                    "minlength": "Ism uzunligi kamida 1 harf bo'lsin",
+                    "maxlength": "Ism uzunligi ko'pida 50 harf bo'lsin"
+                },
+                "lastname": {
+                    "required": "Familiya kiriting.",
+                    "minlength": "Familiya uzunligi kamida 1 harf bo'lsin",
+                    "maxlength": "Familiya uzunligi ko'pida 50 harf bo'lsin"
+                }
+            }
+        }
+    }
+}

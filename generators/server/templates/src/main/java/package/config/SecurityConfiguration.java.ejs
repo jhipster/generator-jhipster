@@ -40,15 +40,17 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.http.HttpMethod;
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 <%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+<%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+<%_ } _%>
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType === 'jwt') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
@@ -236,11 +238,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
             <%_ } _%>
-            .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()<% if (websocket === 'spring-websocket') { %>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()<% } %>
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/v2/api-docs/**").permitAll()
             .antMatchers("/swagger-resources/configuration/ui").permitAll()

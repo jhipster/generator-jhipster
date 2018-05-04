@@ -45,6 +45,7 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}components/form/uib-pagination.config.js`);
     }
     if (generator.isJhipsterVersionLessThan('5.0.0')) {
+        generator.removeFile(`${ANGULAR_DIR}/app.route.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/account.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/auth-jwt.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/auth-session.service.ts`);
@@ -139,13 +140,12 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.config.delete('hibernateCache');
     }
     if (generator.isJhipsterVersionLessThan('5.0.0')) {
-        generator.removeFile(`${javaDir}/ApplicationWebXml.java`);
-        generator.removeFile(`${javaDir}/config/ThymeleafConfiguration.java`);
-        generator.removeFile(`${mainResourceDir}/mails/activationEmail.html`);
-        generator.removeFile(`${mainResourceDir}/mails/creationEmail.html`);
-        generator.removeFile(`${mainResourceDir}/mails/passwordResetEmail.html`);
-        generator.removeFile(`${mainResourceDir}/mails/socialRegistrationValidationEmail.html`);
-        generator.removeFile(`${testResourceDir}/mail/testEmail.html`);
+        generator.removeFile(`${javaDir}config/ThymeleafConfiguration.java`);
+        generator.removeFile(`${mainResourceDir}mails/activationEmail.html`);
+        generator.removeFile(`${mainResourceDir}mails/creationEmail.html`);
+        generator.removeFile(`${mainResourceDir}mails/passwordResetEmail.html`);
+        generator.removeFile(`${mainResourceDir}mails/socialRegistrationValidationEmail.html`);
+        generator.removeFile(`${testResourceDir}mail/testEmail.html`);
         generator.removeFile('gradle/mapstruct.gradle');
     }
 }

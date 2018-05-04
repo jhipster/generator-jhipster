@@ -18,8 +18,13 @@
 -%>
 import { expect } from 'chai';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import thunk from 'redux-thunk';
+import axios from 'axios';
+import * as sinon from 'sinon';
+import configureStore from 'redux-mock-store';
+import promiseMiddleware from 'redux-promise-middleware';
 
-import authentication, { ACTION_TYPES } from 'app/shared/reducers/authentication';
+import authentication, { ACTION_TYPES, getSession<% if (authenticationType !== 'oauth2') { %>, login<% } %> } from 'app/shared/reducers/authentication';
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {
@@ -44,18 +49,18 @@ describe('Authentication reducer tests', () => {
     });
   });
 
-  describe('Requests', () =>{
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  describe('Requests', () => {
     it('should detect a request', () => {
-      <%_ if (authenticationType !== 'oauth2') { _%>
       expect(authentication(undefined, { type: REQUEST(ACTION_TYPES.LOGIN) })).to.contain({
         loading: true
       });
-      <%_ } _%>
       expect(authentication(undefined, { type: REQUEST(ACTION_TYPES.GET_SESSION) })).to.contain({
         loading: true
       });
     });
   });
+  <%_ } _%>
 
   describe('Success', () => {
     <%_ if (authenticationType !== 'oauth2') { _%>
@@ -63,13 +68,15 @@ describe('Authentication reducer tests', () => {
       const toTest = authentication(undefined, { type: SUCCESS(ACTION_TYPES.LOGIN) });
       expect(toTest).to.contain({
         loading: false,
+        <%_ if (authenticationType !== 'oauth2') { _%>
         loginError: false,
-        showModalLogin: false,
-        loginSuccess: true
+        loginSuccess: true,
+        <%_ } _%>
+        showModalLogin: false
       });
     });
-
     <%_ } _%>
+
     it('should detect a success on get session and be authenticated', () => {
       const payload = { data: { activated: true } };
       const toTest = authentication(undefined, { type: SUCCESS(ACTION_TYPES.GET_SESSION), payload });
@@ -104,8 +111,8 @@ describe('Authentication reducer tests', () => {
       });
       expect(isAccountEmpty(toTest));
     });
-
     <%_ } _%>
+
     it('should detect a failure', () => {
       const payload = 'Something happened.';
       const toTest = authentication(undefined, { type: FAILURE(ACTION_TYPES.GET_SESSION), payload });
@@ -126,9 +133,11 @@ describe('Authentication reducer tests', () => {
       expect(toTest).to.contain({
         loading: false,
         isAuthenticated: false,
+        <%_ if (authenticationType !== 'oauth2') { _%>
         loginSuccess: false,
-        errorMessage: null,
         loginError: false,
+        <%_ } _%>
+        errorMessage: null,
         redirectMessage: null,
         showModalLogin: true
       });
@@ -141,9 +150,11 @@ describe('Authentication reducer tests', () => {
       expect(toTest).to.contain({
         loading: false,
         isAuthenticated: false,
+        <%_ if (authenticationType !== 'oauth2') { _%>
         loginSuccess: false,
-        errorMessage: null,
         loginError: false,
+        <%_ } _%>
+        errorMessage: null,
         redirectMessage: message,
         showModalLogin: true
       });
@@ -159,6 +170,29 @@ describe('Authentication reducer tests', () => {
         isAuthenticated: false
       });
     });
+  });
 
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      store = mockStore({});
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.GET_SESSION)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.GET_SESSION),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getSession()).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
   });
 });

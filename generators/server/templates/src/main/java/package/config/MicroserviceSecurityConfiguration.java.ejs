@@ -37,13 +37,13 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Import(SecurityProblemSupport.class)
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final TokenProvider tokenProvider;
 
     private final SecurityProblemSupport problemSupport;
 
-    public MicroserviceSecurityConfiguration(TokenProvider tokenProvider, SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(TokenProvider tokenProvider, SecurityProblemSupport problemSupport) {
         this.tokenProvider = tokenProvider;
         this.problemSupport = problemSupport;
     }
@@ -80,6 +80,7 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
             .authorizeRequests()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/swagger-resources/configuration/ui").permitAll()
         .and()
@@ -119,14 +120,14 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
+public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     private final OAuth2Properties oAuth2Properties;
 
     <%_ if (applicationType === 'gateway') { _%>
     private final CorsFilter corsFilter;
 
     <%_ } _%>
-    public MicroserviceSecurityConfiguration(OAuth2Properties oAuth2Properties<%_ if (applicationType === 'gateway') { _%>, CorsFilter corsFilter<%_ } _%>) {
+    public SecurityConfiguration(OAuth2Properties oAuth2Properties<%_ if (applicationType === 'gateway') { _%>, CorsFilter corsFilter<%_ } _%>) {
         this.oAuth2Properties = oAuth2Properties;
         <%_ if (applicationType === 'gateway') { _%>
         this.corsFilter = corsFilter;
@@ -153,9 +154,9 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
-            .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/swagger-resources/configuration/ui").permitAll();
     }
@@ -204,7 +205,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Import(SecurityProblemSupport.class)
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerAdapter {
+public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
     private static final String OAUTH2_PRINCIPAL_ATTRIBUTE = "preferred_username";
 
@@ -214,7 +215,7 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
 
     private final SecurityProblemSupport problemSupport;
 
-    public MicroserviceSecurityConfiguration(ResourceServerProperties resourceServerProperties,
+    public SecurityConfiguration(ResourceServerProperties resourceServerProperties,
         SecurityProblemSupport problemSupport) {
         this.resourceServerProperties = resourceServerProperties;
         this.problemSupport = problemSupport;
@@ -269,9 +270,9 @@ public class MicroserviceSecurityConfiguration extends ResourceServerConfigurerA
         .and()
             .requestMatcher(authorizationHeaderRequestMatcher())
             .authorizeRequests()
-            .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
+            .antMatchers("/management/info").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
     }
 }

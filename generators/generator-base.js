@@ -83,7 +83,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-element-to-menu',
                     splicable: [`<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                                 <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
-                                    <i class="fa fa-${glyphiconName}"></i>&nbsp;
+                                    <i class="fas fa-${glyphiconName}"></i>&nbsp;
                                     <span${enableTranslation ? ` jhiTranslate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`
@@ -143,7 +143,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-element-to-admin-menu',
                     splicable: [`<li>
                         <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
-                            <i class="fa fa-${glyphiconName}" aria-hidden="true"></i>&nbsp;
+                            <i class="fas fa-${glyphiconName}" aria-hidden="true"></i>&nbsp;
                             <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                         </a>
                     </li>`
@@ -189,25 +189,22 @@ module.exports = class extends PrivateBase {
                     splicable: [
                         this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
+                             |                            <i class="fas fa-fw fa-asterisk" aria-hidden="true"></i>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
                     ]
                 }, this);
-            } else {
+            } else if (this.clientFramework === 'react') {
                 // React
                 entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/header.tsx`;
                 jhipsterUtils.rewriteFile({
                     file: entityMenuPath,
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
-                        this.stripMargin(`|(
-                        |        <DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
-                        |          <FaAsterisk />&nbsp;
-                        |          ${_.startCase(routerName)}
-                        |        </DropdownItem>
-                        |      ),`)
+                        this.stripMargin(`|<DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
+                        |        <FontAwesomeIcon icon="asterisk" />&nbsp; ${_.startCase(routerName)}
+                        |      </DropdownItem>,`)
                     ]
                 }, this);
             }
@@ -260,7 +257,7 @@ module.exports = class extends PrivateBase {
                         this.stripMargin(microServiceName ? `|${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module,` : `|${appName}${entityAngularName}Module,`)
                     ]
                 }, this);
-            } else {
+            } else if (clientFramework === 'react') {
                 // React
                 const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
 
@@ -276,7 +273,7 @@ module.exports = class extends PrivateBase {
                     file: indexModulePath,
                     needle: 'jhipster-needle-add-route-path',
                     splicable: [
-                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}}/>`)
+                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}} />`)
                     ]
                 }, this);
 
@@ -1478,7 +1475,7 @@ module.exports = class extends PrivateBase {
                 /(import { ?translate, ?Translate ?} from 'react-jhipster';?)/, // translate imports
                 /( Translate,|, ?Translate|import { ?Translate ?} from 'react-jhipster';?)/, // Translate import
                 /( translate,|, ?translate|import { ?translate ?} from 'react-jhipster';?)/, // translate import
-                /<Translate (component="[a-z]+" )?contentKey="([a-zA-Z0-9.\-_]+)" ?(component="[a-z]+")? ?(interpolate=\{\{[a-zA-Z0-9.: ]+\}\})? ?>|<\/Translate>/, // Translate component tag
+                /<Translate(\s*)?((component="[a-z]+")(\s*)|(contentKey=("[a-zA-Z0-9.\-_]+"|\{.*\}))(\s*)|(interpolate=\{.*\})(\s*))*(\s*)\/?>|<\/Translate>/, // Translate component tag
             ].map(r => r.source).join('|'), 'g');
 
             jhipsterUtils.copyWebResource(source, dest, regex, 'jsx', _this, opt, template);
@@ -1922,8 +1919,8 @@ module.exports = class extends PrivateBase {
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
-            const entityTable = _.snakeCase(this.getTableName(entityName).substring(0, halfLimit));
-            const relationTable = _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
+            const entityTable = this.getTableName(entityName).substring(0, halfLimit);
+            const relationTable = this.getTableName(relationshipName).substring(0, halfLimit - 1);
             return `${entityTable}_${relationTable}`;
         }
         return joinTableName;
@@ -1957,8 +1954,8 @@ module.exports = class extends PrivateBase {
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
-            const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : _.snakeCase(this.getTableName(entityName).substring(0, halfLimit));
-            const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
+            const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
+            const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 2) : this.getTableName(relationshipName).substring(0, halfLimit - 2);
             return `${entityTable}_${relationTable}_id`;
         }
         return constraintName;
@@ -2278,7 +2275,11 @@ module.exports = class extends PrivateBase {
                         if (typeof templateObj === 'string') {
                             templatePath += templateObj;
                         } else {
-                            templatePath += templateObj.file;
+                            if (typeof templateObj.file === 'string') {
+                                templatePath += templateObj.file;
+                            } else if (typeof templateObj.file === 'function') {
+                                templatePath += templateObj.file(_this);
+                            }
                             method = templateObj.method ? templateObj.method : method;
                             useTemplate = templateObj.template ? templateObj.template : useTemplate;
                             options = templateObj.options ? templateObj.options : options;
@@ -2312,75 +2313,86 @@ module.exports = class extends PrivateBase {
 
     /**
      * Setup client instance level options from context.
+     * all variables should be set to dest,
+     * all variables should be referred from context,
+     * all methods should be called on generator,
      * @param {any} generator - generator instance
      * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is context
      */
-    setupClientOptions(generator, context = generator) {
-        generator.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
-        generator.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
-        generator.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
-        generator.authenticationType = context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
-        if (generator.authenticationType === 'oauth2') {
-            generator.skipUserManagement = true;
+    setupClientOptions(generator, context = generator, dest = context) {
+        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
+        dest.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
+        dest.authenticationType = context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
+        if (dest.authenticationType === 'oauth2') {
+            dest.skipUserManagement = true;
         }
         const uaaBaseName = context.options.uaaBaseName || context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
         if (context.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
             generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
         }
-        generator.uaaBaseName = uaaBaseName;
+        dest.uaaBaseName = uaaBaseName;
 
-        generator.buildTool = context.options.build;
-        generator.websocket = context.options.websocket;
-        generator.devDatabaseType = context.options.db || context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
-        generator.prodDatabaseType = context.options.db || context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
-        generator.databaseType = generator.getDBTypeFromDBValue(context.options.db) || context.configOptions.databaseType || context.config.get('databaseType');
-        generator.searchEngine = context.options['search-engine'] || context.config.get('searchEngine');
-        generator.cacheProvider = context.options['cache-provider'] || context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
-        generator.enableHibernateCache = context.options['hb-cache'] || context.config.get('enableHibernateCache') || (context.config.get('hibernateCache') !== undefined && context.config.get('hibernateCache') !== 'no');
-        generator.otherModules = context.configOptions.otherModules || [];
-        generator.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
-        generator.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
-        generator.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
-        generator.testFrameworks = [];
+        dest.buildTool = context.options.build;
+        dest.websocket = context.options.websocket;
+        dest.devDatabaseType = context.options.db || context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
+        dest.prodDatabaseType = context.options.db || context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
+        dest.databaseType = generator.getDBTypeFromDBValue(context.options.db) || context.configOptions.databaseType || context.config.get('databaseType');
+        dest.searchEngine = context.options['search-engine'] || context.config.get('searchEngine');
+        dest.cacheProvider = context.options['cache-provider'] || context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
+        dest.enableHibernateCache = context.options['hb-cache'] || context.config.get('enableHibernateCache') || (context.config.get('hibernateCache') !== undefined && context.config.get('hibernateCache') !== 'no');
+        dest.otherModules = context.configOptions.otherModules || [];
+        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
+        dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
+        dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
+        dest.testFrameworks = [];
 
-        if (context.options.protractor) generator.testFrameworks.push('protractor');
+        if (context.options.protractor) dest.testFrameworks.push('protractor');
 
-        generator.baseName = context.configOptions.baseName;
-        generator.logo = context.configOptions.logo;
-        generator.useYarn = context.configOptions.useYarn = !context.options.npm;
-        generator.clientPackageManager = context.configOptions.clientPackageManager;
-        generator.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        generator.experimental = context.configOptions.experimental || context.options.experimental;
+        dest.baseName = context.configOptions.baseName;
+        dest.logo = context.configOptions.logo;
+        dest.useYarn = context.configOptions.useYarn = !context.options.npm;
+        dest.clientPackageManager = context.configOptions.clientPackageManager;
+        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+        dest.experimental = context.configOptions.experimental || context.options.experimental;
     }
 
     /**
      * Setup Server instance level options from context.
+     * all variables should be set to dest,
+     * all variables should be referred from context,
+     * all methods should be called on generator,
      * @param {any} generator - generator instance
      * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is context
      */
-    setupServerOptions(generator, context = generator) {
-        generator.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
-        generator.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
-        generator.enableTranslation = context.options.i18n || context.configOptions.enableTranslation || context.config.get('enableTranslation');
-        generator.testFrameworks = [];
+    setupServerOptions(generator, context = generator, dest = context) {
+        dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
+        dest.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        dest.enableTranslation = context.options.i18n || context.configOptions.enableTranslation || context.config.get('enableTranslation');
+        dest.testFrameworks = [];
 
-        if (context.options.gatling) generator.testFrameworks.push('gatling');
-        if (context.options.cucumber) generator.testFrameworks.push('cucumber');
+        if (context.options.gatling) dest.testFrameworks.push('gatling');
+        if (context.options.cucumber) dest.testFrameworks.push('cucumber');
 
-        generator.logo = context.configOptions.logo;
-        generator.baseName = context.configOptions.baseName;
-        generator.clientPackageManager = context.configOptions.clientPackageManager;
-        generator.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        generator.experimental = context.configOptions.experimental || context.options.experimental;
+        dest.logo = context.configOptions.logo;
+        dest.baseName = context.configOptions.baseName;
+        dest.clientPackageManager = context.configOptions.clientPackageManager;
+        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+        dest.experimental = context.configOptions.experimental || context.options.experimental;
     }
 
     /**
      * Setup Entity instance level options from context.
+     * all variables should be set to dest,
+     * all variables should be referred from context,
+     * all methods should be called on generator,
      * @param {any} generator - generator instance
      * @param {any} context - context to use default is generator instance
-     * @param {any} dest - destination context to use default is generator instance
+     * @param {any} dest - destination context to use default is context
      */
-    setupEntityOptions(generator, context = generator, dest = generator) {
+    setupEntityOptions(generator, context = generator, dest = context) {
         dest.name = context.options.name;
         // remove extension if feeding json files
         if (dest.name !== undefined) {
@@ -2396,7 +2408,7 @@ module.exports = class extends PrivateBase {
         dest.skipUiGrouping = context.options['skip-ui-grouping'];
         dest.clientRootFolder = context.options['skip-ui-grouping'] ? '' : context.options['client-root-folder'];
         dest.isDebugEnabled = context.options.debug;
-        generator.experimental = context.options.experimental;
+        dest.experimental = context.options.experimental;
         if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
             dest.entityAngularJSSuffix = `-${dest.entityAngularJSSuffix}`;
         }

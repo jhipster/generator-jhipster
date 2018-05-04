@@ -37,7 +37,7 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--[no-]client-hook` flag
         this.option('client-hook', {
-            desc: 'Enable gulp and bower hook from maven/gradle build',
+            desc: 'Enable Webpack hook from maven/gradle build',
             type: Boolean,
             defaults: false
         });
@@ -79,7 +79,16 @@ module.exports = class extends BaseGenerator {
 
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        useBlueprint = this.composeBlueprint(blueprint, 'server'); // use global variable since getters dont have access to instance property
+        // use global variable since getters dont have access to instance property
+        useBlueprint = this.composeBlueprint(
+            blueprint,
+            'server',
+            {
+                'client-hook': !this.skipClient,
+                configOptions: this.configOptions,
+                force: this.options.force
+            }
+        );
     }
 
     get initializing() {
@@ -137,11 +146,6 @@ module.exports = class extends BaseGenerator {
                 this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
-                }
-
-                this.reactive = this.config.get('reactive');
-                if (this.reactive === undefined) {
-                    this.reactive = false;
                 }
                 this.packageName = this.config.get('packageName');
                 this.serverPort = this.config.get('serverPort');
@@ -284,7 +288,6 @@ module.exports = class extends BaseGenerator {
             askFori18n: prompts.askFori18n,
 
             setSharedConfigOptions() {
-                this.configOptions.reactive = this.reactive;
                 this.configOptions.packageName = this.packageName;
                 this.configOptions.cacheProvider = this.cacheProvider;
                 this.configOptions.enableHibernateCache = this.enableHibernateCache;
@@ -321,7 +324,6 @@ module.exports = class extends BaseGenerator {
             insight() {
                 const insight = this.insight();
                 insight.trackWithEvent('generator', 'server');
-                insight.track('app/reactive', this.reactive);
                 insight.track('app/authenticationType', this.authenticationType);
                 insight.track('app/cacheProvider', this.cacheProvider);
                 insight.track('app/enableHibernateCache', this.enableHibernateCache);
@@ -349,7 +351,6 @@ module.exports = class extends BaseGenerator {
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
-                this.testDir = `${constants.SERVER_TEST_SRC_DIR + this.packageFolder}/`;
                 if (!this.nativeLanguage) {
                     // set to english when translation is set to false
                     this.nativeLanguage = 'en';
@@ -359,7 +360,6 @@ module.exports = class extends BaseGenerator {
             saveConfig() {
                 this.config.set('jhipsterVersion', packagejs.version);
                 this.config.set('baseName', this.baseName);
-                this.config.set('reactive', this.reactive);
                 this.config.set('packageName', this.packageName);
                 this.config.set('packageFolder', this.packageFolder);
                 this.config.set('serverPort', this.serverPort);

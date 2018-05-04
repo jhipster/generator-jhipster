@@ -29,6 +29,9 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
+<%_ if (reactiveRepositories) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
 
 <%_ if (pagination === 'no' || fieldsContainNoOwnerOneToOne === true) { _%>
 import java.util.List;
@@ -73,6 +76,14 @@ public interface <%= entityClass %>Service {
     Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable);
     <% } -%>
 
+    <%_ if (reactiveRepositories) { _%>
+    /**
+     * Get all the <%= entityInstancePlural %>.
+     * @return the Flux of entities
+     */
+    Flux<<%= instanceType %>> findAllAsFlux();
+
+    <%_ } _%>
     /**
      * Get the "id" <%= entityInstance %>.
      *

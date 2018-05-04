@@ -20,7 +20,7 @@
     "health": {
         "title": "Состояние",
         "refresh.button": "Обновить",
-        "stacktrace": "Stacktrace",
+        "stacktrace": "Трассировки стека",
         "details": {
             "details": "Детали",
             "properties": "Параметры",
@@ -30,12 +30,12 @@
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
-            "binders": "Message broker",
+            "binders": "Брокер сообщений",
             <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             "discoveryComposite": "Discovery Composite",
-            "refreshScope": "Microservice Refresh Scope",
-            "configServer": "Microservice Config Server",
+            "refreshScope": "Область обновления микросервиса",
+            "configServer": "Сервер конфигурации микросервиса",
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
             "consul": "Consul",<% } %>
             <%_ } _%>

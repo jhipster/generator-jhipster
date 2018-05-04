@@ -33,7 +33,10 @@ const filter = require('gulp-filter');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
-const { prettierTransform, defaultTsPrettierOptions } = require('./generator-transforms');
+const {
+    prettierTransform,
+    prettierOptions
+} = require('./generator-transforms');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
@@ -176,6 +179,9 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstantNG2(languages) {
+        if (this.clientFramework !== 'angularX') {
+            return;
+        }
         const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
@@ -203,6 +209,9 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguagePipe(languages) {
+        if (this.clientFramework !== 'angularX') {
+            return;
+        }
         const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`;
         try {
             let content = '{\n';
@@ -341,7 +350,7 @@ module.exports = class extends Generator {
             return text;
         }
         const rows = text.split('\n');
-        let description = rows[0];
+        let description = this.formatLineForJavaStringUse(rows[0]);
         for (let i = 1; i < rows.length; i++) {
             // discard empty rows
             if (rows[i].trim() !== '') {
@@ -360,6 +369,41 @@ module.exports = class extends Generator {
             return text;
         }
         return text.replace(/"/g, '\\"');
+    }
+
+    /**
+     * Format As Liquibase Remarks
+     *
+     * @param {string} text - text to format
+     * @returns formatted liquibase remarks
+     */
+    formatAsLiquibaseRemarks(text) {
+        if (!text) {
+            return text;
+        }
+        const rows = text.split('\n');
+        let description = rows[0];
+        for (let i = 1; i < rows.length; i++) {
+            // discard empty rows
+            if (rows[i].trim() !== '') {
+                // if simple text then put space between row strings
+                if (!description.endsWith('>') && !rows[i].startsWith('<')) {
+                    description += ' ';
+                }
+                description += rows[i];
+            }
+        }
+        // escape & to &amp;
+        description = description.replace(/&/g, '&amp;');
+        // escape " to &quot;
+        description = description.replace(/"/g, '&quot;');
+        // escape ' to &apos;
+        description = description.replace(/'/g, '&apos;');
+        // escape < to &lt;
+        description = description.replace(/</g, '&lt;');
+        // escape > to &gt;
+        description = description.replace(/>/g, '&gt;');
+        return description;
     }
 
     /**
@@ -565,15 +609,21 @@ module.exports = class extends Generator {
      * Compose external blueprint module
      * @param {string} blueprint - name of the blueprint
      * @param {string} subGen - sub generator
+     * @param {any} options - options to pass to blueprint generator
      */
-    composeBlueprint(blueprint, subGen) {
+    composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
             this.checkBlueprint(blueprint);
             try {
                 this.useBlueprint = true;
-                this.composeExternalModule(blueprint, subGen, {
-                    jhipsterContext: this
-                });
+                this.composeExternalModule(
+                    blueprint,
+                    subGen,
+                    Object.assign(
+                        { jhipsterContext: this },
+                        options
+                    )
+                );
                 return true;
             } catch (e) {
                 this.debug('Error', e);
@@ -1065,12 +1115,13 @@ module.exports = class extends Generator {
      */
     registerClientTransforms(generator = this) {
         if (!generator.skipClient) {
-            const typescriptFilter = filter(['**/*.{ts,tsx}'], { restore: true });
+            // Prettier is clever, it uses correct rules and correct parser according to file extension.
+            const prettierFilter = filter(['src/**/*.{ts,tsx,scss,css}'], { restore: true });
             // this pipe will pass through (restore) anything that doesn't match typescriptFilter
             generator.registerTransformStream([
-                typescriptFilter,
-                prettierTransform(defaultTsPrettierOptions),
-                typescriptFilter.restore
+                prettierFilter,
+                prettierTransform(prettierOptions),
+                prettierFilter.restore
             ]);
         }
     }

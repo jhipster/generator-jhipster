@@ -54,7 +54,7 @@ public class AwsSSMConfiguration implements PropertySourceLocator {
         log.info("Retrieving configuration from AWS Simple Systems Management(SSM)");
         AWSSimpleSystemsManagement awsClient = AWSSimpleSystemsManagementClientBuilder.defaultClient();
 
-        final String pathPrefix = String.format("/%s/%s/",stackName, applicationName);
+        final String pathPrefix = String.format("/%s/%s/", stackName, applicationName);
 
         GetParametersByPathResult getParameterResults = awsClient.getParametersByPath(new GetParametersByPathRequest()
             .withPath(pathPrefix)

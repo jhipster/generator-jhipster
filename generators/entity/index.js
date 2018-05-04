@@ -110,9 +110,18 @@ module.exports = class extends BaseGenerator {
 
         this.context = {};
         this.setupEntityOptions(this, this, this.context);
-        const blueprint = this.config.get('blueprint');
-        useBlueprint = this.composeBlueprint(blueprint, 'entity'); // use global variable since getters dont have access to instance property
         this.registerClientTransforms();
+        const blueprint = this.config.get('blueprint');
+        // use global variable since getters dont have access to instance property
+        useBlueprint = this.composeBlueprint(
+            blueprint,
+            'entity',
+            {
+                'skip-install': this.options['skip-install'],
+                force: this.options.force,
+                arguments: [this.context.name]
+            }
+        );
     }
 
     get initializing() {
@@ -464,6 +473,7 @@ module.exports = class extends BaseGenerator {
                 context.entityTranslationKey = context.clientRootFolder ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`) : context.entityInstance;
                 context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
+                context.reactiveRepositories = context.applicationType === 'reactive' && ['mongodb', 'couchbase'].includes(context.databaseType);
 
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;
@@ -590,6 +600,7 @@ module.exports = class extends BaseGenerator {
                         context.validation = true;
                     }
                 });
+                context.hasUserField = context.saveUserSnapshot = false;
                 // Load in-memory data for relationships
                 context.relationships.forEach((relationship) => {
                     if (_.isUndefined(relationship.relationshipNameCapitalized)) {
@@ -649,6 +660,7 @@ module.exports = class extends BaseGenerator {
 
                     if (otherEntityName === 'user') {
                         relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
+                        context.hasUserField = true;
                     } else {
                         relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
                         if (!relationship.otherEntityTableName) {
@@ -659,6 +671,7 @@ module.exports = class extends BaseGenerator {
                             relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
                         }
                     }
+                    context.saveUserSnapshot = context.applicationType === 'microservice' && context.authenticationType === 'oauth2' && context.hasUserField;
 
                     if (_.isUndefined(relationship.otherEntityNamePlural)) {
                         relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);

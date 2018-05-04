@@ -57,7 +57,7 @@ spring:
         restart:
             enabled: true
         livereload:
-            enabled: false # we use gulp + BrowserSync for livereload
+            enabled: false # we use Webpack dev server + BrowserSync for livereload
     jackson:
         serialization.indent_output: true
     <%_ if (messageBroker === 'kafka' || serviceDiscoveryType === 'consul') { _%>
@@ -205,6 +205,7 @@ spring:
         bootstrap-hosts: localhost
         bucket:
             name: <%= baseName %>
+            password: password
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
@@ -230,7 +231,7 @@ spring:
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
-# keytool -genkey -alias <%= baseName %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
 #
 # You can also use Let's Encrypt:
 # https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
@@ -243,7 +244,7 @@ spring:
 #        key-store: keystore.p12
 #        key-store-password: <your-password>
 #        key-store-type: PKCS12
-#        key-alias: <%= baseName %>
+#        key-alias: <%= baseName.toLowerCase() %>
 # ===================================================================
 server:
     port: <%= serverPort %>
