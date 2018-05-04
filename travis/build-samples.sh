@@ -644,102 +644,6 @@ function createLogFile() {
 # ====================
 # ====================
 
-# function isSkipClientInFileYoRcDotConf() {{{3
-# test if skipClient=true in ./samples/"$JHIPSTER"/.yo-rc.conf
-function isSkipClientInFileYoRcDotConf() {
-    pushd "$JHIPSTER_SAMPLES/""$JHIPSTER"
-    [[ $(grep -E '"skipClient":\s*true' .yo-rc.json) ]] && \
-        return 0 || \
-        return 1
-    popd
-}
-
-# function yarnLink() {{{3
-function yarnLink() {
-    cd "$APP_FOLDER"
-    echoTitleBuildStep "yarn link"
-    yarn init -y
-    command yarn link "generator-jhipster" || \
-        errorInBuildStopCurrentSample "FATAL ERROR: " \
-            "you havn't executed \`yarn link' in a folder " \
-            "named 'generator-jhipster'. " \
-            "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
-    local GENERATOR_JHIPSTER_FOLDER="`pwd`/node_modules/generator-jhipster"
-    ls -la "$GENERATOR_JHIPSTER_FOLDER"
-    # Test if `yarn link' is correct
-    cd -P "${JHIPSTER_TRAVIS}/.."
-    local JHIPSTER_TRAVISReal=`pwd -P`
-    cd "$GENERATOR_JHIPSTER_FOLDER"
-    local GENERATOR_JHIPSTER_FOLDER_REAL=`pwd -P`
-    if [ "$JHIPSTER_TRAVISReal" != "$GENERATOR_JHIPSTER_FOLDER_REAL" ] ; then
-        errorInBuildStopCurrentSample "FATAL ERROR: " \
-            "'$JHIPSTER_TRAVISReal and '$GENERATOR_JHIPSTER_FOLDER_REAL' " \
-            "are not the same folders"
-    else
-        echo "Command \`yarn link' seems corect."
-    fi
-    unset GENERATOR_JHIPSTER_FOLDER JHIPSTER_TRAVISReal
-}
-
-# function errorInBuildStopCurrentSample() {{{3
-function errorInBuildStopCurrentSample() {
-
-    local ELAPSED=`echo -e "Elapsed: $(($SECONDS / 3600))" \ "hrs " \
-        "$((($SECONDS / 60) % 60)) min " \
-        "$(($SECONDS % 60))sec"`
-    if [[ -e /dev/fd/4 ]] ; then
-        1>&2 echo "$@. Error in '$JHIPSTER_MATRIX' at `date +%r`" \
-            "(elapsed: '$ELAPSED')" \
-            >> >(tee --append /dev/fd/2 /dev/fd/4 >> /dev/null)
-    else
-        1>&2 echo "$@. Error in '$JHIPSTER_MATRIX' at `date +%r`" \
-            "(elapsed: '$ELAPSED')"
-    fi
-    unset ELAPSED
-
-    # Thanks this variable set to 1, following steps will not start
-    # in function launchNewBash above()
-    ERROR_IN_SAMPLE=1
-
-    # Do not exit, otherwise we stop this script!
-    # exit 15
-    # Do not return something > 0 caused of `set -e'
-    return 0
-}
-
-# function launchNewBash() {{{3
-function launchNewBash() {
-    local pathOfScript="$1"
-    local print="$2"
-    # "$JHIPSTER" argument is used only to know which build is launched.
-    # It's only a marker for when we call "ps -C bash. The argument "$1"
-    # is not readden in any ./scripts/*.sh
-
-    echoTitleBuildStep "$2" "('$1')"
-    # If there is an error raised, in function errorInBuildStopCurrentSample()
-    # "$ERROR_IN_SAMPLE" takes a value of 1. Initialized to 0 in function
-    # launchScriptForOnlyOneSample() or generateNode_Modules_Cache()
-    if [[ "${ERROR_IN_SAMPLE}" -eq 0 ]] ; then
-        cd "${JHIPSTER_TRAVIS}"
-        set +e
-        time bash "$pathOfScript" "$JHIPSTER"
-        if [[ $? -ne 0 ]] ; then
-            errorInBuildStopCurrentSample "'$pathOfScript' finished with error."
-        fi
-        set -e
-    else
-        # tee print in stdout (either logfile or console) and /dev/fd/4
-        # for /dev/fd/4 see function launchScriptForAllSamples()
-        if [[ -e /dev/fd/4 ]] ; then
-            1>&2 echo -e "SKIP '${2}' cause of previous error." \
-                >> >(tee --append /dev/fd/2 /dev/fd/4 1>> /dev/null)
-        else
-            1>&2 echo -e "SKIP '${2}' cause of previous error."
-        fi
-    fi
-    unset pathOfScript
-}
-
 # function treatEndOfBuild() {{{3
 function treatEndOfBuild() {
     # TODO treat for REACT. React has its own node_modules.
@@ -787,6 +691,107 @@ function treatEndOfBuild() {
     unset logrenamed
 }
 
+# function errorInBuildStopCurrentSample() {{{3
+function errorInBuildStopCurrentSample() {
+
+    local ELAPSED=`echo -e "Elapsed: $(($SECONDS / 3600))" \ "hrs " \
+        "$((($SECONDS / 60) % 60)) min " \
+        "$(($SECONDS % 60))sec"`
+    if [[ -e /dev/fd/4 ]] ; then
+        1>&2 echo "$@. Error in '$JHIPSTER_MATRIX' at `date +%r`" \
+            "(elapsed: '$ELAPSED')" \
+            >> >(tee --append /dev/fd/2 /dev/fd/4 >> /dev/null)
+    else
+        1>&2 echo "$@. Error in '$JHIPSTER_MATRIX' at `date +%r`" \
+            "(elapsed: '$ELAPSED')"
+    fi
+    unset ELAPSED
+
+    # Thanks this variable set to 1, following steps will not start
+    # in function launchNewBash above()
+    ERROR_IN_SAMPLE=1
+
+    # Do not exit, otherwise we stop this script!
+    # exit 15
+    # Do not return something > 0 caused of `set -e'
+    return 0
+}
+
+errorInBuildExitCurrentSample() {
+    errorInBuildStopCurrentSample "$@"
+    treatEndOfBuild
+    exit 80
+}
+
+# function isSkipClientInFileYoRcDotConf() {{{3
+# test if skipClient=true in ./samples/"$JHIPSTER"/.yo-rc.conf
+function isSkipClientInFileYoRcDotConf() {
+    pushd "$JHIPSTER_SAMPLES/""$JHIPSTER"
+    [[ $(grep -E '"skipClient":\s*true' .yo-rc.json) ]] && \
+        return 0 || \
+        return 1
+    popd
+}
+
+# function yarnLink() {{{3
+function yarnLink() {
+    cd "$APP_FOLDER"
+    echoTitleBuildStep "yarn link"
+    yarn init -y
+    command yarn link "generator-jhipster" || \
+        errorInBuildExitCurrentSample "FATAL ERROR: " \
+            "you havn't executed \`yarn link' in a folder " \
+            "named 'generator-jhipster'. " \
+            "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
+    local GENERATOR_JHIPSTER_FOLDER="`pwd`/node_modules/generator-jhipster"
+    ls -la "$GENERATOR_JHIPSTER_FOLDER"
+    # Test if `yarn link' is correct
+    cd -P "${JHIPSTER_TRAVIS}/.."
+    local JHIPSTER_TRAVISReal=`pwd -P`
+    cd "$GENERATOR_JHIPSTER_FOLDER"
+    local GENERATOR_JHIPSTER_FOLDER_REAL=`pwd -P`
+    if [ "$JHIPSTER_TRAVISReal" != "$GENERATOR_JHIPSTER_FOLDER_REAL" ] ; then
+        errorInBuildExitCurrentSample "FATAL ERROR: " \
+            "'$JHIPSTER_TRAVISReal and '$GENERATOR_JHIPSTER_FOLDER_REAL' " \
+            "are not the same folders"
+    else
+        echo "Command \`yarn link' seems corect."
+    fi
+    unset GENERATOR_JHIPSTER_FOLDER JHIPSTER_TRAVISReal
+}
+
+# function launchNewBash() {{{3
+function launchNewBash() {
+    local pathOfScript="$1"
+    local print="$2"
+    # "$JHIPSTER" argument is used only to know which build is launched.
+    # It's only a marker for when we call "ps -C bash. The argument "$1"
+    # is not readden in any ./scripts/*.sh
+
+    echoTitleBuildStep "$2" "('$1')"
+    # If there is an error raised, in function errorInBuildStopCurrentSample()
+    # "$ERROR_IN_SAMPLE" takes a value of 1. Initialized to 0 in function
+    # launchScriptForOnlyOneSample() or generateNode_Modules_Cache()
+    if [[ "${ERROR_IN_SAMPLE}" -eq 0 ]] ; then
+        cd "${JHIPSTER_TRAVIS}"
+        set +e
+        time bash "$pathOfScript" "$JHIPSTER"
+        if [[ $? -ne 0 ]] ; then
+            errorInBuildStopCurrentSample "'$pathOfScript' finished with error."
+        fi
+        set -e
+    else
+        # tee print in stdout (either logfile or console) and /dev/fd/4
+        # for /dev/fd/4 see function launchScriptForAllSamples()
+        if [[ -e /dev/fd/4 ]] ; then
+            1>&2 echo -e "SKIP '${2}' cause of previous error." \
+                >> >(tee --append /dev/fd/2 /dev/fd/4 1>> /dev/null)
+        else
+            1>&2 echo -e "SKIP '${2}' cause of previous error."
+        fi
+    fi
+    unset pathOfScript
+}
 
 # III 2) EXECUTE SCRIPTS ./scripts/*.sh {{{2
 # ====================
@@ -937,7 +942,7 @@ function generateNode_Modules_Cache() {
         echoTitleBuildStep "JHipster generation."
         cp "${JHIPSTER_SAMPLES}/node_modules_cache/angular/.yo-rc.json" \
             "${NODE_MODULES_CACHE_ANGULAR}" || \
-            errorInBuildStopCurrentSample "FATAL ERROR: not a JHipster project."
+            errorInBuildExitCurrentSample "FATAL ERROR: not a JHipster project."
         cd "${NODE_MODULES_CACHE_ANGULAR}"
         local jhipstercommand="jhipster --force --no-insight --skip-checks \
             --with-entities --skip-git --skip-commit-hook"
@@ -946,7 +951,7 @@ function generateNode_Modules_Cache() {
         unset jhipstercommand
 
         if [[ $? -ne 0 ]] ; then
-            errorInBuildStopCurrentSample "FATAL ERROR: " \
+            errorInBuildExitCurrentSample "FATAL ERROR: " \
                 "Failure during generation of the angular no-entity sample"
         fi
 
