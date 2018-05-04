@@ -55,9 +55,9 @@ export default class SignInPage extends BasePage {
   <%_ } else { _%>
   loginWithOAuth(username: string, password: string) {
     this.username.isPresent().then(() => {
-        this.username.sendKeys(username);
-        this.password.sendKeys(password);
-        this.login();
+        this.setUserName(username);
+        this.setPassword(password);
+        return this.login();
     });
   }
   <%_ } _%>

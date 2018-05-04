@@ -17,11 +17,6 @@ export const isHidden = (selector: ElementFinder) => {
   return ExpectedConditions.invisibilityOf(selector);
 };
 
-export const isTextPresentInElementValue = (selector: ElementFinder, text: string) => {
-  if (!checkSelectorExist(selector)) return;
-  return ExpectedConditions.textToBePresentInElementValue(selector, text);
-};
-
 /**
  * Wait until this page is displayed.
  */
@@ -42,16 +37,6 @@ export const waitUntilHidden = (selector: ElementFinder, classname = '', timeout
     isHidden(selector),
     timeout,
     `Failed while waiting for "${selector.locator()}" of Page Object Class '${classname}' to be hidden.`
-  );
-};
-
-export const waitUntilTextIsPresentInElementValue = (selector: ElementFinder, text: string, classname = '', timeout = waitUntilDisplayedTimeout) => {
-  if (!checkSelectorExist(selector)) return;
-
-  browser.wait(
-    isTextPresentInElementValue(selector, text),
-    timeout,
-    `Failed while waiting for "${text}" in "${selector.locator()}" of Page Object Class '${classname}' to be present.`
   );
 };
 

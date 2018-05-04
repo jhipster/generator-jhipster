@@ -1,5 +1,4 @@
 import { $, ElementFinder } from 'protractor';
-import { promise } from 'selenium-webdriver';
 
 import BasePage from './base-component';
 import SignInPage from './signin-page';
@@ -15,7 +14,10 @@ export default class NavBarPage extends BasePage {
   signInPage: SignInPage;
   adminMenu: ElementFinder;
   accountMenu: ElementFinder = this.selector.$('#account-menu');
-  entityMenu = this.selector.$('#entity-menu');
+  entityMenu: ElementFinder = this.selector.$('#entity-menu');
+  <%_ if (authenticationType === 'oauth2') { _%>
+  loginItem: ElementFinder = this.selector.$('#login-item');
+  <%_ } _%>
 
   constructor(asAdmin?: Boolean) {
     super(selector);
@@ -49,7 +51,7 @@ export default class NavBarPage extends BasePage {
     <%_ if (authenticationType !== 'oauth2') { _%>
     this.clickOnTabMenu('#/login');
     <%_ } else { _%>
-    this.clickOnTabMenu('//localhost:8080/login');
+    this.loginItem.click();
     <%_ } _%>
     return new SignInPage();
   }
@@ -65,12 +67,6 @@ export default class NavBarPage extends BasePage {
     .$(`.dropdown-item[href="${item}"]`)
     .click();
   }
-
-  <%_ if (authenticationType === 'oauth2') { _%>
-  clickOnLogin() {
-    return this.selector.$('#header-tabs').$('#login').click();
-  }
-  <%_ } _%>
 
   clickOnAccountMenu() {
     return this.accountMenu.click();

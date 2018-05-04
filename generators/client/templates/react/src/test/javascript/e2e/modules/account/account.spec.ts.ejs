@@ -7,7 +7,7 @@ import NavBarPage from '../../page-objects/navbar-page';
 import RegisterPage from '../../page-objects/register-page';
 import PasswordPage from '../../page-objects/password-page';
 import SettingsPage from '../../page-objects/settings-page';
-import { getDeactivatedButtonByLogin, waitUntilDisplayed, waitUntilHidden, waitUntilTextIsPresentInElementValue, <% if (enableTranslation) { %>getToastByClassName<% } else { %>getToastByInnerText<% } %> } from '../../util/utils';
+import { getDeactivatedButtonByLogin, waitUntilDisplayed, waitUntilHidden, <% if (enableTranslation) { %>getToastByClassName<% } else { %>getToastByInnerText<% } %> } from '../../util/utils';
 <%_ } else { _%>
 import { waitUntilDisplayed } from '../../util/utils';
 <%_ } _%>
@@ -32,7 +32,9 @@ describe('Account', () => {
     browser.get('/');
     navBarPage = new NavBarPage(true);
     signInPage = navBarPage.getSignInPage();
+    <%_ if (authenticationType !== 'oauth2') { _%>
     signInPage.waitUntilDisplayed();
+    <%_ } _%>
   });
 
   it('should fail to login with bad password', async () => {
@@ -58,8 +60,8 @@ describe('Account', () => {
       waitUntilDisplayed(error);
       expect(await error.getText()).to.eq('Sign in failed!');
     }
-    await signInPage.username.clear();
-    await signInPage.password.clear();
+    await signInPage.clearUserName();
+    await signInPage.clearPassword();
     <%_ } _%>
   });
 
@@ -208,7 +210,7 @@ describe('Account', () => {
     await signInPage.setPassword('newpassword');
     await signInPage.login();
     signInPage.waitUntilHidden();
-    // expect(await signInPage.isHidden()()).to.be.true;
+    expect(await signInPage.isHidden()()).to.be.true;
 
     // change back to default
     passwordPage.get();
