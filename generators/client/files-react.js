@@ -108,7 +108,8 @@ const files = {
                 'config/error-middleware.ts',
                 'config/logger-middleware.ts',
                 'config/notification-middleware.ts',
-                'config/store.ts'
+                'config/store.ts',
+                'config/icon-loader.ts'
             ]
         },
         {
@@ -343,20 +344,6 @@ const files = {
             ]
         }
     ],
-    // angularAuthService: [
-    //   {
-    //     path: REACT_DIR,
-    //     templates: [
-    //       'shared/auth/_auth.service.js',
-    //       'shared/auth/_csrf.service.js',
-    //       'shared/auth/_state-storage.service.js',
-    //       'shared/auth/_principal.service.js',
-    //       'shared/auth/_has-any-authority.directive.js',
-    //       'shared/auth/_account.service.js',
-    //       'shared/auth/_user-route-access-service.js'
-    //     ]
-    //   },
-    // ],
     clientTestFw: [
         {
             path: TEST_SRC_DIR,

@@ -431,6 +431,7 @@ function askForField(done) {
     const skipServer = context.skipServer;
     const prodDatabaseType = context.prodDatabaseType;
     const databaseType = context.databaseType;
+    const clientFramework = context.clientFramework;
     const fieldNamesUnderscored = context.fieldNamesUnderscored;
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     const prompts = [
@@ -453,8 +454,10 @@ function askForField(done) {
                     return 'Your field name cannot start with an upper case letter';
                 } else if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
                     return 'Your field name cannot use an already existing field name';
-                } else if (!skipServer && jhiCore.isReservedFieldName(input)) {
+                } else if ((clientFramework === undefined || clientFramework === 'angularX') && jhiCore.isReservedFieldName(input, 'angularX')) {
                     return 'Your field name cannot contain a Java or Angular reserved keyword';
+                } else if ((clientFramework !== undefined || clientFramework === 'react') && jhiCore.isReservedFieldName(input, 'react')) {
+                    return 'Your field name cannot contain a Java or React reserved keyword';
                 } else if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
                     return 'The field name cannot be of more than 30 characters';
                 }

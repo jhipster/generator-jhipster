@@ -195,19 +195,16 @@ module.exports = class extends PrivateBase {
                              |                    </li>`)
                     ]
                 }, this);
-            } else {
+            } else if (this.clientFramework === 'react') {
                 // React
                 entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/header.tsx`;
                 jhipsterUtils.rewriteFile({
                     file: entityMenuPath,
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
-                        this.stripMargin(`|(
-                        |        <DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
-                        |          <FontAwesomeIcon icon={faAsterisk} />&nbsp;
-                        |          ${_.startCase(routerName)}
-                        |        </DropdownItem>
-                        |      ),`)
+                        this.stripMargin(`|<DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
+                        |        <FontAwesomeIcon icon="asterisk" />&nbsp; ${_.startCase(routerName)}
+                        |      </DropdownItem>,`)
                     ]
                 }, this);
             }
@@ -260,7 +257,7 @@ module.exports = class extends PrivateBase {
                         this.stripMargin(microServiceName ? `|${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module,` : `|${appName}${entityAngularName}Module,`)
                     ]
                 }, this);
-            } else {
+            } else if (clientFramework === 'react') {
                 // React
                 const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
 
@@ -276,7 +273,7 @@ module.exports = class extends PrivateBase {
                     file: indexModulePath,
                     needle: 'jhipster-needle-add-route-path',
                     splicable: [
-                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}}/>`)
+                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}} />`)
                     ]
                 }, this);
 
