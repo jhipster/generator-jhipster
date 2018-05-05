@@ -879,6 +879,24 @@ describe('DocumentParser', () => {
           expect(content.applications.MyApp.entities.size()).to.equal(1);
         });
       });
+      context('when parsing a UAA application skipping user management', () => {
+        let input = null;
+
+        before(() => {
+          input = JDLReader.parseFromFiles(['./test/test_files/uaa_with_user_management_skipped.jdl']);
+        });
+
+        it('fails', () => {
+          try {
+            DocumentParser.parseFromConfigurationObject({
+              document: input
+            });
+            fail();
+          } catch (error) {
+            expect(error.name).to.equal('IllegalOptionException');
+          }
+        });
+      });
     });
   });
 });

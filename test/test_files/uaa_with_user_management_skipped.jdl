@@ -1,0 +1,6 @@
+application {
+  config {
+    applicationType uaa,
+    skipUserManagement true
+  }
+}
