@@ -667,7 +667,7 @@ function treatEndOfBuild() {
     # buildAndTestProject().
     if [[ -z "${generationOfNodeModulesCacheMarker+x}" ]] ; then
         sleep 2
-        if [[ ! isSkipClientInFileYorcconf ]] ; then
+        if ! isSkipClientInFileYoRcDotConf ; then
             # Because node_modules takes 1.1 Go ! Too much !
             if [[ "$JHIPSTER" != *"react"* ]] ; then
                 printCommandAndEval "rm -Rf '${APP_FOLDER}/node_modules'"
@@ -707,8 +707,10 @@ function errorInBuildStopCurrentSample() {
     fi
     unset ELAPSED
 
-    # Thanks this variable set to 1, following steps will not start
-    # in function launchNewBash above()
+    # Thanks this variable set to 1
+    # 1. function launchNewBash() will not launch new ./scripts/*.sh
+    # 2. function treatEndOfBuild() will rename the log file with word "errored"
+    #
     ERROR_IN_SAMPLE=1
 
     # Do not exit, otherwise we stop this script!
@@ -717,6 +719,7 @@ function errorInBuildStopCurrentSample() {
     return 0
 }
 
+# errorInBuildExitCurrentSample() {{{2
 errorInBuildExitCurrentSample() {
     errorInBuildStopCurrentSample "$@"
     treatEndOfBuild
@@ -946,7 +949,11 @@ function generateNode_Modules_Cache() {
         cd "${NODE_MODULES_CACHE_ANGULAR}"
         local jhipstercommand="jhipster --force --no-insight --skip-checks \
             --with-entities --skip-git --skip-commit-hook"
-        echo "$jhipstercommand" 1>&3
+        if [[ -e /dev/fd/3 ]] ; then
+            echo "$jhipstercommand" 1>&3
+        else
+            echo "$jhipstercommand"
+        fi
         eval "$jhipstercommand"
         unset jhipstercommand
 
@@ -1007,9 +1014,9 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 }
 
 
-# function createFolderNodeModulesAndLaunchBuild() {{{3
-function createFolderNodeModulesAndLaunchBuild() {
-    if [[ ! isSkipClientInFileYorcconf ]] ; then
+# function createFolderNodeModulesAndLogFile() {{{3
+function createFolderNodeModulesAndLogFile() {
+    if ! isSkipClientInFileYoRcDotConf ; then
 
         generateNode_Modules_Cache
         # Redifine APP_FOLDER, as it is unsetted in function
@@ -1028,6 +1035,9 @@ function createFolderNodeModulesAndLaunchBuild() {
             # But `cp -R' works good ! ;-) ! Probably more reliable.
             cp -R "${NODE_MODULES_CACHE_ANGULAR}/node_modules" \
                 "${APP_FOLDER}"
+        else
+            errorInBuildExitCurrentSample "FATAL ERROR: script not implemented" \
+            "for React"
         fi
         # Even if there is already a correct symlink, we must launch it again.
         yarnLink
@@ -1067,6 +1077,8 @@ function launchScriptForOnlyOneSample() {
                 "echo '$execInfirmed'"
             unset confirmationFirstParameter confirmationFirstParameter
             unset argument
+        else
+            mkdir -p "$APP_FOLDER"
         fi
     else
         # Defined "$APP_FOLDER" as explained in the MAIN section of this file.
@@ -1083,14 +1095,14 @@ function launchScriptForOnlyOneSample() {
 
     time {
 
-        cd "${APP_FOLDER}"
-
         # Instantiate LOGFILENAME
         local beginLogfilename=`echo -e \
             "${JHIPSTER_TRAVIS}"/"${BRANCH_NAME}"."${DATEBININSCRIPT}"`
         local endofLogfilename=`echo -e "${JHIPSTER}"".local-travis.log"`
         local LOGFILENAME="${beginLogfilename}"".pending.""${endofLogfilename}"
-        createFolderNodeModulesAndLaunchBuild
+        createFolderNodeModulesAndLogFile
+
+        cd "${APP_FOLDER}"
 
         local oldPATH="${PATH}"
         export PATH="${APP_FOLDER}"/node_modules:"$PATH"
