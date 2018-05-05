@@ -193,7 +193,7 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
             </AvGroup>
             <AvGroup check>
               <Label>
-                <AvInput type="checkbox" name="activated" /> <Translate contentKey="userManagement.activated">Activated</Translate>
+                <AvInput type="checkbox" name="activated" value={user.activated} /> <Translate contentKey="userManagement.activated">Activated</Translate>
               </Label>
             </AvGroup>
     <%_ if (enableTranslation) { _%>
