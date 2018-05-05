@@ -182,7 +182,7 @@ applicationConfigDecl
   / DATABASE_TYPE SPACE* databaseType:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'databaseType', databaseType.join(''));
   }
-  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
+  / DEV_DATABASE_TYPE SPACE* devDatabaseType:[A-Za-z0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'devDatabaseType', devDatabaseType.join(''));
   }
   / ENABLE_HIBERNATE_CACHE SPACE* enableHibernateCache:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
