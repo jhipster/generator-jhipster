@@ -262,7 +262,7 @@ applicationConfigDecl
     return addToApplicationDecl(applicationConfigDecl, 'skipServer', skipServer);
   }
   / SKIP_USER_MANAGEMENT SPACE* skipUserManagement:booleanChoice SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'skipUserManagement', skipUserManagement.join(''));
+    return addToApplicationDecl(applicationConfigDecl, 'skipUserManagement', skipUserManagement);
   }
   / TEST_FRAMEWORKS SPACE* '[' testFrameworks:[a-z, ]+ ']' SPACE* applicationConfigDecl:applicationConfigDecl {
     const testFrameworkEntries = [];
