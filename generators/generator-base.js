@@ -197,14 +197,14 @@ module.exports = class extends PrivateBase {
                 }, this);
             } else if (this.clientFramework === 'react') {
                 // React
-                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/header.tsx`;
+                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/entities.tsx`;
                 jhipsterUtils.rewriteFile({
                     file: entityMenuPath,
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
-                        this.stripMargin(`|<DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
-                        |        <FontAwesomeIcon icon="asterisk" />&nbsp; ${_.startCase(routerName)}
-                        |      </DropdownItem>,`)
+                        this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
+                        |      <FontAwesomeIcon icon="asterisk" />&nbsp; ${_.startCase(routerName)}
+                        |    </DropdownItem>`)
                     ]
                 }, this);
             }
