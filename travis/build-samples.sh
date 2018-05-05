@@ -897,6 +897,9 @@ function generateNode_Modules_Cache() {
 
     echoSmallTitle "Check node_modules cache"
 
+    # Used in functions errorInBuildExitCurrentSample() and createLogFile()
+    local JHIPSTER_MATRIX="${NODE_MODULES_CACHE_SAMPLE}"
+
     # Display stderr on terminal.
     local beginLogfilename="${NODE_MODULES_CACHE_SAMPLE}"/node_modules_cache
     local endofLogfilename="passed.angular.local-travis.log"
@@ -933,9 +936,7 @@ function generateNode_Modules_Cache() {
         local endofLogfilename="angular.local-travis.log"
         local LOGFILENAME="${beginLogfilename}".pending."${endofLogfilename}"
 
-        local JHIPSTER_MATRIX="${NODE_MODULES_CACHE_SAMPLE}"
         createLogFile
-        unset JHIPSTER_MATRIX
 
         rm -Rf "${APP_FOLDER}"
         mkdir -p "$APP_FOLDER"/
@@ -968,6 +969,7 @@ function generateNode_Modules_Cache() {
     unset shortDate beginLogfilename endofLogfilename fail
     unset APP_FOLDER
     unset generationOfNodeModulesCacheMarker
+    unset JHIPSTER_MATRIX
 }
 
 # II LAUNCH SCRIPT FOR ONLY ONE SAMPLE {{{2
@@ -1018,10 +1020,13 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 function createFolderNodeModulesAndLogFile() {
     if ! isSkipClientInFileYoRcDotConf ; then
 
-        generateNode_Modules_Cache
-        # Redifine APP_FOLDER, as it is unsetted in function
-        # generateNode_Modules_Cache
-        export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+        if [[ "$workOnAllProjects" -eq 0 ]] ; then
+            generateNode_Modules_Cache
+            # Redifine APP_FOLDER, as it is unsetted in function
+            # generateNode_Modules_Cache
+            export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+        # else; done in function launchScriptForAllSamples()
+        fi
 
         createLogFile
 
@@ -1172,8 +1177,9 @@ function launchScriptForAllSamples() {
     done
 
     # TODO
-    # Perform it first when we will could spawn several build in same time.
-    # generateNode_Modules_Cache
+    # do not launch this if there is only projects with "skipClient: true"
+    # in ../.travis.yml
+    generateNode_Modules_Cache
 
     local -a jhipsterArray
     local -i i=0
