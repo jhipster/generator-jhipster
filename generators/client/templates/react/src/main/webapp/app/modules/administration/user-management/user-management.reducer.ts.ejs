@@ -20,7 +20,7 @@ import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { IUser } from 'app/shared/model/user.model';
+import { IUser, User } from 'app/shared/model/user.model';
 
 export const ACTION_TYPES = {
   FETCH_ROLES: 'userManagement/FETCH_ROLES',
@@ -35,13 +35,15 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   errorMessage: null,
-  users: [],
-  authorities: [],
-  user: {},
+  users: [] as IUser[],
+  authorities: [] as any[],
+  user: new User(),
   updating: false,
   updateSuccess: false,
   totalItems: 0
 };
+
+export type UserManagementState = typeof initialState;
 
 // Reducer
 export default (state = initialState, action) => {

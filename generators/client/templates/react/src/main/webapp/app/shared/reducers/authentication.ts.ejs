@@ -45,14 +45,16 @@ const initialState = {
   loginError: false, // Errors returned from server side
   showModalLogin: false,
   <%_ } _%>
-  account: {},
-  errorMessage: null, // Errors returned from server side
-  redirectMessage: null
+  account: {} as any,
+  errorMessage: null as string, // Errors returned from server side
+  redirectMessage: null as string
 };
+
+export type AuthenticationState = typeof initialState;
 
 // Reducer
 
-export default (state = initialState, action) => {
+export default (state = initialState, action): AuthenticationState => {
   switch (action.type) {
     <%_ if (authenticationType !== 'oauth2') { _%>
     case REQUEST(ACTION_TYPES.LOGIN):

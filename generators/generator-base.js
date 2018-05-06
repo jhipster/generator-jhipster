@@ -283,7 +283,15 @@ module.exports = class extends PrivateBase {
                     file: indexReducerPath,
                     needle: 'jhipster-needle-add-reducer-import',
                     splicable: [
-                        this.stripMargin(`|import ${entityInstance} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
+                        this.stripMargin(`|import ${entityInstance}, { ${entityAngularName}State } from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
+                    ]
+                }, this);
+
+                jhipsterUtils.rewriteFile({
+                    file: indexReducerPath,
+                    needle: 'jhipster-needle-add-reducer-type',
+                    splicable: [
+                        this.stripMargin(`|  ${entityInstance}: ${entityAngularName}State;`)
                     ]
                 }, this);
 
@@ -291,7 +299,7 @@ module.exports = class extends PrivateBase {
                     file: indexReducerPath,
                     needle: 'jhipster-needle-add-reducer-combine',
                     splicable: [
-                        this.stripMargin(`${entityInstance},`)
+                        this.stripMargin(`|  ${entityInstance},`)
                     ]
                 }, this);
             }

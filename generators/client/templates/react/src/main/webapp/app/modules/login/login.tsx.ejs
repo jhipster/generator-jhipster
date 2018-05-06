@@ -18,18 +18,13 @@
 -%>
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 
+import { RootState } from 'app/shared/reducers';
 import { login } from 'app/shared/reducers/authentication';
 import LoginModal from './login-modal';
 
-export interface ILoginProps {
-  isAuthenticated: boolean;
-  showModal: boolean;
-  loginError?: boolean;
-  location: any;
-  login: Function;
-}
+export interface ILoginProps extends StateProps, DispatchProps, RouteComponentProps<{}> {}
 
 export interface ILoginState {
   showModal: boolean;
@@ -75,12 +70,15 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
   }
 }
 
-const mapStateToProps = ({ authentication }) => ({
+const mapStateToProps = ({ authentication }: RootState) => ({
   isAuthenticated: authentication.isAuthenticated,
   loginError: authentication.loginError,
   showModal: authentication.showModalLogin
 });
 
 const mapDispatchToProps = { login };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

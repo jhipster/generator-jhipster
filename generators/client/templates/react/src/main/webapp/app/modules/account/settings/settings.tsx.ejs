@@ -25,6 +25,7 @@ import { AvForm, AvField } from 'availity-reactstrap-validation';
 <%_ if (enableTranslation) { _%>
 import { locales } from 'app/config/translation';
 <%_ } _%>
+import { RootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
 import { saveAccountSettings, reset } from './settings.reducer';
 
@@ -36,13 +37,7 @@ const successAlert = (
   </Alert>
 );
 
-export interface IUserSettingsProps {
-  account: any;
-  getSession: Function;
-  saveAccountSettings: Function;
-  reset: Function;
-  updateSuccess: boolean;
-}
+export interface IUserSettingsProps extends StateProps, DispatchProps  {}
 
 export interface IUserSettingsState {
   account: any;
@@ -173,7 +168,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
   }
 }
 
-const mapStateToProps = ({ authentication, settings }) => ({
+const mapStateToProps = ({ authentication, settings }: RootState) => ({
   account: authentication.account,
   isAuthenticated: authentication.isAuthenticated,
   updateSuccess: settings.updateSuccess,
@@ -181,5 +176,8 @@ const mapStateToProps = ({ authentication, settings }) => ({
 });
 
 const mapDispatchToProps = { getSession, saveAccountSettings, reset };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);

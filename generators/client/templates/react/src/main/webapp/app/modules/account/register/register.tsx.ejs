@@ -23,6 +23,7 @@ import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Alert, Button } from 'reactstrap';
 
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
+import { RootState } from 'app/shared/reducers';
 import { handleRegister, reset } from './register.reducer';
 
 export const mainErrorMessages = {
@@ -43,16 +44,7 @@ export const mainErrorMessages = {
   )
 };
 
-export interface IRegisterProps {
-  handleRegister: Function;
-  reset: Function;
-  registrationSuccess: boolean;
-  registrationFailure: boolean;
-  errorMessage: string;
-<%_ if (enableTranslation) { _%>
-  currentLocale: string;
-<%_ } _%>
-}
+export interface IRegisterProps extends StateProps, DispatchProps  {}
 
 export interface IRegisterState {
   password: string;
@@ -189,7 +181,7 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
   }
 }
 
-const mapStateToProps = ({ register<%_ if (enableTranslation) { _%>, locale <%_ } _%>}) => ({
+const mapStateToProps = ({ register<%_ if (enableTranslation) { _%>, locale <%_ } _%>}: RootState) => ({
   registrationSuccess: register.registrationSuccess,
   registrationFailure: register.registrationFailure,
   errorMessage: register.errorMessage,
@@ -199,5 +191,8 @@ const mapStateToProps = ({ register<%_ if (enableTranslation) { _%>, locale <%_ 
 });
 
 const mapDispatchToProps = { handleRegister, reset };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);
