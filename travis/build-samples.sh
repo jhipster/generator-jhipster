@@ -522,21 +522,6 @@ function echoTitleBuildStep() {
 # ====================
 # ====================
 
-# function restoreSTDERRandSTDOUTtoConsole() {{{3
-function restoreSTDERRandSTDOUTtoConsole() {
-    # Restore the originals descriptors.
-    # Behaviour changed in function launchScriptForAllSamples()
-    if [[ -e /dev/fd/3 ]] ; then
-        exec 1>&3
-        3<&-
-    fi
-    if [[ -e /dev/fd/4 ]] ; then
-        exec 2>&4
-        4<&-
-    fi
-
-}
-
 # I suppose ipoute 2 is installed on main linux distro.
 # function testIfPortIsFreeWithSs() {{{3
 # TODO BIG WARNING
@@ -546,17 +531,6 @@ function testIfPortIsFreeWithSs() {
         "port '$1' is busy. Please stop the software who uses it" \
         "(\`sudo ss -nap | grep '$1'' to know it)" || \
         echo -e "\nPort '$1' is free.\n"
-}
-
-function testSomePorts() {
-    if command -v ss 1>> /dev/null ; then
-        testIfPortIsFreeWithSs 8080
-        testIfPortIsFreeWithSs 8081
-        testIfPortIsFreeWithSs 3636
-        testIfPortIsFreeWithSs 27017
-        testIfPortIsFreeWithSs 5432
-        testIfPortIsFreeWithSs 9000
-    fi
 }
 
 # function testRequierments() {{{3
@@ -644,7 +618,14 @@ function testRequierments() {
             # TODO
             # Otherwise, as actually we don't close properly docker after
             # each build, we could have false positive.
-            testSomePorts
+            if command -v ss 1>> /dev/null ; then
+                testIfPortIsFreeWithSs 8080
+                testIfPortIsFreeWithSs 8081
+                testIfPortIsFreeWithSs 3636
+                testIfPortIsFreeWithSs 27017
+                testIfPortIsFreeWithSs 5432
+                testIfPortIsFreeWithSs 9000
+            fi
         fi
 
     fi
@@ -724,6 +705,21 @@ function createLogFile() {
 # ====================
 # ====================
 
+# function restoreSTDERRandSTDOUTtoConsole() {{{3
+function restoreSTDERRandSTDOUTtoConsole() {
+    # Restore the originals descriptors.
+    # Behaviour changed in function launchScriptForAllSamples()
+    if [[ -e /dev/fd/3 ]] ; then
+        exec 1>&3
+        3<&-
+    fi
+    if [[ -e /dev/fd/4 ]] ; then
+        exec 2>&4
+        4<&-
+    fi
+
+}
+
 # function treatEndOfBuild() {{{3
 function treatEndOfBuild() {
     # TODO treat for REACT. React has its own node_modules.
@@ -733,6 +729,9 @@ function treatEndOfBuild() {
     # Let time, in case of the disk isn't flushed, or if there is
     # java or node background processes not completly finished.
     sleep 10
+
+    # TODO improve it. Actually, kill all docker commands. Not cool!
+    docker kill $(docker ps -q)
 
     if [[ "$ERROR_IN_SAMPLE" -eq 0 ]] ; then
         local logrenamed="${beginLogfilename}"".passed.""${endofLogfilename}"
@@ -1072,7 +1071,7 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     if [[ ! -z "${travisVars+x}" ]] ; then
         # Do not escape with quotes $travisVars, because rightly we  want
         # word spliting!
-        IFS=$' ' export $travisVars
+        IFS=$' ' export $travisVars > /dev/null
     fi
 
     # Should never be raised because we check ../.travis.yml.
@@ -1245,7 +1244,6 @@ function launchScriptForAllSamples() {
     done
 
     testRequierments
-    testSomePorts
 
     # TODO
     # do not launch this if there is only projects with "skipClient: true"
@@ -1258,7 +1256,7 @@ function launchScriptForAllSamples() {
     # Works only for simple loops.
     # It lost the iterator when we use this syntax loop
     # with inner loop and background processes.
-    IFS=$'\n' read -ra jhipsterArray <<< "$TRAVIS_DOT_YAML_PARSED"
+    IFS=$'\n' readarray jhipsterArray <<< "$TRAVIS_DOT_YAML_PARSED"
 
     local -i i=0
     timeSpan=15
