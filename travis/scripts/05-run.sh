@@ -49,13 +49,17 @@ launchCurlOrProtractor() {
         httpUrl="http://localhost:8081/management/health"
     fi
 
-    rep=$(curl -v "$httpUrl")
+    # --fail: fail due to the  server's  HTTP  status code
+    # return error 22.
+    # When server send staus code 200, 401 or 407, $rep takes value 0.
+    # But when it sends status code like 500, 404, etc, $rep takes value 22.
+    rep=$(curl -v --fail "$httpUrl")
     status=$?
     while [ "$status" -ne 0 ] && [ "$retryCount" -le "$maxRetry" ]; do
         echo "[$(date)] Application not reachable yet. Sleep and retry - retryCount =" $retryCount "/" $maxRetry
         retryCount=$((retryCount+1))
         sleep 10
-        rep=$(curl -v "$httpUrl")
+        rep=$(curl -v --fail "$httpUrl")
         status=$?
     done
 
