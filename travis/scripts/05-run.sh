@@ -42,50 +42,41 @@ fi
 #-------------------------------------------------------------------------------
 
 launchCurlOrProtractor() {
-    retryCount=1
-    maxRetry=10
-    httpUrl="http://localhost:8080"
+    local -i retryCount=1
+    local -i maxRetry=10
+    local httpUrl="http://localhost:8080"
     if [[ "$JHIPSTER" == *"micro"* ]]; then
-        httpUrl="http://localhost:8081/management/health"
+        local httpUrl="http://localhost:8081/management/health"
     fi
 
     # --fail: fail due to the  server's  HTTP  status code
     # return error 22.
     # When server send staus code 200, 401 or 407, $rep takes value 0.
     # But when it sends status code like 500, 404, etc, $rep takes value 22.
-    rep=$(curl -v --fail "$httpUrl")
-    status=$?
-    while [ "$status" -ne 0 ] && [ "$retryCount" -le "$maxRetry" ]; do
+    while ! curl -v --fail "$httpUrl" && [ "$retryCount" -le "$maxRetry" ]; do
         echo "[$(date)] Application not reachable yet. Sleep and retry - retryCount =" $retryCount "/" $maxRetry
         retryCount=$((retryCount+1))
         sleep 10
-        rep=$(curl -v --fail "$httpUrl")
-        status=$?
     done
 
-    if [ "$status" -ne 0 ]; then
+    if [ "$(($maxRetry))" -eq "$retryCount" ]; then
         echo "[$(date)] Not connected after" $retryCount " retries."
         return 1
     fi
-
     if [ "$PROTRACTOR" != 1 ]; then
         return 0
     fi
 
-    retryCount=0
-    maxRetry=1
-    until [ "$retryCount" -ge "$maxRetry" ]
-    do
-        result=0
-        if [[ -f "tsconfig.json" ]]; then
-            yarn e2e
-        fi
+    local -i result=0
+    if [[ -f "tsconfig.json" ]]; then
+        set +e
+        yarn e2e
         result=$?
-        [ $result -eq 0 ] && break
-        retryCount=$((retryCount+1))
-        echo "e2e tests failed... retryCount =" $retryCount "/" $maxRetry
-        sleep 15
-    done
+        set -e
+        if [[ "$result" -ne 0 ]] ; then
+            echo "e2e tests failed."
+        fi
+    fi
     return $result
 }
 
@@ -154,10 +145,7 @@ if [ "$RUN_APP" == 1 ]; then
     echo $! > .pid
     sleep 40
 
-    set +e
-    launchCurlOrProtractor
-    result=$?
+    launchCurlOrProtractor || result=$? && result=$?
     kill $(cat .pid)
-    set -e
     exit $result
 fi

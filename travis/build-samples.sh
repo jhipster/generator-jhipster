@@ -198,7 +198,16 @@
 # or "${BASH_SOURCE[0]}". (see reference of me in function usage()
 # TODO java send to STDOUT and STDERR
 # TODO actually there is collisions when we launch several builds in same time
-#   they want all port 8080.
+#   they want all port 8080 and 9060.
+# TODO escape ANSI codes and Maven download progress bar for logfile (or advise
+#   Vim;-))
+# TODO add option to minimize output in console when we generate and
+#   testandbuild only one sample.
+# TODO improve comments.
+# TODO do not advaise to change ../.travis.yml, instead let option to
+#   pass several samples in command line.
+# TODO stop docker containers.
+# TODO explain how to launch docker without sudo for linux users.
 
 # PREPARE SCRIPT {{{1
 # ==============================================================================
@@ -303,6 +312,8 @@ function confirmationUser() {
 function usageClean() {
     local NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
     echo -e "\n\n\`./build-samples.sh clean'\n" \
+        "—————————————————————————————————————\n" \
+        "—————————————————————————————————————\n" \
         "1) Before each new build, ./sample/[sample-name]-sample " \
         "is systematically erased, contrary to " \
         "'${NODE_MODULE_SHORT_NAME}'.\n" \
@@ -320,23 +331,15 @@ function usageClean() {
 function usage() {
     local me='$(basename "$0")'
     local list_of_samples=`cut -d ' ' -f 1 <<< "$TRAVIS_DOT_YAML_PARSED"`
+
     echo -e "\n\nScript than emulate well remote Travis CI build " \
         " https://travis-ci.org/jhipster/generator-jhipster.\n"
-    # TODO test if it works on MAC
-    command -v google-chrome-stable 1>> /dev/null || echo -e "\nERROR: " \
-        "\'google-chrome-stable' installed on this computer. " \
-        " Please install it and add it in your PATH " \
-        "(maybe restart your terminal)\n".
-    command -v docker-compose 1>> /dev/null || echo -e "\nWARNING: " \
-        "\'docker-compose' isn't installed on this computer. " \
-        "You could install it and start tests in a new terminal." \
-        "Few tests need \`docker-compose' avaible in your path " \
-        "(not mandatory).\n"
-    # TODO test if you docker is launched.
 
     echo -e "\nUsage: '$me' generate [sample_name] " \
         "| buildandtest [sample_name]|clean | help\n\n" \
     " \`./build-samples.sh generate/buildandtest'\n" \
+        "—————————————————————————————————————\n" \
+        "—————————————————————————————————————\n" \
         "* They will create the travis sample project under the './samples'" \
         "folder with folder name \`[sample_name]-sample'." \
         "* 'generate' generate only a JHipster project with entities. " \
@@ -361,6 +364,7 @@ function usage() {
             "./genertor-jhipster. Now you will test this generator, and not" \
             "the npm genertor-jhipster." \
     "\n\n'[sample_name]' could be:\n" \
+    "——————————————————\n" \
     "${list_of_samples}\n" \
     "\nThis samples could be skipped. In section 'matrix'" \
     " generator-jhipster/.travis.yml simply comment it" \
@@ -377,10 +381,11 @@ function usage() {
     "configurations (defined in the folder .jhipster of a " \
     "'./scripts/sample-name-sample' folder)."
 
-
     usageClean
 
     echo -e "\nExamples:\n" \
+        "—————————————————————————————————————\n" \
+        "—————————————————————————————————————\n" \
     "\`$ ./build-samples.sh generate ngx-default' " \
         "=> generate a new project at travis/samples/ngx-default-sample\n" \
     "\`$ ./build-samples.sh buildandtest ngx-default' " \
@@ -395,9 +400,12 @@ function usage() {
         "=> delete all folders travis/samples/*-sample\n" \
         "=> delete especially the node_modules cache " \
         "(samples/node_modules_cache-sample) to sanitize.\n" \
-    "\`$ ./build-samples.sh help' => display the previous message" \
-    "\n\nNote1: We recommand to use Node.Js LTS. Check if you use it.\n" \
-    "\n\nNote2: for tests with a client (ngx-*, react-*): " \
+    "\`$ ./build-samples.sh help' => display this help\n" \
+    "\nNotes:\n" \
+    "—————————————————————————————————————\n" \
+    "—————————————————————————————————————\n" \
+    "Note1: We recommand to use Node.Js LTS. Check if you use it.\n" \
+    "Note2: for tests with a client (ngx-*, react-*): " \
     "each node_modules takes actually " \
     "(version 5) 1.1 Go." \
     "A symbolic link (symlink) is done at the end of this script between" \
@@ -407,7 +415,11 @@ function usage() {
     "missing library. However, actually you can't parform tests in it. This" \
     "script copy node_modules folder from node_modules_cache-sample before" \
     "perform tests, and symlink again at the end of the test." \
-    "\`yarn install' isn't perform before test to increase speed".
+    "\`yarn install' isn't perform before test to increase speed". \
+    "\n\nJust remind of sample_name:\n" \
+    "——————————————————\n" \
+    "——————————————————\n" \
+    "${list_of_samples}\n"
 
     exit 0
 }
@@ -506,7 +518,8 @@ function echoTitleBuildStep() {
     unset ELAPSED
 }
 
-# LOG FILE AND REDIRECTION OF STDOUT/STDERR {{{2 ====================
+# TEST REQUIERMENTS  {{{2
+# ====================
 # ====================
 
 # function restoreSTDERRandSTDOUTtoConsole() {{{3
@@ -522,6 +535,28 @@ function restoreSTDERRandSTDOUTtoConsole() {
         4<&-
     fi
 
+}
+
+# I suppose ipoute 2 is installed on main linux distro.
+# function testIfPortIsFreeWithSs() {{{3
+# TODO BIG WARNING
+function testIfPortIsFreeWithSs() {
+    ss -nl | grep "$1" 1>> /dev/null \
+        && exitScriptWithError "FATAL ERROR: " \
+        "port '$1' is busy. Please stop the software who uses it" \
+        "(\`sudo ss -nap | grep '$1'' to know it)" || \
+        echo -e "\nPort '$1' is free.\n"
+}
+
+function testSomePorts() {
+    if command -v ss 1>> /dev/null ; then
+        testIfPortIsFreeWithSs 8080
+        testIfPortIsFreeWithSs 8081
+        testIfPortIsFreeWithSs 3636
+        testIfPortIsFreeWithSs 27017
+        testIfPortIsFreeWithSs 5432
+        testIfPortIsFreeWithSs 9000
+    fi
 }
 
 # function testRequierments() {{{3
@@ -557,28 +592,74 @@ function testRequierments() {
     # Ask or search wich version is needed. Java 10 doesn't work also
     javaVersion="$(java -version 2>&1)"
     grep "OpenJDK" <<< "$javaVersion" && exitScriptWithError \
-        'Do not use OpenJDK, please install Oracle Java.'
+        'FATAL ERROR: do not use OpenJDK, please install Oracle Java.'
     echo
 
-    jhipster --version 1>> /dev/null || exitScriptWithError \
+    # TODO SKIP this test it if we want only generate samples.
+    # and not launch testandbuild or test generator (doesItTestGenerator()).
+    # TODO port on Mac.
+    local -i skipDockerTests=0
+    printCommandAndEval "docker --version" || (exitScriptWithError \
+        "FATAL ERROR: please install docker and start the service. " \
+        && skipDockerTests=1)
+    echo
+    printCommandAndEval "docker-compose --version" || (exitScriptWithError \
+        "FATAL ERROR: please install docker-compose. " && skipDockerTests=1)
+    echo
+    if uname -a | grep -i linux 1>> /dev/null && \
+        [[ "$skipDockerTests" -eq 0 ]] ; then
+
+        if command -v systemctl --version 1>> /dev/null 2>&1 ; then
+            systemctl is-active docker.service 1>> /dev/null 2>&1 \
+                ||  (exitScriptWithError "FATAL ERROR: please " \
+                "launch docker service" \
+                "(\`sudo systemctl start docker.service')" && \
+                skipDockerTests=1)
+        fi
+
+        if [[ "$skipDockerTests" -eq 0 ]] ; then
+            command -v docker info 1>> /dev/null || echo -e "\nFATAL ERROR: " \
+                "please manage docker as a non-root user (" \
+                "see https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user" \
+                "– don't forget to restart your computer after this " \
+                "configuration).\n" \
+                "Do not forget to start the docker service."
+        fi
+
+        printCommandAndEval "google-chrome-stable --version" \
+            || printCommandAndEval "chromium --version" \
+            || exitScriptWithError "FATAL ERROR: " \
+            "please install google-chrome-stable or chromium. " \
+            "If google-chrome-stable or chromium is already installed, "\
+            "please add it in your PATH".
+
+        # TODO I not test all ports in
+        # ../generators/server/templates/src/main/docker
+        # because I'm afraid: it could fail too often!
+        # And if it fail too often, nobody will use this script
+        # For a simple test for ngx-default, it's not mandotory
+        # to check all!
+        if [[ "$workOnAllProjects" -eq 0 ]] ; then
+            # Or test in function launchScriptForAllSamples()
+            # TODO
+            # Otherwise, as actually we don't close properly docker after
+            # each build, we could have false positive.
+            testSomePorts
+        fi
+
+    fi
+
+    command -v jhipster --version 1>> /dev/null || exitScriptWithError \
         "FATAL ERROR: please install JHipster globally. " \
         "(\`$ yarn global install jhipster') " \
         "If JHipster is already installed, please add it in your PATH."
     echo
 
-    # TODO test if it works on mac
-    printCommandAndEval "google-chrome-stable --version" \
-        || exitScriptWithError "FATAL ERROR: " \
-            "please install google-chrome-stable. " \
-            "If google-chrome-stable is already installed, "\
-            "please add it in your PATH".
-
-    # TODO add requierments such as mysql posgresql
-
-    echo
-
 }
 
+# LOG FILE AND REDIRECTION OF STDOUT/STDERR {{{2
+# ====================
+# ====================
 
 # function printInfoBeforeLaunch() {{{3
 function printInfoBeforeLaunch() {
@@ -614,7 +695,6 @@ function printInfoBeforeLaunch() {
             "SPRING_JPA_SHOW_SQL='$SPRING_JPA_SHOW_SQL'"
     fi
 }
-
 
 # function createlogfile() {{{3
 function createLogFile() {
@@ -804,9 +884,7 @@ function launchNewBash() {
 function doesItTestGenerator() {
     local confirmationFirstParameter=`echo -e "Do you want execute " \
         "\\\`yarn test' in " \
-        "generator-jhipster '$1' " \
-        "(skip 1° if you havn't \\\`docker-compose' installed" \
-        "2° if you want only generate a new project)? [y/n] "`
+        "generator-jhipster '$1'? [y/n] "`
     confirmationUser "$confirmationFirstParameter" \
         "TESTGENERATOR=1 ; \
         echo Generator test will be test later." \
@@ -877,11 +955,8 @@ function buildAndTestProject() {
     # BUILD AND TEST
     # ====================
     # Corresponding of the entry "script" in .travis.yml
-    # TODO it seems we must be sudo
-    # Maybe a problem with .dockignore:
-    # https://unix.stackexchange.com/questions/413015/docker-compose-cannot-build-without-sudo-but-i-can-run-containers-without-it
-    # launchNewBash "./scripts/03-docker-compose.sh" \
-    #    "Start docker container-compose.sh for '${JHIPSTER}'"
+    launchNewBash "./scripts/03-docker-compose.sh" \
+       "Start docker container-compose.sh for '${JHIPSTER}'"
     launchNewBash "./scripts/04-tests.sh"  "Testing '${JHIPSTER}-sample'"
     launchNewBash "./scripts/05-run.sh" "Run and test '${JHIPSTER}-sample'"
     launchNewBash "./scripts/06-sonar.sh" \
@@ -958,11 +1033,6 @@ function generateNode_Modules_Cache() {
         eval "$jhipstercommand"
         unset jhipstercommand
 
-        if [[ $? -ne 0 ]] ; then
-            errorInBuildExitCurrentSample "FATAL ERROR: " \
-                "Failure during generation of the angular no-entity sample"
-        fi
-
         treatEndOfBuild
     }
 
@@ -999,12 +1069,10 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     # have this option, for this reason (we want display the first column,
     # even if there isn't several columns.
     local travisVars=`cut -s -d ' ' -f 2- <<< "$JHIPSTER_MATRIX"`
-    # https://stackoverflow.com/questions/2821043/allowed-characters-in-linux-environment-variable-names
-    if [[ -z "${travisVars+x}" ]] && \
-        [[ "$travisVars" =~ "[a-zA-Z0-9_].*" ]] ; then
-        while IFS=$' ' read -r defVar ; do
-            export "$defVar"
-        done <<< "$travisVars"
+    if [[ ! -z "${travisVars+x}" ]] ; then
+        # Do not escape with quotes $travisVars, because rightly we  want
+        # word spliting!
+        IFS=$' ' export $travisVars
     fi
 
     # Should never be raised because we check ../.travis.yml.
@@ -1176,23 +1244,21 @@ function launchScriptForAllSamples() {
         echo "" ;
     done
 
+    testRequierments
+    testSomePorts
+
     # TODO
     # do not launch this if there is only projects with "skipClient: true"
     # in ../.travis.yml
     generateNode_Modules_Cache
 
     local -a jhipsterArray
-    local -i i=0
     # We need to use an array.
     # For a complex script, loop below doesn't work.
     # Works only for simple loops.
     # It lost the iterator when we use this syntax loop
     # with inner loop and background processes.
-    while IFS=$'\n' read -r localJHIPSTER_MATRIX ; do
-        jhipsterArray[i]="$localJHIPSTER_MATRIX"
-        i=$((i+1))
-    done <<< "$TRAVIS_DOT_YAML_PARSED"
-    unset i
+    IFS=$'\n' read -ra jhipsterArray <<< "$TRAVIS_DOT_YAML_PARSED"
 
     local -i i=0
     timeSpan=15
