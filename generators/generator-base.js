@@ -283,7 +283,10 @@ module.exports = class extends PrivateBase {
                     file: indexReducerPath,
                     needle: 'jhipster-needle-add-reducer-import',
                     splicable: [
-                        this.stripMargin(`|import ${entityInstance}, { ${entityAngularName}State } from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
+                        this.stripMargin(`|// prettier-ignore
+                            |import ${entityInstance}, {
+                            |  ${entityAngularName}State
+                            |} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
                     ]
                 }, this);
 
