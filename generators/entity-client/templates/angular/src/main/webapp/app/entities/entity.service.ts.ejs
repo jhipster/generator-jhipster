@@ -21,6 +21,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 <%_ if (fieldsContainDate) { _%>
 import * as moment from 'moment';
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 <%_ } _%>
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -91,7 +92,7 @@ export class <%= entityAngularName %>Service {
         <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : null,
         <%_ } _%>
         <%_ if ( fields[idx].fieldType === 'LocalDate' ) { _%>
-        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.format('YYYY-MM-DD') : null,
+        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.format(DATE_FORMAT) : null,
         <%_ } _%>
         <%_ } _%>
         });
