@@ -4,9 +4,11 @@ import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
 import { RootState } from 'app/shared/reducers';
 
-export interface IPrivateRouteProps extends StateProps, RouteProps {
+interface IOwnProps {
   hasAnyAuthorities?: string[];
 }
+
+export interface IPrivateRouteProps extends IOwnProps, StateProps, RouteProps {}
 
 export const PrivateRouteComponent = ({
   component: Component,
@@ -54,7 +56,7 @@ export const hasAnyAuthority = (authorities: string[], hasAnyAuthorities: string
   return false;
 };
 
-const mapStateToProps = ({ authentication: { isAuthenticated, account } }: RootState, { hasAnyAuthorities = [] }) => ({
+const mapStateToProps = ({ authentication: { isAuthenticated, account } }: RootState, { hasAnyAuthorities = [] }: IOwnProps) => ({
   isAuthenticated,
   isAuthorized: hasAnyAuthority(account.authorities, hasAnyAuthorities)
 });
