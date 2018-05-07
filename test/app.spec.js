@@ -65,7 +65,7 @@ describe('JHipster generator', () => {
                 assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
             });
             it('contains correct custom prefix when specified', () => {
-                assert.fileContent('.angular-cli.json', /"prefix": "test"/);
+                assert.fileContent('angular.json', /"prefix": "test"/);
             });
         });
 

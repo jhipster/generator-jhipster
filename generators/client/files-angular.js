@@ -39,7 +39,7 @@ const files = {
                 'tsconfig.json',
                 'tsconfig-aot.json',
                 'tslint.json',
-                '.angular-cli.json',
+                'angular.json',
                 'webpack/utils.js',
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
