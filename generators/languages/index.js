@@ -191,6 +191,7 @@ module.exports = class extends BaseGenerator {
             this.updateLanguagesInLanguagePipe(this.config.get('languages'));
             this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
             this.updateLanguagesInWebpack(this.config.get('languages'));
+            this.updateLanguagesInMomentWebpack(this.config.get('languages'));
         }
     }
 };
