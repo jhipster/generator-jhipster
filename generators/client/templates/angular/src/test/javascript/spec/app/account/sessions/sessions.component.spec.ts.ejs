@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, inject, tick, fakeAsync } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { Session } from 'app/account/sessions/session.model';
@@ -55,7 +55,7 @@ describe('Component Tests', () => {
                     mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
-                    spyOn(service, 'findAll').and.returnValue(Observable.of(sessions));
+                    spyOn(service, 'findAll').and.returnValue(of(sessions));
 
                     comp.ngOnInit();
                     tick();
@@ -78,8 +78,8 @@ describe('Component Tests', () => {
                     mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
-                    spyOn(service, 'findAll').and.returnValue(Observable.of(sessions));
-                    spyOn(service, 'delete').and.returnValue(Observable.of({}));
+                    spyOn(service, 'findAll').and.returnValue(of(sessions));
+                    spyOn(service, 'delete').and.returnValue(of({}));
 
                     comp.ngOnInit();
                     comp.invalidate('xyz');
@@ -96,8 +96,8 @@ describe('Component Tests', () => {
                     mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
-                    spyOn(service, 'findAll').and.returnValue(Observable.of(sessions));
-                    spyOn(service, 'delete').and.returnValue(Observable.of({
+                    spyOn(service, 'findAll').and.returnValue(of(sessions));
+                    spyOn(service, 'delete').and.returnValue(of({
                         status: 400
                     }));
 
@@ -117,8 +117,8 @@ describe('Component Tests', () => {
                     mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
-                    spyOn(service, 'findAll').and.returnValue(Observable.of(sessions));
-                    spyOn(service, 'delete').and.returnValue(Observable.of({
+                    spyOn(service, 'findAll').and.returnValue(of(sessions));
+                    spyOn(service, 'delete').and.returnValue(of({
                         status: 200
                     }));
 

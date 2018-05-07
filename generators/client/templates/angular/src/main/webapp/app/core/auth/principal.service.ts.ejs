@@ -17,8 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
 import { AccountService } from './account.service';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';

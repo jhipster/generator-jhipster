@@ -22,7 +22,7 @@ _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>UpdateComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
@@ -88,7 +88,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new <%= entityAngularName %>(<%- tsKeyId %>);
-                    spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({body: entity})));
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({body: entity})));
                     comp.<%= entityInstance %> = entity;
                     // WHEN
                     comp.save();
@@ -104,7 +104,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new <%= entityAngularName %>();
-                    spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({body: entity})));
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({body: entity})));
                     comp.<%= entityInstance %> = entity;
                     // WHEN
                     comp.save();
