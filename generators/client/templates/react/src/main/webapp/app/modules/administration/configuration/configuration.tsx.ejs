@@ -22,7 +22,7 @@ import { Table, Input, Row, Col, Badge } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 
 import { getConfigurations, getEnv } from '../administration.reducer';
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 
 export interface IConfigurationPageProps extends StateProps, DispatchProps {}
 
@@ -146,7 +146,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
   }
 }
 
-const mapStateToProps = ({ administration }: RootState) => ({
+const mapStateToProps = ({ administration }: IRootState) => ({
   configuration: administration.configuration,
   isFetching: administration.loading
 });

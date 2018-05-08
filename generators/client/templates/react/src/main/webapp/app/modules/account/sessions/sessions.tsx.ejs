@@ -21,7 +21,7 @@ import { connect } from 'react-redux';
 import { Alert, Table, Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { getSession } from 'app/shared/reducers/authentication';
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 import { findAll, invalidateSession } from './sessions.reducer';
 
 export interface ISessionsProps extends StateProps, DispatchProps {}
@@ -101,7 +101,7 @@ export class SessionsPage extends React.Component<ISessionsProps> {
   }
 }
 
-const mapStateToProps = ({ authentication, sessions }: RootState) => ({
+const mapStateToProps = ({ authentication, sessions }: IRootState) => ({
   account: authentication.account,
   sessions: sessions.sessions,
   updateSuccess: sessions.updateSuccess,

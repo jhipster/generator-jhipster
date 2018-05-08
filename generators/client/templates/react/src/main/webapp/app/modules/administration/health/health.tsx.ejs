@@ -22,7 +22,7 @@ import { Translate } from 'react-jhipster';
 import { Table, Badge, Col, Row, Button } from 'reactstrap';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 import { systemHealth } from '../administration.reducer';
 import HealthModal from './health-modal';
 
@@ -123,7 +123,7 @@ export class HealthPage extends React.Component<IHealthPageProps, IHealthPageSta
   }
 }
 
-const mapStateToProps = (storeState: RootState) => ({
+const mapStateToProps = (storeState: IRootState) => ({
   health: storeState.administration.health,
   isFetching: storeState.administration.loading
 });

@@ -23,7 +23,7 @@ import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Alert, Button } from 'reactstrap';
 
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 import { handleRegister, reset } from './register.reducer';
 
 export const mainErrorMessages = {
@@ -181,7 +181,7 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
   }
 }
 
-const mapStateToProps = ({ register<%_ if (enableTranslation) { _%>, locale <%_ } _%>}: RootState) => ({
+const mapStateToProps = ({ register<%_ if (enableTranslation) { _%>, locale <%_ } _%>}: IRootState) => ({
   registrationSuccess: register.registrationSuccess,
   registrationFailure: register.registrationFailure,
   errorMessage: register.errorMessage,

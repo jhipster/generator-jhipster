@@ -52,7 +52,7 @@ import {
   ICrudPutAction
 } from 'react-jhipster';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 
 <%_
 let hasRelationshipQuery = false;
@@ -632,7 +632,7 @@ _%>
   }
 }
 
-const mapStateToProps = (storeState: RootState) => ({
+const mapStateToProps = (storeState: IRootState) => ({
   <%_ otherEntityActions.forEach(val => { _%>
     <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>,
   <%_ }) _%>

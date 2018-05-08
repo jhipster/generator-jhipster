@@ -22,7 +22,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Alert } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 import { activateAction, reset } from './activate.reducer';
 
 const successAlert = (
@@ -75,7 +75,7 @@ export class ActivatePage extends React.Component<IActivateProps> {
   }
 }
 
-const mapStateToProps = ({ activate }: RootState) => ({
+const mapStateToProps = ({ activate }: IRootState) => ({
   activationSuccess: activate.activationSuccess,
   activationFailure: activate.activationFailure
 });

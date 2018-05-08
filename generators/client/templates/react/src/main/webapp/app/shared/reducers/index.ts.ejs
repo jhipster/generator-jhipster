@@ -43,8 +43,7 @@ import sessions, { SessionsState } from 'app/modules/account/sessions/sessions.r
 <%_ } _%>
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
-// tslint:disable-next-line:interface-over-type-literal
-export type RootState = {
+export interface IRootState {
   authentication: AuthenticationState;
   <%_ if (enableTranslation) { _%>
   locale: LocaleState;
@@ -66,7 +65,7 @@ export type RootState = {
   loadingBar: any;
 }
 
-const rootReducer = combineReducers<RootState>({
+const rootReducer = combineReducers<IRootState>({
   authentication,
   <%_ if (enableTranslation) { _%>
   locale,

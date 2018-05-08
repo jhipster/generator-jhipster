@@ -24,7 +24,7 @@ import { Translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 import { Row, Col, Alert } from 'reactstrap';
 
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';

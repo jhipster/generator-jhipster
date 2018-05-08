@@ -24,7 +24,7 @@ import { Card } from 'reactstrap';
 import { HashRouter as Router } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
 import { getProfile } from 'app/shared/reducers/application-profile';
 <%_ if (enableTranslation) { _%>
@@ -73,7 +73,7 @@ export class App extends React.Component<IAppProps> {
   }
 }
 
-const mapStateToProps = ({ authentication, applicationProfile<% if (enableTranslation) { %>, locale<% } %> }: RootState) => ({
+const mapStateToProps = ({ authentication, applicationProfile<% if (enableTranslation) { %>, locale<% } %> }: IRootState) => ({
   <%_ if (enableTranslation) { _%>
   currentLocale: locale.currentLocale,
   <%_ } _%>

@@ -25,7 +25,7 @@ import { AvForm, AvField } from 'availity-reactstrap-validation';
 <%_ if (enableTranslation) { _%>
 import { locales } from 'app/config/translation';
 <%_ } _%>
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
 import { saveAccountSettings, reset } from './settings.reducer';
 
@@ -168,7 +168,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
   }
 }
 
-const mapStateToProps = ({ authentication, settings }: RootState) => ({
+const mapStateToProps = ({ authentication, settings }: IRootState) => ({
   account: authentication.account,
   isAuthenticated: authentication.isAuthenticated,
   updateSuccess: settings.updateSuccess,

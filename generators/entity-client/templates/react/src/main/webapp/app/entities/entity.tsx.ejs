@@ -44,7 +44,7 @@ import {
 } from 'react-jhipster';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
   getSearchEntities,
@@ -354,7 +354,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   }
 }
 
-const mapStateToProps = ({ <%= entityInstance %> }: RootState) => ({
+const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
   <%= entityInstance %>List: <%= entityInstance %>.entities,
   <%_ if (pagination !== 'no') { _%>
   totalItems: <%= entityInstance %>.totalItems,

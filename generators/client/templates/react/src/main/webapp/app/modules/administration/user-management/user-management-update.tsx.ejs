@@ -29,7 +29,7 @@ import { locales } from 'app/config/translation';
 <%_ } _%>
 import { IUser } from 'app/shared/model/user.model';
 import { getUser, getRoles, updateUser, createUser, reset } from './user-management.reducer';
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 
 export interface IUserManagementUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{login: string}> {}
 
@@ -231,7 +231,7 @@ export class UserManagementUpdate extends React.Component<IUserManagementUpdateP
   }
 }
 
-const mapStateToProps = (storeState: RootState) => ({
+const mapStateToProps = (storeState: IRootState) => ({
   user: storeState.userManagement.user,
   roles: storeState.userManagement.authorities,
   loading: storeState.userManagement.loading,

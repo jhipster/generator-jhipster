@@ -25,7 +25,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { APP_WHOLE_NUMBER_FORMAT, APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT } from 'app/config/constants';
 import { systemMetrics, systemThreadDump } from '../administration.reducer';
 import MetricsModal from './metrics-modal';
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 
 export interface IMetricsPageProps extends StateProps, DispatchProps {}
 
@@ -603,7 +603,7 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
   }
 }
 
-const mapStateToProps = (storeState: RootState) => ({
+const mapStateToProps = (storeState: IRootState) => ({
   metrics: storeState.administration.metrics,
   isFetching: storeState.administration.loading,
   threadDump: storeState.administration.threadDump

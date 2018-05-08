@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 
 interface IOwnProps {
   hasAnyAuthorities?: string[];
@@ -56,7 +56,7 @@ export const hasAnyAuthority = (authorities: string[], hasAnyAuthorities: string
   return false;
 };
 
-const mapStateToProps = ({ authentication: { isAuthenticated, account } }: RootState, { hasAnyAuthorities = [] }: IOwnProps) => ({
+const mapStateToProps = ({ authentication: { isAuthenticated, account } }: IRootState, { hasAnyAuthorities = [] }: IOwnProps) => ({
   isAuthenticated,
   isAuthorized: hasAnyAuthority(account.authorities, hasAnyAuthorities)
 });

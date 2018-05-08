@@ -35,7 +35,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 import { getUsers, updateUser } from './user-management.reducer';
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 
 export interface IUserManagementProps extends StateProps, DispatchProps, RouteComponentProps<{}> {}
 
@@ -190,7 +190,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
   }
 }
 
-const mapStateToProps = (storeState: RootState) => ({
+const mapStateToProps = (storeState: IRootState) => ({
   users: storeState.userManagement.users,
   totalItems: storeState.userManagement.totalItems,
   account: storeState.authentication.account

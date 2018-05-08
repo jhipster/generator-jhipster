@@ -36,7 +36,7 @@ import {
 } from 'react-jhipster';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-import { RootState } from 'app/shared/reducers';
+import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 // tslint:disable-next-line:no-unused-variable
@@ -181,7 +181,7 @@ export class <%= entityReactName %>Detail extends React.Component<I<%= entityRea
   }
 }
 
-const mapStateToProps = ({ <%= entityInstance %> }: RootState) => ({
+const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
     <%= entityInstance %>: <%= entityInstance %>.entity
 });
 
