@@ -106,7 +106,8 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
             <Nav className="ml-auto" navbar>
               <Home />
               {isAuthenticated && <EntitiesMenu />}
-              {isAuthenticated && isAdmin && <AdminMenu showSwagger={isSwaggerEnabled} showDatabase={!isInProduction} />}
+              {isAuthenticated && isAdmin &&
+                <AdminMenu showSwagger={isSwaggerEnabled} <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %> showDatabase={!isInProduction} <%_ } _%> />}
             <%_ if (enableTranslation) { _%>
               <LocaleMenu currentLocale={currentLocale} onClick={this.handleLocaleChange} />
             <%_ } _%>
