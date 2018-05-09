@@ -20,6 +20,9 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
+<%_ if (authenticationType === 'oauth2') { _%>
+import { getLoginUrl } from 'app/shared/util/url-utils';
+<%_ } _%>
 import { NavDropdown } from 'app/shared/layout/header/header-components';
 import { AccountMenu } from 'app/shared/layout/header/menus';
 
@@ -61,7 +64,11 @@ describe('AccountMenu', () => {
   it('Renders a guest AccountMenu component', () => {
     const dropdown = guestWrapper().find(NavDropdown);
     expect(dropdown).to.have.length(1);
+    <%_ if (authenticationType === 'oauth2') { _%>
+    expect(dropdown.find({ href: getLoginUrl() })).to.have.length(1);
+    <%_ } else { _%>
     expect(dropdown.find({ to: '/login' })).to.have.length(1);
+    <%_ } _%>
     expect(dropdown.find({ to: '/logout' })).to.have.length(0);
   });
 
