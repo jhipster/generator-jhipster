@@ -261,6 +261,60 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Update Moment Locales to keep in webpack prod build
+     *
+     * @param languages
+     */
+    updateLanguagesInMomentWebpackNgx(languages) {
+        const fullPath = 'webpack/webpack.prod.js';
+        try {
+            let content = 'localesToKeep: [\n';
+            languages.forEach((language, i) => {
+                content += `                    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
+            });
+            content +=
+                '                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n' +
+                '                ]';
+
+            jhipsterUtils.replaceContent({
+                file: fullPath,
+                pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
+                content
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Update Moment Locales to keep in webpack prod build
+     *
+     * @param languages
+     */
+    updateLanguagesInMomentWebpackReact(languages) {
+        const fullPath = 'webpack/webpack.prod.js';
+        try {
+            let content = 'localesToKeep: [\n';
+            languages.forEach((language, i) => {
+                content += `        '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
+            });
+            content +=
+                '        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n' +
+                '      ]';
+
+            jhipsterUtils.replaceContent({
+                file: fullPath,
+                pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
+                content
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * insight
      *
      * @param trackingCode

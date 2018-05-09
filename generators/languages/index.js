@@ -191,6 +191,12 @@ module.exports = class extends BaseGenerator {
             this.updateLanguagesInLanguagePipe(this.config.get('languages'));
             this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
             this.updateLanguagesInWebpack(this.config.get('languages'));
+            if (this.clientFramework === 'angularX') {
+                this.updateLanguagesInMomentWebpackNgx(this.config.get('languages'));
+            }
+            if (this.clientFramework === 'react') {
+                this.updateLanguagesInMomentWebpackReact(this.config.get('languages'));
+            }
         }
     }
 };
