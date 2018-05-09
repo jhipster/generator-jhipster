@@ -25,11 +25,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+<%_ if (reactive) { _%>
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+<%_ } _%>
 import org.springframework.security.core.userdetails.UserDetails;
+<%_ if (!reactive) { _%>
 import org.springframework.security.core.userdetails.UserDetailsService;
+<%_ } _%>
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<%}%>
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,7 +46,7 @@ import java.util.stream.Collectors;
  * Authenticate a user from the database.
  */
 @Component("userDetailsService")
-public class DomainUserDetailsService implements UserDetailsService {
+public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<% } %>UserDetailsService {
 
     private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
@@ -48,8 +56,16 @@ public class DomainUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    @Override<% if (databaseType === 'sql') { %>
-    @Transactional<%}%>
+    @Override
+    <%_ if (reactive) { _%>
+    public Mono<UserDetails> findByUsername(String username) {
+        return Mono.just(loadUserByUsername(username));
+    }
+
+    <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
 

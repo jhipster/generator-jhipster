@@ -16,25 +16,37 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest;
+package <%= packageName %>.web.rest;
 
-import <%=packageName%>.security.jwt.JWTConfigurer;
-import <%=packageName%>.security.jwt.TokenProvider;
-import <%=packageName%>.web.rest.vm.LoginVM;
+import <%= packageName %>.security.jwt.JWTFilter;
+import <%= packageName %>.security.jwt.TokenProvider;
+import <%= packageName %>.web.rest.vm.LoginVM;
 
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.<% if (reactive) { %>Reactive<% } %>AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+<%_ if (reactive) { _%>
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
+<%_ } else { _%>
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+<%_ } _%>
 import org.springframework.web.bind.annotation.*;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
 
 import javax.validation.Valid;
+<%_ if (reactive) { _%>
+import java.security.Principal;
+import java.util.Optional;
+<%_ } _%>
 
 /**
  * Controller to authenticate users.
@@ -45,15 +57,16 @@ public class UserJWTController {
 
     private final TokenProvider tokenProvider;
 
-    private final AuthenticationManager authenticationManager;
+    private final <% if (reactive) { %>Reactive<% } %>AuthenticationManager authenticationManager;
 
-    public UserJWTController(TokenProvider tokenProvider, AuthenticationManager authenticationManager) {
+    public UserJWTController(TokenProvider tokenProvider, <% if (reactive) { %>Reactive<% } %>AuthenticationManager authenticationManager) {
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/authenticate")
     @Timed
+    <%_ if (!reactive) { _%>
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -64,8 +77,21 @@ public class UserJWTController {
         boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
         String jwt = tokenProvider.createToken(authentication, rememberMe);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+    <%_ } else { _%>
+    public Mono<ResponseEntity<JWTToken>> authorize(@Valid @RequestBody Mono<LoginVM> loginVM) {
+        return loginVM
+            .flatMap(login -> authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()))
+                .map(auth -> tokenProvider.createToken(auth, Optional.ofNullable(login.isRememberMe()).orElse(false)))
+            )
+            .map(jwt -> {
+                HttpHeaders httpHeaders = new HttpHeaders();
+                httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+                return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+            });
+    <%_ } _%>
     }
 
     /**

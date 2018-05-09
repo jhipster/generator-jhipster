@@ -26,7 +26,9 @@ import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.zalando.problem.ProblemModule;
+<%_ if (!reactive) { _%>
 import org.zalando.problem.validation.ConstraintViolationProblemModule;
+<%_ } _%>
 
 @Configuration
 public class JacksonConfiguration {
@@ -56,6 +58,7 @@ public class JacksonConfiguration {
     ProblemModule problemModule() {
         return new ProblemModule();
     }
+    <%_ if (!reactive) { _%>
 
     /*
      * Module for serialization/deserialization of ConstraintViolationProblem.
@@ -64,5 +67,6 @@ public class JacksonConfiguration {
     ConstraintViolationProblemModule constraintViolationProblemModule() {
         return new ConstraintViolationProblemModule();
     }
+    <%_ } _%>
 
 }

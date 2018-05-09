@@ -21,10 +21,14 @@ package <%=packageName%>.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
+<%_ if (reactive) { _%>
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+<%_ } else { _%>
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+<%_ } _%>
 
 @Configuration
-public class DateTimeFormatConfiguration implements WebMvcConfigurer {
+public class DateTimeFormatConfiguration implements Web<% if (reactive) { %>Flux<% } else { %>Mvcr<% } %>Configurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {

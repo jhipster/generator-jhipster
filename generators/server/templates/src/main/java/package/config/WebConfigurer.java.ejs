@@ -46,6 +46,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+<%_ if (reactive) { _%>
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
+<%_ } _%>
 <%_ if (!skipClient) { _%>
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -65,7 +69,7 @@ import static java.net.URLDecoder.decode;
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory> {
+public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory><% if (reactive) { %>, WebFluxConfigurer<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
@@ -81,6 +85,16 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         this.jHipsterProperties = jHipsterProperties;
     }
 
+    <%_ 
+        // TODO: remove when this is supported in spring-data / spring-boot
+        if (reactive) { _%>
+    @Override
+    public void configureArgumentResolvers(ArgumentResolverConfigurer configurer) {
+        configurer.addCustomResolver(new ReactiveSortHandlerMethodArgumentResolver(),
+            new ReactivePageableHandlerMethodArgumentResolver());
+    }
+
+    <%_ } _%>
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         if (env.getActiveProfiles().length != 0) {

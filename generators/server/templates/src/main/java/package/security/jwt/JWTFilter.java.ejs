@@ -16,11 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.security.jwt;
+package <%= packageName %>.security.jwt;
 
+<%_ if (reactive) { _%>
+import org.springframework.http.server.reactive.ServerHttpRequest;
+<%_ } _%>
 import org.springframework.security.core.Authentication;
+<%_ if (reactive) { _%>
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+<%_ } _%>
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
+<%_ if (reactive) { _%>
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
+<%_ } else { _%>
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -29,12 +41,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+<%_ } _%>
 
 /**
  * Filters incoming requests and installs a Spring Security principal if a header corresponding to a valid user is
  * found.
  */
-public class JWTFilter extends GenericFilterBean {
+public class JWTFilter <% if (!reactive) { %>extends GenericFilterBean<% } else { %>implements WebFilter<% } %> {
+
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     private TokenProvider tokenProvider;
 
@@ -43,24 +58,34 @@ public class JWTFilter extends GenericFilterBean {
     }
 
     @Override
+    <%_ if (!reactive) { _%>
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
         throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String jwt = resolveToken(httpServletRequest);
+    <%_ } else { _%>
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String jwt = resolveToken(exchange.getRequest());
+    <%_ } _%>
         if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
             Authentication authentication = this.tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        <%_ if (reactive) { _%>
+            return chain.filter(exchange).subscriberContext(ReactiveSecurityContextHolder.withAuthentication(authentication));
         }
+        return chain.filter(exchange);
+        <%_ } else { _%>
         filterChain.doFilter(servletRequest, servletResponse);
+        <%_ } _%>
     }
 
-    private String resolveToken(HttpServletRequest request){
-        String bearerToken = request.getHeader(JWTConfigurer.AUTHORIZATION_HEADER);
+    private String resolveToken(<% if (!reactive) { %>HttpServletRequest<% } else { %>ServerHttpRequest<% } %> request){
+        String bearerToken = request.<% if (!reactive) { %>getHeader<% } else { %>getHeaders().getFirst<% } %>(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
         }
         <%_ if (websocket === 'spring-websocket') { _%>
-        String jwt = request.getParameter(JWTConfigurer.AUTHORIZATION_TOKEN);
+        String jwt = request.getParameter(AUTHORIZATION_TOKEN);
         if (StringUtils.hasText(jwt)) {
             return jwt;
         }

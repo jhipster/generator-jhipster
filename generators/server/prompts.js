@@ -102,7 +102,7 @@ function askForServerSideOpts(meta) {
         {
             when: response => (
                 (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka')
-                || ['gateway', 'microservice'].includes(applicationType)
+                || ['gateway', 'microservice', 'reactive'].includes(applicationType)
             ),
             type: 'list',
             name: 'authenticationType',
@@ -112,12 +112,14 @@ function askForServerSideOpts(meta) {
                     {
                         value: 'jwt',
                         name: 'JWT authentication (stateless, with a token)'
-                    },
-                    {
-                        value: 'oauth2',
-                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
                     }
                 ];
+                if (applicationType !== 'reactive') {
+                    opts.push({
+                        value: 'oauth2',
+                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
+                    });
+                }
                 if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
                     opts.push({
                         value: 'session',
@@ -153,20 +155,23 @@ function askForServerSideOpts(meta) {
             name: 'databaseType',
             message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
             choices: (response) => {
-                const opts = [
-                    {
+                const opts = [];
+                if (applicationType !== 'reactive') {
+                    opts.push({
                         value: 'sql',
                         name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
-                    },
-                    {
-                        value: 'mongodb',
-                        name: 'MongoDB'
-                    },
-                    {
+                    });
+                }
+                opts.push({
+                    value: 'mongodb',
+                    name: 'MongoDB'
+                });
+                if (applicationType !== 'reactive') {
+                    opts.push({
                         value: 'couchbase',
                         name: '[BETA] Couchbase'
-                    }
-                ];
+                    });
+                }
                 if (
                     (response.authenticationType !== 'oauth2' && applicationType === 'microservice')
                     || (response.authenticationType === 'uaa' && applicationType === 'gateway')
@@ -176,7 +181,7 @@ function askForServerSideOpts(meta) {
                         name: 'No database'
                     });
                 }
-                if (response.authenticationType !== 'oauth2') {
+                if (response.authenticationType !== 'oauth2' && applicationType !== 'reactive') {
                     opts.push({
                         value: 'cassandra',
                         name: 'Cassandra'
@@ -338,6 +343,7 @@ function askForServerSideOpts(meta) {
 
 function askForOptionalItems(meta) {
     if (!meta && this.existingProject) return;
+    if (this.applicationType === 'reactive') return;
 
     const applicationType = this.applicationType;
     const choices = [];

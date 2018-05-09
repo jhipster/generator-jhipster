@@ -154,6 +154,8 @@ const serverFiles = {
     ],
     test: [
         {
+            // TODO: add test for reactive
+            condition: generator => !generator.reactive,
             path: SERVER_TEST_SRC_DIR,
             templates: [{
                 file: 'package/web/rest/EntityResourceIntTest.java',

@@ -134,7 +134,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
     @Transactional
     <%_ } _%>
     public void assertThatUserCanBeFoundByLogin() {
-        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_LOGIN);
+        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_ONE_LOGIN)<% if (reactive) { %>.block()<% } %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
@@ -144,7 +144,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
     @Transactional
     <%_ } _%>
     public void assertThatUserCanBeFoundByLoginIgnoreCase() {
-        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_LOGIN.toUpperCase(Locale.ENGLISH));
+        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_ONE_LOGIN.toUpperCase(Locale.ENGLISH))<% if (reactive) { %>.block()<% } %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
@@ -154,7 +154,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
     @Transactional
     <%_ } _%>
     public void assertThatUserCanBeFoundByEmail() {
-        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL);
+        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_TWO_EMAIL)<% if (reactive) { %>.block()<% } %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
@@ -168,7 +168,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
     <%_ } else { // MongoDB and Cassandra _%>
     @Test
     public void assertThatUserCanBeFoundByEmailIgnoreCase() {
-        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH));
+        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH))<% if (reactive) { %>.block()<% } %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
@@ -179,7 +179,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
     @Transactional
     <%_ } _%>
     public void assertThatEmailIsPrioritizedOverLogin() {
-        UserDetails userDetails = domainUserDetailsService.loadUserByUsername(USER_ONE_EMAIL);
+        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_ONE_EMAIL)<% if (reactive) { %>.block()<% } %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
@@ -189,7 +189,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
     @Transactional
     <%_ } _%>
     public void assertThatUserNotActivatedExceptionIsThrownForNotActivatedUsers() {
-        domainUserDetailsService.loadUserByUsername(USER_THREE_LOGIN);
+        domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_THREE_LOGIN)<% if (reactive) { %>.block()<% } %>;
     }
 
 }
