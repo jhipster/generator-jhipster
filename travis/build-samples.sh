@@ -47,7 +47,7 @@
 # $ perl -ne "printf if /(?<\!\(\()(?<\!\")(?<\!')(?<\!\\\\\`)\\\$(?\!\()(?\!\s)(?\!\?)(?\!\\')/" build-samples.sh
 # 4) In Bah local variables are seen, and could be modified by inner functions.
 # 5) keyword "export" exports variables to scripts ./scripts/*.sh
-# 6) [[ -z "${myUnboundVar} ]] return true if "$myUnboundVar" is
+# 6) [[ -z "${myUnboundVar+x} ]] return true if "$myUnboundVar" is
 #       unbound/unsetted.
 #       In JavaScript, corresponding to test "typeof myVar === 'undefined'"
 # 7) Do not return something > 0 caused of `set -e`
@@ -63,6 +63,12 @@
 #       yarn test || errorInBuildStopCurrentSample \
 #               "Fail during test of the Generator." \
 #               " (command 'yarn test' in `pwd`)"
+# 12) Do not use loop for. Sometimes it fail. For example:
+        # IFS=$' ' readarray dockerContainers <<< `docker ps -q`
+        # for i in ${dockerContainers[@]} ; do
+        #     printCommandAndEval docker kill "$i" || exitScriptWithError \
+        #         "FATAL ERROR: couldn't kill docker container '$i'"
+        # done
 
 
 # HOW WORKS THIS SCRIPT. {{{2
@@ -270,15 +276,21 @@ function exitScriptWithError() {
     exit 10
 }
 
+# function printFileDescriptor3() {{{2
+function printFileDescriptor3() {
+    [[ -e /dev/fd/3 ]] && echo -e "\n""$@" | \
+        tee --append /dev/fd/3 || echo -e "\n""$@"
+}
+
 # function printCommandAndEval() {{{2
 function printCommandAndEval() {
     if [[ -e /dev/fd/3 ]] && \
         [[ -e /dev/fd/4 ]] ; then
         # See function launchScriptForAllSamples()
-        echo "$@" >> >(tee --append /dev/fd/3) 2>> >(tee --append /dev/fd/4)
+        echo "${PS1}${@}" >> >(tee --append /dev/fd/3) 2>> >(tee --append /dev/fd/4)
         eval "$@" >> >(tee --append /dev/fd/3) 2>> >(tee --append /dev/fd/4)
     else
-        echo "$@"
+        echo "${PS1}${@}"
         # https://google.github.io/styleguide/shell.xml#Eval
         # says don't use eval. But doesn't work without.
         eval "$@"
@@ -457,13 +469,8 @@ function cleanAllProjects() {
     fi
 
     while IFS=$'\n' read -r dirToRemove ; do
-        if [[ -f "$dirToRemove/.yo-rc.json" ]] || \
-            [[ "$dirToRemove" == "${NODE_MODULES_CACHE_SAMPLE}" ]] ; then
             echo -e "\n\n*********************** Deleting '$dirToRemove'\n"
             rm -Rf "$dirToRemove"
-        else
-            echo "'$dirToRemove': Not a JHipster project. Skipping."
-        fi
     done <<< "$foldersSample"
 
     local NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
@@ -527,10 +534,10 @@ function echoTitleBuildStep() {
 # TODO BIG WARNING
 function testIfPortIsFreeWithSs() {
     ss -nl | grep "$1" 1>> /dev/null \
-        && exitScriptWithError "FATAL ERROR: " \
+        && errorInBuildExitCurrentSample "FATAL ERROR: " \
         "port '$1' is busy. Please stop the software who uses it" \
         "(\`sudo ss -nap | grep '$1'' to know it)" || \
-        echo -e "\nPort '$1' is free.\n"
+        printFileDescriptor3 "Port '$1' is free."
 }
 
 # function testRequierments() {{{3
@@ -541,58 +548,86 @@ function testRequierments() {
 
     printCommandAndEval "node --version" \
         || printCommandAndEval "nodejs --version" \
-        || exitScriptWithError "FATAL ERROR: please install Node. " \
+        || errorInBuildExitCurrentSample "FATAL ERROR: please install Node. " \
         "If Node is already installed, please add it in your PATH."
     echo "We recommand to use Node.Js LTS. Check if you use it."
     echo
 
     printCommandAndEval "yarn -v" \
-        || exitScriptWithError "FATAL ERROR: please install Yarn. " \
+        || errorInBuildExitCurrentSample "FATAL ERROR: please install Yarn. " \
         "If Yarn is already installed, please add it in your PATH."
     echo
 
     # java send question of this version to stderr. Redirect to stdout.
     printCommandAndEval "java -version 2>&1" || \
-        "exitScriptWithError '$argument'" \
-            "FATAL ERROR: please install java."
+        errorInBuildExitCurrentSample "FATAL ERROR: please install java."
     echo
 
     # java send question of this version to stderr. Redirect to stdout.
-    printCommandAndEval "javac -version 2>&1" || "exitScriptWithError" \
+    printCommandAndEval "javac -version 2>&1" || errorInBuildExitCurrentSample \
         "FATAL ERROR: please install JDK. "
     echo
 
-    # TODO
-    # Ask or search wich version is needed. Java 10 doesn't work also
     javaVersion="$(java -version 2>&1)"
-    grep "OpenJDK" <<< "$javaVersion" && exitScriptWithError \
+    grep "OpenJDK" <<< "$javaVersion" && errorInBuildExitCurrentSample \
         'FATAL ERROR: do not use OpenJDK, please install Oracle Java.'
     echo
+    # TODO SHOULD WE ADD TEST TO CHECK IF WE ARE ON JDK8?
 
-    # TODO SKIP this test it if we want only generate samples.
-    # and not launch testandbuild or test generator (doesItTestGenerator()).
-    # TODO port on Mac.
-    local -i skipDockerTests=0
-    printCommandAndEval "docker --version" || (exitScriptWithError \
-        "FATAL ERROR: please install docker and start the service. " \
-        && skipDockerTests=1)
+    command -v jhipster --version 1>> /dev/null || \
+        errorInBuildExitCurrentSample \
+        "FATAL ERROR: please install JHipster globally. " \
+        "(\`$ yarn global install jhipster') " \
+        "If JHipster is already installed, please add it in your PATH."
     echo
-    printCommandAndEval "docker-compose --version" || (exitScriptWithError \
-        "FATAL ERROR: please install docker-compose. " && skipDockerTests=1)
-    echo
-    if uname -a | grep -i linux 1>> /dev/null && \
-        [[ "$skipDockerTests" -eq 0 ]] ; then
 
-        if command -v systemctl --version 1>> /dev/null 2>&1 ; then
-            systemctl is-active docker.service 1>> /dev/null 2>&1 \
-                ||  (exitScriptWithError "FATAL ERROR: please " \
-                "launch docker service" \
-                "(\`sudo systemctl start docker.service')" && \
-                skipDockerTests=1)
+    if [[ "$isBuildAndTest" -eq 1 ]] ; then
+
+        if uname -a | grep -i darwin 1>> /dev/null ; then
+            printCommandAndEval \
+                "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome\
+                --version" \
+            || printCommandAndEval \
+                "/Applications/Chromium.app/Contents/MacOS/Chromium \
+                --version" \
+            || errorInBuildExitCurrentSample "FATAL ERROR: please install" \
+                "Google Chrome or Chromium." \
+        else
+            # For Linux or BSD
+            printCommandAndEval "google-chrome-stable --version" \
+                || printCommandAndEval "chromium --version" \
+                || errorInBuildExitCurrentSample "FATAL ERROR: " \
+                "please install google-chrome-stable or chromium. " \
+                "If google-chrome-stable or chromium is already installed, "\
+                "please add it in your PATH".
+        fi
+
+        local -i skipDockerTests=0
+        if [[ "$skipDockerTests" -eq 0 ]] ; then
+            printCommandAndEval "docker --version" || \
+                (errorInBuildExitCurrentSample \
+                "FATAL ERROR: please install docker and start the service. " \
+                && skipDockerTests=1)
+            echo
+
+            printCommandAndEval "docker-compose --version" || \
+                (errorInBuildExitCurrentSample \
+                "FATAL ERROR: please install docker-compose. " && skipDockerTests=1)
+            echo
+        fi
+
+        if [[ "$skipDockerTests" -eq 0 ]] && \
+            command -v systemctl --version 1>> /dev/null 2>&1 ; then
+                systemctl is-active docker.service 1>> /dev/null 2>&1 \
+                    ||  (errorInBuildExitCurrentSample "FATAL ERROR: please " \
+                    "launch docker service" \
+                    "(\`sudo systemctl start docker.service')" && \
+                    skipDockerTests=1)
         fi
 
         if [[ "$skipDockerTests" -eq 0 ]] ; then
-            command -v docker info 1>> /dev/null || echo -e "\nFATAL ERROR: " \
+            command -v docker info 1>> /dev/null || \
+                errorInBuildExitCurrentSample "\nFATAL ERROR: " \
                 "please manage docker as a non-root user (" \
                 "see https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user" \
                 "– don't forget to restart your computer after this " \
@@ -600,41 +635,29 @@ function testRequierments() {
                 "Do not forget to start the docker service."
         fi
 
-        printCommandAndEval "google-chrome-stable --version" \
-            || printCommandAndEval "chromium --version" \
-            || exitScriptWithError "FATAL ERROR: " \
-            "please install google-chrome-stable or chromium. " \
-            "If google-chrome-stable or chromium is already installed, "\
-            "please add it in your PATH".
-
         # TODO I not test all ports in
         # ../generators/server/templates/src/main/docker
         # because I'm afraid: it could fail too often!
         # And if it fail too often, nobody will use this script
         # For a simple test for ngx-default, it's not mandotory
         # to check all!
-        if [[ "$workOnAllProjects" -eq 0 ]] ; then
-            # Or test in function launchScriptForAllSamples()
-            # TODO
-            # Otherwise, as actually we don't close properly docker after
-            # each build, we could have false positive.
-            if command -v ss 1>> /dev/null ; then
-                testIfPortIsFreeWithSs 8080
-                testIfPortIsFreeWithSs 8081
-                testIfPortIsFreeWithSs 3636
-                testIfPortIsFreeWithSs 27017
-                testIfPortIsFreeWithSs 5432
-                testIfPortIsFreeWithSs 9000
-            fi
+        if command -v ss 1>> /dev/null ; then
+            testIfPortIsFreeWithSs 8080
+            testIfPortIsFreeWithSs 8081
+            testIfPortIsFreeWithSs 3636
+            testIfPortIsFreeWithSs 27017
+            testIfPortIsFreeWithSs 5432
+            testIfPortIsFreeWithSs 9000
+        else
+            # TODO add tests for other tools
+            printFileDescriptor3 "WARNING: could not test if ports" \
+                "8080 8081 3636 27017 5432 9000 are free. " \
+                "This build could fail if this ports are not free." \
+                "Especially, do not forget to shutdown mysql service, " \
+                "postgresql service or mongodb service."
+            sleep 30
         fi
-
     fi
-
-    command -v jhipster --version 1>> /dev/null || exitScriptWithError \
-        "FATAL ERROR: please install JHipster globally. " \
-        "(\`$ yarn global install jhipster') " \
-        "If JHipster is already installed, please add it in your PATH."
-    echo
 
 }
 
@@ -644,8 +667,6 @@ function testRequierments() {
 
 # function printInfoBeforeLaunch() {{{3
 function printInfoBeforeLaunch() {
-    export PROMPT_COMMAND=""
-    export PS1="+ "
     echo -e "\n\n* Your log file will be '$LOGFILENAME'\n" \
         "* When build will finish, The end of this filename shoule be renamed" \
         "'errored' or 'passed'.\n" \
@@ -725,13 +746,31 @@ function treatEndOfBuild() {
     # TODO treat for REACT. React has its own node_modules.
     # React should not be symlinked.
 
+    echoTitleBuildStep "Finishing '$JHIPSTER_MATRIX'"
 
     # Let time, in case of the disk isn't flushed, or if there is
     # java or node background processes not completly finished.
+    # Should not be necessary.
     sleep 10
 
     # TODO improve it. Actually, kill all docker commands. Not cool!
-    docker kill $(docker ps -q)
+    IFS=$' ' readarray dockerContainers <<< `docker ps -q`
+    # If `docker ps -q` is empty, "${#dockerContainers[0]}" takes value 1.
+    if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
+        # Don't use `for' syntax:
+        # for i in ${dockerContainers[@]} ; do
+        #     printCommandAndEval docker kill "$i" || exitScriptWithError \
+        #         "FATAL ERROR: couldn't kill docker container '$i'"
+        # done
+        local -i i=0
+        while [[ i -lt "${#dockerContainers[*]}" ]] ; do
+            printCommandAndEval docker kill "${dockerContainers[i]}" \
+                || exitScriptWithError \
+                "FATAL ERROR: couldn't kill docker container " \
+                "'${dockerContainers[i]}'"
+            i=$((i+1))
+        done
+    fi
 
     if [[ "$ERROR_IN_SAMPLE" -eq 0 ]] ; then
         local logrenamed="${beginLogfilename}"".passed.""${endofLogfilename}"
@@ -800,9 +839,16 @@ function errorInBuildStopCurrentSample() {
 
 # errorInBuildExitCurrentSample() {{{2
 errorInBuildExitCurrentSample() {
-    errorInBuildStopCurrentSample "$@"
-    treatEndOfBuild
-    exit 80
+    if [[ ! -z ${JHIPSTER+x} ]] && \
+        [[ ! -z ${JHIPSTER_MATRIX+x} ]]; then
+        errorInBuildStopCurrentSample "$@"
+        treatEndOfBuild
+        exit 80
+    else
+        # For function testRequierments() launched in function
+        # launchScriptForAllSamples()
+        exitScriptWithError "$@"
+    fi
 }
 
 # function isSkipClientInFileYoRcDotConf() {{{3
@@ -1077,7 +1123,7 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     # Should never be raised because we check ../.travis.yml.
     # Maybe in case of the user delete all folder sample!
     if [ ! -f "$JHIPSTER_SAMPLES/""$JHIPSTER""/.yo-rc.json" ]; then
-        errorInBuildStopCurrentSample "FATAL ERROR: not a JHipster project."
+        errorInBuildExitCurrentSample "FATAL ERROR: not a JHipster project."
     fi
 
 }
@@ -1335,6 +1381,12 @@ export SPRING_JPA_SHOW_SQL="false"
 # (./build-samples.sh)
 export localTravis=1
 
+# GLOBAL CONSTANTS not copiend in ../.travis.yml
+# ====================
+
+# Define prompt (used by `set -x` for scripts in ./scripts/*)
+export PROMPT_COMMAND=""
+export PS1="+ "
 
 # GLOBAL CONSTANTS SPECIFIC TO ./build-samples.sh (this script)
 # ====================
@@ -1387,6 +1439,7 @@ if [[ ! -z "${1+x}" ]] ; then
         exit 0
     fi
     if [ "$1" = "generate" ]; then
+        isBuildAndTest=0
         if [[ ! -z "${2+x}" ]] ; then
             workOnAllProjects=0
             launchScriptForOnlyOneSample "generateProject" "$2"
@@ -1395,6 +1448,7 @@ if [[ ! -z "${1+x}" ]] ; then
             time launchScriptForAllSamples "generateProject"
         fi
     elif [ "$1" = "buildandtest" ]; then
+        isBuildAndTest=1
         if [[ ! -z "${2+x}" ]] ; then
             workOnAllProjects=0
             launchScriptForOnlyOneSample "buildAndTestProject" "$2"
