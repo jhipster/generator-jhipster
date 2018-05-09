@@ -243,6 +243,12 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.logo = false;
                 this.configOptions.otherModules = this.otherModules;
                 this.generatorType = 'app';
+                this.reactive = false;
+                if (this.applicationType === 'reactive') {
+                    // TODO: support client in reactive app
+                    this.skipClient = true;
+                    this.generatorType = 'server';
+                }
                 if (this.applicationType === 'microservice') {
                     this.skipClient = true;
                     this.generatorType = 'server';

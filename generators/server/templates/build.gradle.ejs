@@ -199,7 +199,9 @@ repositories {
 dependencies {
     // Use ", version: jhipster_dependencies_version, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
-    compile group: "io.github.jhipster", name: "jhipster-framework"
+    compile group: "io.github.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
+        exclude group: 'org.springframework', module: 'spring-webmvc'
+    }<% } %>
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
@@ -304,18 +306,20 @@ dependencies {
     compile "org.springframework.kafka:spring-kafka"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-security"
-    compile ("org.springframework.boot:spring-boot-starter-web") {
+    compile ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
         exclude module: 'spring-boot-starter-tomcat'
     }
-    <%_ if (applicationType === 'reactive') { _%>
-    compile "org.springframework.boot:spring-boot-starter-webflux"
-    <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-undertow"
     <%_ if (websocket === 'spring-websocket') { _%>
     compile "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    <%_ if (!reactive) { _%>
     compile "org.zalando:problem-spring-web"
+    <%_ } else { _%>
+    compile "org.zalando:problem:0.20.3"
+    compile "org.zalando:jackson-datatype-problem:0.20.3"
+    <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
@@ -373,10 +377,12 @@ dependencies {
     compile "com.github.differentway:couchmove"
     compile "com.couchbase.client:java-client"
     <%_ } _%>
+    <%_ if (!reactive) { _%>
     compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'
     }
     compile "io.springfox:springfox-bean-validators"
+    <%_ } _%>
     <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
     compile "mysql:mysql-connector-java"
     <%_ } _%>
