@@ -925,7 +925,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'monolith' && generator.authenticationType !== 'oauth2',
+            condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== 'oauth2',
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 // Create auth config test files
