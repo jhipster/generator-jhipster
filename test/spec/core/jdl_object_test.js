@@ -84,6 +84,29 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#getApplicationQuantity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having no application', () => {
+      it('returns 0', () => {
+        expect(jdlObject.getApplicationQuantity()).to.equal(0);
+      });
+    });
+
+    context('when having one or more applications', () => {
+      before(() => {
+        jdlObject.addApplication(new JDLApplication({}));
+      });
+
+      it('returns the number of applications', () => {
+        expect(jdlObject.getApplicationQuantity()).to.equal(1);
+      });
+    });
+  });
   describe('#addEntity', () => {
     context('when adding an invalid entity', () => {
       const object = new JDLObject();
@@ -163,6 +186,31 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#getEntityQuantity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having no entity', () => {
+      it('returns 0', () => {
+        expect(jdlObject.getEntityQuantity()).to.equal(0);
+      });
+    });
+
+    context('when having one or more entities', () => {
+      before(() => {
+        jdlObject.addEntity(new JDLEntity({
+          name: 'toto'
+        }));
+      });
+
+      it('returns the number of entities', () => {
+        expect(jdlObject.getEntityQuantity()).to.equal(1);
+      });
+    });
+  });
   describe('#addEnum', () => {
     context('when adding an invalid enum', () => {
       const object = new JDLObject();
@@ -219,6 +267,31 @@ describe('JDLObject', () => {
 
       it('replaces the old one', () => {
         expect(object.enums[enumObject.name]).to.deep.eq(enumObject2);
+      });
+    });
+  });
+  describe('#getEnumQuantity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having no enum', () => {
+      it('returns 0', () => {
+        expect(jdlObject.getEnumQuantity()).to.equal(0);
+      });
+    });
+
+    context('when having one or more enums', () => {
+      before(() => {
+        jdlObject.addEnum(new JDLEnum({
+          name: 'toto'
+        }));
+      });
+
+      it('returns the number of enums', () => {
+        expect(jdlObject.getEnumQuantity()).to.equal(1);
       });
     });
   });
@@ -295,6 +368,34 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#getRelationshipQuantity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having no relationship', () => {
+      it('returns 0', () => {
+        expect(jdlObject.getRelationshipQuantity()).to.equal(0);
+      });
+    });
+
+    context('when having one or more relationships', () => {
+      before(() => {
+        jdlObject.addRelationship(new JDLRelationship({
+          from: new JDLEntity({ name: 'a' }),
+          to: new JDLEntity({ name: 'b' }),
+          type: RelationshipTypes.ONE_TO_ONE,
+          injectedFieldInFrom: 'b'
+        }));
+      });
+
+      it('returns the number of relationships', () => {
+        expect(jdlObject.getRelationshipQuantity()).to.equal(1);
+      });
+    });
+  });
   describe('#addOption', () => {
     context('when adding an invalid option', () => {
       const object = new JDLObject();
@@ -343,6 +444,31 @@ describe('JDLObject', () => {
     context('when adding a valid option', () => {
       it('works', () => {
         new JDLObject().addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT }));
+      });
+    });
+  });
+  describe('#getOptionQuantity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having no option', () => {
+      it('returns 0', () => {
+        expect(jdlObject.getOptionQuantity()).to.equal(0);
+      });
+    });
+
+    context('when having one or more options', () => {
+      before(() => {
+        jdlObject.addOption(new JDLUnaryOption({
+          name: UnaryOptions.SKIP_CLIENT
+        }));
+      });
+
+      it('returns the number of options', () => {
+        expect(jdlObject.getOptionQuantity()).to.equal(1);
       });
     });
   });
