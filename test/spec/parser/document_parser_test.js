@@ -229,82 +229,6 @@ describe('DocumentParser', () => {
           }));
         });
       });
-      context('with an invalid field type', () => {
-        let input = null;
-
-        before(() => {
-          input = JDLReader.parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
-        });
-
-        it('fails', () => {
-          try {
-            DocumentParser.parseFromConfigurationObject({
-              document: input,
-              databaseType: DatabaseTypes.SQL
-            });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('WrongTypeException');
-          }
-        });
-      });
-      context('with an unexistent validation for a field type', () => {
-        let input = null;
-
-        before(() => {
-          input = JDLReader.parseFromFiles(['./test/test_files/non_existent_validation.jdl']);
-        });
-
-        it('fails', () => {
-          try {
-            DocumentParser.parseFromConfigurationObject({
-              document: input,
-              databaseType: DatabaseTypes.SQL
-            });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('WrongValidationException');
-          }
-        });
-      });
-      context('with entities that do not exist for a relationship', () => {
-        let input = null;
-
-        before(() => {
-          input = JDLReader.parseFromFiles(['./test/test_files/unexistent_entities_for_relationship.jdl']);
-        });
-
-        it('fails', () => {
-          try {
-            DocumentParser.parseFromConfigurationObject({
-              document: input,
-              databaseType: DatabaseTypes.SQL
-            });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('UndeclaredEntityException');
-          }
-        });
-      });
-      context('with User entity as source for a relationship', () => {
-        let input = null;
-
-        before(() => {
-          input = JDLReader.parseFromFiles(['./test/test_files/user_entity_from_relationship.jdl']);
-        });
-
-        it('fails', () => {
-          try {
-            DocumentParser.parseFromConfigurationObject({
-              document: input,
-              databaseType: DatabaseTypes.SQL
-            });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('IllegalAssociationException');
-          }
-        });
-      });
       context('with User entity as destination for a relationship', () => {
         let content = null;
 
@@ -877,24 +801,6 @@ describe('DocumentParser', () => {
         it('adds the application entities in the application object', () => {
           expect(content.applications.MyApp.entities.has('BankAccount')).to.be.true;
           expect(content.applications.MyApp.entities.size()).to.equal(1);
-        });
-      });
-      context('when parsing a UAA application skipping user management', () => {
-        let input = null;
-
-        before(() => {
-          input = JDLReader.parseFromFiles(['./test/test_files/uaa_with_user_management_skipped.jdl']);
-        });
-
-        it('fails', () => {
-          try {
-            DocumentParser.parseFromConfigurationObject({
-              document: input
-            });
-            fail();
-          } catch (error) {
-            expect(error.name).to.equal('IllegalOptionException');
-          }
         });
       });
     });
