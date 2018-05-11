@@ -44,8 +44,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
     <%_ } _%>
 <%_ } _%>
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 <%_ if (cacheProvider === 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 <%_ } _%>
@@ -109,8 +107,6 @@ import java.util.List;
 
 @Configuration
 @EnableCaching
-@AutoConfigureAfter(value = { MetricsConfiguration.class })
-@AutoConfigureBefore(value = { WebConfigurer.class<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>, DatabaseConfiguration.class<% } %> })
 <%_ if (cacheProvider === 'infinispan') { _%>
 @Import(InfinispanEmbeddedCacheManagerAutoConfiguration.class)
 <%_ } _%>

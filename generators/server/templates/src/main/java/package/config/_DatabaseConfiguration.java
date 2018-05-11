@@ -44,9 +44,14 @@ import org.slf4j.LoggerFactory;<% if (databaseType === 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType === 'couchbase') { %>
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;<% } %><% if (databaseType === 'sql') { %>
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;<% } %>
+<%_ if (databaseType === 'sql') { _%>
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;<% } %>
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
+    <%_ if (enableHibernateCache) { _%>
+import org.springframework.cache.CacheManager;
+    <%_ } _%>
+<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -133,9 +138,16 @@ public class DatabaseConfiguration {
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType === 'sql') { %>
 
     private final Environment env;
+<%_ if (enableHibernateCache) { _%>
 
-    public DatabaseConfiguration(Environment env) {
+    private final CacheManager cacheManager;
+<%_ } _%>
+
+    public DatabaseConfiguration(Environment env<% if (enableHibernateCache) { %>, CacheManager cacheManager<% } %>) {
         this.env = env;
+<%_ if (enableHibernateCache) { _%>
+    this.cacheManager = cacheManager;
+<%_ } _%>
     }
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 
