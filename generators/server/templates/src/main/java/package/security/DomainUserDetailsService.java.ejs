@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.security;
+package <%= packageName %>.security;
 
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.UserRepository;
+import <%= packageName %>.domain.User;
+import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +33,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 <%_ } _%>
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;<% if (databaseType === 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<%}%>
+import org.springframework.stereotype.Component;
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
@@ -57,36 +59,28 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
     }
 
     @Override
-    <%_ if (reactive) { _%>
-    public Mono<UserDetails> findByUsername(String username) {
-        return Mono.just(loadUserByUsername(username));
-    }
-
-    <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
-    public UserDetails loadUserByUsername(final String login) {
+    public <% if (!reactive) { %>UserDetails loadUserByUsername<% } else { %>Mono<UserDetails> findByUsername<% } %>(final String login) {
         log.debug("Authenticating {}", login);
 
         if (new EmailValidator().isValid(login, null)) {
-            <%_ if (databaseType === 'sql') { _%>
-            Optional<User> userByEmailFromDatabase = userRepository.findOneWithAuthoritiesByEmail(login);
-            <%_ } else { // MongoDB and Cassandra _%>
-            Optional<User> userByEmailFromDatabase = userRepository.findOneByEmailIgnoreCase(login);
-            <%_ } _%>
-            return userByEmailFromDatabase.map(user -> createSpringSecurityUser(login, user))
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+            return userRepository.<% if (databaseType === 'sql') { %>findOneWithAuthoritiesByEmail<% } else { %>findOneByEmailIgnoreCase<% } %>(login)
+                <%_ if (reactive) { _%>
+                .switchIfEmpty(Mono.error(new UsernameNotFoundException("User with email " + login + " was not found in the database")))
+                <%_ } _%>
+                .map(user -> createSpringSecurityUser(login, user))<% if (!reactive) { %>
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"))<% } %>;
         }
 
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-        <%_ if (databaseType === 'sql') { _%>
-        Optional<User> userByLoginFromDatabase = userRepository.findOneWithAuthoritiesByLogin(lowercaseLogin);
-        <%_ } else { // MongoDB and Cassandra _%>
-        Optional<User> userByLoginFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
-        <%_ } _%>
-        return userByLoginFromDatabase.map(user -> createSpringSecurityUser(lowercaseLogin, user))
-            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
+        return userRepository.findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin(lowercaseLogin)
+            <%_ if (reactive) { _%>
+            .switchIfEmpty(Mono.error(new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database")))
+            <%_ } _%>
+            .map(user -> createSpringSecurityUser(lowercaseLogin, user))<% if (!reactive) { %>
+            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"))<% } %>;
 
     }
 

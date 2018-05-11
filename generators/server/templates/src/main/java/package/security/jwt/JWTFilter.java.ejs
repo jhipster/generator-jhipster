@@ -75,6 +75,7 @@ public class JWTFilter <% if (!reactive) { %>extends GenericFilterBean<% } else 
         }
         return chain.filter(exchange);
         <%_ } else { _%>
+        }
         filterChain.doFilter(servletRequest, servletResponse);
         <%_ } _%>
     }
