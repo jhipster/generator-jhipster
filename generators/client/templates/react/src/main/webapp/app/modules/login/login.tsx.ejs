@@ -18,36 +18,32 @@
 -%>
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 
 import { login } from 'app/shared/reducers/authentication';
 import LoginModal from './login-modal';
 
-export interface ILoginProps {
+export interface ILoginProps extends RouteComponentProps<{}> {
   isAuthenticated: boolean;
   showModal: boolean;
   loginError?: boolean;
-  location: any;
   login: Function;
 }
 
 export interface ILoginState {
   showModal: boolean;
-  redirectToReferrer: boolean;
 }
 
 export class Login extends React.Component<ILoginProps, ILoginState> {
 
   state: ILoginState = {
     showModal: this.props.showModal,
-    redirectToReferrer: this.props.isAuthenticated
   };
 
-  componentWillReceiveProps(nextProps: ILoginProps) {
-    this.setState({
-      showModal: nextProps.showModal,
-      redirectToReferrer: nextProps.isAuthenticated
-    });
+  componentDidUpdate(prevProps: ILoginProps, prevState) {
+    if (this.props !== prevProps) {
+      this.setState({ showModal: this.props.showModal });
+    }
   }
 
   handleLogin = (username, password, rememberMe = false) => {
@@ -59,9 +55,10 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: '/', search: this.props.location.search } };
-    const { showModal, redirectToReferrer } = this.state;
-    if (redirectToReferrer) {
+    const { location, isAuthenticated } = this.props;
+    const { from } = location.state || { from: { pathname: '/', search: location.search } };
+    const { showModal } = this.state;
+    if (isAuthenticated) {
       return <Redirect to={from} />;
     }
     return (
