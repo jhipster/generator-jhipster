@@ -29,10 +29,12 @@ const BusinessErrorChecker = require('../../../lib/exceptions/business_error_che
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const FieldTypes = require('../../../lib/core/jhipster/field_types');
+const Validations = require('../../../lib/core/jhipster/validations');
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLApplication = require('../../../lib/core/jdl_application');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
+const JDLValidation = require('../../../lib/core/jdl_validation');
 
 describe('BusinessErrorChecker', () => {
   describe('#checkForErrors', () => {
@@ -213,6 +215,30 @@ describe('BusinessErrorChecker', () => {
         }).to.throw('The name \'catch\' is a reserved keyword and can not be used as an entity field name.');
       });
     });
+    context('when passing gateway as application type', () => {
+      context('with incompatible database type and field type', () => {
+        before(() => {
+          const validEntity = new JDLEntity({
+            name: 'Valid'
+          });
+          validEntity.addField(new JDLField({
+            name: 'validField',
+            type: FieldTypes.CassandraTypes.UUID
+          }));
+          jdlObject.addEntity(validEntity);
+          checker = new BusinessErrorChecker(jdlObject, {
+            databaseType: DatabaseTypes.SQL,
+            applicationType: ApplicationTypes.GATEWAY
+          });
+        });
+
+        it('succeeds', () => {
+          expect(() => {
+            checker.checkForFieldErrors('Valid', jdlObject.entities.Valid.fields);
+          }).not.to.throw();
+        });
+      });
+    });
     context('if the field type is invalid for a database type', () => {
       context('when checking a JDL object with a JDL application', () => {
         before(() => {
@@ -264,36 +290,40 @@ describe('BusinessErrorChecker', () => {
           }).to.throw('The name \'continue\' is a reserved keyword and can not be used as an entity field name.');
         });
       });
-      context('when passing gateway as application type', () => {
-        it('succeeds', () => {
-          before(() => {
-            const validEntity = new JDLEntity({
-              name: 'Valid',
-              tableName: 'continue'
-            });
-            validEntity.addField(new JDLField({
-              name: 'validField',
-              type: FieldTypes.CommonDBTypes.STRING
-            }));
-            jdlObject.addEntity(validEntity);
-            jdlObject.entities.Valid.fields.validField.name = 'continue';
-            checker = new BusinessErrorChecker(jdlObject, {
-              databaseType: DatabaseTypes.SQL,
-              applicationType: ApplicationTypes.GATEWAY
-            });
-          });
-
-          it('fails', () => {
-            expect(() => {
-              checker.checkForFieldErrors('Valid', jdlObject.entities.Valid.fields);
-            }).not.to.throw();
-          });
-        });
-      });
     });
   });
   describe('#checkForValidationErrors', () => {
+    let checker = null;
+    let jdlObject = null;
 
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when passing an unsupported validation for a field', () => {
+      before(() => {
+        const entity = new JDLEntity({
+          name: 'Valid'
+        });
+        const field = new JDLField({
+          name: 'validField',
+          type: FieldTypes.CommonDBTypes.STRING
+        });
+        field.addValidation(new JDLValidation({
+          name: Validations.MIN,
+          value: 42
+        }));
+        entity.addField(field);
+        jdlObject.addEntity(entity);
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+
+      it('fails', () => {
+        expect(() => {
+          checker.checkForValidationErrors(jdlObject.entities.Valid.fields.validField);
+        }).to.throw('The validation \'min\' isn\'t supported for the type \'String\'.');
+      });
+    });
   });
   describe('#checkForRelationshipErrors', () => {
 
