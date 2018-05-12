@@ -29,12 +29,14 @@ const BusinessErrorChecker = require('../../../lib/exceptions/business_error_che
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const FieldTypes = require('../../../lib/core/jhipster/field_types');
+const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 const Validations = require('../../../lib/core/jhipster/validations');
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLApplication = require('../../../lib/core/jdl_application');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
+const JDLRelationship = require('../../../lib/core/jdl_relationship');
 
 describe('BusinessErrorChecker', () => {
   describe('#checkForErrors', () => {
@@ -326,7 +328,125 @@ describe('BusinessErrorChecker', () => {
     });
   });
   describe('#checkForRelationshipErrors', () => {
+    let checker = null;
+    let jdlObject = null;
 
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+    afterEach(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having User as source entity', () => {
+      before(() => {
+        const userEntity = new JDLEntity({
+          name: 'User'
+        });
+        const otherEntity = new JDLEntity({
+          name: 'Valid'
+        });
+        const relationship = new JDLRelationship({
+          from: userEntity,
+          to: otherEntity,
+          type: RelationshipTypes.ONE_TO_ONE,
+          injectedFieldInFrom: 'other'
+        });
+        jdlObject.addEntity(userEntity);
+        jdlObject.addEntity(otherEntity);
+        jdlObject.addRelationship(relationship);
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+
+      it('fails', () => {
+        expect(() => {
+          checker.checkForRelationshipErrors();
+        }).to.throw('Relationships from the User entity is not supported in the declaration between \'User\' and \'Valid\'.');
+      });
+    });
+    context('when the source entity is missing', () => {
+      before(() => {
+        const sourceEntity = new JDLEntity({
+          name: 'Source'
+        });
+        const otherEntity = new JDLEntity({
+          name: 'Valid'
+        });
+        const relationship = new JDLRelationship({
+          from: sourceEntity,
+          to: otherEntity,
+          type: RelationshipTypes.ONE_TO_ONE,
+          injectedFieldInFrom: 'other'
+        });
+        jdlObject.addEntity(sourceEntity);
+        jdlObject.addEntity(otherEntity);
+        jdlObject.addRelationship(relationship);
+        delete jdlObject.entities.Source;
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+
+      it('fails', () => {
+        expect(() => {
+          checker.checkForRelationshipErrors();
+        }).to.throw('In the relationship between Source and Valid, Source is not declared.');
+      });
+    });
+    context('when the destination entity is missing', () => {
+      context('if it is the User entity', () => {
+        before(() => {
+          const sourceEntity = new JDLEntity({
+            name: 'Source'
+          });
+          const otherEntity = new JDLEntity({
+            name: 'User'
+          });
+          const relationship = new JDLRelationship({
+            from: sourceEntity,
+            to: otherEntity,
+            type: RelationshipTypes.ONE_TO_ONE,
+            injectedFieldInFrom: 'other'
+          });
+          jdlObject.addEntity(sourceEntity);
+          jdlObject.addEntity(otherEntity);
+          jdlObject.addRelationship(relationship);
+          delete jdlObject.entities.User;
+          checker = new BusinessErrorChecker(jdlObject);
+        });
+
+        it('does not fail', () => {
+          expect(() => {
+            checker.checkForRelationshipErrors();
+          }).not.to.throw();
+        });
+      });
+      context('if it is not the User entity', () => {
+        before(() => {
+          const sourceEntity = new JDLEntity({
+            name: 'Source'
+          });
+          const otherEntity = new JDLEntity({
+            name: 'Other'
+          });
+          const relationship = new JDLRelationship({
+            from: sourceEntity,
+            to: otherEntity,
+            type: RelationshipTypes.ONE_TO_ONE,
+            injectedFieldInFrom: 'other'
+          });
+          jdlObject.addEntity(sourceEntity);
+          jdlObject.addEntity(otherEntity);
+          jdlObject.addRelationship(relationship);
+          delete jdlObject.entities.Other;
+          checker = new BusinessErrorChecker(jdlObject);
+        });
+
+        it('fails', () => {
+          expect(() => {
+            checker.checkForRelationshipErrors();
+          }).to.throw('In the relationship between Source and Other, Other is not declared.');
+        });
+      });
+    });
   });
   describe('#checkForEnumErrors', () => {
 
