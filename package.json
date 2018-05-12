@@ -54,7 +54,9 @@
     "nyc": "11.7.1",
     "mocha": "5.1.1",
     "mocha-clean": "1.0.0",
-    "pegjs": "0.10.0"
+    "pegjs": "0.10.0",
+    "sinon": "5.0.7",
+    "sinon-chai": "3.0.0"
   },
   "peerDependencies": {},
   "engines": {
