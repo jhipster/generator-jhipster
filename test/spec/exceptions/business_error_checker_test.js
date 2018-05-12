@@ -30,27 +30,110 @@ const ApplicationTypes = require('../../../lib/core/jhipster/application_types')
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const FieldTypes = require('../../../lib/core/jhipster/field_types');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
+const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const Validations = require('../../../lib/core/jhipster/validations');
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLApplication = require('../../../lib/core/jdl_application');
 const JDLEntity = require('../../../lib/core/jdl_entity');
+const JDLEnum = require('../../../lib/core/jdl_enum');
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
+const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 
 describe('BusinessErrorChecker', () => {
   describe('#checkForErrors', () => {
     let checker = null;
 
-    before(() => {
-      checker = new BusinessErrorChecker();
-    });
-
     context('with no passed JDL object', () => {
+      before(() => {
+        checker = new BusinessErrorChecker();
+      });
+
       it('does not fail', () => {
         expect(() => {
           checker.checkForErrors();
         }).not.to.throw();
+      });
+    });
+    context('with a complete JDL object', () => {
+      let applicationCheckSpy = null;
+      let entityCheckSpy = null;
+      let fieldCheckSpy = null;
+      let validationCheckSpy = null;
+      let relationshipCheckSpy = null;
+      let enumCheckSpy = null;
+      let optionCheckSpy = null;
+
+      before(() => {
+        const jdlObject = new JDLObject();
+        const application = new JDLApplication({
+          entities: ['MyEntity']
+        });
+        const entity = new JDLEntity({
+          name: 'MyEntity'
+        });
+        const otherEntity = new JDLEntity({
+          name: 'OtherEntity'
+        });
+        const field = new JDLField({
+          name: 'myField',
+          type: FieldTypes.CommonDBTypes.STRING
+        });
+        const validation = new JDLValidation({
+          name: Validations.REQUIRED
+        });
+        const relationship = new JDLRelationship({
+          from: entity,
+          to: otherEntity,
+          type: RelationshipTypes.ONE_TO_MANY,
+          injectedFieldInFrom: 'other'
+        });
+        const option = new JDLUnaryOption({
+          name: UnaryOptions.SKIP_CLIENT,
+          entities: ['MyEntity']
+        });
+        const enumObject = new JDLEnum({
+          name: 'MyEnum',
+          values: ['A', 'B']
+        });
+        field.addValidation(validation);
+        entity.addField(field);
+        jdlObject.addEntity(entity);
+        jdlObject.addEntity(otherEntity);
+        jdlObject.addEnum(enumObject);
+        jdlObject.addRelationship(relationship);
+        jdlObject.addOption(option);
+        jdlObject.addApplication(application);
+        checker = new BusinessErrorChecker(jdlObject);
+        applicationCheckSpy = sinon.spy(checker, 'checkForApplicationErrors');
+        entityCheckSpy = sinon.spy(checker, 'checkForEntityErrors');
+        fieldCheckSpy = sinon.spy(checker, 'checkForFieldErrors');
+        validationCheckSpy = sinon.spy(checker, 'checkForValidationErrors');
+        relationshipCheckSpy = sinon.spy(checker, 'checkForRelationshipErrors');
+        enumCheckSpy = sinon.spy(checker, 'checkForEnumErrors');
+        optionCheckSpy = sinon.spy(checker, 'checkForOptionErrors');
+        checker.checkForErrors();
+      });
+
+      after(() => {
+        applicationCheckSpy.restore();
+        entityCheckSpy.restore();
+        fieldCheckSpy.restore();
+        validationCheckSpy.restore();
+        relationshipCheckSpy.restore();
+        enumCheckSpy.restore();
+        optionCheckSpy.restore();
+      });
+
+      it('checks it', () => {
+        expect(applicationCheckSpy).to.have.been.called;
+        expect(entityCheckSpy).to.have.been.called;
+        expect(fieldCheckSpy).to.have.been.called;
+        expect(validationCheckSpy).to.have.been.called;
+        expect(relationshipCheckSpy).to.have.been.called;
+        expect(enumCheckSpy).to.have.been.called;
+        expect(optionCheckSpy).to.have.been.called;
       });
     });
   });
