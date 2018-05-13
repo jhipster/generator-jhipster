@@ -394,7 +394,6 @@ describe('integration tests', () => {
       const parsed = JDLReader.parseFromFiles([path.join('test', 'test_files', 'big_sample.jdl')]);
       const jdlObject = DocumentParser.parseFromConfigurationObject({
         document: parsed,
-        databaseType: DatabaseTypes.SQL,
         applicationType: ApplicationTypes.MONOLITH
       });
       const jsonEntities = EntityParser.parse({
@@ -438,13 +437,11 @@ describe('integration tests', () => {
     before(() => {
       originalContent = DocumentParser.parseFromConfigurationObject({
         document: JDLReader.parseFromFiles([path.join('test', 'test_files', 'big_sample.jdl')]),
-        databaseType: DatabaseTypes.SQL,
         applicationType: ApplicationTypes.MONOLITH
       });
       JDLExporter.exportToJDL(originalContent, 'exported.jdl');
       writtenContent = DocumentParser.parseFromConfigurationObject({
         document: JDLReader.parseFromFiles(['exported.jdl']),
-        databaseType: DatabaseTypes.SQL,
         applicationType: ApplicationTypes.MONOLITH
       });
     });
@@ -612,7 +609,6 @@ describe('integration tests', () => {
       const parsed = JDLReader.parseFromFiles([path.join('test', 'test_files', 'applications2.jdl')]);
       const jdlObject = DocumentParser.parseFromConfigurationObject({
         document: parsed,
-        databaseType: DatabaseTypes.SQL,
         applicationType: ApplicationTypes.MONOLITH
       });
       JHipsterApplicationParser.exportApplications({
@@ -838,8 +834,7 @@ describe('integration tests', () => {
         path.join('test', 'test_files', 'integration', 'file2.jdl')
       ]);
       const jdlObject = DocumentParser.parseFromConfigurationObject({
-        document: parsed,
-        databaseType: DatabaseTypes.SQL
+        document: parsed
       });
       const jsonEntities = EntityParser.parse({
         jdlObject,
