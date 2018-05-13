@@ -30,7 +30,6 @@ const JDLValidation = require('../../../lib/core/jdl_validation');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
-const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const FieldTypes = require('../../../lib/core/jhipster/field_types').CommonDBTypes;
 const Validations = require('../../../lib/core/jhipster/validations');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
