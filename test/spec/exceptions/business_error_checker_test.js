@@ -27,6 +27,7 @@ const expect = chai.expect;
 
 const BusinessErrorChecker = require('../../../lib/exceptions/business_error_checker');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
+const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const FieldTypes = require('../../../lib/core/jhipster/field_types');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
@@ -34,12 +35,13 @@ const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const Validations = require('../../../lib/core/jhipster/validations');
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLEnum = require('../../../lib/core/jdl_enum');
 const JDLField = require('../../../lib/core/jdl_field');
-const JDLValidation = require('../../../lib/core/jdl_validation');
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
+const JDLValidation = require('../../../lib/core/jdl_validation');
 
 describe('BusinessErrorChecker', () => {
   describe('#checkForErrors', () => {
@@ -532,9 +534,116 @@ describe('BusinessErrorChecker', () => {
     });
   });
   describe('#checkForEnumErrors', () => {
+    let checker = null;
+    let jdlObject = null;
 
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+    afterEach(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having a reserved name as class name', () => {
+      before(() => {
+        jdlObject.addEnum(new JDLEnum({
+          name: 'GoodName'
+        }));
+        jdlObject.enums.GoodName.name = 'Catch';
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+
+      it('fails', () => {
+        expect(() => {
+          checker.checkForEnumErrors();
+        }).to.throw('The enum name \'Catch\' is reserved keyword and can not be used as enum class name.');
+      });
+    });
   });
   describe('#checkForOptionErrors', () => {
+    let checker = null;
+    let jdlObject = null;
 
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+    afterEach(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having a JDL with pagination and Cassandra as database type', () => {
+      context('inside a JDL application', () => {
+        before(() => {
+          jdlObject.addApplication(new JDLApplication({
+            config: {
+              databaseType: DatabaseTypes.CASSANDRA
+            },
+            entities: ['A']
+          }));
+          jdlObject.addEntity(new JDLEntity({
+            name: 'A'
+          }));
+          jdlObject.addOption(new JDLBinaryOption({
+            name: BinaryOptions.Options.PAGINATION,
+            value: BinaryOptions.Values.pagination.PAGER,
+            entityNames: ['A']
+          }));
+          checker = new BusinessErrorChecker(jdlObject);
+        });
+
+        it('fails', () => {
+          expect(() => {
+            checker.checkForOptionErrors();
+          }).to.throw('Pagination isn\'t allowed when the app uses Cassandra, for entity: \'A\' and application: \'jhipster\'');
+        });
+      });
+      context('not inside a JDL application', () => {
+        before(() => {
+          jdlObject.addOption(new JDLBinaryOption({
+            name: BinaryOptions.Options.PAGINATION,
+            value: BinaryOptions.Values.pagination.PAGER
+          }));
+          checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });
+        });
+
+        it('fails', () => {
+          expect(() => {
+            checker.checkForOptionErrors();
+          }).to.throw('Pagination isn\'t allowed when the app uses Cassandra.');
+        });
+      });
+    });
+    context('when not passing a value for a binary option', () => {
+      before(() => {
+        jdlObject.addOption(new JDLBinaryOption({
+          name: BinaryOptions.Options.PAGINATION,
+          value: BinaryOptions.Values.pagination.PAGER
+        }));
+        jdlObject.options.options.pagination_pager.value = '';
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+
+      it('fails', () => {
+        expect(() => {
+          checker.checkForOptionErrors();
+        }).to.throw('The \'pagination\' option needs a value.');
+      });
+    });
+    context('when not passing a valid value for a binary option', () => {
+      before(() => {
+        jdlObject.addOption(new JDLBinaryOption({
+          name: BinaryOptions.Options.PAGINATION,
+          value: BinaryOptions.Values.pagination.PAGER
+        }));
+        jdlObject.options.options.pagination_pager.value = BinaryOptions.Values.dto.MAPSTRUCT;
+        checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });
+      });
+
+      it('fails', () => {
+        expect(() => {
+          checker.checkForOptionErrors();
+        }).to.throw('The \'pagination\' option is not valid for value \'mapstruct\'.');
+      });
+    });
   });
 });

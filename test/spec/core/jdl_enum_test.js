@@ -50,16 +50,6 @@ describe('JDLEnum', () => {
         new JDLEnum({ name: 'MyEnum', values: ['ABC'] });
       });
     });
-    context('when passing a reserved keyword as name', () => {
-      it('fails', () => {
-        try {
-          new JDLEnum({ name: 'class' });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('IllegalNameException');
-        }
-      });
-    });
   });
   describe('#addValue', () => {
     let jdlEnum = null;

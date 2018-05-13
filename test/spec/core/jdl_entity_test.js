@@ -84,16 +84,6 @@ describe('JDLEntity', () => {
         expect(entity.fields).to.deep.eq(args.fields);
       });
     });
-    context('when passing a reserved keyword as name', () => {
-      it('fails', () => {
-        try {
-          new JDLEntity({ name: 'class' });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('IllegalNameException');
-        }
-      });
-    });
   });
   describe('::isValid', () => {
     context('when checking the validity of an invalid object', () => {
