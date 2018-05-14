@@ -886,11 +886,11 @@ _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
-    when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= entityInstance %>.getId()), PageRequest.of(0, 20)))
-        .thenReturn(new PageImpl<>(Collections.singletonList(<%= entityInstance %>), PageRequest.of(0, 1), 1));
+        when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= entityInstance %>.getId()), PageRequest.of(0, 20)))
+            .thenReturn(new PageImpl<>(Collections.singletonList(<%= entityInstance %>), PageRequest.of(0, 1), 1));
 <%_ } else { _%>
-    when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= entityInstance %>.getId())))
-        .thenReturn(Collections.singletonList(<%= entityInstance %>));
+        when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= entityInstance %>.getId())))
+            .thenReturn(Collections.singletonList(<%= entityInstance %>));
 <%_ } _%>
         // Search the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query=id:" + <%= entityInstance %>.getId()))

@@ -19,7 +19,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-jhipster';
-import { FaRefresh } from 'react-icons/lib/fa';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Badge, Table, Button } from 'reactstrap';
 
 import { gatewayRoutes } from '../administration.reducer';
@@ -94,11 +94,11 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
         <h2>Gateway</h2>
           <p>
             <Button onClick={this.gatewayRoutes} color={isFetching ? 'danger' : 'primary'} disabled={isFetching}>
-              <FaRefresh />&nbsp;
+              <FontAwesomeIcon icon="sync" />&nbsp;
               <Translate component="span" contentKey="health.refresh.button" />
             </Button>
           </p>
-          
+
           <Table striped responsive>
             <thead>
               <tr key="header">
@@ -117,7 +117,7 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
             )}
             </tbody>
           </Table>
-          
+
         </div>
     );
   }

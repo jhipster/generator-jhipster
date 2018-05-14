@@ -629,7 +629,8 @@ const serverFiles = {
         {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                { file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` }
+                { file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` },
+                { file: 'package/ApplicationWebXml.java', renameTo: generator => `${generator.javaDir}ApplicationWebXml.java` }
 
             ]
         }
@@ -803,8 +804,6 @@ const serverFiles = {
                 { file: 'package/web/rest/package-info.java', renameTo: generator => `${generator.javaDir}web/rest/package-info.java` },
 
                 { file: 'package/web/rest/LogsResource.java', renameTo: generator => `${generator.javaDir}web/rest/LogsResource.java` },
-                { file: 'package/web/rest/ProfileInfoResource.java', renameTo: generator => `${generator.javaDir}web/rest/ProfileInfoResource.java` },
-
             ]
         },
 
@@ -853,7 +852,6 @@ const serverFiles = {
                 { file: 'package/config/WebConfigurerTestController.java', renameTo: generator => `${generator.testDir}config/WebConfigurerTestController.java` },
                 { file: 'package/web/rest/TestUtil.java', renameTo: generator => `${generator.testDir}web/rest/TestUtil.java` },
                 { file: 'package/web/rest/LogsResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/LogsResourceIntTest.java` },
-                { file: 'package/web/rest/ProfileInfoResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/ProfileInfoResourceIntTest.java` },
                 { file: 'package/web/rest/errors/ExceptionTranslatorIntTest.java', renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorIntTest.java` },
                 { file: 'package/web/rest/errors/ExceptionTranslatorTestController.java', renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorTestController.java` },
                 { file: 'package/web/rest/util/PaginationUtilUnitTest.java', renameTo: generator => `${generator.testDir}web/rest/util/PaginationUtilUnitTest.java` },
@@ -927,7 +925,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'monolith' && generator.authenticationType !== 'oauth2',
+            condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== 'oauth2',
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 // Create auth config test files
@@ -955,7 +953,6 @@ const serverFiles = {
             condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                { file: 'package/web/rest/AccountResource.java', renameTo: generator => `${generator.javaDir}web/rest/AccountResource.java` },
                 { file: 'package/domain/User.java', renameTo: generator => `${generator.javaDir}domain/User.java` },
                 { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
                 { file: 'package/service/UserService.java', renameTo: generator => `${generator.javaDir}service/UserService.java` },
@@ -970,13 +967,26 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && ['monolith', 'gateway'].includes(generator.applicationType),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/web/rest/AccountResource.java', renameTo: generator => `${generator.javaDir}web/rest/AccountResource.java` },
+            ]
+        },
+        {
             condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
             path: SERVER_TEST_SRC_DIR,
             templates: [
-                { file: 'package/web/rest/AccountResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/AccountResourceIntTest.java` },
                 { file: 'package/security/SecurityUtilsUnitTest.java', renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java` },
                 { file: 'package/service/UserServiceIntTest.java', renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java` },
                 { file: 'package/web/rest/UserResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserResourceIntTest.java` },
+            ]
+        },
+        {
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && ['monolith', 'gateway'].includes(generator.applicationType),
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                { file: 'package/web/rest/AccountResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/AccountResourceIntTest.java` },
             ]
         },
         {
@@ -984,6 +994,13 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/repository/search/UserSearchRepository.java', renameTo: generator => `${generator.javaDir}repository/search/UserSearchRepository.java` }
+            ]
+        },
+        {
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.searchEngine === 'elasticsearch',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                { file: 'package/repository/search/UserSearchRepositoryMockConfiguration.java', renameTo: generator => `${generator.testDir}repository/search/UserSearchRepositoryMockConfiguration.java` },
             ]
         },
         {

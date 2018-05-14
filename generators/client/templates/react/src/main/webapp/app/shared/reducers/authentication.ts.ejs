@@ -126,7 +126,7 @@ export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, 
 
 export const getSession = () => dispatch => dispatch({
   type: ACTION_TYPES.GET_SESSION,
-  payload: axios.get('/<% if (authenticationType === 'uaa') { %><%= apiUaaPath %><% } %>api/account')
+  payload: axios.get('/<%= apiUaaPath %>api/account')
 });
 
 <%_ if (authenticationType === 'session') { _%>

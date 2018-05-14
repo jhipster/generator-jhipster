@@ -101,19 +101,7 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
-    <%_ if (prodDatabaseType !== 'oracle') { _%>
-        <createIndex indexName="idx_user_login"
-            tableName="<%= jhiTablePrefix %>_user"
-            unique="true">
-            <column name="login" type="varchar(50)"/>
-        </createIndex>
 
-        <createIndex indexName="idx_user_email"
-            tableName="<%= jhiTablePrefix %>_user"
-            unique="true">
-            <column name="email" type="varchar(100)"/>
-        </createIndex>
-    <%_ } _%>
         <createTable tableName="<%= jhiTablePrefix %>_authority">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>

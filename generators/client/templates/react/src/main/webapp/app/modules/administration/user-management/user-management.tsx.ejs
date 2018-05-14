@@ -30,7 +30,7 @@ import {
   getSortState,
   IPaginationBaseState
 } from 'react-jhipster';
-import { FaPlus, FaEye, FaPencil, FaSort, FaTrash } from 'react-icons/lib/fa';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { IUser } from 'app/shared/model/user.model';
@@ -90,27 +90,27 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
         <h2>
           <Translate contentKey="userManagement.home.title">Users</Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
-            <FaPlus /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
+            <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
           </Link>
         </h2>
         <Table responsive striped>
           <thead>
             <tr>
-              <th className="hand" onClick={this.sort('id')}><Translate contentKey="global.field.id">ID</Translate><FaSort/></th>
-              <th className="hand" onClick={this.sort('login')}><Translate contentKey="userManagement.login">Login</Translate><FaSort/></th>
-              <th className="hand" onClick={this.sort('email')}><Translate contentKey="userManagement.email">Email</Translate><FaSort/></th>
+              <th className="hand" onClick={this.sort('id')}><Translate contentKey="global.field.id">ID</Translate><FontAwesomeIcon icon="sort" /></th>
+              <th className="hand" onClick={this.sort('login')}><Translate contentKey="userManagement.login">Login</Translate><FontAwesomeIcon icon="sort" /></th>
+              <th className="hand" onClick={this.sort('email')}><Translate contentKey="userManagement.email">Email</Translate><FontAwesomeIcon icon="sort" /></th>
               <th />
               <%_ if (enableTranslation) { _%>
-              <th className="hand" onClick={this.sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate><FaSort/></th>
+              <th className="hand" onClick={this.sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate><FontAwesomeIcon icon="sort" /></th>
               <%_ } _%>
               <th><Translate contentKey="userManagement.profiles">Profiles</Translate></th>
               <%_ if (databaseType !== 'cassandra') { _%>
-              <th className="hand" onClick={this.sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate><FaSort/></th>
+              <th className="hand" onClick={this.sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate><FontAwesomeIcon icon="sort" /></th>
               <th className="hand" onClick={this.sort('lastModifiedBy')}>
-                <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate><FaSort/>
+                <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate><FontAwesomeIcon icon="sort" />
               </th>
               <th className="hand" onClick={this.sort('lastModifiedDate')}>
-                <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate><FaSort/>
+                <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate><FontAwesomeIcon icon="sort" />
               </th>
               <th />
               <%_ } _%>
@@ -165,19 +165,19 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                       tag={Link} to={`${match.url}/${user.login}`}
                       color="info" size="sm"
                     >
-                      <FaEye/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
+                      <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                     </Button>
                     <Button
                       tag={Link} to={`${match.url}/${user.login}/edit`}
                       color="primary" size="sm"
                     >
-                      <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
+                      <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                     </Button>
                     <Button
                       tag={Link} to={`${match.url}/${user.login}/delete`}
                       color="danger" size="sm" disabled={account.login === user.login}
                     >
-                      <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
+                      <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                     </Button>
                   </div>
                 </td>

@@ -337,10 +337,6 @@ function askForOptionalItems(meta) {
     const applicationType = this.applicationType;
     const choices = [];
     const defaultChoice = [];
-    choices.push({
-        name: 'Reactive APIs, using Spring Webflux',
-        value: 'reactive:true'
-    });
     if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
         choices.push({
             name: 'Search engine using Elasticsearch',
@@ -376,7 +372,6 @@ function askForOptionalItems(meta) {
     if (choices.length > 0) {
         this.prompt(PROMPTS).then((prompt) => {
             this.serverSideOptions = prompt.serverSideOptions;
-            this.reactive = this.getOptionFromArray(this.serverSideOptions, 'reactive');
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
             this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');

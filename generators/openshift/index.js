@@ -76,6 +76,7 @@ module.exports = class extends BaseGenerator {
                 this.openshiftNamespace = this.config.get('openshiftNamespace');
                 this.storageType = this.config.get('storageType');
                 this.registryReplicas = this.config.get('registryReplicas');
+                this.useKafka = false;
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
                 this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
@@ -162,6 +163,16 @@ module.exports = class extends BaseGenerator {
                 this.registryReplicas = 2;
             },
 
+            setPostPromptProp() {
+                this.appConfigs.some((element) => {
+                    if (element.messageBroker === 'kafka') {
+                        this.useKafka = true;
+                        return true;
+                    }
+                    return false;
+                });
+            },
+
             saveConfig() {
                 this.config.set('appsFolders', this.appsFolders);
                 this.config.set('directoryPath', this.directoryPath);
@@ -201,17 +212,36 @@ module.exports = class extends BaseGenerator {
         }
 
         this.log('\nYou can deploy all your apps by running: ');
-        this.log(`  ${chalk.cyan(`${this.directoryPath}/ocp/ocp-apply.sh`)}`);
-        if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
-            this.log('OR');
-            this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/registry`)}`);
-            if (this.monitoring === 'elk' || this.monitoring === 'prometheus') {
-                this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/monitoring`)}`);
+        this.log(`  ${chalk.cyan(`${this.directoryPath}ocp/ocp-apply.sh`)}`);
+        this.log('OR');
+        this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/scc-config.yml | oc apply -f -`)}`);
+        if (this.monitoring === 'elk') {
+            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-monitoring.yml | oc apply -f -`)}`);
+        }
+        if (this.monitoring === 'prometheus') {
+            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-metrics.yml | oc apply -f -`)}`);
+        }
+        if (this.useKafka === true) {
+            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/messagebroker/kafka.yml | oc apply -f -`)}`);
+        }
+        for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
+            const app = this.appConfigs[i];
+            const appName = app.baseName.toLowerCase();
+            if (app.searchEngine === 'elasticsearch') {
+                this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-elasticsearch.yml | oc apply -f -`)}`);
             }
-            for (let i = 0; i < this.appsFolders.length; i++) {
-                this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/${this.appConfigs[i].baseName}`)}`);
+            if (app.serviceDiscoveryType !== false && regIndex++ === 0) {
+                this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/application-configmap.yml | oc apply -f -`)}`);
+                if (app.serviceDiscoveryType === 'eureka') {
+                    this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/jhipster-registry.yml | oc apply -f -`)}`);
+                } else {
+                    this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/consul.yml | oc apply -f -`)}`);
+                }
             }
-            this.log('and then install the apps from OpenShift console by choosing the template created in the namespace. ');
+            if (app.prodDatabaseType !== 'no') {
+                this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-${app.prodDatabaseType}.yml | oc apply -f -`)}`);
+            }
+            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-deployment.yml | oc apply -f -`)}`);
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {

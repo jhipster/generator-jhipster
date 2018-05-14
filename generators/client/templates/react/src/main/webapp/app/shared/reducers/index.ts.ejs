@@ -23,10 +23,13 @@ import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 import locale from './locale';
 <%_ } _%>
 import authentication from './authentication';
+import applicationProfile from './application-profile';
 
 import administration from 'app/modules/administration/administration.reducer';
 <%_ if (!skipUserManagement) { _%>
 import userManagement from 'app/modules/administration/user-management/user-management.reducer';
+<%_ } else { _%>
+import userManagement from './user-management';
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import register from 'app/modules/account/register/register.reducer';
@@ -45,10 +48,9 @@ export default combineReducers({
   <%_ if (enableTranslation) { _%>
   locale,
   <%_ } _%>
+  applicationProfile,
   administration,
-  <%_ if (!skipUserManagement) { _%>
   userManagement,
-  <%_ } _%>
   <%_ if (authenticationType !== 'oauth2') { _%>
   register,
   activate,

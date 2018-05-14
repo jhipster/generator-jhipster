@@ -41,10 +41,11 @@ spec:
           value: 'yes'
         - name: MYSQL_DATABASE
           value: <%= app.baseName.toLowerCase() %>
-#        command:
-#        - mysqld
-#        - --lower_case_table_names=1
-#        - --skip-ssl
+        args:
+        - --lower_case_table_names=1
+        - --skip-ssl
+        - --character_set_server=utf8
+        - --explicit_defaults_for_timestamp
         ports:
         - containerPort: 3306
         volumeMounts:

@@ -18,7 +18,7 @@
  */
 const _ = require('lodash');
 const chalk = require('chalk');
-const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes.Types;
+const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
 
 const AURORA_DB_PASSORD_REGEX = /^[^@"\/]{8,42}$/; // eslint-disable-line
 const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/; // eslint-disable-line
@@ -57,7 +57,7 @@ const PERF_TO_CONFIG = {
         },
         database: {
             size: 'db.t2.small',
-            supportedEngines: [databaseTypes.mariadb, databaseTypes.mysql]
+            supportedEngines: [databaseTypes.MARIADB, databaseTypes.MYSQL]
         }
     },
     medium: {
@@ -67,7 +67,7 @@ const PERF_TO_CONFIG = {
         },
         database: {
             size: 'db.t2.medium',
-            supportedEngines: [databaseTypes.mariadb, databaseTypes.mysql]
+            supportedEngines: [databaseTypes.MARIADB, databaseTypes.MYSQL]
         }
     },
     high: {
@@ -77,7 +77,7 @@ const PERF_TO_CONFIG = {
         },
         database: {
             size: 'db.r4.large',
-            supportedEngines: [databaseTypes.mariadb, databaseTypes.mysql, databaseTypes.postgresql]
+            supportedEngines: [databaseTypes.MARIADB, databaseTypes.MYSQL, databaseTypes.POSTGRESQL]
         }
     }
 };

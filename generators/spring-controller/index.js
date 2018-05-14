@@ -36,17 +36,19 @@ module.exports = class extends BaseGenerator {
     initializing() {
         this.log(`The spring-controller ${this.name} is being created.`);
         this.baseName = this.config.get('baseName');
-        this.reactive = this.config.get('reactive');
         this.packageName = this.config.get('packageName');
         this.packageFolder = this.config.get('packageFolder');
         this.databaseType = this.config.get('databaseType');
         this.reactiveController = false;
+        this.applicationType = this.config.get('applicationType');
+        if (this.applicationType === 'reactive') {
+            this.reactiveController = true;
+        }
         this.controllerActions = [];
     }
 
     get prompting() {
         return {
-            askForReactive: prompts.askForReactive,
             askForControllerActions: prompts.askForControllerActions
         };
     }
@@ -56,9 +58,6 @@ module.exports = class extends BaseGenerator {
             insight() {
                 const insight = this.insight();
                 insight.trackWithEvent('generator', 'spring-controller');
-                if (this.reactiveController) {
-                    insight.track('spring-controller/reactive', this.reactiveController);
-                }
             }
         };
     }

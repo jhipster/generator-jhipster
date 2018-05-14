@@ -179,6 +179,9 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstantNG2(languages) {
+        if (this.clientFramework !== 'angularX') {
+            return;
+        }
         const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
@@ -206,6 +209,9 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguagePipe(languages) {
+        if (this.clientFramework !== 'angularX') {
+            return;
+        }
         const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`;
         try {
             let content = '{\n';
@@ -246,6 +252,60 @@ module.exports = class extends Generator {
             jhipsterUtils.replaceContent({
                 file: fullPath,
                 pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
+                content
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Update Moment Locales to keep in webpack prod build
+     *
+     * @param languages
+     */
+    updateLanguagesInMomentWebpackNgx(languages) {
+        const fullPath = 'webpack/webpack.prod.js';
+        try {
+            let content = 'localesToKeep: [\n';
+            languages.forEach((language, i) => {
+                content += `                    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
+            });
+            content +=
+                '                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n' +
+                '                ]';
+
+            jhipsterUtils.replaceContent({
+                file: fullPath,
+                pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
+                content
+            }, this);
+        } catch (e) {
+            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Update Moment Locales to keep in webpack prod build
+     *
+     * @param languages
+     */
+    updateLanguagesInMomentWebpackReact(languages) {
+        const fullPath = 'webpack/webpack.prod.js';
+        try {
+            let content = 'localesToKeep: [\n';
+            languages.forEach((language, i) => {
+                content += `        '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
+            });
+            content +=
+                '        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n' +
+                '      ]';
+
+            jhipsterUtils.replaceContent({
+                file: fullPath,
+                pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
                 content
             }, this);
         } catch (e) {
@@ -344,7 +404,7 @@ module.exports = class extends Generator {
             return text;
         }
         const rows = text.split('\n');
-        let description = rows[0];
+        let description = this.formatLineForJavaStringUse(rows[0]);
         for (let i = 1; i < rows.length; i++) {
             // discard empty rows
             if (rows[i].trim() !== '') {
@@ -363,6 +423,41 @@ module.exports = class extends Generator {
             return text;
         }
         return text.replace(/"/g, '\\"');
+    }
+
+    /**
+     * Format As Liquibase Remarks
+     *
+     * @param {string} text - text to format
+     * @returns formatted liquibase remarks
+     */
+    formatAsLiquibaseRemarks(text) {
+        if (!text) {
+            return text;
+        }
+        const rows = text.split('\n');
+        let description = rows[0];
+        for (let i = 1; i < rows.length; i++) {
+            // discard empty rows
+            if (rows[i].trim() !== '') {
+                // if simple text then put space between row strings
+                if (!description.endsWith('>') && !rows[i].startsWith('<')) {
+                    description += ' ';
+                }
+                description += rows[i];
+            }
+        }
+        // escape & to &amp;
+        description = description.replace(/&/g, '&amp;');
+        // escape " to &quot;
+        description = description.replace(/"/g, '&quot;');
+        // escape ' to &apos;
+        description = description.replace(/'/g, '&apos;');
+        // escape < to &lt;
+        description = description.replace(/</g, '&lt;');
+        // escape > to &gt;
+        description = description.replace(/>/g, '&gt;');
+        return description;
     }
 
     /**

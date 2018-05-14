@@ -68,7 +68,7 @@ const expectedFiles = {
         './k8s/samplekafka/samplekafka-deployment.yml',
         './k8s/samplekafka/samplekafka-mysql.yml',
         './k8s/samplekafka/samplekafka-service.yml',
-        './k8s/samplekafka/samplekafka-kafka.yml'
+        './k8s/messagebroker/kafka.yml'
     ],
     prometheusmonit: [
         './k8s/monitoring/jhipster-prometheus-crd.yml',

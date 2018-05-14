@@ -231,7 +231,7 @@ spring:
 
 # ===================================================================
 # To enable SSL, generate a certificate using:
-# keytool -genkey -alias <%= baseName %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
 #
 # You can also use Let's Encrypt:
 # https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
@@ -244,7 +244,7 @@ spring:
 #        key-store: keystore.p12
 #        key-store-password: <your-password>
 #        key-store-type: PKCS12
-#        key-alias: <%= baseName %>
+#        key-alias: <%= baseName.toLowerCase() %>
 # ===================================================================
 server:
     port: <%= serverPort %>

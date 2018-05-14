@@ -104,7 +104,7 @@ const serverFiles = {
             }]
         },
         {
-            condition: generator => (generator.reactive && ['mongodb', 'couchbase'].includes(generator.databaseType)),
+            condition: generator => (generator.applicationType === 'reactive' && ['mongodb', 'couchbase'].includes(generator.databaseType)),
             path: SERVER_MAIN_SRC_DIR,
             templates: [{
                 file: 'package/repository/reactive/EntityReactiveRepository.java',

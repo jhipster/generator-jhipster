@@ -54,12 +54,9 @@ export const ACTION_TYPES = {
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
   DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>',
-  <%_
-  blobFields.forEach(b => {
-    const upperFieldName = b.fieldName.toUpperCase();
-  _%>
-  SET_<%= upperFieldName %>: '<%= entityInstance %>/SET_<%= upperFieldName %>',
-  <%_ }); _%>
+  <%_ if (fieldsContainBlob) { _%>
+  SET_BLOB: '<%= entityInstance %>/SET_BLOB',
+  <%_ } _%>
   RESET: '<%= entityInstance %>/RESET'
 };
 
@@ -167,21 +164,18 @@ export default (state = initialState, action) => {
         updateSuccess: true,
         entity: {}
       };
-    <%_
-    blobFields.forEach(b => {
-      const fieldName = b.fieldName;
-      const upperFieldName = fieldName.toUpperCase();
-    _%>
-    case ACTION_TYPES.SET_<%= upperFieldName %>:
-        return {
-          ...state,
-          entity: {
-            ...state.entity,
-            <%= fieldName %>: action.payload.data,
-            <%= fieldName %>ContentType: action.payload.contentType
-          }
-        };
-      <%_ }); _%>
+    <%_ if (fieldsContainBlob) { _%>
+    case ACTION_TYPES.SET_BLOB:
+      const { name, data, contentType } = action.payload;
+      return {
+        ...state,
+        entity: {
+          ...state.entity,
+          [name]: data,
+          [name + 'ContentType']: contentType
+        }
+      };
+    <%_ } _%>
     case ACTION_TYPES.RESET:
       return {
         ...initialState
@@ -257,17 +251,16 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
   return result;
 };
 
-<%_
-  blobFields.forEach(b => {
-    const fieldName = b.fieldName;
-    const upperFirstName =  _.upperFirst(fieldName);
-    const upperFieldName = b.fieldName.toUpperCase();
-_%>
-export const set<%= upperFirstName %> = <%= fieldName %> => ({
-  type: ACTION_TYPES.SET_<%= upperFieldName %>,
-  payload: <%= fieldName %>
+<%_ if (fieldsContainBlob) { _%>
+export const setBlob = (name, data, contentType?) => ({
+  type: ACTION_TYPES.SET_BLOB,
+  payload: {
+    name,
+    data,
+    contentType
+  }
 });
-<%_ }); _%>
+<%_ } _%>
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET
