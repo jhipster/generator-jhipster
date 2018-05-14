@@ -49,6 +49,10 @@ export interface IUserSettingsState {
 }
 
 export class SettingsPage extends React.Component<IUserSettingsProps, IUserSettingsState> {
+  state: IUserSettingsState = {
+    account: this.props.account
+  };
+
   componentDidMount() {
     this.props.getSession();
   }
@@ -57,11 +61,28 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
     this.props.reset();
   }
 
-  
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      account: nextProps.account
+    });
+  }
+
+  <%_ if (enableTranslation) { _%>
+  setLangKey = event => {
+    this.setState({
+      account: {
+        ...this.state.account,
+        langKey: event.target.value
+      }
+    });
+  };
+
+  <%_ } _%>
   handleValidSubmit = (event, values) => {
     const account = {
-      ...this.props.account,
-      ...values
+      ...this.state.account,
+      ...values<% if (enableTranslation) { %>,
+      langKey: this.state.account.langKey<% } %>
     };
 
     this.props.saveAccountSettings(account);
@@ -69,7 +90,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
   };
 
   render() {
-    const { account } = this.props;
+    const { account } = this.state;
     const { updateSuccess } = this.props;
 
     return (
@@ -130,7 +151,8 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
                 name="langKey"
                 className="form-control"
                 label={translate('settings.form.language')}
-                value={account.langKey}
+                onChange={this.setLangKey}
+                defaultValue={account.langKey}
               >
                 {/* TODO: Add findLanguageFromKey translation to options */}
                 {locales.map(lang => (

@@ -34,23 +34,37 @@ export interface IHomeProp {
   getSession: Function;
 }
 
-export class Home extends React.Component<IHomeProp> {
-  componentDidMount() {
+export interface IHomeState {
+  currentUser: any;
+}
+
+export class Home extends React.Component<IHomeProp, IHomeState> {
+  state: IHomeState = {
+    currentUser: this.props.account
+  };
+
+  componentWillMount() {
     this.props.getSession();
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      currentUser: nextProps.account
+    });
+  }
+
   render() {
-    const { account } = this.props;
+    const { currentUser } = this.state;
     return (
       <Row>
         <Col md="9">
           <h2><Translate contentKey="home.title">Welcome, Java Hipster!</Translate></h2>
           <p className="lead"><Translate contentKey="home.subtitle">This is your homepage</Translate></p>
           {
-            (account && account.login) ? (
+            (currentUser && currentUser.login) ? (
               <div>
                 <Alert color="success">
-                  <Translate contentKey="home.logged.message" interpolate={{ username: account.login }}>You are logged in as user {account.login}.</Translate>
+                  <Translate contentKey="home.logged.message" interpolate={{ username: currentUser.login }}>You are logged in as user {currentUser.login}.</Translate>
                 </Alert>
               </div>
             ) : (
