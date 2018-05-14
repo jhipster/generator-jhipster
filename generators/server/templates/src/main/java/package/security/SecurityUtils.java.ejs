@@ -18,9 +18,15 @@
 -%>
 package <%=packageName%>.security;
 
+<%_ if (reactive) { _%>
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+<%_ } _%>
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
 
 import java.util.Optional;
 
@@ -50,6 +56,21 @@ public final class SecurityUtils {
                 return null;
             });
     }
+    <%_ if (reactive) { _%>
+
+    public static Mono<String> getCurrentUserLoginReactively() {
+        return ReactiveSecurityContextHolder.getContext()
+            .map(SecurityContext::getAuthentication).map(authentication -> {
+                if (authentication.getPrincipal() instanceof UserDetails) {
+                    UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+                    return springSecurityUser.getUsername();
+                } else if (authentication.getPrincipal() instanceof String) {
+                    return (String) authentication.getPrincipal();
+                }
+                return null;
+            });
+    }
+    <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
 
     /**

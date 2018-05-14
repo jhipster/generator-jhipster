@@ -22,6 +22,9 @@ import org.junit.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+<%_ if (reactive) { _%>
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+<%_ } _%>
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -40,10 +43,16 @@ public class SecurityUtilsUnitTest {
 
     @Test
     public void testgetCurrentUserLogin() {
+        <%_ if (!reactive) { _%>
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
         SecurityContextHolder.setContext(securityContext);
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
+        <%_ } else { _%>
+        Optional<String> login = SecurityUtils.getCurrentUserLoginReactively()
+            .subscriberContext(ReactiveSecurityContextHolder.withAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin")))
+            .blockOptional();
+        <%_ } _%>
         assertThat(login).contains("admin");
     }
     <%_ if (authenticationType === 'jwt') { _%>

@@ -1095,7 +1095,7 @@ const serverFiles = {
             templates: [
                 { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
                 { file: 'package/repository/CustomAuditEventRepository.java', renameTo: generator => `${generator.javaDir}repository/CustomAuditEventRepository.java` },
-                { file: 'package/repository/AuthorityRepository.java', renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java` },
+                { file: 'package/repository/AuthorityRepository.java', renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}AuthorityRepository.java` },
                 { file: 'package/repository/PersistenceAuditEventRepository.java', renameTo: generator => `${generator.javaDir}repository/PersistenceAuditEventRepository.java` },
                 { file: 'package/service/AuditEventService.java', renameTo: generator => `${generator.javaDir}service/AuditEventService.java` },
                 { file: 'package/web/rest/AuditResource.java', renameTo: generator => `${generator.javaDir}web/rest/AuditResource.java` },
@@ -1107,7 +1107,7 @@ const serverFiles = {
             templates: [
                 /* User management java domain files */
                 { file: 'package/domain/User.java', renameTo: generator => `${generator.javaDir}domain/User.java` },
-                { file: 'package/repository/UserRepository.java', renameTo: generator => `${generator.javaDir}repository/UserRepository.java` },
+                { file: 'package/repository/UserRepository.java', renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}UserRepository.java` },
 
                 /* User management java service files */
                 { file: 'package/service/UserService.java', renameTo: generator => `${generator.javaDir}service/UserService.java` },
@@ -1124,13 +1124,6 @@ const serverFiles = {
                 { file: 'package/service/mapper/package-info.java', renameTo: generator => `${generator.javaDir}service/mapper/package-info.java` },
                 { file: 'package/service/mapper/UserMapper.java', renameTo: generator => `${generator.javaDir}service/mapper/UserMapper.java` },
 
-            ]
-        },
-        {
-            condition: generator => !generator.skipUserManagement && generator.reactive,
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/repository/reactive/UserRepository.java', renameTo: generator => `${generator.javaDir}repository/reactive/UserRepository.java` },
             ]
         },
         {
