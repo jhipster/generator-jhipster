@@ -997,6 +997,13 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.searchEngine === 'elasticsearch',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                { file: 'package/repository/search/UserSearchRepositoryMockConfiguration.java', renameTo: generator => `${generator.testDir}repository/search/UserSearchRepositoryMockConfiguration.java` },
+            ]
+        },
+        {
             condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
