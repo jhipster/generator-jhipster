@@ -64,7 +64,7 @@
 #               "Fail during test of the Generator." \
 #               " (command 'yarn test' in `pwd`)"
 # 12) Do not use loop for. Sometimes it fail. For example:
-        # IFS=$' ' readarray dockerContainers <<< `docker ps -q`
+        # IFS=$' ' read -ra dockerContainers <<< `docker ps -q`
         # for i in ${dockerContainers[@]} ; do
         #     printCommandAndEval docker kill "$i" || exitScriptWithError \
         #         "FATAL ERROR: couldn't kill docker container '$i'"
@@ -96,8 +96,8 @@
 #   * Each subtitle could be written in one independant file.
 #   * Following subtitules could be seen as russian dolls.
 #       The sign "⊇." means "is a superset of":
-#       ( I LAUNCH SCRIPT FOR ALL SAMPLES) ⊇.
-#       ( II LAUNCH SCRIPT FOR ONLY ONE SAMPLE) ⊇.
+#       ( I LAUNCH SAMPLE(S) IN BACKGROUND) ⊇.
+#       ( II LAUNCH ONLY ONE SAMPLE) ⊇.
 #       ((III 1) GENERATE NODE_MODULES CACHE)
 #           AND/THEN (III 2) EXECUTE SCRIPTS ./scripts/*.sh )) ⊇.
 #       (IV WRAPPING EXECUTION OF ./scripts/*.sh
@@ -107,7 +107,7 @@
 #       * The main function is createLogFile()
 #       * Log files are created for each sample
 #       * Used in functions generateNode_Modules_Cache() AND
-#           launchScriptForOnlyOneSample()
+#           launchOnlyOneSample()
 #           i.e.. Generation of the node_module cache produce an log file,
 #               each sample has its own log file.
 #   * IV WRAPPING EXECUTION OF ./scripts/*.sh AND GENERATE NODE_MODULES STEPS
@@ -130,18 +130,21 @@
 #       * Main function is generateNode_Modules_Cache() who generate
 #       a single node_modules. Why this?
 #       On my computer (JulioJu) I save 10 minutes of time for each sample.
-#   * II LAUNCH SCRIPT FOR ONLY ONE SAMPLE
+#   * II LAUNCH ONLY ONE SAMPLE
 #       * Could be seen as "MAIN" for:
-#       `./build-samples.sh generate/buildandtest' (two arguments)
-#       * contains launchScriptForOnlyOneSample(),
+#       `./build-samples.sh generate/buildandtest sample_name --consoleverbose' \
+#           (three mandatory arguments)
+#       * contains launchOnlyOneSample(),
 #       the main function of this subtitle
 #       * see explanations in paragrapher below
-#   * I LAUNCH SCRIPT FOR ALL SAMPLES
+#   * I LAUNCH SAMPLE(S) IN BACKGROUND
 #       * Could be seen as "MAIN" function for:
-#       `./build-samples.sh generate/buildandtest sample_name' (three arugments)
-#       * contains launchScriptForAllSamples(),
+#       `./build-samples.sh generate/buildandtest \
+#           [sample_name[,samle_name][,...]]' \
+#               (one mandatory arguments + one optional arugments)
+#       * contains launchSamplesInBackground(),
 #       the main function of this subtitle
-#       * This function launch several function launchScriptForOnlyOneSample()
+#       * This function launch one or several function launchOnlyOneSample()
 #           in background.
 #       * see explanations in paragrapher below
 # MAIN
@@ -157,9 +160,9 @@
 # 1. If ./samples/node_modules_cache-sample/node_modules_cache.*.passed.local-travis.log
 #    doesn't exits, we trigger generateNode_Modules_Cache() to generate this
 #    cache.
-# 2. If we have two parameters
-#    (e.g `./build-samples.sh generate ngx-default') we trigger
-#    function launchScriptForOnlyOneSample() in foreground.
+# 2. If we have three parameters
+#    (e.g `./build-samples.sh generate ngx-default --consoleverbose') we trigger
+#    function launchOnlyOneSample() in foreground.
 #    * In this file we retrieve line who match "    JHIPSTER=ngx-default".
 #    (we test in same time if this sample exists
 #    under section "matrix" of ../.travis.yml).
@@ -176,11 +179,13 @@
 #    who launch function generateProject() and scripts ./scripts/04-tests.sh,
 #    ./scripts/05-run.sh, ./scripts/06-sonar.sh.
 # 3. If we have one parameters (e.g. `./build-samples.sh generate')
-#    we trigger function launchScriptForAllSamples() in foreground.
-#    This function retrieve all lines in ../.travis.yml,
-#    that match: "    JHIPSTER=ngx-default PROTRACTOR=1 PROFILE=prod"
+#    Or if we have two parameters
+#       (e.g. `./build-samples.sh generate ngx-default,other_samples,...)
+#    we trigger function launchSamplesInBackground().
+#    This function retrieve lines in ../.travis.yml,
+#    that match: "    JHIPSTER="
 #    (e.g those under section matrix:)
-#   * This function launches several function launchScriptForOnlyOneSample()
+#   * This function launches one or several functions launchOnlyOneSample()
 #       in background, for each sample.
 #   * `yarn test' in generator-jhipster is launched for sample 'ngx-default'
 
@@ -286,7 +291,7 @@ function printFileDescriptor3() {
 function printCommandAndEval() {
     if [[ -e /dev/fd/3 ]] && \
         [[ -e /dev/fd/4 ]] ; then
-        # See function launchScriptForAllSamples()
+        # See function launchSamplesInBackground()
         echo "${PS1}${@}" >> >(tee --append /dev/fd/3) 2>> >(tee --append /dev/fd/4)
         eval "$@" >> >(tee --append /dev/fd/3) 2>> >(tee --append /dev/fd/4)
     else
@@ -341,14 +346,24 @@ function usageClean() {
 # argument who match.
 # ====================
 function usage() {
-    local me='$(basename "$0")'
+    local me=$(basename "$0")
     local list_of_samples=`cut -d ' ' -f 1 <<< "$TRAVIS_DOT_YAML_PARSED"`
 
     echo -e "\n\nScript than emulate well remote Travis CI build " \
         " https://travis-ci.org/jhipster/generator-jhipster.\n"
 
-    echo -e "\nUsage: '$me' generate [sample_name] " \
-        "| buildandtest [sample_name]|clean | help\n\n" \
+    echo -e "\nSynopsis: \n" \
+        "'$me' \n" \
+        "\tgenerate [ \n" \
+            "\t\tsample_name [--consoleverbose] \n" \
+            "\t\t | sample_name[,sample_name][,...] \n" \
+        "\t\t]\n" \
+        "\tbuildandtest [ \n" \
+            "\t\tsample_name [--consoleverbose] \n" \
+            "\t\t | sample_name[,sample_name][,...] \n" \
+        "\t\t]\n" \
+        "\tclean\n" \
+        "\thelp\n\n" \
     " \`./build-samples.sh generate/buildandtest'\n" \
         "—————————————————————————————————————\n" \
         "—————————————————————————————————————\n" \
@@ -377,12 +392,8 @@ function usage() {
             "the npm genertor-jhipster." \
     "\n\n'[sample_name]' could be:\n" \
     "——————————————————\n" \
-    "${list_of_samples}\n" \
-    "\nThis samples could be skipped. In section 'matrix'" \
-    " generator-jhipster/.travis.yml simply comment it" \
-    " Do not hesitate to comment some samples in ../.travis.yml to improve" \
-    "speed!" \
-    "\nUse always \`./build-samples.sh buildandtest ngx-default' " \
+    "${list_of_samples}\n\n" \
+    "* Use always \`./build-samples.sh buildandtest ngx-default' " \
             "(the more complete test). " \
             "Useful for test Server side and Angular client.\n" \
     "  * If you work on the React client try the previous and also " \
@@ -400,11 +411,16 @@ function usage() {
         "—————————————————————————————————————\n" \
     "\`$ ./build-samples.sh generate ngx-default' " \
         "=> generate a new project at travis/samples/ngx-default-sample\n" \
+    "\`$ ./build-samples.sh generate ngx-default --consoleverbose' " \
+        "=> all is printed in the console (thanks \`--consoleverbose' lot of logs, not advise)\n" \
     "\`$ ./build-samples.sh buildandtest ngx-default' " \
         "=> generate a new project at travis/samples/ngx-default-sample " \
             "then build and test it.\n" \
     "\`$ ./build-samples.sh generate' =>" \
         " generate all travis/samples/*-sample corresponding of " \
+        " samples listed above.\n" \
+    "\`$ ./build-samples.sh generate ngx-default,ngx-gradle-fr' =>" \
+        " generate \`ngx-default' and \`ngx-gradle-fr'.\n"  \
         " samples listed above.\n" \
     "\`$ ./build-samples.sh buildandtest' => generate build and test all " \
         "travis/samples/*-sample corresponding of samples listed above.\n" \
@@ -515,7 +531,7 @@ function echoTitleBuildStep() {
         "\n"
 
     # ECHO in console:
-    # 1. if console is branched to /dev/fd/3 (see launchScriptForAllSamples())
+    # 1. if console is branched to /dev/fd/3 (see launchSamplesInBackground())
     # 2. if we are not in function generateNode_Modules_Cache().
     # Always false if we launch this script with two arguments, like:
     # `./build-samples.sh generate ngx-default'
@@ -705,7 +721,7 @@ function createLogFile() {
     touch "$LOGFILENAME" || exitScriptWithError "FATAL ERROR: could not " \
         "create '$LOGFILENAME'"
 
-    if [[ "$workOnAllProjects" -eq 0 ]] ; then
+    if [[ "$launchInBackground" -eq 0 ]] ; then
         echoSmallTitle "Create log file and save output in '${LOGFILENAME}'"
         exec 1>> >(tee --append "${LOGFILENAME}") 2>&1
     else
@@ -729,7 +745,7 @@ function createLogFile() {
 # function restoreSTDERRandSTDOUTtoConsole() {{{3
 function restoreSTDERRandSTDOUTtoConsole() {
     # Restore the originals descriptors.
-    # Behaviour changed in function launchScriptForAllSamples()
+    # Behaviour changed in function launchSamplesInBackground()
     if [[ -e /dev/fd/3 ]] ; then
         exec 1>&3
         3<&-
@@ -754,7 +770,7 @@ function treatEndOfBuild() {
     sleep 10
 
     # TODO improve it. Actually, kill all docker commands. Not cool!
-    IFS=$' ' readarray dockerContainers <<< `docker ps -q`
+    IFS=$' ' read -ra dockerContainers <<< `docker ps -q`
     # If `docker ps -q` is empty, "${#dockerContainers[0]}" takes value 1.
     if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
         # Don't use `for' syntax:
@@ -802,7 +818,7 @@ function treatEndOfBuild() {
         fi
     fi
 
-    if [[ "$workOnAllProjects" -eq 1 ]] ; then
+    if [[ "$launchInBackground" -eq 1 ]] ; then
         restoreSTDERRandSTDOUTtoConsole
     fi
 
@@ -846,7 +862,7 @@ errorInBuildExitCurrentSample() {
         exit 80
     else
         # For function testRequierments() launched in function
-        # launchScriptForAllSamples()
+        # launchSamplesInBackground()
         exitScriptWithError "$@"
     fi
 }
@@ -899,7 +915,7 @@ function launchNewBash() {
     echoTitleBuildStep "$2" "('$1')"
     # If there is an error raised, in function errorInBuildStopCurrentSample()
     # "$ERROR_IN_SAMPLE" takes a value of 1. Initialized to 0 in function
-    # launchScriptForOnlyOneSample() or generateNode_Modules_Cache()
+    # launchOnlyOneSample() or generateNode_Modules_Cache()
     if [[ "${ERROR_IN_SAMPLE}" -eq 0 ]] ; then
         cd "${JHIPSTER_TRAVIS}"
         set +e
@@ -910,7 +926,7 @@ function launchNewBash() {
         set -e
     else
         # tee print in stdout (either logfile or console) and /dev/fd/4
-        # for /dev/fd/4 see function launchScriptForAllSamples()
+        # for /dev/fd/4 see function launchSamplesInBackground()
         if [[ -e /dev/fd/4 ]] ; then
             1>&2 echo -e "SKIP '${2}' cause of previous error." \
                 >> >(tee --append /dev/fd/2 /dev/fd/4 1>> /dev/null)
@@ -949,9 +965,9 @@ function generateProject() {
     # `./build-samples.sh generate/buildandtest sample-name', confirmationUser
     # if he wants test it.
     if ([[ "${TESTGENERATOR}" -eq 1 ]] && \
-        [[ "${workOnAllProjects}" -eq 0 ]] ) || \
+        [[ "${launchInBackground}" -eq 0 ]] ) || \
         ( [[ "${TESTGENERATOR}" -eq 1 ]] && \
-        [[ "$workOnAllProjects" -eq 1 ]] && \
+        [[ "$launchInBackground" -eq 1 ]] && \
         [[ "${JHIPSTER}" == "ngx-default"  ]] )
     then
         # Corresponding to "Install and test JHipster Generator" in
@@ -1017,6 +1033,8 @@ function generateNode_Modules_Cache() {
 
     echoSmallTitle "Check node_modules cache"
 
+    # Save JHIPSTER_MATRIX
+    JHIPSTER_MATRIX_SAVED=${JHIPSTER_MATRIX}
     # Used in functions errorInBuildExitCurrentSample() and createLogFile()
     local JHIPSTER_MATRIX="${NODE_MODULES_CACHE_SAMPLE}"
 
@@ -1076,37 +1094,22 @@ function generateNode_Modules_Cache() {
             echo "$jhipstercommand"
         fi
         eval "$jhipstercommand"
-        unset jhipstercommand
 
         treatEndOfBuild
     }
 
-    unset shortDate beginLogfilename endofLogfilename fail
-    unset APP_FOLDER
-    unset generationOfNodeModulesCacheMarker
     unset JHIPSTER_MATRIX
+    declare -g JHIPSTER_MATRIX=${JHIPSTER_MATRIX_SAVED}
 }
 
-# II LAUNCH SCRIPT FOR ONLY ONE SAMPLE {{{2
+# II LAUNCH ONLY ONE SAMPLE {{{2
 # ====================
 # ====================
 
 # function retrieveVariablesInFileDotTravisSectionMatrix() {{{3
 function retrieveVariablesInFileDotTravisSectionMatrix() {
 
-    # For variable "$JHIPSTER_MATRIX", see section "matrix" of ../.travis.yml
-    if [[ "$workOnAllProjects" -eq 0 ]] ; then
-        export JHIPSTER="$1"
-        JHIPSTER_MATRIX=`grep --color=never "$JHIPSTER" \
-            <<< "$TRAVIS_DOT_YAML_PARSED"` \
-            || exitScriptWithError \
-            "\n\nFATAL ERROR: " \
-            "$JHIPSTER is not a correct sample." \
-            "Please read \`$ ./build-samples.sh help'."
-    else
-        JHIPSTER_MATRIX="$1"
-        export JHIPSTER=`cut -d ' ' -f 1 <<< "$JHIPSTER_MATRIX"`
-    fi
+    export JHIPSTER=`cut -d ' ' -f 1 <<< "$JHIPSTER_MATRIX"`
 
     # PROFILE AND PROTRACTOR REDEFINITION
     # Retrieve ../.travis.yml, section matrix
@@ -1133,12 +1136,12 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 function createFolderNodeModulesAndLogFile() {
     if ! isSkipClientInFileYoRcDotConf ; then
 
-        if [[ "$workOnAllProjects" -eq 0 ]] ; then
+        if [[ "$launchInBackground" -eq 0 ]] ; then
             generateNode_Modules_Cache
             # Redifine APP_FOLDER, as it is unsetted in function
             # generateNode_Modules_Cache
             export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
-        # else; done in function launchScriptForAllSamples()
+        # else; done in function launchSamplesInBackground()
         fi
 
         createLogFile
@@ -1166,20 +1169,18 @@ function createFolderNodeModulesAndLogFile() {
     fi
 }
 
-# function launchScriptForOnlyOneSample() {{{3
-function launchScriptForOnlyOneSample() {
-
-    local methodToExecute="$1"
+# function launchOnlyOneSample() {{{3
+function launchOnlyOneSample() {
 
     # define JHIPSTER, and redifine if necessary PROFIL and PROTRACTOR
-    # If "$workOnAllProjects -eq 0", test if the second argument
+    # If "$launchInBackground -eq 0", test if the second argument
     # of command line is correct.
-    retrieveVariablesInFileDotTravisSectionMatrix "$2"
+    retrieveVariablesInFileDotTravisSectionMatrix
 
-    # if "$workOnAllProjects" -eq 1
+    # if "$launchInBackground" -eq 1
     # doesItTestGenerator is done in
-    # function launchScriptForAllSamples()
-    if [[ "$workOnAllProjects" -eq 0 ]] ; then
+    # function launchSamplesInBackground()
+    if [[ "$launchInBackground" -eq 0 ]] ; then
         export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
         local -i TESTGENERATOR=1
         doesItTestGenerator "before generate the project".
@@ -1224,19 +1225,22 @@ function launchScriptForOnlyOneSample() {
 
         local oldPATH="${PATH}"
         export PATH="${APP_FOLDER}"/node_modules:"$PATH"
-        "${methodToExecute}"
+        if [[ "$isBuildAndTest" -eq 1 ]] ; then
+            buildAndTestProject
+        else
+            generate
+        fi
         PATH="${oldPATH}"
         unset oldPATH
 
     }
 
     treatEndOfBuild
-    unset methodToExecute
     # do not unset beginLogfilename and endofLogfilename, unsed in another
     # function
 }
 
-# I LAUNCH SCRIPT FOR ALL SAMPLES {{{2
+# I LAUNCH SAMPLE(S) IN BACKGROUND {{{2
 # ====================
 # ====================
 
@@ -1244,28 +1248,33 @@ function launchScriptForOnlyOneSample() {
 function wrapperLaunchScript() {
     # Display stderr on terminal.
     echoTitleBuildStep \
-        "'${localJHIPSTER_MATRIX}' is launched in background!"
-    launchScriptForOnlyOneSample "${methodToExecute}" \
-        "${localJHIPSTER_MATRIX}" || echo "ERROR IN '${localJHIPSTER_MATRIX}'"
-    echoTitleBuildStep "End of '$localJHIPSTER_MATRIX'" ;
+        "'${JHIPSTER_MATRIX}' is launched in background!"
+    launchOnlyOneSample || echo "ERROR IN '${JHIPSTER_MATRIX}'"
+    echoTitleBuildStep "End of '$JHIPSTER_MATRIX'" ;
     return 0
 }
 
-# function launchScriptForAllSamples() {{{3
-function launchScriptForAllSamples() {
-    local methodToExecute="${1}"
+# function launchSamplesInBackground() {{{3
+function launchSamplesInBackground() {
 
     local -i TESTGENERATOR=1
-    if [[ "$methodToExecute" == "generateProject" ]] ; then
+
+    if [[ "$isBuildAndTest" -eq 0 ]] ; then
         doesItTestGenerator "during generation of 'ngx-default'"
     fi
 
-    local confirmationFirstParameter=`echo -e "Don't forget to " \
-        "check \\\`./build-samples.sh help.'\n" \
-        "Warning: are you sure to run" \
-        "'${methodToExecute}' and delete all samples/*-sample" \
-        "(except node_modules_cache-sample if it exists) [y/n]? "`
-    confirmationUser "${confirmationFirstParameter}" \
+    echo
+    local -i i=0
+    while [[ "$i" -lt "${#JHIPSTER_MATRIX_ARRAY[*]}" ]] ; do
+        local APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER_MATRIX_ARRAY[i]}""-sample"
+        if [[ -e "$APP_FOLDER" ]] ; then
+            echo -e "WARNING: if you continue '$APP_FOLDER' will be deleted."
+        fi
+        i=$((i+1))
+    done
+    unset "$APP_FOLDER"
+
+    confirmationUser "Are you sure to contiune?"
         'echo ""' \
         'exitScriptWithError "ABORTED."'
     unset confirmationFirstParameter
@@ -1296,23 +1305,12 @@ function launchScriptForAllSamples() {
     # in ../.travis.yml
     generateNode_Modules_Cache
 
-    local -a jhipsterArray
-    # We need to use an array.
-    # For a complex script, loop below doesn't work.
-    # Works only for simple loops.
-    # It lost the iterator when we use this syntax loop
-    # with inner loop and background processes.
-    IFS=$'\n' readarray jhipsterArray <<< "$TRAVIS_DOT_YAML_PARSED"
-
     local -i i=0
     timeSpan=15
     # Execute accordingly to the array.
-    while [[ i -lt "${#jhipsterArray[*]}" ]] ; do
-        localJHIPSTER_MATRIX="${jhipsterArray[i]}"
-        # `ps -o pid,stat,command -C "…"' seems
-        # displays more zombies processes (constation of JulioJu).
-
-        # `ps`: see man page:
+    while [[ "$i" -lt "${#JHIPSTER_MATRIX_ARRAY[*]}" ]] ; do
+        JHIPSTER_MATRIX="${JHIPSTER_MATRIX_ARRAY[i]}"
+        # `ps' man page:
         # "By default, ps selects all processes
         # associated with the same terminal as the invoker."
         while [ `ps -o pid,command  \
@@ -1371,7 +1369,7 @@ export RUN_APP=1
 export JHIPSTER_TRAVIS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export JHIPSTER_SAMPLES="$JHIPSTER_TRAVIS/samples"
 export JHIPSTER_SCRIPTS="$JHIPSTER_TRAVIS/scripts"
-# export APP_FOLDER redefined in function launchScriptForOnlyOneSample()
+# export APP_FOLDER redefined in function launchOnlyOneSample()
 export UAA_APP_FOLDER="$JHIPSTER_SAMPLES/uaa-sample"
 # environment properties
 export SPRING_OUTPUT_ANSI_ENABLED="ALWAYS"
@@ -1419,16 +1417,73 @@ NODE_MODULES_CACHE_ANGULAR="${NODE_MODULES_CACHE_SAMPLE}"/angular
 # ====================
 # ====================
 
-function tooMuchArguments() {
-    firstArgument=`echo -e "\n\n\nFATAL ERROR: to much arguments. " \
-        "Please see \\\`./build-samples.sh help'".`
-    exitScriptWithError "$firstArgument"
-    unset firstArgument
+function returnJHIPSTER_MATRIXofFileTravisDotYml() {
+    # "$1" is the name of the variable we want assign
+    # example https://stackoverflow.com/a/38997681
+    local -n returned="$1"
+    local JHIPSTER_LOCAL="$2"
+    returned=grep --color=never "'$JHIPSTER_LOCAL'(\s|$)" <<< "$TRAVIS_DOT_YAML_PARSED" \
+        || exitScriptWithError "\n\nFATAL ERROR: " \
+        "'$JHIPSTER_LOCAL' is not a correct sample." \
+        "Please read \`$ ./build-samples.sh help'."
 }
 
-if [[ "$#" -gt 2 ]] ; then
+function define_JHIPSTER_MATRIX_ARRAY() {
+    local -r sample_list="$2"
+    declare -ga JHIPSTER_MATRIX_ARRAY
+    if [[ -z "${2+x}" ]] ; then
+        IFS=$'\n' read -ra JHIPSTER_MATRIX_ARRAY  <<< "$TRAVIS_DOT_YAML_PARSED"
+    elif [[ "${sample_list}" =~ [a-z] ]] ; then
+        returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX_ARRAY[0] \
+            "$sample_list"
+    elif [[ ${sample_list} =~ [a-z,]* ]] ; then
+        local -a tmpArray
+        IFS=$',' read -ra sampleListArray  <<< "$sample_list"
+        local -i i=0
+        while [[ "$i" -lt "${#tmpArray}" ]] ; do
+            returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX_ARRAY[i]
+            i=$((i+1))
+        done
+    fi
+}
+
+function launchScripts() {
+    local -r sample_list="$1"
+    if [[ "$ONLY_ONE_SAMPLE_VERBOSE_OUTPUT" -eq 1 ]] ; then
+        launchInBackground=0
+        local JHIPSTER_MATRIX
+        testSampleExistanceInFileDotTravis JHIPSTER_MATRIX "$sample_list"
+        time launchOnlyOneSample "$JHIPSTER_MATRIX"
+    else
+        launchInBackground=1
+        define_JHIPSTER_MATRIX_ARRAY
+        time launchSamplesInBackground
+    fi
+}
+
+function tooMuchArguments() {
+    exitScriptWithError "\n\n\nFATAL ERROR: to much arguments. " \
+        "Please see \`./build-samples.sh help'."
+}
+
+if [[ "$#" -gt 3 ]] ; then
     tooMuchArguments
 fi
+if [[ ! -z "${1+x}" ]] && \
+    ([[ "$1" = 'buildandtest' ]] || \
+    [[ "$1" = 'generate' ]]) ; then
+    ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=0
+    if [[ ! -z  "${3+x}" ]] && \
+        [[ "$3" -eq "--consoleverbose" ]] ; then
+        ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=1
+        if [[ ${2} =~ [a-z,]* ]] ; then
+            exitScriptWithError "\n\n\nFATAL ERROR '--consoleverbose' option could " \
+                "be used only when there is only one sample to build." \
+                "Please see \`./build-samples.sh help'."
+        fi
+    fi
+fi
+
 cd "${JHIPSTER_TRAVIS}"
 if [[ ! -z "${1+x}" ]] ; then
     if [ "$1" = "help" ]; then
@@ -1437,25 +1492,12 @@ if [[ ! -z "${1+x}" ]] ; then
         fi
         usage
         exit 0
-    fi
-    if [ "$1" = "generate" ]; then
+    elif [[ "$1" = "generate" ]] ; then
         isBuildAndTest=0
-        if [[ ! -z "${2+x}" ]] ; then
-            workOnAllProjects=0
-            launchScriptForOnlyOneSample "generateProject" "$2"
-        else
-            workOnAllProjects=1
-            time launchScriptForAllSamples "generateProject"
-        fi
-    elif [ "$1" = "buildandtest" ]; then
+        launchScripts "$2"
+    elif [[ "$1" = "buildandtest" ]] ; then
         isBuildAndTest=1
-        if [[ ! -z "${2+x}" ]] ; then
-            workOnAllProjects=0
-            launchScriptForOnlyOneSample "buildAndTestProject" "$2"
-        else
-            workOnAllProjects=1
-            time launchScriptForAllSamples "buildAndTestProject"
-        fi
+        launchScripts "$2"
     elif [ "$1" = "clean" ]; then
         if [[ ! -z "${2+x}" ]] ; then
             tooMuchArguments
