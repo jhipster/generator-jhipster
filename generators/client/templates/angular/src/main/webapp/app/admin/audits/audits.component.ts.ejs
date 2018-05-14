@@ -121,7 +121,7 @@ export class AuditsComponent implements OnInit, OnDestroy {
     }
 
     transition() {
-        this.router.navigate(['/audits'], {
+        this.router.navigate(['/admin/audits'], {
             queryParams: {
                 page: this.page,
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')

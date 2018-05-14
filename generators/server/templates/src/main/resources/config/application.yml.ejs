@@ -132,6 +132,9 @@ spring:
             discovery:
                 healthCheckPath: /management/health
                 instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+            config:
+                watch:
+                    enabled: false
     <%_ } _%>
     <%_ if (!serviceDiscoveryType) { _%>
     profiles:

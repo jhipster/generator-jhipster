@@ -59,7 +59,7 @@
     "insight": "0.10.1",
     "jhipster-core": "2.0.3",
     "js-yaml": "3.10.0",
-    "lodash": "4.17.4",
+    "lodash": "4.17.10",
     "meow": "3.7.0",
     "mkdirp": "0.5.1",
     "pluralize": "7.0.0",
