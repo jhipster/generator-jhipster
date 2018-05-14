@@ -338,6 +338,14 @@ const files = {
             ]
         },
         {
+            condition: generator => (generator.authenticationType === 'session'
+                && generator.websocket === 'spring-websocket'),
+            path: REACT_DIR,
+            templates: [
+                'shared/util/cookie-utils.ts'
+            ]
+        },
+        {
             condition: generator => generator.useSass,
             path: REACT_DIR,
             templates: [
