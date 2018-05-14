@@ -509,6 +509,41 @@ describe('JHipster generator', () => {
             });
         });
 
+        describe('oauth2 + elasticsearch', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'oauth2',
+                        cacheProvider: 'ehcache',
+                        enableHibernateCache: true,
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: [
+                            'searchEngine:elasticsearch'
+                        ]
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with authenticationType "oauth2" and elasticsearch', () => {
+                assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.elasticsearch);
+            });
+        });
+
         describe('hazelcast', () => {
             beforeEach((done) => {
                 helpers.run(path.join(__dirname, '../generators/app'))

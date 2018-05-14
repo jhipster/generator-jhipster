@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from 'app/core';
 
@@ -37,7 +37,8 @@ export class UserMgmtUpdateComponent implements OnInit {
         private languageHelper: JhiLanguageHelper,
         <%_ } _%>
         private userService: UserService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -57,7 +58,7 @@ export class UserMgmtUpdateComponent implements OnInit {
     }
 
     previousState() {
-        window.history.back();
+        this.router.navigate(['/admin/user-management']);
     }
 
     save() {
