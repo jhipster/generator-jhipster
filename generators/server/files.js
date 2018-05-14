@@ -1145,9 +1145,11 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 { file: 'package/security/jwt/TokenProviderTest.java', renameTo: generator => `${generator.testDir}security/jwt/TokenProviderTest.java` },
+                { file: 'package/security/jwt/JWTFilterTest.java', renameTo: generator => `${generator.testDir}security/jwt/JWTFilterTest.java` },
+                { file: 'package/web/rest/UserJWTControllerIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserJWTControllerIntTest.java` },
             ]
         },
-        {
+        /* {
             // TODO : add tests for reactive
             condition: generator => !generator.reactive && !generator.skipUserManagement && generator.authenticationType === 'jwt',
             path: SERVER_TEST_SRC_DIR,
@@ -1155,7 +1157,7 @@ const serverFiles = {
                 { file: 'package/security/jwt/JWTFilterTest.java', renameTo: generator => `${generator.testDir}security/jwt/JWTFilterTest.java` },
                 { file: 'package/web/rest/UserJWTControllerIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserJWTControllerIntTest.java` },
             ]
-        },
+        }, */
         {
             // TODO : add tests for reactive
             condition: generator => !generator.reactive && !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),

@@ -29,6 +29,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
+<%_ if (reactive) { _%>
+import org.springframework.security.core.AuthenticationException;
+<%_ } _%>
 import org.springframework.validation.BindingResult;
 <%_ if (!reactive) { _%>
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -112,7 +115,7 @@ public class ExceptionTranslator<% if (!reactive) { %> implements ProblemHandlin
     private static final String PROBLEM_VALUE = "application/problem+json";
     private static final MediaType PROBLEM = MediaType.parseMediaType(PROBLEM_VALUE);
 
-    @ExceptionHandler(WebExchangeBindException.class)
+    @ExceptionHandler
     public ResponseEntity<Problem> handleWebExchangeBindException(WebExchangeBindException ex) {
     <%_ } _%>
         BindingResult result = ex.getBindingResult();
@@ -155,6 +158,15 @@ public class ExceptionTranslator<% if (!reactive) { %> implements ProblemHandlin
     }
     <%_ } _%>
     <%_ if (reactive) { _%>
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleAuthentication(final AuthenticationException ex) {
+        return create(Status.UNAUTHORIZED, ex);
+    }
+
+    private ResponseEntity<Problem> create(Status status, Throwable ex) {
+        return create(ex, Problem.valueOf(status));
+    }
 
     private ResponseEntity<Problem> create(Throwable throwable, Problem problem) {
         return create(throwable, problem, new HttpHeaders());
