@@ -28,7 +28,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 <%_ } _%>
 
 @Configuration
-public class DateTimeFormatConfiguration implements Web<% if (reactive) { %>Flux<% } else { %>Mvcr<% } %>Configurer {
+public class DateTimeFormatConfiguration implements Web<% if (reactive) { %>Flux<% } else { %>Mvc<% } %>Configurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {

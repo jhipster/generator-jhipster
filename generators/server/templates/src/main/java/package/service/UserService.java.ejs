@@ -18,22 +18,30 @@
 -%>
 package <%=packageName%>.service;
 
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-import <%=packageName%>.domain.Authority;<% } %>
-import <%=packageName%>.domain.User;<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType === 'session') { %>
-import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
 import <%=packageName%>.config.Constants;
-import <%=packageName%>.repository.UserRepository;<% if (searchEngine === 'elasticsearch') { %>
-import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+import <%=packageName%>.domain.Authority;
+<%_ } _%>
+import <%=packageName%>.domain.User;
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.AuthorityRepository;
+    <%_ if (authenticationType === 'session') { _%>
+import <%=packageName%>.repository.PersistentTokenRepository;
+    <%_ } _%>
+<%_ } _%>
+import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import <%=packageName%>.repository.search.UserSearchRepository;
+<%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
 <%_ } _%>
 import <%=packageName%>.security.SecurityUtils;
+import <%=packageName%>.service.dto.UserDTO;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.service.util.RandomUtil;
+import <%=packageName%>.web.rest.errors.InvalidPasswordException;
 <%_ } _%>
-import <%=packageName%>.service.dto.UserDTO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +49,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
+<%_ } _%>
 import org.springframework.data.domain.Pageable;
     <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.scheduling.annotation.Scheduled;
@@ -57,10 +67,15 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
-import <%=packageName%>.web.rest.errors.InvalidPasswordException;
 <%_ } _%>
-import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.stereotype.Service;
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+<%_ } _%>
 
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
@@ -69,8 +84,15 @@ import java.time.Instant;
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
+<%_ if (reactive) { _%>
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+<%_ } else { _%>
 import java.util.*;
 import java.util.stream.Collectors;
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import java.util.stream.Stream;
 <%_ } _%>
@@ -126,13 +148,14 @@ public class UserService {
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
-    public Optional<User> activateRegistration(String key) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
-            .map(user -> {
+            .<% if (reactive) { %>flatMap<% } else { %>map<% } %>(user -> {
                 // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
+            <%_ if (!reactive) { _%>
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
@@ -145,33 +168,25 @@ public class UserService {
                 log.debug("Activated user: {}", user);
                 return user;
             });
+            <%_ } else { _%>
+                return userRepository.save(user);
+            })
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+            .doOnNext(this::clearUserCaches)
+                <%_ } _%>
+            .doOnNext(user -> log.debug("Activated user: {}", user));
+            <%_ } _%>
     }
 
-    public Optional<User> completePasswordReset(String newPassword, String key) {
-       log.debug("Reset user password for reset key {}", key);
-
-       return userRepository.findOneByResetKey(key)
-           .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
-           .map(user -> {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> completePasswordReset(String newPassword, String key) {
+        log.debug("Reset user password for reset key {}", key);
+        return userRepository.findOneByResetKey(key)
+            .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
+            .<% if (reactive) { %>flatMap<% } else { %>map<% } %>(user -> {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
-                <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
-                userRepository.save(user);
-                <%_ } _%>
-                <%_ if (cacheManagerIsAvailable === true) { _%>
-                this.clearUserCaches(user);
-                <%_ } _%>
-                return user;
-           });
-    }
-
-    public Optional<User> requestPasswordReset(String mail) {
-        return userRepository.findOneByEmailIgnoreCase(mail)
-            .filter(User::getActivated)
-            .map(user -> {
-                user.setResetKey(RandomUtil.generateResetKey());
-                user.setResetDate(Instant.now());
+            <%_ if (!reactive) { _%>
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
@@ -180,9 +195,36 @@ public class UserService {
                 <%_ } _%>
                 return user;
             });
+            <%_ } else { _%>
+                return userRepository.save(user);
+            })<% if (cacheManagerIsAvailable === true) { %>
+            .doOnNext(this::clearUserCaches)<% } %>;
+            <%_ } _%>
     }
 
-    public User registerUser(UserDTO userDTO, String password) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> requestPasswordReset(String mail) {
+        return userRepository.findOneByEmailIgnoreCase(mail)
+            .filter(User::getActivated)
+            .<% if (reactive) { %>flatMap<% } else { %>map<% } %>(user -> {
+                user.setResetKey(RandomUtil.generateResetKey());
+                user.setResetDate(Instant.now());
+            <%_ if (!reactive) { _%>
+                <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
+                userRepository.save(user);
+                <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                this.clearUserCaches(user);
+                <%_ } _%>
+                return user;
+            });
+            <%_ } else { _%>
+                return userRepository.save(user);
+            })<% if (cacheManagerIsAvailable === true) { %>
+            .doOnNext(this::clearUserCaches)<% } %>;
+            <%_ } _%>
+    }
+
+    public <% if (reactive) { %>Mono<User><% } else { %>User<% } %> registerUser(UserDTO userDTO, String password) {
 
         User newUser = new User();<% if (databaseType === 'cassandra') { %>
         newUser.setId(UUID.randomUUID().toString());<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
@@ -202,6 +244,7 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
+    <%_ if (!reactive) { _%>
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
@@ -217,9 +260,21 @@ public class UserService {
         <%_ } _%>
         log.debug("Created Information for User: {}", newUser);
         return newUser;
+    <%_ } else { _%>
+        Set<Authority> authorities = new HashSet<>();
+        return authorityRepository.findById(AuthoritiesConstants.USER)
+            .map(authorities::add)
+            .thenReturn(newUser)
+            .doOnNext(user -> user.setAuthorities(authorities))
+            .flatMap(userRepository::save)
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            .doOnNext(this::clearUserCaches)
+            <%_ } _%>
+            .doOnNext(user -> log.debug("Created Information for User: {}", user));
+    <%_ } _%>    
     }
 
-    public User createUser(UserDTO userDTO) {
+    public <% if (reactive) { %>Mono<User><% } else { %>User<% } %> createUser(UserDTO userDTO) {
         User user = new User();<% if (databaseType === 'cassandra') { %>
         user.setId(UUID.randomUUID().toString());<% } %>
         user.setLogin(userDTO.getLogin());
@@ -234,6 +289,12 @@ public class UserService {
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
+        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        user.setPassword(encryptedPassword);
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(Instant.now());
+        user.setActivated(true);
+    <%_ if (!reactive) { _%>
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
@@ -247,11 +308,6 @@ public class UserService {
         <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         user.setAuthorities(userDTO.getAuthorities());
         <%_ } _%>
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-        user.setPassword(encryptedPassword);
-        user.setResetKey(RandomUtil.generateResetKey());
-        user.setResetDate(Instant.now());
-        user.setActivated(true);
         userRepository.save(user);<% if (searchEngine === 'elasticsearch') { %>
         userSearchRepository.save(user);<% } %>
         <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -259,6 +315,17 @@ public class UserService {
         <%_ } _%>
         log.debug("Created Information for User: {}", user);
         return user;
+    <%_ } else { _%>
+        return Flux.fromIterable(Optional.ofNullable(userDTO.getAuthorities()).orElse(new HashSet<>()))
+            .flatMap(authorityRepository::findById)
+            .doOnNext(authority -> user.getAuthorities().add(authority))
+            .then(Mono.just(user))
+            .flatMap(userRepository::save)
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            .doOnNext(this::clearUserCaches)
+            <%_ } _%>
+            .doOnNext(user1 -> log.debug("Created Information for User: {}", user1));
+    <%_ } _%>
     }
 <%_ } _%>
 
@@ -273,10 +340,10 @@ public class UserService {
      * @param imageUrl image URL of user
      <%_ } _%>
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, String imageUrl<% } %>) {
-        SecurityUtils.getCurrentUserLogin()
+    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, String imageUrl<% } %>) {
+        <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin<% if (reactive) { %>Reactively<% } %>()
             .flatMap(userRepository::findOneByLogin)
-            .ifPresent(user -> {
+            .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setEmail(email);
@@ -284,6 +351,7 @@ public class UserService {
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
                 user.setImageUrl(imageUrl);
                 <%_ } _%>
+            <%_ if (!reactive) { _%>
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
@@ -295,6 +363,15 @@ public class UserService {
                 <%_ } _%>
                 log.debug("Changed Information for User: {}", user);
             });
+            <%_ } else { _%>
+                return userRepository.save(user);
+            })
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+            .doOnNext(this::clearUserCaches)
+                <%_ } _%>
+            .doOnNext(user -> log.debug("Changed Information for User: {}", user))
+            .then();
+            <%_ } _%>
     }
 
     /**
@@ -303,12 +380,17 @@ public class UserService {
      * @param userDTO user to update
      * @return updated user
      */
-    public Optional<UserDTO> updateUser(UserDTO userDTO) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><UserDTO> updateUser(UserDTO userDTO) {
+        <%_ if (!reactive) { _%>
         return Optional.of(userRepository
             .findById(userDTO.getId()))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(user -> {
+        <%_ } else { _%>
+        return userRepository.findById(userDTO.getId())
+            .flatMap(user -> {
+        <%_ } _%>
                 <%_ if (databaseType === 'couchbase') { _%>
                 if (!user.getLogin().equals(userDTO.getLogin())) {
                     userRepository.deleteById(userDTO.getId());
@@ -329,13 +411,16 @@ public class UserService {
                 <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
+                <%_ } else { // Cassandra & Couchbase _%>
+                user.setAuthorities(userDTO.getAuthorities());
+                <%_ } _%>
+        <%_ if (!reactive) { _%>
+                <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
                 userDTO.getAuthorities().stream()
                     .map(authorityRepository::findById)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
-                <%_ } else { // Cassandra & Couchbase _%>
-                user.setAuthorities(userDTO.getAuthorities());
                 <%_ } _%>
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
@@ -349,9 +434,22 @@ public class UserService {
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })
+        <%_ } else { _%>
+                return Flux.fromIterable(userDTO.getAuthorities())
+                    .flatMap(authorityRepository::findById)
+                    .map(managedAuthorities::add)
+                    .then(Mono.just(user));
+            })
+            .flatMap(userRepository::save)
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            .doOnNext(this::clearUserCaches)
+            <%_ } _%>
+            .doOnNext(user -> log.debug("Changed Information for User: {}", user))
+        <%_ } _%>
             .map(UserDTO::new);
     }
 
+    <%_ if (!reactive) { _%>
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
             userRepository.delete(user);
@@ -364,18 +462,30 @@ public class UserService {
             log.debug("Deleted User: {}", user);
         });
     }
+    <%_ } else { _%>
+    public Mono<Void> deleteUser(String login) {
+        return userRepository.findOneByLogin(login)
+            .flatMap(user -> userRepository.delete(user).thenReturn(user))
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            .doOnNext(this::clearUserCaches)
+            <%_ } _%>
+            .doOnNext(user -> log.debug("Deleted User: {}", user))
+            .then();
+    }
+    <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 
-    public void changePassword(String currentClearTextPassword, String newPassword) {
-        SecurityUtils.getCurrentUserLogin()
+    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> changePassword(String currentClearTextPassword, String newPassword) {
+        <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin<% if (reactive) { %>Reactively<% } %>()
             .flatMap(userRepository::findOneByLogin)
-            .ifPresent(user -> {
+            .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
                 String currentEncryptedPassword = user.getPassword();
                 if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
                     throw new InvalidPasswordException();
                 }
                 String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
+            <%_ if (!reactive) { _%>
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
                 userRepository.save(user);
                 <%_ } _%>
@@ -384,6 +494,15 @@ public class UserService {
                 <%_ } _%>
                 log.debug("Changed password for User: {}", user);
             });
+            <%_ } else { _%>
+                return userRepository.save(user);
+            })
+            <%_ if (cacheManagerIsAvailable === true) { _%>
+            .doOnNext(this::clearUserCaches)
+            <%_ } _%>
+            .doOnNext(user -> log.debug("Changed password for User: {}", user))
+            .then();
+            <%_ } _%>
     }
 <%_ } _%>
 
@@ -391,7 +510,7 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
+    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><UserDTO> getAllManagedUsers(Pageable pageable) {
         return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
     }<% } else { // Cassandra %>
     public List<UserDTO> getAllManagedUsers() {
@@ -404,7 +523,7 @@ public class UserService {
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> getUserWithAuthoritiesByLogin(String login) {
         <%_ if (databaseType === 'sql') { _%>
         return userRepository.findOneWithAuthoritiesByLogin(login);
         <%_ } else { // MongoDB, Couchbase and Cassandra _%>
@@ -415,7 +534,7 @@ public class UserService {
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public Optional<User> getUserWithAuthorities(<%= pkType %> id) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> getUserWithAuthorities(<%= pkType %> id) {
         <%_ if (databaseType === 'sql') { _%>
         return userRepository.findOneWithAuthoritiesById(id);
         <%_ } else { // MongoDB, Couchbase and and Cassandra _%>
@@ -426,8 +545,8 @@ public class UserService {
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public Optional<User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin);
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> getUserWithAuthorities() {
+        return SecurityUtils.getCurrentUserLogin<% if (reactive) { %>Reactively<% } %>().flatMap(userRepository::findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin);
     }
     <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 
@@ -457,25 +576,35 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
-        List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS));
-        for (User user : users) {
-            log.debug("Deleting not activated user {}", user.getLogin());
-            userRepository.delete(user);
-            <%_ if (searchEngine === 'elasticsearch') { _%>
-            userSearchRepository.delete(user);
-            <%_ } _%>
+        userRepository
+            .findAllByActivatedIsFalseAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
+            <%_ if (!reactive) { _%>
+            .forEach(user -> {
+                log.debug("Deleting not activated user {}", user.getLogin());
+                userRepository.delete(user);
+                <%_ if (searchEngine === 'elasticsearch') { _%>
+                userSearchRepository.delete(user);
+                <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                this.clearUserCaches(user);
+                <%_ } _%>
+            });
+            <%_ } else { _%>
+            .flatMap(user -> userRepository.delete(user).thenReturn(user))
             <%_ if (cacheManagerIsAvailable === true) { _%>
-            this.clearUserCaches(user);
+            .doOnNext(this::clearUserCaches)
             <%_ } _%>
-        }
+            .doOnNext(user -> log.debug("Deleted User: {}", user))
+            .blockLast();
+            <%_ } _%>
     }
     <%_ } if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 
     /**
      * @return a list of all the authorities
      */
-    public List<String> getAuthorities() {
-        return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><String> getAuthorities() {
+        return authorityRepository.findAll()<% if (!reactive) { %>.stream()<% } %>.map(Authority::getName)<% if (!reactive) { %>.collect(Collectors.toList())<% } %>;
     }
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
