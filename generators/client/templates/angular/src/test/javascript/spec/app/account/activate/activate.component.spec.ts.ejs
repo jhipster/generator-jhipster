@@ -36,7 +36,6 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [ActivateComponent],
                 providers: [
-                    ActivateService,
                     {
                         provide: ActivatedRoute,
                         useValue: new MockActivatedRoute({'key': 'ABC123'})

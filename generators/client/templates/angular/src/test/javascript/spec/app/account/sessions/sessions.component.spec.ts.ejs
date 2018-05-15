@@ -39,10 +39,7 @@ describe('Component Tests', () => {
 
             fixture = TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [SessionsComponent],
-                providers: [
-                    SessionsService
-                ]
+                declarations: [SessionsComponent]
             })
             .overrideTemplate(SessionsComponent, '')
             .createComponent(SessionsComponent);

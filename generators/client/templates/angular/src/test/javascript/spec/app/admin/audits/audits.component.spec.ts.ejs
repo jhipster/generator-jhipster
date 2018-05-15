@@ -19,10 +19,8 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { NgbPaginationConfig } from '@ng-bootstrap/ng-bootstrap';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { PaginationConfig } from 'app/blocks/config/uib-pagination.config';
 import { AuditsComponent } from 'app/admin/audits/audits.component';
 import { AuditsService } from 'app/admin/audits/audits.service';
 import { Audit } from 'app/admin/audits/audit.model';
@@ -63,9 +61,7 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [AuditsComponent],
                 providers: [
-                    AuditsService,
-                    NgbPaginationConfig,
-                    PaginationConfig
+                    AuditsService
                 ]
             })
             .overrideTemplate(AuditsComponent, '')

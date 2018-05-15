@@ -37,10 +37,7 @@ describe('Component Tests', () => {
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [RegisterComponent],
-                providers: [
-                    Register
-                ]
+                declarations: [RegisterComponent]
             })
             .overrideTemplate(RegisterComponent, '')
             .compileComponents();

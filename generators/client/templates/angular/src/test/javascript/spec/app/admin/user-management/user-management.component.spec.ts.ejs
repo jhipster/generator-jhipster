@@ -37,10 +37,7 @@ describe('Component Tests', () => {
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [UserMgmtComponent],
-                providers: [
-                    UserService
-                ]
+                declarations: [UserMgmtComponent]
             })
             .overrideTemplate(UserMgmtComponent, '')
             .compileComponents();

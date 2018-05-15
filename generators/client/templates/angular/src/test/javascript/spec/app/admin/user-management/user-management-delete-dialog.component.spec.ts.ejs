@@ -37,10 +37,7 @@ describe('Component Tests', () => {
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [UserMgmtDeleteDialogComponent],
-                providers: [
-                    UserService
-                ]
+                declarations: [UserMgmtDeleteDialogComponent]
             })
             .overrideTemplate(UserMgmtDeleteDialogComponent, '')
             .compileComponents();

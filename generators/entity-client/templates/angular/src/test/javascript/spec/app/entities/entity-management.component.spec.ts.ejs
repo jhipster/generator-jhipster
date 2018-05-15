@@ -43,7 +43,7 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%= entityAngularName %>Component],
                 providers: [
-                    <%= entityAngularName %>Service<% if (pagination !== 'no') { %>, {
+                    <% if (pagination !== 'no') { %> {
                     provide: ActivatedRoute,
                     useValue: {
                         data: {

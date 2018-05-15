@@ -41,10 +41,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [<%= entityAngularName %>DeleteDialogComponent],
-                providers: [
-                    <%= entityAngularName %>Service
-                ]
+                declarations: [<%= entityAngularName %>DeleteDialogComponent]
             })
             .overrideTemplate(<%= entityAngularName %>DeleteDialogComponent, '')
             .compileComponents();
