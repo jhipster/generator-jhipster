@@ -71,7 +71,7 @@
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
             </column>
             <%_ if (authenticationType !== 'oauth2') { _%>
-            <column name="password_hash" type="varchar(60)"/>
+            <column name="password_hash" type="varchar(60)" nullable = false/>
             <%_ } _%>
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
