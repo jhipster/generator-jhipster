@@ -139,13 +139,17 @@
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
                                  referencedTableName="<%= jhiTablePrefix %>_authority"/>
-        <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="<%= jhiTablePrefix %>_user_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
-        <%_ } _%>
+
+        <addNotNullConstraint   columnName="password_hash"
+                                columnDataType="varchar(60)"
+                                tableName="jhi_user"/>
+    <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
