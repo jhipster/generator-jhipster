@@ -1179,9 +1179,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with Cucumber enabled', () => {
                 assert.file(expectedFiles.server);
-                assert.file([
-                    `${TEST_DIR}features/user/user.feature`
-                ]);
+                assert.file(expectedFiles.cucumber);
                 assert.noFile([
                     `${TEST_DIR}gatling/conf/gatling.conf`,
                     `${TEST_DIR}gatling/conf/logback.xml`

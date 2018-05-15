@@ -537,6 +537,14 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`
     ],
 
+    cucumber: [
+        `${TEST_DIR}features/user/user.feature`,
+        `${TEST_DIR}features/gitkeep`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/StepDefs.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberTest.java`
+    ],
+
     eureka: [
         `${DOCKER_DIR}central-server-config/localhost-config/application.yml`,
         `${DOCKER_DIR}central-server-config/docker-config/application.yml`,
