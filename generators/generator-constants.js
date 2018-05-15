@@ -58,7 +58,7 @@ const SCALA_VERSION = '2.12.1';
 
 // version of Node, Yarn, NPM
 const NODE_VERSION = '8.11.1';
-const YARN_VERSION = '1.5.1';
+const YARN_VERSION = '1.6.0';
 const NPM_VERSION = '5.8.0';
 
 // all constants used throughout all generators
