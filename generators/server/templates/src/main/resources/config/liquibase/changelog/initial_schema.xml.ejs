@@ -148,7 +148,7 @@
 
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
-                                tableName="jhi_user"/>
+                                tableName="<%= jhiTablePrefix %>_user"/>
     <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
