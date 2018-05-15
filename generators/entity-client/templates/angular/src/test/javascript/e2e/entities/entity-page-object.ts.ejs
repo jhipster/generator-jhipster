@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { element, by } from 'protractor';
+import { element, by, promise, ElementFinder } from 'protractor';
 
 <%_
 let elementGetter = `getText()`;
@@ -33,22 +33,22 @@ for (let relationship of relationships) {
     }
 } _%>
 export class <%= entityClass %>ComponentsPage {
-    createButton = element(by.css('#jh-create-entity'));
+    createButton = element(by.id('jh-create-entity'));
     title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
 
-    clickOnCreateButton() {
+    clickOnCreateButton(): promise.Promise<void> {
         return this.createButton.click();
     }
 
-    getTitle() {
+    getTitle(): any {
         return this.title.<%- elementGetter %>;
     }
 }
 
 export class <%= entityClass %>UpdatePage {
-    PageTitle = element(by.css('h2#<%= jhiPrefixDashed %>-<%= entityFileName %>-heading'));
-    saveButton = element(by.css('#save-entity'));
-    cancelButton = element(by.css('#cancel-save'));
+    pageTitle = element(by.id('<%= jhiPrefixDashed %>-<%= entityFileName %>-heading'));
+    saveButton = element(by.id('save-entity'));
+    cancelButton = element(by.id('cancel-save'));
     <%_ fields.forEach((field) => {
             const fieldName = field.fieldName;
             const fieldType = field.fieldType;
@@ -56,13 +56,13 @@ export class <%= entityClass %>UpdatePage {
             const fieldTypeBlobContent = field.fieldTypeBlobContent;
     _%>
     <%_ if (fieldIsEnum) { _%>
-    <%= fieldName %>Select = element(by.css('select#field_<%= fieldName %>'));
+    <%= fieldName %>Select = element(by.id('field_<%= fieldName %>'));
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    <%= fieldName %>Input = element(by.css('textarea#field_<%= fieldName %>'));
+    <%= fieldName %>Input = element(by.id('field_<%= fieldName %>'));
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-    <%= fieldName %>Input = element(by.css('input#file_<%= fieldName %>'));
+    <%= fieldName %>Input = element(by.id('file_<%= fieldName %>'));
     <%_ } else { _%>
-    <%= fieldName %>Input = element(by.css('input#field_<%= fieldName %>'));
+    <%= fieldName %>Input = element(by.id('field_<%= fieldName %>'));
     <%_ } _%>
     <%_ }); _%>
     <%_ relationships.forEach((relationship) => {
@@ -71,12 +71,12 @@ export class <%= entityClass %>UpdatePage {
         const relationshipName = relationship.relationshipName;
         const relationshipFieldName = relationship.relationshipFieldName; _%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    <%=relationshipName %>Select = element(by.css('select#field_<%= relationshipName %>'));
+    <%=relationshipName %>Select = element(by.id('field_<%= relationshipName %>'));
     <%_ } _%>
     <%_ }); _%>
 
     getPageTitle() {
-        return this.PageTitle.<%- elementGetter %>;
+        return this.pageTitle.<%- elementGetter %>;
     }
 
     <%_ fields.forEach((field) => {
@@ -94,20 +94,20 @@ export class <%= entityClass %>UpdatePage {
         return this.<%= fieldName %>Input;
     }
             <%_ } else if (fieldIsEnum) { _%>
-    set<%= fieldNameCapitalized %>Select(<%= fieldName %>) {
-        this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
+    set<%= fieldNameCapitalized %>Select(<%= fieldName %>): promise.Promise<void> {
+        return this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
     }
 
     get<%= fieldNameCapitalized %>Select() {
         return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
     }
 
-    <%=fieldName %>SelectLastOption() {
-        this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
+    <%=fieldName %>SelectLastOption(): promise.Promise<void> {
+        return this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
     }
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
-        this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    set<%= fieldNameCapitalized %>Input(<%= fieldName %>): promise.Promise<void> {
+        return this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
     }
 
     get<%= fieldNameCapitalized %>Input() {
@@ -115,8 +115,8 @@ export class <%= entityClass %>UpdatePage {
     }
 
     <%_ } else { _%>
-    set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
-        this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    set<%= fieldNameCapitalized %>Input(<%= fieldName %>): promise.Promise<void> {
+        return this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
     }
 
     get<%= fieldNameCapitalized %>Input() {
@@ -132,15 +132,15 @@ export class <%= entityClass %>UpdatePage {
         const relationshipFieldName = relationship.relationshipFieldName;
         const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    <%=relationshipName %>SelectLastOption() {
-        this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
+    <%=relationshipName %>SelectLastOption(): promise.Promise<void> {
+        return this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
     }
 
-    <%=relationshipName %>SelectOption(option) {
-        this.<%=relationshipName %>Select.sendKeys(option);
+    <%=relationshipName %>SelectOption(option): promise.Promise<void> {
+        return this.<%=relationshipName %>Select.sendKeys(option);
     }
 
-    get<%=relationshipNameCapitalized %>Select() {
+    get<%=relationshipNameCapitalized %>Select(): ElementFinder {
         return this.<%=relationshipName %>Select;
     }
 
@@ -150,15 +150,15 @@ export class <%= entityClass %>UpdatePage {
 
     <%_ } _%>
     <%_ }); _%>
-    save() {
-        this.saveButton.click();
+    save(): promise.Promise<void> {
+        return this.saveButton.click();
     }
 
-    cancel() {
-        this.cancelButton.click();
+    cancel(): promise.Promise<void> {
+        return this.cancelButton.click();
     }
 
-    getSaveButton() {
+    getSaveButton(): ElementFinder {
         return this.saveButton;
     }
 }
