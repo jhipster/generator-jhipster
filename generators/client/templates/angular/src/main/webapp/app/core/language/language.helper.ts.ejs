@@ -27,7 +27,7 @@ import { LANGUAGES } from 'app/core/language/language.constants';
 import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class JhiLanguageHelper {
     renderer: Renderer2 = null;
     private _language: BehaviorSubject<string>;

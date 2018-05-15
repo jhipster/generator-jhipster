@@ -31,7 +31,7 @@ import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileN
 type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
 type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class <%= entityAngularName %>Service {
 
     private resourceUrl =  SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';

@@ -43,23 +43,11 @@ import {
     <%=jhiPrefixCapitalized%>HealthCheckComponent,
     <%=jhiPrefixCapitalized%>ConfigurationComponent,
     <%=jhiPrefixCapitalized%>DocsComponent,
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-    AuditsService,
-    <%_ } _%>
-    <%=jhiPrefixCapitalized%>ConfigurationService,
-    <%=jhiPrefixCapitalized%>HealthService,
-    <%=jhiPrefixCapitalized%>MetricsService,
     <%_ if (applicationType === 'gateway') { _%>
-    GatewayRoutesService,
     <%=jhiPrefixCapitalized%>GatewayComponent,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerComponent,
-    <%_ } _%>
-    LogsService,
-    <%_ if (!skipUserManagement) { _%>
-    UserMgmtResolve,
-    UserResolve
     <%_ } _%>
 } from './';
 
@@ -99,22 +87,6 @@ import {
         <%_ } _%>
         <%=jhiPrefixCapitalized%>HealthModalComponent,
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
-    ],
-    providers: [
-        <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-        AuditsService,
-        <%_ } _%>
-        <%=jhiPrefixCapitalized%>ConfigurationService,
-        <%=jhiPrefixCapitalized%>HealthService,
-        <%=jhiPrefixCapitalized%>MetricsService,
-        <%_ if (applicationType === 'gateway') { _%>
-        GatewayRoutesService,
-        <%_ } _%>
-        LogsService,
-        <%_ if (!skipUserManagement) { _%>
-        UserResolve,
-        UserMgmtResolve
-        <%_ } _%>
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

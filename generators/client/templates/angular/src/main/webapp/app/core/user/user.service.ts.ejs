@@ -24,7 +24,7 @@ import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IUser } from './user.model';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UserService {
     private resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/users';
 

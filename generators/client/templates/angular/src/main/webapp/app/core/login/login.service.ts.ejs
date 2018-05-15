@@ -31,7 +31,7 @@ import { AuthServerProvider } from '../auth/auth-session.service';
 import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
 <%_ } _%>
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class LoginService {
 
     constructor(

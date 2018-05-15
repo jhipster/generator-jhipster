@@ -19,7 +19,7 @@
 import { Injectable } from '@angular/core';
 import { SessionStorageService } from 'ngx-webstorage';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class StateStorageService {
     constructor(
         private $sessionStorage: SessionStorageService

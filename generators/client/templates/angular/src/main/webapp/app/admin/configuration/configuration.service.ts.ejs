@@ -23,7 +23,7 @@ import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class <%=jhiPrefixCapitalized%>ConfigurationService {
 
     constructor(private http: HttpClient) {

@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { Log } from './log.model';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class LogsService {
     constructor(private http: HttpClient) { }
 
