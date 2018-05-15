@@ -60,7 +60,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
     /**
      * Access tokens will not expire any earlier than this.
      */
-    private static final int MIN_ACCESS_TOKEN_VALDITIY_SECS = 60;
+    private static final int MIN_ACCESS_TOKEN_VALIDITY_SECS = 60;
 
     private ApplicationContext applicationContext;
 
@@ -138,7 +138,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         int accessTokenValidity = uaaProperties.getWebClientConfiguration().getAccessTokenValidityInSeconds();
-        accessTokenValidity = Math.max(accessTokenValidity, MIN_ACCESS_TOKEN_VALDITIY_SECS);
+        accessTokenValidity = Math.max(accessTokenValidity, MIN_ACCESS_TOKEN_VALIDITY_SECS);
         int refreshTokenValidity = uaaProperties.getWebClientConfiguration().getRefreshTokenValidityInSecondsForRememberMe();
         refreshTokenValidity = Math.max(refreshTokenValidity, accessTokenValidity);
         /*
