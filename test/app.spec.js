@@ -544,6 +544,39 @@ describe('JHipster generator', () => {
             });
         });
 
+        describe('oauth2 + mongodb', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'oauth2',
+                        cacheProvider: 'ehcache',
+                        enableHibernateCache: true,
+                        databaseType: 'sql',
+                        devDatabaseType: 'mongodb',
+                        prodDatabaseType: 'mongodb',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with authenticationType "oauth2" and mongodb', () => {
+                assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.mongodb);
+            });
+        });
+
         describe('hazelcast', () => {
             beforeEach((done) => {
                 helpers.run(path.join(__dirname, '../generators/app'))
