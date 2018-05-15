@@ -1,5 +1,5 @@
 ---
-name: :boom: Report an issue
+name: Report an issue
 about: Report a problem with JHipster itself.
 
 ---

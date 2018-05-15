@@ -1,5 +1,5 @@
 ---
-name: :heart: Sponsor the project
+name: Sponsor the project
 about: If you would like to support our efforts in maintaining this community-driven project!
 
 ---
