@@ -121,7 +121,11 @@ import {
 export class <%=angularXAppName%>AdminModule {
     <%_ if (enableTranslation) { _%>
     constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-        this.languageHelper.language.subscribe((languageKey: string) => this.languageService.changeLanguage(languageKey));
+        this.languageHelper.language.subscribe((languageKey: string) => {
+            if (languageKey !== undefined) {
+                this.languageService.changeLanguage(languageKey);
+            }
+        });
     }
     <%_ } _%>
 }
