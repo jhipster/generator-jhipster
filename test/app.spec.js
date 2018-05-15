@@ -557,7 +557,7 @@ describe('JHipster generator', () => {
                         authenticationType: 'oauth2',
                         cacheProvider: 'ehcache',
                         enableHibernateCache: true,
-                        databaseType: 'sql',
+                        databaseType: 'mongodb',
                         devDatabaseType: 'mongodb',
                         prodDatabaseType: 'mongodb',
                         useSass: false,
