@@ -44,7 +44,6 @@ const files = {
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
                 'webpack/webpack.prod.js',
-                'webpack/webpack.test.js',
                 { file: 'webpack/logo-jhipster.png', method: 'copy' }
             ]
         }
@@ -453,8 +452,8 @@ const files = {
         {
             path: TEST_SRC_DIR,
             templates: [
-                'karma.conf.js',
-                'spec/entry.ts',
+                'jest.ts',
+                'jest-global-mocks.ts',
                 'spec/test.module.ts',
                 'spec/app/admin/health/health.component.spec.ts',
                 'spec/helpers/spyobject.ts',
