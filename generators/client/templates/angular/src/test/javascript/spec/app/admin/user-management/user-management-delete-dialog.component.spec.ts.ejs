@@ -18,7 +18,7 @@
 -%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
@@ -37,10 +37,7 @@ describe('Component Tests', () => {
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [UserMgmtDeleteDialogComponent],
-                providers: [
-                    UserService
-                ]
+                declarations: [UserMgmtDeleteDialogComponent]
             })
             .overrideTemplate(UserMgmtDeleteDialogComponent, '')
             .compileComponents();
@@ -59,7 +56,7 @@ describe('Component Tests', () => {
                 inject([],
                     fakeAsync(() => {
                         // GIVEN
-                        spyOn(service, 'delete').and.returnValue(Observable.of({}));
+                        spyOn(service, 'delete').and.returnValue(of({}));
 
                         // WHEN
                         comp.confirmDelete('user');

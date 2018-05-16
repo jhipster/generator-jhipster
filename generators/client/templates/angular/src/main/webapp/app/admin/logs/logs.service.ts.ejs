@@ -18,12 +18,12 @@
 -%>
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Log } from './log.model';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class LogsService {
     constructor(private http: HttpClient) { }
 

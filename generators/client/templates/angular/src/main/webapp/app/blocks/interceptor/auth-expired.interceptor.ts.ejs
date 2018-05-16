@@ -18,8 +18,8 @@
 -%>
 import { Injector } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 <%_ if (['oauth2', 'jwt', 'uaa'].includes(authenticationType)) { _%>
     <%_ if (authenticationType === 'uaa') { _%>
 import { Router } from '@angular/router';
@@ -48,7 +48,7 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
 
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).do((event: HttpEvent<any>) => {}, (err: any) => {
+        return next.handle(request).pipe(tap((event: HttpEvent<any>) => {}, (err: any) => {
             if (err instanceof HttpErrorResponse) {
                 if (err.status === 401) {
 <%_ if (authenticationType === 'jwt') { _%>
@@ -70,11 +70,11 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
 <%_ } _%>
                 }
             }
-        });
+        }));
     }
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).do((event: HttpEvent<any>) => {}, (err: any) => {
+        return next.handle(request).pipe(tap((event: HttpEvent<any>) => {}, (err: any) => {
             if (err instanceof HttpErrorResponse) {
                 if (err.status === 401 && err.url && !err.url.includes('/api/account')) {
                     const destination = this.stateStorageService.getDestinationState();
@@ -98,7 +98,7 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
 <% } %>
                 }
             }
-        });
+        }));
     }
 <%_ } _%>
 }

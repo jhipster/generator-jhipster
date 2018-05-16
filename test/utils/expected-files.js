@@ -194,7 +194,7 @@ const expectedFiles = {
     ],
 
     client: [
-        '.angular-cli.json',
+        'angular.json',
         '.prettierignore',
         '.prettierrc',
         'package.json',

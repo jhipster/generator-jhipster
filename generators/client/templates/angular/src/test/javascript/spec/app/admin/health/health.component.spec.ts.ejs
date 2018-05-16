@@ -33,10 +33,7 @@ describe('Component Tests', () => {
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [<%=jhiPrefixCapitalized%>HealthCheckComponent],
-                providers: [
-                    <%=jhiPrefixCapitalized%>HealthService
-                ]
+                declarations: [<%=jhiPrefixCapitalized%>HealthCheckComponent]
             })
             .overrideTemplate(<%=jhiPrefixCapitalized%>HealthCheckComponent, '')
             .compileComponents();
