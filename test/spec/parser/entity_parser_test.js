@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const EntityParser = require('../../../lib/parser/entity_parser');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
@@ -47,22 +46,16 @@ describe('EntityParser', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             EntityParser.parse();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('The JDL object and the database type are both mandatory.');
         });
       });
       context('such as an no databaseType', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             EntityParser.parse({ jdlObject: new JDLObject() });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('The JDL object and the database type are both mandatory.');
         });
       });
       context('such as invalid databaseType', () => {
@@ -85,15 +78,12 @@ describe('EntityParser', () => {
         });
 
         it('throws an error', () => {
-          try {
+          expect(() => {
             EntityParser.parse({
               jdlObject,
               databaseType: DatabaseTypes.MONGODB
             });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NoSQLModelingException');
-          }
+          }).to.throw('NoSQL entities don\'t have relationships.');
         });
       });
     });

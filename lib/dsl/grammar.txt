@@ -232,9 +232,6 @@ applicationConfigDecl
       applicationConfigDecl.packageName.replace(/[.]/g, '/')
     );
   }
-  / PATH SPACE* '"' path:([^\n,"]+) '"' SPACE* applicationConfigDecl:applicationConfigDecl {
-    return addToApplicationDecl(applicationConfigDecl, 'path', path.join(''));
-  }
   / PROD_DATABASE_TYPE SPACE* prodDatabaseType:[A-Za-z]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'prodDatabaseType', prodDatabaseType.join(''));
   }
@@ -566,7 +563,6 @@ notAComment = !commentStop !commentStart char:. { return char; }
 // Application constants
 APPLICATION = 'application'
 CONFIG = 'config'
-PATH = 'path'
 BASE_NAME = 'baseName'
 PACKAGE_NAME = 'packageName'
 CACHE_PROVIDER = 'cacheProvider'

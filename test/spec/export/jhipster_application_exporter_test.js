@@ -25,33 +25,24 @@ const path = require('path');
 const JHipsterApplicationExporter = require('../../../lib/export/jhipster_application_exporter');
 const JDLApplication = require('../../../lib/core/jdl_application');
 
-const fail = expect.fail;
-
 describe('JHipsterApplicationExporter', () => {
   describe('::exportApplication', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JHipsterApplicationExporter.exportApplication();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('An application has to be passed to be exported.');
         });
       });
       context('such as an invalid application', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JHipsterApplicationExporter.exportApplication({
-              application: {
-                config: {}
-              }
+              config: {}
             });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-          }
+          }).to.throw('The application must be valid in order to be converted.\n' +
+            'Errors: No name, No authentication type, No build tool');
         });
       });
       context('such as an invalid path as baseName', () => {
@@ -63,177 +54,88 @@ describe('JHipsterApplicationExporter', () => {
         });
 
         it('throws an error', () => {
-          try {
-            JHipsterApplicationExporter.exportApplication({
-              application: new JDLApplication({
-                config: {
-                  baseName: 'aFile',
-                  enableTranslation: false,
-                  languages: ['en', 'fr']
-                }
-              })
-            });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('WrongDirException');
-          }
+          expect(() => {
+            JHipsterApplicationExporter.exportApplication(new JDLApplication({
+              config: {
+                baseName: 'aFile',
+                enableTranslation: false,
+                languages: ['en', 'fr']
+              }
+            }));
+          }).to.throw('A file located \'aFile\' already exists, so a folder of the same name can\'t be created for the application.');
         });
       });
     });
     context('when passing valid arguments', () => {
       context('when exporting an application to JSON', () => {
-        context('and not passing a path', () => {
-          let content = null;
+        let content = null;
 
-          before((done) => {
-            JHipsterApplicationExporter.exportApplication({
-              application: new JDLApplication({
-                config: {
-                  baseName: 'toto',
-                  packageName: 'com.mathieu.sample',
-                  enableTranslation: false,
-                  languages: ['en', 'fr'],
-                  jhipsterVersion: '4.9.0'
-                }
-              })
-            });
-            fs.readFile(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
-              if (err) {
-                return done(err);
-              }
-              content = JSON.parse(data);
-              return done();
-            });
-          });
-
-          after((done) => {
-            fs.unlink(path.join('toto', '.yo-rc.json'), () => {
-              fs.rmdir('toto', done);
-            });
-          });
-
-          it('exports it', () => {
-            expect(content).not.to.be.undefined;
-          });
-          it('formats it', () => {
-            expect(content['generator-jhipster']).not.to.be.undefined;
-            const config = content['generator-jhipster'];
-            expect(config.jwtSecretKey).not.to.be.undefined;
-            delete config.jwtSecretKey;
-            expect(config).to.deep.equal({
-              applicationType: 'monolith',
-              authenticationType: 'jwt',
+        before((done) => {
+          JHipsterApplicationExporter.exportApplication(new JDLApplication({
+            config: {
               baseName: 'toto',
-              buildTool: 'maven',
-              cacheProvider: 'ehcache',
-              clientFramework: 'angularX',
-              clientPackageManager: 'yarn',
-              databaseType: 'sql',
-              devDatabaseType: 'h2Disk',
-              enableSwaggerCodegen: false,
-              enableTranslation: false,
-              enableHibernateCache: true,
-              jhiPrefix: 'jhi',
-              jhipsterVersion: '4.9.0',
-              languages: [
-                'en',
-                'fr'
-              ],
-              messageBroker: false,
-              nativeLanguage: 'en',
-              packageFolder: 'com/mathieu/sample',
               packageName: 'com.mathieu.sample',
-              prodDatabaseType: 'mysql',
-              searchEngine: false,
-              serverPort: '8080',
-              serviceDiscoveryType: false,
-              skipClient: false,
-              skipServer: false,
-              skipUserManagement: false,
-              testFrameworks: [],
-              useSass: false,
-              websocket: false
-            });
+              enableTranslation: false,
+              languages: ['en', 'fr'],
+              jhipsterVersion: '4.9.0'
+            }
+          }));
+          fs.readFile(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
+            if (err) {
+              return done(err);
+            }
+            content = JSON.parse(data);
+            return done();
           });
         });
-        context('and passing a path', () => {
-          let content = null;
-          let directoryExistence = null;
 
-          before((done) => {
-            JHipsterApplicationExporter.exportApplication({
-              application: new JDLApplication({
-                config: {
-                  baseName: 'toto',
-                  packageName: 'com.mathieu.sample',
-                  enableTranslation: false,
-                  languages: ['en', 'fr'],
-                  jhipsterVersion: '4.9.0'
-                }
-              }),
-              path: '../'
-            });
-            fs.readFile(path.join('../', 'toto', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
-              if (err) {
-                return done(err);
-              }
-              content = JSON.parse(data);
-              directoryExistence = fs.statSync(path.join('../', 'toto')).isDirectory();
-              return done();
-            });
+        after((done) => {
+          fs.unlink(path.join('toto', '.yo-rc.json'), () => {
+            fs.rmdir('toto', done);
           });
+        });
 
-          after((done) => {
-            fs.unlink(path.join('../', 'toto', '.yo-rc.json'), () => {
-              fs.rmdir(path.join('../', 'toto'), done);
-            });
-          });
-
-          it('creates the folders if needed', () => {
-            expect(directoryExistence).to.be.true;
-          });
-          it('exports it', () => {
-            expect(content).not.to.be.undefined;
-          });
-          it('formats it', () => {
-            expect(content['generator-jhipster']).not.to.be.undefined;
-            const config = content['generator-jhipster'];
-            expect(config.jwtSecretKey).not.to.be.undefined;
-            delete config.jwtSecretKey;
-            expect(config).to.deep.equal({
-              applicationType: 'monolith',
-              authenticationType: 'jwt',
-              baseName: 'toto',
-              buildTool: 'maven',
-              cacheProvider: 'ehcache',
-              clientFramework: 'angularX',
-              clientPackageManager: 'yarn',
-              databaseType: 'sql',
-              devDatabaseType: 'h2Disk',
-              enableSwaggerCodegen: false,
-              enableTranslation: false,
-              enableHibernateCache: true,
-              jhiPrefix: 'jhi',
-              jhipsterVersion: '4.9.0',
-              languages: [
-                'en',
-                'fr'
-              ],
-              messageBroker: false,
-              nativeLanguage: 'en',
-              packageFolder: 'com/mathieu/sample',
-              packageName: 'com.mathieu.sample',
-              prodDatabaseType: 'mysql',
-              searchEngine: false,
-              serverPort: '8080',
-              serviceDiscoveryType: false,
-              skipClient: false,
-              skipServer: false,
-              skipUserManagement: false,
-              testFrameworks: [],
-              useSass: false,
-              websocket: false
-            });
+        it('exports it', () => {
+          expect(content).not.to.be.undefined;
+        });
+        it('formats it', () => {
+          expect(content['generator-jhipster']).not.to.be.undefined;
+          const config = content['generator-jhipster'];
+          expect(config.jwtSecretKey).not.to.be.undefined;
+          delete config.jwtSecretKey;
+          expect(config).to.deep.equal({
+            applicationType: 'monolith',
+            authenticationType: 'jwt',
+            baseName: 'toto',
+            buildTool: 'maven',
+            cacheProvider: 'ehcache',
+            clientFramework: 'angularX',
+            clientPackageManager: 'yarn',
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            enableSwaggerCodegen: false,
+            enableTranslation: false,
+            enableHibernateCache: true,
+            jhiPrefix: 'jhi',
+            jhipsterVersion: '4.9.0',
+            languages: [
+              'en',
+              'fr'
+            ],
+            messageBroker: false,
+            nativeLanguage: 'en',
+            packageFolder: 'com/mathieu/sample',
+            packageName: 'com.mathieu.sample',
+            prodDatabaseType: 'mysql',
+            searchEngine: false,
+            serverPort: '8080',
+            serviceDiscoveryType: false,
+            skipClient: false,
+            skipServer: false,
+            skipUserManagement: false,
+            testFrameworks: [],
+            useSass: false,
+            websocket: false
           });
         });
       });
@@ -243,12 +145,9 @@ describe('JHipsterApplicationExporter', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JHipsterApplicationExporter.exportApplications();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('Applications have to be passed to be exported.');
         });
       });
     });
@@ -256,26 +155,24 @@ describe('JHipsterApplicationExporter', () => {
       context('when exporting applications to JSON', () => {
         before('common setup for both applications', () => {
           JHipsterApplicationExporter.exportApplications({
-            applications: [
-              new JDLApplication({
-                config: {
-                  baseName: 'toto',
-                  packageName: 'com.mathieu.toto',
-                  enableTranslation: false,
-                  languages: ['en', 'fr'],
-                  jhipsterVersion: '4.9.0'
-                }
-              }),
-              new JDLApplication({
-                config: {
-                  baseName: 'titi',
-                  packageName: 'com.mathieu.titi',
-                  enableTranslation: false,
-                  languages: ['en', 'fr'],
-                  jhipsterVersion: '4.9.0'
-                }
-              })
-            ]
+            toto: new JDLApplication({
+              config: {
+                baseName: 'toto',
+                packageName: 'com.mathieu.toto',
+                enableTranslation: false,
+                languages: ['en', 'fr'],
+                jhipsterVersion: '4.9.0'
+              }
+            }),
+            titi: new JDLApplication({
+              config: {
+                baseName: 'titi',
+                packageName: 'com.mathieu.titi',
+                enableTranslation: false,
+                languages: ['en', 'fr'],
+                jhipsterVersion: '4.9.0'
+              }
+            })
           });
         });
 

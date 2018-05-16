@@ -2,8 +2,7 @@ application {
   config {
     baseName mySecondApp,
     applicationType microservice,
-    serverPort 8091,
-    path "../../"
+    serverPort 8091
   }
   entities E
 }
@@ -12,8 +11,7 @@ application {
   config {
     baseName myThirdApp,
     applicationType microservice,
-    serverPort 8092,
-    path "../../"
+    serverPort 8092
   }
   entities F
 }

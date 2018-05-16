@@ -2,8 +2,7 @@ application {
   config {
     baseName tata,
     applicationType monolith,
-    packageName com.mathieu.tata,
-    path "../"
+    packageName com.mathieu.tata
   }
 }
 application {
@@ -17,15 +16,13 @@ application {
   config {
     baseName toto,
     applicationType microservice,
-    packageName com.mathieu.toto,
-    path "../../"
+    packageName com.mathieu.toto
   }
 }
 application {
   config {
     baseName tutu,
     applicationType monolith,
-    packageName com.mathieu.tutu,
-    path "./"
+    packageName com.mathieu.tutu
   }
 }
