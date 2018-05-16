@@ -29,7 +29,6 @@ describe('Alert service test', () => {
             TestBed.configureTestingModule({
                 imports: [TranslateModule.forRoot()],
                 providers: [
-                    JhiAlertService,
                     {
                         provide: JhiConfigService,
                         useValue: new JhiConfigService({defaultI18nLang: 'en', i18nEnabled: true})

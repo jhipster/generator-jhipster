@@ -35,7 +35,9 @@ export interface JhiAlert {
     close?: (alerts: JhiAlert[]) => void;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class JhiAlertService {
 
     private alertId: number;

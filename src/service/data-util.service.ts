@@ -21,7 +21,9 @@ import { ElementRef, Injectable } from '@angular/core';
 /**
  * An utility service for data.
  */
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class JhiDataUtils {
 
     constructor() {}

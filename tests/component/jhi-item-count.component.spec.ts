@@ -46,7 +46,6 @@ describe('JhiItemCountComponent test', () => {
             declarations: [JhiItemCountComponent, JhiTranslateComponent],
             imports: [TranslateModule.forRoot()],
             providers: [
-                JhiItemCountComponent,
                 {
                     provide: JhiConfigService,
                     useValue: new JhiConfigService({defaultI18nLang: 'en', i18nEnabled: true})

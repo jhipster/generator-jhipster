@@ -21,7 +21,9 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { JhiEventManager } from '../../src/service/event-manager.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 class SpyService {
   called = false;
 }

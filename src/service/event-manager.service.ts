@@ -23,7 +23,9 @@ import { filter, share } from 'rxjs/operators';
 /**
  * An utility class to manage RX events
  */
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class JhiEventManager {
 
     observable: Observable<any>;
