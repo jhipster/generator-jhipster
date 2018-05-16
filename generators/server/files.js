@@ -917,12 +917,12 @@ const serverFiles = {
         },
         {
             condition: generator => generator.cucumberTests,
-            path: TEST_DIR,
+            path: SERVER_TEST_SRC_DIR,
             templates: [
                 // Create Cucumber test files
-                { file: 'java/package/cucumber/CucumberTest.java', renameTo: generator => `${generator.testDir}cucumber/CucumberTest.java` },
-                { file: 'java/package/cucumber/stepdefs/StepDefs.java', renameTo: generator => `${generator.testDir}cucumber/stepdefs/StepDefs.java` },
-                { file: 'features/gitkeep', noEjs: true }
+                { file: 'package/cucumber/CucumberTest.java', renameTo: generator => `${generator.testDir}cucumber/CucumberTest.java` },
+                { file: 'package/cucumber/stepdefs/StepDefs.java', renameTo: generator => `${generator.testDir}cucumber/stepdefs/StepDefs.java` },
+                { file: '../features/gitkeep', noEjs: true }
             ]
         },
         {
@@ -1102,11 +1102,11 @@ const serverFiles = {
         },
         {
             condition: generator => !generator.skipUserManagement && generator.cucumberTests,
-            path: TEST_DIR,
+            path: SERVER_TEST_SRC_DIR,
             templates: [
 
-                { file: 'java/package/cucumber/stepdefs/UserStepDefs.java', renameTo: generator => `${generator.testDir}cucumber/stepdefs/UserStepDefs.java` },
-                'features/user/user.feature'
+                { file: 'package/cucumber/stepdefs/UserStepDefs.java', renameTo: generator => `${generator.testDir}cucumber/stepdefs/UserStepDefs.java` },
+                '../features/user/user.feature'
             ]
         },
         {

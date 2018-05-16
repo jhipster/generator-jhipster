@@ -194,7 +194,7 @@ const expectedFiles = {
     ],
 
     client: [
-        '.angular-cli.json',
+        'angular.json',
         '.prettierignore',
         '.prettierrc',
         'package.json',
@@ -335,7 +335,8 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}robots.txt`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,
-        `${CLIENT_TEST_SRC_DIR}karma.conf.js`,
+        `${CLIENT_TEST_SRC_DIR}jest.ts`,
+        `${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/activate/activate.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/password-reset/finish/password-reset-finish.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/password-reset/init/password-reset-init.component.spec.ts`,
@@ -347,7 +348,6 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/health/health.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/entry.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-account.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-active-modal.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-event-manager.service.ts`,
@@ -365,8 +365,7 @@ const expectedFiles = {
         'webpack/utils.js',
         'webpack/webpack.common.js',
         'webpack/webpack.dev.js',
-        'webpack/webpack.prod.js',
-        'webpack/webpack.test.js'
+        'webpack/webpack.prod.js'
     ],
 
     i18n: [
@@ -535,6 +534,14 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepository.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/ElasticsearchConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`
+    ],
+
+    cucumber: [
+        `${TEST_DIR}features/user/user.feature`,
+        `${TEST_DIR}features/gitkeep`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/StepDefs.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberTest.java`
     ],
 
     eureka: [

@@ -27,7 +27,7 @@ import { LoginService } from '../login/login.service';
 <%_ } _%>
 import { StateStorageService } from './state-storage.service';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UserRouteAccessService implements CanActivate {
 
     constructor(private router: Router,

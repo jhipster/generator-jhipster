@@ -18,7 +18,7 @@
 -%>
 import { TestBed, async, tick, fakeAsync, inject } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of, throwError } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { MockActivatedRoute } from '../../../helpers/mock-route.service';
@@ -36,7 +36,6 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [ActivateComponent],
                 providers: [
-                    ActivateService,
                     {
                         provide: ActivatedRoute,
                         useValue: new MockActivatedRoute({'key': 'ABC123'})
@@ -55,7 +54,7 @@ describe('Component Tests', () => {
         it('calls activate.get with the key from params',
             inject([ActivateService],
                 fakeAsync((service: ActivateService) => {
-                    spyOn(service, 'get').and.returnValue(Observable.of());
+                    spyOn(service, 'get').and.returnValue(of());
 
                     comp.ngOnInit();
                     tick();
@@ -68,7 +67,7 @@ describe('Component Tests', () => {
         it('should set set success to OK upon successful activation',
             inject([ActivateService],
                 fakeAsync((service: ActivateService) => {
-                    spyOn(service, 'get').and.returnValue(Observable.of({}));
+                    spyOn(service, 'get').and.returnValue(of({}));
 
                     comp.ngOnInit();
                     tick();
@@ -82,7 +81,7 @@ describe('Component Tests', () => {
         it('should set set error to ERROR upon activation failure',
             inject([ActivateService],
                 fakeAsync((service: ActivateService) => {
-                    spyOn(service, 'get').and.returnValue(Observable.throw('ERROR'));
+                    spyOn(service, 'get').and.returnValue(throwError('ERROR'));
 
                     comp.ngOnInit();
                     tick();

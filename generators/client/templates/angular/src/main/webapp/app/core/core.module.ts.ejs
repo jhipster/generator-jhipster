@@ -5,28 +5,6 @@ import { Title } from '@angular/platform-browser';
 <%_ const localeId = getLocaleId(nativeLanguage); _%>
 import locale from '@angular/common/locales/<%= localeId %>';
 
-import {
-    <%_ if (websocket === 'spring-websocket') { _%>
-    <%=jhiPrefixCapitalized%>TrackerService,
-    WindowRef,
-    <%_ } _%>
-    <%_ if (enableTranslation) { _%>
-    JhiLanguageHelper,
-    <%_ } _%>
-    LoginService,
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    LoginModalService,
-    <%_ } _%>
-    AccountService,
-    StateStorageService,
-    Principal,
-    CSRFService,
-    AuthServerProvider,
-    <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-    UserService,
-    <%_ } _%>
-    UserRouteAccessService
-} from './';
 <%_ if (enableI18nRTL) { _%>
 import {
     FindLanguageFromKeyPipe
@@ -39,14 +17,6 @@ import {
     exports: [],
     declarations: [],
     providers: [
-        <%_ if (websocket === 'spring-websocket') { _%>
-        <%=jhiPrefixCapitalized%>TrackerService,
-        WindowRef,
-        <%_ } _%>
-        LoginService,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        LoginModalService,
-        <%_ } _%>
         Title,
         {
             provide: LOCALE_ID,
@@ -58,19 +28,8 @@ import {
         },
         <%_ if (enableI18nRTL) { _%>
         FindLanguageFromKeyPipe,
-        <%_ } if (enableTranslation) { _%>
-        JhiLanguageHelper,
         <%_ } _%>
-        AccountService,
-        StateStorageService,
-        Principal,
-        CSRFService,
-        AuthServerProvider,
-        <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-        UserService,
-        <%_ } _%>
-        DatePipe,
-        UserRouteAccessService
+        DatePipe
     ]
 })
 export class <%=angularXAppName%>CoreModule {
