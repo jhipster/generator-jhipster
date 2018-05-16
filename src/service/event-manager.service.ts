@@ -17,10 +17,8 @@
  limitations under the License.
  */
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/filter';
+import { Observable ,  Observer ,  Subscription } from 'rxjs';
+import { filter, share } from 'rxjs/operators';
 
 /**
  * An utility class to manage RX events
@@ -34,7 +32,7 @@ export class JhiEventManager {
     constructor() {
         this.observable = Observable.create((observer: Observer<any>) => {
             this.observer = observer;
-        }).share();
+        }).pipe(share());
     }
 
     /**
@@ -50,9 +48,9 @@ export class JhiEventManager {
      * Method to subscribe to an event with callback
      */
     subscribe(eventName, callback) {
-        const subscriber: Subscription = this.observable.filter((event) => {
+        const subscriber: Subscription = this.observable.pipe(filter((event) => {
             return event.name === eventName;
-        }).subscribe(callback);
+        })).subscribe(callback);
         return subscriber;
     }
 
