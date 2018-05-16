@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
@@ -29,24 +28,15 @@ describe('JDLUnaryOption', () => {
   describe('::new', () => {
     context('when passing no argument', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLUnaryOption();
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The option\'s name must be passed.');
       });
     });
     context('when passing an invalid name', () => {
-      it('fails', () => {
-        try {
-          new JDLUnaryOption({ name: 'IsNotAnOption' });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('IllegalArgumentException');
-          expect(error.message).to.eq('The option\'s name must be valid, got \'IsNotAnOption\'.');
-        }
-      });
+      expect(() => {
+        new JDLUnaryOption({ name: 'IsNotAnOption' });
+      }).to.throw('The option\'s name must be valid, got \'IsNotAnOption\'.');
     });
     context('when passing a name at least', () => {
       let option = null;
@@ -141,14 +131,9 @@ describe('JDLUnaryOption', () => {
       });
 
       it('fails', () => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-        try {
+        expect(() => {
           option.addEntity(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(error.message).to.eq('The passed entity must be valid.\nErrors: No entity');
-        }
+        }).to.throw('The passed entity must be valid.\nErrors: No entity');
       });
     });
     context('when passing an invalid entity', () => {
@@ -159,15 +144,9 @@ describe('JDLUnaryOption', () => {
       });
 
       it('fails', () => {
-        try {
+        expect(() => {
           option.addEntity({});
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(
-            error.message
-          ).to.eq('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
-        }
+        }).to.throw('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
       });
     });
     context('when passing a valid entity that hasn\'t been added yet', () => {
@@ -270,13 +249,9 @@ describe('JDLUnaryOption', () => {
       });
 
       it('fails', () => {
-        try {
+        expect(() => {
           option.excludeEntity(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(error.message).to.eq('The passed entity must be valid.\nErrors: No entity');
-        }
+        }).to.throw('The passed entity must be valid.\nErrors: No entity');
       });
     });
     context('when passing an invalid entity', () => {
@@ -287,15 +262,9 @@ describe('JDLUnaryOption', () => {
       });
 
       it('fails', () => {
-        try {
+        expect(() => {
           option.excludeEntity({});
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(
-            error.message
-          ).to.eq('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
-        }
+        }).to.throw('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
       });
     });
     context('when passing a valid entity that hasn\'t been excluded yet', () => {

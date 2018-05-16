@@ -23,42 +23,27 @@ const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 
-const fail = expect.fail;
-
 describe('JDLBinaryOption', () => {
   describe('::new', () => {
     context('when passing no argument', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLBinaryOption();
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The option\'s name must be passed.');
       });
     });
     context('when passing an invalid name', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLBinaryOption({ name: 'IsNotAnOption' });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('IllegalArgumentException');
-          expect(
-            error.message
-          ).to.eq('The option\'s name and value must be valid, got no value for \'IsNotAnOption\'.');
-        }
+        }).to.throw('The option\'s name and value must be valid, got no value for \'IsNotAnOption\'.');
       });
     });
     context('when passing a name but no value', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLBinaryOption({ name: BinaryOptions.Options.DTO });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('IllegalArgumentException');
-          expect(error.message).to.eq('The option\'s name and value must be valid, got no value for \'dto\'.');
-        }
+        }).to.throw('The option\'s name and value must be valid, got no value for \'dto\'.');
       });
     });
     context('when passing a name and a value', () => {
@@ -168,26 +153,16 @@ describe('JDLBinaryOption', () => {
 
     context('when passing a nil entity', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           option.addEntity(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(error.message).to.eq('The passed entity must be valid.\nErrors: No entity');
-        }
+        }).to.throw('The passed entity must be valid.\nErrors: No entity');
       });
     });
     context('when passing an invalid entity', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           option.addEntity({});
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(
-            error.message
-          ).to.eq('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
-        }
+        }).to.throw('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
       });
     });
     context('when passing a valid entity that hasn\'t been added yet', () => {
@@ -277,26 +252,16 @@ describe('JDLBinaryOption', () => {
 
     context('when passing a nil entity', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           option.excludeEntity(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(error.message).to.eq('The passed entity must be valid.\nErrors: No entity');
-        }
+        }).to.throw('The passed entity must be valid.\nErrors: No entity');
       });
     });
     context('when passing an invalid entity', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           option.excludeEntity({});
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(
-            error.message
-          ).to.eq('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
-        }
+        }).to.throw('The passed entity must be valid.\nErrors: No entity name, No table name, No fields object');
       });
     });
     context('when passing a valid entity that hasn\'t been excluded yet', () => {

@@ -245,14 +245,11 @@ describe('DocumentParser', () => {
         });
 
         it('fails', () => {
-          try {
+          expect(() => {
             DocumentParser.parseFromConfigurationObject({
               document: input
             });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('IllegalArgumentException');
-          }
+          }).to.throw('The option\'s name and value must be valid, got value \'wrong\' for \'dto\'.');
         });
       });
       context('with a required enum', () => {

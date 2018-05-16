@@ -23,28 +23,20 @@ const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
 
-const fail = expect.fail;
-
 describe('JDLEntity', () => {
   describe('::new', () => {
     context('when not passing any argument', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLEntity();
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The entity name is mandatory to create an entity.');
       });
     });
     context('when not passing the name', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLEntity({ name: null, comment: 'My entity' });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The entity name is mandatory to create an entity.');
       });
     });
     context('when not passing the table name', () => {
@@ -150,24 +142,12 @@ describe('JDLEntity', () => {
 
     context('when adding an invalid field', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           entity.addField(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(
-            error.message
-          ).to.eq(`The passed field '' must be valid for entity '${entity.name}'.\nErrors: No field`);
-        }
-        try {
+        }).to.throw(`The passed field '' must be valid for entity '${entity.name}'.\nErrors: No field`);
+        expect(() => {
           entity.addField({ name: 'myField' });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(
-            error.message
-          ).to.eq(`The passed field 'myField' must be valid for entity '${entity.name}'.\nErrors: No field type`);
-        }
+        }).to.throw(`The passed field 'myField' must be valid for entity '${entity.name}'.\nErrors: No field type`);
       });
     });
     context('when adding a valid field', () => {
