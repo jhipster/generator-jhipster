@@ -21,7 +21,9 @@ import { Injectable } from '@angular/core';
 /**
  * An utility service for link parsing.
  */
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class JhiParseLinks {
 
     constructor() {}

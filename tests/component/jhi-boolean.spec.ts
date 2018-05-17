@@ -43,7 +43,6 @@ describe('JhiBooleanComponent test', () => {
         TestBed.configureTestingModule({
             declarations: [JhiBooleanComponent],
             providers: [
-                JhiBooleanComponent,
                 {
                     provide: JhiConfigService,
                     useValue: new JhiConfigService({defaultI18nLang: 'en', i18nEnabled: true})
