@@ -562,6 +562,23 @@ function testRequierments() {
     # https://askubuntu.com/a/521571"
     echo -e "\n\n"
 
+    local unameOut="$(uname -s)"
+    local machine
+    case "${unameOut}" in
+        Linux*)     machine=Linux;;
+        Darwin*)    machine=Mac;;
+        CYGWIN*)    exitScriptWithError "FATAL ERROR: " \
+            "This Script could not work on Cygwin " \
+            "because Node.js isn't implemented on Cygwin";;
+        MINGW*)     echo -e "WARNING: I don't know if it could works on Mingw."\
+            "If you test, please report it by open a new issue.\n\n" ; " \
+            "sleep 20 ;;
+        *)     echo -e "WARNING: I don't know if it could works on your " \
+            "Operating System."\
+            "If you test, please report it by open a new issue.\n\n" ; " \
+            "sleep 20 ;;
+    esac
+
     printCommandAndEval "node --version" \
         || printCommandAndEval "nodejs --version" \
         || errorInBuildExitCurrentSample "FATAL ERROR: please install Node. " \
@@ -657,9 +674,14 @@ function testRequierments() {
         # And if it fail too often, nobody will use this script
         # For a simple test for ngx-default, it's not mandotory
         # to check all!
+
+        local -ir serverPort=`grep --color=never -E \
+            '"serverPort"\s*:\s*"[0-9]+"' .yo-rc.json \
+            | grep --color=never -Eo '[0-9]+' \
+            || echo 8080
+            `
         if command -v ss 1>> /dev/null ; then
-            testIfPortIsFreeWithSs 8080
-            testIfPortIsFreeWithSs 8081
+            testIfPortIsFreeWithSs "$serverPort"
             testIfPortIsFreeWithSs 3636
             testIfPortIsFreeWithSs 27017
             testIfPortIsFreeWithSs 5432

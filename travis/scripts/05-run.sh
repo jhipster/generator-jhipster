@@ -43,10 +43,15 @@ fi
 
 launchCurlOrProtractor() {
     local -i retryCount=1
-    local -i maxRetry=10
-    local httpUrl="http://localhost:8080"
+    local -ir maxRetry=10
+    local -ir serverPort=`grep --color=never -E \
+        '"serverPort"\s*:\s*"[0-9]+"' .yo-rc.json \
+        | grep --color=never -Eo '[0-9]+' \
+        || echo 8080
+        `
+    local -r httpUrl="http://localhost:""${serverPort}"
     if [[ "$JHIPSTER" == *"micro"* ]]; then
-        local httpUrl="http://localhost:8081/management/health"
+        local -r httpUrl="http://localhost:""${serverPort}""/management/health"
     fi
 
     # --fail: fail due to the  server's  HTTP  status code
@@ -145,7 +150,7 @@ if [ "$RUN_APP" == 1 ]; then
     echo $! > .pid
     sleep 40
 
-    launchCurlOrProtractor || result=$? && result=$?
+    launchCurlOrProtractor && result=$? || result=$?
     kill $(cat .pid)
     exit $result
 fi
