@@ -69,7 +69,7 @@
         #     printCommandAndEval docker kill "$i" || exitScriptWithError \
         #         "FATAL ERROR: couldn't kill docker container '$i'"
         # done
-
+# 13) we could unset even if a variable is not setted.
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -283,8 +283,8 @@ function exitScriptWithError() {
 
 # function printFileDescriptor3() {{{2
 function printFileDescriptor3() {
-    [[ -e /dev/fd/3 ]] && echo -e "\n""$@" | \
-        tee --append /dev/fd/3 || echo -e "\n""$@"
+    [[ -e /dev/fd/3 ]] && echo -e "\n""$@" | tee --append /dev/fd/3 \
+        || echo -e "\n""$@"
 }
 
 # function printCommandAndEval() {{{2
@@ -419,8 +419,8 @@ function usage() {
     "\`$ ./build-samples.sh generate' =>" \
         " generate all travis/samples/*-sample corresponding of " \
         " samples listed above.\n" \
-    "\`$ ./build-samples.sh generate ngx-default,ngx-gradle-fr' =>" \
-        " generate \`ngx-default' and \`ngx-gradle-fr'.\n"  \
+    "\`$ ./build-samples.sh generate ngx-default,react-default' =>" \
+        " generate \`ngx-default' and \`react-default'.\n"  \
         " samples listed above.\n" \
     "\`$ ./build-samples.sh buildandtest' => generate build and test all " \
         "travis/samples/*-sample corresponding of samples listed above.\n" \
@@ -538,7 +538,6 @@ function echoTitleBuildStep() {
     if [[ -e /dev/fd/3 ]] ; then
         1>&3 echoSmallTitle "$@"
     fi
-    unset ELAPSED
 }
 
 # TEST REQUIERMENTS  {{{2
@@ -683,7 +682,7 @@ function testRequierments() {
 
 # function printInfoBeforeLaunch() {{{3
 function printInfoBeforeLaunch() {
-    echo -e "\n\n* Your log file will be '$LOGFILENAME'\n" \
+    printFileDescriptor3 "\n\n* Your log file will be '$LOGFILENAME'\n" \
         "* When build will finish, The end of this filename shoule be renamed" \
         "'errored' or 'passed'.\n" \
         "* On this file lines started by '$PS1' are bash" \
@@ -692,9 +691,9 @@ function printInfoBeforeLaunch() {
     # Test if we launch not this function in generateNode_Modules_Cache().
     # True if launched from functions generateProject() and
     # buildAndTestProject().
-    if [[ -z "${generationOfNodeModulesCacheMarker+x}" ]] ; then
+    if [[ -z "${isGenerationOfNodeModulesCache+x}" ]] ; then
         # echo constants used in ./scripts/*.sh
-        echo -e "LOGFILENAME='$LOGFILENAME'" \
+        printFileDescriptor3 "LOGFILENAME='$LOGFILENAME'" \
                 "(variable not used in ./travis/script/*.sh." \
                 "The end of this filename shoule be renamed errored or passed" \
                 "at the end of this script)\n" \
@@ -710,7 +709,7 @@ function printInfoBeforeLaunch() {
             "APP_FOLDER='$APP_FOLDER'\n" \
             "UAA_APP_FOLDER='$UAA_APP_FOLDER'\n" \
             "SPRING_OUTPUT_ANSI_ENABLED='$SPRING_OUTPUT_ANSI_ENABLED'\n" \
-            "SPRING_JPA_SHOW_SQL='$SPRING_JPA_SHOW_SQL'"
+            "SPRING_JPA_SHOW_SQL='$SPRING_JPA_SHOW_SQL'\n\n"
     fi
 }
 
@@ -721,7 +720,7 @@ function createLogFile() {
     touch "$LOGFILENAME" || exitScriptWithError "FATAL ERROR: could not " \
         "create '$LOGFILENAME'"
 
-    if [[ "$launchInBackground" -eq 0 ]] ; then
+    if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
         echoSmallTitle "Create log file and save output in '${LOGFILENAME}'"
         exec 1>> >(tee --append "${LOGFILENAME}") 2>&1
     else
@@ -799,7 +798,7 @@ function treatEndOfBuild() {
     # Test if we launch not this function in generateNode_Modules_Cache().
     # True if launched from functions generateProject() and
     # buildAndTestProject().
-    if [[ -z "${generationOfNodeModulesCacheMarker+x}" ]] ; then
+    if [[ -z "${isGenerationOfNodeModulesCache+x}" ]] ; then
         sleep 2
         if ! isSkipClientInFileYoRcDotConf ; then
             # Because node_modules takes 1.1 Go ! Too much !
@@ -818,7 +817,7 @@ function treatEndOfBuild() {
         fi
     fi
 
-    if [[ "$launchInBackground" -eq 1 ]] ; then
+    if [[ "$isLaunchSamplesInBackground" -eq 1 ]] ; then
         restoreSTDERRandSTDOUTtoConsole
     fi
 
@@ -965,9 +964,9 @@ function generateProject() {
     # `./build-samples.sh generate/buildandtest sample-name', confirmationUser
     # if he wants test it.
     if ([[ "${TESTGENERATOR}" -eq 1 ]] && \
-        [[ "${launchInBackground}" -eq 0 ]] ) || \
+        [[ "${isLaunchSamplesInBackground}" -eq 0 ]] ) || \
         ( [[ "${TESTGENERATOR}" -eq 1 ]] && \
-        [[ "$launchInBackground" -eq 1 ]] && \
+        [[ "$isLaunchSamplesInBackground" -eq 1 ]] && \
         [[ "${JHIPSTER}" == "ngx-default"  ]] )
     then
         # Corresponding to "Install and test JHipster Generator" in
@@ -1034,7 +1033,9 @@ function generateNode_Modules_Cache() {
     echoSmallTitle "Check node_modules cache"
 
     # Save JHIPSTER_MATRIX
-    JHIPSTER_MATRIX_SAVED=${JHIPSTER_MATRIX}
+    if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
+        JHIPSTER_MATRIX_SAVED=${JHIPSTER_MATRIX}
+    fi
     # Used in functions errorInBuildExitCurrentSample() and createLogFile()
     local JHIPSTER_MATRIX="${NODE_MODULES_CACHE_SAMPLE}"
 
@@ -1064,7 +1065,7 @@ function generateNode_Modules_Cache() {
     local -i ERROR_IN_SAMPLE=0
     local APP_FOLDER="${NODE_MODULES_CACHE_ANGULAR}"
 
-    local -i generationOfNodeModulesCacheMarker=1
+    local -i isGenerationOfNodeModulesCache=1
 
     time {
 
@@ -1088,18 +1089,16 @@ function generateNode_Modules_Cache() {
         cd "${NODE_MODULES_CACHE_ANGULAR}"
         local jhipstercommand="jhipster --force --no-insight --skip-checks \
             --with-entities --skip-git --skip-commit-hook"
-        if [[ -e /dev/fd/3 ]] ; then
-            echo "$jhipstercommand" 1>&3
-        else
-            echo "$jhipstercommand"
-        fi
+        printFileDescriptor3 "$jhipstercommand"
         eval "$jhipstercommand"
 
         treatEndOfBuild
     }
 
-    unset JHIPSTER_MATRIX
-    declare -g JHIPSTER_MATRIX=${JHIPSTER_MATRIX_SAVED}
+    if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
+        unset JHIPSTER_MATRIX
+        declare -g JHIPSTER_MATRIX=${JHIPSTER_MATRIX_SAVED}
+    fi
 }
 
 # II LAUNCH ONLY ONE SAMPLE {{{2
@@ -1124,9 +1123,9 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     fi
 
     # Should never be raised because we check ../.travis.yml.
-    # Maybe in case of the user delete all folder sample!
+    # Maybe in case of the user delete all folders sample!
     if [ ! -f "$JHIPSTER_SAMPLES/""$JHIPSTER""/.yo-rc.json" ]; then
-        errorInBuildExitCurrentSample "FATAL ERROR: not a JHipster project."
+        exitScriptWithError "FATAL ERROR: not a JHipster project."
     fi
 
 }
@@ -1136,11 +1135,8 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 function createFolderNodeModulesAndLogFile() {
     if ! isSkipClientInFileYoRcDotConf ; then
 
-        if [[ "$launchInBackground" -eq 0 ]] ; then
+        if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
             generateNode_Modules_Cache
-            # Redifine APP_FOLDER, as it is unsetted in function
-            # generateNode_Modules_Cache
-            export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
         # else; done in function launchSamplesInBackground()
         fi
 
@@ -1173,14 +1169,14 @@ function createFolderNodeModulesAndLogFile() {
 function launchOnlyOneSample() {
 
     # define JHIPSTER, and redifine if necessary PROFIL and PROTRACTOR
-    # If "$launchInBackground -eq 0", test if the second argument
+    # If "$isLaunchSamplesInBackground -eq 0", test if the second argument
     # of command line is correct.
     retrieveVariablesInFileDotTravisSectionMatrix
 
-    # if "$launchInBackground" -eq 1
+    # if "$isLaunchSamplesInBackground" -eq 1
     # doesItTestGenerator is done in
     # function launchSamplesInBackground()
-    if [[ "$launchInBackground" -eq 0 ]] ; then
+    if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
         export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
         local -i TESTGENERATOR=1
         doesItTestGenerator "before generate the project".
@@ -1190,7 +1186,6 @@ function launchOnlyOneSample() {
                 "[y/n] "`
             local argument="ABORTED: rename this folder, then restart script."
             local execInfirmed="errorInBuildStopCurrentSample '$argument'"
-            export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
             confirmationUser "$confirmationFirstParameter" \
                 "rm -rf '${APP_FOLDER}'; mkdir -p '$APP_FOLDER'" \
                 "echo '$execInfirmed'"
@@ -1268,17 +1263,19 @@ function launchSamplesInBackground() {
     while [[ "$i" -lt "${#JHIPSTER_MATRIX_ARRAY[*]}" ]] ; do
         local APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER_MATRIX_ARRAY[i]}""-sample"
         if [[ -e "$APP_FOLDER" ]] ; then
-            echo -e "WARNING: if you continue '$APP_FOLDER' will be deleted."
+            echo -e "WARNING: if you continue the old folder '$APP_FOLDER'" \
+                "will be deleted."
         fi
         i=$((i+1))
     done
-    unset "$APP_FOLDER"
 
-    confirmationUser "Are you sure to contiune?"
+    confirmationUser "Are you sure to contiune? [y/n] " \
         'echo ""' \
         'exitScriptWithError "ABORTED."'
     unset confirmationFirstParameter
 
+    # TODO Actually numberOfProcesses should be 1 because there is port conflict
+    # TODO add test if there is only few samples to test
     read -t 1 -n 10000 discard || echo ""
     echo
     local question=`echo -e "How many processes" \
@@ -1287,7 +1284,7 @@ function launchSamplesInBackground() {
     local -i typeAnswer=1
     while [[ "$typeAnswer" -eq 1 ]] ; do
         read -p "$question" -n 1 -r
-        if [[ "$REPLY" =~ [1-9] ]] ; then
+        if [[ "$REPLY" =~ ^[1-9]$ ]] ; then
             local -i numberOfProcesses="${REPLY}"
             echo "" ;
             typeAnswer=0
@@ -1297,6 +1294,7 @@ function launchSamplesInBackground() {
         fi
         echo "" ;
     done
+    unset typeAnswer
 
     testRequierments
 
@@ -1309,7 +1307,7 @@ function launchSamplesInBackground() {
     timeSpan=15
     # Execute accordingly to the array.
     while [[ "$i" -lt "${#JHIPSTER_MATRIX_ARRAY[*]}" ]] ; do
-        JHIPSTER_MATRIX="${JHIPSTER_MATRIX_ARRAY[i]}"
+        local JHIPSTER_MATRIX="${JHIPSTER_MATRIX_ARRAY[i]}"
         # `ps' man page:
         # "By default, ps selects all processes
         # associated with the same terminal as the invoker."
@@ -1422,41 +1420,56 @@ function returnJHIPSTER_MATRIXofFileTravisDotYml() {
     # example https://stackoverflow.com/a/38997681
     local -n returned="$1"
     local JHIPSTER_LOCAL="$2"
-    returned=grep --color=never "'$JHIPSTER_LOCAL'(\s|$)" <<< "$TRAVIS_DOT_YAML_PARSED" \
+    returned=`grep -E --color=never "$JHIPSTER_LOCAL(\s|$)" \
+        <<< "$TRAVIS_DOT_YAML_PARSED"` \
         || exitScriptWithError "\n\nFATAL ERROR: " \
         "'$JHIPSTER_LOCAL' is not a correct sample." \
         "Please read \`$ ./build-samples.sh help'."
+
+    # Should never be raised because we check ../.travis.yml.
+    # Maybe in case of the user delete all folders sample!
+    if [ ! -f "$JHIPSTER_SAMPLES/""$JHIPSTER_LOCAL""/.yo-rc.json" ]; then
+        exitScriptWithError "FATAL ERROR: not a JHipster project."
+    fi
+
 }
 
 function define_JHIPSTER_MATRIX_ARRAY() {
-    local -r sample_list="$2"
-    declare -ga JHIPSTER_MATRIX_ARRAY
-    if [[ -z "${2+x}" ]] ; then
+    if [[ -z "${sample_list+x}" ]] ; then
         IFS=$'\n' read -ra JHIPSTER_MATRIX_ARRAY  <<< "$TRAVIS_DOT_YAML_PARSED"
-    elif [[ "${sample_list}" =~ [a-z] ]] ; then
+    elif [[ "${sample_list}" =~ ^[a-z0-9-]*$ ]] ; then
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX_ARRAY[0] \
             "$sample_list"
-    elif [[ ${sample_list} =~ [a-z,]* ]] ; then
-        local -a tmpArray
-        IFS=$',' read -ra sampleListArray  <<< "$sample_list"
+    elif [[ ${sample_list} =~ ^[a-z0-9,-]*$ ]] ; then
+        local -a tmpSampleListArray
+        IFS=$',' read -ra tmpSampleListArray  <<< "$sample_list"
         local -i i=0
-        while [[ "$i" -lt "${#tmpArray}" ]] ; do
-            returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX_ARRAY[i]
+        while [[ "$i" -lt "${#tmpSampleListArray[*]}" ]] ; do
+            returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX_ARRAY[$i] \
+                "${tmpSampleListArray[i]}"
             i=$((i+1))
         done
+    else
+        exitScriptWithError "FATAL ERROR: not a valid sample name, or" \
+            "list of samples name.\n" \
+            "A sample name contains only alphanumeric characters and dash.\n" \
+            "A list of samples name is seperated by the character ','.\n" \
+            "Please read \`./build-samples.sh help'."
     fi
 }
 
-function launchScripts() {
-    local -r sample_list="$1"
+function launchSamples() {
     if [[ "$ONLY_ONE_SAMPLE_VERBOSE_OUTPUT" -eq 1 ]] ; then
-        launchInBackground=0
+        isLaunchSamplesInBackground=0
         local JHIPSTER_MATRIX
-        testSampleExistanceInFileDotTravis JHIPSTER_MATRIX "$sample_list"
-        time launchOnlyOneSample "$JHIPSTER_MATRIX"
+        returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$sample_list"
+        unset sample_list
+        time launchOnlyOneSample
     else
-        launchInBackground=1
+        isLaunchSamplesInBackground=1
         define_JHIPSTER_MATRIX_ARRAY
+        echo -e "\n\nYou will build:" ${JHIPSTER_MATRIX_ARRAY[*]}
+        unset sample_list
         time launchSamplesInBackground
     fi
 }
@@ -1476,8 +1489,9 @@ if [[ ! -z "${1+x}" ]] && \
     if [[ ! -z  "${3+x}" ]] && \
         [[ "$3" -eq "--consoleverbose" ]] ; then
         ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=1
-        if [[ ${2} =~ [a-z,]* ]] ; then
-            exitScriptWithError "\n\n\nFATAL ERROR '--consoleverbose' option could " \
+        if [[ ${2} =~ ^[a-z1-9,-]*$ ]] ; then
+            exitScriptWithError "\n\n\nFATAL ERROR '--consoleverbose' " \
+                "option could " \
                 "be used only when there is only one sample to build." \
                 "Please see \`./build-samples.sh help'."
         fi
@@ -1492,12 +1506,13 @@ if [[ ! -z "${1+x}" ]] ; then
         fi
         usage
         exit 0
-    elif [[ "$1" = "generate" ]] ; then
-        isBuildAndTest=0
-        launchScripts "$2"
-    elif [[ "$1" = "buildandtest" ]] ; then
-        isBuildAndTest=1
-        launchScripts "$2"
+    elif [[ "$1" = "generate" ]] || [[ "$1" = "buildandtest" ]] ; then
+        [[ "$1" = "generate" ]] && isBuildAndTest=0 || isBuildAndTest=1
+        if [[ ! -z "${2+x}" ]] ; then
+            sample_list="$2"
+            declare -a JHIPSTER_MATRIX_ARRAY
+        fi
+        launchSamples
     elif [ "$1" = "clean" ]; then
         if [[ ! -z "${2+x}" ]] ; then
             tooMuchArguments
