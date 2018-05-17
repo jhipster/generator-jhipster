@@ -985,7 +985,7 @@ module.exports = class extends Generator {
                 if (otherEntityAngularName === 'User') {
                     importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : './user.model';
                 } else {
-                    importPath = `./${relationship.otherEntityFileName}.model`;
+                    importPath = clientFramework === 'angularX' ? `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model` : `./${relationship.otherEntityFileName}.model`;
                 }
                 typeImports.set(importType, importPath);
             }
