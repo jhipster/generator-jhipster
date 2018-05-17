@@ -34,6 +34,7 @@
 # Only scripts under ./travis/script are executed by Travis CI.
 # For a real local Travis build, see
 # https://docs.travis-ci.com/user/common-build-problems/#Troubleshooting-Locally-in-a-Docker-Image.
+# (Travis Docker image take lot of size, several Go for each test)
 
 # NOTES FOR DEVELOPPERS OF THIS SCRIPT {{{2
 # ============
@@ -87,10 +88,10 @@
 # PRINT HELP `./build-samples.sh help'
 # CLEAN SAMPLES `./build-samples.sh/ clean'
 #   `./build-samples.sh clean [sample_name]'
-# GENERATE AND TEST SAMPLES `./build-samples.sh generate/buildandtest'
+# GENERATE AND TEST SAMPLES `./build-samples.sh generate/generateandtest'
 #   `./build-samples.sh generate [sample_name]'
 #   or
-#   `./build-samples.sh buildandtest [sample_name]'
+#   `./build-samples.sh generateandtest [sample_name]'
 #   * See also paragrapher below to understand how this works.
 #   * This part of this file is splitted under six subtitles:
 #   * Each subtitle could be written in one independant file.
@@ -124,7 +125,7 @@
 #       * launchNewBash() who launch ./scripts/*.sh if previous step was
 #           not errored.
 #   * III 2) EXECUTE SCRIPTS ./scripts/*.sh
-#       * functions generateProject() buildAndTestProject() who
+#       * functions generateProject() generateAndTestProject() who
 #       launch scripts (see explanations in paragraph below).
 #   * III 1) GENERATE NODE_MODULES CACHE
 #       * Main function is generateNode_Modules_Cache() who generate
@@ -132,14 +133,14 @@
 #       On my computer (JulioJu) I save 10 minutes of time for each sample.
 #   * II LAUNCH ONLY ONE SAMPLE
 #       * Could be seen as "MAIN" for:
-#       `./build-samples.sh generate/buildandtest sample_name --consoleverbose' \
+#       `./build-samples.sh generate/generateandtest sample_name --consoleverbose' \
 #           (three mandatory arguments)
 #       * contains launchOnlyOneSample(),
 #       the main function of this subtitle
 #       * see explanations in paragrapher below
 #   * I LAUNCH SAMPLE(S) IN BACKGROUND
 #       * Could be seen as "MAIN" function for:
-#       `./build-samples.sh generate/buildandtest \
+#       `./build-samples.sh generate/generateandtest \
 #           [sample_name[,samle_name][,...]]' \
 #               (one mandatory arguments + one optional arugments)
 #       * contains launchSamplesInBackground(),
@@ -152,10 +153,10 @@
 #   * Argument parser
 
 
-# More explanation about parameter `generate' and `buildandtest':
-# * All code corresponding to parameters `generate' and `buildandtest'
+# More explanation about parameter `generate' and `generateandtest':
+# * All code corresponding to parameters `generate' and `generateandtest'
 # it's in this file under title
-# GENERATE AND TEST SAMPLES `./BUILD-SAMPLES.SH GENERATE/BUILDANDTEST'
+# GENERATE AND TEST SAMPLES `./BUILD-SAMPLES.SH GENERATE/generateandtest'
 # Sequential explanation.
 # 1. If ./samples/node_modules_cache-sample/node_modules_cache.*.passed.local-travis.log
 #    doesn't exits, we trigger generateNode_Modules_Cache() to generate this
@@ -174,8 +175,8 @@
 #           (corresponding to ./scripts/00-install-jhipster.sh)
 #       It launches ./scripts/01-generate-entities.sh and
 #           ./scripts/02-generate-project.sh
-#    * If the second argument is `buildandtest', we launch
-#    only function buildAndTestProject()
+#    * If the second argument is `generateandtest', we launch
+#    only function generateAndTestProject()
 #    who launch function generateProject() and scripts ./scripts/04-tests.sh,
 #    ./scripts/05-run.sh, ./scripts/06-sonar.sh.
 # 3. If we have one parameters (e.g. `./build-samples.sh generate')
@@ -358,13 +359,13 @@ function usage() {
             "\t\tsample_name [--consoleverbose] \n" \
             "\t\t | sample_name[,sample_name][,...] \n" \
         "\t\t]\n" \
-        "\tbuildandtest [ \n" \
+        "\tgenerateandtest [ \n" \
             "\t\tsample_name [--consoleverbose] \n" \
             "\t\t | sample_name[,sample_name][,...] \n" \
         "\t\t]\n" \
         "\tclean\n" \
         "\thelp\n\n" \
-    " \`./build-samples.sh generate/buildandtest'\n" \
+    " \`./build-samples.sh generate/generateandtest'\n" \
         "—————————————————————————————————————\n" \
         "—————————————————————————————————————\n" \
         "* They will create the travis sample project under the './samples'" \
@@ -374,10 +375,10 @@ function usage() {
             "the folder generate-project before launch generation.\n" \
             "You will can open this application in your " \
             "editor or IDE to check it further." \
-        "* 'buildandtest' generate then test project(s), as Travis CI.\n" \
-    "  * Without optional parameter, 'generate', and 'buildandtest' " \
+        "* 'generateandtest' generate then test project(s), as Travis CI.\n" \
+    "  * Without optional parameter, 'generate', and 'generateandtest' " \
             "operate for all samples listed below.\n" \
-    "  * Arguments 'generate', 'buildandtest' could be apply for " \
+    "  * Arguments 'generate', 'generateandtest' could be apply for " \
             "one sample_name below.\n" \
     "  * For each sample, an independant log file is created. During" \
             "built time, its name contains 'pending'. " \
@@ -391,13 +392,13 @@ function usage() {
             "./genertor-jhipster. Now you will test this generator, and not" \
             "the npm genertor-jhipster." \
     "\n\n'[sample_name]' could be:\n" \
-    "——————————————————\n" \
-    "${list_of_samples}\n\n" \
-    "* Use always \`./build-samples.sh buildandtest ngx-default' " \
+    "——————————————————" \
+    "\n${list_of_samples}\n\n" \
+    "* Use always \`./build-samples.sh generateandtest ngx-default' " \
             "(the more complete test). " \
             "Useful for test Server side and Angular client.\n" \
     "  * If you work on the React client try the previous and also " \
-            "\`./build-samples.sh buildandtest react-default\n" \
+            "\`./build-samples.sh generateandtest react-default\n" \
     "  * If you work on an other functionality, chose the corresponding one\n" \
     "Name of samples indicate their test goal. They have different application"\
     "configurations (defined in '.yo-rc.json') and different entity" \
@@ -413,7 +414,7 @@ function usage() {
         "=> generate a new project at travis/samples/ngx-default-sample\n" \
     "\`$ ./build-samples.sh generate ngx-default --consoleverbose' " \
         "=> all is printed in the console (thanks \`--consoleverbose' lot of logs, not advise)\n" \
-    "\`$ ./build-samples.sh buildandtest ngx-default' " \
+    "\`$ ./build-samples.sh generateandtest ngx-default' " \
         "=> generate a new project at travis/samples/ngx-default-sample " \
             "then build and test it.\n" \
     "\`$ ./build-samples.sh generate' =>" \
@@ -422,7 +423,7 @@ function usage() {
     "\`$ ./build-samples.sh generate ngx-default,react-default' =>" \
         " generate \`ngx-default' and \`react-default'.\n"  \
         " samples listed above.\n" \
-    "\`$ ./build-samples.sh buildandtest' => generate build and test all " \
+    "\`$ ./build-samples.sh generateandtest' => generate build and test all " \
         "travis/samples/*-sample corresponding of samples listed above.\n" \
     "\`$ ./build-samples.sh clean' " \
         "=> delete all folders travis/samples/*-sample\n" \
@@ -446,8 +447,8 @@ function usage() {
     "\`yarn install' isn't perform before test to increase speed". \
     "\n\nJust remind of sample_name:\n" \
     "——————————————————\n" \
-    "——————————————————\n" \
-    "${list_of_samples}\n"
+    "——————————————————" \
+    "\n${list_of_samples}\n\n" \
 
     exit 0
 }
@@ -495,7 +496,7 @@ function cleanAllProjects() {
         "doesn't  exists:\n     ==> you could launch a sanitzed new build.\n"
 }
 
-# GENERATE AND TEST SAMPLES `./build-samples.sh generate/buildandtest' {{{1
+# GENERATE AND TEST SAMPLES `./build-samples.sh generate/generateandtest' {{{1
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
@@ -596,7 +597,7 @@ function testRequierments() {
         "If JHipster is already installed, please add it in your PATH."
     echo
 
-    if [[ "$isBuildAndTest" -eq 1 ]] ; then
+    if [[ "$isgenerateandtest" -eq 1 ]] ; then
 
         if uname -a | grep -i darwin 1>> /dev/null ; then
             printCommandAndEval \
@@ -690,7 +691,7 @@ function printInfoBeforeLaunch() {
         "* See progress in this file. Do not forget to refresh it!"
     # Test if we launch not this function in generateNode_Modules_Cache().
     # True if launched from functions generateProject() and
-    # buildAndTestProject().
+    # generateAndTestProject().
     if [[ -z "${isGenerationOfNodeModulesCache+x}" ]] ; then
         # echo constants used in ./scripts/*.sh
         printFileDescriptor3 "LOGFILENAME='$LOGFILENAME'" \
@@ -797,7 +798,7 @@ function treatEndOfBuild() {
 
     # Test if we launch not this function in generateNode_Modules_Cache().
     # True if launched from functions generateProject() and
-    # buildAndTestProject().
+    # generateAndTestProject().
     if [[ -z "${isGenerationOfNodeModulesCache+x}" ]] ; then
         sleep 2
         if ! isSkipClientInFileYoRcDotConf ; then
@@ -954,14 +955,14 @@ function doesItTestGenerator() {
 
 # function generateProject() {{{3
 # Executed when the first argument of the script is "generate" and
-# "buildandtest"
+# "generateandtest"
 # ====================
 # Corresponding of the entry "install" in ../.travis.yml
 function generateProject() {
 
     # `./build-samples.sh generate', confirmationUser
     # if he wants test it.
-    # `./build-samples.sh generate/buildandtest sample-name', confirmationUser
+    # `./build-samples.sh generate/generateandtest sample-name', confirmationUser
     # if he wants test it.
     if ([[ "${TESTGENERATOR}" -eq 1 ]] && \
         [[ "${isLaunchSamplesInBackground}" -eq 0 ]] ) || \
@@ -1002,10 +1003,10 @@ function generateProject() {
 
 
 
-# function buildAndTestProject() {{{3
-# Executed when the first argument of the script is "buildandtest"
+# function generateAndTestProject() {{{3
+# Executed when the first argument of the script is "generateandtest"
 # ====================
-function buildAndTestProject() {
+function generateAndTestProject() {
 
     # GENERATE PROJECT
     # ====================
@@ -1220,8 +1221,8 @@ function launchOnlyOneSample() {
 
         local oldPATH="${PATH}"
         export PATH="${APP_FOLDER}"/node_modules:"$PATH"
-        if [[ "$isBuildAndTest" -eq 1 ]] ; then
-            buildAndTestProject
+        if [[ "$isgenerateandtest" -eq 1 ]] ; then
+            generateAndTestProject
         else
             generate
         fi
@@ -1254,7 +1255,7 @@ function launchSamplesInBackground() {
 
     local -i TESTGENERATOR=1
 
-    if [[ "$isBuildAndTest" -eq 0 ]] ; then
+    if [[ "$isgenerateandtest" -eq 0 ]] ; then
         doesItTestGenerator "during generation of 'ngx-default'"
     fi
 
@@ -1483,7 +1484,7 @@ if [[ "$#" -gt 3 ]] ; then
     tooMuchArguments
 fi
 if [[ ! -z "${1+x}" ]] && \
-    ([[ "$1" = 'buildandtest' ]] || \
+    ([[ "$1" = 'generateandtest' ]] || \
     [[ "$1" = 'generate' ]]) ; then
     ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=0
     if [[ ! -z  "${3+x}" ]] && \
@@ -1506,8 +1507,8 @@ if [[ ! -z "${1+x}" ]] ; then
         fi
         usage
         exit 0
-    elif [[ "$1" = "generate" ]] || [[ "$1" = "buildandtest" ]] ; then
-        [[ "$1" = "generate" ]] && isBuildAndTest=0 || isBuildAndTest=1
+    elif [[ "$1" = "generate" ]] || [[ "$1" = "generateandtest" ]] ; then
+        [[ "$1" = "generate" ]] && isgenerateandtest=0 || isgenerateandtest=1
         if [[ ! -z "${2+x}" ]] ; then
             sample_list="$2"
             declare -a JHIPSTER_MATRIX_ARRAY

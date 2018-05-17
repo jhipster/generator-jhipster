@@ -49,8 +49,14 @@ env:
     # At the end of build-samples.sh, you must update statement:
     # `grep --color=never -E '^    - JHIPSTER=' "$travisDotYml" | sed -n -e 's/    - JHIPSTER=//p'`
 
+
     # File ./travis/build-samples.sh target explicitly ngx-default. Please
     # do not rename this sample. All others samples could be renamed.
+
+
+    # In name of samples, please only use alphanumeric characters in lowercase
+    # and dash.
+
     - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
 
     - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1

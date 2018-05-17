@@ -238,24 +238,24 @@ You can run the travis builds locally by following below commands
 
 CD into the [./travis](./travis) folder `cd travis` from the generator source code root folder
 
-Run `./build-samples.sh generate|buildandtest [ sample_name[,sample_name][,...] ] `
+Run `./build-samples.sh generate|generateandtest [ sample_name[,sample_name][,...] ] `
 
-This will create the travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your editor or IDE to check it further. You can also run tests locally on the project to verify
+This will create the travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your Text Editor or IDE to check it further. You can also run tests locally on the project to verify
 
 Sample name is optional and can be any of the folder name in the `travis/samples` folder. If not specified the it will mean all samples
 
 Command name can be as below:
 
     `help`: display the help (recommended to read it)
-    `generate`: Generate sample(s) if specified else generate all samples
-    `buildandtest` : Generate and test sample(s) if specified else generate and test all samples
+    `generate`: Generate sample(s) if specified else clean all samples. Not test are performed. You could see what is generated in samples/*-sample and open the project in your Text Editor/IDE.
+    `generateandtest` : Generate and test sample(s) if specified else generate and test all samples. Test as in Travis CI.
     `clean` : Clean the generated code for the sample if specified else clean all samples
 
 Examples:
 
-    `./buildandtest buildandtest ngx-default`: build and test only ngx-default
-    `./buildandtest buildandtest ngx-default,react-default`: build and test ngx-default and react-default
-    `./buildandtest buildandtest`: build all tests listed in `./build-sample.sh help`
+    `./build-samples.sh generateandtest ngx-default`: build and test only ngx-default
+    `./build-samples.sh generateandtest ngx-default,react-default`: generate and test ngx-default and react-default
+    `./build-samples.sh generateandtest`: generate and test all samples listed in `./build-sample.sh help`
 
 *NOTES FOR OLD DEVELOPERS: ./travis/build-samples.sh has been rewritten. Now it spawns several generation/build in same time and use a node_modules cache. Improve speed.*
 
