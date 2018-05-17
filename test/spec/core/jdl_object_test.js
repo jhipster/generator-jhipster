@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
@@ -41,31 +40,21 @@ describe('JDLObject', () => {
 
       context('such as a nil application', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             object.addApplication(null);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(error.message).to.eq('The application must be valid in order to be added.\nErrors: No application');
-          }
+          }).to.throw('The application must be valid in order to be added.\nErrors: No application');
         });
       });
       context('such as an incomplete application', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             object.addApplication({
               config: {
                 baseName: 'toto'
               }
             });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(
-              error.message
-            ).to.eq('The application must be valid in order to be added.\n' +
-              'Errors: No authentication type, No build tool');
-          }
+          }).to.throw('The application must be valid in order to be added.\n' +
+            'Errors: No authentication type, No build tool');
         });
       });
     });
@@ -113,17 +102,13 @@ describe('JDLObject', () => {
 
       context('such as a nil object', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             object.addEntity(null);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(error.message).to.eq('The entity must be valid in order to be added.\nErrors: No entity');
-          }
+          }).to.throw('The entity must be valid in order to be added.\nErrors: No entity');
         });
       });
       context('such as an incomplete entity', () => {
-        try {
+        expect(() => {
           object.addEntity({
             name: 'Something',
             tableName: 't_something',
@@ -133,13 +118,7 @@ describe('JDLObject', () => {
               validations: []
             }]
           });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(
-            error.message
-          ).to.eq('The entity must be valid in order to be added.\nErrors: For field #1: No field name');
-        }
+        }).to.throw('The entity must be valid in order to be added.\nErrors: For field #1: No field name');
       });
     });
     context('when adding a valid entity', () => {
@@ -217,24 +196,16 @@ describe('JDLObject', () => {
 
       context('such as a nil enum', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             object.addEnum(null);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(error.message).to.eq('The enum must be valid in order to be added.\nErrors: No enumeration');
-          }
+          }).to.throw('The enum must be valid in order to be added.\nErrors: No enumeration');
         });
       });
       context('such as an incomplete enum', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             object.addEnum({ values: ['A', 'B'] });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(error.message).to.eq('The enum must be valid in order to be added.\nErrors: No enumeration name');
-          }
+          }).to.throw('The enum must be valid in order to be added.\nErrors: No enumeration name');
         });
       });
     });
@@ -301,31 +272,22 @@ describe('JDLObject', () => {
 
       context('such as a nil relationship', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             object.addRelationship(null);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(error.message).to.eq('The relationship must be valid in order to be added.\nErrors: No relationship');
-          }
+          }).to.throw('The relationship must be valid in order to be added.\nErrors: No relationship');
         });
       });
       context('such as an incomplete relationship', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             object.addRelationship({
               from: {},
               to: { name: 'Valid', tableName: 't_valid', fields: [] },
               type: RelationshipTypes.MANY_TO_MANY,
               injectedFieldInFrom: 'something'
             });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(
-              error.message
-            ).to.eq('The relationship must be valid in order to be added.\nErrors: Wrong source entity: No entity name, No table name, No fields object');
-          }
+          }).to.throw('The relationship must be valid in order to be added.\n' +
+            'Errors: Wrong source entity: No entity name, No table name, No fields object');
         });
       });
     });
@@ -402,42 +364,28 @@ describe('JDLObject', () => {
 
       context('such as a nil option', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             object.addOption(null);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(error.message).to.eq('The option must be valid in order to be added.\nErrors: No option');
-          }
+          }).to.throw('The option must be valid in order to be added.\nErrors: No option');
         });
       });
       context('such as an empty object', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             object.addOption({});
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(
-              error.message
-            ).to.eq('The option must be valid in order to be added.\nErrors: No option name, No entity names, No excluded names, No type');
-          }
+          }).to.throw('The option must be valid in order to be added.\n' +
+            'Errors: No option name, No entity names, No excluded names, No type');
         });
       });
       context('such as a wrong option/value', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             object.addOption({
               name: UnaryOptions.SKIP_CLIENT,
               type: 'WrongType'
             });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(
-              error.message
-            ).to.eq('The option must be valid in order to be added.\nErrors: No entity names, No excluded names, No type');
-          }
+          }).to.throw('The option must be valid in order to be added.\n' +
+            'Errors: No entity names, No excluded names, No type');
         });
       });
     });

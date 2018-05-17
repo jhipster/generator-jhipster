@@ -21,28 +21,20 @@
 const expect = require('chai').expect;
 const JDLEnum = require('../../../lib/core/jdl_enum');
 
-const fail = expect.fail;
-
 describe('JDLEnum', () => {
   describe('::new', () => {
     context('when not passing any argument', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLEnum();
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The enum\'s name must be passed.');
       });
     });
     context('when not passing a name', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLEnum({ values: ['ABC'], comment: 'My enumeration.' });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The enum\'s name must be passed.');
       });
     });
     context('when passing arguments', () => {
@@ -60,12 +52,9 @@ describe('JDLEnum', () => {
 
     context('when not passing a value', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           jdlEnum.addValue(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('A valid value must be passed, got nil.');
       });
     });
     context('when passing a value', () => {

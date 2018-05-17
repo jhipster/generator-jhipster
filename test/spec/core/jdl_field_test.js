@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
 const Validations = require('../../../lib/core/jhipster/validations');
@@ -29,28 +28,23 @@ describe('JDLField', () => {
   describe('::new', () => {
     context('when not passing any argument', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLField();
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The field name and type are mandatory.');
       });
     });
-    context('when not passing the name or the type', () => {
+    context('when not passing the name', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLField({ name: null, type: 'String' });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
+        }).to.throw('The field name and type are mandatory.');
+      });
+    });
+    context('when not passing the type', () => {
+      it('fails', () => {
+        expect(() => {
           new JDLField({ name: 'abc', type: null });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The field name and type are mandatory.');
       });
     });
     context('when passing arguments', () => {
@@ -76,12 +70,9 @@ describe('JDLField', () => {
     });
     context('when passing a reserved keyword as name', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLField({ name: 'class', type: 'String' });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('IllegalNameException');
-        }
+        }).to.throw('The field name cannot be a reserved keyword, got: class.');
       });
     });
   });
@@ -143,20 +134,12 @@ describe('JDLField', () => {
 
     context('when adding an invalid validation', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           field.addValidation(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(error.message).to.eq('The passed validation must be valid.\nErrors: No validation');
-        }
-        try {
+        }).to.throw('The passed validation must be valid.\nErrors: No validation');
+        expect(() => {
           field.addValidation({ name: Validations.MIN });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-          expect(error.message).to.eq('The passed validation must be valid.\nErrors: No value');
-        }
+        }).to.throw('The passed validation must be valid.\nErrors: No value');
       });
     });
     context('when adding a valid validation', () => {

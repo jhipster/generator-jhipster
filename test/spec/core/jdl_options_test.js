@@ -20,42 +20,46 @@
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const JDLOptions = require('../../../lib/core/jdl_options');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 
 describe('JDLOptions', () => {
   describe('#addOption', () => {
-    describe('when passing an invalid option', () => {
-      it('fails', () => {
-        const options = new JDLOptions();
-        try {
-          options.addOption(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.equal('InvalidObjectException');
-        }
-      });
-    });
-    describe('when passing a valid option', () => {
-      const options = new JDLOptions();
-      const option1 = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT, entityNames: ['A', 'B', 'C'], excludedNames: ['M'] });
-      const option2 = new JDLUnaryOption({ name: UnaryOptions.SKIP_SERVER, entityNames: ['D'] });
+    context('when passing an invalid option', () => {
+      let options = null;
 
       before(() => {
+        options = new JDLOptions();
+      });
+
+      it('fails', () => {
+        expect(() => {
+          options.addOption(null);
+        }).to.throw('The passed options are invalid.\nErrors: No option');
+      });
+    });
+    context('when passing a valid option', () => {
+      let options = null;
+      let option1 = null;
+      let option2 = null;
+
+      before(() => {
+        options = new JDLOptions();
+        option1 = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT, entityNames: ['A', 'B', 'C'], excludedNames: ['M'] });
+        option2 = new JDLUnaryOption({ name: UnaryOptions.SKIP_SERVER, entityNames: ['D'] });
         options.addOption(option1);
         options.addOption(option2);
       });
 
-      describe('that has not been added before', () => {
+      context('that has not been added before', () => {
         it('adds it', () => {
           expect(options.getOptions()[0]).to.deep.eq(option1);
           expect(options.getOptions()[1]).to.deep.eq(option2);
         });
       });
 
-      describe('that has been added before', () => {
+      context('that has been added before', () => {
         before(() => {
           options.addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT, entityNames: ['A', 'J'], excludedNames: ['N', 'O'] }));
         });
@@ -76,14 +80,19 @@ describe('JDLOptions', () => {
     });
   });
   describe('#has', () => {
-    describe('with an invalid input', () => {
+    context('with an invalid input', () => {
       it('returns false', () => {
         expect(new JDLOptions().has(null)).to.be.false;
       });
     });
-    describe('with a valid input', () => {
+    context('with a valid input', () => {
+      let options = null;
+
+      before(() => {
+        options = new JDLOptions();
+      });
+
       it('returns whether the option is present', () => {
-        const options = new JDLOptions();
         options.addOption(new JDLUnaryOption({
           name: UnaryOptions.SKIP_CLIENT,
           entityNames: ['A']
@@ -93,9 +102,14 @@ describe('JDLOptions', () => {
       });
     });
   });
-  context('#size', () => {
+  describe('#size', () => {
+    let options = null;
+
+    before(() => {
+      options = new JDLOptions();
+    });
+
     it('returns the number of options', () => {
-      const options = new JDLOptions();
       expect(options.size()).to.equal(0);
       options.addOption(new JDLUnaryOption({
         name: UnaryOptions.SKIP_CLIENT,
@@ -107,6 +121,7 @@ describe('JDLOptions', () => {
   });
   describe('#toString', () => {
     const options = new JDLOptions();
+
     before(() => {
       options.addOption(new JDLUnaryOption({
         name: UnaryOptions.SKIP_CLIENT,
@@ -120,6 +135,7 @@ describe('JDLOptions', () => {
         excludedNames: ['N', 'O']
       }));
     });
+
     it('stringifies the options', () => {
       expect(options.toString()).to.eq('skipClient A, B, C, J except M, N, O\nskipServer D');
     });
