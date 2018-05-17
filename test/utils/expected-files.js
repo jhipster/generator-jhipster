@@ -133,6 +133,11 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`
     ],
 
+    memcached: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
+        `${DOCKER_DIR}memcached.yml`
+    ],
+
     gatling: [
         `${TEST_DIR}gatling/conf/gatling.conf`
     ],
