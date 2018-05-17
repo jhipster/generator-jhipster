@@ -162,7 +162,7 @@
     "start": "<%= clientPackageManager %> run webpack:dev",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
-    "test": "<%= clientPackageManager %> run lint && jest --coverage",
+    "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2",
     "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch --clearCache",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060 --watch-content-base",
     "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --profile",
