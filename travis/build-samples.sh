@@ -70,6 +70,64 @@
         #     printCommandAndEval docker kill "$i" || exitScriptWithError \
         #         "FATAL ERROR: couldn't kill docker container '$i'"
         # done
+# 12) Not about `read' built-in command
+
+    # For new lines, the correct solution is:
+    # IFS=$'\n' readarray -d '\n' array <<< "abcd
+    # efj"
+    # OR:
+    # IFS=$'\n' readarray -d '' array <<< "abcd
+    # efj"
+    # OR: IFS=$'\n' readarray -d '' array <<< "abcd
+    # IFS= readarray -d '\n' array <<< "abcd
+    # efj"
+    # OR:
+    # IFS= readarray -d '' array <<< "abcd
+    # efj"
+    # IFS= readarray -d '' array <<< "$variableWithCariageReturn"
+    # DO NOT FORGET TO SURROUND WITH CHARACTER '"', even if don't work!
+    # BUT NOT
+    # IFS=$"\n" read -d '\n' -ra array <<< "abcd
+    # efj"
+    # ("$?" -eq 1)
+    # BUT NOT
+    # IFS= read -d '\n' -ra array <<< "abcd
+    # efj"
+    # ("$?" -eq 1)
+    # BUT NOT:
+    # IFS=$"\n" read -ra array <<< "abcd
+    # efj"
+
+    # IFS=$"," read -d '\r' -ra array <<< "abcd,efj"
+    # OR
+    # IFS=$"," read -ra array <<< "abcd,efj"
+    # BUT NOT
+    # IFS= read -d ',' -ra array <<< "abcd,efj"
+    # BUT NOT
+    # IFS=$"," read -d ',' -ra array <<< "abcd,efj"
+    # BUT NOT
+    # IFS=$',' readarray array <<< "abcd,efj"
+    # (echo "${array[0]}" = "abcd,")
+    # BUT NOT
+    # IFS=$"," readarray -d ',' array <<< "abcd,efj"
+    # (echo "${array[0]}" = "abcd,")
+    # BUT NOT
+    # IFS=$"," readarray -d ',' array <<< "abcd,efj"
+    # (echo "${array[0]}" = "abcd,")
+    # BUT NOT:
+    # IFS=$"," readarray -d '' array <<< "abcd,efj"
+    # (echo "${array[0]}" = "abcd,efj")
+
+    # To well understand `read' built-in command, see
+    # how parse csv files.
+
+    # Warning: `read -a' is not POSIX compliant, as `readarray'. Don't work
+    #   for Zsh.
+    # We could use also `while read' (POSIX) loop or maybe `for in' loop. "
+    #    But too much verbose for a bash script.
+    # I don't like `for' because I've seen there is problems
+    #   for very very very long lists in an other project, in opposite of while.
+    # There is an example above.
 # 13) we could unset even if a variable is not setted.
 
 # HOW WORKS THIS SCRIPT. {{{2
@@ -1284,7 +1342,19 @@ function launchSamplesInBackground() {
     echo
     local -i i=0
     while [[ "$i" -lt "${#JHIPSTER_MATRIX_ARRAY[*]}" ]] ; do
-        local APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER_MATRIX_ARRAY[i]}""-sample"
+        local JHIPSTER=`cut -d ' ' -f 1 <<< "${JHIPSTER_MATRIX_ARRAY[i]}"`
+        local YO_FOLDER="${JHIPSTER_SAMPLES}/""$JHIPSTER"
+        local APP_FOLDER="$YO_FOLDER-sample"
+
+        echo "You will build:" "${JHIPSTER_MATRIX_ARRAY[i]}" \
+            "in '$APP_FOLDER'."
+
+        # Should never be raised because we check ../.travis.yml.
+        # Maybe in case of the user delete all folders sample!
+        if [ ! -f "$YO_FOLDER""/.yo-rc.json" ]; then
+            exitScriptWithError "FATAL ERROR: not a JHipster project."
+        fi
+
         if [[ -e "$APP_FOLDER" ]] ; then
             echo -e "WARNING: if you continue the old folder '$APP_FOLDER'" \
                 "will be deleted."
@@ -1449,23 +1519,17 @@ function returnJHIPSTER_MATRIXofFileTravisDotYml() {
         "'$JHIPSTER_LOCAL' is not a correct sample." \
         "Please read \`$ ./build-samples.sh help'."
 
-    # Should never be raised because we check ../.travis.yml.
-    # Maybe in case of the user delete all folders sample!
-    if [ ! -f "$JHIPSTER_SAMPLES/""$JHIPSTER_LOCAL""/.yo-rc.json" ]; then
-        exitScriptWithError "FATAL ERROR: not a JHipster project."
-    fi
-
 }
 
 function define_JHIPSTER_MATRIX_ARRAY() {
-    if [[ -z "${sample_list+x}" ]] ; then
-        IFS=$'\n' read -ra JHIPSTER_MATRIX_ARRAY  <<< "$TRAVIS_DOT_YAML_PARSED"
-    elif [[ "${sample_list}" =~ ^[a-z0-9-]*$ ]] ; then
+    if [[ -z "${JHIPSTER_LIST+x}" ]] ; then
+        IFS= readarray JHIPSTER_MATRIX_ARRAY <<< "$TRAVIS_DOT_YAML_PARSED"
+    elif [[ "${JHIPSTER_LIST}" =~ ^[a-z0-9-]*$ ]] ; then
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX_ARRAY[0] \
-            "$sample_list"
-    elif [[ ${sample_list} =~ ^[a-z0-9,-]*$ ]] ; then
+            "$JHIPSTER_LIST"
+    elif [[ ${JHIPSTER_LIST} =~ ^[a-z0-9,-]*$ ]] ; then
         local -a tmpSampleListArray
-        IFS=$',' read -ra tmpSampleListArray  <<< "$sample_list"
+        IFS=$',' read -ra tmpSampleListArray  <<< "$JHIPSTER_LIST"
         local -i i=0
         while [[ "$i" -lt "${#tmpSampleListArray[*]}" ]] ; do
             returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX_ARRAY[$i] \
@@ -1485,14 +1549,13 @@ function launchSamples() {
     if [[ "$ONLY_ONE_SAMPLE_VERBOSE_OUTPUT" -eq 1 ]] ; then
         isLaunchSamplesInBackground=0
         local JHIPSTER_MATRIX
-        returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$sample_list"
-        unset sample_list
+        returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER_LIST"
+        unset JHIPSTER_LIST
         time launchOnlyOneSample
     else
         isLaunchSamplesInBackground=1
         define_JHIPSTER_MATRIX_ARRAY
-        echo -e "\n\nYou will build:" ${JHIPSTER_MATRIX_ARRAY[*]}
-        unset sample_list
+        unset JHIPSTER_LIST
         time launchSamplesInBackground
     fi
 }
@@ -1532,7 +1595,7 @@ if [[ ! -z "${1+x}" ]] ; then
     elif [[ "$1" = "generate" ]] || [[ "$1" = "generateandtest" ]] ; then
         [[ "$1" = "generate" ]] && isgenerateandtest=0 || isgenerateandtest=1
         if [[ ! -z "${2+x}" ]] ; then
-            sample_list="$2"
+            JHIPSTER_LIST="$2"
             declare -a JHIPSTER_MATRIX_ARRAY
         fi
         launchSamples
