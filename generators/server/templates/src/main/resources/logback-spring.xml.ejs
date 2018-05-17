@@ -92,6 +92,9 @@
     <%_ if (cacheProvider === 'infinispan') { _%>
     <logger name="org.infinispan" level="WARN"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <logger name="net.spy.memcached" level="WARN"/>
+    <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>

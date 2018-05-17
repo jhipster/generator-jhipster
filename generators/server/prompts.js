@@ -230,14 +230,18 @@ function askForServerSideOpts(meta) {
                     name: '[BETA] Yes, with the Infinispan implementation (hybrid cache, for multiple nodes)'
                 },
                 {
+                    value: 'memcached',
+                    name: 'Yes, with Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!'
+                },
+                {
                     value: 'no',
-                    name: 'No (when using an SQL database, this will also disable the Hibernate L2 cache)'
+                    name: 'No - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!'
                 }
             ],
             default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
         },
         {
-            when: response => ((response.cacheProvider !== 'no' || applicationType === 'gateway') && response.databaseType === 'sql'),
+            when: response => (((response.cacheProvider !== 'no' && response.cacheProvider !== 'memcached') || applicationType === 'gateway') && response.databaseType === 'sql'),
             type: 'confirm',
             name: 'enableHibernateCache',
             message: 'Do you want to use Hibernate 2nd level cache?',

@@ -282,6 +282,13 @@
         </dependency>
 -->
         <%_ } _%>
+        <%_ if (cacheProvider === 'memcached') { _%>
+        <dependency>
+            <groupId>io.sixhours</groupId>
+            <artifactId>memcached-spring-boot-starter</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
