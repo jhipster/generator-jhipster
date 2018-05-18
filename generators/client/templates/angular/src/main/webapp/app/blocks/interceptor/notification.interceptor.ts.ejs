@@ -40,9 +40,9 @@ export class NotificationInterceptor implements HttpInterceptor {
                 let alertParams = null;
                 <%_ } _%>
                 arr.forEach((entry) => {
-                    if (entry.endsWith('app-alert')) {
+                    if (entry.toLowerCase().endsWith('app-alert')) {
                         alert = event.headers.get(entry);
-                    }<% if (enableTranslation) { %> else if (entry.endsWith('app-params')) {
+                    }<% if (enableTranslation) { %> else if (entry.toLowerCase().endsWith('app-params')) {
                         alertParams = event.headers.get(entry);
                     }<% } %>
                 });
