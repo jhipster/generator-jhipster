@@ -370,23 +370,28 @@ _%>
                 <%_ } _%>
             <%_ } _%>
         <%_ } _%>
-        <%_ for (idx in relationships) {
+        <%_
+        const alreadyGeneratedEntities = []
+        for (idx in relationships) {
             const relationshipValidate = relationships[idx].relationshipValidate;
+            const otherEntityName = relationships[idx].otherEntityName;
             const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-            const relationshipFieldName = relationships[idx].relationshipFieldName;
             const relationshipType = relationships[idx].relationshipType;
             const relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
             const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
             if (relationshipValidate !== null && relationshipValidate === true) { _%>
         // Add required entity
-        <%= otherEntityNameCapitalized %> <%= relationshipFieldName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
-        em.persist(<%= relationshipFieldName %>);
+            <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
+        <%= otherEntityNameCapitalized %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
+        em.persist(<%= otherEntityName %>);
         em.flush();
-            <%_ if (relationshipType === 'many-to-many' || relationshipType === 'one-to-many') { _%>
-        <%= entityInstance %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= relationshipFieldName %>);
-            <%_ } else { _%>
-        <%= entityInstance %>.set<%= relationshipNameCapitalized %>(<%= relationshipFieldName %>);
             <%_ } _%>
+            <%_ if (relationshipType === 'many-to-many' || relationshipType === 'one-to-many') { _%>
+        <%= entityInstance %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= otherEntityName %>);
+            <%_ } else { _%>
+        <%= entityInstance %>.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
+            <%_ } _%>
+        <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
         <%_ } } _%>
         return <%= entityInstance %>;
     }

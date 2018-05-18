@@ -720,10 +720,10 @@ module.exports = class extends BaseGenerator {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
                             relationship.otherEntityModuleName = `${context.angularXAppName + relationship.otherEntityNameCapitalized}Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
-                            if (context.skipUiGrouping || otherEntityData === undefined) {
+                            if (context.skipUiGrouping || otherEntityData === undefined || otherEntityData.clientRootFolder === undefined) {
                                 relationship.otherEntityClientRootFolder = '';
                             } else {
-                                relationship.otherEntityClientRootFolder = otherEntityData.clientRootFolder;
+                                relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
                             }
                             if (otherEntityData !== undefined && otherEntityData.clientRootFolder) {
                                 if (context.clientRootFolder === otherEntityData.clientRootFolder) {
