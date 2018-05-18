@@ -470,7 +470,7 @@ module.exports = class extends BaseGenerator {
                 context.entityReactName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
                 context.entityStateName = _.kebabCase(context.entityAngularName);
                 context.entityUrl = context.entityStateName;
-                context.entityTranslationKey = context.clientRootFolder ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`) : context.entityInstance;
+                context.entityTranslationKey = context.entityInstance;
                 context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.reactiveRepositories = context.applicationType === 'reactive' && ['mongodb', 'couchbase'].includes(context.databaseType);
