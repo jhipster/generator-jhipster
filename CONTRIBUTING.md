@@ -238,7 +238,7 @@ You can run the travis builds locally by following below commands
 
 CD into the [./travis](./travis) folder `cd travis` from the generator source code root folder
 
-Run `./build-samples.sh generate|generateandtest [ sample_name[,sample_name][,...] ] `
+Run `./build-samples.sh generate|generateandtest [ sample_name[,sample_name][,...] ] [ --colorizelogfile ] `
 
 This will create the travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your Text Editor or IDE to check it further. You can also run tests locally on the project to verify
 
@@ -254,6 +254,7 @@ Command name can be as below:
 Examples:
 
     `./build-samples.sh generateandtest ngx-default`: build and test only ngx-default
+    `./build-samples.sh generateandtest ngx-default --colorizelogfile`: same as before and keep colors in logfile (needs plugin in your Text Editor, see `./build-samples.sh help`).
     `./build-samples.sh generateandtest ngx-default,react-default`: generate and test ngx-default and react-default
     `./build-samples.sh generateandtest`: generate and test all samples listed in `./build-sample.sh help`
 

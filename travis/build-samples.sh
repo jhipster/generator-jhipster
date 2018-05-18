@@ -129,6 +129,8 @@
     #   for very very very long lists in an other project, in opposite of while.
     # There is an example above.
 # 13) we could unset even if a variable is not setted.
+# 14) Do not forget to read `man bash', especially sections " \
+#    "SHELL BUILT-IN COMMANDS" AND "BUGS".
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -268,9 +270,7 @@
 # or "${BASH_SOURCE[0]}". (see reference of me in function usage()
 # TODO java send to STDOUT and STDERR
 # TODO actually there is collisions when we launch several builds in same time
-#   they want all port 8080 and 9060.
-# TODO escape ANSI codes and Maven download progress bar for logfile (or advise
-#   Vim;-))
+#   they want all port 8080.
 # TODO add option to minimize output in console when we generate and
 #   testandbuild only one sample.
 # TODO improve comments.
@@ -417,10 +417,12 @@ function usage() {
             "\t\tsample_name [--consoleverbose] \n" \
             "\t\t | sample_name[,sample_name][,...] \n" \
         "\t\t]\n" \
+        "\t\t[--colorizelogfile]\n" \
         "\tgenerateandtest [ \n" \
             "\t\tsample_name [--consoleverbose] \n" \
             "\t\t | sample_name[,sample_name][,...] \n" \
         "\t\t]\n" \
+        "\t\t[--colorizelogfile]\n" \
         "\tclean\n" \
         "\thelp\n\n" \
     " \`./build-samples.sh generate/generateandtest'\n" \
@@ -461,7 +463,19 @@ function usage() {
     "Name of samples indicate their test goal. They have different application"\
     "configurations (defined in '.yo-rc.json') and different entity" \
     "configurations (defined in the folder .jhipster of a " \
-    "'./scripts/sample-name-sample' folder)."
+    "'./scripts/sample-name-sample' folder).\n\n"
+    "* \`--consoleverbose'\n" \
+        "\t=> all is printed in the console." \
+        "\tCould be used only with if there is you build only one sample_name" \
+        "\t(too much logs in console, not advise)\n" \
+    "* \`--colorizelogfile'\n" \
+        "\n\t=> ansi code will not be deleted in logfile." \
+        "\n\t* For Vim users use:" \
+            "https://github.com/powerman/vim-plugin-AnsiEsc."
+        "\n\t* For IntelliJ/JetBrains users try:" \
+            "https://plugins.jetbrains.com/plugin/9707-ansi-highlighter"
+        "\n\t* For Visual Studio Code users try:" \
+            "https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer"
 
     usageClean
 
@@ -470,8 +484,6 @@ function usage() {
         "—————————————————————————————————————\n" \
     "\`$ ./build-samples.sh generate ngx-default' " \
         "=> generate a new project at travis/samples/ngx-default-sample\n" \
-    "\`$ ./build-samples.sh generate ngx-default --consoleverbose' " \
-        "=> all is printed in the console (thanks \`--consoleverbose' lot of logs, not advise)\n" \
     "\`$ ./build-samples.sh generateandtest ngx-default' " \
         "=> generate a new project at travis/samples/ngx-default-sample " \
             "then build and test it.\n" \
@@ -628,10 +640,10 @@ function testRequierments() {
         CYGWIN*)    exitScriptWithError "FATAL ERROR: " \
             "This Script could not work on Cygwin " \
             "because Node.js isn't implemented on Cygwin";;
-        MINGW*)     echo -e "WARNING: I don't know if it could works on Mingw."\
+        MINGW*)     echo -e "WARNING: We don't know if it could works on Mingw."\
             "If you test, please report it by open a new issue.\n\n" ; " \
             "sleep 20 ;;
-        *)     echo -e "WARNING: I don't know if it could works on your " \
+        *)     echo -e "WARNING: We don't know if it could works on your " \
             "Operating System."\
             "If you test, please report it by open a new issue.\n\n" ; " \
             "sleep 20 ;;
@@ -875,6 +887,14 @@ function treatEndOfBuild() {
     fi
 
     printCommandAndEval mv "${LOGFILENAME}" "${logrenamed}"
+
+    if [[ "$COLORIZELOGFILE" -eq 0 ]] ; then
+        # https://stackoverflow.com/questions/6534556/how-to-remove-and-all-of-the-escape-sequences-in-a-file-using-linux-shell-sc
+        printCommandAndEval "sed -i 's///g' '${logrenamed}' > /dev/null"
+    fi
+    printCommandAndEval "sed -i" \
+        "'s/^Progress.*.*Downloaded from/Downloaded from/g'" \
+        "'${logrenamed}' > /dev/null"
 
     # Test if we launch not this function in generateNode_Modules_Cache().
     # True if launched from functions generateProject() and
@@ -1168,8 +1188,8 @@ function generateNode_Modules_Cache() {
             "${NODE_MODULES_CACHE_ANGULAR}" || \
             errorInBuildExitCurrentSample "FATAL ERROR: not a JHipster project."
         cd "${NODE_MODULES_CACHE_ANGULAR}"
-        local jhipstercommand="jhipster --force --no-insight --skip-checks \
-            --with-entities --skip-git --skip-commit-hook"
+        local jhipstercommand="jhipster --force --no-insight --skip-checks "\
+            "--with-entities --skip-git --skip-commit-hook"
         printFileDescriptor3 "$jhipstercommand"
         eval "$jhipstercommand"
 
@@ -1333,10 +1353,20 @@ function wrapperLaunchScript() {
 # function launchSamplesInBackground() {{{3
 function launchSamplesInBackground() {
 
-    local -i TESTGENERATOR=1
+    if [[ ! "${JHIPSTER_MATRIX_ARRAY[*]}" =~ "(\s|^)ngx-default(\s|$)" ]] ; then
+        echo -e "\n\nWARNING: " \
+            "we advise to add build of 'ngx-default'.\n"
+        sleep 4
+    fi
 
+    local -i TESTGENERATOR=1
     if [[ "$isgenerateandtest" -eq 0 ]] ; then
-        doesItTestGenerator "during generation of 'ngx-default'"
+        if [[ "${JHIPSTER_MATRIX_ARRAY[*]}" =~ "(\s|^)ngx-default(\s|$)" ]]
+        then
+            doesItTestGenerator "during generation of 'ngx-default'"
+        else
+            TESTGENERATOR=0
+        fi
     fi
 
     echo
@@ -1346,7 +1376,7 @@ function launchSamplesInBackground() {
         local YO_FOLDER="${JHIPSTER_SAMPLES}/""$JHIPSTER"
         local APP_FOLDER="$YO_FOLDER-sample"
 
-        echo "You will build:" "${JHIPSTER_MATRIX_ARRAY[i]}" \
+        echo "You will build: '${JHIPSTER_MATRIX_ARRAY[i]}'" \
             "in '$APP_FOLDER'."
 
         # Should never be raised because we check ../.travis.yml.
@@ -1565,52 +1595,63 @@ function tooMuchArguments() {
         "Please see \`./build-samples.sh help'."
 }
 
-if [[ "$#" -gt 3 ]] ; then
+if [[ "$#" -gt 4 ]] ; then
     tooMuchArguments
+elif [[ "$#" -eq 0 ]] ; then
+    usage
 fi
+
 if [[ ! -z "${1+x}" ]] && \
     ([[ "$1" = 'generateandtest' ]] || \
     [[ "$1" = 'generate' ]]) ; then
-    ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=0
-    if [[ ! -z  "${3+x}" ]] && \
-        [[ "$3" -eq "--consoleverbose" ]] ; then
-        ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=1
-        if [[ ${2} =~ ^[a-z1-9,-]*$ ]] ; then
-            exitScriptWithError "\n\n\nFATAL ERROR '--consoleverbose' " \
-                "option could " \
-                "be used only when there is only one sample to build." \
-                "Please see \`./build-samples.sh help'."
+    declare ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=0
+    declare COLORIZELOGFILE=0
+    declare -i i=3
+    while [[ "$i" -le "$#" ]] ; do
+        if [[ "$i" -eq "--consoleverbose" ]] ; then
+            ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=1
+            if [[ ${2} =~ ^[a-z1-9,-]*$ ]] ; then
+                exitScriptWithError "\n\n\nFATAL ERROR '--consoleverbose' " \
+                    "option could " \
+                    "be used only when there is only one sample to build." \
+                    "Please see \`./build-samples.sh help'."
+            fi
+        elif [[ "$i" -eq "--colorizelogfile" ]] ; then
+            COLORIZELOGFILE=1
+        else
+            exitScriptWithError "\n\n\nFATAL ERROR: '$i' is not a correct" \
+                "argument. Please read \`./build-samples.sh help'".
         fi
-    fi
+        i=$((i+1))
+    done
 fi
 
+echo -e "\n\nThanks to use this script. Do not hesitate to open a new issue" \
+    "for any thing, thanks in advance! This script is young (06/2018)!"
+
 cd "${JHIPSTER_TRAVIS}"
-if [[ ! -z "${1+x}" ]] ; then
-    if [ "$1" = "help" ]; then
-        if [[ ! -z "${2+x}" ]] ; then
-            tooMuchArguments
-        fi
-        usage
-        exit 0
-    elif [[ "$1" = "generate" ]] || [[ "$1" = "generateandtest" ]] ; then
-        [[ "$1" = "generate" ]] && isgenerateandtest=0 || isgenerateandtest=1
-        if [[ ! -z "${2+x}" ]] ; then
-            JHIPSTER_LIST="$2"
-            declare -a JHIPSTER_MATRIX_ARRAY
-        fi
-        launchSamples
-    elif [ "$1" = "clean" ]; then
-        if [[ ! -z "${2+x}" ]] ; then
-            tooMuchArguments
-        fi
-        cleanAllProjects
-    else
-        firstArgument=`echo -e "\n\n\nFATAL ERROR: incorrect argument. " \
-            "Please see \\\`$ ./build-samples.sh help'".`
-        exitScriptWithError "$firstArgument"
+if [ "$1" = "help" ]; then
+    if [[ ! -z "${2+x}" ]] ; then
+        tooMuchArguments
     fi
-else
     usage
+    exit 0
+elif [[ "$1" = "generate" ]] || [[ "$1" = "generateandtest" ]] ; then
+    [[ "$1" = "generate" ]] && isgenerateandtest=0 || isgenerateandtest=1
+    if [[ ! -z "${2+x}" ]] ; then
+        JHIPSTER_LIST="$2"
+        declare -a JHIPSTER_MATRIX_ARRAY
+    fi
+    launchSamples
+elif [ "$1" = "clean" ]; then
+    if [[ ! -z "${2+x}" ]] ; then
+        tooMuchArguments
+    fi
+    cleanAllProjects
+else
+    firstArgument=`echo -e "\n\n\nFATAL ERROR: incorrect argument. " \
+        "Please see \\\`$ ./build-samples.sh help'".`
+    exitScriptWithError "$firstArgument"
 fi
 
 # vim: foldmethod=marker sw=4 ts=4 et textwidth=80 foldlevel=0
