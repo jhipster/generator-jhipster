@@ -48,6 +48,15 @@ eureka:
         service-url:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
+<%_ if (cacheProvider === 'memcached') { _%>
+
+memcached:
+    cache:
+        servers: localhost:11211
+        mode: static
+        expiration: 86400
+        protocol: binary
+<%_ } _%>
 
 spring:
     profiles:
