@@ -131,6 +131,18 @@
 # 13) we could unset even if a variable is not setted.
 # 14) Do not forget to read `man bash', especially sections " \
 #    "SHELL BUILT-IN COMMANDS" AND "BUGS".
+# 15)
+#       function func() { local -r cc=dd ; inner ; echo -n $cc ; } && \
+#       inner() { echo -n $cc ; local -r cc=gg ; echo -n $cc ;} && func
+#       AS
+#       function func() { local cc=dd ; inner ; echo -n $cc ; } && \
+#       inner() { echo -n $cc ; ^C echo -n $cc ;} && func
+#       ==> ddggdd
+#       CONTRARY TO
+#       function func() { cc=dd ; inner ; echo -n $cc ; } && \
+#       inner() { echo -n $cc ; cc=gg ; echo -n $cc ;} && func
+#       ===> ddgggg
+#       We use this behaviour in generateNode_Modules_Cache()
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -193,7 +205,8 @@
 #       On my computer (JulioJu) I save 10 minutes of time for each sample.
 #   * II LAUNCH ONLY ONE SAMPLE
 #       * Could be seen as "MAIN" for:
-#       `./build-samples.sh generate/generateandtest sample_name --consoleverbose' \
+#       `./build-samples.sh generate/generateandtest sample_name \
+#               --consoleverbose' \
 #           (three mandatory arguments)
 #       * contains launchOnlyOneSample(),
 #       the main function of this subtitle
@@ -252,32 +265,17 @@
 
 # TODO: {{{2
 # ========
-# TODO check if variables are properly unsetted in functions belong of a scope.
-# In bash, inner functions belong same scope than outer function (we could
-# see that with keyword "local"
 # TODO tell to the original author of this script: don't use keyword "source"
 # it launches script in current execution context. So exit 0 exit all!
-# TODO check if all escapes of set -e with `command || commandIfFailure' are
-# goode. Otherwise replace it by if statement.
 # TODO add a test to check if we have enough size.
 # TODO check https://google.github.io/styleguide/shell.xml
 # TODO See others todo in this file.
-#   See corresponding TODO in function generateProject().
-# TODO too much echo /dev/fd/[34]. Factorize it, remove not useful.
-# TODO do not printCommandAndEval() several times testRequierments in console.
 # TODO replace all references of the name of this script by local
 # me='$(basename "$0")'
 # or "${BASH_SOURCE[0]}". (see reference of me in function usage()
-# TODO java send to STDOUT and STDERR
 # TODO actually there is collisions when we launch several builds in same time
 #   they want all port 8080.
-# TODO add option to minimize output in console when we generate and
-#   testandbuild only one sample.
 # TODO improve comments.
-# TODO do not advaise to change ../.travis.yml, instead let option to
-#   pass several samples in command line.
-# TODO stop docker containers.
-# TODO explain how to launch docker without sudo for linux users.
 
 # PREPARE SCRIPT {{{1
 # ==============================================================================
@@ -308,7 +306,6 @@ trap ctrl_c INT
 function ctrl_c() {
     cd "${JHIPSTER_TRAVIS}"
     erroredAllPendingLog
-    # TODO ln -s all node_modules folders
     1>&2 echo "Exit by user."
     if [[ -e /dev/fd/4 ]] ; then
         1>&4 echo "Exit by user."
@@ -351,7 +348,8 @@ function printCommandAndEval() {
     if [[ -e /dev/fd/3 ]] && \
         [[ -e /dev/fd/4 ]] ; then
         # See function launchSamplesInBackground()
-        echo "${PS1}${@}" >> >(tee --append /dev/fd/3) 2>> >(tee --append /dev/fd/4)
+        echo "${PS1}${@}" >> >(tee --append /dev/fd/3) \
+            2>> >(tee --append /dev/fd/4)
         eval "$@" >> >(tee --append /dev/fd/3) 2>> >(tee --append /dev/fd/4)
     else
         echo "${PS1}${@}"
@@ -405,8 +403,8 @@ function usageClean() {
 # argument who match.
 # ====================
 function usage() {
-    local me=$(basename "$0")
-    local list_of_samples=`cut -d ' ' -f 1 <<< "$TRAVIS_DOT_YAML_PARSED"`
+    local -r me=$(basename "$0")
+    local -r list_of_samples=`cut -d ' ' -f 1 <<< "$TRAVIS_DOT_YAML_PARSED"`
 
     echo -e "\n\nScript than emulate well remote Travis CI build " \
         " https://travis-ci.org/jhipster/generator-jhipster.\n"
@@ -540,9 +538,8 @@ function cleanAllProjects() {
     usageClean
     echo -e "4) Do not forget to read \`./build-samples.sh help'\n"
 
-    local confirmationFirstParameter=`echo -e "Warning: " \
-        "are you sure to delete " \
-        "all samples/*-sample [y/n]? "`
+    local confirmationFirstParameter="Warning: are you sure to delete "\
+"all samples/*-sample [y/n]? "
     confirmationUser "$confirmationFirstParameter" \
         'echo ""' \
         'exitScriptWithError "ABORTED."'
@@ -560,7 +557,7 @@ function cleanAllProjects() {
             rm -Rf "$dirToRemove"
     done <<< "$foldersSample"
 
-    local NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
+    local -r NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
 
     echo -e "\nNote: We are sure than '${NODE_MODULE_SHORT_NAME}' " \
         "doesn't  exists:\n     ==> you could launch a sanitzed new build.\n"
@@ -573,23 +570,20 @@ function cleanAllProjects() {
 # ==============================================================================
 # function echoTitleBuildStep() {{{3
 function echoSmallTitle() {
-    local ELAPSED=`echo -e "Elapsed: $(($SECONDS / 3600))" \ "hrs " \
-        "$((($SECONDS / 60) % 60)) min " \
-        "$(($SECONDS % 60))sec"`
+    local -r ELAPSED="Elapsed: $(($SECONDS / 3600)) hrs "\
+"$((($SECONDS / 60) % 60)) min $(($SECONDS % 60))sec"
     echo -e "\n\n\n" \
         "\n'$@'" \
         "(`date +%r`, '$ELAPSED')\n" \
         "================================================================" \
         "\n"
-    unset ELAPSED
 }
 
 # function echoTitleBuildStep() {{{3
 function echoTitleBuildStep() {
     # Echo in STDOUT
-    local ELAPSED=`echo -e "Elapsed: $(($SECONDS / 3600))" \ "hrs " \
-        "$((($SECONDS / 60) % 60)) min " \
-        "$(($SECONDS % 60))sec"`
+    local -r ELAPSED="Elapsed: $(($SECONDS / 3600)) hrs "\
+"$((($SECONDS / 60) % 60)) min $(($SECONDS % 60))sec"
     echo -e "\n" \
         "================================================================" \
         "================================================================" \
@@ -615,9 +609,8 @@ function echoTitleBuildStep() {
 # ====================
 # ====================
 
-# I suppose ipoute 2 is installed on main linux distro.
 # function testIfPortIsFreeWithSs() {{{3
-# TODO BIG WARNING
+# I suppose iproute 2 is installed on main linux distro.
 function testIfPortIsFreeWithSs() {
     ss -nl | grep "$1" 1>> /dev/null \
         && errorInBuildExitCurrentSample "FATAL ERROR: " \
@@ -632,7 +625,7 @@ function testRequierments() {
     # https://askubuntu.com/a/521571"
     echo -e "\n\n"
 
-    local unameOut="$(uname -s)"
+    local -r unameOut="$(uname -s)"
     local machine
     case "${unameOut}" in
         Linux*)     machine=Linux;;
@@ -640,7 +633,8 @@ function testRequierments() {
         CYGWIN*)    exitScriptWithError "FATAL ERROR: " \
             "This Script could not work on Cygwin " \
             "because Node.js isn't implemented on Cygwin";;
-        MINGW*)     echo -e "WARNING: We don't know if it could works on Mingw."\
+        MINGW*)     echo -e "WARNING: " \
+            "We don't know if it could works on Mingw."\
             "If you test, please report it by open a new issue.\n\n" ; " \
             "sleep 20 ;;
         *)     echo -e "WARNING: We don't know if it could works on your " \
@@ -671,7 +665,7 @@ function testRequierments() {
         "FATAL ERROR: please install JDK. "
     echo
 
-    javaVersion="$(java -version 2>&1)"
+    local -r javaVersion="$(java -version 2>&1)"
     grep "OpenJDK" <<< "$javaVersion" && errorInBuildExitCurrentSample \
         'FATAL ERROR: do not use OpenJDK, please install Oracle Java.'
     echo
@@ -684,7 +678,7 @@ function testRequierments() {
         "If JHipster is already installed, please add it in your PATH."
     echo
 
-    if [[ "$isgenerateandtest" -eq 1 ]] ; then
+    if [[ "$ISGENERATEANDTEST" -eq 1 ]] ; then
 
         if uname -a | grep -i darwin 1>> /dev/null ; then
             printCommandAndEval \
@@ -715,7 +709,8 @@ function testRequierments() {
 
             printCommandAndEval "docker-compose --version" || \
                 (errorInBuildExitCurrentSample \
-                "FATAL ERROR: please install docker-compose. " && skipDockerTests=1)
+                "FATAL ERROR: please install docker-compose. " \
+                && skipDockerTests=1)
             echo
         fi
 
@@ -817,7 +812,8 @@ function createLogFile() {
         echoSmallTitle "Create log file and save output in '${LOGFILENAME}'"
         exec 1>> >(tee --append "${LOGFILENAME}") 2>&1
     else
-        # save the originals descriptor (stdout to console and stderr to console).
+        # save the originals descriptor
+        # (stdout to console and stderr to console).
         exec 3>&1 4>&2
         echoSmallTitle "Create log file and redirect output in '${LOGFILENAME}'"
         exec 1>> "${LOGFILENAME}" 2>> "${LOGFILENAME}"
@@ -862,6 +858,7 @@ function treatEndOfBuild() {
     sleep 10
 
     # TODO improve it. Actually, kill all docker commands. Not cool!
+    local -a dockerContainers
     IFS=$' ' read -ra dockerContainers <<< `docker ps -q`
     # If `docker ps -q` is empty, "${#dockerContainers[0]}" takes value 1.
     if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
@@ -880,21 +877,32 @@ function treatEndOfBuild() {
         done
     fi
 
-    if [[ "$ERROR_IN_SAMPLE" -eq 0 ]] ; then
-        local logrenamed="${beginLogfilename}"".passed.""${endofLogfilename}"
-    else
-        local logrenamed="${beginLogfilename}"".errored.""${endofLogfilename}"
-    fi
-
-    printCommandAndEval mv "${LOGFILENAME}" "${logrenamed}"
-
     if [[ "$COLORIZELOGFILE" -eq 0 ]] ; then
-        # https://stackoverflow.com/questions/6534556/how-to-remove-and-all-of-the-escape-sequences-in-a-file-using-linux-shell-sc
-        printCommandAndEval "sed -i 's///g' '${logrenamed}' > /dev/null"
+        # https://superuser.com/questions/380772/removing-ansi-color-codes-from-text-stream
+        printFileDescriptor3 "$PS1"\
+            "sed -i \'s/^H/g ;" \
+            "s/^Progress.*^M.*Downloaded from/Downloaded from/g ;" \
+            "s/^M//g ;" \
+            "s/^[\[[0-9;]*[a-zA-Z]//g\'" \
+            "'${LOGFILENAME}' 1>> /dev/null"
+        echo coucou
+        sed -i 's///g ;
+            s/^Progress.*.*Downloaded from/Downloaded from/g ;
+            s///g ;
+            s/\[[0-9;]*[a-zA-Z]//g' \
+            "${LOGFILENAME}" 1>> /dev/null
+    else
+        printFileDescriptor3 "$PS1"\
+            "sed -i \'s/^H/g ;" \
+            "s/^Progress.*^M.*Downloaded from/Downloaded from/g ;" \
+            "s/^M//g\'" \
+            "'${LOGFILENAME}' 1>> /dev/null"
+        echo coucou
+        sed -i 's///g ;
+            s/^Progress.*.*Downloaded from/Downloaded from/g ;
+            s///g ' \
+            "${LOGFILENAME}" 1>> /dev/null
     fi
-    printCommandAndEval "sed -i" \
-        "'s/^Progress.*.*Downloaded from/Downloaded from/g'" \
-        "'${logrenamed}' > /dev/null"
 
     # Test if we launch not this function in generateNode_Modules_Cache().
     # True if launched from functions generateProject() and
@@ -912,25 +920,32 @@ function treatEndOfBuild() {
         fi
     else
         if [[ "${ERROR_IN_SAMPLE}" -eq 0 ]] ; then
-            cp "${logrenamed}" "${NODE_MODULES_CACHE_SAMPLE}"
+            printCommandAndEval "cp '$FILE_ANGULAR_PACKAGE_JSON' \
+                '$FILE_ANGULAR_PACKAGE_JSON_CACHED'"
         else
             exit 200
         fi
     fi
 
+    if [[ "$ERROR_IN_SAMPLE" -eq 0 ]] ; then
+        local -r LOGRENAMED="${beginLogfilename}"".passed.""${endofLogfilename}"
+    else
+        local -r LOGRENAMED="${beginLogfilename}"".errored.${endofLogfilename}"
+    fi
+    printCommandAndEval mv "${LOGFILENAME}" "${LOGRENAMED}"
+
     if [[ "$isLaunchSamplesInBackground" -eq 1 ]] ; then
         restoreSTDERRandSTDOUTtoConsole
     fi
 
-    unset logrenamed
+    printCommandAndEval "cp '${LOGRENAMED}' '${APP_FOLDER}'"
 }
 
 # function errorInBuildStopCurrentSample() {{{3
 function errorInBuildStopCurrentSample() {
 
-    local ELAPSED=`echo -e "Elapsed: $(($SECONDS / 3600))" \ "hrs " \
-        "$((($SECONDS / 60) % 60)) min " \
-        "$(($SECONDS % 60))sec"`
+    local -r ELAPSED="Elapsed: $(($SECONDS / 3600)) hrs "\
+"$((($SECONDS / 60) % 60)) min $(($SECONDS % 60)) sec"
     if [[ -e /dev/fd/4 ]] ; then
         1>&2 echo "$@. Error in '$JHIPSTER_MATRIX' at `date +%r`" \
             "(elapsed: '$ELAPSED')" \
@@ -939,7 +954,6 @@ function errorInBuildStopCurrentSample() {
         1>&2 echo "$@. Error in '$JHIPSTER_MATRIX' at `date +%r`" \
             "(elapsed: '$ELAPSED')"
     fi
-    unset ELAPSED
 
     # Thanks this variable set to 1
     # 1. function launchNewBash() will not launch new ./scripts/*.sh
@@ -955,16 +969,10 @@ function errorInBuildStopCurrentSample() {
 
 # errorInBuildExitCurrentSample() {{{2
 errorInBuildExitCurrentSample() {
-    if [[ ! -z ${JHIPSTER+x} ]] && \
-        [[ ! -z ${JHIPSTER_MATRIX+x} ]]; then
-        errorInBuildStopCurrentSample "$@"
-        treatEndOfBuild
-        exit 80
-    else
-        # For function testRequierments() launched in function
-        # launchSamplesInBackground()
-        exitScriptWithError "$@"
-    fi
+    ERROR_IN_SAMPLE=1
+    errorInBuildStopCurrentSample "$@"
+    treatEndOfBuild
+    exit 80
 }
 
 # function isSkipClientInFileYoRcDotConf() {{{3
@@ -987,13 +995,13 @@ function yarnLink() {
             "you havn't executed \`yarn link' in a folder " \
             "named 'generator-jhipster'. " \
             "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
-    local GENERATOR_JHIPSTER_FOLDER="`pwd`/node_modules/generator-jhipster"
+    local -r GENERATOR_JHIPSTER_FOLDER="`pwd`/node_modules/generator-jhipster"
     ls -la "$GENERATOR_JHIPSTER_FOLDER"
     # Test if `yarn link' is correct
     cd -P "${JHIPSTER_TRAVIS}/.."
-    local JHIPSTER_TRAVISReal=`pwd -P`
+    local -r JHIPSTER_TRAVISReal=`pwd -P`
     cd "$GENERATOR_JHIPSTER_FOLDER"
-    local GENERATOR_JHIPSTER_FOLDER_REAL=`pwd -P`
+    local -r GENERATOR_JHIPSTER_FOLDER_REAL=`pwd -P`
     if [ "$JHIPSTER_TRAVISReal" != "$GENERATOR_JHIPSTER_FOLDER_REAL" ] ; then
         errorInBuildExitCurrentSample "FATAL ERROR: " \
             "'$JHIPSTER_TRAVISReal and '$GENERATOR_JHIPSTER_FOLDER_REAL' " \
@@ -1001,13 +1009,12 @@ function yarnLink() {
     else
         echo "Command \`yarn link' seems corect."
     fi
-    unset GENERATOR_JHIPSTER_FOLDER JHIPSTER_TRAVISReal
 }
 
 # function launchNewBash() {{{3
 function launchNewBash() {
-    local pathOfScript="$1"
-    local print="$2"
+    local -r pathOfScript="$1"
+    local -r print="$2"
     # "$JHIPSTER" argument is used only to know which build is launched.
     # It's only a marker for when we call "ps -C bash. The argument "$1"
     # is not readden in any ./scripts/*.sh
@@ -1034,7 +1041,6 @@ function launchNewBash() {
             1>&2 echo -e "SKIP '${2}' cause of previous error."
         fi
     fi
-    unset pathOfScript
 }
 
 # III 2) EXECUTE SCRIPTS ./scripts/*.sh {{{2
@@ -1043,14 +1049,12 @@ function launchNewBash() {
 
 # function doesItTestGenerator() {{{3
 function doesItTestGenerator() {
-    local confirmationFirstParameter=`echo -e "Do you want execute " \
-        "\\\`yarn test' in " \
-        "generator-jhipster '$1'? [y/n] "`
+    local -r confirmationFirstParameter="Do you want execute "\
+"\`yarn test' in generator-jhipster '$1'? [y/n]"
     confirmationUser "$confirmationFirstParameter" \
         "TESTGENERATOR=1 ; \
         echo Generator test will be test later." \
         "TESTGENERATOR=0 ; echo -e '\n\nSKIP test generator.\n'"
-    unset confirmationFirstParameter
 }
 
 # function generateProject() {{{3
@@ -1060,10 +1064,7 @@ function doesItTestGenerator() {
 # Corresponding of the entry "install" in ../.travis.yml
 function generateProject() {
 
-    # `./build-samples.sh generate', confirmationUser
-    # if he wants test it.
-    # `./build-samples.sh generate/generateandtest sample-name', confirmationUser
-    # if he wants test it.
+    # `./build-samples.sh generate/generateandtest sample-name'
     if ([[ "${TESTGENERATOR}" -eq 1 ]] && \
         [[ "${isLaunchSamplesInBackground}" -eq 0 ]] ) || \
         ( [[ "${TESTGENERATOR}" -eq 1 ]] && \
@@ -1133,48 +1134,53 @@ function generateNode_Modules_Cache() {
 
     echoSmallTitle "Check node_modules cache"
 
-    # Save JHIPSTER_MATRIX
-    if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
-        JHIPSTER_MATRIX_SAVED=${JHIPSTER_MATRIX}
-    fi
     # Used in functions errorInBuildExitCurrentSample() and createLogFile()
-    local JHIPSTER_MATRIX="${NODE_MODULES_CACHE_SAMPLE}"
+    local -r JHIPSTER_MATRIX="node_modules_cache_angular"
+    local -r JHIPSTER="$JHIPSTER_MATRIX"
+    local -r APP_FOLDER="${NODE_MODULES_CACHE_ANGULAR}"
 
-    # Display stderr on terminal.
-    local beginLogfilename="${NODE_MODULES_CACHE_SAMPLE}"/node_modules_cache
-    local endofLogfilename="passed.angular.local-travis.log"
-    if ls "$beginLogfilename".*."$endofLogfilename" 1> /dev/null 2>> /dev/null
-    then
-        # TODO
-        # Test if package.json.ejs has changed remotly for the last
-        # generation of node_modules
-        echo -e "A file named" "$beginLogfilename"".*.""$endofLogfilename" \
-            "was found." \
-            "\n\nBE CARREFUL LOCAL BUILD SAMPLES " \
-            "USE CACHED NODE_MODULES\n." \
-            "So if you done a \`git pull' " \
-            "or if you modifiy something relative to \`package.json', " \
-            "you could not see bugs\n. " \
-            "To refresh cache, simply run \`./build-samples.sh clean'"
-        return 0
+    local -r FILE_ANGULAR_PACKAGE_JSON=\
+"${JHIPSTER_TRAVIS}/""../generators/client/templates/angular/package.json.ejs"
+    local -r FILE_ANGULAR_PACKAGE_JSON_CACHED=\
+"${NODE_MODULES_CACHE_ANGULAR}angular.package.json.ejs.cached"
+    if [[ -f "$FILE_ANGULAR_PACKAGE_JSON_CACHED" ]] && \
+        diff "$FILE_ANGULAR_PACKAGE_JSON" "$FILE_ANGULAR_PACKAGE_JSON_CACHED" \
+        1>> /dev/null 2>> /dev/null
+            then
+                echo -e "Files '$FILE_ANGULAR_PACKAGE_JSON' and" \
+                    "'$FILE_ANGULAR_PACKAGE_JSON_CACHED' are the same. " \
+                    "Not need to refresh node_modules cache." \
+                    "To force refresh, simply run \`./build-samples.sh clean'"
+                sleep 4
+                return 0
+    elif [[ ! -f "$FILE_ANGULAR_PACKAGE_JSON_CACHED" ]] ; then
+        echo -e "'$NODE_MODULES_CACHE_ANGULAR' isn't generated. We need" \
+            "generate it first."
     else
-        echo "No node_modules cache founded. It must be generated first."
+        confirmationFirstParameter="Files '$FILE_ANGULAR_PACKAGE_JSON' and "\
+"'$FILE_ANGULAR_PACKAGE_JSON_CACHED' differ. The old "\
+"'$NODE_MODULES_CACHE_ANGULAR' is outdated. "\
+"We need to refresh it. "\
+"Do you want to continue? [y/n] "
+        confirmationUser "$confirmationFirstParameter" \
+            "echo 'Generating...'"
+            "exitScriptWithError 'ABORTED'"
     fi
-    unset beginLogfilename endofLogfilename
-    rm -Rf "${NODE_MODULES_CACHE_SAMPLE}"
+    sleep 4
+
+    rm -Rf "${NODE_MODULES_CACHE_ANGULAR}"
 
     local -i ERROR_IN_SAMPLE=0
-    local APP_FOLDER="${NODE_MODULES_CACHE_ANGULAR}"
 
-    local -i isGenerationOfNodeModulesCache=1
+    local -ir isGenerationOfNodeModulesCache=1
 
     time {
 
-        local shortDate=`date +%m-%dT%H_%M`
-        local beginLogfilename=`echo -e \
-            "${JHIPSTER_TRAVIS}"/node_modules_cache."${shortDate}"`
-        local endofLogfilename="angular.local-travis.log"
-        local LOGFILENAME="${beginLogfilename}".pending."${endofLogfilename}"
+        local -r shortDate=`date +%m-%dT%H_%M`
+        local -r beginLogfilename=\
+"${JHIPSTER_TRAVIS}""/node_modules_cache.""${shortDate}"
+        local -r endofLogfilename="angular.local-travis.log"
+        local -r LOGFILENAME="${beginLogfilename}".pending."${endofLogfilename}"
 
         createLogFile
 
@@ -1188,18 +1194,17 @@ function generateNode_Modules_Cache() {
             "${NODE_MODULES_CACHE_ANGULAR}" || \
             errorInBuildExitCurrentSample "FATAL ERROR: not a JHipster project."
         cd "${NODE_MODULES_CACHE_ANGULAR}"
-        local jhipstercommand="jhipster --force --no-insight --skip-checks "\
-            "--with-entities --skip-git --skip-commit-hook"
+        local -r jhipstercommand="jhipster --force --no-insight --skip-checks "\
+"--with-entities --skip-git --skip-commit-hook"
         printFileDescriptor3 "$jhipstercommand"
+        set +e
         eval "$jhipstercommand"
+        [[ "$?" -ne 0 ]] &&  errorInBuildExitCurrentSample
+        set -e
 
         treatEndOfBuild
     }
 
-    if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
-        unset JHIPSTER_MATRIX
-        declare -g JHIPSTER_MATRIX=${JHIPSTER_MATRIX_SAVED}
-    fi
 }
 
 # II LAUNCH ONLY ONE SAMPLE {{{2
@@ -1236,11 +1241,6 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 function createFolderNodeModulesAndLogFile() {
     if ! isSkipClientInFileYoRcDotConf ; then
 
-        if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
-            generateNode_Modules_Cache
-        # else; done in function launchSamplesInBackground()
-        fi
-
         createLogFile
 
         # TODO make for react
@@ -1254,7 +1254,7 @@ function createFolderNodeModulesAndLogFile() {
             cp -R "${NODE_MODULES_CACHE_ANGULAR}/node_modules" \
                 "${APP_FOLDER}"
         else
-            errorInBuildExitCurrentSample "FATAL ERROR: script not implemented" \
+            errorInBuildExitCurrentSample "FATAL ERROR: script not implemented"\
             "for React"
         fi
         # Even if there is already a correct symlink, we must launch it again.
@@ -1282,16 +1282,17 @@ function launchOnlyOneSample() {
         local -i TESTGENERATOR=1
         doesItTestGenerator "before generate the project".
         if [[ -e "$APP_FOLDER" ]] ; then
-            local confirmationFirstParameter=`echo -e  \
-                "Warning: '${APP_FOLDER}' exists. Do you want delete it?" \
-                "[y/n] "`
-            local argument="ABORTED: rename this folder, then restart script."
+            local confirmationFirstParameter="Warning: "\
+"'${APP_FOLDER}' exists. Do you want delete it? [y/n] "
+            local argument="ABORTED: rename this folder,"\
+" then restart script."
             local execInfirmed="errorInBuildStopCurrentSample '$argument'"
             confirmationUser "$confirmationFirstParameter" \
                 "rm -rf '${APP_FOLDER}'; mkdir -p '$APP_FOLDER'" \
                 "echo '$execInfirmed'"
-            unset confirmationFirstParameter confirmationFirstParameter
-            unset argument
+            unset confirmationFirstParameter argument execInfirmed
+
+            generateNode_Modules_Cache
         else
             mkdir -p "$APP_FOLDER"
         fi
@@ -1311,23 +1312,23 @@ function launchOnlyOneSample() {
     time {
 
         # Instantiate LOGFILENAME
-        local beginLogfilename=`echo -e \
-            "${JHIPSTER_TRAVIS}"/"${BRANCH_NAME}"."${DATEBININSCRIPT}"`
-        local endofLogfilename=`echo -e "${JHIPSTER}"".local-travis.log"`
-        local LOGFILENAME="${beginLogfilename}"".pending.""${endofLogfilename}"
+        local -r beginLogfilename=\
+"${JHIPSTER_TRAVIS}""/""${BRANCH_NAME}"".""${DATEBININSCRIPT}"
+        local -r endofLogfilename="${JHIPSTER}"".local-travis.log"
+        local -r LOGFILENAME=\
+"${beginLogfilename}"".pending.""${endofLogfilename}"
         createFolderNodeModulesAndLogFile
 
         cd "${APP_FOLDER}"
 
-        local oldPATH="${PATH}"
+        local -r oldPATH="${PATH}"
         export PATH="${APP_FOLDER}"/node_modules:"$PATH"
-        if [[ "$isgenerateandtest" -eq 1 ]] ; then
+        if [[ "$ISGENERATEANDTEST" -eq 1 ]] ; then
             generateAndTestProject
         else
             generate
         fi
         PATH="${oldPATH}"
-        unset oldPATH
 
     }
 
@@ -1360,7 +1361,7 @@ function launchSamplesInBackground() {
     fi
 
     local -i TESTGENERATOR=1
-    if [[ "$isgenerateandtest" -eq 0 ]] ; then
+    if [[ "$ISGENERATEANDTEST" -eq 0 ]] ; then
         if [[ "${JHIPSTER_MATRIX_ARRAY[*]}" =~ "(\s|^)ngx-default(\s|$)" ]]
         then
             doesItTestGenerator "during generation of 'ngx-default'"
@@ -1401,14 +1402,13 @@ function launchSamplesInBackground() {
     # TODO add test if there is only few samples to test
     read -t 1 -n 10000 discard || echo ""
     echo
-    local question=`echo -e "How many processes" \
-        "do you want to launch in same time (Travis CI launch 4 processes)? " \
-        ""`
+    local question="How many processes "\
+"do you want to launch in same time (Travis CI launch 4 processes)? "
     local -i typeAnswer=1
     while [[ "$typeAnswer" -eq 1 ]] ; do
         read -p "$question" -n 1 -r
         if [[ "$REPLY" =~ ^[1-9]$ ]] ; then
-            local -i numberOfProcesses="${REPLY}"
+            local -ir numberOfProcesses="${REPLY}"
             echo "" ;
             typeAnswer=0
         else
@@ -1417,7 +1417,7 @@ function launchSamplesInBackground() {
         fi
         echo "" ;
     done
-    unset typeAnswer
+    unset question typeAnswer
 
     testRequierments
 
@@ -1505,32 +1505,33 @@ export localTravis=1
 
 # Define prompt (used by `set -x` for scripts in ./scripts/*)
 export PROMPT_COMMAND=""
-export PS1="+ "
+export PS1="$ "
 
 # GLOBAL CONSTANTS SPECIFIC TO ./build-samples.sh (this script)
 # ====================
 # Should be unique thanks command `date'. Thanks lot of `sleep' in this script
 # we sure DATEBININSCRIPT will be unique.
-DATEBININSCRIPT=`date +%Y-%m-%dT%H_%M_%S`
+declare -r DATEBININSCRIPT=`date +%Y-%m-%dT%H_%M_%S`
 
 ## Retrieve ../.travis.yml and parse it
 travisDotYml="${JHIPSTER_TRAVIS}/../.travis.yml"
 if [ ! -f "$travisDotYml" ] ; then
     exitScriptWithError "'$travisDotYml' doesn't exist."
 fi
-TRAVIS_DOT_YAML_PARSED="`grep --color=never -E \
+declare -r TRAVIS_DOT_YAML_PARSED="`grep --color=never -E \
     '^    - JHIPSTER=' "$travisDotYml" | sed 's/    - JHIPSTER=//'`"
 unset travisDotYml
 
 # Count time in this script
 SECONDS=0
 
-BRANCH_NAME=`git rev-parse --abbrev-ref HEAD`
+declare -r BRANCH_NAME=`git rev-parse --abbrev-ref HEAD`
 
 # See also ./scripts/02-generate-project.sh.
 # The string "node_modules_cache-sample" is used.
-NODE_MODULES_CACHE_SAMPLE="${JHIPSTER_SAMPLES}/node_modules_cache-sample"
-NODE_MODULES_CACHE_ANGULAR="${NODE_MODULES_CACHE_SAMPLE}"/angular
+declare -r NODE_MODULES_CACHE_SAMPLE=\
+"${JHIPSTER_SAMPLES}/node_modules_cache-sample"
+declare -r NODE_MODULES_CACHE_ANGULAR="${NODE_MODULES_CACHE_SAMPLE}""/angular"
 # TODO
 # NODE_MODULES_CACHE_REACT="${NODE_MODULES_CACHE_SAMPLE}"/react
 
@@ -1637,9 +1638,10 @@ if [ "$1" = "help" ]; then
     usage
     exit 0
 elif [[ "$1" = "generate" ]] || [[ "$1" = "generateandtest" ]] ; then
-    [[ "$1" = "generate" ]] && isgenerateandtest=0 || isgenerateandtest=1
+    [[ "$1" = "generate" ]] && declare -r ISGENERATEANDTEST=0 || \
+        declare -r ISGENERATEANDTEST=1
     if [[ ! -z "${2+x}" ]] ; then
-        JHIPSTER_LIST="$2"
+        declare JHIPSTER_LIST="$2"
         declare -a JHIPSTER_MATRIX_ARRAY
     fi
     launchSamples
@@ -1649,8 +1651,8 @@ elif [ "$1" = "clean" ]; then
     fi
     cleanAllProjects
 else
-    firstArgument=`echo -e "\n\n\nFATAL ERROR: incorrect argument. " \
-        "Please see \\\`$ ./build-samples.sh help'".`
+    declare firstArgument="\n\n\nFATAL ERROR: incorrect argument. "\
+"Please see \\\`$ ./build-samples.sh help'".
     exitScriptWithError "$firstArgument"
 fi
 

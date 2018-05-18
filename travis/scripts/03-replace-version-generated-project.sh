@@ -18,6 +18,8 @@
 # limitations under the License.
 
 set -ex
+export PROMPT_COMMAND=""
+export PS1="$ "
 
 if [[ "$JHIPSTER_LIB_BRANCH" == "release" ]]; then
     echo "No need to change version in generated project"

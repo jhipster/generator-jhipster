@@ -18,6 +18,8 @@
 # limitations under the License.
 
 set -ex
+export PROMPT_COMMAND=""
+export PS1="$ "
 function echoSetX() {
     echo -e "\n-------------------------------------------------------------------------------\n" \
         "\n$1\n" \
@@ -58,13 +60,13 @@ launchCurlOrProtractor() {
     # return error 22.
     # When server send staus code 200, 401 or 407, $rep takes value 0.
     # But when it sends status code like 500, 404, etc, $rep takes value 22.
-    while ! curl -v --fail "$httpUrl" && [ "$retryCount" -le "$maxRetry" ]; do
+    while ! curl -v --fail "$httpUrl" && [[ "$retryCount" -le "$maxRetry" ]]; do
         echo "[$(date)] Application not reachable yet. Sleep and retry - retryCount =" $retryCount "/" $maxRetry
         retryCount=$((retryCount+1))
         sleep 10
     done
 
-    if [ "$(($maxRetry))" -eq "$retryCount" ]; then
+    if [[ "$retryCount" -gt "$maxRetry" ]]; then
         echo "[$(date)] Not connected after" $retryCount " retries."
         return 1
     fi

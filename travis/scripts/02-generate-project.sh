@@ -18,7 +18,8 @@
 # limitations under the License.
 
 set -ex
-
+export PROMPT_COMMAND=""
+export PS1="$ "
 function echoSetX() {
     echo -e "\n-------------------------------------------------------------------------------\n" \
         "\n$1\n" \
