@@ -45,6 +45,15 @@ eureka:
         service-url:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
+<%_ if (cacheProvider === 'memcached') { _%>
+
+memcached:
+    cache:
+        servers: localhost:11211
+        mode: static
+        expiration: 86400
+        protocol: binary
+<%_ } _%>
 
 spring:
     devtools:
@@ -246,7 +255,7 @@ jhipster:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 1461
-    <%_ if (cacheProvider !== 'no') { _%>
+    <%_ if (cacheProvider !== 'no' && cacheProvider !== 'memcached') { _%>
     cache: # Cache configuration
         <%_ if (cacheProvider === 'hazelcast') { _%>
         hazelcast: # Hazelcast distributed cache

@@ -251,6 +251,9 @@ dependencies {
         exclude module: 'undertow-core'
     }
     <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    compile "io.sixhours:infinispan-jcache:memcached-spring-boot-starter:1.2.0"
+    <%_ } _%>
     <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
     compile "javax.cache:cache-api"
     <%_ } _%>
