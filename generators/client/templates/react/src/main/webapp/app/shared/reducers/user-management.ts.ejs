@@ -54,7 +54,7 @@ export default (state = initialState, action): UserManagementState => {
     case ACTION_TYPES.RESET:
       return {
         ...state,
-        user: {}
+        users: []
       };
     default:
       return state;

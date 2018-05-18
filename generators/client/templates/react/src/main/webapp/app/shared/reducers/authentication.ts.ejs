@@ -78,7 +78,9 @@ export default (state = initialState, action): AuthenticationState => {
         ...state,
         loading: false,
         isAuthenticated: false,
+      <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: true,
+      <%_ } _%>
         errorMessage: action.payload
       };
     <%_ if (authenticationType !== 'oauth2') { _%>
@@ -94,7 +96,9 @@ export default (state = initialState, action): AuthenticationState => {
     case ACTION_TYPES.LOGOUT:
       return {
         ...initialState,
+      <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: true
+      <%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION):
       {
@@ -109,14 +113,18 @@ export default (state = initialState, action): AuthenticationState => {
     case ACTION_TYPES.ERROR_MESSAGE:
       return {
         ...initialState,
+      <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: true,
+      <%_ } _%>
         redirectMessage: action.message
       };
     case ACTION_TYPES.CLEAR_AUTH:
       return {
         ...state,
         loading: false,
+      <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: true,
+      <%_ } _%>
         isAuthenticated: false
       };
     default:
