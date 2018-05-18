@@ -2089,7 +2089,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * get the Angular 2+ application name.
+     * get the Angular application name.
      * @param {string} baseName of application
      */
     getAngularXAppName(baseName = this.baseName) {
