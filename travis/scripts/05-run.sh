@@ -44,7 +44,7 @@ fi
 launchCurlOrProtractor() {
     local -i retryCount=1
     local -ir maxRetry=10
-    local -ir serverPort=`grep --color=never -E \
+    declare -gir serverPort=`grep --color=never -E \
         '"serverPort"\s*:\s*"[0-9]+"' .yo-rc.json \
         | grep --color=never -Eo '[0-9]+' \
         || echo 8080
@@ -58,11 +58,13 @@ launchCurlOrProtractor() {
     # return error 22.
     # When server send staus code 200, 401 or 407, $rep takes value 0.
     # But when it sends status code like 500, 404, etc, $rep takes value 22.
+    set -x
     while ! curl -v --fail "$httpUrl" && [[ "$retryCount" -le "$maxRetry" ]]; do
         echo "[$(date)] Application not reachable yet. Sleep and retry - retryCount =" $retryCount "/" $maxRetry
         retryCount=$((retryCount+1))
         sleep 10
     done
+    set +x
 
     if [[ "$retryCount" -gt "$maxRetry" ]]; then
         echo "[$(date)] Not connected after" $retryCount " retries."
@@ -158,15 +160,20 @@ if [ "$RUN_APP" == 1 ]; then
     sleep 40
 
     launchCurlOrProtractor && result=$? || result=$?
-    # "$ISSTARTAPPLICATION" is setted for `../build-samples.sh startapplication sample_name'
+    # "$ISSTARTAPPLICATION" is setted for `../build-samples.sh startapplication
+    # sample_name'
     if [[ -z "${ISSTARTAPPLICATION+x}" ]] && \
         [[ "$ISSTARTAPPLICATION" -eq 0 ]]; then
         # If we are in Travis CI or in `../build-samples.sh generate'
         # or `../build-samples.sh generateandtest'
         kill $(cat .pid)
     else
-        echo -e "\n\n\033[1;31m""WARNING: YOU MUST MANUALLY KILL " \
-            "THIS APPLICATION TO STOP IT (\'KILL $(cat .pid)')""\033[0m]\n\n"
+        echo -e "\n\n\033[0;31m"\
+            "Server is launched at http://localhost://""$serverPort" \
+            "\033[0m \n\n"
+        echo -e "\n\n\033[1;31m""WARNING: YOU MUST MANUALLY TERMINATE " \
+            "THIS JAVA APPLICATION (\`kill $(cat .pid)')""\033[0m\n\n"
     fi
+    wait
     exit $result
 fi

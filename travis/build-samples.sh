@@ -653,18 +653,18 @@ function echoTitleBuildStep() {
 # function testIfPortIsFreeWithSs() {{{3
 # I suppose iproute 2 is installed on main linux distro.
 function testIfPortIsFreeWithSs() {
-    if [[ ! -z "$2" ]] ; then
-        ss -nl | grep "$1" 1>> /dev/null \
+    if [[ ! -z "${2+x}" ]] ; then
+        ss -nl | grep ":$1\s" 1>> /dev/null \
             && errorInBuildExitCurrentSample "port '$1' is busy. " \
             "It's the Server Port. You could change it in file:" \
             "'$APP_FOLDER/.yo-rc.json' Or you could stop software who uses it" \
-            "(\'sudo ss -nap | grep '$1'' to know it)." || \
-            printFileDescriptor3 "Port '$1' is free."
+            "(\`sudo ss -nap | grep -E ':$1\s'' to know it, then \`kill PID')."\
+            || printFileDescriptor3 "Port '$1' is free."
     fi
-    ss -nl | grep "$1" 1>> /dev/null \
+    ss -nl | grep -E ":$1\s" 1>> /dev/null \
         && errorInBuildExitCurrentSample "port '$1' is busy. " \
         "Please stop the software who uses it" \
-        "(\`sudo ss -nap | grep '$1'' to know it)" || \
+        "(\`sudo ss -nap | grep -E '$1'' to know it, then \`kill PID')" || \
         printFileDescriptor3 "Port '$1' is free."
 }
 
@@ -1474,7 +1474,9 @@ function wrapperLaunchScript() {
 # function launchSamplesInBackground() {{{3
 function launchSamplesInBackground() {
 
-    if [[ ! "${JHIPSTER_MATRIX_ARRAY[*]}" =~ "(\s|^)ngx-default(\s|$)" ]] ; then
+    echo "${JHIPSTER_MATRIX_ARRAY[*]}"
+    if [[ ! "${JHIPSTER_MATRIX_ARRAY[*]}" =~  \
+        (^|[[:space:]])ngx-default[[:space:]] ]] ; then
         warning "we advise to add build of 'ngx-default'.\n"
         sleep 4
     fi
@@ -1761,7 +1763,7 @@ elif [[ "$COMMAND_NAME" == "startapplication" ]] ; then
         declare -r ISGENERATEANDTEST=0
         export ISSTARTAPPLICATION=1
         colorizeLogFile
-        startApplication
+        time startApplication
     else
         exitScriptWithError "you could only launch only one sample." \
             "A sample name contains only alphanumeric or dash characters."
