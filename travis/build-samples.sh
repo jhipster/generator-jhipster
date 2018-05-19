@@ -308,6 +308,15 @@ set -E
 # substitutions, and commands executed in a subshell environment.
 set -T
 
+ps4b() {
+    if [[ "$COLORIZELOGFILE" -eq 0 ]] ; then
+        echo -en "$USER""@""$HOSTNAME"": `dirs +0` $ "
+    else
+        echo -en "\033[1;32m""$USER@""$HOSTNAME""\033[0m"": "\
+            "\033[1;34m"`dirs +0`"\033[0m"" $ "
+    fi
+}
+
 # Treat end of script {{{2
 
 function erroredAllPendingLog() {
@@ -364,11 +373,13 @@ function printCommandAndEval() {
     if [[ -e /dev/fd/3 ]] && \
         [[ -e /dev/fd/4 ]] ; then
         # See function launchSamplesInBackground()
-        echo "${PS4}${@}" >> >(tee --append /dev/fd/3) \
+        ps4b
+        echo "${@}" >> >(tee --append /dev/fd/3) \
             2>> >(tee --append /dev/fd/4)
         eval "$@" >> >(tee --append /dev/fd/3) 2>> >(tee --append /dev/fd/4)
     else
-        echo "${PS4}${@}"
+        ps4b
+        echo "${@}"
         # https://google.github.io/styleguide/shell.xml#Eval
         # says don't use eval. But doesn't work without.
         eval "$@"
@@ -789,7 +800,7 @@ function printInfoBeforeLaunch() {
     printFileDescriptor3 "\n\n* Your log file will be '$LOGFILENAME'\n" \
         "* When build will finish, The end of this filename shoule be renamed" \
         "'errored' or 'passed'.\n" \
-        "* On this file lines started by '$PS4' are bash" \
+        "* On this file lines started by '${ps4Light}' are bash" \
         "command. Useful to know which command fail.\n" \
         "* See progress in this file. Do not forget to refresh it!"
     # Test if we launch not this function in generateNode_Modules_Cache().
@@ -895,7 +906,7 @@ function treatEndOfBuild() {
 
     if [[ "$COLORIZELOGFILE" -eq 0 ]] ; then
         # https://superuser.com/questions/380772/removing-ansi-color-codes-from-text-stream
-        printFileDescriptor3 "$PS4"\
+        printFileDescriptor3 "${ps4Light}`dirs +0` $ "\
             "sed -i \'s/^H/g ;" \
             "s/^Progress.*^M.*Downloaded from/Downloaded from/g ;" \
             "s/^M//g ;" \
@@ -905,10 +916,10 @@ function treatEndOfBuild() {
         sed -i 's///g ;
             s/^Progress.*.*Downloaded from/Downloaded from/g ;
             s///g ;
-            s/\[[0-9;]*[a-zA-Z]//g' \
+            s/\033[\[[0-9;]*[a-zA-Z]//g' \
             "${LOGFILENAME}" 1>> /dev/null
     else
-        printFileDescriptor3 "$PS4"\
+        printFileDescriptor3 "${ps4Light}`dirs +0` $ "\
             "sed -i \'s/^H/g ;" \
             "s/^Progress.*^M.*Downloaded from/Downloaded from/g ;" \
             "s/^M//g\'" \
@@ -1560,6 +1571,10 @@ declare -r NODE_MODULES_CACHE_ANGULAR="${NODE_MODULES_CACHE_SAMPLE}""/angular"
 # TODO
 # NODE_MODULES_CACHE_REACT="${NODE_MODULES_CACHE_SAMPLE}"/react
 
+# Could be redefined if --colorizelogfile is passed as argument.
+# Use it like this:"${ps4Light}`dirs +0`$ "
+declare ps4Light="$USER""@""$HOSTNAME"": "
+
 # Argument parser {{{2
 # ====================
 # ====================
@@ -1621,58 +1636,65 @@ function tooMuchArguments() {
         "Please see \`./build-samples.sh help'."
 }
 
+echo -e "\n\nThanks to use this script. Do not hesitate to open a new issue" \
+    "for any thing, thanks in advance! This script is young (06/2018)!"
+
 if [[ "$#" -gt 4 ]] ; then
     tooMuchArguments
 elif [[ "$#" -eq 0 ]] ; then
     usage
 fi
 
-if [[ ! -z "${1+x}" ]] && \
-    ([[ "$1" = 'generateandtest' ]] || \
-    [[ "$1" = 'generate' ]]) ; then
-    declare ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=0
-    declare COLORIZELOGFILE=0
-    declare -i i=3
-    while [[ "$i" -le "$#" ]] ; do
-        if [[ "$i" -eq "--consoleverbose" ]] ; then
-            ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=1
-            if [[ ${2} =~ ^[a-z1-9,-]*$ ]] ; then
-                exitScriptWithError "\n\n\nFATAL ERROR '--consoleverbose' " \
-                    "option could " \
-                    "be used only when there is only one sample to build." \
-                    "Please see \`./build-samples.sh help'."
-            fi
-        elif [[ "$i" -eq "--colorizelogfile" ]] ; then
-            export PS4='${debian_chroot:+($debian_chroot)}'\
-'\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-            COLORIZELOGFILE=1
-        else
-            exitScriptWithError "\n\n\nFATAL ERROR: '$i' is not a correct" \
-                "argument. Please read \`./build-samples.sh help'".
-        fi
-        i=$((i+1))
-    done
-fi
-
-echo -e "\n\nThanks to use this script. Do not hesitate to open a new issue" \
-    "for any thing, thanks in advance! This script is young (06/2018)!"
+COMMAND_NAME="$1"
 
 cd "${JHIPSTER_TRAVIS}"
-if [ "$1" = "help" ]; then
+if [ "$COMMAND_NAME" = "help" ]; then
     if [[ ! -z "${2+x}" ]] ; then
         tooMuchArguments
     fi
     usage
-    exit 0
-elif [[ "$1" = "generate" ]] || [[ "$1" = "generateandtest" ]] ; then
-    [[ "$1" = "generate" ]] && declare -r ISGENERATEANDTEST=0 || \
+elif [[ "$COMMAND_NAME" == "generate" ]] || \
+    [[ "$COMMAND_NAME" == "generateandtest" ]] ; then
+
+    [[ "$COMMAND_NAME" == "generate" ]] && declare -r ISGENERATEANDTEST=0 || \
         declare -r ISGENERATEANDTEST=1
-    if [[ ! -z "${2+x}" ]] ; then
+
+    if [[ ! -z "$2" ]] ; then
         declare JHIPSTER_LIST="$2"
         declare -a JHIPSTER_MATRIX_ARRAY
     fi
+
+    declare ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=0
+    declare COLORIZELOGFILE=0
+
+    if [[ ! -z "${3+x}" ]] ; then
+        shift 2
+        while [[ "$#" -ne 0 ]] ; do
+            if [[ "$1" == "--consoleverbose" ]] ; then
+                ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=1
+                if [[ "$SAMPLES_NAME" =~ ^[a-z1-9,-]*$ ]] ; then
+                    exitScriptWithError "\n\n\nFATAL ERROR '--consoleverbose' "\
+                        "option could " \
+                        "be used only when there is only one sample to build." \
+                        "Please see \`./build-samples.sh help'."
+                fi
+            elif [[ "$1" == "--colorizelogfile" ]] ; then
+                export PS4='${debian_chroot:+($debian_chroot)}'\
+'\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+                declare ps4Light="\033[1;32m""$USER@""$HOSTNAME""\033[0m"": "\
+"\033[1;34m"`dirs +0`"\033[0m"" $ "
+                COLORIZELOGFILE=1
+            else
+                exitScriptWithError "\n\n\nFATAL ERROR: '$1' is not a correct" \
+                    "argument. Please read \`./build-samples.sh help'".
+            fi
+            shift
+        done
+    fi
+
     launchSamples
-elif [ "$1" = "clean" ]; then
+
+elif [ "$COMMAND_NAME" = "clean" ]; then
     if [[ ! -z "${2+x}" ]] ; then
         tooMuchArguments
     fi
