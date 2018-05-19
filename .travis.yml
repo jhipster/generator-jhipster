@@ -41,7 +41,7 @@ env:
     - JHIPSTER_BRANCH="release"
 
     # PS4 is used for PROMPT when we trace each command thanks "set -x"
-    - PS4=\'${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]: \[\033[01;34m\]\w\[\033[00m\]\$ : \'
+    - PS4='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]: \[\033[01;34m\]\w\[\033[00m\]\$: '
 
   matrix:
 
