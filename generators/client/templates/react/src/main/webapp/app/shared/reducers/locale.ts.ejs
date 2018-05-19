@@ -24,9 +24,9 @@ const initialState = {
   currentLocale: 'en'
 };
 
-export type LocaleState = typeof initialState;
+export type LocaleState =  Readonly<typeof initialState>;
 
-export default (state = initialState, action): LocaleState => {
+export default (state: LocaleState = initialState, action): LocaleState => {
   switch (action.type) {
     case ACTION_TYPES.SET_LOCALE:
       return {

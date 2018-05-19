@@ -29,13 +29,13 @@ export const ACTION_TYPES = {
 
 const initialState = {
   errorMessage: null,
-  users: [] as IUser[],
+  users: [] as ReadonlyArray<IUser>,
 };
 
-export type UserManagementState = typeof initialState;
+export type UserManagementState =  Readonly<typeof initialState>;
 
 // Reducer
-export default (state = initialState, action): UserManagementState => {
+export default (state: UserManagementState = initialState, action): UserManagementState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FETCH_USERS):
       return {

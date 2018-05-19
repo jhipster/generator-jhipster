@@ -33,10 +33,10 @@ const initialState = {
   updateFailure: false
 };
 
-export type SettingsState = typeof initialState;
+export type SettingsState =  Readonly<typeof initialState>;
 
 // Reducer
-export default (state = initialState, action): SettingsState => {
+export default (state: SettingsState = initialState, action): SettingsState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.UPDATE_ACCOUNT):
       return {

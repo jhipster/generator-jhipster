@@ -294,7 +294,7 @@ module.exports = class extends PrivateBase {
                     file: indexReducerPath,
                     needle: 'jhipster-needle-add-reducer-type',
                     splicable: [
-                        this.stripMargin(`|  ${entityInstance}: ${entityAngularName}State;`)
+                        this.stripMargin(`|  readonly ${entityInstance}: ${entityAngularName}State;`)
                     ]
                 }, this);
 

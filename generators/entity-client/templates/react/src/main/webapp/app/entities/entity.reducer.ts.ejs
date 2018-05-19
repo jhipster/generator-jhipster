@@ -43,7 +43,7 @@ import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (fieldsContainDate) { _%>
 
 <%_ } _%>
-import { I<%= entityReactName %>, <%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -63,8 +63,8 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   errorMessage: null,
-  entities: [] as I<%= entityReactName %>[],
-  entity: new <%= entityReactName %>(),
+  entities: [] as ReadonlyArray<I<%= entityReactName %>>,
+  entity: defaultValue,
   <%_ if (pagination === 'infinite-scroll') { _%>
   links: {
     last: 0
@@ -77,11 +77,11 @@ const initialState = {
   updateSuccess: false
 };
 
-export type <%= entityReactName %>State = typeof initialState;
+export type <%= entityReactName %>State =  Readonly<typeof initialState>;
 
 // Reducer
 
-export default (state = initialState, action): <%= entityReactName %>State => {
+export default (state: <%= entityReactName %>State = initialState, action): <%= entityReactName %>State => {
   switch (action.type) {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):

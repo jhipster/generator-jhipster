@@ -30,10 +30,10 @@ const initialState = {
   activationFailure: false
 };
 
-export type ActivateState = typeof initialState;
+export type ActivateState =  Readonly<typeof initialState>;
 
 // Reducer
-export default (state = initialState, action): ActivateState => {
+export default (state: ActivateState = initialState, action): ActivateState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.ACTIVATE_ACCOUNT):
       return {

@@ -50,11 +50,11 @@ const initialState = {
   redirectMessage: null as string
 };
 
-export type AuthenticationState = typeof initialState;
+export type AuthenticationState =  Readonly<typeof initialState>;
 
 // Reducer
 
-export default (state = initialState, action): AuthenticationState => {
+export default (state: AuthenticationState = initialState, action): AuthenticationState => {
   switch (action.type) {
     <%_ if (authenticationType !== 'oauth2') { _%>
     case REQUEST(ACTION_TYPES.LOGIN):

@@ -44,25 +44,25 @@ import sessions, { SessionsState } from 'app/modules/account/sessions/sessions.r
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
-  authentication: AuthenticationState;
+  readonly authentication: AuthenticationState;
   <%_ if (enableTranslation) { _%>
-  locale: LocaleState;
+  readonly locale: LocaleState;
   <%_ } _%>
-  applicationProfile: ApplicationProfileState;
-  administration: AdministrationState;
-  userManagement: UserManagementState;
+  readonly applicationProfile: ApplicationProfileState;
+  readonly administration: AdministrationState;
+  readonly userManagement: UserManagementState;
   <%_ if (authenticationType !== 'oauth2') { _%>
-  register: RegisterState;
-  activate: ActivateState;
-  passwordReset: PasswordResetState;
-  password: PasswordState;
-  settings: SettingsState;
+  readonly register: RegisterState;
+  readonly activate: ActivateState;
+  readonly passwordReset: PasswordResetState;
+  readonly password: PasswordState;
+  readonly settings: SettingsState;
     <%_ if (authenticationType === 'session') { _%>
-  sessions: SessionsState;
+  readonly sessions: SessionsState;
     <%_ } _%>
   <%_ } _%>
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
-  loadingBar: any;
+  readonly loadingBar: any;
 }
 
 const rootReducer = combineReducers<IRootState>({

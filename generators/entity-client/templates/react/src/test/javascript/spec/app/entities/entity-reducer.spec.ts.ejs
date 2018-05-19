@@ -34,7 +34,7 @@ import reducer, {
   ACTION_TYPES, createEntity, deleteEntity, getEntities, getEntity, updateEntity<% if (pagination === 'infinite-scroll') { %>, reset<% } %>
 } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { I<%= entityReactName %>, <%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 // tslint:disable no-invalid-template-strings
 describe('Entities reducer tests', () => {
@@ -50,8 +50,8 @@ describe('Entities reducer tests', () => {
   const initialState = {
     loading: false,
     errorMessage: null,
-    entities: [] as I<%= entityReactName %>[],
-    entity: new <%= entityReactName %>(),
+    entities: [] as ReadonlyArray<I<%= entityReactName %>>,
+    entity: defaultValue,
     <%_ if (pagination === 'infinite-scroll') { _%>
     links: {
       last: 0
