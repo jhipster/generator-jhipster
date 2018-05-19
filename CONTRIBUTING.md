@@ -246,17 +246,22 @@ Sample name is optional and can be any of the folder name in the `travis/samples
 
 Command name can be as below:
 
-    `help`: display the help (recommended to read it)
-    `generate`: Generate sample(s) if specified else clean all samples. Not test are performed. You could see what is generated in samples/*-sample and open the project in your Text Editor/IDE.
-    `generateandtest` : Generate and test sample(s) if specified else generate and test all samples. Test as in Travis CI.
-    `clean` : Clean the generated code for the sample if specified else clean all samples
+    `help`: display the help (recommended to read it).
+    `generate`: Generate sample(s). Not test are performed. You could see what is generated in samples/*-sample and open the project in your Text Editor/IDE.
+    `generateandtest` : Generate and test sample(s). Like `generate` + test as in Travis CI.
+    `clean` : Delete all ./travis/samples/*-sample folders.
+
+    Options `generate` and `buildandtest` work in the same way: `./buildandtest generate|generateandtest [ sample_name[,sample_name][,...] [--colorizelogfile] ]`
+
+    `sample_name` is an optional parameter. You could find a list in `./build-samples.sh help`. We advise at least test `ngx-default`. You could build several samples in same time by separated it by comma (e.g. `ngx-default,react-default`). If `sample_name` isn't specified, build all samples.
+    `--colorizelogfile`: keep color in your logfile, **this optional parameter is strongly advise for redability**.
 
 Examples:
 
-    `./build-samples.sh generateandtest ngx-default`: build and test only ngx-default
-    `./build-samples.sh generateandtest ngx-default --colorizelogfile`: same as before and keep colors in logfile (needs plugin in your Text Editor, see `./build-samples.sh help`).
-    `./build-samples.sh generateandtest ngx-default,react-default`: generate and test ngx-default and react-default
-    `./build-samples.sh generateandtest`: generate and test all samples listed in `./build-sample.sh help`
+    `./build-samples.sh generateandtest ngx-default --colorizelogfile`: build and test only ngx-default
+    `./build-samples.sh generateandtest ngx-default --colorizelogfile`: same as before and keep colors in logfile .
+    `./build-samples.sh generateandtest ngx-default,react-default` --colorizelogfile: generate and test ngx-default and react-default
+    `./build-samples.sh generateandtest --colorizelogfile`: generate and test all samples listed in `./build-sample.sh help`
 
 *NOTES FOR OLD DEVELOPERS: ./travis/build-samples.sh has been rewritten. Now it spawns several generation/build in same time and use a node_modules cache. Improve speed.*
 

@@ -68,7 +68,7 @@
         # IFS=$' ' read -ra dockerContainers <<< `docker ps -q`
         # for i in ${dockerContainers[@]} ; do
         #     printCommandAndEval docker kill "$i" || exitScriptWithError \
-        #         "FATAL ERROR: couldn't kill docker container '$i'"
+        #         "Couldn't kill docker container '$i'"
         # done
 # 12) Not about `read' built-in command
 
@@ -308,15 +308,6 @@ set -E
 # substitutions, and commands executed in a subshell environment.
 set -T
 
-ps4b() {
-    if [[ "$COLORIZELOGFILE" -eq 0 ]] ; then
-        echo -en "$USER""@""$HOSTNAME"": `dirs +0` $ "
-    else
-        echo -en "\033[1;32m""$USER@""$HOSTNAME""\033[0m"": "\
-            "\033[1;34m"`dirs +0`"\033[0m"" $ "
-    fi
-}
-
 # Treat end of script {{{2
 
 function erroredAllPendingLog() {
@@ -358,8 +349,24 @@ errorInScript() {
 }
 
 function exitScriptWithError() {
-    1>&2 echo -e "\n\n$@" # print in stderr
+    1>&2 echo -e "$BRED\n\nFATAL ERROR: ""$@""$NC\n\n" # print in stderr
     exit 10
+}
+
+# warning() {{{3
+warning() {
+    echo -e "$BRED"WARNING: "$@""$NC"
+}
+
+
+# ps4b() {{{3
+ps4b() {
+    if [[ "$COLORIZELOGFILE" -eq 0 ]] ; then
+        echo -en "$USER""@""$HOSTNAME"": `dirs +0` $ "
+    else
+        echo -en "\033[1;32m""$USER@""$HOSTNAME""\033[0m"": "\
+            "\033[1;34m"`dirs +0`"\033[0m"" $ "
+    fi
 }
 
 # function printFileDescriptor3() {{{2
@@ -392,6 +399,7 @@ function confirmationUser() {
     read -t 1 -n 10000 discard || echo ""
     echo
     local -i typeAnswer=1
+    echo -en "$BLUE"
     while [[ "$typeAnswer" -eq 1 ]] ; do
         read -p "$1" -n 1 -r
         case "$REPLY" in
@@ -402,6 +410,7 @@ function confirmationUser() {
         esac
         echo ""
     done
+    echo -en "$NC"
 }
 
 # PRINT HELP `./build-samples.sh help' {{{1
@@ -412,9 +421,7 @@ function confirmationUser() {
 
 function usageClean() {
     local NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
-    echo -e "\n\n\`./build-samples.sh clean'\n" \
-        "—————————————————————————————————————\n" \
-        "—————————————————————————————————————\n" \
+    echo -e "\n\n\t""$URED""\`./build-samples.sh clean'""$NC""\n" \
         "1) Before each new build, ./sample/[sample-name]-sample " \
         "is systematically erased, contrary to " \
         "'${NODE_MODULE_SHORT_NAME}'.\n" \
@@ -433,10 +440,10 @@ function usage() {
     local -r me=$(basename "$0")
     local -r list_of_samples=`cut -d ' ' -f 1 <<< "$TRAVIS_DOT_YAML_PARSED"`
 
-    echo -e "\n\nScript than emulate well remote Travis CI build " \
+    echo -e "\n\n\tScript than emulate well remote Travis CI build " \
         " https://travis-ci.org/jhipster/generator-jhipster.\n"
 
-    echo -e "\nSynopsis: \n" \
+    echo -e "\n\t"$URED""Synopsis:""$NC" \n" \
         "'$me' \n" \
         "\tgenerate [ \n" \
             "\t\tsample_name [--consoleverbose] \n" \
@@ -450,9 +457,7 @@ function usage() {
         "\t\t[--colorizelogfile]\n" \
         "\tclean\n" \
         "\thelp\n\n" \
-    " \`./build-samples.sh generate/generateandtest'\n" \
-        "—————————————————————————————————————\n" \
-        "—————————————————————————————————————\n" \
+    "\t$URED""\`./build-samples.sh generate/generateandtest'"$NC"\n" \
         "* They will create the travis sample project under the './samples'" \
         "folder with folder name \`[sample_name]-sample'." \
         "* 'generate' generate only a JHipster project with entities. " \
@@ -476,8 +481,7 @@ function usage() {
         "* Before launch this commands, type \`yarn link' in the folder" \
             "./genertor-jhipster. Now you will test this generator, and not" \
             "the npm genertor-jhipster." \
-    "\n\n'[sample_name]' could be:\n" \
-    "——————————————————" \
+    "\n\n""\t$URED""'[sample_name]' could be:""$NC""\n" \
     "\n${list_of_samples}\n\n" \
     "* Use always \`./build-samples.sh generateandtest ngx-default' " \
             "(the more complete test). " \
@@ -488,46 +492,45 @@ function usage() {
     "Name of samples indicate their test goal. They have different application"\
     "configurations (defined in '.yo-rc.json') and different entity" \
     "configurations (defined in the folder .jhipster of a " \
-    "'./scripts/sample-name-sample' folder).\n\n"
+    "'./scripts/sample-name-sample' folder).\n\n" \
     "* \`--consoleverbose'\n" \
         "\t=> all is printed in the console." \
         "\tCould be used only with if there is you build only one sample_name" \
         "\t(too much logs in console, not advise)\n" \
     "* \`--colorizelogfile'\n" \
-        "\n\t=> ansi code will not be deleted in logfile." \
-        "\n\t* For Vim users use:" \
-            "https://github.com/powerman/vim-plugin-AnsiEsc."
-        "\n\t* For IntelliJ/JetBrains users try:" \
-            "https://plugins.jetbrains.com/plugin/9707-ansi-highlighter"
-        "\n\t* For Visual Studio Code users try:" \
+        "\t""$BRED""This parameter is strongly advise\n""$NC" \
+        "\t=> Keep colors in log file.\n" \
+        "\t* For Vim users install:" \
+            "https://github.com/powerman/vim-plugin-AnsiEsc.\n" \
+        "\t* For IntelliJ/JetBrains users try:" \
+            "https://plugins.jetbrains.com/plugin/9707-ansi-highlighter\n" \
+        "\t* For Visual Studio Code users try:" \
             "https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer"
 
     usageClean
 
-    echo -e "\nExamples:\n" \
-        "—————————————————————————————————————\n" \
-        "—————————————————————————————————————\n" \
-    "\`$ ./build-samples.sh generate ngx-default' " \
+    echo -e "\n\t$URED""Examples:""$NC""\n" \
+    "\`$ ./build-samples.sh generate ngx-default --colorizelogfile' " \
         "=> generate a new project at travis/samples/ngx-default-sample\n" \
-    "\`$ ./build-samples.sh generateandtest ngx-default' " \
+    "\`$ ./build-samples.sh generateandtest ngx-default --colorizelogfile' " \
         "=> generate a new project at travis/samples/ngx-default-sample " \
             "then build and test it.\n" \
-    "\`$ ./build-samples.sh generate' =>" \
+    "\`$ ./build-samples.sh generate --colorizelogfile' =>" \
         " generate all travis/samples/*-sample corresponding of " \
         " samples listed above.\n" \
-    "\`$ ./build-samples.sh generate ngx-default,react-default' =>" \
+    "\`$ ./build-samples.sh generate ngx-default,react-default " \
+        "--colorizelogfile' =>" \
         " generate \`ngx-default' and \`react-default'.\n"  \
         " samples listed above.\n" \
-    "\`$ ./build-samples.sh generateandtest' => generate build and test all " \
+    "\`$ ./build-samples.sh generateandtest --colorizelogfile' " \
+        "=> generate build and test all " \
         "travis/samples/*-sample corresponding of samples listed above.\n" \
     "\`$ ./build-samples.sh clean' " \
         "=> delete all folders travis/samples/*-sample\n" \
         "=> delete especially the node_modules cache " \
         "(samples/node_modules_cache-sample) to sanitize.\n" \
     "\`$ ./build-samples.sh help' => display this help\n" \
-    "\nNotes:\n" \
-    "—————————————————————————————————————\n" \
-    "—————————————————————————————————————\n" \
+    "\n\n""\t$URED""Notes:""$NC""\n" \
     "Note1: We recommand to use Node.Js LTS. Check if you use it.\n" \
     "Note2: for tests with a client (ngx-*, react-*): " \
     "each node_modules takes actually " \
@@ -540,9 +543,8 @@ function usage() {
     "script copy node_modules folder from node_modules_cache-sample before" \
     "perform tests, and symlink again at the end of the test." \
     "\`yarn install' isn't perform before test to increase speed". \
-    "\n\nJust remind of sample_name:\n" \
-    "——————————————————\n" \
-    "——————————————————" \
+    "\n\n""\t$URED""Just remind of sample_name:""$NC""\n" \
+    "$NC" \
     "\n${list_of_samples}\n\n" \
 
     exit 0
@@ -595,15 +597,15 @@ function cleanAllProjects() {
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
-# function echoTitleBuildStep() {{{3
+# function echoSmallTitle() {{{3
 function echoSmallTitle() {
     local -r ELAPSED="Elapsed: $(($SECONDS / 3600)) hrs "\
 "$((($SECONDS / 60) % 60)) min $(($SECONDS % 60))sec"
     echo -e "\n\n\n" \
-        "\n'$@'" \
+        "$URED""'$@'" \
         "(`date +%r`, '$ELAPSED')\n" \
-        "================================================================" \
-        "\n"
+        "$BRED""=============================================================" \
+        "\n$NC"
 }
 
 # function echoTitleBuildStep() {{{3
@@ -611,16 +613,16 @@ function echoTitleBuildStep() {
     # Echo in STDOUT
     local -r ELAPSED="Elapsed: $(($SECONDS / 3600)) hrs "\
 "$((($SECONDS / 60) % 60)) min $(($SECONDS % 60))sec"
-    echo -e "\n" \
+    echo -e "$BRED\n" \
         "================================================================" \
         "================================================================" \
         "================================================================" \
-        "\n'$@'" \
-        "(`date +%r`, '$ELAPSED')\n" \
+        "\n$URED""'$@'" \
+        "(`date +%r`, '$ELAPSED')""$BRED""\n" \
         "================================================================" \
         "================================================================" \
         "================================================================" \
-        "\n"
+        "$NC\n"
 
     # ECHO in console:
     # 1. if console is branched to /dev/fd/3 (see launchSamplesInBackground())
@@ -640,8 +642,8 @@ function echoTitleBuildStep() {
 # I suppose iproute 2 is installed on main linux distro.
 function testIfPortIsFreeWithSs() {
     ss -nl | grep "$1" 1>> /dev/null \
-        && errorInBuildExitCurrentSample "FATAL ERROR: " \
-        "port '$1' is busy. Please stop the software who uses it" \
+        && errorInBuildExitCurrentSample "port '$1' is busy. " \
+        "Please stop the software who uses it" \
         "(\`sudo ss -nap | grep '$1'' to know it)" || \
         printFileDescriptor3 "Port '$1' is free."
 }
@@ -657,50 +659,48 @@ function testRequierments() {
     case "${unameOut}" in
         Linux*)     machine=Linux;;
         Darwin*)    machine=Mac;;
-        CYGWIN*)    exitScriptWithError "FATAL ERROR: " \
-            "This Script could not work on Cygwin " \
+        CYGWIN*)    exitScriptWithError "this Script could not work on Cygwin" \
             "because Node.js isn't implemented on Cygwin";;
-        MINGW*)     echo -e "WARNING: " \
-            "We don't know if it could works on Mingw."\
-            "If you test, please report it by open a new issue.\n\n" ; " \
+        MINGW*)     warning "We don't know if it could works on Mingw."\
+            "If you test, please report it by open a new issue." ; " \
             "sleep 20 ;;
-        *)     echo -e "WARNING: We don't know if it could works on your " \
+        *)     warning "We don't know if it could works on your " \
             "Operating System."\
-            "If you test, please report it by open a new issue.\n\n" ; " \
+            "If you test, please report it by open a new issue." ; " \
             "sleep 20 ;;
     esac
 
     printCommandAndEval "node --version" \
         || printCommandAndEval "nodejs --version" \
-        || errorInBuildExitCurrentSample "FATAL ERROR: please install Node. " \
+        || errorInBuildExitCurrentSample "please install Node. " \
         "If Node is already installed, please add it in your PATH."
     echo "We recommand to use Node.Js LTS. Check if you use it."
     echo
 
     printCommandAndEval "yarn -v" \
-        || errorInBuildExitCurrentSample "FATAL ERROR: please install Yarn. " \
+        || errorInBuildExitCurrentSample "please install Yarn. " \
         "If Yarn is already installed, please add it in your PATH."
     echo
 
     # java send question of this version to stderr. Redirect to stdout.
     printCommandAndEval "java -version 2>&1" || \
-        errorInBuildExitCurrentSample "FATAL ERROR: please install java."
+        errorInBuildExitCurrentSample "please install java."
     echo
 
     # java send question of this version to stderr. Redirect to stdout.
     printCommandAndEval "javac -version 2>&1" || errorInBuildExitCurrentSample \
-        "FATAL ERROR: please install JDK. "
+        "please install JDK. "
     echo
 
     local -r javaVersion="$(java -version 2>&1)"
     grep "OpenJDK" <<< "$javaVersion" && errorInBuildExitCurrentSample \
-        'FATAL ERROR: do not use OpenJDK, please install Oracle Java.'
+        'do not use OpenJDK, please install Oracle Java.'
     echo
     # TODO SHOULD WE ADD TEST TO CHECK IF WE ARE ON JDK8?
 
     command -v jhipster --version 1>> /dev/null || \
         errorInBuildExitCurrentSample \
-        "FATAL ERROR: please install JHipster globally. " \
+        "please install JHipster globally. " \
         "(\`$ yarn global install jhipster') " \
         "If JHipster is already installed, please add it in your PATH."
     echo
@@ -714,15 +714,15 @@ function testRequierments() {
             || printCommandAndEval \
                 "/Applications/Chromium.app/Contents/MacOS/Chromium \
                 --version" \
-            || errorInBuildExitCurrentSample "FATAL ERROR: please install" \
+            || errorInBuildExitCurrentSample "please install" \
                 "Google Chrome or Chromium." \
         else
             # For Linux or BSD
             printCommandAndEval "google-chrome-stable --version" \
                 || printCommandAndEval "chromium --version" \
-                || errorInBuildExitCurrentSample "FATAL ERROR: " \
-                "please install google-chrome-stable or chromium. " \
-                "If google-chrome-stable or chromium is already installed, "\
+                || errorInBuildExitCurrentSample "please install " \
+                "\`google-chrome-stable' or \`chromium'. " \
+                "If \`google-chrome-stable' or \`chromium' is already installed, "\
                 "please add it in your PATH".
         fi
 
@@ -730,13 +730,13 @@ function testRequierments() {
         if [[ "$skipDockerTests" -eq 0 ]] ; then
             printCommandAndEval "docker --version" || \
                 (errorInBuildExitCurrentSample \
-                "FATAL ERROR: please install docker and start the service. " \
+                "please install docker and start the service. " \
                 && skipDockerTests=1)
             echo
 
             printCommandAndEval "docker-compose --version" || \
                 (errorInBuildExitCurrentSample \
-                "FATAL ERROR: please install docker-compose. " \
+                "please install docker-compose. " \
                 && skipDockerTests=1)
             echo
         fi
@@ -744,7 +744,7 @@ function testRequierments() {
         if [[ "$skipDockerTests" -eq 0 ]] && \
             command -v systemctl --version 1>> /dev/null 2>&1 ; then
                 systemctl is-active docker.service 1>> /dev/null 2>&1 \
-                    ||  (errorInBuildExitCurrentSample "FATAL ERROR: please " \
+                    ||  (errorInBuildExitCurrentSample "please " \
                     "launch docker service" \
                     "(\`sudo systemctl start docker.service')" && \
                     skipDockerTests=1)
@@ -752,7 +752,7 @@ function testRequierments() {
 
         if [[ "$skipDockerTests" -eq 0 ]] ; then
             command -v docker info 1>> /dev/null || \
-                errorInBuildExitCurrentSample "\nFATAL ERROR: " \
+                errorInBuildExitCurrentSample "\n" \
                 "please manage docker as a non-root user (" \
                 "see https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user" \
                 "– don't forget to restart your computer after this " \
@@ -780,11 +780,11 @@ function testRequierments() {
             testIfPortIsFreeWithSs 9000
         else
             # TODO add tests for other tools
-            printFileDescriptor3 "WARNING: could not test if ports" \
+            printFileDescriptor3 "$BRED""\n\nWARNING: could not test if ports" \
                 "8080 8081 3636 27017 5432 9000 are free. " \
                 "This build could fail if this ports are not free." \
                 "Especially, do not forget to shutdown mysql service, " \
-                "postgresql service or mongodb service."
+                "postgresql service or mongodb service.\n\n""$NC"
             sleep 30
         fi
     fi
@@ -832,7 +832,7 @@ function printInfoBeforeLaunch() {
 function createLogFile() {
 
     cd "${JHIPSTER_TRAVIS}"
-    touch "$LOGFILENAME" || exitScriptWithError "FATAL ERROR: could not " \
+    touch "$LOGFILENAME" || exitScriptWithError "could not " \
         "create '$LOGFILENAME'"
 
     if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
@@ -892,13 +892,12 @@ function treatEndOfBuild() {
         # Don't use `for' syntax:
         # for i in ${dockerContainers[@]} ; do
         #     printCommandAndEval docker kill "$i" || exitScriptWithError \
-        #         "FATAL ERROR: couldn't kill docker container '$i'"
+        #         "Couldn't kill docker container '$i'"
         # done
         local -i i=0
         while [[ i -lt "${#dockerContainers[*]}" ]] ; do
             printCommandAndEval docker kill "${dockerContainers[i]}" \
-                || exitScriptWithError \
-                "FATAL ERROR: couldn't kill docker container " \
+                || exitScriptWithError "couldn't kill docker container " \
                 "'${dockerContainers[i]}'"
             i=$((i+1))
         done
@@ -974,12 +973,14 @@ function errorInBuildStopCurrentSample() {
     local -r ELAPSED="Elapsed: $(($SECONDS / 3600)) hrs "\
 "$((($SECONDS / 60) % 60)) min $(($SECONDS % 60)) sec"
     if [[ -e /dev/fd/4 ]] ; then
-        1>&2 echo "$@. Error in '$JHIPSTER_MATRIX' at `date +%r`" \
-            "(elapsed: '$ELAPSED')" \
+        1>&2 echo "$BRED""FATAL ERROR: ""$@" \
+            "Error in '$JHIPSTER_MATRIX' at `date +%r`" \
+            "(elapsed: '$ELAPSED')""$NC" \
             >> >(tee --append /dev/fd/2 /dev/fd/4 >> /dev/null)
     else
-        1>&2 echo "$@. Error in '$JHIPSTER_MATRIX' at `date +%r`" \
-            "(elapsed: '$ELAPSED')"
+        1>&2 echo "$BRED FATAL ERROR: ""$@" \
+            "Error in '$JHIPSTER_MATRIX' at `date +%r` " \
+            "(elapsed: '$ELAPSED')""$NC"
     fi
 
     # Thanks this variable set to 1
@@ -1025,9 +1026,8 @@ function yarnLink() {
     echoTitleBuildStep "yarn link"
     yarn init -y
     command yarn link "generator-jhipster" || \
-        errorInBuildExitCurrentSample "FATAL ERROR: " \
-            "you havn't executed \`yarn link' in a folder " \
-            "named 'generator-jhipster'. " \
+        errorInBuildExitCurrentSample "you havn't executed \`yarn link' " \
+            "in a folder named 'generator-jhipster'. " \
             "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
     local -r GENERATOR_JHIPSTER_FOLDER="`pwd`/node_modules/generator-jhipster"
     ls -la "$GENERATOR_JHIPSTER_FOLDER"
@@ -1037,9 +1037,8 @@ function yarnLink() {
     cd "$GENERATOR_JHIPSTER_FOLDER"
     local -r GENERATOR_JHIPSTER_FOLDER_REAL=`pwd -P`
     if [ "$JHIPSTER_TRAVISReal" != "$GENERATOR_JHIPSTER_FOLDER_REAL" ] ; then
-        errorInBuildExitCurrentSample "FATAL ERROR: " \
-            "'$JHIPSTER_TRAVISReal and '$GENERATOR_JHIPSTER_FOLDER_REAL' " \
-            "are not the same folders"
+        errorInBuildExitCurrentSample "'$JHIPSTER_TRAVISReal and " \
+            "'$GENERATOR_JHIPSTER_FOLDER_REAL' are not the same folders"
     else
         echo "Command \`yarn link' seems corect."
     fi
@@ -1116,8 +1115,7 @@ function generateProject() {
         set +e
         yarn test
         if [[ $? -ne 0 ]] ; then
-            errorInBuildStopCurrentSample \
-                "Fail during test of the Generator." \
+            errorInBuildStopCurrentSample "fail during test of the Generator." \
                 " (command 'yarn test' in `pwd`)"
         fi
         set -e
@@ -1226,7 +1224,7 @@ function generateNode_Modules_Cache() {
         echoTitleBuildStep "JHipster generation."
         cp "${JHIPSTER_SAMPLES}/node_modules_cache/angular/.yo-rc.json" \
             "${NODE_MODULES_CACHE_ANGULAR}" || \
-            errorInBuildExitCurrentSample "FATAL ERROR: not a JHipster project."
+            errorInBuildExitCurrentSample "not a JHipster project."
         cd "${NODE_MODULES_CACHE_ANGULAR}"
         local -r jhipstercommand="jhipster --force --no-insight --skip-checks "\
 "--with-entities --skip-git --skip-commit-hook"
@@ -1265,7 +1263,7 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     # Should never be raised because we check ../.travis.yml.
     # Maybe in case of the user delete all folders sample!
     if [ ! -f "$JHIPSTER_SAMPLES/""$JHIPSTER""/.yo-rc.json" ]; then
-        exitScriptWithError "FATAL ERROR: not a JHipster project."
+        exitScriptWithError "not a JHipster project."
     fi
 
 }
@@ -1288,7 +1286,7 @@ function createFolderNodeModulesAndLogFile() {
             cp -R "${NODE_MODULES_CACHE_ANGULAR}/node_modules" \
                 "${APP_FOLDER}"
         else
-            errorInBuildExitCurrentSample "FATAL ERROR: script not implemented"\
+            errorInBuildExitCurrentSample "Script not implemented."\
             "for React"
         fi
         # Even if there is already a correct symlink, we must launch it again.
@@ -1389,8 +1387,7 @@ function wrapperLaunchScript() {
 function launchSamplesInBackground() {
 
     if [[ ! "${JHIPSTER_MATRIX_ARRAY[*]}" =~ "(\s|^)ngx-default(\s|$)" ]] ; then
-        echo -e "\n\nWARNING: " \
-            "we advise to add build of 'ngx-default'.\n"
+        warning "we advise to add build of 'ngx-default'.\n"
         sleep 4
     fi
 
@@ -1417,11 +1414,11 @@ function launchSamplesInBackground() {
         # Should never be raised because we check ../.travis.yml.
         # Maybe in case of the user delete all folders sample!
         if [ ! -f "$YO_FOLDER""/.yo-rc.json" ]; then
-            exitScriptWithError "FATAL ERROR: not a JHipster project."
+            exitScriptWithError "not a JHipster project."
         fi
 
         if [[ -e "$APP_FOLDER" ]] ; then
-            echo -e "WARNING: if you continue the old folder '$APP_FOLDER'" \
+            warning "if you continue the old folder '$APP_FOLDER'" \
                 "will be deleted."
         fi
         i=$((i+1))
@@ -1434,6 +1431,7 @@ function launchSamplesInBackground() {
 
     # TODO Actually numberOfProcesses should be 1 because there is port conflict
     # TODO add test if there is only few samples to test
+    echo -en "$BLUE"
     read -t 1 -n 10000 discard || echo ""
     echo
     local question="How many processes "\
@@ -1452,6 +1450,7 @@ function launchSamplesInBackground() {
         echo "" ;
     done
     unset question typeAnswer
+    echo -en "$NC"
 
     testRequierments
 
@@ -1575,6 +1574,14 @@ declare -r NODE_MODULES_CACHE_ANGULAR="${NODE_MODULES_CACHE_SAMPLE}""/angular"
 # Use it like this:"${ps4Light}`dirs +0`$ "
 declare ps4Light="$USER""@""$HOSTNAME"": "
 
+declare -r URED="\033[4;31m"
+declare -r BRED="\033[1;31m"
+declare -r BLUE="\033[0;34m"
+declare -r NC="\033[0m"
+
+declare -r JHIPSTER_LIST_PATTERN="^[a-z1-9,-]*$"
+declare -r JHIPSTER_PATTERN="^[a-z1-9-]*$"
+
 # Argument parser {{{2
 # ====================
 # ====================
@@ -1583,11 +1590,10 @@ function returnJHIPSTER_MATRIXofFileTravisDotYml() {
     # "$1" is the name of the variable we want assign
     # example https://stackoverflow.com/a/38997681
     local -n returned="$1"
-    local JHIPSTER_LOCAL="$2"
+    local -r JHIPSTER_LOCAL="$2"
     returned=`grep -E --color=never "$JHIPSTER_LOCAL(\s|$)" \
         <<< "$TRAVIS_DOT_YAML_PARSED"` \
-        || exitScriptWithError "\n\nFATAL ERROR: " \
-        "'$JHIPSTER_LOCAL' is not a correct sample." \
+        || exitScriptWithError "'$JHIPSTER_LOCAL' is not a correct sample." \
         "Please read \`$ ./build-samples.sh help'."
 
 }
@@ -1595,10 +1601,10 @@ function returnJHIPSTER_MATRIXofFileTravisDotYml() {
 function define_JHIPSTER_MATRIX_ARRAY() {
     if [[ -z "${JHIPSTER_LIST+x}" ]] ; then
         IFS= readarray JHIPSTER_MATRIX_ARRAY <<< "$TRAVIS_DOT_YAML_PARSED"
-    elif [[ "${JHIPSTER_LIST}" =~ ^[a-z0-9-]*$ ]] ; then
+    elif [[ "${JHIPSTER_LIST}" =~ "$JHIPSTER_PATTERN" ]] ; then
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX_ARRAY[0] \
             "$JHIPSTER_LIST"
-    elif [[ ${JHIPSTER_LIST} =~ ^[a-z0-9,-]*$ ]] ; then
+    elif [[ ${JHIPSTER_LIST} =~ "$JHIPSTER_LIST_PATTERN" ]] ; then
         local -a tmpSampleListArray
         IFS=$',' read -ra tmpSampleListArray  <<< "$JHIPSTER_LIST"
         local -i i=0
@@ -1608,7 +1614,7 @@ function define_JHIPSTER_MATRIX_ARRAY() {
             i=$((i+1))
         done
     else
-        exitScriptWithError "FATAL ERROR: not a valid sample name, or" \
+        exitScriptWithError "not a valid sample name, or" \
             "list of samples name.\n" \
             "A sample name contains only alphanumeric characters and dash.\n" \
             "A list of samples name is seperated by the character ','.\n" \
@@ -1632,7 +1638,7 @@ function launchSamples() {
 }
 
 function tooMuchArguments() {
-    exitScriptWithError "\n\n\nFATAL ERROR: to much arguments. " \
+    exitScriptWithError "too much arguments. " \
         "Please see \`./build-samples.sh help'."
 }
 
@@ -1659,21 +1665,25 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
     [[ "$COMMAND_NAME" == "generate" ]] && declare -r ISGENERATEANDTEST=0 || \
         declare -r ISGENERATEANDTEST=1
 
-    if [[ ! -z "$2" ]] ; then
-        declare JHIPSTER_LIST="$2"
-        declare -a JHIPSTER_MATRIX_ARRAY
-    fi
-
     declare ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=0
     declare COLORIZELOGFILE=0
 
-    if [[ ! -z "${3+x}" ]] ; then
-        shift 2
+    if [[ ! -z "$2" ]] ; then
+
+        if [[ "$2" =~ "$JHIPSTER_LIST_PATTERN" ]] ; then
+            declare JHIPSTER_LIST="$2"
+            declare -a JHIPSTER_MATRIX_ARRAY
+            shift 2
+        else
+            shift
+        fi
+
         while [[ "$#" -ne 0 ]] ; do
             if [[ "$1" == "--consoleverbose" ]] ; then
                 ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=1
-                if [[ "$SAMPLES_NAME" =~ ^[a-z1-9,-]*$ ]] ; then
-                    exitScriptWithError "\n\n\nFATAL ERROR '--consoleverbose' "\
+                if [[ -z "$JHIPSTER_LIST_PATTERN" ]] || \
+                    "$JHIPSTER_LIST" =~ "$JHIPSTER_LIST_PATTERN" ]] ; then
+                    exitScriptWithError "'--consoleverbose' "\
                         "option could " \
                         "be used only when there is only one sample to build." \
                         "Please see \`./build-samples.sh help'."
@@ -1681,11 +1691,11 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
             elif [[ "$1" == "--colorizelogfile" ]] ; then
                 export PS4='${debian_chroot:+($debian_chroot)}'\
 '\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-                declare ps4Light="\033[1;32m""$USER@""$HOSTNAME""\033[0m"": "\
+                ps4Light="\033[1;32m""$USER@""$HOSTNAME""\033[0m"": "\
 "\033[1;34m"`dirs +0`"\033[0m"" $ "
                 COLORIZELOGFILE=1
             else
-                exitScriptWithError "\n\n\nFATAL ERROR: '$1' is not a correct" \
+                exitScriptWithError "$1' is not a correct" \
                     "argument. Please read \`./build-samples.sh help'".
             fi
             shift
@@ -1700,7 +1710,7 @@ elif [ "$COMMAND_NAME" = "clean" ]; then
     fi
     cleanAllProjects
 else
-    declare firstArgument="\n\n\nFATAL ERROR: incorrect argument. "\
+    declare firstArgument="Incorrect argument. "\
 "Please see \\\`$ ./build-samples.sh help'".
     exitScriptWithError "$firstArgument"
 fi
