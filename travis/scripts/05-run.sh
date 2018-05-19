@@ -33,7 +33,8 @@ set -x
 
 cd "$APP_FOLDER"
 if [ -a src/main/docker/couchbase.yml ]; then
-    docker-compose -f src/main/docker/couchbase.yml up -d
+    docker-compose -f src/main/docker/couchbase.yml \
+        --project-name jhister-travis-log-couchebase up -d
     sleep 10
 fi
 
@@ -87,10 +88,10 @@ launchCurlOrProtractor() {
     return $result
 }
 
-if [[ -z "${ISSTARTAPPLICATION+x}" ]] && \
+if [[ -z "${ISSTARTAPPLICATION+x}" ]] || \
     [[ "$ISSTARTAPPLICATION" -eq 0 ]]; then
-        # If we are in Travis CI or in `../build-samples.sh generate'
-        # or `../build-samples.sh generateandtest'
+    # If we are in Travis CI or in `../build-samples.sh generate'
+    # or `../build-samples.sh generateandtest'
 
     #--------------------------------------------------------------------------
     # Package UAA
@@ -162,7 +163,7 @@ if [ "$RUN_APP" == 1 ]; then
     launchCurlOrProtractor && result=$? || result=$?
     # "$ISSTARTAPPLICATION" is setted for `../build-samples.sh startapplication
     # sample_name'
-    if [[ -z "${ISSTARTAPPLICATION+x}" ]] && \
+    if [[ -z "${ISSTARTAPPLICATION+x}" ]] || \
         [[ "$ISSTARTAPPLICATION" -eq 0 ]]; then
         # If we are in Travis CI or in `../build-samples.sh generate'
         # or `../build-samples.sh generateandtest'

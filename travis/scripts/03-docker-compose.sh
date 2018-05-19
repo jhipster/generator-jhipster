@@ -33,39 +33,50 @@ set -x
 
 cd "$APP_FOLDER"
 if [ -a src/main/docker/jhipster-registry.yml ]; then
-    docker-compose -f src/main/docker/jhipster-registry.yml up -d
+    docker-compose -f src/main/docker/jhipster-registry.yml \
+        --project-name jhipster-travis-build-registery up -d
 fi
 if [ -a src/main/docker/consul.yml ]; then
-    docker-compose -f src/main/docker/consul.yml up -d
+    docker-compose -f src/main/docker/consul.yml \
+        --project-name jhipster-travis-build-consul up -d
 fi
 if [ -a src/main/docker/cassandra.yml ]; then
-    docker-compose -f src/main/docker/cassandra.yml up -d
+    docker-compose -f src/main/docker/cassandra.yml \
+        --project-name jhipster-travis-build-cassandra up -d
 fi
 if [ -a src/main/docker/mongodb.yml ]; then
-    docker-compose -f src/main/docker/mongodb.yml up -d
+    docker-compose -f src/main/docker/mongodb.yml \
+        --project-name jhipster-travis-build-mongodb up -d
 fi
 if [ -a src/main/docker/couchbase.yml ]; then
     # this container can't be started otherwise, it will be conflict with tests
     # so here, only prepare the image
-    docker-compose -f src/main/docker/couchbase.yml build
+    docker-compose -f src/main/docker/couchbase.yml \
+        --project-name jhipster-travis-build-couchbase build -d
 fi
 if [ -a src/main/docker/mysql.yml ]; then
-    docker-compose -f src/main/docker/mysql.yml up -d
+    docker-compose -f src/main/docker/mysql.yml \
+        --project-name jhipster-travis-build-mysql up -d
 fi
 if [ -a src/main/docker/postgresql.yml ]; then
-    docker-compose -f src/main/docker/postgresql.yml up -d
+    docker-compose -f src/main/docker/postgresql.yml \
+        --project-name jhipster-travis-build-postgresql up -d
 fi
 if [ -a src/main/docker/elasticsearch.yml ]; then
-    docker-compose -f src/main/docker/elasticsearch.yml up -d
+    docker-compose -f src/main/docker/elasticsearch.yml \
+        --project-name jhipster-travis-build-elasticsearch up -d
 fi
 if [ -a src/main/docker/mariadb.yml ]; then
-    docker-compose -f src/main/docker/mariadb.yml up -d
+    docker-compose -f src/main/docker/mariadb.yml \
+        --project-name jhipster-travis-build-mariadb up -d
 fi
 if [ -a src/main/docker/kafka.yml ]; then
-    docker-compose -f src/main/docker/kafka.yml up -d
+    docker-compose -f src/main/docker/kafka.yml \
+        --project-name jhipster-travis-build-kafka up -d
 fi
 if [ -a src/main/docker/keycloak.yml ]; then
-    docker-compose -f src/main/docker/keycloak.yml up -d
+    docker-compose -f src/main/docker/keycloak.yml \
+        --project-name jhipster-travis-build-keycloak up -d
 fi
 
 docker ps -a

@@ -143,6 +143,8 @@
 #       inner() { echo -n $cc ; cc=gg ; echo -n $cc ;} && func
 #       ===> ddgggg
 #       We use this behaviour in generateNode_Modules_Cache()
+# 16) readonly isn't transimtted to subshell (`export readonly'). But
+#       a var could be marked readonly in any moment.
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -362,12 +364,8 @@ warning() {
 
 # ps4b() {{{3
 ps4b() {
-    if [[ "$COLORIZELOGFILE" -eq 0 ]] ; then
-        echo -en "$USER""@""$HOSTNAME"": `dirs +0` $ "
-    else
-        echo -en "\033[1;32m""$USER@""$HOSTNAME""\033[0m"": "\
-            "\033[1;34m"`dirs +0`"\033[0m"" $ "
-    fi
+    echo -en "\033[1;32m""$USER@""$HOSTNAME""\033[0m"": "\
+        "\033[1;34m"`dirs +0`"\033[0m"" $ "
 }
 
 # function printFileDescriptor3() {{{2
@@ -812,7 +810,7 @@ function testRequierments() {
             `
         if command -v ss 1>> /dev/null ; then
             testIfPortIsFreeWithSs "$serverPort" "serverPort"
-            testIfPortIsFreeWithSs 3636
+            testIfPortIsFreeWithSs 3306
             testIfPortIsFreeWithSs 27017
             testIfPortIsFreeWithSs 5432
             testIfPortIsFreeWithSs 9000
@@ -848,11 +846,13 @@ function printInfoBeforeLaunch() {
     # generateAndTestProject().
     if [[ -z "${isGenerationOfNodeModulesCache+x}" ]] ; then
         # echo constants used in ./scripts/*.sh
-        printFileDescriptor3 "LOGFILENAME='$LOGFILENAME'" \
+        if [[ "$ISSTARTAPPLICATION" -eq 0 ]] ; then
+            printFileDescriptor3 "\nLOGFILENAME='$LOGFILENAME'" \
                 "(variable not used in ./travis/script/*.sh." \
                 "The end of this filename shoule be renamed errored or passed" \
-                "at the end of this script)\n" \
-            "JHIPSTER_MATRIX='$JHIPSTER_MATRIX'" \
+                "at the end of this script)\n"
+        fi
+        printFileDescriptor3 "\nJHIPSTER_MATRIX='$JHIPSTER_MATRIX'" \
                 "(variable not used in ./travis/script/*.sh)\n" \
             "JHIPSTER='$JHIPSTER'\n" \
             "PROFILE='$PROFILE'\n" \
@@ -1171,11 +1171,16 @@ function generateProject() {
     # Do not run command below for this script (this script is only for Travis)
     # launchNewBash "./scripts/03-replace-version-generated-project.sh" \
     #     "Replace version generated-project'"
-    if [[ "$ISSTARTAPPLICATION" -eq 0 ]] ; then
+
+
+    if [[ "$ISGENERATEANDTEST" -eq 0 ]] ; then
         # to not launch \`yarn e2e' in 05-run.sh
         PROTRACTOR=0
+        launchNewBash "./scripts/03-docker-compose.sh" \
+            "Start docker container-compose.sh for '${JHIPSTER}'"
         launchNewBash "./scripts/05-run.sh" "Package '${JHIPSTER}-sample'"
     fi
+
 }
 
 # function generateAndTestProject() {{{3
@@ -1628,8 +1633,9 @@ export localTravis=1
 
 # Define prompt (used by `set -x` for scripts in ./scripts/*)
 export PROMPT_COMMAND=""
-# Could be redefined if --colorizelogfile is passed as argument.
-export PS4='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+export PS4='${debian_chroot:+($debian_chroot)}'\
+'\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+readonly PS4
 
 
 # GLOBAL CONSTANTS SPECIFIC TO ./build-samples.sh (this script)
@@ -1661,14 +1667,7 @@ declare -r NODE_MODULES_CACHE_ANGULAR="${NODE_MODULES_CACHE_SAMPLE}""/angular"
 # NODE_MODULES_CACHE_REACT="${NODE_MODULES_CACHE_SAMPLE}"/react
 
 # Use it like this:"${ps4Light}`dirs +0`$ "
-declare ps4Light="$USER""@""$HOSTNAME"": "
-function colorizeLogFile() {
-    export PS4='${debian_chroot:+($debian_chroot)}'\
-'\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-    declare -g ps4Light="\033[1;32m""$USER@""$HOSTNAME""\033[0m"": "\
-"\033[1;34m"`dirs +0`"\033[0m"" $ "
-    declare -g COLORIZELOGFILE=1
-}
+declare -r ps4Light="\033[1;32m""$USER@""$HOSTNAME""\033[0m"": "\
 
 declare -r NC="\033[0m"
 declare -r URED="\033[4;31m"
@@ -1762,7 +1761,8 @@ elif [[ "$COMMAND_NAME" == "startapplication" ]] ; then
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER"
         declare -r ISGENERATEANDTEST=0
         export ISSTARTAPPLICATION=1
-        colorizeLogFile
+        readonly ISSTARTAPPLICATION
+        declare -r COLORIZELOGFILE=1
         time startApplication
     else
         exitScriptWithError "you could only launch only one sample." \
@@ -1775,6 +1775,7 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
         declare -r ISGENERATEANDTEST=1
 
     export ISSTARTAPPLICATION=0
+    readonly ISSTARTAPPLICATION
 
     declare ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=0
     declare COLORIZELOGFILE=0
@@ -1800,7 +1801,7 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
                         "Please see \`./build-samples.sh help'."
                 fi
             elif [[ "$1" == "--colorizelogfile" ]] ; then
-                colorizeLogFile
+                COLORIZELOGFILE=1
             else
                 exitScriptWithError "$1' is not a correct" \
                     "argument. Please read \`./build-samples.sh help'".
@@ -1818,7 +1819,7 @@ elif [ "$COMMAND_NAME" = "clean" ]; then
     cleanAllProjects
 else
     declare firstArgument="Incorrect argument. "\
-"Please see \\\`$ ./build-samples.sh help'".
+"Please see \`$ ./build-samples.sh help'".
     exitScriptWithError "$firstArgument"
 fi
 
