@@ -20,12 +20,16 @@
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
+                "required",
+                "unique"
             ]
         },
         {
             "fieldName": "shortName",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "unique"
+            ]
         },
         {
             "fieldName": "numberOfPeople",
@@ -52,5 +56,6 @@
     "entityTableName": "division",
     "dto": "no",
     "pagination": "no",
-    "service": "no"
+    "service": "no",
+    "clientRootFolder": "test-root"
 }

@@ -1,0 +1,93 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%=packageName%>.config;
+
+import com.couchbase.client.java.Cluster;
+import com.couchbase.client.java.bucket.BucketType;
+import com.couchbase.client.java.cluster.DefaultBucketSettings;
+import com.couchbase.client.java.env.CouchbaseEnvironment;
+import org.assertj.core.util.Lists;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
+import org.springframework.data.couchbase.config.BeanNames;
+import org.springframework.data.couchbase.config.CouchbaseConfigurer;
+import org.testcontainers.couchbase.CouchbaseContainer;
+
+import java.util.List;
+
+@Configuration
+public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
+
+    private CouchbaseProperties couchbaseProperties;
+
+    private static CouchbaseContainer<? extends CouchbaseContainer<?>> couchbaseContainer;
+
+    public DatabaseTestConfiguration(CouchbaseProperties couchbaseProperties) {
+        this.couchbaseProperties = couchbaseProperties;
+    }
+
+    @Override
+    @Bean(destroyMethod = "", name = BeanNames.COUCHBASE_ENV)
+    public CouchbaseEnvironment couchbaseEnvironment() {
+        return getCouchbaseContainer().getCouchbaseEnvironment();
+    }
+
+    @Override
+    public Cluster couchbaseCluster() throws Exception {
+        return getCouchbaseContainer().getCouchbaseCluster();
+    }
+
+    @Override
+    protected List<String> getBootstrapHosts() {
+        return Lists.newArrayList(getCouchbaseContainer().getContainerIpAddress());
+    }
+
+    @Override
+    protected String getBucketName() {
+        return couchbaseProperties.getBucket().getName();
+    }
+
+    @Override
+    protected String getBucketPassword() {
+        return couchbaseProperties.getBucket().getPassword();
+    }
+
+    @Override
+    protected CouchbaseConfigurer couchbaseConfigurer() {
+        return this;
+    }
+
+    private CouchbaseContainer<? extends CouchbaseContainer<?>> getCouchbaseContainer() {
+        if (couchbaseContainer != null) {
+            return couchbaseContainer;
+        }
+        couchbaseContainer = new CouchbaseContainer<>("<%= DOCKER_COUCHBASE %>");
+        couchbaseContainer
+            .withNewBucket(DefaultBucketSettings.builder()
+                .name(getBucketName())
+                .password(getBucketPassword())
+                .type(BucketType.COUCHBASE)
+                .quota(100)
+                .build());
+        couchbaseContainer.start();
+        return couchbaseContainer;
+    }
+}

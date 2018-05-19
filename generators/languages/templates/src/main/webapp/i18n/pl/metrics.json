@@ -72,9 +72,17 @@
         "cache": {
             "title": "Statystyki Cache",
             "cachename": "Nazwa cache",
-            "hits": "Odsłon",
+            "hits": "Trafienia",
             "misses": "Nietrafionych",
-            "evictions": "Liczba wyeksmitowanych"
+            "gets": "Odczyty",
+            "puts": "Zapisy",
+            "removals": "Usunięcia",
+            "evictions": "Eksmisje",
+            "hitPercent": "Trafienia %",
+            "missPercent": "Nietrafionych %",
+            "averageGetTime": "Średni czas odczytu (µs)",
+            "averagePutTime": "Średni czas zapisu (µs)",
+            "averageRemoveTime": "Średni czas usunięcia (µs)"
         },
         "datasource": {
             "usage": "Użycie",

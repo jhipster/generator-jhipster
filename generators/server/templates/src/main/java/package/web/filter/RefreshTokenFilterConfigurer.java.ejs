@@ -1,0 +1,54 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%=packageName%>.web.filter;
+
+import <%=packageName%>.security.oauth2.OAuth2AuthenticationService;
+
+import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationProcessingFilter;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.web.DefaultSecurityFilterChain;
+
+/**
+ * Configures a RefreshTokenFilter to refresh access tokens if they are about to expire.
+ *
+ * @see RefreshTokenFilter
+ */
+public class RefreshTokenFilterConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+    /**
+     * RefreshTokenFilter needs the OAuth2AuthenticationService to refresh cookies using the refresh token.
+     */
+    private OAuth2AuthenticationService authenticationService;
+    private final TokenStore tokenStore;
+
+    public RefreshTokenFilterConfigurer(OAuth2AuthenticationService authenticationService, TokenStore tokenStore) {
+        this.authenticationService = authenticationService;
+        this.tokenStore = tokenStore;
+    }
+
+    /**
+     * Install RefreshTokenFilter as a servlet Filter.
+     */
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        RefreshTokenFilter customFilter = new RefreshTokenFilter(authenticationService, tokenStore);
+        http.addFilterBefore(customFilter, OAuth2AuthenticationProcessingFilter.class);
+    }
+}

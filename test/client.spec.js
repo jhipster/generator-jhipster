@@ -5,30 +5,28 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const getFilesForOptions = require('./utils/utils').getFilesForOptions;
 const expectedFiles = require('./utils/expected-files');
-const angularJsfiles = require('../generators/client/files-angularjs').files;
-const angularfiles = require('../generators/client/files-angular').files;
+const angularFiles = require('../generators/client/files-angular').files;
+const reactFiles = require('../generators/client/files-react').files;
 
 describe('JHipster client generator', () => {
-    describe('generate client with angularjs 1', () => {
+    describe('generate client with React', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({ skipInstall: true, auth: 'jwt' })
+                .withOptions({ skipInstall: true, auth: 'jwt', experimental: true })
                 .withPrompts({
                     baseName: 'jhipster',
-                    enableTranslation: true,
                     serviceDiscoveryType: false,
+                    enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    clientFramework: 'angular1',
+                    clientFramework: 'react',
                     useSass: true
                 })
                 .on('end', done);
         });
-
-        it('creates expected files for default configuration for client generator', () => {
-            assert.noFile(expectedFiles.server);
+        it('creates expected files for react configuration for client generator', () => {
             assert.noFile(expectedFiles.maven);
-            assert.file(getFilesForOptions(angularJsfiles, {
+            assert.file(getFilesForOptions(reactFiles, {
                 useSass: true,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -36,38 +34,12 @@ describe('JHipster client generator', () => {
                 testFrameworks: []
             }));
         });
-        it('contains clientFramework with angular1 value', () => {
-            assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
-        });
-        it('contains clientPackageManager with yarn value', () => {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
+        it('contains clientFramework with react value', () => {
+            assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
         });
     });
 
-    describe('generate client with AngularJS 1 using npm flag', () => {
-        beforeEach((done) => {
-            helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({ skipInstall: true, auth: 'session', npm: true })
-                .withPrompts({
-                    baseName: 'jhipster',
-                    serviceDiscoveryType: false,
-                    enableTranslation: true,
-                    nativeLanguage: 'en',
-                    languages: ['fr'],
-                    clientFramework: 'angular1',
-                    useSass: true
-                })
-                .on('end', done);
-        });
-        it('contains clientFramework with angular1 value', () => {
-            assert.fileContent('.yo-rc.json', /"clientFramework": "angular1"/);
-        });
-        it('contains clientPackageManager with npm value', () => {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
-        });
-    });
-
-    describe('generate client with Angular 2+', () => {
+    describe('generate client with Angular', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'jwt' })
@@ -87,7 +59,7 @@ describe('JHipster client generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
-            assert.file(getFilesForOptions(angularfiles, {
+            assert.file(getFilesForOptions(angularFiles, {
                 useSass: true,
                 enableTranslation: true,
                 serviceDiscoveryType: false,
@@ -103,7 +75,7 @@ describe('JHipster client generator', () => {
         });
     });
 
-    describe('generate client with Angular 2+ using yarn flag', () => {
+    describe('generate client with Angular using npm flag', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'jwt', npm: true })
@@ -123,7 +95,7 @@ describe('JHipster client generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
-            assert.file(getFilesForOptions(angularfiles, {
+            assert.file(getFilesForOptions(angularFiles, {
                 useSass: true,
                 enableTranslation: true,
                 serviceDiscoveryType: false,

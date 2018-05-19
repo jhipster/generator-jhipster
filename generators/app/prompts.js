@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,7 +54,7 @@ function askForApplicationType(meta) {
     const PROMPT = {
         type: 'list',
         name: 'applicationType',
-        message: response => this.getNumberedQuestion('Which *type* of application would you like to create?', true),
+        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
         choices: [
             {
                 value: DEFAULT_APPTYPE,
@@ -68,6 +68,11 @@ function askForApplicationType(meta) {
                 value: 'gateway',
                 name: 'Microservice gateway'
             },
+            // Reactive applications are not yet supported!
+            //    {
+            //        value: 'reactive',
+            //        name: 'Reactive application'
+            //    },
             {
                 value: 'uaa',
                 name: 'JHipster UAA server (for microservice OAuth2 authentication)'
@@ -93,13 +98,9 @@ function askForModuleName() {
     if (this.existingProject) return;
 
     this.askModuleName(this);
-    this.configOptions.lastQuestion = this.currentQuestion;
-    this.configOptions.totalQuestions = this.totalQuestions;
 }
 
 function askFori18n() {
-    this.currentQuestion = this.configOptions.lastQuestion;
-    this.totalQuestions = this.configOptions.totalQuestions;
     if (this.skipI18n || this.existingProject) return;
     this.aski18n(this);
 }
@@ -118,12 +119,14 @@ function askForTestOpts(meta) {
     }
     if (meta || !this.skipClient) {
         // all client side test frameworks should be added here
-        choices.push({ name: 'Protractor', value: 'protractor' });
+        if (this.configOptions.clientFramework === 'angularX') {
+            choices.push({ name: 'Protractor', value: 'protractor' });
+        }
     }
     const PROMPT = {
         type: 'checkbox',
         name: 'testFrameworks',
-        message: response => this.getNumberedQuestion('Besides JUnit and Karma, which testing frameworks would you like to use?', true),
+        message: 'Besides JUnit and Karma, which testing frameworks would you like to use?',
         choices,
         default: defaultChoice
     };
@@ -147,7 +150,7 @@ function askForMoreModules() {
     this.prompt({
         type: 'confirm',
         name: 'installModules',
-        message: response => this.getNumberedQuestion('Would you like to install other generators from the JHipster Marketplace?', true),
+        message: 'Would you like to install other generators from the JHipster Marketplace?',
         default: false
     }).then((prompt) => {
         if (prompt.installModules) {
@@ -159,7 +162,7 @@ function askForMoreModules() {
 }
 
 function askModulesToBeInstalled(done, generator) {
-    generator.httpsGet('https://api.npms.io/v2/search?q=keywords:jhipster-module&from=0&size=50', (body) => {
+    generator.httpsGet('https://api.npms.io/v2/search?q=keywords:jhipster-module+jhipster-5&from=0&size=50', (body) => {
         try {
             const moduleResponse = JSON.parse(body);
             const choices = [];

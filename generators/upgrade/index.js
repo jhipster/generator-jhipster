@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,7 +65,7 @@ module.exports = class extends BaseGenerator {
     _cleanUp() {
         const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn'];
         shelljs.ls('-A').forEach((file) => {
-            if (filesToKeep.indexOf(file) === -1) {
+            if (!filesToKeep.includes(file)) {
                 this.info(`Removing ${file}`);
                 shelljs.rm('-rf', file);
             }
@@ -78,7 +78,7 @@ module.exports = class extends BaseGenerator {
         let generatorCommand = 'yo jhipster';
         if (semver.gte(version, FIRST_CLI_SUPPORTED_VERSION)) {
             const generatorDir = this.clientPackageManager === 'yarn' ? shelljs.exec('yarn bin', { silent: this.silent }).stdout : shelljs.exec('npm bin', { silent: this.silent }).stdout;
-            generatorCommand = `${generatorDir.replace('\n', '')}/jhipster`;
+            generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
         const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install`;
         this.info(regenerateCmd);
@@ -105,13 +105,6 @@ module.exports = class extends BaseGenerator {
 
     _regenerate(version, callback) {
         this._generate(version, () => {
-            if (this.clientFramework === 'angular1' && version === this.latestVersion) {
-                this.info('bower install');
-                const result = this.spawnCommandSync('bower', ['install']);
-                if (result.status !== 0) {
-                    this.error('bower install failed.');
-                }
-            }
             const keystore = `${SERVER_MAIN_RES_DIR}keystore.jks`;
             this.info(`Removing ${keystore}`);
             shelljs.rm('-Rf', keystore);
@@ -123,6 +116,15 @@ module.exports = class extends BaseGenerator {
 
     get configuring() {
         return {
+
+            assertJHipsterProject() {
+                const done = this.async();
+                if (!this.getJhipsterAppConfig()) {
+                    this.error('Current directory does not contain a JHipster project.');
+                }
+                done();
+            },
+
             assertGitPresent() {
                 const done = this.async();
                 this.isGitInstalled((code) => {
@@ -338,18 +340,12 @@ module.exports = class extends BaseGenerator {
                 if (code !== 0) {
                     this.error(`${installCommand} failed.`);
                 }
-                if (this.clientFramework === 'angular1') {
-                    this.info('bower install');
-                    this.spawnCommandSync('bower', ['install']);
-                }
                 done();
             });
         } else {
-            if (this.clientFramework !== 'angular1') {
-                const logMsg =
-                    `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
-                this.success(logMsg);
-            }
+            const logMsg =
+                `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
+            this.success(logMsg);
             done();
         }
     }

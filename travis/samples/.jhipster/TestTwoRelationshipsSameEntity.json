@@ -24,6 +24,20 @@
             "otherEntityName": "user",
             "relationshipType": "one-to-one",
             "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "firstUniqueRequiredRelation",
+            "relationshipValidateRules": "required",
+            "otherEntityName": "division",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "secondUniqueRequiredRelation",
+            "relationshipValidateRules": "required",
+            "otherEntityName": "division",
+            "otherEntityField": "id"
         }
     ],
     "fields": [],
@@ -31,5 +45,6 @@
     "entityTableName": "test_multiple_rel",
     "dto": "no",
     "service": "no",
+    "angularJSSuffix": "mySuffix",
     "pagination": "no"
 }

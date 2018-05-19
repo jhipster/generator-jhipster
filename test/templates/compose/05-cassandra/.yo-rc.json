@@ -6,7 +6,8 @@
     "packageFolder": "com/mycompany/myapp",
     "serverPort": "8081",
     "authenticationType": "jwt",
-    "hibernateCache": "no",
+    "cacheProvider": "no",
+    "enableHibernateCache": false,
     "databaseType": "cassandra",
     "devDatabaseType": "cassandra",
     "prodDatabaseType": "cassandra",
@@ -25,8 +26,6 @@
     "languages": [
       "en"
     ],
-    "clusteredHttpSession": "no",
-    "websocket": "no",
-    "enableSocialSignIn": false
+    "websocket": "no"
   }
 }

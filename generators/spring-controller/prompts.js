@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,7 +43,7 @@ function askForControllerActions() {
                     } else if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                         return 'Your action name cannot start with an upper case letter';
                     } else if (jhiCore.isReservedFieldName(input)) {
-                        return 'Your action name cannot contain a Java or Angular reserved keyword';
+                        return 'Your action name cannot contain a Java, Angular or React reserved keyword';
                     }
 
                     return true;
@@ -96,4 +96,3 @@ function askForControllerActions() {
     const done = this.async();
     askForControllerAction(done);
 }
-

@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,16 @@ module.exports = {
 
 function askPipelines() {
     if (this.abort) return;
+    if (this.autoconfigureTravis) {
+        this.log('Auto-configuring Travis CI');
+        this.pipelines = ['travis'];
+        return;
+    }
+    if (this.autoconfigureJenkins) {
+        this.log('Auto-configuring Jenkins');
+        this.pipelines = ['jenkins'];
+        return;
+    }
     const done = this.async();
     const prompts = [
         {
@@ -49,6 +59,15 @@ function askPipelines() {
 
 function askIntegrations() {
     if (this.abort || this.pipelines.length === 0) return;
+    if (this.autoconfigureTravis) {
+        this.heroku = [];
+        return;
+    }
+    if (this.autoconfigureJenkins) {
+        this.heroku = [];
+        this.jenkinsIntegrations = [];
+        return;
+    }
     const done = this.async();
     const herokuChoices = [];
     if (this.pipelines.includes('jenkins')) {

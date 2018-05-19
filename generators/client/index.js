@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
-const writeAngularJsFiles = require('./files-angularjs').writeFiles;
+const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
-/* Constants used throughout */
-const QUESTIONS = constants.CLIENT_QUESTIONS;
+let useBlueprint;
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -71,23 +71,24 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        // This adds support for a `--social` flag
-        this.option('social', {
-            desc: 'Provide development DB option for the application',
-            type: Boolean,
-            default: false
-        });
-
         // This adds support for a `--search-engine` flag
         this.option('search-engine', {
             desc: 'Provide development DB option for the application',
             type: String
         });
 
-        // This adds support for a `--search-engine` flag
+        // This adds support for a `--cache-provider` flag
+        this.option('cache-provider', {
+            desc: 'Provide a cache provider option for the application',
+            type: String,
+            defaults: 'no'
+        });
+
+        // This adds support for a `--hb-cache` flag
         this.option('hb-cache', {
             desc: 'Provide hibernate cache option for the application',
-            type: String
+            type: Boolean,
+            default: false
         });
 
         // This adds support for a `--jhi-prefix` flag
@@ -104,6 +105,13 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        // This adds support for a `--skip-commit-hook` flag
+        this.option('skip-commit-hook', {
+            desc: 'Skip adding husky commit hooks',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--npm` flag
         this.option('npm', {
             desc: 'Use npm instead of yarn',
@@ -111,43 +119,29 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        this.skipServer = this.configOptions.skipServer || this.config.get('skipServer');
-        this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.authenticationType = this.options.auth || this.configOptions.authenticationType || this.config.get('authenticationType');
-        if (this.authenticationType === 'oauth2') {
-            this.skipUserManagement = true;
-        }
-        const uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.options['uaa-base-name'] || this.config.get('uaaBaseName');
-        if (this.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
-            this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        this.uaaBaseName = uaaBaseName;
+        // This adds support for a `--experimental` flag which can be used to enable experimental features
+        this.option('experimental', {
+            desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
+            type: Boolean,
+            defaults: false
+        });
 
-        this.buildTool = this.options.build;
-        this.websocket = this.options.websocket;
-        this.devDatabaseType = this.options.db || this.configOptions.devDatabaseType || this.config.get('devDatabaseType');
-        this.prodDatabaseType = this.options.db || this.configOptions.prodDatabaseType || this.config.get('prodDatabaseType');
-        this.databaseType = this.getDBTypeFromDBValue(this.options.db) || this.configOptions.databaseType || this.config.get('databaseType');
-        this.enableSocialSignIn = this.options.social || this.config.get('enableSocialSignIn');
-        this.searchEngine = this.options['search-engine'] || this.config.get('searchEngine');
-        this.hibernateCache = this.options['hb-cache'] || this.config.get('hibernateCache');
-        this.otherModules = this.configOptions.otherModules || [];
-        this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix') || this.options['jhi-prefix'];
-        this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
-        this.testFrameworks = [];
-
-        if (this.options.protractor) this.testFrameworks.push('protractor');
-
-        this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
-        this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
-        this.baseName = this.configOptions.baseName;
-        this.logo = this.configOptions.logo;
-        this.useYarn = this.configOptions.useYarn = !this.options.npm;
-        this.clientPackageManager = this.configOptions.clientPackageManager;
-        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
+        this.setupClientOptions(this);
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
+        // use global variable since getters dont have access to instance property
+        useBlueprint = this.composeBlueprint(
+            blueprint,
+            'client',
+            {
+                'skip-install': this.options['skip-install'],
+                configOptions: this.configOptions,
+                force: this.options.force
+            }
+        );
     }
 
     get initializing() {
+        if (useBlueprint) return;
         return {
             displayLogo() {
                 if (this.logo) {
@@ -168,7 +162,7 @@ module.exports = class extends BaseGenerator {
                 this.clientFramework = this.config.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
-                    this.clientFramework = 'angular1';
+                    this.clientFramework = 'angularX';
                 }
                 if (this.clientFramework === 'angular2') {
                     /* for backward compatibility */
@@ -184,6 +178,11 @@ module.exports = class extends BaseGenerator {
                 const baseName = this.config.get('baseName');
                 if (baseName) {
                     this.baseName = baseName;
+                }
+
+                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
+                if (this.serviceDiscoveryType === undefined) {
+                    this.serviceDiscoveryType = false;
                 }
 
                 const clientConfigFound = this.useSass !== undefined;
@@ -219,6 +218,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
+        if (useBlueprint) return;
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
@@ -226,8 +226,6 @@ module.exports = class extends BaseGenerator {
             askFori18n: prompts.askFori18n,
 
             setSharedConfigOptions() {
-                this.configOptions.lastQuestion = this.currentQuestion;
-                this.configOptions.totalQuestions = this.totalQuestions;
                 this.configOptions.clientFramework = this.clientFramework;
                 this.configOptions.useSass = this.useSass;
             }
@@ -235,6 +233,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
+        if (useBlueprint) return;
         return {
             insight() {
                 const insight = this.insight();
@@ -266,6 +265,7 @@ module.exports = class extends BaseGenerator {
                 this.config.set('clientFramework', this.clientFramework);
                 this.config.set('useSass', this.useSass);
                 this.config.set('enableTranslation', this.enableTranslation);
+                this.config.set('skipCommitHook', this.skipCommitHook);
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                     this.config.set('nativeLanguage', this.nativeLanguage);
                     this.config.set('languages', this.languages);
@@ -274,7 +274,8 @@ module.exports = class extends BaseGenerator {
                 if (this.skipServer) {
                     this.authenticationType && this.config.set('authenticationType', this.authenticationType);
                     this.uaaBaseName && this.config.set('uaaBaseName', this.uaaBaseName);
-                    this.hibernateCache && this.config.set('hibernateCache', this.hibernateCache);
+                    this.cacheProvider && this.config.set('cacheProvider', this.cacheProvider);
+                    this.enableHibernateCache && this.config.set('enableHibernateCache', this.enableHibernateCache);
                     this.websocket && this.config.set('websocket', this.websocket);
                     this.databaseType && this.config.set('databaseType', this.databaseType);
                     this.devDatabaseType && this.config.set('devDatabaseType', this.devDatabaseType);
@@ -287,10 +288,14 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
+        if (useBlueprint) return;
         return {
             getSharedConfigOptions() {
-                if (this.configOptions.hibernateCache) {
-                    this.hibernateCache = this.configOptions.hibernateCache;
+                if (this.configOptions.cacheProvider) {
+                    this.cacheProvider = this.configOptions.cacheProvider;
+                }
+                if (this.configOptions.enableHibernateCache) {
+                    this.enableHibernateCache = this.configOptions.enableHibernateCache;
                 }
                 if (this.configOptions.websocket !== undefined) {
                     this.websocket = this.configOptions.websocket;
@@ -316,9 +321,6 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.buildTool) {
                     this.buildTool = this.configOptions.buildTool;
                 }
-                if (this.configOptions.enableSocialSignIn !== undefined) {
-                    this.enableSocialSignIn = this.configOptions.enableSocialSignIn;
-                }
                 if (this.configOptions.authenticationType) {
                     this.authenticationType = this.configOptions.authenticationType;
                 }
@@ -328,7 +330,7 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.testFrameworks) {
                     this.testFrameworks = this.configOptions.testFrameworks;
                 }
-                this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
+                this.protractorTests = this.testFrameworks.includes('protractor');
 
                 if (this.configOptions.enableTranslation !== undefined) {
                     this.enableTranslation = this.configOptions.enableTranslation;
@@ -351,6 +353,10 @@ module.exports = class extends BaseGenerator {
                 } else {
                     this.BUILD_DIR = 'build/';
                 }
+
+                this.styleSheetExt = this.useSass ? 'scss' : 'css';
+                this.pkType = this.getPkType(this.databaseType);
+                this.apiUaaPath = `${this.authenticationType === 'uaa' ? `${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             },
 
@@ -363,23 +369,22 @@ module.exports = class extends BaseGenerator {
     }
 
     writing() {
-        if (this.clientFramework === 'angular1') {
-            return writeAngularJsFiles.call(this);
+        if (useBlueprint) return;
+        switch (this.clientFramework) {
+        case 'react':
+            return writeReactFiles.call(this);
+        default:
+            return writeAngularFiles.call(this);
         }
-        return writeAngularFiles.call(this);
     }
 
     install() {
-        let logMsg =
+        if (useBlueprint) return;
+        const logMsg =
             `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
-        if (this.clientFramework === 'angular1') {
-            logMsg =
-                `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install & bower install`)}`;
-        }
-
         const installConfig = {
-            bower: this.clientFramework === 'angular1',
+            bower: false,
             npm: this.clientPackageManager !== 'yarn',
             yarn: this.clientPackageManager === 'yarn'
         };
@@ -389,11 +394,7 @@ module.exports = class extends BaseGenerator {
         } else {
             this.installDependencies(installConfig).then(
                 () => {
-                    if (this.clientFramework === 'angular1') {
-                        this.spawnCommandSync('gulp', ['install']);
-                    } else {
-                        this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
-                    }
+                    this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
                 },
                 (err) => {
                     this.warning('Install of dependencies failed!');
@@ -404,22 +405,15 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
+        if (useBlueprint) return;
+        if (this.buildResult !== undefined && this.buildResult.status !== 0) {
+            this.error('webpack:build failed.');
+        }
         this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
-        let logMsg =
+        const logMsg =
             `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
 
-        if (this.clientFramework === 'angular1') {
-            logMsg =
-                'Inject your front end dependencies into your source code:\n' +
-                ` ${chalk.yellow.bold('gulp inject')}\n\n` +
-                'Generate the AngularJS constants:\n' +
-                ` ${chalk.yellow.bold('gulp ngconstant:dev')}` +
-                `${this.useSass ? '\n\nCompile your Sass style sheets:\n\n' +
-                `${chalk.yellow.bold('gulp sass')}` : ''}\n\n` +
-                'Or do all of the above:\n' +
-                ` ${chalk.yellow.bold('gulp install')}\n`;
-        }
         this.log(chalk.green(logMsg));
     }
 };

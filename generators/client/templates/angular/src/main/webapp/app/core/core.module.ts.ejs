@@ -1,0 +1,39 @@
+import { NgModule, LOCALE_ID } from '@angular/core';
+import { DatePipe, registerLocaleData } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { Title } from '@angular/platform-browser';
+<%_ const localeId = getLocaleId(nativeLanguage); _%>
+import locale from '@angular/common/locales/<%= localeId %>';
+
+<%_ if (enableI18nRTL) { _%>
+import {
+    FindLanguageFromKeyPipe
+} from 'app/shared';<%_ } _%>
+
+@NgModule({
+    imports: [
+        HttpClientModule
+    ],
+    exports: [],
+    declarations: [],
+    providers: [
+        Title,
+        {
+            provide: LOCALE_ID,
+        <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
+            useValue: 'en'
+        <%_ } else { _%>
+            useValue: '<%= localeId %>'
+        <%_ } _%>
+        },
+        <%_ if (enableI18nRTL) { _%>
+        FindLanguageFromKeyPipe,
+        <%_ } _%>
+        DatePipe
+    ]
+})
+export class <%=angularXAppName%>CoreModule {
+    constructor() {
+        registerLocaleData(locale);
+    }
+}

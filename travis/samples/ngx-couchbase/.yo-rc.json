@@ -1,0 +1,37 @@
+{
+    "generator-jhipster": {
+      "baseName": "travisCouchbaseNoCache",
+      "packageName": "io.github.jhipster.travis",
+      "packageFolder": "io/github/jhipster/travis",
+      "serverPort": "8080",
+      "authenticationType": "jwt",
+      "cacheProvider": "no",
+      "enableHibernateCache": false,
+      "websocket": false,
+      "databaseType": "couchbase",
+      "devDatabaseType": "couchbase",
+      "prodDatabaseType": "couchbase",
+      "reactive": true,
+      "searchEngine": false,
+      "messageBroker": false,
+      "serviceDiscoveryType": false,
+      "buildTool": "maven",
+      "enableSwaggerCodegen": false,
+      "jwtSecretKey": "6253157746f73d0c8b7cee248235fbeb91429338",
+      "clientFramework": "angularX",
+      "useSass": false,
+      "clientPackageManager": "yarn",
+      "applicationType": "monolith",
+      "testFrameworks": [
+        "gatling",
+        "protractor"
+      ],
+      "jhiPrefix": "jhi",
+      "travis": true,
+      "enableTranslation": true,
+      "nativeLanguage": "en",
+      "languages": [
+        "en"
+      ]
+    }
+  }

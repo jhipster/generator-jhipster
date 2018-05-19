@@ -1,0 +1,184 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# DB template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the Cassandra service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls  note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+# Replication mode is not tested yet.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-cassandra-template
+  namespace: <%= openshiftNamespace %>
+  annotations:
+    description: This template defines objects that are required to spin up a cassandra pod
+    tags: db, <%= app.baseName.toLowerCase() %>-cassandra<% if (storageType === 'persistent') { %> ,persistent <% } %> <% if (storageType === 'ephemeral') { %> ,ephemeral <% } %>
+    openshift.io/display-name: <%= app.baseName.toLowerCase() %>-cassandra-template
+    openshift.io/long-description: "This template provides objects that are required to spin up a cassandra pod. <% if (storageType ==
+    'persistent') { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
+     Please make sure you have provisioned PVs (Persistent Volumes) before using this template. <% } %><% if (storageType === 'ephemeral') {
+     %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: <%= app.baseName.toLowerCase() %>-cassandra
+  createdBy: JHipster-Team
+parameters:
+  -
+    name: APPLICATION_NAME
+    value: <%= app.baseName.toLowerCase() %>-cassandra
+    description: Name of the application
+    required: true
+    displayName: Application Name
+  -
+    name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+  -
+    name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+objects:
+<%_ if (storageType === 'persistent') { _%>
+  -
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: ${APPLICATION_NAME}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: "${VOLUME_CAPACITY}"
+<%_ } _%>
+  -
+    apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${APPLICATION_NAME}
+      labels:
+        app: ${APPLICATION_NAME}
+    spec:
+      strategy:
+        type: Rolling
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+          post:
+            failurePolicy: ignore
+            execNewPod:
+              command:
+                - "/bin/sh"
+                - "-ec"
+                - |
+                  hostname && cqlsh ${APPLICATION_NAME} -e "CREATE KEYSPACE
+                  IF NOT EXISTS <%= app.baseName.toLowerCase() %>  WITH REPLICATION = {'class':
+                  'SimpleStrategy','replication_factor': 1} AND DURABLE_WRITES =
+                  true;"  && cqlsh ${APPLICATION_NAME} -e "CREATE TABLE IF NOT EXISTS
+                  <%= app.baseName.toLowerCase() %>.schema_version(script_name text,checksum text,executed_by
+                  text,executed_on timestamp,execution_time int,status text, PRIMARY
+                  KEY(script_name));" && sleep 30
+              containerName: ${APPLICATION_NAME}
+        resources:
+      triggers:
+        -
+          type: ConfigChange
+      replicas: 1
+      selector:
+        app: ${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: ${APPLICATION_NAME}
+        spec:
+          volumes:
+          - name: ${APPLICATION_NAME}-data
+            <%_ if (storageType === 'persistent') { _%>
+            persistentVolumeClaim:
+              claimName: ${APPLICATION_NAME}
+            <%_ } _%>
+            <%_ if (storageType === 'ephemeral') { _%>
+            emptyDir: {}
+            <%_ } _%>
+          containers:
+          - name: ${APPLICATION_NAME}
+            image: <%= DOCKER_CASSANDRA %>
+            env:
+            - name: DATA_FILE_DIRECTORIES
+              value: /data/db
+            ports:
+              - containerPort: 9042
+                name: cql
+                protocol: TCP
+              - containerPort: 9160
+                name: thrift
+                protocol: TCP
+            readinessProbe:
+              timeoutSeconds: 1
+              initialDelaySeconds: 15
+              exec:
+                command:
+                - "/bin/sh"
+                - "-ec"
+                - cqlsh  -e "quit"
+            livenessProbe:
+              timeoutSeconds: 1
+              initialDelaySeconds: 30
+              tcpSocket:
+                port: 9042
+            volumeMounts:
+            - name: ${APPLICATION_NAME}-data
+              mountPath: /data/db
+            resources:
+            imagePullPolicy: IfNotPresent
+          serviceAccount: ${SVC_ID}
+          serviceAccountName: ${SVC_ID}
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${APPLICATION_NAME}
+      labels:
+        app: ${APPLICATION_NAME}
+    spec:
+      ports:
+        -
+          name: cassandra-tcp
+          protocol: TCP
+          port: 9042
+          targetPort: 9042
+        -
+          name: cassandra-thrift
+          protocol: TCP
+          port: 9160
+          targetPort: 9160
+      selector:
+        app: ${APPLICATION_NAME}

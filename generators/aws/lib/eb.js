@@ -89,7 +89,7 @@ function createApplicationVersion(params, callback) {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, { message: `Application version ${applicationName} created successful` });
+            callback(null, { message: `Application version ${applicationName} created successfully` });
         }
     });
 }
@@ -176,7 +176,7 @@ function createEnvironment(params, callback) {
 
         elasticbeanstalk.createEnvironment(environmentParams, (err) => {
             if (err) callback(err, null);
-            else callback(null, { message: `Environment ${environmentName} created successful` });
+            else callback(null, { message: `Environment ${environmentName} created successfully` });
         });
     });
 }
@@ -195,7 +195,7 @@ function getLatestSolutionStackName(callback) {
     }
 
     function filterCriteria(element) {
-        return element.indexOf('Tomcat 8') > -1;
+        return element.includes('Tomcat 8');
     }
 }
 

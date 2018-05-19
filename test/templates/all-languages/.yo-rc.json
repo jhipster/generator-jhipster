@@ -5,8 +5,8 @@
     "packageFolder": "com/mycompany/myapp",
     "serverPort": "8080",
     "authenticationType": "jwt",
-    "hibernateCache": "ehcache",
-    "clusteredHttpSession": false,
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
     "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
@@ -15,7 +15,6 @@
     "messageBroker": false,
     "serviceDiscoveryType": false,
     "buildTool": "maven",
-    "enableSocialSignIn": false,
     "jwtSecretKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
     "clientFramework": "angularX",
     "useSass": false,
@@ -64,6 +63,7 @@
       "ta",
       "th",
       "ua",
+      "uz-lat",
       "vi"
     ]
   }

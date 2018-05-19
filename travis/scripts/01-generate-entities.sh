@@ -16,8 +16,8 @@ moveEntity() {
 rm -Rf "$APP_FOLDER"
 mkdir -p "$APP_FOLDER"/.jhipster/
 
-if [ "$JHIPSTER" == "app-ng2-mongodb" ]; then
-    moveEntity MongoBankAccount
+if [[ ("$JHIPSTER" == *"mongodb"*) || ("$JHIPSTER" == *"couchbase"*) ]]; then
+    moveEntity DocumentBankAccount
 
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructEntity
@@ -27,7 +27,7 @@ if [ "$JHIPSTER" == "app-ng2-mongodb" ]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [ "$JHIPSTER" == "app-ng2-cassandra" ]; then
+elif [[ "$JHIPSTER" == *"cassandra"* ]]; then
     moveEntity CassBankAccount
 
     moveEntity CassTestEntity
@@ -35,7 +35,7 @@ elif [ "$JHIPSTER" == "app-ng2-cassandra" ]; then
     moveEntity CassTestServiceClassEntity
     moveEntity CassTestServiceImplEntity
 
-elif [[ ("$JHIPSTER" == "app-microservice-eureka") || ("$JHIPSTER" == "app-microservice-consul") ]]; then
+elif [[ "$JHIPSTER" == *"micro"* ]]; then
     moveEntity MicroserviceBankAccount
     moveEntity MicroserviceOperation
     moveEntity MicroserviceLabel
@@ -48,7 +48,41 @@ elif [[ ("$JHIPSTER" == "app-microservice-eureka") || ("$JHIPSTER" == "app-micro
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-ng2-psql-es-noi18n") ]]; then
+elif [[ "$JHIPSTER" == *"react"* ]]; then
+    moveEntity BankAccount
+    moveEntity Label
+    moveEntity Operation
+
+    moveEntity FieldTestEntity
+    moveEntity FieldTestMapstructEntity
+    moveEntity FieldTestServiceClassEntity
+    moveEntity FieldTestServiceImplEntity
+    moveEntity FieldTestInfiniteScrollEntity
+    moveEntity FieldTestPagerEntity
+    moveEntity FieldTestPaginationEntity
+
+    moveEntity EntityWithDTO
+    moveEntity EntityWithPagination
+    moveEntity EntityWithPaginationAndDTO
+    moveEntity EntityWithServiceClass
+    moveEntity EntityWithServiceClassAndDTO
+    moveEntity EntityWithServiceClassAndPagination
+    moveEntity EntityWithServiceClassPaginationAndDTO
+    moveEntity EntityWithServiceImpl
+    moveEntity EntityWithServiceImplAndDTO
+    moveEntity EntityWithServiceImplAndPagination
+    moveEntity EntityWithServiceImplPaginationAndDTO
+
+elif [[ "$JHIPSTER" == *"uaa"* ]]; then
+    moveEntity FieldTestEntity
+    moveEntity FieldTestMapstructEntity
+    moveEntity FieldTestServiceClassEntity
+    moveEntity FieldTestServiceImplEntity
+    moveEntity FieldTestInfiniteScrollEntity
+    moveEntity FieldTestPagerEntity
+    moveEntity FieldTestPaginationEntity
+
+elif [[ ( "$JHIPSTER" == *"mysql"* ) || ( "$JHIPSTER" == *"psql"* ) ]]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation
@@ -72,6 +106,7 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-ng2-psql-es-noi18n"
     moveEntity TestPagination
     moveEntity TestManyToOne
     moveEntity TestManyToMany
+    moveEntity TestManyRelPaginDTO
     moveEntity TestOneToOne
     moveEntity TestCustomTableName
     moveEntity TestTwoRelationshipsSameEntity
@@ -87,15 +122,6 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-ng2-psql-es-noi18n"
     moveEntity EntityWithServiceImplAndDTO
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
-
-elif [ "$JHIPSTER" == "app-ng2-gateway-uaa" ]; then
-    moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructEntity
-    moveEntity FieldTestServiceClassEntity
-    moveEntity FieldTestServiceImplEntity
-    moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPagerEntity
-    moveEntity FieldTestPaginationEntity
 
 else
     moveEntity BankAccount

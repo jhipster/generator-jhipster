@@ -5,8 +5,8 @@
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
-    "hibernateCache": "ehcache",
-    "clusteredHttpSession": false,
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
     "websocket": false,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
@@ -15,7 +15,6 @@
     "useSass": false,
     "buildTool": "maven",
     "enableTranslation": true,
-    "enableSocialSignIn": false,
     "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
     "testFrameworks": [
       "gatling"

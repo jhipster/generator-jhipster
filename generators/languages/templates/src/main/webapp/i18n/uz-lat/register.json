@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Ro'yhatdan o'tish",
+        "form": {
+            "button": "Ro'yhatdan o'tish"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Login kiritilsin.",
+                    "minlength": "Login kamida 1 ta harfdan iborat bo'lsin",
+                    "maxlength": "Login ko'pi bilan 50 ta harfdan iborat bo'lsin",
+                    "pattern": "Login harf va sonlardan iborat bo'lsin"
+                }
+            },
+            "success": "<strong>Ro'yhatdan o'tildi!</strong> Iltimos, faollashtirsh uchun emailingizni tekshiring.",
+            "error": {
+                "fail": "<strong>Ro'yhatdan o'tishda xatolik!</strong> Iltimos, qayta urinib ko'ring.",
+                "userexists": "<strong>Bunday login allaqachon band!</strong> Iltimos, boshqasini kiriting.",
+                "emailexists": "<strong>Email allaqachon band!</strong> Iltimos, boshqasini kiriting."
+            }
+        }
+    }
+}

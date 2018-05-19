@@ -1,0 +1,56 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%
+const variablesWithTypes = generateEntityClientFields(pkType, fields, relationships, dto);
+const typeImports = generateEntityClientImports(relationships, dto);
+const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
+%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+import { Moment } from 'moment';
+<%_ } _%>
+<%_ typeImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ }); _%>
+
+<%_ const enumsAlreadyDeclared = [];
+fields.forEach(field => {
+    if (field.fieldIsEnum && !enumsAlreadyDeclared.includes(field.fieldType)) {
+        enumsAlreadyDeclared.push(field.fieldType); _%>
+export const enum <%= field.fieldType %> {<%
+        const enums = field.fieldValues.split(',');
+        for (let i = 0; i < enums.length; i++) { %>
+    <%= enums[i] %> = '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
+        } %>
+}
+
+<%_ }
+}); _%>
+export interface I<%= entityAngularName %> {
+    <%_ variablesWithTypes.forEach(variablesWithType => { _%>
+    <%- variablesWithType %>;
+    <%_ }); _%>
+}
+
+export class <%= entityAngularName %> implements I<%= entityAngularName %> {
+    constructor(<% variablesWithTypes.forEach(variablesWithType => { %>
+        public <%- variablesWithType %>,<% }); %>
+    ) {<% for (idx in defaultVariablesValues) { %>
+        <%- defaultVariablesValues[idx] %><% } %>
+    }
+}

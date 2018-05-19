@@ -5,8 +5,8 @@
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
-    "hibernateCache": "ehcache",
-    "clusteredHttpSession": "no",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
     "websocket": "no",
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
@@ -20,7 +20,6 @@
       "en",
       "fr"
     ],
-    "enableSocialSignIn": false,
     "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
     "clientFramework": "angularX",
     "testFrameworks": [

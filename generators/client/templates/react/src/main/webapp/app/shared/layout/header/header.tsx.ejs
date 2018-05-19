@@ -1,0 +1,121 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import './header.<%= styleSheetExt %>';
+
+import * as React from 'react';
+import { Translate<% if (enableI18nRTL) { %>, Storage<% } %> } from 'react-jhipster';
+import {
+  Navbar,
+  Nav,
+  NavbarToggler,
+  NavbarBrand,
+  Collapse
+} from 'reactstrap';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+
+import { NavLink as Link } from 'react-router-dom';
+import LoadingBar from 'react-redux-loading-bar';
+
+<%_ if (enableTranslation && enableI18nRTL) { _%>
+import { isRTL } from 'app/config/translation';
+<%_ } _%>
+
+import { Home, Brand } from './header-components';
+import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from './menus';
+
+export interface IHeaderProps {
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+  ribbonEnv: string;
+  isInProduction: boolean;
+  isSwaggerEnabled: boolean;
+<%_ if (enableTranslation) { _%>
+  currentLocale: string;
+  onLocaleChange: Function;
+<%_ } _%>
+}
+
+export interface IHeaderState {
+  menuOpen: boolean
+}
+
+export default class Header extends React.Component<IHeaderProps, IHeaderState> {
+  state: IHeaderState = {
+      menuOpen: false
+  };
+  <%_ if (enableI18nRTL) { _%>
+  componentDidMount () {
+    document.querySelector('html').setAttribute('dir', isRTL(Storage.local.get('locale')) ? 'rtl' : 'ltr');
+  };
+  <%_ } _%>
+
+  <%_ if (enableTranslation) { _%>
+  handleLocaleChange = event => {
+    this.props.onLocaleChange(event.target.value);
+    <%_ if (enableI18nRTL) { _%>
+    document.querySelector('html').setAttribute('dir', isRTL(event.target.value) ? 'rtl' : 'ltr');
+    <%_ } _%>
+  }
+  <%_ } _%>
+
+  renderDevRibbon = () => this.props.isInProduction === false ? (
+    <div className="ribbon dev">
+      <a href="">
+        <%_ if (enableTranslation) { _%>
+        <Translate contentKey={`global.ribbon.${this.props.ribbonEnv}`} />
+        <%_ } else { _%>
+        Development
+        <%_ } _%>
+      </a>
+    </div>
+  ) : null;
+
+  toggleMenu = () => {
+    this.setState({ menuOpen: !this.state.menuOpen });
+  }
+
+  render() {
+    const {<%_ if (enableTranslation) { _%>currentLocale,<%_ } _%> isAuthenticated, isAdmin, isSwaggerEnabled, isInProduction } = this.props;
+
+    /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
+  
+    return (
+      <div id="app-header">
+        {this.renderDevRibbon()}
+        <LoadingBar className="loading-bar"/>
+        <Navbar dark expand="sm" fixed="top" className="jh-navbar">
+          <NavbarToggler aria-label="Menu" onClick={this.toggleMenu} />
+          <Brand />
+          <Collapse isOpen={this.state.menuOpen} navbar>
+            <Nav className="ml-auto" navbar>
+              <Home />
+              {isAuthenticated && <EntitiesMenu />}
+              {isAuthenticated && isAdmin &&
+                <AdminMenu showSwagger={isSwaggerEnabled} <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %> showDatabase={!isInProduction} <%_ } _%> />}
+            <%_ if (enableTranslation) { _%>
+              <LocaleMenu currentLocale={currentLocale} onClick={this.handleLocaleChange} />
+            <%_ } _%>
+              <AccountMenu isAuthenticated={isAuthenticated} />
+            </Nav>
+          </Collapse>
+        </Navbar>
+      </div>
+    );
+  }
+}

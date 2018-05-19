@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +44,7 @@ const init = function (program) {
     program.option('-d, --debug', 'enable debugger');
 
     const argv = program.normalize(process.argv);
-    this.debugEnabled = program.debug = argv.indexOf('-d') > -1 || argv.indexOf('--debug') > -1; // Need this early
+    this.debugEnabled = program.debug = argv.includes('-d') || argv.includes('--debug'); // Need this early
 
     if (this.debugEnabled) {
         debug('Debug logging is on');
@@ -74,7 +74,7 @@ const toString = (item) => {
 const initHelp = (program, cliName) => {
     program.on('--help', () => {
         logger.debug('Adding additional help info');
-        logger.info(`  For more info visit ${chalk.blue('http://www.jhipster.tech')}`);
+        logger.info(`  For more info visit ${chalk.blue('https://www.jhipster.tech')}`);
         logger.info('');
     });
 

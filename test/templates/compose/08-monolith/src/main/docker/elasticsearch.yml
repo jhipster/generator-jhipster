@@ -1,7 +1,7 @@
 version: '2'
 services:
     samplemysql-elasticsearch:
-        image: elasticsearch:2.4.0
+        image: elasticsearch:2.4.6
         # volumes:
         #     - ~/volumes/jhipster/sampleMysql/elasticsearch/:/usr/share/elasticsearch/data/
         ports:

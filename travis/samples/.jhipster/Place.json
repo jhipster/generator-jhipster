@@ -39,11 +39,17 @@
         {
             "fieldName": "colorText",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
     "changelogDate": "20170626061521",
     "entityTableName": "place",
     "dto": "no",
     "pagination": "no",
-    "service": "no"
+    "service": "no",
+    "clientRootFolder": "test-root"
 }

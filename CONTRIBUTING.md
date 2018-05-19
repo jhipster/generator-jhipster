@@ -10,10 +10,12 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
  - [Coding Rules](#rules)
  - [Git Commit Guidelines](#commit)
 
+And don't forget we also accept [financial contributions to the project](https://www.jhipster.tech/sponsors/) using OpenCollective.
+
 ## <a name="question"></a> Questions and help
 This is the JHipster bug tracker, and it is used for [Issues and Bugs](#issue) and for [Feature Requests](#feature). It is **not** a help desk or a support forum.
 
-If you have a question on using JHipster, or if you need help with your JHipster project, please [read our help page](http://www.jhipster.tech/help/) and use the [JHipster tag on StackOverflow](http://stackoverflow.com/tags/jhipster) or join our [Gitter.im chat room](https://gitter.im/jhipster/generator-jhipster).
+If you have a question on using JHipster, or if you need help with your JHipster project, please [read our help page](https://www.jhipster.tech/help/) and use the [JHipster tag on StackOverflow](http://stackoverflow.com/tags/jhipster) or join our [Gitter.im chat room](https://gitter.im/jhipster/generator-jhipster).
 
 ## <a name="issue"></a> Issues and Bugs
 If you find a bug in the source code or a mistake in the documentation, you can help us by [submitting a ticket](https://opensource.guide/how-to-contribute/#opening-an-issue) to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). Even better, you can submit a Pull Request to our [JHipster generator project](https://github.com/jhipster/generator-jhipster) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
@@ -51,7 +53,7 @@ chances of your issue being dealt with quickly:
 
 You can use `jhipster info` to provide us the information we need.
 
-Click [here](https://github.com/jhipster/generator-jhipster/issues/new) to open a bug issue with a pre-filled template. For feature requests and enquiries you can use [this template][feature-template].
+Click [here](issue-template) to open a bug issue with a pre-filled template. For feature requests and enquiries you can use [this template][feature-template].
 
 You can run `jhipster info` in your project folder to get most of the above required info.
 
@@ -74,7 +76,7 @@ Before you submit your pull request consider the following guidelines:
 * Generate a new JHipster project, and ensure that all tests pass
 
      ```shell
-     mvn package -Pprod
+     mvn verify -Pprod
      ```
 
 * Test that the new project runs correctly:
@@ -203,12 +205,27 @@ Now, running the 'jhipster' command should use your specific JHipster version. Y
 ```shell
 jhipster
 ```
+Depending on which parts of the generator you have changed, do not forget to run jhipster command with the proper arguments e.g. when updating the entity template run:
+
+```shell
+jhipster --with-entities
+```
 
 You should see your changes reflected in the generated project.
 
 ### Use a text editor
 
-As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes.
+As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
+
+### Use a debugger
+
+It is possible to debug JHipster's code using a Node.js debugger. To achieve this, setup your debugger to launch `cli/jhipster.js`.
+
+#### Debugging with VSCode
+
+To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `travis/samples/app-sample-dev` folder.
+
+It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
 ## Local Travis Build
 
@@ -218,10 +235,13 @@ CD into the travis folder `cd travis` from the generator source code root folder
 
 Run `./build-samples.sh [command_name] [sample_name:optional]`
 
+This will create the travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your editor or IDE to check it further. You can also run tests locally on the project to verify
+
 Sample name is optional and can be any of the folder name in the `travis/samples` folder. If not specified the it will mean all samples
 
 Command name can be as below
 
+    `list`: List all sample names
     `generate`: Generate the sample if specified else generate all samples
     `build` : Generate and test the sample if specified else generate and test all samples
     `clean` : Clean the generated code for the sample if specified else clean all samples
@@ -234,8 +254,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 * Java files **must be** formatted using [Intellij IDEA's code style](http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Style+and+Formatting). Please note that JHipster committers have a free Intellij IDEA Ultimate Edition for developing the project.
 * Generators JavaScript files **must follow** the eslint configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 * Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
-* AngularJS files **must follow** [John Papa's Angular 1 style guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md).
-* Angular 2+ Typescript files **must follow** [Official Angular style guide](https://angular.io/styleguide).
+* Angular Typescript files **must follow** the [Official Angular style guide](https://angular.io/styleguide).
 
 Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request. You can also run `npm run lint-fix` to fix some of the lint issues automatically.
 
@@ -301,4 +320,5 @@ see http://spring.io/blog/2014/09/26/spring-boot-1-1-7-released
 Fix #1234
 ```
 
-[feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?body=*%20**Overview%20of%20the%20request**%0A%0A%3C!--%20what%20is%20the%20query%20or%20request%20--%3E%0A%0A*%20**Motivation%20for%20or%20Use%20Case**%20%0A%0A%3C!--%20explain%20why%20this%20is%20a%20required%20for%20you%20--%3E%0A%0A%0A*%20**Browsers%20and%20Operating%20System**%20%0A%0A%3C!--%20is%20this%20a%20problem%20with%20all%20browsers%20or%20only%20IE8%3F%20--%3E%0A%0A%0A*%20**Related%20issues**%20%0A%0A%3C!--%20has%20a%20similar%20issue%20been%20reported%20before%3F%20--%3E%0A%0A*%20**Suggest%20a%20Fix**%20%0A%0A%3C!--%20if%20you%20can%27t%20fix%20this%20yourself%2C%20perhaps%20you%20can%20point%20to%20what%20might%20be%0A%20%20causing%20the%20problem%20(line%20of%20code%20or%20commit)%20--%3E
+[issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
+[feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md

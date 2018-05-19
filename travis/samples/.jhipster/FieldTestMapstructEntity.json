@@ -318,6 +318,6 @@
     ],
     "changelogDate": "20160208184031",
     "dto": "mapstruct",
-    "service": "no",
+    "service": "serviceClass",
     "pagination": "no"
 }

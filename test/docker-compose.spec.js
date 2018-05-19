@@ -35,6 +35,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -66,6 +67,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -90,6 +92,33 @@ describe('JHipster Docker Compose Sub Generator', () => {
         });
     });
 
+    describe('one microservice and a directory path without a trailing slash', () => {
+        beforeEach((done) => {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    composeApplicationType: 'microservice',
+                    directoryPath: '.',
+                    chosenApps: [
+                        '02-mysql'
+                    ],
+                    clusteredDbApps: [],
+                    monitoring: 'no'
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', () => {
+            assert.file(expectedFiles.dockercompose);
+        });
+        it('Correct the directory path by appending a trailing slash', () => {
+            assert.fileContent('.yo-rc.json', '"directoryPath": "./"');
+        });
+    });
+
     describe('gateway and one microservice', () => {
         beforeEach((done) => {
             helpers
@@ -97,6 +126,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -129,6 +159,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -171,6 +202,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -216,6 +248,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -261,6 +294,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -307,6 +341,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -342,6 +377,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withOptions({ force: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
@@ -379,6 +415,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -417,6 +454,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -456,6 +494,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
@@ -491,6 +530,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .inTmpDir((dir) => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
+                .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
@@ -504,6 +544,83 @@ describe('JHipster Docker Compose Sub Generator', () => {
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.monolith);
+        });
+        it('creates compose file without container_name, external_links, links', () => {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
+        });
+    });
+
+    describe('gateway and multi microservices, with couchbase', () => {
+        beforeEach((done) => {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    composeApplicationType: 'microservice',
+                    directoryPath: './',
+                    chosenApps: [
+                        '01-gateway',
+                        '02-mysql',
+                        '03-psql',
+                        '10-couchbase',
+                        '07-mariadb'
+                    ],
+                    clusteredDbApps: [],
+                    monitoring: 'elk'
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', () => {
+            assert.file(expectedFiles.dockercompose);
+        });
+        it('creates expected elk files', () => {
+            assert.file(expectedFiles.elk);
+        });
+        it('creates jhipster-registry content', () => {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
+        });
+        it('creates compose file without container_name, external_links, links', () => {
+            assert.noFileContent('docker-compose.yml', /container_name:/);
+            assert.noFileContent('docker-compose.yml', /external_links:/);
+            assert.noFileContent('docker-compose.yml', /links:/);
+        });
+    });
+
+    describe('gateway and 1 microservice, with 1 couchbase cluster', () => {
+        beforeEach((done) => {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    composeApplicationType: 'microservice',
+                    directoryPath: './',
+                    chosenApps: [
+                        '01-gateway',
+                        '10-couchbase'
+                    ],
+                    clusteredDbApps: [
+                        '10-couchbase'
+                    ],
+                    monitoring: 'elk'
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', () => {
+            assert.file(expectedFiles.dockercompose);
+        });
+        it('creates expected elk files', () => {
+            assert.file(expectedFiles.elk);
+        });
+        it('creates jhipster-registry content', () => {
+            assert.fileContent('docker-compose.yml', /jhipster-registry:8761\/config/);
         });
         it('creates compose file without container_name, external_links, links', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);

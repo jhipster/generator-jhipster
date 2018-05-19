@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
 const prompts = require('./prompts');
@@ -26,8 +27,7 @@ const crypto = require('crypto');
 const os = require('os');
 const constants = require('../generator-constants');
 
-/* Constants used throughout */
-const QUESTIONS = constants.SERVER_QUESTIONS;
+let useBlueprint;
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -37,7 +37,7 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--[no-]client-hook` flag
         this.option('client-hook', {
-            desc: 'Enable gulp and bower hook from maven/gradle build',
+            desc: 'Enable Webpack hook from maven/gradle build',
             type: Boolean,
             defaults: false
         });
@@ -70,23 +70,29 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        this.skipClient = !this.options['client-hook'] || this.configOptions.skipClient || this.config.get('skipClient');
-        this.skipUserManagement = this.configOptions.skipUserManagement || this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.enableTranslation = this.options.i18n || this.configOptions.enableTranslation || this.config.get('enableTranslation');
-        this.testFrameworks = [];
+        // This adds support for a `--experimental` flag which can be used to enable experimental features
+        this.option('experimental', {
+            desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
+            type: Boolean,
+            defaults: false
+        });
 
-        if (this.options.gatling) this.testFrameworks.push('gatling');
-        if (this.options.cucumber) this.testFrameworks.push('cucumber');
-
-        this.currentQuestion = this.configOptions.lastQuestion ? this.configOptions.lastQuestion : 0;
-        this.totalQuestions = this.configOptions.totalQuestions ? this.configOptions.totalQuestions : QUESTIONS;
-        this.logo = this.configOptions.logo;
-        this.baseName = this.configOptions.baseName;
-        this.clientPackageManager = this.configOptions.clientPackageManager;
-        this.isDebugEnabled = this.configOptions.isDebugEnabled || this.options.debug;
+        this.setupServerOptions(this);
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
+        // use global variable since getters dont have access to instance property
+        useBlueprint = this.composeBlueprint(
+            blueprint,
+            'server',
+            {
+                'client-hook': !this.skipClient,
+                configOptions: this.configOptions,
+                force: this.options.force
+            }
+        );
     }
 
     get initializing() {
+        if (useBlueprint) return;
         return {
             displayLogo() {
                 if (this.logo) {
@@ -111,8 +117,10 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
                 this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+                this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
                 this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
+                this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
                 this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
@@ -127,17 +135,18 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
                 this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
 
+                this.JAVA_VERSION = constants.JAVA_VERSION;
+                this.SCALA_VERSION = constants.SCALA_VERSION;
+
                 this.NODE_VERSION = constants.NODE_VERSION;
                 this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
 
-                this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
                 this.packagejs = packagejs;
                 this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
-
                 this.packageName = this.config.get('packageName');
                 this.serverPort = this.config.get('serverPort');
                 if (this.serverPort === undefined) {
@@ -162,49 +171,44 @@ module.exports = class extends BaseGenerator {
                     this.serviceDiscoveryType = false;
                 }
 
+                this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
+                this.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
+
                 this.databaseType = this.config.get('databaseType');
                 if (this.databaseType === 'mongodb') {
                     this.devDatabaseType = 'mongodb';
                     this.prodDatabaseType = 'mongodb';
-                    this.hibernateCache = 'no';
+                    this.enableHibernateCache = false;
+                } else if (this.databaseType === 'couchbase') {
+                    this.devDatabaseType = 'couchbase';
+                    this.prodDatabaseType = 'couchbase';
+                    this.enableHibernateCache = false;
                 } else if (this.databaseType === 'cassandra') {
                     this.devDatabaseType = 'cassandra';
                     this.prodDatabaseType = 'cassandra';
-                    this.hibernateCache = 'no';
+                    this.enableHibernateCache = false;
                 } else if (this.databaseType === 'no') {
                     // no database, only available for microservice applications
                     this.devDatabaseType = 'no';
                     this.prodDatabaseType = 'no';
-                    this.hibernateCache = 'no';
+                    this.enableHibernateCache = false;
                 } else {
                     // sql
                     this.devDatabaseType = this.config.get('devDatabaseType');
                     this.prodDatabaseType = this.config.get('prodDatabaseType');
-                    this.hibernateCache = this.config.get('hibernateCache');
                 }
-                if (this.hibernateCache === undefined) {
-                    this.hibernateCache = 'no';
-                }
+
                 // Hazelcast is mandatory for Gateways, as it is used for rate limiting
                 if (this.applicationType === 'gateway') {
-                    this.hibernateCache = 'hazelcast';
+                    this.cacheProvider = 'hazelcast';
                 }
-                this.clusteredHttpSession = this.config.get('clusteredHttpSession') === 'no' ? false : this.config.get('clusteredHttpSession');
-                if (this.hibernateCache === 'ehcache') {
-                    this.clusteredHttpSession = false; // cannot use HazelCast clusering AND ehcache
-                }
+
                 this.buildTool = this.config.get('buildTool');
-                this.enableSocialSignIn = this.config.get('enableSocialSignIn');
                 this.jhipsterVersion = packagejs.version;
                 if (this.jhipsterVersion === undefined) {
                     this.jhipsterVersion = this.config.get('jhipsterVersion');
                 }
                 this.authenticationType = this.config.get('authenticationType');
-                // JWT authentication is mandatory with Eureka, so the JHipster Registry
-                // can control the applications
-                if (this.serviceDiscoveryType === 'eureka' && (this.authenticationType !== 'uaa' && this.authenticationType !== 'oauth2')) {
-                    this.authenticationType = 'jwt';
-                }
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = this.config.get('rememberMeKey');
                 }
@@ -224,16 +228,15 @@ module.exports = class extends BaseGenerator {
                     this.baseName = baseName;
                 }
 
-                // force constiables unused by microservice applications
+                // force variables unused by microservice applications
                 if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
-                    this.clusteredHttpSession = false;
                     this.websocket = false;
                 }
 
                 const serverConfigFound = this.packageName !== undefined &&
                     this.authenticationType !== undefined &&
-                    this.hibernateCache !== undefined &&
-                    this.clusteredHttpSession !== undefined &&
+                    this.cacheProvider !== undefined &&
+                    this.enableHibernateCache !== undefined &&
                     this.websocket !== undefined &&
                     this.databaseType !== undefined &&
                     this.devDatabaseType !== undefined &&
@@ -250,11 +253,6 @@ module.exports = class extends BaseGenerator {
                     // Generate JWT secret key if key does not already exist in config
                     if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
                         this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
-                    }
-
-                    // If social sign in is not defined, it is disabled by default
-                    if (this.enableSocialSignIn === undefined) {
-                        this.enableSocialSignIn = false;
                     }
 
                     // If translation is not defined, it is enabled by default
@@ -282,6 +280,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
+        if (useBlueprint) return;
         return {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
@@ -289,11 +288,9 @@ module.exports = class extends BaseGenerator {
             askFori18n: prompts.askFori18n,
 
             setSharedConfigOptions() {
-                this.configOptions.lastQuestion = this.currentQuestion;
-                this.configOptions.totalQuestions = this.totalQuestions;
                 this.configOptions.packageName = this.packageName;
-                this.configOptions.hibernateCache = this.hibernateCache;
-                this.configOptions.clusteredHttpSession = this.clusteredHttpSession;
+                this.configOptions.cacheProvider = this.cacheProvider;
+                this.configOptions.enableHibernateCache = this.enableHibernateCache;
                 this.configOptions.websocket = this.websocket;
                 this.configOptions.databaseType = this.databaseType;
                 this.configOptions.devDatabaseType = this.devDatabaseType;
@@ -302,7 +299,6 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.messageBroker = this.messageBroker;
                 this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
                 this.configOptions.buildTool = this.buildTool;
-                this.configOptions.enableSocialSignIn = this.enableSocialSignIn;
                 this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
                 this.configOptions.authenticationType = this.authenticationType;
                 this.configOptions.uaaBaseName = this.uaaBaseName;
@@ -323,13 +319,14 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
+        if (useBlueprint) return;
         return {
             insight() {
                 const insight = this.insight();
                 insight.trackWithEvent('generator', 'server');
                 insight.track('app/authenticationType', this.authenticationType);
-                insight.track('app/hibernateCache', this.hibernateCache);
-                insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
+                insight.track('app/cacheProvider', this.cacheProvider);
+                insight.track('app/enableHibernateCache', this.enableHibernateCache);
                 insight.track('app/websocket', this.websocket);
                 insight.track('app/databaseType', this.databaseType);
                 insight.track('app/devDatabaseType', this.devDatabaseType);
@@ -338,7 +335,6 @@ module.exports = class extends BaseGenerator {
                 insight.track('app/messageBroker', this.messageBroker);
                 insight.track('app/serviceDiscoveryType', this.serviceDiscoveryType);
                 insight.track('app/buildTool', this.buildTool);
-                insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
                 insight.track('app/enableSwaggerCodegen', this.enableSwaggerCodegen);
             },
 
@@ -350,15 +346,11 @@ module.exports = class extends BaseGenerator {
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
+                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan'].includes(this.cacheProvider) || this.applicationType === 'gateway';
 
-                if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
-                    this.pkType = 'String';
-                } else {
-                    this.pkType = 'Long';
-                }
+                this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
-                this.testDir = `${constants.SERVER_TEST_SRC_DIR + this.packageFolder}/`;
                 if (!this.nativeLanguage) {
                     // set to english when translation is set to false
                     this.nativeLanguage = 'en';
@@ -373,8 +365,8 @@ module.exports = class extends BaseGenerator {
                 this.config.set('serverPort', this.serverPort);
                 this.config.set('authenticationType', this.authenticationType);
                 this.config.set('uaaBaseName', this.uaaBaseName);
-                this.config.set('hibernateCache', this.hibernateCache);
-                this.config.set('clusteredHttpSession', this.clusteredHttpSession);
+                this.config.set('cacheProvider', this.cacheProvider);
+                this.config.set('enableHibernateCache', this.enableHibernateCache);
                 this.config.set('websocket', this.websocket);
                 this.config.set('databaseType', this.databaseType);
                 this.config.set('devDatabaseType', this.devDatabaseType);
@@ -383,7 +375,6 @@ module.exports = class extends BaseGenerator {
                 this.config.set('messageBroker', this.messageBroker);
                 this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
                 this.config.set('buildTool', this.buildTool);
-                this.config.set('enableSocialSignIn', this.enableSocialSignIn);
                 this.config.set('enableSwaggerCodegen', this.enableSwaggerCodegen);
                 this.config.set('jwtSecretKey', this.jwtSecretKey);
                 this.config.set('rememberMeKey', this.rememberMeKey);
@@ -397,6 +388,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
+        if (useBlueprint) return;
         return {
             getSharedConfigOptions() {
                 this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
@@ -415,9 +407,9 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
-                this.protractorTests = this.testFrameworks.indexOf('protractor') !== -1;
-                this.gatlingTests = this.testFrameworks.indexOf('gatling') !== -1;
-                this.cucumberTests = this.testFrameworks.indexOf('cucumber') !== -1;
+                this.protractorTests = this.testFrameworks.includes('protractor');
+                this.gatlingTests = this.testFrameworks.includes('gatling');
+                this.cucumberTests = this.testFrameworks.includes('cucumber');
             },
 
             composeLanguages() {
@@ -429,10 +421,12 @@ module.exports = class extends BaseGenerator {
     }
 
     get writing() {
+        if (useBlueprint) return;
         return writeFiles();
     }
 
     end() {
+        if (useBlueprint) return;
         if (this.prodDatabaseType === 'oracle') {
             this.log('\n\n');
             this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')

@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,6 +39,11 @@ module.exports = class extends BaseGenerator {
         this.packageName = this.config.get('packageName');
         this.packageFolder = this.config.get('packageFolder');
         this.databaseType = this.config.get('databaseType');
+        this.reactiveController = false;
+        this.applicationType = this.config.get('applicationType');
+        if (this.applicationType === 'reactive') {
+            this.reactiveController = true;
+        }
         this.controllerActions = [];
     }
 
@@ -89,13 +94,13 @@ module.exports = class extends BaseGenerator {
         });
 
         this.template(
-            `${SERVER_MAIN_SRC_DIR}package/web/rest/_Controller.java`,
-            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}Controller.java`
+            `${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
+            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}Resource.java`
         );
 
         this.template(
-            `${SERVER_TEST_SRC_DIR}package/web/rest/_ControllerIntTest.java`,
-            `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}ControllerIntTest.java`
+            `${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIntTest.java.ejs`,
+            `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}ResourceIntTest.java`
         );
     }
 };

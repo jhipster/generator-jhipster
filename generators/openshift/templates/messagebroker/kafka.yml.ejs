@@ -1,0 +1,238 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# Message Broker template.
+#
+# This defines all the configurable parameters and other objects that are needed to run the kafka service. This template can even be
+# saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
+# displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
+#
+apiVersion: v1
+kind: Template
+metadata:
+  name: jhipster-kafka-template
+  namespace: <%= openshiftNamespace %>
+  annotations:
+    description: This template defines objects that are required to spin up a kafka and zookeeper pod
+    tags: kafka, jhipster-kafka<% if (storageType === 'persistent') { %> ,persistent <% } %> <% if (storageType === 'ephemeral') { %> ,ephemeral <% } %>
+    openshift.io/display-name: jhipster-kafka-template
+    openshift.io/long-description: "This template provides objects that are required to spin up a kafka and zookeeper pod. <% if (storageType ==
+    'persistent') { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
+     Please make sure you have provisioned PVs (Persistent Volumes) before using this template. <% } %><% if (storageType === 'ephemeral') {
+     %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>"
+    openshift.io/provider-display-name: JHipster-OpenShift
+labels:
+  app: jhipster-kafka
+  createdBy: JHipster-Team
+parameters:
+  -
+    name: APPLICATION_NAME
+    value: jhipster-kafka
+    description: Name of the kafka application
+    required: true
+    displayName: Kafka Application Name
+  -
+    name: ZK_APPLICATION_NAME
+    value: jhipster-zookeeper
+    description: Name of the zookeeper application
+    required: true
+    displayName: Zookeeper Application Name
+  -
+    name: VOLUME_CAPACITY
+    displayName: Volume Capacity
+    description: Volume space available for data, e.g. 512Mi, 2Gi.
+    value: 1Gi
+    required: true
+  -
+    name: SVC_ID
+    value: jhipster
+    description: Name of the service account
+    required: true
+    displayName: "*** PLEASE DO NOT CHANGE THIS ***"
+objects:
+<%_ if (storageType === 'persistent') { _%>
+  -
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: ${APPLICATION_NAME}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: "${VOLUME_CAPACITY}"
+<%_ } _%>
+<%_ if (storageType === 'persistent') { _%>
+  -
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: ${ZK_APPLICATION_NAME}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: "${VOLUME_CAPACITY}"
+<%_ } _%>
+# Zookeeper objects. This can be later replaced with StatefulSet
+  -
+    apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${ZK_APPLICATION_NAME}
+      labels:
+        app: ${ZK_APPLICATION_NAME}
+    spec:
+# This is to define the deployment strategy (either has to follow Rolling upgrades or Recreate)
+#     strategy:
+#       type: Rolling
+#       rollingParams:
+#         updatePeriodSeconds: 1
+#         intervalSeconds: 1
+#         timeoutSeconds: 600
+#         maxUnavailable: 25%
+#         maxSurge: 25%
+#       resources:
+      triggers:
+        -
+          type: ConfigChange
+      replicas: 1
+      selector:
+        app: ${ZK_APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: ${ZK_APPLICATION_NAME}
+        spec:
+          volumes:
+          - name: ${ZK_APPLICATION_NAME}-data
+            <%_ if (storageType === 'persistent') { _%>
+            persistentVolumeClaim:
+              claimName: ${ZK_APPLICATION_NAME}
+            <%_ } _%>
+            <%_ if (storageType === 'ephemeral') { _%>
+            emptyDir: {}
+            <%_ } _%>
+          containers:
+          - name: ${ZK_APPLICATION_NAME}
+            image: <%= DOCKER_ZOOKEEPER %>
+            ports:
+            - containerPort: 2181
+            volumeMounts:
+            - name: ${ZK_APPLICATION_NAME}-data
+              mountPath: /tmp/zookeeper
+            resources:
+            imagePullPolicy: IfNotPresent
+          serviceAccount: ${SVC_ID}
+          serviceAccountName: ${SVC_ID}
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${ZK_APPLICATION_NAME}
+      labels:
+        app: ${ZK_APPLICATION_NAME}
+    spec:
+      ports:
+        -
+          name: zookeeper-bc
+          port: 2181
+          targetPort: 2181
+      selector:
+        app: ${ZK_APPLICATION_NAME}
+# Kafka objects
+  -
+    apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: ${APPLICATION_NAME}
+      labels:
+        app: ${APPLICATION_NAME}
+    spec:
+# This is to define the deployment strategy (either be Rolling or Recreate)
+#     strategy:
+#       type: Rolling
+#       rollingParams:
+#         updatePeriodSeconds: 1
+#         intervalSeconds: 1
+#         timeoutSeconds: 600
+#         maxUnavailable: 25%
+#         maxSurge: 25%
+#       resources:
+      triggers:
+        -
+          type: ConfigChange
+      replicas: 1
+      selector:
+        app: ${APPLICATION_NAME}
+      template:
+        metadata:
+          labels:
+            app: ${APPLICATION_NAME}
+        spec:
+          volumes:
+          - name: ${APPLICATION_NAME}-data
+            <%_ if (storageType === 'persistent') { _%>
+            persistentVolumeClaim:
+              claimName: ${APPLICATION_NAME}
+            <%_ } _%>
+            <%_ if (storageType === 'ephemeral') { _%>
+            emptyDir: {}
+            <%_ } _%>
+          containers:
+          - name: ${APPLICATION_NAME}
+            image: <%= DOCKER_KAFKA %>
+            env:
+            - name: KAFKA_ADVERTISED_HOST_NAME
+              value: ${APPLICATION_NAME}
+            - name: KAFKA_ADVERTISED_PORT
+              value: '9092'
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: ${ZK_APPLICATION_NAME}
+            - name: KAFKA_CREATE_TOPICS
+              value: 'topic-jhipster:1:1'
+            ports:
+            - containerPort: 9092
+            volumeMounts:
+            - name: ${APPLICATION_NAME}-data
+              mountPath: /opt/kafka/data
+            resources:
+            imagePullPolicy: IfNotPresent
+          serviceAccount: ${SVC_ID}
+          serviceAccountName: ${SVC_ID}
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+  -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ${APPLICATION_NAME}
+      labels:
+        app: ${APPLICATION_NAME}
+    spec:
+      ports:
+        -
+          name: kafka
+          port: 9092
+          targetPort: 9092
+      selector:
+        app: ${APPLICATION_NAME}

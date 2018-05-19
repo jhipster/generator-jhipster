@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,6 +54,9 @@ module.exports = class extends BaseGenerator {
                 const prodDatabaseType = this.config.get('prodDatabaseType');
 
                 switch (prodDatabaseType.toLowerCase()) {
+                case 'mariadb':
+                    this.dbEngine = 'mariadb';
+                    break;
                 case 'mysql':
                     this.dbEngine = 'mysql';
                     break;
@@ -123,7 +126,11 @@ module.exports = class extends BaseGenerator {
 
                 s3.createBucket({ bucket: this.bucketName }, (err, data) => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        if (err.message == null) {
+                            this.error(chalk.red(('The S3 bucket could not be created. Are you sure its name is not already used?')));
+                        } else {
+                            this.error(chalk.red(err.message));
+                        }
                     } else {
                         this.log(data.message);
                         cb();
@@ -198,6 +205,19 @@ module.exports = class extends BaseGenerator {
                     } else {
                         this.dbUrl = data.dbUrl;
                         this.log(data.message);
+                        cb();
+                    }
+                });
+            },
+            verifyRoles() {
+                const cb = this.async();
+                this.log();
+                this.log(chalk.bold('Verifying ElasticBeanstalk Roles'));
+                const iam = this.awsFactory.getIam();
+                iam.verifyRoles({}, (err) => {
+                    if (err) {
+                        this.error(chalk.red(err.message));
+                    } else {
                         cb();
                     }
                 });

@@ -1,0 +1,137 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Translate } from 'react-jhipster';
+import { Table, Badge, Col, Row, Button } from 'reactstrap';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+
+import { systemHealth } from '../administration.reducer';
+import HealthModal from './health-modal';
+
+export interface IHealthPageProps {
+  isFetching?: boolean;
+  systemHealth: Function;
+  health: any;
+  systemHealthInfo: any;
+}
+
+export interface IHealthPageState {
+  healthObject: any,
+  showModal: boolean
+}
+
+export class HealthPage extends React.Component<IHealthPageProps, IHealthPageState> {
+  state: IHealthPageState = {
+    healthObject: {},
+    showModal: false
+  };
+
+  componentDidMount() {
+    this.props.systemHealth();
+  }
+
+  getSystemHealth = () => {
+    if (!this.props.isFetching) {
+      this.props.systemHealth();
+    }
+  }
+
+  getSystemHealthInfo = (name, healthObject) => () => {
+    this.setState({
+      showModal: true,
+      healthObject: {
+        ...healthObject,
+        name
+      }
+    });
+  }
+
+  handleClose = () => {
+    this.setState({
+        showModal: false
+    });
+  }
+
+  renderModal = () => {
+    const { healthObject } = this.state;
+    return (
+      <HealthModal healthObject={healthObject} handleClose={this.handleClose} showModal={this.state.showModal} />
+    );
+  }
+
+  render() {
+    const { health, isFetching } = this.props;
+    const data = (health || {}).details || {};
+    return (
+      <div>
+          <h2>Health Checks</h2>
+          <p>
+            <Button onClick={this.getSystemHealth} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
+               <FontAwesomeIcon icon="sync" />&nbsp;
+              <Translate component="span" contentKey="health.refresh.button">Refresh</Translate>
+            </Button>
+          </p>
+          <Row>
+            <Col md="12">
+            <Table bordered>
+               <thead>
+                 <tr>
+                   <th>Service Name</th>
+                   <th>Status</th>
+                   <th>Details</th>
+                 </tr>
+               </thead>
+               <tbody>
+              {Object.keys(data).map((configPropKey, configPropIndex) =>
+                configPropKey !== 'status' ? (
+                  <tr key={configPropIndex}>
+                    <td>{configPropKey}</td>
+                    <td>
+                      <Badge color={data[configPropKey].status !== 'UP' ? 'danger' : 'success'}>
+                        {data[configPropKey].status}
+                      </Badge>
+                    </td>
+                    <td>
+                      {data[configPropKey].details ? (
+                      <a onClick={this.getSystemHealthInfo(configPropKey, data[configPropKey])}>
+                        <FontAwesomeIcon icon="eye" />
+                      </a>) : null}
+                    </td>
+                  </tr>
+                ) : null
+                )}
+              </tbody>
+             </Table>
+            </Col>
+          </Row>
+          {this.renderModal()}
+        </div>
+    );
+  }
+}
+
+const mapStateToProps = storeState => ({
+  health: storeState.administration.health,
+  isFetching: storeState.administration.isFetching
+});
+
+const mapDispatchToProps = { systemHealth };
+
+export default connect(mapStateToProps, mapDispatchToProps)(HealthPage);

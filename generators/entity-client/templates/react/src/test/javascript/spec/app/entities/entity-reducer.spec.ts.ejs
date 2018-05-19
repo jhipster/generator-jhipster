@@ -1,0 +1,314 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+    let entityActionName = entityInstance.toUpperCase();
+    let entityActionNamePlural = entityInstancePlural.toUpperCase();
+_%>
+import axios from 'axios';
+import { expect } from 'chai';
+import configureStore from 'redux-mock-store';
+import promiseMiddleware from 'redux-promise-middleware';
+import thunk from 'redux-thunk';
+import * as sinon from 'sinon';
+<%_ if (pagination === 'infinite-scroll') { _%>
+import { parseHeaderForLinks } from 'react-jhipster';
+<%_ } _%>
+
+import reducer, {
+  ACTION_TYPES, createEntity, deleteEntity, getEntities, getEntity, updateEntity<% if (pagination === 'infinite-scroll') { %>, reset<% } %>
+} from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+
+// tslint:disable no-invalid-template-strings
+describe('Entities reducer tests', () => {
+
+  function isEmpty(element): boolean {
+    if (element instanceof Array) {
+      return element.length === 0;
+    } else {
+      return Object.keys(element).length === 0;
+    }
+  }
+
+  const initialState = {
+    loading: false,
+    errorMessage: null,
+    entities: [],
+    entity: {},
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    links: {
+      last: 0
+    },
+    <%_ } _%>
+    <%_ if (pagination !== 'no') { _%>
+    totalItems: 0,
+    <%_ } _%>
+    updating: false,
+    updateSuccess: false
+  };
+
+  function testInitialState(state) {
+    expect(state).to.contain({
+      loading: false,
+      errorMessage: null,
+      updating: false,
+      updateSuccess: false
+    });
+    expect(isEmpty(state.entities));
+    expect(isEmpty(state.entity));
+  }
+
+  function testMultipleTypes(types, payload, testFunction) {
+    types.forEach(e => {
+      testFunction(reducer(undefined, { type: e, payload }));
+    });
+  }
+
+  describe('Common', () => {
+    it('should return the initial state', () => {
+      testInitialState(reducer(undefined, {}));
+    });
+  });
+
+  describe('Requests', () => {
+    it('should set state to loading', () => {
+      testMultipleTypes(
+        [
+          REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>)
+        ],
+        {},
+        state => {
+          expect(state).to.contain({
+            errorMessage: null,
+            updateSuccess: false,
+            loading: true
+          });
+        }
+      );
+    });
+
+    it('should set state to updating', () => {
+      testMultipleTypes(
+        [
+          REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>),
+          REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>),
+          REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>)
+        ],
+        {},
+        state => {
+          expect(state).to.contain({
+            errorMessage: null,
+            updateSuccess: false,
+            updating: true
+          });
+        }
+      );
+    });
+  });
+
+  describe('Failures', () => {
+    it('should set a message in errorMessage', () => {
+      testMultipleTypes(
+        [
+          FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>),
+          FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>),
+          FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>),
+          FAILURE(ACTION_TYPES.DELETE_<%= entityActionName %>)
+        ],
+        'error message',
+        state => {
+          expect(state).to.contain({
+            errorMessage: 'error message',
+            updateSuccess: false,
+            updating: false
+          });
+        }
+      );
+    });
+  });
+
+  describe('Successes', () => {
+    it('should fetch all entities', () => {
+      const payload = { data: { 1: 'fake1', 2: 'fake2' }<% if (pagination !== 'no') { %>, headers: { 'x-total-count': 123<% if (pagination === 'infinite-scroll') { %>, link: ';'<% } %> }<% } %> };
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      const link = parseHeaderForLinks(payload.headers.link);
+      <%_ } _%>
+      expect(reducer(undefined, {
+        type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+        payload
+      })).to.eql({
+      ...initialState,
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      links: { last: link.last },
+      <%_ } _%>
+      loading: false,
+      <%_ if (pagination !== 'no') { _%>
+      totalItems: payload.headers['x-total-count'],
+      <%_ } _%>
+      entities: <% if (pagination === 'infinite-scroll') { %>[payload.data]<% } else { %>payload.data<% } %>
+      });
+    });
+
+    it('should create/update entity', () => {
+      const payload = { data: 'fake payload' };
+      expect(reducer(undefined, {
+        type: SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>),
+        payload
+      })).to.eql({
+        ...initialState,
+        updating: false,
+        updateSuccess: true,
+        entity: payload.data
+      });
+    });
+
+    it('should delete entity', () => {
+      const payload = 'fake payload';
+      const toTest = reducer(undefined,
+        {
+          type: SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>),
+          payload
+        });
+      expect(toTest).to.contain({
+        updating: false,
+        updateSuccess: true
+      });
+    });
+  });
+
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      store = mockStore({});
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches ACTION_TYPES.FETCH_<%= entityActionName %>_LIST actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getEntities()).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+
+    it('dispatches ACTION_TYPES.FETCH_<%= entityActionName %> actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getEntity(42666)).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+
+    it('dispatches ACTION_TYPES.CREATE_<%= entityActionName %> actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>),
+          payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(createEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+
+    it('dispatches ACTION_TYPES.UPDATE_<%= entityActionName %> actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>),
+          payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(updateEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+
+    it('dispatches ACTION_TYPES.DELETE_<%= entityActionName %> actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>),
+          payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).to.eql(expectedActions));
+    });
+  });
+
+  <%_ if (fieldsContainBlob) { _%>
+  describe('blobFields', () => {
+    it('should properly set a blob in state.', () => {
+      const payload = { name: 'fancyBlobName', data: 'fake data', contentType: 'fake dataType' };
+      expect(reducer(undefined, {
+        type: ACTION_TYPES.SET_BLOB,
+        payload
+      })).to.eql({
+        ...initialState,
+        entity: {
+          fancyBlobName: payload.data,
+          fancyBlobNameContentType: payload.contentType
+        }
+      });
+    });
+  });
+  <%_ } _%>
+});

@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -76,6 +76,7 @@ module.exports = class extends BaseGenerator {
                 this.openshiftNamespace = this.config.get('openshiftNamespace');
                 this.storageType = this.config.get('storageType');
                 this.registryReplicas = this.config.get('registryReplicas');
+                this.useKafka = false;
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
                 this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
@@ -86,6 +87,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
                 this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
+                this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
                 this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
                 this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
@@ -94,6 +96,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
                 this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
                 this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
+                this.DOCKER_JHIPSTER_IMPORT_DASHBOARDS = constants.DOCKER_JHIPSTER_IMPORT_DASHBOARDS;
                 this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
                 this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
                 this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
@@ -160,6 +163,16 @@ module.exports = class extends BaseGenerator {
                 this.registryReplicas = 2;
             },
 
+            setPostPromptProp() {
+                this.appConfigs.some((element) => {
+                    if (element.messageBroker === 'kafka') {
+                        this.useKafka = true;
+                        return true;
+                    }
+                    return false;
+                });
+            },
+
             saveConfig() {
                 this.config.set('appsFolders', this.appsFolders);
                 this.config.set('directoryPath', this.directoryPath);
@@ -199,17 +212,36 @@ module.exports = class extends BaseGenerator {
         }
 
         this.log('\nYou can deploy all your apps by running: ');
-        this.log(`  ${chalk.cyan(`${this.directoryPath}/ocp/ocp-apply.sh`)}`);
-        if (this.gatewayNb >= 1 || this.microserviceNb >= 1) {
-            this.log('OR');
-            this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/registry`)}`);
-            if (this.monitoring === 'elk' || this.monitoring === 'prometheus') {
-                this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/monitoring`)}`);
+        this.log(`  ${chalk.cyan(`${this.directoryPath}ocp/ocp-apply.sh`)}`);
+        this.log('OR');
+        this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/scc-config.yml | oc apply -f -`)}`);
+        if (this.monitoring === 'elk') {
+            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-monitoring.yml | oc apply -f -`)}`);
+        }
+        if (this.monitoring === 'prometheus') {
+            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/monitoring/jhipster-metrics.yml | oc apply -f -`)}`);
+        }
+        if (this.useKafka === true) {
+            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/messagebroker/kafka.yml | oc apply -f -`)}`);
+        }
+        for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
+            const app = this.appConfigs[i];
+            const appName = app.baseName.toLowerCase();
+            if (app.searchEngine === 'elasticsearch') {
+                this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-elasticsearch.yml | oc apply -f -`)}`);
             }
-            for (let i = 0; i < this.appsFolders.length; i++) {
-                this.log(`  ${chalk.cyan(`oc apply -f ${this.directoryPath}/ocp/${this.appConfigs[i].baseName}`)}`);
+            if (app.serviceDiscoveryType !== false && regIndex++ === 0) {
+                this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/application-configmap.yml | oc apply -f -`)}`);
+                if (app.serviceDiscoveryType === 'eureka') {
+                    this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/jhipster-registry.yml | oc apply -f -`)}`);
+                } else {
+                    this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/consul.yml | oc apply -f -`)}`);
+                }
             }
-            this.log('and then install the apps from OpenShift console by choosing the template created in the namespace. ');
+            if (app.prodDatabaseType !== 'no') {
+                this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-${app.prodDatabaseType}.yml | oc apply -f -`)}`);
+            }
+            this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-deployment.yml | oc apply -f -`)}`);
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {

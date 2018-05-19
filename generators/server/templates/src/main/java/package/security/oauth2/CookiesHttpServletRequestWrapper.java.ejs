@@ -1,0 +1,49 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%=packageName%>.security.oauth2;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+
+/**
+ * A request mapper used to modify the cookies in the original request.
+ * This is needed such that we can modify the cookies of the request during a token refresh.
+ * The token refresh happens before authentication by the <code>OAuth2AuthenticationProcessingFilter</code>
+ * so we must make sure that further in the filter chain, we have the new cookies and not the expired/missing ones.
+ */
+class CookiesHttpServletRequestWrapper extends HttpServletRequestWrapper {
+    /**
+     * The new cookies of the request. Use these instead of the ones found in the wrapped request.
+     */
+    private Cookie[] cookies;
+
+    public CookiesHttpServletRequestWrapper(HttpServletRequest request, Cookie[] cookies) {
+        super(request);
+        this.cookies = cookies;
+    }
+
+    /**
+     * Return the modified cookies instead of the original ones.
+     */
+    @Override
+    public Cookie[] getCookies() {
+        return cookies;
+    }
+}

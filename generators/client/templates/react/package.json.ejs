@@ -1,0 +1,205 @@
+<%#
+Copyright 2013-2018 the original author or authors from the JHipster project.
+
+This file is part of the JHipster project, see https://www.jhipster.tech/
+for more information.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-%>
+<% var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- '%>
+{
+  "name": "<%= dasherizedBaseName %>",
+  "version": "0.0.0",
+  "description": "Description for <%= baseName %>",
+  "private": true,
+  "license": "UNLICENSED",
+  "cacheDirectories": [
+    "node_modules"
+  ],
+  "dependencies": {
+    "@fortawesome/fontawesome": "1.1.5",
+    "@fortawesome/fontawesome-free-solid": "5.0.10",
+    "@fortawesome/react-fontawesome": "0.0.18",
+    "availity-reactstrap-validation": "2.0.2",
+    "axios": "0.18.0",
+    "bootstrap": "4.0.0",
+    "loaders.css": "0.1.2",
+    "lodash": "4.17.5",
+    "moment": "2.22.0",
+    "react": "16.3.0",
+    "react-addons-css-transition-group": "16.0.0-alpha.3",
+    "react-addons-transition-group": "16.0.0-alpha.3",
+    "react-dom": "16.3.0",
+    "react-hot-loader": "3.1.1",
+    "react-jhipster": "0.5.1",
+    "react-redux": "5.0.7",
+    "react-redux-loading-bar": "3.1.2",
+    "react-router-dom": "4.2.2",
+    "react-toastify": "3.4.3",
+    "react-transition-group": "2.3.0",
+    "reactstrap": "5.0.0",
+    "redux": "3.7.2",
+    "redux-devtools": "3.4.1",
+    "redux-devtools-dock-monitor": "1.1.3",
+    "redux-devtools-log-monitor": "1.4.0",
+    "redux-promise-middleware": "5.0.0",
+    "redux-thunk": "2.2.0",
+    "tslib": "1.9.0",
+    <%_ if (websocket === 'spring-websocket') { _%>
+    "rxjs": "5.5.6",
+    "sockjs-client": "1.1.4",
+    "webstomp-client": "1.2.0",
+    <%_ } _%>
+    "uuid": "3.2.1"
+  },
+  "devDependencies": {
+    "@types/chai": "4.1.2",
+    "@types/chai-enzyme": "0.6.4",
+    "@types/lodash": "4.14.106",
+    "@types/mocha": "5.0.0",
+    "@types/node": "9.6.1",
+    "@types/react": "16.1.0",
+    "@types/react-dom": "16.0.4",
+    "@types/react-router-dom": "4.2.6",
+    "@types/redux": "3.6.31",
+    <%_ if (protractorTests) { _%>
+    "@types/selenium-webdriver": "3.0.7",
+    <%_ } _%>
+    "@types/webpack-env": "1.13.5",
+    "browser-sync": "2.24.4",
+    "browser-sync-webpack-plugin": "2.2.2",
+    "cache-loader": "1.2.2",
+    "chai": "4.1.2",
+    "chai-enzyme": "1.0.0-beta.0",
+    "copy-webpack-plugin": "4.5.1",
+    "core-js": "2.5.4",
+    "cross-env": "5.1.4",
+    "css-loader": "0.28.11",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "1.1.1",
+    "extract-text-webpack-plugin": "4.0.0-beta.0",
+    "file-loader": "1.1.11",
+    "fork-ts-checker-webpack-plugin": "0.4.1",
+    "html-webpack-plugin": "3.1.0",
+    "http-proxy-middleware": "0.18.0",
+    <%_ if(!skipCommitHook) { _%>
+    "husky": "0.14.3",
+    <%_ } _%>
+    "image-webpack-loader": "4.2.0",
+    <%_ if (protractorTests) { _%>
+    "chai-as-promised": "7.1.1",
+    <%_ } _%>
+    "json-loader": "0.5.7",
+    "karma": "2.0.0",
+    "karma-chai": "0.1.0",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-coverage": "1.1.1",
+    "karma-junit-reporter": "1.2.0",
+    "karma-mocha": "1.3.0",
+    "karma-mocha-reporter": "2.2.5",
+    "karma-notify-reporter": "1.0.1",
+    "karma-remap-istanbul": "0.6.0",
+    "karma-sourcemap-loader": "0.3.7",
+    "karma-webpack": "3.0.0",
+    <%_ if(!skipCommitHook) { _%>
+    "lint-staged": "7.0.1",
+    <%_ } _%>
+    <%_ if (enableTranslation) { _%>
+    "merge-jsons-webpack-plugin": "1.0.14",
+    <%_ } _%>
+    "mocha": "5.0.5",
+    "moment-locales-webpack-plugin": "1.0.5",
+    "prettier": "1.11.1",
+    <%_ if (protractorTests) { _%>
+    "protractor": "5.1.2",
+    <%_ } _%>
+    "puppeteer": "1.2.0",
+    "react-addons-test-utils": "15.6.2",
+    "react-infinite-scroller": "1.1.3",
+    "react-test-renderer": "16.3.0",
+    "redux-mock-store": "1.5.1",
+    "rimraf": "2.6.2",
+    "sinon": "4.5.0",
+    "source-map-loader": "0.2.3",
+    "sourcemap-istanbul-instrumenter-loader": "0.2.0",
+    "stripcomment-loader": "0.1.0",
+    "style-loader": "0.20.3",
+    "swagger-ui": "2.2.10",
+    "thread-loader": "1.1.5",
+    <%_ if (useSass) { _%>
+    "sass-loader": "7.0.1",
+    "node-sass": "4.9.0",
+    "postcss-loader": "2.0.6",
+    <%_ } _%>
+    <%_ otherModules.forEach(module => { _%>
+    "<%= module.name %>": "<%= module.version %>",
+    <%_ }); _%>
+    "to-string-loader": "1.1.5",
+    "ts-loader": "4.1.0",
+    <%_ if (protractorTests) { _%>
+    "ts-node": "3.3.0",
+    <%_ } _%>
+    "tslint": "5.9.1",
+    "tslint-config-prettier": "1.10.0",
+    "tslint-eslint-rules": "5.1.0",
+    "tslint-loader": "3.6.0",
+    "tslint-microsoft-contrib": "5.0.3",
+    "tslint-react": "3.5.1",
+    "typescript": "2.8.1",
+    "uglifyjs-webpack-plugin": "1.2.4",
+    "webpack": "4.4.1",
+    "webpack-cli": "2.0.13",
+    "webpack-dev-server": "3.1.1",
+    "webpack-merge": "4.1.2",
+    "webpack-notifier": "1.6.0",
+    "workbox-webpack-plugin": "3.0.1",
+    "write-file-webpack-plugin": "4.2.0"<% if (buildTool === 'maven') { %>,
+    "xml2js": "0.4.19"
+    <%_ } _%>
+  },
+  "resolutions": {
+    "@types/react": "16.1.0"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  <%_ if(!skipCommitHook) { _%>
+  "lint-staged": {
+    "src/**/*.{ts,tsx,css,scss}": ["prettier --write", "git add"]
+  },
+  <%_ } _%>
+  "scripts": {
+    <%_ if(!skipCommitHook) { _%>
+    "precommit": "lint-staged",
+    <%_ } _%>
+    "prettier:format": "<%= clientPackageManager %> prettier --write 'src/**/*.{ts,tsx,css,scss}'",
+    "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
+    "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
+    "cleanup": "rimraf <%= BUILD_DIR %>www",
+    <%_ if (protractorTests) { _%>
+    "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
+    "postinstall": "webdriver-manager update --gecko false",
+    <%_ } _%>
+    "start": "<%= clientPackageManager %> run webpack:dev",
+    "test": "<%= clientPackageManager %> run lint && karma start src/test/javascript/karma.conf.js",
+    "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --inline --profile --port=9060",
+    "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --profile",
+    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.prod.js --profile",
+    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main",
+    "webpack:test": "<%= clientPackageManager %> run test",
+    "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
+  }
+}

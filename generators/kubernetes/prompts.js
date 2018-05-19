@@ -1,7 +1,7 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
  *
- * This file is part of the JHipster project, see http://www.jhipster.tech/
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,10 +21,6 @@ const dockerPrompts = require('../docker-prompts');
 
 module.exports = _.extend({
     askForKubernetesNamespace,
-    askForDockerRepositoryName,
-    askForDockerPushCommand,
-    askForJhipsterConsole,
-    askForPrometheusOperator,
     askForKubernetesServiceType,
     askForIngressDomain
 }, dockerPrompts);
@@ -41,70 +37,6 @@ function askForKubernetesNamespace() {
 
     this.prompt(prompts).then((props) => {
         this.kubernetesNamespace = props.kubernetesNamespace;
-        done();
-    });
-}
-
-function askForDockerRepositoryName() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'input',
-        name: 'dockerRepositoryName',
-        message: 'What should we use for the base Docker repository name?',
-        default: this.dockerRepositoryName
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.dockerRepositoryName = props.dockerRepositoryName;
-        done();
-    });
-}
-
-function askForDockerPushCommand() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'input',
-        name: 'dockerPushCommand',
-        message: 'What command should we use for push Docker image to repository?',
-        default: this.dockerPushCommand ? this.dockerPushCommand : 'docker push'
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.dockerPushCommand = props.dockerPushCommand;
-        done();
-    });
-}
-
-function askForJhipsterConsole() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'confirm',
-        name: 'jhipsterConsole',
-        message: 'Do you want to use JHipster Console for log aggregation (ELK)?',
-        default: this.jhipsterConsole ? this.jhipsterConsole : true
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.jhipsterConsole = props.jhipsterConsole;
-        done();
-    });
-}
-
-function askForPrometheusOperator() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'confirm',
-        name: 'prometheusOperator',
-        message: 'Do you want to export your services for Prometheus (needs a running prometheus operator)?',
-        default: this.prometheusOperator ? this.prometheusOperator : true
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.prometheusOperator = props.prometheusOperator;
         done();
     });
 }
@@ -147,8 +79,9 @@ function askForIngressDomain() {
         when: () => kubernetesServiceType === 'Ingress',
         type: 'input',
         name: 'ingressDomain',
-        message: 'What is the root FQDN for your ingress services (e.g. example.com, sub.domain.co, www.10.10.10.10.xip.io,...)?',
-        default: this.ingressDomain ? this.ingressDomain : 'mycompany.com',
+        message: 'What is the root FQDN for your ingress services (e.g. example.com, sub.domain.co, www.10.10.10.10.xip.io, [namespace.ip]...)?',
+        // default to minikube ip
+        default: this.ingressDomain ? this.ingressDomain : `${this.kubernetesNamespace}.192.168.99.100.nip.io`,
         validate: (input) => {
             if (input.length === 0) {
                 return 'domain name cannot be empty';

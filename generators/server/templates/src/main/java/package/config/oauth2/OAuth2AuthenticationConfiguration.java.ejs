@@ -1,0 +1,98 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://jhipster.github.io/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%=packageName%>.config.oauth2;
+
+import <%=packageName%>.security.oauth2.CookieTokenExtractor;
+import <%=packageName%>.security.oauth2.OAuth2AuthenticationService;
+import <%=packageName%>.security.oauth2.OAuth2CookieHelper;
+import <%=packageName%>.security.oauth2.OAuth2TokenEndpointClient;
+import <%=packageName%>.web.filter.RefreshTokenFilterConfigurer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.authentication.TokenExtractor;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+
+/**
+ * Configures the RefreshFilter refreshing expired OAuth2 token Cookies.
+ */
+@Configuration
+@EnableResourceServer
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerAdapter {
+    private final OAuth2Properties oAuth2Properties;
+    private final OAuth2TokenEndpointClient tokenEndpointClient;
+    private final TokenStore tokenStore;
+
+    public OAuth2AuthenticationConfiguration(OAuth2Properties oAuth2Properties, OAuth2TokenEndpointClient tokenEndpointClient, TokenStore tokenStore) {
+        this.oAuth2Properties = oAuth2Properties;
+        this.tokenEndpointClient = tokenEndpointClient;
+        this.tokenStore = tokenStore;
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+            .antMatchers("/auth/login").permitAll()
+            .antMatchers("/auth/logout").authenticated()
+            .and()
+            .apply(refreshTokenSecurityConfigurerAdapter());
+    }
+
+    /**
+     * A SecurityConfigurerAdapter to install a servlet filter that refreshes OAuth2 tokens.
+     */
+    private RefreshTokenFilterConfigurer refreshTokenSecurityConfigurerAdapter() {
+        return new RefreshTokenFilterConfigurer(uaaAuthenticationService(), tokenStore);
+    }
+
+    @Bean
+    public OAuth2CookieHelper cookieHelper() {
+        return new OAuth2CookieHelper(oAuth2Properties);
+    }
+
+    @Bean
+    public OAuth2AuthenticationService uaaAuthenticationService() {
+        return new OAuth2AuthenticationService(tokenEndpointClient, cookieHelper());
+    }
+
+    /**
+     * Configure the ResourceServer security by installing a new TokenExtractor.
+     */
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+        resources.tokenExtractor(tokenExtractor());
+    }
+
+    /**
+     * The new TokenExtractor can extract tokens from Cookies and Authorization headers.
+     *
+     * @return the CookieTokenExtractor bean.
+     */
+    @Bean
+    public TokenExtractor tokenExtractor() {
+        return new CookieTokenExtractor();
+    }
+
+}

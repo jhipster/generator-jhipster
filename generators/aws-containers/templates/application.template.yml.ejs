@@ -1,0 +1,335 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  shouldDeployService:
+    Type: String
+    Description: Should the ECS service be initialised
+    AllowedValues:
+        - true
+        - false
+    Default: false
+  parentStackName:
+    Type: String
+  repositoryName:
+    Type: String
+    Description: Name of the Container Repository to Create
+  databaseName:
+    Type: String
+    Description: Name of the database to use
+    Default: monolithDB
+  fargateCPU:
+    Type: String
+    Description: Fargate CPU units
+    AllowedValues:
+        - 256
+        - 512
+        - 1024
+        - 2048
+        - 4096
+    Default: '<%= app.fargate.CPU %>'
+  fargateMemory:
+    Type: String
+    Description: Amount of memory available for Fargate
+    AllowedPattern: (512MB)|([1-3]?\dGB)
+    Default: <%= app.fargate.memory %>
+  vpcID:
+    Type: String
+    Description: VPC Target
+    Default: <%= aws.vpc.id %>
+  elbSubnets:
+    Type: CommaDelimitedList
+    Description: List of subnets to use
+    Default: <%= aws.vpc.elbSubnets.join(', ') %>
+  appSubnets:
+    Type: CommaDelimitedList
+    Description: List of subnets to use
+    Default: <%= aws.vpc.appSubnets.join(', ') %>
+  AppDeployUsingPublicIP:
+    Type: String
+    Description: Should the Application be Deployed with a Public IP
+    Default: <%= aws.vpc.appSubnetsLaunchWithPublicIP ? 'ENABLED' : 'DISABLED' %>
+  vpcCIDR:
+    Type: String
+    Description: CIDR IPv4 range for the VPC
+    Default: <%= aws.vpc.cidr %>
+  TaskCount:
+    Type: Number
+    Description: Desired task count
+    Default: <%= app.fargate.taskCount %>
+  databaseSize:
+    Type: String
+    Description: Size of the Aurora Instance
+    Default: <%= app.database.size %>
+  databaseUsername:
+    Type: String
+    Description: Database username
+    Default: <%= app.baseName %>
+  databasePassword:
+    Type: String
+    Description: Database password
+    NoEcho: true
+Conditions:
+  DeployService: !Equals [ !Ref shouldDeployService, 'true' ]
+Resources:
+  jhipsterRunRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+  jhipsterRunPolicy:
+    Type: "AWS::IAM::Policy"
+    DependsOn:
+     - jhipsterRunRole
+     - JHipsterContainerRegistry
+     - JHipsterLogGroup
+    Properties:
+      PolicyName: "jhipsterRunRole"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        # ECR Permissions
+          -
+            Effect: "Allow"
+            Action:
+             - "ecr:GetAuthorizationToken"
+            Resource: '*'
+          -
+            Effect: "Allow"
+            Action:
+             - "ecr:BatchCheckLayerAvailability"
+             - "ecr:GetDownloadUrlForLayer"
+             - "ecr:GetRepositoryPolicy"
+             - "ecr:DescribeRepositories"
+             - "ecr:ListImages"
+             - "ecr:DescribeImages"
+             - "ecr:BatchGetImage"
+            Resource: !GetAtt JHipsterContainerRegistry.Arn
+        # LogStream Persmissions
+          -
+            Effect: "Allow"
+            Action:
+             - "logs:PutLogEvents"
+             - "logs:CreateLogStream"
+            Resource: !GetAtt JHipsterLogGroup.Arn
+          - Effect: "Allow"
+            Action:
+             - "ssm:GetParameter"
+             - "ssm:GetParametersByPath"
+            Resource: !Join ['', ['arn:aws:ssm:',!Ref 'AWS::Region',':', !Ref 'AWS::AccountId', ':parameter/', !Ref parentStackName,'/*' ]]
+      Roles:
+        - !Ref jhipsterRunRole
+  JHipsterInternalSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Internal JHipster Container Security Group
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '8080'
+        ToPort: '8080'
+        CidrIp: !Ref vpcCIDR
+      VpcId: !Ref vpcID
+  JHipsterDatabaseSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    DependsOn:
+    - JHipsterInternalSG
+    Properties:
+      GroupDescription: Internal JHIpster Database Security Group
+      SecurityGroupIngress:
+      - IpProtocol: icmp
+        FromPort: -1
+        ToPort: -1
+        SourceSecurityGroupId: !GetAtt JHipsterInternalSG.GroupId
+      - IpProtocol: tcp
+        FromPort: 0
+        ToPort: 65535
+        SourceSecurityGroupId: !GetAtt JHipsterInternalSG.GroupId
+      - IpProtocol: udp
+        FromPort: 0
+        ToPort: 65535
+        SourceSecurityGroupId: !GetAtt JHipsterInternalSG.GroupId
+      VpcId: !Ref vpcID
+  JHipsterInternetSG:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: External JHipster Container Security Group for ALB
+      VpcId: !Ref vpcID
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '80'
+        ToPort: '80'
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: tcp
+        FromPort: '8080'
+        ToPort: '8080'
+        DestinationSecurityGroupId: !Ref JHipsterInternalSG
+  JHipsterContainerRegistry:
+    Type: 'AWS::ECR::Repository'
+    Properties:
+      RepositoryName: !Ref repositoryName
+  JHipsterLogGroup:
+    Type: 'AWS::Logs::LogGroup'
+    Properties:
+      RetentionInDays: 7
+# Database
+  JHipsterDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+        DBSubnetGroupDescription: "JHipster Aurora DB Cluster"
+        SubnetIds: !Ref appSubnets
+  JHipsterRDSCluster:
+    Type: AWS::RDS::DBCluster
+    DependsOn:
+    - JHipsterDatabaseSG
+    DeletionPolicy: Delete
+    Properties:
+      DatabaseName: !Ref databaseName
+      MasterUsername: !Ref databaseUsername
+      MasterUserPassword: !Ref databasePassword
+      DBClusterParameterGroupName: <%= app.auroraClusterParameterGroupName %>
+      VpcSecurityGroupIds:
+      - !GetAtt JHipsterDatabaseSG.GroupId
+      # need to toggle between aurora, aurora-postgresql
+      Engine: <%= app.auroraEngine %>
+      DBSubnetGroupName:
+        Ref: JHipsterDBSubnetGroup
+<% for (inst = 1; inst <= app.database.instances; inst++) { %>
+  JHipsterRDSDBInstance<%= inst %>:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    Properties:
+      DBSubnetGroupName: !Ref JHipsterDBSubnetGroup
+      DBParameterGroupName: !Ref JHipsterRDSDBParameterGroup
+      Engine: <%= app.auroraEngine %>
+      DBClusterIdentifier: !Ref JHipsterRDSCluster
+      DBInstanceClass: !Ref databaseSize<%} %>
+  JHipsterRDSDBParameterGroup:
+    Type: AWS::RDS::DBParameterGroup
+    Properties:
+      Description: CloudFormation Sample Aurora Parameter Group
+      Family: <%= app.auroraFamily %>
+      Parameters:
+        <%= app.auroraDbParam %>
+  JHipsterMonoTask:
+    Type: 'AWS::ECS::TaskDefinition'
+    DependsOn:
+        - JHipsterCluster
+        - jhipsterRunRole
+    Properties:
+      Cpu: !Ref fargateCPU
+      Memory: !Ref fargateMemory
+      RequiresCompatibilities:
+        - FARGATE
+      TaskRoleArn: !Join ['', ['arn:aws:iam::', !Ref 'AWS::AccountId', ':role/', !Ref jhipsterRunRole ]]
+      #This role is required by Fargate tasks to pull container images and publish container logs to Amazon CloudWatch on your behalf.
+      ExecutionRoleArn: !Join ['', ['arn:aws:iam::', !Ref 'AWS::AccountId', ':role/', !Ref jhipsterRunRole ]]
+      NetworkMode: awsvpc
+      ContainerDefinitions:
+        - Name: JHipsterMonolith
+          Image: !Join [ '', [ !Ref 'AWS::AccountId','.dkr.ecr.',!Ref 'AWS::Region','.amazonaws.com/', !Ref repositoryName ] ]
+          Cpu: !Ref fargateCPU
+          PortMappings:
+            - ContainerPort: 8080
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref JHipsterLogGroup
+              awslogs-region: !Ref 'AWS::Region'
+              awslogs-stream-prefix: awslogs-jhipster
+          Environment:
+            - Name: JAVA_OPTS
+              Value: '-Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses'
+            - Name: SPRING_PROFILES_ACTIVE
+              Value: 'prod,swagger,aws'
+            - Name: SPRING_DATASOURCE_URL
+              Value: !Join ['',['jdbc:', <%= app.dbType %> ,'://',!GetAtt JHipsterRDSCluster.Endpoint.Address ,':', !GetAtt JHipsterRDSCluster.Endpoint.Port,'/', !Ref databaseName]]
+            - Name: SPRING_DATASOURCE_USERNAME
+              Value: !Ref databaseUsername
+#            - Name: SPRING_DATASOURCE_PASSWORD
+#              Value: !Ref databasePassword
+            - Name: JHIPSTER_SLEEP
+              Value: '0'
+            - Name: CLOUD_AWS_STACK_NAME
+              Value: !Ref parentStackName
+          MemoryReservation: '1024'
+          Essential: 'true'
+  JHipsterCluster:
+    Type: 'AWS::ECS::Cluster'
+    Properties: {}
+  JHipsterLoadBalancer:
+    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+    Properties:
+      Scheme: internet-facing
+      Type: application
+      Subnets: !Ref elbSubnets
+      SecurityGroups:
+      - !Ref JHipsterInternetSG
+  JHIpsterALBTargetGroup:
+    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      TargetType: ip
+      VpcId: !Ref vpcID
+      HealthCheckIntervalSeconds: 30
+  JHIpsterALBListener:
+    Type: 'AWS::ElasticLoadBalancingV2::Listener'
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref JHIpsterALBTargetGroup
+      LoadBalancerArn: !Ref JHipsterLoadBalancer
+      Port: '80'
+      Protocol: HTTP
+  JHipsterAppService:
+    Type: 'AWS::ECS::Service'
+    DependsOn:
+      - JHIpsterALBListener
+      - JHIpsterALBTargetGroup
+      - jhipsterRunRole
+    Condition: DeployService
+    Properties:
+      Cluster: !Ref JHipsterCluster
+      DesiredCount: !Ref TaskCount
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: !Ref AppDeployUsingPublicIP
+          SecurityGroups:
+            - !GetAtt JHipsterInternalSG.GroupId
+            - !GetAtt JHipsterDatabaseSG.GroupId
+          Subnets: !Ref appSubnets
+      LoadBalancers:
+        - ContainerName: JHipsterMonolith
+          ContainerPort: 8080
+          TargetGroupArn: !Ref JHIpsterALBTargetGroup
+      TaskDefinition: !Ref JHipsterMonoTask
+Outputs:
+  LoadBalancerOutput:
+    Description: The external DNS address of the load-balanancer
+    Value: !GetAtt JHipsterLoadBalancer.DNSName

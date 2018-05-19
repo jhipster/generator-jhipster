@@ -1,0 +1,141 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: <%= kubernetesNamespace %>
+  name: <%= app.baseName.toLowerCase() %>-mongodb-config
+data:
+  mongod.conf: |
+    net:
+      port: 27017
+    replication:
+      replSetName: rs0
+    storage:
+      dbPath: /data/db
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mongodb
+  namespace: <%= kubernetesNamespace %>
+spec:
+  serviceName: <%= app.baseName.toLowerCase() %>-mongodb
+  replicas: <%= app.dbPeerCount %>
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-mongodb
+      annotations:
+    spec:
+      initContainers:
+        - name: config
+          image: "gcr.io/google_containers/mongodb-install:0.5"
+          args:
+            - --work-dir=/work-dir
+          volumeMounts:
+            - name: workdir
+              mountPath: /work-dir
+            - name: config
+              mountPath: /config
+        - name: boot
+          image: <%= DOCKER_MONGODB %>
+          command:
+            - /work-dir/peer-finder
+          args:
+            - -on-start=/work-dir/on-start.sh
+            - "-service=<%= app.baseName.toLowerCase() %>-mongodb"
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: REPLICA_SET
+              value: rs0
+          volumeMounts:
+            - name: workdir
+              mountPath: /work-dir
+            - name: config
+              mountPath: /config
+            - name: datadir
+              mountPath: /data/db
+      containers:
+        - name: mongodb
+          image: <%= DOCKER_MONGODB %>
+          ports:
+            - name: peer
+              containerPort: 27017
+          command:
+            - mongod
+            - --config=/config/mongod.conf
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          volumeMounts:
+            - name: datadir
+              mountPath: /data/db
+            - name: config
+              mountPath: /config
+            - name: workdir
+              mountPath: /work-dir
+      volumes:
+        - name: config
+          configMap:
+            name: <%= app.baseName.toLowerCase() %>-mongodb-config
+        - name: workdir
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: "1Gi"
+---
+# Headless service for DNS record
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: <%= app.baseName.toLowerCase() %>-mongodb
+  namespace: <%= kubernetesNamespace %>
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: peer
+      port: 27017
+  selector:
+    app: <%= app.baseName.toLowerCase() %>-mongodb
