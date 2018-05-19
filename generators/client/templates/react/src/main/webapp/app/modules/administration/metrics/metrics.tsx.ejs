@@ -94,6 +94,17 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
     return stat;
   }
 
+  gaugeRow = (metrics, label: String, key) => (
+    metrics.gauges[key] ?
+      <Row>
+        <Col md="9">{label}</Col>
+        <Col md="3" className="text-right">
+          {metrics.gauges[key].value}
+        </Col>
+      </Row>
+      : ''
+  );
+
   renderModal = () => <MetricsModal handleClose={this.handleClose} showModal={this.state.showModal} threadDump={this.props.threadDump}/>;
 
   renderGauges = metrics => (
@@ -231,22 +242,10 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
           </Col>
           <Col md="4">
             <b>Garbage collections</b>
-            <Row>
-              <Col md="9">Mark Sweep count</Col>
-              <Col md="3" className="text-right">{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}</Col>
-            </Row>
-            <Row>
-              <Col md="9">Mark Sweep time</Col>
-              <Col md="3" className="text-right">{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}ms</Col>
-            </Row>
-            <Row>
-              <Col md="9">Scavenge count</Col>
-              <Col md="3" className="text-right">{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}</Col>
-            </Row>
-            <Row>
-              <Col md="9">Scavenge time</Col>
-              <Col md="3" className="text-right">{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}ms</Col>
-            </Row>
+            {this.gaugeRow(metrics, 'Mark Sweep count', 'jvm.garbage.PS-MarkSweep.count')}
+            {this.gaugeRow(metrics, 'Mark Sweep time', 'jvm.garbage.PS-MarkSweep.time')}
+            {this.gaugeRow(metrics, 'Scavenge count', 'jvm.garbage.PS-Scavenge.count')}
+            {this.gaugeRow(metrics, 'Scavenge time', 'jvm.garbage.PS-Scavenge.time')}
           </Col>
         </Row>
       </Col>
