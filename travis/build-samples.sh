@@ -283,11 +283,30 @@
 # ==============================================================================
 # ==============================================================================
 
-# option -x for debug purpose.
+# After expanding each simple command, for command, case command, select
+# command, or arithmetic for command, display the expanded value of PS4,
+# followed by the command and its expanded arguments or  associated  word list.
 # set -x
+
+# Print all lines in the script before executing them, which helps identify
+# which steps failed. For debug purpose.
+# set -v
+
 # # DO NOT REMOVE `set -e`
+# Exit as soon as one command returns a non-zero exit code.
 set -e
-set -o nounset
+
+# Treat unset variables as an error
+set -u
+
+# Any trap on ERR is inherited by shell functions, command substitutions, and
+# commands executed in a subshell environment.  The ERR trap is normally not
+# inherited in such cases.
+set -E
+
+# Any traps on DEBUG and RETURN are inherited by shell functions, command
+# substitutions, and commands executed in a subshell environment.
+set -T
 
 # Treat end of script {{{2
 
@@ -300,8 +319,6 @@ function erroredAllPendingLog() {
         done
 }
 
-# Seems work if there is not several <CTRL-c>
-# Do not add `sleep'!
 trap ctrl_c INT
 function ctrl_c() {
     cd "${JHIPSTER_TRAVIS}"
@@ -313,7 +330,6 @@ function ctrl_c() {
     exit 131
 }
 
-# Never raised with set -e
 trap finish EXIT
 function finish() {
 
@@ -348,11 +364,11 @@ function printCommandAndEval() {
     if [[ -e /dev/fd/3 ]] && \
         [[ -e /dev/fd/4 ]] ; then
         # See function launchSamplesInBackground()
-        echo "${PS1}${@}" >> >(tee --append /dev/fd/3) \
+        echo "${PS4}${@}" >> >(tee --append /dev/fd/3) \
             2>> >(tee --append /dev/fd/4)
         eval "$@" >> >(tee --append /dev/fd/3) 2>> >(tee --append /dev/fd/4)
     else
-        echo "${PS1}${@}"
+        echo "${PS4}${@}"
         # https://google.github.io/styleguide/shell.xml#Eval
         # says don't use eval. But doesn't work without.
         eval "$@"
@@ -773,7 +789,7 @@ function printInfoBeforeLaunch() {
     printFileDescriptor3 "\n\n* Your log file will be '$LOGFILENAME'\n" \
         "* When build will finish, The end of this filename shoule be renamed" \
         "'errored' or 'passed'.\n" \
-        "* On this file lines started by '$PS1' are bash" \
+        "* On this file lines started by '$PS4' are bash" \
         "command. Useful to know which command fail.\n" \
         "* See progress in this file. Do not forget to refresh it!"
     # Test if we launch not this function in generateNode_Modules_Cache().
@@ -879,7 +895,7 @@ function treatEndOfBuild() {
 
     if [[ "$COLORIZELOGFILE" -eq 0 ]] ; then
         # https://superuser.com/questions/380772/removing-ansi-color-codes-from-text-stream
-        printFileDescriptor3 "$PS1"\
+        printFileDescriptor3 "$PS4"\
             "sed -i \'s/^H/g ;" \
             "s/^Progress.*^M.*Downloaded from/Downloaded from/g ;" \
             "s/^M//g ;" \
@@ -892,7 +908,7 @@ function treatEndOfBuild() {
             s/\[[0-9;]*[a-zA-Z]//g' \
             "${LOGFILENAME}" 1>> /dev/null
     else
-        printFileDescriptor3 "$PS1"\
+        printFileDescriptor3 "$PS4"\
             "sed -i \'s/^H/g ;" \
             "s/^Progress.*^M.*Downloaded from/Downloaded from/g ;" \
             "s/^M//g\'" \
@@ -967,12 +983,19 @@ function errorInBuildStopCurrentSample() {
     return 0
 }
 
-# errorInBuildExitCurrentSample() {{{2
+# errorInBuildExitCurrentSample() {{{3
 errorInBuildExitCurrentSample() {
-    ERROR_IN_SAMPLE=1
-    errorInBuildStopCurrentSample "$@"
-    treatEndOfBuild
-    exit 80
+    if [[ ! -z ${JHIPSTER+x} ]] && \
+        [[ ! -z ${JHIPSTER_MATRIX+x} ]]; then
+        ERROR_IN_SAMPLE=1
+        errorInBuildStopCurrentSample "$@"
+        treatEndOfBuild
+        exit 80
+    else
+        # For function testRequierments() launched in function
+        # launchSamplesInBackground()
+        exitScriptWithError "$@"
+    fi
 }
 
 # function isSkipClientInFileYoRcDotConf() {{{3
@@ -1505,7 +1528,9 @@ export localTravis=1
 
 # Define prompt (used by `set -x` for scripts in ./scripts/*)
 export PROMPT_COMMAND=""
-export PS1="$ "
+# Could be redefined if --colorizelogfile is passed as argument.
+export PS4='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+
 
 # GLOBAL CONSTANTS SPECIFIC TO ./build-samples.sh (this script)
 # ====================
@@ -1618,6 +1643,8 @@ if [[ ! -z "${1+x}" ]] && \
                     "Please see \`./build-samples.sh help'."
             fi
         elif [[ "$i" -eq "--colorizelogfile" ]] ; then
+            export PS4='${debian_chroot:+($debian_chroot)}'\
+'\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
             COLORIZELOGFILE=1
         else
             exitScriptWithError "\n\n\nFATAL ERROR: '$i' is not a correct" \
