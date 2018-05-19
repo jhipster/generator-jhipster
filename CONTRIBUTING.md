@@ -232,23 +232,25 @@ To start debugging JHipster with **VSCode**, open the generator code in your wor
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
-## Local Travis Build
+## Local Travis Build and explore application generated
 
-You can run the travis builds locally by following below commands
+You can run the Travis builds locally by following below commands, and track rendered pages.
 
-CD into the [./travis](./travis) folder `cd travis` from the generator source code root folder
+Change directory into the [./travis](./travis) folder `cd travis` from the generator source code root folder
 
 Run `./build-samples.sh generate|generateandtest [ sample_name[,sample_name][,...] ] [ --colorizelogfile ] `
 
-This will create the travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your Text Editor or IDE to check it further. You can also run tests locally on the project to verify
+Then `./build-samples.sh startapplication sample_name`
 
-Sample name is optional and can be any of the folder name in the `travis/samples` folder. If not specified the it will mean all samples
+This will create the travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your Text Editor or IDE to check it further. You can also run tests locally on the project to verify. Moreover, you could start the application generated with command `./build-samples.sh startapplication sample_name` to test rendered pages.
+
 
 Command name can be as below:
 
     `help`: display the help (recommended to read it).
     `generate`: Generate sample(s). Not test are performed. You could see what is generated in samples/*-sample and open the project in your Text Editor/IDE.
     `generateandtest` : Generate and test sample(s). Like `generate` + test as in Travis CI.
+    `startapplication` : "Start the application generated with `generate` or `generateandtest`. You could open the app on a Web browser."
     `clean` : Delete all ./travis/samples/*-sample folders.
 
     Options `generate` and `buildandtest` work in the same way: `./buildandtest generate|generateandtest [ sample_name[,sample_name][,...] [--colorizelogfile] ]`
@@ -258,12 +260,13 @@ Command name can be as below:
 
 Examples:
 
-    `./build-samples.sh generateandtest ngx-default --colorizelogfile`: build and test only ngx-default
-    `./build-samples.sh generateandtest ngx-default --colorizelogfile`: same as before and keep colors in logfile .
-    `./build-samples.sh generateandtest ngx-default,react-default` --colorizelogfile: generate and test ngx-default and react-default
-    `./build-samples.sh generateandtest --colorizelogfile`: generate and test all samples listed in `./build-sample.sh help`
+    `./build-samples.sh generateandtest ngx-default --colorizelogfile`: build and test only ngx-default.
+    `./build-samples.sh generateandtest ngx-default --colorizelogfile`: same as before and keep colors in logfile ..
+    `./build-samples.sh generateandtest ngx-default,react-default` --colorizelogfile: generate and test ngx-default and react-default.
+    `./build-samples.sh generateandtest --colorizelogfile`: generate and test all samples listed in `./build-sample.sh help`.
+    `./build-samples.sh startapplication ngx-default`: start application generated. Open a Web browser at http://localhost:8080.
 
-*NOTES FOR OLD DEVELOPERS: ./travis/build-samples.sh has been rewritten. Now it spawns several generation/build in same time and use a node_modules cache. Improve speed.*
+*NOTES FOR OLD DEVELOPERS: ./travis/build-samples.sh has been rewritten. It has new functionalities. Do not hesitate to test it.*
 
 ## <a name="rules"></a> Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:

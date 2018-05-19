@@ -85,40 +85,47 @@ launchCurlOrProtractor() {
     return $result
 }
 
-#-------------------------------------------------------------------------------
-# Package UAA
-#-------------------------------------------------------------------------------
-set +x
-echoSetX "Package UAA"
-set -x
+if [[ -z "${ISSTARTAPPLICATION+x}" ]] && \
+    [[ "$ISSTARTAPPLICATION" -eq 0 ]]; then
+        # If we are in Travis CI or in `../build-samples.sh generate'
+        # or `../build-samples.sh generateandtest'
 
-if [[ "$JHIPSTER" == *"uaa"* ]]; then
-    cd "$UAA_APP_FOLDER"
-    ./mvnw verify -DskipTests -P "$PROFILE"
-fi
+    #--------------------------------------------------------------------------
+    # Package UAA
+    #--------------------------------------------------------------------------
+    set +x
+    echoSetX "Package UAA"
+    set -x
 
-#-------------------------------------------------------------------------------
-# Package the application
-#-------------------------------------------------------------------------------
-set +x
-echoSetX "Package the application"
-set -x
+    if [[ "$JHIPSTER" == *"uaa"* ]]; then
+        cd "$UAA_APP_FOLDER"
+        ./mvnw verify -DskipTests -P "$PROFILE"
+    fi
 
-cd "$APP_FOLDER"
+    #--------------------------------------------------------------------------
+    # Package the application
+    #--------------------------------------------------------------------------
 
-if [ -f "mvnw" ]; then
-    ./mvnw verify -DskipTests -P "$PROFILE"
-    mv target/*.war app.war
-elif [ -f "gradlew" ]; then
-    ./gradlew bootWar -P "$PROFILE" -x test
-    mv build/libs/*.war app.war
-else
-    echo "No mvnw or gradlew"
-    exit 0
-fi
-if [ $? -ne 0 ]; then
-    echo "Error when packaging"
-    exit 1
+    set +x
+    echoSetX "Package the application"
+    set -x
+
+    cd "$APP_FOLDER"
+
+    if [ -f "mvnw" ]; then
+        ./mvnw verify -DskipTests -P "$PROFILE"
+        mv target/*.war app.war
+    elif [ -f "gradlew" ]; then
+        ./gradlew bootWar -P "$PROFILE" -x test
+        mv build/libs/*.war app.war
+    else
+        echo "No mvnw or gradlew"
+        exit 0
+    fi
+    if [ $? -ne 0 ]; then
+        echo "Error when packaging"
+        exit 1
+    fi
 fi
 
 #-------------------------------------------------------------------------------
@@ -151,6 +158,15 @@ if [ "$RUN_APP" == 1 ]; then
     sleep 40
 
     launchCurlOrProtractor && result=$? || result=$?
-    kill $(cat .pid)
+    # "$ISSTARTAPPLICATION" is setted for `../build-samples.sh startapplication sample_name'
+    if [[ -z "${ISSTARTAPPLICATION+x}" ]] && \
+        [[ "$ISSTARTAPPLICATION" -eq 0 ]]; then
+        # If we are in Travis CI or in `../build-samples.sh generate'
+        # or `../build-samples.sh generateandtest'
+        kill $(cat .pid)
+    else
+        echo -e "\n\n\033[1;31m""WARNING: YOU MUST MANUALLY KILL " \
+            "THIS APPLICATION TO STOP IT (\'KILL $(cat .pid)')""\033[0m]\n\n"
+    fi
     exit $result
 fi
