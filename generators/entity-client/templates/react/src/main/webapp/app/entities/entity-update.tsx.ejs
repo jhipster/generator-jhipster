@@ -614,7 +614,7 @@ _%>
                 onChange={this.<%= relationshipFieldName %>Update}>
                 <option value="" key="0" />
                 {
-                  (<%= otherEntityNamePlural %>) ? <%=otherEntityNamePlural.toLowerCase() %>.map(otherEntity =>
+                  (<%= otherEntityNamePlural %>) ? <%=otherEntityNamePlural %>.map(otherEntity =>
                   <option
                       value={otherEntity.<%=otherEntityField%>}
                       key={otherEntity.id}>
