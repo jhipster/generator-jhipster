@@ -41,7 +41,15 @@ env:
     - JHIPSTER_BRANCH="release"
 
     # PS4 is used for PROMPT when we trace each command thanks "set -x"
+    # In line below, spaces are insecables spaces
+    # (don't work with secables spaces)
     - PS4='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]: \[\033[01;34m\]\w\[\033[00m\]\$: '
+
+    # Prefix of docker images for ./travis/scripts/03-docker-compose.sh
+    - DOCKER_PREFIX_NAME="jhipster-travis-build-"
+
+    # Travis CI and not ./travis/build-samples.sh
+    - IS_TRAVIS_CI=1
 
   matrix:
 

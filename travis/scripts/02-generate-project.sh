@@ -54,11 +54,13 @@ fi
 mkdir -p "$APP_FOLDER"
 cp -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$APP_FOLDER"/
 cd "$APP_FOLDER"
-if [[ ! -z "${localTravis+x}" ]] && \
+if [[ "$IS_TRAVIS_CI" -eq 0 ]] && \
     [[ "$JHIPSTER" != *"react"* ]]
 then
+    # If it's ../build-samples.sh and not Travis CI
     jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook --skip-install
-elif [[ ! -z "${localTravis+x}" ]] ; then
+elif [[ "${IS_TRAVIS_CI}" -eq 0 ]] && \
+    [[ "${JHIPSTER}" = "*react*" ]] ; then
     echo "Not already implemented. Skip tests on react projects"
     exit 100
 else

@@ -34,49 +34,59 @@ set -x
 cd "$APP_FOLDER"
 if [ -a src/main/docker/jhipster-registry.yml ]; then
     docker-compose -f src/main/docker/jhipster-registry.yml \
-        --project-name jhipster-travis-build-registery up -d
+        --project-name "$DOCKER_PREFIX_NAME"registery up -d
 fi
 if [ -a src/main/docker/consul.yml ]; then
     docker-compose -f src/main/docker/consul.yml \
-        --project-name jhipster-travis-build-consul up -d
+        --project-name "$DOCKER_PREFIX_NAME"consul up -d
 fi
 if [ -a src/main/docker/cassandra.yml ]; then
     docker-compose -f src/main/docker/cassandra.yml \
-        --project-name jhipster-travis-build-cassandra up -d
+        --project-name "$DOCKER_PREFIX_NAME"cassandra up -d
 fi
 if [ -a src/main/docker/mongodb.yml ]; then
     docker-compose -f src/main/docker/mongodb.yml \
-        --project-name jhipster-travis-build-mongodb up -d
+        --project-name "$DOCKER_PREFIX_NAME"mongodb up -d
 fi
 if [ -a src/main/docker/couchbase.yml ]; then
     # this container can't be started otherwise, it will be conflict with tests
     # so here, only prepare the image
     docker-compose -f src/main/docker/couchbase.yml \
-        --project-name jhipster-travis-build-couchbase build -d
+        --project-name "$DOCKER_PREFIX_NAME"couchbase build -d
 fi
 if [ -a src/main/docker/mysql.yml ]; then
     docker-compose -f src/main/docker/mysql.yml \
-        --project-name jhipster-travis-build-mysql up -d
+        --project-name "$DOCKER_PREFIX_NAME"mysql up -d
 fi
 if [ -a src/main/docker/postgresql.yml ]; then
     docker-compose -f src/main/docker/postgresql.yml \
-        --project-name jhipster-travis-build-postgresql up -d
+        --project-name "$DOCKER_PREFIX_NAME"postgresql up -d
 fi
 if [ -a src/main/docker/elasticsearch.yml ]; then
     docker-compose -f src/main/docker/elasticsearch.yml \
-        --project-name jhipster-travis-build-elasticsearch up -d
+        --project-name "$DOCKER_PREFIX_NAME"elasticsearch up -d
 fi
 if [ -a src/main/docker/mariadb.yml ]; then
     docker-compose -f src/main/docker/mariadb.yml \
-        --project-name jhipster-travis-build-mariadb up -d
+        --project-name "$DOCKER_PREFIX_NAME"mariadb up -d
 fi
 if [ -a src/main/docker/kafka.yml ]; then
     docker-compose -f src/main/docker/kafka.yml \
-        --project-name jhipster-travis-build-kafka up -d
+        --project-name "$DOCKER_PREFIX_NAME"kafka up -d
 fi
 if [ -a src/main/docker/keycloak.yml ]; then
     docker-compose -f src/main/docker/keycloak.yml \
-        --project-name jhipster-travis-build-keycloak up -d
+        --project-name "$DOCKER_PREFIX_NAME"keycloak up -d
+fi
+if [ -a src/main/docker/couchbase.yml ]; then
+    docker-compose -f src/main/docker/couchbase.yml \
+        --project-name "$DOCKER_PREFIX_NAME"couchebase up -d
+    sleep 10
 fi
 
-docker ps -a
+if [[ "$IS_TRAVIS_CI" -eq 0 ]]  ; then
+    # If it's ../build-samples.sh and not Travis CI
+    docker ps -a --filter "name=jhipster-travis-build*"
+else
+    docker ps -a
+fi

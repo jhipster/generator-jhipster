@@ -99,7 +99,10 @@
     # efj"
 
     # IFS=$"," read -d '\r' -ra array <<< "abcd,efj"
-    # OR
+    # OR (beceause echo `docker ps -a` don't print new lines
+    # as echo $varWithNewLines (without escapes).
+    # IFS=$' ' read -ra dockerContainers <<< \
+        # `docker ps -aq --filter "name=jhipster-travis-build*"`
     # IFS=$"," read -ra array <<< "abcd,efj"
     # BUT NOT
     # IFS= read -d ',' -ra array <<< "abcd,efj"
@@ -278,7 +281,6 @@
 # TODO actually there is collisions when we launch several builds in same time
 #   they want all port 8080.
 # TODO improve comments.
-# BIG TODO `DOCKER RM` BECAUSE WHEN THERE IS TOO MUCH DOCKER IMAGES IT CRASHES.
 
 # PREPARE SCRIPT {{{1
 # ==============================================================================
@@ -644,6 +646,54 @@ function echoTitleBuildStep() {
     fi
 }
 
+dockerKillThenRm() {
+    # We could write in one line, like `docker kill $(docker ps -q)`
+    # but less controls.
+    local -a dockerContainers
+
+    IFS=$' ' read -ra dockerContainers <<< \
+        `docker ps -q --filter "name=jhipster-travis-build*"`
+    # If `docker ps -q` is empty, "${#dockerContainers[0]}" takes value 1.
+    if [[ "$IS_TEST_REQUIERMENT" -eq 1 ]] ; then
+        if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
+            printFileDescriptor3 "There is already docker with named prefixed"\
+                "by 'jhipster-travis-build*':"
+            docker ps -q --filter "name=jhipster-travis-build*"
+            confirmationUser "Do you want to kill then rm them? [y/n] " \
+                "echo 'Deleting this docker images...'" \
+                "errorInBuildExitCurrentSample 'ABORTED by user'"
+        fi
+    fi
+    if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
+        local -i i=0
+        while [[ i -lt "${#dockerContainers[*]}" ]] ; do
+            printFileDescriptor3 "Trying to kill docker container: " \
+                `docker ps --filter "id=${dockerContainers[i]}"`
+            printCommandAndEval "docker kill '${dockerContainers[i]}'" \
+                || exitScriptWithError "couldn't kill docker container " \
+                    "'${dockerContainers[i]}'"
+            printFileDescriptor3 "Sucess."
+            i=$((i+1))
+        done
+    fi
+
+    IFS=$' ' read -ra dockerContainers <<< \
+        `docker ps -qa --filter "name=jhipster-travis-build*"`
+    if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
+        local -i i=0
+        while [[ i -lt "${#dockerContainers[*]}" ]] ; do
+            printFileDescriptor3 "Trying to rm docker container: " \
+                `docker ps -a --filter "id=${dockerContainers[i]}"`
+            printCommandAndEval "docker rm '${dockerContainers[i]}'" \
+                || exitScriptWithError "couldn't rm docker container " \
+                    "'${dockerContainers[i]}'"
+            printFileDescriptor3 "Sucess."
+            i=$((i+1))
+        done
+    fi
+
+}
+
 # TEST REQUIERMENTS  {{{2
 # ====================
 # ====================
@@ -667,31 +717,35 @@ function testIfPortIsFreeWithSs() {
 }
 
 # function testRequierments() {{{3
+
+warningOS() {
+    warning "we don't know if it could work on '$MACHINE'." \
+        "If you test, please report it by open a new issue."
+    sleep 20
+}
+
 function testRequierments() {
     # Why "nodejs --version"? For Ubuntu users, please see
     # https://askubuntu.com/a/521571"
     echo -e "\n\n"
 
     local -r unameOut="$(uname -s)"
+    local -r IS_TEST_REQUIERMENT=1
+
     local MACHINE
+    # TODO test on it ;-).
     case "${unameOut}" in
-        Microsoft*) MACHINE=WSL;;
-        Linux*)     MACHINE=Linux;;
-        Darwin*)    MACHINE=Mac;;
-        *BSD*)      MACHINE=Bsd;;
+        Linux*)     MACHINE="Linux" ;;
+        *BSD*)      MACHINE="BSD" ; warningOS ;;
+        Darwin*)    MACHINE="Mac" ; warningOS ;;
+        Microsoft*) MACHINE="WSL" ; warningOS ;;
         CYGWIN*)    exitScriptWithError "this Script could not work on Cygwin" \
-            "because Node.js isn't implemented on Cygwin";;
-        MINGW*)     warning "We don't know if it could works on Mingw."\
-            "If you test, please report it by open a new issue." ; " \
-            "sleep 20 ;;
-        *)     warning "We don't know if it could works on your " \
-            "Operating System."\
-            "If you test, please report it by open a new issue." ; " \
-            "sleep 20 ;;
+            "because Node.js isn't implemented on Cygwin" ;;
+        MINGW*)     MACHINE="MinGW" ; warningOS ;;
+        *)          MACHINE="notKnow" ; warningOS ;;
     esac
 
     printCommandAndEval "node --version" \
-        || printCommandAndEval "nodejs --version" \
         || errorInBuildExitCurrentSample "please install Node. " \
         "If Node is already installed, please add it in your PATH."
     echo "We recommand to use Node.Js LTS. Check if you use it."
@@ -714,87 +768,93 @@ function testRequierments() {
 
     local -r javaVersion="$(java -version 2>&1)"
     grep "OpenJDK" <<< "$javaVersion" && errorInBuildExitCurrentSample \
-        'do not use OpenJDK, please install Oracle Java.'
-    echo
+        'do not use OpenJDK, please install Oracle Java.' || \
+        printFileDescriptor3 "No OpenJDK: good."
     # TODO SHOULD WE ADD TEST TO CHECK IF WE ARE ON JDK8?
 
-    command -v jhipster --version 1>> /dev/null || \
+    jhipster --version 1>> /dev/null || \
         errorInBuildExitCurrentSample \
         "please install JHipster globally. " \
         "(\`$ yarn global install jhipster') " \
         "If JHipster is already installed, please add it in your PATH."
     echo
 
-    if [[ "$ISGENERATEANDTEST" -eq 1 ]] && \
-        [[ "$ISSTARTAPPLICATION" -eq 0 ]] ; then
+    if [[ "$IS_GENERATEANDTEST" -eq 1 ]] && \
+        [[ "$IS_STARTAPPLICATION" -eq 0 ]] ; then
 
         if [[ "$MACHINE" == "Mac" ]] ; then
             printCommandAndEval \
                 "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome\
-                --version" \
-            || printCommandAndEval \
-                "/Applications/Chromium.app/Contents/MacOS/Chromium \
-                --version" \
-            || errorInBuildExitCurrentSample "please install" \
-                "Google Chrome or Chromium."
-        elif [[ "$MACHINE" == 'Wsl' ]] ; then
+                    --version" \
+                || printCommandAndEval \
+                    "/Applications/Chromium.app/Contents/MacOS/Chromium \
+                        --version" \
+                || errorInBuildExitCurrentSample "please install" \
+                        "Google Chrome or Chromium."
+        elif [[ "$MACHINE" == 'WSL' ]] ; then
             # TODO test it
             # Maybe we should make an alias. Test it.
             printCommandAndEval \
                 'C:\Program Files (x86)\Google\Chrome\Application/chrome.exe
-                --version' \
-            || printCommandAndEval \
-                'C:\Program Files (x86)\Chromium\Application/chromium.exe
-                --version' \
-            || errorInBuildExitCurrentSample "please install" \
-                "Google Chrome or Chromium in disk C."
+                    --version' \
+                || printCommandAndEval \
+                    'C:\Program Files (x86)\Chromium\Application/chromium.exe
+                    --version' \
+                || errorInBuildExitCurrentSample "please install" \
+                    "Google Chrome or Chromium in disk C."
         else
-            # For Linux or BSD
+            # For Linux or BSD or other one
             printCommandAndEval "google-chrome-stable --version" \
                 || printCommandAndEval "chromium --version" \
                 || errorInBuildExitCurrentSample "please install " \
-                "\`google-chrome-stable' or \`chromium'. " \
-                "If \`google-chrome-stable' or \`chromium' is already installed, "\
-                "please add it in your PATH".
+                    "\`google-chrome-stable' or \`chromium'. " \
+                    "If \`google-chrome-stable' or \`chromium' is already " \
+                    "installed, please add it in your PATH".
         fi
     fi
 
-    if [[ "$ISGENERATEANDTEST" -eq 1 ]] || \
-        [[ "$ISSTARTAPPLICATION" -eq 1 ]]; then
+    if [[ "$IS_GENERATEANDTEST" -eq 1 ]] || \
+        [[ "$IS_STARTAPPLICATION" -eq 1 ]]; then
 
-        local -i skipDockerTests=0
-        if [[ "$skipDockerTests" -eq 0 ]] ; then
-            printCommandAndEval "docker --version" || \
-                (errorInBuildExitCurrentSample \
-                "please install docker and start the service. " \
-                && skipDockerTests=1)
-            echo
+        printCommandAndEval "docker --version" || \
+            errorInBuildExitCurrentSample \
+                "please install docker and start the service. "
+        echo
 
-            printCommandAndEval "docker-compose --version" || \
-                (errorInBuildExitCurrentSample \
-                "please install docker-compose. " \
-                && skipDockerTests=1)
-            echo
-        fi
+        printCommandAndEval "docker-compose --version" || \
+            errorInBuildExitCurrentSample "please install docker-compose. "
+        echo
 
-        if [[ "$skipDockerTests" -eq 0 ]] && \
-            command -v systemctl --version 1>> /dev/null 2>&1 ; then
-                systemctl is-active docker.service 1>> /dev/null 2>&1 \
-                    ||  (errorInBuildExitCurrentSample "please " \
+        if command -v systemctl --version 1>> /dev/null 2>&1 ; then
+            systemctl is-active docker.service 1>> /dev/null 2>&1  && \
+                printFileDescriptor3 "Docker is started. Good." || \
+                errorInBuildExitCurrentSample "please " \
                     "launch docker service" \
-                    "(\`sudo systemctl start docker.service')" && \
-                    skipDockerTests=1)
+                    "(\`sudo systemctl start docker.service')."
+            docker info 1>> /dev/null && \
+                printFileDescriptor3 "Docker is usable " \
+                    "by the computer user '$USER'. Good."|| \
+                errorInBuildExitCurrentSample "please" \
+                    "manage docker as a non-root user (" \
+                    "see https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user" \
+                    "– don't forget to restart your computer after this " \
+                    "configuration).\n"
+        elif [[ "$MACHINE" = "Linux" ]] || [[ "$MACHINE" = "BSD" ]] ; then
+            docker info 1>> /dev/null && \
+                printFileDescriptor3 "Docker is started and usable " \
+                    "by the computer user '$USER'."|| \
+                errorInBuildExitCurrentSample "please" \
+                    "start docker and manage docker as a non-root user (" \
+                    "see https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user" \
+                    "– don't forget to restart your computer after this " \
+                    "configuration).\n"
+        else
+            docker info 1>> /dev/null && \
+                printFileDescriptor3 "Docker is started. Good." || \
+                errorInBuildExitCurrentSample "please start docker"
         fi
 
-        if [[ "$skipDockerTests" -eq 0 ]] ; then
-            command -v docker info 1>> /dev/null || \
-                errorInBuildExitCurrentSample "\n" \
-                "please manage docker as a non-root user (" \
-                "see https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user" \
-                "– don't forget to restart your computer after this " \
-                "configuration).\n" \
-                "Do not forget to start the docker service."
-        fi
+        dockerKillThenRm
 
         # TODO I not test all ports in
         # ../generators/server/templates/src/main/docker
@@ -846,7 +906,7 @@ function printInfoBeforeLaunch() {
     # generateAndTestProject().
     if [[ -z "${isGenerationOfNodeModulesCache+x}" ]] ; then
         # echo constants used in ./scripts/*.sh
-        if [[ "$ISSTARTAPPLICATION" -eq 0 ]] ; then
+        if [[ "$IS_STARTAPPLICATION" -eq 0 ]] ; then
             printFileDescriptor3 "\nLOGFILENAME='$LOGFILENAME'" \
                 "(variable not used in ./travis/script/*.sh." \
                 "The end of this filename shoule be renamed errored or passed" \
@@ -924,26 +984,7 @@ function treatEndOfBuild() {
     # Should not be necessary.
     sleep 10
 
-    # TODO improve it. Actually, kill all docker commands. Not cool!
-    local -a dockerContainers
-    IFS=$' ' read -ra dockerContainers <<< `docker ps -q`
-    # If `docker ps -q` is empty, "${#dockerContainers[0]}" takes value 1.
-    if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
-        # Don't use `for' syntax:
-        # for i in ${dockerContainers[@]} ; do
-        #     printCommandAndEval docker kill "$i" || exitScriptWithError \
-        #         "Couldn't kill docker container '$i'"
-        # done
-        local -i i=0
-        while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-            printCommandAndEval docker kill "${dockerContainers[i]}" \
-                || exitScriptWithError "couldn't kill docker container " \
-                "'${dockerContainers[i]}'"
-            i=$((i+1))
-        done
-    fi
-
-    if [[ "$COLORIZELOGFILE" -eq 0 ]] ; then
+    if [[ "$IS_COLORIZELOGFILE" -eq 0 ]] ; then
         # https://superuser.com/questions/380772/removing-ansi-color-codes-from-text-stream
         printFileDescriptor3 "${ps4Light}`dirs +0` $ "\
             "sed -i \'s/^H/g ;" \
@@ -1035,7 +1076,7 @@ function errorInBuildStopCurrentSample() {
 
 # errorInBuildExitCurrentSample() {{{3
 errorInBuildExitCurrentSample() {
-    if [[ "$ISSTARTAPPLICATION" -eq 1 ]] ; then
+    if [[ "$IS_STARTAPPLICATION" -eq 1 ]] ; then
         exitScriptWithError "$@"
     elif [[ ! -z ${JHIPSTER+x} ]] && \
         [[ ! -z ${JHIPSTER_MATRIX+x} ]]; then
@@ -1172,13 +1213,11 @@ function generateProject() {
     # launchNewBash "./scripts/03-replace-version-generated-project.sh" \
     #     "Replace version generated-project'"
 
-
-    if [[ "$ISGENERATEANDTEST" -eq 0 ]] ; then
-        # to not launch \`yarn e2e' in 05-run.sh
-        PROTRACTOR=0
-        launchNewBash "./scripts/03-docker-compose.sh" \
-            "Start docker container-compose.sh for '${JHIPSTER}'"
+    echo "$IS_GENERATEANDTEST"
+    if [[ "$IS_GENERATEANDTEST" -eq 0 ]] ; then
+        PROTRACTOR=0        # to not launch \`yarn e2e' in 05-run.sh
         launchNewBash "./scripts/05-run.sh" "Package '${JHIPSTER}-sample'"
+    # else done in function generateAndTestProject()
     fi
 
 }
@@ -1315,7 +1354,138 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 
 }
 
-# function startApplication() {{{2
+# I LAUNCH SAMPLE(S) IN BACKGROUND {{{2
+# ====================
+# ====================
+
+# function wrapperLaunchScript() {{{3
+function wrapperLaunchScript() {
+    # Display stderr on terminal.
+    echoTitleBuildStep \
+        "'${JHIPSTER_MATRIX}' is launched in background!"
+    launchOnlyOneSample
+    echoTitleBuildStep "End of '$JHIPSTER_MATRIX'" ;
+    return 0
+}
+
+# function launchSamplesInBackground() {{{3
+function launchSamplesInBackground() {
+
+    if [[ ! "${JHIPSTER_MATRIX_ARRAY[*]}" =~  \
+        (^|[[:space:]])ngx-default[[:space:]] ]] ; then
+        warning "we advise to add build of 'ngx-default'.\n"
+        sleep 4
+    fi
+
+    local -i TESTGENERATOR=1
+    if [[ "$IS_GENERATEANDTEST" -eq 0 ]] ; then
+        if [[ "${JHIPSTER_MATRIX_ARRAY[*]}" =~ "(\s|^)ngx-default(\s|$)" ]]
+        then
+            doesItTestGenerator "during generation of 'ngx-default'"
+        else
+            TESTGENERATOR=0
+        fi
+    fi
+
+    echo
+    local -i i=0
+    while [[ "$i" -lt "${#JHIPSTER_MATRIX_ARRAY[*]}" ]] ; do
+        local JHIPSTER=`cut -d ' ' -f 1 <<< "${JHIPSTER_MATRIX_ARRAY[i]}"`
+        local YO_FOLDER="${JHIPSTER_SAMPLES}/""$JHIPSTER"
+        local APP_FOLDER="$YO_FOLDER-sample"
+
+        echo "You will build: '${JHIPSTER_MATRIX_ARRAY[i]}'" \
+            "in '$APP_FOLDER'."
+
+        # Should never be raised because we check ../.travis.yml.
+        # Maybe in case of the user delete all folders sample!
+        if [ ! -f "$YO_FOLDER""/.yo-rc.json" ]; then
+            exitScriptWithError "not a JHipster project."
+        fi
+
+        if [[ -e "$APP_FOLDER" ]] ; then
+            warning "if you continue the old folder '$APP_FOLDER'" \
+                "will be deleted."
+        fi
+        i=$((i+1))
+    done
+
+    confirmationUser "Are you sure to contiune? [y/n] " \
+        'echo ""' \
+        'exitScriptWithError "ABORTED."'
+    unset confirmationFirstParameter
+
+    # TODO Actually numberOfProcesses should be 1 because there is port conflict
+    # TODO add test if there is only few samples to test
+    echo -en "$BLUE"
+    read -t 1 -n 10000 discard || echo ""
+    echo
+    local question="How many processes "\
+"do you want to launch in same time (Travis CI launch 4 processes)? "
+    local -i typeAnswer=1
+    while [[ "$typeAnswer" -eq 1 ]] ; do
+        read -p "$question" -n 1 -r
+        if [[ "$REPLY" =~ ^[1-9]$ ]] ; then
+            local -ir numberOfProcesses="${REPLY}"
+            echo "" ;
+            typeAnswer=0
+        else
+            echo -e "\nPlease answer a number between 1 and 9."
+            typeAnswer=1
+        fi
+        echo "" ;
+    done
+    unset question typeAnswer
+    echo -en "$NC"
+
+    testRequierments
+
+    # TODO
+    # do not launch this if there is only projects with "skipClient: true"
+    # in ../.travis.yml
+    generateNode_Modules_Cache
+
+    local -i i=0
+    timeSpan=15
+    # Execute accordingly to the array.
+    while [[ "$i" -lt "${#JHIPSTER_MATRIX_ARRAY[*]}" ]] ; do
+        local JHIPSTER_MATRIX="${JHIPSTER_MATRIX_ARRAY[i]}"
+        # `ps' man page:
+        # "By default, ps selects all processes
+        # associated with the same terminal as the invoker."
+        while [ `ps -o pid,command  \
+                | grep "build-samples.sh" \
+                | grep -v "grep" \
+                | wc -l` -gt $(($numberOfProcesses+1)) ] ; do
+            # If we use `grep build-samples.sh', do not forget than grep is also
+            # returned by `ps'.
+            sleep "$timeSpan"
+        done
+        wrapperLaunchScript &
+        # ps -o pid,command  | grep "build-samples.sh"
+
+        # ps -o pid,stat,command,%cpu,%mem -C "bash ./build-samples.sh"
+        # Sleep to not have too much logs at start up.
+        sleep 25
+        i=$((i+1))
+    done
+
+    # Wait background process before continuing
+    # Do not return the focus to the user.
+    # If we delete line after, when loop before is finished
+    # this foreground script ./build-samples.sh is ended.
+    # The focus return to the user.
+    wait
+
+    echo "All build are finished"
+
+}
+
+# START APPLICATION `./build-samples.sh startapplication sample_name' {{{1
+# ==============================================================================
+# ==============================================================================
+# ==============================================================================
+# ==============================================================================
 function startApplication() {
     retrieveVariablesInFileDotTravisSectionMatrix
     export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
@@ -1448,10 +1618,10 @@ function launchOnlyOneSample() {
 
         local -r oldPATH="${PATH}"
         export PATH="${APP_FOLDER}"/node_modules:"$PATH"
-        if [[ "$ISGENERATEANDTEST" -eq 1 ]] ; then
+        if [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
             generateAndTestProject
         else
-            generate
+            generateProject
         fi
         PATH="${oldPATH}"
 
@@ -1460,134 +1630,6 @@ function launchOnlyOneSample() {
     treatEndOfBuild
     # do not unset beginLogfilename and endofLogfilename, unsed in another
     # function
-}
-
-# I LAUNCH SAMPLE(S) IN BACKGROUND {{{2
-# ====================
-# ====================
-
-# function wrapperLaunchScript() {{{3
-function wrapperLaunchScript() {
-    # Display stderr on terminal.
-    echoTitleBuildStep \
-        "'${JHIPSTER_MATRIX}' is launched in background!"
-    launchOnlyOneSample || echo "ERROR IN '${JHIPSTER_MATRIX}'"
-    echoTitleBuildStep "End of '$JHIPSTER_MATRIX'" ;
-    return 0
-}
-
-# function launchSamplesInBackground() {{{3
-function launchSamplesInBackground() {
-
-    echo "${JHIPSTER_MATRIX_ARRAY[*]}"
-    if [[ ! "${JHIPSTER_MATRIX_ARRAY[*]}" =~  \
-        (^|[[:space:]])ngx-default[[:space:]] ]] ; then
-        warning "we advise to add build of 'ngx-default'.\n"
-        sleep 4
-    fi
-
-    local -i TESTGENERATOR=1
-    if [[ "$ISGENERATEANDTEST" -eq 0 ]] ; then
-        if [[ "${JHIPSTER_MATRIX_ARRAY[*]}" =~ "(\s|^)ngx-default(\s|$)" ]]
-        then
-            doesItTestGenerator "during generation of 'ngx-default'"
-        else
-            TESTGENERATOR=0
-        fi
-    fi
-
-    echo
-    local -i i=0
-    while [[ "$i" -lt "${#JHIPSTER_MATRIX_ARRAY[*]}" ]] ; do
-        local JHIPSTER=`cut -d ' ' -f 1 <<< "${JHIPSTER_MATRIX_ARRAY[i]}"`
-        local YO_FOLDER="${JHIPSTER_SAMPLES}/""$JHIPSTER"
-        local APP_FOLDER="$YO_FOLDER-sample"
-
-        echo "You will build: '${JHIPSTER_MATRIX_ARRAY[i]}'" \
-            "in '$APP_FOLDER'."
-
-        # Should never be raised because we check ../.travis.yml.
-        # Maybe in case of the user delete all folders sample!
-        if [ ! -f "$YO_FOLDER""/.yo-rc.json" ]; then
-            exitScriptWithError "not a JHipster project."
-        fi
-
-        if [[ -e "$APP_FOLDER" ]] ; then
-            warning "if you continue the old folder '$APP_FOLDER'" \
-                "will be deleted."
-        fi
-        i=$((i+1))
-    done
-
-    confirmationUser "Are you sure to contiune? [y/n] " \
-        'echo ""' \
-        'exitScriptWithError "ABORTED."'
-    unset confirmationFirstParameter
-
-    # TODO Actually numberOfProcesses should be 1 because there is port conflict
-    # TODO add test if there is only few samples to test
-    echo -en "$BLUE"
-    read -t 1 -n 10000 discard || echo ""
-    echo
-    local question="How many processes "\
-"do you want to launch in same time (Travis CI launch 4 processes)? "
-    local -i typeAnswer=1
-    while [[ "$typeAnswer" -eq 1 ]] ; do
-        read -p "$question" -n 1 -r
-        if [[ "$REPLY" =~ ^[1-9]$ ]] ; then
-            local -ir numberOfProcesses="${REPLY}"
-            echo "" ;
-            typeAnswer=0
-        else
-            echo -e "\nPlease answer a number between 1 and 9."
-            typeAnswer=1
-        fi
-        echo "" ;
-    done
-    unset question typeAnswer
-    echo -en "$NC"
-
-    testRequierments
-
-    # TODO
-    # do not launch this if there is only projects with "skipClient: true"
-    # in ../.travis.yml
-    generateNode_Modules_Cache
-
-    local -i i=0
-    timeSpan=15
-    # Execute accordingly to the array.
-    while [[ "$i" -lt "${#JHIPSTER_MATRIX_ARRAY[*]}" ]] ; do
-        local JHIPSTER_MATRIX="${JHIPSTER_MATRIX_ARRAY[i]}"
-        # `ps' man page:
-        # "By default, ps selects all processes
-        # associated with the same terminal as the invoker."
-        while [ `ps -o pid,command  \
-                | grep "build-samples.sh" \
-                | grep -v "grep" \
-                | wc -l` -gt $(($numberOfProcesses+1)) ] ; do
-            # If we use `grep build-samples.sh', do not forget than grep is also
-            # returned by `ps'.
-            sleep "$timeSpan"
-        done
-        wrapperLaunchScript &
-        # ps -o pid,command  | grep "build-samples.sh"
-
-        # ps -o pid,stat,command,%cpu,%mem -C "bash ./build-samples.sh"
-        # Sleep to not have too much logs at start up.
-        sleep 25
-        i=$((i+1))
-    done
-
-    # Wait background process before continuing
-    # Do not return the focus to the user.
-    # If we delete line after, when loop before is finished
-    # this foreground script ./build-samples.sh is ended.
-    # The focus return to the user.
-    wait
-
-    echo "All build are finished"
-
 }
 
 # MAIN {{{1
@@ -1624,19 +1666,20 @@ export UAA_APP_FOLDER="$JHIPSTER_SAMPLES/uaa-sample"
 export SPRING_OUTPUT_ANSI_ENABLED="ALWAYS"
 export SPRING_JPA_SHOW_SQL="false"
 
-# Send a variable to ./scripts/*.sh to test if the parent is this script
-# (./build-samples.sh)
-export localTravis=1
-
-# GLOBAL CONSTANTS not copiend in ../.travis.yml
-# ====================
-
 # Define prompt (used by `set -x` for scripts in ./scripts/*)
 export PROMPT_COMMAND=""
 export PS4='${debian_chroot:+($debian_chroot)}'\
 '\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-readonly PS4
 
+# Prefix of docker images for ./travis/scripts/03-docker-compose.sh
+export DOCKER_PREFIX_NAME="jhipster-travis-build-"
+
+# Send a variable to ./scripts/*.sh to test if the parent is this script
+# (./build-samples.sh)
+export IS_TRAVIS_CI=0
+
+# GLOBAL CONSTANTS not copied from ../.travis.yml
+# ====================
 
 # GLOBAL CONSTANTS SPECIFIC TO ./build-samples.sh (this script)
 # ====================
@@ -1674,8 +1717,8 @@ declare -r URED="\033[4;31m"
 declare -r BRED="$NC""\033[1;31m"
 declare -r BLUE="\033[0;34m"
 
-declare -r JHIPSTER_LIST_PATTERN="^[a-z1-9,-]*$"
-declare -r JHIPSTER_PATTERN="^[a-z1-9-]*$"
+declare -r JHIPSTER_LIST_PATTERN="^[^-][a-z1-9,-]*$"
+declare -r JHIPSTER_PATTERN="^[^-][a-z1-9-]*$"
 
 # Argument parser {{{2
 # ====================
@@ -1718,7 +1761,7 @@ function define_JHIPSTER_MATRIX_ARRAY() {
 }
 
 function launchSamples() {
-    if [[ "$ONLY_ONE_SAMPLE_VERBOSE_OUTPUT" -eq 1 ]] ; then
+    if [[ "$IS_CONSOLEVERBOSE" -eq 1 ]] ; then
         isLaunchSamplesInBackground=0
         local JHIPSTER_MATRIX
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER_LIST"
@@ -1755,30 +1798,38 @@ if [[ "$COMMAND_NAME" = "help" ]]; then
     fi
     usage
 elif [[ "$COMMAND_NAME" == "startapplication" ]] ; then
+    if [[ ! -z "${3+x}" ]] ; then
+        tooMuchArguments
+    fi
+    if [[ -z "${2+x}" ]] ; then
+        exitScriptWithError "\`startapplication' take " \
+            "one mandatory argument (the sample_name)." \
+            "Please read \`./build-samples.sh help'"
+    fi
     if [[ "$2" =~ $JHIPSTER_PATTERN ]] ; then
         declare JHIPSTER="$2"
         declare JHIPSTER_MATRIX
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER"
-        declare -r ISGENERATEANDTEST=0
-        export ISSTARTAPPLICATION=1
-        readonly ISSTARTAPPLICATION
-        declare -r COLORIZELOGFILE=1
+        export IS_GENERATEANDTEST=0
+        export IS_STARTAPPLICATION=1
+        declare -r IS_COLORIZELOGFILE=1
         time startApplication
     else
         exitScriptWithError "you could only launch only one sample." \
-            "A sample name contains only alphanumeric or dash characters."
+            "A sample name contains only alphanumeric or dash characters, " \
+            "it not start by a dash."
     fi
 elif [[ "$COMMAND_NAME" == "generate" ]] || \
     [[ "$COMMAND_NAME" == "generateandtest" ]] ; then
 
-    [[ "$COMMAND_NAME" == "generate" ]] && declare -r ISGENERATEANDTEST=0 || \
-        declare -r ISGENERATEANDTEST=1
+    [[ "$COMMAND_NAME" == "generate" ]] && export IS_GENERATEANDTEST=0 || \
+        export IS_GENERATEANDTEST=1
 
-    export ISSTARTAPPLICATION=0
-    readonly ISSTARTAPPLICATION
+    export IS_STARTAPPLICATION=0
+    readonly IS_STARTAPPLICATION
 
-    declare ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=0
-    declare COLORIZELOGFILE=0
+    declare IS_CONSOLEVERBOSE=0
+    declare IS_COLORIZELOGFILE=0
 
     if [[ ! -z "${2+x}" ]] ; then
 
@@ -1792,7 +1843,7 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
 
         while [[ "$#" -ne 0 ]] ; do
             if [[ "$1" == "--consoleverbose" ]] ; then
-                ONLY_ONE_SAMPLE_VERBOSE_OUTPUT=1
+                IS_CONSOLEVERBOSE=1
                 if [[ -z "${JHIPSTER_LIST_PATTERN+x}" ]] || \
                     "$JHIPSTER_LIST" =~ $JHIPSTER_LIST_PATTERN ]] ; then
                     exitScriptWithError "'--consoleverbose' "\
@@ -1801,7 +1852,7 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
                         "Please see \`./build-samples.sh help'."
                 fi
             elif [[ "$1" == "--colorizelogfile" ]] ; then
-                COLORIZELOGFILE=1
+                IS_COLORIZELOGFILE=1
             else
                 exitScriptWithError "$1' is not a correct" \
                     "argument. Please read \`./build-samples.sh help'".

@@ -25,20 +25,6 @@ function echoSetX() {
 }
 
 #-------------------------------------------------------------------------------
-# Specific for couchbase
-#-------------------------------------------------------------------------------
-set +x
-echoSetX "Specific for couchbase"
-set -x
-
-cd "$APP_FOLDER"
-if [ -a src/main/docker/couchbase.yml ]; then
-    docker-compose -f src/main/docker/couchbase.yml \
-        --project-name jhister-travis-log-couchebase up -d
-    sleep 10
-fi
-
-#-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
 
@@ -88,8 +74,8 @@ launchCurlOrProtractor() {
     return $result
 }
 
-if [[ -z "${ISSTARTAPPLICATION+x}" ]] || \
-    [[ "$ISSTARTAPPLICATION" -eq 0 ]]; then
+if [[ "$IS_TRAVIS_CI" -eq 1 ]]  || \
+    [[ "$IS_STARTAPPLICATION" -eq 0 ]]; then
     # If we are in Travis CI or in `../build-samples.sh generate'
     # or `../build-samples.sh generateandtest'
 
@@ -129,6 +115,11 @@ if [[ -z "${ISSTARTAPPLICATION+x}" ]] || \
         echo "Error when packaging"
         exit 1
     fi
+
+    if [[ "$IS_TRAVIS_CI" -eq 0 ]] && \
+        [[ "$IS_GENERATEANDTEST" -eq 0 ]] ; then
+        exit  0
+    fi
 fi
 
 #-------------------------------------------------------------------------------
@@ -161,14 +152,13 @@ if [ "$RUN_APP" == 1 ]; then
     sleep 40
 
     launchCurlOrProtractor && result=$? || result=$?
-    # "$ISSTARTAPPLICATION" is setted for `../build-samples.sh startapplication
-    # sample_name'
-    if [[ -z "${ISSTARTAPPLICATION+x}" ]] || \
-        [[ "$ISSTARTAPPLICATION" -eq 0 ]]; then
+    if [[ "$IS_TRAVIS_CI" -eq 1 ]]  || \
+        [[ "$IS_STARTAPPLICATION" -eq 0 ]]; then
         # If we are in Travis CI or in `../build-samples.sh generate'
         # or `../build-samples.sh generateandtest'
         kill $(cat .pid)
     else
+        # If it's `../build-samples.sh startapplication sample_name'
         echo -e "\n\n\033[0;31m"\
             "Server is launched at http://localhost://""$serverPort" \
             "\033[0m \n\n"
