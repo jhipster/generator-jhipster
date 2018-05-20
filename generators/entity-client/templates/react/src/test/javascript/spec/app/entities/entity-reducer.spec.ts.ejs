@@ -21,8 +21,8 @@
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
-import { expect } from 'chai';
-import configureStore from 'redux-mock-store';
+
+import * as configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import * as sinon from 'sinon';
@@ -65,7 +65,7 @@ describe('Entities reducer tests', () => {
   };
 
   function testInitialState(state) {
-    expect(state).to.contain({
+    expect(state).toMatchObject({
       loading: false,
       errorMessage: null,
       updating: false,
@@ -96,7 +96,7 @@ describe('Entities reducer tests', () => {
         ],
         {},
         state => {
-          expect(state).to.contain({
+          expect(state).toMatchObject({
             errorMessage: null,
             updateSuccess: false,
             loading: true
@@ -114,7 +114,7 @@ describe('Entities reducer tests', () => {
         ],
         {},
         state => {
-          expect(state).to.contain({
+          expect(state).toMatchObject({
             errorMessage: null,
             updateSuccess: false,
             updating: true
@@ -136,7 +136,7 @@ describe('Entities reducer tests', () => {
         ],
         'error message',
         state => {
-          expect(state).to.contain({
+          expect(state).toMatchObject({
             errorMessage: 'error message',
             updateSuccess: false,
             updating: false
@@ -155,7 +155,7 @@ describe('Entities reducer tests', () => {
       expect(reducer(undefined, {
         type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
         payload
-      })).to.eql({
+      })).toEqual({
       ...initialState,
       <%_ if (pagination === 'infinite-scroll') { _%>
       links: { last: link.last },
@@ -173,7 +173,7 @@ describe('Entities reducer tests', () => {
       expect(reducer(undefined, {
         type: SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>),
         payload
-      })).to.eql({
+      })).toEqual({
         ...initialState,
         updating: false,
         updateSuccess: true,
@@ -188,7 +188,7 @@ describe('Entities reducer tests', () => {
           type: SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>),
           payload
         });
-      expect(toTest).to.contain({
+      expect(toTest).toMatchObject({
         updating: false,
         updateSuccess: true
       });
@@ -218,7 +218,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getEntities()).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(getEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.FETCH_<%= entityActionName %> actions', async () => {
@@ -231,7 +231,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getEntity(42666)).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(getEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.CREATE_<%= entityActionName %> actions', async () => {
@@ -251,7 +251,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(createEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(createEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.UPDATE_<%= entityActionName %> actions', async () => {
@@ -271,7 +271,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(updateEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(updateEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.DELETE_<%= entityActionName %> actions', async () => {
@@ -291,7 +291,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
   });
 
@@ -302,7 +302,7 @@ describe('Entities reducer tests', () => {
       expect(reducer(undefined, {
         type: ACTION_TYPES.SET_BLOB,
         payload
-      })).to.eql({
+      })).toEqual({
         ...initialState,
         entity: {
           ...initialState.entity,

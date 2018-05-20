@@ -42,7 +42,6 @@ const files = {
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
                 'webpack/webpack.prod.js',
-                'webpack/webpack.test.js',
                 'webpack/utils.js'
             ]
         }
@@ -369,8 +368,6 @@ const files = {
         {
             path: TEST_SRC_DIR,
             templates: [
-                'karma.conf.js',
-                'spec/entry.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/reducers/application-profile.spec.ts',
