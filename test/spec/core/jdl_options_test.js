@@ -22,7 +22,9 @@ const expect = require('chai').expect;
 
 const JDLOptions = require('../../../lib/core/jdl_options');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
+const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
+const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 
 describe('JDLOptions', () => {
   describe('#addOption', () => {
@@ -117,6 +119,56 @@ describe('JDLOptions', () => {
         excludedNames: ['M']
       }));
       expect(options.size()).to.equal(1);
+    });
+  });
+  describe('#getOptionsForName', () => {
+    let jdlOptions = null;
+
+    before(() => {
+      jdlOptions = new JDLOptions();
+    });
+
+    afterEach(() => {
+      jdlOptions = new JDLOptions();
+    });
+
+    context('when passing an invalid name', () => {
+      it('returns an empty array', () => {
+        expect(jdlOptions.getOptionsForName()).to.be.empty;
+      });
+    });
+    context('when checking for an absent option', () => {
+      it('returns an empty array', () => {
+        expect(jdlOptions.getOptionsForName(UnaryOptions.SKIP_CLIENT)).to.be.empty;
+      });
+    });
+    context('when checking for a present option', () => {
+      let option1 = null;
+      let option2 = null;
+      let option3 = null;
+
+      before(() => {
+        option1 = new JDLUnaryOption({
+          name: UnaryOptions.SKIP_CLIENT
+        });
+        option2 = new JDLBinaryOption({
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_CLASS
+        });
+        option3 = new JDLBinaryOption({
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_IMPL
+        });
+
+        jdlOptions.addOption(option1);
+        jdlOptions.addOption(option2);
+        jdlOptions.addOption(option3);
+      });
+
+      it('returns it', () => {
+        expect(jdlOptions.getOptionsForName(UnaryOptions.SKIP_CLIENT)).to.deep.equal([option1]);
+        expect(jdlOptions.getOptionsForName(BinaryOptions.Options.SERVICE)).to.deep.equal([option2, option3]);
+      });
     });
   });
   describe('#toString', () => {

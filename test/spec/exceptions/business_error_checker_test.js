@@ -645,5 +645,26 @@ describe('BusinessErrorChecker', () => {
         }).to.throw('The \'pagination\' option is not valid for value \'mapstruct\'.');
       });
     });
+    context('when having DTOs without services', () => {
+      before(() => {
+        jdlObject.addOption(new JDLBinaryOption({
+          name: BinaryOptions.Options.DTO,
+          value: BinaryOptions.Values.dto.MAPSTRUCT,
+          entityNames: ['A', 'B', 'C']
+        }));
+        jdlObject.addOption(new JDLBinaryOption({
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_CLASS,
+          entityNames: ['B']
+        }));
+        checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.SQL });
+      });
+
+      it('fails', () => {
+        expect(() => {
+          checker.checkForOptionErrors();
+        }).to.throw('Selecting DTOs without services is forbidden, for entities A, C.');
+      });
+    });
   });
 });

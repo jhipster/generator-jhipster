@@ -190,6 +190,34 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#getEntityNames', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+
+    afterEach(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having no entity', () => {
+      it('returns an empty list', () => {
+        expect(jdlObject.getEntityNames()).to.be.empty;
+      });
+    });
+    context('when having entities', () => {
+      before(() => {
+        jdlObject.addEntity(new JDLEntity({ name: 'A' }));
+        jdlObject.addEntity(new JDLEntity({ name: 'B' }));
+        jdlObject.addEntity(new JDLEntity({ name: 'C' }));
+      });
+
+      it('returns the entity names', () => {
+        expect(jdlObject.getEntityNames()).to.deep.equal(['A', 'B', 'C']);
+      });
+    });
+  });
   describe('#addEnum', () => {
     context('when adding an invalid enum', () => {
       const object = new JDLObject();
@@ -392,6 +420,56 @@ describe('JDLObject', () => {
     context('when adding a valid option', () => {
       it('works', () => {
         new JDLObject().addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT }));
+      });
+    });
+  });
+  describe('#getOptionsForName', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+
+    afterEach(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when passing an invalid name', () => {
+      it('returns an empty array', () => {
+        expect(jdlObject.getOptionsForName()).to.be.empty;
+      });
+    });
+    context('when checking for an absent option', () => {
+      it('returns an empty array', () => {
+        expect(jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)).to.be.empty;
+      });
+    });
+    context('when checking for a present option', () => {
+      let option1 = null;
+      let option2 = null;
+      let option3 = null;
+
+      before(() => {
+        option1 = new JDLUnaryOption({
+          name: UnaryOptions.SKIP_CLIENT
+        });
+        option2 = new JDLBinaryOption({
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_CLASS
+        });
+        option3 = new JDLBinaryOption({
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_IMPL
+        });
+
+        jdlObject.addOption(option1);
+        jdlObject.addOption(option2);
+        jdlObject.addOption(option3);
+      });
+
+      it('returns it', () => {
+        expect(jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)).to.deep.equal([option1]);
+        expect(jdlObject.getOptionsForName(BinaryOptions.Options.SERVICE)).to.deep.equal([option2, option3]);
       });
     });
   });
