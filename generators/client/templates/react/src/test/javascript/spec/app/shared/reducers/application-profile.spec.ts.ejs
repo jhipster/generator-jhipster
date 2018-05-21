@@ -41,8 +41,8 @@ describe('Profile reducer tests', () => {
     it('should return the right payload in prod', () => {
       const payload = {
         data: {
-          ribbonEnv: 'awesome ribbon stuff',
-          activeProfiles: ['prod']
+          'display-ribbon-on-profiles' : 'awesome ribbon stuff',
+          activeProfiles : [ 'prod' ]
         }
       };
 
@@ -56,8 +56,8 @@ describe('Profile reducer tests', () => {
     it('should return the right payload in dev with swagger enabled', () => {
       const payload = {
         data: {
-          ribbonEnv: 'awesome ribbon stuff',
-          activeProfiles: ['dev', 'swagger']
+          'display-ribbon-on-profiles' : 'awesome ribbon stuff',
+          activeProfiles : [ 'swagger', 'dev' ]
         }
       };
 

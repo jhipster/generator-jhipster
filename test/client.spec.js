@@ -39,7 +39,7 @@ describe('JHipster client generator', () => {
         });
     });
 
-    describe('generate client with Angular 2+', () => {
+    describe('generate client with Angular', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'jwt' })
@@ -75,7 +75,7 @@ describe('JHipster client generator', () => {
         });
     });
 
-    describe('generate client with Angular 2+ using npm flag', () => {
+    describe('generate client with Angular using npm flag', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'jwt', npm: true })

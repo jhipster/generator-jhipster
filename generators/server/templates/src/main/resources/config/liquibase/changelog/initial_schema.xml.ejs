@@ -101,19 +101,7 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
-    <%_ if (prodDatabaseType !== 'oracle') { _%>
-        <createIndex indexName="idx_user_login"
-            tableName="<%= jhiTablePrefix %>_user"
-            unique="true">
-            <column name="login" type="varchar(50)"/>
-        </createIndex>
 
-        <createIndex indexName="idx_user_email"
-            tableName="<%= jhiTablePrefix %>_user"
-            unique="true">
-            <column name="email" type="varchar(100)"/>
-        </createIndex>
-    <%_ } _%>
         <createTable tableName="<%= jhiTablePrefix %>_authority">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -151,13 +139,17 @@
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
                                  referencedTableName="<%= jhiTablePrefix %>_authority"/>
-        <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="<%= jhiTablePrefix %>_user_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
-        <%_ } _%>
+
+        <addNotNullConstraint   columnName="password_hash"
+                                columnDataType="varchar(60)"
+                                tableName="<%= jhiTablePrefix %>_user"/>
+    <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
         <addForeignKeyConstraint baseColumnNames="user_id"

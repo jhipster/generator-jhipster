@@ -133,7 +133,6 @@ module.exports = class extends BaseGenerator {
                 this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 context.options = this.options;
                 context.baseName = this.config.get('baseName');
-                context.reactive = this.config.get('reactive');
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
                 context.packageName = this.config.get('packageName');
                 context.applicationType = this.config.get('applicationType');
@@ -471,10 +470,10 @@ module.exports = class extends BaseGenerator {
                 context.entityReactName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
                 context.entityStateName = _.kebabCase(context.entityAngularName);
                 context.entityUrl = context.entityStateName;
-                context.entityTranslationKey = context.clientRootFolder ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`) : context.entityInstance;
+                context.entityTranslationKey = context.entityInstance;
                 context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-                context.reactiveRepositories = context.reactive && ['mongodb', 'couchbase'].includes(context.databaseType);
+                context.reactiveRepositories = context.applicationType === 'reactive' && ['mongodb', 'couchbase'].includes(context.databaseType);
 
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;
@@ -516,7 +515,7 @@ module.exports = class extends BaseGenerator {
                         'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
                         'LocalDate', 'Instant', 'ZonedDateTime', 'Boolean', 'byte[]', 'ByteBuffer'
                     ].includes(fieldType);
-                    if ((['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) && !nonEnumType) {
+                    if ((['sql', 'mongodb', 'couchbase', 'no'].includes(context.databaseType)) && !nonEnumType) {
                         field.fieldIsEnum = true;
                     } else {
                         field.fieldIsEnum = false;
@@ -721,10 +720,10 @@ module.exports = class extends BaseGenerator {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
                             relationship.otherEntityModuleName = `${context.angularXAppName + relationship.otherEntityNameCapitalized}Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
-                            if (context.skipUiGrouping || otherEntityData === undefined) {
+                            if (context.skipUiGrouping || otherEntityData === undefined || otherEntityData.clientRootFolder === undefined) {
                                 relationship.otherEntityClientRootFolder = '';
                             } else {
-                                relationship.otherEntityClientRootFolder = otherEntityData.clientRootFolder;
+                                relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
                             }
                             if (otherEntityData !== undefined && otherEntityData.clientRootFolder) {
                                 if (context.clientRootFolder === otherEntityData.clientRootFolder) {

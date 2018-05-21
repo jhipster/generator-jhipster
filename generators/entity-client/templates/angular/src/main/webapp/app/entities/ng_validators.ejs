@@ -36,9 +36,11 @@ if (field.fieldValidate === true) {
     }
     if (rules.includes('min')) {
         validators.push('min="' + field.fieldValidateRulesMin + '"');
+        validators.push('jhiMin="' + field.fieldValidateRulesMin + '"');
     }
     if (rules.includes('max')) {
         validators.push('max="' + field.fieldValidateRulesMax + '"');
+        validators.push('jhiMax="' + field.fieldValidateRulesMax + '"');
     }
     if (rules.includes('minbytes')) {
         validators.push('minbytes="' + field.fieldValidateRulesMinbytes +'"');

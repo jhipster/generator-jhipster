@@ -51,7 +51,7 @@ import {
   <%_ } _%>
   ICrudPutAction
 } from 'react-jhipster';
-import { FaBan, <% if(fieldsContainBlob) { %>FaTimesCircle, <% } %>FaFloppyO, FaArrowLeft } from 'react-icons/lib/fa';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 <%_
 let hasRelationshipQuery = false;
@@ -89,7 +89,11 @@ Object.keys(differentRelationships).forEach(key => {
     if (uniqueRel.otherEntityAngularName === 'User') {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { getUsers } from 'app/shared/reducers/user-management';
+<%_ } else { _%>
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+<%_ } _%>
 <%_
   } else {
     if (uniqueRel.otherEntityAngularName !== entityReactName) {
@@ -231,14 +235,21 @@ _%>
 
   <%_ } else if (relationshipType === 'many-to-one' || relationshipType === 'one-to-one' && ownerSide === true) { _%>
   <%= relationshipFieldName %>Update = element => {
-    const <%= otherEntityField %> = element.target.value;
-    for (const i in this.props.<%= otherEntityNamePlural %>) {
-        if (<%= otherEntityField %>.toString() === this.props.<%= otherEntityNamePlural %>[i].<%= otherEntityField %>.toString()) {
-            this.setState({
-                <%= relationshipFieldName %>Id: this.props.<%= otherEntityNamePlural %>[i].id
-            });
-        }
+    const <%= otherEntityField %> = element.target.value.toString();
+    if (<%= otherEntityField %> === '') {
+      this.setState({
+        <%= relationshipFieldName %>Id: -1
+      })
+    } else {
+      for (const i in this.props.<%= otherEntityNamePlural %>) {
+          if (<%= otherEntityField %> === this.props.<%= otherEntityNamePlural %>[i].<%= otherEntityField %>.toString()) {
+              this.setState({
+                  <%= relationshipFieldName %>Id: this.props.<%= otherEntityNamePlural %>[i].id
+              });
+          }
+      }
     }
+
   }
 
   <%_ } _%>
@@ -422,7 +433,7 @@ _%>
                       <span>{<%= fieldName %>ContentType}, {byteSize(<%= fieldName %>)}</span>
                     </Col>
                     <Col md="1">
-                      <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}><FaTimesCircle /></Button>
+                      <Button color="danger" onClick={this.clearBlob('<%= fieldName %>')}><FontAwesomeIcon icon="times-circle" /></Button>
                     </Col>
                   </Row>
                 </div>
@@ -620,12 +631,12 @@ _%>
             <%_ } _%>
           <%_ }) _%>
             <Button tag={Link} id="cancel-save" to="/entity/<%= entityFileName %>" replace color="info">
-              <FaArrowLeft/>&nbsp;
+              <FontAwesomeIcon icon="arrow-left" />&nbsp;
               <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
             </Button>
             &nbsp;
             <Button color="primary" id="save-entity" type="submit" disabled={isInvalid || updating}>
-              <FaFloppyO/>&nbsp;
+              <FontAwesomeIcon icon="save" />&nbsp;
               <Translate contentKey="entity.action.save">Save</Translate>
             </Button>
           </AvForm>

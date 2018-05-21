@@ -42,7 +42,7 @@ import {
   , getPaginationItemsNumber, JhiPagination
   <%_ }} _%>
 } from 'react-jhipster';
-import { FaPlus, FaEye, FaPencil, FaTrash<% if (pagination !== 'no') { %>, FaSort<% } %><% if (searchEngine === 'elasticsearch') { %>, FaSearch<% } %> } from 'react-icons/lib/fa';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -183,7 +183,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
         <h2 id="page-heading">
           <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
-            <FaPlus />
+            <FontAwesomeIcon icon="plus" />&nbsp;
             <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
               Create new <%= entityClassHumanized %>
             </Translate>
@@ -198,10 +198,10 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                   <AvInput type="text" name="search" value={this.state.search} onChange={this.handleSearch}
                     placeholder=<% if (enableTranslation) { %>{translate('<%= i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
                   <Button className="input-group-addon">
-                    <FaSearch/>
+                    <FontAwesomeIcon icon="search" />
                   </Button>
                   <Button type="reset" className="input-group-addon" onClick={this.clear}>
-                    <FaTrash/>
+                    <FontAwesomeIcon icon="trash" />
                   </Button>
                 </InputGroup>
               </AvGroup>
@@ -221,16 +221,16 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <Table responsive>
             <thead>
               <tr>
-                <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
+                <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                 <%_ for (idx in fields) { _%>
-                <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
+                <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                 <%_ } _%>
                 <%_ for (idx in relationships) { _%>
                     <%_ if (relationships[idx].relationshipType === 'many-to-one'
                     || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                     || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
                     const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FaSort /><% } %></th>
+                <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                     <%_ } _%>
                 <%_ } _%>
                 <th />
@@ -341,13 +341,13 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">
-                          <FaEye/> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
+                          <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                         </Button>
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit`} color="primary" size="sm">
-                          <FaPencil/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
+                          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                         </Button>
                         <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete`} color="danger" size="sm">
-                          <FaTrash/> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
+                          <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                         </Button>
                       </div>
                     </td>

@@ -21,6 +21,7 @@ const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const path = require('path');
 
 const utils = require('./utils.js');
@@ -102,6 +103,11 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     <%_ if (useSass) { _%>
     extractSASS,
     <%_ } _%>
+    new MomentLocalesPlugin({
+      localesToKeep: [
+        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array
+      ]
+    }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false

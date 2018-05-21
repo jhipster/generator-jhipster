@@ -108,7 +108,8 @@ const files = {
                 'config/error-middleware.ts',
                 'config/logger-middleware.ts',
                 'config/notification-middleware.ts',
-                'config/store.ts'
+                'config/store.ts',
+                'config/icon-loader.ts'
             ]
         },
         {
@@ -217,6 +218,13 @@ const files = {
             templates: [
                 'shared/reducers/locale.ts'
             ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: REACT_DIR,
+            templates: [
+                'shared/reducers/user-management.ts'
+            ]
         }
     ],
     accountModule: [
@@ -298,6 +306,11 @@ const files = {
                 // layouts
                 { file: 'shared/layout/footer/footer.tsx', method: 'processJsx' },
                 { file: 'shared/layout/header/header.tsx', method: 'processJsx' },
+                { file: 'shared/layout/header/header-components.tsx', method: 'processJsx' },
+                'shared/layout/header/menus/index.ts',
+                { file: 'shared/layout/header/menus/admin.tsx', method: 'processJsx' },
+                { file: 'shared/layout/header/menus/account.tsx', method: 'processJsx' },
+                { file: 'shared/layout/header/menus/entities.tsx', method: 'processJsx' },
                 { file: 'shared/layout/password/password-strength-bar.tsx', method: 'processJsx' },
                 // util
                 'shared/util/date-utils.ts',
@@ -311,10 +324,25 @@ const files = {
             ]
         },
         {
+            condition: generator => generator.enableTranslation,
+            path: REACT_DIR,
+            templates: [
+                { file: 'shared/layout/header/menus/locale.tsx', method: 'processJsx' },
+            ]
+        },
+        {
             condition: generator => generator.authenticationType === 'oauth2',
             path: REACT_DIR,
             templates: [
                 'shared/util/url-utils.ts'
+            ]
+        },
+        {
+            condition: generator => (generator.authenticationType === 'session'
+                && generator.websocket === 'spring-websocket'),
+            path: REACT_DIR,
+            templates: [
+                'shared/util/cookie-utils.ts'
             ]
         },
         {
@@ -336,20 +364,6 @@ const files = {
             ]
         }
     ],
-    // angularAuthService: [
-    //   {
-    //     path: REACT_DIR,
-    //     templates: [
-    //       'shared/auth/_auth.service.js',
-    //       'shared/auth/_csrf.service.js',
-    //       'shared/auth/_state-storage.service.js',
-    //       'shared/auth/_principal.service.js',
-    //       'shared/auth/_has-any-authority.directive.js',
-    //       'shared/auth/_account.service.js',
-    //       'shared/auth/_user-route-access-service.js'
-    //     ]
-    //   },
-    // ],
     clientTestFw: [
         {
             path: TEST_SRC_DIR,
@@ -362,7 +376,8 @@ const files = {
                 'spec/app/shared/reducers/authentication.spec.ts',
                 'spec/app/shared/util/entity-utils.spec.ts',
                 'spec/app/shared/auth/private-route.spec.tsx',
-                'spec/app/shared/layout/header.spec.tsx',
+                'spec/app/shared/layout/header/header.spec.tsx',
+                'spec/app/shared/layout/header/menus/account.spec.tsx',
                 'spec/app/modules/account/register/register.spec.tsx',
                 'spec/app/modules/account/register/register.reducer.spec.ts',
                 'spec/app/modules/account/activate/activate.reducer.spec.ts',
@@ -388,6 +403,13 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 'spec/app/modules/administration/user-management/user-management.reducer.spec.ts'
+            ]
+        },
+        {
+            condition: generator => generator.skipUserManagement,
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/shared/reducers/user-management.spec.ts'
             ]
         },
         {

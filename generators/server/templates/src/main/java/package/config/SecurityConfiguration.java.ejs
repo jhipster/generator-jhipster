@@ -76,7 +76,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
 import javax.annotation.PostConstruct;
-<% } %>
+<%_ } _%>
 
 @Configuration
 <%_ if (authenticationType === 'oauth2') { _%>

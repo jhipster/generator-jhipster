@@ -19,7 +19,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-import { JhiPaginationUtil } from 'ng-jhipster';
+import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
 <%_ } _%>
 
 import { UserRouteAccessService } from 'app/core';
@@ -36,26 +36,7 @@ import {
 } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
 
-<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-@Injectable()
-export class <%= entityAngularName %>ResolvePagingParams implements Resolve<any> {
-
-    constructor(private paginationUtil: JhiPaginationUtil) {}
-
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
-        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
-        return {
-            page: this.paginationUtil.parsePage(page),
-            predicate: this.paginationUtil.parsePredicate(sort),
-            ascending: this.paginationUtil.parseAscending(sort)
-      };
-    }
-}
-
-<%_ } _%>
-
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class <%= entityAngularName %>Resolve implements Resolve<any> {
 
     constructor(private service: <%= entityAngularName %>Service) {
@@ -77,11 +58,14 @@ export const <%= entityInstance %>Route: Routes = [
         component: <%= entityAngularName %>Component,
         <%_ if (pagination === 'pagination' || pagination === 'pager'){ _%>
         resolve: {
-            'pagingParams': <%= entityAngularName %>ResolvePagingParams
+            'pagingParams': JhiResolvePagingParams
         },
         <%_ } _%>
         data: {
             authorities: ['ROLE_USER'],
+            <%_ if (pagination === 'pagination' || pagination === 'pager'){ _%>
+            defaultSort: 'id,asc',
+            <%_ } _%> 
             pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]

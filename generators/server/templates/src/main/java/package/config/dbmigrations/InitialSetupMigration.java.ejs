@@ -43,6 +43,7 @@ public class InitialSetupMigration {
         mongoTemplate.save(adminAuthority);
         mongoTemplate.save(userAuthority);
     }
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     @ChangeSet(order = "02", author = "initiator", id = "02-addUsers")
     public void addUsers(MongoTemplate mongoTemplate) {
@@ -116,4 +117,5 @@ public class InitialSetupMigration {
         userUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(userUser);
     }
+    <%_ } _%>
 }

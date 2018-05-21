@@ -22,7 +22,7 @@ _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
@@ -41,10 +41,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [<%= entityAngularName %>DeleteDialogComponent],
-                providers: [
-                    <%= entityAngularName %>Service
-                ]
+                declarations: [<%= entityAngularName %>DeleteDialogComponent]
             })
             .overrideTemplate(<%= entityAngularName %>DeleteDialogComponent, '')
             .compileComponents();
@@ -60,7 +57,7 @@ describe('Component Tests', () => {
                 inject([],
                     fakeAsync(() => {
                         // GIVEN
-                        spyOn(service, 'delete').and.returnValue(Observable.of({}));
+                        spyOn(service, 'delete').and.returnValue(of({}));
 
                         // WHEN
                         comp.confirmDelete(<%- tsKeyId %>);

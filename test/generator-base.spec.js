@@ -116,10 +116,22 @@ describe('Generator Base', () => {
                 expect(BaseGenerator.getConstraintName('entityName', 'relationshipName', 'mysql')).to.equal('fk_entity_name_relationship_name_id');
             });
         });
-        describe('when called with a long name', () => {
+        describe('when called with a long name and oracle', () => {
             it('returns a proper constraint name', () => {
-                expect(BaseGenerator.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle')).to.have.length(30);
-                expect(BaseGenerator.getConstraintName('entityNameLongerName', 'relationshipName', 'oracle')).to.equal('entity_name_lo_relationship_id');
+                expect(BaseGenerator.getConstraintName('entityNameLongerName', 'relationshipLongerName', 'oracle')).to.have.length(30);
+                expect(BaseGenerator.getConstraintName('entityNameLongerName', 'relationshipLongerName', 'oracle')).to.equal('entity_name_lo_relationship_id');
+            });
+        });
+        describe('when called with a long name and mysql', () => {
+            it('returns a proper constraint name', () => {
+                expect(BaseGenerator.getConstraintName('entityLongerNameWithPaginationAndDTO', 'relationshipLongerNameWithPaginationAndDTO', 'mysql')).to.have.length(64);
+                expect(BaseGenerator.getConstraintName('entityLongerNameWithPaginationAndDTO', 'relationshipLongerNameWithPaginationAndDTO', 'mysql')).to.equal('entity_longer_name_with_paginat_relationship_longer_name_with_id');
+            });
+        });
+        describe('when called with a long name and no snake case', () => {
+            it('returns a proper constraint name', () => {
+                expect(BaseGenerator.getConstraintName('entityNameLongerName', 'relationshipLongerName', 'oracle', true)).to.have.length(30);
+                expect(BaseGenerator.getConstraintName('entityNameLongerName', 'relationshipLongerName', 'oracle', true)).to.equal('entityNameLong_relationship_id');
             });
         });
     });

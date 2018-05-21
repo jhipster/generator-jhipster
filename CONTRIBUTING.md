@@ -53,7 +53,7 @@ chances of your issue being dealt with quickly:
 
 You can use `jhipster info` to provide us the information we need.
 
-Click [here](https://github.com/jhipster/generator-jhipster/issues/new) to open a bug issue with a pre-filled template. For feature requests and enquiries you can use [this template][feature-template].
+Click [here](issue-template) to open a bug issue with a pre-filled template. For feature requests and enquiries you can use [this template][feature-template].
 
 You can run `jhipster info` in your project folder to get most of the above required info.
 
@@ -254,7 +254,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 * Java files **must be** formatted using [Intellij IDEA's code style](http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Style+and+Formatting). Please note that JHipster committers have a free Intellij IDEA Ultimate Edition for developing the project.
 * Generators JavaScript files **must follow** the eslint configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 * Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
-* Angular 2+ Typescript files **must follow** [Official Angular style guide](https://angular.io/styleguide).
+* Angular Typescript files **must follow** the [Official Angular style guide](https://angular.io/styleguide).
 
 Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request. You can also run `npm run lint-fix` to fix some of the lint issues automatically.
 
@@ -320,4 +320,5 @@ see http://spring.io/blog/2014/09/26/spring-boot-1-1-7-released
 Fix #1234
 ```
 
-[feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?body=*%20**Overview%20of%20the%20request**%0A%0A%3C!--%20what%20is%20the%20query%20or%20request%20--%3E%0A%0A*%20**Motivation%20for%20or%20Use%20Case**%20%0A%0A%3C!--%20explain%20why%20this%20is%20a%20required%20for%20you%20--%3E%0A%0A%0A*%20**Browsers%20and%20Operating%20System**%20%0A%0A%3C!--%20is%20this%20a%20problem%20with%20all%20browsers%20or%20only%20IE8%3F%20--%3E%0A%0A%0A*%20**Related%20issues**%20%0A%0A%3C!--%20has%20a%20similar%20issue%20been%20reported%20before%3F%20--%3E%0A%0A*%20**Suggest%20a%20Fix**%20%0A%0A%3C!--%20if%20you%20can%27t%20fix%20this%20yourself%2C%20perhaps%20you%20can%20point%20to%20what%20might%20be%0A%20%20causing%20the%20problem%20(line%20of%20code%20or%20commit)%20--%3E
+[issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
+[feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md

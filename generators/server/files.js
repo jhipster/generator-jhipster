@@ -281,7 +281,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.databaseType === 'mongodb' && !generator.skipUserManagement,
+            condition: generator => generator.databaseType === 'mongodb'
+                && (!generator.skipUserManagement || (generator.skipUserManagement && generator.authenticationType === 'oauth2')),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -629,7 +630,8 @@ const serverFiles = {
         {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                { file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` }
+                { file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` },
+                { file: 'package/ApplicationWebXml.java', renameTo: generator => `${generator.javaDir}ApplicationWebXml.java` }
 
             ]
         }
@@ -915,16 +917,16 @@ const serverFiles = {
         },
         {
             condition: generator => generator.cucumberTests,
-            path: TEST_DIR,
+            path: SERVER_TEST_SRC_DIR,
             templates: [
                 // Create Cucumber test files
-                { file: 'java/package/cucumber/CucumberTest.java', renameTo: generator => `${generator.testDir}cucumber/CucumberTest.java` },
-                { file: 'java/package/cucumber/stepdefs/StepDefs.java', renameTo: generator => `${generator.testDir}cucumber/stepdefs/StepDefs.java` },
-                { file: 'features/gitkeep', noEjs: true }
+                { file: 'package/cucumber/CucumberTest.java', renameTo: generator => `${generator.testDir}cucumber/CucumberTest.java` },
+                { file: 'package/cucumber/stepdefs/StepDefs.java', renameTo: generator => `${generator.testDir}cucumber/stepdefs/StepDefs.java` },
+                { file: '../features/gitkeep', noEjs: true }
             ]
         },
         {
-            condition: generator => generator.applicationType === 'monolith' && generator.authenticationType !== 'oauth2',
+            condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== 'oauth2',
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 // Create auth config test files
@@ -993,6 +995,13 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/repository/search/UserSearchRepository.java', renameTo: generator => `${generator.javaDir}repository/search/UserSearchRepository.java` }
+            ]
+        },
+        {
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.searchEngine === 'elasticsearch',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                { file: 'package/repository/search/UserSearchRepositoryMockConfiguration.java', renameTo: generator => `${generator.testDir}repository/search/UserSearchRepositoryMockConfiguration.java` },
             ]
         },
         {
@@ -1093,11 +1102,11 @@ const serverFiles = {
         },
         {
             condition: generator => !generator.skipUserManagement && generator.cucumberTests,
-            path: TEST_DIR,
+            path: SERVER_TEST_SRC_DIR,
             templates: [
 
-                { file: 'java/package/cucumber/stepdefs/UserStepDefs.java', renameTo: generator => `${generator.testDir}cucumber/stepdefs/UserStepDefs.java` },
-                'features/user/user.feature'
+                { file: 'package/cucumber/stepdefs/UserStepDefs.java', renameTo: generator => `${generator.testDir}cucumber/stepdefs/UserStepDefs.java` },
+                '../features/user/user.feature'
             ]
         },
         {

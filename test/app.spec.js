@@ -65,7 +65,7 @@ describe('JHipster generator', () => {
                 assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
             });
             it('contains correct custom prefix when specified', () => {
-                assert.fileContent('.angular-cli.json', /"prefix": "test"/);
+                assert.fileContent('angular.json', /"prefix": "test"/);
             });
         });
 
@@ -509,6 +509,74 @@ describe('JHipster generator', () => {
             });
         });
 
+        describe('oauth2 + elasticsearch', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'oauth2',
+                        cacheProvider: 'ehcache',
+                        enableHibernateCache: true,
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: [
+                            'searchEngine:elasticsearch'
+                        ]
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with authenticationType "oauth2" and elasticsearch', () => {
+                assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.elasticsearch);
+            });
+        });
+
+        describe('oauth2 + mongodb', () => {
+            beforeEach((done) => {
+                helpers.run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'oauth2',
+                        cacheProvider: 'ehcache',
+                        enableHibernateCache: true,
+                        databaseType: 'mongodb',
+                        devDatabaseType: 'mongodb',
+                        prodDatabaseType: 'mongodb',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with authenticationType "oauth2" and mongodb', () => {
+                assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.mongodb);
+            });
+        });
+
         describe('hazelcast', () => {
             beforeEach((done) => {
                 helpers.run(path.join(__dirname, '../generators/app'))
@@ -818,7 +886,8 @@ describe('JHipster generator', () => {
 
             it('creates expected files with default application name', () => {
                 assert.file([
-                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`
+                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/ApplicationWebXml.java`
                 ]);
                 assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`, /public class Application/);
             });
@@ -1110,9 +1179,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with Cucumber enabled', () => {
                 assert.file(expectedFiles.server);
-                assert.file([
-                    `${TEST_DIR}features/user/user.feature`
-                ]);
+                assert.file(expectedFiles.cucumber);
                 assert.noFile([
                     `${TEST_DIR}gatling/conf/gatling.conf`,
                     `${TEST_DIR}gatling/conf/logback.xml`

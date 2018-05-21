@@ -24,5 +24,7 @@ export * from './auth/user-route-access-service';
 export * from './login/login-modal.service';
 <%_ } _%>
 export * from './login/login.service';
+<%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
 export * from './user/user.service';
+<%_ } _%>
 export * from './core.module';

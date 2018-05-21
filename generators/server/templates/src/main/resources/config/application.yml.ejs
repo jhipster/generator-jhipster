@@ -110,7 +110,7 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump"]
+                include: ["configprops", "health", "info", "threaddump"]
     endpoint:
         health:
             show-details: when_authorized
@@ -132,6 +132,9 @@ spring:
             discovery:
                 healthCheckPath: /management/health
                 instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+            config:
+                watch:
+                    enabled: false
     <%_ } _%>
     <%_ if (!serviceDiscoveryType) { _%>
     profiles:

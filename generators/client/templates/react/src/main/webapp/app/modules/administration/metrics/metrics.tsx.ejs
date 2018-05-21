@@ -20,7 +20,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Table, Progress, Col, Row, Button } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
-import { FaEye, FaRefresh } from 'react-icons/lib/fa';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { APP_WHOLE_NUMBER_FORMAT, APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT } from 'app/config/constants';
 import { systemMetrics, systemThreadDump } from '../administration.reducer';
@@ -184,7 +184,7 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
             </Progress>
           </Col>
           <Col md="4">
-            <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value}) <FaEye className="hand" onClick={this.getThreadDump}/>
+            <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value}) <FontAwesomeIcon icon="eye" className="hand" onClick={this.getThreadDump} />
             <p><span>Runnable</span> {metrics.gauges['jvm.threads.runnable.count'].value}</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.runnable.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
               <span>
@@ -262,7 +262,7 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
           <h2>Application Metrics</h2>
           <p>
             <Button onClick={this.getMetrics} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
-              <FaRefresh/>&nbsp;
+              <FontAwesomeIcon icon="sync" />&nbsp;
               <Translate component="span" contentKey="health.refresh.button">Refresh</Translate>
             </Button>
           </p>

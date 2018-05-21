@@ -72,6 +72,7 @@ function replaceContent(args, generator) {
 }
 
 /**
+ * Escape regular expressions.
  *
  * @param {string} str string
  * @returns {string} string with regular expressions escaped
@@ -81,7 +82,7 @@ function escapeRegExp(str) {
 }
 
 /**
- * rewrite using the passed argument object
+ * Rewrite using the passed argument object.
  *
  * @param {object} args arguments object (containing splicable, haystack, needle properties) to be used
  * @returns {*} re-written file

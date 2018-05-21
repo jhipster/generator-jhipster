@@ -20,7 +20,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
-import { FaBan, FaTrash } from 'react-icons/lib/fa';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { IUser } from 'app/shared/model/user.model';
 import { getUser, deleteUser } from './user-management.reducer';
@@ -58,11 +58,11 @@ export class UserManagementDeleteDialog extends React.Component<IUserManagementD
       </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={this.handleClose}>
-          <FaBan/>&nbsp;
+          <FontAwesomeIcon icon="ban"/>&nbsp;
           <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
         <Button color="danger" onClick={this.confirmDelete}>
-          <FaTrash/>&nbsp;
+          <FontAwesomeIcon icon="trash" />&nbsp;
           <Translate contentKey="entity.action.delete">Delete</Translate>
         </Button>
       </ModalFooter>

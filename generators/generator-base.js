@@ -83,7 +83,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-element-to-menu',
                     splicable: [`<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                                 <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
-                                    <i class="fas fa-${glyphiconName}"></i>&nbsp;
+                                    <fa-icon [icon]="'${glyphiconName}'"></fa-icon>&nbsp;
                                     <span${enableTranslation ? ` jhiTranslate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`
@@ -143,7 +143,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-element-to-admin-menu',
                     splicable: [`<li>
                         <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
-                            <i class="fas fa-${glyphiconName}" aria-hidden="true"></i>&nbsp;
+                            <fa-icon [icon]="'${glyphiconName}'"></fa-icon>&nbsp;
                             <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                         </a>
                     </li>`
@@ -189,25 +189,22 @@ module.exports = class extends PrivateBase {
                     splicable: [
                         this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <i class="fas fa-fw fa-asterisk" aria-hidden="true"></i>
+                             |                            <fa-icon [icon]="['fw', 'asterisk']"></fa-icon>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
                     ]
                 }, this);
-            } else {
+            } else if (this.clientFramework === 'react') {
                 // React
-                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/header.tsx`;
+                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/entities.tsx`;
                 jhipsterUtils.rewriteFile({
                     file: entityMenuPath,
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
-                        this.stripMargin(`|(
-                        |        <DropdownItem tag={Link} key="${routerName}" to="/entity/${routerName}">
-                        |          <FaAsterisk />&nbsp;
-                        |          ${_.startCase(routerName)}
-                        |        </DropdownItem>
-                        |      ),`)
+                        this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
+                        |      <FontAwesomeIcon icon="asterisk" />&nbsp; ${_.startCase(routerName)}
+                        |    </DropdownItem>`)
                     ]
                 }, this);
             }
@@ -260,7 +257,7 @@ module.exports = class extends PrivateBase {
                         this.stripMargin(microServiceName ? `|${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module,` : `|${appName}${entityAngularName}Module,`)
                     ]
                 }, this);
-            } else {
+            } else if (clientFramework === 'react') {
                 // React
                 const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
 
@@ -276,7 +273,7 @@ module.exports = class extends PrivateBase {
                     file: indexModulePath,
                     needle: 'jhipster-needle-add-route-path',
                     splicable: [
-                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}}/>`)
+                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}} />`)
                     ]
                 }, this);
 
@@ -1922,8 +1919,8 @@ module.exports = class extends PrivateBase {
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
-            const entityTable = _.snakeCase(this.getTableName(entityName).substring(0, halfLimit));
-            const relationTable = _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
+            const entityTable = this.getTableName(entityName).substring(0, halfLimit);
+            const relationTable = this.getTableName(relationshipName).substring(0, halfLimit - 1);
             return `${entityTable}_${relationTable}`;
         }
         return joinTableName;
@@ -1957,8 +1954,8 @@ module.exports = class extends PrivateBase {
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
-            const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : _.snakeCase(this.getTableName(entityName).substring(0, halfLimit));
-            const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 1) : _.snakeCase(this.getTableName(relationshipName).substring(0, halfLimit - 1));
+            const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
+            const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 2) : this.getTableName(relationshipName).substring(0, halfLimit - 2);
             return `${entityTable}_${relationTable}_id`;
         }
         return constraintName;
@@ -2092,7 +2089,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * get the Angular 2+ application name.
+     * get the Angular application name.
      * @param {string} baseName of application
      */
     getAngularXAppName(baseName = this.baseName) {
