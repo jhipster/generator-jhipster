@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const JSONReader = require('../../../lib/reader/json_reader');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 
@@ -29,32 +28,23 @@ describe('JSONReader', () => {
     describe('when passing invalid parameters', () => {
       describe('such as nil', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JSONReader.parseFromDir(null);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('IllegalArgumentException');
-          }
+          }).to.throw('The app directory must be passed.');
         });
       });
       describe('such as a file', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JSONReader.parseFromDir('../../test_files/invalid_file.txt');
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('WrongDirException');
-          }
+          }).to.throw('The passed directory \'../../test_files/invalid_file.txt\' must exist and must be a directory.');
         });
       });
       describe('such as a dir that does not exist', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JSONReader.parseFromDir('nodir');
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('WrongDirException');
-          }
+          }).to.throw('The passed directory \'nodir\' must exist and must be a directory.');
         });
       });
     });

@@ -49,11 +49,9 @@ describe('Set', () => {
   describe('#add', () => {
     context('when trying to add a nil element', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           set.add(null);
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('Can\'t add a nil element to the set.');
       });
     });
     context('when trying to add a new element', () => {
@@ -75,11 +73,9 @@ describe('Set', () => {
   describe('#addArrayElements', () => {
     context('when trying to add elements from a nil array', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           set.addArrayElements(null);
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('Can\'t add elements from a nil object.');
       });
     });
     context('when trying to add an array\'s elements', () => {
@@ -104,11 +100,9 @@ describe('Set', () => {
   describe('#addSetElements', () => {
     context('when passing a nil Set', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           set.addSetElements(null);
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('Can\'t add elements from a nil object.');
       });
     });
     context('when passing an empty Set', () => {
@@ -170,11 +164,9 @@ describe('Set', () => {
   describe('#forEach', () => {
     context('when passing a nil function', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           set.forEach(null);
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The function must not be nil.');
       });
     });
     context('when passing a valid function', () => {
@@ -189,11 +181,9 @@ describe('Set', () => {
   describe('#filter', () => {
     context('when passing a nil function', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           set.filter(null);
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The function must not be nil.');
       });
     });
     context('when passing a valid function', () => {
@@ -208,11 +198,9 @@ describe('Set', () => {
   describe('#map', () => {
     context('when passing a nil function', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           set.map(null);
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The function must not be nil.');
       });
     });
     context('when passing a valid function', () => {
