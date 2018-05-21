@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
@@ -29,7 +28,7 @@ describe('JDLRelationship', () => {
   describe('::new', () => {
     context('when not passing at least one injected field', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLRelationship({
             from: new JDLEntity({
               name: 'Abc'
@@ -39,15 +38,12 @@ describe('JDLRelationship', () => {
             }),
             type: RelationshipTypes.MANY_TO_MANY
           });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The type, and at least one injected field must be passed');
       });
     });
     context('when having invalid entities as source and/or destination', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLRelationship({
             from: {},
             to: new JDLEntity({
@@ -55,11 +51,8 @@ describe('JDLRelationship', () => {
             }),
             injectedFieldInFrom: 'something'
           });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-        }
-        try {
+        }).to.throw('Valid source and destination entities are required.');
+        expect(() => {
           new JDLRelationship({
             from: new JDLEntity({
               name: 'Abc1'
@@ -67,25 +60,19 @@ describe('JDLRelationship', () => {
             to: {},
             injectedFieldInFrom: 'something'
           });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-        }
-        try {
+        }).to.throw('Valid source and destination entities are required.');
+        expect(() => {
           new JDLRelationship({
             from: {},
             to: {},
             injectedFieldInFrom: 'something'
           });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('InvalidObjectException');
-        }
+        }).to.throw('Valid source and destination entities are required.');
       });
     });
     context('when passing an invalid type', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JDLRelationship({
             from: new JDLEntity({
               name: 'Abc'
@@ -96,10 +83,7 @@ describe('JDLRelationship', () => {
             injectedFieldInFrom: 'something',
             type: 'WRONG_TYPE'
           });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The type, and at least one injected field must be passed.');
       });
     });
     context('when passing valid args', () => {
@@ -205,15 +189,9 @@ describe('JDLRelationship', () => {
         });
 
         it('fails', () => {
-          try {
+          expect(() => {
             relationship.validate();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(
-              error.message
-            ).to.eq('The exception is not in a valid state.\nErrors: Declaration error (no injected field in both sides).');
-          }
+          }).to.throw('The exception is not in a valid state.\nErrors: Declaration error (no injected field in both sides).');
         });
       });
       context('because the type doesn\'t exist', () => {
@@ -230,13 +208,9 @@ describe('JDLRelationship', () => {
         });
 
         it('fails', () => {
-          try {
+          expect(() => {
             relationship.validate();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-            expect(error.message).to.eq('The exception is not in a valid state.\nErrors: Wrong type: got \'WRONG\'.');
-          }
+          }).to.throw('The exception is not in a valid state.\nErrors: Wrong type: got \'WRONG\'.');
         });
       });
       context('because the source entity is not in a One-to-One', () => {
@@ -252,12 +226,10 @@ describe('JDLRelationship', () => {
         });
 
         it('fails', () => {
-          try {
+          expect(() => {
             relationship.validate();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('MalformedAssociationException');
-          }
+          }).to.throw('In the One-to-One relationship from Valid2 to Valid, the source entity must possess the ' +
+            'destination in a One-to-One  relationship, or you must invert the direction of the relationship.');
         });
       });
       context('because one of the injected fields is not present in a One-to-Many (not bidirectional)', () => {
@@ -294,12 +266,10 @@ describe('JDLRelationship', () => {
         });
 
         it('fails', () => {
-          try {
+          expect(() => {
             relationship.validate();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('MalformedAssociationException');
-          }
+          }).to.throw('In the Many-to-One relationship from Valid2 to Valid, only unidirectionality is supported f' +
+            'or a Many-to-One relationship, you should create a bidirectional One-to-Many relationship instead.');
         });
       });
       context('because one of the sides is not present in a Many-to-Many (not bidirectional)', () => {
@@ -315,12 +285,10 @@ describe('JDLRelationship', () => {
         });
 
         it('fails', () => {
-          try {
+          expect(() => {
             relationship.validate();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('MalformedAssociationException');
-          }
+          }).to.throw('In the Many-to-Many relationship from Valid2 to Valid, only bidirectionality is supported ' +
+            'for a Many-to-Many relationship.');
         });
       });
     });

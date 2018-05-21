@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
@@ -31,31 +30,19 @@ describe('JDLRelationships', () => {
     context('when passing an invalid relationship', () => {
       context('because it is nil', () => {
         it('fails', () => {
-          try {
-            new JDLRelationships().add(null);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
-          try {
-            new JDLRelationships().add(undefined);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          expect(() => {
+            new JDLRelationships().add();
+          }).to.throw('A relationship must be passed.');
         });
       });
       context('because it is invalid', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             new JDLRelationships().add({
               to: { name: 'A' },
               from: { name: 'B' }
             });
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('InvalidObjectException');
-          }
+          }).to.throw('A valid relationship must be passed.');
         });
       });
     });
