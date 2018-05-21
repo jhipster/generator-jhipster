@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const fs = require('fs');
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLEntity = require('../../../lib/core/jdl_entity');
@@ -31,12 +30,9 @@ describe('JDLExporter', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JDLExporter.exportToJDL();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('A JDLObject has to be passed to be exported.');
         });
       });
     });

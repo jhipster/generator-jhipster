@@ -22,7 +22,6 @@ const expect = require('chai').expect;
 const fs = require('fs');
 const path = require('path');
 
-const fail = expect.fail;
 const JDLApplication = require('../../../lib/core/jdl_application');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const JHipsterEntityExporter = require('../../../lib/export/jhipster_entity_exporter');
@@ -33,12 +32,9 @@ describe('JHipsterEntityExporter', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JHipsterEntityExporter.exportEntities();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('Entities have to be passed to be exported.');
         });
       });
     });
@@ -506,12 +502,9 @@ describe('JHipsterEntityExporter', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JHipsterEntityExporter.exportEntitiesInApplications();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('Entities have to be passed to be exported.');
         });
       });
     });

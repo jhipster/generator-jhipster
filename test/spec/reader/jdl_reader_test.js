@@ -22,29 +22,21 @@ const expect = require('chai').expect;
 const fs = require('fs');
 const JDLReader = require('../../../lib/reader/jdl_reader');
 
-const fail = expect.fail;
-
 describe('JDLReader', () => {
   describe('::parse', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JDLReader.parse(null);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('IllegalArgumentException');
-          }
+          }).to.throw('The content must be passed.');
         });
       });
       context('such as an empty array', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JDLReader.parse('');
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('IllegalArgumentException');
-          }
+          }).to.throw('The content must be passed.');
         });
       });
     });
@@ -67,52 +59,38 @@ describe('JDLReader', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JDLReader.parseFromFiles(null);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('IllegalArgumentException');
-          }
+          }).to.throw('The files must be passed.');
         });
       });
       context('such as an empty array', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JDLReader.parseFromFiles([]);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('IllegalArgumentException');
-          }
+          }).to.throw('The files must be passed.');
         });
       });
       context('such as files without the \'.jh\' or \'.jdl\' file extension', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JDLReader.parseFromFiles(['../../test_files/invalid_file.txt']);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('WrongFileException');
-          }
+          }).to.throw('The passed file \'../../test_files/invalid_file.txt\' must end ' +
+            'with \'.jh\' or \'.jdl\' to be valid.');
         });
       });
       context('such as files that do not exist', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JDLReader.parseFromFiles(['nofile.jh']);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('WrongFileException');
-          }
+          }).to.throw('The passed file \'nofile.jh\' must exist and must not be a directory.');
         });
       });
       context('such as folders', () => {
         it('throws an error', () => {
-          try {
+          expect(() => {
             JDLReader.parseFromFiles(['../../test_files/folder.jdl']);
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('WrongFileException');
-          }
+          }).to.throw('The passed file \'../../test_files/folder.jdl\' must exist and must not be a directory.');
         });
       });
     });
@@ -152,11 +130,9 @@ describe('JDLReader', () => {
       });
       context('when having multiple internal JDL comments', () => {
         it('ignores them and does not fail', () => {
-          try {
+          expect(() => {
             JDLReader.parseFromFiles(['./test/test_files/multiple_jdl_comments.jdl']);
-          } catch (error) {
-            fail(error, null, error);
-          }
+          }).not.to.throw();
         });
       });
     });

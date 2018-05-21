@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const fs = require('fs');
 const path = require('path');
 const JSONParser = require('../../../lib/parser/json_parser');
@@ -230,15 +229,12 @@ describe('JSONParser', () => {
         });
         context('when there is a User.json entity', () => {
           it('throws an error ', () => {
-            try {
+            expect(() => {
               JSONParser.parseEntities({
                 Country: readJsonEntity('Country'),
                 User: readJsonEntity('Region')
               });
-              fail();
-            } catch (error) {
-              expect(error.name).to.eq('IllegalNameException');
-            }
+            }).to.throw('User entity name is reserved if skipUserManagement is not set.');
           });
         });
       });

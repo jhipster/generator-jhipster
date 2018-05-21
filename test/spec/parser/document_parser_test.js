@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const JDLReader = require('../../../lib/reader/jdl_reader');
 const DocumentParser = require('../../../lib/parser/document_parser');
 const JDLEntity = require('../../../lib/core/jdl_entity');
@@ -41,12 +40,9 @@ describe('DocumentParser', () => {
     context('when passing invalid args', () => {
       context('because there is no document', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             DocumentParser.parseFromConfigurationObject({});
-            fail();
-          } catch (error) {
-            expect(error.name).to.equal('NullPointerException');
-          }
+          }).to.throw('The parsed JDL content must be passed.');
         });
       });
     });

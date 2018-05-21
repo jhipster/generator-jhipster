@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const JSONFileReader = require('../../../lib/reader/json_file_reader');
 
 describe('JSONFileReader', () => {
@@ -28,42 +27,30 @@ describe('JSONFileReader', () => {
     context('when passing an invalid argument', () => {
       context('because it is nil', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             JSONFileReader.readEntityJSON();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('The passed file path must not be nil.');
         });
       });
       context('because it is empty', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             JSONFileReader.readEntityJSON('');
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('The passed file path must not be nil.');
         });
       });
       context('because the file does not exist', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             JSONFileReader.readEntityJSON('test/test_files/WrongFile.json');
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('WrongFileException');
-          }
+          }).to.throw('The passed file \'test/test_files/WrongFile.json\' must exist and must not be a directory.');
         });
       });
       context('because the file is a folder', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             JSONFileReader.readEntityJSON('test/test_files/');
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('WrongFileException');
-          }
+          }).to.throw('The passed file \'test/test_files/\' must exist and must not be a directory.');
         });
       });
     });
@@ -93,22 +80,16 @@ describe('JSONFileReader', () => {
     context('when converting an entity name to a path', () => {
       context('with a nil entity name', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             JSONFileReader.toFilePath();
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('The passed entity name must not be nil.');
         });
       });
       context('with an empty entity name', () => {
         it('fails', () => {
-          try {
+          expect(() => {
             JSONFileReader.toFilePath('');
-            fail();
-          } catch (error) {
-            expect(error.name).to.eq('NullPointerException');
-          }
+          }).to.throw('The passed entity name must not be nil.');
         });
       });
       context('with a valid entity name', () => {

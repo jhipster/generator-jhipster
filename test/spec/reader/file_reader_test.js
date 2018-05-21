@@ -21,28 +21,20 @@ const fs = require('fs');
 const FileReader = require('../../../lib/reader/file_reader');
 const expect = require('chai').expect;
 
-const fail = expect.fail;
-
 describe('FileReader', () => {
   describe('::readFile', () => {
     context('when passing a nil path', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           FileReader.readFile(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.equal('NullPointerException');
-        }
+        }).to.throw('The passed file must not be nil.');
       });
     });
     context('when passing a directory', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           FileReader.readFile('.');
-          fail();
-        } catch (error) {
-          expect(error.name).to.equal('WrongFileException');
-        }
+        }).to.throw('The passed file \'.\' must exist and must not be a directory.');
       });
     });
     context('when passing a valid text file', () => {
@@ -65,22 +57,16 @@ describe('FileReader', () => {
   describe('::readFiles', () => {
     context('when passing a nil iterable', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           FileReader.readFiles(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.equal('NullPointerException');
-        }
+        }).to.throw('The passed files must not be nil.');
       });
     });
     context('when passing a directory among the files', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           FileReader.readFiles(['.']);
-          fail();
-        } catch (error) {
-          expect(error.name).to.equal('WrongFileException');
-        }
+        }).to.throw('The passed file \'.\' must exist and must not be a directory.');
       });
     });
     context('when passing valid text files', () => {
