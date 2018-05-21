@@ -368,6 +368,7 @@ const files = {
         {
             path: TEST_SRC_DIR,
             templates: [
+                'jest.conf.js',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/reducers/application-profile.spec.ts',

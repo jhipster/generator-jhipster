@@ -178,7 +178,7 @@ limitations under the License.
     "postinstall": "webdriver-manager update --gecko false",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
-    "test": "<%= clientPackageManager %> run lint && jest",
+    "test": "<%= clientPackageManager %> run lint && jest --config src/test/javascript/jest.conf.js",
     "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --inline --profile --port=9060",
     "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --profile",
@@ -188,15 +188,5 @@ limitations under the License.
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testMatch": ["<rootDir>/src/test/javascript/spec/**/+(*.)+(spec.ts)"],
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-    "moduleNameMapper": {
-      "app/(.*)": "<rootDir>/src/main/webapp/app/$1"
-    }
   }
 }
