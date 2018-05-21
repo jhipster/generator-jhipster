@@ -24,8 +24,6 @@ const path = require('path');
 const FileUtils = require('../../../lib/utils/file_utils');
 const expect = require('chai').expect;
 
-const fail = expect.fail;
-
 describe('FileUtils', () => {
   describe('::doesFileExist', () => {
     context('when checking a file path', () => {
@@ -81,12 +79,9 @@ describe('FileUtils', () => {
     });
     context('when passing a file that exists', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           FileUtils.createDirectory('./package.json');
-          fail();
-        } catch (error) {
-          expect(error.name).to.equal('WrongDirException');
-        }
+        }).to.throw('The directory to create \'./package.json\' is a file.');
       });
     });
     context('when passing a directory that exists', () => {

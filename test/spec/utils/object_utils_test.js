@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const merge = require('../../../lib/utils/object_utils').merge;
 const values = require('../../../lib/utils/object_utils').values;
 const areEntitiesEqual = require('../../../lib/utils/object_utils').areEntitiesEqual;
@@ -78,18 +77,9 @@ describe('ObjectUtils', () => {
   describe('::values', () => {
     context('when passing a nil object', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           values(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
-          values(undefined);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The passed object must not be nil.');
       });
     });
     context('when passing a valid object', () => {
