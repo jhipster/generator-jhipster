@@ -23,28 +23,20 @@
 const JSONEntity = require('../../../../lib/core/jhipster/json_entity');
 const expect = require('chai').expect;
 
-const fail = expect.fail;
-
 describe('JSONEntity', () => {
   describe('::new', () => {
     context('when not passing a configuration', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JSONEntity();
-          fail();
-        } catch (error) {
-          expect(error.name).to.equal('NullPointerException');
-        }
+        }).to.throw('At least an entity name must be passed');
       });
     });
     context('when not passing an entity name', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           new JSONEntity({});
-          fail();
-        } catch (error) {
-          expect(error.name).to.equal('NullPointerException');
-        }
+        }).to.throw('At least an entity name must be passed');
       });
     });
     context('when only passing an entity name', () => {

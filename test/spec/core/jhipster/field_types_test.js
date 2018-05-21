@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const fail = expect.fail;
 const FieldTypes = require('../../../../lib/core/jhipster/field_types');
 const Validations = require('../../../../lib/core/jhipster/validations');
 const JDLEnum = require('../../../../lib/core/jdl_enum');
@@ -29,24 +28,12 @@ describe('FieldTypes', () => {
   describe('::isCommonDBType', () => {
     context('when passing an invalid argument', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           FieldTypes.isCommonDBType(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
-          FieldTypes.isCommonDBType(undefined);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
+        }).to.throw('The passed type must not be nil.');
+        expect(() => {
           FieldTypes.isCommonDBType('');
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The passed type must not be nil.');
       });
     });
     context('when passing a false type', () => {
@@ -68,24 +55,12 @@ describe('FieldTypes', () => {
   describe('::isCassandraType', () => {
     context('when passing an invalid argument', () => {
       it('fails', () => {
-        try {
-          FieldTypes.isCassandraType(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
+        expect(() => {
           FieldTypes.isCassandraType();
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
+        }).to.throw('The passed type must not be nil.');
+        expect(() => {
           FieldTypes.isCassandraType('');
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The passed type must not be nil.');
       });
     });
     context('when passing a false type', () => {
@@ -107,20 +82,14 @@ describe('FieldTypes', () => {
   describe('::getIsType', () => {
     context('when passing an invalid argument', () => {
       it('fails', () => {
-        try {
+        expect(() => {
           FieldTypes.getIsType(null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
+        }).to.throw('The passed type must not be nil.');
+        expect(() => {
           FieldTypes.getIsType(null, () => {
             // do nothing
           });
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The passed type must not be nil.');
       });
     });
     context('when passing a valid argument without callback', () => {
@@ -135,28 +104,25 @@ describe('FieldTypes', () => {
         })).to.eq(FieldTypes.isCommonDBType);
       });
     });
+    context('when passing an invalid argument', () => {
+      expect(() => {
+        FieldTypes.getIsType('thing', () => {});
+      }).to.throw('The passed database type must either be \'sql\', \'mysql\', \'mariadb\', \'postgresql\',' +
+        ' \'oracle\', \'mssql\', \'mongodb\', \'couchbase\', or \'cassandra\'');
+    });
   });
   describe('::hasValidation', () => {
     context('when passing an invalid argument', () => {
       it('fails', () => {
-        try {
-          FieldTypes.hasValidation(null, null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
+        expect(() => {
+          FieldTypes.hasValidation();
+        }).to.throw('The passed type and value must not be nil.');
+        expect(() => {
           FieldTypes.hasValidation(null, Validations.MAXLENGTH);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
-        try {
-          FieldTypes.hasValidation(FieldTypes.CassandraTypes.BIG_DECIMAL, null);
-          fail();
-        } catch (error) {
-          expect(error.name).to.eq('NullPointerException');
-        }
+        }).to.throw('The passed type and value must not be nil.');
+        expect(() => {
+          FieldTypes.hasValidation(FieldTypes.CassandraTypes.BIG_DECIMAL);
+        }).to.throw('The passed type and value must not be nil.');
       });
     });
     context('when passing a false argument', () => {
