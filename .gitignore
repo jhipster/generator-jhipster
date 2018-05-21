@@ -9,4 +9,5 @@ jhipster-jdl.jh
 coverage/*
 sonar-project.properties
 .nyc_output/*
+yarn-error.log
 jhipster-core.iml

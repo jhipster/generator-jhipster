@@ -3,7 +3,7 @@ application {
     baseName toto
     packageName com.mathieu.toto
     enableTranslation false
-    languages en, fr
+    languages [en, fr]
   }
 }
 
@@ -12,6 +12,6 @@ application {
     baseName titi
     packageName com.mathieu.titi
     enableTranslation false
-    languages en, fr
+    languages [en, fr]
   }
 }

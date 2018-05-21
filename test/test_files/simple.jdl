@@ -7,5 +7,5 @@ entity A {
 entity B
 
 relationship OneToMany {
-  A{b} to B{a(myOtherField required}
+  A{b} to B{a(myOtherField) required}
 }

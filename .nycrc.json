@@ -2,7 +2,8 @@
   "cache": true,
   "check-coverage": true,
   "exclude": [
-    "lib/dsl/pegjs_parser.js",
+    "lib/dsl/old/pegjs_parser.js",
+    "lib/dsl/gen/*.js",
     "test/**/*.js"
   ],
   "reporter": [

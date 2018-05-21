@@ -15,8 +15,9 @@
     "test:watch": "mocha test --watch --reporter min",
     "posttest": "yarn coverage",
     "coverage": "nyc --reporter=text-summary report",
-    "peg-parse": "pegjs -o lib/dsl/pegjs_parser.js lib/dsl/grammar.txt",
-    "prepublish": "yarn peg-parse && yarn test",
+    "peg-parse": "pegjs -o lib/dsl/old/pegjs_parser.js lib/dsl/old/grammar.txt",
+    "diagrams": "node ./scripts/serialize_grammar.js && eslint lib/dsl/gen/generated_serialized_grammar.js --fix",
+    "prepublish": "yarn peg-parse && yarn test && yarn diagrams",
     "release": "git push && git push --tags && npm publish",
     "release-patch": "npm version patch -a -m \"Update to %s\" && yarn release",
     "release-minor": "npm version minor -a -m \"Update to %s\" && yarn release",
@@ -43,7 +44,8 @@
   ],
   "dependencies": {
     "lodash": "4.17.10",
-    "winston": "2.4.2"
+    "winston": "2.4.2",
+    "chevrotain": "3.3.0"
   },
   "devDependencies": {
     "chai": "4.1.2",

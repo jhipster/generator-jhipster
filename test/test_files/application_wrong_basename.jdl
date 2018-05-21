@@ -2,6 +2,6 @@ application {
   config {
     baseName aFile
     enableTranslation false
-    languages en, fr
+    languages [en, fr]
   }
 }
