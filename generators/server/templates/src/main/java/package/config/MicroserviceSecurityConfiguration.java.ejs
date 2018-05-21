@@ -207,49 +207,11 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
 
-    private static final String OAUTH2_PRINCIPAL_ATTRIBUTE = "preferred_username";
-
-    private static final String OAUTH2_AUTHORITIES_ATTRIBUTE = "roles";
-
-    private final ResourceServerProperties resourceServerProperties;
-
     private final SecurityProblemSupport problemSupport;
 
     public SecurityConfiguration(ResourceServerProperties resourceServerProperties,
         SecurityProblemSupport problemSupport) {
-        this.resourceServerProperties = resourceServerProperties;
         this.problemSupport = problemSupport;
-    }
-
-    @Bean
-    @Primary
-    public UserInfoTokenServices userInfoTokenServices(PrincipalExtractor principalExtractor, AuthoritiesExtractor authoritiesExtractor) {
-        UserInfoTokenServices userInfoTokenServices =
-        <%_ if (cacheProvider !== 'no') { _%>
-            new CachedUserInfoTokenServices(resourceServerProperties.getUserInfoUri(), resourceServerProperties.getClientId());
-        <%_ } else { _%>
-            new UserInfoTokenServices(resourceServerProperties.getUserInfoUri(), resourceServerProperties.getClientId());
-        <%_ } _%>
-
-        userInfoTokenServices.setPrincipalExtractor(principalExtractor);
-        userInfoTokenServices.setAuthoritiesExtractor(authoritiesExtractor);
-        return userInfoTokenServices;
-    }
-
-    @Bean
-    public PrincipalExtractor principalExtractor() {
-        return new SimplePrincipalExtractor(OAUTH2_PRINCIPAL_ATTRIBUTE);
-    }
-
-    @Bean
-    public AuthoritiesExtractor authoritiesExtractor() {
-        return new SimpleAuthoritiesExtractor(OAUTH2_AUTHORITIES_ATTRIBUTE);
-    }
-
-    @Bean
-    @Qualifier("authorizationHeaderRequestMatcher")
-    public RequestMatcher authorizationHeaderRequestMatcher() {
-        return new RequestHeaderRequestMatcher("Authorization");
     }
 
     @Override
@@ -268,7 +230,6 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-            .requestMatcher(authorizationHeaderRequestMatcher())
             .authorizeRequests()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
