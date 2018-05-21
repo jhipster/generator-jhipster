@@ -148,6 +148,17 @@
 #       We use this behaviour in generateNode_Modules_Cache()
 # 16) readonly isn't transimtted to subshell (`export readonly'). But
 #       a var could be marked readonly in any moment.
+# 17) Use: https://github.com/koalaman/shellcheck
+# 18) Use: https://github.com/universal-ctags and
+#       https://github.com/JulioJu/vimrc/blob/master/dotFilesOtherSoftwareVimCompliant/ctags.d/sh.ctags
+#       My convention:
+#       In function I use keyword `local' to define local variable.
+#       When I use keyword `declare' it's a global variable.
+#       I never declare a global variable like `name=aa'
+#       Note: `declare -g' in a function declare a global variable.
+#       Note: `declare' without `-g' in a function declare a local variable.
+#           but I never use that (by convention). Useful for my regex
+#           pattern.
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -444,10 +455,10 @@ function usage() {
     echo -e "\n\n\tScript than emulate well remote Travis CI build " \
         " https://travis-ci.org/jhipster/generator-jhipster.\n"
 
-    echo -e "\n\t"$URED""Synopsis:""$NC" \n" \
+    echo -e "\n\t"$URED""Usage:""$NC" \n" \
         "'$me' \n" \
         "\tgenerate [ \n" \
-            "\t\tsample_name [--consoleverbose] \n" \
+            "\t\tsample_name [--consoleverbose] [--skippackageapp] \n" \
             "\t\t | sample_name[,sample_name][,...] \n" \
         "\t\t]\n" \
         "\t\t[--colorizelogfile]\n" \
@@ -497,7 +508,7 @@ function usage() {
     "'./scripts/sample-name-sample' folder).\n\n" \
     "* \`--consoleverbose'\n" \
         "\t=> all is printed in the console." \
-        "\tCould be used only with if there is you build only one sample_name" \
+        "\tCould be used only with if there you build only one sample_name" \
         "\t(too much logs in console, not advise)\n" \
     "* \`--colorizelogfile'\n" \
         "\t""$BRED""This parameter is strongly advise\n""$NC" \
@@ -507,7 +518,14 @@ function usage() {
         "\t* For IntelliJ/JetBrains users try:" \
             "https://plugins.jetbrains.com/plugin/9707-ansi-highlighter\n" \
         "\t* For Visual Studio Code users try:" \
-            "https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer"
+            "https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer" \
+    "* \`--skippackageapp'\n" \
+        "\tUsable only with command \`./build-samples.sh generate [...]'"\
+        "\t=> Skip package of application. " \
+        "If you want only generate the sample to check what is generated.\n" \
+        "\t=> After this, you can't start the application with." \
+            "\`./build-samples.sh startapplication sample_name'" \
+        "\t=> This parameter imply automatically --consoleverbose"
 
 
     echo -e "\n\t$URED""\`./build-samples.sh startapplication " \
@@ -935,7 +953,7 @@ function createLogFile() {
     touch "$LOGFILENAME" || exitScriptWithError "could not " \
         "create '$LOGFILENAME'"
 
-    if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
+    if [[ "$IS_CONSOLEVERBOSE" -eq 1 ]] ; then
         echoSmallTitle "Create log file and save output in '${LOGFILENAME}'"
         exec 1>> >(tee --append "${LOGFILENAME}") 2>&1
     else
@@ -979,6 +997,14 @@ function treatEndOfBuild() {
 
     echoTitleBuildStep "Finishing '$JHIPSTER_MATRIX'"
 
+    if [[ "$IS_GENERATEANDTEST" -eq 0 ]] && \
+        [[ "$IS_SKIPPACKAGEAPP" -eq 1 ]]; then
+        local -r \
+            IS_NOT_PACKAGED_FILE="$APP_FOLDER"/"not_packaged.local-travis.log"
+        touch "$IS_NOT_PACKAGED_FILE"
+        # To test in startApplication() if it was packaged or not.
+    fi
+
     # Let time, in case of the disk isn't flushed, or if there is
     # java or node background processes not completly finished.
     # Should not be necessary.
@@ -1014,7 +1040,7 @@ function treatEndOfBuild() {
     # generateAndTestProject().
     if [[ -z "${isGenerationOfNodeModulesCache+x}" ]] ; then
         sleep 2
-        if ! isSkipClientInFileYoRcDotConf ; then
+        if [[ "$IS_SKIP_CLIENT" -eq 0 ]] ; then
             # Because node_modules takes 1.1 Go ! Too much !
             if [[ "$JHIPSTER" != *"react"* ]] ; then
                 printCommandAndEval "rm -Rf '${APP_FOLDER}/node_modules'"
@@ -1039,7 +1065,7 @@ function treatEndOfBuild() {
     fi
     printCommandAndEval mv "${LOGFILENAME}" "${LOGRENAMED}"
 
-    if [[ "$isLaunchSamplesInBackground" -eq 1 ]] ; then
+    if [[ "$IS_CONSOLEVERBOSE" -eq 0 ]] ; then
         restoreSTDERRandSTDOUTtoConsole
     fi
 
@@ -1089,16 +1115,6 @@ errorInBuildExitCurrentSample() {
         # launchSamplesInBackground()
         exitScriptWithError "$@"
     fi
-}
-
-# function isSkipClientInFileYoRcDotConf() {{{3
-# test if skipClient=true in ./samples/"$JHIPSTER"/.yo-rc.conf
-function isSkipClientInFileYoRcDotConf() {
-    pushd "$JHIPSTER_SAMPLES/""$JHIPSTER"
-    [[ $(grep -E '"skipClient":\s*true' .yo-rc.json) ]] && \
-        return 0 || \
-        return 1
-    popd
 }
 
 # function yarnLink() {{{3
@@ -1161,16 +1177,6 @@ function launchNewBash() {
 # ====================
 # ====================
 
-# function doesItTestGenerator() {{{3
-function doesItTestGenerator() {
-    local -r confirmationFirstParameter="Do you want execute "\
-"\`yarn test' in generator-jhipster '$1'? [y/n]"
-    confirmationUser "$confirmationFirstParameter" \
-        "TESTGENERATOR=1 ; \
-        echo Generator test will be test later." \
-        "TESTGENERATOR=0 ; echo -e '\n\nSKIP test generator.\n'"
-}
-
 # function generateProject() {{{3
 # Executed when the first argument of the script is "generate" and
 # "generateandtest"
@@ -1178,13 +1184,8 @@ function doesItTestGenerator() {
 # Corresponding of the entry "install" in ../.travis.yml
 function generateProject() {
 
-    # `./build-samples.sh generate/generateandtest sample-name'
-    if ([[ "${TESTGENERATOR}" -eq 1 ]] && \
-        [[ "${isLaunchSamplesInBackground}" -eq 0 ]] ) || \
-        ( [[ "${TESTGENERATOR}" -eq 1 ]] && \
-        [[ "$isLaunchSamplesInBackground" -eq 1 ]] && \
-        [[ "${JHIPSTER}" == "ngx-default"  ]] )
-    then
+    if [[ "$IS_GENERATEANDTEST" -eq 1 ]] && \
+            [[ "${JHIPSTER}" == "ngx-default"  ]] ; then
         # Corresponding to "Install and test JHipster Generator" in
         # ./scripts/00-install-jhipster.sh
         echoTitleBuildStep "\\\`yarn test' in generator-jhipster"
@@ -1214,7 +1215,8 @@ function generateProject() {
     #     "Replace version generated-project'"
 
     echo "$IS_GENERATEANDTEST"
-    if [[ "$IS_GENERATEANDTEST" -eq 0 ]] ; then
+    if [[ "$IS_GENERATEANDTEST" -eq 0 ]] && \
+        [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]]; then
         PROTRACTOR=0        # to not launch \`yarn e2e' in 05-run.sh
         launchNewBash "./scripts/05-run.sh" "Package '${JHIPSTER}-sample'"
     # else done in function generateAndTestProject()
@@ -1354,6 +1356,112 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 
 }
 
+# function createFolderNodeModulesAndLogFile() {{{3
+function createFolderNodeModulesAndLogFile() {
+    if [[ "$IS_SKIP_CLIENT" -eq 0 ]] ; then
+
+        createLogFile
+
+    local -r NODE_MOD_CACHED="$NODE_MODULES_CACHE_ANGULAR/node_modules"
+
+    if [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]] ; then
+        echoTitleBuildStep "Symlink '$NODE_MOD_CACHED' to '$APP_FOLDER'"
+        ln -s "$NODE_MOD_CACHED" "$APP_FOLDER"
+    fi
+        # TODO make for react
+        if [[ "$JHIPSTER" != *"react"* ]] ; then
+            echoTitleBuildStep "Copy '$NODE_MOD_CACHED' to '$APP_FOLDER'"
+            # No `ln -s' due to
+            # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
+            # But `cp -R' works good ! ;-) ! Probably more reliable.
+            cp -R "$NODE_MOD_CACHED" "${APP_FOLDER}"
+        else
+            errorInBuildExitCurrentSample "Script not implemented."\
+            "for React"
+        fi
+        # Even if there is already a correct symlink, we must launch it again.
+        yarnLink
+    else
+        createLogFile
+        yarnLink
+        yarn install
+    fi
+}
+
+# function launchOnlyOneSample() {{{3
+function launchOnlyOneSample() {
+
+    retrieveVariablesInFileDotTravisSectionMatrix
+
+    if [[ "$IS_CONSOLEVERBOSE" -eq 1 ]] ; then
+        export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+        # We launch directly function launchOnlyOneSample()
+        # and not function launchSamplesInBackground()
+        # so we must done stuff done in function launchSamplesInBackground()
+        if [[ -e "$APP_FOLDER" ]] ; then
+            local confirmationFirstParameter="Warning: "\
+"'${APP_FOLDER}' exists. Do you want delete it? [y/n] "
+            local argument="ABORTED: rename this folder,"\
+" then restart script."
+            local execInfirmed="errorInBuildStopCurrentSample '$argument'"
+            confirmationUser "$confirmationFirstParameter" \
+                "rm -rf '${APP_FOLDER}'; mkdir -p '$APP_FOLDER'" \
+                "echo '$execInfirmed'"
+            unset confirmationFirstParameter argument execInfirmed
+
+            generateNode_Modules_Cache
+        else
+            mkdir -p "$APP_FOLDER"
+        fi
+    else
+        # Defined "$APP_FOLDER" as explained in the MAIN section of this file.
+        export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
+        rm -rf "${APP_FOLDER}"
+        mkdir -p "$APP_FOLDER"/
+    fi
+
+    pushd "$JHIPSTER_SAMPLES/""$JHIPSTER"
+    if [[ $(grep -E '"skipClient":\s*true' .yo-rc.json) ]] ; then
+        local -r IS_SKIP_CLIENT=1
+    else
+        local -r IS_SKIP_CLIENT=0
+    fi
+    popd
+
+    # Used in function launchNewBash() to test if we must continue the script.
+    # If an error occure in ./scripts/*.sh, in function
+    # errorInBuildStopCurrentSample() the value of this variable is changed to
+    # 1.
+    local -i ERROR_IN_SAMPLE=0
+
+    time {
+
+        # Instantiate LOGFILENAME
+        local -r beginLogfilename=\
+"${JHIPSTER_TRAVIS}""/""${BRANCH_NAME}"".""${DATEBININSCRIPT}"
+        local -r endofLogfilename="${JHIPSTER}"".local-travis.log"
+        local -r LOGFILENAME=\
+"${beginLogfilename}"".pending.""${endofLogfilename}"
+        createFolderNodeModulesAndLogFile
+
+        cd "${APP_FOLDER}"
+
+        local -r oldPATH="${PATH}"
+        export PATH="${APP_FOLDER}"/node_modules:"$PATH"
+        if [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
+            generateAndTestProject
+        else
+            generateProject
+        fi
+        PATH="${oldPATH}"
+
+    }
+
+    treatEndOfBuild
+    # do not unset beginLogfilename and endofLogfilename, unsed in another
+    # function
+}
+
 # I LAUNCH SAMPLE(S) IN BACKGROUND {{{2
 # ====================
 # ====================
@@ -1377,17 +1485,6 @@ function launchSamplesInBackground() {
         sleep 4
     fi
 
-    local -i TESTGENERATOR=1
-    if [[ "$IS_GENERATEANDTEST" -eq 0 ]] ; then
-        if [[ "${JHIPSTER_MATRIX_ARRAY[*]}" =~ "(\s|^)ngx-default(\s|$)" ]]
-        then
-            doesItTestGenerator "during generation of 'ngx-default'"
-        else
-            TESTGENERATOR=0
-        fi
-    fi
-
-    echo
     local -i i=0
     while [[ "$i" -lt "${#JHIPSTER_MATRIX_ARRAY[*]}" ]] ; do
         local JHIPSTER=`cut -d ' ' -f 1 <<< "${JHIPSTER_MATRIX_ARRAY[i]}"`
@@ -1515,6 +1612,14 @@ function startApplication() {
     fi
     cd "$APP_FOLDER"
     local -i ERROR_IN_SAMPLE=0
+
+    local -r IS_NOT_PACKAGED_FILE="$APP_FOLDER"/"not_packaged.local-travis.log"
+
+    if [[ -f "$IS_NOT_PACKAGED_FILE" ]] ; then
+        exitScriptWithError "$APP_FOLDER was not packaged. " \
+            "Please run \`./build-samples.sh generate " "$JHIPSTER'."
+    fi
+
     testRequierments
     # To not launch \`yarn e2e' in 05-run.sh
     export PROTRACTOR=0
@@ -1530,106 +1635,6 @@ function startApplication() {
     echoTitleBuildStep "./scripts/05-run.sh" "(Run '${JHIPSTER}-sample')"
     bash ./scripts/05-run.sh || \
         exitScriptWithError "in ./scripts/05-run.sh"
-}
-
-# function createFolderNodeModulesAndLogFile() {{{3
-function createFolderNodeModulesAndLogFile() {
-    if ! isSkipClientInFileYoRcDotConf ; then
-
-        createLogFile
-
-        # TODO make for react
-        if [[ "$JHIPSTER" != *"react"* ]] ; then
-            echoTitleBuildStep \
-                "Copy '$NODE_MODULES_CACHE_ANGULAR/node_modules' to" \
-                "'$APP_FOLDER'"
-            # No `ln -s' due to
-            # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
-            # But `cp -R' works good ! ;-) ! Probably more reliable.
-            cp -R "${NODE_MODULES_CACHE_ANGULAR}/node_modules" \
-                "${APP_FOLDER}"
-        else
-            errorInBuildExitCurrentSample "Script not implemented."\
-            "for React"
-        fi
-        # Even if there is already a correct symlink, we must launch it again.
-        yarnLink
-    else
-        createLogFile
-        yarnLink
-        yarn install
-    fi
-}
-
-# function launchOnlyOneSample() {{{3
-function launchOnlyOneSample() {
-
-    # define JHIPSTER, and redifine if necessary PROFIL and PROTRACTOR
-    # If "$isLaunchSamplesInBackground -eq 0", test if the second argument
-    # of command line is correct.
-    retrieveVariablesInFileDotTravisSectionMatrix
-
-    # if "$isLaunchSamplesInBackground" -eq 1
-    # doesItTestGenerator is done in
-    # function launchSamplesInBackground()
-    if [[ "$isLaunchSamplesInBackground" -eq 0 ]] ; then
-        export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
-        local -i TESTGENERATOR=1
-        doesItTestGenerator "before generate the project".
-        if [[ -e "$APP_FOLDER" ]] ; then
-            local confirmationFirstParameter="Warning: "\
-"'${APP_FOLDER}' exists. Do you want delete it? [y/n] "
-            local argument="ABORTED: rename this folder,"\
-" then restart script."
-            local execInfirmed="errorInBuildStopCurrentSample '$argument'"
-            confirmationUser "$confirmationFirstParameter" \
-                "rm -rf '${APP_FOLDER}'; mkdir -p '$APP_FOLDER'" \
-                "echo '$execInfirmed'"
-            unset confirmationFirstParameter argument execInfirmed
-
-            generateNode_Modules_Cache
-        else
-            mkdir -p "$APP_FOLDER"
-        fi
-    else
-        # Defined "$APP_FOLDER" as explained in the MAIN section of this file.
-        export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
-        rm -rf "${APP_FOLDER}"
-        mkdir -p "$APP_FOLDER"/
-    fi
-
-    # Used in function launchNewBash() to test if we must continue the script.
-    # If an error occure in ./scripts/*.sh, in function
-    # errorInBuildStopCurrentSample() the value of this variable is changed to
-    # 1.
-    local -i ERROR_IN_SAMPLE=0
-
-    time {
-
-        # Instantiate LOGFILENAME
-        local -r beginLogfilename=\
-"${JHIPSTER_TRAVIS}""/""${BRANCH_NAME}"".""${DATEBININSCRIPT}"
-        local -r endofLogfilename="${JHIPSTER}"".local-travis.log"
-        local -r LOGFILENAME=\
-"${beginLogfilename}"".pending.""${endofLogfilename}"
-        createFolderNodeModulesAndLogFile
-
-        cd "${APP_FOLDER}"
-
-        local -r oldPATH="${PATH}"
-        export PATH="${APP_FOLDER}"/node_modules:"$PATH"
-        if [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
-            generateAndTestProject
-        else
-            generateProject
-        fi
-        PATH="${oldPATH}"
-
-    }
-
-    treatEndOfBuild
-    # do not unset beginLogfilename and endofLogfilename, unsed in another
-    # function
 }
 
 # MAIN {{{1
@@ -1762,13 +1767,11 @@ function define_JHIPSTER_MATRIX_ARRAY() {
 
 function launchSamples() {
     if [[ "$IS_CONSOLEVERBOSE" -eq 1 ]] ; then
-        isLaunchSamplesInBackground=0
         local JHIPSTER_MATRIX
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER_LIST"
         unset JHIPSTER_LIST
         time launchOnlyOneSample
     else
-        isLaunchSamplesInBackground=1
         define_JHIPSTER_MATRIX_ARRAY
         unset JHIPSTER_LIST
         time launchSamplesInBackground
@@ -1783,24 +1786,16 @@ function tooMuchArguments() {
 echo -e "\n\nThanks to use this script. Do not hesitate to open a new issue" \
     "for any thing, thanks in advance! This script is young (06/2018)!"
 
-if [[ "$#" -gt 4 ]] ; then
-    tooMuchArguments
-elif [[ "$#" -eq 0 ]] ; then
-    usage
-fi
+[[ "$#" -eq 0 ]] && usage
 
 COMMAND_NAME="$1"
 
 cd "${JHIPSTER_TRAVIS}"
 if [[ "$COMMAND_NAME" = "help" ]]; then
-    if [[ ! -z "${2+x}" ]] ; then
-        tooMuchArguments
-    fi
+    [[ ! -z "${2+x}" ]] && tooMuchArguments
     usage
 elif [[ "$COMMAND_NAME" == "startapplication" ]] ; then
-    if [[ ! -z "${3+x}" ]] ; then
-        tooMuchArguments
-    fi
+    [[ ! -z "${3+x}" ]] && tooMuchArguments
     if [[ -z "${2+x}" ]] ; then
         exitScriptWithError "\`startapplication' take " \
             "one mandatory argument (the sample_name)." \
@@ -1822,14 +1817,19 @@ elif [[ "$COMMAND_NAME" == "startapplication" ]] ; then
 elif [[ "$COMMAND_NAME" == "generate" ]] || \
     [[ "$COMMAND_NAME" == "generateandtest" ]] ; then
 
-    [[ "$COMMAND_NAME" == "generate" ]] && export IS_GENERATEANDTEST=0 || \
+    if [[ "$COMMAND_NAME" == "generate" ]] ; then
+        [[ "$#" -gt 5 ]] && tooMuchArguments
+        export IS_GENERATEANDTEST=0
+    else
+        [[ "$#" -gt 4 ]] && tooMuchArguments
         export IS_GENERATEANDTEST=1
+    fi
 
     export IS_STARTAPPLICATION=0
-    readonly IS_STARTAPPLICATION
 
     declare IS_CONSOLEVERBOSE=0
     declare IS_COLORIZELOGFILE=0
+    declare IS_SKIPPACKAGEAPP=0
 
     if [[ ! -z "${2+x}" ]] ; then
 
@@ -1853,6 +1853,10 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
                 fi
             elif [[ "$1" == "--colorizelogfile" ]] ; then
                 IS_COLORIZELOGFILE=1
+            elif [[ "$IS_GENERATEANDTEST" -eq 0 ]] && \
+                [[ "$1" == "--skippackageapp" ]]; then
+                IS_SKIPPACKAGEAPP=1
+                CONSOLEVERBOSE=1
             else
                 exitScriptWithError "$1' is not a correct" \
                     "argument. Please read \`./build-samples.sh help'".
@@ -1864,9 +1868,7 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
     launchSamples
 
 elif [ "$COMMAND_NAME" = "clean" ]; then
-    if [[ ! -z "${2+x}" ]] ; then
-        tooMuchArguments
-    fi
+    [[ ! -z "${2+x}" ]] && tooMuchArguments
     cleanAllProjects
 else
     declare firstArgument="Incorrect argument. "\
