@@ -63,8 +63,14 @@ limitations under the License.
     "uuid": "3.2.1"
   },
   "devDependencies": {
+    <%_ if (protractorTests) { _%>
+    "@types/chai": "4.1.2",
+    <%_ } _%>
     "@types/jest": "22.2.3",
     "@types/lodash": "4.14.106",
+    <%_ if (protractorTests) { _%>
+    "@types/mocha": "5.0.0",
+    <%_ } _%>
     "@types/node": "9.6.1",
     "@types/react": "16.1.0",
     "@types/react-dom": "16.0.4",
@@ -106,6 +112,9 @@ limitations under the License.
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.14",
+    <%_ } _%>
+    <%_ if (protractorTests) { _%>
+    "mocha": "5.0.5",
     <%_ } _%>
     "moment-locales-webpack-plugin": "1.0.5",
     "prettier": "1.11.1",
