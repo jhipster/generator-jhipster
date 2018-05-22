@@ -166,6 +166,10 @@
     # http://wiki.bash-hackers.org/commands/builtin/eval
     # khttps://stackoverflow.com/questions/17529220/why-should-eval-be-avoided-in-bash-and-what-should-i-use-instead
     # https://medium.com/dot-debug/the-perils-of-bash-eval-cc5f9e309cae
+# 21)
+    # trap of INT int ../build-samples.sh
+    # is raised after trap of ./scripts/05-run.sh :-). Good.
+# 23) # set -e doesn't kill the current script if a background process fail.
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -346,8 +350,8 @@ set -T
 elapsedF() {
     local -n ELAPSEDLOC="$1"
     # shellcheck disable=2034
-    ELAPSEDLOC="Elapsed: $((SECONDS / 3600)) hrs \
-$(((SECONDS / 60) % 60)) min $((SECONDS % 60)) sec"
+    ELAPSEDLOC="($(date +%r) — Elapsed: $((SECONDS / 3600)) hrs \
+$(((SECONDS / 60) % 60)) min $((SECONDS % 60)) sec)"
 }
 
 # Treat end of script {{{2
@@ -365,6 +369,7 @@ trap ctrl_c INT
 function ctrl_c() {
     cd "${JHIPSTER_TRAVIS}"
     erroredAllPendingLog
+    dockerKillThenRm
     1>&2 echo "Exit by user."
     if [[ -e /dev/fd/4 ]] ; then
         1>&4 echo "Exit by user."
@@ -377,16 +382,17 @@ function finish() {
 
     # https://en.wikipedia.org/wiki/Defensive_programming
     erroredAllPendingLog
+    dockerKillThenRm
 
     echo -e "\\n\\n\\nIt's the end of ./build-samples.sh.\\n\\n"
 }
 
-# works for this type of command:
-# echo hello | grep foo  # This is line number 9
 trap 'errorInScript "$LINENO"' ERR
 errorInScript() {
     1>&2 echo "In ./build-samples.sh, error on line: '$1'"
     cd "${JHIPSTER_TRAVIS}"
+    erroredAllPendingLog
+    dockerKillThenRm
     exit 5
 }
 
@@ -419,9 +425,9 @@ function printCommandAndEval() {
         [[ -e /dev/fd/4 ]] ; then
         # See function launchSamplesInBackground()
         ps4b
-        echo "${@}" >> >(tee --append /dev/fd/3) \
-            2>> >(tee --append /dev/fd/4)
-        eval "$@" >> >(tee --append /dev/fd/3) 2>> >(tee --append /dev/fd/4)
+        echo "${@}" 1> >(tee --append /dev/fd/3) \
+            2> >(tee --append /dev/fd/4)
+        eval "$@" > >(tee --append /dev/fd/3) 2> >(tee --append /dev/fd/4)
     else
         ps4b
         echo "${@}"
@@ -518,11 +524,11 @@ function usage() {
         "\\t=> After this, you can't start the application with." \
             "\`./build-samples.sh startapplication sample_name'.\\n" \
         "\\t=> This parameter implies automatically ``--consoleverbose' and " \
-        "``--colorizelogfile'.\n\n" \
+        "\`--colorizelogfile'.\\n\\n" \
     "\\t""$URED""\`./build-samples.sh generate/generateandtest'""$NC""\\n" \
         " * They will create the travis sample project under the './samples'" \
-        "folder with folder name \`[sample_name]-sample'.\n" \
-        " * \`generate' generate only a JHipster project with entities.\n" \
+        "folder with folder name \`[sample_name]-sample'.\\n" \
+        " * \`generate' generate only a JHipster project with entities.\\n" \
         " * \`generateandtest' generate then test project(s), as Travis CI\\n" \
     "  * Without optional parameter, 'generate', and 'generateandtest' " \
             "operate for all samples listed below\\n" \
@@ -661,8 +667,7 @@ function echoSmallTitle() {
     local ELAPSED
     elapsedF ELAPSED
     echo -e "$colorEchoTitleBuildStep""\\n\\n\\n" \
-        "${@:2}" \
-        "($(date +%r), '$ELAPSED'\\n" \
+        "${@:2}" " '$ELAPSED'\\n" \
         "====================================================================="\
         "\\n$NC"
 }
@@ -680,8 +685,7 @@ function echoTitleBuildStep() {
         "===============================================================\\n" \
         "===============================================================\\n" \
         "===============================================================\\n" \
-        "\\n" "${@:2}" \
-        "($(date +%r), '$ELAPSED'\\n" \
+        "${@:2}" " '$ELAPSED'\\n" \
         "===============================================================\\n" \
         "===============================================================\\n" \
         "===============================================================\\n" \
@@ -705,12 +709,12 @@ dockerKillThenRm() {
     IFS=$' ' read -ra dockerContainers <<< \
         "$(docker ps -q --filter "name=jhipster-travis-build*")"
     # If `docker ps -q` is empty, "${#dockerContainers[0]}" takes value 1.
-    if [[ "$IS_TEST_REQUIERMENT" -eq 1 ]] ; then
+    if [[ ! -z "${IS_TEST_REQUIERMENT+x}" ]] ; then
         if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
             printFileDescriptor3 "There is already docker with named prefixed"\
                 "by 'jhipster-travis-build*':"
             docker ps -q --filter "name=jhipster-travis-build*"
-            confirmationUser "Do you want to kill then rm them? [y/n] " \
+            confirmationUser "Do you want to \`kill' then \`rm' then? [y/n] " \
                 "echo 'Deleting this docker images...'" \
                 "errorInBuildExitCurrentSample 'ABORTED by user'"
         fi
@@ -718,12 +722,12 @@ dockerKillThenRm() {
     if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
         local -i i=0
         while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-            printFileDescriptor3 "Trying to kill docker container: " \
+            printFileDescriptor3 "Trying to kill docker container:\\n" \
                 "$(docker ps --filter "id=${dockerContainers[i]}")"
             printCommandAndEval "docker kill '${dockerContainers[i]}'" \
                 || exitScriptWithError "couldn't kill docker container " \
                     "'${dockerContainers[i]}'"
-            printFileDescriptor3 "Sucess."
+            printFileDescriptor3 "Docker containers killed with success."
             i=$((i+1))
         done
     fi
@@ -733,12 +737,12 @@ dockerKillThenRm() {
     if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
         local -i i=0
         while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-            printFileDescriptor3 "Trying to rm docker container: " \
+            printFileDescriptor3 "Trying to rm docker container:\\n" \
                 "$(docker ps -a --filter "id=${dockerContainers[i]}")"
             printCommandAndEval "docker rm '${dockerContainers[i]}'" \
                 || exitScriptWithError "couldn't rm docker container " \
                     "'${dockerContainers[i]}'"
-            printFileDescriptor3 "Sucess."
+            printFileDescriptor3 "Docker containers deleted with success."
             i=$((i+1))
         done
     fi
@@ -978,7 +982,8 @@ function printInfoBeforeLaunch() {
                 "The end of this filename shoule be renamed errored or passed" \
                 "at the end of this script\\n"
         fi
-        printFileDescriptor3 "\\nJHIPSTER_MATRIX='$JHIPSTER_MATRIX'" \
+        printFileDescriptor3 "\\nPATH='$PATH'\\n" \
+            "JHIPSTER_MATRIX='$JHIPSTER_MATRIX'" \
                 "(variable not used in ./travis/script/*.sh\\n" \
             "JHIPSTER='$JHIPSTER\\n" \
             "PROFILE='$PROFILE\\n" \
@@ -1055,31 +1060,37 @@ function treatEndOfBuild() {
         # To test in startApplication() if it was packaged or not.
     fi
 
+    dockerKillThenRm
+
     # Let time, in case of the disk isn't flushed, or if there is
     # java or node background processes not completly finished.
     # Should not be necessary.
     sleep 10
 
     if [[ "$IS_COLORIZELOGFILE" -eq 0 ]] ; then
-        # https://superuser.com/questions/380772/removing-ansi-color-codes-from-text-stream
+        printFileDescriptor3 "Note: on the following \`sed' command, " \
+            "there is: "\
+            "https://en.wikipedia.org/wiki/Control_character"
         printFileDescriptor3 "${ps4Light}$(dirs +0) $ "\
-            "sed -i 's/^H/g ;" \
+            "sed -i -E 's/^H/g ;" \
             's/^Progress.*^M.*Downloaded from/Downloaded from/g ;' \
             's/^M//g ;' \
             's/\033[\[[^[0-9;]*[a-zA-Z]//g'"'" \
+            's/^[\[([0-9]{1,2};)?[0-9]{1,2}m//g ;' \
+            's/^[//g'"'" \
             "'${LOGFILENAME}' 1>> /dev/null"
-        sed -i 's///g ;
+        sed -i -E 's///g ;
             s/^Progress.*.*Downloaded from/Downloaded from/g ;
             s///g ;
-            s/\033[\[[0-9;]*[a-zA-Z]//g' \
+            s/\[([0-9]{1,2};)?[0-9]{1,2}m//g' \
             "${LOGFILENAME}" 1>> /dev/null
     else
         printFileDescriptor3 "${ps4Light}$(dirs +0) $ "\
-            "sed -i 's/^H/g ;" \
+            "sed -i -E 's/^H/g ;" \
             "s/^Progress.*^M.*Downloaded from/Downloaded from/g ;" \
             "s/^M//g'" \
             "'${LOGFILENAME}' 1>> /dev/null"
-        sed -i 's///g ;
+        sed -i -E 's///g ;
             s/^Progress.*.*Downloaded from/Downloaded from/g ;
             s///g ' \
             "${LOGFILENAME}" 1>> /dev/null
@@ -1130,13 +1141,11 @@ function errorInBuildStopCurrentSample() {
     local -r
     if [[ -e /dev/fd/4 ]] ; then
         1>&2 echo -e "$BRED""FATAL ERROR: " "$@" \
-            "Error in '$JHIPSTER_MATRIX' at $(date +%r)" \
-            "(elapsed: '$ELAPSED')""$NC" \
+            "Error in '$JHIPSTER_MATRIX' " "$ELAPSED" "$NC" \
             >> >(tee --append /dev/fd/2 /dev/fd/4 >> /dev/null)
     else
         1>&2 echo -e "$BRED FATAL ERROR: " "$@" \
-            "Error in '$JHIPSTER_MATRIX' at $(date +%r) " \
-            "(elapsed: '$ELAPSED')""$NC"
+            "Error in '$JHIPSTER_MATRIX'" "$ELAPSED" "$NC"
     fi
 
     # Thanks this variable set to 1
@@ -1178,7 +1187,6 @@ function yarnLink() {
             "in a folder named 'generator-jhipster'. " \
             "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
     local -r GENERATOR_JHIPSTER_FOLDER="$(pwd)/node_modules/generator-jhipster"
-    ls -la "$GENERATOR_JHIPSTER_FOLDER"
     # Test if `yarn link' is correct
     cd -P "${JHIPSTER_TRAVIS}/.."
     local -r JHIPSTER_TRAVISReal=$(pwd -P)
@@ -1239,7 +1247,7 @@ function generateProject() {
             [[ "${JHIPSTER}" == "ngx-default"  ]] ; then
         # Corresponding to "Install and test JHipster Generator" in
         # ./scripts/00-install-jhipster.sh
-        echoTitleBuildStep "start" "\\\`yarn test' in generator-jhipster"
+        echoTitleBuildStep "start" "\`yarn test' in generator-jhipster"
         cd -P "$JHIPSTER_TRAVIS"
         echo "We are at path: '$(pwd)'".
         echo "Your branch is: '$BRANCH_NAME'."
@@ -1264,7 +1272,6 @@ function generateProject() {
     # launchNewBash "./scripts/03-replace-version-generated-project.sh" \
     #     "Replace version generated-project'"
 
-    echo "$IS_GENERATEANDTEST"
     if [[ "$IS_GENERATEANDTEST" -eq 0 ]] && \
         [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]]; then
         PROTRACTOR=0        # to not launch \`yarn e2e' in 05-run.sh
@@ -1338,13 +1345,14 @@ Do you want to continue? [y/n] "
     fi
     sleep 4
 
-    rm -Rf "${NODE_MODULES_CACHE_ANGULAR}"
-
     local -i ERROR_IN_SAMPLE=0
 
     local -ir isGenerationOfNodeModulesCache=1
 
     time {
+
+        local -r oldPATH="${PATH}"
+        export PATH="${APP_FOLDER}""/node_modules/.bin:""$PATH"
 
         local -r shortDate=$(date +%m-%dT%H_%M)
         local -r beginLogfilename=\
@@ -1355,7 +1363,7 @@ Do you want to continue? [y/n] "
         createLogFile
 
         rm -Rf "${APP_FOLDER}"
-        mkdir -p "$APP_FOLDER"/
+        mkdir -p "$APP_FOLDER"
         cd "${APP_FOLDER}"
         yarnLink
 
@@ -1375,6 +1383,8 @@ Do you want to continue? [y/n] "
         fi
 
         treatEndOfBuild
+
+        export PATH="${oldPATH}"
     }
 
 }
@@ -1421,12 +1431,8 @@ function createFolderNodeModulesAndLogFile() {
 
         createLogFile
 
-    local -r NODE_MOD_CACHED="$NODE_MODULES_CACHE_ANGULAR/node_modules"
+        local -r NODE_MOD_CACHED="$NODE_MODULES_CACHE_ANGULAR/node_modules"
 
-    if [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]] ; then
-        echoTitleBuildStep "start" "Symlink '$NODE_MOD_CACHED' to '$APP_FOLDER'"
-        ln -s "$NODE_MOD_CACHED" "$APP_FOLDER"
-    fi
         # TODO make for react
         if [[ "$JHIPSTER" != *"react"* ]] ; then
             echoTitleBuildStep "start" \
@@ -1434,10 +1440,10 @@ function createFolderNodeModulesAndLogFile() {
             # No `ln -s' due to
             # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
             # But `cp -R' works good ! ;-) ! Probably more reliable.
-            cp -R "$NODE_MOD_CACHED" "${APP_FOLDER}"
+            printCommandAndEval "cp -R '$NODE_MOD_CACHED' '${APP_FOLDER}'"
         else
             errorInBuildExitCurrentSample "Script not implemented."\
-            "for React"
+                "for React"
         fi
         # Even if there is already a correct symlink, we must launch it again.
         yarnLink
@@ -1465,7 +1471,7 @@ function launchOnlyOneSample() {
 then restart script."
             local execInfirmed="errorInBuildStopCurrentSample '$argument'"
             confirmationUser "$confirmationFirstParameter" \
-                "rm -rf '${APP_FOLDER}'; mkdir -p '$APP_FOLDER'" \
+                "rm -rf '${APP_FOLDER}' && mkdir -p '$APP_FOLDER'" \
                 "echo '$execInfirmed'"
             unset confirmationFirstParameter argument execInfirmed
 
@@ -1477,7 +1483,7 @@ then restart script."
         # Defined "$APP_FOLDER" as explained in the MAIN section of this file.
         export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
         rm -rf "${APP_FOLDER}"
-        mkdir -p "$APP_FOLDER"/
+        mkdir -p "$APP_FOLDER"
     fi
 
     pushd "$JHIPSTER_SAMPLES/""$JHIPSTER"
@@ -1496,6 +1502,9 @@ then restart script."
 
     time {
 
+        local -r oldPATH="${PATH}"
+        export PATH="${APP_FOLDER}""/node_modules/.bin:""$PATH"
+
         # Instantiate LOGFILENAME
         local -r beginLogfilename=\
 "${JHIPSTER_TRAVIS}""/""${BRANCH_NAME}"".""${DATEBININSCRIPT}"
@@ -1506,14 +1515,13 @@ then restart script."
 
         cd "${APP_FOLDER}"
 
-        local -r oldPATH="${PATH}"
-        export PATH="${APP_FOLDER}"/node_modules:"$PATH"
         if [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
             generateAndTestProject
         else
             generateProject
         fi
-        PATH="${oldPATH}"
+
+        export PATH="${oldPATH}"
 
     }
 
@@ -1613,16 +1621,19 @@ do you want to launch in same time (Travis CI launch 4 processes)? "
         # `ps' man page:
         # "By default, ps selects all processes
         # associated with the same terminal as the invoker."
-        while [[ "$(pgrep -c 'build-samples.sh')" \
-            -gt $((numberOfProcesses+1)) ]] ; do
-            # If we use `grep build-samples.sh', do not forget than grep is also
-            # returned by `ps'.
+        # Don't use `pgrep`. Doesn't work if pattern is longer than 15 char.
+        # Use `grep -v', because sometimes `grep' is outputed by `ps',
+        # sometimes not
+        # shellcheck disable=2009
+        while [[ $(ps -o pid,command  \
+                | grep "build-samples.sh" \
+                | grep -vc "grep" ) -gt $((numberOfProcesses+1)) ]] ; do
             sleep "$timeSpan"
         done
         wrapperLaunchScript &
-        # ps -o pid,command  | grep "build-samples.sh"
 
         # ps -o pid,stat,command,%cpu,%mem -C "bash ./build-samples.sh"
+
         # Sleep to not have too much logs at start up.
         sleep 25
         i=$((i+1))
@@ -1810,8 +1821,7 @@ function returnJHIPSTER_MATRIXofFileTravisDotYml() {
 }
 
 function define_JHIPSTER_MATRIX_ARRAY() {
-    if [[ -z "${JHIPSTER_LIST+x}" ]] ; then
-        IFS= readarray JHIPSTER_MATRIX_ARRAY <<< "$TRAVIS_DOT_YAML_PARSED"
+    if [[ -z "${JHIPSTER_LIST+x}" ]] ; then IFS= readarray JHIPSTER_MATRIX_ARRAY <<< "$TRAVIS_DOT_YAML_PARSED"
     elif [[ "${JHIPSTER_LIST}" =~ $JHIPSTER_PATTERN ]] ; then
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX_ARRAY[0] \
             "$JHIPSTER_LIST"
@@ -1897,7 +1907,7 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
 
     declare IS_CONSOLEVERBOSE=0
     declare IS_COLORIZELOGFILE=0
-    declare IS_SKIPPACKAGEAPP=0
+    export IS_SKIPPACKAGEAPP=0
 
     if [[ ! -z "${2+x}" ]] ; then
 

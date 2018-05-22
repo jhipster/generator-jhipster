@@ -49,10 +49,8 @@ if [ -a src/main/docker/mongodb.yml ]; then
         --project-name "$DOCKER_PREFIX_NAME"mongodb up -d
 fi
 if [ -a src/main/docker/couchbase.yml ]; then
-    # this container can't be started otherwise, it will be conflict with tests
-    # so here, only prepare the image
-    docker-compose -f src/main/docker/couchbase.yml \
-        --project-name "$DOCKER_PREFIX_NAME"couchbase build -d
+    echo "This container can't be started otherwise, " \
+        "it will be conflict with tests. So it is done in 05-run.sh"
 fi
 if [ -a src/main/docker/mysql.yml ]; then
     docker-compose -f src/main/docker/mysql.yml \
@@ -77,11 +75,6 @@ fi
 if [ -a src/main/docker/keycloak.yml ]; then
     docker-compose -f src/main/docker/keycloak.yml \
         --project-name "$DOCKER_PREFIX_NAME"keycloak up -d
-fi
-if [ -a src/main/docker/couchbase.yml ]; then
-    docker-compose -f src/main/docker/couchbase.yml \
-        --project-name "$DOCKER_PREFIX_NAME"couchebase up -d
-    sleep 10
 fi
 
 if [[ "$IS_TRAVIS_CI" -eq 0 ]]  ; then

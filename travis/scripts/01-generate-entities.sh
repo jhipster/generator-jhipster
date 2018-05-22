@@ -42,7 +42,7 @@ echoSetX "Copy entities json"
 set -x
 
 
-if [[ -z "$localTravis" ]] ; then
+if [[ "$IS_TRAVIS_CI" -eq 1 ]] ; then
     rm -Rf "$APP_FOLDER"
 fi
 mkdir -p "$APP_FOLDER"/.jhipster/

@@ -17,25 +17,55 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -ex
+set -exu
+
+if [[ "$IS_TRAVIS_CI" -eq 0 ]] ; then
+    # trap of INT ../build-samples.sh
+    # is raised after this trap :-). Good.
+    trap exitJavaApp INT
+    trap exitJavaApp EXIT
+    function ctrl_c() {
+        if [[ -e /dev/fd/4 ]] ; then
+            1>&2 echo "Exit by user." 4>&2
+            if [[ ! -z ${serverPort+x} ]] ; then
+                1>&2 echo "Killing Java Application..." 4>&2
+                kill "$serverPort"
+                1>&2 echo "Done..." 4>&2
+            fi
+        else
+            1>&2 echo "Exit by user."
+            if [[ ! -z ${serverPort+x} ]] ; then
+                1>&2 echo "Killing Java Application..."
+                kill "$serverPort"
+                1>&2 echo "Done..."
+            fi
+        fi
+    }
+fi
+
 function echoSetX() {
-    echo -e "\n-------------------------------------------------------------------------------\n" \
-        "\n$1\n" \
-        "\n-------------------------------------------------------------------------------\n"
+    echo -e "\\n----------------------------------------------------------\\n" \
+        "\\n$1\\n" \
+        "\\n--------------------------------------------------------------\\n"
 }
 
 #-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
-
 launchCurlOrProtractor() {
+
+    if [ -a src/main/docker/couchbase.yml ]; then
+        docker-compose -f src/main/docker/couchbase.yml up -d
+        sleep 10
+    fi
+
     local -i retryCount=1
     local -ir maxRetry=10
-    declare -gir serverPort=`grep --color=never -E \
+    declare -gir serverPort
+    serverPort=$(grep --color=never -E \
         '"serverPort"\s*:\s*"[0-9]+"' .yo-rc.json \
         | grep --color=never -Eo '[0-9]+' \
-        || echo 8080
-        `
+        || echo 8080)
     local -r httpUrl="http://localhost:""${serverPort}"
     if [[ "$JHIPSTER" == *"micro"* ]]; then
         local -r httpUrl="http://localhost:""${serverPort}""/management/health"
@@ -63,21 +93,26 @@ launchCurlOrProtractor() {
 
     local -i result=0
     if [[ -f "tsconfig.json" ]]; then
-        set +e
-        yarn e2e
-        result=$?
-        set -e
-        if [[ "$result" -ne 0 ]] ; then
+        if yarn e2e ; then
+            result=$?
+            echo "e2e tests passed."
+        else
+            result=$?
             echo "e2e tests failed."
         fi
     fi
     return $result
 }
 
-if [[ "$IS_TRAVIS_CI" -eq 1 ]]  || \
-    [[ "$IS_STARTAPPLICATION" -eq 0 ]]; then
-    # If we are in Travis CI or in `../build-samples.sh generate'
-    # or `../build-samples.sh generateandtest'
+if [[ "$IS_TRAVIS_CI" -eq 1 ]] || \
+    ([[ "$IS_STARTAPPLICATION" -eq 0 ]] && \
+    [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]]); then
+        # 1. If we are in Travis CI
+        # 2. or
+            # 2.1
+                # in `../build-samples.sh generate'  or
+                # in `../build-samples.sh generateandtest'
+            # 2.2 AND NOT In `../build-samples.sh generate --skippackageapp'
 
     #--------------------------------------------------------------------------
     # Package UAA
@@ -102,24 +137,24 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]]  || \
     cd "$APP_FOLDER"
 
     if [ -f "mvnw" ]; then
-        ./mvnw verify -DskipTests -P "$PROFILE"
-        mv target/*.war app.war
+        if ./mvnw verify -DskipTests -P "$PROFILE" ; then
+            mv target/*.war app.war
+            exit 0
+        else
+            echo "Error when packaging"
+            exit 1
+        fi
     elif [ -f "gradlew" ]; then
-        ./gradlew bootWar -P "$PROFILE" -x test
-        mv build/libs/*.war app.war
+        if ./gradlew bootWar -P "$PROFILE" -x test ; then
+            mv build/libs/*.war app.war
+        else
+            echo "Error when packaging"
+            exit 1
+        fi
     else
         echo "No mvnw or gradlew"
-        exit 0
     fi
-    if [ $? -ne 0 ]; then
-        echo "Error when packaging"
-        exit 1
-    fi
-
-    if [[ "$IS_TRAVIS_CI" -eq 0 ]] && \
-        [[ "$IS_GENERATEANDTEST" -eq 0 ]] ; then
-        exit  0
-    fi
+    exit 0
 fi
 
 #-------------------------------------------------------------------------------
@@ -129,7 +164,20 @@ set +x
 echoSetX "Run the application"
 set -x
 
-if [ "$RUN_APP" == 1 ]; then
+if [[ "$IS_TRAVIS_CI" -eq 1 ]] || \
+    [[ "$IS_GENERATEANDTEST" -eq 1 ]] || \
+    [[ "$IS_STARTAPPLICATION" -eq 1 ]] ; then
+    # 1. If we are in Travis CI
+    # 2. OR in `../build-samples.sh generateandtest'
+    # 3. OR in `../build-samples.sh startapplication'
+
+    cd "$APP_FOLDER"
+    if [ -a src/main/docker/couchbase.yml ]; then
+        time docker-compose -f src/main/docker/couchbase.yml couchbase build
+        docker-compose -f src/main/docker/couchbase.yml up -d
+        sleep 10
+    fi
+
     if [[ "$JHIPSTER" == *"uaa"* ]]; then
         cd "$UAA_APP_FOLDER"
         java -jar target/*.war \
@@ -151,20 +199,33 @@ if [ "$RUN_APP" == 1 ]; then
     echo $! > .pid
     sleep 40
 
-    launchCurlOrProtractor && result=$? || result=$?
-    if [[ "$IS_TRAVIS_CI" -eq 1 ]]  || \
-        [[ "$IS_STARTAPPLICATION" -eq 0 ]]; then
-        # If we are in Travis CI or in `../build-samples.sh generate'
-        # or `../build-samples.sh generateandtest'
-        kill $(cat .pid)
+    if launchCurlOrProtractor ; then
+        result=$?
     else
-        # If it's `../build-samples.sh startapplication sample_name'
-        echo -e "\n\n\033[0;31m"\
-            "Server is launched at http://localhost://""$serverPort" \
-            "\033[0m \n\n"
-        echo -e "\n\n\033[1;31m""WARNING: YOU MUST MANUALLY TERMINATE " \
-            "THIS JAVA APPLICATION (\`kill $(cat .pid)')""\033[0m\n\n"
+        result=$?
     fi
-    wait
+
+    if [[ "${IS_TRAVIS_CI}" -eq 0 ]] && \
+        [[ "$IS_STARTAPPLICATION" -eq 0 ]]; then
+        # If we are in Travis CI AND
+        # in `../build-samples.sh generateandtest'
+        # (see also surrounded if)
+        kill "$(cat .pid)"
+    else
+        # If we are in `../build-samples.sh startapplication'.
+        echo -e "\\n\\n\\033[0;31m"\
+            "Server is launched at http://localhost://""$serverPort" \
+            "\\033[0m \\n\\n"
+        # TODO test close the term, then see if Java is running.
+        echo -e "\\n\\n\\033[1;31m""Type CTRL+C ONLY ONE TIME to terminate " \
+            "gracefully the app and terminate the Java App. " \
+            "DO NOT TYPE SEVERAL TIMES CTRL+C. " \
+            "Maybe if you terminate by stop the term, " \
+            "the app could be continue to run until " \
+            "the reboot of the computer.\\033[0m"
+        wait
+    fi
+
     exit $result
+
 fi
