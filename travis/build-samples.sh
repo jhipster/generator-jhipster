@@ -161,6 +161,11 @@
 #           pattern.
 # 19) SC2015
 #       Note that A && B || C is not if-then-else. C may run when A is true.
+# 20) Pitfalls with `eval' command, read:
+    # http://wiki.bash-hackers.org/rcwatson
+    # http://wiki.bash-hackers.org/commands/builtin/eval
+    # khttps://stackoverflow.com/questions/17529220/why-should-eval-be-avoided-in-bash-and-what-should-i-use-instead
+    # https://medium.com/dot-debug/the-perils-of-bash-eval-cc5f9e309cae
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -294,6 +299,16 @@
 # TODO actually there is collisions when we launch several builds in same time
 #   they want all port 8080.
 # TODO improve comments.
+# TODO the convention should be: uppercase only global variabless.
+    # scriptcheck check if variable is assigned only for variables
+    # with lowercase
+    # https://github.com/koalaman/shellcheck/wiki/SC2154
+    # Morover, always use immutable variable is good, so uppercase all
+    # immutables variables is a no sens because almost all variables
+    # should be constants.
+    # Differ from
+    # https://google.github.io/styleguide/shell.xml?showone=Constants_and_Environment_Variable_Names#Constants_and_Environment_Variable_Names
+# TODO check if is use only lower Camel Case and snake case for capitals.
 
 # PREPARE SCRIPT {{{1
 # ==============================================================================
@@ -329,8 +344,9 @@ set -T
 # elapsedF() {{{2
 
 elapsedF() {
-    local -n ELAPSED="$1"
-    ELAPSED="Elapsed: $((SECONDS / 3600)) hrs \
+    local -n ELAPSEDLOC="$1"
+    # shellcheck disable=2034
+    ELAPSEDLOC="Elapsed: $((SECONDS / 3600)) hrs \
 $(((SECONDS / 60) % 60)) min $((SECONDS % 60)) sec"
 }
 
@@ -472,24 +488,42 @@ function usage() {
             "\\t\\tsample_name [--consoleverbose] [--skippackageapp]\\n" \
             "\\t\\t | sample_name[,sample_name][,...]\\n" \
         "\\t\\t\\n" \
-        "\\t\\t[--colorizelogfile\\n" \
+        "\\t\\t[ --colorizelogfile ]\\n" \
         "\\tgenerateandtest [\\n" \
-            "\\t\\tsample_name [--consoleverbose]\\n" \
+            "\\t\\tsample_name [ --consoleverbose ]\\n" \
             "\\t\\t | sample_name[,sample_name][,...]\\n" \
         "\\t\\t\\n" \
-        "\\t\\t[--colorizelogfile\\n" \
+        "\\t\\t[ --colorizelogfile ]\\n" \
         "\\tstartapplication sample_nam\\n" \
         "\\tclean\\n" \
         "\\thelp\\n\\n" \
+    "* \`--consoleverbose\\n" \
+        "\\t=> all is printed in the console.\\n" \
+        "\\tCould be used only with if there you build only one sample_name\\n"\
+        "\\t(too much logs in console, not advise).\\n" \
+    "* \`--colorizelogfile\\n" \
+        "\\t""$BRED""This parameter is strongly advis\\n""$NC" \
+        "\\t=> Keep colors in log file\\n" \
+        "\\t* For Vim users install:" \
+            "https://github.com/powerman/vim-plugin-AnsiEsc\\n" \
+        "\\t* For IntelliJ/JetBrains users try:" \
+            "https://plugins.jetbrains.com/plugin/9707-ansi-highlighte\\n" \
+        "\\t* For Visual Studio Code users try:" \
+            "https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer\\n" \
+    "* \`--skippackageapp\\n" \
+        "\\tUsable only with command \`./build-samples.sh generate [...]'\\n'"\
+        "\\t=> Skip package of application. " \
+            "If you want only " \
+            "generate the sample to check files generated.\\n" \
+        "\\t=> After this, you can't start the application with." \
+            "\`./build-samples.sh startapplication sample_name'.\\n" \
+        "\\t=> This parameter implies automatically ``--consoleverbose' and " \
+        "``--colorizelogfile'.\n\n" \
     "\\t""$URED""\`./build-samples.sh generate/generateandtest'""$NC""\\n" \
-        "* They will create the travis sample project under the './samples'" \
-        "folder with folder name \`[sample_name]-sample'." \
-        "* 'generate' generate only a JHipster project with entities. " \
-            "It will ask you if you want execute \`yarn test' in" \
-            "the folder generate-project before launch generation\\n" \
-            "You will can open this application in your " \
-            "editor or IDE to check it further." \
-        "* 'generateandtest' generate then test project(s), as Travis CI\\n" \
+        " * They will create the travis sample project under the './samples'" \
+        "folder with folder name \`[sample_name]-sample'.\n" \
+        " * \`generate' generate only a JHipster project with entities.\n" \
+        " * \`generateandtest' generate then test project(s), as Travis CI\\n" \
     "  * Without optional parameter, 'generate', and 'generateandtest' " \
             "operate for all samples listed below\\n" \
     "  * Arguments 'generate', 'generateandtest' could be apply for " \
@@ -504,42 +538,9 @@ function usage() {
             "launch in same tim\\n " \
         "* Before launch this commands, type \`yarn link' in the folder" \
             "./genertor-jhipster. Now you will test this generator, and not" \
-            "the npm genertor-jhipster." \
-    "\\n\\n\\t""$URED""'[sample_name]' could be:""$NC""\\n" \
-    "\\n${list_of_samples}\\n\\n" \
-    "* Use always \`./build-samples.sh generateandtest ngx-default' " \
-            "(the more complete test). " \
-            "Useful for test Server side and Angular client\\n" \
-    "  * If you work on the React client try the previous and also " \
-            "\`./build-samples.sh generateandtest react-defaul\\n" \
-    "  * If you work on an other functionality, chose the corresponding on\\n" \
-    "Name of samples indicate their test goal. They have different application"\
-    "configurations (defined in '.yo-rc.json') and different entity" \
-    "configurations (defined in the folder .jhipster of a " \
-    "'./scripts/sample-name-sample' folder).\\n\\n" \
-    "* \`--consoleverbose\\n" \
-        "\\t=> all is printed in the console." \
-        "\\tCould be used only with if there you build only one sample_name" \
-        "\\t(too much logs in console, not advise\\n" \
-    "* \`--colorizelogfile\\n" \
-        "\\t""$BRED""This parameter is strongly advis\\n""$NC" \
-        "\\t=> Keep colors in log file\\n" \
-        "\\t* For Vim users install:" \
-            "https://github.com/powerman/vim-plugin-AnsiEsc\\n" \
-        "\\t* For IntelliJ/JetBrains users try:" \
-            "https://plugins.jetbrains.com/plugin/9707-ansi-highlighte\\n" \
-        "\\t* For Visual Studio Code users try:" \
-            "https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer" \
-    "* \`--skippackageapp\\n" \
-        "\\tUsable only with command \`./build-samples.sh generate [...]'"\
-        "\\t=> Skip package of application. " \
-        "If you want only generate the sample to check what is generated\\n" \
-        "\\t=> After this, you can't start the application with." \
-            "\`./build-samples.sh startapplication sample_name'" \
-        "\\t=> This parameter imply automatically --consoleverbose"
+            "the npm genertor-jhipster."
 
-
-    echo -e "\\t""$URED""\`./build-samples.sh startapplication " \
+    echo -e "\\n\\t""$URED""\`./build-samples.sh startapplication " \
         "sample_name""$NC""\\n" \
         "Start the application generated with \`generate' " \
         "or \`generateandtest'. You could open the app on a Web browser " \
@@ -584,9 +585,20 @@ function usage() {
     "script copy node_modules folder from node_modules_cache-sample before" \
     "perform tests, and symlink again at the end of the test." \
     "\`yarn install' isn't perform before test to increase speed". \
-    "\\n\\n\\t""$URED""Just remind of sample_name:""$NC\\n" \
-    "$NC" \
-    "\\n${list_of_samples}\\n\\n" \
+    "\\n\\n\\t""$URED""sample_name:""$NC\\n"
+
+    echo -e "\\n${list_of_samples}\\n\\n" \
+    "* Use always \`./build-samples.sh generateandtest ngx-default' " \
+            "(the more complete test). " \
+            "Useful for test Server side and Angular client\\n" \
+    "  * If you work on the React client try the previous and also " \
+            "'react-default'\\n" \
+    "  * If you work on an other functionality, chose the corresponding on\\n" \
+    "* Generated files wil be under folder ./samples/sample_name-sample\\n" \
+    "* Name of samples indicate their test goal. " \
+    "Their configuration is (defined in '.yo-rc.json'. " \
+    "Their entity is generated from folder '.jhipster'"
+
 
     exit 0
 }
@@ -641,10 +653,15 @@ function cleanAllProjects() {
 # ==============================================================================
 # function echoSmallTitle() {{{3
 function echoSmallTitle() {
+    if [[ "$1" == "end" ]] ; then
+        local -r colorEchoTitleBuildStep="${BRED}"
+    else
+        local -r colorEchoTitleBuildStep="${BLUE}"
+    fi
     local ELAPSED
     elapsedF ELAPSED
-    echo -e "$BRED""\\n\\n\\n" \
-        "$@" \
+    echo -e "$colorEchoTitleBuildStep""\\n\\n\\n" \
+        "${@:2}" \
         "($(date +%r), '$ELAPSED'\\n" \
         "====================================================================="\
         "\\n$NC"
@@ -652,19 +669,23 @@ function echoSmallTitle() {
 
 # function echoTitleBuildStep() {{{3
 function echoTitleBuildStep() {
-    # Echo in STDOUT
+    if [[ "$1" == "end" ]] ; then
+        local -r colorEchoTitleBuildStep="${BRED}"
+    else
+        local -r colorEchoTitleBuildStep="${BLUE}"
+    fi
     local ELAPSED
     elapsedF ELAPSED
-    echo -e "$BRED\\n" \
+    echo -e "${colorEchoTitleBuildStep}""\\n" \
         "===============================================================\\n" \
         "===============================================================\\n" \
         "===============================================================\\n" \
-        "\\n" "$@" \
+        "\\n" "${@:2}" \
         "($(date +%r), '$ELAPSED'\\n" \
         "===============================================================\\n" \
         "===============================================================\\n" \
         "===============================================================\\n" \
-        "$N\\n"
+        "$NC\\n"
 
     # ECHO in console:
     # 1. if console is branched to /dev/fd/3 (see launchSamplesInBackground())
@@ -732,17 +753,17 @@ dockerKillThenRm() {
 # I suppose iproute 2 is installed on main linux distro.
 function testIfPortIsFreeWithSs() {
     if [[ ! -z "${2+x}" ]] ; then
-        if ss -nl | grep -q ":$1[:space:]" 1>> /dev/null ; then
+        if ss -nl | grep -q ":$1[[:space:]]" 1>> /dev/null ; then
             errorInBuildExitCurrentSample "port '$1' is busy. " \
             "It's the Server Port. You could change it in file:" \
             "'$APP_FOLDER/.yo-rc.json' Or you could stop software who uses it" \
-            "(\`sudo ss -nap | grep ':$1[:space:]'' " \
+            "(\`sudo ss -nap | grep ':$1[[:space:]]'' " \
             "to know it, then \`kill PID')."\
         else
              printFileDescriptor3 "Port '$1' is free."
          fi
     fi
-    if ss -nl | grep -q ":$1[:space:]" 1>> /dev/null ; then
+    if ss -nl | grep -q ":$1[[:space:]]" 1>> /dev/null ; then
         errorInBuildExitCurrentSample "port '$1' is busy. " \
         "Please stop the software who uses it" \
         "(\`sudo ss -nap | grep '$1'' to know it, then \`kill PID')"
@@ -981,19 +1002,21 @@ function createLogFile() {
         "create '$LOGFILENAME'"
 
     if [[ "$IS_CONSOLEVERBOSE" -eq 1 ]] ; then
-        echoSmallTitle "Create log file and save output in '${LOGFILENAME}'"
+        echoSmallTitle "start" \
+            "Create log file and save output in '${LOGFILENAME}'"
         exec 1>> >(tee --append "${LOGFILENAME}") 2>&1
     else
         # save the originals descriptor
         # (stdout to console and stderr to console).
         exec 3>&1 4>&2
-        echoSmallTitle "Create log file and redirect output in '${LOGFILENAME}'"
+        echoSmallTitle "start" \
+            "Create log file and redirect output in '${LOGFILENAME}'"
         exec 1>> "${LOGFILENAME}" 2>> "${LOGFILENAME}"
     fi
     # Otherwise folowing command is started before function createLogFile is
     # finished.
     sleep 5
-    echoTitleBuildStep "\\n\\n'${JHIPSTER_MATRIX}' is launched!!"
+    echoTitleBuildStep "start" "\\n\\n'${JHIPSTER_MATRIX}' is launched!!"
     printInfoBeforeLaunch
     testRequierments
 }
@@ -1022,7 +1045,7 @@ function treatEndOfBuild() {
     # TODO treat for REACT. React has its own node_modules.
     # React should not be symlinked.
 
-    echoTitleBuildStep "Finishing '$JHIPSTER_MATRIX'"
+    echoTitleBuildStep "start" "Finishing '$JHIPSTER_MATRIX'"
 
     if [[ "$IS_GENERATEANDTEST" -eq 0 ]] && \
         [[ "$IS_SKIPPACKAGEAPP" -eq 1 ]]; then
@@ -1148,7 +1171,7 @@ errorInBuildExitCurrentSample() {
 # function yarnLink() {{{3
 function yarnLink() {
     cd "$APP_FOLDER"
-    echoTitleBuildStep "yarn link"
+    echoTitleBuildStep "start" "yarn link"
     yarn init -y
     command yarn link "generator-jhipster" || \
         errorInBuildExitCurrentSample "you havn't executed \`yarn link' " \
@@ -1172,28 +1195,31 @@ function yarnLink() {
 # function launchNewBash() {{{3
 function launchNewBash() {
     local -r pathOfScript="$1"
+    local -r message=$2
     # "$JHIPSTER" argument is used only to know which build is launched.
     # It's only a marker for when we call "ps -C bash. The argument "$1"
     # is not readden in any ./scripts/*.sh
 
-    echoTitleBuildStep "$2" "('$1')"
+    echoTitleBuildStep "start" "$message" "('$pathOfScript')"
     # If there is an error raised, in function errorInBuildStopCurrentSample()
     # "$ERROR_IN_SAMPLE" takes a value of 1. Initialized to 0 in function
     # launchOnlyOneSample() or generateNode_Modules_Cache()
     if [[ "${ERROR_IN_SAMPLE}" -eq 0 ]] ; then
         cd "${JHIPSTER_TRAVIS}"
-        time bash "$pathOfScript"
         if time bash "$pathOfScript" ; then
+            echoTitleBuildStep "end" "'$message' finished with SUCCESS! " \
+                "('$pathOfScript')"
+        else
             errorInBuildStopCurrentSample "'$pathOfScript' finished with error."
         fi
     else
         # tee print in stdout (either logfile or console) and /dev/fd/4
         # for /dev/fd/4 see function launchSamplesInBackground()
         if [[ -e /dev/fd/4 ]] ; then
-            1>&2 echo -e "SKIP '${2}' cause of previous error." \
+            1>&2 echo -e "SKIP '${message}' cause of previous error." \
                 >> >(tee --append /dev/fd/2 /dev/fd/4 1>> /dev/null)
         else
-            1>&2 echo -e "SKIP '${2}' cause of previous error."
+            1>&2 echo -e "SKIP '${message}' cause of previous error."
         fi
     fi
 }
@@ -1213,13 +1239,15 @@ function generateProject() {
             [[ "${JHIPSTER}" == "ngx-default"  ]] ; then
         # Corresponding to "Install and test JHipster Generator" in
         # ./scripts/00-install-jhipster.sh
-        echoTitleBuildStep "\\\`yarn test' in generator-jhipster"
+        echoTitleBuildStep "start" "\\\`yarn test' in generator-jhipster"
         cd -P "$JHIPSTER_TRAVIS"
         echo "We are at path: '$(pwd)'".
         echo "Your branch is: '$BRANCH_NAME'."
         # TODO should we add yarn install?
 
         if yarn test ; then
+            echoTitleBuildStep "end" "Test of the generator finish with sucess."
+        else
             errorInBuildStopCurrentSample "fail during test of the Generator." \
                 " (command 'yarn test' in $(pwd))"
         fi
@@ -1274,7 +1302,7 @@ function generateAndTestProject() {
 
 function generateNode_Modules_Cache() {
 
-    echoSmallTitle "Check node_modules cache"
+    echoSmallTitle "start" "Check node_modules cache"
 
     # Used in functions errorInBuildExitCurrentSample() and createLogFile()
     local -r JHIPSTER_MATRIX="node_modules_cache_angular"
@@ -1331,7 +1359,7 @@ Do you want to continue? [y/n] "
         cd "${APP_FOLDER}"
         yarnLink
 
-        echoTitleBuildStep "JHipster generation."
+        echoTitleBuildStep "start" "JHipster generation."
         cp "${JHIPSTER_SAMPLES}/node_modules_cache/angular/.yo-rc.json" \
             "${NODE_MODULES_CACHE_ANGULAR}" || \
             errorInBuildExitCurrentSample "not a JHipster project."
@@ -1341,7 +1369,9 @@ Do you want to continue? [y/n] "
         printFileDescriptor3 "$jhipstercommand"
         eval "$jhipstercommand"
         if eval "$jhipstercommand" ; then
-            errorInBuildExitCurrentSample
+            echoTitleBuildStep "end" "'$jhipstercommand' finish with SUCCESS!"
+        else
+            errorInBuildExitCurrentSample "'$jhipstercommand' FAILED"
         fi
 
         treatEndOfBuild
@@ -1367,13 +1397,15 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     local travisVars
     travisVars=
     local -a travisVars
-    https://github.com/koalaman/shellcheck/wiki/SC2086
-    https://github.com/koalaman/shellcheck/wiki/SC2206
+    # https://github.com/koalaman/shellcheck/wiki/SC2086
+    # https://github.com/koalaman/shellcheck/wiki/SC2206
     IFS=" " read -r -a travisVars <<< \
         "$(cut -s -d ' ' -f 2- <<< "$JHIPSTER_MATRIX")"
     # https://github.com/koalaman/shellcheck/wiki/SC2163
     # shellcheck disable=SC2163
-    export "${travisVars[@]?}"
+    if [[ "${#travisVars[*]}" -lt 0 ]] ; then
+        export "${travisVars[@]}"
+    fi
 
     # Should never be raised because we check ../.travis.yml.
     # Maybe in case of the user delete all folders sample!
@@ -1392,12 +1424,13 @@ function createFolderNodeModulesAndLogFile() {
     local -r NODE_MOD_CACHED="$NODE_MODULES_CACHE_ANGULAR/node_modules"
 
     if [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]] ; then
-        echoTitleBuildStep "Symlink '$NODE_MOD_CACHED' to '$APP_FOLDER'"
+        echoTitleBuildStep "start" "Symlink '$NODE_MOD_CACHED' to '$APP_FOLDER'"
         ln -s "$NODE_MOD_CACHED" "$APP_FOLDER"
     fi
         # TODO make for react
         if [[ "$JHIPSTER" != *"react"* ]] ; then
-            echoTitleBuildStep "Copy '$NODE_MOD_CACHED' to '$APP_FOLDER'"
+            echoTitleBuildStep "start" \
+                "Copy '$NODE_MOD_CACHED' to '$APP_FOLDER'"
             # No `ln -s' due to
             # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
             # But `cp -R' works good ! ;-) ! Probably more reliable.
@@ -1496,10 +1529,10 @@ then restart script."
 # function wrapperLaunchScript() {{{3
 function wrapperLaunchScript() {
     # Display stderr on terminal.
-    echoTitleBuildStep \
+    echoTitleBuildStep "start" \
         "'${JHIPSTER_MATRIX}' is launched in background!"
     launchOnlyOneSample
-    echoTitleBuildStep "End of '$JHIPSTER_MATRIX'" ;
+    echoTitleBuildStep "start" "End of '$JHIPSTER_MATRIX'" ;
     return 0
 }
 
@@ -1654,13 +1687,14 @@ function startApplication() {
     printInfoBeforeLaunch
 
     cd "$JHIPSTER_TRAVIS"
-    echoTitleBuildStep "./scripts/03-docker-compose.sh" \
+    echoTitleBuildStep "start" "./scripts/03-docker-compose.sh" \
         "(Start docker container-compose.sh for '${JHIPSTER}')"
     bash ./scripts/03-docker-compose.sh || \
         exitScriptWithError "in ./scripts/03-docker-compose.sh"
 
     cd "$JHIPSTER_TRAVIS"
-    echoTitleBuildStep "./scripts/05-run.sh" "(Run '${JHIPSTER}-sample')"
+    echoTitleBuildStep "start" \
+        "./scripts/05-run.sh" "(Run '${JHIPSTER}-sample')" \
     bash ./scripts/05-run.sh || \
         exitScriptWithError "in ./scripts/05-run.sh"
 }
@@ -1768,7 +1802,7 @@ function returnJHIPSTER_MATRIXofFileTravisDotYml() {
     local -n returned="$1"
     local -r JHIPSTER_LOCAL="$2"
     # shellcheck disable=2034
-    returned=$(grep -E --color=never "$JHIPSTER_LOCAL([:space:]|$)" \
+    returned=$(grep -E --color=never "$JHIPSTER_LOCAL([[:space:]]|$)" \
         <<< "$TRAVIS_DOT_YAML_PARSED") \
         || exitScriptWithError "'$JHIPSTER_LOCAL' is not a correct sample." \
         "Please read \`$ ./build-samples.sh help'."
