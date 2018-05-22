@@ -29,6 +29,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+@Component
 public class AuthorizationHeaderUtil {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -51,7 +52,7 @@ public class AuthorizationHeaderUtil {
             } catch (UserRedirectRequiredException e) {
                 // It's a refresh failure (because previous token wasn't null)
                 // If it's an AJAX Request, this sends a 401 error
-                throw new AccessTokenRequiredException("Refreshing access token failed");
+                throw new AccessTokenRequiredException("Refreshing access token failed",null);
             }
 
             String tokenType = accessToken.getTokenType();
