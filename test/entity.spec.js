@@ -374,7 +374,7 @@ describe('JHipster generator entity for angularX', () => {
             it('creates expected languages files', () => {
                 constants.LANGUAGES.forEach((language) => {
                     assert.file([
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/foo.json`
+                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/Foo.json`
                     ]);
                 });
             });
