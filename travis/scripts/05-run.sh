@@ -18,36 +18,28 @@
 # limitations under the License.
 
 set -exu
-
-if [[ "$IS_TRAVIS_CI" -eq 0 ]] ; then
-    # trap of INT ../build-samples.sh
-    # is raised after this trap :-). Good.
-    trap exitJavaApp INT
-    trap exitJavaApp EXIT
-    function ctrl_c() {
-        if [[ -e /dev/fd/4 ]] ; then
-            1>&2 echo "Exit by user." 4>&2
-            if [[ ! -z ${serverPort+x} ]] ; then
-                1>&2 echo "Killing Java Application..." 4>&2
-                kill "$serverPort"
-                1>&2 echo "Done..." 4>&2
-            fi
-        else
-            1>&2 echo "Exit by user."
-            if [[ ! -z ${serverPort+x} ]] ; then
-                1>&2 echo "Killing Java Application..."
-                kill "$serverPort"
-                1>&2 echo "Done..."
-            fi
-        fi
-    }
-fi
-
 function echoSetX() {
     echo -e "\\n----------------------------------------------------------\\n" \
         "\\n$1\\n" \
         "\\n--------------------------------------------------------------\\n"
 }
+
+if [[ "$IS_TRAVIS_CI" -eq 0 ]] ; then
+    # If we are not and Travis CI
+
+    # trap of INT ../build-samples.sh
+    # is raised after this trap :-). Good.
+    trap "echo '\\n\`./05-run.sh' exited by user.'" INT
+    trap exitJavaApp EXIT # raised even if we type <CTRL-C>
+    function exitJavaApp() {
+        if [[ ! -z ${JAVA_PID+x} ]] ; then
+            1>&2 echo "Killing Java Application..."
+            1>&2 echo "kill '$JAVA_PID'"
+            kill "$JAVA_PID"
+            1>&2 echo "Done..."
+        fi
+    }
+fi
 
 #-------------------------------------------------------------------------------
 # Functions
@@ -61,7 +53,7 @@ launchCurlOrProtractor() {
 
     local -i retryCount=1
     local -ir maxRetry=10
-    declare -gir serverPort
+    declare -gi serverPort
     serverPort=$(grep --color=never -E \
         '"serverPort"\s*:\s*"[0-9]+"' .yo-rc.json \
         | grep --color=never -Eo '[0-9]+' \
@@ -104,9 +96,9 @@ launchCurlOrProtractor() {
     return $result
 }
 
-if [[ "$IS_TRAVIS_CI" -eq 1 ]] || \
-    ([[ "$IS_STARTAPPLICATION" -eq 0 ]] && \
-    [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]]); then
+if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
+    ||([[ "$IS_STARTAPPLICATION" -eq 0 ]] \
+        && [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]]); then
         # 1. If we are in Travis CI
         # 2. or
             # 2.1
@@ -136,7 +128,7 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] || \
 
     cd "$APP_FOLDER"
 
-    if [ -f "mvnw" ]; then
+    if [[ -f "mvnw" ]]; then
         if ./mvnw verify -DskipTests -P "$PROFILE" ; then
             mv target/*.war app.war
             exit 0
@@ -144,7 +136,7 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] || \
             echo "Error when packaging"
             exit 1
         fi
-    elif [ -f "gradlew" ]; then
+    elif [[ -f "gradlew" ]]; then
         if ./gradlew bootWar -P "$PROFILE" -x test ; then
             mv build/libs/*.war app.war
         else
@@ -164,12 +156,12 @@ set +x
 echoSetX "Run the application"
 set -x
 
-if [[ "$IS_TRAVIS_CI" -eq 1 ]] || \
-    [[ "$IS_GENERATEANDTEST" -eq 1 ]] || \
-    [[ "$IS_STARTAPPLICATION" -eq 1 ]] ; then
+if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
+    || [[ "$IS_STARTAPPLICATION" -eq 1 ]] \
+    || [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
     # 1. If we are in Travis CI
+    # 2. OR in `../build-samples.sh startapplication'
     # 2. OR in `../build-samples.sh generateandtest'
-    # 3. OR in `../build-samples.sh startapplication'
 
     cd "$APP_FOLDER"
     if [ -a src/main/docker/couchbase.yml ]; then
@@ -187,6 +179,8 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] || \
             --logging.level.io.github.jhipster.sample=OFF \
             --logging.level.io.github.jhipster.travis=OFF &
         sleep 80
+        # TODO test it
+        # Test if when we type <Ctrl-C> it is gracefully stopped (probably not)
     fi
 
     cd "$APP_FOLDER"
@@ -196,22 +190,24 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] || \
         --logging.level.io.github.jhipster=OFF \
         --logging.level.io.github.jhipster.sample=OFF \
         --logging.level.io.github.jhipster.travis=OFF &
-    echo $! > .pid
+    declare -r JAVA_PID="$!"
     sleep 40
 
     if launchCurlOrProtractor ; then
-        result=$?
+        declare -r result=$?
     else
-        result=$?
+        declare -r result=$?
     fi
 
-    if [[ "${IS_TRAVIS_CI}" -eq 0 ]] && \
-        [[ "$IS_STARTAPPLICATION" -eq 0 ]]; then
+    if [[ "${IS_TRAVIS_CI}" -eq 1 ]] \
+        && [[ "$IS_STARTAPPLICATION" -eq 0 ]]; then
         # If we are in Travis CI AND
         # in `../build-samples.sh generateandtest'
         # (see also surrounded if)
-        kill "$(cat .pid)"
+        kill "$JAVA_PID"
     else
+        echo "ps -o pid,command"
+        ps -o pid,command
         # If we are in `../build-samples.sh startapplication'.
         echo -e "\\n\\n\\033[0;31m"\
             "Server is launched at http://localhost://""$serverPort" \
@@ -219,10 +215,7 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] || \
         # TODO test close the term, then see if Java is running.
         echo -e "\\n\\n\\033[1;31m""Type CTRL+C ONLY ONE TIME to terminate " \
             "gracefully the app and terminate the Java App. " \
-            "DO NOT TYPE SEVERAL TIMES CTRL+C. " \
-            "Maybe if you terminate by stop the term, " \
-            "the app could be continue to run until " \
-            "the reboot of the computer.\\033[0m"
+            "DO NOT TYPE SEVERAL TIMES CTRL+C. \\033[0m"
         wait
     fi
 

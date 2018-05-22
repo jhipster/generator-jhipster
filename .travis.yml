@@ -100,16 +100,16 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
   - yarn -v
 install:
-  - "$JHIPSTER_SCRIPTS/00-install-jhipster.sh"
+  - $JHIPSTER_SCRIPTS/00-install-jhipster.sh
   # generate project and entities
-  - "$JHIPSTER_SCRIPTS/01-generate-entities.sh"
-  - "$JHIPSTER_SCRIPTS/02-generate-project.sh"
-  - "$JHIPSTER_SCRIPTS/03-replace-version-generated-project.sh"
+  - $JHIPSTER_SCRIPTS/01-generate-entities.sh
+  - $JHIPSTER_SCRIPTS/02-generate-project.sh
+  - $JHIPSTER_SCRIPTS/03-replace-version-generated-project.sh
 script:
-  - "$JHIPSTER_SCRIPTS/03-docker-compose.sh"
-  - "travis_wait $JHIPSTER_SCRIPTS/04-tests.sh"
-  - "$JHIPSTER_SCRIPTS/05-run.sh"
-  - "$JHIPSTER_SCRIPTS/06-sonar.sh"
+  - $JHIPSTER_SCRIPTS/03-docker-compose.sh
+  - travis_wait $JHIPSTER_SCRIPTS/04-tests.sh
+  - $JHIPSTER_SCRIPTS/05-run.sh
+  - $JHIPSTER_SCRIPTS/06-sonar.sh
 before_cache:
   - rm -rf $HOME/.m2/repository/io/github/jhipster/jhipster-framework/
   - rm -rf $HOME/.m2/repository/io/github/jhipster/jhipster-dependencies/

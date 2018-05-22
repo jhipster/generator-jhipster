@@ -173,6 +173,9 @@
     # trap of INT int ../build-samples.sh
     # is raised after trap of ./scripts/05-run.sh :-). Good.
 # 23) # set -e doesn't kill the current script if a background process fail.
+# 24) There is not solution to test if we are STDOUT is terminal, or not.
+    # https://stackoverflow.com/questions/911168/how-to-detect-if-my-shell-script-is-running-through-a-pipe
+    # https://stackoverflow.com/questions/911168/how-to-detect-if-my-shell-script-is-running-through-a-pipe
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -371,8 +374,7 @@ function erroredAllPendingLog() {
 trap ctrl_c INT
 function ctrl_c() {
     cd "${JHIPSTER_TRAVIS}"
-    erroredAllPendingLog
-    dockerKillThenRm
+    # dockerKillThenRm
     1>&2 echo "Exit by user."
     if [[ -e /dev/fd/4 ]] ; then
         1>&4 echo "Exit by user."
@@ -381,11 +383,15 @@ function ctrl_c() {
 }
 
 trap finish EXIT
+# Raised also if receive INT command
 function finish() {
 
     # https://en.wikipedia.org/wiki/Defensive_programming
     erroredAllPendingLog
+
+    local WE_WANT_A_PROMPT=0
     dockerKillThenRm
+    unset WE_WANT_A_PROMPT
 
     echo -e "\\n\\n\\nIt's the end of ./build-samples.sh.\\n\\n"
 }
@@ -395,7 +401,11 @@ errorInScript() {
     1>&2 echo "In ./build-samples.sh, error on line: '$1'"
     cd "${JHIPSTER_TRAVIS}"
     erroredAllPendingLog
+
+    local WE_WANT_A_PROMPT=0
     dockerKillThenRm
+    unset WE_WANT_A_PROMPT
+
     exit 5
 }
 
@@ -710,15 +720,23 @@ dockerKillThenRm() {
     # but less controls.
     local -a dockerContainers
 
+    # If docker is not started.
+    if ! docker info 1>> /dev/null 2>&1 ; then
+        return 0
+    fi
+
     IFS=$' ' read -ra dockerContainers <<< \
         "$(docker ps -q --filter "name=jhipster-travis-build*")"
-    # If `docker ps -q` is empty, "${#dockerContainers[0]}" takes value 1.
-    if [[ ! -z "${IS_TEST_REQUIERMENT+x}" ]] ; then
+    printCommandAndEval "docker ps -q --filter 'name=jhipster-travis-build*'"
+
+    if [[ "$WE_WANT_A_PROMPT" -eq 1 ]] ; then
+        # If `docker ps -q` is empty, "${#dockerContainers[0]}" takes value 1.
+        # (IS_CONSOLEVERBOSE=1 when we are in startapplication).
         if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
             printFileDescriptor3 "There is already docker with named prefixed"\
                 "by 'jhipster-travis-build*':"
             docker ps -q --filter "name=jhipster-travis-build*"
-            confirmationUser "Do you want to \`kill' then \`rm' then? [y/n] " \
+            confirmationUser "Do you want to \`kill' then \`rm' them? [y/n] " \
                 "echo 'Deleting this docker images...'" \
                 "errorInBuildExitCurrentSample 'ABORTED by user'"
         fi
@@ -794,7 +812,6 @@ function testRequierments() {
     echo -e "\\n\\n"
 
     local -r unameOut="$(uname -s)"
-    local -r IS_TEST_REQUIERMENT=1
 
     local MACHINE
     # TODO test on it ;-).
@@ -846,9 +863,8 @@ function testRequierments() {
         "If JHipster is already installed, please add it in your PATH."
     echo
 
-    if [[ "$IS_GENERATEANDTEST" -eq 1 ]] && \
-        [[ "$IS_STARTAPPLICATION" -eq 0 ]] ; then
-
+    if [[ "$IS_STARTAPPLICATION" -eq 0 ]] \
+        && [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
         if [[ "$MACHINE" == "Mac" ]] ; then
             printCommandAndEval \
                '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'\
@@ -880,8 +896,8 @@ function testRequierments() {
         fi
     fi
 
-    if [[ "$IS_GENERATEANDTEST" -eq 1 ]] || \
-        [[ "$IS_STARTAPPLICATION" -eq 1 ]]; then
+    if [[ "$IS_STARTAPPLICATION" -eq 0 ]] \
+        && [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
 
         printCommandAndEval "docker --version" || \
             errorInBuildExitCurrentSample \
@@ -929,7 +945,9 @@ function testRequierments() {
             fi
         fi
 
+        local WE_WANT_A_PROMPT=1
         dockerKillThenRm
+        unset WE_WANT_A_PROMPT
 
         # TODO I not test all ports in
         # ../generators/server/templates/src/main/docker
@@ -969,38 +987,44 @@ function testRequierments() {
 
 # function printInfoBeforeLaunch() {{{3
 function printInfoBeforeLaunch() {
-    printFileDescriptor3 "\\n\\n* Your log file will be '$LOGFILENAME\\n" \
-        "* When build will finish, The end of this filename shoule be renamed" \
-        "'errored' or 'passed'\\n" \
-        "* On this file lines started by '${ps4Light}' are bash" \
-        "command. Useful to know which command fail\\n" \
-        "* See progress in this file. Do not forget to refresh it!"
-    # Test if we launch not this function in generateNode_Modules_Cache().
-    # True if launched from functions generateProject() and
-    # generateAndTestProject().
-    if [[ -z "${isGenerationOfNodeModulesCache+x}" ]] ; then
-        # echo constants used in ./scripts/*.sh
-        if [[ "$IS_STARTAPPLICATION" -eq 0 ]] ; then
-            printFileDescriptor3 "\\nLOGFILENAME='$LOGFILENAME'" \
-                "(variable not used in ./travis/script/*.sh." \
-                "The end of this filename shoule be renamed errored or passed" \
-                "at the end of this script\\n"
-        fi
-        printFileDescriptor3 "\\nPATH='$PATH'\\n" \
-            "JHIPSTER_MATRIX='$JHIPSTER_MATRIX'" \
-                "(variable not used in ./travis/script/*.sh\\n" \
-            "JHIPSTER='$JHIPSTER\\n" \
-            "PROFILE='$PROFILE\\n" \
-            "PROTRACTOR='$PROTRACTOR\\n" \
-            "RUN_APP='$RUN_APP\\n" \
-            "JHIPSTER_TRAVIS='$JHIPSTER_TRAVIS\\n" \
-            "JHIPSTER_SAMPLES='$JHIPSTER_SAMPLES\\n" \
-            "JHIPSTER_SCRIPTS='$JHIPSTER_SCRIPTS\\n" \
-            "APP_FOLDER='$APP_FOLDER\\n" \
-            "UAA_APP_FOLDER='$UAA_APP_FOLDER\\n" \
-            "SPRING_OUTPUT_ANSI_ENABLED='$SPRING_OUTPUT_ANSI_ENABLED\\n" \
-            "SPRING_JPA_SHOW_SQL='$SPRING_JPA_SHOW_SQL'\\n\\n"
+    if [[ "$IS_STARTAPPLICATION" -eq 0 ]] ; then
+        printFileDescriptor3 "\\n\\n* Your log file will be '$LOGFILENAME'\\n" \
+            "* When build will finish, " \
+            "the end of this filename should be renamed" \
+            "'errored' or 'passed'\\n" \
+            "* On this file lines started by '${ps4Light}' are bash" \
+            "command. Useful to know which command fail\\n" \
+            "* See progress in this file. Do not forget to refresh it!"
+        printFileDescriptor3 "\\nLOGFILENAME='$LOGFILENAME'" \
+            "(variable not used in ./travis/script/*.sh." \
+            "The end of this filename shoule be renamed errored or passed" \
+            "at the end of this script\\n\\n\\n"
     fi
+    printFileDescriptor3 "\\nPATH='$PATH'\\n" \
+        "JHIPSTER_MATRIX='$JHIPSTER_MATRIX'" \
+        "(variable not used in ./travis/script/*.sh\\n" \
+        "APP_FOLDER='$APP_FOLDER'\\n" \
+        "JHIPSTER='$JHIPSTER'\\n\\n" \
+        "JHIPSTER_TRAVIS='$JHIPSTER_TRAVIS'\\n" \
+        "JHIPSTER_SAMPLES='$JHIPSTER_SAMPLES'\\n" \
+        "JHIPSTER_SCRIPTS='$JHIPSTER_SCRIPTS'\\n"
+    if [[ -z "${IS_GENERATION_NODE_MODULES_CACHE+x}" ]] ; then
+        # True if it's not launched from function generateNode_Modules_Cache()
+        printFileDescriptor3 "PROFILE='$PROFILE'\\n" \
+            "PROTRACTOR='$PROTRACTOR'\\n" \
+            "RUN_APP='$RUN_APP'\\n" \
+            "UAA_APP_FOLDER='$UAA_APP_FOLDER'\\n" \
+            "SPRING_OUTPUT_ANSI_ENABLED='$SPRING_OUTPUT_ANSI_ENABLED'\\n" \
+            "SPRING_JPA_SHOW_SQL='$SPRING_JPA_SHOW_SQL'\\n\\n" \
+            "IS_TRAVIS_CI='$IS_TRAVIS_CI'\\n" \
+            "IS_STARTAPPLICATION='$IS_STARTAPPLICATION'\\n" \
+            "IS_SKIP_CLIENT='$IS_SKIP_CLIENT'\\n"
+            if [[ "$IS_STARTAPPLICATION" -eq 0 ]] ; then
+                printFileDescriptor3 "IS_GENERATEANDTEST=""'$IS_GENERATEANDTEST'\\n" \
+                "IS_SKIPPACKAGEAPP='$IS_SKIPPACKAGEAPP'\\n"
+            fi
+    fi
+
 }
 
 # function createlogfile() {{{3
@@ -1054,7 +1078,7 @@ function treatEndOfBuild() {
     # TODO treat for REACT. React has its own node_modules.
     # React should not be symlinked.
 
-    echoTitleBuildStep "start" "Finishing '$JHIPSTER_MATRIX'"
+    echoTitleBuildStep "end" "Finishing '$JHIPSTER_MATRIX'"
 
     if [[ "$IS_GENERATEANDTEST" -eq 0 ]] && \
         [[ "$IS_SKIPPACKAGEAPP" -eq 1 ]]; then
@@ -1064,7 +1088,9 @@ function treatEndOfBuild() {
         # To test in startApplication() if it was packaged or not.
     fi
 
+    local WE_WANT_A_PROMPT=0
     dockerKillThenRm
+    unset WE_WANT_A_PROMPT
 
     # Let time, in case of the disk isn't flushed, or if there is
     # java or node background processes not completly finished.
@@ -1100,10 +1126,9 @@ function treatEndOfBuild() {
             "${LOGFILENAME}" 1>> /dev/null
     fi
 
-    # Test if we launch not this function in generateNode_Modules_Cache().
-    # True if launched from functions generateProject() and
-    # generateAndTestProject().
-    if [[ -z "${isGenerationOfNodeModulesCache+x}" ]] ; then
+    if [[ -z "${IS_GENERATION_NODE_MODULES_CACHE+x}" ]] ; then
+        # True only if is not launched from function
+        # generateNode_Modules_Cache()
         sleep 2
         if [[ "$IS_SKIP_CLIENT" -eq 0 ]] ; then
             # Because node_modules takes 1.1 Go ! Too much !
@@ -1276,8 +1301,8 @@ function generateProject() {
     # launchNewBash "./scripts/03-replace-version-generated-project.sh" \
     #     "Replace version generated-project'"
 
-    if [[ "$IS_GENERATEANDTEST" -eq 0 ]] && \
-        [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]]; then
+    if [[ "$IS_GENERATEANDTEST" -eq 0 ]] \
+        && [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]]; then
         PROTRACTOR=0        # to not launch \`yarn e2e' in 05-run.sh
         launchNewBash "./scripts/05-run.sh" "Package '${JHIPSTER}-sample'"
     # else done in function generateAndTestProject()
@@ -1350,7 +1375,7 @@ Do you want to continue? [y/n] "
 
     local -i ERROR_IN_SAMPLE=0
 
-    local -ir isGenerationOfNodeModulesCache=1
+    local -ir IS_GENERATION_NODE_MODULES_CACHE=1
 
     time {
 
@@ -1402,6 +1427,17 @@ Do you want to continue? [y/n] "
 # ====================
 # ====================
 
+# function define_IS_SKIP_CLIENT() {{{3
+function define_IS_SKIP_CLIENT() {
+    pushd "$JHIPSTER_SAMPLES/""$JHIPSTER" 1>> /dev/null
+    if grep -q -E '"skipClient":\s*true' .yo-rc.json ; then
+        export IS_SKIP_CLIENT=1
+    else
+        export IS_SKIP_CLIENT=0
+    fi
+    popd 1>> /dev/null
+}
+
 # function retrieveVariablesInFileDotTravisSectionMatrix() {{{3
 function retrieveVariablesInFileDotTravisSectionMatrix() {
 
@@ -1420,9 +1456,10 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     # https://github.com/koalaman/shellcheck/wiki/SC2206
     IFS=" " read -r -a travisVars <<< \
         "$(cut -s -d ' ' -f 2- <<< "$JHIPSTER_MATRIX")"
-    # https://github.com/koalaman/shellcheck/wiki/SC2163
-    # shellcheck disable=SC2163
-    if [[ "${#travisVars[*]}" -lt 0 ]] ; then
+    echo ${#travisVars[*]}
+    if [[ "${#travisVars[*]}" -gt 0 ]] ; then
+        # https://github.com/koalaman/shellcheck/wiki/SC2163
+        # shellcheck disable=SC2163
         export "${travisVars[@]}"
     fi
 
@@ -1436,9 +1473,8 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 
 # function createFolderNodeModulesAndLogFile() {{{3
 function createFolderNodeModulesAndLogFile() {
+    createLogFile
     if [[ "$IS_SKIP_CLIENT" -eq 0 ]] ; then
-
-        createLogFile
 
         local -r NODE_MOD_CACHED="$NODE_MODULES_CACHE_ANGULAR/node_modules"
 
@@ -1457,12 +1493,8 @@ function createFolderNodeModulesAndLogFile() {
                 "for React"
         fi
         # Even if there is already a correct symlink, we must launch it again.
-        yarnLink
-    else
-        createLogFile
-        yarnLink
-        yarn install
     fi
+    yarnLink
 }
 
 # function launchOnlyOneSample() {{{3
@@ -1481,7 +1513,7 @@ function launchOnlyOneSample() {
             local argument="ABORTED: rename this folder, \
 then restart script."
             confirmationUser "$confirmationFirstParameter" \
-                "true"
+                "true" \
                 "exitScriptWithError '$argument'"
             unset confirmationFirstParameter argument
             generateNode_Modules_Cache
@@ -1495,13 +1527,7 @@ then restart script."
     printCommandAndEval "rm -rf '${APP_FOLDER}'"
     printCommandAndEval "mkdir -p '$APP_FOLDER'"
 
-    pushd "$JHIPSTER_SAMPLES/""$JHIPSTER"
-    if grep -q -E '"skipClient":\s*true' .yo-rc.json ; then
-        local -r IS_SKIP_CLIENT=1
-    else
-        local -r IS_SKIP_CLIENT=0
-    fi
-    popd
+    define_IS_SKIP_CLIENT
 
     # Used in function launchNewBash() to test if we must continue the script.
     # If an error occure in ./scripts/*.sh, in function
@@ -1549,7 +1575,7 @@ function wrapperLaunchScript() {
     echoTitleBuildStep "start" \
         "'${JHIPSTER_MATRIX}' is launched in background!"
     launchOnlyOneSample
-    echoTitleBuildStep "start" "End of '$JHIPSTER_MATRIX'" ;
+    echoTitleBuildStep "end" "End of '$JHIPSTER_MATRIX'" ;
     return 0
 }
 
@@ -1694,6 +1720,8 @@ function startApplication() {
     cd "$APP_FOLDER"
     local -i ERROR_IN_SAMPLE=0
 
+    define_IS_SKIP_CLIENT
+
     local -r IS_NOT_PACKAGED_FILE="$APP_FOLDER""/not_packaged.local-travis.log"
 
     if [[ -f "$IS_NOT_PACKAGED_FILE" ]] ; then
@@ -1709,14 +1737,22 @@ function startApplication() {
     cd "$JHIPSTER_TRAVIS"
     echoTitleBuildStep "start" "./scripts/03-docker-compose.sh" \
         "(Start docker container-compose.sh for '${JHIPSTER}')"
-    bash ./scripts/03-docker-compose.sh || \
+    if  ./scripts/03-docker-compose.sh ; then
+        echoTitleBuildStep "end" "End of ./scripts/03-docker-compose.sh " \
+            "with sucess."
+    else
         exitScriptWithError "in ./scripts/03-docker-compose.sh"
+    fi
 
     cd "$JHIPSTER_TRAVIS"
     echoTitleBuildStep "start" \
-        "./scripts/05-run.sh" "(Run '${JHIPSTER}-sample')" \
-    bash ./scripts/05-run.sh || \
+        "./scripts/05-run.sh" "(Run '${JHIPSTER}-sample')"
+    if  ./scripts/05-run.sh ; then
+        echoTitleBuildStep "end" "Java and Docker stopped gracefully."
+    else
         exitScriptWithError "in ./scripts/05-run.sh"
+    fi
+
 }
 
 # MAIN {{{1
@@ -1893,7 +1929,6 @@ elif [[ "$COMMAND_NAME" == "startapplication" ]] ; then
         declare JHIPSTER="$2"
         declare JHIPSTER_MATRIX
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER"
-        export IS_GENERATEANDTEST=0
         export IS_STARTAPPLICATION=1
         declare -r IS_COLORIZELOGFILE=1
         time startApplication
@@ -1937,6 +1972,12 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
         while [[ "$#" -ne 0 ]] ; do
             if [[ "$1" == "--consoleverbose" ]] ; then
                 IS_CONSOLEVERBOSE=1
+                if [[ -z "${JHIPSTER_LIST+x}" ]]  ; then
+                    exitScriptWithError "'--consoleverbose' "\
+                        "should be used with at least one \`sample_name'" \
+                        "before it." \
+                        "Please read \`./build-samples.sh help'."
+                fi
                 if [[ "$JHIPSTER_LIST" =~ $JHIPSTER_LIST_PATTERN ]] ; then
                     exitScriptWithError "'--consoleverbose' "\
                         "option could " \

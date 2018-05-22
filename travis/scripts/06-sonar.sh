@@ -17,11 +17,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -ex
+set -exu
 function echoSetX() {
-    echo -e "\n-------------------------------------------------------------------------------\n" \
-        "\n$1\n" \
-        "\n-------------------------------------------------------------------------------\n"
+    echo -e "\\n----------------------------------------------------------\\n" \
+        "\\n$1\\n" \
+        "\\n--------------------------------------------------------------\\n"
 }
 
 #--------------------------------------------------
@@ -34,6 +34,6 @@ set -x
 cd "$APP_FOLDER"
 if [ "$JHIPSTER" == "ngx-default" ]; then
     if [ "$TRAVIS_REPO_SLUG" = "jhipster/generator-jhipster" ] && [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
-        ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+        ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.login="$SONAR_TOKEN"
     fi
 fi
