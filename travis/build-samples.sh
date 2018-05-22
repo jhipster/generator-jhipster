@@ -166,6 +166,9 @@
     # http://wiki.bash-hackers.org/commands/builtin/eval
     # khttps://stackoverflow.com/questions/17529220/why-should-eval-be-avoided-in-bash-and-what-should-i-use-instead
     # https://medium.com/dot-debug/the-perils-of-bash-eval-cc5f9e309cae
+    # always write `eval "$1"' to escape properly.
+    # Write `eval' "$@"
+    # If you could, prefere simple quotes than double quotes.
 # 21)
     # trap of INT int ../build-samples.sh
     # is raised after trap of ./scripts/05-run.sh :-). Good.
@@ -629,22 +632,23 @@ function cleanAllProjects() {
     local confirmationFirstParameter=\
 "Warning: are you sure to delete all samples/*-sample [y/n]? "
     confirmationUser "$confirmationFirstParameter" \
-        'echo ""' \
-        'exitScriptWithError "ABORTED."'
+        "echo ''" \
+        "exitScriptWithError 'ABORTED by user.'"
     unset confirmationFirstParameter
 
     local foldersSample
     foldersSample=$(find . "$JHIPSTER_SAMPLES" -maxdepth 1 \
         -type d -name "*-sample")
-    if [[ "$foldersSample" == "" ]] ; then
-        echo -e "\\n\\n*********************** No folder ./samples/*-sample to " /
-        "delete\\n"
+    if [[ -z "$foldersSample" ]] ; then
+        echo -e "\\n\\n*********************** No folder ./samples/*-sample to " \
+            "delete\\n"
+    else
+        while IFS=$'\n' read -r dirToRemove ; do
+                echo -e "\\n\\n********************** Deleting '$dirToRemove\\n"
+                rm -Rf "$dirToRemove"
+        done <<< "$foldersSample"
     fi
 
-    while IFS=$'\n' read -r dirToRemove ; do
-            echo -e "\\n\\n*********************** Deleting '$dirToRemove\\n"
-            rm -Rf "$dirToRemove"
-    done <<< "$foldersSample"
 
     local -r NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
 
@@ -1319,7 +1323,7 @@ function generateNode_Modules_Cache() {
     local -r FILE_ANGULAR_PACKAGE_JSON=\
 "${JHIPSTER_TRAVIS}/""../generators/client/templates/angular/package.json.ejs"
     local -r FILE_ANGULAR_PACKAGE_JSON_CACHED=\
-"${NODE_MODULES_CACHE_ANGULAR}angular.package.json.ejs.cached"
+"${NODE_MODULES_CACHE_ANGULAR}/angular.package.json.ejs.cached"
     if [[ -f "$FILE_ANGULAR_PACKAGE_JSON_CACHED" ]] && \
         diff "$FILE_ANGULAR_PACKAGE_JSON" "$FILE_ANGULAR_PACKAGE_JSON_CACHED" \
         1>> /dev/null 2>> /dev/null
@@ -1334,14 +1338,13 @@ function generateNode_Modules_Cache() {
         echo -e "'$NODE_MODULES_CACHE_ANGULAR' isn't generated. We need" \
             "generate it first."
     else
-        confirmationFirstParameter="Files '$FILE_ANGULAR_PACKAGE_JSON' and \
-'$FILE_ANGULAR_PACKAGE_JSON_CACHED' differ. The old \
-'$NODE_MODULES_CACHE_ANGULAR' is outdated. \
-We need to refresh it. \
+        local confirmationFirstParameter="Files  \
+'$FILE_ANGULAR_PACKAGE_JSON' and '$FILE_ANGULAR_PACKAGE_JSON_CACHED' differ. \
+The old '$NODE_MODULES_CACHE_ANGULAR' is outdated.  We need to refresh it. \
 Do you want to continue? [y/n] "
         confirmationUser "$confirmationFirstParameter" \
-            "echo 'Generating...'"
-            "exitScriptWithError 'ABORTED'"
+            "echo 'Generating...'" \
+            "exitScriptWithError 'ABORTED by user'"
     fi
     sleep 4
 
@@ -1362,20 +1365,26 @@ Do you want to continue? [y/n] "
 
         createLogFile
 
-        rm -Rf "${APP_FOLDER}"
-        mkdir -p "$APP_FOLDER"
-        cd "${APP_FOLDER}"
+        printCommandAndEval "rm -Rf '${APP_FOLDER}'"
+        # For PATH
+        printCommandAndEval "mkdir -p '${APP_FOLDER}/node_modules/.bin'"
+        printCommandAndEval "cd '${APP_FOLDER}'"
+
         yarnLink
 
         echoTitleBuildStep "start" "JHipster generation."
-        cp "${JHIPSTER_SAMPLES}/node_modules_cache/angular/.yo-rc.json" \
-            "${NODE_MODULES_CACHE_ANGULAR}" || \
+        if cp "${JHIPSTER_SAMPLES}/node_modules_cache/angular/.yo-rc.json" \
+            "${NODE_MODULES_CACHE_ANGULAR}"  ; then
+            echo ".yo-rc.json is copied"
+        else
             errorInBuildExitCurrentSample "not a JHipster project."
+        fi
+
         cd "${NODE_MODULES_CACHE_ANGULAR}"
+
         local -r jhipstercommand="jhipster --force --no-insight --skip-checks \
 --with-entities --skip-git --skip-commit-hook"
         printFileDescriptor3 "$jhipstercommand"
-        eval "$jhipstercommand"
         if eval "$jhipstercommand" ; then
             echoTitleBuildStep "end" "'$jhipstercommand' finish with SUCCESS!"
         else
@@ -1441,6 +1450,8 @@ function createFolderNodeModulesAndLogFile() {
             # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
             # But `cp -R' works good ! ;-) ! Probably more reliable.
             printCommandAndEval "cp -R '$NODE_MOD_CACHED' '${APP_FOLDER}'"
+            # Because it's the PATH!
+            printCommandAndEval "mkdir -p '${APP_FOLDER}/node_modules/.bin'"
         else
             errorInBuildExitCurrentSample "Script not implemented."\
                 "for React"
@@ -1469,22 +1480,20 @@ function launchOnlyOneSample() {
 '${APP_FOLDER}' exists. Do you want delete it? [y/n] "
             local argument="ABORTED: rename this folder, \
 then restart script."
-            local execInfirmed="errorInBuildStopCurrentSample '$argument'"
             confirmationUser "$confirmationFirstParameter" \
-                "rm -rf '${APP_FOLDER}' && mkdir -p '$APP_FOLDER'" \
-                "echo '$execInfirmed'"
-            unset confirmationFirstParameter argument execInfirmed
-
+                "true"
+                "exitScriptWithError '$argument'"
+            unset confirmationFirstParameter argument
             generateNode_Modules_Cache
         else
-            mkdir -p "$APP_FOLDER"
+            true
         fi
     else
         # Defined "$APP_FOLDER" as explained in the MAIN section of this file.
         export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
-        rm -rf "${APP_FOLDER}"
-        mkdir -p "$APP_FOLDER"
     fi
+    printCommandAndEval "rm -rf '${APP_FOLDER}'"
+    printCommandAndEval "mkdir -p '$APP_FOLDER'"
 
     pushd "$JHIPSTER_SAMPLES/""$JHIPSTER"
     if grep -q -E '"skipClient":\s*true' .yo-rc.json ; then
@@ -1577,8 +1586,8 @@ function launchSamplesInBackground() {
     done
 
     confirmationUser "Are you sure to contiune? [y/n] " \
-        'echo ""' \
-        'exitScriptWithError "ABORTED."'
+        "echo ''" \
+        "exitScriptWithError 'ABORTED by user.'"
     unset confirmationFirstParameter
 
     # TODO Actually numberOfProcesses should be 1 because there is port conflict
@@ -1671,16 +1680,16 @@ function startApplication() {
             "try to generate it again with" \
             "\`./build-samples.sh generate ""$JHIPSTER'."
         confirmationUser "Do you want to continue [y/n]? "\
-            "echo Continuing..." \
-            "exitScriptWithError 'ABORTED'"
+            "echo 'Continuing...'" \
+            "exitScriptWithError 'ABORTED by user'"
     elif  find . "$APP_FOLDER" -name "$LOGFILENAME_ERR" | \
         grep -q "$LOGFILENAME_ERR" ; then
         warning "'$LOGFILENAME_ERR' was found. An errored occured" \
             "during previous generation of '$APP_FOLDER'. This command should" \
             "not work properly read the logfile in '$APP_FOLDER'."
         confirmationUser "Do you want to continue [y/n]? "\
-            "echo Continuing..." \
-            "exitScriptWithError 'ABORTED'"
+            "echo 'Continuing...'" \
+            "exitScriptWithError 'ABORTED by user'"
     fi
     cd "$APP_FOLDER"
     local -i ERROR_IN_SAMPLE=0
@@ -1786,11 +1795,12 @@ readonly BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
 
 # See also ./scripts/02-generate-project.sh.
 # The string "node_modules_cache-sample" is used.
-declare -r NODE_MODULES_CACHE_SAMPLE=\
+declare node_modules_cache_sample=\
 "${JHIPSTER_SAMPLES}/node_modules_cache-sample"
-declare -r NODE_MODULES_CACHE_ANGULAR="${NODE_MODULES_CACHE_SAMPLE}""/angular"
+declare -r NODE_MODULES_CACHE_ANGULAR="${node_modules_cache_sample}""/angular"
 # TODO
-# NODE_MODULES_CACHE_REACT="${NODE_MODULES_CACHE_SAMPLE}"/react
+# react
+unset node_modules_cache_sample
 
 # Use it like this:"${ps4Light}`dirs +0`$ "
 declare -r ps4Light="\\033[1;32m""$USER@""$HOSTNAME""\\033[0m"": "\
@@ -1800,8 +1810,8 @@ declare -r URED="\\033[4;31m"
 declare -r BRED="$NC""\\033[1;31m"
 declare -r BLUE="\\033[0;34m"
 
-declare -r JHIPSTER_LIST_PATTERN="^[^-][a-z1-9,-]*$"
-declare -r JHIPSTER_PATTERN="^[^-][a-z1-9-]*$"
+declare -r JHIPSTER_PATTERN="^[^-][a-z0-9]{2,}[a-z0-9-]+[a-z0-9]+$"
+declare -r JHIPSTER_LIST_PATTERN="^[^-]([a-z0-9]{2,}[a-z0-9-]{2,},)+([a-z0-9]{2,}[a-z0-9-]{2,}[a-z0-9]+)+$"
 
 # Argument parser {{{2
 # ====================
@@ -1915,6 +1925,11 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
             declare JHIPSTER_LIST="$2"
             declare -a JHIPSTER_MATRIX_ARRAY
             shift 2
+        elif [[ "$2" =~ $JHIPSTER_PATTERN ]] ; then
+            declare JHIPSTER_LIST="$2"
+            declare JHIPSTER_MATRIX
+            returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER_LIST"
+            shift 2
         else
             shift
         fi
@@ -1922,8 +1937,7 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
         while [[ "$#" -ne 0 ]] ; do
             if [[ "$1" == "--consoleverbose" ]] ; then
                 IS_CONSOLEVERBOSE=1
-                if [[ -z "${JHIPSTER_LIST_PATTERN+x}" ]] || \
-                    [[ "$JHIPSTER_LIST" =~ $JHIPSTER_LIST_PATTERN ]] ; then
+                if [[ "$JHIPSTER_LIST" =~ $JHIPSTER_LIST_PATTERN ]] ; then
                     exitScriptWithError "'--consoleverbose' "\
                         "option could " \
                         "be used only when there is only one sample to build." \
