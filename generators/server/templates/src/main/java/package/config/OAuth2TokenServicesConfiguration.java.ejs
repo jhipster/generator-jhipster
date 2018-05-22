@@ -20,14 +20,14 @@ package <%=packageName%>.config;
 
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
-<%_ if (applicationType === 'microservice') { _%>
+<%_ if (applicationType === 'microservice' && cacheProvider !== 'no') { _%>
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-<%_ if (applicationType === 'microservice') { _%>
+<%_ if (applicationType === 'microservice' && cacheProvider !== 'no') { _%>
 import <%=packageName%>.security.oauth2.CachedUserInfoTokenServices;
 <%_ } _%>
 import <%=packageName%>.security.oauth2.SimpleAuthoritiesExtractor;
@@ -39,7 +39,7 @@ public class OAuth2TokenServicesConfiguration {
     private static final String OAUTH2_PRINCIPAL_ATTRIBUTE = "preferred_username";
     private static final String OAUTH2_AUTHORITIES_ATTRIBUTE = "roles";
 
-<%_ if (applicationType === 'microservice') { _%>
+<%_ if (applicationType === 'microservice' && cacheProvider !== 'no') { _%>
     private final ResourceServerProperties resourceServerProperties;
 
 	public OAuth2TokenServicesConfiguration(ResourceServerProperties resourceServerProperties) {

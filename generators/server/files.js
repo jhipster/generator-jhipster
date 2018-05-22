@@ -499,6 +499,13 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'jwt',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/gateway/TokenRelayFilter.java', renameTo: generator => `${generator.javaDir}gateway/TokenRelayFilter.java` }
+            ]
+        },
+        {
             condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -528,7 +535,7 @@ const serverFiles = {
     ],
     serverMicroservice: [
         {
-            condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2'))),
+            condition: generator => generator.applicationType === 'microservice' || generator.authenticationType === 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/MicroserviceSecurityConfiguration.java', renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java` }
@@ -577,16 +584,14 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !(generator.applicationType === 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
-                && generator.authenticationType === 'oauth2' && generator.cacheProvider !== 'no',
+            condition: generator => generator.applicationType === 'microservice' && generator.authenticationType === 'oauth2' && generator.cacheProvider !== 'no',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/security/oauth2/CachedUserInfoTokenServices.java', renameTo: generator => `${generator.javaDir}security/oauth2/CachedUserInfoTokenServices.java` },
             ]
         },
         {
-            condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
-                && (generator.authenticationType === 'oauth2' && (generator.applicationType === 'microservice' || generator.applicationType === 'gateway')),
+            condition: generator => (generator.authenticationType === 'oauth2' && (generator.applicationType === 'microservice' || generator.applicationType === 'gateway')),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/FeignConfiguration.java', renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java` },

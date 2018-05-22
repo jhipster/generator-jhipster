@@ -593,12 +593,6 @@
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
         </dependency>
-            <%_ if (applicationType === 'gateway') { _%>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-security</artifactId>
-        </dependency>
-            <%_ } _%>
             <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -696,7 +690,7 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (authenticationType === 'uaa') { _%>
+        <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-security</artifactId>
