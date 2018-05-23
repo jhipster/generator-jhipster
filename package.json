@@ -48,14 +48,12 @@
     "jsdoc": "jsdoc --configure jsdoc-conf.json"
   },
   "dependencies": {
-    "cheerio": "0.22.0",
     "chalk": "2.4.1",
     "commander": "2.15.1",
     "didyoumean": "1.2.1",
     "ejs": "2.6.1",
     "glob": "7.1.2",
     "gulp-filter": "5.1.0",
-    "html-wiring": "1.2.0",
     "insight": "0.10.1",
     "jhipster-core": "2.0.3",
     "js-yaml": "3.11.0",

@@ -18,7 +18,6 @@
  */
 
 const path = require('path');
-const html = require('html-wiring');
 const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
@@ -294,8 +293,7 @@ function geti18nJson(key, generator) {
         render = true;
     }
     try {
-        let file = html.readFileAsString(path.join(generator.sourceRoot(), filename));
-
+        let file = generator.fs.read(path.join(generator.sourceRoot(), filename));
         file = render ? ejs.render(file, generator, {}) : file;
         file = JSON.parse(file);
         return file;
