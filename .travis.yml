@@ -52,8 +52,8 @@ env:
     - JHIPSTER=ms-ngx-gateway-uaa
     - JHIPSTER=ms-micro-eureka
     - JHIPSTER=ms-micro-consul
-    - JHIPSTER=react-default
-    - JHIPSTER=react-noi18n-es-ws-gradle-session
+    - JHIPSTER=react-default PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=react-noi18n-es-ws-gradle-session PROTRACTOR=1
 
 before_install:
   - jdk_switcher use oraclejdk8
