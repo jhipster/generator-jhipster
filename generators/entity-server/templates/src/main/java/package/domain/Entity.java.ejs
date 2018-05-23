@@ -24,7 +24,11 @@ let importSet = false;
 const uniqueEnums = {}; %><%- include imports -%>
 
 <%_ if (databaseType === 'cassandra') { _%>
-import com.datastax.driver.mapping.annotations.*;
+import org.springframework.data.annotation.Id;
+    <%_ if (fieldsContainBlob) { _%>
+import org.springframework.data.cassandra.core.mapping.Column;
+    <%_ } _%>
+import org.springframework.data.cassandra.core.mapping.Table;
 <%_ } if (importJsonIgnore === true) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
 <%_ } if (importJsonIgnoreProperties === true) { _%>
@@ -108,7 +112,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } if (databaseType === 'couchbase') { _%>
 @Document
 <%_ } if (databaseType === 'cassandra') { _%>
-@Table(name = "<%= entityInstance %>")
+@Table("<%= entityInstance %>")
 <%_ } if (searchEngine === 'elasticsearch' && databaseType === 'mongodb') { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
@@ -117,29 +121,27 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 public class <%= entityClass %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
-<% if (databaseType === 'sql') { %>
-    @Id
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    <%_ }  else { _%>
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    <%_ } _%>
-    private Long id;
-<% } if (databaseType === 'couchbase') { %>
+    <%_ if (databaseType === 'couchbase') { _%>
     public static final String PREFIX = "<%= entityInstance.toLowerCase() %>";
 
     @SuppressWarnings("unused")
     @IdPrefix
     private String prefix = PREFIX;
-<%_ } if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-    @Id<% if (databaseType === 'couchbase') { %>
-    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)<% } %>
-    private String id;
-<%_ } if (databaseType === 'cassandra') { %>
-    @PartitionKey
-    private UUID id;
-<%_ } _%>
+    <%_ } _%>
+
+    @Id
+    <%_ if (databaseType === 'sql') { _%>
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+        <%_ }  else { _%>
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+        <%_ } _%>
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
+    <%_ } _%>
+    private <%= pkType %> id;
 
 <%_ for (idx in fields) {
     if (typeof fields[idx].javadoc !== 'undefined') { _%>
@@ -189,7 +191,7 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
       <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
+    @Column(<% if (databaseType !== 'cassandra') { %>name = <% } %>"<%-fieldNameAsDatabaseColumn %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
         <%_ if (required && databaseType === 'cassandra') { _%>
     @NotNull
         <%_ } _%>

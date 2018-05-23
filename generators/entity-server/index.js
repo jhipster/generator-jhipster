@@ -28,6 +28,10 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
+        this.log(this.databaseType);
+        if (this.databaseType === 'cassandra') {
+            this.pkType = 'UUID';
+        }
         const blueprint = this.config.get('blueprint');
         // use global variable since getters dont have access to instance property
         useBlueprint = this.composeBlueprint(blueprint, 'entity-server', {
