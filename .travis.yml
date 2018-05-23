@@ -21,7 +21,6 @@ env:
   global:
     # If you add some global variables, please add it also at the end of ./travis/build-samples.sh - PROFILE=dev
     - PROFILE=dev
-    - RUN_APP=1
     - PROTRACTOR=0
     - JHIPSTER_TRAVIS="$TRAVIS_BUILD_DIR/travis"
     - JHIPSTER_SAMPLES="$JHIPSTER_TRAVIS/samples"

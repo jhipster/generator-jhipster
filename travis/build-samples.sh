@@ -1012,7 +1012,6 @@ function printInfoBeforeLaunch() {
         # True if it's not launched from function generateNode_Modules_Cache()
         printFileDescriptor3 "PROFILE='$PROFILE'\\n" \
             "PROTRACTOR='$PROTRACTOR'\\n" \
-            "RUN_APP='$RUN_APP'\\n" \
             "UAA_APP_FOLDER='$UAA_APP_FOLDER'\\n" \
             "SPRING_OUTPUT_ANSI_ENABLED='$SPRING_OUTPUT_ANSI_ENABLED'\\n" \
             "SPRING_JPA_SHOW_SQL='$SPRING_JPA_SHOW_SQL'\\n\\n" \
@@ -1780,7 +1779,6 @@ export PROTRACTOR=0
 # its value corresponding to the first column
 # export JHIPSTER=ngx-default
 
-export RUN_APP=1
 export JHIPSTER_TRAVIS=
 JHIPSTER_TRAVIS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export JHIPSTER_SAMPLES="$JHIPSTER_TRAVIS/samples"
