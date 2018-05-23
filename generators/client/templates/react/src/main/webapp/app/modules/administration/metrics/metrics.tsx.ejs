@@ -102,7 +102,7 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
           {metrics.gauges[key].value}
         </Col>
       </Row>
-      : ''
+      : null
   );
 
   renderModal = () => <MetricsModal handleClose={this.handleClose} showModal={this.state.showModal} threadDump={this.props.threadDump}/>;
