@@ -16,19 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { AxiosPromise } from 'axios';
-
-// TEMPORARY
-declare module 'react-jhipster' {
-  export interface IPayload<T> {
-    type: string;
-    payload: AxiosPromise<T>;
-    meta?: any;
-  }
-  export type ICrudGetAction<T> = (id: string | number) => IPayload<T> | ((dispatch: any) => IPayload<T>);
-  export type ICrudGetAllAction<T> = (page?: number, size?: number, sort?: string) => IPayload<T> | ((dispatch: any) => IPayload<T>);
-  export type ICrudSearchAction<T> = (search?: string) => IPayload<T> | ((dispatch: any) => IPayload<T>);
-}
 
 declare module '*.json' {
     const value: any;
