@@ -32,13 +32,13 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import appConfig from 'app/config/constants';
 
-export const NavDropdown = ({ id, name, icon, style, children }) => (
-  <UncontrolledDropdown nav inNavbar id={id}>
+export const NavDropdown = props => (
+  <UncontrolledDropdown nav inNavbar id={props.id}>
     <DropdownToggle nav caret className="d-flex align-items-center">
-      <FontAwesomeIcon icon={icon} />
-      <span>{name}</span>
+      <FontAwesomeIcon icon={props.icon} />
+      <span>{props.name}</span>
     </DropdownToggle>
-    <DropdownMenu right style={style}>{children}</DropdownMenu>
+    <DropdownMenu right style={props.style}>{props.children}</DropdownMenu>
   </UncontrolledDropdown>
 );
 

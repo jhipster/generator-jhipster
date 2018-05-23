@@ -81,7 +81,7 @@ describe('Settings reducer tests', () => {
     it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {
       const meta = {
         <%_ if (enableTranslation) { _%>
-        successMessage: 'settings.messages.success'
+        successMessage: 'translation-not-found[settings.messages.success]'
         <%_ } else { _%>
         successMessage: '<strong>Settings saved!</strong>'
         <%_ } _%>

@@ -94,7 +94,7 @@ describe('Creating account tests', () => {
     it('dispatches CREATE_ACCOUNT_PENDING and CREATE_ACCOUNT_FULFILLED actions', async () => {
       const meta = {
         <%_ if (enableTranslation) { _%>
-        successMessage: 'register.messages.success'
+        successMessage: 'translation-not-found[register.messages.success]'
         <%_ } else { _%>
         successMessage: '<strong>Registration saved!</strong> Please check your email for confirmation.'
         <%_ } _%>
