@@ -284,7 +284,7 @@
 #    * If the second argument is `generateandtest', we launch
 #    only function generateAndTestProject()
 #    who launch function generateProject() and scripts ./scripts/04-tests.sh,
-#    ./scripts/05-run.sh, ./scripts/06-sonar.sh.
+#    ./scripts/05-run.sh
 # 3. If we have one parameters (e.g. `./build-samples.sh generate')
 #    Or if we have two parameters
 #       (e.g. `./build-samples.sh generate ngx-default,other_samples,...)
@@ -1327,8 +1327,9 @@ function generateAndTestProject() {
         "Start docker container-compose.sh for '${JHIPSTER}'"
     launchNewBash "./scripts/04-tests.sh"  "Testing '${JHIPSTER}-sample'"
     launchNewBash "./scripts/05-run.sh" "Run and test '${JHIPSTER}-sample'"
-    launchNewBash "./scripts/06-sonar.sh" \
-        "Launch Sonar analysis for '${JHIPSTER}'"
+    # Never launched in TRAVIS CI for a PR
+    # launchNewBash "./scripts/06-sonar.sh" \
+    #     "Launch Sonar analysis for '${JHIPSTER}'"
 
 }
 
