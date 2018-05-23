@@ -864,13 +864,17 @@ module.exports = class extends Generator {
      * @param {Array|Object} fields - array of fields
      * @returns {Array} defaultVariablesValues
      */
-    generateEntityClientFieldDefaultValues(fields) {
+    generateEntityClientFieldDefaultValues(fields, clientFramework = 'angularX') {
         const defaultVariablesValues = {};
         fields.forEach((field) => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
             if (fieldType === 'Boolean') {
-                defaultVariablesValues[fieldName] = `this.${fieldName} = false;`;
+                if (clientFramework === 'react') {
+                    defaultVariablesValues[fieldName] = `${fieldName}: false,`;
+                } else {
+                    defaultVariablesValues[fieldName] = `this.${fieldName} = false;`;
+                }
             }
         });
         return defaultVariablesValues;

@@ -32,8 +32,10 @@ const initialState = {
   errorMessage: null
 };
 
+export type RegisterState =  Readonly<typeof initialState>;
+
 // Reducer
-export default (state = initialState, action) => {
+export default (state: RegisterState = initialState, action): RegisterState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.CREATE_ACCOUNT):
       return {

@@ -32,8 +32,10 @@ const initialState = {
   updateFailure: false
 };
 
+export type SessionsState =  Readonly<typeof initialState>;
+
 // Reducer
-export default (state = initialState, action) => {
+export default (state: SessionsState = initialState, action): SessionsState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FIND_ALL):
     case REQUEST(ACTION_TYPES.INVALIDATE):

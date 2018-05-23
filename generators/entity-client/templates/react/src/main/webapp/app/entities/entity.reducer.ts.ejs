@@ -43,7 +43,7 @@ import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (fieldsContainDate) { _%>
 
 <%_ } _%>
-import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -63,8 +63,8 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   errorMessage: null,
-  entities: [],
-  entity: {},
+  entities: [] as ReadonlyArray<I<%= entityReactName %>>,
+  entity: defaultValue,
   <%_ if (pagination === 'infinite-scroll') { _%>
   links: {
     last: 0
@@ -77,9 +77,11 @@ const initialState = {
   updateSuccess: false
 };
 
+export type <%= entityReactName %>State =  Readonly<typeof initialState>;
+
 // Reducer
 
-export default (state = initialState, action) => {
+export default (state: <%= entityReactName %>State = initialState, action): <%= entityReactName %>State => {
   switch (action.type) {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
@@ -195,7 +197,7 @@ const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microservice
 <%_ if (searchEngine === 'elasticsearch') { _%>
 export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = query => ({
   type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
-  payload: axios.get(`${apiSearchUrl}?query=` + query) as Promise<I<%= entityReactName %>>
+  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=` + query)
 });
 
 <%_ } _%>
@@ -205,13 +207,13 @@ export const getEntities: ICrudGetAllAction<I<%= entityReactName %>> = (page, si
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
-    payload: axios.get(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`) as Promise<I<%= entityReactName %>>
+    payload: axios.get<I<%= entityReactName %>>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
   }
 }
 <%_ } else { _%>
 ({
   type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
-  payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`) as Promise<I<%= entityReactName %>>
+  payload: axios.get<I<%= entityReactName %>>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
 <%_ } _%>
 
@@ -219,7 +221,7 @@ export const getEntity: ICrudGetAction<I<%= entityReactName %>> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {
     type: ACTION_TYPES.FETCH_<%= entityActionName %>,
-    payload: axios.get(requestUrl) as Promise<I<%= entityReactName %>>
+    payload: axios.get<I<%= entityReactName %>>(requestUrl)
   };
 };
 

@@ -229,6 +229,7 @@ const files = {
     ],
     accountModule: [
         {
+            condition: generator => generator.authenticationType !== 'oauth2',
             path: REACT_DIR,
             templates: [
                 { file: 'modules/account/index.tsx', method: 'processJsx' },
@@ -378,11 +379,6 @@ const files = {
                 'spec/app/shared/auth/private-route.spec.tsx',
                 'spec/app/shared/layout/header/header.spec.tsx',
                 'spec/app/shared/layout/header/menus/account.spec.tsx',
-                'spec/app/modules/account/register/register.spec.tsx',
-                'spec/app/modules/account/register/register.reducer.spec.ts',
-                'spec/app/modules/account/activate/activate.reducer.spec.ts',
-                'spec/app/modules/account/password/password.reducer.spec.ts',
-                'spec/app/modules/account/settings/settings.reducer.spec.ts',
                 'spec/app/modules/administration/administration.reducer.spec.ts',
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
@@ -396,6 +392,17 @@ const files = {
                 // 'spec/helpers/_mock-account.service.js',
                 // 'spec/helpers/_mock-principal.service.js',
                 // 'spec/helpers/_mock-route.service.js'
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType !== 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/modules/account/register/register.spec.tsx',
+                'spec/app/modules/account/register/register.reducer.spec.ts',
+                'spec/app/modules/account/activate/activate.reducer.spec.ts',
+                'spec/app/modules/account/password/password.reducer.spec.ts',
+                'spec/app/modules/account/settings/settings.reducer.spec.ts',
             ]
         },
         {

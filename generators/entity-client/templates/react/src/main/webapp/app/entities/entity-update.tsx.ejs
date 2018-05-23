@@ -30,7 +30,7 @@ for (const idx in fields) {
 _%>
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Button,
   Row,
@@ -52,6 +52,7 @@ import {
   ICrudPutAction
 } from 'react-jhipster';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { IRootState } from 'app/shared/reducers';
 
 <%_
 let hasRelationshipQuery = false;
@@ -120,24 +121,7 @@ import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
 import { keysToValues } from 'app/shared/util/entity-utils';
 <%_ } _%>
 
-export interface I<%= entityReactName %>UpdateProps {
-  getEntity: ICrudGetAction<I<%= entityReactName %>>;
-  updateEntity: ICrudPutAction<I<%= entityReactName %>>;
-  createEntity: ICrudPutAction<I<%= entityReactName %>>;
-  <%_ otherEntityActions.forEach(val => { _%>
-  <%= val.action %>: ICrudGetAllAction<I<%= val.entity %>>;
-  <%= val.instance %>: I<%= val.entity %>[];
-  <%_ }) _%>
-  <%= entityInstance %>: I<%= entityReactName %>;
-  <%_ if (fieldsContainBlob) { _%>
-  setBlob: Function;
-  <%_ } _%>
-  reset: Function;
-  loading: boolean;
-  updating: boolean;
-  match: any;
-  history: any;
-}
+export interface I<%= entityReactName %>UpdateProps extends StateProps, DispatchProps, RouteComponentProps<{id: number}>  {}
 
 export interface I<%= entityReactName %>UpdateState {
   isNew: boolean;
@@ -648,7 +632,7 @@ _%>
   }
 }
 
-const mapStateToProps = storeState => ({
+const mapStateToProps = (storeState: IRootState) => ({
   <%_ otherEntityActions.forEach(val => { _%>
     <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>,
   <%_ }) _%>
@@ -669,5 +653,8 @@ const mapDispatchToProps = {
   createEntity,
   reset
 };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Update);
