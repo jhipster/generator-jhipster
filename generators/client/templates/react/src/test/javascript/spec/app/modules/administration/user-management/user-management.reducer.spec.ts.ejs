@@ -223,7 +223,7 @@ describe('User management reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getRoles('admin')).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(getRoles()).then(() => expect(store.getActions()).to.eql(expectedActions));
     });
     it('dispatches FETCH_USER_PENDING and FETCH_USER_FULFILLED actions', async () => {
       const expectedActions = [

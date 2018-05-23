@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
+import { IRootState } from 'app/shared/reducers';
 
-export interface IPrivateRouteProps {
-  component: any;
-  isAuthenticated: boolean;
-  isAuthorized: boolean;
+interface IOwnProps {
   hasAnyAuthorities?: string[];
-  [key: string]: any;
 }
+
+export interface IPrivateRouteProps extends IOwnProps, StateProps, RouteProps {}
 
 export const PrivateRouteComponent = ({
   component: Component,
@@ -57,16 +56,19 @@ export const hasAnyAuthority = (authorities: string[], hasAnyAuthorities: string
   return false;
 };
 
-const mapStoreToProps = ({ authentication: { isAuthenticated, account } }, { hasAnyAuthorities = [] }) => ({
+const mapStateToProps = ({ authentication: { isAuthenticated, account } }: IRootState, { hasAnyAuthorities = [] }: IOwnProps) => ({
   isAuthenticated,
   isAuthorized: hasAnyAuthority(account.authorities, hasAnyAuthorities)
 });
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+// type DispatchProps = typeof mapDispatchToProps;
 
 /**
  * A route wrapped in an authentication check so that routing happens only when you are authenticated.
  * Accepts same props as React router Route.
  * The route also checks for authorization if hasAnyAuthorities is specified.
  */
-export const PrivateRoute = connect(mapStoreToProps, null, null, { pure: false })(PrivateRouteComponent);
+export const PrivateRoute = connect(mapStateToProps, null, null, { pure: false })(PrivateRouteComponent);
 
 export default PrivateRoute;
