@@ -535,7 +535,7 @@ const serverFiles = {
     ],
     serverMicroservice: [
         {
-            condition: generator => generator.applicationType === 'microservice' || generator.authenticationType === 'uaa',
+            condition: generator => generator.applicationType === 'microservice' || (generator.authenticationType === 'uaa' && generator.applicationType !== 'uaa'),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/MicroserviceSecurityConfiguration.java', renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java` }
