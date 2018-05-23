@@ -59,7 +59,7 @@ export default () => next => action => {
         if (alert) {
           <%_ if (enableTranslation) { _%>
           const alertParam = alertParams;
-          toast.success(translate(alert, { param: alertParam }), { className: alert });
+          toast.success(translate(alert, { param: alertParam }));
           <%_ } else { _%>
           toast.success(alert);
           <%_ } _%>
@@ -69,11 +69,7 @@ export default () => next => action => {
     })
     .catch(error => {
       if (action.meta && action.meta.errorMessage) {
-        <%_ if (enableTranslation) { _%>
-        toast.error(translate(action.meta.errorMessage), { className: action.meta.errorMessage });
-        <%_ } else { _%>
         toast.error(action.meta.errorMessage);
-        <%_ } _%>
       } else if (error && error.response) {
         const response = error.response;
         const data = response.data;
