@@ -191,6 +191,20 @@ const reactFiles = {
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-reducer.spec.ts`
                 }
             ]
+        },
+        {
+            condition: generator => generator.protractorTests,
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [{
+                file: 'e2e/entities/entity-page-object.ts',
+                renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`
+            }, {
+                file: 'e2e/entities/entity.spec.ts',
+                renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`
+            }, {
+                file: 'e2e/entities/entity-update-page-object.ts',
+                renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-update.page-object.ts` 
+            }]
         }
     ]
 };

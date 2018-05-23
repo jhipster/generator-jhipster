@@ -78,7 +78,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
     const { users, account, match, totalItems } = this.props;
     return (
       <div>
-        <h2>
+        <h2 className="userManagement-page-heading">
           <Translate contentKey="userManagement.home.title">Users</Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity">
             <FontAwesomeIcon icon="plus" /> <Translate contentKey="userManagement.home.createLabel">Create a new user</Translate>
@@ -110,7 +110,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
           <tbody>
             {
             users.map((user, i) => (
-              <tr key={`user-${i}`}>
+              <tr id={user.login} key={`user-${i}`}>
                 <td>
                   <Button
                     tag={Link} to={`${match.url}/${user.login}`}

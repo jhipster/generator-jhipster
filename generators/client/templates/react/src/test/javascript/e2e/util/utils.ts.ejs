@@ -1,4 +1,4 @@
-import { ExpectedConditions, ElementFinder, browser } from 'protractor';
+import { ExpectedConditions, ElementFinder, browser, by, element } from 'protractor';
 
 const waitUntilDisplayedTimeout = 30000;
 
@@ -39,3 +39,12 @@ export const waitUntilHidden = (selector: ElementFinder, classname = '', timeout
     `Failed while waiting for "${selector.locator()}" of Page Object Class '${classname}' to be hidden.`
   );
 };
+
+export const getDeactivatedButtonByLogin = (login: string): ElementFinder =>
+  element(by.css('table > tbody')).element(by.id(login)).element(by.buttonText('Deactivated'));
+
+<%_ if (enableTranslation) { _%>
+export const getToastByClassName = (className: string): ElementFinder => element(by.className(className));
+<%_ } else { _%>
+export const getToastByInnerText = (text: string): ElementFinder => element(by.cssContainingText('div[role=alert]', text));
+<%_ } _%>

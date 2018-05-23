@@ -2,12 +2,22 @@ import { $, ElementFinder } from 'protractor';
 
 import BasePage from './base-component';
 import SignInPage from './signin-page';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import RegisterPage from './register-page';
+import PasswordPage from './password-page';
+import SettingsPage from './settings-page';
+<%_ } _%>
 
-const selector = $('#app-header');
+const selector: ElementFinder = $('#app-header');
 export default class NavBarPage extends BasePage {
   selector: ElementFinder;
   signInPage: SignInPage;
   adminMenu: ElementFinder;
+  accountMenu: ElementFinder = this.selector.$('#account-menu');
+  entityMenu: ElementFinder = this.selector.$('#entity-menu');
+  <%_ if (authenticationType === 'oauth2') { _%>
+  loginItem: ElementFinder = this.selector.$('#login-item');
+  <%_ } _%>
 
   constructor(asAdmin?: Boolean) {
     super(selector);
@@ -18,15 +28,53 @@ export default class NavBarPage extends BasePage {
     this.signInPage = new SignInPage();
   }
 
-  clickOnTabMenu(item: string) {
-    return this.selector
-      .$('.header-tabs')
-      .$(`.nav-link[href="#/${item}"]`)
-      .click();
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  getPasswordPage() {
+    this.clickOnAccountMenuItem('password');
+    return new PasswordPage();
   }
 
-  clickOnAdminMenu() {
-    return this.adminMenu.click();
+  getSettingsPage() {
+    this.clickOnAccountMenuItem('settings');
+    return new SettingsPage();
+  }
+
+  getRegisterPage() {
+    this.clickOnAccountMenu();
+    this.clickOnTabMenu('#/register');
+    return new RegisterPage();
+  }
+  <%_ } _%>
+
+  getSignInPage() {
+    this.clickOnAccountMenu();
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    this.clickOnTabMenu('#/login');
+    <%_ } else { _%>
+    this.loginItem.click();
+    <%_ } _%>
+    return new SignInPage();
+  }
+
+  getEntityPage(entityName: string) {
+    this.clickOnEntityMenu();
+    return this.clickOnEntity(entityName);
+  }
+
+  clickOnTabMenu(item: string) {
+  return this.selector
+    .$('#header-tabs')
+    .$(`.dropdown-item[href="${item}"]`)
+    .click();
+  }
+
+  clickOnAccountMenu() {
+    return this.accountMenu.click();
+  }
+
+  clickOnAccountMenuItem(item: string) {
+    this.accountMenu.click();
+    return this.selector.$(`.dropdown-item[href="#/account/${item}"`).click();
   }
 
   clickOnAdminMenuItem(item: string) {
@@ -34,9 +82,21 @@ export default class NavBarPage extends BasePage {
     return this.selector.$(`.dropdown-item[href="#/admin/${item}"]`).click();
   }
 
+  clickOnEntityMenu() {
+    return this.entityMenu.click();
+  }
+
+  clickOnEntity(entityName: string) {
+    return this.selector.$(`.dropdown-item[href="#/entity/${entityName}"]`).click();
+  }
+
   autoSignIn() {
     this.signInPage.get();
+    <%_ if (authenticationType !== 'oauth2') { _%>
     this.signInPage.autoSignInUsing('admin', 'admin');
+    <%_ } else { _%>
+    this.signInPage.loginWithOAuth('admin', 'admin');
+    <%_ } _%>
     return this.signInPage.waitUntilHidden();
   }
 

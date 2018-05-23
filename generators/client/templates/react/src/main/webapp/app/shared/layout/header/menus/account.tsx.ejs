@@ -43,16 +43,16 @@ const accountMenuItemsAuthenticated = (
 const accountMenuItems = (
   <>
   <%_ if (authenticationType !== 'oauth2') { _%>
-    <DropdownItem tag={Link} to="/login"><FontAwesomeIcon icon="sign-in-alt" /> Login</DropdownItem>
+    <DropdownItem id="login-item" tag={Link} to="/login"><FontAwesomeIcon icon="sign-in-alt" /> Login</DropdownItem>
     <DropdownItem tag={Link} to="/register"><FontAwesomeIcon icon="sign-in-alt" /> Register</DropdownItem>
   <%_ } else { _%>
-    <DropdownItem tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" /> Login</DropdownItem>
+    <DropdownItem id="login-item" tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" /> Login</DropdownItem>
   <%_ } _%>
   </>
 );
 
 export const AccountMenu = ({ isAuthenticated = false }) => (
-  <NavDropdown icon="user" name="Account">
+  <NavDropdown icon="user" name="Account" id="account-menu">
     {isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
   </NavDropdown>
 );

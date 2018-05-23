@@ -79,13 +79,23 @@ describe('Settings reducer tests', () => {
     });
 
     it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {
+      const meta = {
+        <%_ if (enableTranslation) { _%>
+        successMessage: 'settings.messages.success'
+        <%_ } else { _%>
+        successMessage: '<strong>Settings saved!</strong>'
+        <%_ } _%>
+      };
+
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT)
+          type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT),
+          meta
         },
         {
           type: SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT),
-          payload: resolvedObject
+          payload: resolvedObject,
+          meta
         },
         {
           type: REQUEST(authActionTypes.GET_SESSION)

@@ -94,7 +94,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     const {<%_ if (enableTranslation) { _%>currentLocale,<%_ } _%> isAuthenticated, isAdmin, isSwaggerEnabled, isInProduction } = this.props;
 
     /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
-  
+
     return (
       <div id="app-header">
         {this.renderDevRibbon()}
@@ -103,7 +103,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
           <NavbarToggler aria-label="Menu" onClick={this.toggleMenu} />
           <Brand />
           <Collapse isOpen={this.state.menuOpen} navbar>
-            <Nav className="ml-auto" navbar>
+            <Nav id="header-tabs" className="ml-auto" navbar>
               <Home />
               {isAuthenticated && <EntitiesMenu />}
               {isAuthenticated && isAdmin &&

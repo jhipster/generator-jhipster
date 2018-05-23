@@ -1,0 +1,269 @@
+/* tslint:disable no-unused-expression */
+import { browser, <% if (authenticationType === 'oauth2') { %>element, by<% } %> } from 'protractor';
+
+import SignInPage from '../../page-objects/signin-page';
+import NavBarPage from '../../page-objects/navbar-page';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import RegisterPage from '../../page-objects/register-page';
+import PasswordPage from '../../page-objects/password-page';
+import SettingsPage from '../../page-objects/settings-page';
+import { getDeactivatedButtonByLogin, waitUntilDisplayed, waitUntilHidden, <% if (enableTranslation) { %>getToastByClassName<% } else { %>getToastByInnerText<% } %> } from '../../util/utils';
+<%_ } else { _%>
+import { waitUntilDisplayed } from '../../util/utils';
+<%_ } _%>
+
+const expect = chai.expect;
+
+describe('Account', () => {
+  let navBarPage: NavBarPage;
+  let signInPage: SignInPage;
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  let passwordPage: PasswordPage;
+  let settingsPage: SettingsPage;
+  let registerPage: RegisterPage;
+
+  const registerPageTitle = 'register-title';
+  const passwordPageTitle = 'password-title';
+  const settingsPageTitle = 'settings-title';
+  <%_ } _%>
+  const loginPageTitle = 'login-title';
+
+  before(() => {
+    browser.get('/');
+    navBarPage = new NavBarPage(true);
+    signInPage = navBarPage.getSignInPage();
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    signInPage.waitUntilDisplayed();
+    <%_ } _%>
+  });
+
+  it('should fail to login with bad password', async () => {
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    // Login page should appear
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.setUserName('admin');
+    await signInPage.setPassword('foo');
+    await signInPage.login();
+
+    // Login page should stay open when login fails
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+    <%_ } else { _%>
+    signInPage.loginWithOAuth('admin', 'foo');
+    const alert = element(by.css('.alert-error'));
+    if (await alert.isPresent()) {
+      // Keycloak
+      expect(await alert.getText()).to.eq('Invalid username or password.');
+    } else {
+      // Okta
+      const error = element(by.css('.infobox-error'));
+      waitUntilDisplayed(error);
+      expect(await error.getText()).to.eq('Sign in failed!');
+    }
+    await signInPage.clearUserName();
+    await signInPage.clearPassword();
+    <%_ } _%>
+  });
+
+  it('should login with admin account', async () => {
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    // Login page should appear
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.clearUserName();
+    await signInPage.setUserName('admin');
+    await signInPage.clearPassword();
+    await signInPage.setPassword('admin');
+    await signInPage.login();
+
+    signInPage.waitUntilHidden();
+
+    // Login page should close when login success
+    expect(await signInPage.isHidden()()).to.be.true;
+    navBarPage.autoSignOut();
+    <%_ } else { _%>
+    // Keycloak credentials by default, change them to be able to use oauth2 with Okta
+    signInPage.loginWithOAuth('admin', 'admin');
+    const success = element(by.className('alert-success'));
+    waitUntilDisplayed(success);
+    // Success alert should appear in home page
+    expect(await success.isPresent()).to.be.true;
+    <%_ } _%>
+  });
+
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  it('should be able to sign up', async () => {
+    registerPage = navBarPage.getRegisterPage();
+    expect(await registerPage.getTitle()).to.eq(registerPageTitle);
+
+    registerPage.autoSignUpUsing('user_test', 'usertest@jhipster.com', 'user_test');
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByClassName('register.messages.success');
+    <%_ } else { _%>
+    const toast = getToastByInnerText('<strong>Registration saved!</strong> Please check your email for confirmation.');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
+
+    // Success toast should appear
+    expect(await toast.isPresent()).to.be.true;
+  });
+
+  it('should not be able to sign up if login already taken', async () => {
+    await registerPage.save();
+
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByClassName('error.userexists');
+    <%_ } else { _%>
+    const toast = getToastByInnerText('Login already in use');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
+
+    // Error toast should appear
+    expect(await toast.isPresent()).to.be.true;
+  });
+
+  it('should not be able to sign up if email already taken', async () => {
+    expect(await registerPage.getTitle()).to.eq(registerPageTitle);
+
+    await registerPage.username.clear();
+    await registerPage.setUserName('user_test2');
+    await registerPage.save();
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByClassName('error.emailexists');
+    <%_ } else { _%>
+    const toast = getToastByInnerText('Email address already in use');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
+
+    // Error toast should appear
+    expect(await toast.isPresent()).to.be.true;
+  });
+
+  it('should activate the new registered user', async () => {
+    navBarPage.autoSignIn();
+    navBarPage.clickOnAdminMenuItem('user-management');
+    const deactivatedButton = getDeactivatedButtonByLogin('user_test');
+    await deactivatedButton.click();
+    waitUntilHidden(deactivatedButton);
+
+    // Deactivated button should disappear
+    expect(await deactivatedButton.isPresent()).to.be.false;
+    navBarPage.autoSignOut();
+  });
+
+  it('should be able to log in with new registered account', async () => {
+    signInPage.get();
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    signInPage.autoSignInUsing('user_test', 'user_test');
+    signInPage.waitUntilHidden();
+
+    // Login page should close when login success
+    expect(await signInPage.isHidden()()).to.be.true;
+    navBarPage.autoSignOut();
+  });
+
+  it('should fail to update password when using incorrect current password', async () => {
+    navBarPage.autoSignIn();
+    passwordPage = navBarPage.getPasswordPage();
+    expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
+
+    passwordPage.autoChangePassword('wrong_current_password', 'new_password', 'new_password');
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByClassName('password.messages.error');
+    <%_ } else { _%>
+    const toast = getToastByInnerText('<strong>An error has occurred!</strong> The password could not be changed.');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
+
+    // Error toast should appear
+    expect(await toast.isPresent()).to.be.true;
+  });
+
+  it('should be able to update password', async () => {
+    expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
+
+    await passwordPage.clearCurrentPassword();
+    await passwordPage.setCurrentPassword('admin');
+    await passwordPage.clearNewPassword();
+    await passwordPage.setNewPassword('newpassword');
+    await passwordPage.clearConfirmPassword();
+    await passwordPage.setConfirmPassword('newpassword');
+    await passwordPage.save();
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByClassName('password.messages.success');
+    <%_ } else { _%>
+    const toast = getToastByInnerText('<strong>Password changed!</strong>');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
+
+    // Success toast should appear
+    expect(await toast.isPresent()).to.be.true;
+    navBarPage.autoSignOut();
+  });
+
+  it('should be able to log in with new password', async () => {
+    signInPage.get();
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.setUserName('admin');
+    await signInPage.setPassword('newpassword');
+    await signInPage.login();
+    signInPage.waitUntilHidden();
+    expect(await signInPage.isHidden()()).to.be.true;
+
+    // change back to default
+    passwordPage.get();
+    expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
+
+    await passwordPage.clearCurrentPassword();
+    await passwordPage.setCurrentPassword('newpassword');
+    await passwordPage.setNewPassword('admin');
+    await passwordPage.setConfirmPassword('admin');
+    await passwordPage.save();
+
+    navBarPage.autoSignOut();
+  });
+
+  it('should be able to change settings', async () => {
+    signInPage.get();
+    signInPage.autoSignInUsing('user_test', 'user_test');
+    settingsPage = navBarPage.getSettingsPage();
+    expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
+
+    await settingsPage.setFirstName('jhipster');
+    await settingsPage.setLastName('retspihj');
+    await settingsPage.save();
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByClassName('settings.messages.success');
+    <%_ } else { _%>
+    const toast = getToastByInnerText('<strong>Settings saved!</strong>');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
+    // Success toast should appear
+    expect(await toast.isPresent()).to.be.true;
+    navBarPage.autoSignOut();
+  });
+
+  it('should not be able to change settings if email already exists', async () => {
+    navBarPage.autoSignIn();
+    settingsPage.get();
+    expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
+
+    await settingsPage.clearEmail();
+    await settingsPage.setEmail('usertest@jhipster.com');
+    await settingsPage.save();
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByClassName('error.emailexists');
+    <%_ } else { _%>
+    const toast = getToastByInnerText('Email address already in use');
+    <%_ } _%>
+    waitUntilDisplayed(toast);
+
+    // Error toast should appear
+    expect(await toast.isPresent()).to.be.true;
+  });
+  <%_ } _%>
+
+  after(() => navBarPage.autoSignOut());
+});
