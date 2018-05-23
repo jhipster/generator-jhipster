@@ -32,37 +32,23 @@ import { getLoginUrl } from 'app/shared/util/url-utils';
 
 export interface IHomeProp extends StateProps, DispatchProps {}
 
-export interface IHomeState {
-  currentUser: any;
-}
-
-export class Home extends React.Component<IHomeProp, IHomeState> {
-  state: IHomeState = {
-    currentUser: this.props.account
-  };
-
-  componentWillMount() {
+export class Home extends React.Component<IHomeProp> {
+  componentDidMount() {
     this.props.getSession();
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      currentUser: nextProps.account
-    });
-  }
-
   render() {
-    const { currentUser } = this.state;
+    const { account } = this.props;
     return (
       <Row>
         <Col md="9">
           <h2><Translate contentKey="home.title">Welcome, Java Hipster!</Translate></h2>
           <p className="lead"><Translate contentKey="home.subtitle">This is your homepage</Translate></p>
           {
-            (currentUser && currentUser.login) ? (
+            (account && account.login) ? (
               <div>
                 <Alert color="success">
-                  <Translate contentKey="home.logged.message" interpolate={{ username: currentUser.login }}>You are logged in as user {currentUser.login}.</Translate>
+                  <Translate contentKey="home.logged.message" interpolate={{ username: account.login }}>You are logged in as user {account.login}.</Translate>
                 </Alert>
               </div>
             ) : (
