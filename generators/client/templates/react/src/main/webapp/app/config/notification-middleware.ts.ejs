@@ -23,7 +23,7 @@ import { toast } from 'react-toastify';
 const addErrorAlert = (message, key?, data?) => {
   <%_ if (enableTranslation) { _%>
   key = key ? key : message;
-  toast.error(translate(key, data), { className: key });
+  toast.error(translate(key, data));
   <%_ } else { _%>
   toast.error(message);
   <%_ } _%>
@@ -42,11 +42,7 @@ export default () => next => action => {
   return next(action)
     .then(response => {
       if (action.meta && action.meta.successMessage) {
-        <%_ if (enableTranslation) { _%>
-        toast.success(translate(action.meta.successMessage), { className: action.meta.successMessage });
-        <%_ } else { _%>
         toast.success(action.meta.successMessage);
-        <%_ } _%>
       } else if (response && response.action && response.action.payload && response.action.payload.headers) {
         const headers = response.action.payload.headers;
         let alert: string = null;

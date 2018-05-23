@@ -7,7 +7,7 @@ import NavBarPage from '../../page-objects/navbar-page';
 import RegisterPage from '../../page-objects/register-page';
 import PasswordPage from '../../page-objects/password-page';
 import SettingsPage from '../../page-objects/settings-page';
-import { getDeactivatedButtonByLogin, waitUntilDisplayed, waitUntilHidden, <% if (enableTranslation) { %>getToastByClassName<% } else { %>getToastByInnerText<% } %> } from '../../util/utils';
+import { getUserDeactivatedButtonByLogin, waitUntilDisplayed, waitUntilHidden, getToastByInnerText } from '../../util/utils';
 <%_ } else { _%>
 import { waitUntilDisplayed } from '../../util/utils';
 <%_ } _%>
@@ -97,11 +97,7 @@ describe('Account', () => {
     expect(await registerPage.getTitle()).to.eq(registerPageTitle);
 
     registerPage.autoSignUpUsing('user_test', 'usertest@jhipster.com', 'user_test');
-    <%_ if (enableTranslation) { _%>
-    const toast = getToastByClassName('register.messages.success');
-    <%_ } else { _%>
     const toast = getToastByInnerText('<strong>Registration saved!</strong> Please check your email for confirmation.');
-    <%_ } _%>
     waitUntilDisplayed(toast);
 
     // Success toast should appear
@@ -111,11 +107,7 @@ describe('Account', () => {
   it('should not be able to sign up if login already taken', async () => {
     await registerPage.save();
 
-    <%_ if (enableTranslation) { _%>
-    const toast = getToastByClassName('error.userexists');
-    <%_ } else { _%>
     const toast = getToastByInnerText('Login already in use');
-    <%_ } _%>
     waitUntilDisplayed(toast);
 
     // Error toast should appear
@@ -128,11 +120,7 @@ describe('Account', () => {
     await registerPage.username.clear();
     await registerPage.setUserName('user_test2');
     await registerPage.save();
-    <%_ if (enableTranslation) { _%>
-    const toast = getToastByClassName('error.emailexists');
-    <%_ } else { _%>
     const toast = getToastByInnerText('Email address already in use');
-    <%_ } _%>
     waitUntilDisplayed(toast);
 
     // Error toast should appear
@@ -142,7 +130,7 @@ describe('Account', () => {
   it('should activate the new registered user', async () => {
     navBarPage.autoSignIn();
     navBarPage.clickOnAdminMenuItem('user-management');
-    const deactivatedButton = getDeactivatedButtonByLogin('user_test');
+    const deactivatedButton = getUserDeactivatedButtonByLogin('user_test');
     await deactivatedButton.click();
     waitUntilHidden(deactivatedButton);
 
@@ -169,11 +157,7 @@ describe('Account', () => {
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
     passwordPage.autoChangePassword('wrong_current_password', 'new_password', 'new_password');
-    <%_ if (enableTranslation) { _%>
-    const toast = getToastByClassName('password.messages.error');
-    <%_ } else { _%>
     const toast = getToastByInnerText('<strong>An error has occurred!</strong> The password could not be changed.');
-    <%_ } _%>
     waitUntilDisplayed(toast);
 
     // Error toast should appear
@@ -190,11 +174,7 @@ describe('Account', () => {
     await passwordPage.clearConfirmPassword();
     await passwordPage.setConfirmPassword('newpassword');
     await passwordPage.save();
-    <%_ if (enableTranslation) { _%>
-    const toast = getToastByClassName('password.messages.success');
-    <%_ } else { _%>
     const toast = getToastByInnerText('<strong>Password changed!</strong>');
-    <%_ } _%>
     waitUntilDisplayed(toast);
 
     // Success toast should appear
@@ -234,11 +214,7 @@ describe('Account', () => {
     await settingsPage.setFirstName('jhipster');
     await settingsPage.setLastName('retspihj');
     await settingsPage.save();
-    <%_ if (enableTranslation) { _%>
-    const toast = getToastByClassName('settings.messages.success');
-    <%_ } else { _%>
     const toast = getToastByInnerText('<strong>Settings saved!</strong>');
-    <%_ } _%>
     waitUntilDisplayed(toast);
     // Success toast should appear
     expect(await toast.isPresent()).to.be.true;
@@ -253,11 +229,7 @@ describe('Account', () => {
     await settingsPage.clearEmail();
     await settingsPage.setEmail('usertest@jhipster.com');
     await settingsPage.save();
-    <%_ if (enableTranslation) { _%>
-    const toast = getToastByClassName('error.emailexists');
-    <%_ } else { _%>
     const toast = getToastByInnerText('Email address already in use');
-    <%_ } _%>
     waitUntilDisplayed(toast);
 
     // Error toast should appear
