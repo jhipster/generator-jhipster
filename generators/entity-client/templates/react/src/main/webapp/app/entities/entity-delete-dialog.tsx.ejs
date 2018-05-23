@@ -18,20 +18,16 @@
 -%>
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { IRootState } from 'app/shared/reducers';
 import { getEntity, deleteEntity } from './<%= entityFileName %>.reducer';
 
-export interface I<%= entityReactName %>DeleteDialogProps {
-  getEntity: ICrudGetAction<I<%= entityReactName %>>;
-  deleteEntity: ICrudDeleteAction<I<%= entityReactName %>>;
-  <%= entityInstance %>: I<%= entityReactName %>;
-  match: any;
-  history: any;
-}
+export interface I<%= entityReactName %>DeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{id: number}>  {}
 
 export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= entityReactName %>DeleteDialogProps> {
   componentDidMount() {
@@ -73,10 +69,13 @@ export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= ent
   }
 }
 
-const mapStateToProps = ({ <%= entityInstance %> }) => ({
+const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
     <%= entityInstance %>: <%= entityInstance %>.entity
 });
 
 const mapDispatchToProps = { getEntity, deleteEntity };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>DeleteDialog);

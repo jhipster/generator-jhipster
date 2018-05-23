@@ -19,7 +19,7 @@
 <%
 const variablesWithTypes = generateEntityClientFields(pkType, fields, relationships, dto);
 const typeImports = generateEntityClientImports(relationships, dto);
-const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
+const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields, 'react');
 %>
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
 import { Moment } from 'moment';
@@ -47,10 +47,6 @@ export interface I<%= entityReactName %> {
     <%_ }); _%>
 }
 
-export class <%= entityReactName %> implements I<%= entityReactName %> {
-    constructor(<% variablesWithTypes.forEach(variablesWithType => { %>
-        public <%- variablesWithType %>,<% }); %>
-    ) {<% for (idx in defaultVariablesValues) { %>
-        <%- defaultVariablesValues[idx] %><% } %>
-    }
-}
+export const defaultValue:  Readonly<I<%= entityReactName %>> = {
+<% for (idx in defaultVariablesValues) { %><%- defaultVariablesValues[idx] %><% } %>
+};
