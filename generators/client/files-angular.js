@@ -452,6 +452,7 @@ const files = {
         {
             path: TEST_SRC_DIR,
             templates: [
+                'jest.conf.js',
                 'jest.ts',
                 'jest-global-mocks.ts',
                 'spec/test.module.ts',
