@@ -384,6 +384,7 @@ function ctrl_c() {
 
 trap finish EXIT
 # Raised also if receive INT command
+# But not raised if there is an ubound variable.
 function finish() {
 
     # https://en.wikipedia.org/wiki/Defensive_programming
@@ -396,6 +397,8 @@ function finish() {
     echo -e "\\n\\n\\nIt's the end of ./build-samples.sh.\\n\\n"
 }
 
+# trap ERR is not always performed
+# https://unix.stackexchange.com/a/209507
 trap 'errorInScript "$LINENO"' ERR
 errorInScript() {
     1>&2 echo "In ./build-samples.sh, error on line: '$1'"
@@ -945,9 +948,8 @@ function testRequierments() {
             fi
         fi
 
-        local WE_WANT_A_PROMPT=1
+        # Declare "$WE_WANT_A_PROMPT" before launch dockerKillThenRm
         dockerKillThenRm
-        unset WE_WANT_A_PROMPT
 
         # TODO I not test all ports in
         # ../generators/server/templates/src/main/docker
@@ -1050,7 +1052,18 @@ function createLogFile() {
     sleep 5
     echoTitleBuildStep "start" "\\n\\n'${JHIPSTER_MATRIX}' is launched!!"
     printInfoBeforeLaunch
+
+    if [[ "$IS_CONSOLEVERBOSE" -eq 1 ]] ; then
+        local WE_WANT_A_PROMPT=1
+    else
+        # https://en.wikipedia.org/wiki/Defensive_programming
+        # If in a function launchSamplesInBackground()
+        # a sample isn't gracefully finished, and a Docker is still running.
+        # Especially for Errors that could not be trapped.
+        local WE_WANT_A_PROMPT=0
+    fi
     testRequierments
+    unset WE_WANT_A_PROMPT
 }
 
 # IV WRAPPING EXECUTION OF ./scripts/*.sh AND GENERATE NODE_MODULES STEPS {{{2
@@ -1516,6 +1529,7 @@ then restart script."
                 "true" \
                 "exitScriptWithError '$argument'"
             unset confirmationFirstParameter argument
+
             generateNode_Modules_Cache
         else
             true
@@ -1641,7 +1655,9 @@ do you want to launch in same time (Travis CI launch 4 processes)? "
     unset question typeAnswer
     echo -en "$NC"
 
+    local WE_WANT_A_PROMPT=1
     testRequierments
+    unset WE_WANT_A_PROMPT
 
     # TODO
     # do not launch this if there is only projects with "skipClient: true"
@@ -1729,7 +1745,9 @@ function startApplication() {
             "Please run \`./build-samples.sh generate " "$JHIPSTER'."
     fi
 
+    local WE_WANT_A_PROMPT=1
     testRequierments
+    unset WE_WANT_A_PROMPT
     # To not launch \`yarn e2e' in 05-run.sh
     export PROTRACTOR=0
     printInfoBeforeLaunch
