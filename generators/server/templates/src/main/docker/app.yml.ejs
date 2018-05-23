@@ -54,6 +54,9 @@ services:
             - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=<%= baseName.toLowerCase() %>-couchbase
             - SPRING_COUCHBASE_BUCKET_NAME=<%= baseName %>
             <%_ } _%>
+            <%_ if (cacheProvider === 'memcached') { _%>
+            - MEMCACHED_CACHE_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
+            <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
             # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
             - SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/token
@@ -145,6 +148,12 @@ services:
             service: <%= baseName.toLowerCase() %>-cassandra-migration
         environment:
             - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
+    <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <%= baseName.toLowerCase() %>-memcached:
+        extends:
+            file: memcached.yml
+            service: <%= baseName.toLowerCase() %>-memcached
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     <%= baseName.toLowerCase() %>-elasticsearch:
