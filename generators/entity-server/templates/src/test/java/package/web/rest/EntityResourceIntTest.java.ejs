@@ -55,7 +55,9 @@ import <%=packageName%>.service.<%= entityClass %>QueryService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+<%_ if (fieldsContainOwnerManyToMany) { _%>
 import org.mockito.Mock;
+<%_ } _%>
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -85,11 +87,14 @@ import java.time.ZonedDateTime;
 import java.time.ZoneOffset;<% } %><% if (fieldsContainLocalDate === true || fieldsContainZonedDateTime === true) { %>
 import java.time.ZoneId;<% } %><% if (fieldsContainInstant === true) { %>
 import java.time.temporal.ChronoUnit;<% } %>
+<%_ if (fieldsContainOwnerManyToMany) { _%>
+import java.util.ArrayList;
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import java.util.Collections;
 <%_ } _%>
 import java.util.List;
-import java.util.ArrayList;<% if (databaseType === 'cassandra') { %>
+<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %>
 <%_ if (databaseType === 'couchbase') { _%>
     import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
@@ -497,6 +502,9 @@ _%>
     @Transactional<% } %>
     public void getAll<%= entityClassPlural %>() throws Exception {
         // Initialize the database
+        <%_ if (databaseType === 'cassandra') { _%>
+        <%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get all the <%= entityInstance %>List
@@ -565,6 +573,9 @@ _%>
     @Transactional<% } %>
     public void get<%= entityClass %>() throws Exception {
         // Initialize the database
+        <%_ if (databaseType === 'cassandra') { _%>
+        <%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get the <%= entityInstance %>
@@ -722,6 +733,9 @@ _%>
     @Test
     public void getAll<%= entityClassPlural %>AsStream() {
         // Initialize the database
+        <%_ if (databaseType === 'cassandra') { _%>
+        <%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
         <%= entityInstance %>Repository.save(<%= entityInstance %>);
 
         <%_ if (service !== 'no') { _%>
@@ -771,6 +785,9 @@ _%>
     @Transactional<% } %>
     public void update<%= entityClass %>() throws Exception {
         // Initialize the database
+        <%_ if (databaseType === 'cassandra') { _%>
+        <%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= entityInstance %>);
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -857,6 +874,9 @@ _%>
     @Transactional<% } %>
     public void delete<%= entityClass %>() throws Exception {
         // Initialize the database
+        <%_ if (databaseType === 'cassandra') { _%>
+        <%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= entityInstance %>);
 <%_ } else { _%>
@@ -885,6 +905,9 @@ _%>
     @Transactional<% } %>
     public void search<%= entityClass %>() throws Exception {
         // Initialize the database
+        <%_ if (databaseType === 'cassandra') { _%>
+        <%= entityInstance %>.setId(UUID.randomUUID());
+        <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= entityInstance %>);
 <%_ } else { _%>

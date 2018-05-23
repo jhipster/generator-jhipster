@@ -88,8 +88,9 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
     public static final String PREFIX = "user";
 
     @IdPrefix
-    private String prefix = PREFIX;<% } %>
-<% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+    private String prefix = PREFIX;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Id<% } %><% if (databaseType === 'couchbase') { %>
     @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)<% } %><% if (databaseType === 'cassandra') { %>
     @PartitionKey<% } %>

@@ -296,7 +296,7 @@ dependencies {
     // https://github.com/elastic/elasticsearch/issues/13245
     compile "net.java.dev.jna:jna"
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
     compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
@@ -318,7 +318,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.zalando:problem-spring-web"
     <%_ if (databaseType === 'cassandra') { _%>
-    compile "com.datastax.cassandra:cassandra-driver-core"
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
