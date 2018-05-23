@@ -197,18 +197,11 @@ security:
             user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
             client-id: web_app
             client-secret: web_app
-                <%_ if (applicationType === 'monolith') { %>
-            client-authentication-scheme: form
-                <%_ } else { _%>
-            client-authentication-scheme: header
-                <%_ } _%>
             scope: openid profile email
             <%_ } _%>
             <%_ if (applicationType === 'microservice') { _%>
             client-id: internal
             client-secret: internal
-            authentication-scheme: header
-            client-authentication-scheme: header
             <%_ } _%>
         resource:
             user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
