@@ -33,7 +33,7 @@ const JDLRelationship = require('../../../lib/core/jdl_relationship');
 const JDLRelationships = require('../../../lib/core/jdl_relationships');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
-const FieldTypes = require('../../../lib/core/jhipster/field_types').CommonDBTypes;
+const FieldTypes = require('../../../lib/core/jhipster/field_types');
 const Validations = require('../../../lib/core/jhipster/validations');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Options;
@@ -98,13 +98,13 @@ describe('EntityParser', () => {
           fields: {
             aa: new JDLField({
               name: 'aa',
-              type: FieldTypes.STRING,
+              type: FieldTypes.CommonDBTypes.STRING,
               comment: 'My field',
               validations: { required: new JDLValidation({ name: Validations.REQUIRED }) }
             }),
             ab: new JDLField({
               name: 'ab',
-              type: FieldTypes.INTEGER
+              type: FieldTypes.CommonDBTypes.INTEGER
             })
           }
         });
@@ -557,15 +557,15 @@ describe('EntityParser', () => {
             fields: {
               anyBlob: new JDLField({
                 name: 'anyBlob',
-                type: FieldTypes.ANY_BLOB
+                type: FieldTypes.CommonDBTypes.ANY_BLOB
               }),
               imageBlob: new JDLField({
                 name: 'imageBlob',
-                type: FieldTypes.IMAGE_BLOB
+                type: FieldTypes.CommonDBTypes.IMAGE_BLOB
               }),
               textBlob: new JDLField({
                 name: 'textBlob',
-                type: FieldTypes.TEXT_BLOB
+                type: FieldTypes.CommonDBTypes.TEXT_BLOB
               })
             }
           }));
@@ -720,6 +720,61 @@ describe('EntityParser', () => {
         it('sets one by default', () => {
           expect(content.A.relationships[0].relationshipName).to.equal('b');
           expect(content.B.relationships[0].otherEntityRelationshipName).to.equal('a');
+        });
+      });
+    });
+    context('when passing \'no\' as database type', () => {
+      let jdlObject = null;
+      let result = null;
+
+      before(() => {
+        jdlObject = new JDLObject();
+        const entity = new JDLEntity({
+          name: 'Toto'
+        });
+        const field1 = new JDLField({
+          name: 'titi',
+          type: FieldTypes.CassandraTypes.UUID
+        });
+        const field2 = new JDLField({
+          name: 'tutu',
+          type: FieldTypes.CommonDBTypes.STRING
+        });
+        entity.addField(field1);
+        entity.addField(field2);
+        jdlObject.addEntity(entity);
+        result = EntityParser.parse({
+          jdlObject,
+          databaseType: DatabaseTypes.NO,
+          applicationType: ApplicationTypes.MICROSERVICE
+        });
+        delete result.Toto.changelogDate;
+      });
+
+      it('converts everything into JSON', () => {
+        expect(result).to.deep.equal({
+          Toto: {
+            applications: '*',
+            clientRootFolder: '',
+            dto: 'no',
+            entityTableName: 'toto',
+            fields: [
+              {
+                fieldName: 'titi',
+                fieldType: 'UUID'
+              },
+              {
+                fieldName: 'tutu',
+                fieldType: 'String'
+              }
+            ],
+            fluentMethods: true,
+            javadoc: undefined,
+            jpaMetamodelFiltering: false,
+            pagination: 'no',
+            relationships: [],
+            service: 'no'
+          }
         });
       });
     });

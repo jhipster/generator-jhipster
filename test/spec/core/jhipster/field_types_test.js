@@ -20,6 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
+const DatabaseTypes = require('../../../../lib/core/jhipster/database_types');
 const FieldTypes = require('../../../../lib/core/jhipster/field_types');
 const Validations = require('../../../../lib/core/jhipster/validations');
 const JDLEnum = require('../../../../lib/core/jdl_enum');
@@ -109,6 +110,13 @@ describe('FieldTypes', () => {
         FieldTypes.getIsType('thing', () => {});
       }).to.throw('The passed database type must either be \'sql\', \'mysql\', \'mariadb\', \'postgresql\',' +
         ' \'oracle\', \'mssql\', \'mongodb\', \'couchbase\', or \'cassandra\'');
+    });
+    context('when passing \'no\' as argument', () => {
+      it('does not fail', () => {
+        expect(() => {
+          FieldTypes.getIsType(DatabaseTypes.NO, () => {});
+        }).not.to.throw();
+      });
     });
   });
   describe('::hasValidation', () => {
