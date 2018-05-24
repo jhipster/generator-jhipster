@@ -203,7 +203,7 @@ const reactFiles = {
                 renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`
             }, {
                 file: 'e2e/entities/entity-update-page-object.ts',
-                renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-update.page-object.ts` 
+                renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-update.page-object.ts`
             }]
         }
     ]
