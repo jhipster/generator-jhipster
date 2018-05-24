@@ -26,7 +26,11 @@ import PasswordStrengthBar from 'app/shared/layout/password/password-strength-ba
 import { IRootState } from 'app/shared/reducers';
 import { handleRegister, reset } from './register.reducer';
 
-export interface IRegisterProps extends <% if (enableTranslation) { %>StateProps, <% } %>DispatchProps  {}
+<%_ if (enableTranslation) { _%>
+export interface IRegisterProps extends StateProps, DispatchProps  {}
+<%_ } else { _%>
+export type IRegisterProps = DispatchProps;
+<%_ } _%>
 
 export interface IRegisterState {
   password: string;
