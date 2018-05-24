@@ -71,8 +71,9 @@ describe('Account', () => {
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
     await signInPage.clearUserName();
-    await signInPage.setUserName('admin');
     await signInPage.clearPassword();
+    browser.sleep(300); // to avoid double entry
+    await signInPage.setUserName('admin');
     await signInPage.setPassword('admin');
     await signInPage.login();
 
@@ -97,7 +98,7 @@ describe('Account', () => {
     expect(await registerPage.getTitle()).to.eq(registerPageTitle);
 
     registerPage.autoSignUpUsing('user_test', 'usertest@jhipster.com', 'user_test');
-    const toast = getToastByInnerText('<strong>Registration saved!</strong> Please check your email for confirmation.');
+    const toast = getToastByInnerText('Registration saved! Please check your email for confirmation.');
     waitUntilDisplayed(toast);
 
     // Success toast should appear
@@ -107,7 +108,7 @@ describe('Account', () => {
   it('should not be able to sign up if login already taken', async () => {
     await registerPage.save();
 
-    const toast = getToastByInnerText('Login already in use');
+    const toast = getToastByInnerText('Login name already used!');
     waitUntilDisplayed(toast);
 
     // Error toast should appear
@@ -120,7 +121,7 @@ describe('Account', () => {
     await registerPage.username.clear();
     await registerPage.setUserName('user_test2');
     await registerPage.save();
-    const toast = getToastByInnerText('Email address already in use');
+    const toast = getToastByInnerText('Email is already in use!');
     waitUntilDisplayed(toast);
 
     // Error toast should appear
@@ -157,7 +158,7 @@ describe('Account', () => {
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
     passwordPage.autoChangePassword('wrong_current_password', 'new_password', 'new_password');
-    const toast = getToastByInnerText('<strong>An error has occurred!</strong> The password could not be changed.');
+    const toast = getToastByInnerText('An error has occurred! The password could not be changed.');
     waitUntilDisplayed(toast);
 
     // Error toast should appear
@@ -174,7 +175,7 @@ describe('Account', () => {
     await passwordPage.clearConfirmPassword();
     await passwordPage.setConfirmPassword('newpassword');
     await passwordPage.save();
-    const toast = getToastByInnerText('<strong>Password changed!</strong>');
+    const toast = getToastByInnerText('Password changed!');
     waitUntilDisplayed(toast);
 
     // Success toast should appear
@@ -214,7 +215,7 @@ describe('Account', () => {
     await settingsPage.setFirstName('jhipster');
     await settingsPage.setLastName('retspihj');
     await settingsPage.save();
-    const toast = getToastByInnerText('<strong>Settings saved!</strong>');
+    const toast = getToastByInnerText('Settings saved!');
     waitUntilDisplayed(toast);
     // Success toast should appear
     expect(await toast.isPresent()).to.be.true;
@@ -229,7 +230,7 @@ describe('Account', () => {
     await settingsPage.clearEmail();
     await settingsPage.setEmail('usertest@jhipster.com');
     await settingsPage.save();
-    const toast = getToastByInnerText('Email address already in use');
+    const toast = getToastByInnerText('Email is already in use!');
     waitUntilDisplayed(toast);
 
     // Error toast should appear
