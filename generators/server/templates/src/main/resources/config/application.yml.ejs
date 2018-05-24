@@ -71,18 +71,8 @@ zuul: # those values must be configured depending on the application specific ne
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     ignoredServices: 'consul,<%= baseName %>' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
     <%_ } _%>
-
-# See https://github.com/Netflix/Hystrix/wiki/Configuration
-hystrix:
-    command:
-        default:
-            execution:
-                isolation:
-                    thread:
-                        timeoutInMilliseconds: 10000
-
 <%_ } _%>
-<%_ if (applicationType === 'microservice') { _%>
+<%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
 feign:
     hystrix:
         enabled: true
