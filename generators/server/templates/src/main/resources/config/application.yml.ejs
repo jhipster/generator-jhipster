@@ -192,28 +192,19 @@ security:
     <%_ if (authenticationType === 'oauth2') {  _%>
     oauth2:
         client:
+            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
             access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
             user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
-            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
             client-id: web_app
             client-secret: web_app
-            client-authentication-scheme: form
             scope: openid profile email
             <%_ } _%>
             <%_ if (applicationType === 'microservice') { _%>
             client-id: internal
             client-secret: internal
-            authentication-scheme: header
-            client-authentication-scheme: header
             <%_ } _%>
         resource:
             user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
-            token-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
-            prefer-token-info: false
-            <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
-            jwk:
-                key-set-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/certs
-            <%_ } _%>
     <%_ } _%>
 
 server:
