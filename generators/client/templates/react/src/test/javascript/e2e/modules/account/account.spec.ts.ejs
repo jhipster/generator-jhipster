@@ -66,13 +66,13 @@ describe('Account', () => {
   });
 
   it('should login with admin account', async () => {
+    browser.get('/');
+    signInPage = navBarPage.getSignInPage();
     <%_ if (authenticationType !== 'oauth2') { _%>
+    signInPage.waitUntilDisplayed();
     // Login page should appear
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-    await signInPage.clearUserName();
-    await signInPage.clearPassword();
-    browser.sleep(300); // to avoid double entry
     await signInPage.setUserName('admin');
     await signInPage.setPassword('admin');
     await signInPage.login();
