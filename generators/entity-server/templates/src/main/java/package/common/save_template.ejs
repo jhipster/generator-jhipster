@@ -25,7 +25,7 @@ const returnPrefix = (returnDirectly && searchEngine !== 'elasticsearch') ? 'ret
 let resultEntity;
 if (!viaService) {
     if (dto === 'mapstruct') {
-        resultEntity = entityInstance; _%>
+        resultEntity = entityInstance; %>
         <%= entityClass %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
         <%= entityInstance %> = <%= entityInstance %>Repository.save(<%= entityInstance %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= entityInstance %>);
