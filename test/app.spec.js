@@ -702,7 +702,7 @@ describe('JHipster generator', () => {
                     })
                     .on('end', done);
             });
-            it('creates expected files with "Infinispan"', () => {
+            it('creates expected files with "Memcached"', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.memcached);
