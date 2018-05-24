@@ -16,11 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (!viaService) { _%>
-        <%= entityInstance %>Repository.deleteById(id);
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        <%= entityInstance %>SearchRepository.deleteById(id);
-        <%_ } _%>
-<%_ } else { _%>
-        <%= entityInstance %>Service.delete(id);
-<%_ } _%>
+version: '2'
+services:
+    <%= baseName.toLowerCase() %>-memcached:
+        image: <%= DOCKER_MEMCACHED %>
+        ports:
+            - "11211:11211"

@@ -121,6 +121,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
                 this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
                 this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
+                this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
                 this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
@@ -172,7 +173,7 @@ module.exports = class extends BaseGenerator {
                 }
 
                 this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-                this.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
+                this.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no' && this.config.get('hibernateCache') !== 'memcached');
 
                 this.databaseType = this.config.get('databaseType');
                 if (this.databaseType === 'mongodb') {
@@ -346,7 +347,7 @@ module.exports = class extends BaseGenerator {
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
-                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan'].includes(this.cacheProvider) || this.applicationType === 'gateway';
+                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(this.cacheProvider) || this.applicationType === 'gateway';
 
                 this.pkType = this.getPkType(this.databaseType);
 

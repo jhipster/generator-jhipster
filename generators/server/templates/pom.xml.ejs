@@ -281,6 +281,13 @@
         </dependency>
 -->
         <%_ } _%>
+        <%_ if (cacheProvider === 'memcached') { _%>
+        <dependency>
+            <groupId>io.sixhours</groupId>
+            <artifactId>memcached-spring-boot-starter</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
@@ -511,7 +518,7 @@
             <scope>runtime</scope>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+        <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %></artifactId>
@@ -624,10 +631,6 @@
         <%_ } _%>
         <%_ if (databaseType === 'cassandra') { _%>
         <!-- DataStax driver -->
-        <dependency>
-            <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-core</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-extras</artifactId>

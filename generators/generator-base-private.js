@@ -744,6 +744,9 @@ module.exports = class extends Generator {
                 if (!semver.satisfies(nodeVersion, nodeFromPackageJson)) {
                     this.warning(`Your NodeJS version is too old (${nodeVersion}). You should use at least NodeJS ${chalk.bold(nodeFromPackageJson)}`);
                 }
+                if (!(process.release || {}).lts) {
+                    this.warning('Your Node version is not LTS (Long Term Support), use it at your own risk! JHipster does not support non-LTS releases, so if you encounter a bug, please use a LTS version first.');
+                }
             }
             done();
         });
