@@ -130,6 +130,7 @@ describe('Account', () => {
 
   it('should activate the new registered user', async () => {
     navBarPage.autoSignIn();
+    signInPage.waitUntilHidden();
     navBarPage.clickOnAdminMenuItem('user-management');
     const deactivatedButton = getUserDeactivatedButtonByLogin('user_test');
     await deactivatedButton.click();
@@ -154,6 +155,7 @@ describe('Account', () => {
 
   it('should fail to update password when using incorrect current password', async () => {
     navBarPage.autoSignIn();
+    signInPage.waitUntilHidden();
     passwordPage = navBarPage.getPasswordPage();
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
@@ -209,6 +211,7 @@ describe('Account', () => {
   it('should be able to change settings', async () => {
     signInPage.get();
     signInPage.autoSignInUsing('user_test', 'user_test');
+    signInPage.waitUntilHidden();
     settingsPage = navBarPage.getSettingsPage();
     expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
 
@@ -224,6 +227,7 @@ describe('Account', () => {
 
   it('should not be able to change settings if email already exists', async () => {
     navBarPage.autoSignIn();
+    signInPage.waitUntilHidden();
     settingsPage.get();
     expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
 
