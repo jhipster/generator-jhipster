@@ -69,9 +69,10 @@ describe('JHipsterApplicationExporter', () => {
     context('when passing valid arguments', () => {
       context('when exporting an application to JSON', () => {
         let content = null;
+        let returned = null;
 
         before((done) => {
-          JHipsterApplicationExporter.exportApplication(new JDLApplication({
+          returned = JHipsterApplicationExporter.exportApplication(new JDLApplication({
             config: {
               baseName: 'toto',
               packageName: 'com.mathieu.sample',
@@ -95,6 +96,47 @@ describe('JHipsterApplicationExporter', () => {
           });
         });
 
+        it('returns the exported application', () => {
+          expect(returned['generator-jhipster'].jwtSecretKey).not.to.be.undefined;
+          delete returned['generator-jhipster'].jwtSecretKey;
+          expect(returned).to.deep.equal({
+            entities: [],
+            'generator-jhipster': {
+              applicationType: 'monolith',
+              authenticationType: 'jwt',
+              baseName: 'toto',
+              buildTool: 'maven',
+              cacheProvider: 'ehcache',
+              clientFramework: 'angularX',
+              clientPackageManager: 'yarn',
+              databaseType: 'sql',
+              devDatabaseType: 'h2Disk',
+              enableHibernateCache: true,
+              enableSwaggerCodegen: false,
+              enableTranslation: false,
+              jhiPrefix: 'jhi',
+              jhipsterVersion: '4.9.0',
+              languages: [
+                'en',
+                'fr'
+              ],
+              messageBroker: false,
+              nativeLanguage: 'en',
+              packageFolder: 'com/mathieu/sample',
+              packageName: 'com.mathieu.sample',
+              prodDatabaseType: 'mysql',
+              searchEngine: false,
+              serverPort: '8080',
+              serviceDiscoveryType: false,
+              skipClient: false,
+              skipServer: false,
+              skipUserManagement: false,
+              testFrameworks: [],
+              useSass: false,
+              websocket: false
+            }
+          });
+        });
         it('exports it', () => {
           expect(content).not.to.be.undefined;
         });
@@ -153,8 +195,10 @@ describe('JHipsterApplicationExporter', () => {
     });
     context('when passing valid arguments', () => {
       context('when exporting applications to JSON', () => {
+        let returned = null;
+
         before('common setup for both applications', () => {
-          JHipsterApplicationExporter.exportApplications({
+          returned = JHipsterApplicationExporter.exportApplications({
             toto: new JDLApplication({
               config: {
                 baseName: 'toto',
@@ -176,6 +220,9 @@ describe('JHipsterApplicationExporter', () => {
           });
         });
 
+        it('returns the exported applications', () => {
+          expect(returned).to.have.lengthOf(2);
+        });
         context('for the first application', () => {
           let content = null;
 
@@ -239,7 +286,6 @@ describe('JHipsterApplicationExporter', () => {
             });
           });
         });
-
         context('for the second application', () => {
           let content = null;
 
