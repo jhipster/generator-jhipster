@@ -24,11 +24,7 @@ const RelationshipTypes = require('../lib/core/jhipster/relationship_types');
 const FieldTypes = require('../lib/core/jhipster/field_types');
 const Validations = require('../lib/core/jhipster/validations');
 const DatabaseTypes = require('../lib/core/jhipster/database_types');
-const JDLReader = require('../lib/reader/jdl_reader');
-const JsonReader = require('../lib/reader/json_reader');
-const DocumentParser = require('../lib/parser/document_parser');
-const convertToJHipsterJSON = require('../lib/parser/entity_parser').parse;
-const JsonParser = require('../lib/parser/json_parser');
+
 const JDLObject = require('../lib/core/jdl_object');
 const JDLApplication = require('../lib/core/jdl_application');
 const JDLEntity = require('../lib/core/jdl_entity');
@@ -40,6 +36,13 @@ const JDLRelationships = require('../lib/core/jdl_relationships');
 const JDLUnaryOption = require('../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../lib/core/jdl_binary_option');
 const JDLOptions = require('../lib/core/jdl_options');
+
+const JDLImporter = require('../lib/jdl/jdl_importer');
+const JDLReader = require('../lib/reader/jdl_reader');
+const JsonReader = require('../lib/reader/json_reader');
+const DocumentParser = require('../lib/parser/document_parser');
+const convertToJHipsterJSON = require('../lib/parser/entity_parser').parse;
+const JsonParser = require('../lib/parser/json_parser');
 const JHipsterApplicationExporter = require('../lib/export/jhipster_application_exporter');
 const JHipsterEntityExporter = require('../lib/export/jhipster_entity_exporter');
 const exportToJDL = require('../lib/export/jdl_exporter').exportToJDL;
@@ -76,6 +79,8 @@ module.exports = {
   JDLUnaryOption,
   JDLBinaryOption,
   JDLOptions,
+  /* JDL Importer */
+  JDLImporter,
   /* JDL reading */
   parse: JDLReader.parse,
   parseFromFiles: JDLReader.parseFromFiles,
