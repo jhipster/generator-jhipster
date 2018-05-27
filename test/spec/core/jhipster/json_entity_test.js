@@ -52,6 +52,7 @@ describe('JSONEntity', () => {
         expect(entity.changelogDate).not.to.be.undefined;
         delete entity.changelogDate;
         expect(entity).to.deep.equal({
+          name: 'Toto',
           clientRootFolder: '',
           dto: 'no',
           entityTableName: 'toto',
@@ -71,7 +72,7 @@ describe('JSONEntity', () => {
 
       before(() => {
         entity = new JSONEntity({
-          entityName: 'toto',
+          entityName: 'Titi',
           dto: 'mapstruct',
           entityTableName: 'titi',
           fields: [42],
@@ -93,6 +94,7 @@ describe('JSONEntity', () => {
 
       it('uses them', () => {
         expect(entity).to.deep.equal({
+          name: 'Titi',
           dto: 'mapstruct',
           entityTableName: 'titi',
           fields: [42],

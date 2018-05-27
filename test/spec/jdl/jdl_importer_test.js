@@ -41,6 +41,7 @@ describe('JDLImporter', () => {
     context('when not parsing applications', () => {
       const ENTITY_NAMES = ['Country', 'Department', 'Employee', 'Job', 'JobHistory', 'Location', 'Region', 'Task'];
       let filesExist = true;
+      let returned = null;
       const expectedContent = {
         Country: {
           fields: [
@@ -63,6 +64,7 @@ describe('JDLImporter', () => {
               otherEntityRelationshipName: 'country'
             }
           ],
+          name: 'Country',
           entityTableName: 'country',
           dto: 'no',
           pagination: 'no',
@@ -72,7 +74,8 @@ describe('JDLImporter', () => {
           clientRootFolder: '',
           applications: '*',
           skipServer: true,
-          microserviceName: 'mymicroservice'
+          microserviceName: 'mymicroservice',
+          javadoc: ''
         },
         Department: {
           fields: [
@@ -116,6 +119,7 @@ describe('JDLImporter', () => {
               otherEntityRelationshipName: 'department'
             }
           ],
+          name: 'Department',
           entityTableName: 'department',
           dto: 'no',
           pagination: 'no',
@@ -124,7 +128,8 @@ describe('JDLImporter', () => {
           fluentMethods: true,
           clientRootFolder: '',
           applications: '*',
-          microserviceName: 'mymicroservice'
+          microserviceName: 'mymicroservice',
+          javadoc: ''
         },
         Employee: {
           fields: [
@@ -185,6 +190,7 @@ describe('JDLImporter', () => {
               otherEntityField: 'id'
             }
           ],
+          name: 'Employee',
           javadoc: 'The Employee entity.\nSecond line in javadoc.',
           entityTableName: 'employee',
           dto: 'mapstruct',
@@ -239,6 +245,7 @@ describe('JDLImporter', () => {
               otherEntityField: 'id'
             }
           ],
+          name: 'Job',
           entityTableName: 'job',
           dto: 'no',
           pagination: 'pagination',
@@ -247,7 +254,8 @@ describe('JDLImporter', () => {
           fluentMethods: true,
           clientRootFolder: '',
           applications: '*',
-          microserviceName: 'mymicroservice'
+          microserviceName: 'mymicroservice',
+          javadoc: ''
         },
         JobHistory: {
           fields: [
@@ -291,6 +299,7 @@ describe('JDLImporter', () => {
               ownerSide: true
             }
           ],
+          name: 'JobHistory',
           javadoc: 'JobHistory comment.',
           entityTableName: 'job_history',
           dto: 'no',
@@ -329,6 +338,7 @@ describe('JDLImporter', () => {
               otherEntityRelationshipName: 'location'
             }
           ],
+          name: 'Location',
           entityTableName: 'location',
           dto: 'no',
           pagination: 'no',
@@ -337,7 +347,8 @@ describe('JDLImporter', () => {
           fluentMethods: true,
           clientRootFolder: '',
           applications: '*',
-          microserviceName: 'mymicroservice'
+          microserviceName: 'mymicroservice',
+          javadoc: ''
         },
         Region: {
           fields: [
@@ -354,6 +365,7 @@ describe('JDLImporter', () => {
               otherEntityField: 'id'
             }
           ],
+          name: 'Region',
           entityTableName: 'region',
           dto: 'no',
           pagination: 'no',
@@ -362,7 +374,8 @@ describe('JDLImporter', () => {
           fluentMethods: true,
           clientRootFolder: '',
           applications: '*',
-          microserviceName: 'mymicroservice'
+          microserviceName: 'mymicroservice',
+          javadoc: ''
         },
         Task: {
           fields: [
@@ -384,6 +397,7 @@ describe('JDLImporter', () => {
               otherEntityRelationshipName: 'chore'
             }
           ],
+          name: 'Task',
           entityTableName: 'task',
           dto: 'no',
           pagination: 'no',
@@ -392,7 +406,8 @@ describe('JDLImporter', () => {
           fluentMethods: true,
           clientRootFolder: '',
           applications: '*',
-          microserviceName: 'mymicroservice'
+          microserviceName: 'mymicroservice',
+          javadoc: ''
         }
       };
 
@@ -402,7 +417,17 @@ describe('JDLImporter', () => {
           applicationType: ApplicationTypes.MONOLITH,
           databaseType: DatabaseTypes.SQL,
         });
-        importer.import();
+        returned = importer.import();
+        returned.exportedEntities = returned.exportedEntities.sort((exportedEntityA, exportedEntityB) => {
+          if (exportedEntityA.entityTableName < exportedEntityB.entityTableName) {
+            return -1;
+          }
+          return 1;
+        }).map((exportedEntity) => {
+          exportedEntity.javadoc = exportedEntity.javadoc || '';
+          delete exportedEntity.changelogDate;
+          return exportedEntity;
+        });
         filesExist = ENTITY_NAMES.reduce((result, entityName) =>
           result && fs.statSync(path.join('.jhipster', `${entityName}.json`)).isFile());
       });
@@ -416,6 +441,15 @@ describe('JDLImporter', () => {
         });
       });
 
+      it('returns the final state', () => {
+        expect(returned).to.deep.equal({
+          exportedEntities: [
+            expectedContent.Country, expectedContent.Department, expectedContent.Employee, expectedContent.Job,
+            expectedContent.JobHistory, expectedContent.Location, expectedContent.Region, expectedContent.Task
+          ],
+          exportedApplications: []
+        });
+      });
       it('creates the files', () => {
         expect(filesExist).to.be.true;
       });
@@ -424,6 +458,9 @@ describe('JDLImporter', () => {
           const entityContent = JSON.parse(fs.readFileSync(path.join('.jhipster', `${entityName}.json`), 'utf-8'));
           expect(entityContent.changelogDate).not.to.be.undefined;
           delete entityContent.changelogDate;
+          if (expectedContent[entityName].javadoc === '') {
+            delete expectedContent[entityName].javadoc;
+          }
           expect(entityContent).to.deep.equal(expectedContent[entityName]);
         });
       });
@@ -724,6 +761,7 @@ describe('JDLImporter', () => {
       ];
       const expectedEntities = [
         {
+          name: 'A',
           fields: [],
           relationships: [],
           entityTableName: 'a',
@@ -738,6 +776,7 @@ describe('JDLImporter', () => {
           ]
         },
         {
+          name: 'B',
           fields: [],
           relationships: [],
           entityTableName: 'b',
@@ -752,6 +791,7 @@ describe('JDLImporter', () => {
           ]
         },
         {
+          name: 'E',
           fields: [],
           relationships: [],
           entityTableName: 'e',
@@ -768,6 +808,7 @@ describe('JDLImporter', () => {
           microserviceName: 'mySecondApp'
         },
         {
+          name: 'F',
           fields: [],
           relationships: [],
           entityTableName: 'f',

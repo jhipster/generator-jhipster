@@ -173,6 +173,7 @@ describe('EntityParser', () => {
           delete content.EntityB.changelogDate;
           expect(content).to.deep.equal({
             EntityA: {
+              name: 'EntityA',
               applications: '*',
               clientRootFolder: '',
               dto: 'no',
@@ -208,6 +209,7 @@ describe('EntityParser', () => {
               skipClient: true
             },
             EntityB: {
+              name: 'EntityB',
               applications: '*',
               clientRootFolder: '',
               dto: 'no',
@@ -255,6 +257,7 @@ describe('EntityParser', () => {
           delete content.EntityB.changelogDate;
           expect(content).to.deep.equal({
             EntityA: {
+              name: 'EntityA',
               applications: '*',
               clientRootFolder: '',
               dto: 'no',
@@ -280,6 +283,7 @@ describe('EntityParser', () => {
               skipClient: true
             },
             EntityB: {
+              name: 'EntityB',
               applications: '*',
               clientRootFolder: '',
               dto: 'no',
@@ -319,6 +323,7 @@ describe('EntityParser', () => {
           delete content.EntityB.changelogDate;
           expect(content).to.deep.equal({
             EntityA: {
+              name: 'EntityA',
               applications: '*',
               clientRootFolder: '',
               dto: 'no',
@@ -344,6 +349,7 @@ describe('EntityParser', () => {
               skipClient: true
             },
             EntityB: {
+              name: 'EntityB',
               applications: '*',
               clientRootFolder: '',
               dto: 'no',
@@ -385,6 +391,7 @@ describe('EntityParser', () => {
           delete content.EntityB.changelogDate;
           expect(content).to.deep.equal({
             EntityA: {
+              name: 'EntityA',
               applications: '*',
               clientRootFolder: '',
               dto: 'no',
@@ -410,6 +417,7 @@ describe('EntityParser', () => {
               skipClient: true
             },
             EntityB: {
+              name: 'EntityB',
               applications: '*',
               clientRootFolder: '',
               dto: 'no',
@@ -754,6 +762,7 @@ describe('EntityParser', () => {
       it('converts everything into JSON', () => {
         expect(result).to.deep.equal({
           Toto: {
+            name: 'Toto',
             applications: '*',
             clientRootFolder: '',
             dto: 'no',
