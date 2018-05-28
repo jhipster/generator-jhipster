@@ -92,14 +92,23 @@ describe('Creating account tests', () => {
     });
 
     it('dispatches CREATE_ACCOUNT_PENDING and CREATE_ACCOUNT_FULFILLED actions', async () => {
+      const meta = {
+        <%_ if (enableTranslation) { _%>
+        successMessage: 'translation-not-found[register.messages.success]'
+        <%_ } else { _%>
+        successMessage: '<strong>Registration saved!</strong> Please check your email for confirmation.'
+        <%_ } _%>
+      };
 
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT)
+          type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT),
+          meta
         },
         {
           type: SUCCESS(ACTION_TYPES.CREATE_ACCOUNT),
-          payload: resolvedObject
+          payload: resolvedObject,
+          meta
         }
       ];
       await store.dispatch(handleRegister('', '', '')).then(() => expect(store.getActions()).to.eql(expectedActions));

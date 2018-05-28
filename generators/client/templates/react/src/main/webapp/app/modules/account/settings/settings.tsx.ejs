@@ -29,14 +29,6 @@ import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
 import { saveAccountSettings, reset } from './settings.reducer';
 
-const successAlert = (
-  <Alert color="success" >
-    <strong>
-      <Translate contentKey="settings.messages.success">Settings saved!</Translate>
-    </strong>
-  </Alert>
-);
-
 export interface IUserSettingsProps extends StateProps, DispatchProps  {}
 
 export interface IUserSettingsState {
@@ -52,7 +44,7 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
     this.props.reset();
   }
 
-  
+
   handleValidSubmit = (event, values) => {
     const account = {
       ...this.props.account,
@@ -65,17 +57,15 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
 
   render() {
     const { account } = this.props;
-    const { updateSuccess } = this.props;
 
     return (
       <div>
         <Row className="justify-content-center">
           <Col md="8" >
-            <h2>
+            <h2 id="settings-title">
               <Translate contentKey="settings.title" interpolate={{ username: account.login }}>User settings for {account.login}</Translate>
             </h2>
-            { updateSuccess ? successAlert : null }
-            <AvForm onValidSubmit={this.handleValidSubmit}>
+            <AvForm id="settings-form" onValidSubmit={this.handleValidSubmit}>
               {/* First name */}
               <AvField
                 className="form-control"
@@ -146,11 +136,9 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
   }
 }
 
-const mapStateToProps = ({ authentication, settings }: IRootState) => ({
+const mapStateToProps = ({ authentication }: IRootState) => ({
   account: authentication.account,
   isAuthenticated: authentication.isAuthenticated,
-  updateSuccess: settings.updateSuccess,
-  updateFailure: settings.updateFailure
 });
 
 const mapDispatchToProps = { getSession, saveAccountSettings, reset };

@@ -239,11 +239,11 @@ const files = {
                 { file: 'modules/account/password-reset/init/password-reset-init.tsx', method: 'processJsx' },
                 { file: 'modules/account/password-reset/finish/password-reset-finish.tsx', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' },
-                'modules/account/register/register.reducer.ts',
-                'modules/account/activate/activate.reducer.ts',
-                'modules/account/password-reset/password-reset.reducer.ts',
+                { file: 'modules/account/register/register.reducer.ts', method: 'processJsx' },
+                { file: 'modules/account/activate/activate.reducer.ts', method: 'processJsx' },
+                { file: 'modules/account/password-reset/password-reset.reducer.ts', method: 'processJsx' },
                 { file: 'modules/account/password/password.reducer.ts', method: 'processJsx' },
-                'modules/account/settings/settings.reducer.ts'
+                { file: 'modules/account/settings/settings.reducer.ts', method: 'processJsx' }
             ]
         },
         {
@@ -424,6 +424,29 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
+            ]
+        },
+        {
+            condition: generator => generator.protractorTests,
+            path: TEST_SRC_DIR,
+            templates: [
+                'e2e/modules/account/account.spec.ts',
+                'e2e/modules/administration/administration.spec.ts',
+                'e2e/util/utils.ts',
+                'e2e/page-objects/base-component.ts',
+                'e2e/page-objects/navbar-page.ts',
+                'e2e/page-objects/signin-page.ts',
+                'protractor.conf.js'
+            ]
+        },
+        {
+            condition: generator => generator.protractorTests && generator.authenticationType !== 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: [
+                'e2e/page-objects/password-page.ts',
+                'e2e/page-objects/settings-page.ts',
+                'e2e/page-objects/register-page.ts',
+                'protractor.conf.js'
             ]
         }
     ]
