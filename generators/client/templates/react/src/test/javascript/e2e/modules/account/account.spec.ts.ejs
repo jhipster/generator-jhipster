@@ -23,8 +23,8 @@ import SignInPage from '../../page-objects/signin-page';
 import NavBarPage from '../../page-objects/navbar-page';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import RegisterPage from '../../page-objects/register-page';
-import PasswordPage from '../../page-objects/password-page';
-import SettingsPage from '../../page-objects/settings-page';
+// import PasswordPage from '../../page-objects/password-page';
+// import SettingsPage from '../../page-objects/settings-page';
 import { getUserDeactivatedButtonByLogin, waitUntilDisplayed, waitUntilHidden, getToastByInnerText } from '../../util/utils';
 <%_ } else { _%>
 import { waitUntilDisplayed } from '../../util/utils';
@@ -36,13 +36,17 @@ describe('Account', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
   <%_ if (authenticationType !== 'oauth2') { _%>
-  // let passwordPage: PasswordPage;
+  <%#
+  let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
+  -%>
   let registerPage: RegisterPage;
 
   const registerPageTitle = 'register-title';
+  <%#
   const passwordPageTitle = 'password-title';
   const settingsPageTitle = 'settings-title';
+  -%>
   <%_ } _%>
   const loginPageTitle = 'login-title';
 
@@ -149,6 +153,7 @@ describe('Account', () => {
   });
   <%_ } _%>
 <%#
+  // TODO fix below flaky tests
   it('should activate the new registered user', async () => {
     browser.sleep(500);
     navBarPage.autoSignIn();
