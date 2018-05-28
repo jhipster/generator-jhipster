@@ -29,15 +29,6 @@ describe('Administration', () => {
       // Title should be equal to 'Users'
       expect(await element(by.className('userManagement-page-heading')).isPresent()).to.be.true;
     });
-
-    it('should delete previously created fake user', async () => {
-      browser.get('#/admin/user-management/user_test/delete');
-      const deleteModal = element(by.className('modal'));
-      waitUntilDisplayed(deleteModal);
-      element(by.buttonText('Delete')).click();
-      // Delete modal should disappear
-      expect(await deleteModal.isPresent()).to.be.false;
-    });
   });
   <%_ } _%>
 

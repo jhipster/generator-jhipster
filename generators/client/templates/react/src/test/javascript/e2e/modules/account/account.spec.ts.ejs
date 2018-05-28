@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import { browser, <% if (authenticationType === 'oauth2') { %>element, by<% } %> } from 'protractor';
+import { browser, element, by } from 'protractor';
 
 import SignInPage from '../../page-objects/signin-page';
 import NavBarPage from '../../page-objects/navbar-page';
@@ -106,6 +106,7 @@ describe('Account', () => {
   });
 
   it('should not be able to sign up if login already taken', async () => {
+    browser.sleep(500);
     await registerPage.save();
 
     const toast = getToastByInnerText('Login name already used!');
@@ -116,6 +117,7 @@ describe('Account', () => {
   });
 
   it('should not be able to sign up if email already taken', async () => {
+    browser.sleep(500);
     expect(await registerPage.getTitle()).to.eq(registerPageTitle);
 
     await registerPage.username.clear();
@@ -129,6 +131,7 @@ describe('Account', () => {
   });
 
   it('should activate the new registered user', async () => {
+    browser.sleep(500);
     navBarPage.autoSignIn();
     signInPage.waitUntilHidden();
     navBarPage.clickOnAdminMenuItem('user-management');
@@ -142,6 +145,7 @@ describe('Account', () => {
   });
 
   it('should be able to log in with new registered account', async () => {
+    browser.sleep(500);
     signInPage.get();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
@@ -168,6 +172,7 @@ describe('Account', () => {
   });
 
   it('should be able to update password', async () => {
+    browser.sleep(500);
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
     await passwordPage.clearCurrentPassword();
@@ -209,6 +214,7 @@ describe('Account', () => {
   });
 
   it('should be able to change settings', async () => {
+    browser.sleep(500);
     signInPage.get();
     signInPage.autoSignInUsing('user_test', 'user_test');
     signInPage.waitUntilHidden();
@@ -226,6 +232,7 @@ describe('Account', () => {
   });
 
   it('should not be able to change settings if email already exists', async () => {
+    browser.sleep(500);
     navBarPage.autoSignIn();
     signInPage.waitUntilHidden();
     settingsPage.get();
@@ -239,6 +246,16 @@ describe('Account', () => {
 
     // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
+  });
+
+  it('should delete previously created fake user', async () => {
+    browser.sleep(500);
+    browser.get('#/admin/user-management/user_test/delete');
+    const deleteModal = element(by.className('modal'));
+    waitUntilDisplayed(deleteModal);
+    element(by.buttonText('Delete')).click();
+    // Delete modal should disappear
+    expect(await deleteModal.isPresent()).to.be.false;
   });
   <%_ } _%>
 
