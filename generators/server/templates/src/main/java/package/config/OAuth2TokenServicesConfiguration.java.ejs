@@ -1,0 +1,68 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%=packageName%>.config;
+
+import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
+<%_ if (applicationType === 'microservice' && cacheProvider !== 'no') { _%>
+import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
+<%_ } _%>
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+<%_ if (applicationType === 'microservice' && cacheProvider !== 'no') { _%>
+import <%=packageName%>.security.oauth2.CachedUserInfoTokenServices;
+<%_ } _%>
+import <%=packageName%>.security.oauth2.SimpleAuthoritiesExtractor;
+import <%=packageName%>.security.oauth2.SimplePrincipalExtractor;
+
+@Configuration
+public class OAuth2TokenServicesConfiguration {
+
+    private static final String OAUTH2_PRINCIPAL_ATTRIBUTE = "preferred_username";
+    private static final String OAUTH2_AUTHORITIES_ATTRIBUTE = "roles";
+
+<%_ if (applicationType === 'microservice' && cacheProvider !== 'no') { _%>
+    private final ResourceServerProperties resourceServerProperties;
+
+	public OAuth2TokenServicesConfiguration(ResourceServerProperties resourceServerProperties) {
+		this.resourceServerProperties = resourceServerProperties;
+	}
+
+    @Bean
+    public UserInfoTokenServices userInfoTokenServices(PrincipalExtractor principalExtractor, AuthoritiesExtractor authoritiesExtractor) {
+        UserInfoTokenServices userInfoTokenServices =
+            new CachedUserInfoTokenServices(resourceServerProperties.getUserInfoUri(), resourceServerProperties.getClientId());
+
+        userInfoTokenServices.setPrincipalExtractor(principalExtractor);
+        userInfoTokenServices.setAuthoritiesExtractor(authoritiesExtractor);
+        return userInfoTokenServices;
+    }
+<%_ } _%>
+    @Bean
+    public PrincipalExtractor principalExtractor() {
+        return new SimplePrincipalExtractor(OAUTH2_PRINCIPAL_ATTRIBUTE);
+    }
+
+    @Bean
+    public AuthoritiesExtractor authoritiesExtractor() {
+        return new SimpleAuthoritiesExtractor(OAUTH2_AUTHORITIES_ATTRIBUTE);
+    }
+}

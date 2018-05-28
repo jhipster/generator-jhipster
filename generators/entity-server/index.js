@@ -28,7 +28,6 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
-        this.log(this.databaseType);
         if (this.databaseType === 'cassandra') {
             this.pkType = 'UUID';
         }

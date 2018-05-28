@@ -693,7 +693,7 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (authenticationType === 'uaa') { _%>
+        <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-security</artifactId>
