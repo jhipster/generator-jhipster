@@ -22,7 +22,9 @@ const dockerPrompts = require('../docker-prompts');
 module.exports = _.extend({
     askForKubernetesNamespace,
     askForKubernetesServiceType,
-    askForIngressDomain
+    askForIngressDomain,
+    askForIstioSupport,
+    askForIstioRouteFiles
 }, dockerPrompts);
 
 function askForKubernetesNamespace() {
@@ -99,6 +101,67 @@ function askForIngressDomain() {
 
     this.prompt(prompts).then((props) => {
         this.ingressDomain = props.ingressDomain;
+        done();
+    });
+}
+
+function askForIstioSupport() {
+    if (this.composeApplicationType === 'monolith') {
+        this.istioSupportOpt = 'no';
+        return;
+    }
+    const done = this.async();
+
+    const prompts = [{
+        type: 'list',
+        name: 'istioSupportOpt',
+        message: 'Choose your preference for Istio Service Mesh',
+        choices: [
+            {
+                value: 'no',
+                name: 'Not required'
+            },
+            {
+                value: 'mi',
+                name: 'Manual sidecar injection (ensure istioctl in $PATH)'
+            },
+            {
+                value: 'ai',
+                name: 'Label namespace as automatic injection is configured already'
+            }
+        ],
+        default: this.istioSupportOpt ? this.istioSupportOpt : 'no'
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.istioSupportOpt = props.istioSupportOpt;
+        done();
+    });
+}
+
+function askForIstioRouteFiles() {
+    if (this.istioSupportOpt === 'no') return;
+    const done = this.async();
+
+    const prompts = [{
+        type: 'list',
+        name: 'istioRouteObjs',
+        message: 'Do you want to generate Istio route files?',
+        choices: [
+            {
+                value: 'no',
+                name: 'No'
+            },
+            {
+                value: 'yes',
+                name: 'Yes'
+            }
+        ],
+        default: this.istioRouteObjs ? this.istioRouteObjs : 'no'
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.istioRouteObjs = props.istioRouteObjs;
         done();
     });
 }

@@ -76,6 +76,8 @@ module.exports = class extends BaseGenerator {
                 this.kubernetesServiceType = this.config.get('kubernetesServiceType');
                 this.ingressDomain = this.config.get('ingressDomain');
                 this.useKafka = false;
+                this.istioSupportOpt = this.config.get('istioSupportOpt');
+                this.istioRouteObjs = this.config.get('istioRouteObjs');
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
                 this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
@@ -142,8 +144,10 @@ module.exports = class extends BaseGenerator {
             askForKubernetesNamespace: prompts.askForKubernetesNamespace,
             askForDockerRepositoryName: prompts.askForDockerRepositoryName,
             askForDockerPushCommand: prompts.askForDockerPushCommand,
+            askForIstioSupport: prompts.askForIstioSupport,
+            askForIstioRouteFiles: prompts.askForIstioRouteFiles,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
-            askForIngressDomain: prompts.askForIngressDomain
+            askForIngressDomain: prompts.askForIngressDomain,
         };
     }
 
@@ -180,6 +184,8 @@ module.exports = class extends BaseGenerator {
                 this.config.set('kubernetesServiceType', this.kubernetesServiceType);
                 this.config.set('ingressDomain', this.ingressDomain);
                 this.config.set('monitoring', this.monitoring);
+                this.config.set('istioSupportOpt', this.istioSupportOpt);
+                this.config.set('istioRouteObjs', this.istioRouteObjs);
             }
         };
     }
@@ -206,27 +212,8 @@ module.exports = class extends BaseGenerator {
             this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
 
-        this.log('\nYou can deploy all your apps by running: ');
-        this.log(`  ${chalk.cyan(`sh ${this.directoryPath}k8s/kubectl-apply.sh`)}`);
-        this.log('OR');
-        if (this.kubernetesNamespace !== 'default') {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/namespace.yml`)}`);
-        }
-        if (this.useKafka === true) {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/messagebroker`)}`);
-        }
-        if (this.monitoring === 'elk') {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/console`)}`);
-        }
-        if (this.monitoring === 'prometheus') {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/monitoring`)}`);
-        }
-        for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/${this.appConfigs[i].baseName.toLowerCase()}`)}`);
-            if (this.appConfigs[i].serviceDiscoveryType !== false && regIndex++ === 0) {
-                this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/registry`)}`);
-            }
-        }
+        this.log('\nYou can deploy all your apps by running the below bash command: ');
+        this.log(`  ${chalk.cyan(`bash ${this.directoryPath}k8s/kubectl-apply.sh`)}`);
         if (this.gatewayNb + this.monolithicNb >= 1) {
             const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
             this.log('\nUse these commands to find your application\'s IP addresses:');
