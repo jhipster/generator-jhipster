@@ -39,11 +39,9 @@ describe('Account', () => {
   <%#
   let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
-  -%>
   let registerPage: RegisterPage;
 
   const registerPageTitle = 'register-title';
-  <%#
   const passwordPageTitle = 'password-title';
   const settingsPageTitle = 'settings-title';
   -%>
@@ -115,6 +113,8 @@ describe('Account', () => {
   });
 
   <%_ if (authenticationType !== 'oauth2') { _%>
+  <%#
+  // TODO fix below flaky tests
   it('should be able to sign up', async () => {
     registerPage = navBarPage.getRegisterPage();
     expect(await registerPage.getTitle()).to.eq(registerPageTitle);
@@ -151,9 +151,6 @@ describe('Account', () => {
     // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
   });
-  <%_ } _%>
-<%#
-  // TODO fix below flaky tests
   it('should activate the new registered user', async () => {
     browser.sleep(500);
     navBarPage.autoSignIn();
@@ -271,8 +268,7 @@ describe('Account', () => {
     // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
   });
--%>
-  <%_ if (authenticationType !== 'oauth2') { _%>
+
   it('should delete previously created fake user', async () => {
     browser.sleep(500);
     browser.get('#/admin/user-management/user_test/delete');
@@ -282,7 +278,9 @@ describe('Account', () => {
     // Delete modal should disappear
     expect(await deleteModal.isPresent()).to.be.false;
   });
+  -%>
   <%_ } _%>
-
+  <%#
   after(() => navBarPage.autoSignOut());
+  -%>
 });
