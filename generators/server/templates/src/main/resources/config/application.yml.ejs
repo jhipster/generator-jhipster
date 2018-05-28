@@ -209,6 +209,9 @@ security:
 
 server:
     servlet:
+        <%_ if (applicationType === 'microservice' && !serviceDiscoveryType) { _%>
+        context-path: /${spring.application.name}
+        <%_ } _%>
         session:
             cookie:
                 http-only: true
