@@ -20,7 +20,7 @@ cache:
 env:
   global:
     # If you add some global variables, please add it also at the end of ./travis/build-samples.sh - PROFILE=dev
-    - PROFILE=dev
+    - PROFILE="dev"
     - PROTRACTOR=0
     - JHIPSTER_TRAVIS="$TRAVIS_BUILD_DIR/travis"
     - JHIPSTER_SAMPLES="$JHIPSTER_TRAVIS/samples"
@@ -30,14 +30,6 @@ env:
     # environment properties
     - SPRING_OUTPUT_ANSI_ENABLED="ALWAYS"
     - SPRING_JPA_SHOW_SQL="false"
-
-    # Below, not used in ./travis/build-samples.sh
-    # if JHIPSTER_LIB_BRANCH value is release, use the release from Maven
-    - JHIPSTER_LIB_REPO="https://github.com/jhipster/jhipster.git"
-    - JHIPSTER_LIB_BRANCH="release"
-    # if JHIPSTER_BRANCH value is release, use the release from NPM
-    - JHIPSTER_REPO="https://github.com/jhipster/generator-jhipster.git"
-    - JHIPSTER_BRANCH="release"
 
     # PS4 is used for PROMPT when we trace each command thanks "set -x"
     # In line below, spaces are insecables spaces
@@ -49,6 +41,16 @@ env:
 
     # Travis CI and not ./travis/build-samples.sh
     - IS_TRAVIS_CI=1
+
+    # Below Not used in ./travis/build-samples.sh
+    # Used only in ./travis/scripts/00-install-jhipster.sh
+    #       and ./travis/scripts/03-replace-version-generated-project.sh
+    # if JHIPSTER_LIB_BRANCH value is release, use the release from Maven
+    - JHIPSTER_LIB_REPO="https://github.com/jhipster/jhipster.git"
+    - JHIPSTER_LIB_BRANCH="release"
+    # if JHIPSTER_BRANCH value is release, use the release from NPM
+    - JHIPSTER_REPO="https://github.com/jhipster/generator-jhipster.git"
+    - JHIPSTER_BRANCH="release"
 
   matrix:
 

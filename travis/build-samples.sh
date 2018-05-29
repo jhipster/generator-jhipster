@@ -1205,8 +1205,9 @@ function errorInBuildStopCurrentSample() {
 errorInBuildExitCurrentSample() {
     if [[ "$IS_STARTAPPLICATION" -eq 1 ]] ; then
         exitScriptWithError "$@"
-    elif [[ ! -z ${JHIPSTER+x} ]] && \
-        [[ ! -z ${JHIPSTER_MATRIX+x} ]]; then
+    elif [[ ! -z ${JHIPSTER+x} ]] \
+        && [[ ! -z ${JHIPSTER_MATRIX+x} ]] \
+        && [[ ! -z ${LOGFILENAME+x} ]]; then
         ERROR_IN_SAMPLE=1
         errorInBuildStopCurrentSample "$@"
         treatEndOfBuild
@@ -1309,7 +1310,7 @@ function generateProject() {
     launchNewBash "./scripts/01-generate-entities.sh" \
         "Copying entities for '$APP_FOLDER'"
     launchNewBash "./scripts/02-generate-project.sh" "Building '$APP_FOLDER'"
-    # Do not run command below for this script (this script is only for Travis)
+    # Never launched in TRAVIS CI for a PR
     # launchNewBash "./scripts/03-replace-version-generated-project.sh" \
     #     "Replace version generated-project'"
 
