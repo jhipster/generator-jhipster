@@ -363,9 +363,6 @@ dependencies {
     compile "org.springframework.security:spring-security-jwt"
         <%_ } _%>
     <%_ } _%>
-    <%_ if (authenticationType === 'session') { _%>
-    compile "com.google.guava:guava"
-    <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     compile "io.jsonwebtoken:jjwt"
     <%_ } _%>

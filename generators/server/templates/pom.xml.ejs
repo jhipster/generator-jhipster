@@ -607,12 +607,6 @@
         </dependency>
             <%_ } _%>
         <%_ } _%>
-        <%_ if (authenticationType === 'session') { _%>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
