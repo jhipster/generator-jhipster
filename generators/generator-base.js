@@ -83,7 +83,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-element-to-menu',
                     splicable: [`<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                                 <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
-                                    <fa-icon [icon]="'${glyphiconName}'"></fa-icon>&nbsp;
+                                    <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
                                     <span${enableTranslation ? ` jhiTranslate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`
@@ -143,7 +143,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-element-to-admin-menu',
                     splicable: [`<li>
                         <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'${glyphiconName}'"></fa-icon>&nbsp;
+                            <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
                             <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                         </a>
                     </li>`
@@ -189,7 +189,7 @@ module.exports = class extends PrivateBase {
                     splicable: [
                         this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <fa-icon [icon]="'asterisk'"></fa-icon>
+                             |                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
