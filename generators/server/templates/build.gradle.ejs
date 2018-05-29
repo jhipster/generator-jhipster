@@ -229,6 +229,9 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner"
     compile "com.ryantenney.metrics:metrics-spring"
+    <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
+    compile "org.apache.httpcomponents:httpclient"
+    <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     <%_ if (enableHibernateCache) { _%>

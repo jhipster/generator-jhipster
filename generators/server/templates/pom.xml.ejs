@@ -237,6 +237,12 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <%_ } _%>
         <%_ if (cacheProvider === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
