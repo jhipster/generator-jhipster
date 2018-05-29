@@ -44,7 +44,7 @@ function writeFiles() {
                 if (this.monitoring === 'prometheus') {
                     this.template('monitoring/jhipster-prometheus-sm.yml.ejs', `${this.directoryPath}/k8s/${appName}/${appName}-prometheus-sm.yml`);
                 }
-                if (this.istioRouteObjs === 'yes') {
+                if (this.istioRoute === true) {
                     this.template('istio/destination-policy.yml.ejs', `${this.directoryPath}/k8s/${appName}/${appName}-deployment-policy.yml`);
                     this.template('istio/route-rule.yml.ejs', `${this.directoryPath}/k8s/${appName}/${appName}-route-rule.yml`);
                 }

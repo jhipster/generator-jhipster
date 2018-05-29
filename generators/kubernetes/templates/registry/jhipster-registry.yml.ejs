@@ -90,7 +90,7 @@ spec:
             secretKeyRef:
               name: registry-secret
               key: registry-admin-password
-        <%_ if (app.istioSupportOpt !== 'no') { _%>
+        <%_ if (app.istio !== 'no') { _%>
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "false"
         <%_ } _%>

@@ -81,7 +81,7 @@ spec:
               key: registry-admin-password
         - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
           value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
-          <%_ if (app.istioSupportOpt !== 'no') { _%>
+          <%_ if (app.istio !== 'no') { _%>
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "false"
         - name: EUREKA_INSTANCE_HOSTNAME
@@ -93,7 +93,7 @@ spec:
           value: consul.<%= kubernetesNamespace %>.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
-          <%_ if (app.istioSupportOpt !== 'no') { _%>
+          <%_ if (app.istio !== 'no') { _%>
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -162,6 +162,10 @@ spec:
           value: 'true'
         - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
           value: /prometheusMetrics
+        <%_ } _%>
+        <%_ if (composeApplicationType === 'microservice') { _%>
+        - name: SPRING_SLEUTH_PROPAGATION_KEYS
+          value: "x-request-id,x-ot-span-context"
         <%_ } _%>
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"

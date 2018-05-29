@@ -19,7 +19,7 @@
 -%>
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash <%-directoryPath%>apply.sh
-<%_ if (istioSupportOpt === 'mi') { _%>
+<%_ if (istio === 'manualInjection') { _%>
 loopDir(){
   for entry in "$1"/*
   do
@@ -30,9 +30,9 @@ loopDir(){
 
 <%_ if (kubernetesNamespace !== 'default') { _%>
 kubectl apply -f <%-directoryPath%>k8s/namespace.yml
-<%_ } _%> <%_ if (istioSupportOpt === 'ai') { _%>
+<%_ } _%> <%_ if (istio === 'autoInjection') { _%>
 kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled
-<%_ } _%> <%_ if (istioSupportOpt === 'mi') { _%>
+<%_ } _%> <%_ if (istio === 'manualInjection') { _%>
 <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 loopDir "<%-directoryPath%>k8s/registry"
 <%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>

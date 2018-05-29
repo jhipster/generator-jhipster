@@ -107,61 +107,61 @@ function askForIngressDomain() {
 
 function askForIstioSupport() {
     if (this.composeApplicationType === 'monolith') {
-        this.istioSupportOpt = 'no';
+        this.istio = 'no';
         return;
     }
     const done = this.async();
 
     const prompts = [{
         type: 'list',
-        name: 'istioSupportOpt',
-        message: 'Choose your preference for Istio Service Mesh',
+        name: 'istio',
+        message: 'Do you want to configure Istio?',
         choices: [
             {
                 value: 'no',
                 name: 'Not required'
             },
             {
-                value: 'mi',
+                value: 'manualInjection',
                 name: 'Manual sidecar injection (ensure istioctl in $PATH)'
             },
             {
-                value: 'ai',
-                name: 'Label namespace as automatic injection is configured already'
+                value: 'autoInjection',
+                name: 'Label tag namespace as automatic injection is already configured'
             }
         ],
-        default: this.istioSupportOpt ? this.istioSupportOpt : 'no'
+        default: this.istio ? this.istio : 'no'
     }];
 
     this.prompt(prompts).then((props) => {
-        this.istioSupportOpt = props.istioSupportOpt;
+        this.istio = props.istio;
         done();
     });
 }
 
 function askForIstioRouteFiles() {
-    if (this.istioSupportOpt === 'no') return;
+    if (this.istio === 'no') return;
     const done = this.async();
 
     const prompts = [{
         type: 'list',
-        name: 'istioRouteObjs',
+        name: 'istioRoute',
         message: 'Do you want to generate Istio route files?',
         choices: [
             {
-                value: 'no',
+                value: false,
                 name: 'No'
             },
             {
-                value: 'yes',
+                value: true,
                 name: 'Yes'
             }
         ],
-        default: this.istioRouteObjs ? this.istioRouteObjs : 'no'
+        default: this.istioRoute
     }];
 
     this.prompt(prompts).then((props) => {
-        this.istioRouteObjs = props.istioRouteObjs;
+        this.istioRoute = props.istioRoute;
         done();
     });
 }

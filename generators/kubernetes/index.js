@@ -76,8 +76,8 @@ module.exports = class extends BaseGenerator {
                 this.kubernetesServiceType = this.config.get('kubernetesServiceType');
                 this.ingressDomain = this.config.get('ingressDomain');
                 this.useKafka = false;
-                this.istioSupportOpt = this.config.get('istioSupportOpt');
-                this.istioRouteObjs = this.config.get('istioRouteObjs');
+                this.istio = this.config.get('istio');
+                this.istioRoute = this.config.get('istioRoute');
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
                 this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
@@ -184,8 +184,8 @@ module.exports = class extends BaseGenerator {
                 this.config.set('kubernetesServiceType', this.kubernetesServiceType);
                 this.config.set('ingressDomain', this.ingressDomain);
                 this.config.set('monitoring', this.monitoring);
-                this.config.set('istioSupportOpt', this.istioSupportOpt);
-                this.config.set('istioRouteObjs', this.istioRouteObjs);
+                this.config.set('istio', this.istio);
+                this.config.set('istioRoute', this.istioRoute);
             }
         };
     }
