@@ -200,7 +200,7 @@ To put it in a nutshell, you need to:
 1. run `npm link` or `yarn link` on the `generator-jhipster` project
 2. run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated application folder (you need to do this for each application you create)
 
-Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct witht the following command :
+Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command :
 ```shell
 ➜  ~ ll $(which jhipster)
 lrwxr-xr-x  1 username  admin    63B May 15 11:03 /usr/local/bin/jhipster -> ../../../Users/username/github/generator-jhipster/cli/jhipster.js
