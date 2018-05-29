@@ -53,26 +53,4 @@ describe('StringUtils', () => {
       });
     });
   });
-  describe('::isNilOrEmpty', () => {
-    context('when passing a nil object', () => {
-      it('returns true', () => {
-        expect(StringUtils.isNilOrEmpty(null)).to.be.true;
-      });
-    });
-    context('when passing an undefined object', () => {
-      it('returns true', () => {
-        expect(StringUtils.isNilOrEmpty(undefined)).to.be.true;
-      });
-    });
-    context('when passing an empty string', () => {
-      it('returns true', () => {
-        expect(StringUtils.isNilOrEmpty('')).to.be.true;
-      });
-    });
-    context('when passing a valid string', () => {
-      it('returns false', () => {
-        expect(StringUtils.isNilOrEmpty('ABC')).to.be.false;
-      });
-    });
-  });
 });
