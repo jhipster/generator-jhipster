@@ -412,8 +412,8 @@ dependencies {
     }
     <%_ } _%>
     <%_ if (cucumberTests) { _%>
-    testCompile "info.cukes:cucumber-junit"
-    testCompile "info.cukes:cucumber-spring"
+    testCompile "io.cucumber:cucumber-junit"
+    testCompile "io.cucumber:cucumber-spring"
     <%_ } _%>
     testCompile ("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
