@@ -1223,23 +1223,37 @@ errorInBuildExitCurrentSample() {
 function yarnLink() {
     cd "$APP_FOLDER"
     echoTitleBuildStep "start" "yarn link"
-    yarn init -y
-    command yarn link "generator-jhipster" || \
+    if [[ -z ${IS_GENERATEANDTEST+x} ]] ; then
+        yarn init -y
+    fi
+    if yarn link "generator-jhipster" ; then
+        printFileDescriptor3 "\`yarn link' performed"
+    else
         errorInBuildExitCurrentSample "you havn't executed \`yarn link' " \
             "in a folder named 'generator-jhipster'. " \
             "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
-    local -r GENERATOR_JHIPSTER_FOLDER="$(pwd)/node_modules/generator-jhipster"
-    # Test if `yarn link' is correct
-    cd -P "${JHIPSTER_TRAVIS}/.."
-    local -r JHIPSTER_TRAVISReal=$(pwd -P)
-    cd "$GENERATOR_JHIPSTER_FOLDER"
-    local -r GENERATOR_JHIPSTER_FOLDER_REAL=$(pwd -P)
-    if [ "$JHIPSTER_TRAVISReal" != "$GENERATOR_JHIPSTER_FOLDER_REAL" ] ; then
-        errorInBuildExitCurrentSample "'$JHIPSTER_TRAVISReal and " \
-            "'$GENERATOR_JHIPSTER_FOLDER_REAL' are not the same folders"
-    else
-        echo "Command \`yarn link' seems corect."
     fi
+    if [[ -z ${IS_GENERATEANDTEST+x} ]] ; then
+        local -r \
+            GENERATOR_JHIPSTER_FOLDER="$(pwd)/node_modules/generator-jhipster"
+        # `yarn link' must be launched for the generator-jhipster folder where
+        # ./build-samples.sh is.
+        # (we could have several folders generator-jhipster, with several
+        # ./build-samples.sh in a same computer).
+        cd -P "${JHIPSTER_TRAVIS}/.."
+        local -r JHIPSTER_TRAVISReal=$(pwd -P)
+        cd "$GENERATOR_JHIPSTER_FOLDER"
+        local -r GENERATOR_JHIPSTER_FOLDER_REAL=$(pwd -P)
+        if [ "$JHIPSTER_TRAVISReal" != "$GENERATOR_JHIPSTER_FOLDER_REAL" ] ; then
+            errorInBuildExitCurrentSample "'$JHIPSTER_TRAVISReal and " \
+                "'$GENERATOR_JHIPSTER_FOLDER_REAL' are not the same folders"
+        else
+            echo "Command \`yarn link' seems corect. It was triggered in" \
+                "../../generator-jhipster"
+        fi
+        cd "$APP_FOLDER"
+    fi
+
 }
 
 # function launchNewBash() {{{3
@@ -1393,9 +1407,6 @@ Do you want to continue? [y/n] "
 
     time {
 
-        local -r oldPATH="${PATH}"
-        export PATH="${APP_FOLDER}""/node_modules/.bin:""$PATH"
-
         local -r shortDate=$(date +%m-%dT%H_%M)
         local -r beginLogfilename=\
 "${JHIPSTER_TRAVIS}""/node_modules_cache.""${shortDate}"
@@ -1405,21 +1416,17 @@ Do you want to continue? [y/n] "
         createLogFile
 
         printCommandAndEval "rm -Rf '${APP_FOLDER}'"
-        # For PATH
-        printCommandAndEval "mkdir -p '${APP_FOLDER}/node_modules/.bin'"
-        printCommandAndEval "cd '${APP_FOLDER}'"
+        printCommandAndEval "mkdir -p '${APP_FOLDER}'"
 
         yarnLink
 
         echoTitleBuildStep "start" "JHipster generation."
         if cp "${JHIPSTER_SAMPLES}/node_modules_cache/angular/.yo-rc.json" \
-            "${NODE_MODULES_CACHE_ANGULAR}"  ; then
+            "${APP_FOLDER}"  ; then
             echo ".yo-rc.json is copied"
         else
             errorInBuildExitCurrentSample "not a JHipster project."
         fi
-
-        cd "${NODE_MODULES_CACHE_ANGULAR}"
 
         local -r jhipstercommand="jhipster --force --no-insight --skip-checks \
 --with-entities --skip-git --skip-commit-hook"
@@ -1432,7 +1439,6 @@ Do you want to continue? [y/n] "
 
         treatEndOfBuild
 
-        export PATH="${oldPATH}"
     }
 
 }
@@ -1549,9 +1555,6 @@ then restart script."
 
     time {
 
-        local -r oldPATH="${PATH}"
-        export PATH="${APP_FOLDER}""/node_modules/.bin:""$PATH"
-
         # Instantiate LOGFILENAME
         local -r beginLogfilename=\
 "${JHIPSTER_TRAVIS}""/""${BRANCH_NAME}"".""${DATEBININSCRIPT}"
@@ -1567,8 +1570,6 @@ then restart script."
         else
             generateProject
         fi
-
-        export PATH="${oldPATH}"
 
     }
 
