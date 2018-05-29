@@ -187,7 +187,7 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 ### Set NPM/YARN to use the cloned project
 
-In your cloned `generator-jhipster` project, type `npm link` or `yarn link` depending on the package manager you use.
+In your cloned `generator-jhipster` project, type `npm link` or `yarn && yarn link` depending on the package manager you use.
 
 This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster`, you will now use the development version of JHipster.
 
@@ -200,7 +200,12 @@ To put it in a nutshell, you need to:
 1. run `npm link` or `yarn link` on the `generator-jhipster` project
 2. run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated application folder (you need to do this for each application you create)
 
-Now, running the 'jhipster' command should use your specific JHipster version. You can test it by making a small change in your cloned generator, and running again on an existing JHipster project:
+Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command :
+```shell
+➜  ~ ll $(which jhipster)
+lrwxr-xr-x  1 username  admin    63B May 15 11:03 /usr/local/bin/jhipster -> ../../../Users/username/github/generator-jhipster/cli/jhipster.js
+```
+You can test your setup by making a small change in your cloned generator, and running again on an existing JHipster project:
 
 ```shell
 jhipster
