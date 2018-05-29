@@ -41,11 +41,11 @@ const JDLImporter = require('../lib/jdl/jdl_importer');
 const JDLReader = require('../lib/reader/jdl_reader');
 const JsonReader = require('../lib/reader/json_reader');
 const DocumentParser = require('../lib/parser/document_parser');
-const convertToJHipsterJSON = require('../lib/parser/entity_parser').parse;
+const EntityParser = require('../lib/parser/entity_parser');
 const JsonParser = require('../lib/parser/json_parser');
 const JHipsterApplicationExporter = require('../lib/export/jhipster_application_exporter');
 const JHipsterEntityExporter = require('../lib/export/jhipster_entity_exporter');
-const exportToJDL = require('../lib/export/jdl_exporter').exportToJDL;
+const JDLExporter = require('../lib/export/jdl_exporter');
 const JSONFileReader = require('../lib/reader/json_file_reader');
 const ReservedKeywords = require('../lib/core/jhipster/reserved_keywords');
 const FileUtils = require('../lib/utils/file_utils');
@@ -87,7 +87,7 @@ module.exports = {
   parseJsonFromDir: JsonReader.parseFromDir,
   /* JDL conversion */
   convertToJDLFromConfigurationObject: DocumentParser.parseFromConfigurationObject,
-  convertToJHipsterJSON,
+  convertToJHipsterJSON: EntityParser.parse,
   /* JSON  conversion */
   convertJsonEntitiesToJDL: JsonParser.parseEntities,
   convertJsonServerOptionsToJDL: JsonParser.parseServerOptions,
@@ -98,7 +98,7 @@ module.exports = {
   exportApplications: JHipsterApplicationExporter.exportApplications,
   exportApplication: JHipsterApplicationExporter.exportApplication,
   /* JDL exporting */
-  exportToJDL,
+  exportToJDL: JDLExporter.exportToJDL,
   /* JDL utils */
   isJDLFile: JDLReader.checkFileIsJDLFile,
   /* JSON utils */
