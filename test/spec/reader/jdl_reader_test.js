@@ -23,38 +23,6 @@ const fs = require('fs');
 const JDLReader = require('../../../lib/reader/jdl_reader');
 
 describe('JDLReader', () => {
-  describe('::parse', () => {
-    context('when passing invalid parameters', () => {
-      context('such as nil', () => {
-        it('throws an error', () => {
-          expect(() => {
-            JDLReader.parse(null);
-          }).to.throw('The content must be passed.');
-        });
-      });
-      context('such as an empty array', () => {
-        it('throws an error', () => {
-          expect(() => {
-            JDLReader.parse('');
-          }).to.throw('The content must be passed.');
-        });
-      });
-    });
-    context('when passing valid arguments', () => {
-      context('when reading JDL content', () => {
-        let content = null;
-
-        before(() => {
-          const input = fs.readFileSync('./test/test_files/valid_jdl.jdl', 'utf-8').toString();
-          content = JDLReader.parse(input);
-        });
-
-        it('reads it', () => {
-          expect(content).not.to.be.null;
-        });
-      });
-    });
-  });
   describe('::parseFromFiles', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {
@@ -95,6 +63,36 @@ describe('JDLReader', () => {
       });
     });
     context('when passing valid arguments', () => {
+      context('when passing an empty file', () => {
+        before(() => {
+          fs.writeFileSync('./test/test_files/test_file.jdl', '');
+        });
+
+        after(() => {
+          fs.unlinkSync('./test/test_files/test_file.jdl');
+        });
+
+        it('fails', () => {
+          expect(() => {
+            JDLReader.parseFromFiles(['./test/test_files/test_file.jdl']);
+          }).to.throw('File content must be passed in order to be parsed, it is currently empty.');
+        });
+      });
+      context('when passing a JDL file with a syntax error', () => {
+        before(() => {
+          fs.writeFileSync('./test/test_files/test_file.jdl', 'enity A');
+        });
+
+        after(() => {
+          fs.unlinkSync('./test/test_files/test_file.jdl');
+        });
+
+        it('fails', () => {
+          expect(() => {
+            JDLReader.parseFromFiles(['./test/test_files/test_file.jdl']);
+          }).to.throw(SyntaxError);
+        });
+      });
       context('when reading a single JDL file', () => {
         let content = null;
 

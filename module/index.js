@@ -81,7 +81,6 @@ module.exports = {
   /* JDL Importer */
   JDLImporter,
   /* JDL reading */
-  parse: JDLReader.parse,
   parseFromFiles: JDLReader.parseFromFiles,
   /* JSON reading */
   parseJsonFromDir: JsonReader.parseFromDir,
