@@ -52,7 +52,6 @@ const FileUtils = require('../lib/utils/file_utils');
 const ObjectUtils = require('../lib/utils/object_utils');
 const FormatUtils = require('../lib/utils/format_utils');
 const StringUtils = require('../lib/utils/string_utils');
-const Set = require('../lib/utils/objects/set');
 
 module.exports = {
   /* JHipster notions */
@@ -106,8 +105,6 @@ module.exports = {
   ObjectUtils,
   readEntityJSON: JSONFileReader.readEntityJSON,
   toFilePath: JSONFileReader.toFilePath,
-  /* Objects */
-  Set,
   /* Utils */
   FileUtils,
   camelCase: StringUtils.camelCase,
