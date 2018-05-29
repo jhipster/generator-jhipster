@@ -1530,11 +1530,8 @@ then restart script."
                 "true" \
                 "exitScriptWithError '$argument'"
             unset confirmationFirstParameter argument
-
-            generateNode_Modules_Cache
-        else
-            true
         fi
+        generateNode_Modules_Cache
     else
         # Defined "$APP_FOLDER" as explained in the MAIN section of this file.
         export APP_FOLDER="${JHIPSTER_SAMPLES}/""${JHIPSTER}""-sample"
