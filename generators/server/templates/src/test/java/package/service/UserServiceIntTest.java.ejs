@@ -45,8 +45,15 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+<%_ if (databaseType === 'sql') { _%>
+import org.mockito.Mock;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.data.auditing.AuditingHandler;
+import org.springframework.data.auditing.DateTimeProvider;
+<%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,6 +72,10 @@ import java.time.temporal.ChronoUnit;
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
 <%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+import java.time.LocalDateTime;
+import java.util.Optional;
+<%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import java.util.List;
 <%_ } _%>
@@ -81,6 +92,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+import static org.mockito.Mockito.when;
 <%_ } _%>
 
 /**
@@ -113,6 +127,14 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Autowired
     private UserSearchRepository mockUserSearchRepository;
     <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+
+    @Autowired
+    private AuditingHandler auditingHandler;
+
+    @Mock
+    DateTimeProvider dateTimeProvider;
+    <%_ } _%>
 
     private User user;
 
@@ -143,6 +165,11 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         user.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         user.setLangKey("en");
+        <%_ if (databaseType === 'sql') { _%>
+
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(LocalDateTime.now()));
+        auditingHandler.setDateTimeProvider(dateTimeProvider);
+        <%_ } _%>
     }
     <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 
@@ -253,9 +280,14 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     <%_ } _%>
     public void testFindNotActivatedUsersByCreationDateBefore() {
         Instant now = Instant.now();
+        <%_ if (databaseType === 'sql') { _%>
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
+        <%_ } _%>
         user.setActivated(false);
+        <%_ if (databaseType !== 'sql') { _%>
         User dbUser = userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
+        <%_ } _%>
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isNotEmpty();
@@ -313,11 +345,18 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Transactional
     <%_ } _%>
     public void testRemoveNotActivatedUsers() {
+        <%_ if (databaseType === 'sql') { _%>
+        // custom "now" for audit to use as creation date
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(Instant.now().minus(30, ChronoUnit.DAYS)));
+        <%_ } _%>
+
         user.setActivated(false);
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        <%_ if (databaseType !== 'sql') { _%>
         // Let the audit first set the creation date but then update it
         user.setCreatedDate(Instant.now().minus(30, ChronoUnit.DAYS));
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        <%_ } _%>
 
         assertThat(userRepository.findOneByLogin("johndoe")).isPresent();
         userService.removeNotActivatedUsers();
