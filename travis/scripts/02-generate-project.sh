@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# -*- coding: UTF8 -*-
 
 #  Copyright 2013-2018 the original author or authors from the JHipster project.
 #
@@ -25,18 +26,11 @@ function echoSetX() {
 }
 
 function generateProject() {
-    if [[ "$IS_TRAVIS_CI" -eq 0 ]] \
-        && [[ "$IS_SKIP_CLIENT" -eq 0 ]] ; then
-        # If it's ../build-samples.sh and not Travis CI if if there is a client
-        if [[ "$JHIPSTER" != *"react"* ]] ; then
-            jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook --skip-install
-        else
-            echo "Not already implemented for react for react. Skip tests on" \
-            "react projects"
-            exit 100
-        fi
-    else
-        jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook
+    jhipster --force --no-insight --skip-checks --with-entities \
+        --skip-git --skip-commit-hook --skip-install
+    if [[ $IS_TRAVIS_CI -eq 1 ]] \
+        || [[ "$IS_SKIP_CLIENT" -eq 1 ]]; then
+        yarn install
     fi
     ls -la
 }

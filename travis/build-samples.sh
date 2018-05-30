@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# -*- coding: UTF8 -*-
 
 #  Copyright 2013-2018 the original author or authors from the JHipster project.
 #
@@ -1171,11 +1172,14 @@ function treatEndOfBuild() {
     fi
     printCommandAndEval mv "${LOGFILENAME}" "${LOGRENAMED}"
 
+    # On Linux, redirect corectly to "$LOGRENAMED"
+    # TODO Test on other systems.
+    printCommandAndEval "cp '${LOGRENAMED}' '${APP_FOLDER}'"
+
     if [[ "$IS_CONSOLEVERBOSE" -eq 0 ]] ; then
         restoreSTDERRandSTDOUTtoConsole
     fi
 
-    printCommandAndEval "cp '${LOGRENAMED}' '${APP_FOLDER}'"
 }
 
 # function errorInBuildStopCurrentSample() {{{3
@@ -1227,9 +1231,7 @@ errorInBuildExitCurrentSample() {
 function yarnLink() {
     cd "$APP_FOLDER"
     echoTitleBuildStep "start" "yarn link"
-    if [[ -z ${IS_GENERATEANDTEST+x} ]] ; then
-        yarn init -y
-    fi
+    yarn init -y
     if yarn link "generator-jhipster" ; then
         printFileDescriptor3 "\`yarn link' performed"
     else
@@ -1434,12 +1436,18 @@ Do you want to continue? [y/n] "
         fi
 
         local -r jhipstercommand="jhipster --force --no-insight --skip-checks \
---with-entities --skip-git --skip-commit-hook"
+--with-entities --skip-git --skip-commit-hook --skip-install"
         printFileDescriptor3 "$jhipstercommand"
         if eval "$jhipstercommand" ; then
             echoTitleBuildStep "end" "'$jhipstercommand' finish with SUCCESS!"
         else
             errorInBuildExitCurrentSample "'$jhipstercommand' FAILED"
+        fi
+        printFileDescriptor3 "yarn install"
+        if yarn install ; then
+            echoTitleBuildStep "end" "'yarn install' finish with SUCCESS!"
+        else
+            errorInBuildExitCurrentSample "'yarn' FAILED"
         fi
 
         treatEndOfBuild
@@ -1474,8 +1482,6 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     # `cut -s', because otherwise display first column. Other `cut` should not
     # have this option, for this reason (we want display the first column,
     # even if there isn't several columns.
-    local travisVars
-    travisVars=
     local -a travisVars
     # https://github.com/koalaman/shellcheck/wiki/SC2086
     # https://github.com/koalaman/shellcheck/wiki/SC2206
@@ -1508,6 +1514,7 @@ function createFolderNodeModulesAndLogFile() {
             echoTitleBuildStep "start" \
                 "Copy '$NODE_MOD_CACHED' to '$APP_FOLDER'"
             printCommandAndEval "mkdir -p '${APP_FOLDER}'"
+            # TODO
             # No `ln -s' due to
             # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
             # But `cp -R' works good ! ;-) ! Probably more reliable.
@@ -1822,6 +1829,10 @@ export DOCKER_PREFIX_NAME="jhipster-travis-build-"
 # Send a variable to ./scripts/*.sh to test if the parent is this script
 # (./build-samples.sh)
 export IS_TRAVIS_CI=0
+
+# TODO contratry to Travis CI, we don't add
+# ./samples/sample_name-sample/node-modules/.bin in the PATH
+# Automatically done by Travis CI, not in ../.travis.yml.
 
 # GLOBAL CONSTANTS not copied from ../.travis.yml
 # ====================
