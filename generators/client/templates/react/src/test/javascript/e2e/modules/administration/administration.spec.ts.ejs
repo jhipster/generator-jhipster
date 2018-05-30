@@ -65,11 +65,13 @@ describe('Administration', () => {
     expect(await element(by.className('configuration-page-heading')).getText()).to.eq('Configuration');
   });
 
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
   it('should load audits', async () => {
     navBarPage.clickOnAdminMenuItem('audits');
     expect(await element(by.className('audits-page-heading')).getText()).to.eq('Audits');
   });
 
+<%_ } _%>
   it('should load logs', async () => {
     navBarPage.clickOnAdminMenuItem('logs');
     expect(await element(by.className('logs-page-heading')).getText()).to.eq('Logs');
