@@ -959,7 +959,7 @@ function testRequierments() {
         # to check all!
 
         local -ir serverPort=$(grep --color=never -E \
-            '"serverPort"\s*:\s*"[0-9]+"' .yo-rc.json \
+            '"serverPort"\s*:\s*"[0-9]+"' .yo-rc.json 2> /dev/null \
             | grep --color=never -Eo '[0-9]+' \
             || echo 8080)
         if command -v ss 1>> /dev/null ; then
@@ -1061,6 +1061,10 @@ function createLogFile() {
         # a sample isn't gracefully finished, and a Docker is still running.
         # Especially for Errors that could not be trapped.
         local WE_WANT_A_PROMPT=0
+    fi
+    if [ -z "${IS_GENERATION_NODE_MODULES_CACHE+x}" ] ; then
+        printCommandAndEval "cp '$JHIPSTER_SAMPLES'/'$JHIPSTER'/.yo-rc.json " \
+            "'$APP_FOLDER'/"
     fi
     testRequierments
     unset WE_WANT_A_PROMPT
@@ -1244,7 +1248,8 @@ function yarnLink() {
         local -r JHIPSTER_TRAVISReal=$(pwd -P)
         cd "$GENERATOR_JHIPSTER_FOLDER"
         local -r GENERATOR_JHIPSTER_FOLDER_REAL=$(pwd -P)
-        if [ "$JHIPSTER_TRAVISReal" != "$GENERATOR_JHIPSTER_FOLDER_REAL" ] ; then
+        if [ "$JHIPSTER_TRAVISReal" != "$GENERATOR_JHIPSTER_FOLDER_REAL" ]
+        then
             errorInBuildExitCurrentSample "'$JHIPSTER_TRAVISReal and " \
                 "'$GENERATOR_JHIPSTER_FOLDER_REAL' are not the same folders"
         else
@@ -1502,12 +1507,11 @@ function createFolderNodeModulesAndLogFile() {
         if [[ "$JHIPSTER" != *"react"* ]] ; then
             echoTitleBuildStep "start" \
                 "Copy '$NODE_MOD_CACHED' to '$APP_FOLDER'"
+            printCommandAndEval "mkdir -p '${APP_FOLDER}'"
             # No `ln -s' due to
             # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
             # But `cp -R' works good ! ;-) ! Probably more reliable.
             printCommandAndEval "cp -R '$NODE_MOD_CACHED' '${APP_FOLDER}'"
-            # Because it's the PATH!
-            printCommandAndEval "mkdir -p '${APP_FOLDER}/node_modules/.bin'"
         else
             errorInBuildExitCurrentSample "Script not implemented."\
                 "for React"

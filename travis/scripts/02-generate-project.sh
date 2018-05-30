@@ -62,13 +62,13 @@ set -x
 
 if [[ "$JHIPSTER" == *"uaa"* ]]; then
     mkdir -p "$UAA_APP_FOLDER"
-    cp -f "$JHIPSTER_SAMPLES"/uaa/.yo-rc.json "$UAA_APP_FOLDER"/
+    cp "$JHIPSTER_SAMPLES"/uaa/.yo-rc.json "$UAA_APP_FOLDER"/
     cd "$UAA_APP_FOLDER"
     generateProject
 fi
 
 mkdir -p "$APP_FOLDER"
-cp -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$APP_FOLDER"/
+cp "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$APP_FOLDER"/
 cd "$APP_FOLDER"
 generateProject
 
