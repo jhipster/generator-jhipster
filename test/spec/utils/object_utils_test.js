@@ -20,9 +20,11 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const merge = require('../../../lib/utils/object_utils').merge;
-const values = require('../../../lib/utils/object_utils').values;
-const areEntitiesEqual = require('../../../lib/utils/object_utils').areEntitiesEqual;
+const ObjectUtils = require('../../../lib/utils/object_utils');
+
+const merge = ObjectUtils.merge;
+const values = ObjectUtils.values;
+const areEntitiesEqual = ObjectUtils.areEntitiesEqual;
 
 describe('ObjectUtils', () => {
   describe('::merge', () => {
@@ -498,58 +500,98 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not have the options', () => {
-        it('returns false', () => {
-          const firstObject = {
-            fields: [
-              {
-                id: 1,
-                theAnswer: 42
-              },
-              {
-                id: 2,
-                notTheAnswer: 43
-              }
-            ],
-            relationships: [
-              {
-                id: 1,
-                anotherField: 44
-              },
-              {
-                id: 2,
-                anotherField: 44
-              }
-            ],
-            dto: 'mapstruct',
-            pagination: 'pager',
-            service: 'no'
-          };
-          const secondObject = {
-            fields: [
-              {
-                id: 1,
-                theAnswer: 42
-              },
-              {
-                id: 2,
-                notTheAnswer: 43
-              }
-            ],
-            relationships: [
-              {
-                id: 1,
-                anotherField: 44
-              },
-              {
-                id: 2,
-                anotherField: 44
-              }
-            ],
-            dto: 'mapstruct',
-            pagination: 'no',
-            service: 'no'
-          };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        const firstObject = {
+          fields: [{ id: 1, theAnswer: 42 }],
+          relationships: [{ id: 1, anotherField: 44 }],
+          dto: 'no',
+          pagination: 'no',
+          service: 'no',
+          searchEngine: 'no',
+          jpaMetamodelFiltering: false
+        };
+        const secondObject = {
+          fields: [{ id: 1, theAnswer: 42 }],
+          relationships: [{ id: 1, anotherField: 44 }],
+          dto: 'no',
+          pagination: 'no',
+          service: 'no',
+          searchEngine: 'no',
+          jpaMetamodelFiltering: false
+        };
+
+        context('when not having the same DTO option value', () => {
+          before(() => {
+            secondObject.dto = 'mapstruct';
+          });
+          after(() => {
+            secondObject.dto = 'no';
+          });
+
+          it('returns false', () => {
+            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          });
+        });
+        context('when not having the same pagination option value', () => {
+          before(() => {
+            secondObject.pagination = 'pager';
+          });
+          after(() => {
+            secondObject.pagination = 'no';
+          });
+
+          it('returns false', () => {
+            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          });
+        });
+        context('when not having the same service option value', () => {
+          before(() => {
+            secondObject.service = 'serviceImpl';
+          });
+          after(() => {
+            secondObject.service = 'no';
+          });
+
+          it('returns false', () => {
+            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          });
+        });
+        context('when not having the same search engine', () => {
+          before(() => {
+            secondObject.searchEngine = 'elasticsearch';
+          });
+          after(() => {
+            secondObject.searchEngine = 'no';
+          });
+
+          it('returns false', () => {
+            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          });
+        });
+        context('when not having the same jpaMetaModelFiltering option value', () => {
+          context('when one entity has \'no\' and the other has \'false\'', () => {
+            before(() => {
+              secondObject.jpaMetaModelFiltering = false;
+            });
+            after(() => {
+              secondObject.jpaMetaModelFiltering = 'no';
+            });
+
+            it('returns true', () => {
+              expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+            });
+          });
+          context('when they have opposite values', () => {
+            before(() => {
+              secondObject.jpaMetaModelFiltering = true;
+            });
+            after(() => {
+              secondObject.jpaMetaModelFiltering = false;
+            });
+
+            it('returns false', () => {
+              expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+            });
+          });
         });
       });
       context('as they do not have the same table name', () => {
