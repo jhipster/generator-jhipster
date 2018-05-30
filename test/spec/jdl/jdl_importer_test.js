@@ -433,12 +433,10 @@ describe('JDLImporter', () => {
       });
 
       after(() => {
-        after(() => {
-          ENTITY_NAMES.forEach((entityName) => {
-            fs.unlinkSync(path.join('.jhipster', `${entityName}.json`));
-          });
-          fs.rmdirSync('.jhipster');
+        ENTITY_NAMES.forEach((entityName) => {
+          fs.unlinkSync(path.join('.jhipster', `${entityName}.json`));
         });
+        fs.rmdirSync('.jhipster');
       });
 
       it('returns the final state', () => {
@@ -899,6 +897,27 @@ describe('JDLImporter', () => {
             // nothing to do
           }
         });
+      });
+    });
+    context('when choosing \'no\' as database type', () => {
+      let importer = null;
+
+      before('importing a JDL file with the \'no\' database type', () => {
+        importer = new JDLImporter([path.join('test', 'test_files', 'simple.jdl')], {
+          applicationName: 'MyApp',
+          applicationType: ApplicationTypes.MONOLITH,
+          databaseType: DatabaseTypes.NO,
+        });
+      });
+
+      after(() => {
+        fs.unlinkSync(path.join('.jhipster', 'A.json'));
+        fs.unlinkSync(path.join('.jhipster', 'B.json'));
+        fs.rmdirSync('.jhipster');
+      });
+
+      it('does not fail', () => {
+        importer.import();
       });
     });
   });

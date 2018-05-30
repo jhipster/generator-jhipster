@@ -1,0 +1,10 @@
+entity A {
+  myField String required,
+  myOtherField UUID
+}
+
+entity B
+
+relationship OneToMany {
+  A{b} to B{a(myOtherField required}
+}
