@@ -498,6 +498,57 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#isEntityInMicroservice', () => {
+    let jdlObject = null;
+
+    context('when an entity is in a microservice', () => {
+      context('because no entity name has been specified', () => {
+        before(() => {
+          jdlObject = new JDLObject();
+          const microserviceOption = new JDLBinaryOption({
+            name: BinaryOptions.Options.MICROSERVICE,
+            value: 'toto'
+          });
+          jdlObject.addOption(microserviceOption);
+        });
+
+        it('returns true', () => {
+          expect(jdlObject.isEntityInMicroservice('A')).to.be.true;
+        });
+      });
+
+      context('because entity names have been specified', () => {
+        before(() => {
+          jdlObject = new JDLObject();
+          const microserviceOption = new JDLBinaryOption({
+            name: BinaryOptions.Options.MICROSERVICE,
+            value: 'toto',
+            entityNames: ['A']
+          });
+          jdlObject.addOption(microserviceOption);
+        });
+
+        it('returns true', () => {
+          expect(jdlObject.isEntityInMicroservice('A')).to.be.true;
+        });
+      });
+    });
+    context('when an entity is not in a microservice', () => {
+      before(() => {
+        jdlObject = new JDLObject();
+        const microserviceOption = new JDLBinaryOption({
+          name: BinaryOptions.Options.MICROSERVICE,
+          value: 'toto',
+          entityNames: ['A']
+        });
+        jdlObject.addOption(microserviceOption);
+      });
+
+      it('returns false', () => {
+        expect(jdlObject.isEntityInMicroservice('B')).to.be.false;
+      });
+    });
+  });
   describe('#toString', () => {
     let application = null;
     let object = null;
