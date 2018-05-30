@@ -1,6 +1,7 @@
 entity A {
   myField String required,
-  myOtherField UUID
+  myOtherField UUID,
+  myLastField ZonedDateTime
 }
 
 entity B
