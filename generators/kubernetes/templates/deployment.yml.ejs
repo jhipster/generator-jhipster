@@ -83,6 +83,13 @@ spec:
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
         <%_ } _%>
+        <%_ if (!app.serviceDiscoveryType && app.authenticationType === 'jwt') { _%>
+        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: secret
+        <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mysql') { _%>
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mysql://<%= app.baseName.toLowerCase() %>-mysql.<%= kubernetesNamespace %>.svc.cluster.local:3306/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
