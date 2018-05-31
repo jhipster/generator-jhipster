@@ -45,26 +45,6 @@ describe('JHipsterApplicationExporter', () => {
             'Errors: No name, No authentication type, No build tool');
         });
       });
-      context('such as an invalid path as baseName', () => {
-        before((done) => {
-          fs.writeFile('aFile', '', {}, done);
-        });
-        after((done) => {
-          fs.unlink('aFile', done);
-        });
-
-        it('throws an error', () => {
-          expect(() => {
-            JHipsterApplicationExporter.exportApplication(new JDLApplication({
-              config: {
-                baseName: 'aFile',
-                enableTranslation: false,
-                languages: ['en', 'fr']
-              }
-            }));
-          }).to.throw('A file located \'aFile\' already exists, so a folder of the same name can\'t be created for the application.');
-        });
-      });
     });
     context('when passing valid arguments', () => {
       context('when exporting an application to JSON', () => {
@@ -81,7 +61,7 @@ describe('JHipsterApplicationExporter', () => {
               jhipsterVersion: '4.9.0'
             }
           }));
-          fs.readFile(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
+          fs.readFile(path.join('.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
             if (err) {
               return done(err);
             }
@@ -90,10 +70,8 @@ describe('JHipsterApplicationExporter', () => {
           });
         });
 
-        after((done) => {
-          fs.unlink(path.join('toto', '.yo-rc.json'), () => {
-            fs.rmdir('toto', done);
-          });
+        after(() => {
+          fs.unlinkSync(path.join('.yo-rc.json'));
         });
 
         it('returns the exported application', () => {

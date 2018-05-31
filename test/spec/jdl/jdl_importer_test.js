@@ -463,6 +463,32 @@ describe('JDLImporter', () => {
         });
       });
     });
+    context('when parsing one JDL application and entities', () => {
+      let returned = null;
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'application_with_entities.jdl')]);
+        returned = importer.import();
+      });
+
+      after(() => {
+        fs.unlinkSync(path.join('.jhipster', 'BankAccount.json'));
+        fs.unlinkSync('.yo-rc.json');
+        fs.rmdirSync('.jhipster');
+      });
+
+      it('returns the import state', () => {
+        expect(returned.exportedEntities).to.have.lengthOf(1);
+        expect(returned.exportedApplications).to.have.lengthOf(1);
+      });
+      it('creates the app config file in the same folder', () => {
+        expect(fs.statSync('.yo-rc.json').isFile()).to.be.true;
+      });
+      it('creates the entity folder in the same folder', () => {
+        expect(fs.statSync('.jhipster').isDirectory()).to.be.true;
+        expect(fs.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
+      });
+    });
     context('when parsing JDL applications and exporting them', () => {
       const contents = [];
       const expectedContents = [

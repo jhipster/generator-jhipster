@@ -631,21 +631,10 @@ describe('JHipsterEntityExporter', () => {
       });
     });
     context('when passing valid arguments', () => {
-      let application1 = null;
-      let application2 = null;
-      let entities = null;
-      let aEntityContent = null;
-      let bEntityContent = null;
-      let returned = null;
-
-      before(() => {
-        entities = {
-          A: {
-            fields: [{
-              fieldName: 'myEnum',
-              fieldType: 'MyEnum',
-              fieldValues: 'FRENCH,ENGLISH'
-            }],
+      context('with one application', () => {
+        before(() => {
+          const entity = {
+            fields: [],
             relationships: [],
             changelogDate: '42',
             javadoc: '',
@@ -657,63 +646,116 @@ describe('JHipsterEntityExporter', () => {
             jpaMetamodelFiltering: false,
             clientRootFolder: '',
             applications: ['toto']
-          },
-          B: {
-            fields: [{
-              fieldName: 'myString',
-              fieldType: 'String',
-            }],
-            relationships: [],
-            changelogDate: '43',
-            javadoc: '',
-            entityTableName: 'b',
-            dto: 'mapstruct',
-            pagination: 'no',
-            service: 'serviceClass',
-            fluentMethods: true,
-            jpaMetamodelFiltering: false,
-            clientRootFolder: '',
-            applications: ['titi']
-          }
-        };
-        application1 = new JDLApplication({
-          config: {
-            baseName: 'toto'
-          },
-          entities: ['A']
+          };
+          const application = new JDLApplication({
+            config: {
+              baseName: 'toto'
+            },
+            entities: ['A']
+          });
+          JHipsterEntityExporter.exportEntitiesInApplications({
+            entities: { A: entity },
+            applications: {
+              toto: application,
+            }
+          });
         });
-        application2 = new JDLApplication({
-          config: {
-            baseName: 'titi'
-          },
-          entities: ['B']
-        });
-        returned = JHipsterEntityExporter.exportEntitiesInApplications({
-          entities,
-          applications: {
-            toto: application1,
-            titi: application2
-          }
-        });
-        aEntityContent = JSON.parse(fs.readFileSync(path.join('toto', '.jhipster', 'A.json'), { encoding: 'utf-8' }));
-        bEntityContent = JSON.parse(fs.readFileSync(path.join('titi', '.jhipster', 'B.json'), { encoding: 'utf-8' }));
-      });
 
-      after(() => {
-        fs.unlinkSync(path.join('toto', '.jhipster', 'A.json'));
-        fs.rmdirSync(path.join('toto', '.jhipster'));
-        fs.rmdirSync(path.join('toto'));
-        fs.unlinkSync(path.join('titi', '.jhipster', 'B.json'));
-        fs.rmdirSync(path.join('titi', '.jhipster'));
-        fs.rmdirSync(path.join('titi'));
-      });
+        after(() => {
+          fs.unlinkSync(path.join('.jhipster', 'A.json'));
+          fs.rmdirSync('.jhipster');
+        });
 
-      it('returns the exported entities', () => {
-        expect(returned).to.deep.equal([entities.A, entities.B]);
+        it('creates the entity in the current folder', () => {
+          expect(fs.statSync('.jhipster').isDirectory()).to.be.true;
+          expect(fs.statSync(path.join('.jhipster', 'A.json')).isFile()).to.be.true;
+        });
       });
-      it('exports the entities', () => {
-        expect(aEntityContent).to.deep.equal(entities.A);
-        expect(bEntityContent).to.deep.equal(entities.B);
+      context('with more than one application', () => {
+        let application1 = null;
+        let application2 = null;
+        let entities = null;
+        let aEntityContent = null;
+        let bEntityContent = null;
+        let returned = null;
+
+        before(() => {
+          entities = {
+            A: {
+              fields: [{
+                fieldName: 'myEnum',
+                fieldType: 'MyEnum',
+                fieldValues: 'FRENCH,ENGLISH'
+              }],
+              relationships: [],
+              changelogDate: '42',
+              javadoc: '',
+              entityTableName: 'a',
+              dto: 'no',
+              pagination: 'no',
+              service: 'no',
+              fluentMethods: true,
+              jpaMetamodelFiltering: false,
+              clientRootFolder: '',
+              applications: ['toto']
+            },
+            B: {
+              fields: [{
+                fieldName: 'myString',
+                fieldType: 'String',
+              }],
+              relationships: [],
+              changelogDate: '43',
+              javadoc: '',
+              entityTableName: 'b',
+              dto: 'mapstruct',
+              pagination: 'no',
+              service: 'serviceClass',
+              fluentMethods: true,
+              jpaMetamodelFiltering: false,
+              clientRootFolder: '',
+              applications: ['titi']
+            }
+          };
+          application1 = new JDLApplication({
+            config: {
+              baseName: 'toto'
+            },
+            entities: ['A']
+          });
+          application2 = new JDLApplication({
+            config: {
+              baseName: 'titi'
+            },
+            entities: ['B']
+          });
+          returned = JHipsterEntityExporter.exportEntitiesInApplications({
+            entities,
+            applications: {
+              toto: application1,
+              titi: application2
+            }
+          });
+          aEntityContent = JSON.parse(fs.readFileSync(path.join('toto', '.jhipster', 'A.json'), { encoding: 'utf-8' }));
+          bEntityContent = JSON.parse(fs.readFileSync(path.join('titi', '.jhipster', 'B.json'), { encoding: 'utf-8' }));
+        });
+
+        after(() => {
+          fs.unlinkSync(path.join('toto', '.jhipster', 'A.json'));
+          fs.rmdirSync(path.join('toto', '.jhipster'));
+          fs.rmdirSync(path.join('toto'));
+          fs.unlinkSync(path.join('titi', '.jhipster', 'B.json'));
+          fs.rmdirSync(path.join('titi', '.jhipster'));
+          fs.rmdirSync(path.join('titi'));
+        });
+
+        it('returns the exported entities', () => {
+          expect(returned).to.deep.equal([entities.A, entities.B]);
+        });
+        it('exports the entities', () => {
+          expect(aEntityContent).to.deep.equal(entities.A);
+          expect(bEntityContent).to.deep.equal(entities.B);
+        });
       });
     });
   });
