@@ -444,9 +444,7 @@ const files = {
             templates: [
                 'e2e/page-objects/password-page.ts',
                 'e2e/page-objects/settings-page.ts',
-                'e2e/page-objects/register-page.ts',
-                'protractor.conf.js',
-                'tsconfig.e2e.json'
+                'e2e/page-objects/register-page.ts'
             ]
         }
     ]
