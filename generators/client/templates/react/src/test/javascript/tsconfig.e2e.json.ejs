@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "chai",
+      "mocha"
+    ]
+  },
+  "include": [
+    "<%= MAIN_SRC_DIR %>app/typing.d.ts",
+    "<%= MAIN_SRC_DIR %>app/**/*",
+    "<%= TEST_SRC_DIR %>**/*"
+  ]
+}

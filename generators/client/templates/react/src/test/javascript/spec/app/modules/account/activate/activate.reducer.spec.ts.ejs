@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { expect } from 'chai';
+
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import * as sinon from 'sinon';
@@ -28,28 +28,28 @@ import activate, { ACTION_TYPES, activateAction } from 'app/modules/account/acti
 
 describe('Activate reducer tests', () => {
   it('should return the initial state', () => {
-    expect(activate(undefined, {})).to.contain({
+    expect(activate(undefined, {})).toMatchObject({
       activationSuccess: false,
       activationFailure: false
     });
   });
 
   it('should reset', () => {
-    expect(activate({ activationSuccess: true, activationFailure: false }, { type: ACTION_TYPES.RESET })).to.contain({
+    expect(activate({ activationSuccess: true, activationFailure: false }, { type: ACTION_TYPES.RESET })).toMatchObject({
       activationSuccess: false,
       activationFailure: false
     });
   });
 
   it('should detect a success', () => {
-    expect(activate(undefined, { type: SUCCESS(ACTION_TYPES.ACTIVATE_ACCOUNT) })).to.contain({
+    expect(activate(undefined, { type: SUCCESS(ACTION_TYPES.ACTIVATE_ACCOUNT) })).toMatchObject({
       activationSuccess: true,
       activationFailure: false
     });
   });
 
   it('should detect a failure', () => {
-    expect(activate(undefined, { type: FAILURE(ACTION_TYPES.ACTIVATE_ACCOUNT) })).to.contain({
+    expect(activate(undefined, { type: FAILURE(ACTION_TYPES.ACTIVATE_ACCOUNT) })).toMatchObject({
       activationSuccess: false,
       activationFailure: true
     });
@@ -75,7 +75,7 @@ describe('Activate reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(activateAction('')).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(activateAction('')).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
   });
 });

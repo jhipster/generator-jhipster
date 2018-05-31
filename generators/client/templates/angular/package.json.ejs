@@ -163,7 +163,7 @@
     "start": "<%= clientPackageManager %> run webpack:dev",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
-    "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2",
+    "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
     "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch --clearCache",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --inline --hot --profile --port=9060 --watch-content-base",
     "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --profile",
@@ -173,21 +173,5 @@
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
-  },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "setupTestFrameworkScriptFile": "<rootDir>/src/test/javascript/jest.ts",
-    "coverageDirectory": "<rootDir>/<%= BUILD_DIR %>test-results/",
-    "globals": {
-        "ts-jest": {
-            "tsConfigFile": "tsconfig.json"
-        },
-        "__TRANSFORM_HTML__": true
-    },
-    "moduleNameMapper": {
-        "app/(.*)": "<rootDir>/src/main/webapp/app/$1"
-    },
-    "transformIgnorePatterns": ["node_modules/(?!@angular/common/locales)"],
-    "testMatch": ["<rootDir>/src/test/javascript/spec/**/+(*.)+(spec.ts)"]
   }
 }

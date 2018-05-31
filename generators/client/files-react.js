@@ -42,7 +42,6 @@ const files = {
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
                 'webpack/webpack.prod.js',
-                'webpack/webpack.test.js',
                 'webpack/utils.js'
             ]
         }
@@ -369,8 +368,7 @@ const files = {
         {
             path: TEST_SRC_DIR,
             templates: [
-                'karma.conf.js',
-                'spec/entry.ts',
+                'jest.conf.js',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/reducers/application-profile.spec.ts',
@@ -436,7 +434,8 @@ const files = {
                 'e2e/page-objects/base-component.ts',
                 'e2e/page-objects/navbar-page.ts',
                 'e2e/page-objects/signin-page.ts',
-                'protractor.conf.js'
+                'protractor.conf.js',
+                'tsconfig.e2e.json'
             ]
         },
         {
@@ -446,7 +445,8 @@ const files = {
                 'e2e/page-objects/password-page.ts',
                 'e2e/page-objects/settings-page.ts',
                 'e2e/page-objects/register-page.ts',
-                'protractor.conf.js'
+                'protractor.conf.js',
+                'tsconfig.e2e.json'
             ]
         }
     ]

@@ -341,6 +341,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,
         `${CLIENT_TEST_SRC_DIR}jest.ts`,
+        `${CLIENT_TEST_SRC_DIR}jest.conf.js`,
         `${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/activate/activate.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/password-reset/finish/password-reset-finish.component.spec.ts`,
