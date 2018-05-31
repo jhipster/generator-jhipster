@@ -225,7 +225,7 @@
 #           Each node_modules takes 1.1 Go. To save disk space, at the and of
 #           generation or testandbuild I symlink
 #           ./samples/sample-name-sample/node_modules to
-#       .   /samples/node_modules_cache-sample/node_modules
+#       .   /samples/node_modules-cache-*-sample/node_modules
 #           We must not use symlink during tests:
 #           (see https://github.com/ng-bootstrap/ng-bootstrap/issues/2283)
 #       * launchNewBash() who launch ./scripts/*.sh if previous step was
@@ -265,7 +265,7 @@
 # it's in this file under title
 # GENERATE AND TEST SAMPLES `./BUILD-SAMPLES.SH GENERATE/generateandtest'
 # Sequential explanation.
-# 1. If ./samples/node_modules_cache-sample/node_modules_cache.*.passed.local-travis.log
+# 1. If ./samples/node_modules-cache-*-sample/node_modules_cache.*.passed.local-travis.log
 #    doesn't exits, we trigger generateNode_Modules_Cache() to generate this
 #    cache.
 # 2. If we have three parameters
@@ -482,12 +482,11 @@ function confirmationUser() {
 # ==============================================================================
 
 function usageClean() {
-    local NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
     echo -e "\\n\\t""$URED""\`./build-samples.sh clean'""$NC""\\n" \
         "1) Before each new build, ./sample/[sample-name]-sample " \
         "is systematically erased, contrary to " \
-        "'${NODE_MODULE_SHORT_NAME}'\\n" \
-        "2) Actually '${NODE_MODULE_SHORT_NAME} takes more " \
+        "'${NODE_MODULES_CACHE_ANGULAR}'\\n" \
+        "2) Actually '${NODE_MODULES_CACHE_ANGULAR} takes more " \
         "than 1 G\\n" \
         "3) After a build, [sample-name]-sample/node_modules is a" \
         "symbolic link. " \
@@ -590,7 +589,7 @@ function usage() {
     "\`$ ./build-samples.sh clean' " \
         "=> delete all folders travis/samples/*-sampl\\n" \
         "=> delete especially the node_modules cache " \
-        "(samples/node_modules_cache-sample) to sanitize\\n" \
+        "(samples/node_modules-cache-*-sample) to sanitize\\n" \
     "\`$ ./build-samples.sh startapplication ngx-default' " \
         "=> start application generated. Open a Web browser at " \
         "http://localhost:8080\\n" \
@@ -601,11 +600,11 @@ function usage() {
     "each node_modules takes actually " \
     "(version 5) 1.1 Go." \
     "A symbolic link (symlink) is done at the end of this script between" \
-    "./samples/node_modules_cache-sample/node_modules and" \
+    "./samples/node_modules-cache-*-sample/node_modules and" \
     "./samples/[sample-name]-sample/node_modules to preserve disk space." \
     "You could open this sample on your IDE without complains concerning" \
     "missing library. However, actually you can't parform tests in it. This" \
-    "script copy node_modules folder from node_modules_cache-sample before" \
+    "script copy node_modules folder from node_modules-cache-*-sample before" \
     "perform tests, and symlink again at the end of the test." \
     "\`yarn install' isn't perform before test to increase speed". \
     "\\n\\n\\t""$URED""sample_name:""$NC\\n"
@@ -663,10 +662,7 @@ function cleanAllProjects() {
         done <<< "$foldersSample"
     fi
 
-
-    local -r NODE_MODULE_SHORT_NAME='./samples/node_modules_cache-sample'
-
-    echo -e "\\nNote: We are sure than '${NODE_MODULE_SHORT_NAME}' " \
+    echo -e "\\nNote: We are sure than '${NODE_MODULES_CACHE_ANGULAR}' " \
         "doesn't  exists:\\n     ==> you could launch a sanitzed new build\\n"
 }
 
@@ -1063,10 +1059,6 @@ function createLogFile() {
         # Especially for Errors that could not be trapped.
         local WE_WANT_A_PROMPT=0
     fi
-    if [ -z "${IS_GENERATION_NODE_MODULES_CACHE+x}" ] ; then
-        printCommandAndEval "cp '$JHIPSTER_SAMPLES'/'$JHIPSTER'/.yo-rc.json " \
-            "'$APP_FOLDER'/"
-    fi
     testRequierments
     unset WE_WANT_A_PROMPT
 }
@@ -1428,7 +1420,8 @@ Do you want to continue? [y/n] "
         yarnLink
 
         echoTitleBuildStep "start" "JHipster generation."
-        if cp "${JHIPSTER_SAMPLES}/node_modules_cache/angular/.yo-rc.json" \
+        # ${variable:0:(-7)} : substring who removes "-sample"
+        if cp "${NODE_MODULES_CACHE_ANGULAR:0:(-7)}/.yo-rc.json" \
             "${APP_FOLDER}"  ; then
             echo ".yo-rc.json is copied"
         else
@@ -1861,10 +1854,9 @@ declare BRANCH_NAME
 readonly BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
 
 # See also ./scripts/02-generate-project.sh.
-# The string "node_modules_cache-sample" is used.
-declare node_modules_cache_sample=\
-"${JHIPSTER_SAMPLES}/node_modules_cache-sample"
-declare -r NODE_MODULES_CACHE_ANGULAR="${node_modules_cache_sample}""/angular"
+# The string "node_modules-cache-*-sample" is used.
+declare -r NODE_MODULES_CACHE_ANGULAR=\
+"${JHIPSTER_SAMPLES}""/node_modules-cache-angular-sample"
 # TODO
 # react
 unset node_modules_cache_sample
