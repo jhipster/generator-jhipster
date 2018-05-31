@@ -140,7 +140,10 @@ function askForIstioSupport() {
 }
 
 function askForIstioRouteFiles() {
-    if (this.istio === 'no') return;
+    if (this.istio === 'no') {
+        this.istioRoute = false;
+        return;
+    }
     const done = this.async();
 
     const prompts = [{
