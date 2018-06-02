@@ -35,6 +35,8 @@ import {
     <%= entityAngularName %>DeletePopupComponent
 } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
+import { Observable } from 'rxjs';
+import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 @Injectable({providedIn: 'root'})
 export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngularName %>> {
@@ -47,7 +49,7 @@ export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngul
         if (id) {
             return this.service.find(id).map((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => <%= entityInstance %>.body);
         }
-        return new <%= entityAngularName %>();
+        return Observable.of(new <%= entityAngularName %>());
     }
 }
 
