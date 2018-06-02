@@ -25,6 +25,22 @@ function echoSetX() {
         "\\n--------------------------------------------------------------\\n"
 }
 
+if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
+    || [[ "$IS_STARTAPPLICATION" -eq 1 ]] \
+    || [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
+    # 1. If we are in Travis CI
+    # 2. OR in `../build-samples.sh startapplication'
+    # 2. OR in `../build-samples.sh generateandtest'
+
+    cd "$APP_FOLDER"
+    if [ -a src/main/docker/couchbase.yml ]; then
+        docker-compose -f src/main/docker/couchbase.yml build
+        docker-compose -f src/main/docker/couchbase.yml \
+            --project-name "$DOCKER_PREFIX_NAME"registery up -d
+        sleep 10
+    fi
+fi
+
 if [[ "$IS_TRAVIS_CI" -eq 0 ]] ; then
     # If we are not and Travis CI
 
@@ -46,11 +62,6 @@ fi
 # Functions
 #-------------------------------------------------------------------------------
 launchCurlOrProtractor() {
-
-    if [ -a src/main/docker/couchbase.yml ]; then
-        docker-compose -f src/main/docker/couchbase.yml up -d
-        sleep 10
-    fi
 
     local -i retryCount=1
     local -ir maxRetry=10
@@ -165,11 +176,6 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
     # 2. OR in `../build-samples.sh generateandtest'
 
     cd "$APP_FOLDER"
-    if [ -a src/main/docker/couchbase.yml ]; then
-        time docker-compose -f src/main/docker/couchbase.yml couchbase build
-        docker-compose -f src/main/docker/couchbase.yml up -d
-        sleep 10
-    fi
 
     if [[ "$JHIPSTER" == *"uaa"* ]]; then
         cd "$UAA_APP_FOLDER"

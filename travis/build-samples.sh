@@ -132,6 +132,11 @@
     # I don't like `for' because I've seen there is problems
     #   for very very very long lists in an other project, in opposite of while.
     # There is an example above.
+
+    # BIG WARNING:
+    # IFS=$'\n' readarray -d '' array <<< "abcd
+    # efj"
+        # ---> echo "a${array[0]}a" ======> aabcd\na
 # 13) we could unset even if a variable is not setted.
 # 14) Do not forget to read `man bash', especially sections " \
 #    "SHELL BUILT-IN COMMANDS" AND "BUGS".
@@ -364,12 +369,11 @@ $(((SECONDS / 60) % 60)) min $((SECONDS % 60)) sec)"
 # Treat end of script {{{2
 
 function erroredAllPendingLog() {
-    find . -maxdepth 1 -name "*local-travis.log" -print0 | \
         while IFS= read -d '' -r file ; do
             if [[ "$file" == *".pending."* ]] ; then
                 mv "$file" "$(sed 's/.pending./.errored./g' <<< "$file")"
             fi
-        done
+        done < <(find . -maxdepth 1 -name "*local-travis.log" -print0)
 }
 
 trap ctrl_c INT
@@ -725,49 +729,43 @@ dockerKillThenRm() {
         return 0
     fi
 
-    IFS=$' ' read -ra dockerContainers <<< \
-        "$(docker ps -q --filter "name=jhipster-travis-build*")"
-    printCommandAndEval "docker ps -q --filter 'name=jhipster-travis-build*'"
-
-    if [[ "$WE_WANT_A_PROMPT" -eq 1 ]] ; then
-        # If `docker ps -q` is empty, "${#dockerContainers[0]}" takes value 1.
-        # (IS_CONSOLEVERBOSE=1 when we are in startapplication).
-        if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
-            printFileDescriptor3 "There is already docker with named prefixed"\
-                "by 'jhipster-travis-build*':"
-            docker ps -q --filter "name=jhipster-travis-build*"
-            confirmationUser "Do you want to \`kill' then \`rm' them? [y/n] " \
-                "echo 'Deleting this docker images...'" \
-                "errorInBuildExitCurrentSample 'ABORTED by user'"
+    IFS= readarray dockerContainers < \
+        <(docker ps -q --filter "name=jhipster-travis-build*")
+    if [[ "${#dockerContainers[*]}" -gt 0 ]] ; then
+        printFileDescriptor3 "WARNING: there is already running container" \
+            "with named prefixed by 'jhipster-travis-build*':"
+        printCommandAndEval \
+            "docker ps -q --filter 'name=jhipster-travis-build*'"
+        if [[ "$WE_WANT_A_PROMPT" -eq 1 ]] ; then
+                confirmationUser " They will be \`kill' then \`rm' [y/y]"
+                    "echo 'Deleting this docker images...'" \
+                    "echo 'Deleting this docker images...'"
         fi
     fi
-    if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
-        local -i i=0
-        while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-            printFileDescriptor3 "Trying to kill docker container:\\n" \
-                "$(docker ps --filter "id=${dockerContainers[i]}")"
-            printCommandAndEval "docker kill '${dockerContainers[i]}'" \
-                || exitScriptWithError "couldn't kill docker container " \
-                    "'${dockerContainers[i]}'"
-            printFileDescriptor3 "Docker containers killed with success."
-            i=$((i+1))
-        done
-    fi
 
-    IFS=$' ' read -ra dockerContainers <<< \
-        "$(docker ps -qa --filter "name=jhipster-travis-build*")"
-    if [[ "${#dockerContainers[0]}" -gt 1 ]] ; then
-        local -i i=0
-        while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-            printFileDescriptor3 "Trying to rm docker container:\\n" \
-                "$(docker ps -a --filter "id=${dockerContainers[i]}")"
-            printCommandAndEval "docker rm '${dockerContainers[i]}'" \
-                || exitScriptWithError "couldn't rm docker container " \
-                    "'${dockerContainers[i]}'"
-            printFileDescriptor3 "Docker containers deleted with success."
-            i=$((i+1))
-        done
-    fi
+    local -i i=0
+    while [[ i -lt "${#dockerContainers[*]}" ]] ; do
+        printFileDescriptor3 "Trying to kill docker container:\\n" \
+            "$(docker ps --filter "id=${dockerContainers[i]}")"
+        printCommandAndEval "docker kill ${dockerContainers[i]}" \
+            || exitScriptWithError "couldn't kill docker container " \
+                "${dockerContainers[i]}"
+        printFileDescriptor3 "Docker containers killed with success."
+        i=$((i+1))
+    done
+
+    IFS= readarray dockerContainers < \
+        <(docker ps -qa --filter "name=jhipster-travis-build*")
+    i=0
+    while [[ i -lt "${#dockerContainers[*]}" ]] ; do
+        printFileDescriptor3 "Trying to rm docker container:\\n" \
+            "$(docker ps -a --filter "id=${dockerContainers[i]}")"
+        printCommandAndEval "docker rm ${dockerContainers[i]}" \
+            || exitScriptWithError "couldn't rm docker container " \
+                "${dockerContainers[i]}"
+        printFileDescriptor3 "Docker container deleted with success."
+        i=$((i+1))
+    done
 
 }
 
@@ -847,8 +845,7 @@ function testRequierments() {
         "please install JDK. "
     echo
 
-    local -r javaVersion="$(java -version 2>&1)"
-    if grep -q "OpenJDK" <<< "$javaVersion" ; then
+    if grep -q "OpenJDK" < <(java -version 2>&1) ; then
         errorInBuildExitCurrentSample \
         'do not use OpenJDK, please install Oracle Java.'
     else
@@ -1883,14 +1880,15 @@ function returnJHIPSTER_MATRIXofFileTravisDotYml() {
     local -r JHIPSTER_LOCAL="$2"
     # shellcheck disable=2034
     returned=$(grep -E --color=never "$JHIPSTER_LOCAL([[:space:]]|$)" \
-        <<< "$TRAVIS_DOT_YAML_PARSED") \
-        || exitScriptWithError "'$JHIPSTER_LOCAL' is not a correct sample." \
-        "Please read \`$ ./build-samples.sh help'."
+    <<< "$TRAVIS_DOT_YAML_PARSED") \
+    || exitScriptWithError "'$JHIPSTER_LOCAL' is not a correct sample." \
+    "Please read \`$ ./build-samples.sh help'."
 
 }
 
 function define_JHIPSTER_MATRIX_ARRAY() {
-    if [[ -z "${JHIPSTER_LIST+x}" ]] ; then IFS= readarray JHIPSTER_MATRIX_ARRAY <<< "$TRAVIS_DOT_YAML_PARSED"
+if [[ -z "${JHIPSTER_LIST+x}" ]] ; then
+    IFS= readarray JHIPSTER_MATRIX_ARRAY <<< "$TRAVIS_DOT_YAML_PARSED"
     elif [[ "${JHIPSTER_LIST}" =~ $JHIPSTER_PATTERN ]] ; then
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX_ARRAY[0] \
             "$JHIPSTER_LIST"
