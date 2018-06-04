@@ -23,6 +23,7 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@a
 import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
 <%_ } _%>
 import { UserRouteAccessService } from 'app/core';
+import { Observable } from 'rxjs';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
@@ -35,7 +36,6 @@ import {
     <%= entityAngularName %>DeletePopupComponent
 } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
-import { Observable } from 'rxjs';
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 @Injectable({providedIn: 'root'})
