@@ -357,6 +357,9 @@ set -E
 # substitutions, and commands executed in a subshell environment.
 set -T
 
+# tabs == 4 spaces
+tabs 4
+
 # elapsedF() {{{2
 
 elapsedF() {
@@ -378,6 +381,7 @@ function erroredAllPendingLog() {
 
 trap ctrl_c INT
 function ctrl_c() {
+    set +e
     cd "${JHIPSTER_TRAVIS}"
     # dockerKillThenRm
     1>&2 echo "Exit by user."
@@ -391,7 +395,7 @@ trap finish EXIT
 # Raised also if receive INT command
 # But not raised if there is an ubound variable.
 function finish() {
-
+    set +e
     # https://en.wikipedia.org/wiki/Defensive_programming
     erroredAllPendingLog
 
@@ -406,6 +410,7 @@ function finish() {
 # https://unix.stackexchange.com/a/209507
 trap 'errorInScript "$LINENO"' ERR
 errorInScript() {
+    set +e
     1>&2 echo "In ./build-samples.sh, error on line: '$1'"
     cd "${JHIPSTER_TRAVIS}"
     erroredAllPendingLog
@@ -510,25 +515,31 @@ function usage() {
 
     echo -e "\\t""$URED""Usage:""$NC\\n" \
         "'$me'\\n" \
-        "\\tgenerate [\\n" \
-            "\\t\\tsample_name [--consoleverbose] [--skippackageapp]\\n" \
-            "\\t\\t | sample_name[,sample_name][,...]\\n" \
-        "\\t\\t\\n" \
+        "\\tgenerate\\n" \
+        "\\t\\t[\\n" \
+            "\\t\\t\\tsample_name [ --consoleverbose ] [ --skippackageapp ]\\n" \
+            "\\t\\t\\t| sample_name[,sample_name][,...]\\n" \
+        "\\t\\t[\\n" \
         "\\t\\t[ --colorizelogfile ]\\n" \
-        "\\tgenerateandtest [\\n" \
-            "\\t\\tsample_name [ --consoleverbose ]\\n" \
-            "\\t\\t | sample_name[,sample_name][,...]\\n" \
-        "\\t\\t\\n" \
+        "\\tgenerateandtest\\n" \
+        "\\t\\t[\\n" \
+            "\\t\\t\\tsample_name [ --consoleverbose ]\\n" \
+            "\\t\\t\\t| sample_name[,sample_name][,...]\\n" \
+        "\\t\\t]\\n" \
         "\\t\\t[ --colorizelogfile ]\\n" \
-        "\\tstartapplication sample_nam\\n" \
+        "\\t\\t[ --skiptestgenerator ]\\n" \
+        "\\tstartapplication sample_name\\n" \
         "\\tclean\\n" \
         "\\thelp\\n\\n" \
+    "* \`--skiptestgenerator\\n" \
+        "\\t=> for sample 'ngx-default'" \
+        " skip \`yarn test' of generator-jhipster\\n" \
     "* \`--consoleverbose\\n" \
         "\\t=> all is printed in the console.\\n" \
         "\\tCould be used only with if there you build only one sample_name\\n"\
         "\\t(too much logs in console, not advise).\\n" \
     "* \`--colorizelogfile\\n" \
-        "\\t""$BRED""This parameter is strongly advis\\n""$NC" \
+        "\\t""$BRED""This parameter is strongly advise\\n""$NC" \
         "\\t=> Keep colors in log file\\n" \
         "\\t* For Vim users install:" \
             "https://github.com/powerman/vim-plugin-AnsiEsc\\n" \
@@ -624,7 +635,6 @@ function usage() {
     "* Name of samples indicate their test goal. " \
     "Their configuration is (defined in '.yo-rc.json'. " \
     "Their entity is generated from folder '.jhipster'"
-
 
     exit 0
 }
@@ -747,26 +757,31 @@ dockerKillThenRm() {
     while [[ i -lt "${#dockerContainers[*]}" ]] ; do
         printFileDescriptor3 "Trying to kill docker container:\\n" \
             "$(docker ps --filter "id=${dockerContainers[i]}")"
-        printCommandAndEval "docker kill ${dockerContainers[i]}" \
-            || exitScriptWithError "couldn't kill docker container " \
+        if docker kill "${dockerContainers[i]}" ; then
+            printFileDescriptor3 "Docker containers killed with success."
+        else
+            exitScriptWithError "Couldn't \`kill' docker container " \
                 "${dockerContainers[i]}"
-        printFileDescriptor3 "Docker containers killed with success."
+        fi
         i=$((i+1))
     done
 
-    IFS= readarray dockerContainers < \
-        <(docker ps -qa --filter "name=jhipster-travis-build*")
-    i=0
-    while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-        printFileDescriptor3 "Trying to rm docker container:\\n" \
-            "$(docker ps -a --filter "id=${dockerContainers[i]}")"
-        printCommandAndEval "docker rm ${dockerContainers[i]}" \
-            || exitScriptWithError "couldn't rm docker container " \
-                "${dockerContainers[i]}"
-        printFileDescriptor3 "Docker container deleted with success."
-        i=$((i+1))
-    done
-
+    # TODO: Seems to be automatically \`rm'
+    # Is it true ?
+    # IFS= readarray dockerContainers < \
+    #     <(docker ps -qa --filter "name=jhipster-travis-build*")
+    # i=0
+    # while [[ i -lt "${#dockerContainers[*]}" ]] ; do
+    #     printFileDescriptor3 "Trying to \`rm' docker container:\\n" \
+    #         "$(docker ps --filter "id=${dockerContainers[i]}")"
+    #     if docker rm "${dockerContainers[i]}" ; then
+    #         printFileDescriptor3 "Docker containers \`rm' with success."
+    #     else
+    #         exitScriptWithError "Couldn't \`rm' docker container " \
+    #             "${dockerContainers[i]}"
+    #     fi
+    #     i=$((i+1))
+    # done
 }
 
 # TEST REQUIERMENTS  {{{2
@@ -1295,7 +1310,7 @@ function launchNewBash() {
 # Corresponding of the entry "install" in ../.travis.yml
 function generateProject() {
 
-    if [[ "$IS_GENERATEANDTEST" -eq 1 ]] && \
+    if [[ "$IS_SKIP_TEST_GENERATOR" -eq 0 ]] && \
             [[ "${JHIPSTER}" == "ngx-default"  ]] ; then
         # Corresponding to "Install and test JHipster Generator" in
         # ./scripts/00-install-jhipster.sh
@@ -1477,7 +1492,6 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
     # https://github.com/koalaman/shellcheck/wiki/SC2206
     IFS=" " read -r -a travisVars <<< \
         "$(cut -s -d ' ' -f 2- <<< "$JHIPSTER_MATRIX")"
-    echo ${#travisVars[*]}
     if [[ "${#travisVars[*]}" -gt 0 ]] ; then
         # https://github.com/koalaman/shellcheck/wiki/SC2163
         # shellcheck disable=SC2163
@@ -1964,9 +1978,11 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
     if [[ "$COMMAND_NAME" == "generate" ]] ; then
         [[ "$#" -gt 5 ]] && tooMuchArguments
         export IS_GENERATEANDTEST=0
+        declare IS_SKIP_TEST_GENERATOR=1
     else
         [[ "$#" -gt 4 ]] && tooMuchArguments
         export IS_GENERATEANDTEST=1
+        declare IS_SKIP_TEST_GENERATOR=0
     fi
 
     export IS_STARTAPPLICATION=0
@@ -2011,6 +2027,19 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
                 [[ "$1" == "--skippackageapp" ]]; then
                 IS_SKIPPACKAGEAPP=1
                 IS_CONSOLEVERBOSE=1
+            elif [[ "$1" == "--skiptestgenerator" ]]; then
+                if [[ "$IS_GENERATEANDTEST" -eq 0 ]]  ; then
+                    exitScriptWithError "'--skiptestgenerator' is illegal" \
+                        "in this context." \
+                        "Please read \`build-samples.sh'."
+                fi
+                if [[ ! -z "${JHIPSTER_LIST+x}" ]] && \
+                    [[ "$JHIPSTER_LIST" != *ngx-default* ]]; then
+                    exitScriptWithError "'--skiptestgenerator'" \
+                        "has sens only for sample 'ngx-default': " \
+                        "actually, you don't build 'ngx-default'"
+                fi
+                IS_SKIP_TEST_GENERATOR=1
             else
                 exitScriptWithError "$1' is not a correct" \
                     "argument. Please read \`./build-samples.sh help'".
@@ -2025,9 +2054,8 @@ elif [ "$COMMAND_NAME" = "clean" ]; then
     [[ ! -z "${2+x}" ]] && tooMuchArguments
     cleanAllProjects
 else
-    declare firstArgument="Incorrect argument. \
-Please see \`$ ./build-samples.sh help'".
-    exitScriptWithError "$firstArgument"
+    exitScriptWithError "Incorrect argument." \
+        "Please see \`$ ./build-samples.sh help'."
 fi
 
 # vim: foldmethod=marker sw=4 ts=4 et textwidth=80 foldlevel=0
