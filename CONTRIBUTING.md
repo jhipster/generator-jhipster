@@ -240,17 +240,17 @@ You can run the Travis builds locally by following below commands, and track ren
 
 1. Change directory into the [./travis](./travis) folder `cd travis` from the generator source code root folder
 
-2. Do not forget to run `yarn link`.
+2. Do not forget to run `yarn link` (do not use `npm`)
 
-3. Run `./build-samples.sh generate|generateandtest [ sample_name[,sample_name][,...] ] [ --colorizelogfile ] ` (parameters between brackets are optionals).
+3. Run `./build-samples.sh generate|verify [ sample_name[,sample_name][,...] ] [ --colorizelogfile ] ` (parameters between brackets are optionals).
 
-    * `generate` and `generateandtest` create the Travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your Text Editor or IDE to check it further. You can also run tests locally on the project to verify.
+    * `generate` and `verify` create the Travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your Text Editor or IDE to check it further. You can also run tests locally on the project to verify.
         * By default, run on all samples. Choose those you want in `./build-samples.sh help`.
         * You could build several samples in same time by separated it by comma (e.g. `ngx-default,react-default`).
         * `--colorizelogfile`: keep color in your log file, **this optional parameter is strongly advise for readability**. Check `./build-samples.sh help` to know more about it.
-    * `generateandtest` generate, and beside test samples like in Travis CI. Very interesting if you want check quickly know correctness of your modifications. Very interesting if you want check before push.
+    * `verify` generate, and beside test samples like in Travis CI. Very interesting if you want check quickly know correctness of your modifications. Very interesting if you want check before push.
 
-4. Then `./build-samples.sh startapplication sample_name` to start the application and check what is rendered in your web browser.
+4. Then `./build-samples.sh start sample_name` to start the application and check what is rendered in your web browser.
 
 #### Synopsis
 
@@ -258,18 +258,25 @@ Command name can be as below:
 
     `help`: display the help (recommended to read it).
     `generate`: Generate sample(s). Not test are performed. You could see what is generated in samples/*-sample and open the project in your Text Editor/IDE.
-    `generateandtest` : Generate and test sample(s). Like `generate` + test as in Travis CI.
-    `startapplication` : "Start the application generated with `generate` or `generateandtest`. You could open the app on a Web browser."
+    `verify` : Generate and test sample(s). Like `generate` + test as in Travis CI.
+    `start` : "Start the application generated with `generate` or `verify`. You could open the app on a Web browser."
     `clean` : Delete all ./travis/samples/*-sample folders.
+
+### Requirements
+#### For all commands
+1. `yarn` (not `npm`)
+2. `node` and `javac` LTS
+
+#### Only for `verify`
+1. `docker` and `docker-compose` installed. `docker` service should be started, and properly configured (see beginning of the article https://www.jhipster.tech/docker-compose/).
+2. `chromium` or `google-chrome`
 
 #### Examples:
 
-    `./build-samples.sh generateandtest ngx-default --colorizelogfile`: build and test only ngx-default.
-    `./build-samples.sh generateandtest ngx-default,react-default` --colorizelogfile: generate and test ngx-default and react-default.
-    `./build-samples.sh generateandtest --colorizelogfile`: generate and test all samples listed in `./build-sample.sh help`.
-    `./build-samples.sh startapplication ngx-default`: start application generated. Open a Web browser at http://localhost:8080.
-
-*NOTES FOR OLD DEVELOPERS: ./travis/build-samples.sh has been rewritten. It has new functionalities. Do not hesitate to test it and provide feedbacks.*
+    `./build-samples.sh verify ngx-default --colorizelogfile`: build and test only ngx-default.
+    `./build-samples.sh verify ngx-default,react-default --colorizelogfile`: generate and test ngx-default and react-default.
+    `./build-samples.sh verify --colorizelogfile`: generate and test all samples listed in `./build-sample.sh help`.
+    `./build-samples.sh start ngx-default`: start application generated. Open a Web browser at http://localhost:8080.
 
 ## <a name="rules"></a> Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:

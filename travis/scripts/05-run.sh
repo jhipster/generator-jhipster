@@ -27,10 +27,10 @@ function echoSetX() {
 
 if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
     || [[ "$IS_STARTAPPLICATION" -eq 1 ]] \
-    || [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
+    || [[ "$IS_VERIFY" -eq 1 ]] ; then
     # 1. If we are in Travis CI
     # 2. OR in `../build-samples.sh startapplication'
-    # 2. OR in `../build-samples.sh generateandtest'
+    # 2. OR in `../build-samples.sh verify'
 
     cd "$APP_FOLDER"
     if [ -a src/main/docker/couchbase.yml ]; then
@@ -115,7 +115,7 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
         # 2. or
             # 2.1
                 # in `../build-samples.sh generate'  or
-                # in `../build-samples.sh generateandtest'
+                # in `../build-samples.sh verify'
             # 2.2 AND NOT In `../build-samples.sh generate --skippackageapp'
 
     #--------------------------------------------------------------------------
@@ -170,10 +170,10 @@ set -x
 
 if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
     || [[ "$IS_STARTAPPLICATION" -eq 1 ]] \
-    || [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
+    || [[ "$IS_VERIFY" -eq 1 ]] ; then
     # 1. If we are in Travis CI
     # 2. OR in `../build-samples.sh startapplication'
-    # 2. OR in `../build-samples.sh generateandtest'
+    # 2. OR in `../build-samples.sh verify'
 
     cd "$APP_FOLDER"
 
@@ -209,7 +209,7 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
     if [[ "${IS_TRAVIS_CI}" -eq 1 ]] \
         && [[ "$IS_STARTAPPLICATION" -eq 0 ]]; then
         # If we are in Travis CI AND
-        # in `../build-samples.sh generateandtest'
+        # in `../build-samples.sh verify'
         # (see also surrounded if)
         kill "$JAVA_PID"
     else

@@ -199,10 +199,10 @@
 # PRINT HELP `./build-samples.sh help'
 # CLEAN SAMPLES `./build-samples.sh/ clean'
 #   `./build-samples.sh clean [sample_name]'
-# GENERATE AND TEST SAMPLES `./build-samples.sh generate/generateandtest'
+# GENERATE AND TEST SAMPLES `./build-samples.sh generate/verify'
 #   `./build-samples.sh generate [sample_name]'
 #   or
-#   `./build-samples.sh generateandtest [sample_name]'
+#   `./build-samples.sh verify [sample_name]'
 #   * See also paragrapher below to understand how this works.
 #   * This part of this file is splitted under six subtitles:
 #   * Each subtitle could be written in one independant file.
@@ -244,7 +244,7 @@
 #       On my computer (JulioJu) I save 10 minutes of time for each sample.
 #   * II LAUNCH ONLY ONE SAMPLE
 #       * Could be seen as "MAIN" for:
-#       `./build-samples.sh generate/generateandtest sample_name \
+#       `./build-samples.sh generate/verify sample_name \
 #               --consoleverbose' \
 #           (three mandatory arguments)
 #       * contains launchOnlyOneSample(),
@@ -252,7 +252,7 @@
 #       * see explanations in paragrapher below
 #   * I LAUNCH SAMPLE(S) IN BACKGROUND
 #       * Could be seen as "MAIN" function for:
-#       `./build-samples.sh generate/generateandtest \
+#       `./build-samples.sh generate/verify \
 #           [sample_name[,samle_name][,...]]' \
 #               (one mandatory arguments + one optional arugments)
 #       * contains launchSamplesInBackground(),
@@ -265,10 +265,10 @@
 #   * Argument parser
 
 
-# More explanation about parameter `generate' and `generateandtest':
-# * All code corresponding to parameters `generate' and `generateandtest'
+# More explanation about parameter `generate' and `verify':
+# * All code corresponding to parameters `generate' and `verify'
 # it's in this file under title
-# GENERATE AND TEST SAMPLES `./BUILD-SAMPLES.SH GENERATE/generateandtest'
+# GENERATE AND TEST SAMPLES `./BUILD-SAMPLES.SH GENERATE/verify'
 # Sequential explanation.
 # 1. If ./samples/node_modules-cache-*-sample/node_modules_cache.*.passed.local-travis.log
 #    doesn't exits, we trigger generateNode_Modules_Cache() to generate this
@@ -287,7 +287,7 @@
 #           (corresponding to ./scripts/00-install-jhipster.sh)
 #       It launches ./scripts/01-generate-entities.sh and
 #           ./scripts/02-generate-project.sh
-#    * If the second argument is `generateandtest', we launch
+#    * If the second argument is `verify', we launch
 #    only function generateAndTestProject()
 #    who launch function generateProject() and scripts ./scripts/04-tests.sh,
 #    ./scripts/05-run.sh
@@ -500,7 +500,13 @@ function usageClean() {
         "3) After a build, [sample-name]-sample/node_modules is a" \
         "symbolic link. " \
         "Therefore, a folder [sample-name]-sample doesn't take" \
-        "lot of size (just some megabytes\\n"
+        "lot of size (just some megabytes"
+}
+
+# Executed when the first argument of the script is "list"
+function listSamples() {
+    echo -e "\\n\\t""$URED""sample_name:""$NC\\n"
+    cut -d ' ' -f 1 <<< "$TRAVIS_DOT_YAML_PARSED"
 }
 
 # Executed when the first argument of the script is "usage" or when there isn't
@@ -508,7 +514,6 @@ function usageClean() {
 # ====================
 function usage() {
     local -r me=$(basename "$0")
-    local -r list_of_samples=$(cut -d ' ' -f 1 <<< "$TRAVIS_DOT_YAML_PARSED")
 
     echo -e "\\n\\tScript than emulate well remote Travis CI build " \
         " https://travis-ci.org/jhipster/generator-jhipster\\n"
@@ -519,26 +524,33 @@ function usage() {
         "\\t\\t[\\n" \
             "\\t\\t\\tsample_name [ --consoleverbose ] [ --skippackageapp ]\\n" \
             "\\t\\t\\t| sample_name[,sample_name][,...]\\n" \
-        "\\t\\t[\\n" \
+        "\\t\\t]\\n" \
         "\\t\\t[ --colorizelogfile ]\\n" \
-        "\\tgenerateandtest\\n" \
+        "\\tverify\\n" \
         "\\t\\t[\\n" \
             "\\t\\t\\tsample_name [ --consoleverbose ]\\n" \
             "\\t\\t\\t| sample_name[,sample_name][,...]\\n" \
         "\\t\\t]\\n" \
         "\\t\\t[ --colorizelogfile ]\\n" \
         "\\t\\t[ --skiptestgenerator ]\\n" \
-        "\\tstartapplication sample_name\\n" \
+        "\\tstart sample_name\\n" \
         "\\tclean\\n" \
-        "\\thelp\\n\\n" \
-    "* \`--skiptestgenerator\\n" \
+        "\\thelp\\n" \
+        "\\tlist\\n\\n" \
+    "\\t""$URED""Positional parameters""$NC""\\n" \
+    "'generate' | 'verify' | 'start'" \
+    "| 'clean' | 'help' | 'list' must be the first parameter.\\n" \
+    "If specified (it's optional), 'sample_name[,sample_name[,...]]'" \
+    "should be the second parameter.\\n\\n" \
+    "\\t""$URED""Non positional parameters""$NC""\\n" \
+    "* \`--skiptestgenerator'\\n" \
         "\\t=> for sample 'ngx-default'" \
         " skip \`yarn test' of generator-jhipster\\n" \
-    "* \`--consoleverbose\\n" \
+    "* \`--consoleverbose'\\n" \
         "\\t=> all is printed in the console.\\n" \
         "\\tCould be used only with if there you build only one sample_name\\n"\
         "\\t(too much logs in console, not advise).\\n" \
-    "* \`--colorizelogfile\\n" \
+    "* \`--colorizelogfile'\\n" \
         "\\t""$BRED""This parameter is strongly advise\\n""$NC" \
         "\\t=> Keep colors in log file\\n" \
         "\\t* For Vim users install:" \
@@ -547,23 +559,23 @@ function usage() {
             "https://plugins.jetbrains.com/plugin/9707-ansi-highlighte\\n" \
         "\\t* For Visual Studio Code users try:" \
             "https://marketplace.visualstudio.com/items?itemName=IBM.output-colorizer\\n" \
-    "* \`--skippackageapp\\n" \
+    "* \`--skippackageapp'\\n" \
         "\\tUsable only with command \`./build-samples.sh generate [...]'\\n'"\
         "\\t=> Skip package of application. " \
             "If you want only " \
             "generate the sample to check files generated.\\n" \
         "\\t=> After this, you can't start the application with." \
-            "\`./build-samples.sh startapplication sample_name'.\\n" \
+            "\`./build-samples.sh start sample_name'.\\n" \
         "\\t=> This parameter implies automatically ``--consoleverbose' and " \
         "\`--colorizelogfile'.\\n\\n" \
-    "\\t""$URED""\`./build-samples.sh generate/generateandtest'""$NC""\\n" \
+    "\\t""$URED""\`./build-samples.sh generate/verify'""$NC""\\n" \
         " * They will create the travis sample project under the './samples'" \
         "folder with folder name \`[sample_name]-sample'.\\n" \
         " * \`generate' generate only a JHipster project with entities.\\n" \
-        " * \`generateandtest' generate then test project(s), as Travis CI\\n" \
-    "  * Without optional parameter, 'generate', and 'generateandtest' " \
+        " * \`verify' generate then test project(s), as Travis CI\\n" \
+    "  * Without optional parameter, 'generate', and 'verify' " \
             "operate for all samples listed below\\n" \
-    "  * Arguments 'generate', 'generateandtest' could be apply for " \
+    "  * Arguments 'generate', 'verify' could be apply for " \
             "one sample_name below\\n" \
     "  * For each sample, an independant log file is created. During" \
             "built time, its name contains 'pending'. " \
@@ -574,21 +586,44 @@ function usage() {
             "The program will ask you how much you want" \
             "launch in same tim\\n " \
         "* Before launch this commands, type \`yarn link' in the folder" \
-            "./genertor-jhipster. Now you will test this generator, and not" \
-            "the npm genertor-jhipster."
-
-    echo -e "\\n\\t""$URED""\`./build-samples.sh startapplication " \
+            "./genertor-jhipster.\\n" \
+    "\\n\\t""$URED""\`./build-samples.sh start " \
         "sample_name""$NC""\\n" \
         "Start the application generated with \`generate' " \
-        "or \`generateandtest'. You could open the app on a Web browser " \
+        "or \`verify'. You could open the app on a Web browser " \
         "if it has a client."
 
     usageClean
 
-    echo -e "\\t""$URED""Examples:""$NC""\\n" \
+    echo -e "\\n\\t""$URED""\`./build-samples.sh list'""$NC""\\n" \
+        "List all samples below."
+
+   listSamples
+    echo -e "\\n* Use always \`./build-samples.sh verify ngx-default' " \
+            "(the more complete test). " \
+            "Useful for test Server side and Angular client\\n" \
+    "  * If you work on the React client try the previous and also " \
+            "'react-default'\\n" \
+    "  * If you work on an other functionality, chose the corresponding on\\n" \
+    "* Generated files will be under folder ./samples/sample_name-sample\\n" \
+    "* Name of samples indicate their test goal. " \
+    "Their configuration is (defined in '.yo-rc.json'. " \
+    "Their entity is generated from folder '.jhipster'\\n"
+
+    echo -e "\\t""$URED""Requirements:""$NC""\\n" \
+        "\\t\\tFor all commands:\\n" \
+        "\\t1. \`yarn' (not \`npm')\\n" \
+        "\\t2. \`node' and \`javac' LTS\\n" \
+        "\\t\\tOnly for 'verify'\\n" \
+        "\\t1. \`docker' and \`docker-compose' installed." \
+        "\`docker' service should be started, and properly configured" \
+        "(see beginning of the article" \
+        "https://www.jhipster.tech/docker-compose/).\\n" \
+        "\\t2. \`chromium' or \`google-chrome'\\n\\n" \
+    "\\t""$URED""Examples:""$NC""\\n" \
     "\`$ ./build-samples.sh generate ngx-default --colorizelogfile' " \
         "=> generate a new project at travis/samples/ngx-default-sampl\\n" \
-    "\`$ ./build-samples.sh generateandtest ngx-default --colorizelogfile' " \
+    "\`$ ./build-samples.sh verify ngx-default --colorizelogfile' " \
         "=> generate a new project at travis/samples/ngx-default-sample " \
             "then build and test it\\n" \
     "\`$ ./build-samples.sh generate --colorizelogfile' =>" \
@@ -598,20 +633,19 @@ function usage() {
         "--colorizelogfile' =>" \
         " generate \`ngx-default' and \`react-default'\\n"  \
         " samples listed above\\n" \
-    "\`$ ./build-samples.sh generateandtest --colorizelogfile' " \
+    "\`$ ./build-samples.sh verify --colorizelogfile' " \
         "=> generate build and test all " \
         "travis/samples/*-sample corresponding of samples listed above\\n" \
     "\`$ ./build-samples.sh clean' " \
         "=> delete all folders travis/samples/*-sampl\\n" \
         "=> delete especially the node_modules cache " \
         "(samples/node_modules-cache-*-sample) to sanitize\\n" \
-    "\`$ ./build-samples.sh startapplication ngx-default' " \
+    "\`$ ./build-samples.sh start ngx-default' " \
         "=> start application generated. Open a Web browser at " \
         "http://localhost:8080\\n" \
     "\`$ ./build-samples.sh help' => display this hel\\n" \
-    "\\n\\n\\t""$URED""Notes:""$NC""\\n" \
-    "Note1: We recommand to use Node.Js LTS. Check if you use it\\n" \
-    "Note2: for tests with a client (ngx-*, react-*): " \
+    "\\n\\t""$URED""Notes:""$NC""\\n" \
+    "For tests with a client (ngx-*, react-*): " \
     "each node_modules takes actually " \
     "(version 5) 1.1 Go." \
     "A symbolic link (symlink) is done at the end of this script between" \
@@ -621,20 +655,7 @@ function usage() {
     "missing library. However, actually you can't parform tests in it. This" \
     "script copy node_modules folder from node_modules-cache-*-sample before" \
     "perform tests, and symlink again at the end of the test." \
-    "\`yarn install' isn't perform before test to increase speed". \
-    "\\n\\n\\t""$URED""sample_name:""$NC\\n"
-
-    echo -e "\\n${list_of_samples}\\n\\n" \
-    "* Use always \`./build-samples.sh generateandtest ngx-default' " \
-            "(the more complete test). " \
-            "Useful for test Server side and Angular client\\n" \
-    "  * If you work on the React client try the previous and also " \
-            "'react-default'\\n" \
-    "  * If you work on an other functionality, chose the corresponding on\\n" \
-    "* Generated files wil be under folder ./samples/sample_name-sample\\n" \
-    "* Name of samples indicate their test goal. " \
-    "Their configuration is (defined in '.yo-rc.json'. " \
-    "Their entity is generated from folder '.jhipster'"
+    "\`yarn install' isn't perform before test to increase speed".
 
     exit 0
 }
@@ -680,7 +701,7 @@ function cleanAllProjects() {
         "doesn't  exists:\\n     ==> you could launch a sanitzed new build\\n"
 }
 
-# GENERATE AND TEST SAMPLES `./build-samples.sh generate/generateandtest' {{{1
+# GENERATE AND TEST SAMPLES `./build-samples.sh generate/verify' {{{1
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
@@ -876,7 +897,7 @@ function testRequierments() {
     echo
 
     if [[ "$IS_STARTAPPLICATION" -eq 0 ]] \
-        && [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
+        && [[ "$IS_VERIFY" -eq 1 ]] ; then
         if [[ "$MACHINE" == "Mac" ]] ; then
             printCommandAndEval \
                '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'\
@@ -909,7 +930,7 @@ function testRequierments() {
     fi
 
     if [[ "$IS_STARTAPPLICATION" -eq 0 ]] \
-        && [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
+        && [[ "$IS_VERIFY" -eq 1 ]] ; then
 
         printCommandAndEval "docker --version" || \
             errorInBuildExitCurrentSample \
@@ -1030,7 +1051,7 @@ function printInfoBeforeLaunch() {
             "IS_STARTAPPLICATION='$IS_STARTAPPLICATION'\\n" \
             "IS_SKIP_CLIENT='$IS_SKIP_CLIENT'\\n"
             if [[ "$IS_STARTAPPLICATION" -eq 0 ]] ; then
-                printFileDescriptor3 "IS_GENERATEANDTEST=""'$IS_GENERATEANDTEST'\\n" \
+                printFileDescriptor3 "IS_VERIFY=""'$IS_VERIFY'\\n" \
                 "IS_SKIPPACKAGEAPP='$IS_SKIPPACKAGEAPP'\\n"
             fi
     fi
@@ -1101,7 +1122,7 @@ function treatEndOfBuild() {
 
     echoTitleBuildStep "end" "Finishing '$JHIPSTER_MATRIX'"
 
-    if [[ "$IS_GENERATEANDTEST" -eq 0 ]] && \
+    if [[ "$IS_VERIFY" -eq 0 ]] && \
         [[ "$IS_SKIPPACKAGEAPP" -eq 1 ]]; then
         local -r \
             IS_NOT_PACKAGED_FILE="$APP_FOLDER""/not_packaged.local-travis.log"
@@ -1243,7 +1264,7 @@ function yarnLink() {
             "in a folder named 'generator-jhipster'. " \
             "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
     fi
-    if [[ -z ${IS_GENERATEANDTEST+x} ]] ; then
+    if [[ -z ${IS_VERIFY+x} ]] ; then
         local -r \
             GENERATOR_JHIPSTER_FOLDER="$(pwd)/node_modules/generator-jhipster"
         # `yarn link' must be launched for the generator-jhipster folder where
@@ -1305,7 +1326,7 @@ function launchNewBash() {
 
 # function generateProject() {{{3
 # Executed when the first argument of the script is "generate" and
-# "generateandtest"
+# "verify"
 # ====================
 # Corresponding of the entry "install" in ../.travis.yml
 function generateProject() {
@@ -1339,7 +1360,7 @@ function generateProject() {
     # launchNewBash "./scripts/03-replace-version-generated-project.sh" \
     #     "Replace version generated-project'"
 
-    if [[ "$IS_GENERATEANDTEST" -eq 0 ]] \
+    if [[ "$IS_VERIFY" -eq 0 ]] \
         && [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]]; then
         PROTRACTOR=0        # to not launch \`yarn e2e' in 05-run.sh
         launchNewBash "./scripts/05-run.sh" "Package '${JHIPSTER}-sample'"
@@ -1349,7 +1370,7 @@ function generateProject() {
 }
 
 # function generateAndTestProject() {{{3
-# Executed when the first argument of the script is "generateandtest"
+# Executed when the first argument of the script is "verify"
 # ====================
 function generateAndTestProject() {
 
@@ -1378,6 +1399,8 @@ function generateAndTestProject() {
 function generateNode_Modules_Cache() {
 
     echoSmallTitle "start" "Check node_modules cache"
+
+    cd "$JHIPSTER_TRAVIS""/.."
 
     # Used in functions errorInBuildExitCurrentSample() and createLogFile()
     local -r JHIPSTER_MATRIX="node_modules_cache_angular"
@@ -1552,6 +1575,8 @@ then restart script."
                 "exitScriptWithError '$argument'"
             unset confirmationFirstParameter argument
         fi
+        cd "$JHIPSTER_TRAVIS""/.."
+        printCommandAndEval "yarn install"
         generateNode_Modules_Cache
     else
         # Defined "$APP_FOLDER" as explained in the MAIN section of this file.
@@ -1580,7 +1605,7 @@ then restart script."
 
         cd "${APP_FOLDER}"
 
-        if [[ "$IS_GENERATEANDTEST" -eq 1 ]] ; then
+        if [[ "$IS_VERIFY" -eq 1 ]] ; then
             generateAndTestProject
         else
             generateProject
@@ -1673,6 +1698,9 @@ do you want to launch in same time (Travis CI launch 4 processes)? "
     testRequierments
     unset WE_WANT_A_PROMPT
 
+    cd "$JHIPSTER_TRAVIS""/.."
+    printCommandAndEval "yarn install"
+
     # TODO
     # do not launch this if there is only projects with "skipClient: true"
     # in ../.travis.yml
@@ -1715,7 +1743,7 @@ do you want to launch in same time (Travis CI launch 4 processes)? "
 
 }
 
-# START APPLICATION `./build-samples.sh startapplication sample_name' {{{1
+# START APPLICATION `./build-samples.sh start sample_name' {{{1
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
@@ -1953,10 +1981,10 @@ cd "${JHIPSTER_TRAVIS}"
 if [[ "$COMMAND_NAME" = "help" ]]; then
     [[ ! -z "${2+x}" ]] && tooMuchArguments
     usage
-elif [[ "$COMMAND_NAME" == "startapplication" ]] ; then
+elif [[ "$COMMAND_NAME" == "start" ]] ; then
     [[ ! -z "${3+x}" ]] && tooMuchArguments
     if [[ -z "${2+x}" ]] ; then
-        exitScriptWithError "\`startapplication' take " \
+        exitScriptWithError "\`start' take " \
             "one mandatory argument (the sample_name)." \
             "Please read \`./build-samples.sh help'"
     fi
@@ -1973,15 +2001,15 @@ elif [[ "$COMMAND_NAME" == "startapplication" ]] ; then
             "it not start by a dash."
     fi
 elif [[ "$COMMAND_NAME" == "generate" ]] || \
-    [[ "$COMMAND_NAME" == "generateandtest" ]] ; then
+    [[ "$COMMAND_NAME" == "verify" ]] ; then
 
     if [[ "$COMMAND_NAME" == "generate" ]] ; then
         [[ "$#" -gt 5 ]] && tooMuchArguments
-        export IS_GENERATEANDTEST=0
+        export IS_VERIFY=0
         declare IS_SKIP_TEST_GENERATOR=1
     else
-        [[ "$#" -gt 4 ]] && tooMuchArguments
-        export IS_GENERATEANDTEST=1
+        [[ "$#" -gt 5 ]] && tooMuchArguments
+        export IS_VERIFY=1
         declare IS_SKIP_TEST_GENERATOR=0
     fi
 
@@ -2023,12 +2051,12 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
                 fi
             elif [[ "$1" == "--colorizelogfile" ]] ; then
                 IS_COLORIZELOGFILE=1
-            elif [[ "$IS_GENERATEANDTEST" -eq 0 ]] && \
+            elif [[ "$IS_VERIFY" -eq 0 ]] && \
                 [[ "$1" == "--skippackageapp" ]]; then
                 IS_SKIPPACKAGEAPP=1
                 IS_CONSOLEVERBOSE=1
             elif [[ "$1" == "--skiptestgenerator" ]]; then
-                if [[ "$IS_GENERATEANDTEST" -eq 0 ]]  ; then
+                if [[ "$IS_VERIFY" -eq 0 ]]  ; then
                     exitScriptWithError "'--skiptestgenerator' is illegal" \
                         "in this context." \
                         "Please read \`build-samples.sh'."
@@ -2053,6 +2081,9 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
 elif [ "$COMMAND_NAME" = "clean" ]; then
     [[ ! -z "${2+x}" ]] && tooMuchArguments
     cleanAllProjects
+elif [ "$COMMAND_NAME" = "list" ]; then
+   listSamples
+   echo -e "\\nPlease do not forget to read \`./build-samples.sh help'."
 else
     exitScriptWithError "Incorrect argument." \
         "Please see \`$ ./build-samples.sh help'."
