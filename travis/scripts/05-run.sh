@@ -81,7 +81,8 @@ launchCurlOrProtractor() {
     # But when it sends status code like 500, 404, etc, $rep takes value 22.
     set -x
     while ! curl -v --fail "$httpUrl" && [[ "$retryCount" -le "$maxRetry" ]]; do
-        echo "[$(date)] Application not reachable yet. Sleep and retry - retryCount =" $retryCount "/" $maxRetry
+        echo "[$(date)] Application not reachable yet." \
+            " Sleep and retry - retryCount =" $retryCount "/" $maxRetry
         retryCount=$((retryCount+1))
         sleep 10
     done
@@ -121,12 +122,11 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
     #--------------------------------------------------------------------------
     # Package UAA
     #--------------------------------------------------------------------------
-    set +x
-    echoSetX "Package UAA"
-    set -x
-
     if [[ "$JHIPSTER" == *"uaa"* ]]; then
         cd "$UAA_APP_FOLDER"
+        set +x
+        echoSetX "Package UAA"
+        set -x
         ./mvnw verify -DskipTests -P "$PROFILE"
     fi
 
@@ -143,22 +143,20 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
     if [[ -f "mvnw" ]]; then
         if ./mvnw verify -DskipTests -P "$PROFILE" ; then
             mv target/*.war app.war
-            exit 0
         else
             echo "Error when packaging"
-            exit 1
+            exit 110
         fi
     elif [[ -f "gradlew" ]]; then
         if ./gradlew bootWar -P "$PROFILE" -x test ; then
             mv build/libs/*.war app.war
         else
             echo "Error when packaging"
-            exit 1
+            exit 110
         fi
     else
         echo "No mvnw or gradlew"
     fi
-    exit 0
 fi
 
 #-------------------------------------------------------------------------------
@@ -207,7 +205,7 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
     fi
 
     if [[ "${IS_TRAVIS_CI}" -eq 1 ]] \
-        && [[ "$IS_STARTAPPLICATION" -eq 0 ]]; then
+        || [[ "$IS_STARTAPPLICATION" -eq 0 ]]; then
         # If we are in Travis CI AND
         # in `../build-samples.sh verify'
         # (see also surrounded if)

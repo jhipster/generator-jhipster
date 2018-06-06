@@ -652,17 +652,22 @@ function usage() {
         "http://localhost:8080\\n" \
     "\`$ ./build-samples.sh help' => display this hel\\n" \
     "\\n\\t""$URED""Notes:""$NC""\\n" \
-    "For tests with a client (ngx-*, react-*): " \
-    "each node_modules takes actually " \
-    "(version 5) 1.1 Go." \
-    "A symbolic link (symlink) is done at the end of this script between" \
-    "./samples/node_modules-cache-*-sample/node_modules and" \
-    "./samples/[sample-name]-sample/node_modules to preserve disk space." \
-    "You could open this sample on your IDE without complains concerning" \
-    "missing library. However, actually you can't parform tests in it. This" \
-    "script copy node_modules folder from node_modules-cache-*-sample before" \
-    "perform tests, and symlink again at the end of the test." \
-    "\`yarn install' isn't perform before test to increase speed".
+    "* Note 1: For \`yarn e2e', you could shift the Web Browser controlled by " \
+        "the automated test software to a secondary " \
+        "virtual desktop(https://en.wikipedia.org/wiki/Virtual_desktop). " \
+        "Otherwise the focus is permanently to the Web Browser.\\n" \
+    "* Note 2: For tests with a client (ngx-*, react-*): " \
+        "each node_modules takes actually " \
+        "(version 5) 1.1 Go." \
+        "A symbolic link (symlink) is done at the end of this script between" \
+        "./samples/node_modules-cache-*-sample/node_modules and" \
+        "./samples/[sample-name]-sample/node_modules to preserve disk space." \
+        "You could open this sample on your IDE without complains concerning" \
+        "missing library. However, actually you can't parform tests in it. " \
+        "This script copy node_modules folder from " \
+        "node_modules-cache-*-sample before" \
+        "perform tests, and symlink again at the end of the test." \
+        "\`yarn install' isn't performed before test to increase speed".
 
     exit 0
 }

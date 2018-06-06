@@ -278,6 +278,9 @@ Command name can be as below:
     `./build-samples.sh verify --colorizelogfile`: generate and test all samples listed in `./build-sample.sh help`.
     `./build-samples.sh start ngx-default`: start application generated. Open a Web browser at http://localhost:8080.
 
+#### Note:
+For `yarn e2e`, you could shift the Web Browser controlled by the automated test software to a secondary [virtual desktop](https://en.wikipedia.org/wiki/Virtual_desktop). Otherwise the focus is permanently to the Web Browser.
+
 ## <a name="rules"></a> Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
 
