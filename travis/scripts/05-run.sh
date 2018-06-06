@@ -33,7 +33,7 @@ if [[ "$IS_TRAVIS_CI" -eq 1 ]] \
     # 2. OR in `../build-samples.sh verify'
 
     cd "$APP_FOLDER"
-    if [ -a src/main/docker/couchbase.yml ]; then
+    if [[ -f src/main/docker/couchbase.yml ]]; then
         docker-compose -f src/main/docker/couchbase.yml build
         docker-compose -f src/main/docker/couchbase.yml \
             --project-name "$DOCKER_PREFIX_NAME"registery up -d

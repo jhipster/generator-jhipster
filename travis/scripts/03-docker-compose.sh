@@ -33,47 +33,47 @@ echoSetX "Start docker container"
 set -x
 
 cd "$APP_FOLDER"
-if [ -a src/main/docker/jhipster-registry.yml ]; then
+if [[ -f src/main/docker/jhipster-registry.yml ]]; then
     docker-compose -f src/main/docker/jhipster-registry.yml \
         --project-name "$DOCKER_PREFIX_NAME"registery up -d
 fi
-if [ -a src/main/docker/consul.yml ]; then
+if [[ -f src/main/docker/consul.yml ]]; then
     docker-compose -f src/main/docker/consul.yml \
         --project-name "$DOCKER_PREFIX_NAME"consul up -d
 fi
-if [ -a src/main/docker/cassandra.yml ]; then
+if [[ -f src/main/docker/cassandra.yml ]]; then
     docker-compose -f src/main/docker/cassandra.yml \
         --project-name "$DOCKER_PREFIX_NAME"cassandra up -d
 fi
-if [ -a src/main/docker/mongodb.yml ]; then
+if [[ -f src/main/docker/mongodb.yml ]]; then
     docker-compose -f src/main/docker/mongodb.yml \
         --project-name "$DOCKER_PREFIX_NAME"mongodb up -d
 fi
-if [ -a src/main/docker/couchbase.yml ]; then
+if [[ -f src/main/docker/couchbase.yml ]]; then
     echo "This container can't be started otherwise, " \
         "it will be conflict with tests. So it is done in 05-run.sh"
 fi
-if [ -a src/main/docker/mysql.yml ]; then
+if [[ -f src/main/docker/mysql.yml ]]; then
     docker-compose -f src/main/docker/mysql.yml \
         --project-name "$DOCKER_PREFIX_NAME"mysql up -d
 fi
-if [ -a src/main/docker/postgresql.yml ]; then
+if [[ -f src/main/docker/postgresql.yml ]]; then
     docker-compose -f src/main/docker/postgresql.yml \
         --project-name "$DOCKER_PREFIX_NAME"postgresql up -d
 fi
-if [ -a src/main/docker/elasticsearch.yml ]; then
+if [[ -f src/main/docker/elasticsearch.yml ]]; then
     docker-compose -f src/main/docker/elasticsearch.yml \
         --project-name "$DOCKER_PREFIX_NAME"elasticsearch up -d
 fi
-if [ -a src/main/docker/mariadb.yml ]; then
+if [[ -f src/main/docker/mariadb.yml ]]; then
     docker-compose -f src/main/docker/mariadb.yml \
         --project-name "$DOCKER_PREFIX_NAME"mariadb up -d
 fi
-if [ -a src/main/docker/kafka.yml ]; then
+if [[ -f src/main/docker/kafka.yml ]]; then
     docker-compose -f src/main/docker/kafka.yml \
         --project-name "$DOCKER_PREFIX_NAME"kafka up -d
 fi
-if [ -a src/main/docker/keycloak.yml ]; then
+if [[ -f src/main/docker/keycloak.yml ]]; then
     docker-compose -f src/main/docker/keycloak.yml \
         --project-name "$DOCKER_PREFIX_NAME"keycloak up -d
 fi
