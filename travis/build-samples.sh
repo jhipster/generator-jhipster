@@ -597,8 +597,8 @@ function usage() {
 
     echo -e "\\n\\t""$URED""\`./build-samples.sh list'""$NC""\\n" \
         "List all samples below."
-
    listSamples
+
     echo -e "\\n* Use always \`./build-samples.sh verify ngx-default' " \
             "(the more complete test). " \
             "Useful for test Server side and Angular client\\n" \
@@ -608,19 +608,26 @@ function usage() {
     "* Generated files will be under folder ./samples/sample_name-sample\\n" \
     "* Name of samples indicate their test goal. " \
     "Their configuration is (defined in '.yo-rc.json'. " \
-    "Their entity is generated from folder '.jhipster'\\n"
-
-    echo -e "\\t""$URED""Requirements:""$NC""\\n" \
-        "\\t\\tFor all commands:\\n" \
+    "Their entity is generated from folder '.jhipster'\\n" \
+    "\\n\\t""$URED""Configuration file ./build-samples.sh.conf""$NC""\\n" \
+    "* You could set 'colorizelogfile' and 'consoleverbose' as default" \
+    "in the file './build-samples.sh.conf'. Simply add the corresponding word"\
+        "in this file, without leading character or trailing character" \
+    "(be careful of spaces or tabs).\\n" \
+    "* If you want temporally ignore changes, execute:\\n" \
+        "\\t\`$ git update-index --assume-unchanged ./build-samples.sh.conf'" \
+        "(see https://docs.microsoft.com/en-us/vsts/git/tutorial/ignore-files)\\n" \
+    "\\n\\t""$URED""Requirements:""$NC""\\n" \
+        "For all commands:\\n" \
         "\\t1. \`yarn' (not \`npm')\\n" \
         "\\t2. \`node' and \`javac' LTS\\n" \
-        "\\t\\tOnly for 'verify'\\n" \
+        "Only for 'verify'\\n" \
         "\\t1. \`docker' and \`docker-compose' installed." \
         "\`docker' service should be started, and properly configured" \
         "(see beginning of the article" \
         "https://www.jhipster.tech/docker-compose/).\\n" \
         "\\t2. \`chromium' or \`google-chrome'\\n\\n" \
-    "\\t""$URED""Examples:""$NC""\\n" \
+        "\\t""$URED""Examples:""$NC""\\n" \
     "\`$ ./build-samples.sh generate ngx-default --colorizelogfile' " \
         "=> generate a new project at travis/samples/ngx-default-sampl\\n" \
     "\`$ ./build-samples.sh verify ngx-default --colorizelogfile' " \
@@ -1911,7 +1918,7 @@ declare -r BLUE="\\033[0;34m"
 declare -r JHIPSTER_PATTERN="^[^-][a-z0-9]{2,}[a-z0-9-]+[a-z0-9]+$"
 declare -r JHIPSTER_LIST_PATTERN="^[^-]([a-z0-9]{2,}[a-z0-9-]{2,},)+([a-z0-9]{2,}[a-z0-9-]{2,}[a-z0-9]+)+$"
 
-# Argument parser {{{2
+# Argument parser functions {{{2
 # ====================
 # ====================
 
@@ -1969,6 +1976,10 @@ function tooMuchArguments() {
     exitScriptWithError "too much arguments. " \
         "Please see \`./build-samples.sh help'."
 }
+
+# Argument parser {{{2
+# ====================
+# ====================
 
 echo -e "\\n\\nThanks to use this script. Do not hesitate to open a new issue" \
     "for any thing, thanks in advance! This script is young (06/2018)!"
@@ -2088,5 +2099,26 @@ else
     exitScriptWithError "Incorrect argument." \
         "Please see \`$ ./build-samples.sh help'."
 fi
+
+# ./build-samples.sh.conf parser {{{2
+# ====================
+# ====================
+
+if [[ -f "./build-samples.sh.conf" ]] \
+    && [[ ! -z "${JHIPSTER_LIST+x}" ]]  \
+    && [[ ! "$JHIPSTER_LIST" =~ $JHIPSTER_LIST_PATTERN ]] \
+    && grep -Eq "^consoleverbose$" ./build-samples.sh.conf ; then
+    IS_CONSOLEVERBOSE=1
+fi
+
+if [[ -f "./build-samples.sh.conf" ]] \
+    && grep -Eq "^colorizelogfile$" ./build-samples.sh.conf ; then
+    IS_CONSOLEVERBOSE=1
+fi
+
+# TODO maybe add possibility to add all options in this file.
+# If believe it's simple with a ini filetype, parsed thanks `grep',
+# espacially to determine where is the beginning and the end
+# of the sample list to build.
 
 # vim: foldmethod=marker sw=4 ts=4 et textwidth=80 foldlevel=0
