@@ -484,7 +484,7 @@ const serverFiles = {
     ],
     serverJavaGateway: [
         {
-            condition: generator => generator.applicationType === 'gateway',
+            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -506,14 +506,14 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'jwt',
+            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'jwt' && generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/gateway/TokenRelayFilter.java', renameTo: generator => `${generator.javaDir}gateway/TokenRelayFilter.java` }
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'uaa',
+            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'uaa' && generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/web/rest/AuthResource.java', renameTo: generator => `${generator.javaDir}web/rest/AuthResource.java` },
@@ -532,7 +532,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'oauth2',
+            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'oauth2' && generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/OAuth2Configuration.java', renameTo: generator => `${generator.javaDir}config/OAuth2Configuration.java` },
@@ -875,7 +875,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway',
+            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 // Create Gateway tests files
