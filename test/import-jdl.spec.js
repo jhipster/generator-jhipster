@@ -145,6 +145,8 @@ describe('JHipster generator import jdl', () => {
                 '.jhipster/WithoutSearch.json'
             ]);
             assert.fileContent('.jhipster/WithoutSearch.json', /"searchEngine": false/);
+            assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/WithSearchSearchRepository.java`);
+            assert.noFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/WithoutSearchSearchRepository.java`);
         });
     });
 });

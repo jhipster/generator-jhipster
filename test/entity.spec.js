@@ -107,7 +107,6 @@ describe('JHipster generator for server', () => {
                 .withPrompts({
                     fieldAdd: false,
                     relationshipAdd: false,
-                    searchEngine: 'elasticsearch',
                     dto: 'no',
                     service: 'no',
                     pagination: 'no'

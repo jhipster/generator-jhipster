@@ -128,7 +128,7 @@ module.exports = class extends BaseGenerator {
                             entities,
                             forceNoFiltering: this.options.force,
                             applications: this.jdlObject.applications
-                        });
+                        }).toArray();
                     } else {
                         this.changedEntities = jhiCore.exportEntities({
                             entities,

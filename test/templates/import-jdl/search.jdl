@@ -8,5 +8,5 @@ entity WithoutSearch {
 	name String
 }
 
-search WithSearch with elasticsearch except WithoutSearch
+search * with elasticsearch except WithoutSearch
 
