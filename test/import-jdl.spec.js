@@ -129,4 +129,22 @@ describe('JHipster generator import jdl', () => {
             assert.file(entityFiles);
         });
     });
+    describe('imports a JDL model which excludes elastic for a class', () => {
+        beforeEach((done) => {
+            helpers.run(require.resolve('../generators/import-jdl'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/import-jdl'), dir);
+                })
+                .withArguments(['search.jdl'])
+                .on('end', done);
+        });
+
+        it('creates entity json files', () => {
+            assert.file([
+                '.jhipster/WithSearch.json',
+                '.jhipster/WithoutSearch.json'
+            ]);
+            assert.fileContent('.jhipster/WithoutSearch.json', /"searchEngine": false/);
+        });
+    });
 });

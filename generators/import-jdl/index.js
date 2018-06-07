@@ -128,7 +128,7 @@ module.exports = class extends BaseGenerator {
                             entities,
                             forceNoFiltering: this.options.force,
                             applications: this.jdlObject.applications
-                        }).toArray();
+                        });
                     } else {
                         this.changedEntities = jhiCore.exportEntities({
                             entities,
@@ -174,7 +174,7 @@ module.exports = class extends BaseGenerator {
                     }
                     this.log('Generating entities.');
                     this.getExistingEntities()
-                        .filter(entity => this.changedEntities.includes(entity.name))
+                        .filter(entity => this.changedEntities.map(ent => ent.name).includes(entity.name))
                         .forEach((entity) => {
                             if (shouldGenerateApplications(this, this.jdlObject) && entity.applications !== '*') {
                                 entity.applications.forEach((applicationName) => {
