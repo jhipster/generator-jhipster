@@ -147,7 +147,7 @@ module.exports = class extends BaseGenerator {
             askForIstioSupport: prompts.askForIstioSupport,
             askForIstioRouteFiles: prompts.askForIstioRouteFiles,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
-            askForIngressDomain: prompts.askForIngressDomain,
+            askForIngressDomain: prompts.askForIngressDomain
         };
     }
 
