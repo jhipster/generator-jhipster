@@ -443,8 +443,7 @@ function finish() {
     # https://en.wikipedia.org/wiki/Defensive_programming
     erroredAllPendingLog
 
-    echo -e "Killing all descendants, if some still exists (\`node', \`java')"
-    kill 0
+    while read -r i ; do kill "$i" ; done < <(jobs -p)
 
     echo -e "\\n\\n\\nIt's the end of ./build-samples.sh.\\n\\n"
 }
