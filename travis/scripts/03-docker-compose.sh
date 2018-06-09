@@ -50,6 +50,7 @@ if [[ -f src/main/docker/mongodb.yml ]]; then
         --project-name "$DOCKER_PREFIX_NAME"mongodb up -d
 fi
 if [[ -f src/main/docker/couchbase.yml ]]; then
+    # Same thing in function verifyProject() in ../build-samples.sh
     echo "This container can't be started otherwise, " \
         "it will be conflict with tests. So it is done in 05-run.sh"
 fi

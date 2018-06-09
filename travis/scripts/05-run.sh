@@ -92,6 +92,8 @@ launchCurlOrProtractor() {
         echo "[$(date)] Not connected after" $retryCount " retries."
         return 1
     fi
+    # PROTRACTOR is used in `../build-samples.sh start sample_name` to mark
+    # don't start `yarn e2e`
     if [ "$PROTRACTOR" != 1 ]; then
         return 0
     fi

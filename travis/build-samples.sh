@@ -182,6 +182,44 @@
 # 24) There is not solution to test if we are STDOUT is terminal, or not.
     # https://stackoverflow.com/questions/911168/how-to-detect-if-my-shell-script-is-running-through-a-pipe
     # https://stackoverflow.com/questions/911168/how-to-detect-if-my-shell-script-is-running-through-a-pipe
+# 25) The correct solution is:
+    # IFS= readarray dockerContainers < \
+    #     <(docker ps -q --filter "name=jhipster-travis-build*")
+    #
+    # local -i i=0
+    # while [[ i -lt "${#dockerContainers[*]}" ]] ; do
+    #     local dockerImage
+    #     dockerImage="$(tr -d '\n' <<< "${dockerContainers[i]}")"
+    #     docker kill "$dockerImage"
+    #     i=$((i+1))
+    # done
+# 26) Notes about redirections
+    # 04Function() {
+    #     local LOGFILENAME=04.log
+    #     exec 1>> "${LOGFILENAME}" 2>> "${LOGFILENAME}"
+    #     echo "04"
+    # }
+    # mainRedirected() {
+    #     local LOGFILENAME=main.log
+    #     exec 1>> >(tee --append "${LOGFILENAME}") 2>&1
+    #     04Function &
+    #     wait
+    #     # Printed in main.log
+    #     echo "All done"
+    # }
+    # mainRedirected
+
+# functions to exit this script {{{2
+# ============
+
+# function exitScriptWithError() must be trigger before createlogfile()"
+    # "was triggered"
+# function errorInBuildStopCurrentSample must be trigger after "$JHIPSTER"
+#    is defined, AND after createlogfile() is triggered.
+# function errorInBuildExitCurrentSample must be trigger after "$JHIPSTER" is
+    # defined.
+
+# See also TRAP under title "Treat end of script"
 
 # HOW WORKS THIS SCRIPT. {{{2
 # ============
@@ -223,7 +261,7 @@
 #           i.e.. Generation of the node_module cache produce an log file,
 #               each sample has its own log file.
 #   * IV WRAPPING EXECUTION OF ./scripts/*.sh AND GENERATE NODE_MODULES STEPS
-#       * Notes for function treatEndOfBuild().
+#       * Notes for function closeLogFile().
 #           * If there was an error during build, log file is renamed "errored".
 #           Otherwise it is renamed "passed"
 #           * When "skipClient= false",
@@ -236,7 +274,7 @@
 #       * launchNewBash() who launch ./scripts/*.sh if previous step was
 #           not errored.
 #   * III 2) EXECUTE SCRIPTS ./scripts/*.sh
-#       * functions generateProject() generateAndTestProject() who
+#       * functions generateProject() verifyProject() who
 #       launch scripts (see explanations in paragraph below).
 #   * III 1) GENERATE NODE_MODULES CACHE
 #       * Main function is generateNode_Modules_Cache() who generate
@@ -288,7 +326,7 @@
 #       It launches ./scripts/01-generate-entities.sh and
 #           ./scripts/02-generate-project.sh
 #    * If the second argument is `verify', we launch
-#    only function generateAndTestProject()
+#    only function verifyProject()
 #    who launch function generateProject() and scripts ./scripts/04-tests.sh,
 #    ./scripts/05-run.sh
 # 3. If we have one parameters (e.g. `./build-samples.sh generate')
@@ -383,11 +421,15 @@ trap ctrl_c INT
 function ctrl_c() {
     set +e
     cd "${JHIPSTER_TRAVIS}"
-    # dockerKillThenRm
-    1>&2 echo "Exit by user."
+    1>&2 echo "Exit by user." \
+        "Please wait until docker container(s) is/are gracefully terminated."
     if [[ -e /dev/fd/4 ]] ; then
-        1>&4 echo "Exit by user."
+        1>&4 echo  "Exit by user." \
+            "Please wait until docker is gracefully terminated."
     fi
+    local WE_WANT_A_PROMPT=0
+    dockerKillThenRm
+    unset WE_WANT_A_PROMPT
     exit 131
 }
 
@@ -396,12 +438,9 @@ trap finish EXIT
 # But not raised if there is an ubound variable.
 function finish() {
     set +e
+
     # https://en.wikipedia.org/wiki/Defensive_programming
     erroredAllPendingLog
-
-    local WE_WANT_A_PROMPT=0
-    dockerKillThenRm
-    unset WE_WANT_A_PROMPT
 
     echo -e "\\n\\n\\nIt's the end of ./build-samples.sh.\\n\\n"
 }
@@ -422,6 +461,7 @@ errorInScript() {
     exit 5
 }
 
+# SEE EXPLANATIONS ABOVE UNDER TITLE: "FUNCTIONS TO EXIT THIS SCRIPT"
 function exitScriptWithError() {
     1>&2 echo -e "$BRED""\\n\\nFATAL ERROR: " "${@}" "$NC""\\n\\n"
     exit 10
@@ -547,9 +587,10 @@ function usage() {
         "\\t=> for sample 'ngx-default'" \
         " skip \`yarn test' of generator-jhipster\\n" \
     "* \`--consoleverbose'\\n" \
-        "\\t=> all is printed in the console.\\n" \
+        "\\t=> all is printed in the console. All logs are melds.\\n" \
+        "Do not use this paremeter, except if you know" \
+        "very very well what you do.\\n" \
         "\\tCould be used only with if there you build only one sample_name\\n"\
-        "\\t(too much logs in console, not advise).\\n" \
     "* \`--colorizelogfile'\\n" \
         "\\t""$BRED""This parameter is strongly advise\\n""$NC" \
         "\\t=> Keep colors in log file\\n" \
@@ -713,12 +754,13 @@ function cleanAllProjects() {
         "doesn't  exists:\\n     ==> you could launch a sanitzed new build\\n"
 }
 
-# GENERATE AND TEST SAMPLES `./build-samples.sh generate/verify' {{{1
+# WRAP EXECUTION OF SAMPLE `./build-samples.sh start/generate/verify' {{{1
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
-# function echoSmallTitle() {{{3
+
+# function echoSmallTitle() {{{2
 function echoSmallTitle() {
     if [[ "$1" == "end" ]] ; then
         local -r colorEchoTitleBuildStep="${BRED}"
@@ -733,7 +775,7 @@ function echoSmallTitle() {
         "\\n$NC"
 }
 
-# function echoTitleBuildStep() {{{3
+# function echoTitleBuildStep() {{{2
 function echoTitleBuildStep() {
     if [[ "$1" == "end" ]] ; then
         local -r colorEchoTitleBuildStep="${BRED}"
@@ -762,66 +804,7 @@ function echoTitleBuildStep() {
     fi
 }
 
-dockerKillThenRm() {
-    # We could write in one line, like `docker kill $(docker ps -q)`
-    # but less controls.
-    local -a dockerContainers
-
-    # If docker is not started.
-    if ! docker info 1>> /dev/null 2>&1 ; then
-        return 0
-    fi
-
-    IFS= readarray dockerContainers < \
-        <(docker ps -q --filter "name=jhipster-travis-build*")
-    if [[ "${#dockerContainers[*]}" -gt 0 ]] ; then
-        printFileDescriptor3 "WARNING: there is already running container" \
-            "with named prefixed by 'jhipster-travis-build*':"
-        printCommandAndEval \
-            "docker ps -q --filter 'name=jhipster-travis-build*'"
-        if [[ "$WE_WANT_A_PROMPT" -eq 1 ]] ; then
-                confirmationUser " They will be \`kill' then \`rm' [y/y]"
-                    "echo 'Deleting this docker images...'" \
-                    "echo 'Deleting this docker images...'"
-        fi
-    fi
-
-    local -i i=0
-    while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-        printFileDescriptor3 "Trying to kill docker container:\\n" \
-            "$(docker ps --filter "id=${dockerContainers[i]}")"
-        if docker kill "${dockerContainers[i]}" ; then
-            printFileDescriptor3 "Docker containers killed with success."
-        else
-            exitScriptWithError "Couldn't \`kill' docker container " \
-                "${dockerContainers[i]}"
-        fi
-        i=$((i+1))
-    done
-
-    # TODO: Seems to be automatically \`rm'
-    # Is it true ?
-    # IFS= readarray dockerContainers < \
-    #     <(docker ps -qa --filter "name=jhipster-travis-build*")
-    # i=0
-    # while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-    #     printFileDescriptor3 "Trying to \`rm' docker container:\\n" \
-    #         "$(docker ps --filter "id=${dockerContainers[i]}")"
-    #     if docker rm "${dockerContainers[i]}" ; then
-    #         printFileDescriptor3 "Docker containers \`rm' with success."
-    #     else
-    #         exitScriptWithError "Couldn't \`rm' docker container " \
-    #             "${dockerContainers[i]}"
-    #     fi
-    #     i=$((i+1))
-    # done
-}
-
-# TEST REQUIERMENTS  {{{2
-# ====================
-# ====================
-
-# function testIfPortIsFreeWithSs() {{{3
+# function testIfPortIsFreeWithSs() {{{2
 # I suppose iproute 2 is installed on main linux distro.
 function testIfPortIsFreeWithSs() {
     if [[ ! -z "${2+x}" ]] ; then
@@ -844,7 +827,7 @@ function testIfPortIsFreeWithSs() {
     fi
 }
 
-# function testRequierments() {{{3
+# function testRequierments() {{{2
 
 warningOS() {
     warning "we don't know if it could work on '$MACHINE'." \
@@ -1025,12 +1008,11 @@ function testRequierments() {
 
 }
 
-# LOG FILE AND REDIRECTION OF STDOUT/STDERR {{{2
-# ====================
-# ====================
+# function startingLaunchSample() {{{2
+function startingLaunchSample() {
 
-# function printInfoBeforeLaunch() {{{3
-function printInfoBeforeLaunch() {
+    echoTitleBuildStep "start" "\\n\\n'${JHIPSTER_MATRIX}' is launched!!"
+
     if [[ "$IS_STARTAPPLICATION" -eq 0 ]] ; then
         printFileDescriptor3 "\\n\\n* Your log file will be '$LOGFILENAME'\\n" \
             "* When build will finish, " \
@@ -1068,33 +1050,6 @@ function printInfoBeforeLaunch() {
             fi
     fi
 
-}
-
-# function createlogfile() {{{3
-function createLogFile() {
-
-    cd "${JHIPSTER_TRAVIS}"
-    touch "$LOGFILENAME" || exitScriptWithError "could not " \
-        "create '$LOGFILENAME'"
-
-    if [[ "$IS_CONSOLEVERBOSE" -eq 1 ]] ; then
-        echoSmallTitle "start" \
-            "Create log file and save output in '${LOGFILENAME}'"
-        exec 1>> >(tee --append "${LOGFILENAME}") 2>&1
-    else
-        # save the originals descriptor
-        # (stdout to console and stderr to console).
-        exec 3>&1 4>&2
-        echoSmallTitle "start" \
-            "Create log file and redirect output in '${LOGFILENAME}'"
-        exec 1>> "${LOGFILENAME}" 2>> "${LOGFILENAME}"
-    fi
-    # Otherwise folowing command is started before function createLogFile is
-    # finished.
-    sleep 5
-    echoTitleBuildStep "start" "\\n\\n'${JHIPSTER_MATRIX}' is launched!!"
-    printInfoBeforeLaunch
-
     if [[ "$IS_CONSOLEVERBOSE" -eq 1 ]] ; then
         local WE_WANT_A_PROMPT=1
     else
@@ -1108,43 +1063,130 @@ function createLogFile() {
     unset WE_WANT_A_PROMPT
 }
 
-# IV WRAPPING EXECUTION OF ./scripts/*.sh AND GENERATE NODE_MODULES STEPS {{{2
+# dockerKillThenRm() {{{2
+dockerKillThenRm() {
+    # We could write in one line, like `docker kill $(docker ps -q)`
+    # but less controls.
+    local -a dockerContainers
+
+    # If docker is not started.
+    if ! docker info 1>> /dev/null 2>&1 ; then
+        return 0
+    fi
+
+    IFS= readarray dockerContainers < \
+        <(docker ps -q --filter "name=jhipster-travis-build*")
+    if [[ "${#dockerContainers[*]}" -gt 0 ]] ; then
+        printFileDescriptor3 "WARNING: there is already running container" \
+            "with named prefixed by 'jhipster-travis-build*':"
+        printCommandAndEval \
+            "docker ps --filter 'name=jhipster-travis-build*'"
+        if [[ "$WE_WANT_A_PROMPT" -eq 1 ]] ; then
+                confirmationUser " They will be \`kill' then \`rm' [y/y]" \
+                    "echo 'Deleting this docker images...'" \
+                    "echo 'Deleting this docker images...'"
+        fi
+    fi
+
+    local -i i=0
+    while [[ i -lt "${#dockerContainers[*]}" ]] ; do
+        local dockerImage
+        dockerImage="$(tr -d '\n' <<< "${dockerContainers[i]}")"
+        printFileDescriptor3 "Trying to kill docker container:\\n" \
+            "$(docker ps --filter "id=${dockerImage}")"
+        if docker kill "$dockerImage" ; then
+            printFileDescriptor3 "Docker containers killed with success."
+        else
+            exitScriptWithError "Couldn't \`kill' docker container" \
+                "'$dockerImage'"
+        fi
+        i=$((i+1))
+        if [[ i -eq "${#dockerContainers[*]}" ]] ; then
+            # Sometimes, the container is automatically `rm'
+            printFileDescriptor3 "Please wait…"
+            sleep 5
+        fi
+    done
+
+    IFS= readarray dockerContainers < \
+        <(docker ps -qa --filter "name=jhipster-travis-build*")
+    i=0
+    while [[ i -lt "${#dockerContainers[*]}" ]] ; do
+        local dockerImage
+        dockerImage="$(tr -d '\n' <<< "${dockerContainers[i]}")"
+        printFileDescriptor3 "Trying to \`rm' docker container:\\n" \
+            "$(docker ps -a --filter "id=$dockerImage")"
+        if docker rm "$dockerImage" ; then
+            printFileDescriptor3 "Docker containers \`rm' with success."
+        else
+            exitScriptWithError "Couldn't \`rm' docker container '$dockerImage'"
+        fi
+        i=$((i+1))
+    done
+}
+
+# GENERATE AND TEST SAMPLES `./build-samples.sh generate/verify' {{{1
+# ==============================================================================
+# ==============================================================================
+# ==============================================================================
+# ==============================================================================
+# LOG FILE AND REDIRECTION OF STDOUT/STDERR  {{{2
 # ====================
 # ====================
+
+# function createlogfile() {{{3
+function createLogFile() {
+    cd "${JHIPSTER_TRAVIS}"
+    touch "$LOGFILENAME" || exitScriptWithError "could not " \
+        "create '$LOGFILENAME'"
+
+    if [[ "$IS_CONSOLEVERBOSE" -eq 1 ]] ; then
+        # save the originals descriptor
+        # (stdout to console and stderr to console).
+        # used only in function restoreSTDERRandSTDOUTtoConsole()
+        exec 5>&1 6>&2
+        echoSmallTitle "start" \
+            "Create log file and save output in '${LOGFILENAME}'"
+        exec 1>> >(tee --append "${LOGFILENAME}") 2>&1
+    else
+        # save the originals descriptor
+        # (stdout to console and stderr to console).
+        # /dev/fd/3 and /dev/fd/4 are used as it in this script
+        # especially in functions printFileDescriptor3() or echoSmallTitle()
+        exec 3>&1 4>&2
+        echoSmallTitle "start" \
+            "Create log file and redirect output in '${LOGFILENAME}'"
+        exec 1>> "${LOGFILENAME}" 2>> "${LOGFILENAME}"
+    fi
+    # Otherwise folowing command is started before function createLogFile is
+    # finished.
+    sleep 5
+}
 
 # function restoreSTDERRandSTDOUTtoConsole() {{{3
 function restoreSTDERRandSTDOUTtoConsole() {
     # Restore the originals descriptors.
-    # Behaviour changed in function launchSamplesInBackground()
-    if [[ -e /dev/fd/3 ]] ; then
+    # Behaviour changed in function createLogFile()
+    echo "End of file '$LOGFILENAME'"
+    if [[ "$IS_CONSOLEVERBOSE" -eq 1 ]] ; then
+        exec 1>&5
+        exec 5<&-
+        exec 2>&6
+        exec 6<&-
+    else
         exec 1>&3
-        true 3<&-
-    fi
-    if [[ -e /dev/fd/4 ]] ; then
+        exec 3<&-
         exec 2>&4
-        true 4<&-
+        exec 4<&-
     fi
-
 }
 
-# function treatEndOfBuild() {{{3
-function treatEndOfBuild() {
+# function closeLogFile() {{{3
+function closeLogFile() {
     # TODO treat for REACT. React has its own node_modules.
     # React should not be symlinked.
 
-    echoTitleBuildStep "end" "Finishing '$JHIPSTER_MATRIX'"
-
-    if [[ "$IS_VERIFY" -eq 0 ]] && \
-        [[ "$IS_SKIPPACKAGEAPP" -eq 1 ]]; then
-        local -r \
-            IS_NOT_PACKAGED_FILE="$APP_FOLDER""/not_packaged.local-travis.log"
-        touch "$IS_NOT_PACKAGED_FILE"
-        # To test in startApplication() if it was packaged or not.
-    fi
-
-    local WE_WANT_A_PROMPT=0
-    dockerKillThenRm
-    unset WE_WANT_A_PROMPT
+    echoTitleBuildStep "end" "Closing '$LOGFILENAME'"
 
     # Let time, in case of the disk isn't flushed, or if there is
     # java or node background processes not completly finished.
@@ -1180,46 +1222,27 @@ function treatEndOfBuild() {
             "${LOGFILENAME}" 1>> /dev/null
     fi
 
-    if [[ -z "${IS_GENERATION_NODE_MODULES_CACHE+x}" ]] ; then
-        # True only if is not launched from function
-        # generateNode_Modules_Cache()
-        sleep 2
-        if [[ "$IS_SKIP_CLIENT" -eq 0 ]] ; then
-            # Because node_modules takes 1.1 Go ! Too much !
-            if [[ "$JHIPSTER" != *"react"* ]] ; then
-                printCommandAndEval "rm -Rf '${APP_FOLDER}/node_modules'"
-                printCommandAndEval ln -s \
-                    "${NODE_MODULES_CACHE_ANGULAR}/node_modules" \
-                    "${APP_FOLDER}"
-            fi
-        fi
+    if [[ "$ERROR_IN_SAMPLE" -eq 0 ]] ; then
+        local -r LOGRENAMED="${bLogfileN}"".passed.""${enLogfileN}"
     else
-        if [[ "${ERROR_IN_SAMPLE}" -eq 0 ]] ; then
-            printCommandAndEval "cp '$FILE_ANGULAR_PACKAGE_JSON' \
-                '$FILE_ANGULAR_PACKAGE_JSON_CACHED'"
-        else
-            exit 200
-        fi
+        local -r LOGRENAMED="${bLogfileN}"".errored.${enLogfileN}"
     fi
 
-    if [[ "$ERROR_IN_SAMPLE" -eq 0 ]] ; then
-        local -r LOGRENAMED="${beginLogfilename}"".passed.""${endofLogfilename}"
-    else
-        local -r LOGRENAMED="${beginLogfilename}"".errored.${endofLogfilename}"
-    fi
+    restoreSTDERRandSTDOUTtoConsole
+
     printCommandAndEval mv "${LOGFILENAME}" "${LOGRENAMED}"
 
-    # On Linux, redirect corectly to "$LOGRENAMED"
-    # TODO Test on other systems.
     printCommandAndEval "cp '${LOGRENAMED}' '${APP_FOLDER}'"
-
-    if [[ "$IS_CONSOLEVERBOSE" -eq 0 ]] ; then
-        restoreSTDERRandSTDOUTtoConsole
-    fi
 
 }
 
+
+# IV WRAPPING EXECUTION OF ./scripts/*.sh AND GENERATE NODE_MODULES STEPS {{{2
+# ====================
+# ====================
+
 # function errorInBuildStopCurrentSample() {{{3
+# SEE EXPLANATIONS ABOVE UNDER TITLE: "FUNCTIONS TO EXIT THIS SCRIPT"
 function errorInBuildStopCurrentSample() {
 
     local ELAPSED
@@ -1236,7 +1259,7 @@ function errorInBuildStopCurrentSample() {
 
     # Thanks this variable set to 1
     # 1. function launchNewBash() will not launch new ./scripts/*.sh
-    # 2. function treatEndOfBuild() will rename the log file with word "errored"
+    # 2. function closeLogFile() will rename the log file with word "errored"
     #
     ERROR_IN_SAMPLE=1
 
@@ -1247,19 +1270,20 @@ function errorInBuildStopCurrentSample() {
 }
 
 # errorInBuildExitCurrentSample() {{{3
+# SEE EXPLANATIONS ABOVE UNDER TITLE: "FUNCTIONS TO EXIT THIS SCRIPT"
 errorInBuildExitCurrentSample() {
     if [[ "$IS_STARTAPPLICATION" -eq 1 ]] ; then
         exitScriptWithError "$@"
-    elif [[ ! -z ${JHIPSTER+x} ]] \
-        && [[ ! -z ${JHIPSTER_MATRIX+x} ]] \
-        && [[ ! -z ${LOGFILENAME+x} ]]; then
+    elif [[ -e "/dev/fd/3" ]] \
+        || [[ -e "/dev/fd/5" ]] ; then
         ERROR_IN_SAMPLE=1
         errorInBuildStopCurrentSample "$@"
-        treatEndOfBuild
+        closeLogFile
         exit 80
     else
         # For function testRequierments() launched in function
         # launchSamplesInBackground()
+        # At this time, createlogfile() is not executed.
         exitScriptWithError "$@"
     fi
 }
@@ -1336,6 +1360,30 @@ function launchNewBash() {
 # ====================
 # ====================
 
+# function testGenerator() {{{3
+function testGenerator() {
+    local -r enLogfileN="${JHIPSTER}"".generatorTest.local-travis.log"
+    local -r LOGFILENAME="${bLogfileN}"".pending.""${enLogfileN}"
+    createLogFile
+
+    # Corresponding to "Install and test JHipster Generator" in
+    # ./scripts/00-install-jhipster.sh
+    echoTitleBuildStep "start" "\`yarn test' in generator-jhipster"
+    cd -P "$JHIPSTER_TRAVIS"
+    echo "We are at path: '$(pwd)'".
+    echo "Your branch is: '$BRANCH_NAME'."
+    # TODO should we add yarn install?
+
+    if yarn test ; then
+        echoTitleBuildStep "end" "Test of the generator finish with sucess."
+    else
+        errorInBuildStopCurrentSample "fail during test of the Generator." \
+            " (command 'yarn test' in $(pwd))"
+    fi
+
+    closeLogFile
+}
+
 # function generateProject() {{{3
 # Executed when the first argument of the script is "generate" and
 # "verify"
@@ -1343,27 +1391,11 @@ function launchNewBash() {
 # Corresponding of the entry "install" in ../.travis.yml
 function generateProject() {
 
-    if [[ "$IS_SKIP_TEST_GENERATOR" -eq 0 ]] && \
-            [[ "${JHIPSTER}" == "ngx-default"  ]] ; then
-        # Corresponding to "Install and test JHipster Generator" in
-        # ./scripts/00-install-jhipster.sh
-        echoTitleBuildStep "start" "\`yarn test' in generator-jhipster"
-        cd -P "$JHIPSTER_TRAVIS"
-        echo "We are at path: '$(pwd)'".
-        echo "Your branch is: '$BRANCH_NAME'."
-        # TODO should we add yarn install?
-
-        if yarn test ; then
-            echoTitleBuildStep "end" "Test of the generator finish with sucess."
-        else
-            errorInBuildStopCurrentSample "fail during test of the Generator." \
-                " (command 'yarn test' in $(pwd))"
-        fi
-
-    fi
-    # Script below is done with code above.
-    # launchNewBash "./scripts/00-install-jhipster.sh" \
-    #     "Install JHipster"
+    local enLogfileN="${JHIPSTER}"".generate.local-travis.log"
+    local LOGFILENAME="${bLogfileN}"".pending.""${enLogfileN}"
+    createLogFile
+    startingLaunchSample
+    createFolderNodeModules
 
     launchNewBash "./scripts/01-generate-entities.sh" \
         "Copying entities for '$APP_FOLDER'"
@@ -1376,28 +1408,61 @@ function generateProject() {
         && [[ "$IS_SKIPPACKAGEAPP" -eq 0 ]]; then
         PROTRACTOR=0        # to not launch \`yarn e2e' in 05-run.sh
         launchNewBash "./scripts/05-run.sh" "Package '${JHIPSTER}-sample'"
-    # else done in function generateAndTestProject()
+    # else done in function verifyProject()
     fi
 
+    closeLogFile
 }
 
-# function generateAndTestProject() {{{3
+# launch04Test() {{{3
+launch04Test() {
+    local -r enLogfileN="${JHIPSTER}"".04-tests.local-travis.log"
+    local -r LOGFILENAME="${bLogfileN}"".pending.""${enLogfileN}"
+    createLogFile
+    startingLaunchSample
+    launchNewBash "./scripts/04-tests.sh"  "Testing '${JHIPSTER}-sample'"
+    closeLogFile
+}
+
+# launch05Run() {{{3
+launch05Run() {
+    # TODO @pascalgrimaud says it should don't work. But it works on my
+    # Intel Celeron. If experience some troubles, add a sleep between 03 and
+    # 05.  For me (JulioJu) it should work, because docker is needed only
+    # for `./mvn verify'(end of 05-run.sh), but not fo packaging app (start
+    # of 05-run.sh). So docker should have time to start before `./mvn
+    # verify'.  Maybe ask some more explanations to @pascalgrimaud because I
+    # don't understand this.
+    local -r enLogfileN="${JHIPSTER}"".05-run.local-travis.log"
+    local -r LOGFILENAME="${bLogfileN}"".pending.""${enLogfileN}"
+    createLogFile
+    startingLaunchSample
+    launchNewBash "./scripts/03-docker-compose.sh" \
+        "Start docker container-compose.sh for '${JHIPSTER}'"
+    launchNewBash "./scripts/05-run.sh" "Run and test '${JHIPSTER}-sample'"
+    closeLogFile
+}
+
+# function verifyProject() {{{3
 # Executed when the first argument of the script is "verify"
 # ====================
-function generateAndTestProject() {
-
-    # GENERATE PROJECT
-    # ====================
-    # Corresponding of the entry "install" in ../.travis.yml
-    generateProject
+function verifyProject() {
 
     # BUILD AND TEST
     # ====================
     # Corresponding of the entry "script" in .travis.yml
-    launchNewBash "./scripts/03-docker-compose.sh" \
-        "Start docker container-compose.sh for '${JHIPSTER}'"
-    launchNewBash "./scripts/04-tests.sh"  "Testing '${JHIPSTER}-sample'"
-    launchNewBash "./scripts/05-run.sh" "Run and test '${JHIPSTER}-sample'"
+    cd "$APP_FOLDER"
+    if [[ -f src/main/docker/couchbase.yml ]]; then
+        printFileDescriptor3 "../../scripts/04Test and" \
+            "../../scripts/05run.sh can't be started" \
+            "in same time for couchbase."
+        launch04Test
+        launch05Run
+    else
+        launch04Test &
+        launch05Run &
+        wait
+    fi
     # Never launched in TRAVIS CI for a PR
     # launchNewBash "./scripts/06-sonar.sh" \
     #     "Launch Sonar analysis for '${JHIPSTER}'"
@@ -1454,10 +1519,10 @@ Do you want to continue? [y/n] "
     time {
 
         local -r shortDate=$(date +%m-%dT%H_%M)
-        local -r beginLogfilename=\
+        local -r bLogfileN=\
 "${JHIPSTER_TRAVIS}""/node_modules_cache.""${shortDate}"
-        local -r endofLogfilename="angular.local-travis.log"
-        local -r LOGFILENAME="${beginLogfilename}".pending."${endofLogfilename}"
+        local -r enLogfileN="angular.local-travis.log"
+        local -r LOGFILENAME="${bLogfileN}"".pending.""${enLogfileN}"
 
         createLogFile
 
@@ -1490,7 +1555,7 @@ Do you want to continue? [y/n] "
             errorInBuildExitCurrentSample "'yarn' FAILED"
         fi
 
-        treatEndOfBuild
+        closeLogFile
 
     }
 
@@ -1499,6 +1564,43 @@ Do you want to continue? [y/n] "
 # II LAUNCH ONLY ONE SAMPLE {{{2
 # ====================
 # ====================
+
+# finishingLaunchSample() {{{3
+finishingLaunchSample() {
+    if [[ "$IS_VERIFY" -eq 0 ]] && \
+        [[ "$IS_SKIPPACKAGEAPP" -eq 1 ]]; then
+        local -r \
+            IS_NOT_PACKAGED_FILE="$APP_FOLDER""/not_packaged.local-travis.log"
+        touch "$IS_NOT_PACKAGED_FILE"
+        # To test in startApplication() if it was packaged or not.
+    fi
+
+    local WE_WANT_A_PROMPT=0
+    dockerKillThenRm
+    unset WE_WANT_A_PROMPT
+    if [[ -z "${IS_GENERATION_NODE_MODULES_CACHE+x}" ]] ; then
+        # True only if is not launched from function
+        # generateNode_Modules_Cache()
+        sleep 2
+        if [[ "$IS_SKIP_CLIENT" -eq 0 ]] ; then
+            # Because node_modules takes 1.1 Go ! Too much !
+            if [[ "$JHIPSTER" != *"react"* ]] ; then
+                printCommandAndEval "rm -Rf '${APP_FOLDER}/node_modules'"
+                printCommandAndEval ln -s \
+                    "${NODE_MODULES_CACHE_ANGULAR}/node_modules" \
+                    "${APP_FOLDER}"
+            fi
+        fi
+    else
+        if [[ "${ERROR_IN_SAMPLE}" -eq 0 ]] ; then
+            printCommandAndEval "cp '$FILE_ANGULAR_PACKAGE_JSON' \
+                '$FILE_ANGULAR_PACKAGE_JSON_CACHED'"
+        else
+            exit 200
+        fi
+    fi
+
+}
 
 # function define_IS_SKIP_CLIENT() {{{3
 function define_IS_SKIP_CLIENT() {
@@ -1541,9 +1643,8 @@ function retrieveVariablesInFileDotTravisSectionMatrix() {
 
 }
 
-# function createFolderNodeModulesAndLogFile() {{{3
-function createFolderNodeModulesAndLogFile() {
-    createLogFile
+# function createFolderNodeModules() {{{3
+function createFolderNodeModules() {
     if [[ "$IS_SKIP_CLIENT" -eq 0 ]] ; then
 
         local -r NODE_MOD_CACHED="$NODE_MODULES_CACHE_ANGULAR/node_modules"
@@ -1605,29 +1706,30 @@ then restart script."
     # 1.
     local -i ERROR_IN_SAMPLE=0
 
+    local -r bLogfileN="$JHIPSTER_TRAVIS""/""$BRANCH_NAME"".""$DATEBEGIN"
+
     time {
 
-        # Instantiate LOGFILENAME
-        local -r beginLogfilename=\
-"${JHIPSTER_TRAVIS}""/""${BRANCH_NAME}"".""${DATEBININSCRIPT}"
-        local -r endofLogfilename="${JHIPSTER}"".local-travis.log"
-        local -r LOGFILENAME=\
-"${beginLogfilename}"".pending.""${endofLogfilename}"
-        createFolderNodeModulesAndLogFile
+        generateProject &
+        generateProjectPID="$!"
 
-        cd "${APP_FOLDER}"
+        if [[ "$IS_SKIP_TEST_GENERATOR" -eq 0 ]] && \
+            [[ "${JHIPSTER}" == "ngx-default"  ]] ; then
+            # ./scripts/00-install-jhipster.sh coresponding to function
+            # testGenerator
+            testGenerator &
+        fi
+
+        wait "$generateProjectPID"
 
         if [[ "$IS_VERIFY" -eq 1 ]] ; then
-            generateAndTestProject
-        else
-            generateProject
+            verifyProject
         fi
+
+        finishingLaunchSample
 
     }
 
-    treatEndOfBuild
-    # do not unset beginLogfilename and endofLogfilename, unsed in another
-    # function
 }
 
 # I LAUNCH SAMPLE(S) IN BACKGROUND {{{2
@@ -1799,12 +1901,9 @@ function startApplication() {
             "Please run \`./build-samples.sh generate " "$JHIPSTER'."
     fi
 
-    local WE_WANT_A_PROMPT=1
-    testRequierments
-    unset WE_WANT_A_PROMPT
     # To not launch \`yarn e2e' in 05-run.sh
     export PROTRACTOR=0
-    printInfoBeforeLaunch
+    startingLaunchSample
 
     cd "$JHIPSTER_TRAVIS"
     echoTitleBuildStep "start" "./scripts/03-docker-compose.sh" \
@@ -1884,9 +1983,9 @@ export IS_TRAVIS_CI=0
 # GLOBAL CONSTANTS SPECIFIC TO ./build-samples.sh (this script)
 # ====================
 # Should be unique thanks command `date'. Thanks lot of `sleep' in this script
-# we sure DATEBININSCRIPT will be unique.
-declare DATEBININSCRIPT
-readonly DATEBININSCRIPT="$(date +%Y-%m-%dT%H_%M_%S)"
+# we sure DATEBEGIN will be unique.
+declare DATEBEGIN
+readonly DATEBEGIN="$(date +%Y-%m-%dT%H_%M_%S)"
 
 ## Retrieve ../.travis.yml and parse it
 travisDotYml="${JHIPSTER_TRAVIS}/../.travis.yml"
@@ -1982,68 +2081,17 @@ function tooMuchArguments() {
         "Please see \`./build-samples.sh help'."
 }
 
-# Argument parser {{{2
-# ====================
-# ====================
-
-echo -e "\\n\\nThanks to use this script. Do not hesitate to open a new issue" \
-    "for any thing, thanks in advance! This script is young (06/2018)!"
-
-[[ "$#" -eq 0 ]] && usage
-
-COMMAND_NAME="$1"
-
-cd "${JHIPSTER_TRAVIS}"
-if [[ "$COMMAND_NAME" = "help" ]]; then
-    [[ ! -z "${2+x}" ]] && tooMuchArguments
-    usage
-elif [[ "$COMMAND_NAME" == "start" ]] ; then
-    [[ ! -z "${3+x}" ]] && tooMuchArguments
-    if [[ -z "${2+x}" ]] ; then
-        exitScriptWithError "\`start' take " \
-            "one mandatory argument (the sample_name)." \
-            "Please read \`./build-samples.sh help'"
-    fi
-    if [[ "$2" =~ $JHIPSTER_PATTERN ]] ; then
-        declare JHIPSTER="$2"
-        declare JHIPSTER_MATRIX
-        returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER"
-        export IS_STARTAPPLICATION=1
-        declare -r IS_COLORIZELOGFILE=1
-        time startApplication
-    else
-        exitScriptWithError "you could only launch only one sample." \
-            "A sample name contains only alphanumeric or dash characters, " \
-            "it not start by a dash."
-    fi
-elif [[ "$COMMAND_NAME" == "generate" ]] || \
-    [[ "$COMMAND_NAME" == "verify" ]] ; then
-
-    if [[ "$COMMAND_NAME" == "generate" ]] ; then
-        [[ "$#" -gt 5 ]] && tooMuchArguments
-        export IS_VERIFY=0
-        declare IS_SKIP_TEST_GENERATOR=1
-    else
-        [[ "$#" -gt 5 ]] && tooMuchArguments
-        export IS_VERIFY=1
-        declare IS_SKIP_TEST_GENERATOR=0
-    fi
-
-    export IS_STARTAPPLICATION=0
-
-    declare IS_CONSOLEVERBOSE=0
-    declare IS_COLORIZELOGFILE=0
-    export IS_SKIPPACKAGEAPP=0
+function parseArgumentsGenerateAndVerify () {
 
     if [[ ! -z "${2+x}" ]] ; then
 
         if [[ "$2" =~ $JHIPSTER_LIST_PATTERN ]] ; then
-            declare JHIPSTER_LIST="$2"
-            declare -a JHIPSTER_MATRIX_ARRAY
+            declare -g JHIPSTER_LIST="$2"
+            declare -ag JHIPSTER_MATRIX_ARRAY
             shift 2
         elif [[ "$2" =~ $JHIPSTER_PATTERN ]] ; then
-            declare JHIPSTER_LIST="$2"
-            declare JHIPSTER_MATRIX
+            declare -g JHIPSTER_LIST="$2"
+            declare -g JHIPSTER_MATRIX
             returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER_LIST"
             shift 2
         else
@@ -2091,6 +2139,92 @@ elif [[ "$COMMAND_NAME" == "generate" ]] || \
             shift
         done
     fi
+}
+
+# ./build-samples.sh.conf parser {{{2
+# ====================
+# ====================
+
+confFileIsConsoleVerbose() {
+    if [[ -f "./build-samples.sh.conf" ]] \
+        && [[ ! -z "${JHIPSTER_LIST+x}" ]]  \
+        && [[ ! "$JHIPSTER_LIST" =~ $JHIPSTER_LIST_PATTERN ]] \
+        && grep -Eq "^consoleverbose$" ./build-samples.sh.conf ; then
+        IS_CONSOLEVERBOSE=1
+    fi
+}
+
+confFileIsColorzelogfile() {
+    if [[ -f "./build-samples.sh.conf" ]] \
+        && grep -Eq "^colorizelogfile$" ./build-samples.sh.conf ; then
+        IS_COLORIZELOGFILE=1
+    fi
+}
+
+# TODO maybe add possibility to add all options in this file.
+# If believe it's simple with a ini filetype, parsed thanks `grep',
+# espacially to determine where is the beginning and the end
+# of the sample list to build.
+
+# Argument parser {{{2
+# ====================
+# ====================
+
+echo -e "\\n\\nThanks to use this script. Do not hesitate to open a new issue" \
+    "for any thing, thanks in advance! This script is young (06/2018)!"
+
+[[ "$#" -eq 0 ]] && usage
+
+COMMAND_NAME="$1"
+
+cd "${JHIPSTER_TRAVIS}"
+if [[ "$COMMAND_NAME" = "help" ]]; then
+    [[ ! -z "${2+x}" ]] && tooMuchArguments
+    usage
+elif [[ "$COMMAND_NAME" == "start" ]] ; then
+    [[ ! -z "${3+x}" ]] && tooMuchArguments
+    if [[ -z "${2+x}" ]] ; then
+        exitScriptWithError "\`start' take " \
+            "one mandatory argument (the sample_name)." \
+            "Please read \`./build-samples.sh help'"
+    fi
+    if [[ "$2" =~ $JHIPSTER_PATTERN ]] ; then
+        declare JHIPSTER="$2"
+        declare JHIPSTER_MATRIX
+        returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER"
+        export IS_STARTAPPLICATION=1
+        declare -r IS_CONSOLEVERBOSE=1
+        declare -r IS_COLORIZELOGFILE=1
+        time startApplication
+    else
+        exitScriptWithError "you could only launch only one sample." \
+            "A sample name contains only alphanumeric or dash characters, " \
+            "it not start by a dash."
+    fi
+elif [[ "$COMMAND_NAME" == "generate" ]] || \
+    [[ "$COMMAND_NAME" == "verify" ]] ; then
+
+    if [[ "$COMMAND_NAME" == "generate" ]] ; then
+        [[ "$#" -gt 5 ]] && tooMuchArguments
+        export IS_VERIFY=0
+        declare IS_SKIP_TEST_GENERATOR=1
+    else
+        [[ "$#" -gt 5 ]] && tooMuchArguments
+        export IS_VERIFY=1
+        declare IS_SKIP_TEST_GENERATOR=0
+    fi
+
+    export IS_STARTAPPLICATION=0
+
+    export IS_SKIPPACKAGEAPP=0
+
+    declare IS_CONSOLEVERBOSE=0
+    declare IS_COLORIZELOGFILE=0
+
+    parseArgumentsGenerateAndVerify "$@"
+
+    confFileIsColorzelogfile
+    confFileIsConsoleVerbose
 
     launchSamples
 
@@ -2104,26 +2238,5 @@ else
     exitScriptWithError "Incorrect argument." \
         "Please see \`$ ./build-samples.sh help'."
 fi
-
-# ./build-samples.sh.conf parser {{{2
-# ====================
-# ====================
-
-if [[ -f "./build-samples.sh.conf" ]] \
-    && [[ ! -z "${JHIPSTER_LIST+x}" ]]  \
-    && [[ ! "$JHIPSTER_LIST" =~ $JHIPSTER_LIST_PATTERN ]] \
-    && grep -Eq "^consoleverbose$" ./build-samples.sh.conf ; then
-    IS_CONSOLEVERBOSE=1
-fi
-
-if [[ -f "./build-samples.sh.conf" ]] \
-    && grep -Eq "^colorizelogfile$" ./build-samples.sh.conf ; then
-    IS_CONSOLEVERBOSE=1
-fi
-
-# TODO maybe add possibility to add all options in this file.
-# If believe it's simple with a ini filetype, parsed thanks `grep',
-# espacially to determine where is the beginning and the end
-# of the sample list to build.
 
 # vim: foldmethod=marker sw=4 ts=4 et textwidth=80 foldlevel=0
