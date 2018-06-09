@@ -443,21 +443,21 @@ function finish() {
     # https://en.wikipedia.org/wiki/Defensive_programming
     erroredAllPendingLog
 
+    echo -e "Killing all descendants, if some still exists (\`node', \`java')"
+    kill 0
+
     echo -e "\\n\\n\\nIt's the end of ./build-samples.sh.\\n\\n"
 }
 
 # trap ERR is not always performed
 # https://unix.stackexchange.com/a/209507
+# TODO I don't know if ERR trigger EXIT event too
 trap 'errorInScript "$LINENO"' ERR
 errorInScript() {
     set +e
     1>&2 echo "In ./build-samples.sh, error on line: '$1'"
-    cd "${JHIPSTER_TRAVIS}"
-    erroredAllPendingLog
 
-    local WE_WANT_A_PROMPT=0
-    dockerKillThenRm
-    unset WE_WANT_A_PROMPT
+    finish
 
     exit 5
 }
@@ -473,33 +473,26 @@ warning() {
     echo -e "$BRED"" WARNING: " "$@" "$NC"
 }
 
-
-# ps4b() {{{3
-ps4b() {
-    echo -en "\\033[1;32m""$USER@""$HOSTNAME""\\033[0m"": "\
-        "\\033[1;34m""$(dirs +0)""\\033[0m"" $ "
-}
-
 # function printFileDescriptor3() {{{2
 function printFileDescriptor3() {
     [[ -e /dev/fd/3 ]] && echo -e "\\n" "$@" | tee --append /dev/fd/3 \
         || echo -e "\\n" "$@"
 }
 
+# function printCommand() {{{3
+function printCommand() {
+    printFileDescriptor3 "${ps4Light}""\\033[01;34m""$(dirs +0)"\
+        "$ ""\\033[00m" "$@"
+}
+
 # function printCommandAndEval() {{{2
 function printCommandAndEval() {
+    printCommand "$@"
     if [[ -e /dev/fd/3 ]] && \
         [[ -e /dev/fd/4 ]] ; then
         # See function launchSamplesInBackground()
-        ps4b
-        echo "${@}" 1> >(tee --append /dev/fd/3) \
-            2> >(tee --append /dev/fd/4)
         eval "$@" > >(tee --append /dev/fd/3) 2> >(tee --append /dev/fd/4)
     else
-        ps4b
-        echo "${@}"
-        # https://google.github.io/styleguide/shell.xml#Eval
-        # says don't use eval. But doesn't work without.
         eval "$@"
     fi
 }
@@ -1010,9 +1003,9 @@ function testRequierments() {
 }
 
 yarnInstall() {
-    printFileDescriptor3 "yarn install"
+    printCommand "yarn install"
     if yarn install ; then
-        echoTitleBuildStep "end" "\`yarn install' finished with SUCCESS!"
+        printFileDescriptor3 "\`yarn install' finished with SUCCESS!"
     else
         errorInBuildExitCurrentSample "\`yarn install' FAILED"
     fi
@@ -1207,8 +1200,7 @@ function closeLogFile() {
         printFileDescriptor3 "Note: on the following \`sed' command, " \
             "there is: "\
             "https://en.wikipedia.org/wiki/Control_character"
-        printFileDescriptor3 "${ps4Light}$(dirs +0) $ "\
-            "sed -i -E 's/^H/g ;" \
+        printCommand "sed -i -E 's/^H/g ;" \
             's/^Progress.*^M.*Downloaded from/Downloaded from/g ;' \
             's/^M//g ;' \
             's/\033[\[[^[0-9;]*[a-zA-Z]//g'"'" \
@@ -1221,8 +1213,7 @@ function closeLogFile() {
             s/\[([0-9]{1,2};)?[0-9]{1,2}m//g' \
             "${LOGFILENAME}" 1>> /dev/null
     else
-        printFileDescriptor3 "${ps4Light}$(dirs +0) $ "\
-            "sed -i -E 's/^H/g ;" \
+        printCommand "sed -i -E 's/^H/g ;" \
             "s/^Progress.*^M.*Downloaded from/Downloaded from/g ;" \
             "s/^M//g'" \
             "'${LOGFILENAME}' 1>> /dev/null"
@@ -1302,7 +1293,8 @@ errorInBuildExitCurrentSample() {
 function yarnLink() {
     cd "$APP_FOLDER"
     echoTitleBuildStep "start" "yarn link"
-    yarn init -y
+    printCommandAndEval "yarn init -y"
+    printCommand "yarn link 'generator-jhipster'"
     if yarn link "generator-jhipster" ; then
         printFileDescriptor3 "\`yarn link' performed"
     else
@@ -1423,8 +1415,8 @@ function generateProject() {
     closeLogFile
 }
 
-# launch04Test() {{{3
-launch04Test() {
+# function launch04Test() {{{3
+function launch04Test() {
     local -r enLogfileN="${JHIPSTER}"".04-tests.local-travis.log"
     local -r LOGFILENAME="${bLogfileN}"".pending.""${enLogfileN}"
     createLogFile
@@ -1433,8 +1425,8 @@ launch04Test() {
     closeLogFile
 }
 
-# launch05Run() {{{3
-launch05Run() {
+# function launch05Run() {{{3
+function launch05Run() {
     # TODO @pascalgrimaud says it should don't work. But it works on my
     # Intel Celeron. If experience some troubles, add a sleep between 03 and
     # 05.  For me (JulioJu) it should work, because docker is needed only
@@ -1462,16 +1454,16 @@ function verifyProject() {
     # Corresponding of the entry "script" in .travis.yml
     cd "$APP_FOLDER"
     if [[ -f src/main/docker/couchbase.yml ]]; then
+        printCommandAndEval "pwd"
         printFileDescriptor3 "../../scripts/04Test and" \
             "../../scripts/05run.sh can't be started" \
             "in same time for couchbase."
         launch04Test
-        launch05Run
     else
         launch04Test &
-        launch05Run &
-        wait
     fi
+    launch05Run
+    wait
     # Never launched in TRAVIS CI for a PR
     # launchNewBash "./scripts/06-sonar.sh" \
     #     "Launch Sonar analysis for '${JHIPSTER}'"
@@ -1551,7 +1543,7 @@ Do you want to continue? [y/n] "
 
         local -r jhipstercommand="jhipster --force --no-insight --skip-checks \
 --with-entities --skip-git --skip-commit-hook --skip-install"
-        printFileDescriptor3 "$jhipstercommand"
+        printCommand "$jhipstercommand"
         if eval "$jhipstercommand" ; then
             echoTitleBuildStep "end" "'$jhipstercommand' finish with SUCCESS!"
         else
@@ -1560,6 +1552,8 @@ Do you want to continue? [y/n] "
         yarnInstall
 
         closeLogFile
+
+        finishingLaunchSample
 
     }
 
@@ -2015,7 +2009,7 @@ declare -r NODE_MODULES_CACHE_ANGULAR=\
 unset node_modules_cache_sample
 
 # Use it like this:"${ps4Light}`dirs +0`$ "
-declare -r ps4Light="\\033[1;32m""$USER@""$HOSTNAME""\\033[0m"": "\
+declare -r ps4Light="\\033[1;32m""$USER@""$HOSTNAME""\\033[0m"": "
 
 declare -r NC="\\033[0m"
 declare -r URED="\\033[4;31m"
