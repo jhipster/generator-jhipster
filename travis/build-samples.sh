@@ -420,7 +420,6 @@ function erroredAllPendingLog() {
 trap ctrl_c INT
 function ctrl_c() {
     set +e
-    cd "${JHIPSTER_TRAVIS}"
     1>&2 echo "Exit by user." \
         "Please wait until docker container(s) is/are gracefully terminated."
     if [[ -e /dev/fd/4 ]] ; then
@@ -438,6 +437,8 @@ trap finish EXIT
 # But not raised if there is an ubound variable.
 function finish() {
     set +e
+
+    cd "${JHIPSTER_TRAVIS}"
 
     # https://en.wikipedia.org/wiki/Defensive_programming
     erroredAllPendingLog
@@ -1008,6 +1009,15 @@ function testRequierments() {
 
 }
 
+yarnInstall() {
+    printFileDescriptor3 "yarn install"
+    if yarn install ; then
+        echoTitleBuildStep "end" "\`yarn install' finished with SUCCESS!"
+    else
+        errorInBuildExitCurrentSample "\`yarn install' FAILED"
+    fi
+}
+
 # function startingLaunchSample() {{{2
 function startingLaunchSample() {
 
@@ -1372,7 +1382,6 @@ function testGenerator() {
     cd -P "$JHIPSTER_TRAVIS"
     echo "We are at path: '$(pwd)'".
     echo "Your branch is: '$BRANCH_NAME'."
-    # TODO should we add yarn install?
 
     if yarn test ; then
         echoTitleBuildStep "end" "Test of the generator finish with sucess."
@@ -1477,7 +1486,7 @@ function generateNode_Modules_Cache() {
 
     echoSmallTitle "start" "Check node_modules cache"
 
-    cd "$JHIPSTER_TRAVIS""/.."
+    cd "$JHIPSTER_TRAVIS"
 
     # Used in functions errorInBuildExitCurrentSample() and createLogFile()
     local -r JHIPSTER_MATRIX="node_modules_cache_angular"
@@ -1548,12 +1557,7 @@ Do you want to continue? [y/n] "
         else
             errorInBuildExitCurrentSample "'$jhipstercommand' FAILED"
         fi
-        printFileDescriptor3 "yarn install"
-        if yarn install ; then
-            echoTitleBuildStep "end" "'yarn install' finish with SUCCESS!"
-        else
-            errorInBuildExitCurrentSample "'yarn' FAILED"
-        fi
+        yarnInstall
 
         closeLogFile
 
@@ -1688,8 +1692,8 @@ then restart script."
                 "exitScriptWithError '$argument'"
             unset confirmationFirstParameter argument
         fi
-        cd "$JHIPSTER_TRAVIS""/.."
-        printCommandAndEval "yarn install"
+        cd "$JHIPSTER_TRAVIS"
+        yarnInstall
         generateNode_Modules_Cache
     else
         # Defined "$APP_FOLDER" as explained in the MAIN section of this file.
@@ -1710,6 +1714,7 @@ then restart script."
 
     time {
 
+        cd "$APP_FOLDER"
         generateProject &
         generateProjectPID="$!"
 
@@ -1812,8 +1817,8 @@ do you want to launch in same time (Travis CI launch 4 processes)? "
     testRequierments
     unset WE_WANT_A_PROMPT
 
-    cd "$JHIPSTER_TRAVIS""/.."
-    printCommandAndEval "yarn install"
+    cd "$JHIPSTER_TRAVIS"
+    yarnInstall
 
     # TODO
     # do not launch this if there is only projects with "skipClient: true"
@@ -1905,7 +1910,6 @@ function startApplication() {
     export PROTRACTOR=0
     startingLaunchSample
 
-    cd "$JHIPSTER_TRAVIS"
     echoTitleBuildStep "start" "./scripts/03-docker-compose.sh" \
         "(Start docker container-compose.sh for '${JHIPSTER}')"
     if  ./scripts/03-docker-compose.sh ; then
@@ -1915,7 +1919,6 @@ function startApplication() {
         exitScriptWithError "in ./scripts/03-docker-compose.sh"
     fi
 
-    cd "$JHIPSTER_TRAVIS"
     echoTitleBuildStep "start" \
         "./scripts/05-run.sh" "(Run '${JHIPSTER}-sample')"
     if  ./scripts/05-run.sh ; then
@@ -2068,11 +2071,18 @@ function launchSamples() {
         local JHIPSTER_MATRIX
         returnJHIPSTER_MATRIXofFileTravisDotYml JHIPSTER_MATRIX "$JHIPSTER_LIST"
         unset JHIPSTER_LIST
-        time launchOnlyOneSample
+        launchOnlyOneSample
     else
         define_JHIPSTER_MATRIX_ARRAY
-        unset JHIPSTER_LIST
-        time launchSamplesInBackground
+        if [[ -z "${JHIPSTER_LIST+x}" ]] \
+            || [[ "$JHIPSTER_LIST" =~ $JHIPSTER_LIST_PATTERN ]] ; then
+            # If there is several samples to build
+            unset JHIPSTER_LIST
+            time launchSamplesInBackground
+        else
+            unset JHIPSTER_LIST
+            launchSamplesInBackground
+        fi
     fi
 }
 
