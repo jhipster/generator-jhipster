@@ -137,6 +137,25 @@
     # IFS=$'\n' readarray -d '' array <<< "abcd
     # efj"
         # ---> echo "a${array[0]}a" ======> aabcd\na
+
+    # WORK VERY WELL:
+    # sleep 10 & sleep 10 & declare -a array ; j=0
+    # while read -r i ; do array[j]="$i" ; j=$((j+1)) ; done < <(jobs -p)
+    # unset j
+    # echo -n ${array[1]}
+
+    # OR WORK WELL
+    # IFS= readarray dockerContainers < \
+    #     <(docker ps -q --filter "name=jhipster-travis-build*")
+    #
+    # local -i i=0
+    # while [[ i -lt "${#dockerContainers[*]}" ]] ; do
+    #     local dockerImage
+    #     dockerImage="$(tr -d '\n' <<< "${dockerContainers[i]}")"
+    #     docker kill "$dockerImage"
+    #     i=$((i+1))
+    # done
+
 # 13) we could unset even if a variable is not setted.
 # 14) Do not forget to read `man bash', especially sections " \
 #    "SHELL BUILT-IN COMMANDS" AND "BUGS".
@@ -182,18 +201,7 @@
 # 24) There is not solution to test if we are STDOUT is terminal, or not.
     # https://stackoverflow.com/questions/911168/how-to-detect-if-my-shell-script-is-running-through-a-pipe
     # https://stackoverflow.com/questions/911168/how-to-detect-if-my-shell-script-is-running-through-a-pipe
-# 25) The correct solution is:
-    # IFS= readarray dockerContainers < \
-    #     <(docker ps -q --filter "name=jhipster-travis-build*")
-    #
-    # local -i i=0
-    # while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-    #     local dockerImage
-    #     dockerImage="$(tr -d '\n' <<< "${dockerContainers[i]}")"
-    #     docker kill "$dockerImage"
-    #     i=$((i+1))
-    # done
-# 26) Notes about redirections
+# 25) Notes about redirections
     # 04Function() {
     #     local LOGFILENAME=04.log
     #     exec 1>> "${LOGFILENAME}" 2>> "${LOGFILENAME}"
@@ -208,6 +216,8 @@
     #     echo "All done"
     # }
     # mainRedirected
+# 26) Note about syntax { command ; } or ( command )
+    # read "man bash", section "Compound Commands"
 
 # functions to exit this script {{{2
 # ============
@@ -443,7 +453,9 @@ function finish() {
     # https://en.wikipedia.org/wiki/Defensive_programming
     erroredAllPendingLog
 
-    while read -r i ; do kill "$i" ; done < <(jobs -p)
+    while read -r i ; do
+        kill "$i" || echo "\`kill '$i'' is failed. Probably already terminated."
+    done < <(jobs -p)
 
     echo -e "\\n\\n\\nIt's the end of ./build-samples.sh.\\n\\n"
 }
@@ -1092,15 +1104,15 @@ dockerKillThenRm() {
 
     local -i i=0
     while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-        local dockerImage
-        dockerImage="$(tr -d '\n' <<< "${dockerContainers[i]}")"
+        local dockerC
+        dockerC="$(tr -d '\n' <<< "${dockerContainers[i]}")"
         printFileDescriptor3 "Trying to kill docker container:\\n" \
-            "$(docker ps --filter "id=${dockerImage}")"
-        if docker kill "$dockerImage" ; then
+            "$(docker ps --filter "id=${dockerC}")"
+        if docker kill "$dockerC" ; then
             printFileDescriptor3 "Docker containers killed with success."
         else
             exitScriptWithError "Couldn't \`kill' docker container" \
-                "'$dockerImage'"
+                "'$dockerC'"
         fi
         i=$((i+1))
         if [[ i -eq "${#dockerContainers[*]}" ]] ; then
@@ -1114,14 +1126,14 @@ dockerKillThenRm() {
         <(docker ps -qa --filter "name=jhipster-travis-build*")
     i=0
     while [[ i -lt "${#dockerContainers[*]}" ]] ; do
-        local dockerImage
-        dockerImage="$(tr -d '\n' <<< "${dockerContainers[i]}")"
+        local dockerC
+        dockerC="$(tr -d '\n' <<< "${dockerContainers[i]}")"
         printFileDescriptor3 "Trying to \`rm' docker container:\\n" \
-            "$(docker ps -a --filter "id=$dockerImage")"
-        if docker rm "$dockerImage" ; then
+            "$(docker ps -a --filter "id=$dockerC")"
+        if docker rm "$dockerC" ; then
             printFileDescriptor3 "Docker containers \`rm' with success."
         else
-            exitScriptWithError "Couldn't \`rm' docker container '$dockerImage'"
+            exitScriptWithError "Couldn't \`rm' docker container '$dockerC'"
         fi
         i=$((i+1))
     done
@@ -1903,6 +1915,7 @@ function startApplication() {
     export PROTRACTOR=0
     startingLaunchSample
 
+    cd "$JHIPSTER_TRAVIS"
     echoTitleBuildStep "start" "./scripts/03-docker-compose.sh" \
         "(Start docker container-compose.sh for '${JHIPSTER}')"
     if  ./scripts/03-docker-compose.sh ; then
