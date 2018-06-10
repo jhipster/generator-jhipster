@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (gitlabUseDocker) { _%>
+<%_ if (insideDocker) { _%>
 image: openjdk:8
 <%_ } _%>
 
@@ -39,7 +39,7 @@ stages:
     - build
     - test
     - package
-<%_ if (heroku.includes('gitlab')) { _%>
+<%_ if (cicdIntegrations.includes('heroku')) { _%>
     - deploy
 <%_ } _%>
 
@@ -90,7 +90,7 @@ gradle-repackage:
         paths:
             - build/libs/*.war
 #       expire_in: 90 day
-    <%_ if (heroku.includes('gitlab')) { _%>
+    <%_ if (cicdIntegrations.includes('heroku')) { _%>
 gradle-deploy:
     stage: deploy
     script:
@@ -138,7 +138,7 @@ maven-front-test:
             - target/test-results/jest/*
 #       expire_in: 90 day
     <%_ } _%>
-    <%_ if (heroku.includes('gitlab')) { _%>
+    <%_ if (cicdIntegrations.includes('heroku')) { _%>
 maven-deploy:
     stage: deploy
     script:

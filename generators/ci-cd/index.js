@@ -74,8 +74,8 @@ module.exports = class extends BaseGenerator {
 
     get prompting() {
         return {
-            askPipelines: prompts.askPipelines,
-            askIntegrations: prompts.askIntegrations
+            askPipeline: prompts.askPipeline,
+            askIntegrations: prompts.askIntegrations,
         };
     }
 
@@ -87,30 +87,30 @@ module.exports = class extends BaseGenerator {
                 insight.trackWithEvent('generator', 'ci-cd');
             },
             setTemplateConstants() {
-                if (this.abort || this.jenkinsIntegrations === undefined) return;
-                this.gitLabIndent = this.jenkinsIntegrations.includes('gitlab') ? '    ' : '';
-                this.indent = this.jenkinsIntegrations.includes('docker') ? '    ' : '';
+                if (this.abort || this.cicdIntegrations === undefined) return;
+                this.gitLabIndent = this.cicdIntegrations.includes('gitlab') ? '    ' : '';
+                this.indent = this.cicdIntegrations.includes('docker') ? '    ' : '';
                 this.indent += this.gitLabIndent;
             }
         };
     }
 
     writing() {
-        if (this.pipelines.includes('jenkins')) {
+        if (this.pipeline === 'jenkins') {
             this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
             this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
             this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
-            if (this.jenkinsIntegrations.includes('publishDocker')) {
+            if (this.cicdIntegrations.includes('publishDocker')) {
                 this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
             }
         }
-        if (this.pipelines.includes('gitlab')) {
+        if (this.pipeline === 'gitlab') {
             this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
         }
-        if (this.pipelines.includes('circle')) {
+        if (this.pipeline === 'circle') {
             this.template('circle.yml.ejs', 'circle.yml');
         }
-        if (this.pipelines.includes('travis')) {
+        if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');
         }
     }

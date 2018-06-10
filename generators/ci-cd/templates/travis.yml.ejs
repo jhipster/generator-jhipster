@@ -82,7 +82,7 @@ script:
     <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
-  <%_ if (heroku.includes('travis')) { _%>
+  <%_ if (cicdIntegrations.includes('heroku')) { _%>
   - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
   <%_ } else { _%>
   - ./mvnw verify -Pprod -DskipTests
