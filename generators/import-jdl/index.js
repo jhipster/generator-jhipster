@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 const _ = require('lodash');
+const fs = require('fs');
 const shelljs = require('shelljs');
-const path = require('path');
 const chalk = require('chalk');
 const jhiCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
@@ -59,6 +59,7 @@ module.exports = class extends BaseGenerator {
         this.registerClientTransforms();
         this.applicationsLeftToGenerate = [];
         this.entitiesLeftToGenerate = [];
+        this.generated = false;
     }
 
     get initializing() {
@@ -74,15 +75,23 @@ module.exports = class extends BaseGenerator {
             },
 
             getConfig() {
-                this.applicationType = this.config.get('applicationType');
-                this.baseName = this.config.get('baseName');
-                this.databaseType = this.config.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
-                this.prodDatabaseType = this.config.get('prodDatabaseType') || this.options.db;
-                this.devDatabaseType = this.config.get('devDatabaseType') || this.options.db;
-                this.skipClient = this.config.get('skipClient');
-                this.clientFramework = this.config.get('clientFramework');
+                if (!jhiCore.FileUtils.doesFileExist('.yo-rc.json') && !this.generated) {
+                    // we may have to parse the JDL first
+                    return;
+                }
+                let configuration = this.config.getAll();
+                if (!configuration.baseName) {
+                    configuration = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }))['generator-jhipster'];
+                }
+                this.applicationType = configuration.applicationType;
+                this.baseName = configuration.baseName;
+                this.databaseType = configuration.databaseType || this.getDBTypeFromDBValue(this.options.db);
+                this.prodDatabaseType = configuration.prodDatabaseType || this.options.db;
+                this.devDatabaseType = configuration.devDatabaseType || this.options.db;
+                this.skipClient = configuration.skipClient;
+                this.clientFramework = configuration.clientFramework;
                 this.clientFramework = this.clientFramework || 'angularX';
-                this.clientPackageManager = this.config.get('clientPackageManager');
+                this.clientPackageManager = configuration.clientPackageManager;
                 if (!this.clientPackageManager) {
                     if (this.useYarn) {
                         this.clientPackageManager = 'yarn';
@@ -90,6 +99,7 @@ module.exports = class extends BaseGenerator {
                         this.clientPackageManager = 'npm';
                     }
                 }
+                this.log('this.baseName from getConfig', this.baseName);
             }
         };
     }
@@ -102,6 +112,9 @@ module.exports = class extends BaseGenerator {
             },
 
             parseJDL() {
+                if (this.generated) {
+                    return;
+                }
                 this.log('The JDL is being parsed.');
                 const jdlImporter = new jhiCore.JDLImporter(this.jdlFiles, {
                     databaseType: this.prodDatabaseType,
@@ -116,10 +129,12 @@ module.exports = class extends BaseGenerator {
                         const entityNames = _.uniq(this.importState.exportedEntities
                             .map(exportedEntity => exportedEntity.name))
                             .join(', ');
-                        this.log(`Updated entities are: ${chalk.yellow(entityNames)}.`);
+                        this.log(`Found entities: ${chalk.yellow(entityNames)}.`);
                     } else {
                         this.log(chalk.yellow('No change in entity configurations, no entities were updated.'));
                     }
+                    this.log('The JDL has been successfully parsed');
+                    this.generated = true;
                 } catch (error) {
                     this.debug('Error:', error);
                     if (error) {
@@ -133,20 +148,24 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get writing() {
+    get install() {
         return {
+            initializeGeneratorIfNeedBe() {
+                if (!this.baseName) {
+                    this.initializing.getConfig.call(this);
+                }
+            },
+
             generateApplications() {
                 if (!shouldGenerateApplications(this) || this.importState.exportedApplications.length === 0) {
                     return;
                 }
                 if (this.importState.exportedApplications.length === 1) {
+                    const application = this.importState.exportedApplications[0];
                     try {
-                        generateApplicationFiles(
-                            this,
-                            this.importState.exportedApplications[0]
-                        );
+                        generateApplicationFiles(this, application);
                     } catch (error) {
-                        this.error(`While generating applications from the parsed JDL\n${error}`);
+                        this.error(`Error while generating applications from the parsed JDL\n${error}`);
                     }
                 } else {
                     // sub-folder generation, not yet handled
@@ -156,6 +175,7 @@ module.exports = class extends BaseGenerator {
             },
 
             generateEntities() {
+                this.log('this.importState.exportedEntities ', this.importState.exportedEntities);
                 if (this.importState.exportedEntities.length === 0) {
                     return;
                 }
@@ -175,7 +195,7 @@ module.exports = class extends BaseGenerator {
                         }
                     });
                 } catch (error) {
-                    this.error(`While generating entities from the parsed JDL\n${error}`);
+                    this.error(`Error while generating entities from the parsed JDL\n${error}`);
                 }
             }
         };
@@ -183,15 +203,15 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']
-            && !shouldGenerateApplications(this, this.jdlObject)) {
+                && !shouldGenerateApplications(this, this.jdlObject)) {
             this.debug('Building client');
             this.rebuildClient();
         }
         if (this.applicationsLeftToGenerate.length !== 0) {
-            this.info(`Here are the application names to generate: ${this.applicationsLeftToGenerate.join(', ')}`);
+            this.info(`Here are the application names to generate manually: ${this.applicationsLeftToGenerate.join(', ')}`);
         }
         if (this.entitiesLeftToGenerate.length !== 0) {
-            this.info(`Here are the entity names to generate: ${_.uniq(this.entitiesLeftToGenerate).join(', ')}`);
+            this.info(`Here are the entity names to generate manually: ${_.uniq(this.entitiesLeftToGenerate).join(', ')}`);
         }
     }
 };
@@ -201,30 +221,55 @@ function shouldGenerateApplications(generator) {
 }
 
 function generateApplicationFiles(generator, application) {
-    callSubGenerator(generator, '..', 'app', {
-        force: generator.options.force,
-        debug: generator.options.debug,
-        'skip-install': generator.options['skip-install'],
-        'skip-user-management': application['generator-jhipster'].skipUserManagement,
-        'jhi-prefix': application['generator-jhipster'].jhiPrefix
+    const args = ['jhipster'];
+    if (generator.options.force) {
+        args.push('--force');
+    }
+    if (generator.options.debug) {
+        args.push('--debug');
+    }
+    if (generator.options['skip-install']) {
+        args.push('--skip-install');
+    }
+    if (application['generator-jhipster'].skipUserManagement) {
+        args.push('--skip-user-management');
+    }
+    if (application['generator-jhipster'].jhiPrefix) {
+        args.push('--jhi-prefix');
+        args.push(application['generator-jhipster'].jhiPrefix);
+    }
+    const done = generator.async();
+    generator.spawnCommand('yo', args).on('close', () => {
+        done();
     });
 }
 
 function generateEntityFiles(generator, entity) {
-    callSubGenerator(generator, '..', 'entity', {
-        force: generator.options.force,
-        debug: generator.options.debug,
-        regenerate: true,
-        'skip-install': true,
-        'skip-client': entity.skipClient,
-        'skip-server': entity.skipServer,
-        'no-fluent-methods': entity.noFluentMethod,
-        'skip-user-management': entity.skipUserManagement,
-        'skip-ui-grouping': generator.options['skip-ui-grouping'],
-        arguments: [entity.name]
-    });
-}
+    const args = ['jhipster:entity', entity.name, '--regenerate', '--force'];
+    if (generator.options.debug) {
+        args.push('--debug');
+    }
+    if (generator.options['skip-install']) {
+        args.push('--skip-install');
+    }
+    if (entity.skipUserManagement) {
+        args.push('--skip-user-management');
+    }
+    if (entity.skipClient) {
+        args.push('--skip-client');
+    }
+    if (entity.skipServer) {
+        args.push('--skip-server');
+    }
+    if (!entity.noFluentMethod) {
+        args.push('--no-fluent-methods');
+    }
+    if (generator.options['skip-ui-grouping']) {
+        args.push('skip-ui-grouping');
+    }
 
-function callSubGenerator(currentGenerator, subgenPath, name, args) {
-    currentGenerator.composeWith(require.resolve(path.join(subgenPath, name)), args);
+    const done = generator.async();
+    generator.spawnCommand('yo', args).on('close', () => {
+        done();
+    });
 }
