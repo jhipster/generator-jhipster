@@ -99,7 +99,6 @@ module.exports = class extends BaseGenerator {
                         this.clientPackageManager = 'npm';
                     }
                 }
-                this.log('this.baseName from getConfig', this.baseName);
             }
         };
     }
@@ -175,7 +174,6 @@ module.exports = class extends BaseGenerator {
             },
 
             generateEntities() {
-                this.log('this.importState.exportedEntities ', this.importState.exportedEntities);
                 if (this.importState.exportedEntities.length === 0) {
                     return;
                 }
