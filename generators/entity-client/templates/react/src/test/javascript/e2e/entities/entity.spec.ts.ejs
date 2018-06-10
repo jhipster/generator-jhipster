@@ -117,7 +117,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%= entityInstance %>UpdatePage.<%=fieldName %>SelectLastOption();
         <%_ } else if (fieldType === 'UUID'){ _%>
         <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match('64c99148-3908-465d-8c4a-e510e3ade974');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
         <%_ } else { _%>
         <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);

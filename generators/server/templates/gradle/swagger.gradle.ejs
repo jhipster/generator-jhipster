@@ -17,29 +17,43 @@
  limitations under the License.
 -%>
 /*
- * Plugin that provides API-first development using swagger-codegen to
- * generate Spring-MVC endpoint stubs at compile time from a swagger definition file
+ * Task that provides API-first development using opeenapi-generator to
+ * generate Spring-MVC endpoint stubs at compile time from an OpenAPI definition file
  */
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath('org.openapitools:openapi-generator:3.0.0')
+    }
+}
 
-apply plugin: "org.detoeuf.swagger-codegen"
+import org.openapitools.codegen.config.CodegenConfigurator
+import org.openapitools.codegen.DefaultGenerator
 
-swagger {
-    inputSpec = file('<%= SERVER_MAIN_RES_DIR %>swagger/api.yml').absolutePath
-    outputDir = file('build/swagger')
-    lang = 'spring'
+def swaggerInput = file("<%= SERVER_MAIN_RES_DIR %>swagger/api.yml")
+def swaggerOutputDir = file('build/openapi')
+task openapi {
+    inputs.file(swaggerInput)
+    outputs.dir(swaggerOutputDir)
+    doLast {
+        def config = new CodegenConfigurator()
+            .setInputSpec(swaggerInput.absolutePath)
+            .setOutputDir(swaggerOutputDir.absolutePath)
+            .setGeneratorName('spring')
+            .setApiPackage('<%= packageName %>.web.api')
+            .setModelPackage('<%= packageName %>.web.api.model')
+            .addSystemProperty('apis', '')
+            .addSystemProperty('models', '')
+            .addSystemProperty('supportingFiles', 'ApiUtil.java')
+            .addAdditionalProperty('delegatePattern', true)
+        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+    }
+}
 
-    addDynamicProperty 'interfaceOnly', true
-    addDynamicProperty 'java8', true
-
-    additionalProperties = [
-        'modelPackage' : '<%= packageName %>.web.api.model',
-        'apiPackage'   : '<%= packageName %>.web.api'
-    ]
-
-    systemProperties = [
-        'models' : '',
-        'apis'   : ''
-    ]
+clean.doFirst {
+    delete(swaggerOutputDir)
 }
 
 sourceSets {
@@ -50,4 +64,4 @@ sourceSets {
     }
 }
 
-compileJava.dependsOn('swagger')
+compileJava.dependsOn("openapi")

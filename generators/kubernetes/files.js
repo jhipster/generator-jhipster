@@ -37,6 +37,9 @@ function writeFiles() {
                 }
                 if ((this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') && this.kubernetesServiceType === 'Ingress') {
                     this.template('ingress.yml.ejs', `${this.directoryPath}/k8s/${appName}/${appName}-ingress.yml`);
+                    if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
+                        this.template('secret/jwt-secret.yml.ejs', `${this.directoryPath}//k8s/${appName}/jwt-secret.yml`);
+                    }
                 }
                 if (this.monitoring === 'prometheus') {
                     this.template('monitoring/jhipster-prometheus-sm.yml.ejs', `${this.directoryPath}/k8s/${appName}/${appName}-prometheus-sm.yml`);

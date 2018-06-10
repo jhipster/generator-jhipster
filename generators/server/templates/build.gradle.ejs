@@ -30,9 +30,6 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "io.spring.gradle:propdeps-plugin:0.0.10.RELEASE"
-        <%_ if (enableSwaggerCodegen) { _%>
-        classpath "gradle.plugin.org.detoeuf:swagger-codegen-plugin:1.7.4"
-        <%_ } _%>
         classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.21"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
@@ -229,6 +226,9 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner"
     compile "com.ryantenney.metrics:metrics-spring"
+    <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
+    compile "org.apache.httpcomponents:httpclient"
+    <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     <%_ if (enableHibernateCache) { _%>
@@ -362,9 +362,6 @@ dependencies {
         <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
     compile "org.springframework.security:spring-security-jwt"
         <%_ } _%>
-    <%_ } _%>
-    <%_ if (authenticationType === 'session') { _%>
-    compile "com.google.guava:guava"
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     compile "io.jsonwebtoken:jjwt"

@@ -360,6 +360,7 @@ module.exports = class extends BaseGenerator {
 
             saveConfig() {
                 this.config.set('jhipsterVersion', packagejs.version);
+                this.config.set('applicationType', this.applicationType);
                 this.config.set('baseName', this.baseName);
                 this.config.set('packageName', this.packageName);
                 this.config.set('packageFolder', this.packageFolder);

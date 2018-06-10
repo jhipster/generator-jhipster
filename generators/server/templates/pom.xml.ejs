@@ -88,7 +88,7 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.6</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.8</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.0.2.RELEASE</spring-boot.version>
@@ -123,7 +123,7 @@
         <scala-maven-plugin.version>3.3.2</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
-        <swagger-codegen-maven-plugin.version>2.3.1</swagger-codegen-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>3.0.0</openapi-generator-maven-plugin.version>
         <%_ } _%>
 
         <!-- Sonar properties -->
@@ -237,6 +237,12 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <%_ } _%>
         <%_ if (cacheProvider === 'hazelcast' || applicationType === 'gateway') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
@@ -607,12 +613,6 @@
         </dependency>
             <%_ } _%>
         <%_ } _%>
-        <%_ if (authenticationType === 'session') { _%>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -641,7 +641,7 @@
         </dependency>
         <%_ } _%>
         <!-- Spring Cloud -->
-        <%_ if (applicationType === 'gateway') { _%>
+        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
@@ -1019,12 +1019,12 @@
             <%_ if (enableSwaggerCodegen) { _%>
             <plugin>
                 <!--
-                    Plugin that provides API-first development using swagger-codegen to
-                    generate Spring-MVC endpoint stubs at compile time from a swagger definition file
+                    Plugin that provides API-first development using openapi-generator to
+                    generate Spring-MVC endpoint stubs at compile time from an OpenAPI definition file
                 -->
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-codegen-maven-plugin</artifactId>
-                <version>${swagger-codegen-maven-plugin.version}</version>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -1032,13 +1032,12 @@
                         </goals>
                         <configuration>
                             <inputSpec>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>swagger/api.yml</inputSpec>
-                            <language>spring</language>
+                            <generatorName>spring</generatorName>
                             <apiPackage><%= packageName %>.web.api</apiPackage>
                             <modelPackage><%= packageName %>.web.api.model</modelPackage>
-                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                             <configOptions>
-                                <interfaceOnly>true</interfaceOnly>
-                                <java8>true</java8>
+                                <delegatePattern>true</delegatePattern>
                             </configOptions>
                         </configuration>
                     </execution>
@@ -1102,9 +1101,9 @@
                                 <%_ if (enableSwaggerCodegen) { _%>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
-                                        <groupId>io.swagger</groupId>
-                                        <artifactId>swagger-codegen-maven-plugin</artifactId>
-                                        <versionRange>${swagger-codegen-maven-plugin.version}</versionRange>
+                                        <groupId>org.openapitools</groupId>
+                                        <artifactId>openapi-generator-maven-plugin</artifactId>
+                                        <versionRange>${openapi-generator-maven-plugin.version}</versionRange>
                                         <goals>
                                             <goal>generate</goal>
                                         </goals>
