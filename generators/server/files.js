@@ -61,6 +61,7 @@ const serverFiles = {
             path: DOCKER_DIR,
             templates: [
                 'Dockerfile',
+                'entrypoint.sh',
                 '.dockerignore',
                 'app.yml',
                 'sonar.yml'
