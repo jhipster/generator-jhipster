@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
@@ -18,12 +18,32 @@
  limitations under the License.
 -%>
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
-# Usage: sh <%-directoryPath%>apply.sh
+# Usage: bash <%-directoryPath%>apply.sh
+<%_ if (istio === 'manualInjection') { _%>
+loopDir(){
+  for entry in "$1"/*
+  do
+    kubectl apply -f <(istioctl kube-inject -f ${entry})
+  done
+}
+<%_ } _%>
+
 <%_ if (kubernetesNamespace !== 'default') { _%>
 kubectl apply -f <%-directoryPath%>k8s/namespace.yml
-<%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+<%_ } _%> <%_ if (istio === 'autoInjection') { _%>
+kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled
+<%_ } _%> <%_ if (istio === 'manualInjection') { _%>
+<%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+loopDir "<%-directoryPath%>k8s/registry"
+<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+loopDir "<%-directoryPath%>k8s/<%- appConfig.baseName.toLowerCase() %>"
+<%_ }) _%>
+<%_ } else {_%>
+<%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 kubectl apply -f <%-directoryPath%>k8s/registry/
-<%_ } _%> <%_ if (useKafka === true) { _%>
+<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+kubectl apply -f <%-directoryPath%>k8s/<%- appConfig.baseName.toLowerCase() %>/
+<%_ }) _%> <%_ } _%> <%_ if (useKafka === true) { _%>
 kubectl apply -f <%-directoryPath%>k8s/messagebroker/
 <%_ } _%> <%_ if (monitoring === 'elk') { _%>
 kubectl apply -f <%-directoryPath%>k8s/console/
@@ -36,6 +56,4 @@ done
 kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-prometheus-cr.yml
 kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-grafana.yml
 kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-grafana-dashboard.yml
-<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
-kubectl apply -f <%-directoryPath%>k8s/<%- appConfig.baseName.toLowerCase() %>/
-<%_ }) _%>
+<%_ } _%>

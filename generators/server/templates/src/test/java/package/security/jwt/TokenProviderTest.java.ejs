@@ -31,16 +31,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TokenProviderTest {
 
-    private final String secretKey = "e5c9ee274ae87bc031adda32e27fa98b9290da83";
+    private final Base64.Encoder encoder = Base64.getEncoder();
     private final long ONE_MINUTE = 60000;
+    private String secretKey;
     private JHipsterProperties jHipsterProperties;
     private TokenProvider tokenProvider;
 
@@ -48,6 +48,7 @@ public class TokenProviderTest {
     public void setup() {
         jHipsterProperties = Mockito.mock(JHipsterProperties.class);
         tokenProvider = new TokenProvider(jHipsterProperties);
+        secretKey = encoder.encodeToString("e5c9ee274ae87bc031adda32e27fa98b9290da83".getBytes(StandardCharsets.UTF_8));
         ReflectionTestUtils.setField(tokenProvider, "secretKey", secretKey);
         ReflectionTestUtils.setField(tokenProvider, "tokenValidityInMilliseconds", ONE_MINUTE);
     }

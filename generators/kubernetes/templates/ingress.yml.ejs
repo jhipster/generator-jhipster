@@ -21,12 +21,24 @@ kind: Ingress
 metadata:
   name: <%= app.baseName.toLowerCase() %>
   namespace: <%= kubernetesNamespace %>
+  <%_ if (istio !== 'no') { _%>
+  annotations:
+    kubernetes.io/ingress.class: istio
+  <%_ } _%>
 spec:
   rules:
   - host: <%= app.baseName.toLowerCase() %>.<%= ingressDomain %>
     http:
       paths:
-      - path: /
+      - path: /.*
         backend:
           serviceName: <%= app.baseName.toLowerCase() %>
           servicePort: <%= app.serverPort %>
+      <%_ if (!app.serviceDiscoveryType) { _%>
+        <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(function(config) { _%>
+      - path: /<%= config.baseName.toLowerCase() %>/.*
+        backend:
+          serviceName: <%= config.baseName.toLowerCase() %>
+          servicePort: <%= config.serverPort %>
+        <%_ }); _%>
+      <%_ } _%>
