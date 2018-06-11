@@ -1,0 +1,12 @@
+entity WithSearch {
+	id Long
+	name String
+}
+
+entity WithoutSearch {
+	id Long
+	name String
+}
+
+search * with elasticsearch except WithoutSearch
+

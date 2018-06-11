@@ -144,7 +144,7 @@ module.exports = class extends BaseGenerator {
                 context.databaseType = this.config.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
                 context.prodDatabaseType = this.config.get('prodDatabaseType') || this.options.db;
                 context.devDatabaseType = this.config.get('devDatabaseType') || this.options.db;
-                context.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
+                context.searchEngine = this.config.get('searchEngine');
                 context.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
                 context.enableTranslation = this.config.get('enableTranslation');
                 context.nativeLanguage = this.config.get('nativeLanguage');
@@ -397,12 +397,8 @@ module.exports = class extends BaseGenerator {
                     context.jpaMetamodelFiltering = false;
                 }
                 if (_.isUndefined(context.pagination)) {
-                    if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
-                        this.warning(`pagination is missing in .jhipster/${entityName}.json, using no as fallback`);
-                        context.pagination = 'no';
-                    } else {
-                        context.pagination = 'no';
-                    }
+                    this.warning(`pagination is missing in .jhipster/${entityName}.json, using no as fallback`);
+                    context.pagination = 'no';
                 }
                 if (!context.clientRootFolder && !context.skipUiGrouping && context.applicationType === 'gateway' && context.useMicroserviceJson) {
                     context.clientRootFolder = context.microserviceName;
@@ -425,6 +421,7 @@ module.exports = class extends BaseGenerator {
                 this.data.fields = context.fields;
                 this.data.changelogDate = context.changelogDate;
                 this.data.dto = context.dto;
+                this.data.searchEngine = context.searchEngine;
                 this.data.service = context.service;
                 this.data.entityTableName = context.entityTableName;
                 this.copyFilteringFlag(context, this.data, context);
@@ -439,11 +436,9 @@ module.exports = class extends BaseGenerator {
                 }
                 if (context.applicationType === 'microservice') {
                     this.data.microserviceName = context.baseName;
-                    this.data.searchEngine = context.searchEngine;
                 }
                 if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
                     this.data.microserviceName = context.microserviceName;
-                    this.data.searchEngine = context.searchEngine;
                 }
                 this.fs.writeJSON(context.filename, this.data, null, 4);
             },
