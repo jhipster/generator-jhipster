@@ -129,7 +129,7 @@ describe('JHipster generator import jdl', () => {
             assert.file(entityFiles);
         });
     });
-    describe('imports a JDL model which excludes elastic for a class', () => {
+    describe('imports a JDL model which excludes Elasticsearch for a class', () => {
         beforeEach((done) => {
             helpers.run(require.resolve('../generators/import-jdl'))
                 .inTmpDir((dir) => {
