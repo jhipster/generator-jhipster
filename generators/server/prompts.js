@@ -354,7 +354,7 @@ function askForOptionalItems(meta) {
         });
     }
     choices.push({
-        name: 'API first development using swagger-codegen',
+        name: 'API first development using OpenAPI-generator',
         value: 'enableSwaggerCodegen:true'
     });
     choices.push({
