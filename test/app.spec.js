@@ -756,7 +756,7 @@ describe('JHipster generator', () => {
             });
         });
 
-        describe('API first using swagger-codegen (maven)', () => {
+        describe('API first using OpenAPI-generator (maven)', () => {
             beforeEach((done) => {
                 helpers.run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
@@ -803,7 +803,7 @@ describe('JHipster generator', () => {
             });
         });
 
-        describe('API first using swagger-codegen (gradle)', () => {
+        describe('API first using OpenAPI-generator (gradle)', () => {
             beforeEach((done) => {
                 helpers.run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
