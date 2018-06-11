@@ -18,6 +18,7 @@
  */
 const _ = require('lodash');
 const fs = require('fs');
+const path = require('path');
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const jhiCore = require('jhipster-core');
@@ -60,6 +61,7 @@ module.exports = class extends BaseGenerator {
         this.applicationsLeftToGenerate = [];
         this.entitiesLeftToGenerate = [];
         this.generated = false;
+        this.generatorConfig = {};
     }
 
     get initializing() {
@@ -80,8 +82,11 @@ module.exports = class extends BaseGenerator {
                     return;
                 }
                 let configuration = this.config.getAll();
-                if (!configuration.baseName) {
+                if (!configuration.baseName && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
                     configuration = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }))['generator-jhipster'];
+                    configuration.getAll = () => configuration;
+                    configuration.get = key => configuration[key];
+                    configuration.set = (key, value) => { configuration[key] = value; };
                 }
                 this.applicationType = configuration.applicationType;
                 this.baseName = configuration.baseName;
@@ -99,6 +104,7 @@ module.exports = class extends BaseGenerator {
                         this.clientPackageManager = 'npm';
                     }
                 }
+                this.generatorConfig = configuration;
             }
         };
     }
@@ -147,7 +153,7 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get install() {
+    get writing() {
         return {
             initializeGeneratorIfNeedBe() {
                 if (!this.baseName) {
@@ -159,10 +165,12 @@ module.exports = class extends BaseGenerator {
                 if (!shouldGenerateApplications(this) || this.importState.exportedApplications.length === 0) {
                     return;
                 }
+                this.log(`Generating ${this.importState.exportedApplications.length} `
+                    + `application${this.importState.exportedApplications.length > 1 ? 's' : ''}.`);
                 if (this.importState.exportedApplications.length === 1) {
                     const application = this.importState.exportedApplications[0];
                     try {
-                        generateApplicationFiles(this, application);
+                        generateApplicationFiles(this, application, this.generatorConfig);
                     } catch (error) {
                         this.error(`Error while generating applications from the parsed JDL\n${error}`);
                     }
@@ -185,8 +193,9 @@ module.exports = class extends BaseGenerator {
                     this.importState.exportedEntities.forEach((exportedEntity) => {
                         if (this.importState.exportedApplications.length === 0
                                 || this.importState.exportedApplications.length === 1) {
-                            this.log(`Generating ${this.importState.exportedEntities.length} entities.`);
-                            generateEntityFiles(this, exportedEntity);
+                            this.log(`Generating ${this.importState.exportedEntities.length} `
+                                + `entit${this.importState.exportedEntities.length === 1 ? 'y' : 'ies'}.`);
+                            generateEntityFiles(this, exportedEntity, this.generatorConfig);
                         } else {
                             // sub-folder generation, not yet handled
                             this.entitiesLeftToGenerate.push(exportedEntity.name);
@@ -218,56 +227,35 @@ function shouldGenerateApplications(generator) {
     return !generator.options['ignore-application'] && generator.importState.exportedApplications.length !== 0;
 }
 
-function generateApplicationFiles(generator, application) {
-    const args = ['jhipster'];
-    if (generator.options.force) {
-        args.push('--force');
-    }
-    if (generator.options.debug) {
-        args.push('--debug');
-    }
-    if (generator.options['skip-install']) {
-        args.push('--skip-install');
-    }
-    if (application['generator-jhipster'].skipUserManagement) {
-        args.push('--skip-user-management');
-    }
-    if (application['generator-jhipster'].jhiPrefix) {
-        args.push('--jhi-prefix');
-        args.push(application['generator-jhipster'].jhiPrefix);
-    }
-    const done = generator.async();
-    generator.spawnCommand('yo', args).on('close', () => {
-        done();
+function generateApplicationFiles(generator, application, generatorConfig) {
+    callSubGenerator(generator, '..', 'app', {
+        force: generator.options.force,
+        debug: generator.options.debug,
+        'skip-client': generator.options.skipClient,
+        'skip-server': generator.options.skipServer,
+        'skip-install': generator.options['skip-install'],
+        'skip-user-management': application['generator-jhipster'].skipUserManagement,
+        'jhi-prefix': application['generator-jhipster'].jhiPrefix,
+        availableGeneratorConfig: generatorConfig
     });
 }
 
-function generateEntityFiles(generator, entity) {
-    const args = ['jhipster:entity', entity.name, '--regenerate', '--force'];
-    if (generator.options.debug) {
-        args.push('--debug');
-    }
-    if (generator.options['skip-install']) {
-        args.push('--skip-install');
-    }
-    if (entity.skipUserManagement) {
-        args.push('--skip-user-management');
-    }
-    if (entity.skipClient) {
-        args.push('--skip-client');
-    }
-    if (entity.skipServer) {
-        args.push('--skip-server');
-    }
-    if (!entity.noFluentMethod) {
-        args.push('--no-fluent-methods');
-    }
-    if (generator.options['skip-ui-grouping']) {
-        args.push('skip-ui-grouping');
-    }
-
-    const done = generator.async();
-    generator.spawnCommand('yo', args).on('close', () => {
-        done();
+function generateEntityFiles(generator, entity, generatorConfig) {
+    callSubGenerator(generator, '..', 'entity', {
+        force: generator.options.force,
+        debug: generator.options.debug,
+        regenerate: true,
+        'skip-install': true,
+        'skip-client': entity.skipClient,
+        'skip-server': entity.skipServer,
+        'no-fluent-methods': entity.noFluentMethod,
+        'skip-user-management': entity.skipUserManagement,
+        'skip-ui-grouping': generator.options['skip-ui-grouping'],
+        arguments: [entity.name],
+        availableGeneratorConfig: generatorConfig
     });
+}
+
+function callSubGenerator(generator, subgenPath, name, args) {
+    generator.composeWith(require.resolve(path.join(subgenPath, name)), args);
 }

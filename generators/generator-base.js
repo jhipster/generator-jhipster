@@ -2218,7 +2218,8 @@ module.exports = class extends PrivateBase {
                 'skip-client': skipClient,
                 languages: generator.languages,
                 force: generator.options.force,
-                debug: generator.options.debug
+                debug: generator.options.debug,
+                availableGeneratorConfig: generator.config
             });
         }
     }
