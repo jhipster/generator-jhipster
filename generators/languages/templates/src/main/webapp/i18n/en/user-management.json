@@ -11,6 +11,15 @@
         "delete": {
             "question": "Are you sure you want to delete user {{ login }}?"
         },
+        "reset": {
+            "button": "Reset password",
+            "title": "Password reset link",
+            "success": "The link has been successfully copied to the clipboard.",
+            "failure": "Could not copy link to clipboard.",
+            "notice": "The user will be able to reset his password with this link.",
+            "generate": " Generate link",
+            "copy": "Copy to clipboard"
+        },
         "detail": {
             "title": "User"
         },

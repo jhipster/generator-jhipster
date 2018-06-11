@@ -29,12 +29,17 @@ export const ACTION_TYPES = {
   CREATE_USER: 'userManagement/CREATE_USER',
   UPDATE_USER: 'userManagement/UPDATE_USER',
   DELETE_USER: 'userManagement/DELETE_USER',
+  RESET_CODE: 'userManagement/RESET_CODE',
+  MAIL_ENABLED: 'userManagement/MAIL_ENABLED',
   RESET: 'userManagement/RESET'
 };
 
 const initialState = {
   loading: false,
   errorMessage: null,
+  resetCode: '',
+  isGettingResetCode: false,
+  areMailsEnabled: false,
   users: [] as ReadonlyArray<IUser>,
   authorities: [] as any[],
   user: defaultValue,
@@ -69,6 +74,12 @@ export default (state: UserManagementState = initialState, action): UserManageme
         updateSuccess: false,
         updating: true
       };
+    case REQUEST(ACTION_TYPES.RESET_CODE):
+      return {
+        ...state,
+        errorMessage: null,
+        isGettingResetCode: true
+      };
     case FAILURE(ACTION_TYPES.FETCH_USERS):
     case FAILURE(ACTION_TYPES.FETCH_USER):
     case FAILURE(ACTION_TYPES.FETCH_ROLES):
@@ -81,6 +92,12 @@ export default (state: UserManagementState = initialState, action): UserManageme
         updating: false,
         updateSuccess: false,
         errorMessage: action.payload
+      };
+    case FAILURE(ACTION_TYPES.RESET_CODE):
+      return {
+        ...state,
+        errorMessage: action.payload,
+        isGettingResetCode: false
       };
     case SUCCESS(ACTION_TYPES.FETCH_ROLES):
       return {
@@ -115,6 +132,17 @@ export default (state: UserManagementState = initialState, action): UserManageme
         updating: false,
         updateSuccess: true,
         user: {}
+      };
+    case SUCCESS(ACTION_TYPES.RESET_CODE):
+      return {
+        ...state,
+        isGettingResetCode: false,
+        resetCode: action.payload.data
+      };
+    case SUCCESS(ACTION_TYPES.MAIL_ENABLED):
+      return {
+        ...state,
+        areMailsEnabled : action.payload.data
       };
     case ACTION_TYPES.RESET:
       return {
@@ -176,6 +204,16 @@ export const deleteUser: ICrudDeleteAction<IUser> = id => async dispatch => {
   dispatch(getUsers());
   return result;
 };
+
+export const getResetCode = mail => ({
+  type: ACTION_TYPES.RESET_CODE,
+  payload: axios.post('/api/account/reset-password/code', mail, { headers: { 'Content-Type': 'text/plain' } })
+});
+
+export const getMailStatus = () => ({
+  type: ACTION_TYPES.MAIL_ENABLED,
+  payload: axios.get('/api/mail/enabled')
+});
 
 export const reset = () => ({
   type: ACTION_TYPES.RESET

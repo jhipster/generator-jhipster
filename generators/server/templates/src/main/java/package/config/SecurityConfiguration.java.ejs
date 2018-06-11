@@ -237,6 +237,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
+            .antMatchers("/api/account/reset-password/code").hasAuthority(AuthoritiesConstants.ADMIN)
             <%_ } _%>
             .antMatchers("/api/**").authenticated()<% if (websocket === 'spring-websocket') { %>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)

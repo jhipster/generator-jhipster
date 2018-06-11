@@ -735,6 +735,13 @@ const serverFiles = {
             templates: [
                 { file: 'package/config/MessagingConfiguration.java', renameTo: generator => `${generator.javaDir}config/MessagingConfiguration.java` },
             ]
+        },
+        {
+            condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType !== 'oauth2',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/config/MailConfiguration.java', renameTo: generator => `${generator.javaDir}config/MailConfiguration.java` },
+            ]
         }
 
     ],
@@ -1039,7 +1046,7 @@ const serverFiles = {
             templates: [
                 'templates/mail/activationEmail.html',
                 'templates/mail/creationEmail.html',
-                'templates/mail/passwordResetEmail.html',
+                'templates/mail/passwordResetEmail.html'
             ]
         },
         {
@@ -1077,6 +1084,13 @@ const serverFiles = {
                 { file: 'package/service/mapper/package-info.java', renameTo: generator => `${generator.javaDir}service/mapper/package-info.java` },
                 { file: 'package/service/mapper/UserMapper.java', renameTo: generator => `${generator.javaDir}service/mapper/UserMapper.java` },
 
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement && generator.authenticationType !== 'oauth2',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/web/rest/MailResource.java', renameTo: generator => `${generator.javaDir}web/rest/MailResource.java` }
             ]
         },
         {

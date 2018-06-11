@@ -23,6 +23,7 @@ import UserManagement from './user-management';
 import UserManagementDetail from './user-management-detail';
 import UserManagementUpdate from './user-management-update';
 import UserManagementDeleteDialog from './user-management-delete-dialog';
+import UserManagementResetDialog from './user-management-reset-dialog';
 
 const Routes = ({ match }) => (
   <>
@@ -33,6 +34,7 @@ const Routes = ({ match }) => (
       <Route path={match.url} component={UserManagement} />
     </Switch>
     <Route path={`${match.url}/:login/delete`} component={UserManagementDeleteDialog} />
+    <Route path={`${match.url}/:login/password-reset`} component={UserManagementResetDialog} />
   </>
 );
 

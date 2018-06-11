@@ -42,6 +42,9 @@
     "core-js": "2.5.3",
     "jquery": "3.3.1",
     "moment": "2.21.0",
+    <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
+    "ngx-clipboard": "11.0.0",
+    <%_ } _%>
     "ng-jhipster": "0.5.3",
     "ngx-cookie": "2.0.1",
     "ngx-infinite-scroll": "0.5.1",

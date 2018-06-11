@@ -333,7 +333,9 @@ const files = {
                 { file: 'admin/user-management/user-management-update.component.ts', method: 'processJs' },
                 { file: 'admin/user-management/user-management-update.component.html', method: 'processHtml' },
                 { file: 'admin/user-management/user-management-delete-dialog.component.ts', method: 'processJs' },
-                { file: 'admin/user-management/user-management-delete-dialog.component.html', method: 'processHtml' }
+                { file: 'admin/user-management/user-management-delete-dialog.component.html', method: 'processHtml' },
+                { file: 'admin/user-management/user-management-reset-dialog.component.ts', method: 'processJs' },
+                { file: 'admin/user-management/user-management-reset-dialog.component.html', method: 'processHtml' }
             ]
         },
         {
@@ -372,7 +374,8 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'core/user/user.service.ts',
-                'core/user/user.model.ts'
+                'core/user/user.model.ts',
+                'core/auth/password-reset.service.ts'
             ]
         },
         {

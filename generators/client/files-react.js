@@ -288,6 +288,7 @@ const files = {
                 { file: 'modules/administration/user-management/user-management-update.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management-detail.tsx', method: 'processJsx' },
                 { file: 'modules/administration/user-management/user-management-delete-dialog.tsx', method: 'processJsx' },
+                { file: 'modules/administration/user-management/user-management-reset-dialog.tsx', method: 'processJsx' },
                 'modules/administration/user-management/user-management.reducer.ts'
             ]
         },

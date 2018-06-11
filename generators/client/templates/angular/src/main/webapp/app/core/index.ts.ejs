@@ -19,6 +19,9 @@ export * from './user/account.model';
 export * from './user/user.model';
 <%_ } _%>
 export * from './auth/principal.service';
+<%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
+export * from './auth/password-reset.service';
+<%_ } _%>
 export * from './auth/user-route-access-service';
 <%_ if (authenticationType !== 'oauth2') { _%>
 export * from './login/login-modal.service';

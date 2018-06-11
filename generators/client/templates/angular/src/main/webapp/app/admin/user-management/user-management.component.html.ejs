@@ -81,6 +81,12 @@
                             <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
+                        <button type="submit" (click)="resetPassword(user)"
+                            class="btn btn-secondary btn-sm"
+                            *ngIf="!areMailsEnabled">
+                            <fa-icon [icon]="'undo'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="userManagement.reset.button">Reset password</span>
+                        </button>
                         <button type="button" (click)="deleteUser(user)"
                                 class="btn btn-danger btn-sm" [disabled]="currentAccount.login === user.login">
                             <fa-icon [icon]="'times'"></fa-icon>

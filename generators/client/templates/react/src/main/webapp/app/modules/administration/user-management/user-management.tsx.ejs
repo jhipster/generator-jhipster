@@ -34,7 +34,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
-import { getUsers, updateUser } from './user-management.reducer';
+import { getUsers, updateUser, getMailStatus } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
 
 export interface IUserManagementProps extends StateProps, DispatchProps, RouteComponentProps<{}> {}
@@ -46,6 +46,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
 
   componentDidMount() {
     this.getUsers();
+    this.props.getMailStatus();
   }
 
   sort = prop => () => {
@@ -75,7 +76,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
   };
 
   render() {
-    const { users, account, match, totalItems } = this.props;
+    const { users, account, match, totalItems, areMailsEnabled } = this.props;
     return (
       <div>
         <h2 className="userManagement-page-heading">
@@ -164,6 +165,19 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                     >
                       <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                     </Button>
+                    {!areMailsEnabled ? (
+                      <Button
+                        tag={Link}
+                        to={`${match.url}/${user.login}/password-reset`}
+                        color="secondary"
+                        size="sm"
+                      >
+                        <FontAwesomeIcon icon="undo"/>{' '}
+                        <span className="d-none d-md-inline">
+                          <Translate contentKey="userManagement.reset.button" />
+                        </span>
+                      </Button>
+                    ) : null}
                     <Button
                       tag={Link} to={`${match.url}/${user.login}/delete`}
                       color="danger" size="sm" disabled={account.login === user.login}
@@ -193,10 +207,11 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
 const mapStateToProps = (storeState: IRootState) => ({
   users: storeState.userManagement.users,
   totalItems: storeState.userManagement.totalItems,
-  account: storeState.authentication.account
+  account: storeState.authentication.account,
+  areMailsEnabled: storeState.userManagement.areMailsEnabled,
 });
 
-const mapDispatchToProps = { getUsers, updateUser };
+const mapDispatchToProps = { getUsers, updateUser, getMailStatus };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;

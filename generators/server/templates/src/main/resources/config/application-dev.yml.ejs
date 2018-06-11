@@ -352,6 +352,7 @@ jhipster:
             key: <%= rememberMeKey %>
 <%_ } _%>
     mail: # specific JHipster mail property, for standard properties see MailProperties
+        enabled: false
         from: <%= baseName %>@localhost
         base-url: http://127.0.0.1:<%= serverPort %>
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration

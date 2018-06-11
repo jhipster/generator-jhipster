@@ -28,8 +28,8 @@ import { ITEMS_PER_PAGE } from 'app/shared';
 <%_ } else { _%>
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 <%_ } _%>
-import { Principal, UserService, User } from 'app/core';
-import { UserMgmtDeleteDialogComponent } from 'app/admin';
+import { Principal, UserService, User, PasswordResetService } from 'app/core';
+import { UserMgmtDeleteDialogComponent, UserMgmtResetDialogComponent } from 'app/admin';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-user-mgmt',
@@ -41,6 +41,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     users: User[];
     error: any;
     success: any;
+    areMailsEnabled: boolean;
     <%_ if (databaseType !== 'cassandra') { _%>
     routeData: any;
     links: any;
@@ -57,6 +58,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private alertService: JhiAlertService,
         private principal: Principal,
+        private passwordResetService: PasswordResetService,
         <%_ if (prodDatabaseType !== 'cassandra') { _%>
         private parseLinks: JhiParseLinks,
         private activatedRoute: ActivatedRoute,
@@ -82,6 +84,9 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
             this.loadAll();
             this.registerChangeInUsers();
         });
+        this.passwordResetService
+            .areMailsEnabled()
+            .subscribe(result => (this.areMailsEnabled = result), () => (this.areMailsEnabled = false));
     }
 
     ngOnDestroy() {
@@ -163,6 +168,11 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
             // Left blank intentionally, nothing to do here
             }
         );
+    }
+
+    resetPassword(user: User) {
+        const modalRef = this.modalService.open(UserMgmtResetDialogComponent, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.user = user;
     }
 
     private onSuccess(data, headers) {

@@ -31,7 +31,10 @@ import userManagement, {
   getUser,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  deleteUser,
+  getMailStatus,
+  getResetCode
 } from 'app/modules/administration/user-management/user-management.reducer';
 
 describe('User management reducer tests', () => {
@@ -49,6 +52,9 @@ describe('User management reducer tests', () => {
       errorMessage: null,
       updating: false,
       updateSuccess: false,
+      resetCode: '',
+      areMailsEnabled: false,
+      isGettingResetCode: false,
       totalItems: 0
     });
     expect(isEmpty(state.users));
@@ -174,6 +180,22 @@ describe('User management reducer tests', () => {
       });
       expect(isEmpty(toTest.user));
     });
+
+    it('should correctly enable mails', () => {
+      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.MAIL_ENABLED), payload: { data: true } });
+
+      expect(toTest).toMatchObject({
+        areMailsEnabled: true
+      });
+    });
+
+    it('should set a reset code', () => {
+      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.RESET_CODE), payload: { data: 'superSecretResetCode' } });
+
+      expect(toTest).toMatchObject({
+        resetCode: 'superSecretResetCode'
+      });
+    });
   });
 
   describe('Actions', () => {
@@ -293,6 +315,30 @@ describe('User management reducer tests', () => {
         }
       ];
       await store.dispatch(deleteUser('admin')).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches MAIL_ENABLED_PENDING and MAIL_ENABLED_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.MAIL_ENABLED)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.MAIL_ENABLED),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getMailStatus()).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches RESET_CODE_PENDING and RESET_CODE_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.RESET_CODE)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.RESET_CODE),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getResetCode('mail')).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
   });
 });

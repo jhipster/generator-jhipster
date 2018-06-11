@@ -9,7 +9,16 @@
         "updated": "L'utilisateur {{ param }} a été mis à jour.",
         "deleted": "L'utilisateur {{ param }} a été supprimé.",
         "delete": {
-            "question": "Etes-vous certain de vouloir supprimer l'utilisateur {{ login }} ?"
+            "question": "Êtes-vous certain de vouloir supprimer l'utilisateur {{ login }} ?"
+        },
+        "reset": {
+            "button": "Réinitialiser le mot de passe",
+            "title": "Lien de réinitialisation de mot de passe",
+            "success": "Le lien a bien été copier dans le presse-papiers.",
+            "failure": "La copie du lien vers le presse-papiers a échoué.",
+            "notice": "L'utilisateur sera en mesure de réinitialiser son mot de passe grace à ce lien.",
+            "generate": "Générer un lien",
+            "copy": "Copier vers le presse papier"
         },
         "detail": {
             "title": "Utilisateur"

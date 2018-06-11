@@ -1,0 +1,97 @@
+import * as React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+import { connect } from 'react-redux';
+import {
+  Modal,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  Button,
+  Alert,
+  Form,
+  InputGroup,
+  InputGroupAddon,
+  Input
+} from 'reactstrap';
+import { translate, Translate, getBasePath } from 'react-jhipster';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { toast } from 'react-toastify';
+
+import { IRootState } from 'app/shared/reducers';
+import { getResetCode, getUser } from 'app/modules/administration/user-management/user-management.reducer';
+
+export interface IUserManagementResetDialogProps extends StateProps, DispatchProps, RouteComponentProps<{ login: string }> {}
+
+export class UserManagementResetDialog extends React.Component<IUserManagementResetDialogProps> {
+
+  componentDidMount() {
+    this.props.getUser(this.props.match.params.login);
+  }
+
+  handleClose = event => {
+    event.stopPropagation();
+    this.props.history.goBack();
+  };
+
+  requestResetCode = () => {
+    this.props.getResetCode(this.props.user.email);
+  };
+
+  notifyCopy = () => {
+    toast.success(translate('userManagement.reset.success'));
+  };
+
+  render() {
+    const { isGettingResetCode, user, resetCode } = this.props;
+    const resetLink = resetCode !== '' ? (getBasePath() + '#/reset/finish/' + resetCode): '';
+
+    return (
+      <Modal isOpen toggle={this.handleClose}>
+        <ModalHeader toggle={this.handleClose}>
+          <Translate contentKey="userManagement.reset.title" />
+        </ModalHeader>
+        <ModalBody>
+          <p>
+            <Translate contentKey={'userManagement.reset.notice'}/>
+          </p>
+          <Form>
+            <InputGroup>
+              <Input type="text" id="reset-link" value={resetLink} placeholder={translate('userManagement.reset.title')} readOnly />
+              <InputGroupAddon color="primary" addonType="append">
+                <Button color="primary" disabled={user.email === null} onClick={this.requestResetCode}>
+                  <FontAwesomeIcon icon="sync" spin={isGettingResetCode} /> <Translate contentKey={'userManagement.reset.generate'}/>
+                </Button>
+              </InputGroupAddon>
+            </InputGroup>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <CopyToClipboard text={resetLink} onCopy={this.notifyCopy}>
+            <Button color="primary" disabled={user.email === null}>
+              <FontAwesomeIcon icon="clipboard" />{' '}
+              <Translate contentKey="userManagement.reset.copy" />
+            </Button>
+          </CopyToClipboard>
+          <Button color="danger" onClick={this.handleClose}>
+            <FontAwesomeIcon icon="times" />{' '}
+            <Translate contentKey="entity.action.cancel" />
+          </Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+}
+
+const mapStateToProps = (storeState: IRootState) => ({
+  user: storeState.userManagement.user,
+  isGettingResetCode: storeState.userManagement.isGettingResetCode,
+  resetCode: storeState.userManagement.resetCode
+});
+
+const mapDispatchToProps = { getResetCode, getUser };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserManagementResetDialog);

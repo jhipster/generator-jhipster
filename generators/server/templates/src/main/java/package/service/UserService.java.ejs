@@ -35,6 +35,9 @@ import <%=packageName%>.service.util.RandomUtil;
 <%_ } _%>
 import <%=packageName%>.service.dto.UserDTO;
 
+<%_ if (authenticationType !== 'oauth2') { _%>
+import io.github.jhipster.config.JHipsterProperties;
+<%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -88,6 +91,8 @@ public class UserService {
     <%_ if (authenticationType !== 'oauth2') { _%>
 
     private final PasswordEncoder passwordEncoder;
+
+    private final JHipsterProperties jHipsterProperties;
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -106,10 +111,11 @@ public class UserService {
     private final CacheManager cacheManager;
     <%_ } _%>
 
-    public UserService(UserRepository userRepository<% if (authenticationType !== 'oauth2') { %>, PasswordEncoder passwordEncoder<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
+    public UserService(UserRepository userRepository<% if (authenticationType !== 'oauth2') { %>, PasswordEncoder passwordEncoder, JHipsterProperties jHipsterProperties<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
         this.userRepository = userRepository;
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.passwordEncoder = passwordEncoder;
+        this.jHipsterProperties = jHipsterProperties;
         <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.userSearchRepository = userSearchRepository;
@@ -198,8 +204,8 @@ public class UserService {
         newUser.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
         newUser.setLangKey(userDTO.getLangKey());
-        // new user is not active
-        newUser.setActivated(false);
+        // new user is not active if mails are enabled
+        newUser.setActivated(!jHipsterProperties.getMail().isEnabled());
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>

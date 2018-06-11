@@ -1,0 +1,40 @@
+<form name="resetForm">
+    <div class="modal-header">
+        <h4 class="modal-title" jhiTranslate="userManagement.reset.title">Password reset link</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+        <div class="alert alert-success" *ngIf="showClipboardSuccess">
+            <p jhiTranslate="userManagement.reset.success">The link has been successfully copied to the clipboard.</p>
+        </div>
+        <div class="alert alert-danger" *ngIf="showClipboardError">
+            <p jhiTranslate="userManagement.reset.failure">Could not copy link to clipboard.</p>
+        </div>
+        <jhi-alert-error></jhi-alert-error>
+        <p jhiTranslate="userManagement.reset.notice">The user will be able to reset his password with this link.</p>
+        <form>
+            <label for="reset-link"></label>
+            <input type="text" id="reset-link" [value]="resetLink" size="50" readonly #resetLinkInput />
+            <button class="btn btn-primary" (click)="generateResetLink(user.email)">
+                <span *ngIf="isGeneratingLink">
+                    <i class="fas fa-sync fa-spin"></i>
+                </span>
+                <span *ngIf="!isGeneratingLink">
+                    <i class="fas fa-sync"></i>
+                </span>&nbsp;
+                <span jhiTranslate="userManagement.reset.generate">Generate link</span>
+            </button>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div>
+            <button type="button" class="btn btn-primary" jhiTranslate="userManagement.reset.copy" [ngxClipboard]="resetLinkInput" (cbOnSuccess)="showClipboardSuccess = true" (cbOnError)="showClipboardError = true">
+                <i class="fas fa-copy"></i>&nbsp;<span>Copy to clipboard</span>
+            </button>
+        </div>
+        <button type="submit" class="btn btn-secondary" jhiTranslate="entity.action.cancel" data-dismiss="modal" (click)="clear()">
+            <i class="fas fa-times"></i>&nbsp;<span>Cancel</span>
+        </button>
+    </div>
+</form>

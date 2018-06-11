@@ -107,6 +107,7 @@ import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -133,12 +134,14 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
+
     <%_ if (authenticationType === 'session') { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
+    private final boolean areMailsEnabled;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService<% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
+    public AccountResource(UserRepository userRepository, UserService userService, @Autowired(required = false) MailService mailService<% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
 
         this.userRepository = userRepository;
         this.userService = userService;
@@ -146,6 +149,7 @@ public class AccountResource {
         <%_ if (authenticationType === 'session') { _%>
         this.persistentTokenRepository = persistentTokenRepository;
         <%_ } _%>
+        this.areMailsEnabled = mailService != null;
     }
 
     /**
@@ -166,7 +170,9 @@ public class AccountResource {
         userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {throw new LoginAlreadyUsedException();});
         userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {throw new EmailAlreadyUsedException();});
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
+        if (areMailsEnabled) {
+            mailService.sendActivationEmail(user);
+        }
     }
 
     /**
@@ -305,10 +311,12 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
     @Timed
     public void requestPasswordReset(@RequestBody String mail) {
-       mailService.sendPasswordResetMail(
-           userService.requestPasswordReset(mail)
-               .orElseThrow(EmailNotFoundException::new)
-       );
+        if (areMailsEnabled) {
+            mailService.sendPasswordResetMail(
+                userService.requestPasswordReset(mail)
+                    .orElseThrow(EmailNotFoundException::new)
+            );
+        }
     }
 
     /**
@@ -330,6 +338,19 @@ public class AccountResource {
         if (!user.isPresent()) {
             throw new InternalServerErrorException("No user was found for this reset key");
         }
+    }
+
+    /**
+     * POST /account/reset-password/code : returns a code that can be used to change a password
+     *
+     * @param mail the mail of the user
+     * @throws EmailNotFoundException 400 (Bad Request) if the email address is not registered
+     */
+    @PostMapping(path = "/account/reset-password/code")
+    @Timed
+    public String requestPasswordResetAndReturnLink(@RequestBody String mail) {
+        User user  = userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new);
+        return user.getResetKey();
     }
 
     private static boolean checkPasswordLength(String password) {
