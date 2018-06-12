@@ -9,4 +9,3 @@ entity WithoutSearch {
 }
 
 search * with elasticsearch except WithoutSearch
-
