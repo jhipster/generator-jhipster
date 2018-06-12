@@ -148,17 +148,6 @@ describe('JDLRelationship', () => {
           ).to.be.false;
         });
       });
-      context('because it lacks an injected field', () => {
-        it('returns false', () => {
-          expect(
-            JDLRelationship.isValid({
-              from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-              to: { name: 'Valid', tableName: 't_valid', fields: [] },
-              type: RelationshipTypes.MANY_TO_MANY
-            })
-          ).to.be.false;
-        });
-      });
     });
     context('when passing a valid object', () => {
       it('returns true', () => {
@@ -191,7 +180,7 @@ describe('JDLRelationship', () => {
         it('fails', () => {
           expect(() => {
             relationship.validate();
-          }).to.throw('The exception is not in a valid state.\nErrors: Declaration error (no injected field in both sides).');
+          }).to.throw('In the Many-to-Many relationship from Valid2 to Valid, only bidirectionality is supported for a Many-to-Many relationship.');
         });
       });
       context('because the type doesn\'t exist', () => {
