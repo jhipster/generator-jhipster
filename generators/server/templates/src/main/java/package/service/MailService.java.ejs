@@ -41,6 +41,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
  * <p>
  * We use the @Async annotation to send emails asynchronously.
  */
+@Service
 public class MailService {
 
     private final Logger log = LoggerFactory.getLogger(MailService.class);
@@ -64,6 +65,10 @@ public class MailService {
         this.javaMailSender = javaMailSender;
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
+    }
+
+    public boolean isEnabled() {
+        return this.jHipsterProperties.getMail().isEnabled();
     }
 
     @Async

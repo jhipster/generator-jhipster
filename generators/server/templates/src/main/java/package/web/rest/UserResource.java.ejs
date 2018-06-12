@@ -108,21 +108,17 @@ public class UserResource {
     private final UserRepository userRepository;
 
     private final MailService mailService;
-
-    private final boolean areMailsEnabled;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 
     private final UserSearchRepository userSearchRepository;
 <%_ } _%>
 
-    public UserResource(UserService userService<% if (authenticationType !== 'oauth2') { %>, UserRepository userRepository, @Autowired(required = false) MailService mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
-
+    public UserResource(UserService userService<% if (authenticationType !== 'oauth2') { %>, UserRepository userRepository, MailService mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
         this.userService = userService;
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.userRepository = userRepository;
         this.mailService = mailService;
-        this.areMailsEnabled = mailService != null;
         <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.userSearchRepository = userSearchRepository;
@@ -157,7 +153,7 @@ public class UserResource {
             throw new EmailAlreadyUsedException();
         } else {
             User newUser = userService.createUser(userDTO);
-            if (areMailsEnabled) {
+            if (mailService.isEnabled()) {
                 mailService.sendCreationEmail(newUser);
             }
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))

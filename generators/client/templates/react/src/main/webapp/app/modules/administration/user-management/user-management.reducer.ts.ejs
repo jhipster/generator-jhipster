@@ -39,7 +39,7 @@ const initialState = {
   errorMessage: null,
   resetCode: '',
   isGettingResetCode: false,
-  areMailsEnabled: false,
+  isMailEnabled: false,
   users: [] as ReadonlyArray<IUser>,
   authorities: [] as any[],
   user: defaultValue,
@@ -142,7 +142,7 @@ export default (state: UserManagementState = initialState, action): UserManageme
     case SUCCESS(ACTION_TYPES.MAIL_ENABLED):
       return {
         ...state,
-        areMailsEnabled : action.payload.data
+        isMailEnabled: action.payload.data['mailEnabled']
       };
     case ACTION_TYPES.RESET:
       return {
@@ -212,7 +212,7 @@ export const getResetCode = mail => ({
 
 export const getMailStatus = () => ({
   type: ACTION_TYPES.MAIL_ENABLED,
-  payload: axios.get('/api/mail/enabled')
+  payload: axios.get('/management/info')
 });
 
 export const reset = () => ({

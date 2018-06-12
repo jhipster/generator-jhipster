@@ -41,7 +41,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     users: User[];
     error: any;
     success: any;
-    areMailsEnabled: boolean;
+    isMailEnabled: boolean;
     <%_ if (databaseType !== 'cassandra') { _%>
     routeData: any;
     links: any;
@@ -85,8 +85,8 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
             this.registerChangeInUsers();
         });
         this.passwordResetService
-            .areMailsEnabled()
-            .subscribe(result => (this.areMailsEnabled = result), () => (this.areMailsEnabled = false));
+            .getMailStatus()
+            .subscribe(result => (this.isMailEnabled = result['mailEnabled']), () => (this.isMailEnabled = false));
     }
 
     ngOnDestroy() {

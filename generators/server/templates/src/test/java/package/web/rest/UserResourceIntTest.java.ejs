@@ -154,7 +154,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
 
-    @Autowired(required = false)
+    @Autowired
     private MailService mailService;
     <%_ } _%>
 

@@ -76,7 +76,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
   };
 
   render() {
-    const { users, account, match, totalItems, areMailsEnabled } = this.props;
+    const { users, account, match, totalItems, isMailEnabled } = this.props;
     return (
       <div>
         <h2 className="userManagement-page-heading">
@@ -165,7 +165,7 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
                     >
                       <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                     </Button>
-                    {!areMailsEnabled ? (
+                    {!isMailEnabled ? (
                       <Button
                         tag={Link}
                         to={`${match.url}/${user.login}/password-reset`}
@@ -208,7 +208,7 @@ const mapStateToProps = (storeState: IRootState) => ({
   users: storeState.userManagement.users,
   totalItems: storeState.userManagement.totalItems,
   account: storeState.authentication.account,
-  areMailsEnabled: storeState.userManagement.areMailsEnabled,
+  isMailEnabled: storeState.userManagement.isMailEnabled,
 });
 
 const mapDispatchToProps = { getUsers, updateUser, getMailStatus };

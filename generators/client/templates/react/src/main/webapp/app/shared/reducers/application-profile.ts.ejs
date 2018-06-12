@@ -26,6 +26,7 @@ export const ACTION_TYPES = {
 
 const initialState = {
   ribbonEnv: '',
+  isMailEnabled: false,
   inProduction: true,
   isSwaggerEnabled: false
 };
@@ -39,6 +40,7 @@ export default (state: ApplicationProfileState = initialState, action): Applicat
       return {
         ...state,
         ribbonEnv: data['display-ribbon-on-profiles'],
+        isMailEnabled: data['mailEnabled'],
         inProduction: data.activeProfiles.includes('prod'),
         isSwaggerEnabled: data.activeProfiles.includes('swagger')
       };
