@@ -1,2 +1,3 @@
 lib/dsl/pegjs_parser.js
+lib/dsl/linting_parser.js
 coverage

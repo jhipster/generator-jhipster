@@ -3,6 +3,7 @@
   "check-coverage": true,
   "exclude": [
     "lib/dsl/pegjs_parser.js",
+    "lib/dsl/linting_parser.js",
     "test/**/*.js"
   ],
   "reporter": [
