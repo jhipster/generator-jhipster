@@ -212,8 +212,8 @@ module.exports = class extends BaseGenerator {
             this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
 
-        this.log('\nYou can deploy all your apps by running the below bash command: ');
-        this.log(`  ${chalk.cyan(`bash ${this.directoryPath}k8s/kubectl-apply.sh`)}`);
+        this.log('\nYou can deploy all your apps by running the following script:');
+        this.log(`  ${chalk.cyan(`./kubectl-apply.sh`)}`);
         if (this.gatewayNb + this.monolithicNb >= 1) {
             const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
             this.log('\nUse these commands to find your application\'s IP addresses:');
