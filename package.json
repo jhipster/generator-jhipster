@@ -16,6 +16,7 @@
     "posttest": "yarn coverage",
     "coverage": "nyc --reporter=text-summary report",
     "peg-parse": "pegjs -o lib/dsl/pegjs_parser.js lib/dsl/grammar.txt",
+    "linter:peg-parse": "pegjs --dependency _:lodash -o lib/dsl/linting_parser.js lib/dsl/linting_grammar.txt",
     "prepublish": "yarn peg-parse && yarn test",
     "release": "git push && git push --tags && npm publish",
     "release-patch": "npm version patch -a -m \"Update to %s\" && yarn release",
