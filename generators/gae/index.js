@@ -456,11 +456,15 @@ module.exports = class extends BaseGenerator {
             },
 */
 
-            addMavenPlugin() {
+            addMaven() {
                 if (this.buildTool === 'maven') {
                     this.render('pom-plugin.xml.ejs', (rendered) => {
-                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.1', rendered);
+                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.1', rendered.trim());
                     });
+                    this.render('pom-profile.xml.ejs', (rendered) => {
+                        this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
+                    });
+ 
                 }
             }
         };
@@ -472,7 +476,7 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
 
                 this.log(chalk.bold(`\nRun App Engine DevServer Locally: ./mvnw appengine:run -DskipTests`));
-                this.log(chalk.bold(`\nDeploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod`));
+                this.log(chalk.bold(`\nDeploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod,prod-gae`));
 /*
                 if (this.gcpSkipBuild || this.gcpDeployType === 'git') {
                     this.log(chalk.bold('\nSkipping build'));

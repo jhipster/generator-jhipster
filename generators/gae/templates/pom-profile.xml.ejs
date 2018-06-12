@@ -1,0 +1,8 @@
+            <activation>
+                <property>
+                    <name>profile.prod</name>
+                </property>
+            </activation>
+            <properties>
+                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase},gae</spring.profiles.active>
+            </properties>
