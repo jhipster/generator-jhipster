@@ -109,6 +109,7 @@ module.exports = class extends BaseGenerator {
         });
 
         this.context = {};
+
         this.setupEntityOptions(this, this, this.context);
         this.registerClientTransforms();
         const blueprint = this.config.get('blueprint');
@@ -563,11 +564,7 @@ module.exports = class extends BaseGenerator {
                             field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"') : field.fieldValidateRulesPattern;
                     }
 
-                    if (_.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
-                        field.fieldValidate = true;
-                    } else {
-                        field.fieldValidate = false;
-                    }
+                    field.fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
 
                     if (fieldType === 'ZonedDateTime') {
                         context.fieldsContainZonedDateTime = true;
