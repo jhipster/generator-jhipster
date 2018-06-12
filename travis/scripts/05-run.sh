@@ -63,8 +63,14 @@ fi
 #-------------------------------------------------------------------------------
 launchCurlOrProtractor() {
 
-    local -i retryCount=1
     local -ir maxRetry=10
+    local -i retryCount=1
+    if [[ "$IS_TRAVIS_CI" -eq 1 ]] ; then
+        local -ir sleepTime=10
+    else
+        # Otherwise, not enough for slow computers
+        local -ir sleepTime=15
+    fi
     declare -gi serverPort
     serverPort=$(grep --color=never -E \
         '"serverPort"\s*:\s*"[0-9]+"' .yo-rc.json \
@@ -84,7 +90,7 @@ launchCurlOrProtractor() {
         echo "[$(date)] Application not reachable yet." \
             " Sleep and retry - retryCount =" $retryCount "/" $maxRetry
         retryCount=$((retryCount+1))
-        sleep 10
+        sleep "$sleepTime"
     done
     set +x
 

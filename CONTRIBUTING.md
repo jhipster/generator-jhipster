@@ -268,7 +268,7 @@ Command name can be as below:
 2. `node` and `javac` LTS
 
 #### Only for `verify`
-1. `docker` and `docker-compose` installed. `docker` service should be started, and properly configured (see beginning of the article https://www.jhipster.tech/docker-compose/).
+1. `docker` and `docker-compose` installed. `docker` service should be started, and properly configured (please read `./build-samples.sh help`).
 2. `chromium` or `google-chrome`
 
 #### Examples:

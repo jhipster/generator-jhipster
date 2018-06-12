@@ -669,9 +669,13 @@ function usage() {
         "\\t2. \`node' and \`javac' LTS\\n" \
         "Only for 'verify'\\n" \
         "\\t1. \`docker' and \`docker-compose' installed." \
-        "\`docker' service should be started, and properly configured" \
-        "(see beginning of the article" \
-        "https://www.jhipster.tech/docker-compose/).\\n" \
+        "\`docker' service should be started, and properly configured.\\n" \
+        "\\t\\t* On Windows and Mac OS X, Kitematic is an easy-to-use graphical" \
+        "interface provided with the Docker Toolbox," \
+        " which will makes using Docker a lot easier.\\n" \
+        "\\t\\t* On Linux see https://docs.docker.com/install/#server and" \
+        "manage docker as a non-root user " \
+        "(see https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user)\\n" \
         "\\t2. \`chromium' or \`google-chrome'\\n\\n" \
         "\\t""$URED""Examples:""$NC""\\n" \
     "\`$ ./build-samples.sh generate ngx-default --colorizelogfile' " \
@@ -934,7 +938,8 @@ function testRequierments() {
 
         printCommandAndEval "docker --version" || \
             errorInBuildExitCurrentSample \
-                "please install docker and start the service. "
+                "please install docker and start the service." \
+                "For help, read \`./build-samples.sh help'."
         echo
 
         printCommandAndEval "docker-compose --version" || \
@@ -2028,7 +2033,7 @@ declare -r URED="\\033[4;31m"
 declare -r BRED="$NC""\\033[1;31m"
 declare -r BLUE="\\033[0;34m"
 
-declare -r JHIPSTER_PATTERN="^[^-][a-z0-9]{2,}[a-z0-9-]+[a-z0-9]+$"
+declare -r JHIPSTER_PATTERN="^[^-][a-z0-9]+[a-z0-9-]+[a-z0-9]+$"
 declare -r JHIPSTER_LIST_PATTERN="^[^-]([a-z0-9]{2,}[a-z0-9-]{2,},)+([a-z0-9]{2,}[a-z0-9-]{2,}[a-z0-9]+)+$"
 
 # Argument parser functions {{{2
@@ -2215,7 +2220,7 @@ elif [[ "$COMMAND_NAME" == "start" ]] ; then
     else
         exitScriptWithError "you could only launch only one sample." \
             "A sample name contains only alphanumeric or dash characters, " \
-            "it not start by a dash."
+            "it should not start by a dash."
     fi
 elif [[ "$COMMAND_NAME" == "generate" ]] || \
     [[ "$COMMAND_NAME" == "verify" ]] ; then

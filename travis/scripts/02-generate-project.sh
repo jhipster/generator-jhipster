@@ -27,11 +27,7 @@ function echoSetX() {
 
 function generateProject() {
     jhipster --force --no-insight --skip-checks --with-entities \
-        --skip-git --skip-commit-hook --skip-install
-    if [[ $IS_TRAVIS_CI -eq 1 ]] \
-        || [[ "$IS_SKIP_CLIENT" -eq 1 ]]; then
-        yarn install
-    fi
+        --skip-git --skip-commit-hook
     ls -la
 }
 

@@ -12,4 +12,4 @@ test/temp/
 .DS_Store
 /.jhipster
 yarn-error.log
-,.sw?
+*.sw?
