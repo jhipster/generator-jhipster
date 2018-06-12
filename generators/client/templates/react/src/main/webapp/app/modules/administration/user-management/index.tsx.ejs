@@ -19,7 +19,7 @@
 import * as React from 'react';
 import { Switch } from 'react-router-dom';
 
-import RouteWrapper from 'app/shared/error-boundary/route-wrapper';
+import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import UserManagement from './user-management';
 import UserManagementDetail from './user-management-detail';
 import UserManagementUpdate from './user-management-update';
@@ -28,12 +28,12 @@ import UserManagementDeleteDialog from './user-management-delete-dialog';
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <RouteWrapper exact path={`${match.url}/new`} component={UserManagementUpdate} />
-      <RouteWrapper exact path={`${match.url}/:login/edit`} component={UserManagementUpdate} />
-      <RouteWrapper exact path={`${match.url}/:login`} component={UserManagementDetail} />
-      <RouteWrapper path={match.url} component={UserManagement} />
+      <ErrorBoundaryRoute exact path={`${match.url}/new`} component={UserManagementUpdate} />
+      <ErrorBoundaryRoute exact path={`${match.url}/:login/edit`} component={UserManagementUpdate} />
+      <ErrorBoundaryRoute exact path={`${match.url}/:login`} component={UserManagementDetail} />
+      <ErrorBoundaryRoute path={match.url} component={UserManagement} />
     </Switch>
-    <RouteWrapper path={`${match.url}/:login/delete`} component={UserManagementDeleteDialog} />
+    <ErrorBoundaryRoute path={`${match.url}/:login/delete`} component={UserManagementDeleteDialog} />
   </>
 );
 

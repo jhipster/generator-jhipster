@@ -1,13 +1,16 @@
 import * as React from 'react';
 
-class ErrorBoundary extends React.Component<{ children: any }, { error: any; errorInfo: any }> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: undefined,
-      errorInfo: undefined
-    };
-  }
+interface IErrorBoundaryProps {
+  readonly children: JSX.Element;
+}
+
+interface IErrorBoundaryState {
+  readonly error: any;
+  readonly errorInfo: any;
+}
+
+class ErrorBoundary extends React.Component<IErrorBoundaryProps, IErrorBoundaryState> {
+  readonly state: IErrorBoundaryState = { error: undefined, errorInfo: undefined };
 
   componentDidCatch(error, errorInfo) {
     this.setState({
@@ -20,13 +23,13 @@ class ErrorBoundary extends React.Component<{ children: any }, { error: any; err
     if (this.state.errorInfo) {
       const errorDetails =
         process.env.NODE_ENV === 'development' ? (
-          <details className="error--preserve-space">
+          <details className="preserve-space">
             {this.state.error && this.state.error.toString()}
             <br />
             {this.state.errorInfo.componentStack}
           </details>
         ) : (
-          ''
+          undefined
         );
       return (
         <div>
