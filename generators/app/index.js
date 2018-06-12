@@ -130,7 +130,6 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        this.availableGeneratorConfig = this.options.availableGeneratorConfig;
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
@@ -190,9 +189,6 @@ module.exports = class extends BaseGenerator {
             },
 
             setupconsts() {
-                if (this.availableGeneratorConfig) {
-                    this.config = this.availableGeneratorConfig;
-                }
                 this.applicationType = this.config.get('applicationType');
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
@@ -277,8 +273,7 @@ module.exports = class extends BaseGenerator {
                     'client-hook': !this.skipClient,
                     configOptions: this.configOptions,
                     force: this.options.force,
-                    debug: this.isDebugEnabled,
-                    availableGeneratorConfig: this.availableGeneratorConfig
+                    debug: this.isDebugEnabled
                 });
             },
 
@@ -290,8 +285,7 @@ module.exports = class extends BaseGenerator {
                     'skip-commit-hook': this.options['skip-commit-hook'],
                     configOptions: this.configOptions,
                     force: this.options.force,
-                    debug: this.isDebugEnabled,
-                    availableGeneratorConfig: this.availableGeneratorConfig
+                    debug: this.isDebugEnabled
                 });
             },
 
@@ -363,8 +357,7 @@ module.exports = class extends BaseGenerator {
                             'skip-install': true,
                             force: this.options.force,
                             debug: this.isDebugEnabled,
-                            arguments: [entity.name],
-                            availableGeneratorConfig: this.config
+                            arguments: [entity.name]
                         });
                     });
                 }

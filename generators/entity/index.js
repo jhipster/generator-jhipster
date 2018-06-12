@@ -109,7 +109,6 @@ module.exports = class extends BaseGenerator {
         });
 
         this.context = {};
-        this.availableGeneratorConfig = this.options.availableGeneratorConfig;
 
         this.setupEntityOptions(this, this, this.context);
         this.registerClientTransforms();
@@ -130,12 +129,6 @@ module.exports = class extends BaseGenerator {
         if (useBlueprint) return;
         return {
             getConfig() {
-                if (this.availableGeneratorConfig) {
-                    this.config = this.availableGeneratorConfig;
-                    this.config.getAll = () => this.config;
-                    this.config.get = key => this.config[key];
-                    this.config.set = (key, value) => { this.config[key] = value; };
-                }
                 const context = this.context;
                 context.useConfigurationFile = false;
                 this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;

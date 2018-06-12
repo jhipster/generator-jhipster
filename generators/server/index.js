@@ -77,10 +77,6 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        if (this.options.availableGeneratorConfig) {
-            this.config = this.options.availableGeneratorConfig;
-            this.config.get = key => this.config[key];
-        }
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         // use global variable since getters dont have access to instance property

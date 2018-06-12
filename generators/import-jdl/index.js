@@ -235,8 +235,7 @@ function generateApplicationFiles(generator, application, generatorConfig) {
         'skip-server': generator.options.skipServer,
         'skip-install': generator.options['skip-install'],
         'skip-user-management': application['generator-jhipster'].skipUserManagement,
-        'jhi-prefix': application['generator-jhipster'].jhiPrefix,
-        availableGeneratorConfig: generatorConfig
+        'jhi-prefix': application['generator-jhipster'].jhiPrefix
     });
 }
 
@@ -251,8 +250,7 @@ function generateEntityFiles(generator, entity, generatorConfig) {
         'no-fluent-methods': entity.noFluentMethod,
         'skip-user-management': entity.skipUserManagement,
         'skip-ui-grouping': generator.options['skip-ui-grouping'],
-        arguments: [entity.name],
-        availableGeneratorConfig: generatorConfig
+        arguments: [entity.name]
     });
 }
 
