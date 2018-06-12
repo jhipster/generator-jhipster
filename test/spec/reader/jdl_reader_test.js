@@ -135,4 +135,76 @@ describe('JDLReader', () => {
       });
     });
   });
+  describe('::lintFiles', () => {
+    context('when passing invalid parameters', () => {
+      context('such as nil', () => {
+        it('throws an error', () => {
+          expect(() => {
+            JDLReader.lintFiles(null);
+          }).to.throw('The files must be passed to be linted.');
+        });
+      });
+      context('such as an empty array', () => {
+        it('throws an error', () => {
+          expect(() => {
+            JDLReader.lintFiles([]);
+          }).to.throw('The files must be passed to be linted.');
+        });
+      });
+      context('such as files without the \'.jh\' or \'.jdl\' file extension', () => {
+        it('throws an error', () => {
+          expect(() => {
+            JDLReader.lintFiles(['../../test_files/invalid_file.txt']);
+          }).to.throw('The passed file \'../../test_files/invalid_file.txt\' must end ' +
+            'with \'.jh\' or \'.jdl\' to be valid.');
+        });
+      });
+      context('such as files that do not exist', () => {
+        it('throws an error', () => {
+          expect(() => {
+            JDLReader.lintFiles(['nofile.jh']);
+          }).to.throw('The passed file \'nofile.jh\' must exist and must not be a directory.');
+        });
+      });
+      context('such as folders', () => {
+        it('throws an error', () => {
+          expect(() => {
+            JDLReader.lintFiles(['../../test_files/folder.jdl']);
+          }).to.throw('The passed file \'../../test_files/folder.jdl\' must exist and must not be a directory.');
+        });
+      });
+    });
+    context('when passing valid parameters', () => {
+      context('when parsing a file containing useless curly braces', () => {
+        let content = null;
+
+        before(() => {
+          content = JDLReader.lintFiles(['./test/test_files/lint/useless_curly_braces.jdl']);
+        });
+
+        it('counts it', () => {
+          expect(content.errors.ENT_SHORTER_DECL).to.have.lengthOf(1);
+        });
+        it('tells which entity', () => {
+          expect(content.errors.ENT_SHORTER_DECL[0].entityName).to.equal('B');
+        });
+      });
+      context('when parsing a file containing useless table names', () => {
+        let content = null;
+
+        before(() => {
+          content = JDLReader.lintFiles(['./test/test_files/lint/useless_table_names.jdl']);
+        });
+
+        it('counts it', () => {
+          expect(content.errors.ENT_OPTIONAL_TABLE_NAME).to.have.lengthOf(3);
+        });
+        it('tells which entity', () => {
+          expect(content.errors.ENT_OPTIONAL_TABLE_NAME[0]).to.deep.equal({ entityName: 'B' });
+          expect(content.errors.ENT_OPTIONAL_TABLE_NAME[1]).to.deep.equal({ entityName: 'Toto' });
+          expect(content.errors.ENT_OPTIONAL_TABLE_NAME[2]).to.deep.equal({ entityName: 'SuperToto' });
+        });
+      });
+    });
+  });
 });
