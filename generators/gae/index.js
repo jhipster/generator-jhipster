@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const os = require('os');
 const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
@@ -87,7 +88,10 @@ module.exports = class extends BaseGenerator {
                 this.applicationType = this.config.get('applicationType');
                 this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
 
-                this.gcpProjectId= this.config.get('gcpProjectId');
+                this.gcpProjectId = this.config.get('gcpProjectId');
+                this.gcpCloudSqlInstanceName = this.config.get('gcpCloudSqlInstanceName');
+                this.gcpCloudSqlUserName = this.config.get('gcpCloudSqlUserName');
+                this.gcpDatabaseName = this.config.get('gcpCloudSqlDatabaseName');
                 this.gaeServiceName = this.config.get('gaeServiceName');
                 this.gaeLocation = this.config.get('gaeLocation');
                 this.gaeInstanceClass = this.config.get('gaeInstanceClass');
@@ -341,7 +345,152 @@ module.exports = class extends BaseGenerator {
                     this.gaeMinInstances = props.gaeMinInstances;
                     done();
                 });
+            },
+
+            askForCloudSqlInstance() {
+                if (this.abort) return;
+                if (this.prodDatabaseType !== 'mysql' && this.prodDatabaseType !== 'mariadb') return;
+
+                const done = this.async();
+
+                var cloudSqlInstances = [ { value: '', name: 'New Cloud SQL Instance' } ];
+
+                exec(`gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`, (err, stdout, stderr) => {
+                    if (err) {
+                        this.log.error(err);
+                    } else {
+                        _.forEach(stdout.toString().split(os.EOL), (instance) => {
+                            if (!instance) return;
+                            cloudSqlInstances.push({ value: instance, name: instance})
+                        });
+                    }
+
+                    const prompts = [
+                        {
+                            type: 'list',
+                            name: 'gcpCloudSqlInstanceName',
+                            message: 'Google Cloud SQL Instance Name',
+                            choices: cloudSqlInstances,
+                            default: this.gcpCloudSqlInstanceName ? this.gcpCloudSqlInstanceName : 0
+                        }];
+
+                    this.prompt(prompts).then((props) => {
+                        this.gcpCloudSqlInstanceName = props.gcpCloudSqlInstanceName;
+                        this.gcpCloudSqlInstanceNameExists = true;
+                        done();
+                    });
+                });
+            },
+
+            promptForCloudSqlInstanceNameIfNeeded() {
+                if (this.abort) return;
+                if (this.gcpCloudSqlInstanceName) return;
+
+                const done = this.async();
+
+                const prompts = [
+                    {
+                        type: 'input',
+                        name: 'gcpCloudSqlInstanceName',
+                        message: 'Google Cloud SQL Instance Name',
+                        default: this.gcpCloudSqlInstanceName ? this.gcpCloudSqlInstanceName : this.baseName
+                    }];
+
+                this.prompt(prompts).then((props) => {
+                    this.gcpCloudSqlInstanceName = props.gcpCloudSqlInstanceName;
+                    this.gcpCloudSqlInstanceNameExists = false;
+                    done();
+                });
+            },
+
+            askForCloudSqlLogin() {
+                if (this.abort) return;
+                if (!this.gcpCloudSqlInstanceName) return;
+
+                const done = this.async();
+                const prompts = [
+                    {
+                        type: 'input',
+                        name: 'gcpCloudSqlUserName',
+                        message: 'Google Cloud SQL User Name',
+                        default: this.gcpCloudSqlUserName ? this.gcpCloudSqlUserName : 'root',
+                        validate: (input) => {
+                            if (input.length === 0) {
+                                return 'User Name cannot empty';
+                            }
+                            return true;
+                        }
+                    },
+                    {
+                        type: 'password',
+                        name: 'gcpCloudSqlPassword',
+                        message: 'Google Cloud SQL Password',
+                        default: this.gcpCloudSqlPassword ? this.gcpCloudSqlPassword : ''
+                    }];
+
+                this.prompt(prompts).then((props) => {
+                    this.gcpCloudSqlUserName = props.gcpCloudSqlUserName;
+                    this.gcpCloudSqlPassword = props.gcpCloudSqlPassword;
+                    done();
+                });
+            },
+
+            askForCloudSqlDatabaseName() {
+                if (this.abort) return;
+                if (!this.gcpCloudSqlInstanceNameExists) return;
+
+                const done = this.async();
+
+                const cloudSqlDatabases = [ { value: '', name: 'New Database' } ];
+                const name = this.gcpCloudSqlInstanceName.split(':')[2];
+                exec(`gcloud sql databases list -i ${name} --format='value(name)' --project="${this.gcpProjectId}"`, (err, stdout, stderr) => {
+                    if (err) {
+                        this.log.error(err);
+                    } else {
+                        _.forEach(stdout.toString().split(os.EOL), (database) => {
+                            if (!database) return;
+                            cloudSqlDatabases.push({ value: database, name: database})
+                        });
+                    }
+
+                    const prompts = [
+                        {
+                            type: 'list',
+                            name: 'gcpCloudSqlDatabaseName',
+                            message: 'Google Cloud SQL Database Name',
+                            choices: cloudSqlDatabases,
+                            default: this.gcpCloudSqlDatabaseName ? this.gcpCloudSqlDatabaseName : 0
+                        }];
+
+                    this.prompt(prompts).then((props) => {
+                        this.gcpCloudSqlDatabaseName = props.gcpCloudSqlDatabaseName;
+                        this.gcpCloudSqlDatabaseNameExists = true;
+                        done();
+                    });
+                });
+            },
+
+            promptForCloudSqlDatabaseNameIfNeeded() {
+                if (this.abort) return;
+                if (this.gcpCloudSqlInstanceName !== 'new' && this.gcpCloudSqlDatabaseName) return;
+
+                const done = this.async();
+
+                const prompts = [
+                    {
+                        type: 'input',
+                        name: 'gcpCloudSqlDatabaseName',
+                        message: 'Google Cloud SQL Database Name',
+                        default: this.gcpCloudSqlDatabaseName ? this.gcpCloudSqlDatabaseName : this.baseName
+                    }];
+
+                this.prompt(prompts).then((props) => {
+                    this.gcpCloudSqlDatabaseName = props.gcpCloudSqlDatabaseName;
+                    this.gcpCloudSqlDatabaseNameExists = false;
+                    done();
+                });
             }
+
         };
     }
 
@@ -376,35 +525,81 @@ module.exports = class extends BaseGenerator {
                 }
             },
 
-            configureCloudSql() {
+            createCloudSqlInstance() {
                 if (this.abort) return;
+                if (!this.gcpCloudSqlInstanceName) return;
+                if (this.gcpCloudSqlInstanceNameExists) return;
                 const done = this.async();
-                done();
+
+                this.log(chalk.bold('\nCreating New Cloud SQL Instance'));
+
+                const name = this.gcpCloudSqlInstanceName;
+
+                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${this.gcpProjectId}`;
+                this.log(chalk.bold('\n... Running: ' + cmd));
+
+                exec(cmd, (err, stdout, stderr) => {
+                    if (err) {
+                        this.abort = true;
+                        this.log.error(err);
+                    }
+
+                    this.gcpCloudSqlInstanceName = execSync(`gcloud sql instances describe jhipster --format="value(connectionName)" --project="${this.gcpProjectId}"`, { encoding: 'utf8'} );
+
+                    done();
+                });
             },
 
-            gcpAddonsCreate() {
+            createCloudSqlLogin() {
                 if (this.abort) return;
+                if (!this.gcpCloudSqlInstanceName) return;
                 const done = this.async();
 
-                this.log(chalk.bold('\nProvisioning Services'));
+                this.log(chalk.bold('\nConfiguring Cloud SQL Login'));
 
-/*
-                if (this.prodDatabaseType === 'mysql' || this.prodDatabaseType === 'mariadb') {
-                    exec('gcloud services enable sqladmin.googleapis.com', (err, stdout) {
-                        if (!err) {
-                            exec('
-                        }
+                const name = this.gcpCloudSqlInstanceName.split(':')[2];
+                exec(`gcloud sql users list -i jhipster --format='value(name)' --project="${this.gcpProjectId}"`, (err, stdout) => {
+                    if (_.includes(stdout, this.gcpCloudSqlUserName)) {
+                        this.log(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
+                        const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" "%" --project="${this.gcpProjectId}" --password="..."`;
+                        this.log(chalk.bold('... To set its password, run: ' + cmd));
+                        done();
+                    } else {
+                        const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" "%" --password="${this.gcpCloudSqlPassword}" --project="${this.gcpProjectId}"`;
+                        this.log(chalk.bold('... Running: ' + cmd));
+                        exec(cmd, (err, stdout, stderr) => {
+                            if (err) {
+                                this.log.error(err);
+                            }
+                            done();
+                        });
                     }
-                } else {
+                });
+            },
+
+            createCloudSqlDatabase() {
+                if (this.abort) return;
+                if (!this.gcpCloudSqlInstanceName) return;
+                if (this.gcpCloudSqlDatabaseNameExists) return;
+                const done = this.async();
+
+                const name = this.gcpCloudSqlInstanceName.split(':')[2];
+                this.log(chalk.bold(`\nCreating Database ${chalk.cyan(this.gcpCloudSqlDatabaseName)}`));
+                const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${this.gcpProjectId}"`;
+                this.log(chalk.bold('... Running: ' + cmd));
+                exec(cmd, (err, stdout, stderr) => {
+                    if (err) {
+                        this.log.error(err);
+                    }
                     done();
-                    return;
-                }
-*/
-                done();
+                });
             },
 
             saveConfig() {
                 this.config.set('gcpProjectId', this.gcpProjectId);
+                this.config.set('gcpCloudSqlInstanceName', this.gcpCloudSqlInstanceName);
+                this.config.set('gcpCloudSqlUserName', this.gcpCloudSqlUserName);
+                this.config.set('gcpCloudSqlDatabaseName', this.gcpDatabaseName);
                 this.config.set('gaeServiceName', this.gaeServiceName);
                 this.config.set('gaeLocation', this.gaeLocation);
                 this.config.set('gaeInstanceClass', this.gaeInstanceClass);
@@ -425,8 +620,8 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
                 this.template('appengine-web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/appengine-web.xml`);
-                this.template('application-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-gae.yml`);
                 this.template('logging.properties.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/logging.properties`);
+                this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
 /*
                if (this.buildTool === 'gradle') {
                     this.template('gae.gradle.ejs', 'gradle/gae.gradle');

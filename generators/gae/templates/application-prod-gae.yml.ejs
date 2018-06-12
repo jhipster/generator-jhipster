@@ -32,9 +32,9 @@ spring:
 <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: ${JDBC_DATABASE_URL}
-        username: ${JDBC_DATABASE_USERNAME}
-        password: ${JDBC_DATABASE_PASSWORD}
+        url: jdbc:mysql://google/<%=gcpCloudSqlDatabaseName%>?cloudSqlInstance=<%=gcpCloudSqlInstanceName%>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
+        username: <%=gcpCloudSqlUserName%>
+        password: <%=gcpCloudSqlPassword%>
         hikari:
             maximumPoolSize: 8
 <%_ } _%>
