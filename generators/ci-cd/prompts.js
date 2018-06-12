@@ -27,12 +27,12 @@ function askPipeline() {
     if (this.abort) return;
     if (this.autoconfigureTravis) {
         this.log('Auto-configuring Travis CI');
-        this.pipeline = ['travis'];
+        this.pipeline = 'travis';
         return;
     }
     if (this.autoconfigureJenkins) {
         this.log('Auto-configuring Jenkins');
-        this.pipeline = ['jenkins'];
+        this.pipeline = 'jenkins';
         return;
     }
     const done = this.async();
@@ -62,11 +62,10 @@ function askPipeline() {
 function askIntegrations() {
     if (this.abort || this.pipeline === undefined) return;
     if (this.autoconfigureTravis) {
-        this.cicdHeroku = [];
+        this.cicdIntegrations = [];
         return;
     }
     if (this.autoconfigureJenkins) {
-        this.cicdHeroku = [];
         this.cicdIntegrations = [];
         return;
     }
@@ -101,23 +100,30 @@ function askIntegrations() {
         {
             when: response => response.cicdIntegrations.includes('deploy'),
             type: 'input',
-            name: 'artifactoryId',
-            message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement ?`,
-            default: 'artifactoryId'
+            name: 'artifactorySnapshotsId',
+            message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for snapshots ?`,
+            default: 'snapshots'
         },
         {
             when: response => response.cicdIntegrations.includes('deploy'),
             type: 'input',
-            name: 'artifactoryName',
-            message: `${chalk.yellow('*Artifactory*')}: what is the Name of distributionManagement ?`,
-            default: 'artifactoryName'
+            name: 'artifactorySnapshotsUrl',
+            message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for snapshots ?`,
+            default: ''
         },
         {
             when: response => response.cicdIntegrations.includes('deploy'),
             type: 'input',
-            name: 'artifactoryUrl',
-            message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement ?`,
-            default: 'artifactoryUrl'
+            name: 'artifactoryReleasesId',
+            message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for releases ?`,
+            default: 'releases'
+        },
+        {
+            when: response => response.cicdIntegrations.includes('deploy'),
+            type: 'input',
+            name: 'artifactoryReleasesUrl',
+            message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for releases ?`,
+            default: ''
         },
         {
             when: response => this.pipeline === 'jenkins' && response.cicdIntegrations.includes('sonar'),
@@ -179,13 +185,15 @@ function askIntegrations() {
     this.prompt(prompts).then((props) => {
         this.cicdIntegrations = props.cicdIntegrations;
 
-        this.artifactoryId = props.artifactoryId;
-        this.artifactoryName = props.artifactoryName;
-        this.artifactoryUrl = props.artifactoryUrl;
+        this.artifactorySnapshotsId = props.artifactorySnapshotsId;
+        this.artifactorySnapshotsUrl = props.artifactorySnapshotsUrl;
+        this.artifactoryReleasesId = props.artifactoryReleasesId;
+        this.artifactoryReleasesUrl = props.artifactoryReleasesUrl;
 
         this.sonarName = props.sonarName;
         this.sonarUrl = props.sonarUrl;
 
+        this.publishDocker = props.publishDocker;
         this.dockerRegistryURL = props.dockerRegistryURL;
         this.dockerRegistryCredentialsId = props.dockerRegistryCredentialsId;
         this.dockerRegistryOrganizationName = props.dockerRegistryOrganizationName;

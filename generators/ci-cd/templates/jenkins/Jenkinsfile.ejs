@@ -26,7 +26,7 @@ node {
 <%_ if (cicdIntegrations.includes('gitlab')) { _%>
     gitlabCommitStatus('build') {
 <%_ } _%>
-<%_ if (cicdIntegrations.includes('docker')) { _%>
+<%_ if (insideDocker) { _%>
 <%= gitLabIndent %>    docker.image('openjdk:8').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
 <%_ } _%>
 <%= indent %>    stage('check java') {

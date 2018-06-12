@@ -75,7 +75,7 @@ module.exports = class extends BaseGenerator {
     get prompting() {
         return {
             askPipeline: prompts.askPipeline,
-            askIntegrations: prompts.askIntegrations,
+            askIntegrations: prompts.askIntegrations
         };
     }
 
@@ -89,7 +89,7 @@ module.exports = class extends BaseGenerator {
             setTemplateConstants() {
                 if (this.abort || this.cicdIntegrations === undefined) return;
                 this.gitLabIndent = this.cicdIntegrations.includes('gitlab') ? '    ' : '';
-                this.indent = this.cicdIntegrations.includes('docker') ? '    ' : '';
+                this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
             }
         };
@@ -100,9 +100,6 @@ module.exports = class extends BaseGenerator {
             this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
             this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
             this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
-            if (this.cicdIntegrations.includes('publishDocker')) {
-                this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
-            }
         }
         if (this.pipeline === 'gitlab') {
             this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
@@ -112,6 +109,20 @@ module.exports = class extends BaseGenerator {
         }
         if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');
+        }
+
+        if (this.cicdIntegrations.includes('deploy')) {
+            if (this.buildTool === 'maven') {
+                this.addMavenDistributionManagement(this.artifactorySnapshotsId, this.artifactorySnapshotsUrl,
+                    this.artifactoryReleasesId, this.artifactoryReleasesUrl);
+            } else if (this.buildTool === 'gradle') {
+                // TODO
+                // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
+            }
+        }
+
+        if (this.cicdIntegrations.includes('publishDocker')) {
+            this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
         }
     }
 };
