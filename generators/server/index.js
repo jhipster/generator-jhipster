@@ -200,7 +200,7 @@ module.exports = class extends BaseGenerator {
                 }
 
                 // Hazelcast is mandatory for Gateways, as it is used for rate limiting
-                if (this.applicationType === 'gateway') {
+                if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
                     this.cacheProvider = 'hazelcast';
                 }
 
@@ -347,8 +347,7 @@ module.exports = class extends BaseGenerator {
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
-                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(this.cacheProvider) || this.applicationType === 'gateway';
-
+                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(this.cacheProvider);
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');

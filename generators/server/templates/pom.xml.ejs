@@ -243,7 +243,7 @@
             <artifactId>httpclient</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (cacheProvider === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
@@ -255,7 +255,7 @@
             <artifactId>hazelcast-hibernate52</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (cacheProvider === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
@@ -356,7 +356,7 @@
             <artifactId>java-client</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
+        <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider)) { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>

@@ -665,7 +665,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(generator.cacheProvider) || generator.applicationType === 'gateway',
+            condition: generator => ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(generator.cacheProvider),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/CacheConfiguration.java', renameTo: generator => `${generator.javaDir}config/CacheConfiguration.java` }
