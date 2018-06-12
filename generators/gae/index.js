@@ -44,7 +44,7 @@ module.exports = class extends BaseGenerator {
 
                 exec('gcloud version', (err) => {
                     if (err) {
-                        this.log.error('You don\'t have the gcloud SDK installed. ' +
+                        this.log.error('You don\'t have the Cloud SDK (gcloud) installed. ' +
                             'Download it from https://cloud.google.com/sdk/install');
                         this.abort = true;
                     }
@@ -68,16 +68,6 @@ module.exports = class extends BaseGenerator {
                             if (code !== 0) { this.abort = true; }
                             done();
                         });
-/*
-                        const child = exec(`gcloud components install ${component} --quiet`, (err, stdout) => {
-                            if (err) {
-                                this.abort = true;
-                                this.log.error(err);
-                            }
-
-                            done();
-                        });
-*/
                     }
                 });
             },
@@ -96,17 +86,23 @@ module.exports = class extends BaseGenerator {
                 this.buildTool = this.config.get('buildTool');
                 this.applicationType = this.config.get('applicationType');
                 this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+
                 this.gcpProjectId= this.config.get('gcpProjectId');
                 this.gaeServiceName = this.config.get('gaeServiceName');
                 this.gaeLocation = this.config.get('gaeLocation');
                 this.gaeInstanceClass = this.config.get('gaeInstanceClass');
                 this.gaeScalingType = this.config.get('gaeScalingType');
                 this.gaeInstances = this.config.get('gaeInstances');
+                this.gaeMaxInstances = this.config.get('gaeMaxInstances');
+                this.gaeMinInstances = this.config.get('gaeMinInstances');
             }
         };
     }
 
     defaultProjectId() {
+        if (this.gcpProjectId) {
+            return this.gcpProjectId;
+        }
         try {
             var projectId = execSync('gcloud config get-value core/project --quiet', { encoding: 'utf8' });
             return projectId.trim();
@@ -181,7 +177,7 @@ module.exports = class extends BaseGenerator {
                                     { value: 'asia-south1', name: 'asia-south1 - Mumbai' },
                                     { value: 'australia-southeast1', name: 'australia-southeast1 - Sydney' }
                                 ],
-                                default: 0
+                                default: this.gaeLocation ? this.gaeLocation : 0
                             }];
 
                         this.prompt(prompts).then((props) => {
@@ -215,7 +211,7 @@ module.exports = class extends BaseGenerator {
                         name: 'gaeServiceName',
                         message: 'Google App Engine Service Name',
                         choices: this.defaultServiceNameChoices(this.defaultServiceExists),
-                        default: 0
+                        default: this.gaeServiceName ? this.gaeServiceName : 0
                     }];
 
                 this.prompt(prompts).then((props) => {
@@ -234,17 +230,17 @@ module.exports = class extends BaseGenerator {
                         name: 'gaeInstanceClass',
                         message: 'Google App Engine Instance Class',
                         choices: [
-                            { value: 'F1', name: 'F1 - 600MHz, 128MB, Automatic/Manual Scaling' },
-                            { value: 'F2', name: 'F2 - 1.2GHz, 256MB, Automatic/Manual Scaling' },
-                            { value: 'F4', name: 'F4 - 2.4GHz, 512MB, Automatic/Manual Scaling' },
+                            { value: 'F1', name: 'F1 - 600MHz, 128MB, Automatic Scaling' },
+                            { value: 'F2', name: 'F2 - 1.2GHz, 256MB, Automatic Scaling' },
+                            { value: 'F4', name: 'F4 - 2.4GHz, 512MB, Automatic Scaling' },
                             { value: 'F4_1G', name: 'F4_1G - 2.4GHz, 1GB, Automatic/Manual Scaling' },
-                            { value: 'B1', name: 'B1 - 600MHz, 128MB, Manual Scaling'},
-                            { value: 'B2', name: 'B2 - 1.2GHz, 256MB, Manual Scaling'},
-                            { value: 'B4', name: 'B4 - 2.4GHz, 512MB, Manual Scaling'},
+                            { value: 'B1', name: 'B1 - 600MHz, 128MB, Basic or Manual Scaling'},
+                            { value: 'B2', name: 'B2 - 1.2GHz, 256MB, Basic or Manual Scaling'},
+                            { value: 'B4', name: 'B4 - 2.4GHz, 512MB, Basic or Manual Scaling'},
                             { value: 'B4_1G', name: 'B4_1G - 2.4GHz, 1GB, Manual Scaling'},
                             { value: 'B8', name: 'B8 - 4.8GHz, 1GB, Manual Scaling'},
                         ],
-                        default: 0
+                        default: this.gaeInstanceClass ? this.gaeInstanceClass : 0
                     }];
 
                 this.prompt(prompts).then((props) => {
@@ -257,18 +253,18 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
 
-                if (this.gaeInstanceClass.startsWith('B')) {
-                    this.log(`Instance Class "${chalk.cyan(this.gaeInstanceClass)}" can only be manually scaled. Setting manual scaling type.`);
-                    this.gaeScalingType = 'manual';
+                if (this.gaeInstanceClass.startsWith('F')) {
+                    this.log(`Instance Class "${chalk.cyan(this.gaeInstanceClass)}" can only be automatically scaled. Setting scaling type to automatic.`);
+                    this.gaeScalingType = 'automatic';
                     done();
                 } else {
                     const prompts = [
                         {
                             type: 'list',
                             name: 'gaeScalingType',
-                            message: 'Automatic or Manual Scaling',
-                            choices: ['automatic', 'manual'],
-                            default: 0
+                            message: 'Basic or Manual Scaling',
+                            choices: ['basic', 'manual'],
+                            default: this.gaeScalingType ? this.gaeScalingType : 0
                         }];
 
                     this.prompt(prompts).then((props) => {
@@ -279,15 +275,17 @@ module.exports = class extends BaseGenerator {
             },
 
             askForInstances() {
-                if (this.abort || this.gaeScalingType !== 'manual') return;
+                if (this.abort) return;
                 const done = this.async();
 
-                const prompts = [
-                    {
+                const prompts = [];
+
+                if (this.gaeScalingType === 'manual') {
+                    prompts.push({
                         type: 'input',
                         name: 'gaeInstances',
-                        message: 'How many instances to start with ?',
-                        default: 1,
+                        message: 'How many instances to run ?',
+                        default: this.gaeInstances ? this.gaeInstances : "1",
                         validate: (input) => {
                             if (input.length === 0) {
                                 return 'Instances cannot be empty';
@@ -298,44 +296,90 @@ module.exports = class extends BaseGenerator {
                             }
                             return true;
                         }
-                    }];
+                    });
+                }
+                if (this.gaeScalingType === 'automatic') {
+                    prompts.push({
+                        type: 'input',
+                        name: 'gaeMinInstances',
+                        message: 'How many instances minimum ?',
+                        default: this.gaeMinInstances ? this.gaeMinInstances : "0",
+                        validate: (input) => {
+                            if (input.length === 0) {
+                                return 'Minimum Instances cannot be empty';
+                            }
+                            var n = Math.floor(Number(input));
+                            if (n === Infinity || String(n) !== input || n < 0) {
+                                return 'Please enter an integer >= 0'
+                            }
+                            return true;
+                        }
+                    });
+                }
+                if (this.gaeScalingType === 'automatic' || this.gaeScalingType === 'basic') {
+                    prompts.push({
+                        type: 'input',
+                        name: 'gaeMaxInstances',
+                        message: 'How many instances max (0 for unlimited) ?',
+                        default: this.gaeMaxInstances ? this.gaeMaxInstances : "0",
+                        validate: (input) => {
+                            if (input.length === 0) {
+                                return 'Max Instances cannot be empty';
+                            }
+                            var n = Math.floor(Number(input));
+                            if (n === Infinity || String(n) !== input || n < 0) {
+                                return 'Please enter an integer >= 0'
+                            }
+                            return true;
+                        }
+                    });
+                }
 
                 this.prompt(prompts).then((props) => {
                     this.gaeInstances = props.gaeInstances;
+                    this.gaeMaxInstances = props.gaeMaxInstances;
+                    this.gaeMinInstances = props.gaeMinInstances;
                     done();
                 });
             }
         };
     }
 
-    get configuring() {
+    get default() {
         return {
         };
     }
 
-    get default() {
+    get configuring() {
         return {
             insight() {
                 const insight = this.insight();
                 insight.trackWithEvent('generator', 'gae');
             },
 
-            create() {
+            configureProject() {
                 if (this.abort) return;
                 const done = this.async();
 
                 if (!this.gaeLocationExists) {
-                    this.log(chalk.bold('Configuring Google App Engine Location [' + this.gaeLocation + ']'));
-                    exec('gcloud app create --region="' + this.gaeLocation + '" --project="' + this.gaeProjectId + '"', (err, stdout) => {
+                    this.log(chalk.bold(`Configuring Google App Engine Location "${chalk.cyanthis.gaeLocation}"`));
+                    exec(`gcloud app create --region="${this.gaeLocation}" --project="${this.gaeProjectId}"`, (err, stdout) => {
                         if (err) {
                             this.log.error(err);
                             this.abort = true;
-                            done();
-                        } else {
-                            done();
                         }
+
+                        done();
                     });
-                } else { done(); }
+                } else {
+                    done();
+                }
+            },
+
+            configureCloudSql() {
+                if (this.abort) return;
+                const done = this.async();
+                done();
             },
 
             gcpAddonsCreate() {
@@ -359,14 +403,29 @@ module.exports = class extends BaseGenerator {
                 done();
             },
 
+            saveConfig() {
+                this.config.set('gcpProjectId', this.gcpProjectId);
+                this.config.set('gaeServiceName', this.gaeServiceName);
+                this.config.set('gaeLocation', this.gaeLocation);
+                this.config.set('gaeInstanceClass', this.gaeInstanceClass);
+                this.config.set('gaeScalingType', this.gaeScalingType);
+                this.config.set('gaeInstances', this.gaeInstances);
+                this.config.set('gaeMinInstances', this.gaeMinInstances);
+                this.config.set('gaeMaxInstances', this.gaeMaxInstances);
+            }
+        };
+    }
+
+    get writing() {
+        return {
             copyFiles() {
                 if (this.abort) return;
 
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
-                this.template('application-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-gcp.yml`);
                 this.template('appengine-web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/appengine-web.xml`);
+                this.template('application-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-gae.yml`);
                 this.template('logging.properties.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/logging.properties`);
 /*
                if (this.buildTool === 'gradle') {
@@ -390,17 +449,17 @@ module.exports = class extends BaseGenerator {
             },
 
 /*
-            addGradleBuildPlugin() {
+            addGradlePlugin() {
                 if (this.buildTool !== 'gradle') return;
                 this.addGradlePlugin('gradle.plugin.com.gcp.sdk', 'gcp-gradle', '0.2.0');
                 this.applyFromGradleScript('gradle/gcp');
             },
 */
 
-            addMavenProfile() {
+            addMavenPlugin() {
                 if (this.buildTool === 'maven') {
-                    this.render('pom-profile.xml.ejs', (rendered) => {
-                        this.addMavenProfile('gae', `            ${rendered.trim()}`);
+                    this.render('pom-plugin.xml.ejs', (rendered) => {
+                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.1', rendered);
                     });
                 }
             }
@@ -412,6 +471,9 @@ module.exports = class extends BaseGenerator {
             productionBuild() {
                 if (this.abort) return;
 
+                this.log(chalk.bold(`\nRun App Engine DevServer Locally: ./mvnw appengine:run -DskipTests`));
+                this.log(chalk.bold(`\nDeploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod`));
+/*
                 if (this.gcpSkipBuild || this.gcpDeployType === 'git') {
                     this.log(chalk.bold('\nSkipping build'));
                     return;
@@ -433,6 +495,7 @@ module.exports = class extends BaseGenerator {
                 child.stdout.on('data', (data) => {
                     process.stdout.write(data.toString());
                 });
+*/
             }
         };
     }

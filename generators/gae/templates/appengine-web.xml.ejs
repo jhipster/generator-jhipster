@@ -2,10 +2,27 @@
     <service><%=gaeServiceName%></service>
     <threadsafe>true</threadsafe>
     <runtime>java8</runtime>
+    <!-- See https://cloud.google.com/appengine/docs/standard/java/config/appref#syntax
+         for more scaling tuning parameters -->
     <%_ if (gaeScalingType === 'manual') { _%>
     <manual-scaling>
         <instances><%= gaeInstances %></instances>
     </manual-scaling>
+    <%_ } else if (gaeScalingType === 'basic') { _%>
+    <basic-scaling>
+        <%_ if (gaeMaxInstances > 0) { _%>
+        <max-instances><%= gaeMaxInstances %></max-instances>
+        <%_ } _%>
+    </basic-scaling>
+    <%_ } else if (gaeScalingType === 'automatic') { _%>
+    <automatic-scaling>
+        <%_ if (gaeMinInstances > 0) { _%>
+        <min-instances><%= gaeMinInstances %></min-instances>
+        <%_ } _%>
+        <%_ if (gaeMaxInstances > 0) { _%>
+        <max-instances><%= gaeMaxInstances %></max-instances>
+        <%_ } _%>
+    </automatic-scaling>
     <%_ } _%>
     <sessions-enabled>true</sessions-enabled>
     <instance-class><%= gaeInstanceClass %></instance-class>    
@@ -16,4 +33,7 @@
     <class-loader-config>
         <priority-specifier filename="cache-api-1.0.0.jar"/>
     </class-loader-config>
-+</appengine-web-app>
+    <env-variables>
+        <env-var name="SERVER_PORT" value="8080"/>
+    </env-variables>
+</appengine-web-app>
