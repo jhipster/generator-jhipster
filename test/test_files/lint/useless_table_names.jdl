@@ -1,0 +1,4 @@
+entity A
+entity B(b)
+entity Toto(toto)
+entity SuperToto(super_toto)
