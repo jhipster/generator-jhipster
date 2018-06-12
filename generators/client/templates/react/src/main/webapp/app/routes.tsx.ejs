@@ -32,27 +32,28 @@ import Home from 'app/modules/home/home';
 import Admin from 'app/modules/administration';
 import Entities from 'app/entities';
 import PrivateRoute from 'app/shared/auth/private-route';
+import { RouteWrapper } from 'app/shared/error-boundary/route-wrapper';
 import { AUTHORITIES } from 'app/config/constants';
 
 const Routes = () => (
   <div className="view-routes">
     <%_ if (authenticationType !== 'oauth2') { _%>
-    <Route path="/login" component={Login} />
+    <RouteWrapper path="/login" component={Login} />
     <%_ } _%>
     <Switch>
-      <Route path="/logout" component={Logout} />
+      <RouteWrapper path="/logout" component={Logout} />
     <%_ if (authenticationType !== 'oauth2') { _%>
-      <Route path="/register" component={Register} />
-      <Route path="/activate/:key?" component={Activate} />
-      <Route path="/reset/request" component={PasswordResetInit} />
-      <Route path="/reset/finish/:key?" component={PasswordResetFinish} />
+      <RouteWrapper path="/register" component={Register} />
+      <RouteWrapper path="/activate/:key?" component={Activate} />
+      <RouteWrapper path="/reset/request" component={PasswordResetInit} />
+      <RouteWrapper path="/reset/finish/:key?" component={PasswordResetFinish} />
     <%_ } _%>
       <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]}/>
     <%_ if (authenticationType !== 'oauth2') { _%>
       <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}/>
     <%_ } _%>
       <PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
-      <Route path="/" component={Home}/>
+      <RouteWrapper path="/" component={Home}/>
     </Switch>
   </div>
 );

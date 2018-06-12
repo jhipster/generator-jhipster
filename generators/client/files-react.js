@@ -319,6 +319,8 @@ const files = {
                 'shared/util/entity-utils.ts',
                 // components
                 { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
+                { file: 'shared/error-boundary/error-boundary.tsx', method: 'processJsx' },
+                { file: 'shared/error-boundary/route-wrapper.tsx', method: 'processJsx' },
                 // model
                 'shared/model/user.model.ts'
             ]
