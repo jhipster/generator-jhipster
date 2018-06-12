@@ -267,7 +267,7 @@ jhipster:
     <%_ } _%>
     http:
         version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
-    <%_ if (cacheProvider !== 'no' && cacheProvider !== 'memcached') { _%>
+    <%_ if (cacheProvider !== 'no') { _%>
     cache: # Cache configuration
         <%_ if (cacheProvider === 'hazelcast') { _%>
         hazelcast: # Hazelcast distributed cache
@@ -300,6 +300,12 @@ jhipster:
             replicated:
                 time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
                 max-entries: 100 # Number of objects in each cache entry
+        <%_ } _%>
+        <%_ if (cacheProvider === 'memcached') { _%>
+        memcached: # Memcached configuration
+            # Disabled by default in dev mode as Memcached does not work with Spring Boot Devtools
+            # If you want to use Memcached, you must also enable it in CacheConfiguration
+            enabled: false
         <%_ } _%>
     <%_ } _%>
     <%_ if (applicationType !== 'microservice') { _%>

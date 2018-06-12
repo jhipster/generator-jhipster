@@ -88,7 +88,7 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.9</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.10</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.0.2.RELEASE</spring-boot.version>
@@ -289,9 +289,16 @@
         <%_ } _%>
         <%_ if (cacheProvider === 'memcached') { _%>
         <dependency>
-            <groupId>io.sixhours</groupId>
-            <artifactId>memcached-spring-boot-starter</artifactId>
-            <version>1.2.0</version>
+            <groupId>com.google.code.simple-spring-memcached</groupId>
+            <artifactId>spring-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.simple-spring-memcached</groupId>
+            <artifactId>xmemcached-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.xmemcached</groupId>
+            <artifactId>xmemcached</artifactId>
         </dependency>
         <%_ } _%>
         <dependency>

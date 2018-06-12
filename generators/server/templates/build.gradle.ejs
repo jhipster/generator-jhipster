@@ -255,7 +255,9 @@ dependencies {
     }
     <%_ } _%>
     <%_ if (cacheProvider === 'memcached') { _%>
-    compile "io.sixhours:infinispan-jcache:memcached-spring-boot-starter:1.2.0"
+    compile "com.google.code.simple-spring-memcached:spring-cache"
+    compile "com.google.code.simple-spring-memcached:xmemcached-provider"
+    compile "com.googlecode.xmemcached:xmemcached"
     <%_ } _%>
     <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
     compile "javax.cache:cache-api"
