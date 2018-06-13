@@ -156,7 +156,7 @@ module.exports = class extends BaseGenerator {
                     done();
                 });
             },
- 
+
             askForLocation() {
                 if (this.abort) return;
                 const done = this.async();
@@ -208,7 +208,7 @@ module.exports = class extends BaseGenerator {
                 } catch (ex) {
                     this.defaultServiceExists = false;
                 }
-  
+
                 const prompts = [
                     {
                         type: 'list',
@@ -654,12 +654,12 @@ module.exports = class extends BaseGenerator {
             addMaven() {
                 if (this.buildTool === 'maven') {
                     this.render('pom-plugin.xml.ejs', (rendered) => {
-                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.1', rendered.trim());
+                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.2', rendered.trim());
                     });
                     this.render('pom-profile.xml.ejs', (rendered) => {
                         this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
                     });
- 
+
                 }
             }
         };
