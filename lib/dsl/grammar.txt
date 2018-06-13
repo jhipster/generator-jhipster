@@ -200,7 +200,7 @@ applicationConfigDecl
   / JHIPSTER_VERSION SPACE* jhipsterVersionMajor:[0-9]+ '.' jhipsterVersionMinor:[0-9]+ '.' jhipsterVersionPatch:[0-9]+ SPACE* applicationConfigDecl:applicationConfigDecl {
     return addToApplicationDecl(applicationConfigDecl, 'jhipsterVersion', `${jhipsterVersionMajor.join('')}.${jhipsterVersionMinor.join('')}.${jhipsterVersionPatch.join('')}`);
   }
-  / LANGUAGES SPACE* '[' languages:[a-z, ]+ ']' SPACE* applicationConfigDecl:applicationConfigDecl {
+  / LANGUAGES SPACE* '['? languages:[a-z, ]+ ']'? SPACE* applicationConfigDecl:applicationConfigDecl {
     const languageEntries = [];
     const results = languages.join('').split(',');
     for (let i = 0; i < results.length; i++) {
