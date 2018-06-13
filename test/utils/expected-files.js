@@ -183,6 +183,8 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-delete-dialog.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-delete-dialog.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-detail.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-reset-dialog.component.html`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-reset-dialog.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-detail.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-update.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-update.component.html`,
@@ -195,7 +197,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-update.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`
     ],
 
     client: [
@@ -304,6 +306,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/csrf.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/password-reset.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/auth/has-any-authority.directive.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/principal.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/state-storage.service.ts`,

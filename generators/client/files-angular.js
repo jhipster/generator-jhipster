@@ -358,7 +358,8 @@ const files = {
                 'core/core.module.ts',
                 // login
                 'core/login/login.service.ts',
-                'core/user/account.model.ts'
+                'core/user/account.model.ts',
+                'core/auth/password-reset.service.ts'
             ]
         },
         {
@@ -374,8 +375,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 'core/user/user.service.ts',
-                'core/user/user.model.ts',
-                'core/auth/password-reset.service.ts'
+                'core/user/user.model.ts'
             ]
         },
         {
