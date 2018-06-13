@@ -29,6 +29,7 @@ import profile, { ACTION_TYPES, getProfile } from 'app/shared/reducers/applicati
 describe('Profile reducer tests', () => {
   const initialState = {
     ribbonEnv: '',
+    isMailEnabled: false,
     inProduction: true,
     isSwaggerEnabled: false
   };
@@ -42,12 +43,14 @@ describe('Profile reducer tests', () => {
       const payload = {
         data: {
           'display-ribbon-on-profiles' : 'awesome ribbon stuff',
-          activeProfiles : [ 'prod' ]
+          activeProfiles : [ 'prod' ],
+          'mailEnabled': false
         }
       };
 
       expect(profile(undefined, { type: SUCCESS(ACTION_TYPES.GET_PROFILE), payload })).toEqual({
         ribbonEnv: 'awesome ribbon stuff',
+        isMailEnabled: false,
         inProduction: true,
         isSwaggerEnabled: false
       });
@@ -57,14 +60,33 @@ describe('Profile reducer tests', () => {
       const payload = {
         data: {
           'display-ribbon-on-profiles' : 'awesome ribbon stuff',
-          activeProfiles : [ 'swagger', 'dev' ]
+          activeProfiles : [ 'swagger', 'dev' ],
+          'mailEnabled': false
         }
       };
 
       expect(profile(undefined, { type: SUCCESS(ACTION_TYPES.GET_PROFILE), payload })).toEqual({
         ribbonEnv: 'awesome ribbon stuff',
+        isMailEnabled: false,
         inProduction: false,
         isSwaggerEnabled: true
+      });
+    });
+
+    it('should return the right payload with mail enabled', () => {
+      const payload = {
+        data: {
+          'display-ribbon-on-profiles': 'awesome ribbon stuff',
+          activeProfiles: ['prod'],
+          'mailEnabled': true
+        }
+      };
+
+      expect(profile(undefined, { type: SUCCESS(ACTION_TYPES.GET_PROFILE), payload })).toEqual({
+        ribbonEnv: 'awesome ribbon stuff',
+        isMailEnabled: true,
+        inProduction: true,
+        isSwaggerEnabled: false
       });
     });
   });

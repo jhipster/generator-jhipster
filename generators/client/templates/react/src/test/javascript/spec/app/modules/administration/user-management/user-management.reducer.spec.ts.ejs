@@ -53,7 +53,7 @@ describe('User management reducer tests', () => {
       updating: false,
       updateSuccess: false,
       resetCode: '',
-      areMailsEnabled: false,
+      isMailEnabled: false,
       isGettingResetCode: false,
       totalItems: 0
     });
@@ -182,10 +182,12 @@ describe('User management reducer tests', () => {
     });
 
     it('should correctly enable mails', () => {
-      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.MAIL_ENABLED), payload: { data: true } });
+      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.MAIL_ENABLED), payload: {
+        data: { 'mailEnabled': true }
+      }});
 
       expect(toTest).toMatchObject({
-        areMailsEnabled: true
+        isMailEnabled: true
       });
     });
 
