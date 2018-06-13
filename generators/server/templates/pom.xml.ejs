@@ -27,7 +27,7 @@
     <name><%= humanizedBaseName %></name>
 
     <repositories>
-        <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
+        <!-- TODO Remove snapshot repositories after final Spring Cloud release -->
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
@@ -166,12 +166,6 @@
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
-        </dependency>
-
-        <!-- TODO To remove after final Spring Boot 2 release -->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
         </dependency>
 
         <%_ if (cacheProvider !== 'no') { _%>

@@ -24,7 +24,7 @@ buildscript {
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
-        // TODO To remove after final Spring Boot 2 release
+        // TODO To remove after final Spring Cloud release
         maven { url "https://repo.spring.io/milestone" }
     }
     dependencies {
@@ -195,7 +195,7 @@ repositories {
     // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
-    // TODO To remove after final Spring Boot 2 release
+    // TODO To remove after final Spring Cloud release
     maven { url "https://repo.spring.io/milestone" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
@@ -204,9 +204,6 @@ dependencies {
     // Use ", version: jhipster_dependencies_version, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
     compile group: "io.github.jhipster", name: "jhipster-framework"
-
-    // TODO To remove after final Spring Boot 2 release
-    compile "javax.xml.bind:jaxb-api"
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
