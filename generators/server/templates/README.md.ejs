@@ -101,12 +101,9 @@ security:
             userAuthorizationUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
             clientId: web_app
             clientSecret: web_app
-            clientAuthenticationScheme: form
             scope: openid profile email
         resource:
             userInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
-            tokenInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
-            preferTokenInfo: false
 ```
 
 ### Okta
@@ -125,12 +122,9 @@ security:
             userAuthorizationUri: https://{yourOktaDomain}.com/oauth2/default/v1/authorize
             clientId: {clientId}
             clientSecret: {clientSecret}
-            clientAuthenticationScheme: form
             scope: openid profile email
         resource:
             userInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/userinfo
-            tokenInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/introspect
-            preferTokenInfo: false
 ```
 
 Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the **Next** button. Give the app a name you’ll remember, specify `http://localhost:8080` as a Base URI, and `http://localhost:8080/login` as a Login Redirect URI. Click **Done** and copy the client ID and secret into your `application.yml` file.
