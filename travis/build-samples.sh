@@ -218,6 +218,9 @@
     # mainRedirected
 # 26) Note about syntax { command ; } or ( command )
     # read "man bash", section "Compound Commands"
+# 27)
+    # Perform `yarn link` doesn't replace older `yarn link` performed in another
+    # folder, and doesn't exit with failure
 
 # functions to exit this script {{{2
 # ============
@@ -1320,33 +1323,28 @@ function yarnLink() {
     printCommandAndEval "yarn init -y"
     printCommand "yarn link 'generator-jhipster'"
     if yarn link "generator-jhipster" ; then
-        printFileDescriptor3 "\`yarn link' performed"
+        printFileDescriptor3 "\`yarn link 'generator-jhipster'' performed"
     else
         errorInBuildExitCurrentSample "you havn't executed \`yarn link' " \
             "in a folder named 'generator-jhipster'. " \
             "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
     fi
-    if [[ -z ${IS_VERIFY+x} ]] ; then
-        local -r \
-            GENERATOR_JHIPSTER_FOLDER="$(pwd)/node_modules/generator-jhipster"
-        # `yarn link' must be launched for the generator-jhipster folder where
-        # ./build-samples.sh is.
-        # (we could have several folders generator-jhipster, with several
-        # ./build-samples.sh in a same computer).
-        cd -P "${JHIPSTER_TRAVIS}/.."
-        local -r JHIPSTER_TRAVISReal=$(pwd -P)
-        cd "$GENERATOR_JHIPSTER_FOLDER"
-        local -r GENERATOR_JHIPSTER_FOLDER_REAL=$(pwd -P)
-        if [ "$JHIPSTER_TRAVISReal" != "$GENERATOR_JHIPSTER_FOLDER_REAL" ]
-        then
-            errorInBuildExitCurrentSample "'$JHIPSTER_TRAVISReal and " \
-                "'$GENERATOR_JHIPSTER_FOLDER_REAL' are not the same folders"
-        else
-            echo "Command \`yarn link' seems corect. It was triggered in" \
-                "../../generator-jhipster"
-        fi
-        cd "$APP_FOLDER"
+    # `yarn link' must be launched for the generator-jhipster folder where
+    # ./build-samples.sh is.
+    # (we could have several folders generator-jhipster, with several
+    # ./build-samples.sh in a same computer).
+    cd -P "$(pwd -P)/node_modules/generator-jhipster/travis"
+    if [[ "$(pwd -P)" =~ ^$JHIPSTER_TRAVIS/?$ ]] ; then
+        printFileDescriptor3 "\`yarn link' was performed correctly in" \
+            "'$(dirname "$(pwd -P)")'."
+    else
+        errorInBuildExitCurrentSample "you have performed \`yarn link'" \
+            " in other folder than the project" \
+            "'$(dirname "$JHIPSTER_TRAVIS")': \\n" \
+            "\\t1° \`yarn unlink' in '$(dirname "$(pwd -P)")'\\n" \
+            "\\t2° \`yarn link' in '$(dirname "$JHIPSTER_TRAVIS")'."
     fi
+    cd "$APP_FOLDER"
 
 }
 
@@ -1396,14 +1394,14 @@ function testGenerator() {
     # ./scripts/00-install-jhipster.sh
     echoTitleBuildStep "start" "\`yarn test' in generator-jhipster"
     cd -P "$JHIPSTER_TRAVIS"
-    echo "We are at path: '$(pwd)'".
+    echo "We are at path: '$(pwd -P)'".
     echo "Your branch is: '$BRANCH_NAME'."
 
     if yarn test ; then
         echoTitleBuildStep "end" "Test of the generator finish with sucess."
     else
         errorInBuildStopCurrentSample "fail during test of the Generator." \
-            " (command 'yarn test' in $(pwd))"
+            " (command 'yarn test' in $(pwd -P))"
     fi
 
     closeLogFile
@@ -1478,7 +1476,7 @@ function verifyProject() {
     # Corresponding of the entry "script" in .travis.yml
     cd "$APP_FOLDER"
     if [[ -f src/main/docker/couchbase.yml ]]; then
-        printCommandAndEval "pwd"
+        printCommandAndEval "pwd -P"
         printFileDescriptor3 "../../scripts/04Test and" \
             "../../scripts/05run.sh can't be started" \
             "in same time for couchbase."
@@ -1487,7 +1485,6 @@ function verifyProject() {
         launch04Test &
     fi
     launch05Run
-    wait
     # Never launched in TRAVIS CI for a PR
     # launchNewBash "./scripts/06-sonar.sh" \
     #     "Launch Sonar analysis for '${JHIPSTER}'"
@@ -1733,8 +1730,7 @@ then restart script."
     time {
 
         cd "$APP_FOLDER"
-        generateProject &
-        generateProjectPID="$!"
+        generateProject
 
         if [[ "$IS_SKIP_TEST_GENERATOR" -eq 0 ]] && \
             [[ "${JHIPSTER}" == "ngx-default"  ]] ; then
@@ -1743,11 +1739,13 @@ then restart script."
             testGenerator &
         fi
 
-        wait "$generateProjectPID"
-
         if [[ "$IS_VERIFY" -eq 1 ]] ; then
             verifyProject
         fi
+
+        # wait functions launched in background in verifyProject()
+        # and launchOnlyOneSample() (here)
+        printCommandAndEval wait
 
         finishingLaunchSample
 
@@ -1876,7 +1874,7 @@ do you want to launch in same time (Travis CI launch 4 processes)? "
     # If we delete line after, when loop before is finished
     # this foreground script ./build-samples.sh is ended.
     # The focus return to the user.
-    wait
+    printCommandAndEval wait
 
     echo "All build are finished"
 
@@ -1975,7 +1973,7 @@ export PROTRACTOR=0
 # export JHIPSTER=ngx-default
 
 export JHIPSTER_TRAVIS=
-JHIPSTER_TRAVIS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+JHIPSTER_TRAVIS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
 export JHIPSTER_SAMPLES="$JHIPSTER_TRAVIS/samples"
 export JHIPSTER_SCRIPTS="$JHIPSTER_TRAVIS/scripts"
 # export APP_FOLDER redefined in function launchOnlyOneSample()
