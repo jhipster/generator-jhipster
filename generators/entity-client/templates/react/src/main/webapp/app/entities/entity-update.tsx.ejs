@@ -181,16 +181,16 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
     <%_ } _%>
 
     if (errors.length === 0) {
-      const { <%= entityInstance %>Entity } = this.props;
-      const entity = {
-        ...<%= entityInstance %>Entity,
+      const { entity } = this.props;
+      const updatedEntity = {
+        ...entity,
         ...values
       }
 
       if (this.state.isNew) {
-        this.props.createEntity(entity);
+        this.props.createEntity(updatedEntity);
       } else {
-        this.props.updateEntity(entity);
+        this.props.updateEntity(updatedEntity);
       }
       this.handleClose();
     }
@@ -274,7 +274,7 @@ _%>
 <%_ }) _%>
   render() {
     const isInvalid = false;
-    const { <%= entityInstance %>Entity,<%
+    const { entity,<%
     uniqueRealtionFields.forEach(rel => {
     %> <%= rel %>,<% }) %> loading, updating } = this.props;
     const { isNew } = this.state;
@@ -291,7 +291,7 @@ _%>
       , <%= b.fieldName %>ContentType
       <%_ } _%>
       <%_ if (i+1 === blobFields.length) { _%>
-      } = <%= entityInstance %>Entity;
+      } = entity;
       <%_ } else { _%>
       ,
       <%_ } _%>
@@ -309,7 +309,7 @@ _%>
       <Row className="justify-content-center">
         <Col md="8">
           { loading ? <p>Loading...</p> :
-          <AvForm model={isNew ? {} : <%= entityInstance %>Entity} onSubmit={this.saveEntity} >
+          <AvForm model={isNew ? {} : entity} onSubmit={this.saveEntity} >
             { !isNew ?
               <AvGroup>
                 <Label for="id"><Translate contentKey="global.field.id">ID</Translate></Label>
@@ -341,7 +341,7 @@ _%>
                 type="datetime-local"
                 className="form-control"
                 name="<%= fieldName %>"
-                value={isNew ? null : convertDateTimeFromServer(this.props.<%= entityInstance %>Entity.<%= fieldName %>)}
+                value={isNew ? null : convertDateTimeFromServer(this.props.entity.<%= fieldName %>)}
                 <%- include react_validators %>
               />
             <%_ } else if (fieldType === 'LocalDate') { _%>
@@ -371,7 +371,7 @@ _%>
                 type="select"
                 className="form-control"
                 name="<%= fieldName %>"
-                value={(!isNew && <%= entityInstance %>Entity.<%= fieldName%>) || '<%= values[0] %>'}
+                value={(!isNew && entity.<%= fieldName%>) || '<%= values[0] %>'}
               >
               <%_
                 const enumPrefix = angularAppName + '.'+ fieldType;
@@ -618,7 +618,7 @@ _%>
                 multiple
                 className="form-control"
                 name="fake<%= otherEntityNamePlural %>"
-                value={this.display<%= relationshipName %>(<%= entityInstance %>Entity)}
+                value={this.display<%= relationshipName %>(entity)}
                 onChange={this.<%= relationshipFieldName %>Update}>
                 <option value="" key="0" />
                 {
@@ -662,7 +662,7 @@ const mapStateToProps = (storeState: IRootState) => ({
   <%_ otherEntityActions.forEach(val => { _%>
     <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>,
   <%_ }) _%>
-  <%= entityInstance %>Entity: storeState.<%= entityInstance %>.entity,
+  entity: storeState.<%= entityInstance %>.entity,
   loading: storeState.<%= entityInstance %>.loading,
   updating: storeState.<%= entityInstance %>.updating
 });
