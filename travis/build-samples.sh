@@ -2147,7 +2147,10 @@ function parseArgumentsGenerateAndVerify () {
             elif [[ "$IS_VERIFY" -eq 0 ]] && \
                 [[ "$1" == "--skippackageapp" ]]; then
                 IS_SKIPPACKAGEAPP=1
-                IS_CONSOLEVERBOSE=1
+                if [[ ! -z "${JHIPSTER_LIST+x}" ]] \
+                    && [[ ! "$JHIPSTER_LIST" =~ $JHIPSTER_LIST_PATTERN ]] ; then
+                    IS_CONSOLEVERBOSE=1
+                fi
             elif [[ "$1" == "--skiptestgenerator" ]]; then
                 if [[ "$IS_VERIFY" -eq 0 ]]  ; then
                     exitScriptWithError "'--skiptestgenerator' is illegal" \
