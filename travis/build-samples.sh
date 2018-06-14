@@ -618,19 +618,19 @@ function usage() {
         " * They will create the travis sample project under the './samples'" \
         "folder with folder name \`[sample_name]-sample'.\\n" \
         " * \`generate' generate only a JHipster project with entities.\\n" \
-        " * \`verify' generate then test project(s), as Travis CI\\n" \
+        " * \`verify' generate then test project(s), as Travis CI.\\n" \
     "  * Without optional parameter, 'generate', and 'verify' " \
-            "operate for all samples listed below\\n" \
+            "operate for all samples listed below.\\n" \
     "  * Arguments 'generate', 'verify' could be apply for " \
-            "one sample_name below\\n" \
+            "one sample_name below.\\n" \
     "  * For each sample, an independant log file is created. During" \
             "built time, its name contains 'pending'. " \
             "If there is a fail, its name" \
             "will contain 'errored'. If it finishes with success, its name" \
-            "will contain 'passed\\n" \
+            "will contain 'passed.\\n" \
     "   * When all samples are launched, there are launched in parralel." \
             "The program will ask you how much you want" \
-            "launch in same tim\\n " \
+            "launch in same time.\\n " \
         "* Before launch this commands, type \`yarn link' in the folder" \
             "./genertor-jhipster.\\n" \
     "\\n\\t""$URED""\`./build-samples.sh start " \
@@ -645,16 +645,24 @@ function usage() {
         "List all samples below."
    listSamples
 
-    echo -e "\\n* Use always \`./build-samples.sh verify ngx-default' " \
+    echo -e "\\n* If you don't know which test use, use" \
+            "\`./build-samples.sh verify ngx-default' " \
             "(the more complete test). " \
-            "Useful for test Server side and Angular client\\n" \
-    "  * If you work on the React client try the previous and also " \
-            "'react-default'\\n" \
-    "  * If you work on an other functionality, chose the corresponding on\\n" \
-    "* Generated files will be under folder ./samples/sample_name-sample\\n" \
-    "* Name of samples indicate their test goal. " \
-    "Their configuration is (defined in '.yo-rc.json'. " \
-    "Their entity is generated from folder '.jhipster'\\n" \
+            "Useful to test Server side and Angular client templates" \
+            "(*.ejs files).\\n" \
+    " * If you modify only templates files of the the React client use" \
+    "instead 'react-default'.\\n" \
+    " * If you modify templates files of React client and Java Server" \
+    "use at least 'ngx-default' and 'react-default'.\\n" \
+    " * If you work on other part of the application, the name of the sample "\
+          "should tell you wich one use.\\n" \
+    " * Generarlly it's not necessary to build and test all samples.\\n" \
+    " * Generated files will be under the folder" \
+    "'./samples/sample_name""$BRED""-sample""$NC""/'\\n" \
+    "\\t* Their configuration is defined in the file '.yo-rc.json' taken in" \
+    "the folder './samples/sample_name/'.\\n" \
+    "\\t* Entity configuration could be seen after generation in the folder" \
+    "'samples/sample_name""$BRED""-sample""$NC""/.jhipster/'.\\n" \
     "\\n\\t""$URED""Configuration file ./build-samples.sh.conf""$NC""\\n" \
     "* You could set 'colorizelogfile' and 'consoleverbose' as default" \
     "in the file './build-samples.sh.conf'. Simply add the corresponding word"\
@@ -1766,7 +1774,9 @@ function launchSamplesInBackground() {
 
     if [[ ! "${JHIPSTER_MATRIX_ARRAY[*]}" =~  \
         (^|[[:space:]])ngx-default[[:space:]] ]] ; then
-        warning "we advise to add build of 'ngx-default'\\n"
+        warning "'ngx-default' not builded." \
+            " You probably know what you do :-)." \
+            " Otherwise read \`./build-samples.sh help'\\n"
         sleep 4
     fi
 
