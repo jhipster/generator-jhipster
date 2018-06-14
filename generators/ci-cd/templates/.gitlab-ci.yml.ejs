@@ -30,7 +30,7 @@ cache:
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
 cache:
-    key: "$CI_BUILD_REF_NAME"
+    key: "$CI_COMMIT_REF_NAME"
     paths:
         - node_modules
         - .maven
