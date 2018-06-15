@@ -24,7 +24,6 @@ const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
 const Statistics = require('../statistics');
 
-
 /* Constants used throughout */
 const constants = require('../generator-constants');
 

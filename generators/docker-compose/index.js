@@ -26,7 +26,6 @@ const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
 const Statistics = require('../statistics');
 
-
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {

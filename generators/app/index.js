@@ -24,7 +24,6 @@ const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const Statistics = require('../statistics');
 
-
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
