@@ -22,6 +22,7 @@ const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 const prompts = require('./prompts');
+const Statistics = require('../statistics');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
@@ -56,8 +57,8 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'spring-controller');
+                const stats = new Statistics();
+                stats.sendSubGenEvent('generator', 'spring-controller');
             }
         };
     }

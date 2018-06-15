@@ -322,23 +322,6 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         if (useBlueprint) return;
         return {
-            insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'server');
-                insight.track('app/authenticationType', this.authenticationType);
-                insight.track('app/cacheProvider', this.cacheProvider);
-                insight.track('app/enableHibernateCache', this.enableHibernateCache);
-                insight.track('app/websocket', this.websocket);
-                insight.track('app/databaseType', this.databaseType);
-                insight.track('app/devDatabaseType', this.devDatabaseType);
-                insight.track('app/prodDatabaseType', this.prodDatabaseType);
-                insight.track('app/searchEngine', this.searchEngine);
-                insight.track('app/messageBroker', this.messageBroker);
-                insight.track('app/serviceDiscoveryType', this.serviceDiscoveryType);
-                insight.track('app/buildTool', this.buildTool);
-                insight.track('app/enableSwaggerCodegen', this.enableSwaggerCodegen);
-            },
-
             configureGlobal() {
                 // Application name modified, using each technology's conventions
                 this.angularAppName = this.getAngularAppName();

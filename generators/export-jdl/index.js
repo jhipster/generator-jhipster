@@ -18,6 +18,7 @@
  */
 const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
+const Statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -30,8 +31,8 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'export-jdl');
+                const stats = new Statistics();
+                stats.sendSubGenEvent('generator', 'export-jdl');
             },
 
             parseJson() {

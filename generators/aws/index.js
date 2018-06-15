@@ -20,6 +20,7 @@ const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
 const AwsFactory = require('./lib/aws.js');
+const Statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
     get initializing() {
@@ -77,8 +78,8 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'aws');
+                const stats = new Statistics();
+                stats.sendSubGenEvent('generator', 'aws');
             },
             createAwsFactory() {
                 const cb = this.async();

@@ -22,6 +22,8 @@ const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
+const Statistics = require('../statistics');
+
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -307,15 +309,6 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
 
-            insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'app');
-                insight.track('app/applicationType', this.applicationType);
-                insight.track('app/testFrameworks', this.testFrameworks);
-                insight.track('app/otherModules', this.otherModules);
-                insight.track('app/clientPackageManager', this.clientPackageManager);
-            },
-
             composeLanguages() {
                 if (this.skipI18n) return;
                 this.composeLanguagesSub(this, this.configOptions, this.generatorType);
@@ -339,7 +332,16 @@ module.exports = class extends BaseGenerator {
                 this.skipClient && this.config.set('skipClient', true);
                 this.skipServer && this.config.set('skipServer', true);
                 this.skipUserManagement && this.config.set('skipUserManagement', true);
-            }
+            },
+
+            insight() {
+                if (this.existingProject) return;
+
+                const stats = new Statistics();
+                const yorc = Object.assign({}, this.configOptions);
+                yorc.applicationType = this.applicationType;
+                stats.sendYoRc(yorc, this.jhipsterVersion);
+            },
         };
     }
 

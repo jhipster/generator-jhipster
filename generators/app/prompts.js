@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const Statistics = require('../statistics');
 
 module.exports = {
     askForInsightOptIn,
@@ -31,17 +32,17 @@ function askForInsightOptIn() {
     if (this.existingProject) return;
 
     const done = this.async();
-    const insight = this.insight();
+    const statistics = new Statistics();
 
     this.prompt({
-        when: () => insight.optOut === undefined,
+        when: () => statistics.shouldWeAskForOptIn(),
         type: 'confirm',
         name: 'insight',
         message: `May ${chalk.cyan('JHipster')} anonymously report usage statistics to improve the tool over time?`,
         default: true
     }).then((prompt) => {
         if (prompt.insight !== undefined) {
-            insight.optOut = !prompt.insight;
+            statistics.setOptoutStatus(!prompt.insight);
         }
         done();
     });

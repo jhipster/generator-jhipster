@@ -24,6 +24,7 @@ const chalk = require('chalk');
 const jhiCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
 const packagejs = require('../../package.json');
+const Statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -112,8 +113,8 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'import-jdl');
+                const stats = new Statistics();
+                stats.sendSubGenEvent('generator', 'import-jdl');
             },
 
             parseJDL() {
