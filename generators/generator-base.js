@@ -273,7 +273,7 @@ module.exports = class extends PrivateBase {
                     file: indexModulePath,
                     needle: 'jhipster-needle-add-route-path',
                     splicable: [
-                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}} />`)
+                        this.stripMargin(`|<ErrorBoundaryRoute path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}} />`)
                     ]
                 }, this);
 
