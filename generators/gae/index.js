@@ -17,23 +17,16 @@
  * limitations under the License.
  */
 const os = require('os');
-const fs = require('fs');
-const path = require('path');
 const exec = require('child_process').exec;
 const spawn = require('child_process').spawn;
 const execSync = require('child_process').execSync;
 const chalk = require('chalk');
 const _ = require('lodash');
-const glob = require('glob');
 const BaseGenerator = require('../generator-base');
 
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-    }
-
     get initializing() {
         return {
             sayHello() {
@@ -64,7 +57,7 @@ module.exports = class extends BaseGenerator {
                     } else {
                         this.log(chalk.bold('\nInstalling App Engine Java SDK'));
                         this.log(`... Running: gcloud components install ${component} --quiet`);
-                        const child = spawn('gcloud', ['components', 'install', component, '--quiet'], {stdio: [process.stdin, process.stdout, process.stderr]});
+                        const child = spawn('gcloud', ['components', 'install', component, '--quiet'], { stdio: [process.stdin, process.stdout, process.stderr] });
                         child.on('exit', (code) => {
                             if (code !== 0) { this.abort = true; }
                             done();
@@ -108,10 +101,11 @@ module.exports = class extends BaseGenerator {
             return this.gcpProjectId;
         }
         try {
-            var projectId = execSync('gcloud config get-value core/project --quiet', { encoding: 'utf8' });
+            const projectId = execSync('gcloud config get-value core/project --quiet', { encoding: 'utf8' });
             return projectId.trim();
         } catch (ex) {
             this.log.error('Unable to determine the default Google Cloud Project ID');
+            return undefined;
         }
     }
 
@@ -119,10 +113,10 @@ module.exports = class extends BaseGenerator {
         if (this.applicationType === 'monolith') {
             return defaultServiceExists ? ['default', _.kebabCase(this.baseName)] : ['default'];
         } else if (this.applicationType === 'gateway') {
-            return ['default']
-        } else if (this.applicationType === 'microservice') {
-            return [_.kebabCase(this.baseName)];
+            return ['default'];
         }
+
+        return [_.kebabCase(this.baseName)];
     }
 
     get prompting() {
@@ -141,11 +135,11 @@ module.exports = class extends BaseGenerator {
                                 return 'Project ID cannot empty';
                             }
                             try {
-                                execSync('gcloud projects describe ' + input);
+                                execSync(`gcloud projects describe ${input}`);
                                 this.gcpProjectIdExists = true;
                             } catch (ex) {
-                                return `Project ID "${chalk.cyan(this.gcpProjectId)}" does not exist, please create one first!`;
                                 this.gcpProjectIdExists = false;
+                                return `Project ID "${chalk.cyan(input)}" does not exist, please create one first!`;
                             }
                             return true;
                         }
@@ -161,7 +155,7 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
 
-                exec('gcloud app describe --format="value(locationId)" --project="' + this.gcpProjectId + '"', (err, stdout) => {
+                exec(`gcloud app describe --format="value(locationId)" --project="${this.gcpProjectId}"`, (err, stdout) => {
                     if (err) {
                         const prompts = [
                             {
@@ -203,7 +197,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 try {
-                    execSync('gcloud app services describe default --project="' + this.gcpProjectId + '"' , { encoding: 'utf8'});
+                    execSync(`gcloud app services describe default --project="${this.gcpProjectId}"`, { encoding: 'utf8' });
                     this.defaultServiceExists = true;
                 } catch (ex) {
                     this.defaultServiceExists = false;
@@ -238,11 +232,11 @@ module.exports = class extends BaseGenerator {
                             { value: 'F2', name: 'F2 - 1.2GHz, 256MB, Automatic Scaling' },
                             { value: 'F4', name: 'F4 - 2.4GHz, 512MB, Automatic Scaling' },
                             { value: 'F4_1G', name: 'F4_1G - 2.4GHz, 1GB, Automatic/Manual Scaling' },
-                            { value: 'B1', name: 'B1 - 600MHz, 128MB, Basic or Manual Scaling'},
-                            { value: 'B2', name: 'B2 - 1.2GHz, 256MB, Basic or Manual Scaling'},
-                            { value: 'B4', name: 'B4 - 2.4GHz, 512MB, Basic or Manual Scaling'},
-                            { value: 'B4_1G', name: 'B4_1G - 2.4GHz, 1GB, Manual Scaling'},
-                            { value: 'B8', name: 'B8 - 4.8GHz, 1GB, Manual Scaling'},
+                            { value: 'B1', name: 'B1 - 600MHz, 128MB, Basic or Manual Scaling' },
+                            { value: 'B2', name: 'B2 - 1.2GHz, 256MB, Basic or Manual Scaling' },
+                            { value: 'B4', name: 'B4 - 2.4GHz, 512MB, Basic or Manual Scaling' },
+                            { value: 'B4_1G', name: 'B4_1G - 2.4GHz, 1GB, Manual Scaling' },
+                            { value: 'B8', name: 'B8 - 4.8GHz, 1GB, Manual Scaling' },
                         ],
                         default: this.gaeInstanceClass ? this.gaeInstanceClass : 0
                     }];
@@ -289,14 +283,14 @@ module.exports = class extends BaseGenerator {
                         type: 'input',
                         name: 'gaeInstances',
                         message: 'How many instances to run ?',
-                        default: this.gaeInstances ? this.gaeInstances : "1",
+                        default: this.gaeInstances ? this.gaeInstances : '1',
                         validate: (input) => {
                             if (input.length === 0) {
                                 return 'Instances cannot be empty';
                             }
-                            var n = Math.floor(Number(input));
+                            const n = Math.floor(Number(input));
                             if (n === Infinity || String(n) !== input || n <= 0) {
-                                return 'Please enter an integer greater than 0'
+                                return 'Please enter an integer greater than 0';
                             }
                             return true;
                         }
@@ -307,14 +301,14 @@ module.exports = class extends BaseGenerator {
                         type: 'input',
                         name: 'gaeMinInstances',
                         message: 'How many instances minimum ?',
-                        default: this.gaeMinInstances ? this.gaeMinInstances : "0",
+                        default: this.gaeMinInstances ? this.gaeMinInstances : '0',
                         validate: (input) => {
                             if (input.length === 0) {
                                 return 'Minimum Instances cannot be empty';
                             }
-                            var n = Math.floor(Number(input));
+                            const n = Math.floor(Number(input));
                             if (n === Infinity || String(n) !== input || n < 0) {
-                                return 'Please enter an integer >= 0'
+                                return 'Please enter an integer >= 0';
                             }
                             return true;
                         }
@@ -325,14 +319,14 @@ module.exports = class extends BaseGenerator {
                         type: 'input',
                         name: 'gaeMaxInstances',
                         message: 'How many instances max (0 for unlimited) ?',
-                        default: this.gaeMaxInstances ? this.gaeMaxInstances : "0",
+                        default: this.gaeMaxInstances ? this.gaeMaxInstances : '0',
                         validate: (input) => {
                             if (input.length === 0) {
                                 return 'Max Instances cannot be empty';
                             }
-                            var n = Math.floor(Number(input));
+                            const n = Math.floor(Number(input));
                             if (n === Infinity || String(n) !== input || n < 0) {
-                                return 'Please enter an integer >= 0'
+                                return 'Please enter an integer >= 0';
                             }
                             return true;
                         }
@@ -353,7 +347,7 @@ module.exports = class extends BaseGenerator {
 
                 const done = this.async();
 
-                var cloudSqlInstances = [ { value: '', name: 'New Cloud SQL Instance' } ];
+                const cloudSqlInstances = [{ value: '', name: 'New Cloud SQL Instance' }];
 
                 exec(`gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`, (err, stdout, stderr) => {
                     if (err) {
@@ -361,7 +355,7 @@ module.exports = class extends BaseGenerator {
                     } else {
                         _.forEach(stdout.toString().split(os.EOL), (instance) => {
                             if (!instance) return;
-                            cloudSqlInstances.push({ value: instance, name: instance})
+                            cloudSqlInstances.push({ value: instance, name: instance });
                         });
                     }
 
@@ -441,7 +435,7 @@ module.exports = class extends BaseGenerator {
 
                 const done = this.async();
 
-                const cloudSqlDatabases = [ { value: '', name: 'New Database' } ];
+                const cloudSqlDatabases = [{ value: '', name: 'New Database' }];
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 exec(`gcloud sql databases list -i ${name} --format='value(name)' --project="${this.gcpProjectId}"`, (err, stdout, stderr) => {
                     if (err) {
@@ -449,7 +443,7 @@ module.exports = class extends BaseGenerator {
                     } else {
                         _.forEach(stdout.toString().split(os.EOL), (database) => {
                             if (!database) return;
-                            cloudSqlDatabases.push({ value: database, name: database})
+                            cloudSqlDatabases.push({ value: database, name: database });
                         });
                     }
 
@@ -536,7 +530,7 @@ module.exports = class extends BaseGenerator {
                 const name = this.gcpCloudSqlInstanceName;
 
                 const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${this.gcpProjectId}`;
-                this.log(chalk.bold('\n... Running: ' + cmd));
+                this.log(chalk.bold(`\n... Running: ${cmd}`));
 
                 exec(cmd, (err, stdout, stderr) => {
                     if (err) {
@@ -544,7 +538,7 @@ module.exports = class extends BaseGenerator {
                         this.log.error(err);
                     }
 
-                    this.gcpCloudSqlInstanceName = execSync(`gcloud sql instances describe jhipster --format="value(connectionName)" --project="${this.gcpProjectId}"`, { encoding: 'utf8'} );
+                    this.gcpCloudSqlInstanceName = execSync(`gcloud sql instances describe jhipster --format="value(connectionName)" --project="${this.gcpProjectId}"`, { encoding: 'utf8' });
 
                     done();
                 });
@@ -562,11 +556,11 @@ module.exports = class extends BaseGenerator {
                     if (_.includes(stdout, this.gcpCloudSqlUserName)) {
                         this.log(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
                         const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" "%" --project="${this.gcpProjectId}" --password="..."`;
-                        this.log(chalk.bold('... To set its password, run: ' + cmd));
+                        this.log(chalk.bold(`... To set its password, run: ${cmd}`));
                         done();
                     } else {
                         const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" "%" --password="${this.gcpCloudSqlPassword}" --project="${this.gcpProjectId}"`;
-                        this.log(chalk.bold('... Running: ' + cmd));
+                        this.log(chalk.bold(`... Running: ${cmd}`));
                         exec(cmd, (err, stdout, stderr) => {
                             if (err) {
                                 this.log.error(err);
@@ -586,7 +580,7 @@ module.exports = class extends BaseGenerator {
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 this.log(chalk.bold(`\nCreating Database ${chalk.cyan(this.gcpCloudSqlDatabaseName)}`));
                 const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${this.gcpProjectId}"`;
-                this.log(chalk.bold('... Running: ' + cmd));
+                this.log(chalk.bold(`... Running: ${cmd}`));
                 exec(cmd, (err, stdout, stderr) => {
                     if (err) {
                         this.log.error(err);
@@ -622,7 +616,7 @@ module.exports = class extends BaseGenerator {
                 this.template('appengine-web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/appengine-web.xml`);
                 this.template('logging.properties.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/logging.properties`);
                 this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
-/*
+                /*
                if (this.buildTool === 'gradle') {
                     this.template('gae.gradle.ejs', 'gradle/gae.gradle');
                 }
@@ -643,7 +637,7 @@ module.exports = class extends BaseGenerator {
                 }
             },
 
-/*
+            /*
             addGradlePlugin() {
                 if (this.buildTool !== 'gradle') return;
                 this.addGradlePlugin('gradle.plugin.com.gcp.sdk', 'gcp-gradle', '0.2.0');
@@ -659,7 +653,6 @@ module.exports = class extends BaseGenerator {
                     this.render('pom-profile.xml.ejs', (rendered) => {
                         this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
                     });
-
                 }
             }
         };
@@ -670,9 +663,9 @@ module.exports = class extends BaseGenerator {
             productionBuild() {
                 if (this.abort) return;
 
-                this.log(chalk.bold(`\nRun App Engine DevServer Locally: ./mvnw appengine:run -DskipTests`));
-                this.log(chalk.bold(`\nDeploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod,prod-gae`));
-/*
+                this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw appengine:run -DskipTests'));
+                this.log(chalk.bold('\nDeploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod,prod-gae'));
+                /*
                 if (this.gcpSkipBuild || this.gcpDeployType === 'git') {
                     this.log(chalk.bold('\nSkipping build'));
                     return;
