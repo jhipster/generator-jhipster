@@ -18,6 +18,7 @@
  */
 const chalk = require('chalk');
 const shelljs = require('shelljs');
+const fs = require('fs');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseGenerator = require('../generator-base');
@@ -223,6 +224,12 @@ module.exports = class extends BaseGenerator {
                 }
             }
             this.log();
+        }
+        // Make the apply script executable
+        try {
+            fs.chmodSync('kubectl-apply.sh', '755');
+        } catch (err) {
+            this.log(`${chalk.yellow.bold('WARNING!')}Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'`);
         }
     }
 };

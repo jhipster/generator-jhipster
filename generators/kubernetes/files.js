@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const fs = require('fs');
 
 module.exports = {
     writeFiles
@@ -101,9 +100,7 @@ function writeFiles() {
         },
 
         writeConfigRunFile() {
-            this.template('_kubectl-apply.sh', 'kubectl-apply.sh');
-            fs.chmodSync('kubectl-apply.sh', '755');
+            this.template('_kubectl-apply.sh.ejs', 'kubectl-apply.sh');
         }
-
     };
 }
