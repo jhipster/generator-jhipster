@@ -377,6 +377,8 @@ const files = {
                 'spec/app/shared/reducers/authentication.spec.ts',
                 'spec/app/shared/util/entity-utils.spec.ts',
                 'spec/app/shared/auth/private-route.spec.tsx',
+                'spec/app/shared/error/error-boundary.spec.tsx',
+                'spec/app/shared/error/error-boundary-route.spec.tsx',
                 'spec/app/shared/layout/header/header.spec.tsx',
                 'spec/app/shared/layout/header/menus/account.spec.tsx',
                 'spec/app/modules/administration/administration.reducer.spec.ts',
