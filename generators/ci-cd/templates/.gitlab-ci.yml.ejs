@@ -77,7 +77,7 @@ gradle-front-test:
         <%_ } _%>
     artifacts:
         paths:
-            - build/test-results/karma/*
+            - build/test-results/jest/*
     <%_ } _%>
 gradle-repackage:
     stage: package
@@ -129,7 +129,7 @@ maven-front-test:
         <%_ } _%>
     artifacts:
         paths:
-            - target/test-results/karma/*
+            - target/test-results/jest/*
     <%_ } _%>
     <%_ if (heroku.includes('gitlab')) { _%>
 maven-deploy:
