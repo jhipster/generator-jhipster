@@ -29,6 +29,9 @@ function generateProject() {
     jhipster --force --no-insight --skip-checks --with-entities \
         --skip-git --skip-commit-hook
     ls -la
+    if [[ ! -d "src" ]] ; then
+        exit 5
+    fi
 }
 
 #-------------------------------------------------------------------------------
