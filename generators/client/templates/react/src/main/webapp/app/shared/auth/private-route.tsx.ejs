@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
 import { IRootState } from 'app/shared/reducers';
+import ErrorBoundary from 'app/shared/error/error-boundary';
 
 interface IOwnProps {
   hasAnyAuthorities?: string[];
@@ -19,7 +20,9 @@ export const PrivateRouteComponent = ({
 }: IPrivateRouteProps) => {
   const checkAuthorities = props =>
     isAuthorized ? (
-      <Component {...props} />
+      <ErrorBoundary>
+        <Component {...props} />
+      </ErrorBoundary>
     ) : (
       <div className="insufficient-authority">
         <div className="alert alert-danger">
