@@ -386,7 +386,7 @@ module.exports = class extends BaseGenerator {
     }
     get default() {
         if (useBlueprint) return;
-        return this._configuring();
+        return this._default();
     }
 
     // Public API method used by the getter and also by Blueprints
