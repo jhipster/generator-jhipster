@@ -16,7 +16,7 @@ const entityFiles = [
     `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/JobResourceIntTest.java`,
 ];
 
-describe.only('JHipster generator import jdl', () => {
+describe('JHipster generator import jdl', () => {
     describe('imports a JDL model from single file with --json-only flag', () => {
         beforeEach((done) => {
             helpers.run(require.resolve('../generators/import-jdl'))
@@ -98,7 +98,7 @@ describe.only('JHipster generator import jdl', () => {
             ]);
         });
     });
-    describe.only('imports single app and entities', () => {
+    describe('imports single app and entities', () => {
         before((done) => {
             helpers.run(require.resolve('../generators/import-jdl'))
                 .inTmpDir((dir) => {
