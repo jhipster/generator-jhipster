@@ -70,7 +70,7 @@ describe('JHipster generator import jdl', () => {
             assert.file(entityFiles);
         });
     });
-    describe('imports a JDL app and entities', () => {
+    describe('imports JDL apps and entities', () => {
         before((done) => {
             helpers.run(require.resolve('../generators/import-jdl'))
                 .inTmpDir((dir) => {
@@ -95,6 +95,27 @@ describe('JHipster generator import jdl', () => {
                 path.join('myFirstApp', '.jhipster', 'F.json'),
                 path.join('mySecondApp', '.jhipster', 'E.json'),
                 path.join('myThirdApp', '.jhipster', 'F.json')
+            ]);
+        });
+    });
+    describe('imports single app and entities', () => {
+        before((done) => {
+            helpers.run(require.resolve('../generators/import-jdl'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/import-jdl'), dir);
+                })
+                .withOptions({ skipInstall: true })
+                .withArguments(['single-app-and-entities.jdl'])
+                .on('end', done);
+        });
+
+        it('creates the application', () => {
+            assert.file(['.yo-rc.json']);
+        });
+        it('creates the entities', () => {
+            assert.file([
+                path.join('.jhipster', 'A.json'),
+                path.join('.jhipster', 'B.json'),
             ]);
         });
     });
