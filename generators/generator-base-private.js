@@ -670,9 +670,9 @@ module.exports = class extends Generator {
             this.checkBlueprint(blueprint);
             this.log(`Trying to use blueprint ${blueprint}`);
             try {
-                const finalOptions = _.extend(
-                    { jhipsterContext: this },
-                    options
+                const finalOptions = Object.assign(
+                    options,
+                    { jhipsterContext: this }
                 );
                 this.useBlueprint = true;
                 this.composeExternalModule(
