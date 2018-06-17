@@ -125,8 +125,8 @@ module.exports = class extends BaseGenerator {
         );
     }
 
-    get initializing() {
-        if (useBlueprint) return;
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
         return {
             getConfig() {
                 const context = this.context;
@@ -267,9 +267,13 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
-    get prompting() {
+    get initializing() {
         if (useBlueprint) return;
+        return this._initializing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _prompting() {
         return {
             /* pre entity hook needs to be written here */
             askForMicroserviceJson: prompts.askForMicroserviceJson,
@@ -286,9 +290,13 @@ module.exports = class extends BaseGenerator {
             askForPagination: prompts.askForPagination
         };
     }
-
-    get configuring() {
+    get prompting() {
         if (useBlueprint) return;
+        return this._prompting();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
         return {
             validateFile() {
                 const context = this.context;
@@ -779,9 +787,13 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
-    get writing() {
+    get configuring() {
         if (useBlueprint) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
         return {
 
             cleanup() {
@@ -828,9 +840,13 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
-    get install() {
+    get writing() {
         if (useBlueprint) return;
+        return this._writing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _install() {
         return {
             afterRunHook() {
                 const done = this.async();
@@ -856,5 +872,9 @@ module.exports = class extends BaseGenerator {
                 }
             }
         };
+    }
+    get install() {
+        if (useBlueprint) return;
+        return this._install();
     }
 };

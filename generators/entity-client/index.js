@@ -38,16 +38,29 @@ module.exports = class extends BaseGenerator {
         });
     }
 
-    get writing() {
-        if (useBlueprint) return;
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
         return writeFiles();
     }
 
-    end() {
+    get writing() {
         if (useBlueprint) return;
-        if (!this.options['skip-install'] && !this.skipClient) {
-            this.rebuildClient();
-        }
-        this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));
+        return this._writing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _end() {
+        return {
+            end() {
+                if (!this.options['skip-install'] && !this.skipClient) {
+                    this.rebuildClient();
+                }
+                this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));
+            }
+        };
+    }
+    get end() {
+        if (useBlueprint) return;
+        return this._end();
     }
 };

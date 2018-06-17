@@ -91,8 +91,8 @@ module.exports = class extends BaseGenerator {
         );
     }
 
-    get initializing() {
-        if (useBlueprint) return;
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
         return {
             displayLogo() {
                 if (this.logo) {
@@ -280,8 +280,13 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get prompting() {
+    get initializing() {
         if (useBlueprint) return;
+        return this._initializing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _prompting() {
         return {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
@@ -319,8 +324,13 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get configuring() {
+    get prompting() {
         if (useBlueprint) return;
+        return this._prompting();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
         return {
             insight() {
                 const insight = this.insight();
@@ -389,8 +399,13 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get default() {
+    get configuring() {
         if (useBlueprint) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
         return {
             getSharedConfigOptions() {
                 this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
@@ -422,30 +437,49 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get writing() {
+    get default() {
         if (useBlueprint) return;
+        return this._default();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
         return writeFiles();
     }
 
-    end() {
+    get writing() {
         if (useBlueprint) return;
-        if (this.prodDatabaseType === 'oracle') {
-            this.log('\n\n');
-            this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
-            }Please follow our documentation on using Oracle to set up the \n` +
-                'Oracle proprietary JDBC driver.');
-        }
-        this.log(chalk.green.bold('\nServer application generated successfully.\n'));
+        return this._writing();
+    }
 
-        let executable = 'mvnw';
-        if (this.buildTool === 'gradle') {
-            executable = 'gradlew';
-        }
-        let logMsgComment = '';
-        if (os.platform() === 'win32') {
-            logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
-        }
-        this.log(chalk.green(`${'Run your Spring Boot application:' +
-            '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+    // Public API method used by the getter and also by Blueprints
+    _end() {
+        return {
+            end() {
+                if (this.prodDatabaseType === 'oracle') {
+                    this.log('\n\n');
+                    this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
+                    }Please follow our documentation on using Oracle to set up the \n` +
+                        'Oracle proprietary JDBC driver.');
+                }
+                this.log(chalk.green.bold('\nServer application generated successfully.\n'));
+
+                let executable = 'mvnw';
+                if (this.buildTool === 'gradle') {
+                    executable = 'gradlew';
+                }
+                let logMsgComment = '';
+                if (os.platform() === 'win32') {
+                    logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
+                }
+                this.log(chalk.green(`${'Run your Spring Boot application:' +
+                    '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+            }
+        };
+    }
+
+    get end() {
+        if (useBlueprint) return;
+        return this._end();
     }
 };

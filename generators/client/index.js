@@ -129,19 +129,23 @@ module.exports = class extends BaseGenerator {
         this.setupClientOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         // use global variable since getters dont have access to instance property
-        useBlueprint = this.composeBlueprint(
-            blueprint,
-            'client',
-            {
-                'skip-install': this.options['skip-install'],
-                configOptions: this.configOptions,
-                force: this.options.force
-            }
-        );
+        if (!opts.fromBlueprint) {
+            useBlueprint = this.composeBlueprint(
+                blueprint,
+                'client',
+                {
+                    'skip-install': this.options['skip-install'],
+                    configOptions: this.configOptions,
+                    force: this.options.force
+                }
+            );
+        } else {
+            useBlueprint = false;
+        }
     }
 
-    get initializing() {
-        if (useBlueprint) return;
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
         return {
             displayLogo() {
                 if (this.logo) {
@@ -217,8 +221,13 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get prompting() {
+    get initializing() {
         if (useBlueprint) return;
+        return this._initializing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _prompting() {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
@@ -232,8 +241,13 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get configuring() {
+    get prompting() {
         if (useBlueprint) return;
+        return this._prompting();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
         return {
             insight() {
                 const insight = this.insight();
@@ -288,8 +302,13 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get default() {
+    get configuring() {
         if (useBlueprint) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
         return {
             getSharedConfigOptions() {
                 if (this.configOptions.cacheProvider) {
@@ -369,52 +388,84 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    writing() {
+    get default() {
         if (useBlueprint) return;
-        switch (this.clientFramework) {
-        case 'react':
-            return writeReactFiles.call(this);
-        default:
-            return writeAngularFiles.call(this);
-        }
+        return this._configuring();
     }
 
-    install() {
-        if (useBlueprint) return;
-        const logMsg =
-            `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
-
-        const installConfig = {
-            bower: false,
-            npm: this.clientPackageManager !== 'yarn',
-            yarn: this.clientPackageManager === 'yarn'
-        };
-
-        if (this.options['skip-install']) {
-            this.log(logMsg);
-        } else {
-            this.installDependencies(installConfig).then(
-                () => {
-                    this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
-                },
-                (err) => {
-                    this.warning('Install of dependencies failed!');
-                    this.log(logMsg);
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
+        return {
+            write() {
+                switch (this.clientFramework) {
+                case 'react':
+                    return writeReactFiles.call(this);
+                default:
+                    return writeAngularFiles.call(this);
                 }
-            );
-        }
+            }
+        };
     }
 
-    end() {
+    get writing() {
         if (useBlueprint) return;
-        if (this.buildResult !== undefined && this.buildResult.status !== 0) {
-            this.error('webpack:build failed.');
-        }
-        this.log(chalk.green.bold('\nClient application generated successfully.\n'));
+        return this._writing();
+    }
 
-        const logMsg =
-            `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
+    // Public API method used by the getter and also by Blueprints
+    _install() {
+        return {
+            installing() {
+                const logMsg =
+                    `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
-        this.log(chalk.green(logMsg));
+                const installConfig = {
+                    bower: false,
+                    npm: this.clientPackageManager !== 'yarn',
+                    yarn: this.clientPackageManager === 'yarn'
+                };
+
+                if (this.options['skip-install']) {
+                    this.log(logMsg);
+                } else {
+                    this.installDependencies(installConfig).then(
+                        () => {
+                            this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
+                        },
+                        (err) => {
+                            this.warning('Install of dependencies failed!');
+                            this.log(logMsg);
+                        }
+                    );
+                }
+            }
+        };
+    }
+
+    get install() {
+        if (useBlueprint) return;
+        return this._install();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _end() {
+        return {
+            end() {
+                if (this.buildResult !== undefined && this.buildResult.status !== 0) {
+                    this.error('webpack:build failed.');
+                }
+                this.log(chalk.green.bold('\nClient application generated successfully.\n'));
+
+                const logMsg =
+                    `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
+
+                this.log(chalk.green(logMsg));
+            }
+        };
+    }
+
+    get end() {
+        if (useBlueprint) return;
+        return this._end();
     }
 };

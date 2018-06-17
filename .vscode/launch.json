@@ -7,6 +7,23 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "jhipster generate sample-dev blueprint",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "timeout": 100000,
+            "args": [
+                "-d",
+                "--skip-checks",
+                "--skip-git",
+                "--skip-cache",
+                "--blueprint",
+                "generator-jhipster-sample-blueprint"
+                ],
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "jhipster generate sample-dev",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "timeout": 100000,
