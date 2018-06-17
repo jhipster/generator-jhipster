@@ -416,7 +416,7 @@ tabs 4
 elapsedF() {
     local -n ELAPSEDLOC="$1"
     # shellcheck disable=2034
-    ELAPSEDLOC="($(date +%r) — Elapsed: $((SECONDS / 3600)) hrs \
+    ELAPSEDLOC="($(date +%T) — Elapsed: $((SECONDS / 3600)) hrs \
 $(((SECONDS / 60) % 60)) min $((SECONDS % 60)) sec)"
 }
 
@@ -496,7 +496,7 @@ function printFileDescriptor3() {
 # function printCommand() {{{3
 function printCommand() {
     printFileDescriptor3 "${ps4Light}""\\033[01;34m""$(dirs +0)"\
-        "$ ""\\033[00m" "$@"
+        "[$(date +%T)] $ ""\\033[00m" "$@"
 }
 
 # function printCommandAndEval() {{{2
@@ -1482,7 +1482,7 @@ function verifyProject() {
             "in same time for couchbase."
         launch04Test
     else
-        launch04Test &
+        launch04Test
     fi
     launch05Run
     # Never launched in TRAVIS CI for a PR
@@ -1736,7 +1736,7 @@ then restart script."
             [[ "${JHIPSTER}" == "ngx-default"  ]] ; then
             # ./scripts/00-install-jhipster.sh coresponding to function
             # testGenerator
-            testGenerator &
+            testGenerator
         fi
 
         if [[ "$IS_VERIFY" -eq 1 ]] ; then
@@ -1986,7 +1986,7 @@ export SPRING_JPA_SHOW_SQL="false"
 export PROMPT_COMMAND=""
 # shellcheck disable=SC2154
 export PS4='${debian_chroot:+($debian_chroot)}'\
-'\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+'\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\] [\D{%T}] \$ '
 
 # Prefix of docker images for ./travis/scripts/03-docker-compose.sh
 export DOCKER_PREFIX_NAME="jhipster-travis-build-"
