@@ -68,7 +68,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             test: /(vendor\.scss|global\.scss)/,
             use: extractSASS.extract({
                 fallback: 'style-loader',
-                use: ['css-loader', 'postcss-loader', 'sass-loader']
+                use: ['css-loader', 'postcss-loader', 'sass-loader'],
+                publicPath: '../'
             })
         },
         <%_ } _%>

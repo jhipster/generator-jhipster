@@ -18,7 +18,7 @@
  limitations under the License.
 -%>
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
-# Usage: bash <%-directoryPath%>apply.sh
+# Usage: bash kubectl-apply.sh
 <%_ if (istio === 'manualInjection') { _%>
 loopDir(){
   for entry in "$1"/*
@@ -29,31 +29,31 @@ loopDir(){
 <%_ } _%>
 
 <%_ if (kubernetesNamespace !== 'default') { _%>
-kubectl apply -f <%-directoryPath%>k8s/namespace.yml
+kubectl apply -f namespace.yml
 <%_ } _%> <%_ if (istio === 'autoInjection') { _%>
 kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled
 <%_ } _%> <%_ if (istio === 'manualInjection') { _%>
 <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-loopDir "<%-directoryPath%>k8s/registry"
+loopDir "registry"
 <%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
-loopDir "<%-directoryPath%>k8s/<%- appConfig.baseName.toLowerCase() %>"
+loopDir "<%- appConfig.baseName.toLowerCase() %>"
 <%_ }) _%>
 <%_ } else {_%>
 <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-kubectl apply -f <%-directoryPath%>k8s/registry/
+kubectl apply -f registry/
 <%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
-kubectl apply -f <%-directoryPath%>k8s/<%- appConfig.baseName.toLowerCase() %>/
+kubectl apply -f <%- appConfig.baseName.toLowerCase() %>/
 <%_ }) _%> <%_ } _%> <%_ if (useKafka === true) { _%>
-kubectl apply -f <%-directoryPath%>k8s/messagebroker/
+kubectl apply -f messagebroker/
 <%_ } _%> <%_ if (monitoring === 'elk') { _%>
-kubectl apply -f <%-directoryPath%>k8s/console/
+kubectl apply -f console/
 <%_ } _%> <%_ if (monitoring === 'prometheus') { _%>
-kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-prometheus-crd.yml
+kubectl apply -f monitoring/jhipster-prometheus-crd.yml
 until [ $(kubectl get crd prometheuses.monitoring.coreos.com 2>>/dev/null | wc -l) -ge 2 ]; do
     echo "Waiting for the custom resource prometheus operator to get initialised";
     sleep 5;
 done
-kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-prometheus-cr.yml
-kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-grafana.yml
-kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-grafana-dashboard.yml
+kubectl apply -f monitoring/jhipster-prometheus-cr.yml
+kubectl apply -f monitoring/jhipster-grafana.yml
+kubectl apply -f monitoring/jhipster-grafana-dashboard.yml
 <%_ } _%>
