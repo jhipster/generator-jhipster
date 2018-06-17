@@ -157,13 +157,13 @@ module.exports = class extends BaseGenerator {
                 // Make constants available in templates
                 this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-
-                this.serverPort = this.config.get('serverPort') || this.configOptions.serverPort || 8080;
-                this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
+                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
-                this.clientFramework = this.config.get('clientFramework');
+                this.clientFramework = configuration.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
@@ -172,19 +172,19 @@ module.exports = class extends BaseGenerator {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
                 }
-                this.useSass = this.config.get('useSass');
-                this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
-                this.nativeLanguage = this.config.get('nativeLanguage');
-                this.languages = this.config.get('languages');
+                this.useSass = configuration.get('useSass');
+                this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+                this.nativeLanguage = configuration.get('nativeLanguage');
+                this.languages = configuration.get('languages');
                 this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
-                this.messageBroker = this.config.get('messageBroker');
+                this.messageBroker = configuration.get('messageBroker');
                 this.packagejs = packagejs;
-                const baseName = this.config.get('baseName');
+                const baseName = configuration.get('baseName');
                 if (baseName) {
                     this.baseName = baseName;
                 }
 
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
+                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
                 if (this.serviceDiscoveryType === undefined) {
                     this.serviceDiscoveryType = false;
                 }

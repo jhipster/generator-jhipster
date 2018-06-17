@@ -2434,4 +2434,22 @@ module.exports = class extends PrivateBase {
         dest.fieldNameChoices = [];
         dest.relNameChoices = [];
     }
+
+    /**
+     * Get all the generator configuration from the .yo-rc.json file
+     * @param {Generator} generator the generator instance to use
+     * @param {boolean} force force getting direct from file
+     */
+    getAllJhipsterConfig(generator = this, force) {
+        let configuration = generator.config.getAll();
+        if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
+            configuration = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }))['generator-jhipster'];
+            Object.assign(configuration, {
+                getAll: () => configuration,
+                get: key => configuration[key],
+                set: (key, value) => { configuration[key] = value; }
+            });
+        }
+        return configuration;
+    }
 };

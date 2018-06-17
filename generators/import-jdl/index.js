@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const _ = require('lodash');
-const fs = require('fs');
 const path = require('path');
 const shelljs = require('shelljs');
 const chalk = require('chalk');
@@ -81,13 +80,7 @@ module.exports = class extends BaseGenerator {
                     // we may have to parse the JDL first
                     return;
                 }
-                let configuration = this.config.getAll();
-                if (!configuration.baseName && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
-                    configuration = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }))['generator-jhipster'];
-                    configuration.getAll = () => configuration;
-                    configuration.get = key => configuration[key];
-                    configuration.set = (key, value) => { configuration[key] = value; };
-                }
+                const configuration = this.getAllJhipsterConfig();
                 this.applicationType = configuration.applicationType;
                 this.baseName = configuration.baseName;
                 this.databaseType = configuration.databaseType || this.getDBTypeFromDBValue(this.options.db);

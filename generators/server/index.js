@@ -148,38 +148,39 @@ module.exports = class extends BaseGenerator {
                 this.NPM_VERSION = constants.NPM_VERSION;
 
                 this.packagejs = packagejs;
-                this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
-                this.packageName = this.config.get('packageName');
-                this.serverPort = this.config.get('serverPort');
+                this.packageName = configuration.get('packageName');
+                this.serverPort = configuration.get('serverPort');
                 if (this.serverPort === undefined) {
                     this.serverPort = '8080';
                 }
-                this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
-                this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
+                this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
+                this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
                 if (this.searchEngine === undefined) {
                     this.searchEngine = false;
                 }
-                this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix');
+                this.jhiPrefix = this.configOptions.jhiPrefix || configuration.get('jhiPrefix');
                 this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
-                this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
+                this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
                 if (this.messageBroker === undefined) {
                     this.messageBroker = false;
                 }
 
-                this.enableSwaggerCodegen = this.config.get('enableSwaggerCodegen');
+                this.enableSwaggerCodegen = configuration.get('enableSwaggerCodegen');
 
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
+                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
                 if (this.serviceDiscoveryType === undefined) {
                     this.serviceDiscoveryType = false;
                 }
 
-                this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-                this.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no' && this.config.get('hibernateCache') !== 'memcached');
+                this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                this.enableHibernateCache = configuration.get('enableHibernateCache') || (configuration.get('hibernateCache') !== undefined && configuration.get('hibernateCache') !== 'no' && configuration.get('hibernateCache') !== 'memcached');
 
-                this.databaseType = this.config.get('databaseType');
+                this.databaseType = configuration.get('databaseType');
                 if (this.databaseType === 'mongodb') {
                     this.devDatabaseType = 'mongodb';
                     this.prodDatabaseType = 'mongodb';
@@ -199,8 +200,8 @@ module.exports = class extends BaseGenerator {
                     this.enableHibernateCache = false;
                 } else {
                     // sql
-                    this.devDatabaseType = this.config.get('devDatabaseType');
-                    this.prodDatabaseType = this.config.get('prodDatabaseType');
+                    this.devDatabaseType = configuration.get('devDatabaseType');
+                    this.prodDatabaseType = configuration.get('prodDatabaseType');
                 }
 
                 // Hazelcast is mandatory for Gateways, as it is used for rate limiting
@@ -208,26 +209,26 @@ module.exports = class extends BaseGenerator {
                     this.cacheProvider = 'hazelcast';
                 }
 
-                this.buildTool = this.config.get('buildTool');
+                this.buildTool = configuration.get('buildTool');
                 this.jhipsterVersion = packagejs.version;
                 if (this.jhipsterVersion === undefined) {
-                    this.jhipsterVersion = this.config.get('jhipsterVersion');
+                    this.jhipsterVersion = configuration.get('jhipsterVersion');
                 }
-                this.authenticationType = this.config.get('authenticationType');
+                this.authenticationType = configuration.get('authenticationType');
                 if (this.authenticationType === 'session') {
-                    this.rememberMeKey = this.config.get('rememberMeKey');
+                    this.rememberMeKey = configuration.get('rememberMeKey');
                 }
-                this.jwtSecretKey = this.config.get('jwtSecretKey');
-                this.nativeLanguage = this.config.get('nativeLanguage');
-                this.languages = this.config.get('languages');
-                this.uaaBaseName = this.config.get('uaaBaseName');
-                this.clientFramework = this.config.get('clientFramework');
-                const testFrameworks = this.config.get('testFrameworks');
+                this.jwtSecretKey = configuration.get('jwtSecretKey');
+                this.nativeLanguage = configuration.get('nativeLanguage');
+                this.languages = configuration.get('languages');
+                this.uaaBaseName = configuration.get('uaaBaseName');
+                this.clientFramework = configuration.get('clientFramework');
+                const testFrameworks = configuration.get('testFrameworks');
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;
                 }
 
-                const baseName = this.config.get('baseName');
+                const baseName = configuration.get('baseName');
                 if (baseName) {
                     // to avoid overriding name from configOptions
                     this.baseName = baseName;

@@ -56,12 +56,13 @@ module.exports = class extends BaseGenerator {
         return {
             initializing() {
                 this.log(`The spring-controller ${this.name} is being created.`);
-                this.baseName = this.config.get('baseName');
-                this.packageName = this.config.get('packageName');
-                this.packageFolder = this.config.get('packageFolder');
-                this.databaseType = this.config.get('databaseType');
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.baseName = configuration.get('baseName');
+                this.packageName = configuration.get('packageName');
+                this.packageFolder = configuration.get('packageFolder');
+                this.databaseType = configuration.get('databaseType');
                 this.reactiveController = false;
-                this.applicationType = this.config.get('applicationType');
+                this.applicationType = configuration.get('applicationType');
                 if (this.applicationType === 'reactive') {
                     this.reactiveController = true;
                 }
