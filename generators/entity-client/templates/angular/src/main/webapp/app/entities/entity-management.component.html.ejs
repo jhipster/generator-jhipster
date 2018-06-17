@@ -130,7 +130,7 @@
                         <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?.id" %>, 'view' ]" >{{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}</a>
                     </div>
                         <%_ } else { _%>
-                    <div *ngIf="<%= entityInstance + "." + relationshipFieldName + "Id" %>">
+                    <div *ngIf="<%= entityInstance + "." + relationshipFieldName + "Id" %> !== ''">
                         <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "Id" %> %>, 'view' ]" >{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
                     </div>
                             <%_ } _%>
