@@ -41,9 +41,8 @@ module.exports = class extends BaseGenerator {
                 blueprint,
                 'spring-controller',
                 {
-                    'skip-install': this.options['skip-install'],
                     force: this.options.force,
-                    arguments: [this.context.name]
+                    arguments: [this.name]
                 }
             );
         } else {
