@@ -137,7 +137,7 @@ spring:
             hibernate.generate_statistics: false
             <%_ if (enableHibernateCache) { _%>
                 <%_ if (cacheProvider === 'ehcache') { _%>
-            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.NoDefaultJCacheRegionFactory
+            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory
                 <%_ } else if (cacheProvider === 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
