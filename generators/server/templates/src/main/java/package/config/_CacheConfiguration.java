@@ -25,6 +25,10 @@ import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.expiry.Duration;
 import org.ehcache.expiry.Expirations;
 import org.ehcache.jsr107.Eh107Configuration;
+    <%_ if (enableHibernateCache) { _%>
+
+import io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory;
+    <%_ } _%>
 
 import java.util.concurrent.TimeUnit;
 
@@ -116,6 +120,9 @@ public class CacheConfiguration {
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
+        <%_ if (enableHibernateCache) { _%>
+        BeanClassLoaderAwareJCacheRegionFactory.setBeanClassLoader(this.getClass().getClassLoader());
+        <%_ } _%>
         JHipsterProperties.Cache.Ehcache ehcache =
             jHipsterProperties.getCache().getEhcache();
 
