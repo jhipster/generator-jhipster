@@ -113,16 +113,20 @@ module.exports = class extends BaseGenerator {
         this.setupEntityOptions(this, this, this.context);
         this.registerClientTransforms();
         const blueprint = this.config.get('blueprint');
-        // use global variable since getters dont have access to instance property
-        useBlueprint = this.composeBlueprint(
-            blueprint,
-            'entity',
-            {
-                'skip-install': this.options['skip-install'],
-                force: this.options.force,
-                arguments: [this.context.name]
-            }
-        );
+        if (!opts.fromBlueprint) {
+            // use global variable since getters dont have access to instance property
+            useBlueprint = this.composeBlueprint(
+                blueprint,
+                'entity',
+                {
+                    'skip-install': this.options['skip-install'],
+                    force: this.options.force,
+                    arguments: [this.context.name]
+                }
+            );
+        } else {
+            useBlueprint = false;
+        }
     }
 
     // Public API method used by the getter and also by Blueprints

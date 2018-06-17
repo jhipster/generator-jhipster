@@ -220,7 +220,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get initializing() {
         if (useBlueprint) return;
         return this._initializing();
@@ -240,7 +239,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get prompting() {
         if (useBlueprint) return;
         return this._prompting();
@@ -301,7 +299,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get configuring() {
         if (useBlueprint) return;
         return this._configuring();
@@ -387,7 +384,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get default() {
         if (useBlueprint) return;
         return this._configuring();
@@ -406,7 +402,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get writing() {
         if (useBlueprint) return;
         return this._writing();
@@ -441,7 +436,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get install() {
         if (useBlueprint) return;
         return this._install();
@@ -463,7 +457,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get end() {
         if (useBlueprint) return;
         return this._end();

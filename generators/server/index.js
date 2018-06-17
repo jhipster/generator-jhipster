@@ -79,16 +79,20 @@ module.exports = class extends BaseGenerator {
 
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        // use global variable since getters dont have access to instance property
-        useBlueprint = this.composeBlueprint(
-            blueprint,
-            'server',
-            {
-                'client-hook': !this.skipClient,
-                configOptions: this.configOptions,
-                force: this.options.force
-            }
-        );
+        if (!opts.fromBlueprint) {
+            // use global variable since getters dont have access to instance property
+            useBlueprint = this.composeBlueprint(
+                blueprint,
+                'server',
+                {
+                    'client-hook': !this.skipClient,
+                    configOptions: this.configOptions,
+                    force: this.options.force
+                }
+            );
+        } else {
+            useBlueprint = false;
+        }
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -279,7 +283,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get initializing() {
         if (useBlueprint) return;
         return this._initializing();
@@ -323,7 +326,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get prompting() {
         if (useBlueprint) return;
         return this._prompting();
@@ -398,7 +400,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get configuring() {
         if (useBlueprint) return;
         return this._configuring();
@@ -436,7 +437,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get default() {
         if (useBlueprint) return;
         return this._default();
@@ -446,7 +446,6 @@ module.exports = class extends BaseGenerator {
     _writing() {
         return writeFiles();
     }
-
     get writing() {
         if (useBlueprint) return;
         return this._writing();
@@ -477,7 +476,6 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
     get end() {
         if (useBlueprint) return;
         return this._end();
