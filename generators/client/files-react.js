@@ -67,6 +67,10 @@ const files = {
             templates: [
                 { file: 'static/images/hipster.png', method: 'copy' },
                 { file: 'static/images/hipster2x.png', method: 'copy' },
+                { file: 'static/images/hipster192.png', method: 'copy' },
+                { file: 'static/images/hipster256.png', method: 'copy' },
+                { file: 'static/images/hipster384.png', method: 'copy' },
+                { file: 'static/images/hipster512.png', method: 'copy' },
                 { file: 'static/images/logo-jhipster.png', method: 'copy' },
                 { file: 'static/images/logo-jhipster-react.svg', method: 'copy' }
             ]
