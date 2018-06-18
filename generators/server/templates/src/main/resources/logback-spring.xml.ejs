@@ -61,6 +61,10 @@
     <%_ if (databaseType === 'couchbase') { _%>
     <logger name="com.github.couchmove" level="INFO"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <logger name="com.google.code.ssm" level="WARN"/>
+    <logger name="com.google.code.yanf4j" level="WARN"/>
+    <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || serviceDiscoveryType === 'eureka') { _%>
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.discovery" level="INFO"/>
@@ -91,6 +95,9 @@
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') { _%>
     <logger name="org.infinispan" level="WARN"/>
+    <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <logger name="net.rubyeye.xmemcached" level="INFO"/>
     <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>

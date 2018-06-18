@@ -109,7 +109,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.route.data.subscribe(({<%= entityInstance %>}) => {
-            this.<%= entityInstance %> = <%= entityInstance %>.body ? <%= entityInstance %>.body : <%= entityInstance %>;
+            this.<%= entityInstance %> = <%= entityInstance %>;
         });
         <%_ for (idx in queries) { _%>
         <%- queries[idx] %>

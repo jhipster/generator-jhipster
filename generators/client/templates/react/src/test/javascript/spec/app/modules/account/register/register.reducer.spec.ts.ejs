@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { expect } from 'chai';
+
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import * as sinon from 'sinon';
@@ -35,13 +35,13 @@ describe('Creating account tests', () => {
   };
 
   it('should return the initial state', () => {
-    expect(register(undefined, {})).to.eql({
+    expect(register(undefined, {})).toEqual({
       ...initialState
     });
   });
 
   it('should detect a request', () => {
-    expect(register(undefined, { type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT) })).to.eql({
+    expect(register(undefined, { type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT) })).toEqual({
       ...initialState,
       loading: true
     });
@@ -50,7 +50,7 @@ describe('Creating account tests', () => {
   it('should handle RESET', () => {
     expect(
       register({ loading: true, registrationSuccess: true, registrationFailure: true, errorMessage: '' }, { type: ACTION_TYPES.RESET })
-    ).to.eql({
+    ).toEqual({
       ...initialState
     });
   });
@@ -61,7 +61,7 @@ describe('Creating account tests', () => {
         type: SUCCESS(ACTION_TYPES.CREATE_ACCOUNT),
         payload: 'fake payload'
       })
-    ).to.eql({
+    ).toEqual({
       ...initialState,
       registrationSuccess: true
     });
@@ -74,7 +74,7 @@ describe('Creating account tests', () => {
         type: FAILURE(ACTION_TYPES.CREATE_ACCOUNT),
         payload
       })
-    ).to.eql({
+    ).toEqual({
       ...initialState,
       registrationFailure: true,
       errorMessage: payload.response.data.errorKey
@@ -92,17 +92,26 @@ describe('Creating account tests', () => {
     });
 
     it('dispatches CREATE_ACCOUNT_PENDING and CREATE_ACCOUNT_FULFILLED actions', async () => {
+      const meta = {
+        <%_ if (enableTranslation) { _%>
+        successMessage: 'translation-not-found[register.messages.success]'
+        <%_ } else { _%>
+        successMessage: '<strong>Registration saved!</strong> Please check your email for confirmation.'
+        <%_ } _%>
+      };
 
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT)
+          type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT),
+          meta
         },
         {
           type: SUCCESS(ACTION_TYPES.CREATE_ACCOUNT),
-          payload: resolvedObject
+          payload: resolvedObject,
+          meta
         }
       ];
-      await store.dispatch(handleRegister('', '', '')).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(handleRegister('', '', '')).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
   });
 });

@@ -133,6 +133,11 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`
     ],
 
+    memcached: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
+        `${DOCKER_DIR}memcached.yml`
+    ],
+
     gatling: [
         `${TEST_DIR}gatling/conf/gatling.conf`
     ],
@@ -328,6 +333,10 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}content/css/vendor.css`,
         `${CLIENT_MAIN_SRC_DIR}content/images/hipster.png`,
         `${CLIENT_MAIN_SRC_DIR}content/images/hipster2x.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/hipster192.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/hipster256.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/hipster384.png`,
+        `${CLIENT_MAIN_SRC_DIR}content/images/hipster512.png`,
         `${CLIENT_MAIN_SRC_DIR}content/images/logo-jhipster.png`,
         `${CLIENT_MAIN_SRC_DIR}favicon.ico`,
         `${CLIENT_MAIN_SRC_DIR}index.html`,
@@ -336,6 +345,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,
         `${CLIENT_TEST_SRC_DIR}jest.ts`,
+        `${CLIENT_TEST_SRC_DIR}jest.conf.js`,
         `${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/activate/activate.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/account/password-reset/finish/password-reset-finish.component.spec.ts`,

@@ -42,7 +42,6 @@ const files = {
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
                 'webpack/webpack.prod.js',
-                'webpack/webpack.test.js',
                 'webpack/utils.js'
             ]
         }
@@ -68,6 +67,10 @@ const files = {
             templates: [
                 { file: 'static/images/hipster.png', method: 'copy' },
                 { file: 'static/images/hipster2x.png', method: 'copy' },
+                { file: 'static/images/hipster192.png', method: 'copy' },
+                { file: 'static/images/hipster256.png', method: 'copy' },
+                { file: 'static/images/hipster384.png', method: 'copy' },
+                { file: 'static/images/hipster512.png', method: 'copy' },
                 { file: 'static/images/logo-jhipster.png', method: 'copy' },
                 { file: 'static/images/logo-jhipster-react.svg', method: 'copy' }
             ]
@@ -239,11 +242,11 @@ const files = {
                 { file: 'modules/account/password-reset/init/password-reset-init.tsx', method: 'processJsx' },
                 { file: 'modules/account/password-reset/finish/password-reset-finish.tsx', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' },
-                'modules/account/register/register.reducer.ts',
-                'modules/account/activate/activate.reducer.ts',
-                'modules/account/password-reset/password-reset.reducer.ts',
+                { file: 'modules/account/register/register.reducer.ts', method: 'processJsx' },
+                { file: 'modules/account/activate/activate.reducer.ts', method: 'processJsx' },
+                { file: 'modules/account/password-reset/password-reset.reducer.ts', method: 'processJsx' },
                 { file: 'modules/account/password/password.reducer.ts', method: 'processJsx' },
-                'modules/account/settings/settings.reducer.ts'
+                { file: 'modules/account/settings/settings.reducer.ts', method: 'processJsx' }
             ]
         },
         {
@@ -320,6 +323,8 @@ const files = {
                 'shared/util/entity-utils.ts',
                 // components
                 { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
+                { file: 'shared/error/error-boundary.tsx', method: 'processJsx' },
+                { file: 'shared/error/error-boundary-route.tsx', method: 'processJsx' },
                 // model
                 'shared/model/user.model.ts'
             ]
@@ -369,14 +374,15 @@ const files = {
         {
             path: TEST_SRC_DIR,
             templates: [
-                'karma.conf.js',
-                'spec/entry.ts',
+                'jest.conf.js',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/reducers/application-profile.spec.ts',
                 'spec/app/shared/reducers/authentication.spec.ts',
                 'spec/app/shared/util/entity-utils.spec.ts',
                 'spec/app/shared/auth/private-route.spec.tsx',
+                'spec/app/shared/error/error-boundary.spec.tsx',
+                'spec/app/shared/error/error-boundary-route.spec.tsx',
                 'spec/app/shared/layout/header/header.spec.tsx',
                 'spec/app/shared/layout/header/menus/account.spec.tsx',
                 'spec/app/modules/administration/administration.reducer.spec.ts',
@@ -424,6 +430,29 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
+            ]
+        },
+        {
+            condition: generator => generator.protractorTests,
+            path: TEST_SRC_DIR,
+            templates: [
+                'e2e/modules/account/account.spec.ts',
+                'e2e/modules/administration/administration.spec.ts',
+                'e2e/util/utils.ts',
+                'e2e/page-objects/base-component.ts',
+                'e2e/page-objects/navbar-page.ts',
+                'e2e/page-objects/signin-page.ts',
+                'protractor.conf.js',
+                'tsconfig.e2e.json'
+            ]
+        },
+        {
+            condition: generator => generator.protractorTests && generator.authenticationType !== 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: [
+                'e2e/page-objects/password-page.ts',
+                'e2e/page-objects/settings-page.ts',
+                'e2e/page-objects/register-page.ts'
             ]
         }
     ]

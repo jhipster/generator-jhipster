@@ -57,16 +57,16 @@ spec:
     port: 8500
   - name: rpc
     port: 8400
-  - name: serflan-tcp
+  - name: tcp-serflan
     protocol: "TCP"
     port: 8301
-  - name: serflan-udp
+  - name: udp-serflan
     protocol: "UDP"
     port: 8301
-  - name: serfwan-tcp
+  - name: tcp-serfwan
     protocol: "TCP"
     port: 8302
-  - name: serfwan-udp
+  - name: udp-serfwan
     protocol: "UDP"
     port: 8302
   - name: server
@@ -102,16 +102,16 @@ spec:
           containerPort: 8500
         - name: rpc
           containerPort: 8400
-        - name: serflan-tcp
+        - name: tcp-serflan
           protocol: "TCP"
           containerPort: 8301
-        - name: serflan-udp
+        - name: udp-serflan
           protocol: "UDP"
           containerPort: 8301
-        - name: serfwan-tcp
+        - name: tcp-serfwan
           protocol: "TCP"
           containerPort: 8302
-        - name: serfwan-udp
+        - name: udp-serfwan
           protocol: "UDP"
           containerPort: 8302
         - name: server

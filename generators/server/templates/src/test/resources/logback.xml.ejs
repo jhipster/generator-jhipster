@@ -37,6 +37,10 @@
     <%_ if (databaseType === 'cassandra') { _%>
     <logger name="com.datastax" level="WARN"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <logger name="com.google.code.ssm" level="WARN"/>
+    <logger name="com.google.code.yanf4j" level="WARN"/>
+    <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.discovery" level="INFO"/>
@@ -46,6 +50,9 @@
     <logger name="com.zaxxer" level="WARN"/>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <logger name="net.rubyeye.xmemcached" level="INFO"/>
+    <%_ } _%>
     <%_ if (cacheProvider === 'ehcache') { _%>
     <logger name="org.ehcache" level="WARN"/>
     <%_ } _%>

@@ -158,7 +158,7 @@ spring:
             hibernate.generate_statistics: true
             <%_ if (enableHibernateCache) { _%>
                 <%_ if (cacheProvider === 'ehcache') { _%>
-            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.NoDefaultJCacheRegionFactory
+            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory
                 <%_ } else if (cacheProvider === 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
@@ -300,6 +300,12 @@ jhipster:
             replicated:
                 time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
                 max-entries: 100 # Number of objects in each cache entry
+        <%_ } _%>
+        <%_ if (cacheProvider === 'memcached') { _%>
+        memcached: # Memcached configuration
+            # Disabled by default in dev mode as Memcached does not work with Spring Boot Devtools
+            # If you want to use Memcached, you must also enable it in CacheConfiguration
+            enabled: false
         <%_ } _%>
     <%_ } _%>
     <%_ if (applicationType !== 'microservice') { _%>

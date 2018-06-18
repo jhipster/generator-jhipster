@@ -61,6 +61,7 @@ const serverFiles = {
             path: DOCKER_DIR,
             templates: [
                 'Dockerfile',
+                'entrypoint.sh',
                 '.dockerignore',
                 'app.yml',
                 'sonar.yml'
@@ -119,6 +120,13 @@ const serverFiles = {
             path: DOCKER_DIR,
             templates: [
                 'hazelcast-management-center.yml'
+            ]
+        },
+        {
+            condition: generator => generator.cacheProvider === 'memcached',
+            path: DOCKER_DIR,
+            templates: [
+                'memcached.yml'
             ]
         },
         {
@@ -477,7 +485,7 @@ const serverFiles = {
     ],
     serverJavaGateway: [
         {
-            condition: generator => generator.applicationType === 'gateway',
+            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -492,10 +500,6 @@ const serverFiles = {
                     file: 'package/gateway/ratelimiting/RateLimitingFilter.java',
                     renameTo: generator => `${generator.javaDir}gateway/ratelimiting/RateLimitingFilter.java`
                 },
-                {
-                    file: 'package/gateway/TokenRelayFilter.java',
-                    renameTo: generator => `${generator.javaDir}gateway/TokenRelayFilter.java`
-                },
                 { file: 'package/gateway/accesscontrol/AccessControlFilter.java', renameTo: generator => `${generator.javaDir}gateway/accesscontrol/AccessControlFilter.java` },
                 { file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilter.java', renameTo: generator => `${generator.javaDir}gateway/responserewriting/SwaggerBasePathRewritingFilter.java` },
                 { file: 'package/web/rest/vm/RouteVM.java', renameTo: generator => `${generator.javaDir}web/rest/vm/RouteVM.java` },
@@ -503,7 +507,14 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'uaa',
+            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'jwt' && generator.serviceDiscoveryType,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/gateway/TokenRelayFilter.java', renameTo: generator => `${generator.javaDir}gateway/TokenRelayFilter.java` }
+            ]
+        },
+        {
+            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'uaa' && generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/web/rest/AuthResource.java', renameTo: generator => `${generator.javaDir}web/rest/AuthResource.java` },
@@ -522,7 +533,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'oauth2',
+            condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'oauth2' && generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/OAuth2Configuration.java', renameTo: generator => `${generator.javaDir}config/OAuth2Configuration.java` },
@@ -532,7 +543,7 @@ const serverFiles = {
     ],
     serverMicroservice: [
         {
-            condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2'))),
+            condition: generator => generator.applicationType === 'microservice' || (generator.authenticationType === 'uaa' && generator.applicationType !== 'uaa'),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/MicroserviceSecurityConfiguration.java', renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java` }
@@ -581,21 +592,20 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
-                && generator.authenticationType === 'oauth2' && generator.cacheProvider !== 'no',
+            condition: generator => generator.applicationType === 'microservice' && generator.authenticationType === 'oauth2' && generator.cacheProvider !== 'no',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/security/oauth2/CachedUserInfoTokenServices.java', renameTo: generator => `${generator.javaDir}security/oauth2/CachedUserInfoTokenServices.java` },
             ]
         },
         {
-            condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
-                && (generator.authenticationType === 'oauth2' && (generator.applicationType === 'microservice' || generator.applicationType === 'gateway')),
+            condition: generator => (generator.authenticationType === 'oauth2' && (generator.applicationType === 'microservice' || generator.applicationType === 'gateway')),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/FeignConfiguration.java', renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java` },
                 { file: 'package/client/AuthorizedFeignClient.java', renameTo: generator => `${generator.javaDir}client/AuthorizedFeignClient.java` },
                 { file: 'package/client/OAuth2InterceptedFeignConfiguration.java', renameTo: generator => `${generator.javaDir}client/OAuth2InterceptedFeignConfiguration.java` },
+                { file: 'package/config/OAuth2TokenServicesConfiguration.java', renameTo: generator => `${generator.javaDir}config/OAuth2TokenServicesConfiguration.java` },
                 { file: 'package/client/TokenRelayRequestInterceptor.java', renameTo: generator => `${generator.javaDir}client/TokenRelayRequestInterceptor.java` }
             ]
         },
@@ -656,7 +666,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => ['ehcache', 'hazelcast', 'infinispan'].includes(generator.cacheProvider) || generator.applicationType === 'gateway',
+            condition: generator => ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(generator.cacheProvider),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/CacheConfiguration.java', renameTo: generator => `${generator.javaDir}config/CacheConfiguration.java` }
@@ -866,7 +876,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway',
+            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 // Create Gateway tests files

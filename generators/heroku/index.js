@@ -498,7 +498,7 @@ module.exports = class extends BaseGenerator {
                                     let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
                                     if (this.buildTool === 'gradle') {
                                         buildpack = 'heroku/gradle';
-                                        configVars = '';
+                                        configVars = 'GRADLE_TASK="stage -Pprod" ';
                                     }
                                     this.log(chalk.bold('\nConfiguring Heroku'));
                                     exec(`heroku config:set NPM_CONFIG_PRODUCTION="false" ${configVars}--app ${this.herokuAppName}`, (err, stdout, stderr) => {

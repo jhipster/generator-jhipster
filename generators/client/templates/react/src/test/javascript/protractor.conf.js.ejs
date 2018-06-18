@@ -4,16 +4,16 @@ exports.config = {
   allScriptsTimeout: 20000,
 
   specs: [
-    './e2e/modules/account/**/*.spec.ts',
-    './e2e/modules/admin/**/*.spec.ts',
-    './e2e/entities/**/*.spec.ts',
+    './e2e/modules/account/*.spec.ts',
+    './e2e/modules/administration/*.spec.ts',
+    './e2e/entities/**/*.spec.ts'
     /* jhipster-needle-add-protractor-tests - JHipster will add protractors tests here */
   ],
 
   capabilities: {
     browserName: 'chrome',
     chromeOptions: {
-        args: [ "--disable-gpu", "--window-size=800,600" ]
+        args: [ '--disable-gpu', '--window-size=800,600' ]
     }
   },
 
@@ -32,7 +32,7 @@ exports.config = {
 
   beforeLaunch () {
     require('ts-node').register({
-      project: 'tsconfig.json'
+      project: '<%= TEST_SRC_DIR %>tsconfig.e2e.json'
     });
   },
 

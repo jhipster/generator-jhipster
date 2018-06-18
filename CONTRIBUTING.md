@@ -187,7 +187,7 @@ Go to the [generator-jhipster project](https://github.com/jhipster/generator-jhi
 
 ### Set NPM/YARN to use the cloned project
 
-In your cloned `generator-jhipster` project, type `npm link` or `yarn link` depending on the package manager you use.
+In your cloned `generator-jhipster` project, type `npm link` or `yarn && yarn link` depending on the package manager you use.
 
 This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster`, you will now use the development version of JHipster.
 
@@ -200,7 +200,12 @@ To put it in a nutshell, you need to:
 1. run `npm link` or `yarn link` on the `generator-jhipster` project
 2. run `npm link generator-jhipster` or `yarn link generator-jhipster` on the generated application folder (you need to do this for each application you create)
 
-Now, running the 'jhipster' command should use your specific JHipster version. You can test it by making a small change in your cloned generator, and running again on an existing JHipster project:
+Now, running the 'jhipster' command should run your locally installed JHipster version directly from sources. Check that the symbolic link is correct with the following command :
+```shell
+➜  ~ ll $(which jhipster)
+lrwxr-xr-x  1 username  admin    63B May 15 11:03 /usr/local/bin/jhipster -> ../../../Users/username/github/generator-jhipster/cli/jhipster.js
+```
+You can test your setup by making a small change in your cloned generator, and running again on an existing JHipster project:
 
 ```shell
 jhipster
@@ -252,9 +257,11 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 * All features or bug fixes **must be tested** by one or more tests.
 * All files must follow the [.editorconfig file](http://editorconfig.org/) located at the root of the JHipster generator project. Please note that generated projects use the same `.editorconfig` file, so that both the generator and the generated projects share the same configuration.
 * Java files **must be** formatted using [Intellij IDEA's code style](http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Style+and+Formatting). Please note that JHipster committers have a free Intellij IDEA Ultimate Edition for developing the project.
-* Generators JavaScript files **must follow** the eslint configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
+* Generators JavaScript files **must follow** the eslint configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).\
+* Any client side feature/change should be done for both Angular and react clients
 * Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
 * Angular Typescript files **must follow** the [Official Angular style guide](https://angular.io/styleguide).
+* React/Redux Typescript files **may follow** the [React/Redux Typescript guide](https://github.com/piotrwitek/react-redux-typescript-guide).
 
 Please ensure to run `npm run lint` and `npm test` on the project root before submitting a pull request. You can also run `npm run lint-fix` to fix some of the lint issues automatically.
 

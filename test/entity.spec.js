@@ -96,6 +96,30 @@ const expectedFiles = {
     ]
 };
 
+describe('JHipster generator for server', () => {
+    describe('search, no dto, no service, no pagination', () => {
+        beforeEach((done) => {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/default-elasticsearch'), dir);
+                })
+                .withArguments(['foo'])
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'no',
+                    service: 'no',
+                    pagination: 'no'
+                })
+                .on('end', done);
+        });
+
+        it('does creates search files', () => {
+            assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`);
+        });
+    });
+});
+
 describe('JHipster generator entity for angularX', () => {
     describe('no dto, no service, no pagination', () => {
         beforeEach((done) => {
@@ -221,7 +245,7 @@ describe('JHipster generator entity for angularX', () => {
         });
     });
 
-    describe('with dto, serviceImpl, with hazelcast, elasticsearch and noi18n', () => {
+    describe('with dto, serviceImpl, with hazelcast, elasticsearch and no i18n', () => {
         beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir((dir) => {

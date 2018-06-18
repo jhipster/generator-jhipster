@@ -42,7 +42,7 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
 
     ngOnInit() {
         this.route.data.subscribe(({<%= entityInstance %>}) => {
-            this.<%= entityInstance %> = <%= entityInstance %>.body ? <%= entityInstance %>.body : <%= entityInstance %>;
+            this.<%= entityInstance %> = <%= entityInstance %>;
         });
     }
 

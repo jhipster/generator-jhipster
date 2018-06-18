@@ -114,12 +114,17 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
-        }<%_ if (saveUserSnapshot) { %>
+        }
+        <%_ if (saveUserSnapshot) { %>
         if (<%= instanceName %>.getUser() != null) {
             // Save user in case it's new and only exists in gateway
             userRepository.save(<%= instanceName %>.getUser());
-        }<%_ } _%>
-        <%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+        }
+        <%_ } _%>
+        <%_ if (databaseType === 'cassandra') { _%>
+        <%= instanceName %>.setId(UUID.randomUUID());
+        <%_ } _%>
+<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -140,12 +145,14 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }<%_ if (saveUserSnapshot) { %>
+        }
+        <%_ if (saveUserSnapshot) { %>
         if (<%= instanceName %>.getUser() != null) {
             // Save user in case it's new and only exists in gateway
             userRepository.save(<%= instanceName %>.getUser());
-        }<%_ } _%>
-        <%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+        }
+        <%_ } _%>
+<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
@@ -202,7 +209,8 @@ public class <%= entityClass %>Resource {
     @DeleteMapping("/<%= entityApiUrl %>/{id}")
     @Timed
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
-        log.debug("REST request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
+        log.debug("REST request to delete <%= entityClass %> : {}", id);
+<%- include('../../common/delete_template', {viaService: viaService}); -%>
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();
     }<% if (searchEngine === 'elasticsearch') { %>
 

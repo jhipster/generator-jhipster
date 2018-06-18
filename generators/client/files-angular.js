@@ -98,6 +98,10 @@ const files = {
             templates: [
                 { file: 'content/images/hipster.png', method: 'copy' },
                 { file: 'content/images/hipster2x.png', method: 'copy' },
+                { file: 'content/images/hipster192.png', method: 'copy' },
+                { file: 'content/images/hipster256.png', method: 'copy' },
+                { file: 'content/images/hipster384.png', method: 'copy' },
+                { file: 'content/images/hipster512.png', method: 'copy' },
                 { file: 'content/images/logo-jhipster.png', method: 'copy' }
             ]
         }
@@ -452,6 +456,7 @@ const files = {
         {
             path: TEST_SRC_DIR,
             templates: [
+                'jest.conf.js',
                 'jest.ts',
                 'jest-global-mocks.ts',
                 'spec/test.module.ts',

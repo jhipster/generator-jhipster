@@ -24,16 +24,16 @@ buildscript {
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
-        // TODO To remove after final Spring Boot 2 release
+        // TODO To remove after final Spring Cloud release
         maven { url "https://repo.spring.io/milestone" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
-        classpath "io.spring.gradle:propdeps-plugin:0.0.9.RELEASE"
+        classpath "io.spring.gradle:propdeps-plugin:0.0.10.RELEASE"
         <%_ if (enableSwaggerCodegen) { _%>
-        classpath "gradle.plugin.org.detoeuf:swagger-codegen-plugin:1.7.4"
+        classpath "org.openapitools:openapi-generator-gradle-plugin:3.0.1"
         <%_ } _%>
-        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.4.21"
+        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.5.1"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -43,7 +43,7 @@ plugins {
     id "net.ltgt.apt-eclipse" version "0.15"
     id "net.ltgt.apt-idea" version "0.15"
     id "net.ltgt.apt" version "0.15"
-    id "io.spring.dependency-management" version "1.0.3.RELEASE"
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
     <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
     <%_ } _%>
@@ -195,7 +195,7 @@ repositories {
     // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
-    // TODO To remove after final Spring Boot 2 release
+    // TODO To remove after final Spring Cloud release
     maven { url "https://repo.spring.io/milestone" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
@@ -204,9 +204,6 @@ dependencies {
     // Use ", version: jhipster_dependencies_version, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
     compile group: "io.github.jhipster", name: "jhipster-framework"
-
-    // TODO To remove after final Spring Boot 2 release
-    compile "javax.xml.bind:jaxb-api"
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
@@ -229,6 +226,9 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner"
     compile "com.ryantenney.metrics:metrics-spring"
+    <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
+    compile "org.apache.httpcomponents:httpclient"
+    <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     <%_ if (enableHibernateCache) { _%>
@@ -250,6 +250,11 @@ dependencies {
     compile ("org.infinispan:infinispan-cloud") {
         exclude module: 'undertow-core'
     }
+    <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    compile "com.google.code.simple-spring-memcached:spring-cache"
+    compile "com.google.code.simple-spring-memcached:xmemcached-provider"
+    compile "com.googlecode.xmemcached:xmemcached"
     <%_ } _%>
     <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
     compile "javax.cache:cache-api"
@@ -296,7 +301,7 @@ dependencies {
     // https://github.com/elastic/elasticsearch/issues/13245
     compile "net.java.dev.jna:jna"
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
     compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
@@ -318,7 +323,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
     compile "org.zalando:problem-spring-web"
     <%_ if (databaseType === 'cassandra') { _%>
-    compile "com.datastax.cassandra:cassandra-driver-core"
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
@@ -360,9 +364,6 @@ dependencies {
         <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
     compile "org.springframework.security:spring-security-jwt"
         <%_ } _%>
-    <%_ } _%>
-    <%_ if (authenticationType === 'session') { _%>
-    compile "com.google.guava:guava"
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     compile "io.jsonwebtoken:jjwt"
@@ -410,8 +411,8 @@ dependencies {
     }
     <%_ } _%>
     <%_ if (cucumberTests) { _%>
-    testCompile "info.cukes:cucumber-junit"
-    testCompile "info.cukes:cucumber-spring"
+    testCompile "io.cucumber:cucumber-junit"
+    testCompile "io.cucumber:cucumber-spring"
     <%_ } _%>
     testCompile ("org.springframework.boot:spring-boot-starter-test") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'

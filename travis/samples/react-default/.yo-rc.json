@@ -18,6 +18,7 @@
     "useSass": false,
     "applicationType": "monolith",
     "testFrameworks": [
+        "protractor"
     ],
     "jhiPrefix": "myPrefix",
     "enableTranslation": true,

@@ -211,8 +211,8 @@ function askForServerSideOpts(meta) {
             default: 0
         },
         {
-            // cache is mandatory for gateway and defined later to 'hazelcast' value
-            when: response => applicationType !== 'gateway',
+            // cache is mandatory for gateway with service dsicovery and defined later to 'hazelcast' value
+            when: response => !(applicationType === 'gateway' && response.serviceDiscoveryType),
             type: 'list',
             name: 'cacheProvider',
             message: 'Do you want to use the Spring cache abstraction?',
@@ -230,14 +230,18 @@ function askForServerSideOpts(meta) {
                     name: '[BETA] Yes, with the Infinispan implementation (hybrid cache, for multiple nodes)'
                 },
                 {
+                    value: 'memcached',
+                    name: 'Yes, with Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!'
+                },
+                {
                     value: 'no',
-                    name: 'No (when using an SQL database, this will also disable the Hibernate L2 cache)'
+                    name: 'No - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!'
                 }
             ],
             default: (applicationType === 'microservice' || applicationType === 'uaa') ? 1 : 0
         },
         {
-            when: response => ((response.cacheProvider !== 'no' || applicationType === 'gateway') && response.databaseType === 'sql'),
+            when: response => (((response.cacheProvider !== 'no' && response.cacheProvider !== 'memcached') || applicationType === 'gateway') && response.databaseType === 'sql'),
             type: 'confirm',
             name: 'enableHibernateCache',
             message: 'Do you want to use Hibernate 2nd level cache?',
@@ -324,7 +328,7 @@ function askForServerSideOpts(meta) {
             this.enableHibernateCache = false;
         }
         // Hazelcast is mandatory for Gateways, as it is used for rate limiting
-        if (this.applicationType === 'gateway') {
+        if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
             this.cacheProvider = 'hazelcast';
         }
         done();
@@ -350,7 +354,7 @@ function askForOptionalItems(meta) {
         });
     }
     choices.push({
-        name: 'API first development using swagger-codegen',
+        name: 'API first development using OpenAPI-generator',
         value: 'enableSwaggerCodegen:true'
     });
     choices.push({

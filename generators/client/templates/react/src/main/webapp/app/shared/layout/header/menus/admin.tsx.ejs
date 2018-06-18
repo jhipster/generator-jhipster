@@ -61,7 +61,7 @@ const databaseItem = (
 <%_ } _%>
 
 export const AdminMenu = ({ showSwagger <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>, showDatabase <%_ } _%>}) => (
-  <NavDropdown icon="user-plus" name="Administration" style={{ width: '130%' }}>
+  <NavDropdown icon="user-plus" name="Administration" style={{ width: '130%' }} id="admin-menu">
       {adminMenuItems}
       {showSwagger && swaggerItem}
       <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>

@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% if (!viaService) {
-    if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-        <%= entityInstance %>Repository.deleteById(id);<% } %><% if (databaseType === 'cassandra') { %>
-        <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %><% if (searchEngine === 'elasticsearch') { %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-        <%= entityInstance %>SearchRepository.deleteById(id);<% } %><% if (databaseType === 'cassandra') { %>
-        <%= entityInstance %>SearchRepository.deleteById(UUID.fromString(id));<% } %><% }
-} else { %>
-        <%= entityInstance %>Service.delete(id);<% } %>
+<%_ if (!viaService) { %>
+        <%= entityInstance %>Repository.deleteById(id);
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%= entityInstance %>SearchRepository.deleteById(id);
+        <%_ } _%>
+<%_ } else { _%>
+        <%= entityInstance %>Service.delete(id);
+<%_ } _%>

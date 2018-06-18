@@ -83,7 +83,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-element-to-menu',
                     splicable: [`<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                                 <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
-                                    <fa-icon [icon]="'${glyphiconName}'"></fa-icon>&nbsp;
+                                    <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
                                     <span${enableTranslation ? ` jhiTranslate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`
@@ -143,7 +143,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-element-to-admin-menu',
                     splicable: [`<li>
                         <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'${glyphiconName}'"></fa-icon>&nbsp;
+                            <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
                             <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
                         </a>
                     </li>`
@@ -189,7 +189,7 @@ module.exports = class extends PrivateBase {
                     splicable: [
                         this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <fa-icon [icon]="['fw', 'asterisk']"></fa-icon>
+                             |                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
@@ -273,7 +273,7 @@ module.exports = class extends PrivateBase {
                     file: indexModulePath,
                     needle: 'jhipster-needle-add-route-path',
                     splicable: [
-                        this.stripMargin(`|<Route path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}} />`)
+                        this.stripMargin(`|<ErrorBoundaryRoute path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}} />`)
                     ]
                 }, this);
 
@@ -2057,12 +2057,12 @@ module.exports = class extends PrivateBase {
         this.log(`${chalk.green('  ╚██████╔╝')}${chalk.red(' ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗')}`);
         this.log(`${chalk.green('   ╚═════╝ ')}${chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝')}\n`);
         this.log(chalk.white.bold('                            https://www.jhipster.tech\n'));
-        this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow(`v${packagejs.version}`));
-        this.log(chalk.green(' _______________________________________________________________________________________________________________\n'));
-        this.log(chalk.white(`  If you find JHipster useful consider supporting our collective ${chalk.yellow('https://opencollective.com/generator-jhipster')}`));
-        this.log(chalk.white(`  Documentation for creating an application: ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`));
-        this.log(chalk.green(' _______________________________________________________________________________________________________________\n'));
+        this.log(chalk.white('Welcome to JHipster ') + chalk.yellow(`v${packagejs.version}`));
         this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
+        this.log(chalk.green(' _______________________________________________________________________________________________________________\n'));
+        this.log(chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`));
+        this.log(chalk.white(`  If you find JHipster useful, consider sponsoring the project at ${chalk.yellow('https://opencollective.com/generator-jhipster')}`));
+        this.log(chalk.green(' _______________________________________________________________________________________________________________\n'));
     }
 
     /**
@@ -2433,5 +2433,25 @@ module.exports = class extends PrivateBase {
         // these variable hold field and relationship names for question options during update
         dest.fieldNameChoices = [];
         dest.relNameChoices = [];
+    }
+
+    /**
+     * Get all the generator configuration from the .yo-rc.json file
+     * @param {Generator} generator the generator instance to use
+     * @param {boolean} force force getting direct from file
+     */
+    getAllJhipsterConfig(generator = this, force) {
+        let configuration = generator.config.getAll() || {};
+        if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
+            configuration = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }))['generator-jhipster'];
+        }
+        if (!configuration.get || typeof configuration.get !== 'function') {
+            Object.assign(configuration, {
+                getAll: () => configuration,
+                get: key => configuration[key],
+                set: (key, value) => { configuration[key] = value; }
+            });
+        }
+        return configuration;
     }
 };

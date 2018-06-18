@@ -122,7 +122,6 @@ elif [[ ( "$JHIPSTER" == *"mysql"* ) || ( "$JHIPSTER" == *"psql"* ) ]]; then
     moveEntity EntityWithServiceImplAndDTO
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
-
 else
     moveEntity BankAccount
     moveEntity Label

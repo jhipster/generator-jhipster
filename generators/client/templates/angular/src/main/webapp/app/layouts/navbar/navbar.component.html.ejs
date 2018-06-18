@@ -61,7 +61,7 @@
                     <%_ if (applicationType === 'gateway') { _%>
                     <li>
                         <a class="dropdown-item" routerLink="admin/gateway" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'road'"></fa-icon>
+                            <fa-icon [icon]="'road'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.gateway">Gateway</span>
                         </a>
                     </li>
@@ -69,7 +69,7 @@
                     <%_ if (!skipUserManagement) { _%>
                     <li>
                         <a class="dropdown-item" routerLink="admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'user'"></fa-icon>
+                            <fa-icon [icon]="'user'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.userManagement">User management</span>
                         </a>
                     </li>
@@ -77,46 +77,46 @@
                     <%_ if (websocket === 'spring-websocket') { _%>
                     <li>
                         <a class="dropdown-item" routerLink="admin/<%= jhiPrefixDashed %>-tracker" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <fa-icon [icon]="'eye'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.tracker">User tracker</span>
                         </a>
                     </li>
                     <%_ } _%>
                     <li>
                         <a class="dropdown-item" routerLink="admin/<%= jhiPrefixDashed %>-metrics" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'tachometer-alt'"></fa-icon>
+                            <fa-icon [icon]="'tachometer-alt'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.metrics">Metrics</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="admin/<%= jhiPrefixDashed %>-health" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'heart'"></fa-icon>
+                            <fa-icon [icon]="'heart'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.health">Health</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" routerLink="admin/<%= jhiPrefixDashed %>-configuration" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'list'"></fa-icon>
+                            <fa-icon [icon]="'list'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.configuration">Configuration</span>
                         </a>
                     </li>
                     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
                     <li>
                         <a class="dropdown-item" routerLink="admin/audits" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'bell'"></fa-icon>
+                            <fa-icon [icon]="'bell'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.audits">Audits</span>
                         </a>
                     </li>
                     <%_ } _%>
                     <li>
                         <a class="dropdown-item" routerLink="admin/logs" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'tasks'"></fa-icon>
+                            <fa-icon [icon]="'tasks'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.logs">Logs</span>
                         </a>
                     </li>
                     <li *ngIf="swaggerEnabled">
                         <a class="dropdown-item" routerLink="admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'book'"></fa-icon>
+                            <fa-icon [icon]="'book'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.apidocs">API</span>
                         </a>
                     </li>
@@ -124,7 +124,7 @@
                     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
                     <li *ngIf="!inProduction">
                         <a class="dropdown-item" href='./h2-console' target="_tab" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'hdd'"></fa-icon>
+                            <fa-icon [icon]="'hdd'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.database">Database</span>
                         </a>
                     </li>
@@ -132,14 +132,14 @@
                 </ul>
             </li>
             <%_ if (enableTranslation) { _%>
-            <li ngbDropdown class="nav-item dropdown pointer" *ngIf="languages">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown" *ngIf="languages.length > 1">
+            <li ngbDropdown class="nav-item dropdown pointer" *ngIf="languages && languages.length > 1">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
                     <span>
                         <fa-icon [icon]="'flag'"></fa-icon>
                         <span jhiTranslate="global.menu.language">Language</span>
                     </span>
                 </a>
-                <ul class="dropdown-menu" ngbDropdownMenu *ngIf="languages.length > 1">
+                <ul class="dropdown-menu" ngbDropdownMenu>
                     <li *ngFor="let language of languages">
                         <a class="dropdown-item" [<%=jhiPrefix%>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{language | findLanguageFromKey}}</a>
                     </li>
@@ -162,13 +162,13 @@
                     <%_ if (authenticationType !== 'oauth2') { _%>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" routerLink="settings" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'wrench'"></fa-icon>
+                            <fa-icon [icon]="'wrench'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.account.settings">Settings</span>
                         </a>
                     </li>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" routerLink="password" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'clock'"></fa-icon>
+                            <fa-icon [icon]="'clock'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.account.password">Password</span>
                         </a>
                     </li>
@@ -176,27 +176,27 @@
                     <%_ if (authenticationType === 'session') { _%>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" routerLink="sessions" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'cloud'"></fa-icon>
+                            <fa-icon [icon]="'cloud'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.account.sessions">Sessions</span>
                         </a>
                     </li>
                     <%_ } _%>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" (click)="logout()" id="logout">
-                            <fa-icon [icon]="'sign-out-alt'"></fa-icon>
+                            <fa-icon [icon]="'sign-out-alt'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.account.logout">Sign out</span>
                         </a>
                     </li>
                     <li *ngSwitchCase="false">
                         <a class="dropdown-item" (click)="login()" id="login">
-                            <fa-icon [icon]="'sign-in-alt'"></fa-icon>
+                            <fa-icon [icon]="'sign-in-alt'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.account.login">Sign in</span>
                         </a>
                     </li>
                     <%_ if (authenticationType !== 'oauth2') { _%>
                     <li *ngSwitchCase="false">
                         <a class="dropdown-item" routerLink="register" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'user-plus'"></fa-icon>
+                            <fa-icon [icon]="'user-plus'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.account.register">Register</span>
                         </a>
                     </li>

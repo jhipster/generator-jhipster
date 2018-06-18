@@ -22,7 +22,9 @@ const dockerPrompts = require('../docker-prompts');
 module.exports = _.extend({
     askForKubernetesNamespace,
     askForKubernetesServiceType,
-    askForIngressDomain
+    askForIngressDomain,
+    askForIstioSupport,
+    askForIstioRouteFiles
 }, dockerPrompts);
 
 function askForKubernetesNamespace() {
@@ -99,6 +101,70 @@ function askForIngressDomain() {
 
     this.prompt(prompts).then((props) => {
         this.ingressDomain = props.ingressDomain;
+        done();
+    });
+}
+
+function askForIstioSupport() {
+    if (this.composeApplicationType === 'monolith') {
+        this.istio = 'no';
+        return;
+    }
+    const done = this.async();
+
+    const prompts = [{
+        type: 'list',
+        name: 'istio',
+        message: 'Do you want to configure Istio?',
+        choices: [
+            {
+                value: 'no',
+                name: 'Not required'
+            },
+            {
+                value: 'manualInjection',
+                name: 'Manual sidecar injection (ensure istioctl in $PATH)'
+            },
+            {
+                value: 'autoInjection',
+                name: 'Label tag namespace as automatic injection is already configured'
+            }
+        ],
+        default: this.istio ? this.istio : 'no'
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.istio = props.istio;
+        done();
+    });
+}
+
+function askForIstioRouteFiles() {
+    if (this.istio === 'no') {
+        this.istioRoute = false;
+        return;
+    }
+    const done = this.async();
+
+    const prompts = [{
+        type: 'list',
+        name: 'istioRoute',
+        message: 'Do you want to generate Istio route files?',
+        choices: [
+            {
+                value: false,
+                name: 'No'
+            },
+            {
+                value: true,
+                name: 'Yes'
+            }
+        ],
+        default: this.istioRoute
+    }];
+
+    this.prompt(prompts).then((props) => {
+        this.istioRoute = props.istioRoute;
         done();
     });
 }

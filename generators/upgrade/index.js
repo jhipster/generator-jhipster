@@ -34,6 +34,30 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         this.force = this.options.force;
+
+        // This adds support for a `--target-version` flag
+        this.option('target-version', {
+            desc: 'Upgrade to a specific version instead of the latest',
+            type: String
+        });
+
+        // This adds support for a `--skip-install` flag
+        this.option('skip-install', {
+            desc: 'Skips installing dependencies during the upgrade process',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--silent` flag
+        this.option('silent', {
+            desc: 'Hides output of the generation process',
+            type: Boolean,
+            defaults: false
+        });
+
+        this.targetVersion = this.options['target-version'];
+        this.skipInstall = this.options['skip-install'];
+        this.silent = this.options.silent;
     }
 
     get initializing() {
@@ -47,9 +71,6 @@ module.exports = class extends BaseGenerator {
                 this.currentVersion = this.config.get('jhipsterVersion');
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 this.clientFramework = this.config.get('clientFramework');
-                this.skipInstall = this.options['skip-install'];
-                this.silent = this.options.silent;
-                this.targetVersion = this.options['target-version'];
             }
         };
     }
