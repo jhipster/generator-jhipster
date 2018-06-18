@@ -32,16 +32,24 @@ module.exports = class extends BaseGenerator {
             this.pkType = 'UUID';
         }
         const blueprint = this.config.get('blueprint');
-        // use global variable since getters dont have access to instance property
-        useBlueprint = this.composeBlueprint(blueprint, 'entity-server', {
-            context: opts.context,
-            force: opts.force,
-            debug: opts.context.isDebugEnabled
-        });
+        if (!opts.fromBlueprint) {
+            // use global variable since getters dont have access to instance property
+            useBlueprint = this.composeBlueprint(blueprint, 'entity-server', {
+                context: opts.context,
+                force: opts.force,
+                debug: opts.context.isDebugEnabled
+            });
+        } else {
+            useBlueprint = false;
+        }
     }
 
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
+        return writeFiles();
+    }
     get writing() {
         if (useBlueprint) return;
-        return writeFiles();
+        return this._writing();
     }
 };

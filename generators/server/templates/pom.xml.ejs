@@ -27,7 +27,7 @@
     <name><%= humanizedBaseName %></name>
 
     <repositories>
-        <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
+        <!-- TODO Remove snapshot repositories after final Spring Cloud release -->
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
@@ -88,7 +88,7 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.9</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.12</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.0.2.RELEASE</spring-boot.version>
@@ -168,12 +168,6 @@
             <artifactId>jhipster-framework</artifactId>
         </dependency>
 
-        <!-- TODO To remove after final Spring Boot 2 release -->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-        </dependency>
-
         <%_ if (cacheProvider !== 'no') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -243,7 +237,7 @@
             <artifactId>httpclient</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (cacheProvider === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
@@ -255,7 +249,7 @@
             <artifactId>hazelcast-hibernate52</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (cacheProvider === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
@@ -289,9 +283,16 @@
         <%_ } _%>
         <%_ if (cacheProvider === 'memcached') { _%>
         <dependency>
-            <groupId>io.sixhours</groupId>
-            <artifactId>memcached-spring-boot-starter</artifactId>
-            <version>1.2.0</version>
+            <groupId>com.google.code.simple-spring-memcached</groupId>
+            <artifactId>spring-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.simple-spring-memcached</groupId>
+            <artifactId>xmemcached-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.xmemcached</groupId>
+            <artifactId>xmemcached</artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -356,7 +357,7 @@
             <artifactId>java-client</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
+        <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider)) { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>

@@ -55,7 +55,7 @@ services:
             - SPRING_COUCHBASE_BUCKET_NAME=<%= baseName %>
             <%_ } _%>
             <%_ if (cacheProvider === 'memcached') { _%>
-            - MEMCACHED_CACHE_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
+            - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
             <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
             <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>

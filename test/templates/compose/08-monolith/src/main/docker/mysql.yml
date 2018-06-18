@@ -10,4 +10,4 @@ services:
             - MYSQL_DATABASE=samplemysql
         ports:
             - 3306:3306
-        command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8 --explicit_defaults_for_timestamp
+        command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
