@@ -9,3 +9,4 @@ jhipster-jdl.jh
 coverage/*
 sonar-project.properties
 .nyc_output/*
+jhipster-core.iml

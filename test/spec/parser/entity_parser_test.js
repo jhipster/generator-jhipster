@@ -619,6 +619,32 @@ describe('EntityParser', () => {
           );
         });
       });
+      context('when converting a JDL with elastic except', () => {
+        let content = null;
+
+        before(() => {
+          const entityA = new JDLEntity({ name: 'A' });
+          const entityB = new JDLEntity({ name: 'B' });
+          const option = new JDLBinaryOption({
+            name: BinaryOptions.SEARCH_ENGINE,
+            value: 'elasticsearch',
+            excludedNames: ['B']
+          });
+          const jdlObject = new JDLObject();
+          jdlObject.addEntity(entityA);
+          jdlObject.addEntity(entityB);
+          jdlObject.addOption(option);
+          content = EntityParser.parse({
+            jdlObject,
+            databaseType: DatabaseTypes.SQL
+          });
+        });
+
+        it('converts it', () => {
+          expect(content.A.searchEngine).to.equal('elasticsearch');
+          expect(content.B.searchEngine).to.be.false;
+        });
+      });
       context('when converting a JDL with filtering', () => {
         context('if there was not a service option for entity', () => {
           let content = null;

@@ -775,6 +775,21 @@ describe('DocumentParser', () => {
           expect(content.applications.MyApp.entities.size()).to.equal(1);
         });
       });
+      context('when parsing a relationship with no injected field', () => {
+        let content = null;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/no_injected_field.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            applicationType: ApplicationTypes.MONOLITH
+          });
+        });
+
+        it('adds a default one', () => {
+          expect(content.relationships.relationships.OneToOne['OneToOne_A{a}_B'].injectedFieldInFrom).to.equal('a');
+        });
+      });
     });
   });
 });
