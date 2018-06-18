@@ -129,19 +129,23 @@ module.exports = class extends BaseGenerator {
         this.setupClientOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         // use global variable since getters dont have access to instance property
-        useBlueprint = this.composeBlueprint(
-            blueprint,
-            'client',
-            {
-                'skip-install': this.options['skip-install'],
-                configOptions: this.configOptions,
-                force: this.options.force
-            }
-        );
+        if (!opts.fromBlueprint) {
+            useBlueprint = this.composeBlueprint(
+                blueprint,
+                'client',
+                {
+                    'skip-install': this.options['skip-install'],
+                    configOptions: this.configOptions,
+                    force: this.options.force
+                }
+            );
+        } else {
+            useBlueprint = false;
+        }
     }
 
-    get initializing() {
-        if (useBlueprint) return;
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
         return {
             displayLogo() {
                 if (this.logo) {
@@ -153,13 +157,13 @@ module.exports = class extends BaseGenerator {
                 // Make constants available in templates
                 this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-
-                this.serverPort = this.config.get('serverPort') || this.configOptions.serverPort || 8080;
-                this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
+                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
-                this.clientFramework = this.config.get('clientFramework');
+                this.clientFramework = configuration.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
@@ -168,19 +172,19 @@ module.exports = class extends BaseGenerator {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
                 }
-                this.useSass = this.config.get('useSass');
-                this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
-                this.nativeLanguage = this.config.get('nativeLanguage');
-                this.languages = this.config.get('languages');
+                this.useSass = configuration.get('useSass');
+                this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+                this.nativeLanguage = configuration.get('nativeLanguage');
+                this.languages = configuration.get('languages');
                 this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
-                this.messageBroker = this.config.get('messageBroker');
+                this.messageBroker = configuration.get('messageBroker');
                 this.packagejs = packagejs;
-                const baseName = this.config.get('baseName');
+                const baseName = configuration.get('baseName');
                 if (baseName) {
                     this.baseName = baseName;
                 }
 
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
+                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
                 if (this.serviceDiscoveryType === undefined) {
                     this.serviceDiscoveryType = false;
                 }
@@ -216,9 +220,13 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
-    get prompting() {
+    get initializing() {
         if (useBlueprint) return;
+        return this._initializing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _prompting() {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
@@ -231,9 +239,13 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
-    get configuring() {
+    get prompting() {
         if (useBlueprint) return;
+        return this._prompting();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
         return {
             insight() {
                 const insight = this.insight();
@@ -287,9 +299,13 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
-    get default() {
+    get configuring() {
         if (useBlueprint) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
         return {
             getSharedConfigOptions() {
                 if (this.configOptions.cacheProvider) {
@@ -368,53 +384,81 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
-    writing() {
+    get default() {
         if (useBlueprint) return;
-        switch (this.clientFramework) {
-        case 'react':
-            return writeReactFiles.call(this);
-        default:
-            return writeAngularFiles.call(this);
-        }
+        return this._default();
     }
 
-    install() {
-        if (useBlueprint) return;
-        const logMsg =
-            `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
-
-        const installConfig = {
-            bower: false,
-            npm: this.clientPackageManager !== 'yarn',
-            yarn: this.clientPackageManager === 'yarn'
-        };
-
-        if (this.options['skip-install']) {
-            this.log(logMsg);
-        } else {
-            this.installDependencies(installConfig).then(
-                () => {
-                    this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
-                },
-                (err) => {
-                    this.warning('Install of dependencies failed!');
-                    this.log(logMsg);
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
+        return {
+            write() {
+                switch (this.clientFramework) {
+                case 'react':
+                    return writeReactFiles.call(this);
+                default:
+                    return writeAngularFiles.call(this);
                 }
-            );
-        }
+            }
+        };
+    }
+    get writing() {
+        if (useBlueprint) return;
+        return this._writing();
     }
 
-    end() {
+    // Public API method used by the getter and also by Blueprints
+    _install() {
+        return {
+            installing() {
+                const logMsg =
+                    `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
+
+                const installConfig = {
+                    bower: false,
+                    npm: this.clientPackageManager !== 'yarn',
+                    yarn: this.clientPackageManager === 'yarn'
+                };
+
+                if (this.options['skip-install']) {
+                    this.log(logMsg);
+                } else {
+                    this.installDependencies(installConfig).then(
+                        () => {
+                            this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
+                        },
+                        (err) => {
+                            this.warning('Install of dependencies failed!');
+                            this.log(logMsg);
+                        }
+                    );
+                }
+            }
+        };
+    }
+    get install() {
         if (useBlueprint) return;
-        if (this.buildResult !== undefined && this.buildResult.status !== 0) {
-            this.error('webpack:build failed.');
-        }
-        this.log(chalk.green.bold('\nClient application generated successfully.\n'));
+        return this._install();
+    }
 
-        const logMsg =
-            `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
+    // Public API method used by the getter and also by Blueprints
+    _end() {
+        return {
+            end() {
+                if (this.buildResult !== undefined && this.buildResult.status !== 0) {
+                    this.error('webpack:build failed.');
+                }
+                this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
-        this.log(chalk.green(logMsg));
+                const logMsg =
+                    `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
+
+                this.log(chalk.green(logMsg));
+            }
+        };
+    }
+    get end() {
+        if (useBlueprint) return;
+        return this._end();
     }
 };

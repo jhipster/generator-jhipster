@@ -670,15 +670,17 @@ module.exports = class extends Generator {
     composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
             this.checkBlueprint(blueprint);
+            this.log(`Trying to use blueprint ${blueprint}`);
             try {
+                const finalOptions = Object.assign(
+                    options,
+                    { jhipsterContext: this }
+                );
                 this.useBlueprint = true;
                 this.composeExternalModule(
                     blueprint,
                     subGen,
-                    Object.assign(
-                        { jhipsterContext: this },
-                        options
-                    )
+                    finalOptions
                 );
                 return true;
             } catch (e) {
@@ -829,7 +831,7 @@ module.exports = class extends Generator {
                     `!${relationshipFieldName}Id`;
 
                 query =
-        `this.${relationship.otherEntityName}Service
+                    `this.${relationship.otherEntityName}Service
             .query({filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'})
             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
                 if (${relationshipFieldNameIdCheck}) {
@@ -848,7 +850,7 @@ module.exports = class extends Generator {
                     variableName += 'Collection';
                 }
                 query =
-        `this.${relationship.otherEntityName}Service.query()
+                    `this.${relationship.otherEntityName}Service.query()
             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
