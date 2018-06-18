@@ -16,7 +16,7 @@
                 "--skip-git",
                 "--skip-cache",
                 "--blueprint",
-                "generator-jhipster-sample-blueprint"
+                "sample-blueprint"
                 ],
             "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
             "console": "integratedTerminal"
