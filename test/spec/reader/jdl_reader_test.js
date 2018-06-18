@@ -220,6 +220,22 @@ describe('JDLReader', () => {
           expect(content.errors.REL_INDIVIDUAL_DECL[1]).to.deep.equal({ from: 'A', to: 'C', type: 'one-to-many' });
         });
       });
+      context('when parsing a file containing useless commas separating fields', () => {
+        let content = null;
+
+        before(() => {
+          content = JDLReader.lintFiles(['./test/test_files/lint/useless_commas_fields.jdl']);
+        });
+
+        it('counts it', () => {
+          expect(content.errors.FLD_OPTIONAL_COMMAS).to.have.lengthOf(3);
+        });
+        it('tells which entity', () => {
+          expect(content.errors.FLD_OPTIONAL_COMMAS[0]).to.deep.equal({ field: 'toto', entity: 'A' });
+          expect(content.errors.FLD_OPTIONAL_COMMAS[1]).to.deep.equal({ field: 'titi', entity: 'A' });
+          expect(content.errors.FLD_OPTIONAL_COMMAS[2]).to.deep.equal({ field: 'tata', entity: 'A' });
+        });
+      });
     });
   });
 });
