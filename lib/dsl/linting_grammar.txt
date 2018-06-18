@@ -45,6 +45,13 @@
     return applicationDecl;
   }
 
+  const relationshipCounts = {
+    'one-to-one': 0,
+    'one-to-many': 0,
+    'many-to-one': 0,
+    'many-to-many': 0
+  }
+
   const parsed = {
     applications: [],
     constants: {},
@@ -64,7 +71,8 @@
     clientRootFolder: {},
     errors: {
       ENT_SHORTER_DECL: [],
-      ENT_OPTIONAL_TABLE_NAME: []
+      ENT_OPTIONAL_TABLE_NAME: [],
+      REL_INDIVIDUAL_DECL: []
     }
   };
 }
@@ -309,9 +317,8 @@ entityDecl
       parsed.errors.ENT_SHORTER_DECL.push({ entityName: e });
       eb = [];
     }
-    return { name: e, tableName: tableName ? tableName: e, body: eb, javadoc: jd };
   }
-  / ENTITY SPACE* e:ENTITY_NAME SPACE* eb:entityBody? { return { name: e, body: eb, javadoc: '' }; }
+  / ENTITY SPACE* e:ENTITY_NAME SPACE* eb:entityBody?
 
 entityTableNameDecl
   = '(' SPACE* start:[A-Za-z] end:[A-Za-z0-9_-]* SPACE* ')' { return `${start}${end.join('')}`; }
@@ -321,13 +328,12 @@ entityBody
     if (fdl.length === 0) {
       return 'ENT_SHORTER_DECL';
     }
-    return fdl;
   }
   / '' { return []; }
 
 fieldDeclList
   = SPACE* com:comment? SPACE* f:FIELD_NAME SPACE_WITHOUT_NEWLINE* t:type SPACE_WITHOUT_NEWLINE* vl:validationList? SPACE_WITHOUT_NEWLINE* com2:comment? SPACE_WITHOUT_NEWLINE* ','? SPACE* fdl:fieldDeclList {
-    return addUniqueElements([{ name: f, type: t, validations: vl, javadoc: com || com2 }], fdl );
+    return addUniqueElements([{ name: f, type: t, validations: vl, javadoc: com || com2 }], fdl);
   }
   / '' { return []; }
 
@@ -339,6 +345,14 @@ validationList
 relationDecl
   = RELATIONSHIP SPACE rt:relationshipType SPACE* '{' SPACE* bodies:relationshipBodies SPACE* '}' {
         addCardinalityToRelationships(rt, bodies);
+        if (bodies.length === 1 && relationshipCounts[rt] !== 0) {
+          parsed.errors.REL_INDIVIDUAL_DECL.push({
+            from: bodies[0].from.name,
+            to: bodies[0].to.name,
+            type: rt
+          });
+        }
+        relationshipCounts[rt] += bodies.length;
         return addUniqueElements([], bodies);
     }
 

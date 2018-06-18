@@ -205,6 +205,21 @@ describe('JDLReader', () => {
           expect(content.errors.ENT_OPTIONAL_TABLE_NAME[2]).to.deep.equal({ entityName: 'SuperToto' });
         });
       });
+      context('when parsing a file containing un-grouped relationships', () => {
+        let content = null;
+
+        before(() => {
+          content = JDLReader.lintFiles(['./test/test_files/lint/ungrouped_relationships.jdl']);
+        });
+
+        it('counts it', () => {
+          expect(content.errors.REL_INDIVIDUAL_DECL).to.have.lengthOf(2);
+        });
+        it('tells which entity', () => {
+          expect(content.errors.REL_INDIVIDUAL_DECL[0]).to.deep.equal({ from: 'B', to: 'C', type: 'one-to-many' });
+          expect(content.errors.REL_INDIVIDUAL_DECL[1]).to.deep.equal({ from: 'A', to: 'C', type: 'one-to-many' });
+        });
+      });
     });
   });
 });
