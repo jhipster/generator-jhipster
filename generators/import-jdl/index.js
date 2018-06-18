@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const _ = require('lodash');
-const fs = require('fs');
 const path = require('path');
 const shelljs = require('shelljs');
 const chalk = require('chalk');
@@ -25,7 +24,7 @@ const jhiCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
 const packagejs = require('../../package.json');
 
-module.exports = class extends BaseGenerator {
+class ImporterGenerator extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         this.argument('jdlFiles', { type: Array, required: true });
@@ -57,11 +56,73 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
+
+        if (this.config.get('baseName')) {
+            const configuration = this.config.getAll();
+            this.applicationType = configuration.applicationType;
+            this.baseName = configuration.baseName;
+            this.databaseType = configuration.databaseType || this.getDBTypeFromDBValue(this.options.db);
+            this.prodDatabaseType = configuration.prodDatabaseType || this.options.db;
+            this.devDatabaseType = configuration.devDatabaseType || this.options.db;
+            this.skipClient = configuration.skipClient;
+            this.clientFramework = configuration.clientFramework;
+            this.clientFramework = this.clientFramework || 'angularX';
+            this.clientPackageManager = configuration.clientPackageManager;
+            if (!this.clientPackageManager) {
+                if (this.useYarn) {
+                    this.clientPackageManager = 'yarn';
+                } else {
+                    this.clientPackageManager = 'npm';
+                }
+            }
+        }
+
+        this.importState = importJDL.call(this);
+    }
+}
+
+function importJDL() {
+    this.log('The JDL is being parsed.');
+    const jdlImporter = new jhiCore.JDLImporter(this.jdlFiles, {
+        databaseType: this.prodDatabaseType,
+        applicationType: this.applicationType,
+        applicationName: this.baseName,
+        generatorVersion: packagejs.version,
+        forceNoFiltering: this.options.force
+    });
+    let importState = {
+        exportedEntities: [],
+        exportedApplications: []
+    };
+    try {
+        importState = jdlImporter.import();
+        if (importState.exportedEntities.length > 0) {
+            const entityNames = _.uniq(importState.exportedEntities
+                .map(exportedEntity => exportedEntity.name))
+                .join(', ');
+            this.log(`Found entities: ${chalk.yellow(entityNames)}.`);
+        } else {
+            this.log(chalk.yellow('No change in entity configurations, no entities were updated.'));
+        }
+        this.log('The JDL has been successfully parsed');
+    } catch (error) {
+        this.debug('Error:', error);
+        if (error) {
+            const errorName = `${error.name}:` || '';
+            const errorMessage = error.message || '';
+            this.log(chalk.red(`${errorName} ${errorMessage}`));
+        }
+        this.error(`Error while parsing applications and entities from the JDL ${error}`);
+    }
+    return importState;
+}
+
+module.exports = class extends ImporterGenerator {
+    constructor(args, opts) {
+        super(args, opts);
         this.registerClientTransforms();
         this.applicationsLeftToGenerate = [];
         this.entitiesLeftToGenerate = [];
-        this.generated = false;
-        this.generatorConfig = {};
     }
 
     get initializing() {
@@ -77,17 +138,10 @@ module.exports = class extends BaseGenerator {
             },
 
             getConfig() {
-                if (!jhiCore.FileUtils.doesFileExist('.yo-rc.json') && !this.generated) {
-                    // we may have to parse the JDL first
-                    return;
+                if (!this.config.get('baseName') && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
+                    this.createConfigFromNewConfFile(this);
                 }
-                let configuration = this.config.getAll();
-                if (!configuration.baseName && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
-                    configuration = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }))['generator-jhipster'];
-                    configuration.getAll = () => configuration;
-                    configuration.get = key => configuration[key];
-                    configuration.set = (key, value) => { configuration[key] = value; };
-                }
+                const configuration = this.config.getAll();
                 this.applicationType = configuration.applicationType;
                 this.baseName = configuration.baseName;
                 this.databaseType = configuration.databaseType || this.getDBTypeFromDBValue(this.options.db);
@@ -104,7 +158,6 @@ module.exports = class extends BaseGenerator {
                         this.clientPackageManager = 'npm';
                     }
                 }
-                this.generatorConfig = configuration;
             }
         };
     }
@@ -114,53 +167,12 @@ module.exports = class extends BaseGenerator {
             insight() {
                 const insight = this.insight();
                 insight.trackWithEvent('generator', 'import-jdl');
-            },
-
-            parseJDL() {
-                if (this.generated) {
-                    return;
-                }
-                this.log('The JDL is being parsed.');
-                const jdlImporter = new jhiCore.JDLImporter(this.jdlFiles, {
-                    databaseType: this.prodDatabaseType,
-                    applicationType: this.applicationType,
-                    applicationName: this.baseName,
-                    generatorVersion: packagejs.version,
-                    forceNoFiltering: this.options.force
-                });
-                try {
-                    this.importState = jdlImporter.import();
-                    if (this.importState.exportedEntities.length > 0) {
-                        const entityNames = _.uniq(this.importState.exportedEntities
-                            .map(exportedEntity => exportedEntity.name))
-                            .join(', ');
-                        this.log(`Found entities: ${chalk.yellow(entityNames)}.`);
-                    } else {
-                        this.log(chalk.yellow('No change in entity configurations, no entities were updated.'));
-                    }
-                    this.log('The JDL has been successfully parsed');
-                    this.generated = true;
-                } catch (error) {
-                    this.debug('Error:', error);
-                    if (error) {
-                        const errorName = `${error.name}:` || '';
-                        const errorMessage = error.message || '';
-                        this.log(chalk.red(`${errorName} ${errorMessage}`));
-                    }
-                    this.error(`Error while parsing applications and entities from the JDL ${error}`);
-                }
             }
         };
     }
 
     get writing() {
         return {
-            initializeGeneratorIfNeedBe() {
-                if (!this.baseName) {
-                    this.initializing.getConfig.call(this);
-                }
-            },
-
             generateApplications() {
                 if (!shouldGenerateApplications(this) || this.importState.exportedApplications.length === 0) {
                     return;
@@ -170,7 +182,11 @@ module.exports = class extends BaseGenerator {
                 if (this.importState.exportedApplications.length === 1) {
                     const application = this.importState.exportedApplications[0];
                     try {
-                        generateApplicationFiles(this, application, this.generatorConfig);
+                        generateApplicationFiles({
+                            generator: this,
+                            application,
+                            withEntities: this.importState.exportedEntities.length !== 0
+                        });
                     } catch (error) {
                         this.error(`Error while generating applications from the parsed JDL\n${error}`);
                     }
@@ -182,7 +198,7 @@ module.exports = class extends BaseGenerator {
             },
 
             generateEntities() {
-                if (this.importState.exportedEntities.length === 0) {
+                if (this.importState.exportedEntities.length === 0 || this.importState.exportedApplications.length !== 0) {
                     return;
                 }
                 if (this.options['json-only']) {
@@ -195,7 +211,7 @@ module.exports = class extends BaseGenerator {
                                 || this.importState.exportedApplications.length === 1) {
                             this.log(`Generating ${this.importState.exportedEntities.length} `
                                 + `entit${this.importState.exportedEntities.length === 1 ? 'y' : 'ies'}.`);
-                            generateEntityFiles(this, exportedEntity, this.generatorConfig);
+                            generateEntityFiles(this, exportedEntity);
                         } else {
                             // sub-folder generation, not yet handled
                             this.entitiesLeftToGenerate.push(exportedEntity.name);
@@ -227,19 +243,20 @@ function shouldGenerateApplications(generator) {
     return !generator.options['ignore-application'] && generator.importState.exportedApplications.length !== 0;
 }
 
-function generateApplicationFiles(generator, application, generatorConfig) {
-    callSubGenerator(generator, '..', 'app', {
-        force: generator.options.force,
-        debug: generator.options.debug,
-        'skip-client': generator.options.skipClient,
-        'skip-server': generator.options.skipServer,
-        'skip-install': generator.options['skip-install'],
-        'skip-user-management': application['generator-jhipster'].skipUserManagement,
-        'jhi-prefix': application['generator-jhipster'].jhiPrefix
+function generateApplicationFiles(args) {
+    callSubGenerator(args.generator, '..', 'app', {
+        force: args.generator.options.force,
+        debug: args.generator.options.debug,
+        'skip-client': args.generator.options.skipClient,
+        'skip-server': args.generator.options.skipServer,
+        'skip-install': args.generator.options['skip-install'],
+        'skip-user-management': args.application['generator-jhipster'].skipUserManagement,
+        'jhi-prefix': args.application['generator-jhipster'].jhiPrefix,
+        'with-entities': args.withEntities
     });
 }
 
-function generateEntityFiles(generator, entity, generatorConfig) {
+function generateEntityFiles(generator, entity) {
     callSubGenerator(generator, '..', 'entity', {
         force: generator.options.force,
         debug: generator.options.debug,

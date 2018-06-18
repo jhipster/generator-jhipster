@@ -21,6 +21,7 @@ const path = require('path');
 const _ = require('lodash');
 const fs = require('fs');
 const Generator = require('yeoman-generator');
+const Storage = require('yeoman-generator/lib/util/storage');
 const chalk = require('chalk');
 const Insight = require('insight');
 const shelljs = require('shelljs');
@@ -44,7 +45,7 @@ const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
  * This is the Generator base private class.
  * This provides all the private API methods used internally.
  * These methods should not be directly utilized using commonJS require,
- * as these can have breaking changes without a major version bumb
+ * as these can have breaking changes without a major version bump
  *
  * The method signatures in private API can be changed without a major version change.
  */
@@ -54,6 +55,7 @@ module.exports = class extends Generator {
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
         // expose lodash to templates
         this._ = _;
+        this.createConfigFromNewConfFile();
     }
 
     /* ======================================================================== */
@@ -668,15 +670,17 @@ module.exports = class extends Generator {
     composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
             this.checkBlueprint(blueprint);
+            this.log(`Trying to use blueprint ${blueprint}`);
             try {
+                const finalOptions = Object.assign(
+                    options,
+                    { jhipsterContext: this }
+                );
                 this.useBlueprint = true;
                 this.composeExternalModule(
                     blueprint,
                     subGen,
-                    Object.assign(
-                        { jhipsterContext: this },
-                        options
-                    )
+                    finalOptions
                 );
                 return true;
             } catch (e) {
@@ -827,7 +831,7 @@ module.exports = class extends Generator {
                     `!${relationshipFieldName}Id`;
 
                 query =
-        `this.${relationship.otherEntityName}Service
+                    `this.${relationship.otherEntityName}Service
             .query({filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'})
             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
                 if (${relationshipFieldNameIdCheck}) {
@@ -846,7 +850,7 @@ module.exports = class extends Generator {
                     variableName += 'Collection';
                 }
                 query =
-        `this.${relationship.otherEntityName}Service.query()
+                    `this.${relationship.otherEntityName}Service.query()
             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
@@ -1185,5 +1189,24 @@ module.exports = class extends Generator {
                 prettierFilter.restore
             ]);
         }
+    }
+
+    /**
+     * Creates a new config file and binds it to the passed generator.
+     * @param {any} generator
+     */
+    createConfigFromNewConfFile(generator = this) {
+        const storePath = path.join(generator.destinationRoot(), '.yo-rc.json');
+        if (!jhiCore.FileUtils.doesFileExist(storePath)) {
+            return;
+        }
+        const customFs = this.fs;
+        customFs.readJSON = (filePath) => {
+            if (!jhiCore.FileUtils.doesFileExist(filePath)) {
+                return {};
+            }
+            return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
+        };
+        generator.config = new Storage(generator.rootGeneratorName(), customFs, storePath);
     }
 };

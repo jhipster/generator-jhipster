@@ -113,49 +113,54 @@ module.exports = class extends BaseGenerator {
         this.setupEntityOptions(this, this, this.context);
         this.registerClientTransforms();
         const blueprint = this.config.get('blueprint');
-        // use global variable since getters dont have access to instance property
-        useBlueprint = this.composeBlueprint(
-            blueprint,
-            'entity',
-            {
-                'skip-install': this.options['skip-install'],
-                force: this.options.force,
-                arguments: [this.context.name]
-            }
-        );
+        if (!opts.fromBlueprint) {
+            // use global variable since getters dont have access to instance property
+            useBlueprint = this.composeBlueprint(
+                blueprint,
+                'entity',
+                {
+                    'skip-install': this.options['skip-install'],
+                    force: this.options.force,
+                    arguments: [this.context.name]
+                }
+            );
+        } else {
+            useBlueprint = false;
+        }
     }
 
-    get initializing() {
-        if (useBlueprint) return;
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
         return {
             getConfig() {
                 const context = this.context;
+                const configuration = this.getAllJhipsterConfig(this, true);
                 context.useConfigurationFile = false;
-                this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 context.options = this.options;
-                context.baseName = this.config.get('baseName');
+                context.baseName = configuration.get('baseName');
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
-                context.packageName = this.config.get('packageName');
-                context.applicationType = this.config.get('applicationType');
-                context.packageFolder = this.config.get('packageFolder');
-                context.authenticationType = this.config.get('authenticationType');
-                context.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-                context.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
-                context.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
-                context.databaseType = this.config.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
-                context.prodDatabaseType = this.config.get('prodDatabaseType') || this.options.db;
-                context.devDatabaseType = this.config.get('devDatabaseType') || this.options.db;
-                context.searchEngine = this.config.get('searchEngine');
-                context.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
-                context.enableTranslation = this.config.get('enableTranslation');
-                context.nativeLanguage = this.config.get('nativeLanguage');
-                context.languages = this.config.get('languages');
-                context.buildTool = this.config.get('buildTool');
-                context.jhiPrefix = this.config.get('jhiPrefix');
-                context.skipCheckLengthOfIdentifier = this.config.get('skipCheckLengthOfIdentifier');
+                context.packageName = configuration.get('packageName');
+                context.applicationType = configuration.get('applicationType');
+                context.packageFolder = configuration.get('packageFolder');
+                context.authenticationType = configuration.get('authenticationType');
+                context.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                context.enableHibernateCache = configuration.get('enableHibernateCache') || (configuration.get('hibernateCache') !== undefined && configuration.get('hibernateCache') !== 'no');
+                context.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
+                context.databaseType = configuration.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
+                context.prodDatabaseType = configuration.get('prodDatabaseType') || this.options.db;
+                context.devDatabaseType = configuration.get('devDatabaseType') || this.options.db;
+                context.searchEngine = configuration.get('searchEngine');
+                context.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
+                context.enableTranslation = configuration.get('enableTranslation');
+                context.nativeLanguage = configuration.get('nativeLanguage');
+                context.languages = configuration.get('languages');
+                context.buildTool = configuration.get('buildTool');
+                context.jhiPrefix = configuration.get('jhiPrefix');
+                context.skipCheckLengthOfIdentifier = configuration.get('skipCheckLengthOfIdentifier');
                 context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-                context.testFrameworks = this.config.get('testFrameworks');
+                context.testFrameworks = configuration.get('testFrameworks');
                 // backward compatibility on testing frameworks
                 if (context.testFrameworks === undefined) {
                     context.testFrameworks = ['gatling'];
@@ -164,11 +169,11 @@ module.exports = class extends BaseGenerator {
                 context.gatlingTests = context.testFrameworks.includes('gatling');
                 context.cucumberTests = context.testFrameworks.includes('cucumber');
 
-                context.clientFramework = this.config.get('clientFramework');
+                context.clientFramework = configuration.get('clientFramework');
                 if (!context.clientFramework) {
                     context.clientFramework = 'angularX';
                 }
-                context.clientPackageManager = this.config.get('clientPackageManager');
+                context.clientPackageManager = configuration.get('clientPackageManager');
                 if (!context.clientPackageManager) {
                     if (context.useYarn) {
                         context.clientPackageManager = 'yarn';
@@ -177,8 +182,8 @@ module.exports = class extends BaseGenerator {
                     }
                 }
 
-                context.skipClient = context.applicationType === 'microservice' || this.options['skip-client'] || this.config.get('skipClient');
-                context.skipServer = this.options['skip-server'] || this.config.get('skipServer');
+                context.skipClient = context.applicationType === 'microservice' || this.options['skip-client'] || configuration.get('skipClient');
+                context.skipServer = this.options['skip-server'] || configuration.get('skipServer');
 
                 context.angularAppName = this.getAngularAppName(context.baseName);
                 context.angularXAppName = this.getAngularXAppName(context.baseName);
@@ -267,9 +272,13 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
-    get prompting() {
+    get initializing() {
         if (useBlueprint) return;
+        return this._initializing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _prompting() {
         return {
             /* pre entity hook needs to be written here */
             askForMicroserviceJson: prompts.askForMicroserviceJson,
@@ -286,9 +295,13 @@ module.exports = class extends BaseGenerator {
             askForPagination: prompts.askForPagination
         };
     }
-
-    get configuring() {
+    get prompting() {
         if (useBlueprint) return;
+        return this._prompting();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
         return {
             validateFile() {
                 const context = this.context;
@@ -779,9 +792,13 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
-    get writing() {
+    get configuring() {
         if (useBlueprint) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
         return {
 
             cleanup() {
@@ -828,9 +845,13 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
-
-    get install() {
+    get writing() {
         if (useBlueprint) return;
+        return this._writing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _install() {
         return {
             afterRunHook() {
                 const done = this.async();
@@ -856,5 +877,9 @@ module.exports = class extends BaseGenerator {
                 }
             }
         };
+    }
+    get install() {
+        if (useBlueprint) return;
+        return this._install();
     }
 };

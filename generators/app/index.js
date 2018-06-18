@@ -137,7 +137,11 @@ module.exports = class extends BaseGenerator {
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        this.blueprint = this.configOptions.blueprint = this.options.blueprint || this.config.get('blueprint');
+        let blueprint = this.options.blueprint || this.config.get('blueprint');
+        if (blueprint && !blueprint.startsWith('generator-jhipster')) {
+            blueprint = `generator-jhipster-${blueprint}`;
+        }
+        this.blueprint = this.configOptions.blueprint = blueprint;
         this.useYarn = this.configOptions.useYarn = !this.options.npm;
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
         this.experimental = this.configOptions.experimental = this.options.experimental;
