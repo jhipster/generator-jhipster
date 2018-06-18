@@ -98,6 +98,10 @@ const files = {
             templates: [
                 { file: 'content/images/hipster.png', method: 'copy' },
                 { file: 'content/images/hipster2x.png', method: 'copy' },
+                { file: 'content/images/hipster192.png', method: 'copy' },
+                { file: 'content/images/hipster256.png', method: 'copy' },
+                { file: 'content/images/hipster384.png', method: 'copy' },
+                { file: 'content/images/hipster512.png', method: 'copy' },
                 { file: 'content/images/logo-jhipster.png', method: 'copy' }
             ]
         }
