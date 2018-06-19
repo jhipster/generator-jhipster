@@ -1122,7 +1122,7 @@ module.exports = class extends PrivateBase {
                 `            <url>${snapshotsUrl}</url>\n` +
                 '        </snapshotRepository>\n' +
                 '        <repository>\n' +
-                `            <id>'${releasesId}</id>\n` +
+                `            <id>${releasesId}</id>\n` +
                 `            <url>${releasesUrl}</url>\n` +
                 '        </repository>\n' +
                 '    </distributionManagement>';
