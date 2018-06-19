@@ -102,13 +102,13 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
         <%_ if (fieldsContainImageBlob) { _%>
         private elementRef: ElementRef,
         <%_ } _%>
-        private route: ActivatedRoute
+        private activatedRoute: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
-        this.route.data.subscribe(({<%= entityInstance %>}) => {
+        this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
             this.<%= entityInstance %> = <%= entityInstance %>;
         });
         <%_ for (idx in queries) { _%>
