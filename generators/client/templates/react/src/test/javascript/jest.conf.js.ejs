@@ -9,9 +9,9 @@ module.exports = {
     'app/(.*)': '<rootDir>/src/main/webapp/app/$1'
   },
   reporters: [
-    'default',
-    [ 'jest-junit', { output: './<%= BUILD_DIR %>test-results/jest/TESTS-results.xml' } ]
+    'default'
   ],
+  testResultsProcessor: 'jest-sonar-reporter',
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/src/test/javascript/spec/app/modules/account/sessions/sessions.reducer.spec.ts'
