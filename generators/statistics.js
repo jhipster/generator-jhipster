@@ -43,13 +43,12 @@ class Statistics {
             baseURL: STATISTICS_API_PATH
         });
 
-        let splitted;
-        if (process.env.HTTPS_PROXY) {
-            splitted = process.env.HTTPS_PROXY.split(':');
-        } else if (process.env.HTTP_PROXY) {
-            splitted = process.env.HTTP_PROXY.split(':');
-        }
-        if (splitted) {
+        const npmHttpsProxy = process.env.npm_config_https_proxy || process.env.npm_config_proxy;
+        const npmHttpProxy = process.env.npm_config_http_proxy || process.env.npm_config_proxy;
+        const envProxy = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
+        const proxySettings = npmHttpsProxy || npmHttpProxy || envProxy;
+        if (proxySettings) {
+            const splitted = proxySettings.split(':');
             this.axiosProxyClient = axios.create({
                 baseURL: STATISTICS_API_PATH,
                 proxy: { host: splitted[0], port: splitted[1] }
