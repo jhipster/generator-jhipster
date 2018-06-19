@@ -20,6 +20,41 @@ class Statistics {
         this.clientId = this.config.get('clientId');
         this.doNotAskCounter = this.config.get('doNotAskCounter');
         this.optOut = this.config.get('optOut');
+        this.configAxios();
+    }
+
+    postRequest(url, data) {
+        if (!this.optOut) {
+            this.axiosClient.post(url, data).then(
+                () => {},
+                () => {
+                    if (this.axiosProxyClient) {
+                        this.axiosProxyClient.post(url, data)
+                            .then(() => {})
+                            .catch(() => {});
+                    }
+                }
+            ).catch(() => {});
+        }
+    }
+
+    configAxios() {
+        this.axiosClient = axios.create({
+            baseURL: STATISTICS_API_PATH
+        });
+
+        let splitted;
+        if (process.env.HTTPS_PROXY) {
+            splitted = process.env.HTTPS_PROXY.split(':');
+        } else if (process.env.HTTP_PROXY) {
+            splitted = process.env.HTTP_PROXY.split(':');
+        }
+        if (splitted) {
+            this.axiosProxyClient = axios.create({
+                baseURL: STATISTICS_API_PATH,
+                proxy: { host: splitted[0], port: splitted[1] }
+            });
+        }
     }
 
     shouldWeAskForOptIn() {
@@ -36,47 +71,35 @@ class Statistics {
     }
 
     sendYoRc(yorc, generatorVersion) {
-        this.sendData(() => {
-            axios.post(`${STATISTICS_API_PATH}s/entry`, {
-                'generator-jhipster': yorc,
-                'generator-id': this.clientId,
-                'generator-version': generatorVersion,
-                'git-provider': 'local',
-                'node-version': process.version,
-                os: `${os.platform()}:${os.release()}`,
-                arch: os.arch(),
-                cpu: os.cpus()[0].model,
-                cores: os.cpus().length,
-                memory: os.totalmem(),
-                'user-language': osLocale.sync()
-            }).then(() => {}).catch(() => {});
+        this.postRequest('s/entry', {
+            'generator-jhipster': yorc,
+            'generator-id': this.clientId,
+            'generator-version': generatorVersion,
+            'git-provider': 'local',
+            'node-version': process.version,
+            os: `${os.platform()}:${os.release()}`,
+            arch: os.arch(),
+            cpu: os.cpus()[0].model,
+            cores: os.cpus().length,
+            memory: os.totalmem(),
+            'user-language': osLocale.sync()
         });
     }
 
     sendSubGenEvent(source, type, event) {
-        this.sendData(() => {
-            const strEvent = event === '' ? event : JSON.stringify(event);
-            axios.post(`${STATISTICS_API_PATH}s/event/${this.clientId}`, { source, type, event: strEvent }).then(() => {}).catch(() => {});
-        });
+        const strEvent = event === '' ? event : JSON.stringify(event);
+        this.postRequest(`s/event/${this.clientId}`, { source, type, event: strEvent });
     }
 
     sendEntityStats(fields, relationship, pagination, dto, service, fluentMethods) {
-        this.sendData(() => {
-            axios.post(`${STATISTICS_API_PATH}s/entity/${this.clientId}`, {
-                fields,
-                relationship,
-                pagination,
-                dto,
-                service,
-                fluentMethods
-            }).then(() => {}).catch(() => {});
+        this.postRequest(`s/entity/${this.clientId}`, {
+            fields,
+            relationship,
+            pagination,
+            dto,
+            service,
+            fluentMethods
         });
-    }
-
-    sendData(callback) {
-        if (!this.optOut) {
-            callback();
-        }
     }
 }
 
