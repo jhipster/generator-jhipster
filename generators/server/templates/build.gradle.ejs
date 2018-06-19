@@ -24,8 +24,6 @@ buildscript {
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
-        // TODO To remove after final Spring Cloud release
-        maven { url "https://repo.spring.io/milestone" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -195,8 +193,6 @@ repositories {
     // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
-    // TODO To remove after final Spring Cloud release
-    maven { url "https://repo.spring.io/milestone" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -335,7 +331,8 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-starter"
     compile "org.springframework.cloud:spring-cloud-starter-netflix-ribbon"
     compile "org.springframework.cloud:spring-cloud-starter-netflix-hystrix"
-    compile "org.springframework.retry:spring-retry"
+    compile "org.springframework.retry:spring-retry
+    compile "io.micrometer:micrometer-core"
     <%_ } _%>
     <%_ if (serviceDiscoveryType === 'eureka') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
