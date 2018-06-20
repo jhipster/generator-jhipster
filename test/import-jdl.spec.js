@@ -70,7 +70,7 @@ describe('JHipster generator import jdl', () => {
             assert.file(entityFiles);
         });
     });
-    describe('imports a JDL app and entities', () => {
+    describe('imports JDL apps and entities', () => {
         before((done) => {
             helpers.run(require.resolve('../generators/import-jdl'))
                 .inTmpDir((dir) => {
@@ -95,6 +95,27 @@ describe('JHipster generator import jdl', () => {
                 path.join('myFirstApp', '.jhipster', 'F.json'),
                 path.join('mySecondApp', '.jhipster', 'E.json'),
                 path.join('myThirdApp', '.jhipster', 'F.json')
+            ]);
+        });
+    });
+    describe('imports single app and entities', () => {
+        before((done) => {
+            helpers.run(require.resolve('../generators/import-jdl'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/import-jdl'), dir);
+                })
+                .withOptions({ skipInstall: true })
+                .withArguments(['single-app-and-entities.jdl'])
+                .on('end', done);
+        });
+
+        it('creates the application', () => {
+            assert.file(['.yo-rc.json']);
+        });
+        it('creates the entities', () => {
+            assert.file([
+                path.join('.jhipster', 'A.json'),
+                path.join('.jhipster', 'B.json'),
             ]);
         });
     });
@@ -127,6 +148,26 @@ describe('JHipster generator import jdl', () => {
         });
         it('creates actual entity files', () => {
             assert.file(entityFiles);
+        });
+    });
+    describe('imports a JDL model which excludes Elasticsearch for a class', () => {
+        beforeEach((done) => {
+            helpers.run(require.resolve('../generators/import-jdl'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/import-jdl'), dir);
+                })
+                .withArguments(['search.jdl'])
+                .on('end', done);
+        });
+
+        it('creates entity json files', () => {
+            assert.file([
+                '.jhipster/WithSearch.json',
+                '.jhipster/WithoutSearch.json'
+            ]);
+            assert.fileContent('.jhipster/WithoutSearch.json', /"searchEngine": false/);
+            assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/WithSearchSearchRepository.java`);
+            assert.noFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/WithoutSearchSearchRepository.java`);
         });
     });
 });

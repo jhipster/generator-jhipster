@@ -211,8 +211,8 @@ function askForServerSideOpts(meta) {
             default: 0
         },
         {
-            // cache is mandatory for gateway and defined later to 'hazelcast' value
-            when: response => applicationType !== 'gateway',
+            // cache is mandatory for gateway with service dsicovery and defined later to 'hazelcast' value
+            when: response => !(applicationType === 'gateway' && response.serviceDiscoveryType),
             type: 'list',
             name: 'cacheProvider',
             message: 'Do you want to use the Spring cache abstraction?',
@@ -328,7 +328,7 @@ function askForServerSideOpts(meta) {
             this.enableHibernateCache = false;
         }
         // Hazelcast is mandatory for Gateways, as it is used for rate limiting
-        if (this.applicationType === 'gateway') {
+        if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
             this.cacheProvider = 'hazelcast';
         }
         done();
@@ -354,7 +354,7 @@ function askForOptionalItems(meta) {
         });
     }
     choices.push({
-        name: 'API first development using swagger-codegen',
+        name: 'API first development using OpenAPI-generator',
         value: 'enableSwaggerCodegen:true'
     });
     choices.push({

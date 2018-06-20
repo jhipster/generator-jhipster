@@ -31,12 +31,9 @@ describe('Administration', () => {
 
   before(() => {
     browser.get('/');
+    navBarPage = new NavBarPage(true);
     <%_ if (authenticationType !== 'oauth2') { _%>
-    navBarPage = new NavBarPage(true);
     navBarPage.autoSignIn();
-    <%_ } else { _%>
-    navBarPage = new NavBarPage(true);
-    navBarPage.getSignInPage();
     <%_ } _%>
   });
 

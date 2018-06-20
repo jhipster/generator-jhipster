@@ -101,12 +101,9 @@ security:
             userAuthorizationUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
             clientId: web_app
             clientSecret: web_app
-            clientAuthenticationScheme: form
             scope: openid profile email
         resource:
             userInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
-            tokenInfoUri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
-            preferTokenInfo: false
 ```
 
 ### Okta
@@ -125,12 +122,9 @@ security:
             userAuthorizationUri: https://{yourOktaDomain}.com/oauth2/default/v1/authorize
             clientId: {clientId}
             clientSecret: {clientSecret}
-            clientAuthenticationScheme: form
             scope: openid profile email
         resource:
             userInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/userinfo
-            tokenInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/introspect
-            preferTokenInfo: false
 ```
 
 Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the **Next** button. Give the app a name you’ll remember, specify `http://localhost:8080` as a Base URI, and `http://localhost:8080/login` as a Login Redirect URI. Click **Done** and copy the client ID and secret into your `application.yml` file.
@@ -139,7 +133,7 @@ Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do thi
 
 Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Create a user (e.g., "admin@jhipster.org" with password "Java is hip in 2017!"). Modify e2e tests to use this account when running integration tests. You'll need to change credentials in `src/test/javascript/e2e/account/account.spec.ts` and `src/test/javascript/e2e/admin/administration.spec.ts`.
 
-Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups" or "roles", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
+Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "roles", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
 
 After making these changes, you should be good to go! If you have any issues, please post them to [Stack Overflow](https://stackoverflow.com/questions/tagged/jhipster). Make sure to tag your question with "jhipster" and "okta".
 <%_ } _%>
@@ -154,13 +148,13 @@ Service workers are commented by default, to enable them please uncomment the fo
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker
-        .register('./sw.js')
+        .register('./service-worker.js')
         .then(function() { console.log('Service Worker Registered'); });
     }
 </script>
 ```
 
-Note: workbox creates the respective service worker and dynamically generate the `sw.js`
+Note: workbox creates the respective service worker and dynamically generate the `service-worker.js`
 
 ### Managing dependencies
 
@@ -216,7 +210,7 @@ will generate few files:
     <%_ } _%>
     <%_ if (buildTool === 'gradle') { _%>
 ```bash
-./gradlew openapi
+./gradlew openApiGenerate
 ```
     <%_ } _%>
 Then implements the generated delegate classes with `@Service` classes.
@@ -253,7 +247,7 @@ To launch your application's tests, run:
 <% if (!skipClient) { %>
 ### Client tests
 
-Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
+Unit tests are run by [Jest][] and written with [Jasmine][]. They're located in [<%= CLIENT_TEST_SRC_DIR %>](<%= CLIENT_TEST_SRC_DIR %>) and can be run with:
 
     <%= clientPackageManager %> test
 
@@ -282,7 +276,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool === 'maven') { %>./mvnw verify -Pprod dockerfile:build<% } %><% if (buildTool === 'gradle') { %>./gradlew bootWar -Pprod buildDocker<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw verify -Pprod dockerfile:build dockerfile:tag@version dockerfile:tag@commit<% } %><% if (buildTool === 'gradle') { %>./gradlew bootWar -Pprod buildDocker<% } %>
 
 Then run:
 
@@ -317,7 +311,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Webpack]: https://webpack.github.io/
 [Angular CLI]: https://cli.angular.io/
 [BrowserSync]: http://www.browsersync.io/
-[Karma]: http://karma-runner.github.io/
+[Jest]: https://facebook.github.io/jest/
 [Jasmine]: http://jasmine.github.io/2.0/introduction.html
 [Protractor]: https://angular.github.io/protractor/
 [Leaflet]: http://leafletjs.com/

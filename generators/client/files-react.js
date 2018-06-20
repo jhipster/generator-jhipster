@@ -67,6 +67,10 @@ const files = {
             templates: [
                 { file: 'static/images/hipster.png', method: 'copy' },
                 { file: 'static/images/hipster2x.png', method: 'copy' },
+                { file: 'static/images/hipster192.png', method: 'copy' },
+                { file: 'static/images/hipster256.png', method: 'copy' },
+                { file: 'static/images/hipster384.png', method: 'copy' },
+                { file: 'static/images/hipster512.png', method: 'copy' },
                 { file: 'static/images/logo-jhipster.png', method: 'copy' },
                 { file: 'static/images/logo-jhipster-react.svg', method: 'copy' }
             ]
@@ -319,6 +323,8 @@ const files = {
                 'shared/util/entity-utils.ts',
                 // components
                 { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
+                { file: 'shared/error/error-boundary.tsx', method: 'processJsx' },
+                { file: 'shared/error/error-boundary-route.tsx', method: 'processJsx' },
                 // model
                 'shared/model/user.model.ts'
             ]
@@ -375,6 +381,8 @@ const files = {
                 'spec/app/shared/reducers/authentication.spec.ts',
                 'spec/app/shared/util/entity-utils.spec.ts',
                 'spec/app/shared/auth/private-route.spec.tsx',
+                'spec/app/shared/error/error-boundary.spec.tsx',
+                'spec/app/shared/error/error-boundary-route.spec.tsx',
                 'spec/app/shared/layout/header/header.spec.tsx',
                 'spec/app/shared/layout/header/menus/account.spec.tsx',
                 'spec/app/modules/administration/administration.reducer.spec.ts',

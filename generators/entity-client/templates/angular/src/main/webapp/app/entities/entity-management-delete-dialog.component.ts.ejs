@@ -64,16 +64,16 @@ export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnD
     private ngbModalRef: NgbModalRef;
 
     constructor(
-        private route: ActivatedRoute,
+        private activatedRoute: ActivatedRoute,
         private router: Router,
         private modalService: NgbModal
     ) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({<%= entityInstance %>}) => {
+        this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent as Component, { size: 'lg', backdrop: 'static'});
-                this.ngbModalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>.body;
+                this.ngbModalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
                 this.ngbModalRef.result.then((result) => {
                     this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
                     this.ngbModalRef = null;

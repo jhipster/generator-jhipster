@@ -27,15 +27,6 @@
     <name><%= humanizedBaseName %></name>
 
     <repositories>
-        <!-- TODO Remove snapshot repositories after final Spring Boot 2 release -->
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>http://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
     <!-- more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
         <repository>
@@ -51,16 +42,6 @@
     <%_ } _%>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>http://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
     <properties>
         <!-- Build properties -->
@@ -88,10 +69,10 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.8</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.13</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.0.2.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
@@ -115,7 +96,7 @@
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.0</maven-war-plugin.version>
-        <dockerfile-maven-plugin.version>1.4.0</dockerfile-maven-plugin.version>
+        <dockerfile-maven-plugin.version>1.4.3</dockerfile-maven-plugin.version>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
@@ -123,7 +104,7 @@
         <scala-maven-plugin.version>3.3.2</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>3.0.0</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>3.0.1</openapi-generator-maven-plugin.version>
         <%_ } _%>
 
         <!-- Sonar properties -->
@@ -166,12 +147,6 @@
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
-        </dependency>
-
-        <!-- TODO To remove after final Spring Boot 2 release -->
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
         </dependency>
 
         <%_ if (cacheProvider !== 'no') { _%>
@@ -243,7 +218,7 @@
             <artifactId>httpclient</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (cacheProvider === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
@@ -255,7 +230,7 @@
             <artifactId>hazelcast-hibernate52</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (cacheProvider === 'hazelcast' || applicationType === 'gateway') { _%>
+        <%_ if (cacheProvider === 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
@@ -289,9 +264,16 @@
         <%_ } _%>
         <%_ if (cacheProvider === 'memcached') { _%>
         <dependency>
-            <groupId>io.sixhours</groupId>
-            <artifactId>memcached-spring-boot-starter</artifactId>
-            <version>1.2.0</version>
+            <groupId>com.google.code.simple-spring-memcached</groupId>
+            <artifactId>spring-cache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.simple-spring-memcached</groupId>
+            <artifactId>xmemcached-provider</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.xmemcached</groupId>
+            <artifactId>xmemcached</artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -356,7 +338,7 @@
             <artifactId>java-client</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
+        <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider)) { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
@@ -671,6 +653,10 @@
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (serviceDiscoveryType === 'eureka') { _%>
@@ -998,21 +984,53 @@
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>${dockerfile-maven-plugin.version}</version>
-                <!--
-                Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
                 <executions>
+                    <!--
+                     Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
                     <execution>
-                    <id>default</id>
-                    <goals>
-                        <goal>build</goal>
-                        <goal>push</goal>
-                    </goals>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                    -->
+                    <execution>
+                        <id>tag-latest</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>tag</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>version</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>tag</goal>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <tag>${project.version}</tag>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>commit</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>tag</goal>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <tag>${git.commit.id.describe}</tag>
+                        </configuration>
                     </execution>
                 </executions>
-                -->
                 <configuration>
                     <repository><%= baseName.toLowerCase()%></repository>
-                    <tag>latest</tag>
                     <contextDirectory>${project.build.directory}</contextDirectory>
                 </configuration>
             </plugin>

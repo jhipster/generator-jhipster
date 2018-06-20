@@ -18,6 +18,7 @@
  */
 const chalk = require('chalk');
 const shelljs = require('shelljs');
+const fs = require('fs');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseGenerator = require('../generator-base');
@@ -76,6 +77,8 @@ module.exports = class extends BaseGenerator {
                 this.kubernetesServiceType = this.config.get('kubernetesServiceType');
                 this.ingressDomain = this.config.get('ingressDomain');
                 this.useKafka = false;
+                this.istio = this.config.get('istio');
+                this.istioRoute = this.config.get('istioRoute');
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
                 this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
@@ -142,6 +145,8 @@ module.exports = class extends BaseGenerator {
             askForKubernetesNamespace: prompts.askForKubernetesNamespace,
             askForDockerRepositoryName: prompts.askForDockerRepositoryName,
             askForDockerPushCommand: prompts.askForDockerPushCommand,
+            askForIstioSupport: prompts.askForIstioSupport,
+            askForIstioRouteFiles: prompts.askForIstioRouteFiles,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
             askForIngressDomain: prompts.askForIngressDomain
         };
@@ -180,6 +185,8 @@ module.exports = class extends BaseGenerator {
                 this.config.set('kubernetesServiceType', this.kubernetesServiceType);
                 this.config.set('ingressDomain', this.ingressDomain);
                 this.config.set('monitoring', this.monitoring);
+                this.config.set('istio', this.istio);
+                this.config.set('istioRoute', this.istioRoute);
             }
         };
     }
@@ -206,27 +213,8 @@ module.exports = class extends BaseGenerator {
             this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
 
-        this.log('\nYou can deploy all your apps by running: ');
-        this.log(`  ${chalk.cyan(`sh ${this.directoryPath}k8s/kubectl-apply.sh`)}`);
-        this.log('OR');
-        if (this.kubernetesNamespace !== 'default') {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/namespace.yml`)}`);
-        }
-        if (this.useKafka === true) {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/messagebroker`)}`);
-        }
-        if (this.monitoring === 'elk') {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/console`)}`);
-        }
-        if (this.monitoring === 'prometheus') {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/monitoring`)}`);
-        }
-        for (let i = 0, regIndex = 0; i < this.appsFolders.length; i++) {
-            this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/${this.appConfigs[i].baseName.toLowerCase()}`)}`);
-            if (this.appConfigs[i].serviceDiscoveryType !== false && regIndex++ === 0) {
-                this.log(`  ${chalk.cyan(`kubectl apply -f ${this.directoryPath}k8s/registry`)}`);
-            }
-        }
+        this.log('\nYou can deploy all your apps by running the following script:');
+        this.log(`  ${chalk.cyan('./kubectl-apply.sh')}`);
         if (this.gatewayNb + this.monolithicNb >= 1) {
             const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
             this.log('\nUse these commands to find your application\'s IP addresses:');
@@ -236,6 +224,12 @@ module.exports = class extends BaseGenerator {
                 }
             }
             this.log();
+        }
+        // Make the apply script executable
+        try {
+            fs.chmodSync('kubectl-apply.sh', '755');
+        } catch (err) {
+            this.log(`${chalk.yellow.bold('WARNING!')}Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'`);
         }
     }
 };
