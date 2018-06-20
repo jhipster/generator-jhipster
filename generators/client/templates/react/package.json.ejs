@@ -103,7 +103,7 @@ limitations under the License.
     <%_ } _%>
     "image-webpack-loader": "4.2.0",
     "jest": "22.4.4",
-    "jest-junit": "5.0.0",
+    "jest-sonar-reporter": "2.0.0",
     <%_ if (protractorTests) { _%>
     "chai-as-promised": "7.1.1",
     <%_ } _%>
@@ -199,5 +199,9 @@ limitations under the License.
     "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
+  },
+  "jestSonar": {
+    "reportPath": "<%= BUILD_DIR %>test-results/jest",
+    "reportFile": "TESTS-results.xml"
   }
 }
