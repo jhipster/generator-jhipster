@@ -639,6 +639,24 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Utility function to render a template into a string
+     *
+     * @param {string} source - source
+     * @param {function} callback - callback to take the rendered template as a string
+     * @param {*} generator - reference to the generator
+     * @param {*} options - options object
+     * @param {*} context - context
+     */
+    render(source, callback, generator, options = {}, context) {
+        const _this = generator || this;
+        const _context = context || _this;
+        jhipsterUtils.renderContent(source, _this, _context, options, (res) => {
+            callback(res);
+        });
+    }
+
+
+    /**
      * Utility function to copy files.
      *
      * @param {string} source - Original file.
