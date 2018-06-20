@@ -55,7 +55,7 @@ const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
 // Version of Java, Scala
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
-const SCALA_VERSION = '2.12.1';
+const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
 const NODE_VERSION = '8.11.2';
