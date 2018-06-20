@@ -30,7 +30,8 @@ module.exports = class extends BaseGenerator {
     get initializing() {
         return {
             sayHello() {
-                this.log(chalk.bold('Welcome to Google App Engine Generator'));
+                this.log(chalk.bold('Welcome to Google App Engine Generator (Beta)'));
+                this.warning(chalk.bold('This sub-generator is still in development, please report bugs on Github'));
             },
             checkInstallation() {
                 if (this.abort) return;
