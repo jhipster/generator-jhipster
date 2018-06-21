@@ -232,12 +232,12 @@ module.exports = class extends BaseGenerator {
                             { value: 'F1', name: 'F1 - 600MHz, 128MB, Automatic Scaling' },
                             { value: 'F2', name: 'F2 - 1.2GHz, 256MB, Automatic Scaling' },
                             { value: 'F4', name: 'F4 - 2.4GHz, 512MB, Automatic Scaling' },
-                            { value: 'F4_1G', name: 'F4_1G - 2.4GHz, 1GB, Automatic/Manual Scaling' },
+                            { value: 'F4_1G', name: 'F4_1G - 2.4GHz, 1GB, Automatic' },
                             { value: 'B1', name: 'B1 - 600MHz, 128MB, Basic or Manual Scaling' },
                             { value: 'B2', name: 'B2 - 1.2GHz, 256MB, Basic or Manual Scaling' },
                             { value: 'B4', name: 'B4 - 2.4GHz, 512MB, Basic or Manual Scaling' },
-                            { value: 'B4_1G', name: 'B4_1G - 2.4GHz, 1GB, Manual Scaling' },
-                            { value: 'B8', name: 'B8 - 4.8GHz, 1GB, Manual Scaling' },
+                            { value: 'B4_1G', name: 'B4_1G - 2.4GHz, 1GB, Basic or Manual Scaling' },
+                            { value: 'B8', name: 'B8 - 4.8GHz, 1GB, Basic or Manual Scaling' },
                         ],
                         default: this.gaeInstanceClass ? this.gaeInstanceClass : 0
                     }];
