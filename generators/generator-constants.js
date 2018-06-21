@@ -18,7 +18,7 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:develop';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.3.0';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.20';
 const DOCKER_MARIADB = 'mariadb:10.3.7';
@@ -30,7 +30,7 @@ const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.9.3';
 const DOCKER_MEMCACHED = 'memcached:1.5.8-alpine';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:3.3.0.Final';
+const DOCKER_KEYCLOAK = 'jboss/keycloak:4.0.0.Final';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:5.6.5'; // docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1
 const DOCKER_KAFKA = 'wurstmeister/kafka:1.0.0';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
@@ -55,7 +55,7 @@ const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
 // Version of Java, Scala
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
-const SCALA_VERSION = '2.12.1';
+const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
 const NODE_VERSION = '8.11.2';

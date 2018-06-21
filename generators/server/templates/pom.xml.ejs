@@ -92,16 +92,16 @@
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-        <maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
-        <maven-war-plugin.version>3.2.0</maven-war-plugin.version>
+        <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
+        <maven-war-plugin.version>3.2.2</maven-war-plugin.version>
         <dockerfile-maven-plugin.version>1.4.3</dockerfile-maven-plugin.version>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
         <jacoco-maven-plugin.version>0.8.1</jacoco-maven-plugin.version>
-        <scala-maven-plugin.version>3.3.2</scala-maven-plugin.version>
+        <scala-maven-plugin.version>3.4.1</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
         <openapi-generator-maven-plugin.version>3.0.1</openapi-generator-maven-plugin.version>
@@ -121,7 +121,7 @@
         <sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey>squid:UndocumentedApi</sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey>
         <sonar.jacoco.reportPaths>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPaths>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
-        <sonar.javascript.jstestdriver.reportsPath>${project.testresult.directory}/karma</sonar.javascript.jstestdriver.reportsPath>
+        <sonar.testExecutionReportPaths>${project.testresult.directory}/jest/TESTS-results.xml</sonar.testExecutionReportPaths>
         <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/lcov.info</sonar.typescript.lcov.reportPaths>
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
