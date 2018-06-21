@@ -109,7 +109,7 @@ function askIntegrations() {
             type: 'input',
             name: 'artifactorySnapshotsUrl',
             message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for snapshots ?`,
-            default: ''
+            default: 'http://artifactory:8081/artifactory/libs-snapshot'
         },
         {
             when: response => response.cicdIntegrations.includes('deploy'),
@@ -123,14 +123,14 @@ function askIntegrations() {
             type: 'input',
             name: 'artifactoryReleasesUrl',
             message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for releases ?`,
-            default: ''
+            default: 'http://artifactory:8081/artifactory/libs-release'
         },
         {
             when: response => this.pipeline === 'jenkins' && response.cicdIntegrations.includes('sonar'),
             type: 'input',
             name: 'sonarName',
             message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server?`,
-            default: 'Sonar'
+            default: 'sonar'
         },
         {
             when: response => this.pipeline !== 'jenkins' && response.cicdIntegrations.includes('sonar'),
