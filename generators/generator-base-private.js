@@ -1060,7 +1060,7 @@ module.exports = class extends Generator {
         const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
         if (clientFramework === 'react') {
             return selectedLangs.map(lang =>
-                `'${lang.value}': { name: '${lang.dispName}', translation: (mergeTranslations(require.context('../../i18n/${lang.value}', false, /.json$/))),${lang.rtl ? ', rtl: true' : ''} }`);
+                `'${lang.value}': { name: '${lang.dispName}', translation: (mergeTranslations(require.context('../../i18n/${lang.value}', false, /.json$/)))${lang.rtl ? ', rtl: true' : ''} }`);
         }
 
         return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
