@@ -21,6 +21,8 @@ __Thank you to our sponsors!__
 
 [![ForsysLab][forsyslab-image]][forsyslab-url]
 
+[![CUBA Platform][cubaplatform-image]][cubaplatform-url]
+
 __Thank you to all our backers!__
 
 [![Backers][backers-image]][backers-url]
@@ -72,5 +74,7 @@ Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hip
 [okta-url]: https://developer.okta.com/signup?utm_source=JHipster&utm_medium=logo&utm_campaign=Gold-Sponsor
 [forsyslab-image]: https://www.jhipster.tech/images/open-collective/forsyslab.jpg
 [forsyslab-url]: https://opencollective.com/forsyslabinc
+[cubaplatform-image]: https://www.jhipster.tech/images/open-collective/cubaplatform.jpg
+[cubaplatform-url]: https://opencollective.com/cubaplatform
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
