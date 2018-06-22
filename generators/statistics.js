@@ -23,11 +23,12 @@ class Statistics {
         this.configAxios();
     }
 
-    postRequest(url, data) {
-        if (!this.optOut) {
+    postRequest(url, data, force = false) {
+        if (!this.optOut || force) {
             this.axiosClient.post(url, data).then(
                 () => {},
-                () => {
+                (error) => {
+                    console.log(error);
                     if (this.axiosProxyClient) {
                         this.axiosProxyClient.post(url, data)
                             .then(() => {})
@@ -99,6 +100,28 @@ class Statistics {
             service,
             fluentMethods
         });
+    }
+
+    sendCrashReport(source, stack, generatorVersion, yorc, jdl) {
+        const env = JSON.stringify({
+            'generator-version': generatorVersion,
+            'git-provider': 'local',
+            'node-version': process.version,
+            os: `${os.platform()}:${os.release()}`,
+            arch: os.arch(),
+            cpu: os.cpus()[0].model,
+            cores: os.cpus().length,
+            memory: os.totalmem(),
+            'user-language': osLocale.sync()
+        });
+
+        this.postRequest('crash-reports', {
+            source,
+            env,
+            stack,
+            yorc,
+            jdl
+        }, true);
     }
 }
 
