@@ -45,20 +45,20 @@
   "dependencies": {
     "lodash": "4.17.10",
     "winston": "2.4.2",
-    "chevrotain": "3.3.0"
+    "chevrotain": "3.6.1"
   },
   "devDependencies": {
     "chai": "4.1.2",
     "eslint": "4.19.1",
-    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-config-airbnb-base": "13.0.0",
     "eslint-plugin-mocha": "5.0.0",
     "eslint-plugin-import": "2.12.0",
-    "nyc": "11.8.0",
+    "nyc": "12.0.2",
     "mocha": "5.2.0",
     "mocha-clean": "1.0.0",
     "pegjs": "0.10.0",
     "sinon": "5.0.10",
-    "sinon-chai": "3.1.0"
+    "sinon-chai": "3.2.0"
   },
   "peerDependencies": {},
   "engines": {

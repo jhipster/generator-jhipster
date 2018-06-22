@@ -862,10 +862,9 @@ describe('EntityParser', () => {
             databaseType: DatabaseTypes.SQL,
             applicationType: ApplicationTypes.MICROSERVICE
           });
-        }).to.throw('No valable field type could be resolved for field \'toto\' of entity \'A\', ' +
-          'got \'DoesNotExistAtAll\'');
+        }).to.throw('No valable field type could be resolved for field \'toto\' of entity \'A\', '
+          + 'got \'DoesNotExistAtAll\'');
       });
     });
   });
 });
-

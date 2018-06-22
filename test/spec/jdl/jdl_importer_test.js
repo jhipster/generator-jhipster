@@ -428,8 +428,7 @@ describe('JDLImporter', () => {
           delete exportedEntity.changelogDate;
           return exportedEntity;
         });
-        filesExist = ENTITY_NAMES.reduce((result, entityName) =>
-          result && fs.statSync(path.join('.jhipster', `${entityName}.json`)).isFile());
+        filesExist = ENTITY_NAMES.reduce((result, entityName) => result && fs.statSync(path.join('.jhipster', `${entityName}.json`)).isFile());
       });
 
       after(() => {

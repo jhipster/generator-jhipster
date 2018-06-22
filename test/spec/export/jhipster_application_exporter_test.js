@@ -41,8 +41,8 @@ describe('JHipsterApplicationExporter', () => {
             JHipsterApplicationExporter.exportApplication({
               config: {}
             });
-          }).to.throw('The application must be valid in order to be converted.\n' +
-            'Errors: No name, No authentication type, No build tool');
+          }).to.throw('The application must be valid in order to be converted.\n'
+            + 'Errors: No name, No authentication type, No build tool');
         });
       });
     });

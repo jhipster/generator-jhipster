@@ -119,16 +119,14 @@ describe('JSONParser', () => {
         ).to.eq(1);
         expect(
           content.getOptions().filter(
-            option =>
-              option.name === UnaryOptions.NO_FLUENT_METHOD &&
-              option.entityNames.has('Employee')
+            option => option.name === UnaryOptions.NO_FLUENT_METHOD
+              && option.entityNames.has('Employee')
           ).length
         ).to.eq(1);
         expect(
           content.getOptions().filter(
-            option =>
-              option.name === UnaryOptions.FILTER &&
-              option.entityNames.has('Employee')
+            option => option.name === UnaryOptions.FILTER
+              && option.entityNames.has('Employee')
           ).length
         ).to.eq(1);
       });

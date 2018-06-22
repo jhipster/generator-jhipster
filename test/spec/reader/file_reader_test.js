@@ -18,8 +18,8 @@
  */
 
 const fs = require('fs');
-const FileReader = require('../../../lib/reader/file_reader');
 const expect = require('chai').expect;
+const FileReader = require('../../../lib/reader/file_reader');
 
 describe('FileReader', () => {
   describe('::readFile', () => {
@@ -89,4 +89,3 @@ describe('FileReader', () => {
     });
   });
 });
-

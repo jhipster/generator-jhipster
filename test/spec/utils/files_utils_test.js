@@ -21,8 +21,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const FileUtils = require('../../../lib/utils/file_utils');
 const expect = require('chai').expect;
+const FileUtils = require('../../../lib/utils/file_utils');
 
 describe('FileUtils', () => {
   describe('::doesFileExist', () => {

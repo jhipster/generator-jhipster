@@ -19,9 +19,8 @@
 
 /* eslint-disable no-new */
 /* eslint-disable no-unused-expressions */
-
-const JSONEntity = require('../../../../lib/core/jhipster/json_entity');
 const expect = require('chai').expect;
+const JSONEntity = require('../../../../lib/core/jhipster/json_entity');
 
 describe('JSONEntity', () => {
   describe('::new', () => {

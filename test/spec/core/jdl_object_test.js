@@ -53,8 +53,8 @@ describe('JDLObject', () => {
                 baseName: 'toto'
               }
             });
-          }).to.throw('The application must be valid in order to be added.\n' +
-            'Errors: No authentication type, No build tool');
+          }).to.throw('The application must be valid in order to be added.\n'
+            + 'Errors: No authentication type, No build tool');
         });
       });
     });
@@ -314,8 +314,8 @@ describe('JDLObject', () => {
               type: RelationshipTypes.MANY_TO_MANY,
               injectedFieldInFrom: 'something'
             });
-          }).to.throw('The relationship must be valid in order to be added.\n' +
-            'Errors: Wrong source entity: No entity name, No table name, No fields object');
+          }).to.throw('The relationship must be valid in order to be added.\n'
+            + 'Errors: Wrong source entity: No entity name, No table name, No fields object');
         });
       });
     });
@@ -401,8 +401,8 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addOption({});
-          }).to.throw('The option must be valid in order to be added.\n' +
-            'Errors: No option name, No entity names, No excluded names, No type');
+          }).to.throw('The option must be valid in order to be added.\n'
+            + 'Errors: No option name, No entity names, No excluded names, No type');
         });
       });
       context('such as a wrong option/value', () => {
@@ -412,8 +412,8 @@ describe('JDLObject', () => {
               name: UnaryOptions.SKIP_CLIENT,
               type: 'WrongType'
             });
-          }).to.throw('The option must be valid in order to be added.\n' +
-            'Errors: No entity names, No excluded names, No type');
+          }).to.throw('The option must be valid in order to be added.\n'
+            + 'Errors: No entity names, No excluded names, No type');
         });
       });
     });

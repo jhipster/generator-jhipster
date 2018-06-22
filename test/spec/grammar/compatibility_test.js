@@ -1,9 +1,9 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
-const parse = require('../../../lib/dsl//api').parse;
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
+const parse = require('../../../lib/dsl//api').parse;
 const pegjsParser = require('../../../lib/dsl/old/pegjs_parser');
 
 const sampleFolder = '../../test_files/';

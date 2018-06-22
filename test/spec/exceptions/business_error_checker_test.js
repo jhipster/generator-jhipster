@@ -250,8 +250,8 @@ describe('BusinessErrorChecker', () => {
         it('fails', () => {
           expect(() => {
             checker.checkForEntityErrors();
-          }).to.throw('The name \'continue\' is a reserved keyword and can not be used as an entity table name for ' +
-            'at least one of these applications: jhipster.');
+          }).to.throw('The name \'continue\' is a reserved keyword and can not be used as an entity table name for '
+            + 'at least one of these applications: jhipster.');
         });
       });
     });
