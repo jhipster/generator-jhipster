@@ -357,6 +357,12 @@ check-error@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
 
+chevrotain@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-3.3.0.tgz#0941f30fd1acf3aadb88948b7576a51acbea122b"
+  dependencies:
+    regexp-to-ast "0.2.2"
+
 circular-json@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.1.tgz#be8b36aefccde8b3ca7aa2d6afc07a37242c0d2d"
@@ -1894,6 +1900,10 @@ regex-not@^1.0.0, regex-not@^1.0.2:
   dependencies:
     extend-shallow "^3.0.2"
     safe-regex "^1.1.0"
+
+regexp-to-ast@0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/regexp-to-ast/-/regexp-to-ast-0.2.2.tgz#58edee54a1157b9c20b205b9c05cc0d81be698d8"
 
 regexpp@^1.0.1:
   version "1.0.1"
