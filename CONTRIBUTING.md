@@ -240,9 +240,7 @@ You can run the Travis builds locally by following below commands, and track ren
 
 1. Change directory into the [./travis](./travis) folder `cd travis` from the generator source code root folder
 
-2. Do not forget to run `yarn link` (do not use `npm`)
-
-3. Run `./build-samples.sh generate|verify [ sample_name[,sample_name][,...] ] [ --colorizelogfile ] ` (parameters between brackets are optionals).
+2. Run `./build-samples.sh generate|verify [ sample_name[,sample_name][,...] ] [ --colorizelogfile ] ` (parameters between brackets are optionals).
 
     * `generate` and `verify` create the Travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your Text Editor or IDE to check it further. You can also run tests locally on the project to verify.
         * By default, run on all samples. Choose those you want in `./build-samples.sh help`.
@@ -250,7 +248,9 @@ You can run the Travis builds locally by following below commands, and track ren
         * `--colorizelogfile`: keep color in your log file, **this optional parameter is strongly advise for readability**. Check `./build-samples.sh help` to know more about it.
     * `verify` generate, and beside test samples like in Travis CI. Very interesting if you want check quickly know correctness of your modifications. Very interesting if you want check before push.
 
-4. Then `./build-samples.sh start sample_name` to start the application and check what is rendered in your web browser.
+3. Then `./build-samples.sh start sample_name` to start the application and check what is rendered in your web browser.
+
+**IMPORTANT NOTE**: `yarn link` is automatically performed. Therefore at the end of the execution, the command `jhipster` refers to your development project. To restore it, type `yarn unlink`.
 
 #### Synopsis
 

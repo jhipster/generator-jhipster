@@ -376,6 +376,9 @@
     # Differ from
     # https://google.github.io/styleguide/shell.xml?showone=Constants_and_Environment_Variable_Names#Constants_and_Environment_Variable_Names
 # TODO check if is use only lower Camel Case and snake case for capitals.
+# TODO do not launch generateNode_Modules_Cache() if there is only projects with
+# "skipClient: true" in ../.travis.yml
+# TODO delete unecesary call of launchOnlyOneSample()
 
 # PREPARE SCRIPT {{{1
 # ==============================================================================
@@ -634,8 +637,6 @@ function usage() {
     "   * When all samples are launched, there are launched in parralel." \
             "The program will ask you how much you want" \
             "launch in same time.\\n " \
-        "* Before launch this commands, type \`yarn link' in the folder" \
-            "./genertor-jhipster.\\n" \
     "\\n\\t""$URED""\`./build-samples.sh start " \
         "sample_name""$NC""\\n" \
         "Start the application generated with \`generate' " \
@@ -728,7 +729,16 @@ function usage() {
         "This script copy node_modules folder from " \
         "node_modules-cache-*-sample before" \
         "perform tests, and symlink again at the end of the test." \
-        "\`yarn install' isn't performed before test to increase speed".
+        "\`yarn install' isn't performed before test to increase speed\\n". \
+    "* IMPORTANT NOTE: \`yarn link' is automatically performed during build." \
+        "Therefore at the end of the execution, the command \`jhipster'" \
+        "refers to your development project ($(basename "$JHIPSTER_TRAVIS"))." \
+        "To restore it, in $(basename "$JHIPSTER_TRAVIS")" \
+        "type \`yarn unlink'.\\n" \
+    "Note 4: If you want to perform test wihtout this script, do not forget" \
+        "to add '$(yarn global bin)' in your PATH" \
+        "(see also https://www.jhipster.tech/installation/)"
+
 
     exit 0
 }
@@ -904,13 +914,6 @@ function testRequierments() {
     # TODO SHOULD WE ADD TEST TO CHECK IF WE ARE ON JDK8?
     fi
 
-    jhipster --version 1>> /dev/null || \
-        errorInBuildExitCurrentSample \
-        "please install JHipster globally. " \
-        "(\`$ yarn global install jhipster') " \
-        "If JHipster is already installed, please add it in your PATH."
-    echo
-
     if [[ "$IS_STARTAPPLICATION" -eq 0 ]] \
         && [[ "$IS_VERIFY" -eq 1 ]] ; then
         if [[ "$MACHINE" == "Mac" ]] ; then
@@ -1029,13 +1032,32 @@ function testRequierments() {
 
 }
 
-yarnInstall() {
+# function yarnInstall() {{{2
+function yarnInstall() {
     printCommand "yarn install"
     if yarn install ; then
         printFileDescriptor3 "\`yarn install' finished with SUCCESS!"
     else
         errorInBuildExitCurrentSample "\`yarn install' FAILED"
     fi
+}
+
+# function prepareGeneratorJhipster() {{{2
+function prepareGeneratorJhipster() {
+    local -r GENERATOR_JHIPSTER=$(dirname "$JHIPSTER_TRAVIS")
+    echoTitleBuildStep "Prepare the folder '$GENERATOR_JHIPSTER'"
+    cd "$GENERATOR_JHIPSTER"
+    if [[ "$IS_STARTAPPLICATION" -eq 0 ]] ; then
+        yarnInstall
+    fi
+    # `yarn unlink' because of https://github.com/yarnpkg/yarn/issues/5991
+    yarn unlink || echo "No 'generator-jhipster' already registred" \
+        "by \`yarn link'. Good."
+    yarn link
+    # shellcheck disable=SC2016
+    printCommand 'PATH="$(yarn global bin)":"$PATH"'
+    export PATH
+    PATH="$(yarn global bin)":"$PATH"
 }
 
 # function startingLaunchSample() {{{2
@@ -1316,36 +1338,15 @@ errorInBuildExitCurrentSample() {
     fi
 }
 
-# function yarnLink() {{{3
-function yarnLink() {
+# function yarnInit() {{{3
+# Do not done after `cp -R '$NODE_MOD_CACHED' '${APP_FOLDER}''
+# because otherwise `npm init -y' create a big package.json
+# based of content of the node_modules.
+function yarnInit() {
     cd "$APP_FOLDER"
-    echoTitleBuildStep "start" "yarn link"
-    printCommandAndEval "yarn init -y"
-    printCommand "yarn link 'generator-jhipster'"
-    if yarn link "generator-jhipster" ; then
-        printFileDescriptor3 "\`yarn link 'generator-jhipster'' performed"
-    else
-        errorInBuildExitCurrentSample "you havn't executed \`yarn link' " \
-            "in a folder named 'generator-jhipster'. " \
-            "Please read https://yarnpkg.com/lang/en/docs/cli/link/."
-    fi
-    # `yarn link' must be launched for the generator-jhipster folder where
-    # ./build-samples.sh is.
-    # (we could have several folders generator-jhipster, with several
-    # ./build-samples.sh in a same computer).
-    cd -P "$(pwd -P)/node_modules/generator-jhipster/travis"
-    if [[ "$(pwd -P)" =~ ^$JHIPSTER_TRAVIS/?$ ]] ; then
-        printFileDescriptor3 "\`yarn link' was performed correctly in" \
-            "'$(dirname "$(pwd -P)")'."
-    else
-        errorInBuildExitCurrentSample "you have performed \`yarn link'" \
-            " in other folder than the project" \
-            "'$(dirname "$JHIPSTER_TRAVIS")': \\n" \
-            "\\t1° \`yarn unlink' in '$(dirname "$(pwd -P)")'\\n" \
-            "\\t2° \`yarn link' in '$(dirname "$JHIPSTER_TRAVIS")'."
-    fi
-    cd "$APP_FOLDER"
-
+    # NPM, because sometimes `yarn' 1.7.0 have Troubleshooting with this
+    # command.  see https://github.com/yarnpkg/yarn/issues/5876
+    printCommandAndEval "npm init -y"
 }
 
 # function launchNewBash() {{{3
@@ -1397,6 +1398,7 @@ function testGenerator() {
     echo "We are at path: '$(pwd -P)'".
     echo "Your branch is: '$BRANCH_NAME'."
 
+    printCommand "yarn test"
     if yarn test ; then
         echoTitleBuildStep "end" "Test of the generator finish with sucess."
     else
@@ -1482,7 +1484,7 @@ function verifyProject() {
             "in same time for couchbase."
         launch04Test
     else
-        launch04Test
+        launch04Test &
     fi
     launch05Run
     # Never launched in TRAVIS CI for a PR
@@ -1551,22 +1553,19 @@ Do you want to continue? [y/n] "
         printCommandAndEval "rm -Rf '${APP_FOLDER}'"
         printCommandAndEval "mkdir -p '${APP_FOLDER}'"
 
-        yarnLink
+        yarnInit
 
         echoTitleBuildStep "start" "JHipster generation."
         # ${variable:0:(-7)} : substring who removes "-sample"
-        if cp "${NODE_MODULES_CACHE_ANGULAR:0:(-7)}/.yo-rc.json" \
-            "${APP_FOLDER}"  ; then
-            echo ".yo-rc.json is copied"
-        else
-            errorInBuildExitCurrentSample "not a JHipster project."
-        fi
+        printCommandAndEval "cp" \
+            "'${NODE_MODULES_CACHE_ANGULAR:0:(-7)}/.yo-rc.json'" \
+            "'${APP_FOLDER}'"
 
         local -r jhipstercommand="jhipster --force --no-insight --skip-checks \
 --with-entities --skip-git --skip-commit-hook --skip-install"
         printCommand "$jhipstercommand"
         if eval "$jhipstercommand" ; then
-            echoTitleBuildStep "end" "'$jhipstercommand' finish with SUCCESS!"
+            printFileDescriptor3 "'$jhipstercommand' finish with SUCCESS!"
         else
             errorInBuildExitCurrentSample "'$jhipstercommand' FAILED"
         fi
@@ -1673,6 +1672,7 @@ function createFolderNodeModules() {
             echoTitleBuildStep "start" \
                 "Copy '$NODE_MOD_CACHED' to '$APP_FOLDER'"
             printCommandAndEval "mkdir -p '${APP_FOLDER}'"
+            yarnInit
             # TODO
             # No `ln -s' due to
             # https://github.com/ng-bootstrap/ng-bootstrap/issues/2283
@@ -1684,7 +1684,6 @@ function createFolderNodeModules() {
         fi
         # Even if there is already a correct symlink, we must launch it again.
     fi
-    yarnLink
 }
 
 # function launchOnlyOneSample() {{{3
@@ -1707,8 +1706,7 @@ then restart script."
                 "exitScriptWithError '$argument'"
             unset confirmationFirstParameter argument
         fi
-        cd "$JHIPSTER_TRAVIS"
-        yarnInstall
+        prepareGeneratorJhipster
         generateNode_Modules_Cache
     else
         # Defined "$APP_FOLDER" as explained in the MAIN section of this file.
@@ -1736,7 +1734,7 @@ then restart script."
             [[ "${JHIPSTER}" == "ngx-default"  ]] ; then
             # ./scripts/00-install-jhipster.sh coresponding to function
             # testGenerator
-            testGenerator
+            testGenerator &
         fi
 
         if [[ "$IS_VERIFY" -eq 1 ]] ; then
@@ -1835,12 +1833,9 @@ do you want to launch in same time (Travis CI launch 4 processes)? "
     testRequierments
     unset WE_WANT_A_PROMPT
 
-    cd "$JHIPSTER_TRAVIS"
-    yarnInstall
-
-    # TODO
-    # do not launch this if there is only projects with "skipClient: true"
-    # in ../.travis.yml
+    # Done in launchOnlyOneSample() for
+    # "./build-samples.sh sample_name --consolevertbose"
+    prepareGeneratorJhipster
     generateNode_Modules_Cache
 
     local -i i=0
@@ -1923,6 +1918,9 @@ function startApplication() {
         exitScriptWithError "$APP_FOLDER was not packaged. " \
             "Please run \`./build-samples.sh generate " "$JHIPSTER'."
     fi
+
+    # We could also testRequierments()… But takes too much times.
+    prepareGeneratorJhipster
 
     # To not launch \`yarn e2e' in 05-run.sh
     export PROTRACTOR=0

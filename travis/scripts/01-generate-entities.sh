@@ -41,7 +41,7 @@ set +x
 echoSetX "Copy entities json"
 set -x
 
-
+# TODO change ../build-samples.sh to avoid this if.
 if [[ "$IS_TRAVIS_CI" -eq 1 ]] ; then
     rm -Rf "$APP_FOLDER"
 fi
