@@ -211,13 +211,14 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguagePipe(languages) {
-        if (this.clientFramework !== 'angularX') {
+        if (!['angularX', 'react'].includes(this.clientFramework)) {
             return;
         }
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`;
+
+        const fullPath = this.clientFramework === 'angularX' ? `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts` : `${CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
             let content = '{\n';
-            this.generateLanguageOptions(languages).forEach((ln, i) => {
+            this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
                 content += `        ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
             });
             content +=
@@ -1055,8 +1056,13 @@ module.exports = class extends Generator {
      * @param {string[]} languages
      * @returns generated language options
      */
-    generateLanguageOptions(languages) {
+    generateLanguageOptions(languages, clientFramework) {
         const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
+        if (clientFramework === 'react') {
+            return selectedLangs.map(lang =>
+                `'${lang.value}': { name: '${lang.dispName}', translation: (mergeTranslations(require.context('../../i18n/${lang.value}', false, /.json$/))),${lang.rtl ? ', rtl: true' : ''} }`);
+        }
+
         return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
     }
 

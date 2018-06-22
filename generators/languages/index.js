@@ -170,7 +170,8 @@ module.exports = class extends BaseGenerator {
 
             saveConfig() {
                 if (this.enableTranslation) {
-                    this.config.set('languages', _.union(this.currentLanguages, this.languagesToApply));
+                    this.languages = _.union(this.currentLanguages, this.languagesToApply);
+                    this.config.set('languages', this.languages);
                 }
             }
         };
@@ -188,14 +189,14 @@ module.exports = class extends BaseGenerator {
             insight.track('languages/language', language);
         });
         if (!this.skipClient) {
-            this.updateLanguagesInLanguagePipe(this.config.get('languages'));
-            this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
-            this.updateLanguagesInWebpack(this.config.get('languages'));
+            this.updateLanguagesInLanguagePipe(this.languages);
+            this.updateLanguagesInLanguageConstantNG2(this.languages);
+            this.updateLanguagesInWebpack(this.languages);
             if (this.clientFramework === 'angularX') {
-                this.updateLanguagesInMomentWebpackNgx(this.config.get('languages'));
+                this.updateLanguagesInMomentWebpackNgx(this.languages);
             }
             if (this.clientFramework === 'react') {
-                this.updateLanguagesInMomentWebpackReact(this.config.get('languages'));
+                this.updateLanguagesInMomentWebpackReact(this.languages);
             }
         }
     }
