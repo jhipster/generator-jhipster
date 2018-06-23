@@ -6,8 +6,13 @@ const parse = require('../../../lib/dsl/api').parse;
 describe('JDL DSL API', () => {
   describe('when wanting an AST', () => {
     describe('with a valid input', () => {
+      let ast;
+
+      before(() => {
+        ast = parse('entity A {field String}');
+      });
+
       it('returns an AST', () => {
-        const ast = parse('entity A {field String}');
         expect(ast.entities).to.have.lengthOf(1);
         expect(ast.entities[0]).to.deep.eql({
           name: 'A',
@@ -27,28 +32,25 @@ describe('JDL DSL API', () => {
 
     describe('with a lexing error', () => {
       let parseInvalidToken;
+
       before(() => {
-        // '±' is not a valid token in JDL
         parseInvalidToken = () => parse('entity ± {');
       });
 
-      it('throws an error with offset information', () => {
-        expect(parseInvalidToken).to
-          .throw('offset: 7');
+      it('throws an error with the offset information', () => {
+        expect(parseInvalidToken).to.throw('offset: 7');
       });
 
-      it('throws an error with unexpected character', () => {
-        expect(parseInvalidToken).to
-          .throw('±');
+      it('throws an error with the unexpected character', () => {
+        expect(parseInvalidToken).to.throw('±');
       });
     });
 
-    describe('with a Parsing error', () => {
+    describe('with a parsing error', () => {
       describe('with an unexpected token', () => {
         let parseWrongClosingBraces;
 
         before(() => {
-          // wrong type of closing parenthesis ']'
           parseWrongClosingBraces = () => parse('entity Person { ]');
         });
 
@@ -56,14 +58,12 @@ describe('JDL DSL API', () => {
           expect(parseWrongClosingBraces).to
             .throw()
             .and.to.have.property('message')
-          // chain assertions to avoid assuming the order of the position information text.
             .that.includes('line: 1')
             .that.includes('column: 17');
         });
 
         it('throws an error with typeof MismatchTokenException', () => {
-          expect(parseWrongClosingBraces).to
-            .throw('MismatchedTokenException');
+          expect(parseWrongClosingBraces).to.throw('MismatchedTokenException');
         });
       });
 
@@ -71,13 +71,11 @@ describe('JDL DSL API', () => {
         let parseMissingClosingBraces;
 
         before(() => {
-          // No Closing parenthesis
           parseMissingClosingBraces = () => parse('entity Person {');
         });
 
         it('throws an error with typeof MismatchTokenException', () => {
-          expect(parseMissingClosingBraces).to
-            .throw('MismatchedTokenException');
+          expect(parseMissingClosingBraces).to.throw('MismatchedTokenException');
         });
 
         it('throws an error without any location information', () => {
@@ -93,17 +91,20 @@ describe('JDL DSL API', () => {
       it('throws an error', () => {
         // lower case entityName first char
         const invalidInput = 'entity person { }';
-        expect(() => parse(invalidInput)).to
-          .throw(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
+        expect(() => parse(invalidInput)).to.throw(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
       });
     });
   });
 
   describe('when wanting an auto-completion', () => {
     describe('with an empty text', () => {
+      let result;
+
+      before(() => {
+        result = getSyntacticAutoCompleteSuggestions('');
+      });
+
       it('provides suggestions', () => {
-        const input = '';
-        const result = getSyntacticAutoCompleteSuggestions(input);
         expect(result).to.have.lengthOf(17);
         expect(result).to.have.members([
           tokens.APPLICATION,
@@ -127,12 +128,17 @@ describe('JDL DSL API', () => {
       });
     });
     describe('with a custom start rule', () => {
-      it('provides suggestions', () => {
+      let result;
+
+      before(() => {
         const input = 'lastName string ';
-        const result = getSyntacticAutoCompleteSuggestions(
+        result = getSyntacticAutoCompleteSuggestions(
           input,
           'fieldDeclaration'
         );
+      });
+
+      it('provides suggestions', () => {
         expect(result).to.have.lengthOf(4);
         // Note that because we are using token Inheritance with the MIN_MAX_KEYWORD an auto-complete provider would have
         // to translate this to concrete tokens (MIN/MAX/MAX_BYTES/MIN_BYTES/...)
@@ -145,12 +151,14 @@ describe('JDL DSL API', () => {
       });
     });
     describe('with a default start rule', () => {
-      it('provides suggestions', () => {
-        const input = `
-            entity person {
-            lastName string `;
+      let result;
 
-        const result = getSyntacticAutoCompleteSuggestions(input);
+      before(() => {
+        const input = 'entity person { lastName string ';
+        result = getSyntacticAutoCompleteSuggestions(input);
+      });
+
+      it('provides suggestions', () => {
         expect(result).to.have.lengthOf(7);
         expect(result).to.have.members([
           tokens.REQUIRED,
