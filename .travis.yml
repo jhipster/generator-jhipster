@@ -50,6 +50,7 @@ env:
     - JHIPSTER=react-default PROFILE=prod PROTRACTOR=1
     - JHIPSTER=react-noi18n-es-ws-gradle-session PROTRACTOR=1
     - JHIPSTER=ms-ngx-gateway-eureka
+    - JHIPSTER=ms-ngx-gateway-eureka-oauth2 PROTRACTOR=1
     - JHIPSTER=ms-ngx-gateway-consul
     - JHIPSTER=ms-ngx-gateway-uaa
     - JHIPSTER=ms-micro-eureka
