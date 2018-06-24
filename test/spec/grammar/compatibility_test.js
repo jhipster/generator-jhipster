@@ -19,7 +19,8 @@ function filterJDLDirectives(content) {
   return content.replace(/^\u0023.*\n?/gm, '');
 }
 
-describe('the compatibility test harness for chevrotain migration', () => {
+// skipped as annotations are implemented for the new parsing system only. that's VIP.
+describe.skip('the compatibility test harness for chevrotain migration', () => {
   context('all the existing JDL samples in the test folder', () => {
     const sampleFolderPath = path.resolve(__dirname, sampleFolder);
     const jdlSamples = fs

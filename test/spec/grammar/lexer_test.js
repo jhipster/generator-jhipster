@@ -47,7 +47,7 @@ describe('JDLLexer', () => {
       const input = `
    entity JobHistory {
      startDate ZonedDateTime,
-     @@@ 
+     ###
      endDate ZonedDateTime
    }`;
       lexingResult = JDLLexer.tokenize(input);
@@ -58,7 +58,7 @@ describe('JDLLexer', () => {
       expect(errors).to.have.lengthOf(1);
       expect(errors[0].line).to.equal(4);
       expect(errors[0].column).to.equal(6);
-      expect(errors[0].message).to.include('@');
+      expect(errors[0].message).to.include('#');
       expect(errors[0].message).to.include('skipped 3 characters');
     });
 

@@ -790,6 +790,25 @@ describe('DocumentParser', () => {
           expect(content.relationships.relationships.OneToOne['OneToOne_A{a}_B'].injectedFieldInFrom).to.equal('a');
         });
       });
+      context('when parsing entities with annotations', () => {
+        let content = null;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/annotations.jdl']);
+          content = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            applicationType: ApplicationTypes.MONOLITH
+          });
+        });
+
+        it('sets the annotations as options', () => {
+          expect(content.options.options.dto_mapstruct.entityNames.toArray()).to.deep.equal(['A', 'B']);
+          expect(content.options.options.filter.entityNames.toArray()).to.deep.equal(['C']);
+          expect(content.options.options.pagination_pager.entityNames.toArray()).to.deep.equal(['B', 'C']);
+          expect(content.options.options.service_serviceClass.entityNames.toArray()).to.deep.equal(['A', 'B']);
+          expect(content.options.options.skipClient.entityNames.toArray()).to.deep.equal(['A', 'C']);
+        });
+      });
     });
   });
 });

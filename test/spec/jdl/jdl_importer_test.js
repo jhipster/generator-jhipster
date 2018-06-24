@@ -945,5 +945,32 @@ describe('JDLImporter', () => {
         importer.import();
       });
     });
+    context('when parsing a JDL with annotations', () => {
+      let returned = null;
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'annotations.jdl')], { databaseType: DatabaseTypes.SQL });
+        returned = importer.import();
+      });
+
+      after(() => {
+        fs.unlinkSync(path.join('.jhipster', 'A.json'));
+        fs.unlinkSync(path.join('.jhipster', 'B.json'));
+        fs.unlinkSync(path.join('.jhipster', 'C.json'));
+        fs.rmdirSync('.jhipster');
+      });
+
+      it('sets the options', () => {
+        expect(returned.exportedEntities[0].service).to.equal('serviceClass');
+        expect(returned.exportedEntities[0].dto).to.equal('mapstruct');
+        expect(returned.exportedEntities[0].skipClient).to.equal(true);
+        expect(returned.exportedEntities[1].pagination).to.equal('pager');
+        expect(returned.exportedEntities[1].dto).to.equal('mapstruct');
+        expect(returned.exportedEntities[1].service).to.equal('serviceClass');
+        expect(returned.exportedEntities[2].skipClient).to.equal(true);
+        expect(returned.exportedEntities[2].jpaMetamodelFiltering).to.equal(true);
+        expect(returned.exportedEntities[2].pagination).to.equal('pager');
+      });
+    });
   });
 });

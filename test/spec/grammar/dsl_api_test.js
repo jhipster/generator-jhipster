@@ -9,7 +9,7 @@ describe('JDL DSL API', () => {
       let ast;
 
       before(() => {
-        ast = parse('entity A {field String}');
+        ast = parse('@service(serviceClass) entity A {field String}');
       });
 
       it('returns an AST', () => {
@@ -17,6 +17,7 @@ describe('JDL DSL API', () => {
         expect(ast.entities[0]).to.deep.eql({
           name: 'A',
           tableName: 'A',
+          annotations: [{ option: 'service', method: 'serviceClass', type: 'BINARY' }],
           body: [
             {
               name: 'field',
@@ -105,8 +106,9 @@ describe('JDL DSL API', () => {
       });
 
       it('provides suggestions', () => {
-        expect(result).to.have.lengthOf(17);
+        expect(result).to.have.lengthOf(18);
         expect(result).to.have.members([
+          tokens.AT,
           tokens.APPLICATION,
           tokens.NAME,
           tokens.ENTITY,
