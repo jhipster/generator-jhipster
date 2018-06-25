@@ -17,8 +17,7 @@
             "success": "Le lien a bien été copier dans le presse-papiers.",
             "failure": "La copie du lien vers le presse-papiers a échoué.",
             "notice": "L'utilisateur sera en mesure de réinitialiser son mot de passe grace à ce lien.",
-            "generate": "Générer un lien",
-            "copy": "Copier vers le presse papier"
+            "generate": "Générer un lien"
         },
         "detail": {
             "title": "Utilisateur"

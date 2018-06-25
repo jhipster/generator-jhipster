@@ -5,12 +5,6 @@
     </div>
 
     <div class="modal-body">
-        <div class="alert alert-success" *ngIf="showClipboardSuccess">
-            <p jhiTranslate="userManagement.reset.success">The link has been successfully copied to the clipboard.</p>
-        </div>
-        <div class="alert alert-danger" *ngIf="showClipboardError">
-            <p jhiTranslate="userManagement.reset.failure">Could not copy link to clipboard.</p>
-        </div>
         <jhi-alert-error></jhi-alert-error>
         <p jhiTranslate="userManagement.reset.notice">The user will be able to reset his password with this link.</p>
         <form>
@@ -28,11 +22,6 @@
         </form>
     </div>
     <div class="modal-footer">
-        <div>
-            <button type="button" class="btn btn-primary" jhiTranslate="userManagement.reset.copy" [ngxClipboard]="resetLinkInput" (cbOnSuccess)="showClipboardSuccess = true" (cbOnError)="showClipboardError = true">
-                <i class="fas fa-copy"></i>&nbsp;<span>Copy to clipboard</span>
-            </button>
-        </div>
         <button type="submit" class="btn btn-secondary" jhiTranslate="entity.action.cancel" data-dismiss="modal" (click)="clear()">
             <i class="fas fa-times"></i>&nbsp;<span>Cancel</span>
         </button>

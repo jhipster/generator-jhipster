@@ -15,8 +15,6 @@ import {
 } from 'reactstrap';
 import { translate, Translate, getBasePath } from 'react-jhipster';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { toast } from 'react-toastify';
 
 import { IRootState } from 'app/shared/reducers';
 import { getResetCode, getUser } from 'app/modules/administration/user-management/user-management.reducer';
@@ -36,10 +34,6 @@ export class UserManagementResetDialog extends React.Component<IUserManagementRe
 
   requestResetCode = () => {
     this.props.getResetCode(this.props.user.email);
-  };
-
-  notifyCopy = () => {
-    toast.success(translate('userManagement.reset.success'));
   };
 
   render() {
@@ -67,13 +61,7 @@ export class UserManagementResetDialog extends React.Component<IUserManagementRe
           </Form>
         </ModalBody>
         <ModalFooter>
-          <CopyToClipboard text={resetLink} onCopy={this.notifyCopy}>
-            <Button color="primary" disabled={user.email === null}>
-              <FontAwesomeIcon icon="clipboard" />{' '}
-              <Translate contentKey="userManagement.reset.copy" />
-            </Button>
-          </CopyToClipboard>
-          <Button color="danger" onClick={this.handleClose}>
+          <Button color="secondary" onClick={this.handleClose}>
             <FontAwesomeIcon icon="times" />{' '}
             <Translate contentKey="entity.action.cancel" />
           </Button>

@@ -22,9 +22,6 @@ import { RouterModule } from '@angular/router';
 import { JhiLanguageService } from 'ng-jhipster';
 import { JhiLanguageHelper } from 'app/core';
 <%_ } _%>
-<%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
-import { ClipboardModule } from 'ngx-clipboard';
-<%_ } _%>
 import { <%=angularXAppName%>SharedModule } from 'app/shared';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
@@ -58,11 +55,8 @@ import {
 @NgModule({
     imports: [
         <%=angularXAppName%>SharedModule,
-        RouterModule.forChild(adminState),
+        RouterModule.forChild(adminState)
         /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
-        <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
-        ClipboardModule
-        <%_ } _%>
     ],
     declarations: [
         <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>

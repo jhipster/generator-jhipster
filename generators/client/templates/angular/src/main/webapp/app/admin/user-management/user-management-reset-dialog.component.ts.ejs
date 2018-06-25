@@ -12,16 +12,12 @@ import { SERVER_API_URL } from 'app/app.constants';
 export class UserMgmtResetDialogComponent implements OnInit {
     user: User;
     resetLink: string;
-    showClipboardSuccess: boolean;
-    showClipboardError: boolean;
     isGeneratingLink: boolean;
 
     constructor(private passwordResetService: PasswordResetService, public activeModal: NgbActiveModal) {}
 
     ngOnInit() {
         this.resetLink = '';
-        this.showClipboardSuccess = false;
-        this.showClipboardError = false;
         this.isGeneratingLink = false;
     }
 

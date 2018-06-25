@@ -181,16 +181,6 @@ describe('User management reducer tests', () => {
       expect(isEmpty(toTest.user));
     });
 
-    it('should correctly enable mails', () => {
-      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.MAIL_ENABLED), payload: {
-        data: { 'mailEnabled': true }
-      }});
-
-      expect(toTest).toMatchObject({
-        isMailEnabled: true
-      });
-    });
-
     it('should set a reset code', () => {
       const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.RESET_CODE), payload: { data: 'superSecretResetCode' } });
 
@@ -317,18 +307,6 @@ describe('User management reducer tests', () => {
         }
       ];
       await store.dispatch(deleteUser('admin')).then(() => expect(store.getActions()).toEqual(expectedActions));
-    });
-    it('dispatches MAIL_ENABLED_PENDING and MAIL_ENABLED_FULFILLED actions', async () => {
-      const expectedActions = [
-        {
-          type: REQUEST(ACTION_TYPES.MAIL_ENABLED)
-        },
-        {
-          type: SUCCESS(ACTION_TYPES.MAIL_ENABLED),
-          payload: resolvedObject
-        }
-      ];
-      await store.dispatch(getMailStatus()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
     it('dispatches RESET_CODE_PENDING and RESET_CODE_FULFILLED actions', async () => {
       const expectedActions = [
