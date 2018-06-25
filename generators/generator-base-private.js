@@ -211,10 +211,6 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguagePipe(languages) {
-        if (!['angularX', 'react'].includes(this.clientFramework)) {
-            return;
-        }
-
         const fullPath = this.clientFramework === 'angularX' ? `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts` : `${CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
             let content = '{\n';
@@ -1060,7 +1056,7 @@ module.exports = class extends Generator {
         const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
         if (clientFramework === 'react') {
             return selectedLangs.map(lang =>
-                `'${lang.value}': { name: '${lang.dispName}', translation: (mergeTranslations(require.context('../../i18n/${lang.value}', false, /.json$/)))${lang.rtl ? ', rtl: true' : ''} }`);
+                `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
         }
 
         return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);

@@ -375,6 +375,8 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
+                'enzyme-setup.ts',
+                'storage-mock.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/reducers/application-profile.spec.ts',
@@ -404,7 +406,7 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/modules/account/register/register.spec.tsx',
+                // 'spec/app/modules/account/register/register.spec.tsx',
                 'spec/app/modules/account/register/register.reducer.spec.ts',
                 'spec/app/modules/account/activate/activate.reducer.spec.ts',
                 'spec/app/modules/account/password/password.reducer.spec.ts',

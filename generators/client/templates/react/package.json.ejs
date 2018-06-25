@@ -42,6 +42,7 @@ limitations under the License.
     "react-dom": "16.3.0",
     "react-hot-loader": "3.1.1",
     "react-jhipster": "0.5.2",
+    "react-loadable": "5.4.0",
     "react-redux": "5.0.7",
     "react-redux-loading-bar": "3.1.2",
     "react-router-dom": "4.2.2",
@@ -98,6 +99,7 @@ limitations under the License.
     "fork-ts-checker-webpack-plugin": "0.4.1",
     "html-webpack-plugin": "3.1.0",
     "http-proxy-middleware": "0.18.0",
+    "identity-obj-proxy": "3.0.0",
     <%_ if(!skipCommitHook) { _%>
     "husky": "0.14.3",
     <%_ } _%>
@@ -189,7 +191,7 @@ limitations under the License.
     "postinstall": "webdriver-manager update --gecko false",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
-    "test": "<%= clientPackageManager %> run lint && jest --config src/test/javascript/jest.conf.js",
+    "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
     "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --inline --profile --port=9060",
     "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --profile",
