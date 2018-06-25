@@ -378,6 +378,7 @@ const files = {
                 'enzyme-setup.ts',
                 'storage-mock.ts',
                 'spec/app/utils.ts',
+                'spec/app/config/axios-interceptor.spec.ts',
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/reducers/application-profile.spec.ts',
                 'spec/app/shared/reducers/authentication.spec.ts',
