@@ -28,7 +28,6 @@ class Statistics {
             this.axiosClient.post(url, data).then(
                 () => {},
                 (error) => {
-                    console.log(error);
                     if (this.axiosProxyClient) {
                         this.axiosProxyClient.post(url, data)
                             .then(() => {})
@@ -114,13 +113,12 @@ class Statistics {
             memory: os.totalmem(),
             'user-language': osLocale.sync()
         });
-
-        this.postRequest('crash-reports', {
+        this.postRequest('s/report', {
             source,
             env,
             stack,
             yorc,
-            jdl
+            jdl: 'dummy value'
         }, true);
     }
 }
