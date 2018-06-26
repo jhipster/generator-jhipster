@@ -26,7 +26,10 @@ const fs = require('fs');
 
 const JDLParser = require('../lib/dsl/jdl_parser');
 
-const serializedGrammarText = JSON.stringify(new JDLParser().getSerializedGastProductions(), null, '\t');
+const parser = JDLParser.getParser();
+parser.parse();
+
+const serializedGrammarText = JSON.stringify(parser.getSerializedGastProductions(), null, '\t');
 
 const copyright = `/** Copyright 2013-2018 the original author or authors from the JHipster project.
  *
