@@ -4,8 +4,8 @@ const getSyntacticAutoCompleteSuggestions = require('../../../lib/dsl/api').getS
 const parse = require('../../../lib/dsl/api').parse;
 
 describe('JDL DSL API', () => {
-  describe('when wanting an AST', () => {
-    describe('with a valid input', () => {
+  context('when wanting an AST', () => {
+    context('with a valid input', () => {
       let ast;
 
       before(() => {
@@ -31,7 +31,7 @@ describe('JDL DSL API', () => {
       });
     });
 
-    describe('with a lexing error', () => {
+    context('with a lexing error', () => {
       let parseInvalidToken;
 
       before(() => {
@@ -47,8 +47,8 @@ describe('JDL DSL API', () => {
       });
     });
 
-    describe('with a parsing error', () => {
-      describe('with an unexpected token', () => {
+    context('with a parsing error', () => {
+      context('with an unexpected token', () => {
         let parseWrongClosingBraces;
 
         before(() => {
@@ -68,7 +68,7 @@ describe('JDL DSL API', () => {
         });
       });
 
-      describe('with a missing token at EOF', () => {
+      context('with a missing token at EOF', () => {
         let parseMissingClosingBraces;
 
         before(() => {
@@ -88,7 +88,7 @@ describe('JDL DSL API', () => {
       });
     });
 
-    describe('with a semantic validation error', () => {
+    context('with a semantic validation error', () => {
       it('throws an error', () => {
         // lower case entityName first char
         const invalidInput = 'entity person { }';
@@ -97,8 +97,8 @@ describe('JDL DSL API', () => {
     });
   });
 
-  describe('when wanting an auto-completion', () => {
-    describe('with an empty text', () => {
+  context('when wanting an auto-completion', () => {
+    context('with an empty text', () => {
       let result;
 
       before(() => {
@@ -129,7 +129,7 @@ describe('JDL DSL API', () => {
         ]);
       });
     });
-    describe('with a custom start rule', () => {
+    context('with a custom start rule', () => {
       let result;
 
       before(() => {
@@ -152,7 +152,7 @@ describe('JDL DSL API', () => {
         ]);
       });
     });
-    describe('with a default start rule', () => {
+    context('with a default start rule', () => {
       let result;
 
       before(() => {
