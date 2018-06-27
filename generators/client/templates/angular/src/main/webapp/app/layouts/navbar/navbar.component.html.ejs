@@ -58,7 +58,7 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
-                    <%_ if (applicationType === 'gateway') { _%>
+                    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
                     <li>
                         <a class="dropdown-item" routerLink="admin/gateway" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon [icon]="'road'" [fixedWidth]="true"></fa-icon>

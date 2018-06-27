@@ -27,7 +27,7 @@ import { Translate, translate } from 'react-jhipster';
 
 const adminMenuItems = (
   <>
-  <%_ if (applicationType === 'gateway') { _%>
+  <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     <DropdownItem tag={Link} to="/admin/gateway"><FontAwesomeIcon icon="road" /> <Translate contentKey="global.menu.admin.gateway" /></DropdownItem>
   <%_ } _%>
   <%_ if (!skipUserManagement) { _%>

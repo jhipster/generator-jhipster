@@ -74,9 +74,11 @@ module.exports = class extends Generator {
         if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
             generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
+        if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {
+            generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
+        }
         generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'error.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'login.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'home.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'metrics.json', lang);

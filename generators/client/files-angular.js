@@ -341,7 +341,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway',
+            condition: generator => (generator.applicationType === 'gateway' && generator.serviceDiscoveryType),
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/gateway/gateway.route.ts', method: 'processJs' },
