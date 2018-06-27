@@ -435,7 +435,7 @@ _%>
                   <%= fieldNameHumanized %>
                 </Translate>
               </Label>
-              <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include react_validators %>/>
+              <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include react_validators %>/>
               <%_ } _%>
             <%_ } else { _%>
             <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
