@@ -23,7 +23,7 @@ const Statistics = require('../statistics');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.stats = new Statistics.Statistics();
+        this.stats = new Statistics();
     }
 
     get prompting() {
@@ -61,7 +61,7 @@ module.exports = class extends BaseGenerator {
                     this.login,
                     this.password,
                     this.stats.clientId,
-                    Statistics.STATISTICS_API_PATH
+                    this.stats.statisticsAPIPath
                 ).catch((error) => {
                     if (this.stats.axiosProxyClient && error !== undefined) {
                         authenticateAndLink(
@@ -70,12 +70,12 @@ module.exports = class extends BaseGenerator {
                             this.login,
                             this.password,
                             this.stats.clientId,
-                            Statistics.STATISTICS_API_PATH
+                            this.stats.statisticsAPIPath
                         ).catch((error) => {
-                            this.log(`Could not authenticate !(with proxy ${error}`);
+                            this.log(`Could not authenticate! (with proxy ${error})`);
                         });
                     } else if (error !== undefined) {
-                        this.log(`Could not authenticate !(without proxy ${error}`);
+                        this.log(`Could not authenticate! (without proxy ${error})`);
                     }
                 });
             }
@@ -84,14 +84,12 @@ module.exports = class extends BaseGenerator {
 };
 
 function authenticateAndLink(axiosClient, generator, username, password, generatorId, statisticsPath) {
-    return axiosClient.post(`${Statistics.STATISTICS_API_PATH}authenticate`, {
+    return axiosClient.post(`${generator.stats.statisticsAPIPath}authenticate`, {
         username,
         password,
         rememberMe: false
     }, true).then(answer =>
-        axiosClient.post(`${Statistics.STATISTICS_API_PATH}s/link`, {
-            generatorId
-        }, {
+        axiosClient.post(`${generator.stats.statisticsAPIPath}s/link/${generatorId}`, {}, {
             headers: {
                 Authorization: answer.headers.authorization
             }
@@ -101,7 +99,7 @@ function authenticateAndLink(axiosClient, generator, username, password, generat
             if (error.response.status === 409) {
                 generator.log.error('It looks like this generator has already been linked to an account.');
             } else {
-                generator.log.error(`Link failed! ${error}`);
+                generator.log.error(`Link failed! (${error})`);
             }
         }), error => Promise.reject(error)).then(error => Promise.reject(error));
 }

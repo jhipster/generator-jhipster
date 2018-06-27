@@ -3,8 +3,10 @@ const axios = require('axios');
 const Config = require('conf');
 const osLocale = require('os-locale');
 const os = require('os');
+const inquirer = require('inquirer');
 
 const DO_NOT_ASK_LIMIT = 5;
+
 const STATISTICS_API_PATH = 'http://localhost:8080/api/';
 
 class Statistics {
@@ -12,11 +14,11 @@ class Statistics {
         this.config = new Config({
             configName: 'jhipster-insight',
             defaults: {
-                clientId: Math.floor(Date.now() * Math.random()),
+                clientId: this.guid(),
                 doNotAskCounter: 0
             }
         });
-
+        this.statisticsAPIPath = STATISTICS_API_PATH;
         this.clientId = this.config.get('clientId');
         this.doNotAskCounter = this.config.get('doNotAskCounter');
         this.optOut = this.config.get('optOut');
@@ -36,6 +38,10 @@ class Statistics {
                 }
             ).catch(() => {});
         }
+    }
+
+    postWithProxy(url, data, config) {
+        return this.axiosProxyClient.post(url, data);
     }
 
     configAxios() {
@@ -102,24 +108,39 @@ class Statistics {
     }
 
     sendCrashReport(source, stack, generatorVersion, yorc, jdl) {
-        const env = JSON.stringify({
-            'generator-version': generatorVersion,
-            'git-provider': 'local',
-            'node-version': process.version,
-            os: `${os.platform()}:${os.release()}`,
-            arch: os.arch(),
-            cpu: os.cpus()[0].model,
-            cores: os.cpus().length,
-            memory: os.totalmem(),
-            'user-language': osLocale.sync()
+        inquirer.prompt([{
+            when: () => true,
+            type: 'confirm',
+            name: 'accept',
+            message: 'JHipster has enccountered an error!\nSending a crash report would help us a lot finding out what is wrong. Would you like to send a crash report ? Data will be anonymized.',
+            default: true
+        }]).then((answers) => {
+            const env = JSON.stringify({
+                'generator-version': generatorVersion,
+                'git-provider': 'local',
+                'node-version': process.version,
+                os: `${os.platform()}:${os.release()}`,
+                arch: os.arch(),
+                cpu: os.cpus()[0].model,
+                cores: os.cpus().length,
+                memory: os.totalmem(),
+                'user-language': osLocale.sync()
+            });
+            this.postRequest('s/report', {
+                source,
+                env,
+                stack,
+                yorc,
+                jdl: 'dummy value'
+            }, true);
         });
-        this.postRequest('s/report', {
-            source,
-            env,
-            stack,
-            yorc,
-            jdl: 'dummy value'
-        }, true);
+    }
+
+    guid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+        }
+        return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
     }
 }
 

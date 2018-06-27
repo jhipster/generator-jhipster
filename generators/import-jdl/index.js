@@ -205,6 +205,9 @@ module.exports = class extends BaseGenerator {
                 } catch (error) {
                     this.error(`Error while generating entities from the parsed JDL\n${error}`);
                 }
+
+                const stats = new Statistics();
+                stats.sendCrashReport('source', 'stack', 'generatorVersion', 'yorc', 'jdl');
             }
         };
     }

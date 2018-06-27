@@ -775,9 +775,9 @@ module.exports = class extends BaseGenerator {
                     context.fields.length,
                     context.relationships.length,
                     context.pagination,
-                    context.dto === 'yes',
-                    context.service === 'yes',
-                    context.fluentMethods === 'yes'
+                    context.dto,
+                    context.service,
+                    context.fluentMethods
                 );
             }
         };
