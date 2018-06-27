@@ -20,8 +20,10 @@ const webpack = require('webpack');
 const writeFilePlugin = require('write-file-webpack-plugin');
 const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const WebpackNotifierPlugin = require('webpack-notifier');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
+const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
 
 const utils = require('./utils.js');
@@ -54,6 +56,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             target: 'ws://127.0.0.1:<%= serverPort %>',
             ws: true
         }<% } %>],
+        stats: 'minimal',
         watchOptions: {
             ignored: /node_modules/
         }
@@ -123,7 +126,10 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             loaders: ['style-loader', 'css-loader']
         }]
     },
+    stats: 'minimal',
     plugins: [
+        new SimpleProgressWebpackPlugin(),
+        new FriendlyErrorsWebpackPlugin(),
         new ForkTsCheckerWebpackPlugin(),
         new BrowserSyncPlugin({
             host: 'localhost',

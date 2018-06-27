@@ -20,6 +20,8 @@ const webpack = require('webpack');
 const writeFilePlugin = require('write-file-webpack-plugin');
 const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
 
@@ -53,9 +55,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     ]
   },
   devServer: {
-    stats: {
-      children: false
-    },
+    stats: 'minimal',
     hot: true,
     contentBase: './<%= BUILD_DIR %>www',
     proxy: [{
@@ -84,6 +84,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     }
   },
   plugins: [
+    new SimpleProgressWebpackPlugin(),
+    new FriendlyErrorsWebpackPlugin(),
     new BrowserSyncPlugin({
       host: 'localhost',
       port: 9000,
