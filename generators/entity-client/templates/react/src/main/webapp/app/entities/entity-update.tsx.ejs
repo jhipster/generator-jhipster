@@ -482,7 +482,8 @@ _%>
                 type="select"
                 className="form-control"
                 name="<%= relationshipFieldName %>.<%= otherEntityField %>"
-                onChange={this.<%= relationshipFieldName %>Update}>
+                onChange={this.<%= relationshipFieldName %>Update}
+              >
                 <option value="" key="0" />
                 {
                   <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -494,33 +495,25 @@ _%>
                   ) : null
                 }
               </AvInput>
-              <AvInput
-                id="<%= entityFileName %>-<%= relationshipName %>"
-                type="hidden"
-                name="<%= relationshipFieldName %>.id"
-                value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } else { _%>
               <AvInput
                 id="<%= entityFileName %>-<%= relationshipName %>"
                 type="select"
                 className="form-control"
-                name="<%= relationshipFieldName %>.<%= otherEntityField %>"
-                onChange={this.<%= relationshipFieldName %>Update}>
+                name="<%= relationshipFieldName %>.id"
+                onChange={this.<%= relationshipFieldName %>Update}
+                value={isNew && <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : ''}
+              >
                 {
                   <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                     <option
-                      value={otherEntity.<%=otherEntityField%>}
+                      value={otherEntity.id}
                       key={otherEntity.id}>
                       {otherEntity.<%=otherEntityField%>}
                     </option>
                   ) : null
                 }
               </AvInput>
-              <AvInput
-                id="<%= entityFileName %>-<%= relationshipName %>"
-                type="hidden"
-                name="<%= relationshipFieldName %>.id"
-                value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
@@ -547,7 +540,9 @@ _%>
                     type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
-                    onChange={this.<%= relationshipFieldName %>Update}>
+                    onChange={this.<%= relationshipFieldName %>Update}
+                    value={isNew && <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : ''}
+                  >
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
@@ -571,36 +566,34 @@ _%>
                     id="<%= entityFileName %>-<%= relationshipName %>"
                     type="select"
                     className="form-control"
-                    name="<%= relationshipFieldName %>.<%=otherEntityField%>"
-                    onChange={this.<%= relationshipFieldName %>Update}>
+                    name="<%= relationshipFieldName %>.id"
+                    onChange={this.<%= relationshipFieldName %>Update}
+                    value={isNew && <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : ''}
+                  >
                     <option value="" key="0" />
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
-                          value={otherEntity.<%=otherEntityField%>}
+                          value={otherEntity.id}
                           key={otherEntity.id}>
                           {otherEntity.<%=otherEntityField%>}
                         </option>
                       ) : null
                     }
                   </AvInput>
-                  <AvInput
-                    id="<%= entityFileName %>-<%= relationshipName %>"
-                    type="hidden"
-                    name="<%= relationshipFieldName %>.id"
-                    value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } else { _%>
                   <AvInput
                     id="<%= entityFileName %>-<%= relationshipName %>"
                     type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
-                    onChange={this.<%= relationshipFieldName %>Update}>
+                    onChange={this.<%= relationshipFieldName %>Update}
+                  >
                     <option value="" key="0" />
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
-                          value={otherEntity.id}
+                          value={otherEntity.<%=otherEntityField%>}
                           key={otherEntity.id}>
                           {otherEntity.<%=otherEntityField%>}
                         </option>
