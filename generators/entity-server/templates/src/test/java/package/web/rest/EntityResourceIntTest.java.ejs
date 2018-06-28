@@ -475,7 +475,7 @@ _%>
     }
 <% for (idx in fields) { %><% if (fields[idx].fieldValidate === true) {
     let required = false;
-    if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) {
+    if (fields[idx].fieldType !== 'byte[]' && fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) {
         required = true;
     }
     if (required) { %>
