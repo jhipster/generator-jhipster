@@ -26,7 +26,7 @@ if (field.fieldValidate === true) {
     const validators = [];
     const MAX_VALUE = 2147483647;
 
-    if (rules.includes('required')) {
+    if (rules.includes('required') && field.fieldType !== 'byte[]') {
         validators.push('@NotNull');
     }
     if (rules.includes('minlength') && !rules.includes('maxlength')) {

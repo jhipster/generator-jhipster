@@ -273,7 +273,6 @@ _%>
 <%_ } _%>
 <%_ }) _%>
   render() {
-    const isInvalid = false;
     const { <%= entityInstance %>Entity,<%
     uniqueRealtionFields.forEach(rel => {
     %> <%= rel %>,<% }) %> loading, updating } = this.props;
@@ -427,6 +426,7 @@ _%>
                 </div>
               ) : null}
               <input id="file_<%= fieldName %>" type="file" onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
+              <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include react_validators %>/>
             </AvGroup>
 
             <%_ } else { _%>
@@ -645,7 +645,7 @@ _%>
               <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
             </Button>
             &nbsp;
-            <Button color="primary" id="save-entity" type="submit" disabled={isInvalid || updating}>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating}>
               <FontAwesomeIcon icon="save" />&nbsp;
               <Translate contentKey="entity.action.save">Save</Translate>
             </Button>
