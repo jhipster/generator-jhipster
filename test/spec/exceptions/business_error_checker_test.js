@@ -336,36 +336,32 @@ describe('BusinessErrorChecker', () => {
             entities: ['Valid']
           }));
           const validEntity = new JDLEntity({
-            name: 'Valid',
-            tableName: 'continue'
+            name: 'Valid'
           });
           validEntity.addField(new JDLField({
             name: 'validField',
-            type: FieldTypes.CommonDBTypes.STRING
+            type: 'WeirdType'
           }));
           jdlObject.addEntity(validEntity);
-          jdlObject.entities.Valid.fields.validField.name = 'continue';
           checker = new BusinessErrorChecker(jdlObject);
         });
 
         it('fails', () => {
           expect(() => {
             checker.checkForFieldErrors('Valid', jdlObject.entities.Valid.fields);
-          }).to.throw('The name \'continue\' is a reserved keyword and can not be used as an entity field name.');
+          }).to.throw('The type \'WeirdType\' is an unknown field type for field \'validField\' of entity \'Valid\'.');
         });
       });
       context('when checking a JDL object with no JDL application', () => {
         before(() => {
           const validEntity = new JDLEntity({
-            name: 'Valid',
-            tableName: 'continue'
+            name: 'Valid'
           });
           validEntity.addField(new JDLField({
             name: 'validField',
-            type: FieldTypes.CommonDBTypes.STRING
+            type: 'WeirdType'
           }));
           jdlObject.addEntity(validEntity);
-          jdlObject.entities.Valid.fields.validField.name = 'continue';
           checker = new BusinessErrorChecker(jdlObject, {
             databaseType: DatabaseTypes.SQL
           });
@@ -374,7 +370,7 @@ describe('BusinessErrorChecker', () => {
         it('fails', () => {
           expect(() => {
             checker.checkForFieldErrors('Valid', jdlObject.entities.Valid.fields);
-          }).to.throw('The name \'continue\' is a reserved keyword and can not be used as an entity field name.');
+          }).to.throw('The type \'WeirdType\' is an unknown field type for field \'validField\' of entity \'Valid\'.');
         });
       });
     });
@@ -603,7 +599,7 @@ describe('BusinessErrorChecker', () => {
             name: BinaryOptions.Options.PAGINATION,
             value: BinaryOptions.Values.pagination.PAGER
           }));
-          checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });
+          checker = new BusinessErrorChecker(jdlObject, {databaseType: DatabaseTypes.CASSANDRA});
         });
 
         it('fails', () => {
@@ -636,7 +632,7 @@ describe('BusinessErrorChecker', () => {
           value: BinaryOptions.Values.pagination.PAGER
         }));
         jdlObject.options.options.pagination_pager.value = BinaryOptions.Values.dto.MAPSTRUCT;
-        checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });
+        checker = new BusinessErrorChecker(jdlObject, {databaseType: DatabaseTypes.CASSANDRA});
       });
 
       it('fails', () => {
@@ -657,7 +653,7 @@ describe('BusinessErrorChecker', () => {
           value: BinaryOptions.Values.service.SERVICE_CLASS,
           entityNames: ['B']
         }));
-        checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.SQL });
+        checker = new BusinessErrorChecker(jdlObject, {databaseType: DatabaseTypes.SQL});
       });
 
       it('fails', () => {
