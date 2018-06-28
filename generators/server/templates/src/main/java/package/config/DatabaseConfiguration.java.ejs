@@ -49,11 +49,6 @@ import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfigurati
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
-    <%_ if (enableHibernateCache) { _%>
-import org.springframework.cache.CacheManager;
-    <%_ } _%>
-<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -64,8 +59,7 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-import org.springframework.context.annotation.Profile;<% } %><% if (databaseType === 'sql') { %>
-import org.springframework.core.env.Environment;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+import org.springframework.context.annotation.Profile;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.core.convert.converter.Converter;<% } %>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
@@ -160,18 +154,6 @@ public class DatabaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType === 'sql') { %>
 
-    private final Environment env;
-    <%_ if (enableHibernateCache) { _%>
-
-    private final CacheManager cacheManager;
-    <%_ } _%>
-
-    public DatabaseConfiguration(Environment env<% if (enableHibernateCache) { %>, CacheManager cacheManager<% } %>) {
-        this.env = env;
-        <%_ if (enableHibernateCache) { _%>
-        this.cacheManager = cacheManager;
-        <%_ } _%>
-    }
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 
     /**
@@ -183,6 +165,7 @@ public class DatabaseConfiguration {
     @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
     public Object h2TCPServer() throws SQLException {
+        log.debug("Starting H2 database");
         return H2ConfigurationHelper.createServer();
     }
     <%_ } _%>
