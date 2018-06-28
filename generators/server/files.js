@@ -690,6 +690,13 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.databaseType === 'sql',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/config/LiquibaseConfiguration.java', renameTo: generator => `${generator.javaDir}config/LiquibaseConfiguration.java` },
+            ]
+        },
+        {
             condition: generator => generator.databaseType === 'couchbase',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
