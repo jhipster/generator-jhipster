@@ -980,7 +980,8 @@ function askForRelationship(done) {
             default: 'id'
         },
         {
-            when: response => (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' ||
+            when: response => (response.relationshipAdd === true && response.otherEntityName.toLowerCase() !== context.name.toLowerCase() &&
+                (response.relationshipType === 'many-to-one' ||
                 (response.relationshipType === 'many-to-many' && (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user')) ||
                 (response.relationshipType === 'one-to-one' && (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user')))),
             type: 'confirm',
