@@ -466,8 +466,12 @@ module.exports = {
     files
 };
 
-function writeFiles() {
+function writeFiles(calledByBlueprint) {
     mkdirp(MAIN_SRC_DIR);
     // write React files
-    this.writeFilesToDisk(files, this, false, 'react');
+    if (calledByBlueprint) {
+        this.writeFilesToDisk(files, this, false, '../../../node_modules/generator-jhipster/generators/client/templates/react');
+    } else {
+        this.writeFilesToDisk(files, this, false, 'react');
+    }
 }
