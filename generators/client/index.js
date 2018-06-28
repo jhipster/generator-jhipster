@@ -398,7 +398,7 @@ module.exports = class extends BaseGenerator {
 
     // Public API method used by Blueprints
     _writing() {
-        return this.writingCommon(true)
+        return this.writingCommon(true);
     }
     writingCommon(calledByBlueprint) {
         return {
