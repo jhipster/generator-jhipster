@@ -599,7 +599,7 @@ describe('BusinessErrorChecker', () => {
             name: BinaryOptions.Options.PAGINATION,
             value: BinaryOptions.Values.pagination.PAGER
           }));
-          checker = new BusinessErrorChecker(jdlObject, {databaseType: DatabaseTypes.CASSANDRA});
+          checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });
         });
 
         it('fails', () => {
@@ -632,7 +632,7 @@ describe('BusinessErrorChecker', () => {
           value: BinaryOptions.Values.pagination.PAGER
         }));
         jdlObject.options.options.pagination_pager.value = BinaryOptions.Values.dto.MAPSTRUCT;
-        checker = new BusinessErrorChecker(jdlObject, {databaseType: DatabaseTypes.CASSANDRA});
+        checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });
       });
 
       it('fails', () => {
@@ -653,7 +653,7 @@ describe('BusinessErrorChecker', () => {
           value: BinaryOptions.Values.service.SERVICE_CLASS,
           entityNames: ['B']
         }));
-        checker = new BusinessErrorChecker(jdlObject, {databaseType: DatabaseTypes.SQL});
+        checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.SQL });
       });
 
       it('fails', () => {
