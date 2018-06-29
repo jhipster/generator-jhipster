@@ -108,7 +108,7 @@ module.exports = class extends BaseGenerator {
                 this.apiPrefix = _.kebabCase(this.name);
 
                 if (this.controllerActions.length === 0) {
-                    this.log(chalk.green('No controller actions found, addin a default action'));
+                    this.log(chalk.green('No controller actions found, adding a default action'));
                     this.controllerActions.push({
                         actionName: 'defaultAction',
                         actionMethod: 'Get'
