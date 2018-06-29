@@ -41,7 +41,7 @@ export const isRTL = (lang: string): boolean => languages[lang] && languages[lan
 
 export const registerLocales = store => {
   locales.forEach(locale => {
-    axios.get(`/i18n/${locale}.json`).then(response => {
+    axios.get(`/content/i18n/${locale}.json?${process.env.BUILD_TIMESTAMP}`).then(response => {
       TranslatorContext.registerTranslations(locale, response.data);
     });
   });
