@@ -398,16 +398,13 @@ module.exports = class extends BaseGenerator {
 
     // Public API method used by Blueprints
     _writing() {
-        return this.writingCommon(true);
-    }
-    writingCommon(calledByBlueprint) {
         return {
             write() {
                 switch (this.clientFramework) {
                 case 'react':
-                    return writeReactFiles.call(this, calledByBlueprint);
+                    return writeReactFiles.call(this, useBlueprint);
                 default:
-                    return writeAngularFiles.call(this, calledByBlueprint);
+                    return writeAngularFiles.call(this, useBlueprint);
                 }
             }
         };
@@ -415,7 +412,7 @@ module.exports = class extends BaseGenerator {
 
     get writing() {
         if (useBlueprint) return;
-        return this.writingCommon(false);
+        return this._writing();
     }
 
     // Public API method used by the getter and also by Blueprints

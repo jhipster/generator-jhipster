@@ -460,7 +460,7 @@ module.exports = class extends BaseGenerator {
 
     get writing() {
         if (useBlueprint) return;
-        return this.writingCommon(false);
+        return this._writing();
     }
 
     // Public API method used by the getter and also by Blueprints
