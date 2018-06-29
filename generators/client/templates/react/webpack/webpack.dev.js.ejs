@@ -30,7 +30,7 @@ const commonConfig = require('./webpack.common.js');
 
 const ENV = 'development';
 
-module.exports = webpackMerge(commonConfig({ env: ENV }), {
+module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: 'development',
   entry: [
@@ -55,7 +55,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     ]
   },
   devServer: {
-    stats: 'minimal',
+    stats: options.stats,
     hot: true,
     contentBase: './<%= BUILD_DIR %>www',
     proxy: [{
@@ -84,7 +84,9 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     }
   },
   plugins: [
-    new SimpleProgressWebpackPlugin(),
+    new SimpleProgressWebpackPlugin({
+        format: options.stats === 'minimal' ? 'compact' : 'expanded'
+    }),
     new FriendlyErrorsWebpackPlugin(),
     new BrowserSyncPlugin({
       host: 'localhost',

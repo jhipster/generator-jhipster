@@ -31,7 +31,7 @@ const commonConfig = require('./webpack.common.js');
 
 const ENV = 'development';
 
-module.exports = webpackMerge(commonConfig({ env: ENV }), {
+module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'eval-source-map',
     devServer: {
         contentBase: './<%= BUILD_DIR %>www',
@@ -56,7 +56,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             target: 'ws://127.0.0.1:<%= serverPort %>',
             ws: true
         }<% } %>],
-        stats: 'minimal',
+        stats: options.stats,
         watchOptions: {
             ignored: /node_modules/
         }
@@ -126,9 +126,11 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             loaders: ['style-loader', 'css-loader']
         }]
     },
-    stats: 'minimal',
+    stats: options.stats,
     plugins: [
-        new SimpleProgressWebpackPlugin(),
+        new SimpleProgressWebpackPlugin({
+            format: options.stats === 'minimal' ? 'compact' : 'expanded'
+        }),
         new FriendlyErrorsWebpackPlugin(),
         new ForkTsCheckerWebpackPlugin(),
         new BrowserSyncPlugin({
