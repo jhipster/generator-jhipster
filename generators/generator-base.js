@@ -2298,7 +2298,6 @@ module.exports = class extends PrivateBase {
                         if (templateObj && templateObj.renameTo) {
                             templatePathTo = path + templateObj.renameTo(_this);
                         } else {
-                            templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
                             templatePathTo = templatePath.replace('.ejs', '');
                         }
                         filesOut.push(templatePathTo);
