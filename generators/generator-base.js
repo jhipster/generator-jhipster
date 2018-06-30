@@ -2060,7 +2060,8 @@ module.exports = class extends PrivateBase {
         this.log(chalk.white('Welcome to JHipster ') + chalk.yellow(`v${packagejs.version}`));
         this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
         if (process.cwd() === this.getUserHome()) {
-            this.log(chalk.red.bold('️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+            this.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
+            this.log(chalk.white(`See the Troubleshooting part at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
         }
         this.log(chalk.green(' _______________________________________________________________________________________________________________\n'));
         this.log(chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`));
