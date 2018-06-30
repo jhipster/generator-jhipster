@@ -2344,6 +2344,7 @@ module.exports = class extends PrivateBase {
             generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
         }
         dest.uaaBaseName = uaaBaseName;
+        dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
 
         dest.buildTool = context.options.build;
         dest.websocket = context.options.websocket;

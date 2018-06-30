@@ -296,7 +296,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway',
+            condition: generator => (generator.applicationType === 'gateway' && generator.serviceDiscoveryType),
             path: REACT_DIR,
             templates: [
                 { file: 'modules/administration/gateway/gateway.tsx', method: 'processJsx' }

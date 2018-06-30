@@ -31,7 +31,6 @@ describe('JHipster generator languages', () => {
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/audits.json`,
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/configuration.json`,
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/error.json`,
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/gateway.json`,
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/login.json`,
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/logs.json`,
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/home.json`,
@@ -45,6 +44,9 @@ describe('JHipster generator languages', () => {
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/health.json`,
                         `${SERVER_MAIN_RES_DIR}i18n/messages_${language.value.replace('-', '_')}.properties`
+                    ]);
+                    assert.noFile([
+                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/gateway.json`
                     ]);
                 });
                 it('contains 3 needles in global.json', () => {
