@@ -272,30 +272,33 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('jhipsterVersion', packagejs.version);
-                this.config.set('applicationType', this.applicationType);
-                this.config.set('baseName', this.baseName);
-                this.config.set('clientFramework', this.clientFramework);
-                this.config.set('useSass', this.useSass);
-                this.config.set('enableTranslation', this.enableTranslation);
-                this.config.set('skipCommitHook', this.skipCommitHook);
+                const config = {
+                    jhipsterVersion: packagejs.version,
+                    applicationType: this.applicationType,
+                    baseName: this.baseName,
+                    clientFramework: this.clientFramework,
+                    useSass: this.useSass,
+                    enableTranslation: this.enableTranslation,
+                    skipCommitHook: this.skipCommitHook,
+                    clientPackageManager: this.clientPackageManager
+                };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
-                    this.config.set('nativeLanguage', this.nativeLanguage);
-                    this.config.set('languages', this.languages);
+                    config.nativeLanguage = this.nativeLanguage;
+                    config.languages = this.languages;
                 }
-                this.config.set('clientPackageManager', this.clientPackageManager);
                 if (this.skipServer) {
-                    this.authenticationType && this.config.set('authenticationType', this.authenticationType);
-                    this.uaaBaseName && this.config.set('uaaBaseName', this.uaaBaseName);
-                    this.cacheProvider && this.config.set('cacheProvider', this.cacheProvider);
-                    this.enableHibernateCache && this.config.set('enableHibernateCache', this.enableHibernateCache);
-                    this.websocket && this.config.set('websocket', this.websocket);
-                    this.databaseType && this.config.set('databaseType', this.databaseType);
-                    this.devDatabaseType && this.config.set('devDatabaseType', this.devDatabaseType);
-                    this.prodDatabaseType && this.config.set('prodDatabaseType', this.prodDatabaseType);
-                    this.searchEngine && this.config.set('searchEngine', this.searchEngine);
-                    this.buildTool && this.config.set('buildTool', this.buildTool);
+                    this.authenticationType && (config.authenticationType = this.authenticationType);
+                    this.uaaBaseName && (config.uaaBaseName = this.uaaBaseName);
+                    this.cacheProvider && (config.cacheProvider = this.cacheProvider);
+                    this.enableHibernateCache && (config.enableHibernateCache = this.enableHibernateCache);
+                    this.websocket && (config.websocket = this.websocket);
+                    this.databaseType && (config.databaseType = this.databaseType);
+                    this.devDatabaseType && (config.devDatabaseType = this.devDatabaseType);
+                    this.prodDatabaseType && (config.prodDatabaseType = this.prodDatabaseType);
+                    this.searchEngine && (config.searchEngine = this.searchEngine);
+                    this.buildTool && (config.buildTool = this.buildTool);
                 }
+                this.config.set(config);
             }
         };
     }

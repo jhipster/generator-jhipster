@@ -175,17 +175,19 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('appsFolders', this.appsFolders);
-                this.config.set('directoryPath', this.directoryPath);
-                this.config.set('clusteredDbApps', this.clusteredDbApps);
-                this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
-                this.config.set('monitoring', this.monitoring);
-                this.config.set('jwtSecretKey', this.jwtSecretKey);
-                this.config.set('dockerRepositoryName', this.dockerRepositoryName);
-                this.config.set('dockerPushCommand', this.dockerPushCommand);
-                this.config.set('openshiftNamespace', this.openshiftNamespace);
-                this.config.set('storageType', this.storageType);
-                this.config.set('registryReplicas', this.registryReplicas);
+                this.config.set({
+                    appsFolders: this.appsFolders,
+                    directoryPath: this.directoryPath,
+                    clusteredDbApps: this.clusteredDbApps,
+                    serviceDiscoveryType: this.serviceDiscoveryType,
+                    monitoring: this.monitoring,
+                    jwtSecretKey: this.jwtSecretKey,
+                    dockerRepositoryName: this.dockerRepositoryName,
+                    dockerPushCommand: this.dockerPushCommand,
+                    openshiftNamespace: this.openshiftNamespace,
+                    storageType: this.storageType,
+                    registryReplicas: this.registryReplicas
+                });
             }
         };
     }

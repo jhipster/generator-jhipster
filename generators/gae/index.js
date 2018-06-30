@@ -591,17 +591,19 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('gcpProjectId', this.gcpProjectId);
-                this.config.set('gcpCloudSqlInstanceName', this.gcpCloudSqlInstanceName);
-                this.config.set('gcpCloudSqlUserName', this.gcpCloudSqlUserName);
-                this.config.set('gcpCloudSqlDatabaseName', this.gcpDatabaseName);
-                this.config.set('gaeServiceName', this.gaeServiceName);
-                this.config.set('gaeLocation', this.gaeLocation);
-                this.config.set('gaeInstanceClass', this.gaeInstanceClass);
-                this.config.set('gaeScalingType', this.gaeScalingType);
-                this.config.set('gaeInstances', this.gaeInstances);
-                this.config.set('gaeMinInstances', this.gaeMinInstances);
-                this.config.set('gaeMaxInstances', this.gaeMaxInstances);
+                this.config.set({
+                    gcpProjectId: this.gcpProjectId,
+                    gcpCloudSqlInstanceName: this.gcpCloudSqlInstanceName,
+                    gcpCloudSqlUserName: this.gcpCloudSqlUserName,
+                    gcpCloudSqlDatabaseName: this.gcpDatabaseName,
+                    gaeServiceName: this.gaeServiceName,
+                    gaeLocation: this.gaeLocation,
+                    gaeInstanceClass: this.gaeInstanceClass,
+                    gaeScalingType: this.gaeScalingType,
+                    gaeInstances: this.gaeInstances,
+                    gaeMinInstances: this.gaeMinInstances,
+                    gaeMaxInstances: this.gaeMaxInstances
+                });
             }
         };
     }

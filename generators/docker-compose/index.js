@@ -272,15 +272,17 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('appsFolders', this.appsFolders);
-                this.config.set('directoryPath', this.directoryPath);
-                this.config.set('gatewayType', this.gatewayType);
-                this.config.set('clusteredDbApps', this.clusteredDbApps);
-                this.config.set('monitoring', this.monitoring);
-                this.config.set('consoleOptions', this.consoleOptions);
-                this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
-                this.config.set('adminPassword', this.adminPassword);
-                this.config.set('jwtSecretKey', this.jwtSecretKey);
+                this.config.set({
+                    appsFolders: this.appsFolders,
+                    directoryPath: this.directoryPath,
+                    gatewayType: this.gatewayType,
+                    clusteredDbApps: this.clusteredDbApps,
+                    monitoring: this.monitoring,
+                    consoleOptions: this.consoleOptions,
+                    serviceDiscoveryType: this.serviceDiscoveryType,
+                    adminPassword: this.adminPassword,
+                    jwtSecretKey: this.jwtSecretKey
+                });
             }
         };
     }
