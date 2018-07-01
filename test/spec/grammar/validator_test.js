@@ -114,7 +114,6 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
     });
 
-    /* TODO: remove the quotes. The test should fail.
     context('and using for uaaBaseName', () => {
       context('a valid value', () => {
         it('does not report a syntax error', () => {
@@ -138,7 +137,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             .to.throw('A string literal is expected, but found: "abc"');
         });
       });
-    }); */
+    });
 
     context('and using for enableHibernateCache', () => {
       context('a valid value', () => {
