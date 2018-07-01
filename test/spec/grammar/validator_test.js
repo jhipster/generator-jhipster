@@ -163,5 +163,29 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
+
+    context('and using for jhipsterVersion', () => {
+      context('a valid value', () => {
+        it('does not report a syntax error', () => {
+          expect(() => parse(`
+            application {
+              config {
+                jhipsterVersion "5.0.0"
+              }
+            }`)).to.not.throw();
+        });
+      });
+
+      context('an invalid value', () => {
+        it('will report a syntax error', () => {
+          expect(() => parse(`
+            application {
+              config {
+                jhipsterVersion abc
+              }
+            }`)).to.throw('A string literal is expected, but found: "abc"\n\tat line: 4, column: 33');
+        });
+      });
+    });
   });
 });
