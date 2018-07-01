@@ -11,7 +11,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist/'),
     filename: 'jhipster.min.js',
-    library: 'jhipster',
+    library: 'jdl',
     libraryTarget: 'umd',
     // https://github.com/webpack/webpack/issues/6784
     globalObject: 'typeof self !== \'undefined\' ? self : this'

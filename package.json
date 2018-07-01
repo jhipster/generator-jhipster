@@ -11,7 +11,6 @@
   "scripts": {
     "lint": "eslint .",
     "lint-fix": "yarn lint -- --fix",
-    "pretest" : "yarn bundle",
     "test": "yarn lint && nyc mocha test",
     "test:watch": "mocha test --watch --reporter min",
     "posttest": "yarn coverage",
@@ -62,18 +61,13 @@
     "pegjs": "0.10.0",
     "sinon": "6.0.0",
     "sinon-chai": "3.2.0",
-    "uglifyjs-webpack-plugin": "^1.2.7",
-    "webpack": "^4.14.0",
-    "webpack-cli": "^3.0.8"
+    "uglifyjs-webpack-plugin": "1.2.7",
+    "webpack": "4.14.0",
+    "webpack-cli": "3.0.8"
   },
   "peerDependencies": {},
   "engines": {
     "node": ">=8.9.0",
     "npm": ">=5.5.1"
-  },
-  "nyc": {
-    "exclude": [
-      "dist"
-    ]
   }
 }
