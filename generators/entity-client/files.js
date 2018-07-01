@@ -215,7 +215,7 @@ module.exports = {
     reactFiles
 };
 
-function writeFiles() {
+function writeFiles(calledByBlueprint) {
     return {
 
         writeClientFiles() {
@@ -223,14 +223,22 @@ function writeFiles() {
 
             if (this.clientFramework === 'angularX') {
                 // write client side files for angular 2.x +
-                this.writeFilesToDisk(angularFiles, this, false, CLIENT_NG2_TEMPLATES_DIR);
+                if (calledByBlueprint) {
+                    this.writeFilesToDisk(angularFiles, this, false, this.fetchFromInstalledJHipster(`entity-client/templates/${CLIENT_NG2_TEMPLATES_DIR}`));
+                } else {
+                    this.writeFilesToDisk(angularFiles, this, false, CLIENT_NG2_TEMPLATES_DIR);
+                }
                 this.addEntityToModule(
                     this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName,
                     this.entityFileName, this.enableTranslation, this.clientFramework, this.microserviceName
                 );
             } else if (this.clientFramework === 'react') {
                 // write client side files for react
-                this.writeFilesToDisk(reactFiles, this, false, CLIENT_REACT_TEMPLATES_DIR);
+                if (calledByBlueprint) {
+                    this.writeFilesToDisk(reactFiles, this, false, this.fetchFromInstalledJHipster(`entity-client/templates/${CLIENT_REACT_TEMPLATES_DIR}`));
+                } else {
+                    this.writeFilesToDisk(reactFiles, this, false, CLIENT_REACT_TEMPLATES_DIR);
+                }
                 this.addEntityToModule(
                     this.entityInstance, this.entityClass, this.entityAngularName, this.entityFolderName,
                     this.entityFileName, this.enableTranslation, this.clientFramework

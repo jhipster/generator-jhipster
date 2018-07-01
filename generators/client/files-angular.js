@@ -545,8 +545,12 @@ module.exports = {
     files
 };
 
-function writeFiles() {
+function writeFiles(calledByBlueprint) {
     mkdirp(MAIN_SRC_DIR);
     // write angular 2.x and above files
-    this.writeFilesToDisk(files, this, false, 'angular');
+    if (calledByBlueprint) {
+        this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
+    } else {
+        this.writeFilesToDisk(files, this, false, 'angular');
+    }
 }

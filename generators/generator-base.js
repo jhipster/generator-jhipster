@@ -2468,4 +2468,12 @@ module.exports = class extends PrivateBase {
         }
         return configuration;
     }
+
+    /**
+     * Fetch files from the generator-jhipster instance installed
+     * @param {string} subpath : the path to fetch from
+     */
+    fetchFromInstalledJHipster(subpath) {
+        return path.join(__dirname, subpath);
+    }
 };

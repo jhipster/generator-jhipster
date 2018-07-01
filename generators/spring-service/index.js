@@ -34,7 +34,7 @@ module.exports = class extends BaseGenerator {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(
                 blueprint,
-                'spring-controller',
+                'spring-service',
                 {
                     force: this.options.force,
                     arguments: [this.name]

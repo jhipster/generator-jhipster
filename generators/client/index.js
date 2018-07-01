@@ -402,9 +402,9 @@ module.exports = class extends BaseGenerator {
             write() {
                 switch (this.clientFramework) {
                 case 'react':
-                    return writeReactFiles.call(this);
+                    return writeReactFiles.call(this, useBlueprint);
                 default:
-                    return writeAngularFiles.call(this);
+                    return writeAngularFiles.call(this, useBlueprint);
                 }
             }
         };
