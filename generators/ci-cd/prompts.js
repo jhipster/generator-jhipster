@@ -18,7 +18,7 @@
  */
 const chalk = require('chalk');
 
- module.exports = {
+module.exports = {
     askPipeline,
     askIntegrations
 };
@@ -44,9 +44,8 @@ function askPipeline() {
             default: 'jenkins',
             choices: [
                 { name: 'Jenkins pipeline', value: 'jenkins' },
-                { name: 'Travis CI', value: 'travis' },
                 { name: 'GitLab CI', value: 'gitlab' },
-                { name: 'CircleCI', value: 'circle' }
+                { name: 'Travis CI', value: 'travis' }
             ]
         }
     ];
@@ -70,22 +69,30 @@ function askIntegrations() {
         return;
     }
     const done = this.async();
-    const herokuChoices = [];
-    if (this.pipeline === 'jenkins') {
-        herokuChoices.push({ name: 'In Jenkins pipeline', value: 'jenkins' });
-    }
-    if (this.pipeline === 'gitlab') {
-        herokuChoices.push({ name: 'In GitLab CI', value: 'gitlab' });
-    }
-    if (this.pipeline === 'circle') {
-        herokuChoices.push({ name: 'In CircleCI', value: 'circle' });
-    }
-    if (this.pipeline === 'travis') {
-        herokuChoices.push({ name: 'In Travis CI', value: 'travis' });
-    }
-
     const prompts = [
         {
+            when: this.pipeline === 'jenkins',
+            type: 'confirm',
+            name: 'insideDocker',
+            message: 'Would you like to perform the build in a Docker container ?',
+            default: false
+        },
+        {
+            when: this.pipeline === 'gitlab',
+            type: 'confirm',
+            name: 'insideDocker',
+            message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container)?',
+            default: false
+        },
+        {
+            when: this.pipeline === 'gitlab',
+            type: 'confirm',
+            name: 'sendBuildToGitlab',
+            message: 'Would you like to send build status to GitLab ?',
+            default: false
+        },
+        {
+            when: this.pipeline === 'jenkins',
             type: 'checkbox',
             name: 'cicdIntegrations',
             message: 'What tasks/integrations do you want to include?',
@@ -94,6 +101,18 @@ function askIntegrations() {
                 { name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' },
                 { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
                 { name: `Build and publish a ${chalk.yellow('*Docker*')} image`, value: 'publishDocker' },
+                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service) ?`, value: 'heroku' }
+            ]
+        },
+        {
+            when: this.pipeline === 'gitlab' || this.pipeline === 'travis',
+            type: 'checkbox',
+            name: 'cicdIntegrations',
+            message: 'What tasks/integrations do you want to include?',
+            default: [],
+            choices: [
+                { name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' },
+                { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
                 { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service) ?`, value: 'heroku' }
             ]
         },
@@ -159,27 +178,6 @@ function askIntegrations() {
             name: 'dockerRegistryOrganizationName',
             message: `${chalk.yellow('*Docker*')}: what is the Organization Name for the Docker registry?`,
             default: 'docker-login'
-        },
-        {
-            when: response => this.pipeline === 'jenkins',
-            type: 'confirm',
-            name: 'insideDocker',
-            message: `Would you like to perform the build in a Docker container ?`,
-            default: false
-        },
-        {
-            when: this.pipeline === 'gitlab',
-            type: 'confirm',
-            name: 'insideDocker',
-            message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container)?',
-            default: false
-        },
-        {
-            when: this.pipeline === 'gitlab',
-            type: 'confirm',
-            name: 'sendBuildToGitlab',
-            message: `Would you like to send build status to GitLab ?`,
-            default: false
         }
     ];
     this.prompt(prompts).then((props) => {
@@ -197,11 +195,11 @@ function askIntegrations() {
         this.dockerRegistryURL = props.dockerRegistryURL;
         this.dockerRegistryCredentialsId = props.dockerRegistryCredentialsId;
         this.dockerRegistryOrganizationName = props.dockerRegistryOrganizationName;
-        
+
         this.insideDocker = props.insideDocker;
 
         this.sendBuildToGitlab = props.sendBuildToGitlab;
-        
+
         done();
     });
 }

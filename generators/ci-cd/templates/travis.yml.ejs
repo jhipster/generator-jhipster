@@ -82,6 +82,9 @@ script:
     <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
+  <%_ if (cicdIntegrations.includes('sonar')) { _%>
+  - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
+  <%_ } _%>
   <%_ if (cicdIntegrations.includes('heroku')) { _%>
   - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
   <%_ } else { _%>
@@ -89,7 +92,7 @@ script:
   <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
   - ./gradlew bootWar -Pprod -x test
-  <%_ if (heroku.includes('travis')) { _%>
+  <%_ if (cicdIntegrations.includes('heroku')) { _%>
   - ./gradlew deployHeroku
   <%_ } _%>
 <%_ } _%>

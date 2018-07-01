@@ -66,8 +66,8 @@ gradle-test:
     artifacts:
         paths:
             - build/reports/tests/*
-# Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
-#       expire_in: 90 day
+        # Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
+        # expire_in: 90 day
     <%_ if (!skipClient) { _%>
 gradle-front-test:
     stage: test
@@ -80,7 +80,7 @@ gradle-front-test:
     artifacts:
         paths:
             - build/test-results/jest/*
-#       expire_in: 90 day
+        # expire_in: 90 day
     <%_ } _%>
 gradle-repackage:
     stage: package
@@ -89,10 +89,10 @@ gradle-repackage:
     artifacts:
         paths:
             - build/libs/*.war
-#       expire_in: 90 day
+        # expire_in: 90 day
     <%_ if (cicdIntegrations.includes('heroku')) { _%>
-gradle-deploy:
-    stage: deploy
+gradle-heroku:
+    stage: heroku
     script:
         - ./gradlew deployHeroku --no-daemon
     <%_ } _%>
@@ -122,8 +122,8 @@ maven-test:
     artifacts:
         paths:
             - target/surefire-reports/*
-# Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
-#       expire_in: 90 day
+        # Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
+        # expire_in: 90 day
     <%_ if (!skipClient) { _%>
 maven-front-test:
     stage: test
@@ -136,21 +136,26 @@ maven-front-test:
     artifacts:
         paths:
             - target/test-results/jest/*
-#       expire_in: 90 day
+        # expire_in: 90 day
     <%_ } _%>
-    <%_ if (cicdIntegrations.includes('heroku')) { _%>
-maven-deploy:
-    stage: deploy
-    script:
-        - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %> -Dmaven.repo.local=$MAVEN_USER_HOME
-    <%_ } else { _%>
 maven-package:
     stage: package
     script:
-        - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-    <%_ } _%>
+        - ./mvnw verify <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
             - target/*.war
-#       expire_in: 90 day
+        # expire_in: 90 day
+    <%_ if (cicdIntegrations.includes('sonar')) { _%>
+maven-sonar
+    stage: deploy
+    script:
+        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
+    <%_ } _%>
+    <%_ if (cicdIntegrations.includes('heroku')) { _%>
+maven-heroku:
+    stage: deploy
+    script:
+        - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %> -Dmaven.repo.local=$MAVEN_USER_HOME
+    <%_ } _%>
 <%_ } _%>

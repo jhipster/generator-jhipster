@@ -113,8 +113,10 @@ module.exports = class extends BaseGenerator {
 
         if (this.cicdIntegrations.includes('deploy')) {
             if (this.buildTool === 'maven') {
-                this.addMavenDistributionManagement(this.artifactorySnapshotsId, this.artifactorySnapshotsUrl,
-                    this.artifactoryReleasesId, this.artifactoryReleasesUrl);
+                this.addMavenDistributionManagement(
+                    this.artifactorySnapshotsId, this.artifactorySnapshotsUrl,
+                    this.artifactoryReleasesId, this.artifactoryReleasesUrl
+                );
             } else if (this.buildTool === 'gradle') {
                 // TODO
                 // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
