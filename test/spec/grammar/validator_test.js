@@ -27,7 +27,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
 
-        context('such as an uppercase name', () => {
+        context('having illegal characters', () => {
           it('will report a syntax error', () => {
             expect(() => parse(`
               application {
@@ -52,7 +52,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
 
-      context('an invalud value', () => {
+      context('an invalid value', () => {
         it('will report a syntax error', () => {
           expect(() => parse(`
             application {
