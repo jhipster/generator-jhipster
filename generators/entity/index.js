@@ -762,7 +762,11 @@ module.exports = class extends BaseGenerator {
                     }
 
                     if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
-                        relationship.relationshipValidate = relationship.relationshipRequired = context.validation = true;
+                        if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
+                            this.warning(chalk.red('Required relationships to the same entity are not supported.'));
+                        } else {
+                            relationship.relationshipValidate = relationship.relationshipRequired = context.validation = true;
+                        }
                     }
 
                     const entityType = relationship.otherEntityNameCapitalized;
