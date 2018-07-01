@@ -371,32 +371,35 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('jhipsterVersion', packagejs.version);
-                this.config.set('applicationType', this.applicationType);
-                this.config.set('baseName', this.baseName);
-                this.config.set('packageName', this.packageName);
-                this.config.set('packageFolder', this.packageFolder);
-                this.config.set('serverPort', this.serverPort);
-                this.config.set('authenticationType', this.authenticationType);
-                this.config.set('uaaBaseName', this.uaaBaseName);
-                this.config.set('cacheProvider', this.cacheProvider);
-                this.config.set('enableHibernateCache', this.enableHibernateCache);
-                this.config.set('websocket', this.websocket);
-                this.config.set('databaseType', this.databaseType);
-                this.config.set('devDatabaseType', this.devDatabaseType);
-                this.config.set('prodDatabaseType', this.prodDatabaseType);
-                this.config.set('searchEngine', this.searchEngine);
-                this.config.set('messageBroker', this.messageBroker);
-                this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
-                this.config.set('buildTool', this.buildTool);
-                this.config.set('enableSwaggerCodegen', this.enableSwaggerCodegen);
-                this.config.set('jwtSecretKey', this.jwtSecretKey);
-                this.config.set('rememberMeKey', this.rememberMeKey);
-                this.config.set('enableTranslation', this.enableTranslation);
+                const config = {
+                    jhipsterVersion: packagejs.version,
+                    applicationType: this.applicationType,
+                    baseName: this.baseName,
+                    packageName: this.packageName,
+                    packageFolder: this.packageFolder,
+                    serverPort: this.serverPort,
+                    authenticationType: this.authenticationType,
+                    uaaBaseName: this.uaaBaseName,
+                    cacheProvider: this.cacheProvider,
+                    enableHibernateCache: this.enableHibernateCache,
+                    websocket: this.websocket,
+                    databaseType: this.databaseType,
+                    devDatabaseType: this.devDatabaseType,
+                    prodDatabaseType: this.prodDatabaseType,
+                    searchEngine: this.searchEngine,
+                    messageBroker: this.messageBroker,
+                    serviceDiscoveryType: this.serviceDiscoveryType,
+                    buildTool: this.buildTool,
+                    enableSwaggerCodegen: this.enableSwaggerCodegen,
+                    jwtSecretKey: this.jwtSecretKey,
+                    rememberMeKey: this.rememberMeKey,
+                    enableTranslation: this.enableTranslation
+                };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
-                    this.config.set('nativeLanguage', this.nativeLanguage);
-                    this.config.set('languages', this.languages);
+                    config.nativeLanguage = this.nativeLanguage;
+                    config.languages = this.languages;
                 }
+                this.config.set(config);
             }
         };
     }

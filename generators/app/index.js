@@ -326,23 +326,26 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('jhipsterVersion', packagejs.version);
-                this.config.set('applicationType', this.applicationType);
-                this.config.set('baseName', this.baseName);
-                this.config.set('testFrameworks', this.testFrameworks);
-                this.config.set('jhiPrefix', this.jhiPrefix);
-                this.config.set('skipCheckLengthOfIdentifier', this.skipCheckLengthOfIdentifier);
-                this.config.set('otherModules', this.otherModules);
-                this.config.set('enableTranslation', this.enableTranslation);
+                const config = {
+                    jhipsterVersion: packagejs.version,
+                    applicationType: this.applicationType,
+                    baseName: this.baseName,
+                    testFrameworks: this.testFrameworks,
+                    jhiPrefix: this.jhiPrefix,
+                    skipCheckLengthOfIdentifier: this.skipCheckLengthOfIdentifier,
+                    otherModules: this.otherModules,
+                    enableTranslation: this.enableTranslation,
+                    clientPackageManager: this.clientPackageManager
+                };
                 if (this.enableTranslation) {
-                    this.config.set('nativeLanguage', this.nativeLanguage);
-                    this.config.set('languages', this.languages);
+                    config.nativeLanguage = this.nativeLanguage;
+                    config.languages = this.languages;
                 }
-                this.config.set('clientPackageManager', this.clientPackageManager);
-                this.blueprint && this.config.set('blueprint', this.blueprint);
-                this.skipClient && this.config.set('skipClient', true);
-                this.skipServer && this.config.set('skipServer', true);
-                this.skipUserManagement && this.config.set('skipUserManagement', true);
+                this.blueprint && (config.blueprint = this.blueprint);
+                this.skipClient && (config.skipClient = true);
+                this.skipServer && (config.skipServer = true);
+                this.skipUserManagement && (config.skipUserManagement = true);
+                this.config.set(config);
             }
         };
     }
