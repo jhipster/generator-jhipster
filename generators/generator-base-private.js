@@ -791,7 +791,7 @@ module.exports = class extends Generator {
     checkGitConnection() {
         if (!this.gitInstalled) return;
         const done = this.async();
-        exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 15000 }, (error) => {
+        exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 5000 }, (error) => {
             if (error) {
                 this.warning(`Failed to connect to "git://github.com"
 1. Check your Internet connection.
