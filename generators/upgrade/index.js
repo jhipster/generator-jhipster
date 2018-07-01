@@ -18,9 +18,9 @@
  */
 
 const chalk = require('chalk');
-const BaseGenerator = require('../generator-base');
 const shelljs = require('shelljs');
 const semver = require('semver');
+const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 
 /* Constants used throughout */
@@ -205,8 +205,8 @@ module.exports = class extends BaseGenerator {
                 this.gitExec(['status', '--porcelain'], { silent: this.silent }, (code, msg, err) => {
                     if (code !== 0) this.error(`Unable to check for local changes:\n${msg} ${err}`);
                     if (msg) {
-                        this.warning(' local changes found.\n' +
-                            '\tPlease commit/stash them before upgrading');
+                        this.warning(' local changes found.\n'
+                            + '\tPlease commit/stash them before upgrading');
                         this.error('Exiting process');
                     }
                     done();
@@ -364,8 +364,7 @@ module.exports = class extends BaseGenerator {
                 done();
             });
         } else {
-            const logMsg =
-                `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
+            const logMsg = `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
             this.success(logMsg);
             done();
         }

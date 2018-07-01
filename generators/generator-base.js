@@ -236,8 +236,7 @@ module.exports = class extends PrivateBase {
                 }
                 let importStatement = `|import { ${importName} } from './${entityFolderName}/${entityFileName}.module';`;
                 if (importStatement.length > constants.LINE_LENGTH) {
-                    importStatement =
-                        `|// prettier-ignore
+                    importStatement = `|// prettier-ignore
                          |import {
                          |    ${importName}
                          |} from './${entityFolderName}/${entityFileName}.module';`;
@@ -327,8 +326,7 @@ module.exports = class extends PrivateBase {
         try {
             let importStatement = `|import { ${appName}${adminAngularName}Module } from './${adminFolderName}/${adminFileName}.module';`;
             if (importStatement.length > constants.LINE_LENGTH) {
-                importStatement =
-                    `|import {
+                importStatement = `|import {
                      |    ${appName}${adminAngularName}Module
                      |} from './${adminFolderName}/${adminFileName}.module';`;
             }
@@ -673,8 +671,7 @@ module.exports = class extends PrivateBase {
         try {
             let importStatement = `|import { ${appName}${angularName}Module } from './${folderName}/${fileName}.module';`;
             if (importStatement.length > constants.LINE_LENGTH) {
-                importStatement =
-                    `|import {
+                importStatement = `|import {
                      |    ${appName}${angularName}Module
                      |} from './${folderName}/${fileName}.module';`;
             }
@@ -1054,9 +1051,9 @@ module.exports = class extends PrivateBase {
     addMavenDependencyManagement(groupId, artifactId, version, type, scope, other) {
         const fullPath = 'pom.xml';
         try {
-            let dependency = `${'<dependency>\n' +
-                '                <groupId>'}${groupId}</groupId>\n` +
-                `                <artifactId>${artifactId}</artifactId>\n`;
+            let dependency = `${'<dependency>\n'
+                + '                <groupId>'}${groupId}</groupId>\n`
+                + `                <artifactId>${artifactId}</artifactId>\n`;
             if (version) {
                 dependency += `                <version>${version}</version>\n`;
             }
@@ -1093,10 +1090,10 @@ module.exports = class extends PrivateBase {
     addMavenRepository(id, url) {
         const fullPath = 'pom.xml';
         try {
-            const repository = `${'<repository>\n' +
-                '            <id>'}${id}</id>\n` +
-                `            <url>${url}</url>\n` +
-                '        </repository>';
+            const repository = `${'<repository>\n'
+                + '            <id>'}${id}</id>\n`
+                + `            <url>${url}</url>\n`
+                + '        </repository>';
             jhipsterUtils.rewriteFile({
                 file: fullPath,
                 needle: 'jhipster-needle-maven-repository',
@@ -1157,9 +1154,9 @@ module.exports = class extends PrivateBase {
      */
     addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
         try {
-            let dependency = `${'<dependency>\n' +
-                '            <groupId>'}${groupId}</groupId>\n` +
-                `            <artifactId>${artifactId}</artifactId>\n`;
+            let dependency = `${'<dependency>\n'
+                + '            <groupId>'}${groupId}</groupId>\n`
+                + `            <artifactId>${artifactId}</artifactId>\n`;
             if (version) {
                 dependency += `            <version>${version}</version>\n`;
             }
@@ -1192,9 +1189,9 @@ module.exports = class extends PrivateBase {
     addMavenPlugin(groupId, artifactId, version, other) {
         const fullPath = 'pom.xml';
         try {
-            let plugin = `${'<plugin>\n' +
-                '                <groupId>'}${groupId}</groupId>\n` +
-                `                <artifactId>${artifactId}</artifactId>\n`;
+            let plugin = `${'<plugin>\n'
+                + '                <groupId>'}${groupId}</groupId>\n`
+                + `                <artifactId>${artifactId}</artifactId>\n`;
             if (version) {
                 plugin += `                <version>${version}</version>\n`;
             }
@@ -1224,8 +1221,8 @@ module.exports = class extends PrivateBase {
     addMavenProfile(profileId, other) {
         const fullPath = 'pom.xml';
         try {
-            let profile = '<profile>\n' +
-                `            <id>${profileId}</id>\n`;
+            let profile = '<profile>\n'
+                + `            <id>${profileId}</id>\n`;
             if (other) {
                 profile += `${other}\n`;
             }
@@ -1678,8 +1675,8 @@ module.exports = class extends PrivateBase {
                 try {
                     this.composeExternalModule(module.npmPackageName, hook || 'app', options);
                 } catch (e) {
-                    this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                        chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
+                    this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName)
+                        + chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
                     this.debug('ERROR:', e);
                 }
             }
@@ -2025,15 +2022,15 @@ module.exports = class extends PrivateBase {
                 keytoolPath = `${javaHome}/bin/`;
             }
             shelljs.exec(
-                `"${keytoolPath}keytool" -genkey -noprompt ` +
-                '-keyalg RSA ' +
-                '-alias selfsigned ' +
-                `-keystore ${keyStoreFile} ` +
-                '-storepass password ' +
-                '-keypass password ' +
-                '-keysize 2048 ' +
-                `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`
-                , (code) => {
+                `"${keytoolPath}keytool" -genkey -noprompt `
+                + '-keyalg RSA '
+                + '-alias selfsigned '
+                + `-keystore ${keyStoreFile} `
+                + '-storepass password '
+                + '-keypass password '
+                + '-keysize 2048 '
+                + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
+                (code) => {
                     if (code !== 0) {
                         this.error('\nFailed to create a KeyStore with \'keytool\'', code);
                     } else {
@@ -2085,8 +2082,8 @@ module.exports = class extends PrivateBase {
             const done = this.async();
             shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version`, { silent: true }, (code, stdout, stderr) => {
                 if (!stderr && semver.lt(packagejs.version, stdout)) {
-                    this.log(`${chalk.yellow(' ______________________________________________________________________________\n\n') +
-                        chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`);
+                    this.log(`${chalk.yellow(' ______________________________________________________________________________\n\n')
+                        + chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`);
                     if (this.useYarn) {
                         this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
                     } else {
@@ -2153,9 +2150,11 @@ module.exports = class extends PrivateBase {
             validate: (input) => {
                 if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                     return 'Your application name cannot contain special characters or a blank space';
-                } else if (generator.applicationType === 'microservice' && /_/.test(input)) {
+                }
+                if (generator.applicationType === 'microservice' && /_/.test(input)) {
                     return 'Your microservice name cannot contain underscores as this does not meet the URI spec';
-                } else if (input === 'application') {
+                }
+                if (input === 'application') {
                     return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
                 }
                 return true;
@@ -2310,8 +2309,10 @@ module.exports = class extends PrivateBase {
                         if (templateObj && templateObj.renameTo) {
                             templatePathTo = path + templateObj.renameTo(_this);
                         } else {
+                            // remove`_` prefixed to file names if any
                             templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
-                            templatePathTo = templatePath.replace('.ejs', '');
+                            // remove the .ejs suffix
+                            templatePathTo = templatePathTo.replace('.ejs', '');
                         }
                         filesOut.push(templatePathTo);
                         if (!returnFiles) {

@@ -414,12 +414,11 @@ function askForSubnets() {
     ];
 
     return this.prompt(prompts).then((props) => {
-        const publicIpOnLaunchArray = appSubnets =>
-            _.chain(this.awsFacts.availableSubnets)
-                .filter(availableSubnet => _.includes(appSubnets, availableSubnet.SubnetId))
-                .map('MapPublicIpOnLaunch')
-                .uniq()
-                .value();
+        const publicIpOnLaunchArray = appSubnets => _.chain(this.awsFacts.availableSubnets)
+            .filter(availableSubnet => _.includes(appSubnets, availableSubnet.SubnetId))
+            .map('MapPublicIpOnLaunch')
+            .uniq()
+            .value();
 
         const uniqueIPLaunch = publicIpOnLaunchArray(props.appSubnets);
         const shouldAppHavePublicIP = _.head(uniqueIPLaunch);

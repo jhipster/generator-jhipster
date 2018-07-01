@@ -220,6 +220,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get initializing() {
         if (useBlueprint) return;
         return this._initializing();
@@ -239,6 +240,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get prompting() {
         if (useBlueprint) return;
         return this._prompting();
@@ -302,6 +304,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get configuring() {
         if (useBlueprint) return;
         return this._configuring();
@@ -387,6 +390,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get default() {
         if (useBlueprint) return;
         return this._default();
@@ -405,6 +409,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get writing() {
         if (useBlueprint) return;
         return this._writing();
@@ -414,8 +419,7 @@ module.exports = class extends BaseGenerator {
     _install() {
         return {
             installing() {
-                const logMsg =
-                    `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
+                const logMsg = `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
                 const installConfig = {
                     bower: false,
@@ -439,6 +443,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get install() {
         if (useBlueprint) return;
         return this._install();
@@ -453,13 +458,13 @@ module.exports = class extends BaseGenerator {
                 }
                 this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
-                const logMsg =
-                    `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
+                const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
 
                 this.log(chalk.green(logMsg));
             }
         };
     }
+
     get end() {
         if (useBlueprint) return;
         return this._end();

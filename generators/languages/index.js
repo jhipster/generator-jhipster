@@ -60,8 +60,8 @@ module.exports = class extends BaseGenerator {
             this.languages.forEach((language) => {
                 if (!this.isSupportedLanguage(language)) {
                     this.log('\n');
-                    this.error(chalk.red(`Unsupported language "${language}" passed as argument to language generator.` +
-                        `\nSupported languages: ${_.map(
+                    this.error(chalk.red(`Unsupported language "${language}" passed as argument to language generator.`
+                        + `\nSupported languages: ${_.map(
                             this.getAllSupportedLanguageOptions(),
                             o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`
                         ).join('')}`));

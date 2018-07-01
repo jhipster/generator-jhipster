@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 const AWS = require('aws-sdk'); // eslint-disable-line
-const spinner = require('./utils').spinner;
 const _ = require('lodash');
+const spinner = require('./utils').spinner;
 
 module.exports = class AwSSM {
     constructor(region) {

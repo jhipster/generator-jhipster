@@ -39,8 +39,8 @@ module.exports = class extends BaseGenerator {
 
                 exec('gcloud version', (err) => {
                     if (err) {
-                        this.log.error('You don\'t have the Cloud SDK (gcloud) installed. ' +
-                            'Download it from https://cloud.google.com/sdk/install');
+                        this.log.error('You don\'t have the Cloud SDK (gcloud) installed. '
+                            + 'Download it from https://cloud.google.com/sdk/install');
                         this.abort = true;
                     }
                     done();
@@ -113,7 +113,7 @@ module.exports = class extends BaseGenerator {
     defaultServiceNameChoices(defaultServiceExists) {
         if (this.applicationType === 'monolith') {
             return defaultServiceExists ? ['default', _.kebabCase(this.baseName)] : ['default'];
-        } else if (this.applicationType === 'gateway') {
+        } if (this.applicationType === 'gateway') {
             return ['default'];
         }
 

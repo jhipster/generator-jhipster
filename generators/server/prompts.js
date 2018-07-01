@@ -55,8 +55,8 @@ function askForServerSideOpts(meta) {
         {
             type: 'input',
             name: 'packageName',
-            validate: input => (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input) ?
-                true : 'The package name you have provided is not a valid Java package name.'),
+            validate: input => (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)
+                ? true : 'The package name you have provided is not a valid Java package name.'),
             message: 'What is your default Java package name?',
             default: 'com.mycompany.myapp',
             store: true
@@ -101,8 +101,8 @@ function askForServerSideOpts(meta) {
         },
         {
             when: response => (
-                (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') ||
-                ['gateway', 'microservice'].includes(applicationType)
+                (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka')
+                || ['gateway', 'microservice'].includes(applicationType)
             ),
             type: 'list',
             name: 'authenticationType',

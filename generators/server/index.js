@@ -19,12 +19,12 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
+const crypto = require('crypto');
+const os = require('os');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
-const crypto = require('crypto');
-const os = require('os');
 const constants = require('../generator-constants');
 
 let useBlueprint;
@@ -239,16 +239,16 @@ module.exports = class extends BaseGenerator {
                     this.websocket = false;
                 }
 
-                const serverConfigFound = this.packageName !== undefined &&
-                    this.authenticationType !== undefined &&
-                    this.cacheProvider !== undefined &&
-                    this.enableHibernateCache !== undefined &&
-                    this.websocket !== undefined &&
-                    this.databaseType !== undefined &&
-                    this.devDatabaseType !== undefined &&
-                    this.prodDatabaseType !== undefined &&
-                    this.searchEngine !== undefined &&
-                    this.buildTool !== undefined;
+                const serverConfigFound = this.packageName !== undefined
+                    && this.authenticationType !== undefined
+                    && this.cacheProvider !== undefined
+                    && this.enableHibernateCache !== undefined
+                    && this.websocket !== undefined
+                    && this.databaseType !== undefined
+                    && this.devDatabaseType !== undefined
+                    && this.prodDatabaseType !== undefined
+                    && this.searchEngine !== undefined
+                    && this.buildTool !== undefined;
 
                 if (this.baseName !== undefined && serverConfigFound) {
                     // Generate remember me key if key does not already exist in config
@@ -276,14 +276,15 @@ module.exports = class extends BaseGenerator {
                         this.skipUserManagement = true;
                     }
 
-                    this.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
-                        'to re-generate the project...\n'));
+                    this.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n'
+                        + 'to re-generate the project...\n'));
 
                     this.existingProject = true;
                 }
             }
         };
     }
+
     get initializing() {
         if (useBlueprint) return;
         return this._initializing();
@@ -327,6 +328,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get prompting() {
         if (useBlueprint) return;
         return this._prompting();
@@ -403,6 +405,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get configuring() {
         if (useBlueprint) return;
         return this._configuring();
@@ -440,6 +443,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get default() {
         if (useBlueprint) return;
         return this._default();
@@ -449,6 +453,7 @@ module.exports = class extends BaseGenerator {
     _writing() {
         return writeFiles();
     }
+
     get writing() {
         if (useBlueprint) return;
         return this._writing();
@@ -461,8 +466,8 @@ module.exports = class extends BaseGenerator {
                 if (this.prodDatabaseType === 'oracle') {
                     this.log('\n\n');
                     this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
-                    }Please follow our documentation on using Oracle to set up the \n` +
-                        'Oracle proprietary JDBC driver.');
+                    }Please follow our documentation on using Oracle to set up the \n`
+                        + 'Oracle proprietary JDBC driver.');
                 }
                 this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
@@ -474,11 +479,12 @@ module.exports = class extends BaseGenerator {
                 if (os.platform() === 'win32') {
                     logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
                 }
-                this.log(chalk.green(`${'Run your Spring Boot application:' +
-                    '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+                this.log(chalk.green(`${'Run your Spring Boot application:'
+                    + '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
             }
         };
     }
+
     get end() {
         if (useBlueprint) return;
         return this._end();

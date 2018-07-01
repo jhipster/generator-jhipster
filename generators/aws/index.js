@@ -46,8 +46,8 @@ module.exports = class extends BaseGenerator {
                     this.dbName = awsConfig.dbName;
                     this.dbInstanceClass = awsConfig.dbInstanceClass;
 
-                    this.log(chalk.green('This is an existing deployment, using the configuration from your .yo-rc.json file \n' +
-                        'to deploy your application...\n'));
+                    this.log(chalk.green('This is an existing deployment, using the configuration from your .yo-rc.json file \n'
+                        + 'to deploy your application...\n'));
                 }
             },
             checkDatabase() {
