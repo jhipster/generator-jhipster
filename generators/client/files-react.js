@@ -422,6 +422,13 @@ const files = {
             ]
         },
         {
+            condition: generator => generator.enableTranslation,
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/shared/reducers/locale.spec.ts'
+            ]
+        },
+        {
             condition: generator => generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: [
