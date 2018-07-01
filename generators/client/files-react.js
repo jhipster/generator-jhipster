@@ -470,7 +470,7 @@ function writeFiles(calledByBlueprint) {
     mkdirp(MAIN_SRC_DIR);
     // write React files
     if (calledByBlueprint) {
-        this.writeFilesToDisk(files, this, false, '../../../node_modules/generator-jhipster/generators/client/templates/react');
+        this.writeFilesToDisk(files, this, false, this.fetchFromJHipsterInNodeModules('client/templates/react'));
     } else {
         this.writeFilesToDisk(files, this, false, 'react');
     }

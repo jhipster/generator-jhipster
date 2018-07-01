@@ -549,7 +549,7 @@ function writeFiles(calledByBlueprint) {
     mkdirp(MAIN_SRC_DIR);
     // write angular 2.x and above files
     if (calledByBlueprint) {
-        this.writeFilesToDisk(files, this, false, '../../../node_modules/generator-jhipster/generators/client/templates/angular');
+        this.writeFilesToDisk(files, this, false, this.fetchFromJHipsterInNodeModules('client/templates/angular'));
     } else {
         this.writeFilesToDisk(files, this, false, 'angular');
     }
