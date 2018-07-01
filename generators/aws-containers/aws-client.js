@@ -218,15 +218,14 @@ function getDockerLogin() {
  * @private
  */
 function _getAuthorizationToken() {
-    return spinner(new Promise((resolve, reject) =>
-        ECR.sdk.getAuthorizationToken({}).promise()
-            .then((data) => {
-                if (!_.has(data, 'authorizationData.0')) {
-                    reject(new Error('No authorization data found.'));
-                    return;
-                }
-                resolve(data.authorizationData[0]);
-            })));
+    return spinner(new Promise((resolve, reject) => ECR.sdk.getAuthorizationToken({}).promise()
+        .then((data) => {
+            if (!_.has(data, 'authorizationData.0')) {
+                reject(new Error('No authorization data found.'));
+                return;
+            }
+            resolve(data.authorizationData[0]);
+        })));
 }
 
 /**
@@ -248,10 +247,9 @@ function createS3Bucket(bucketName, region = DEFAULT_REGION) {
                 reject(new Error(`The S3 Bucket ${chalk.bold(bucketName)} in region ${chalk.bold(region)} already exists and you don't have access to it. Error code: ${chalk.bold(error.code)}`));
             }
         })
-        .then(() =>
-            s3.createBucket(createBuckerParams).promise()
-                .then(resolve)
-                .catch(error => reject(new Error(`There was an error during the creation of the S3 Bucket ${chalk.bold(bucketName)} in region ${chalk.bold(region)}`))))));
+        .then(() => s3.createBucket(createBuckerParams).promise()
+            .then(resolve)
+            .catch(error => reject(new Error(`There was an error during the creation of the S3 Bucket ${chalk.bold(bucketName)} in region ${chalk.bold(region)}`))))));
 }
 
 /**
@@ -262,42 +260,41 @@ function createS3Bucket(bucketName, region = DEFAULT_REGION) {
  * @returns {Promise}
  */
 function uploadTemplate(bucketName, filename, path) {
-    return spinner(new Promise((resolve, reject) =>
-        fs.stat(path, (error, stats) => {
-            if (!stats) {
-                reject(new Error(`File ${chalk.bold(path)} not found`));
+    return spinner(new Promise((resolve, reject) => fs.stat(path, (error, stats) => {
+        if (!stats) {
+            reject(new Error(`File ${chalk.bold(path)} not found`));
+        }
+        const upload = s3.upload(
+            {
+                Bucket: bucketName,
+                Key: filename,
+                Body: fs.createReadStream(path)
+            },
+            {
+                partSize: Math.max(stats.size, S3_MIN_PART_SIZE),
+                queueSize: 1
             }
-            const upload = s3.upload(
-                {
-                    Bucket: bucketName,
-                    Key: filename,
-                    Body: fs.createReadStream(path)
-                },
-                {
-                    partSize: Math.max(stats.size, S3_MIN_PART_SIZE),
-                    queueSize: 1
-                }
-            );
-            let bar;
-            upload.on('httpUploadProgress', (evt) => {
-                if (!bar && evt.total) {
-                    const total = evt.total / 1000000;
-                    bar = new ProgressBar('uploading [:bar] :percent :etas', {
-                        complete: '=',
-                        incomplete: ' ',
-                        width: 20,
-                        total,
-                        clear: true
-                    });
-                }
+        );
+        let bar;
+        upload.on('httpUploadProgress', (evt) => {
+            if (!bar && evt.total) {
+                const total = evt.total / 1000000;
+                bar = new ProgressBar('uploading [:bar] :percent :etas', {
+                    complete: '=',
+                    incomplete: ' ',
+                    width: 20,
+                    total,
+                    clear: true
+                });
+            }
 
-                const curr = evt.loaded / 1000000;
-                bar.tick(curr - bar.curr);
-            });
-            return upload.promise()
-                .then(resolve)
-                .catch(reject);
-        })));
+            const curr = evt.loaded / 1000000;
+            bar.tick(curr - bar.curr);
+        });
+        return upload.promise()
+            .then(resolve)
+            .catch(reject);
+    })));
 }
 
 /**

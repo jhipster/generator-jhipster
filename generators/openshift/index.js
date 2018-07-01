@@ -55,9 +55,9 @@ module.exports = class extends BaseGenerator {
 
                 shelljs.exec('oc version', { silent: true }, (code, stdout, stderr) => {
                     if (stderr) {
-                        this.log(`${chalk.yellow.bold('WARNING!')} oc 1.3 or later is not installed on your computer.\n` +
-                          'Make sure you have OpenShift Origin / OpenShift Container Platform and CLI installed. Read' +
-                            ' https://github.com/openshift/origin/\n');
+                        this.log(`${chalk.yellow.bold('WARNING!')} oc 1.3 or later is not installed on your computer.\n`
+                          + 'Make sure you have OpenShift Origin / OpenShift Container Platform and CLI installed. Read'
+                            + ' https://github.com/openshift/origin/\n');
                     }
                     done();
                 });

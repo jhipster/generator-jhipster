@@ -251,8 +251,8 @@ function askForTableName() {
     const entityTableName = context.entityTableName;
     const prodDatabaseType = context.prodDatabaseType;
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
-    if (skipCheckLengthOfIdentifier || !context.relationships || context.relationships.length === 0 ||
-        !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)) {
+    if (skipCheckLengthOfIdentifier || !context.relationships || context.relationships.length === 0
+        || !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)) {
         return;
     }
     const done = this.async();
@@ -264,11 +264,11 @@ function askForTableName() {
             validate: (input) => {
                 if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                     return 'The table name cannot contain special characters';
-                } else if (input === '') {
+                } if (input === '') {
                     return 'The table name cannot be empty';
-                } else if (prodDatabaseType === 'oracle' && input.length > 14 && !skipCheckLengthOfIdentifier) {
+                } if (prodDatabaseType === 'oracle' && input.length > 14 && !skipCheckLengthOfIdentifier) {
                     return 'The table name is too long for Oracle, try a shorter name';
-                } else if (input.length > 30 && !skipCheckLengthOfIdentifier) {
+                } if (input.length > 30 && !skipCheckLengthOfIdentifier) {
                     return 'The table name is too long, try a shorter name';
                 }
                 return true;
@@ -448,17 +448,17 @@ function askForField(done) {
             validate: (input) => {
                 if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                     return 'Your field name cannot contain special characters';
-                } else if (input === '') {
+                } if (input === '') {
                     return 'Your field name cannot be empty';
-                } else if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+                } if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your field name cannot start with an upper case letter';
-                } else if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
+                } if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
                     return 'Your field name cannot use an already existing field name';
-                } else if ((clientFramework === undefined || clientFramework === 'angularX') && jhiCore.isReservedFieldName(input, 'angularX')) {
+                } if ((clientFramework === undefined || clientFramework === 'angularX') && jhiCore.isReservedFieldName(input, 'angularX')) {
                     return 'Your field name cannot contain a Java or Angular reserved keyword';
-                } else if ((clientFramework !== undefined || clientFramework === 'react') && jhiCore.isReservedFieldName(input, 'react')) {
+                } if ((clientFramework !== undefined || clientFramework === 'react') && jhiCore.isReservedFieldName(input, 'react')) {
                     return 'Your field name cannot contain a Java or React reserved keyword';
-                } else if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
+                } if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
                     return 'The field name cannot be of more than 30 characters';
                 }
                 return true;
@@ -536,7 +536,7 @@ function askForField(done) {
             validate: (input) => {
                 if (input === '') {
                     return 'Your class name cannot be empty.';
-                } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
+                } if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your enum name cannot contain a Java reserved keyword';
                 }
                 if (!/^[A-Za-z0-9_]*$/.test(input)) {
@@ -752,9 +752,9 @@ function askForField(done) {
             default: 0
         },
         {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('minlength'),
+            when: response => response.fieldAdd === true
+                    && response.fieldValidate === true
+                    && response.fieldValidateRules.includes('minlength'),
             type: 'input',
             name: 'fieldValidateRulesMinlength',
             validate: input => (this.isNumber(input) ? true : 'Minimum length must be a positive number'),
@@ -762,9 +762,9 @@ function askForField(done) {
             default: 0
         },
         {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('maxlength'),
+            when: response => response.fieldAdd === true
+                    && response.fieldValidate === true
+                    && response.fieldValidateRules.includes('maxlength'),
             type: 'input',
             name: 'fieldValidateRulesMaxlength',
             validate: input => (this.isNumber(input) ? true : 'Maximum length must be a positive number'),
@@ -772,9 +772,9 @@ function askForField(done) {
             default: 20
         },
         {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('min'),
+            when: response => response.fieldAdd === true
+                    && response.fieldValidate === true
+                    && response.fieldValidateRules.includes('min'),
             type: 'input',
             name: 'fieldValidateRulesMin',
             message: 'What is the minimum of your field?',
@@ -787,9 +787,9 @@ function askForField(done) {
             default: 0
         },
         {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('max'),
+            when: response => response.fieldAdd === true
+                    && response.fieldValidate === true
+                    && response.fieldValidateRules.includes('max'),
             type: 'input',
             name: 'fieldValidateRulesMax',
             message: 'What is the maximum of your field?',
@@ -802,11 +802,11 @@ function askForField(done) {
             default: 100
         },
         {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('minbytes') &&
-                    response.fieldType === 'byte[]' &&
-                    response.fieldTypeBlobContent !== 'text',
+            when: response => response.fieldAdd === true
+                    && response.fieldValidate === true
+                    && response.fieldValidateRules.includes('minbytes')
+                    && response.fieldType === 'byte[]'
+                    && response.fieldTypeBlobContent !== 'text',
             type: 'input',
             name: 'fieldValidateRulesMinbytes',
             message: 'What is the minimum byte size of your field?',
@@ -814,11 +814,11 @@ function askForField(done) {
             default: 0
         },
         {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('maxbytes') &&
-                    response.fieldType === 'byte[]' &&
-                    response.fieldTypeBlobContent !== 'text',
+            when: response => response.fieldAdd === true
+                    && response.fieldValidate === true
+                    && response.fieldValidateRules.includes('maxbytes')
+                    && response.fieldType === 'byte[]'
+                    && response.fieldTypeBlobContent !== 'text',
             type: 'input',
             name: 'fieldValidateRulesMaxbytes',
             message: 'What is the maximum byte size of your field?',
@@ -826,9 +826,9 @@ function askForField(done) {
             default: 5000000
         },
         {
-            when: response => response.fieldAdd === true &&
-                    response.fieldValidate === true &&
-                    response.fieldValidateRules.includes('pattern'),
+            when: response => response.fieldAdd === true
+                    && response.fieldValidate === true
+                    && response.fieldValidateRules.includes('pattern'),
             type: 'input',
             name: 'fieldValidateRulesPattern',
             message: 'What is the regular expression pattern you want to apply on your field?',
@@ -891,11 +891,11 @@ function askForRelationship(done) {
             validate: (input) => {
                 if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                     return 'Your other entity name cannot contain special characters';
-                } else if (input === '') {
+                } if (input === '') {
                     return 'Your other entity name cannot be empty';
-                } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
+                } if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your other entity name cannot contain a Java reserved keyword';
-                } else if ((input.toLowerCase() === 'user') && (context.applicationType === 'microservice')) {
+                } if ((input.toLowerCase() === 'user') && (context.applicationType === 'microservice')) {
                     return 'Your entity cannot have a relationship with User because it\'s a gateway entity';
                 }
                 return true;
@@ -909,13 +909,13 @@ function askForRelationship(done) {
             validate: (input) => {
                 if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                     return 'Your relationship cannot contain special characters';
-                } else if (input === '') {
+                } if (input === '') {
                     return 'Your relationship cannot be empty';
-                } else if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+                } if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your relationship cannot start with an upper case letter';
-                } else if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
+                } if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
                     return 'Your relationship cannot use an already existing field name';
-                } else if (jhiCore.isReservedKeyword(input, 'JAVA')) {
+                } if (jhiCore.isReservedKeyword(input, 'JAVA')) {
                     return 'Your relationship cannot contain a Java reserved keyword';
                 }
                 return true;
@@ -954,36 +954,36 @@ function askForRelationship(done) {
             default: 0
         },
         {
-            when: response => (response.relationshipAdd === true && response.otherEntityName.toLowerCase() !== 'user' &&
-                (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one')),
+            when: response => (response.relationshipAdd === true && response.otherEntityName.toLowerCase() !== 'user'
+                && (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one')),
             type: 'confirm',
             name: 'ownerSide',
             message: 'Is this entity the owner of the relationship?',
             default: false
         },
         {
-            when: response => (response.relationshipAdd === true && (response.relationshipType === 'one-to-many' ||
-                ((response.relationshipType === 'many-to-many' ||
-                response.relationshipType === 'one-to-one') && response.otherEntityName.toLowerCase() !== 'user'))),
+            when: response => (response.relationshipAdd === true && (response.relationshipType === 'one-to-many'
+                || ((response.relationshipType === 'many-to-many'
+                || response.relationshipType === 'one-to-one') && response.otherEntityName.toLowerCase() !== 'user'))),
             type: 'input',
             name: 'otherEntityRelationshipName',
             message: 'What is the name of this relationship in the other entity?',
             default: response => _.lowerFirst(name)
         },
         {
-            when: response => (response.relationshipAdd === true && (response.relationshipType === 'many-to-one' ||
-                (response.relationshipType === 'many-to-many' && response.ownerSide === true) ||
-                (response.relationshipType === 'one-to-one' && response.ownerSide === true))),
+            when: response => (response.relationshipAdd === true && (response.relationshipType === 'many-to-one'
+                || (response.relationshipType === 'many-to-many' && response.ownerSide === true)
+                || (response.relationshipType === 'one-to-one' && response.ownerSide === true))),
             type: 'input',
             name: 'otherEntityField',
             message: response => `When you display this relationship on client-side, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
             default: 'id'
         },
         {
-            when: response => (response.relationshipAdd === true && response.otherEntityName.toLowerCase() !== context.name.toLowerCase() &&
-                (response.relationshipType === 'many-to-one' ||
-                (response.relationshipType === 'many-to-many' && (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user')) ||
-                (response.relationshipType === 'one-to-one' && (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user')))),
+            when: response => (response.relationshipAdd === true && response.otherEntityName.toLowerCase() !== context.name.toLowerCase()
+                && (response.relationshipType === 'many-to-one'
+                || (response.relationshipType === 'many-to-many' && (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'))
+                || (response.relationshipType === 'one-to-one' && (response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user')))),
             type: 'confirm',
             name: 'relationshipValidate',
             message: 'Do you want to add any validation rules to this relationship?',

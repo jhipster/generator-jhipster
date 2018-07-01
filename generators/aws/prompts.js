@@ -69,7 +69,7 @@ function prompting() {
             message: 'Database password:',
             validate: (input) => {
                 if (input === '') return 'Please provide a password';
-                else if (input.length < 8) return 'Password must contain minimum 8 chars';
+                if (input.length < 8) return 'Password must contain minimum 8 chars';
                 return true;
             }
         },

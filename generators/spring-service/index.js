@@ -58,6 +58,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get initializing() {
         if (useBlueprint) return;
         return this._initializing();
@@ -84,6 +85,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get prompting() {
         if (useBlueprint) return;
         return this._prompting();
@@ -99,6 +101,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get default() {
         if (useBlueprint) return;
         return this._default();
@@ -125,6 +128,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get writing() {
         if (useBlueprint) return;
         return this._writing();

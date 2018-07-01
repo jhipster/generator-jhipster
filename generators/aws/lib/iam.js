@@ -79,9 +79,8 @@ const hasInstanceProfile = () => hasInstanceProfileName(INSTANCE_PROFILE_ROLE);
 const hasInstanceRole = () => hasRole(INSTANCE_PROFILE_ROLE);
 const hasServiceProfileRole = () => hasRole(SERVICE_PROFILE_ROLE);
 
-const createInstanceProfileWithAttachment = () =>
-    createInstanceProfile(INSTANCE_PROFILE_ROLE)
-        .then(() => addRoleToInstanceProfile(INSTANCE_PROFILE_ROLE, INSTANCE_PROFILE_ROLE));
+const createInstanceProfileWithAttachment = () => createInstanceProfile(INSTANCE_PROFILE_ROLE)
+    .then(() => addRoleToInstanceProfile(INSTANCE_PROFILE_ROLE, INSTANCE_PROFILE_ROLE));
 
 const createServiceProfileRoleWithAttachedPolicies = () => {
     const roleName = SERVICE_PROFILE_ROLE;

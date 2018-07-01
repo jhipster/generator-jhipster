@@ -46,6 +46,7 @@ module.exports = class extends BaseGenerator {
     _writing() {
         return writeFiles();
     }
+
     get writing() {
         if (useBlueprint) return;
         return this._writing();
@@ -62,6 +63,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get end() {
         if (useBlueprint) return;
         return this._end();
