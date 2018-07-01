@@ -528,6 +528,54 @@ describe('BusinessErrorChecker', () => {
         });
       });
     });
+    context('when having required relationships from and to the same entity', () => {
+      context('for the source entity', () => {
+        before(() => {
+          const entity = new JDLEntity({
+            name: 'A'
+          });
+          const relationship = new JDLRelationship({
+            from: entity,
+            to: entity,
+            type: RelationshipTypes.ONE_TO_MANY,
+            injectedFieldInFrom: 'a',
+            isInjectedFieldInFromRequired: true
+          });
+          jdlObject.addEntity(entity);
+          jdlObject.addRelationship(relationship);
+          checker = new BusinessErrorChecker(jdlObject);
+        });
+
+        it('fails', () => {
+          expect(() => {
+            checker.checkForRelationshipErrors();
+          }).to.throw('Required relationships to the same entity are not supported, for relationship from \'A\' to \'A\'.');
+        });
+      });
+      context('for the source entity', () => {
+        before(() => {
+          const entity = new JDLEntity({
+            name: 'A'
+          });
+          const relationship = new JDLRelationship({
+            from: entity,
+            to: entity,
+            type: RelationshipTypes.ONE_TO_MANY,
+            injectedFieldInFrom: 'a',
+            isInjectedFieldInToRequired: true
+          });
+          jdlObject.addEntity(entity);
+          jdlObject.addRelationship(relationship);
+          checker = new BusinessErrorChecker(jdlObject);
+        });
+
+        it('fails', () => {
+          expect(() => {
+            checker.checkForRelationshipErrors();
+          }).to.throw('Required relationships to the same entity are not supported, for relationship from \'A\' to \'A\'.');
+        });
+      });
+    });
   });
   describe('#checkForEnumErrors', () => {
     let checker = null;
