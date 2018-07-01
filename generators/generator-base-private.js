@@ -242,7 +242,7 @@ module.exports = class extends Generator {
         try {
             let content = 'groupBy: [\n';
             languages.forEach((language, i) => {
-                content += `                    { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./content/i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
+                content += `                    { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
             });
             content +=
                 '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
