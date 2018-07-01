@@ -190,7 +190,7 @@ module.exports = {
     serverFiles
 };
 
-function writeFiles() {
+function writeFiles(calledByBlueprint) {
     return {
         saveRemoteEntityPath() {
             if (_.isUndefined(this.microservicePath)) {
@@ -206,7 +206,11 @@ function writeFiles() {
             if (this.skipServer) return;
 
             // write server side files
-            this.writeFilesToDisk(serverFiles, this, false);
+            if (calledByBlueprint) {
+                this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates'));
+            } else {
+                this.writeFilesToDisk(serverFiles, this, false);
+            }
 
             if (this.databaseType === 'sql') {
                 if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {

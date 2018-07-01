@@ -1170,7 +1170,7 @@ function writeFiles(calledByBlueprint) {
 
         writeFiles() {
             if (calledByBlueprint) {
-                this.writeFilesToDisk(serverFiles, this, false, this.fetchFromJHipsterInNodeModules('server/templates'));
+                this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('server/templates'));
             } else {
                 this.writeFilesToDisk(serverFiles, this, false);
             }
