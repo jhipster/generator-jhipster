@@ -105,7 +105,7 @@ function askIntegrations() {
             ]
         },
         {
-            when: this.pipeline === 'gitlab' || this.pipeline === 'travis',
+            when: this.pipeline === 'gitlab' || this.pipeline === 'travis',
             type: 'checkbox',
             name: 'cicdIntegrations',
             message: 'What tasks/integrations do you want to include?',
