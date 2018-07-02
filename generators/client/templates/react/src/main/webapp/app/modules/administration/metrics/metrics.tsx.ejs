@@ -33,7 +33,7 @@ export interface IMetricsPageState {
   showModal: boolean;
 }
 
-export class MetricsPage extends React.Component<any, IMetricsPageState> {
+export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPageState> {
   state: IMetricsPageState = {
     showModal: false
   };
