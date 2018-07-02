@@ -33,7 +33,7 @@ const accountMenuItemsAuthenticated = (
   <>
   <%_ if (authenticationType !== 'oauth2') { _%>
     <DropdownItem tag={Link} to="/account/settings"><FontAwesomeIcon icon="wrench" /> <Translate contentKey="global.menu.account.settings" /></DropdownItem>
-    <DropdownItem tag={Link} to="/account/password"><FontAwesomeIcon icon="clock" /> <Translate contentKey="global.menu.admin.password" /></DropdownItem>
+    <DropdownItem tag={Link} to="/account/password"><FontAwesomeIcon icon="clock" /> <Translate contentKey="global.menu.account.password" /></DropdownItem>
   <%_ } _%>
   <%_ if (authenticationType === 'session') { _%>
     <DropdownItem tag={Link} to="/account/sessions"><FontAwesomeIcon icon="cloud" /> <Translate contentKey="global.menu.account.sessions" /></DropdownItem>
