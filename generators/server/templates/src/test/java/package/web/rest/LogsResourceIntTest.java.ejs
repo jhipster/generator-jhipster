@@ -31,19 +31,24 @@ import ch.qos.logback.classic.LoggerContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+<%_ if (reactive) { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (!reactive) { _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+<%_ } _%>
 
 /**
  * Test class for the LogsResource REST controller.
@@ -58,35 +63,57 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } _%>
 public class LogsResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
+    <%_ if (reactive) { _%>
+    private WebTestClient webTestClient;
+    <%_ } else { _%>
     private MockMvc restLogsMockMvc;
+    <%_ } _%>
 
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
-
         LogsResource logsResource = new LogsResource();
+        <%_ if (reactive) { _%>
+        this.webTestClient = WebTestClient
+            .bindToController(logsResource)
+        <%_ } else { _%>
         this.restLogsMockMvc = MockMvcBuilders
             .standaloneSetup(logsResource)
+        <%_ } _%>
             .build();
     }
 
     @Test
-    public void getAllLogs()throws Exception {
+    public void getAllLogs() throws Exception {
+        <%_ if (reactive) { _%>
+        webTestClient.get().uri("/management/logs")
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        <%_ } else { _%>
         restLogsMockMvc.perform(get("/management/logs"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+        <%_ } _%>
     }
 
     @Test
-    public void changeLogs()throws Exception {
+    public void changeLogs() throws Exception {
         LoggerVM logger = new LoggerVM();
         logger.setLevel("INFO");
         logger.setName("ROOT");
 
+        <%_ if (reactive) { _%>
+        webTestClient.put().uri("/management/logs")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .syncBody(TestUtil.convertObjectToJsonBytes(logger))
+            .exchange()
+            .expectStatus().isNoContent();
+        <%_ } else { _%>
         restLogsMockMvc.perform(put("/management/logs")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(logger)))
             .andExpect(status().isNoContent());
+        <%_ } _%>
     }
 
     @Test
