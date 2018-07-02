@@ -34,17 +34,19 @@ import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import { AUTHORITIES } from 'app/config/constants';
 
+// tslint:disable:space-in-parens
 <%_ if (authenticationType !== 'oauth2') { _%>
 const Account = Loadable({
-  loader: () => import('app/modules/account'),
+  loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
   loading: () => <div>loading ...</div>
 });
 <%_ } _%>
 
 const Admin = Loadable({
-  loader: () => import('app/modules/administration'),
+  loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/administration'),
   loading: () => <div>loading ...</div>
 });
+// tslint:enable
 
 const Routes = () => (
   <div className="view-routes">
