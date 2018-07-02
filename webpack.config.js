@@ -10,8 +10,8 @@ module.exports = {
   entry: './lib/dsl/exports.js',
   output: {
     path: path.resolve(__dirname, './dist/'),
-    filename: 'jhipster.min.js',
-    library: 'jdl',
+    filename: 'jdl-core.min.js',
+    library: 'jdlCore',
     libraryTarget: 'umd',
     // https://github.com/webpack/webpack/issues/6784
     globalObject: 'typeof self !== \'undefined\' ? self : this'

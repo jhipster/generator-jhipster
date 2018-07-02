@@ -16,7 +16,7 @@ This is just a simple manual smoke test...
 <script src='../node_modules/lodash/lodash.min.js'></script>
 
 <!-- our bundled JDL DSL apis -->
-<script src='../dist/jhipster.min.js'></script>
+<script src='../dist/jdl-core.min.js'></script>
 
 <!-- test Libraries -->
 <script src="https://unpkg.com/chai@4.1.2/chai.js"></script>
@@ -29,7 +29,7 @@ This is just a simple manual smoke test...
 
 <script>
 
-  const parse = window.jdl.parse;
+  const parse = window.jdlCore.parse;
 
   describe('JDL browser bundle', () => {
     context('when wanting an AST', () => {
