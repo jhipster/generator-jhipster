@@ -19,35 +19,49 @@
 
 const BaseGenerator = require('../generator-base');
 const Statistics = require('../statistics');
+const chalk = require('chalk');
+
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
+
+        // Shows the generator's id
+        this.argument('guid', {
+            type: Boolean,
+            required: false,
+            default: false,
+            description: 'Show the generator ID'
+        });
+
+        this.showGuid = this.options.guid;
         this.stats = new Statistics();
     }
 
     get prompting() {
         return {
             askForLoginAndPassword() {
-                const done = this.async();
+                if (!this.showGuid) {
+                    const done = this.async();
 
-                const prompts = [{
-                    type: 'input',
-                    name: 'login',
-                    message: 'JHipster online login',
-                    default: undefined
-                }, {
-                    type: 'password',
-                    name: 'password',
-                    message: 'JHipster online password',
-                    default: undefined
-                }];
+                    const prompts = [{
+                        type: 'input',
+                        name: 'login',
+                        message: 'JHipster online login',
+                        default: undefined
+                    }, {
+                        type: 'password',
+                        name: 'password',
+                        message: 'JHipster online password',
+                        default: undefined
+                    }];
 
-                this.prompt(prompts).then((props) => {
-                    this.login = props.login;
-                    this.password = props.password;
-                    done();
-                });
+                    this.prompt(prompts).then((props) => {
+                        this.login = props.login;
+                        this.password = props.password;
+                        done();
+                    });
+                }
             }
         };
     }
@@ -55,29 +69,36 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             authenticateAndLink() {
-                authenticateAndLink(
-                    this.stats.axiosClient,
-                    this,
-                    this.login,
-                    this.password,
-                    this.stats.clientId,
-                    this.stats.statisticsAPIPath
-                ).catch((error) => {
-                    if (this.stats.axiosProxyClient && error !== undefined) {
-                        authenticateAndLink(
-                            this.stats.axiosProxyClient,
-                            this,
-                            this.login,
-                            this.password,
-                            this.stats.clientId,
-                            this.stats.statisticsAPIPath
-                        ).catch((error) => {
-                            this.log(`Could not authenticate! (with proxy ${error})`);
-                        });
-                    } else if (error !== undefined) {
-                        this.log(`Could not authenticate! (without proxy ${error})`);
-                    }
-                });
+                if (!this.showGuid) {
+                    authenticateAndLink(
+                        this.stats.axiosClient,
+                        this,
+                        this.login,
+                        this.password,
+                        this.stats.clientId,
+                        this.stats.statisticsAPIPath
+                    ).catch((error) => {
+                        if (this.stats.axiosProxyClient && error !== undefined) {
+                            authenticateAndLink(
+                                this.stats.axiosProxyClient,
+                                this,
+                                this.login,
+                                this.password,
+                                this.stats.clientId,
+                                this.stats.statisticsAPIPath
+                            ).catch((error) => {
+                                this.log(`Could not authenticate! (with proxy ${error})`);
+                            });
+                        } else if (error !== undefined) {
+                            this.log(`Could not authenticate! (without proxy ${error})`);
+                        }
+                    });
+                }
+            },
+            displayGuid() {
+                if (this.showGuid) {
+                    this.log(chalk.bold('You generator ID is : '), chalk.bold.bgGreen(this.stats.clientId));
+                }
             }
         };
     }
