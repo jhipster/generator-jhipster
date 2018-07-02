@@ -212,10 +212,13 @@ public class AccountResource {
     @GetMapping("/activate")
     @Timed
     public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> activateAccount(@RequestParam(value = "key") String key) {
-        <% if (reactive) { %>return <% } %>userService.activateRegistration(key)
         <%_ if (!reactive) { _%>
-            .ifPresent(user -> { throw new InternalServerErrorException("No user was found for this activation key"); });
+        Optional<User> user = userService.activateRegistration(key);
+        if (!user.isPresent()) {
+            throw new InternalServerErrorException("No user was found for this activation key");
+        }
         <%_ } else { _%>
+        return userService.activateRegistration(key)
             .switchIfEmpty(Mono.error(new InternalServerErrorException("No user was found for this activation key")))
             .then();
         <%_ } _%>
@@ -403,10 +406,15 @@ public class AccountResource {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-        <% if (reactive) { %>return <% } %>userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
         <%_ if (!reactive) { _%>
-            .ifPresent(user -> { throw new InternalServerErrorException("No user was found for this reset key"); });
+        Optional<User> user =
+            userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
+
+        if (!user.isPresent()) {
+            throw new InternalServerErrorException("No user was found for this reset key");
+        }
         <%_ } else { _%>
+        return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
             .switchIfEmpty(Mono.error(new InternalServerErrorException("No user was found for this reset key")))
             .then();
         <%_ } _%>
