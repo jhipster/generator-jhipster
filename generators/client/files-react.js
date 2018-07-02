@@ -459,8 +459,7 @@ const files = {
                 'e2e/page-objects/base-component.ts',
                 'e2e/page-objects/navbar-page.ts',
                 'e2e/page-objects/signin-page.ts',
-                'protractor.conf.js',
-                'tsconfig.e2e.json'
+                'protractor.conf.js'
             ]
         },
         {
