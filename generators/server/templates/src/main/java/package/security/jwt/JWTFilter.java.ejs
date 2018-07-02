@@ -50,6 +50,10 @@ import java.io.IOException;
 public class JWTFilter <% if (!reactive) { %>extends GenericFilterBean<% } else { %>implements WebFilter<% } %> {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    <%_ if (websocket === 'spring-websocket') { _%>
+
+    public static final String AUTHORIZATION_TOKEN = "access_token";
+    <%_ } _%>
 
     private TokenProvider tokenProvider;
 

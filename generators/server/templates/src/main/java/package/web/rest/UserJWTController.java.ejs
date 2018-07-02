@@ -30,10 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.<% if (reactive) { %>Reactive<% } %>AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-<%_ if (reactive) { _%>
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContext;
-<%_ } else { _%>
+<%_ if (!reactive) { _%>
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 <%_ } _%>
@@ -44,7 +41,6 @@ import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 <%_ if (reactive) { _%>
-import java.security.Principal;
 import java.util.Optional;
 <%_ } _%>
 
