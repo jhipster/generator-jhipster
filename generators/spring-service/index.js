@@ -111,18 +111,18 @@ module.exports = class extends BaseGenerator {
     _writing() {
         return {
             write() {
-                this.serviceClass = _.upperFirst(this.name);
-                this.serviceInstance = _.lowerCase(this.name);
+                this.serviceClass = _.upperFirst(this.name) + (this.name.endsWith('Service') ? '' : 'Service');
+                this.serviceInstance = _.lowerCase(this.serviceClass);
 
                 this.template(
                     `${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
-                    `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}Service.java`
+                    `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`
                 );
 
                 if (this.useInterface) {
                     this.template(
                         `${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
-                        `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}ServiceImpl.java`
+                        `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`
                     );
                 }
             }
