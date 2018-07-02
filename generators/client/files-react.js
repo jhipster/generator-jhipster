@@ -45,7 +45,13 @@ const files = {
                 'webpack/webpack.prod.js',
                 'webpack/utils.js'
             ]
-        }
+        },
+        {
+            condition: generator => generator.protractorTests,
+            templates: [
+                'tsconfig.e2e.json'
+            ]
+        },
     ],
     sass: [
         {
@@ -376,8 +382,8 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
-                'enzyme-setup.ts',
-                'storage-mock.ts',
+                'spec/enzyme-setup.ts',
+                'spec/storage-mock.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/axios-interceptor.spec.ts',
                 'spec/app/config/notification-middleware.spec.ts',
