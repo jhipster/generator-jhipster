@@ -97,7 +97,7 @@ module.exports = class extends BaseGenerator {
             },
             displayGuid() {
                 if (this.showGuid) {
-                    this.log(chalk.bold('You generator ID is : '), chalk.bold.bgGreen(this.stats.clientId));
+                    this.log('You generator ID is :', chalk.bold(this.stats.clientId));
                 }
             }
         };
