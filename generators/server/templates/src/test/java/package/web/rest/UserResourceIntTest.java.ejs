@@ -23,7 +23,7 @@ import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (reactive) { _%>
-import com.mycompany.myapp.config.ReactivePageableHandlerMethodArgumentResolver;
+import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
 <%_ } _%>
 <%_ if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
 import <%= packageName %>.domain.Authority;
