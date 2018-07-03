@@ -165,6 +165,61 @@ describe('BusinessErrorChecker', () => {
         }).to.throw('Skipping user management in a UAA app is forbidden.');
       });
     });
+    context('when having no database type', () => {
+      context('for a microservice without oauth2', () => {
+        before(() => {
+          jdlObject.addApplication(new JDLApplication({
+            config: {
+              applicationType: ApplicationTypes.MICROSERVICE,
+              authenticationType: 'jwt',
+              databaseType: DatabaseTypes.NO
+            }
+          }));
+          checker = new BusinessErrorChecker(jdlObject);
+
+          it('does not fail', () => {
+            expect(() => {
+              checker.checkForApplicationErrors();
+            }).not.to.throw();
+          });
+        });
+      });
+      context('for a gateway with uaa', () => {
+        before(() => {
+          jdlObject.addApplication(new JDLApplication({
+            config: {
+              applicationType: ApplicationTypes.GATEWAY,
+              authenticationType: 'uaa',
+              databaseType: DatabaseTypes.NO
+            }
+          }));
+          checker = new BusinessErrorChecker(jdlObject);
+        });
+        it('does not fail', () => {
+          expect(() => {
+            checker.checkForApplicationErrors();
+          }).not.to.throw();
+        });
+      });
+      context('for any other case', () => {
+        before(() => {
+          jdlObject.addApplication(new JDLApplication({
+            config: {
+              applicationType: ApplicationTypes.MONOLITH,
+              authenticationType: 'jwt',
+              databaseType: DatabaseTypes.NO
+            }
+          }));
+          checker = new BusinessErrorChecker(jdlObject);
+        });
+        it('fails', () => {
+          expect(() => {
+            checker.checkForApplicationErrors();
+          }).to.throw('Having no database type is only allowed for microservices without oauth2 authentication '
+            + 'type and gateways with UAA authentication type.');
+        });
+      });
+    });
   });
   describe('#checkForEntityErrors', () => {
     let checker = null;
