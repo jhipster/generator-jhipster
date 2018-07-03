@@ -146,6 +146,10 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ } _%>
 
     <% if (reactive) { %>Flux<% } else { %>Page<% } %><User> findAllByLoginNot(Pageable pageable, String login);
+    <%_ if (reactive) { _%>
+
+    Mono<Long> countAllByLoginNot(String anonymousUser);
+    <%_ } _%>
 }
 <%_ } else if (databaseType === 'cassandra') { _%>
 @Repository

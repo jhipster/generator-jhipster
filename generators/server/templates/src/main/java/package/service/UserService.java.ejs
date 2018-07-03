@@ -520,6 +520,12 @@ public class UserService {
             .collect(Collectors.toList());
     }<% } %>
 
+    <%_ if (reactive) { _%>
+    public Mono<Long> countManagedUsers() {
+        return userRepository.countAllByLoginNot(Constants.ANONYMOUS_USER);
+    }
+
+    <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>

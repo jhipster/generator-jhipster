@@ -51,12 +51,15 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
-    <%_ if (reactive) { _%>
+    <%_ } else { _%>
 import org.springframework.data.domain.PageImpl;
     <%_ } _%>
 import org.springframework.data.domain.Pageable;
+    <%_ if (!reactive) { _%>
 import org.springframework.http.HttpHeaders;
+    <%_ } _%>
 <%_ } _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,6 +82,7 @@ import java.util.*;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import java.util.ArrayList;
+import java.util.List;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import java.util.stream.Collectors;
@@ -278,13 +282,10 @@ public class UserResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         <%_ } else { _%>
     public Mono<ResponseEntity<Flux<UserDTO>>> getAllUsers(Pageable pageable) {
-        Flux<UserDTO> users = userService.getAllManagedUsers(pageable);
-        return userRepository.count()
-            .map(total -> {
-                Page<Object> page = new PageImpl<>(new ArrayList<>(), pageable, total);
-                HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-                return new ResponseEntity<>(users, headers, HttpStatus.OK);
-            });
+        return userService.countManagedUsers()
+            .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
+            .map(page -> PaginationUtil.generatePaginationHttpHeaders(page, "/api/users"))
+            .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
         <%_ } _%>
     }
 
@@ -294,8 +295,8 @@ public class UserResource {
     @GetMapping("/users/authorities")
     @Timed
     @PreAuthorize("hasRole(" + AuthoritiesConstants.ADMIN + ")")
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><String> getAuthorities() {
-        return userService.getAuthorities();
+    public <% if (reactive) { %>Mono<List<String>><% } else { %>List<String><% } %> getAuthorities() {
+        return userService.getAuthorities()<% if (reactive) { %>.collectList()<% } %>;
     }
     <%_ } else { // Cassandra _%>
     public ResponseEntity<List<UserDTO>> getAllUsers() {
