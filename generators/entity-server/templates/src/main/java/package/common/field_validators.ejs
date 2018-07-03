@@ -27,9 +27,6 @@ if (field.fieldValidate === true) {
     const MAX_VALUE = 2147483647;
     const isBlob = field.fieldType === 'byte[]';
 
-    fieldTypeBlobContent
-
-
     if (rules.includes('required') && !isBlob) {
         validators.push('@NotNull');
     }
