@@ -100,7 +100,7 @@ function writeFiles() {
         },
 
         writeConfigRunFile() {
-            this.template('_kubectl-apply.sh.ejs', 'kubectl-apply.sh');
+            this.template('kubectl-apply.sh.ejs', 'kubectl-apply.sh');
         }
     };
 }

@@ -32,7 +32,7 @@ const ENV = 'development';
 
 module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
-  mode: 'development',
+  mode: ENV,
   entry: [
     'react-hot-loader/patch',
     './src/main/webapp/app/index'
@@ -44,14 +44,17 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   },
   module: {
     rules: [
+      <%_ if (useSass) { _%>
       {
-        test: /\.scss$/,
+        test: /\.(sa|sc|c)ss$/,
         loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
       },
+      <%_ } else { _%>
       {
         test: /\.css$/,
         loaders: ['style-loader', 'css-loader']
       }
+      <%_ } _%>
     ]
   },
   devServer: {

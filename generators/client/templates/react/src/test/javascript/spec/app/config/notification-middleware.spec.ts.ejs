@@ -19,8 +19,8 @@
 
 import { createStore, applyMiddleware } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
-import * as toastify from 'react-toastify';
-import * as sinon from 'sinon';
+import * as toastify from 'react-toastify'; // synthetic default import doesn't work here due to mocking.
+import sinon from 'sinon';
 
 import notificationMiddleware from 'app/config/notification-middleware';
 
