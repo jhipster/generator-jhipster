@@ -1,0 +1,32 @@
+{
+  "generator-jhipster": {
+    "applicationType": "reactive",
+    "baseName": "travisWebflux",
+    "packageName": "io.github.jhipster.travis",
+    "packageFolder": "io/github/jhipster/travis",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": false,
+    "websocket": false,
+    "databaseType": "mongodb",
+    "devDatabaseType": "mongodb",
+    "prodDatabaseType": "mongodb",
+    "searchEngine": false,
+    "useSass": false,
+    "buildTool": "maven",
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": [
+      "en",
+      "fr"
+    ],
+    "testFrameworks": [
+      "gatling"
+    ],
+    "serverPort": "8080",
+    "jhiPrefix": "jhi",
+    "travis": true,
+    "clientPackageManager": "yarn",
+    "skipClient": true
+  }
+}
