@@ -2309,10 +2309,8 @@ module.exports = class extends PrivateBase {
                         if (templateObj && templateObj.renameTo) {
                             templatePathTo = path + templateObj.renameTo(_this);
                         } else {
-                            // remove`_` prefixed to file names if any
-                            templatePathTo = templatePath.replace(/([/])_|^_/, '$1');
                             // remove the .ejs suffix
-                            templatePathTo = templatePathTo.replace('.ejs', '');
+                            templatePathTo = templatePath.replace('.ejs', '');
                         }
                         filesOut.push(templatePathTo);
                         if (!returnFiles) {
