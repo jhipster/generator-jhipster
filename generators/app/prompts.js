@@ -51,32 +51,38 @@ function askForApplicationType(meta) {
     if (!meta && this.existingProject) return;
 
     const DEFAULT_APPTYPE = 'monolith';
+
+    const applicationTypeChoices = [
+        {
+            value: DEFAULT_APPTYPE,
+            name: 'Monolithic application (recommended for simple projects)'
+        },
+        {
+            value: 'microservice',
+            name: 'Microservice application'
+        },
+        {
+            value: 'gateway',
+            name: 'Microservice gateway'
+        },
+        {
+            value: 'uaa',
+            name: 'JHipster UAA server (for microservice OAuth2 authentication)'
+        }
+    ];
+
+    if (this.experimental) {
+        applicationTypeChoices.push({
+            value: 'reactive',
+            name: '[Alpha] Reactive monolithic application'
+        });
+    }
+
     const PROMPT = {
         type: 'list',
         name: 'applicationType',
         message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
-        choices: [
-            {
-                value: DEFAULT_APPTYPE,
-                name: 'Monolithic application (recommended for simple projects)'
-            },
-            {
-                value: 'microservice',
-                name: 'Microservice application'
-            },
-            {
-                value: 'gateway',
-                name: 'Microservice gateway'
-            },
-            {
-                value: 'reactive',
-                name: '[Alpha] Reactive monolithic application'
-            },
-            {
-                value: 'uaa',
-                name: 'JHipster UAA server (for microservice OAuth2 authentication)'
-            }
-        ],
+        choices: applicationTypeChoices,
         default: DEFAULT_APPTYPE
     };
 
