@@ -606,8 +606,13 @@ public class UserService {
             user.setLangKey((String) details.get("langKey"));
         } else if (details.get("locale") != null) {
             String locale = (String) details.get("locale");
-            String langKey = locale.substring(0, locale.indexOf("-"));
-            user.setLangKey(langKey);
+            if (locale.contains("-")) {
+              String langKey = locale.substring(0, locale.indexOf("-"));
+              user.setLangKey(langKey);
+            } else if (locale.contains("_")) {
+              String langKey = locale.substring(0, locale.indexOf("_"));
+              user.setLangKey(langKey);
+            }
         }
         if (details.get("picture") != null) {
             user.setImageUrl((String) details.get("picture"));
