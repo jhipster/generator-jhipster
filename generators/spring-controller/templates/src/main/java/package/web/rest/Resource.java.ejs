@@ -39,9 +39,9 @@ import reactor.core.publisher.Mono;
  */
 @RestController
 @RequestMapping("/api/<%= apiPrefix %>")
-public class <%= controllerClass %>Resource {
+public class <%= controllerClass %> {
 
-    private final Logger log = LoggerFactory.getLogger(<%= controllerClass %>Resource.class);
+    private final Logger log = LoggerFactory.getLogger(<%= controllerClass %>.class);
 
     <%_ for(let idx in controllerActions) { _%>
     /**

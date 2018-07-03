@@ -106,8 +106,8 @@ module.exports = class extends BaseGenerator {
     _writing() {
         return {
             writing() {
-                this.controllerClass = _.upperFirst(this.name);
-                this.controllerInstance = _.lowerFirst(this.name);
+                this.controllerClass = _.upperFirst(this.name) + (this.name.endsWith('Resource') ? '' : 'Resource');
+                this.controllerInstance = _.lowerFirst(this.controllerClass);
                 this.apiPrefix = _.kebabCase(this.name);
 
                 if (this.controllerActions.length === 0) {
@@ -138,12 +138,12 @@ module.exports = class extends BaseGenerator {
 
                 this.template(
                     `${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
-                    `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}Resource.java`
+                    `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}.java`
                 );
 
                 this.template(
                     `${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIntTest.java.ejs`,
-                    `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}ResourceIntTest.java`
+                    `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IntTest.java`
                 );
             }
         };
