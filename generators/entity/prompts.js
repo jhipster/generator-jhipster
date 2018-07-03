@@ -736,7 +736,7 @@ function askForField(done) {
                         }
                     );
                 }
-                // Not supported anymore
+                // Not supported anymore because the server can't check the size of the blob before downloading it completely.
                 //  else if (response.fieldType === 'byte[]' && response.fieldTypeBlobContent !== 'text') {
                 //     opts.push(
                 //         {
