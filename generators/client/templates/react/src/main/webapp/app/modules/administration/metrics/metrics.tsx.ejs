@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Table, Progress, Col, Row, Button } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_WHOLE_NUMBER_FORMAT, APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT } from 'app/config/constants';
 import { systemMetrics, systemThreadDump } from '../administration.reducer';
@@ -33,7 +33,7 @@ export interface IMetricsPageState {
   showModal: boolean;
 }
 
-export class MetricsPage extends React.Component<any, IMetricsPageState> {
+export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPageState> {
   state: IMetricsPageState = {
     showModal: false
   };
@@ -190,7 +190,8 @@ export class MetricsPage extends React.Component<any, IMetricsPageState> {
             </Progress>
           </Col>
           <Col md="4">
-            <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value}) <FontAwesomeIcon icon="eye" className="hand" onClick={this.getThreadDump} />
+            <b>Threads</b> (Total: {metrics.gauges['jvm.threads.count'].value}){' '}
+            <Button color="link" className="hand" onClick={this.getThreadDump}><FontAwesomeIcon icon="eye" /></Button>
             <p><span>Runnable</span> {metrics.gauges['jvm.threads.runnable.count'].value}</p>
             <Progress animated min="0" value={metrics.gauges['jvm.threads.runnable.count'].value} max={metrics.gauges['jvm.threads.count'].value} color="success">
               <span>

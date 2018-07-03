@@ -21,7 +21,7 @@
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 <%_ if (pagination === 'infinite-scroll') { _%>
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 <%_ } _%>
 import axios from 'axios';
 import {

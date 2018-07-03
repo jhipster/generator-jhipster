@@ -37,6 +37,7 @@ const files = {
                 'package.json',
                 'tslint.json',
                 'tsconfig.json',
+                'tsconfig.test.json',
                 { file: '.editorconfig', method: 'copy', noEjs: true },
                 'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
@@ -44,7 +45,13 @@ const files = {
                 'webpack/webpack.prod.js',
                 'webpack/utils.js'
             ]
-        }
+        },
+        {
+            condition: generator => generator.protractorTests,
+            templates: [
+                'tsconfig.e2e.json'
+            ]
+        },
     ],
     sass: [
         {
@@ -375,8 +382,8 @@ const files = {
             path: TEST_SRC_DIR,
             templates: [
                 'jest.conf.js',
-                'enzyme-setup.ts',
-                'storage-mock.ts',
+                'spec/enzyme-setup.ts',
+                'spec/storage-mock.ts',
                 'spec/app/utils.ts',
                 'spec/app/config/axios-interceptor.spec.ts',
                 'spec/app/config/notification-middleware.spec.ts',
@@ -452,8 +459,7 @@ const files = {
                 'e2e/page-objects/base-component.ts',
                 'e2e/page-objects/navbar-page.ts',
                 'e2e/page-objects/signin-page.ts',
-                'protractor.conf.js',
-                'tsconfig.e2e.json'
+                'protractor.conf.js'
             ]
         },
         {

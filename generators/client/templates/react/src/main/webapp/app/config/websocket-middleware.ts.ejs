@@ -15,9 +15,10 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%>import * as SockJS from 'sockjs-client';
+-%>
+import SockJS from 'sockjs-client';
 
-import * as Stomp from 'webstomp-client';
+import Stomp from 'webstomp-client';
 import { Observable } from 'rxjs'; // tslint:disable-line
 import { Observer } from 'rxjs/Observer'; // tslint:disable-line
 import { Storage } from 'react-jhipster';
@@ -70,7 +71,7 @@ const connect = () => {
   }
   connection = createConnection();
   listener = createListener();
-  
+
   // building absolute path so that websocket doesn't fail when deploying with a context path
   const loc = window.location;
 
@@ -87,7 +88,7 @@ const connect = () => {
 <%_ } _%>
   const socket = new SockJS(url);
   stompClient = Stomp.over(socket);
-  
+
   stompClient.connect(headers, () => {
     connectedPromise('success');
     connectedPromise = null;
