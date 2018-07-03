@@ -161,6 +161,9 @@ module.exports = class extends BaseGenerator {
                     this.serverPort = '8080';
                 }
                 this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
+                if (this.websocket === undefined) {
+                    this.websocket = false;
+                }
                 this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
                 if (this.searchEngine === undefined) {
                     this.searchEngine = false;
