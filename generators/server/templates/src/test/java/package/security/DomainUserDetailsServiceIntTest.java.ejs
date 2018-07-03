@@ -23,7 +23,7 @@ import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.domain.User;
-import <%= packageName %>.repository.UserRepository;
+import <%= packageName %>.repository.<% if (reactive) { %>reactive.<% } %>UserRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
@@ -31,8 +31,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (reactive) { _%>
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+<%_ } _%>
 import org.springframework.security.core.userdetails.UserDetails;
+<%_ if (!reactive) { _%>
 import org.springframework.security.core.userdetails.UserDetailsService;
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 <%_ } _%>
@@ -77,7 +82,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
     private UserRepository userRepository;
 
     @Autowired
-    private UserDetailsService domainUserDetailsService;
+    private <% if (reactive) { %>Reactive<% } %>UserDetailsService domainUserDetailsService;
 
     private User userOne;
     private User userTwo;
@@ -86,7 +91,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
     @Before
     public void init() {
         <%_ if (databaseType !== 'sql') { _%>
-        userRepository.deleteAll();
+        userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
 
         <%_ } _%>
         userOne = new User();
@@ -100,7 +105,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
         userOne.setFirstName("userOne");
         userOne.setLastName("doe");
         userOne.setLangKey("en");
-        userRepository.save(userOne);
+        userRepository.save(userOne)<% if (reactive) { %>.block()<% } %>;
 
         userTwo = new User();
         <%_ if (databaseType === 'cassandra') { _%>
@@ -113,7 +118,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
         userTwo.setFirstName("userTwo");
         userTwo.setLastName("doe");
         userTwo.setLangKey("en");
-        userRepository.save(userTwo);
+        userRepository.save(userTwo)<% if (reactive) { %>.block()<% } %>;
 
         userThree = new User();
         <%_ if (databaseType === 'cassandra') { _%>
@@ -126,7 +131,7 @@ public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra'
         userThree.setFirstName("userThree");
         userThree.setLastName("doe");
         userThree.setLangKey("en");
-        userRepository.save(userThree);
+        userRepository.save(userThree)<% if (reactive) { %>.block()<% } %>;
     }
 
     @Test
