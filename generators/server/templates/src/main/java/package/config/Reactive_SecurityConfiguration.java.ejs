@@ -16,11 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config;
+package <%= packageName %>.config;
 
-import com.mycompany.myapp.security.AuthoritiesConstants;
-import com.mycompany.myapp.security.jwt.JWTFilter;
-import com.mycompany.myapp.security.jwt.TokenProvider;
+import <%= packageName %>.security.AuthoritiesConstants;
+import <%= packageName %>.security.jwt.JWTFilter;
+import <%= packageName %>.security.jwt.TokenProvider;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
