@@ -274,6 +274,10 @@ public class UserResource {
      */
     @GetMapping("/users")
     @Timed
+<<<<<<< HEAD
+=======
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
+>>>>>>> acf8794f7... Replace Secured by PreAuthorize
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
