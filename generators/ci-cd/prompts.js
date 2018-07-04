@@ -85,7 +85,7 @@ function askIntegrations() {
             default: false
         },
         {
-            when: this.pipeline === 'gitlab',
+            when: this.pipeline === 'jenkins',
             type: 'confirm',
             name: 'sendBuildToGitlab',
             message: 'Would you like to send build status to GitLab ?',
@@ -105,13 +105,24 @@ function askIntegrations() {
             ]
         },
         {
-            when: this.pipeline === 'gitlab' || this.pipeline === 'travis',
+            when: this.pipeline === 'gitlab',
             type: 'checkbox',
             name: 'cicdIntegrations',
             message: 'What tasks/integrations do you want to include?',
             default: [],
             choices: [
                 { name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' },
+                { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
+                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service) ?`, value: 'heroku' }
+            ]
+        },
+        {
+            when: this.pipeline === 'travis',
+            type: 'checkbox',
+            name: 'cicdIntegrations',
+            message: 'What tasks/integrations do you want to include?',
+            default: [],
+            choices: [
                 { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
                 { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service) ?`, value: 'heroku' }
             ]
@@ -156,7 +167,14 @@ function askIntegrations() {
             type: 'input',
             name: 'sonarUrl',
             message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server?`,
-            default: 'Sonar'
+            default: 'https://sonarcloud.io'
+        },
+        {
+            when: response => this.pipeline !== 'jenkins' && response.cicdIntegrations.includes('sonar'),
+            type: 'input',
+            name: 'sonarOrga',
+            message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server?`,
+            default: ''
         },
         {
             when: response => response.cicdIntegrations.includes('publishDocker'),
@@ -190,6 +208,7 @@ function askIntegrations() {
 
         this.sonarName = props.sonarName;
         this.sonarUrl = props.sonarUrl;
+        this.sonarOrga = props.sonarOrga;
 
         this.publishDocker = props.publishDocker;
         this.dockerRegistryURL = props.dockerRegistryURL;

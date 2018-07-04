@@ -142,16 +142,13 @@ maven-package:
     stage: package
     script:
         - ./mvnw verify <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+        <%_ if (cicdIntegrations.includes('sonar')) { _%>
+        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
+        <%_ } _%>    
     artifacts:
         paths:
             - target/*.war
         # expire_in: 90 day
-    <%_ if (cicdIntegrations.includes('sonar')) { _%>
-maven-sonar
-    stage: deploy
-    script:
-        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
-    <%_ } _%>
     <%_ if (cicdIntegrations.includes('heroku')) { _%>
 maven-heroku:
     stage: deploy
