@@ -1,0 +1,41 @@
+const _ = require('lodash');
+const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const { tokens } = require('./lib/dsl/lexer');
+
+const allTokenTypeNames = _.mapValues(tokens, tokenType => tokenType.name);
+
+module.exports = {
+  mode: 'production',
+  entry: './lib/dsl/exports.js',
+  output: {
+    path: path.resolve(__dirname, './dist/'),
+    filename: 'jdl-core.min.js',
+    library: 'jdlCore',
+    libraryTarget: 'umd',
+    // https://github.com/webpack/webpack/issues/6784
+    globalObject: 'typeof self !== \'undefined\' ? self : this'
+  },
+  externals: {
+    // https://webpack.js.org/guides/author-libraries/#externalize-lodash
+    lodash: {
+      commonjs: 'lodash',
+      commonjs2: 'lodash',
+      amd: 'lodash',
+      root: '_'
+    }
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          mangle: {
+            // Avoid mangling TokenType names, this can break Chevrotain initialization phase
+            // due to reliance on Function.protoType.toString.
+            reserved: allTokenTypeNames
+          }
+        }
+      })
+    ]
+  }
+};
