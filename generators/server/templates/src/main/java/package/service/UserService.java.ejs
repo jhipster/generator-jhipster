@@ -169,7 +169,7 @@ public class UserService {
                 return user;
             });
             <%_ } else { _%>
-                return userRepository.save(user);
+                return updateUser(user);
             })
                 <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
@@ -196,7 +196,7 @@ public class UserService {
                 return user;
             });
             <%_ } else { _%>
-                return userRepository.save(user);
+                return updateUser(user);
             })<% if (cacheManagerIsAvailable === true) { %>
             .doOnNext(this::clearUserCaches)<% } %>;
             <%_ } _%>
@@ -218,7 +218,7 @@ public class UserService {
                 return user;
             });
             <%_ } else { _%>
-                return userRepository.save(user);
+                return updateUser(user);
             })<% if (cacheManagerIsAvailable === true) { %>
             .doOnNext(this::clearUserCaches)<% } %>;
             <%_ } _%>
@@ -266,7 +266,7 @@ public class UserService {
             .map(authorities::add)
             .thenReturn(newUser)
             .doOnNext(user -> user.setAuthorities(authorities))
-            .flatMap(userRepository::save)
+            .flatMap(this::createUser)
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
             <%_ } _%>
@@ -319,8 +319,7 @@ public class UserService {
         return Flux.fromIterable(Optional.ofNullable(userDTO.getAuthorities()).orElse(new HashSet<>()))
             .flatMap(authorityRepository::findById)
             .doOnNext(authority -> user.getAuthorities().add(authority))
-            .then(Mono.just(user))
-            .flatMap(userRepository::save)
+            .then(createUser(user))
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
             <%_ } _%>
@@ -341,7 +340,7 @@ public class UserService {
      <%_ } _%>
      */
     public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, String imageUrl<% } %>) {
-        <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin<% if (reactive) { %>Reactively<% } %>()
+        <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
                 user.setFirstName(firstName);
@@ -364,7 +363,7 @@ public class UserService {
                 log.debug("Changed Information for User: {}", user);
             });
             <%_ } else { _%>
-                return userRepository.save(user);
+                return updateUser(user);
             })
                 <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
@@ -440,7 +439,7 @@ public class UserService {
                     .map(managedAuthorities::add)
                     .then(Mono.just(user));
             })
-            .flatMap(userRepository::save)
+            .flatMap(this::updateUser)
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
             <%_ } _%>
@@ -463,6 +462,25 @@ public class UserService {
         });
     }
     <%_ } else { _%>
+    private Mono<User> updateUser(User user) {
+        return SecurityUtils.getCurrentUserLogin()
+            .switchIfEmpty(Mono.just(Constants.SYSTEM_ACCOUNT))
+            .flatMap(login -> {
+                user.setLastModifiedBy(login);
+                return userRepository.save(user);
+            });
+    }
+
+    private Mono<User> createUser(User user) {
+        return SecurityUtils.getCurrentUserLogin()
+            .switchIfEmpty(Mono.just(Constants.SYSTEM_ACCOUNT))
+            .flatMap(login -> {
+                user.setCreatedBy(login);
+                user.setLastModifiedBy(login);
+                return userRepository.save(user);
+            });
+    }
+
     public Mono<Void> deleteUser(String login) {
         return userRepository.findOneByLogin(login)
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
@@ -476,7 +494,7 @@ public class UserService {
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> changePassword(String currentClearTextPassword, String newPassword) {
-        <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin<% if (reactive) { %>Reactively<% } %>()
+        <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
                 String currentEncryptedPassword = user.getPassword();
@@ -495,7 +513,7 @@ public class UserService {
                 log.debug("Changed password for User: {}", user);
             });
             <%_ } else { _%>
-                return userRepository.save(user);
+                return updateUser(user);
             })
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
@@ -552,7 +570,7 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin<% if (reactive) { %>Reactively<% } %>().flatMap(userRepository::findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin);
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin);
     }
     <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 

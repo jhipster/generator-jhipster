@@ -40,8 +40,6 @@ import org.springframework.security.web.server.authentication.AuthenticationWebF
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-// TODO: check that @Secured and @PreAuthorize is handled by @EnableReactiveMethodSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration {
 
     private final ReactiveUserDetailsService userDetailsService;

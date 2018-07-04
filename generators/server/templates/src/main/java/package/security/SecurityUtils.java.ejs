@@ -22,13 +22,17 @@ package <%=packageName%>.security;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.core.context.SecurityContext;
+<%_ if (!reactive) { _%>
 import org.springframework.security.core.context.SecurityContextHolder;
+<%_ } _%>
 import org.springframework.security.core.userdetails.UserDetails;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
+<%_ if (!reactive) { _%>
 
 import java.util.Optional;
+<%_ } _%>
 
 /**
  * Utility class for Spring Security.
@@ -43,9 +47,14 @@ public final class SecurityUtils {
      *
      * @return the login of the current user
      */
-    public static Optional<String> getCurrentUserLogin() {
+    public static <% if (!reactive) { %>Optional<% } else { %>Mono<% } %><String> getCurrentUserLogin() {
+        <%_ if (!reactive) { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
+        <%_ } else { _%>
+        return ReactiveSecurityContextHolder.getContext()
+            .map(SecurityContext::getAuthentication)
+        <%_ } _%>
             .map(authentication -> {
                 if (authentication.getPrincipal() instanceof UserDetails) {
                     UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
@@ -56,21 +65,6 @@ public final class SecurityUtils {
                 return null;
             });
     }
-    <%_ if (reactive) { _%>
-
-    public static Mono<String> getCurrentUserLoginReactively() {
-        return ReactiveSecurityContextHolder.getContext()
-            .map(SecurityContext::getAuthentication).map(authentication -> {
-                if (authentication.getPrincipal() instanceof UserDetails) {
-                    UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-                    return springSecurityUser.getUsername();
-                } else if (authentication.getPrincipal() instanceof String) {
-                    return (String) authentication.getPrincipal();
-                }
-                return null;
-            });
-    }
-    <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
 
     /**
@@ -78,9 +72,14 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user
      */
-    public static Optional<String> getCurrentUserJWT() {
+    public static <% if (!reactive) { %>Optional<% } else { %>Mono<% } %><String> getCurrentUserJWT() {
+        <%_ if (!reactive) { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
+        <%_ } else { _%>
+        return ReactiveSecurityContextHolder.getContext()
+            .map(SecurityContext::getAuthentication)
+        <%_ } _%>
             .filter(authentication -> authentication.getCredentials() instanceof String)
             .map(authentication -> (String) authentication.getCredentials());
     }
@@ -91,12 +90,17 @@ public final class SecurityUtils {
      *
      * @return true if the user is authenticated, false otherwise
      */
-    public static boolean isAuthenticated() {
+    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> isAuthenticated() {
+        <%_ if (!reactive) { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
+        <%_ } else { _%>
+        return ReactiveSecurityContextHolder.getContext()
+            .map(SecurityContext::getAuthentication)
+        <%_ } _%>
             .map(authentication -> authentication.getAuthorities().stream()
-                .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS)))
-            .orElse(false);
+                .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS)))<% if (!reactive) { %>
+            .orElse(false)<% } %>;
     }
 
     /**
@@ -107,11 +111,16 @@ public final class SecurityUtils {
      * @param authority the authority to check
      * @return true if the current user has the authority, false otherwise
      */
-    public static boolean isCurrentUserInRole(String authority) {
+    public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> isCurrentUserInRole(String authority) {
+        <%_ if (!reactive) { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
+        <%_ } else { _%>
+        return ReactiveSecurityContextHolder.getContext()
+            .map(SecurityContext::getAuthentication)
+        <%_ } _%>
             .map(authentication -> authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority)))
-            .orElse(false);
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority)))<% if (!reactive) { %>
+            .orElse(false)<% } %>;
     }
 }

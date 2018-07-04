@@ -162,7 +162,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @Timed
-    @PreAuthorize("hasRole(" + AuthoritiesConstants.ADMIN + ")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public <% if (reactive) { %>Mono<ResponseEntity<User>><% } else { %>ResponseEntity<User><% } %> createUser(@Valid @RequestBody UserDTO userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
         log.debug("REST request to save User : {}", userDTO);
 
@@ -221,7 +221,7 @@ public class UserResource {
      */
     @PutMapping("/users")
     @Timed
-    @PreAuthorize("hasRole(" + AuthoritiesConstants.ADMIN + ")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
         log.debug("REST request to update User : {}", userDTO);
@@ -294,7 +294,7 @@ public class UserResource {
      */
     @GetMapping("/users/authorities")
     @Timed
-    @PreAuthorize("hasRole(" + AuthoritiesConstants.ADMIN + ")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public <% if (reactive) { %>Mono<List<String>><% } else { %>List<String><% } %> getAuthorities() {
         return userService.getAuthorities()<% if (reactive) { %>.collectList()<% } %>;
     }
@@ -337,7 +337,7 @@ public class UserResource {
      */
     @DeleteMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     @Timed
-    @PreAuthorize("hasRole(" + AuthoritiesConstants.ADMIN + ")")
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);

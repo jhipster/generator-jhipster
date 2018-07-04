@@ -37,8 +37,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 <%_ if (reactive) { _%>
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
-<%_ } _%>
+<%_ } else { _%>
 import org.springframework.security.core.context.SecurityContextHolder;
+<%_ } _%>
 import org.springframework.test.util.ReflectionTestUtils;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
@@ -61,11 +62,13 @@ public class JWTFilterTest {
         ReflectionTestUtils.setField(tokenProvider, "secretKey", "test secret");
         ReflectionTestUtils.setField(tokenProvider, "tokenValidityInMilliseconds", 60000);
         jwtFilter = new JWTFilter(tokenProvider);
+        <%_ if (!reactive) { _%>
         SecurityContextHolder.getContext().setAuthentication(null);
+        <%_ } _%>
     }
 
     @Test
-    public void testJWTFilter() throws Exception {
+    public void testJWTFilter()<% if (!reactive) { %> throws Exception<% } %> {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             "test-user",
             "test-password",
@@ -80,6 +83,8 @@ public class JWTFilterTest {
         MockFilterChain filterChain = new MockFilterChain();
         jwtFilter.doFilter(request, response, filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(SecurityContextHolder.getContext().getAuthentication().getName()).isEqualTo("test-user");
+        assertThat(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString()).isEqualTo(jwt);
         <%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test")
@@ -95,12 +100,10 @@ public class JWTFilterTest {
                 .then()
         ).block();
         <%_ } _%>
-        assertThat(SecurityContextHolder.getContext().getAuthentication().getName()).isEqualTo("test-user");
-        assertThat(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString()).isEqualTo(jwt);
     }
 
     @Test
-    public void testJWTFilterInvalidToken() throws Exception {
+    public void testJWTFilterInvalidToken()<% if (!reactive) { %> throws Exception<% } %> {
         String jwt = "wrong_jwt";
         <%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -110,6 +113,7 @@ public class JWTFilterTest {
         MockFilterChain filterChain = new MockFilterChain();
         jwtFilter.doFilter(request, response, filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
         <%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test")
@@ -124,11 +128,10 @@ public class JWTFilterTest {
                 .then()
         ).block();
         <%_ } _%>
-        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 
     @Test
-    public void testJWTFilterMissingAuthorization() throws Exception {
+    public void testJWTFilterMissingAuthorization()<% if (!reactive) { %> throws Exception<% } %> {
         <%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setRequestURI("/api/test");
@@ -136,6 +139,7 @@ public class JWTFilterTest {
         MockFilterChain filterChain = new MockFilterChain();
         jwtFilter.doFilter(request, response, filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
         <%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test");
@@ -149,11 +153,10 @@ public class JWTFilterTest {
                 .then()
         ).block();
         <%_ } _%>
-        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 
     @Test
-    public void testJWTFilterMissingToken() throws Exception {
+    public void testJWTFilterMissingToken()<% if (!reactive) { %> throws Exception<% } %> {
         <%_ if (!reactive) { _%>
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer ");
@@ -162,6 +165,7 @@ public class JWTFilterTest {
         MockFilterChain filterChain = new MockFilterChain();
         jwtFilter.doFilter(request, response, filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
         <%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test")
@@ -176,11 +180,10 @@ public class JWTFilterTest {
                 .then()
         ).block();
         <%_ } _%>
-        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 
     @Test
-    public void testJWTFilterWrongScheme() throws Exception {
+    public void testJWTFilterWrongScheme()<% if (!reactive) { %> throws Exception<% } %> {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             "test-user",
             "test-password",
@@ -195,6 +198,7 @@ public class JWTFilterTest {
         MockFilterChain filterChain = new MockFilterChain();
         jwtFilter.doFilter(request, response, filterChain);
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
         <%_ } else { _%>
         MockServerHttpRequest.BaseBuilder request = MockServerHttpRequest
             .get("/api/test")
@@ -209,7 +213,6 @@ public class JWTFilterTest {
                 .then()
         ).block();
         <%_ } _%>
-        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
     }
 
 }
