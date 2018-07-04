@@ -285,7 +285,7 @@ public class AccountResource {
             userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
     <%_ } else { _%>
     public Mono<Void> saveAccount(@Valid @RequestBody UserDTO userDTO) {
-        return SecurityUtils.getCurrentUserLoginReactively()
+        return SecurityUtils.getCurrentUserLogin()
             .switchIfEmpty(Mono.error(new InternalServerErrorException("Current user login not found")))
             .flatMap(userLogin -> userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
                 .filter(existingUser -> !existingUser.getLogin().equalsIgnoreCase(userLogin))

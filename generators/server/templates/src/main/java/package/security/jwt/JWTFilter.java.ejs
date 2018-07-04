@@ -24,8 +24,9 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.Authentication;
 <%_ if (reactive) { _%>
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-<%_ } _%>
+<%_ } else { _%>
 import org.springframework.security.core.context.SecurityContextHolder;
+<%_ } _%>
 import org.springframework.util.StringUtils;
 <%_ if (reactive) { _%>
 import org.springframework.web.server.ServerWebExchange;
@@ -73,12 +74,12 @@ public class JWTFilter <% if (!reactive) { %>extends GenericFilterBean<% } else 
     <%_ } _%>
         if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
             Authentication authentication = this.tokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
         <%_ if (reactive) { _%>
             return chain.filter(exchange).subscriberContext(ReactiveSecurityContextHolder.withAuthentication(authentication));
         }
         return chain.filter(exchange);
         <%_ } else { _%>
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(servletRequest, servletResponse);
         <%_ } _%>
