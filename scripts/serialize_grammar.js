@@ -19,7 +19,7 @@
 /**
  * Run this file to generate serialized grammar to be rendered as diagrams
  * It will serialize to ../gen/generated_serialized_grammar.js
- * The diagrams can be viewed in ../diagrams.html
+ * The diagrams can be viewed in ../grammar.html
  */
 const path = require('path');
 const fs = require('fs');
