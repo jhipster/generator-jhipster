@@ -685,7 +685,7 @@ function askForField(done) {
             default: 0
         },
         {
-            when: response => response.fieldAdd === true && response.fieldType !== 'byte[]' && response.fieldType !== 'ByteBuffer',
+            when: response => response.fieldAdd === true && response.fieldType !== 'ByteBuffer',
             type: 'confirm',
             name: 'fieldValidate',
             message: 'Do you want to add validation rules to your field?',
@@ -735,18 +735,20 @@ function askForField(done) {
                             value: 'max'
                         }
                     );
-                } else if (response.fieldType === 'byte[]' && response.fieldTypeBlobContent !== 'text') {
-                    opts.push(
-                        {
-                            name: 'Minimum byte size',
-                            value: 'minbytes'
-                        },
-                        {
-                            name: 'Maximum byte size',
-                            value: 'maxbytes'
-                        }
-                    );
                 }
+                // Not supported anymore because the server can't check the size of the blob before downloading it completely.
+                //  else if (response.fieldType === 'byte[]' && response.fieldTypeBlobContent !== 'text') {
+                //     opts.push(
+                //         {
+                //             name: 'Minimum byte size',
+                //             value: 'minbytes'
+                //         },
+                //         {
+                //             name: 'Maximum byte size',
+                //             value: 'maxbytes'
+                //         }
+                //     );
+                // }
                 return opts;
             },
             default: 0

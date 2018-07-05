@@ -45,7 +45,7 @@ export default class <%= entityClass %>UpdatePage {
     <%_ if (fieldIsEnum) { _%>
     <%= fieldName %>Select: ElementFinder = element(by.css('select#<%= entityFileName %>-<%= fieldName %>'));
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    <%= fieldName %>Input: ElementFinder = element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
+    <%= fieldName %>Input: ElementFinder = element(by.css('textarea#<%= entityFileName %>-<%= fieldName %>'));
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
     <%= fieldName %>Input: ElementFinder = element(by.css('input#file_<%= fieldName %>'));
     <%_ } else { _%>
