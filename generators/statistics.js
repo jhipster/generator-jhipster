@@ -6,7 +6,7 @@ const os = require('os');
 
 const DO_NOT_ASK_LIMIT = 100;
 
-const API_PATH = 'http://localhost:8080/api';
+const API_PATH = 'https://start.jhipster.tech/api';
 
 class Statistics {
     constructor() {
