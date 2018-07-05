@@ -48,7 +48,7 @@
     "jsdoc": "jsdoc --configure jsdoc-conf.json"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "0.18.0",
     "chalk": "2.4.1",
     "commander": "2.15.1",
     "conf": "2.0.0",
@@ -65,12 +65,11 @@
     "pluralize": "7.0.0",
     "prettier": "1.12.1",
     "randexp": "0.4.9",
-    "request": "^2.87.0",
     "semver": "5.5.0",
     "shelljs": "0.8.2",
     "tabtab": "2.2.2",
     "through2": "2.0.3",
-    "uuid": "^3.3.2",
+    "uuid": "3.3.2",
     "yeoman-environment": "2.1.1",
     "yeoman-generator": "2.0.5"
   },
