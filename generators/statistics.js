@@ -1,28 +1,27 @@
-
-const axios = require('axios');
+const uuid = require('uuid/v1');
 const Config = require('conf');
 const osLocale = require('os-locale');
+const axios = require('axios');
 const os = require('os');
-const inquirer = require('inquirer');
 
-const DO_NOT_ASK_LIMIT = 5;
+const DO_NOT_ASK_LIMIT = 100;
 
-const STATISTICS_API_PATH = 'http://localhost:8080/api/';
+const API_PATH = 'http://localhost:8080/api';
 
 class Statistics {
     constructor() {
         this.config = new Config({
             configName: 'jhipster-insight',
             defaults: {
-                clientId: this.guid(),
+                clientId: uuid(),
                 doNotAskCounter: 0
             }
         });
-        this.statisticsAPIPath = STATISTICS_API_PATH;
+        this.statisticsAPI = API_PATH;
         this.clientId = this.config.get('clientId');
         this.doNotAskCounter = this.config.get('doNotAskCounter');
         this.optOut = this.config.get('optOut');
-        this.configAxios();
+        this.configProxy();
     }
 
     postRequest(url, data, force = false) {
@@ -44,9 +43,9 @@ class Statistics {
         return this.axiosProxyClient.post(url, data);
     }
 
-    configAxios() {
+    configProxy() {
         this.axiosClient = axios.create({
-            baseURL: STATISTICS_API_PATH
+            baseURL: this.statisticsAPI
         });
 
         const npmHttpsProxy = process.env.npm_config_https_proxy || process.env.npm_config_proxy;
@@ -56,7 +55,7 @@ class Statistics {
         if (proxySettings) {
             const splitted = proxySettings.split(':');
             this.axiosProxyClient = axios.create({
-                baseURL: STATISTICS_API_PATH,
+                baseURL: this.statisticsAPI,
                 proxy: { host: splitted[0], port: splitted[1] }
             });
         }
@@ -67,7 +66,8 @@ class Statistics {
             this.doNotAskCounter++;
             this.config.set('doNotAskCounter', this.doNotAskCounter % (DO_NOT_ASK_LIMIT));
         }
-        return this.optOut || (this.doNotAskCounter >= DO_NOT_ASK_LIMIT);
+
+        return this.optOut === undefined || (this.optOut && this.doNotAskCounter >= DO_NOT_ASK_LIMIT);
     }
 
     setOptoutStatus(status) {
@@ -76,7 +76,7 @@ class Statistics {
     }
 
     sendYoRc(yorc, generatorVersion) {
-        this.postRequest('s/entry', {
+        this.postRequest('/s/entry', {
             'generator-jhipster': yorc,
             'generator-id': this.clientId,
             'generator-version': generatorVersion,
@@ -93,55 +93,29 @@ class Statistics {
 
     sendSubGenEvent(source, type, event) {
         const strEvent = event === '' ? event : JSON.stringify(event);
-        this.postRequest(`s/event/${this.clientId}`, { source, type, event: strEvent });
+        this.postRequest(`/s/event/${this.clientId}`, { source, type, event: strEvent });
     }
 
-    sendEntityStats(fields, relationship, pagination, dto, service, fluentMethods) {
-        this.postRequest(`s/entity/${this.clientId}`, {
+    sendEntityStats(fields, relationships, pagination, dto, service, fluentMethods) {
+        this.postRequest(`/s/entity/${this.clientId}`, {
             fields,
-            relationship,
+            relationships,
             pagination,
             dto,
             service,
             fluentMethods
         });
     }
-
-    sendCrashReport(source, stack, generatorVersion, yorc, jdl) {
-        inquirer.prompt([{
-            when: () => true,
-            type: 'confirm',
-            name: 'accept',
-            message: 'JHipster has enccountered an error!\nSending a crash report would help us a lot finding out what is wrong. Would you like to send a crash report ? Data will be anonymized.',
-            default: true
-        }]).then((answers) => {
-            const env = JSON.stringify({
-                'generator-version': generatorVersion,
-                'git-provider': 'local',
-                'node-version': process.version,
-                os: `${os.platform()}:${os.release()}`,
-                arch: os.arch(),
-                cpu: os.cpus()[0].model,
-                cores: os.cpus().length,
-                memory: os.totalmem(),
-                'user-language': osLocale.sync()
-            });
-            this.postRequest('s/report', {
-                source,
-                env,
-                stack,
-                yorc,
-                jdl: 'dummy value'
-            }, true);
-        });
-    }
-
-    guid() {
-        function s4() {
-            return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-        }
-        return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
-    }
 }
 
-module.exports = Statistics;
+let currentInstance;
+
+function get() {
+    if (!currentInstance) {
+        currentInstance = new Statistics();
+    }
+
+    return currentInstance;
+}
+
+module.exports = get();

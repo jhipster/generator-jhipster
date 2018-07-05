@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
-const Statistics = require('../statistics');
+const statistics = require('../statistics');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
@@ -83,8 +83,7 @@ module.exports = class extends BaseGenerator {
         return {
             insight() {
                 if (this.abort) return;
-                const stats = new Statistics();
-                stats.sendSubGenEvent('generator', 'ci-cd');
+                statistics.sendSubGenEvent('generator', 'ci-cd');
             },
             setTemplateConstants() {
                 if (this.abort || this.jenkinsIntegrations === undefined) return;

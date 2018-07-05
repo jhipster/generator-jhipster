@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const Statistics = require('../statistics');
+const statistics = require('../statistics');
 
 module.exports = {
     askForInsightOptIn,
@@ -32,7 +32,6 @@ function askForInsightOptIn() {
     if (this.existingProject) return;
 
     const done = this.async();
-    const statistics = new Statistics();
 
     this.prompt({
         when: () => statistics.shouldWeAskForOptIn(),

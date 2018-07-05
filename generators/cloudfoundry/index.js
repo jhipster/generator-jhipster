@@ -22,7 +22,7 @@ const chalk = require('chalk');
 const glob = require('glob');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
-const Statistics = require('../statistics');
+const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
 
@@ -51,8 +51,7 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             insight() {
-                const stats = new Statistics();
-                stats.sendSubGenEvent('generator', 'cloudfoundry');
+                statistics.sendSubGenEvent('generator', 'cloudfoundry');
             },
 
             copyCloudFoundryFiles() {

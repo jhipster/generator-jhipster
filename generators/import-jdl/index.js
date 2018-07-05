@@ -24,7 +24,7 @@ const chalk = require('chalk');
 const jhiCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
 const packagejs = require('../../package.json');
-const Statistics = require('../statistics');
+const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -113,8 +113,7 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             insight() {
-                const stats = new Statistics();
-                stats.sendSubGenEvent('generator', 'import-jdl');
+                statistics.sendSubGenEvent('generator', 'import-jdl');
             },
 
             parseJDL() {
@@ -206,8 +205,7 @@ module.exports = class extends BaseGenerator {
                     this.error(`Error while generating entities from the parsed JDL\n${error}`);
                 }
 
-                const stats = new Statistics();
-                stats.sendCrashReport('source', 'stack', 'generatorVersion', 'yorc', 'jdl');
+                statistics.sendCrashReport('source', 'stack', 'generatorVersion', 'yorc', 'jdl');
             }
         };
     }

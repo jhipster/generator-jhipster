@@ -22,7 +22,7 @@ const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
-const Statistics = require('../statistics');
+const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -336,10 +336,9 @@ module.exports = class extends BaseGenerator {
             insight() {
                 if (this.existingProject) return;
 
-                const stats = new Statistics();
                 const yorc = Object.assign({}, this.configOptions);
                 yorc.applicationType = this.applicationType;
-                stats.sendYoRc(yorc, this.jhipsterVersion);
+                statistics.sendYoRc(yorc, this.jhipsterVersion);
             },
         };
     }

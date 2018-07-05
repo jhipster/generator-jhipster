@@ -25,7 +25,7 @@ const prompts = require('./prompts');
 const jhiCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
-const Statistics = require('../statistics');
+const statistics = require('../statistics');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
@@ -768,10 +768,9 @@ module.exports = class extends BaseGenerator {
 
             insight() {
                 // track insights
-                const stats = new Statistics();
                 const context = this.context;
 
-                stats.sendEntityStats(
+                statistics.sendEntityStats(
                     context.fields.length,
                     context.relationships.length,
                     context.pagination,

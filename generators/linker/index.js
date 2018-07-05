@@ -18,9 +18,8 @@
  */
 
 const BaseGenerator = require('../generator-base');
-const Statistics = require('../statistics');
+const statistics = require('../statistics');
 const chalk = require('chalk');
-
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -35,7 +34,6 @@ module.exports = class extends BaseGenerator {
         });
 
         this.showGuid = this.options.guid;
-        this.stats = new Statistics();
     }
 
     get prompting() {
@@ -71,21 +69,21 @@ module.exports = class extends BaseGenerator {
             authenticateAndLink() {
                 if (!this.showGuid) {
                     authenticateAndLink(
-                        this.stats.axiosClient,
+                        statistics.axiosClient,
                         this,
                         this.login,
                         this.password,
-                        this.stats.clientId,
-                        this.stats.statisticsAPIPath
+                        statistics.clientId,
+                        statistics.statisticsAPIPath
                     ).catch((error) => {
-                        if (this.stats.axiosProxyClient && error !== undefined) {
+                        if (statistics.axiosProxyClient && error !== undefined) {
                             authenticateAndLink(
-                                this.stats.axiosProxyClient,
+                                statistics.axiosProxyClient,
                                 this,
                                 this.login,
                                 this.password,
-                                this.stats.clientId,
-                                this.stats.statisticsAPIPath
+                                statistics.clientId,
+                                statistics.statisticsAPIPath
                             ).catch((error) => {
                                 this.log(`Could not authenticate! (with proxy ${error})`);
                             });
@@ -97,7 +95,7 @@ module.exports = class extends BaseGenerator {
             },
             displayGuid() {
                 if (this.showGuid) {
-                    this.log('You generator ID is :', chalk.bold(this.stats.clientId));
+                    this.log('You generator ID is :', chalk.bold(statistics.clientId));
                 }
             }
         };
@@ -105,12 +103,12 @@ module.exports = class extends BaseGenerator {
 };
 
 function authenticateAndLink(axiosClient, generator, username, password, generatorId, statisticsPath) {
-    return axiosClient.post(`${generator.stats.statisticsAPIPath}authenticate`, {
+    return axiosClient.post(`${statistics.statisticsAPIPath}authenticate`, {
         username,
         password,
         rememberMe: false
     }, true).then(answer =>
-        axiosClient.post(`${generator.stats.statisticsAPIPath}s/link/${generatorId}`, {}, {
+        axiosClient.post(`${statistics.statisticsAPIPath}s/link/${generatorId}`, {}, {
             headers: {
                 Authorization: answer.headers.authorization
             }

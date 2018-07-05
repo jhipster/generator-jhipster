@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
-const Statistics = require('../statistics');
+const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
 
@@ -129,8 +129,7 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             insight() {
-                const stats = new Statistics();
-                stats.sendSubGenEvent('generator', 'languages');
+                statistics.sendSubGenEvent('generator', 'languages');
             },
 
             getSharedConfigOptions() {
@@ -185,8 +184,7 @@ module.exports = class extends BaseGenerator {
             if (!this.skipServer) {
                 this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language);
             }
-            const stats = new Statistics();
-            stats.sendSubGenEvent('languages/language', language);
+            statistics.sendSubGenEvent('languages/language', language);
         });
         if (!this.skipClient) {
             this.updateLanguagesInLanguagePipe(this.config.get('languages'));

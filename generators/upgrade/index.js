@@ -22,7 +22,7 @@ const BaseGenerator = require('../generator-base');
 const shelljs = require('shelljs');
 const semver = require('semver');
 const constants = require('../generator-constants');
-const Statistics = require('../statistics');
+const statistics = require('../statistics');
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -293,8 +293,7 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             insight() {
-                const stats = new Statistics();
-                stats.sendSubGenEvent('generator', 'upgrade');
+                statistics.sendSubGenEvent('generator', 'upgrade');
             },
 
             checkoutUpgradeBranch() {

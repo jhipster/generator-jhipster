@@ -23,7 +23,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const glob = require('glob');
 const BaseGenerator = require('../generator-base');
-const Statistics = require('../statistics');
+const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
 
@@ -168,8 +168,7 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             insight() {
-                const stats = new Statistics();
-                stats.sendSubGenEvent('generator', 'heroku');
+                statistics.sendSubGenEvent('generator', 'heroku');
             },
 
             gitInit() {
