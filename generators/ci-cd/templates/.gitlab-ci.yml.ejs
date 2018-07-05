@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ if (insideDocker) { _%>
-image: openjdk:8
+image: jhipster/jhipster:v<%= jhipsterVersion %>
 <%_ } _%>
 
 <%_ if (buildTool === 'gradle') { _%>
@@ -46,7 +46,6 @@ stages:
 <%_ if (buildTool === 'gradle') { _%>
 before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
-    - chmod +x gradlew
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./gradlew yarn_install -PnodeInstall --no-daemon
@@ -100,7 +99,6 @@ gradle-heroku:
 <%_ if (buildTool === 'maven') { _%>
 before_script:
     - export MAVEN_USER_HOME=`pwd`/.maven
-    - chmod +x mvnw
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME

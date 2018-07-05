@@ -81,7 +81,7 @@ function askIntegrations() {
             when: this.pipeline === 'gitlab',
             type: 'confirm',
             name: 'insideDocker',
-            message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container)?',
+            message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container) ?',
             default: false
         },
         {
@@ -95,25 +95,25 @@ function askIntegrations() {
             when: this.pipeline === 'jenkins',
             type: 'checkbox',
             name: 'cicdIntegrations',
-            message: 'What tasks/integrations do you want to include?',
+            message: 'What tasks/integrations do you want to include ?',
             default: [],
             choices: [
                 { name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' },
                 { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
                 { name: `Build and publish a ${chalk.yellow('*Docker*')} image`, value: 'publishDocker' },
-                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service) ?`, value: 'heroku' }
+                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`, value: 'heroku' }
             ]
         },
         {
             when: this.pipeline === 'gitlab',
             type: 'checkbox',
             name: 'cicdIntegrations',
-            message: 'What tasks/integrations do you want to include?',
+            message: 'What tasks/integrations do you want to include ?',
             default: [],
             choices: [
                 { name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' },
                 { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
-                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service) ?`, value: 'heroku' }
+                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`, value: 'heroku' }
             ]
         },
         {
@@ -124,7 +124,7 @@ function askIntegrations() {
             default: [],
             choices: [
                 { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
-                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service) ?`, value: 'heroku' }
+                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`, value: 'heroku' }
             ]
         },
         {

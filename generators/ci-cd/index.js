@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
-
+const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
@@ -44,9 +44,10 @@ module.exports = class extends BaseGenerator {
     get initializing() {
         return {
             sayHello() {
-                this.log(chalk.white('Welcome to the JHipster CI/CD Sub-Generator'));
+                this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator'));
             },
             getConfig() {
+                this.jhipsterVersion = packagejs.version;
                 this.baseName = this.config.get('baseName');
                 this.applicationType = this.config.get('applicationType');
                 this.skipClient = this.config.get('skipClient');
