@@ -40,13 +40,73 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
     });
 
-    context('and using for packageName', () => {
+    context('and using for baseName', () => {
       context('a valid value', () => {
         it('does not report a syntax error', () => {
           expect(() => parse(`
             application {
               config {
-                packageName foo.bar
+                baseName mySuperApp
+              }
+            }`)).to.not.throw();
+        });
+      });
+      context('an invalid value', () => {
+        context('such as quotes', () => {
+          it('fails', () => {
+            expect(() => parse(`
+            application {
+              config {
+                baseName "mySuperApp"
+              }
+            }`)).to.throw('A name is expected, but found: ""mySuperApp""');
+          });
+        });
+        context('such as numbers', () => {
+          it('fails', () => {
+            expect(() => parse(`
+            application {
+              config {
+                baseName 42
+              }
+            }`)).to.throw('A name is expected, but found: "42"');
+          });
+        });
+      });
+    });
+
+    context('and using for enableHibernateCache', () => {
+      context('a valid value', () => {
+        it('does not report a syntax error', () => {
+          expect(() => parse(`
+            application {
+              config {
+                enableHibernateCache true
+              }
+            }`)).to.not.throw();
+        });
+      });
+
+
+      context('an invalid value', () => {
+        it('will report a syntax error', () => {
+          expect(() => parse(`
+            application {
+              config {
+                enableHibernateCache 666
+              }
+            }`)).to.throw('A boolean literal is expected, but found: "666"');
+        });
+      });
+    });
+
+    context('and using for jhipsterVersion', () => {
+      context('a valid value', () => {
+        it('does not report a syntax error', () => {
+          expect(() => parse(`
+            application {
+              config {
+                jhipsterVersion "5.0.0"
               }
             }`)).to.not.throw();
         });
@@ -57,9 +117,9 @@ describe('JDLSyntaxValidatorVisitor', () => {
           expect(() => parse(`
             application {
               config {
-                packageName "oops"
+                jhipsterVersion abc
               }
-            }`)).to.throw('A fully qualified name is expected, but found: ""oops""');
+            }`)).to.throw('A string literal is expected, but found: "abc"\n\tat line: 4, column: 33');
         });
       });
     });
@@ -84,6 +144,30 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 languages true
               }
             }`)).to.throw('An array of names is expected, but found: "true"');
+        });
+      });
+    });
+
+    context('and using for packageName', () => {
+      context('a valid value', () => {
+        it('does not report a syntax error', () => {
+          expect(() => parse(`
+            application {
+              config {
+                packageName foo.bar
+              }
+            }`)).to.not.throw();
+        });
+      });
+
+      context('an invalid value', () => {
+        it('will report a syntax error', () => {
+          expect(() => parse(`
+            application {
+              config {
+                packageName "oops"
+              }
+            }`)).to.throw('A fully qualified name is expected, but found: ""oops""');
         });
       });
     });
@@ -135,55 +219,6 @@ describe('JDLSyntaxValidatorVisitor', () => {
               }
             }`))
             .to.throw('A string literal is expected, but found: "abc"');
-        });
-      });
-    });
-
-    context('and using for enableHibernateCache', () => {
-      context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() => parse(`
-            application {
-              config {
-                enableHibernateCache true
-              }
-            }`)).to.not.throw();
-        });
-      });
-
-
-      context('an invalid value', () => {
-        it('will report a syntax error', () => {
-          expect(() => parse(`
-            application {
-              config {
-                enableHibernateCache 666
-              }
-            }`)).to.throw('A boolean literal is expected, but found: "666"');
-        });
-      });
-    });
-
-    context('and using for jhipsterVersion', () => {
-      context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() => parse(`
-            application {
-              config {
-                jhipsterVersion "5.0.0"
-              }
-            }`)).to.not.throw();
-        });
-      });
-
-      context('an invalid value', () => {
-        it('will report a syntax error', () => {
-          expect(() => parse(`
-            application {
-              config {
-                jhipsterVersion abc
-              }
-            }`)).to.throw('A string literal is expected, but found: "abc"\n\tat line: 4, column: 33');
         });
       });
     });
