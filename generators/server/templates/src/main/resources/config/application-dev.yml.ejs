@@ -110,7 +110,7 @@ spring:
         username: <%= baseName %>
         password:
         <%_ } else if (devDatabaseType === 'h2Memory') { _%>
-        url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
         username: <%= baseName %>
         password:
         <%_ } _%>
@@ -158,7 +158,7 @@ spring:
             hibernate.generate_statistics: true
             <%_ if (enableHibernateCache) { _%>
                 <%_ if (cacheProvider === 'ehcache') { _%>
-            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.NoDefaultJCacheRegionFactory
+            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory
                 <%_ } else if (cacheProvider === 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>

@@ -5,8 +5,8 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const sinon = require('sinon');
-const constants = require('../generators/generator-constants');
 const ChildProcess = require('child_process');
+const constants = require('../generators/generator-constants');
 
 const expectedFiles = {
     monolith: [

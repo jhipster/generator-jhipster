@@ -16,8 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { Switch } from 'react-router-dom';
+
+import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import <%= entityReactName %> from './<%= entityFileName %>';
 import <%= entityReactName %>Detail from './<%= entityFileName %>-detail';
@@ -27,12 +29,12 @@ import <%= entityReactName %>DeleteDialog from './<%= entityFileName %>-delete-d
 const Routes = ({ match }) => (
   <>
     <Switch>
-      <Route exact path={`${match.url}/new`} component={<%= entityReactName %>Update} />
-      <Route exact path={`${match.url}/:id/edit`} component={<%= entityReactName %>Update} />
-      <Route exact path={`${match.url}/:id`} component={<%= entityReactName %>Detail}  />
-      <Route path={match.url} component={<%= entityReactName %>} />
+      <ErrorBoundaryRoute exact path={`${match.url}/new`} component={<%= entityReactName %>Update} />
+      <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={<%= entityReactName %>Update} />
+      <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={<%= entityReactName %>Detail}  />
+      <ErrorBoundaryRoute path={match.url} component={<%= entityReactName %>} />
     </Switch>
-    <Route path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} />
+    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} />
   </>
 );
 

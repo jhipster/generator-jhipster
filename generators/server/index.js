@@ -19,12 +19,12 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
+const crypto = require('crypto');
+const os = require('os');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
-const crypto = require('crypto');
-const os = require('os');
 const constants = require('../generator-constants');
 
 let useBlueprint;
@@ -79,20 +79,24 @@ module.exports = class extends BaseGenerator {
 
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        // use global variable since getters dont have access to instance property
-        useBlueprint = this.composeBlueprint(
-            blueprint,
-            'server',
-            {
-                'client-hook': !this.skipClient,
-                configOptions: this.configOptions,
-                force: this.options.force
-            }
-        );
+        if (!opts.fromBlueprint) {
+            // use global variable since getters dont have access to instance property
+            useBlueprint = this.composeBlueprint(
+                blueprint,
+                'server',
+                {
+                    'client-hook': !this.skipClient,
+                    configOptions: this.configOptions,
+                    force: this.options.force
+                }
+            );
+        } else {
+            useBlueprint = false;
+        }
     }
 
-    get initializing() {
-        if (useBlueprint) return;
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
         return {
             displayLogo() {
                 if (this.logo) {
@@ -144,38 +148,39 @@ module.exports = class extends BaseGenerator {
                 this.NPM_VERSION = constants.NPM_VERSION;
 
                 this.packagejs = packagejs;
-                this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
-                this.packageName = this.config.get('packageName');
-                this.serverPort = this.config.get('serverPort');
+                this.packageName = configuration.get('packageName');
+                this.serverPort = configuration.get('serverPort');
                 if (this.serverPort === undefined) {
                     this.serverPort = '8080';
                 }
-                this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
-                this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
+                this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
+                this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
                 if (this.searchEngine === undefined) {
                     this.searchEngine = false;
                 }
-                this.jhiPrefix = this.configOptions.jhiPrefix || this.config.get('jhiPrefix');
+                this.jhiPrefix = this.configOptions.jhiPrefix || configuration.get('jhiPrefix');
                 this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
-                this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
+                this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
                 if (this.messageBroker === undefined) {
                     this.messageBroker = false;
                 }
 
-                this.enableSwaggerCodegen = this.config.get('enableSwaggerCodegen');
+                this.enableSwaggerCodegen = configuration.get('enableSwaggerCodegen');
 
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
+                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
                 if (this.serviceDiscoveryType === undefined) {
                     this.serviceDiscoveryType = false;
                 }
 
-                this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-                this.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no' && this.config.get('hibernateCache') !== 'memcached');
+                this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                this.enableHibernateCache = configuration.get('enableHibernateCache') || (configuration.get('hibernateCache') !== undefined && configuration.get('hibernateCache') !== 'no' && configuration.get('hibernateCache') !== 'memcached');
 
-                this.databaseType = this.config.get('databaseType');
+                this.databaseType = configuration.get('databaseType');
                 if (this.databaseType === 'mongodb') {
                     this.devDatabaseType = 'mongodb';
                     this.prodDatabaseType = 'mongodb';
@@ -195,35 +200,35 @@ module.exports = class extends BaseGenerator {
                     this.enableHibernateCache = false;
                 } else {
                     // sql
-                    this.devDatabaseType = this.config.get('devDatabaseType');
-                    this.prodDatabaseType = this.config.get('prodDatabaseType');
+                    this.devDatabaseType = configuration.get('devDatabaseType');
+                    this.prodDatabaseType = configuration.get('prodDatabaseType');
                 }
 
                 // Hazelcast is mandatory for Gateways, as it is used for rate limiting
-                if (this.applicationType === 'gateway') {
+                if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
                     this.cacheProvider = 'hazelcast';
                 }
 
-                this.buildTool = this.config.get('buildTool');
+                this.buildTool = configuration.get('buildTool');
                 this.jhipsterVersion = packagejs.version;
                 if (this.jhipsterVersion === undefined) {
-                    this.jhipsterVersion = this.config.get('jhipsterVersion');
+                    this.jhipsterVersion = configuration.get('jhipsterVersion');
                 }
-                this.authenticationType = this.config.get('authenticationType');
+                this.authenticationType = configuration.get('authenticationType');
                 if (this.authenticationType === 'session') {
-                    this.rememberMeKey = this.config.get('rememberMeKey');
+                    this.rememberMeKey = configuration.get('rememberMeKey');
                 }
-                this.jwtSecretKey = this.config.get('jwtSecretKey');
-                this.nativeLanguage = this.config.get('nativeLanguage');
-                this.languages = this.config.get('languages');
-                this.uaaBaseName = this.config.get('uaaBaseName');
-                this.clientFramework = this.config.get('clientFramework');
-                const testFrameworks = this.config.get('testFrameworks');
+                this.jwtSecretKey = configuration.get('jwtSecretKey');
+                this.nativeLanguage = configuration.get('nativeLanguage');
+                this.languages = configuration.get('languages');
+                this.uaaBaseName = configuration.get('uaaBaseName');
+                this.clientFramework = configuration.get('clientFramework');
+                const testFrameworks = configuration.get('testFrameworks');
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;
                 }
 
-                const baseName = this.config.get('baseName');
+                const baseName = configuration.get('baseName');
                 if (baseName) {
                     // to avoid overriding name from configOptions
                     this.baseName = baseName;
@@ -234,16 +239,16 @@ module.exports = class extends BaseGenerator {
                     this.websocket = false;
                 }
 
-                const serverConfigFound = this.packageName !== undefined &&
-                    this.authenticationType !== undefined &&
-                    this.cacheProvider !== undefined &&
-                    this.enableHibernateCache !== undefined &&
-                    this.websocket !== undefined &&
-                    this.databaseType !== undefined &&
-                    this.devDatabaseType !== undefined &&
-                    this.prodDatabaseType !== undefined &&
-                    this.searchEngine !== undefined &&
-                    this.buildTool !== undefined;
+                const serverConfigFound = this.packageName !== undefined
+                    && this.authenticationType !== undefined
+                    && this.cacheProvider !== undefined
+                    && this.enableHibernateCache !== undefined
+                    && this.websocket !== undefined
+                    && this.databaseType !== undefined
+                    && this.devDatabaseType !== undefined
+                    && this.prodDatabaseType !== undefined
+                    && this.searchEngine !== undefined
+                    && this.buildTool !== undefined;
 
                 if (this.baseName !== undefined && serverConfigFound) {
                     // Generate remember me key if key does not already exist in config
@@ -271,8 +276,8 @@ module.exports = class extends BaseGenerator {
                         this.skipUserManagement = true;
                     }
 
-                    this.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
-                        'to re-generate the project...\n'));
+                    this.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n'
+                        + 'to re-generate the project...\n'));
 
                     this.existingProject = true;
                 }
@@ -280,8 +285,13 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get prompting() {
+    get initializing() {
         if (useBlueprint) return;
+        return this._initializing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _prompting() {
         return {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
@@ -319,8 +329,13 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get configuring() {
+    get prompting() {
         if (useBlueprint) return;
+        return this._prompting();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
         return {
             configureGlobal() {
                 // Application name modified, using each technology's conventions
@@ -330,8 +345,7 @@ module.exports = class extends BaseGenerator {
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
-                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(this.cacheProvider) || this.applicationType === 'gateway';
-
+                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(this.cacheProvider);
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
@@ -342,38 +356,46 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('jhipsterVersion', packagejs.version);
-                this.config.set('applicationType', this.applicationType);
-                this.config.set('baseName', this.baseName);
-                this.config.set('packageName', this.packageName);
-                this.config.set('packageFolder', this.packageFolder);
-                this.config.set('serverPort', this.serverPort);
-                this.config.set('authenticationType', this.authenticationType);
-                this.config.set('uaaBaseName', this.uaaBaseName);
-                this.config.set('cacheProvider', this.cacheProvider);
-                this.config.set('enableHibernateCache', this.enableHibernateCache);
-                this.config.set('websocket', this.websocket);
-                this.config.set('databaseType', this.databaseType);
-                this.config.set('devDatabaseType', this.devDatabaseType);
-                this.config.set('prodDatabaseType', this.prodDatabaseType);
-                this.config.set('searchEngine', this.searchEngine);
-                this.config.set('messageBroker', this.messageBroker);
-                this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
-                this.config.set('buildTool', this.buildTool);
-                this.config.set('enableSwaggerCodegen', this.enableSwaggerCodegen);
-                this.config.set('jwtSecretKey', this.jwtSecretKey);
-                this.config.set('rememberMeKey', this.rememberMeKey);
-                this.config.set('enableTranslation', this.enableTranslation);
+                const config = {
+                    jhipsterVersion: packagejs.version,
+                    applicationType: this.applicationType,
+                    baseName: this.baseName,
+                    packageName: this.packageName,
+                    packageFolder: this.packageFolder,
+                    serverPort: this.serverPort,
+                    authenticationType: this.authenticationType,
+                    uaaBaseName: this.uaaBaseName,
+                    cacheProvider: this.cacheProvider,
+                    enableHibernateCache: this.enableHibernateCache,
+                    websocket: this.websocket,
+                    databaseType: this.databaseType,
+                    devDatabaseType: this.devDatabaseType,
+                    prodDatabaseType: this.prodDatabaseType,
+                    searchEngine: this.searchEngine,
+                    messageBroker: this.messageBroker,
+                    serviceDiscoveryType: this.serviceDiscoveryType,
+                    buildTool: this.buildTool,
+                    enableSwaggerCodegen: this.enableSwaggerCodegen,
+                    jwtSecretKey: this.jwtSecretKey,
+                    rememberMeKey: this.rememberMeKey,
+                    enableTranslation: this.enableTranslation
+                };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
-                    this.config.set('nativeLanguage', this.nativeLanguage);
-                    this.config.set('languages', this.languages);
+                    config.nativeLanguage = this.nativeLanguage;
+                    config.languages = this.languages;
                 }
+                this.config.set(config);
             }
         };
     }
 
-    get default() {
+    get configuring() {
         if (useBlueprint) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
         return {
             getSharedConfigOptions() {
                 this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
@@ -405,30 +427,49 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get writing() {
+    get default() {
         if (useBlueprint) return;
-        return writeFiles();
+        return this._default();
     }
 
-    end() {
-        if (useBlueprint) return;
-        if (this.prodDatabaseType === 'oracle') {
-            this.log('\n\n');
-            this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
-            }Please follow our documentation on using Oracle to set up the \n` +
-                'Oracle proprietary JDBC driver.');
-        }
-        this.log(chalk.green.bold('\nServer application generated successfully.\n'));
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
+        return writeFiles(useBlueprint);
+    }
 
-        let executable = 'mvnw';
-        if (this.buildTool === 'gradle') {
-            executable = 'gradlew';
-        }
-        let logMsgComment = '';
-        if (os.platform() === 'win32') {
-            logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
-        }
-        this.log(chalk.green(`${'Run your Spring Boot application:' +
-            '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+    get writing() {
+        if (useBlueprint) return;
+        return this._writing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _end() {
+        return {
+            end() {
+                if (this.prodDatabaseType === 'oracle') {
+                    this.log('\n\n');
+                    this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
+                    }Please follow our documentation on using Oracle to set up the \n`
+                        + 'Oracle proprietary JDBC driver.');
+                }
+                this.log(chalk.green.bold('\nServer application generated successfully.\n'));
+
+                let executable = 'mvnw';
+                if (this.buildTool === 'gradle') {
+                    executable = 'gradlew';
+                }
+                let logMsgComment = '';
+                if (os.platform() === 'win32') {
+                    logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
+                }
+                this.log(chalk.green(`${'Run your Spring Boot application:'
+                    + '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+            }
+        };
+    }
+
+    get end() {
+        if (useBlueprint) return;
+        return this._end();
     }
 };

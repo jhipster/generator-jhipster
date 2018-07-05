@@ -24,8 +24,6 @@ buildscript {
         jcenter()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
-        // TODO To remove after final Spring Cloud release
-        maven { url "https://repo.spring.io/milestone" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -195,8 +193,6 @@ repositories {
     // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
-    // TODO To remove after final Spring Cloud release
-    maven { url "https://repo.spring.io/milestone" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -288,9 +284,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-loader-tools"
     compile "org.springframework.boot:spring-boot-starter-mail"
     compile "org.springframework.boot:spring-boot-starter-logging"
-    compile ("org.springframework.boot:spring-boot-starter-actuator") {
-        exclude module: 'micrometer-core'
-    }
+    compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-aop"
     <%_ if (databaseType === 'sql') { _%>
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
@@ -345,7 +339,7 @@ dependencies {
     compile "org.springframework.cloud:spring-cloud-starter-consul-discovery"
     compile "org.springframework.cloud:spring-cloud-starter-consul-config"
     <%_ } _%>
-    <%_ if (authenticationType === 'uaa') { _%>
+    <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-security"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>

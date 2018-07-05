@@ -22,6 +22,7 @@ import { Observable } from 'rxjs';
 <%_ if (fieldsContainDate) { _%>
 import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { map } from 'rxjs/operators';
 <%_ } _%>
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -48,7 +49,7 @@ export class <%= entityAngularName %>Service {
             return this.http.post<I<%= entityAngularName %>>(this.resourceUrl,
                     <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                     { observe: 'response' })
-            <% if (fieldsContainDate) { %>.map((res: EntityResponseType) => this.convertDateFromServer(res))<% } %>;
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
 
     update(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
@@ -58,18 +59,18 @@ export class <%= entityAngularName %>Service {
             return this.http.put<I<%= entityAngularName %>>(this.resourceUrl,
                     <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                     { observe: 'response' })
-            <% if (fieldsContainDate) { %>.map((res: EntityResponseType) => this.convertDateFromServer(res))<% } %>;
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
 
     find(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<EntityResponseType> {
         return this.http.get<I<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            <% if (fieldsContainDate) { %>.map((res: EntityResponseType) => this.convertDateFromServer(res))<% } %>;
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<I<%= entityAngularName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
-            <% if (fieldsContainDate) { %>.map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res))<% } %>;
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
     }
 
     delete(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<HttpResponse<any>> {
@@ -80,7 +81,7 @@ export class <%= entityAngularName %>Service {
     search(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<I<%= entityAngularName %>[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-            <% if (fieldsContainDate) { %>.map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res))<% } %>;
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
     }
     <%_ } _%>
 

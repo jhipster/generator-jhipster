@@ -18,9 +18,9 @@
  * limitations under the License.
  */
 const semver = require('semver');
+const path = require('path');
 const packageJson = require('../package.json');
 const logger = require('./utils').logger;
-const path = require('path');
 
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;

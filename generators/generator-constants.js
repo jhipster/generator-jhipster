@@ -18,10 +18,10 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:develop';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.3.0';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.20';
-const DOCKER_MARIADB = 'mariadb:10.1.17';
+const DOCKER_MARIADB = 'mariadb:10.3.7';
 const DOCKER_POSTGRESQL = 'postgres:10.4';
 const DOCKER_MONGODB = 'mongo:3.6.3';
 const DOCKER_COUCHBASE = 'couchbase/server:5.1.0';
@@ -30,11 +30,11 @@ const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.9.3';
 const DOCKER_MEMCACHED = 'memcached:1.5.8-alpine';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:3.3.0.Final';
+const DOCKER_KEYCLOAK = 'jboss/keycloak:4.0.0.Final';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:5.6.5'; // docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1
 const DOCKER_KAFKA = 'wurstmeister/kafka:1.0.0';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
-const DOCKER_SONAR = 'sonarqube:7.0-alpine';
+const DOCKER_SONAR = 'sonarqube:7.1-alpine';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v3.0.1';
 const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v3.0.1';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v3.0.1';
@@ -42,8 +42,8 @@ const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v3.0.1';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v3.0.1';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v3.0.1';
 const DOCKER_TRAEFIK = 'traefik:1.5.3';
-const DOCKER_CONSUL = 'consul:1.0.2';
-const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.2.2';
+const DOCKER_CONSUL = 'consul:1.2.0';
+const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v1.6.3';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.6.2';
 const DOCKER_GRAFANA = 'grafana/grafana:4.3.2';
@@ -55,12 +55,12 @@ const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
 // Version of Java, Scala
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
-const SCALA_VERSION = '2.12.1';
+const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '8.11.2';
+const NODE_VERSION = '8.11.3';
 const YARN_VERSION = '1.6.0';
-const NPM_VERSION = '5.8.0';
+const NPM_VERSION = '6.1.0';
 
 // all constants used throughout all generators
 

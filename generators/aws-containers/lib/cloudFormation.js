@@ -147,25 +147,24 @@ module.exports = class CloudFormation {
                                 previousEventId: null
                             };
                             nestedStacks[nestedStackId].listenerInterval = setInterval(
-                                () =>
-                                    this.cf.describeStackEvents({ StackName: nestedStackId }).promise()
-                                        .then((result) => {
-                                            const stackMeta = nestedStacks[nestedStackId];
-                                            const unproceedEvents = _.chain(result.StackEvents).filter(event => !_.has(stackMeta.events, event.EventId)).reverse().value();
+                                () => this.cf.describeStackEvents({ StackName: nestedStackId }).promise()
+                                    .then((result) => {
+                                        const stackMeta = nestedStacks[nestedStackId];
+                                        const unproceedEvents = _.chain(result.StackEvents).filter(event => !_.has(stackMeta.events, event.EventId)).reverse().value();
 
-                                            unproceedEvents.forEach((stack) => {
-                                                stackMeta.events[stack.EventId] = stack;
+                                        unproceedEvents.forEach((stack) => {
+                                            stackMeta.events[stack.EventId] = stack;
 
-                                                if (stack.EventId !== stackMeta.previousEventId) {
-                                                    stdOut(_getStackLogLine(stack, 1));
-                                                    stackMeta.previousEventId = stack.EventId;
-                                                }
-                                                if (_isStackEventError(stack)) {
-                                                    cancel(new Error('Creation of nested stack failed'));
-                                                }
-                                            });
-                                        })
-                                        .catch(cancel),
+                                            if (stack.EventId !== stackMeta.previousEventId) {
+                                                stdOut(_getStackLogLine(stack, 1));
+                                                stackMeta.previousEventId = stack.EventId;
+                                            }
+                                            if (_isStackEventError(stack)) {
+                                                cancel(new Error('Creation of nested stack failed'));
+                                            }
+                                        });
+                                    })
+                                    .catch(cancel),
                                 STACK_LISTENER_INTERVAL
                             );
                         });
@@ -217,8 +216,8 @@ module.exports = class CloudFormation {
                                     failure(new Error('Creation of nested stack failed'));
                                 }
                             })
-                            .catch(failure)
-                        , STACK_LISTENER_INTERVAL
+                            .catch(failure),
+                        STACK_LISTENER_INTERVAL
                     );
                 });
 

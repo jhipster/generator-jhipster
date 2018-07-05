@@ -77,8 +77,8 @@ module.exports = class extends BaseGenerator {
 
                 exec('cf -v', (err) => {
                     if (err) {
-                        this.log.error('cloudfoundry\'s cf command line interface is not available. ' +
-                            'You can install it via https://github.com/cloudfoundry/cli/releases');
+                        this.log.error('cloudfoundry\'s cf command line interface is not available. '
+                            + 'You can install it via https://github.com/cloudfoundry/cli/releases');
                         this.abort = true;
                     }
                     done();

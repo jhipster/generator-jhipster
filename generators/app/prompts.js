@@ -124,7 +124,7 @@ function askForTestOpts(meta) {
     const PROMPT = {
         type: 'checkbox',
         name: 'testFrameworks',
-        message: 'Besides JUnit and Karma, which testing frameworks would you like to use?',
+        message: 'Besides JUnit and Jest, which testing frameworks would you like to use?',
         choices,
         default: defaultChoice
     };

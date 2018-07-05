@@ -29,25 +29,43 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
         utils.copyObjectProps(this, this.options.context);
         const blueprint = this.config.get('blueprint');
-        // use global variable since getters dont have access to instance property
-        useBlueprint = this.composeBlueprint(blueprint, 'entity-client', {
-            context: opts.context,
-            force: opts.force,
-            debug: opts.context.isDebugEnabled,
-            'skip-install': opts.context.options['skip-install']
-        });
+        if (!opts.fromBlueprint) {
+            // use global variable since getters dont have access to instance property
+            useBlueprint = this.composeBlueprint(blueprint, 'entity-client', {
+                context: opts.context,
+                force: opts.force,
+                debug: opts.context.isDebugEnabled,
+                'skip-install': opts.context.options['skip-install']
+            });
+        } else {
+            useBlueprint = false;
+        }
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
+        return writeFiles(useBlueprint);
     }
 
     get writing() {
         if (useBlueprint) return;
-        return writeFiles();
+        return this._writing();
     }
 
-    end() {
+    // Public API method used by the getter and also by Blueprints
+    _end() {
+        return {
+            end() {
+                if (!this.options['skip-install'] && !this.skipClient) {
+                    this.rebuildClient();
+                }
+                this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));
+            }
+        };
+    }
+
+    get end() {
         if (useBlueprint) return;
-        if (!this.options['skip-install'] && !this.skipClient) {
-            this.rebuildClient();
-        }
-        this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));
+        return this._end();
     }
 };

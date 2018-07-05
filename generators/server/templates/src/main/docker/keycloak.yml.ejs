@@ -26,6 +26,7 @@ services:
     environment:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=h2
     ports:
       - 9080:9080
       - 9443:9443

@@ -11,14 +11,12 @@ describe('Generator Base Private', () => {
         it('should produce correct output without margin', () => {
             const entityFolderName = 'entityFolderName';
             const entityFileName = 'entityFileName';
-            const content =
-                `|export * from './${entityFolderName}/${entityFileName}-update.component';
+            const content = `|export * from './${entityFolderName}/${entityFileName}-update.component';
                  |export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
                  |export * from './${entityFolderName}/${entityFileName}-detail.component';
                  |export * from './${entityFolderName}/${entityFileName}.component';
                  |export * from './${entityFolderName}/${entityFileName}.state';`;
-            const out =
-`export * from './entityFolderName/entityFileName-update.component';
+            const out = `export * from './entityFolderName/entityFileName-update.component';
 export * from './entityFolderName/entityFileName-delete-dialog.component';
 export * from './entityFolderName/entityFileName-detail.component';
 export * from './entityFolderName/entityFileName.component';
@@ -29,15 +27,13 @@ export * from './entityFolderName/entityFileName.state';`;
             const routerName = 'routerName';
             const enableTranslation = true;
             const glyphiconName = 'glyphiconName';
-            const content =
-                `|<li ui-sref-active="active">
+            const content = `|<li ui-sref-active="active">
                  |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                  |        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
                  |        <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${routerName}</span>
                  |    </a>
                  |</li>`;
-            const out =
-`<li ui-sref-active="active">
+            const out = `<li ui-sref-active="active">
     <a ui-sref="routerName" ng-click="vm.collapseNavbar()">
         <span class="glyphicon glyphicon-glyphiconName"></span>&nbsp;
         <span data-translate="global.menu.routerName">routerName</span>

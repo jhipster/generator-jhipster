@@ -16,55 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* global: require*/
 import { TranslatorContext, Storage } from 'react-jhipster';
-import { merge } from 'lodash';
 
 import { setLocale } from 'app/shared/reducers/locale';
 
-const mergeTranslations = requireContext => requireContext.keys().reduce(
-  (merged, key) => merge({ ...merged }, { ...requireContext(key) }),
-  {}
-);
-
-// tslint:disable:object-literal-key-quotes
-const translations = {
-<%_ languages.forEach((lang, index) => { _%>
-   '<%= lang %>': mergeTranslations(require.context('../../i18n/<%= lang %>', false, /.json$/))<%= index !== languages.length - 1 ? ',' : '' %>
-<%_ }); _%>
-};
-// tslint:enable
-
-let currentLocale;
-const savedLocale = Storage.session.get('locale', '<%= nativeLanguage %>');
 TranslatorContext.setDefaultLocale('<%= nativeLanguage %>');
 TranslatorContext.setRenderInnerTextForMissingKeys(false);
 
-<%_ if(enableI18nRTL) { _%>
-const languages: any = {
+export const languages: any = {
   <%_ getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value)).forEach((ln, i) => { _%>
-    '<%= ln.value %>': { name: '<%= ln.dispName %>', rtl: <%= ln.rtl || false %> }<%= i !== languages.length - 1 ? ',' : '' %>
+  '<%= ln.value %>': { name: '<%= ln.dispName %>', rtl: <%= ln.rtl || false %> }<%= i !== languages.length - 1 ? ',' : '' %>
   <%_ }); _%>
   // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
 };
 
+export const locales = Object.keys(languages).sort();
+
+<%_ if(enableI18nRTL) { _%>
 export const isRTL = (lang: string): boolean => languages[lang] && languages[lang].rtl;
 <%_ } _%>
 
-export const locales = Object.keys(translations);
-
-export const registerLocales = store => {
-  locales.forEach(key => {
-    TranslatorContext.registerTranslations(key, translations[key]);
-  });
-  store.subscribe(() => {
-    const previousLocale = currentLocale;
-    currentLocale = store.getState().locale.currentLocale;
-    if (previousLocale !== currentLocale) {
-      Storage.local.set('locale', currentLocale);
-      TranslatorContext.setLocale(currentLocale);
-    }
-  });
-  store.dispatch(setLocale(savedLocale));
-  return savedLocale;
+export const registerLocale = store => {
+  store.dispatch(setLocale(Storage.session.get('locale', '<%= nativeLanguage %>')));
 };

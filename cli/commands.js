@@ -29,6 +29,9 @@ module.exports = {
         argument: ['jdlFile'],
         desc: 'Create a JDL file from the existing entities'
     },
+    gae: {
+        desc: 'Deploy the current application to Google App Engine'
+    },
     heroku: {
         desc: 'Deploy the current application to Heroku'
     },

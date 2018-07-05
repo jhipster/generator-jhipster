@@ -81,14 +81,14 @@ node {
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
-<%= indent %>            junit '**/target/test-results/karma/TESTS-*.xml'
+<%= indent %>            junit '**/target/test-results/jest/TESTS-*.xml'
 <%= indent %>        }
 <%= indent %>    }
 
     <%_ } _%>
     <%_ if (heroku.includes('jenkins')) { _%>
 <%= indent %>    stage('package and deploy') {
-<%= indent %>        sh "./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
+<%= indent %>        sh "./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
     <%_ } else { _%>
 <%= indent %>    stage('packaging') {
 <%= indent %>        sh "./mvnw verify -Pprod -DskipTests"
@@ -135,7 +135,7 @@ node {
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
-<%= indent %>            junit '**/build/test-results/karma/TESTS-*.xml'
+<%= indent %>            junit '**/build/test-results/jest/TESTS-*.xml'
 <%= indent %>        }
 <%= indent %>    }
 

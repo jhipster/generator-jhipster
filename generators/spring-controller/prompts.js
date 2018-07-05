@@ -38,11 +38,11 @@ function askForControllerActions() {
                 validate: (input) => {
                     if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                         return 'Your action name cannot contain special characters';
-                    } else if (input === '') {
+                    } if (input === '') {
                         return 'Your action name cannot be empty';
-                    } else if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+                    } if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                         return 'Your action name cannot start with an upper case letter';
-                    } else if (jhiCore.isReservedFieldName(input)) {
+                    } if (jhiCore.isReservedFieldName(input)) {
                         return 'Your action name cannot contain a Java, Angular or React reserved keyword';
                     }
 
