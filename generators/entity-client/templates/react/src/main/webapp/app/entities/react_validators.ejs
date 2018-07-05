@@ -47,12 +47,13 @@ if (field.fieldValidate === true) {
     if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
         validators.push('number: { value: true, errorMessage: translate(\'entity.validation.number\') }');
     }
-    if (rules.includes('minbytes')) {
-        validators.push('minbytes: { value: ' + field.fieldValidateRulesMinbytes + ', errorMessage: translate(\'entity.validation.minbytes\', { min: ' + field.fieldValidateRulesMinbytes + ' }) }');
-    }
-    if (rules.includes('maxbytes')) {
-        validators.push('maxbytes: { value: ' + field.fieldValidateRulesMaxbytes + ', errorMessage: translate(\'entity.validation.maxbytes\', { min: ' + field.fieldValidateRulesMaxbytes + ' }) }');
-    }
+    // Not supported anymore because the server can't check the size of the blob before downloading it completely.
+    // if (rules.includes('minbytes')) {
+    //     validators.push('minbytes: { value: ' + field.fieldValidateRulesMinbytes + ', errorMessage: translate(\'entity.validation.minbytes\', { min: ' + field.fieldValidateRulesMinbytes + ' }) }');
+    // }
+    // if (rules.includes('maxbytes')) {
+    //     validators.push('maxbytes: { value: ' + field.fieldValidateRulesMaxbytes + ', errorMessage: translate(\'entity.validation.maxbytes\', { min: ' + field.fieldValidateRulesMaxbytes + ' }) }');
+    // }
 
     result = validators.join(',\n                ');
     result = `validate={{\n                ${result}\n                }}`;
