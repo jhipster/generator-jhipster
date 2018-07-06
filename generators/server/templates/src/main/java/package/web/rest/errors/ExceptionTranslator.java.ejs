@@ -160,6 +160,11 @@ public class ExceptionTranslator<% if (!reactive) { %> implements ProblemHandlin
     <%_ if (reactive) { _%>
 
     @ExceptionHandler
+    public ResponseEntity<Problem> handleThrowableProblem(ThrowableProblem ex) {
+        return create(ex, ex);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<Problem> handleAuthentication(final AuthenticationException ex) {
         return create(Status.UNAUTHORIZED, ex);
     }

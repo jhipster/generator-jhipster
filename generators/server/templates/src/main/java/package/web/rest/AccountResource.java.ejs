@@ -185,7 +185,7 @@ public class AccountResource {
         <%_ } else { _%>
         return userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase())
             .hasElement()
-            .map(loginExists -> {
+            .flatMap(loginExists -> {
                 if (loginExists) {
                     throw new LoginAlreadyUsedException();
                 }
@@ -295,16 +295,10 @@ public class AccountResource {
                         throw new EmailAlreadyUsedException();
                     }
                     return userRepository.findOneByLogin(userLogin);
-                })
-                .hasElement()
-                .flatMap(emailExists -> {
-                    if (emailExists) {
-                        throw new InternalServerErrorException("User could not be found");
-                    }
-                    return userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                        userDTO.getLangKey(), userDTO.getImageUrl());
-                })
-            );
+                }))
+                .switchIfEmpty(Mono.error(new InternalServerErrorException("User could not be found")))
+                .flatMap(user -> userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+                    userDTO.getLangKey(), userDTO.getImageUrl()));
     <%_ } _%>
     }
 
