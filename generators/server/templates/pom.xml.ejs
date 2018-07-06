@@ -291,7 +291,7 @@
             <scope>test</scope>
             <!-- parent POM declares this dependency in default (compile) scope -->
         </dependency>
-        <%_ if (applicationType !== 'reactive') { _%>
+        <%_ if (!reactive) { _%>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -514,7 +514,7 @@
         <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %></artifactId>
+            <artifactId>spring-boot-starter-data-<%=databaseType%><% if (reactive) { %>-reactive<% } %></artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -535,7 +535,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web<% if (applicationType === 'reactive') { %>flux<% } %></artifactId>
+            <artifactId>spring-boot-starter-web<% if (reactive) { %>flux<% } %></artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
