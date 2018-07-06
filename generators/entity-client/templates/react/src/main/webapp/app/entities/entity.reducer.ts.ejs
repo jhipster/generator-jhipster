@@ -36,7 +36,6 @@ import {
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
 <%_ } _%>
@@ -187,9 +186,9 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
   }
 };
 
-const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %><% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/<%= entityApiUrl %>';
+const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } %>api/<%= entityApiUrl %>';
 <%_ if (searchEngine === 'elasticsearch') { _%>
-const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/_search/<%= entityApiUrl %>';
+const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } %>api/_search/<%= entityApiUrl %>';
 <%_ } _%>
 
 // Actions
