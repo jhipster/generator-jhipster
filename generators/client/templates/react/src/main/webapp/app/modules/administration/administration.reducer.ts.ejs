@@ -230,7 +230,7 @@ export const getEnv = () => ({
 });
 
 export const getAudits = (page, size, sort, fromDate, toDate) => {
-  let requestUrl = `/<%= apiUaaPath %>management/audits${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  let requestUrl = `<%= apiUaaPath %>management/audits${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   if (fromDate) {
     requestUrl += `&fromDate=${fromDate}`;
   }
