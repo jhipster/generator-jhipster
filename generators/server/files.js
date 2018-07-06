@@ -1198,15 +1198,8 @@ const serverFiles = {
                 { file: 'package/service/MailServiceIntTest.java', renameTo: generator => `${generator.testDir}service/MailServiceIntTest.java` },
                 { file: 'package/service/UserServiceIntTest.java', renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java` },
                 { file: 'package/security/SecurityUtilsUnitTest.java', renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java` },
-                { file: 'package/web/rest/UserResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserResourceIntTest.java` },
-            ]
-        },
-        {
-            // TODO : add tests for reactive
-            condition: generator => !generator.reactive && !generator.skipUserManagement,
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
                 { file: 'package/web/rest/AccountResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/AccountResourceIntTest.java` },
+                { file: 'package/web/rest/UserResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserResourceIntTest.java` },
             ]
         }
     ]
