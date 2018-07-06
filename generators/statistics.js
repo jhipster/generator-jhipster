@@ -1,4 +1,4 @@
-const uuid = require('uuid/v1');
+const uuid = require('uuid/v4');
 const Config = require('conf');
 const osLocale = require('os-locale');
 const axios = require('axios');
@@ -14,13 +14,15 @@ class Statistics {
             configName: 'jhipster-insight',
             defaults: {
                 clientId: uuid(),
-                doNotAskCounter: 0
+                doNotAskCounter: 0,
+                isLinked: false
             }
         });
         this.statisticsAPI = API_PATH;
         this.clientId = this.config.get('clientId');
         this.doNotAskCounter = this.config.get('doNotAskCounter');
         this.optOut = this.config.get('optOut');
+        this.isLinked = this.config.get('isLinked');
         this.configProxy();
     }
 
@@ -70,12 +72,20 @@ class Statistics {
         return this.optOut === undefined || (this.optOut && this.doNotAskCounter >= DO_NOT_ASK_LIMIT);
     }
 
-    setOptoutStatus(status) {
-        this.config.set('optOut', status);
-        this.optOut = status;
+    setConfig(key, value) {
+        this.config.set(key, value);
+        this[key] = value;
     }
 
-    sendYoRc(yorc, generatorVersion) {
+    setOptoutStatus(status) {
+        this.setConfig('optOut', status);
+    }
+
+    setLinkedStatus(status) {
+        this.setConfig('isLinked', status);
+    }
+
+    sendYoRc(yorc, isARegeneration, generatorVersion) {
         this.postRequest('/s/entry', {
             'generator-jhipster': yorc,
             'generator-id': this.clientId,
@@ -87,7 +97,8 @@ class Statistics {
             cpu: os.cpus()[0].model,
             cores: os.cpus().length,
             memory: os.totalmem(),
-            'user-language': osLocale.sync()
+            'user-language': osLocale.sync(),
+            isARegeneration
         });
     }
 

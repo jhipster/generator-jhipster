@@ -26,6 +26,7 @@ const BaseGenerator = require('../generator-base');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
+const statistics = require('../statistics');
 
 let useBlueprint;
 
@@ -337,6 +338,25 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _configuring() {
         return {
+            insight() {
+                statistics.sendSubGenEvent('generator', 'server', {
+                    app: {
+                        authenticationType: this.authenticationType,
+                        cacheProvider: this.cacheProvider,
+                        enableHibernateCache: this.enableHibernateCache,
+                        websocket: this.websocket,
+                        databaseType: this.databaseType,
+                        devDatabaseType: this.devDatabaseType,
+                        prodDatabaseType: this.prodDatabaseType,
+                        searchEngine: this.searchEngine,
+                        messageBroker: this.messageBroker,
+                        serviceDiscoveryType: this.serviceDiscoveryType,
+                        buildTool: this.buildTool,
+                        enableSwaggerCodegen: this.enableSwaggerCodegen
+                    }
+                });
+            },
+
             configureGlobal() {
                 // Application name modified, using each technology's conventions
                 this.angularAppName = this.getAngularAppName();

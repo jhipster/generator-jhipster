@@ -101,6 +101,7 @@ module.exports = class extends BaseGenerator {
                 this.monitoring = this.config.get('monitoring');
                 this.consoleOptions = this.config.get('consoleOptions');
                 this.useKafka = false;
+                this.useMemcached = false;
                 this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
                 if (this.serviceDiscoveryType === undefined) {
                     this.serviceDiscoveryType = 'eureka';
@@ -241,6 +242,15 @@ module.exports = class extends BaseGenerator {
                     const messageBroker = appConfig.messageBroker;
                     if (messageBroker === 'kafka') {
                         this.useKafka = true;
+                    }
+                    // Add Memcached support
+                    const cacheProvider = appConfig.cacheProvider;
+                    if (cacheProvider === 'memcached') {
+                        this.useMemcached = true;
+                        const memcachedYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/memcached.yml`));
+                        const memcachedConfig = memcachedYaml.services[`${lowercaseBaseName}-memcached`];
+                        delete memcachedConfig.ports;
+                        parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
                     }
                     // Expose authenticationType
                     this.authenticationType = appConfig.authenticationType;

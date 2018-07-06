@@ -167,41 +167,6 @@ module.exports = class extends ImporterGenerator {
         return {
             insight() {
                 statistics.sendSubGenEvent('generator', 'import-jdl');
-            },
-
-            parseJDL() {
-                if (this.generated) {
-                    return;
-                }
-                this.log('The JDL is being parsed.');
-                const jdlImporter = new jhiCore.JDLImporter(this.jdlFiles, {
-                    databaseType: this.prodDatabaseType,
-                    applicationType: this.applicationType,
-                    applicationName: this.baseName,
-                    generatorVersion: packagejs.version,
-                    forceNoFiltering: this.options.force
-                });
-                try {
-                    this.importState = jdlImporter.import();
-                    if (this.importState.exportedEntities.length > 0) {
-                        const entityNames = _.uniq(this.importState.exportedEntities
-                            .map(exportedEntity => exportedEntity.name))
-                            .join(', ');
-                        this.log(`Found entities: ${chalk.yellow(entityNames)}.`);
-                    } else {
-                        this.log(chalk.yellow('No change in entity configurations, no entities were updated.'));
-                    }
-                    this.log('The JDL has been successfully parsed');
-                    this.generated = true;
-                } catch (error) {
-                    this.debug('Error:', error);
-                    if (error) {
-                        const errorName = `${error.name}:` || '';
-                        const errorMessage = error.message || '';
-                        this.log(chalk.red(`${errorName} ${errorMessage}`));
-                    }
-                    this.error(`Error while parsing applications and entities from the JDL ${error}`);
-                }
             }
         };
     }
@@ -255,8 +220,6 @@ module.exports = class extends ImporterGenerator {
                 } catch (error) {
                     this.error(`Error while generating entities from the parsed JDL\n${error}`);
                 }
-
-                statistics.sendCrashReport('source', 'stack', 'generatorVersion', 'yorc', 'jdl');
             }
         };
     }

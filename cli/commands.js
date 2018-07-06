@@ -49,8 +49,8 @@ module.exports = {
         argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
     },
-    linker: {
-        desc: 'Link your generator to your JHipster online account'
+    'link-account': {
+        desc: 'Link the installed JHipster CLI to your JHipster Online account'
     },
     openshift: {
         desc: 'Deploy the current application to OpenShift'

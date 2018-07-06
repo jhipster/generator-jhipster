@@ -24,9 +24,8 @@ const chalk = require('chalk');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-
         // Shows the generator's id
-        this.argument('guid', {
+        this.argument('id', {
             type: Boolean,
             required: false,
             default: false,
@@ -107,18 +106,18 @@ function authenticateAndLink(axiosClient, generator, username, password, generat
         username,
         password,
         rememberMe: false
-    }, true).then(answer =>
-        axiosClient.post(`${statistics.statisticsAPIPath}s/link/${generatorId}`, {}, {
-            headers: {
-                Authorization: answer.headers.authorization
-            }
-        }).then((success) => {
-            generator.log('Link successful!');
-        }, (error) => {
-            if (error.response.status === 409) {
-                generator.log.error('It looks like this generator has already been linked to an account.');
-            } else {
-                generator.log.error(`Link failed! (${error})`);
-            }
-        }), error => Promise.reject(error)).then(error => Promise.reject(error));
+    }, true).then(answer => axiosClient.post(`${statistics.statisticsAPIPath}s/link/${generatorId}`, {}, {
+        headers: {
+            Authorization: answer.headers.authorization
+        }
+    }).then((success) => {
+        generator.log('Link successful!');
+        statistics.setLinkedStatus(true);
+    }, (error) => {
+        if (error.response.status === 409) {
+            generator.log.error('It looks like this generator has already been linked to an account.');
+        } else {
+            generator.log.error(`Link failed! (${error})`);
+        }
+    }), error => Promise.reject(error)).then(error => Promise.reject(error));
 }

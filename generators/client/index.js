@@ -25,6 +25,7 @@ const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
+const statistics = require('../statistics');
 
 let useBlueprint;
 
@@ -249,6 +250,18 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _configuring() {
         return {
+            insight() {
+                statistics.sendSubGenEvent('generator', 'client', {
+                    app: {
+                        clientFramework: this.clientFramework,
+                        useSass: this.useSass,
+                        enableTranslation: this.enableTranslation,
+                        nativeLanguage: this.nativeLanguage,
+                        languages: this.languages
+                    }
+                });
+            },
+
             configureGlobal() {
                 // Application name modified, using each technology's conventions
                 this.camelizedBaseName = _.camelCase(this.baseName);
