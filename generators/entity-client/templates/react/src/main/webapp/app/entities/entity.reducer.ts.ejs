@@ -230,6 +230,9 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
+  <%_ if (pagination === 'infinite-scroll') { _%>
+    dispatch(reset());
+  <%_ } _%>
   dispatch(getEntities());
   return result;
 };
@@ -239,6 +242,9 @@ export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
+  <%_ if (pagination === 'infinite-scroll') { _%>
+    dispatch(reset());
+  <%_ } _%>
   dispatch(getEntities());
   return result;
 };
@@ -249,6 +255,9 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     payload: axios.delete(requestUrl)
   });
+  <%_ if (pagination === 'infinite-scroll') { _%>
+    dispatch(reset());
+  <%_ } _%>
   dispatch(getEntities());
   return result;
 };
