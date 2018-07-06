@@ -83,7 +83,7 @@ function askForServerSideOpts(meta) {
             default: 'eureka'
         },
         {
-            when: response => applicationType === 'monolith',
+            when: applicationType === 'monolith' || applicationType === 'reactive',
             type: 'list',
             name: 'serviceDiscoveryType',
             message: 'Do you want to use the JHipster Registry to configure, monitor and scale your application?',
