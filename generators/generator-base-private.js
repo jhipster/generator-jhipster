@@ -987,6 +987,7 @@ module.exports = class extends Generator {
      *
      * @param {Array|Object} relationships - array of relationships
      * @param {string} dto - dto
+     * @param {string} clientFramework the client framework, 'angularX' or 'react'.
      * @returns typeImports: Map
      */
     generateEntityClientImports(relationships, dto, clientFramework = this.clientFramework) {
@@ -1012,7 +1013,7 @@ module.exports = class extends Generator {
                 if (otherEntityAngularName === 'User') {
                     importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : './user.model';
                 } else {
-                    importPath = clientFramework === 'angularX' ? `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model` : `./${relationship.otherEntityFileName}.model`;
+                    importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
                 }
                 typeImports.set(importType, importPath);
             }
