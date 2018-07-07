@@ -2,4 +2,4 @@
 
 Welcome to the official repository of everything common to JHipster and its projects, like the JDL (JHipster Domain Language).
 
-Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here](https://github.com/jhipster/jhipster-core/issues/new). For feature requests and queries you can use [this template][feature-template].
+Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here](issue-template). For feature requests and queries you can use [this template][feature-template].
