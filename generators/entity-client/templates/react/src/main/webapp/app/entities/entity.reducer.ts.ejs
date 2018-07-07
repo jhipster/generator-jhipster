@@ -44,6 +44,9 @@ import { SERVER_API_URL } from 'app/config/constants';
 
 <%_ } _%>
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
+<%_ if (pagination === 'infinite-scroll') { _%>
+import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+<%_ } _%>
 
 export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -66,9 +69,7 @@ const initialState = {
   entities: [] as ReadonlyArray<I<%= entityReactName %>>,
   entity: defaultValue,
   <%_ if (pagination === 'infinite-scroll') { _%>
-  links: {
-    last: 0
-  },
+  links: { next: 0 },
   <%_ } _%>
   updating: false,
   <%_ if (pagination !== 'no') { _%>
@@ -133,14 +134,14 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       return {
         ...state,
         <%_ if (pagination === 'infinite-scroll') { _%>
-        links: { last: links.last },
+        links,
         <%_ } _%>
         loading: false,
         <%_ if (pagination !== 'no') { _%>
         totalItems: action.payload.headers['x-total-count'],
         <%_ } _%>
         <%_ if (pagination === 'infinite-scroll') { _%>
-        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links)
+        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links, ITEMS_PER_PAGE)
         <%_ } else { _%>
         entities: action.payload.data
         <%_ } _%>
@@ -230,9 +231,6 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
-  <%_ if (pagination === 'infinite-scroll') { _%>
-    dispatch(reset());
-  <%_ } _%>
   dispatch(getEntities());
   return result;
 };
@@ -242,9 +240,6 @@ export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
-  <%_ if (pagination === 'infinite-scroll') { _%>
-    dispatch(reset());
-  <%_ } _%>
   dispatch(getEntities());
   return result;
 };
@@ -255,9 +250,6 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     payload: axios.delete(requestUrl)
   });
-  <%_ if (pagination === 'infinite-scroll') { _%>
-    dispatch(reset());
-  <%_ } _%>
   dispatch(getEntities());
   return result;
 };

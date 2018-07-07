@@ -42,7 +42,6 @@ export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= ent
   handleClose = event => {
     event.stopPropagation();
     this.props.history.goBack();
-    window.location.reload();
   };
 
   render() {
