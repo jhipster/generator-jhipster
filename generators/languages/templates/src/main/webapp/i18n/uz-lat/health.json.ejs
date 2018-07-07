@@ -32,7 +32,7 @@
             <%_ if (messageBroker === 'kafka') { _%>
             "binders": "Xabar brokeri",
             <%_ } _%>
-            <%_ if (applicationType === 'gateway') { _%>
+            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Qayta yuklash doirasi",
             "configServer": "Microservice Config Server",
@@ -52,6 +52,7 @@
             "status": "Holat"
         },
         "status": {
+            "UNKNOWN": "UNKNOWN",
             "UP": "Faol",
             "DOWN": "Faol emas"
         }
