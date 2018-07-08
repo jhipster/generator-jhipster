@@ -49,6 +49,7 @@ describe('Administration', () => {
 
   it('should load metrics', async () => {
     navBarPage.clickOnAdminMenuItem('metrics');
+    waitUntilDisplayed(element(by.className('metrics-page-heading')));
     expect(await element(by.className('metrics-page-heading')).getText()).to.eq('Application Metrics');
   });
 
