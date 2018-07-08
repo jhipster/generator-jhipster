@@ -180,6 +180,38 @@ describe('JDLEntity', () => {
         expect(entity.toString()).to.eq(`entity ${args.name} (${args.tableName})`);
       });
     });
+    context('with a table equal to the name (snakecase)', () => {
+      let entity = null;
+      let args = null;
+
+      before(() => {
+        args = {
+          name: 'MySuperEntity',
+          tableName: 'my_super_entity'
+        };
+        entity = new JDLEntity(args);
+      });
+
+      it('does not export it', () => {
+        expect(entity.toString()).to.equal(`entity ${args.name}`);
+      });
+    });
+    context('with a table name not equal to the name (snakecase)', () => {
+      let entity = null;
+      let args = null;
+
+      before(() => {
+        args = {
+          name: 'MySuperEntity',
+          tableName: 'MyTableName'
+        };
+        entity = new JDLEntity(args);
+      });
+
+      it('exports it', () => {
+        expect(entity.toString()).to.equal(`entity ${args.name} (MyTableName)`);
+      });
+    });
     context('without fields', () => {
       let entity = null;
       let args = null;
