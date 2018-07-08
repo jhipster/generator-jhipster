@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const _ = require('lodash');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
 const packagejs = require('../../package.json');
@@ -54,6 +55,9 @@ module.exports = class extends BaseGenerator {
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 this.buildTool = this.config.get('buildTool');
                 this.herokuAppName = this.config.get('herokuAppName');
+                if (this.herokuAppName === undefined) {
+                    this.herokuAppName = _.kebabCase(this.baseName);
+                }
                 this.clientFramework = this.config.get('clientFramework');
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];

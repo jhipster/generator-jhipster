@@ -159,43 +159,50 @@ function askIntegrations() {
             when: response => this.pipeline === 'jenkins' && response.cicdIntegrations.includes('sonar'),
             type: 'input',
             name: 'sonarName',
-            message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server?`,
+            message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
             default: 'sonar'
         },
         {
             when: response => this.pipeline !== 'jenkins' && response.cicdIntegrations.includes('sonar'),
             type: 'input',
             name: 'sonarUrl',
-            message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server?`,
+            message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server ?`,
             default: 'https://sonarcloud.io'
         },
         {
             when: response => this.pipeline !== 'jenkins' && response.cicdIntegrations.includes('sonar'),
             type: 'input',
             name: 'sonarOrga',
-            message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server?`,
+            message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server ?`,
             default: ''
         },
         {
             when: response => response.cicdIntegrations.includes('publishDocker'),
             type: 'input',
             name: 'dockerRegistryURL',
-            message: `${chalk.yellow('*Docker*')}: what is the URL of the Docker registry?`,
+            message: `${chalk.yellow('*Docker*')}: what is the URL of the Docker registry ?`,
             default: 'https://registry.hub.docker.com'
         },
         {
             when: response => response.cicdIntegrations.includes('publishDocker'),
             type: 'input',
             name: 'dockerRegistryCredentialsId',
-            message: `${chalk.yellow('*Docker*')}: what is the Jenkins Credentials ID for the Docker registry?`,
+            message: `${chalk.yellow('*Docker*')}: what is the Jenkins Credentials ID for the Docker registry ?`,
             default: 'docker-login'
         },
         {
             when: response => response.cicdIntegrations.includes('publishDocker'),
             type: 'input',
             name: 'dockerRegistryOrganizationName',
-            message: `${chalk.yellow('*Docker*')}: what is the Organization Name for the Docker registry?`,
+            message: `${chalk.yellow('*Docker*')}: what is the Organization Name for the Docker registry ?`,
             default: 'docker-login'
+        },
+        {
+            when: response => response.cicdIntegrations.includes('heroku'),
+            type: 'input',
+            name: 'herokuAppName',
+            message: `${chalk.yellow('*Heroku*')}: name of your Heroku Application ?`,
+            default: `${this.herokuAppName}`
         }
     ];
     this.prompt(prompts).then((props) => {

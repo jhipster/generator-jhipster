@@ -1116,16 +1116,16 @@ module.exports = class extends PrivateBase {
     addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
         const fullPath = 'pom.xml';
         try {
-            const repository = `${'<distributionManagement>\n' +
-                '        <snapshotRepository>\n' +
-                '            <id>'}${snapshotsId}</id>\n` +
-                `            <url>${snapshotsUrl}</url>\n` +
-                '        </snapshotRepository>\n' +
-                '        <repository>\n' +
-                `            <id>${releasesId}</id>\n` +
-                `            <url>${releasesUrl}</url>\n` +
-                '        </repository>\n' +
-                '    </distributionManagement>';
+            const repository = `${'<distributionManagement>\n'
+                + '        <snapshotRepository>\n'
+                + '            <id>'}${snapshotsId}</id>\n`
+                + `            <url>${snapshotsUrl}</url>\n`
+                + '        </snapshotRepository>\n'
+                + '        <repository>\n'
+                + `            <id>${releasesId}</id>\n`
+                + `            <url>${releasesUrl}</url>\n`
+                + '        </repository>\n'
+                + '    </distributionManagement>';
             jhipsterUtils.rewriteFile({
                 file: fullPath,
                 needle: 'jhipster-needle-distribution-management',

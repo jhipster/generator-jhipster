@@ -235,8 +235,8 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.gitlab);
         });
-        it('doesn\'t contain openjdk, Sonar, Heroku', () => {
-            assert.noFileContent('.gitlab-ci.yml', /image: openjdk/);
+        it('doesn\'t contain image: jhipster, Sonar, Heroku', () => {
+            assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.noFileContent('.gitlab-ci.yml', /sonar/);
             assert.noFileContent('.gitlab-ci.yml', /heroku/);
         });
@@ -261,8 +261,8 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.gitlab);
         });
-        it('doesn\'t contain openjdk, Sonar, Heroku', () => {
-            assert.noFileContent('.gitlab-ci.yml', /image: openjdk/);
+        it('doesn\'t contain image: jhipster, Sonar, Heroku', () => {
+            assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.noFileContent('.gitlab-ci.yml', /sonar/);
             assert.noFileContent('.gitlab-ci.yml', /heroku/);
         });
@@ -286,8 +286,8 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.gitlab);
         });
-        it('doesn\'t contain openjdk, Sonar, Heroku', () => {
-            assert.noFileContent('.gitlab-ci.yml', /image: openjdk/);
+        it('doesn\'t contain image: jhipster, Sonar, Heroku', () => {
+            assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.noFileContent('.gitlab-ci.yml', /sonar/);
             assert.noFileContent('.gitlab-ci.yml', /heroku/);
         });
@@ -311,8 +311,8 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.gitlab);
         });
-        it('doesn\'t contain openjdk, Sonar, Heroku', () => {
-            assert.noFileContent('.gitlab-ci.yml', /image: openjdk/);
+        it('doesn\'t contain jhipster/jhipster, Sonar, Heroku', () => {
+            assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.noFileContent('.gitlab-ci.yml', /sonar/);
             assert.noFileContent('.gitlab-ci.yml', /heroku/);
         });
@@ -346,7 +346,7 @@ describe('JHipster CI-CD Sub Generator', () => {
             assert.file(expectedFiles.gitlab);
         });
         it('contains Sonar, Heroku', () => {
-            assert.noFileContent('.gitlab-ci.yml', /image: openjdk/);
+            assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.fileContent('.gitlab-ci.yml', /sonar/);
             assert.fileContent('.gitlab-ci.yml', /heroku/);
         });
@@ -385,8 +385,8 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.gitlab);
         });
-        it('contains openjdk, Sonar, Heroku', () => {
-            assert.fileContent('.gitlab-ci.yml', /image: openjdk/);
+        it('contains image: jhipster, Sonar, Heroku', () => {
+            assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.fileContent('.gitlab-ci.yml', /sonar/);
             assert.fileContent('.gitlab-ci.yml', /heroku/);
         });
