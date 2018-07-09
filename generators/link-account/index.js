@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 
+const chalk = require('chalk');
+
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
-const chalk = require('chalk');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
