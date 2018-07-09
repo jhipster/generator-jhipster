@@ -23,7 +23,16 @@ class Statistics {
         this.doNotAskCounter = this.config.get('doNotAskCounter');
         this.optOut = this.config.get('optOut');
         this.isLinked = this.config.get('isLinked');
-        this.configProxy();
+        this.noInsight = process.argv.includes('--no-insight');
+        if (this.noInsight) {
+            this.noInsightConfig();
+        } else {
+            this.configProxy();
+        }
+    }
+
+    noInsightConfig() {
+        this.optOut = true;
     }
 
     postRequest(url, data, force = false) {
@@ -64,6 +73,9 @@ class Statistics {
     }
 
     shouldWeAskForOptIn() {
+        if (this.noInsight) {
+            return false;
+        }
         if (this.optOut) {
             this.doNotAskCounter++;
             this.config.set('doNotAskCounter', this.doNotAskCounter % (DO_NOT_ASK_LIMIT));
