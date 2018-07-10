@@ -385,9 +385,11 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => (shouldSkipUserManagement(generator)
-                && (generator.applicationType !== 'microservice' && generator.authenticationType === 'jwt'))
-                || (!shouldSkipUserManagement(generator) && generator.applicationType !== 'uaa'),
+            condition: generator => generator.applicationType === 'microservice'
+                || (generator.applicationType !== 'uaa'
+                    && ((shouldSkipUserManagement(generator) && generator.authenticationType === 'jwt')
+                        || !shouldSkipUserManagement(generator)
+                        || generator.authenticationType === 'uaa')),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -543,13 +545,6 @@ const serverFiles = {
         }
     ],
     serverMicroservice: [
-        {
-            condition: generator => generator.applicationType === 'microservice' || (generator.authenticationType === 'uaa' && generator.applicationType !== 'uaa'),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/config/MicroserviceSecurityConfiguration.java', renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java` }
-            ]
-        },
         {
             condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
                 && generator.authenticationType === 'uaa',
