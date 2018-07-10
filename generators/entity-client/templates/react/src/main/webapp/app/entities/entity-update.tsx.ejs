@@ -211,7 +211,7 @@ const ownerSide = rel.ownerSide;
 _%>
   <%_ if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
   <%= relationshipFieldName %>Update = element => {
-    const selected = Array.from(element.target.selectedOptions).map((e: any) => e.value);
+    const selected = Array.from(element.target.selectedOptions).map((e: any) => parseInt(e.value, 10));
     this.setState({
       ids<%= relationshipName %>: keysToValues(selected, this.props.<%= otherEntityNamePlural %>, '<%= otherEntityField %>')
     });
