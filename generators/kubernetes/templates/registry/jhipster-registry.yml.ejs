@@ -84,7 +84,7 @@ spec:
         # StatefulSet specific configuration
         # Registry configuration
         - name: SPRING_PROFILES_ACTIVE
-          value: prod,native,k8s
+          value: prod,k8s
         - name: SPRING_SECURITY_USER_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -96,6 +96,10 @@ spec:
         <%_ } _%>
         - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
           value: my-secret-token-to-change-in-production
+        - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
+          value: native
+        - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
+          value: file:./central-config
         - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
           value: '15'
         - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS

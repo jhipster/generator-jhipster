@@ -49,12 +49,8 @@ services:
         image: <%= DOCKER_JHIPSTER_REGISTRY %>
         #volumes:
         #    - ./central-server-config:/central-config
-        # By default the JHipster Registry runs with the "dev" and "native"
-        # Spring profiles.
-        # "native" profile means the filesystem is used to store data, see
-        # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
         environment:
-            - SPRING_PROFILES_ACTIVE=dev,native
+            - SPRING_PROFILES_ACTIVE=dev
             - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
             <%_ if (monitoring === 'elk') { _%>
             - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
@@ -66,7 +62,8 @@ services:
             - JHIPSTER_METRICS_PROMETHEUS_ENABLED=true
             - JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics
             <%_ } _%>
-            - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:./config/
+            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./config/
             # Uncomment to use a Git configuration source instead of the local filesystem
             # mounted from the registry-config-sidekick volume
             # - GIT_URI=https://github.com/jhipster/jhipster-registry/
