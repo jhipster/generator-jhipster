@@ -103,11 +103,11 @@ module.exports = class extends BaseGenerator {
 };
 
 function authenticateAndLink(axiosClient, generator, username, password, generatorId, statisticsPath) {
-    return axiosClient.post(`${statistics.statisticsAPIPath}authenticate`, {
+    return axiosClient.post(`${statistics.statisticsAPIPath}/authenticate`, {
         username,
         password,
         rememberMe: false
-    }, true).then(answer => axiosClient.post(`${statistics.statisticsAPIPath}s/link/${generatorId}`, {}, {
+    }, true).then(answer => axiosClient.post(`${statistics.statisticsAPIPath}/s/link/${generatorId}`, {}, {
         headers: {
             Authorization: answer.headers.authorization
         }

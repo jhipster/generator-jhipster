@@ -18,7 +18,7 @@ class Statistics {
                 isLinked: false
             }
         });
-        this.statisticsAPI = API_PATH;
+        this.statisticsAPIPath = API_PATH;
         this.clientId = this.config.get('clientId');
         this.doNotAskCounter = this.config.get('doNotAskCounter');
         this.optOut = this.config.get('optOut');
