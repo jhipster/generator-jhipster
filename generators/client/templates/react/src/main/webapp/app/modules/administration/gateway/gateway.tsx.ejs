@@ -90,7 +90,7 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
           <p>
             <Button onClick={this.gatewayRoutes} color={isFetching ? 'danger' : 'primary'} disabled={isFetching}>
               <FontAwesomeIcon icon="sync" />&nbsp;
-              <Translate component="span" contentKey="health.refresh.button">Refresh<Translate>
+              <Translate component="span" contentKey="health.refresh.button">Refresh</Translate>
             </Button>
           </p>
 
@@ -98,7 +98,7 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
             <thead>
               <tr key="header">
                 <th><Translate contentKey="gateway.routes.url">URL</Translate></th>
-                <th><Translate contentKey="gateway.routes.service">service</Translate></th>
+                <th><Translate contentKey="gateway.routes.service">Service</Translate></th>
                 <th><Translate contentKey="gateway.routes.servers">Available servers</Translate></th>
               </tr>
             </thead>
