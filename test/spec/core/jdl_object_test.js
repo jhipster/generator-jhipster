@@ -193,6 +193,28 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#getEntity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addEntity(new JDLEntity({ name: 'A' }));
+    });
+
+    context('when not passing a name', () => {
+      it('fails', () => {
+        expect(() => {
+          jdlObject.getEntity();
+        }).to.throw('An entity name must be passed.');
+      });
+    });
+
+    context('when passing a name', () => {
+      it('returns the entity', () => {
+        expect(jdlObject.getEntity('A')).not.to.be.undefined;
+      });
+    });
+  });
   describe('#getEntityQuantity', () => {
     let jdlObject = null;
 
@@ -243,6 +265,34 @@ describe('JDLObject', () => {
 
       it('returns the entity names', () => {
         expect(jdlObject.getEntityNames()).to.deep.equal(['A', 'B', 'C']);
+      });
+    });
+  });
+  describe('#forEachEntity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addEntity(new JDLEntity({ name: 'A' }));
+      jdlObject.addEntity(new JDLEntity({ name: 'B' }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlObject.forEachEntity();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlObject.forEachEntity((entity) => {
+          result.push(entity.name);
+        });
+      });
+
+      it('uses each entity name', () => {
+        expect(result).to.deep.equal(['A', 'B']);
       });
     });
   });

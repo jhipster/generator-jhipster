@@ -256,7 +256,7 @@ describe('BusinessErrorChecker', () => {
           name: 'valid'
         }));
         checker = new BusinessErrorChecker(jdlObject);
-        jdlObject.entities.Continue = jdlObject.entities.valid;
+        jdlObject.entities.Continue = jdlObject.getEntity('valid');
         jdlObject.entities.Continue.name = 'Continue';
         delete jdlObject.entities.valid;
       });
@@ -332,7 +332,7 @@ describe('BusinessErrorChecker', () => {
       before(() => {
         checker = new BusinessErrorChecker(jdlObject);
         checkForValidationErrorsStub = sinon.stub(checker, 'checkForValidationErrors').returns(null);
-        checker.checkForFieldErrors('Valid', jdlObject.entities.Valid.fields);
+        checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
       });
       after(() => {
         checkForValidationErrorsStub.restore();
@@ -344,16 +344,16 @@ describe('BusinessErrorChecker', () => {
     });
     context('if the field name is reserved', () => {
       before(() => {
-        jdlObject.entities.Valid.fields.validField.name = 'catch';
+        jdlObject.getEntity('Valid').fields.validField.name = 'catch';
         checker = new BusinessErrorChecker(jdlObject);
       });
       after(() => {
-        jdlObject.entities.Valid.fields.validField.name = 'validField';
+        jdlObject.getEntity('Valid').fields.validField.name = 'validField';
       });
 
       it('fails', () => {
         expect(() => {
-          checker.checkForFieldErrors('Valid', jdlObject.entities.Valid.fields);
+          checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
         }).to.throw('The name \'catch\' is a reserved keyword and can not be used as an entity field name.');
       });
     });
@@ -376,7 +376,7 @@ describe('BusinessErrorChecker', () => {
 
         it('succeeds', () => {
           expect(() => {
-            checker.checkForFieldErrors('Valid', jdlObject.entities.Valid.fields);
+            checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
           }).not.to.throw();
         });
       });
@@ -403,7 +403,7 @@ describe('BusinessErrorChecker', () => {
 
         it('fails', () => {
           expect(() => {
-            checker.checkForFieldErrors('Valid', jdlObject.entities.Valid.fields);
+            checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
           }).to.throw('The type \'WeirdType\' is an unknown field type for field \'validField\' of entity \'Valid\'.');
         });
       });
@@ -424,7 +424,7 @@ describe('BusinessErrorChecker', () => {
 
         it('fails', () => {
           expect(() => {
-            checker.checkForFieldErrors('Valid', jdlObject.entities.Valid.fields);
+            checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
           }).to.throw('The type \'WeirdType\' is an unknown field type for field \'validField\' of entity \'Valid\'.');
         });
       });
@@ -458,7 +458,7 @@ describe('BusinessErrorChecker', () => {
 
       it('fails', () => {
         expect(() => {
-          checker.checkForValidationErrors(jdlObject.entities.Valid.fields.validField);
+          checker.checkForValidationErrors(jdlObject.getEntity('Valid').fields.validField);
         }).to.throw('The validation \'min\' isn\'t supported for the type \'String\'.');
       });
     });
