@@ -372,6 +372,34 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#forEachEnum', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addEnum(new JDLEnum({ name: 'A' }));
+      jdlObject.addEnum(new JDLEnum({ name: 'B' }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlObject.forEachEnum();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlObject.forEachEnum((jdlEnum) => {
+          result.push(jdlEnum.name);
+        });
+      });
+
+      it('uses each enum name', () => {
+        expect(result).to.deep.equal(['A', 'B']);
+      });
+    });
+  });
   describe('#addRelationship', () => {
     context('when adding an invalid relationship', () => {
       const object = new JDLObject();
