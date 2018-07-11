@@ -24,7 +24,6 @@ image: jhipster/jhipster:v<%= jhipsterVersion %>
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
-        - node_modules
         - .gradle/wrapper
         - .gradle/caches
 <%_ } _%>
@@ -32,7 +31,6 @@ cache:
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
-        - node_modules
         - .maven
 <%_ } _%>
 stages:
