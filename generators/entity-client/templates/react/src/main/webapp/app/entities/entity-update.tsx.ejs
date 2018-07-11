@@ -375,12 +375,13 @@ _%>
               <%_
                 const enumPrefix = angularAppName + '.'+ fieldType;
                 for (key in values) {
-                    const value = values[key]; _%>
+                    const value = values[key];
+              _%>
                 <option value="<%= value %>">
-                <%_ if (enableTranslation) { _%
-                  <Translate contentKey="<%=enumPrefix%>.<%=value%>" />
+                <%_ if (enableTranslation) { _%>
+                  <Translate contentKey="<%= enumPrefix %>.<%= value %>" />
                 <%_ } else { _%>
-                  <%=value%>
+                  <%= value %>
                 <%_ } _%>
                 </option>
               <%_ } _%>
