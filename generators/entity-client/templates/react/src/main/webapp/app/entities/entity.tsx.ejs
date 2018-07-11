@@ -230,8 +230,10 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     </Button>
                   </td>
                   <%_ for (idx in fields) {
+                    console.log(fields[idx]);
                     const fieldType = fields[idx].fieldType;
                     const fieldName = fields[idx].fieldName;
+                    const fieldIsEnum = fields[idx].fieldIsEnum;
                   _%>
                   <td>
                   <%_ if (fieldType === 'Boolean') { _%>
@@ -240,6 +242,8 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_DATE_FORMAT} />
                   <%_ } else if (fieldType === 'LocalDate') { _%>
                     <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
+                  <%_ } else if (fieldIsEnum && enableTranslation) { _%>
+                    <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
                   <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
                     <%_
                       // blobFields

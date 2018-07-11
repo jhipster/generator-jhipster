@@ -377,7 +377,11 @@ _%>
                 for (key in values) {
                     const value = values[key]; _%>
                 <option value="<%= value %>">
-                    <%=value%>
+                <%_ if (enableTranslation) { _%
+                  <Translate contentKey="<%=enumPrefix%>.<%=value%>" />
+                <%_ } else { _%>
+                  <%=value%>
+                <%_ } _%>
                 </option>
               <%_ } _%>
               </AvInput>
