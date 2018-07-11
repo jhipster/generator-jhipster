@@ -116,6 +116,32 @@ describe('JDLApplication', () => {
       });
     });
   });
+  describe('#forEachEntityName', () => {
+    let application = null;
+
+    before(() => {
+      application = new JDLApplication({ entities: ['A', 'B'] });
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        application.forEachEntityName();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        application.forEachEntityName((entityName) => {
+          result.push(entityName);
+        });
+      });
+
+      it('uses each entity name', () => {
+        expect(result).to.deep.equal(['A', 'B']);
+      });
+    });
+  });
   describe('#toString', () => {
     let jdlApplication = null;
 

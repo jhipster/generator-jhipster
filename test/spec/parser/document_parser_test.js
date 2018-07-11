@@ -771,8 +771,8 @@ describe('DocumentParser', () => {
         });
 
         it('adds the application entities in the application object', () => {
-          expect(content.applications.MyApp.entities.has('BankAccount')).to.be.true;
-          expect(content.applications.MyApp.entities.size()).to.equal(1);
+          expect(content.applications.MyApp.entityNames.has('BankAccount')).to.be.true;
+          expect(content.applications.MyApp.entityNames.size()).to.equal(1);
         });
       });
       context('when parsing a relationship with no injected field', () => {

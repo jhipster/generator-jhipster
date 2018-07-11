@@ -96,6 +96,34 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#forEachApplication', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addApplication(new JDLApplication({ config: { baseName: 'A' } }));
+      jdlObject.addApplication(new JDLApplication({ config: { baseName: 'B' } }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlObject.forEachApplication();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlObject.forEachApplication((application) => {
+          result.push(application.config.baseName);
+        });
+      });
+
+      it('uses each entity name', () => {
+        expect(result).to.deep.equal(['A', 'B']);
+      });
+    });
+  });
   describe('#addEntity', () => {
     context('when adding an invalid entity', () => {
       const object = new JDLObject();
