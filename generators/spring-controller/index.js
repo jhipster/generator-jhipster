@@ -62,9 +62,8 @@ module.exports = class extends BaseGenerator {
                 this.databaseType = configuration.get('databaseType');
                 this.reactiveController = false;
                 this.applicationType = configuration.get('applicationType');
-                if (this.applicationType === 'reactive') {
-                    this.reactiveController = true;
-                }
+                this.reactive = configuration.get('reactive');
+                this.reactiveController = this.reactive;
                 this.controllerActions = [];
             }
         };

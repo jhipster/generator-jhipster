@@ -18,7 +18,9 @@
 -%>
 package <%=packageName%>.config;
 
+<%_ if (!skipClient || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import io.github.jhipster.config.JHipsterConstants;
+<%_ } _%>
 import io.github.jhipster.config.JHipsterProperties;
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import io.github.jhipster.config.h2.H2ConfigurationHelper;
@@ -44,9 +46,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
+<%_ if (!reactive) { _%>
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+<%_ } _%>
 <%_ if (reactive) { _%>
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
 <%_ } _%>
@@ -101,13 +107,17 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-        initMetrics(servletContext, disps);<% if (!skipClient) { %>
+        initMetrics(servletContext, disps);
+        <%_ if (!skipClient) { _%>
         if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
-        }<% } %><% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+        }
+        <%_ } _%>
+        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
             initH2Console(servletContext);
-        }<% } %>
+        }
+        <%_ } _%>
         log.info("Web application fully configured");
     }
 
@@ -226,7 +236,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
     }
 
     @Bean
-    public CorsFilter corsFilter() {
+    public Cors<% if (reactive) { %>Web<% } %>Filter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
         if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
@@ -245,8 +255,9 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
             <%_ } _%>
             <%_ } _%>
         }
-        return new CorsFilter(source);
-    }<% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+        return new Cors<% if (reactive) { %>Web<% } %>Filter(source);
+    }
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 
     /**
      * Initializes H2 console.
@@ -254,7 +265,8 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
     private void initH2Console(ServletContext servletContext) {
         log.debug("Initialize H2 console");
         H2ConfigurationHelper.initH2Console(servletContext);
-    }<% } %>
+    }
+    <%_ } _%>
 
     @Autowired(required = false)
     public void setMetricRegistry(MetricRegistry metricRegistry) {

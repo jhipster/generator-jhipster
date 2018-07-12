@@ -25,32 +25,47 @@ import <%= packageName %>.security.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+<%_ if (!skipUserManagement) { _%>
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
+<%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+<%_ if (!skipUserManagement) { _%>
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+<%_ } _%>
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+<%_ if (!skipUserManagement) { _%>
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+<%_ } _%>
 
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 public class SecurityConfiguration {
 
+    <%_ if (!skipUserManagement) { _%>
     private final ReactiveUserDetailsService userDetailsService;
 
+    <%_ } _%>
     private final TokenProvider tokenProvider;
 
-    public SecurityConfiguration(ReactiveUserDetailsService userDetailsService, TokenProvider tokenProvider) {
+    private final CorsWebFilter corsWebFilter;
+
+    public SecurityConfiguration(<% if (!skipUserManagement) { %>ReactiveUserDetailsService userDetailsService, <% } %>TokenProvider tokenProvider, CorsWebFilter corsWebFilter) {
+        <%_ if (!skipUserManagement) { _%>
         this.userDetailsService = userDetailsService;
+        <%_ } _%>
         this.tokenProvider = tokenProvider;
+        this.corsWebFilter = corsWebFilter;
     }
 
+    <%_ if (!skipUserManagement) { _%>
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -63,6 +78,7 @@ public class SecurityConfiguration {
         return authenticationManager;
     }
 
+    <%_ } _%>
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
@@ -72,29 +88,32 @@ public class SecurityConfiguration {
             .frameOptions()
             .disable()
         .and()
-            // TODO: add Cors filter
+            .addFilterAt(corsWebFilter, SecurityWebFiltersOrder.HTTP_HEADERS_WRITER)
             .addFilterAt(new JWTFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
+            <%_ if (!skipUserManagement) { _%>
             .addFilterAt(new AuthenticationWebFilter(reactiveAuthenticationManager()), SecurityWebFiltersOrder.AUTHENTICATION)
+            <%_ } _%>
             .authorizeExchange()
             .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            <%_ if (!skipClient) { _%>
             .pathMatchers("/app/**/*.js").permitAll()
             .pathMatchers("/app/**/*.html").permitAll()
             .pathMatchers("/i18n/**").permitAll()
             .pathMatchers("/content/**").permitAll()
             .pathMatchers("/swagger-ui/index.html").permitAll()
             .pathMatchers("/test/**").permitAll()
+            <%_ } _%>
+            <%_ if (!skipUserManagement) { _%>
             .pathMatchers("/api/register").permitAll()
             .pathMatchers("/api/activate").permitAll()
             .pathMatchers("/api/authenticate").permitAll()
             .pathMatchers("/api/account/reset-password/init").permitAll()
             .pathMatchers("/api/account/reset-password/finish").permitAll()
+            <%_ } _%>
             .pathMatchers("/api/**").authenticated()
             .pathMatchers("/management/health").permitAll()
             .pathMatchers("/management/info").permitAll()
-            .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .pathMatchers("/v2/api-docs/**").permitAll()
-            .pathMatchers("/swagger-resources/configuration/ui").permitAll()
-            .pathMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
+            .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
         return http.build();
     }
 }

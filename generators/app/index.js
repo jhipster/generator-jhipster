@@ -243,8 +243,7 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.logo = false;
                 this.configOptions.otherModules = this.otherModules;
                 this.generatorType = 'app';
-                this.reactive = false;
-                if (this.applicationType === 'reactive') {
+                if (this.reactive) {
                     // TODO: support client in reactive app
                     this.skipClient = true;
                     this.generatorType = 'server';
@@ -348,6 +347,7 @@ module.exports = class extends BaseGenerator {
                     config.languages = this.languages;
                 }
                 this.blueprint && (config.blueprint = this.blueprint);
+                this.reactive && (config.reactive = this.reactive);
                 this.skipClient && (config.skipClient = true);
                 this.skipServer && (config.skipServer = true);
                 this.skipUserManagement && (config.skipUserManagement = true);

@@ -76,6 +76,10 @@ function askForApplicationType(meta) {
             value: 'reactive',
             name: '[Alpha] Reactive monolithic application'
         });
+        applicationTypeChoices.push({
+            value: 'reactive-micro',
+            name: '[Alpha] Reactive microservice application'
+        });
     }
 
     const PROMPT = {
@@ -94,7 +98,16 @@ function askForApplicationType(meta) {
         ? Promise.resolve({ applicationType: DEFAULT_APPTYPE })
         : this.prompt(PROMPT);
     promise.then((prompt) => {
-        this.applicationType = this.configOptions.applicationType = prompt.applicationType;
+        if (prompt.applicationType === 'reactive') {
+            this.applicationType = this.configOptions.applicationType = DEFAULT_APPTYPE;
+            this.reactive = this.configOptions.reactive = true;
+        } else if (prompt.applicationType === 'reactive-micro') {
+            this.applicationType = this.configOptions.applicationType = 'microservice';
+            this.reactive = this.configOptions.reactive = true;
+        } else {
+            this.applicationType = this.configOptions.applicationType = prompt.applicationType;
+            this.reactive = this.configOptions.reactive = false;
+        }
         done();
     });
 }
