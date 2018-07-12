@@ -646,9 +646,8 @@ describe('BusinessErrorChecker', () => {
     context('when having a reserved name as class name', () => {
       before(() => {
         jdlObject.addEnum(new JDLEnum({
-          name: 'GoodName'
+          name: 'Catch'
         }));
-        jdlObject.enums.GoodName.name = 'Catch';
         checker = new BusinessErrorChecker(jdlObject);
       });
 

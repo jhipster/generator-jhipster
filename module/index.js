@@ -30,6 +30,7 @@ const JDLApplication = require('../lib/core/jdl_application');
 const JDLEntity = require('../lib/core/jdl_entity');
 const JDLField = require('../lib/core/jdl_field');
 const JDLValidation = require('../lib/core/jdl_validation');
+const JDLEnums = require('../lib/core/jdl_enums');
 const JDLEnum = require('../lib/core/jdl_enum');
 const JDLRelationship = require('../lib/core/jdl_relationship');
 const JDLRelationships = require('../lib/core/jdl_relationships');
@@ -72,6 +73,7 @@ module.exports = {
   JDLEntity,
   JDLField,
   JDLValidation,
+  JDLEnums,
   JDLEnum,
   JDLRelationship,
   JDLRelationships,

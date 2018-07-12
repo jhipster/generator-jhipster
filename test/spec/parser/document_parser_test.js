@@ -48,18 +48,18 @@ describe('DocumentParser', () => {
     });
     context('when passing valid args', () => {
       context('with no error', () => {
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
         });
 
         it('builds a JDLObject', () => {
-          expect(content).not.to.be.null;
-          expect(content.entities.Department).to.deep.eq(new JDLEntity({
+          expect(jdlObject).not.to.be.null;
+          expect(jdlObject.entities.Department).to.deep.eq(new JDLEntity({
             name: 'Department',
             tableName: 'Department',
             fields: {
@@ -82,7 +82,7 @@ describe('DocumentParser', () => {
               })
             }
           }));
-          expect(content.entities.JobHistory).to.deep.eq(new JDLEntity({
+          expect(jdlObject.entities.JobHistory).to.deep.eq(new JDLEntity({
             name: 'JobHistory',
             tableName: 'JobHistory',
             fields: {
@@ -98,11 +98,11 @@ describe('DocumentParser', () => {
             },
             comment: 'JobHistory comment.'
           }));
-          expect(content.enums.JobType).to.deep.eq(new JDLEnum({
+          expect(jdlObject.getEnum('JobType')).to.deep.eq(new JDLEnum({
             name: 'JobType',
             values: ['TYPE1', 'TYPE2']
           }));
-          expect(content.entities.Job).to.deep.eq(new JDLEntity({
+          expect(jdlObject.entities.Job).to.deep.eq(new JDLEntity({
             name: 'Job',
             tableName: 'Job',
             fields: {
@@ -131,7 +131,7 @@ describe('DocumentParser', () => {
               })
             }
           }));
-          expect(content.getOptions()).to.deep.eq([
+          expect(jdlObject.getOptions()).to.deep.eq([
             new JDLUnaryOption({
               name: UnaryOptions.SKIP_SERVER,
               entityNames: ['Country']
@@ -249,12 +249,12 @@ describe('DocumentParser', () => {
         });
       });
       context('with a required enum', () => {
-        let content = null;
+        let jdlObject = null;
         let enumField = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/enum.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
           enumField = new JDLField({
@@ -267,11 +267,11 @@ describe('DocumentParser', () => {
         });
 
         it('adds it', () => {
-          expect(content.enums.MyEnum).to.deep.eq(new JDLEnum({
+          expect(jdlObject.getEnum('MyEnum')).to.deep.eq(new JDLEnum({
             name: 'MyEnum',
             values: ['AAA', 'BBB', 'CCC']
           }));
-          expect(content.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
+          expect(jdlObject.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
         });
       });
       context('when using the noFluentMethods option', () => {

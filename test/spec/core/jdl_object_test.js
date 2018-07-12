@@ -326,7 +326,7 @@ describe('JDLObject', () => {
       });
 
       it('works', () => {
-        expect(object.enums[enumObject.name]).to.deep.eq(enumObject);
+        expect(object.getEnum(enumObject.name)).to.deep.eq(enumObject);
       });
     });
     context('when adding an enum with the same name', () => {
@@ -343,7 +343,57 @@ describe('JDLObject', () => {
       });
 
       it('replaces the old one', () => {
-        expect(object.enums[enumObject.name]).to.deep.eq(enumObject2);
+        expect(object.getEnum(enumObject.name)).to.deep.eq(enumObject2);
+      });
+    });
+  });
+  describe('#getEnum', () => {
+    let object = null;
+
+    before(() => {
+      object = new JDLObject();
+    });
+
+    context('when fetching an absent enum', () => {
+      it('returns null', () => {
+        expect(object.getEnum('A')).to.be.undefined;
+      });
+    });
+    context('when fetching an existing enum', () => {
+      let jdlEnum;
+
+      before(() => {
+        jdlEnum = new JDLEnum({ name: 'A' });
+        object.addEnum(jdlEnum);
+      });
+
+      it('returns it', () => {
+        expect(object.getEnum(jdlEnum.name)).to.deep.equal(jdlEnum);
+      });
+    });
+  });
+  describe('#hasEnum', () => {
+    let object = null;
+
+    before(() => {
+      object = new JDLObject();
+    });
+
+    context('when fetching an absent enum', () => {
+      it('returns false', () => {
+        expect(object.hasEnum('A')).to.be.false;
+      });
+    });
+    context('when fetching an existing enum', () => {
+      let jdlEnum;
+
+      before(() => {
+        jdlEnum = new JDLEnum({ name: 'A' });
+        object.addEnum(jdlEnum);
+      });
+
+      it('returns true', () => {
+        expect(object.hasEnum(jdlEnum.name)).to.be.true;
       });
     });
   });

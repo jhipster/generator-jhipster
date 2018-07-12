@@ -69,10 +69,11 @@ describe('JSONParser', () => {
         expect(content.entities.Employee.fields.employeeId.validations).to.be.empty;
       });
       it('parses enums', () => {
-        expect(content.enums.Language.name).eq('Language');
-        expect(content.enums.Language.values.has('FRENCH')).to.be.true;
-        expect(content.enums.Language.values.has('ENGLISH')).to.be.true;
-        expect(content.enums.Language.values.has('SPANISH')).to.be.true;
+        const languageEnum = content.getEnum('Language');
+        expect(languageEnum.name).eq('Language');
+        expect(languageEnum.values.has('FRENCH')).to.be.true;
+        expect(languageEnum.values.has('ENGLISH')).to.be.true;
+        expect(languageEnum.values.has('SPANISH')).to.be.true;
       });
       it('parses options', () => {
         expect(

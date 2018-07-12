@@ -74,13 +74,6 @@ describe('JDLEnum', () => {
           expect(JDLEnum.isValid({ values: ['A', 'B'] })).to.be.false;
         });
       });
-      context('with a reserved keyword as name', () => {
-        it('returns false', () => {
-          expect(
-            JDLEnum.isValid({ name: 'class' })
-          ).to.be.false;
-        });
-      });
     });
   });
   describe('#toString', () => {
