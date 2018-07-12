@@ -118,7 +118,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   reset = () => {
-    this.setState({ activePage: 0 }, () => {
+    this.setState({ activePage: 1 }, () => {
       this.props.reset();
       this.getEntities();
     });
@@ -135,11 +135,11 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   sort = prop => () => {
     this.setState(
       {
-        activePage: 0,
+        activePage: 1,
         order: this.state.order === 'asc' ? 'desc' : 'asc',
         sort: prop
       },
-      () => <% if (pagination === 'infinite-scroll') { %>this.reset()<% } else { %>this.sortEntities()<% } %>
+      () => <% if (pagination === 'infinite-scroll') { %>this.getEntities()<% } else { %>this.sortEntities()<% } %>
     );
   };
 
@@ -156,7 +156,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
   getEntities = () => {
     const { activePage, itemsPerPage, sort, order } = this.state;
-    this.props.getEntities(activePage, itemsPerPage, `${sort},${order}`);
+    this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
   };
   <%_ } _%>
 
@@ -197,7 +197,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <%_ if (pagination === 'infinite-scroll') { _%>
           <InfiniteScroll pageStart={this.state.activePage}
                           loadMore={this.handleLoadMore}
-                          hasMore={this.state.activePage < this.props.links.next}
+                          hasMore={this.state.activePage - 1 < this.props.links.next}
                           loader={<div className="loader">Loading ...</div>}
                           threshold={0}
                           initialLoad={false}>
