@@ -75,7 +75,208 @@ describe('JDLRelationships', () => {
 
       it('succeeds', () => {
         expect(relationships.size()).to.eq(2);
-        expect(Object.keys(relationships.relationships.OneToOne).length).to.eq(2);
+      });
+    });
+  });
+  describe('#get', () => {
+    context('when passing an invalid type', () => {
+      it('fails', () => {
+        expect(() => {
+          new JDLRelationships().get('oops', 42);
+        }).to.throw('A valid relationship type must be passed, got \'oops\'.');
+      });
+    });
+    context('when passing an invalid id', () => {
+      it('fails', () => {
+        expect(() => {
+          new JDLRelationships().get(RelationshipTypes.ONE_TO_MANY);
+        }).to.throw('A relationship id must be passed.');
+      });
+    });
+    context('when passing valid arguments', () => {
+      context('but there is no relationship', () => {
+        it('returns null', () => {
+          expect(new JDLRelationships().get(RelationshipTypes.ONE_TO_MANY, 42)).to.be.undefined;
+        });
+      });
+      context('for an existing relationship', () => {
+        let relationships = null;
+        let relationship = null;
+
+        before(() => {
+          relationships = new JDLRelationships();
+          relationship = new JDLRelationship({
+            from: new JDLEntity({
+              name: 'Abc'
+            }),
+            to: new JDLEntity({
+              name: 'Abc2'
+            }),
+            injectedFieldInFrom: 'something',
+            type: RelationshipTypes.ONE_TO_ONE
+          });
+          relationships.add(relationship);
+        });
+
+        it('returns it', () => {
+          expect(relationships.get(relationship.type, relationship.getId())).to.deep.equal(relationship);
+        });
+      });
+    });
+  });
+  describe('#getOneToOne', () => {
+    context('when passing an invalid id', () => {
+      it('fails', () => {
+        expect(() => {
+          new JDLRelationships().getOneToOne();
+        }).to.throw('A relationship id must be passed.');
+      });
+    });
+    context('when passing valid arguments', () => {
+      context('but there is no relationship', () => {
+        it('returns null', () => {
+          expect(new JDLRelationships().getOneToOne(42)).to.be.undefined;
+        });
+      });
+      context('for an existing relationship', () => {
+        let relationships = null;
+        let relationship = null;
+
+        before(() => {
+          relationships = new JDLRelationships();
+          relationship = new JDLRelationship({
+            from: new JDLEntity({
+              name: 'Abc'
+            }),
+            to: new JDLEntity({
+              name: 'Abc2'
+            }),
+            injectedFieldInFrom: 'something',
+            type: RelationshipTypes.ONE_TO_ONE
+          });
+          relationships.add(relationship);
+        });
+
+        it('returns it', () => {
+          expect(relationships.getOneToOne(relationship.getId())).to.deep.equal(relationship);
+        });
+      });
+    });
+  });
+  describe('#getOneToMany', () => {
+    context('when passing an invalid id', () => {
+      it('fails', () => {
+        expect(() => {
+          new JDLRelationships().getOneToMany();
+        }).to.throw('A relationship id must be passed.');
+      });
+    });
+    context('when passing valid arguments', () => {
+      context('but there is no relationship', () => {
+        it('returns null', () => {
+          expect(new JDLRelationships().getOneToMany(42)).to.be.undefined;
+        });
+      });
+      context('for an existing relationship', () => {
+        let relationships = null;
+        let relationship = null;
+
+        before(() => {
+          relationships = new JDLRelationships();
+          relationship = new JDLRelationship({
+            from: new JDLEntity({
+              name: 'Abc'
+            }),
+            to: new JDLEntity({
+              name: 'Abc2'
+            }),
+            injectedFieldInFrom: 'something',
+            type: RelationshipTypes.ONE_TO_MANY
+          });
+          relationships.add(relationship);
+        });
+
+        it('returns it', () => {
+          expect(relationships.getOneToMany(relationship.getId())).to.deep.equal(relationship);
+        });
+      });
+    });
+  });
+  describe('#getManyToOne', () => {
+    context('when passing an invalid id', () => {
+      it('fails', () => {
+        expect(() => {
+          new JDLRelationships().getManyToOne();
+        }).to.throw('A relationship id must be passed.');
+      });
+    });
+    context('when passing valid arguments', () => {
+      context('but there is no relationship', () => {
+        it('returns null', () => {
+          expect(new JDLRelationships().getManyToOne(42)).to.be.undefined;
+        });
+      });
+      context('for an existing relationship', () => {
+        let relationships = null;
+        let relationship = null;
+
+        before(() => {
+          relationships = new JDLRelationships();
+          relationship = new JDLRelationship({
+            from: new JDLEntity({
+              name: 'Abc'
+            }),
+            to: new JDLEntity({
+              name: 'Abc2'
+            }),
+            injectedFieldInFrom: 'something',
+            type: RelationshipTypes.MANY_TO_ONE
+          });
+          relationships.add(relationship);
+        });
+
+        it('returns it', () => {
+          expect(relationships.getManyToOne(relationship.getId())).to.deep.equal(relationship);
+        });
+      });
+    });
+  });
+  describe('#getManyToMany', () => {
+    context('when passing an invalid id', () => {
+      it('fails', () => {
+        expect(() => {
+          new JDLRelationships().getManyToMany();
+        }).to.throw('A relationship id must be passed.');
+      });
+    });
+    context('when passing valid arguments', () => {
+      context('but there is no relationship', () => {
+        it('returns null', () => {
+          expect(new JDLRelationships().getManyToMany(42)).to.be.undefined;
+        });
+      });
+      context('for an existing relationship', () => {
+        let relationships = null;
+        let relationship = null;
+
+        before(() => {
+          relationships = new JDLRelationships();
+          relationship = new JDLRelationship({
+            from: new JDLEntity({
+              name: 'Abc'
+            }),
+            to: new JDLEntity({
+              name: 'Abc2'
+            }),
+            injectedFieldInFrom: 'something',
+            type: RelationshipTypes.MANY_TO_MANY
+          });
+          relationships.add(relationship);
+        });
+
+        it('returns it', () => {
+          expect(relationships.getManyToMany(relationship.getId())).to.deep.equal(relationship);
+        });
       });
     });
   });
@@ -116,6 +317,118 @@ describe('JDLRelationships', () => {
       expect(array).to.deep.eq([relationship1, relationship2]);
     });
   });
+  describe('#oneToOneQuantity', () => {
+    context('when there is no OtO relationship', () => {
+      it('returns 0', () => {
+        expect(new JDLRelationships().oneToOneQuantity()).to.equal(0);
+      });
+    });
+    context('when there are OtO relationships', () => {
+      let relationships = null;
+
+      before(() => {
+        relationships = new JDLRelationships();
+        relationships.add(new JDLRelationship({
+          from: new JDLEntity({
+            name: 'Abc'
+          }),
+          to: new JDLEntity({
+            name: 'Abc2'
+          }),
+          injectedFieldInFrom: 'something',
+          type: RelationshipTypes.ONE_TO_ONE
+        }));
+      });
+
+      it('returns the size', () => {
+        expect(relationships.oneToOneQuantity()).to.equal(1);
+      });
+    });
+  });
+  describe('#oneToManyQuantity', () => {
+    context('when there is no OtM relationship', () => {
+      it('returns 0', () => {
+        expect(new JDLRelationships().oneToManyQuantity()).to.equal(0);
+      });
+    });
+    context('when there are OtM relationships', () => {
+      let relationships = null;
+
+      before(() => {
+        relationships = new JDLRelationships();
+        relationships.add(new JDLRelationship({
+          from: new JDLEntity({
+            name: 'Abc'
+          }),
+          to: new JDLEntity({
+            name: 'Abc2'
+          }),
+          injectedFieldInFrom: 'something',
+          type: RelationshipTypes.ONE_TO_MANY
+        }));
+      });
+
+      it('returns the size', () => {
+        expect(relationships.oneToManyQuantity()).to.equal(1);
+      });
+    });
+  });
+  describe('#manyToOneQuantity', () => {
+    context('when there is no MtO relationship', () => {
+      it('returns 0', () => {
+        expect(new JDLRelationships().manyToOneQuantity()).to.equal(0);
+      });
+    });
+    context('when there are MtO relationships', () => {
+      let relationships = null;
+
+      before(() => {
+        relationships = new JDLRelationships();
+        relationships.add(new JDLRelationship({
+          from: new JDLEntity({
+            name: 'Abc'
+          }),
+          to: new JDLEntity({
+            name: 'Abc2'
+          }),
+          injectedFieldInFrom: 'something',
+          type: RelationshipTypes.MANY_TO_ONE
+        }));
+      });
+
+      it('returns the size', () => {
+        expect(relationships.manyToOneQuantity()).to.equal(1);
+      });
+    });
+  });
+  describe('#manyToManyQuantity', () => {
+    context('when there is no OtO relationship', () => {
+      it('returns 0', () => {
+        expect(new JDLRelationships().manyToManyQuantity()).to.equal(0);
+      });
+    });
+    context('when there are OtO relationships', () => {
+      let relationships = null;
+
+      before(() => {
+        relationships = new JDLRelationships();
+        relationships.add(new JDLRelationship({
+          from: new JDLEntity({
+            name: 'Abc'
+          }),
+          to: new JDLEntity({
+            name: 'Abc2'
+          }),
+          injectedFieldInFrom: 'something',
+          type: RelationshipTypes.MANY_TO_MANY
+        }));
+      });
+
+      it('returns the size', () => {
+        expect(relationships.manyToManyQuantity()).to.equal(1);
+      });
+    });
+  });
   describe('#size', () => {
     let relationships = null;
 
@@ -139,6 +452,11 @@ describe('JDLRelationships', () => {
     });
   });
   describe('#toString', () => {
+    context('when there is no relationship', () => {
+      it('returns an emptry string', () => {
+        expect(new JDLRelationships().toString()).to.equal('');
+      });
+    });
     context('when having one relationship per type', () => {
       let relationships = null;
       let oneToOneRelationship = null;

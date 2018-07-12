@@ -184,32 +184,34 @@ describe('DocumentParser', () => {
         });
       });
       context('with a required relationship', () => {
-        let content = null;
+        let jdlObject = null;
+        let relationship = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/required_relationships.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
+          relationship = jdlObject.relationships.getOneToOne('OneToOne_A{b}_B{a}');
         });
 
         it('adds it', () => {
-          expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInFromRequired).to.be.true;
-          expect(content.relationships.relationships.OneToOne['OneToOne_A{b}_B{a}'].isInjectedFieldInToRequired).to.be.false;
+          expect(relationship.isInjectedFieldInFromRequired).to.be.true;
+          expect(relationship.isInjectedFieldInToRequired).to.be.false;
         });
       });
       context('with a field name \'id\'', () => {
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/id_field.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
         });
 
         it('doesn\'t add it', () => {
-          expect(content.entities.A).to.deep.eq(new JDLEntity({
+          expect(jdlObject.entities.A).to.deep.eq(new JDLEntity({
             name: 'A',
             tableName: 'A',
             fields: {
@@ -219,18 +221,18 @@ describe('DocumentParser', () => {
         });
       });
       context('with User entity as destination for a relationship', () => {
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
         });
 
         it('is processed', () => {
-          expect(content.relationships.relationships.ManyToOne['ManyToOne_A{user}_User{a}'].to.name).to.eq('User');
-          expect(content.relationships.relationships.OneToOne['OneToOne_B{user}_User'].to.name).to.eq('User');
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{user}_User{a}').to.name).to.eq('User');
+          expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User').to.name).to.eq('User');
         });
       });
       context('with an invalid option', () => {
@@ -276,17 +278,17 @@ describe('DocumentParser', () => {
       });
       context('when using the noFluentMethods option', () => {
         let input = null;
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           input = JDLReader.parseFromFiles(['./test/test_files/fluent_methods.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
         });
 
         it('adds it correctly', () => {
-          expect(content.getOptions()).to.deep.eq([
+          expect(jdlObject.getOptions()).to.deep.eq([
             new JDLUnaryOption({
               name: UnaryOptions.NO_FLUENT_METHOD,
               entityNames: ['A']
@@ -295,59 +297,59 @@ describe('DocumentParser', () => {
         });
       });
       context('when having following comments', () => {
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/following_comments.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
         });
 
         it('accepts them', () => {
-          expect(content.entities.A.fields.name.comment).to.eq('abc');
-          expect(content.entities.A.fields.thing.comment).to.eq('def');
-          expect(content.entities.A.fields.another.comment).to.eq('ghi');
+          expect(jdlObject.entities.A.fields.name.comment).to.eq('abc');
+          expect(jdlObject.entities.A.fields.thing.comment).to.eq('def');
+          expect(jdlObject.entities.A.fields.another.comment).to.eq('ghi');
         });
         context('when having both forms of comments', () => {
           it('only accepts the one defined first', () => {
-            expect(content.entities.B.fields.name.comment).to.eq('xyz');
+            expect(jdlObject.entities.B.fields.name.comment).to.eq('xyz');
           });
         });
         context('when using commas', () => {
           it('assigns the comment to the next field', () => {
-            expect(content.entities.C.fields.name.comment).to.be.undefined;
-            expect(content.entities.C.fields.thing.comment).to.eq('abc');
+            expect(jdlObject.entities.C.fields.name.comment).to.be.undefined;
+            expect(jdlObject.entities.C.fields.thing.comment).to.eq('abc');
           });
         });
       });
       context('when parsing another complex JDL file', () => {
-        let content = null;
+        let jdlObject = null;
         let options = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
-          options = content.getOptions();
+          options = jdlObject.getOptions();
         });
 
         context('checking the entities', () => {
           it('parses them', () => {
-            expect(content.entities.A).to.deep.eq({
+            expect(jdlObject.entities.A).to.deep.eq({
               name: 'A',
               tableName: 'A',
               fields: {},
               comment: undefined
             });
-            expect(content.entities.B).to.deep.eq({
+            expect(jdlObject.entities.B).to.deep.eq({
               name: 'B',
               tableName: 'B',
               fields: {},
               comment: undefined
             });
-            expect(content.entities.C).to.deep.eq({
+            expect(jdlObject.entities.C).to.deep.eq({
               name: 'C',
               tableName: 'C',
               fields: {
@@ -365,7 +367,7 @@ describe('DocumentParser', () => {
               },
               comment: undefined
             });
-            expect(content.entities.D).to.deep.eq({
+            expect(jdlObject.entities.D).to.deep.eq({
               name: 'D',
               tableName: 'D',
               fields: {
@@ -397,13 +399,13 @@ describe('DocumentParser', () => {
               },
               comment: undefined
             });
-            expect(content.entities.E).to.deep.eq({
+            expect(jdlObject.entities.E).to.deep.eq({
               name: 'E',
               tableName: 'E',
               fields: {},
               comment: undefined
             });
-            expect(content.entities.F).to.deep.eq({
+            expect(jdlObject.entities.F).to.deep.eq({
               name: 'F',
               tableName: 'F',
               fields: {
@@ -433,7 +435,7 @@ describe('DocumentParser', () => {
               },
               comment: 'My comment for F.'
             });
-            expect(content.entities.G).to.deep.eq({
+            expect(jdlObject.entities.G).to.deep.eq({
               name: 'G',
               tableName: 'G',
               fields: {
@@ -492,17 +494,17 @@ describe('DocumentParser', () => {
         });
       });
       context('when having two consecutive comments for fields', () => {
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/field_comments.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
         });
 
         it('assigns them correctly', () => {
-          expect(content.entities.TestEntity.fields).to.deep.eq({
+          expect(jdlObject.entities.TestEntity.fields).to.deep.eq({
             first: {
               name: 'first',
               comment: 'first comment',
@@ -528,7 +530,7 @@ describe('DocumentParser', () => {
               validations: {}
             }
           });
-          expect(content.entities.TestEntity2.fields).to.deep.eq({
+          expect(jdlObject.entities.TestEntity2.fields).to.deep.eq({
             first: {
               name: 'first',
               comment: 'first comment',
@@ -550,17 +552,17 @@ describe('DocumentParser', () => {
         });
       });
       context('when having constants', () => {
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/constants.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
         });
 
         it('assigns the constants\' value when needed', () => {
-          expect(content.entities.A.fields).to.deep.eq({
+          expect(jdlObject.entities.A.fields).to.deep.eq({
             name: {
               name: 'name',
               comment: undefined,
@@ -631,10 +633,10 @@ describe('DocumentParser', () => {
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/application.jdl']);
-          const content = DocumentParser.parseFromConfigurationObject({
+          const jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
-          application = content.applications.toto.config;
+          application = jdlObject.applications.toto.config;
         });
 
         it('parses it', () => {
@@ -676,61 +678,61 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing filtered entities', () => {
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input,
           });
         });
 
         it('works', () => {
-          expect(content.options.options.filter.entityNames.has('*')).to.be.true;
-          expect(content.options.options.filter.excludedNames.has('B')).to.be.true;
+          expect(jdlObject.options.options.filter.entityNames.has('*')).to.be.true;
+          expect(jdlObject.options.options.filter.excludedNames.has('B')).to.be.true;
         });
       });
       context('when parsing entities with a custom client root folder', () => {
         context('inside a microservice app', () => {
-          let content = null;
+          let jdlObject = null;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/client_root_folder.jdl']);
-            content = DocumentParser.parseFromConfigurationObject({
+            jdlObject = DocumentParser.parseFromConfigurationObject({
               document: input,
               applicationType: ApplicationTypes.MICROSERVICE
             });
           });
 
           it('is ignored', () => {
-            expect(content.options.options['clientRootFolder_test-root']).to.be.undefined;
+            expect(jdlObject.options.options['clientRootFolder_test-root']).to.be.undefined;
           });
         });
         context('inside any other app', () => {
-          let content = null;
+          let jdlObject = null;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/client_root_folder.jdl']);
-            content = DocumentParser.parseFromConfigurationObject({
+            jdlObject = DocumentParser.parseFromConfigurationObject({
               document: input,
               applicationType: ApplicationTypes.MONOLITH
             });
           });
 
           it('works', () => {
-            expect(content.options.options['clientRootFolder_test-root'].entityNames.has('*')).to.be.true;
-            expect(content.options.options['clientRootFolder_test-root'].excludedNames.has('C')).to.be.true;
-            expect(content.options.options['clientRootFolder_test-root'].value).to.equal('test-root');
+            expect(jdlObject.options.options['clientRootFolder_test-root'].entityNames.has('*')).to.be.true;
+            expect(jdlObject.options.options['clientRootFolder_test-root'].excludedNames.has('C')).to.be.true;
+            expect(jdlObject.options.options['clientRootFolder_test-root'].value).to.equal('test-root');
           });
         });
       });
       context('when parsing a JDL inside a microservice app', () => {
         context('without the microservice option in the JDL', () => {
-          let content = null;
+          let jdlObject = null;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/no_microservice.jdl']);
-            content = DocumentParser.parseFromConfigurationObject({
+            jdlObject = DocumentParser.parseFromConfigurationObject({
               document: input,
               applicationType: ApplicationTypes.MICROSERVICE,
               applicationName: 'toto'
@@ -738,16 +740,16 @@ describe('DocumentParser', () => {
           });
 
           it('adds it to every entity', () => {
-            expect(Object.keys(content.options.options).length).to.equal(1);
-            expect(content.options.options.microservice_toto.entityNames.toString()).to.equal('[A,B,C,D,E,F,G]');
+            expect(Object.keys(jdlObject.options.options).length).to.equal(1);
+            expect(jdlObject.options.options.microservice_toto.entityNames.toString()).to.equal('[A,B,C,D,E,F,G]');
           });
         });
         context('with the microservice option in the JDL', () => {
-          let content = null;
+          let jdlObject = null;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
-            content = DocumentParser.parseFromConfigurationObject({
+            jdlObject = DocumentParser.parseFromConfigurationObject({
               document: input,
               applicationType: ApplicationTypes.MICROSERVICE,
               applicationName: 'toto'
@@ -755,58 +757,60 @@ describe('DocumentParser', () => {
           });
 
           it('does not automatically setup the microservice option', () => {
-            expect(Object.keys(content.options.options).length).to.equal(1);
-            expect(content.options.options.microservice_ms.entityNames.toString()).to.equal('[A]');
+            expect(Object.keys(jdlObject.options.options).length).to.equal(1);
+            expect(jdlObject.options.options.microservice_ms.entityNames.toString()).to.equal('[A]');
           });
         });
       });
       context('when parsing a JDL microservice application with entities', () => {
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/application_with_entities.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input
           });
         });
 
         it('adds the application entities in the application object', () => {
-          expect(content.applications.MyApp.entityNames.has('BankAccount')).to.be.true;
-          expect(content.applications.MyApp.entityNames.size()).to.equal(1);
+          expect(jdlObject.applications.MyApp.entityNames.has('BankAccount')).to.be.true;
+          expect(jdlObject.applications.MyApp.entityNames.size()).to.equal(1);
         });
       });
       context('when parsing a relationship with no injected field', () => {
-        let content = null;
+        let jdlObject = null;
+        let relationship = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/no_injected_field.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input,
             applicationType: ApplicationTypes.MONOLITH
           });
+          relationship = jdlObject.relationships.getOneToOne('OneToOne_A{a}_B');
         });
 
         it('adds a default one', () => {
-          expect(content.relationships.relationships.OneToOne['OneToOne_A{a}_B'].injectedFieldInFrom).to.equal('a');
+          expect(relationship.injectedFieldInFrom).to.equal('a');
         });
       });
       context('when parsing entities with annotations', () => {
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/annotations.jdl']);
-          content = DocumentParser.parseFromConfigurationObject({
+          jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input,
             applicationType: ApplicationTypes.MONOLITH
           });
         });
 
         it('sets the annotations as options', () => {
-          expect(content.options.options.dto_mapstruct.entityNames.toArray()).to.deep.equal(['A', 'B']);
-          expect(content.options.options.filter.entityNames.toArray()).to.deep.equal(['C']);
-          expect(content.options.options.pagination_pager.entityNames.toArray()).to.deep.equal(['B', 'C']);
-          expect(content.options.options.service_serviceClass.entityNames.toArray()).to.deep.equal(['A', 'B']);
-          expect(content.options.options.skipClient.entityNames.toArray()).to.deep.equal(['A', 'C']);
+          expect(jdlObject.options.options.dto_mapstruct.entityNames.toArray()).to.deep.equal(['A', 'B']);
+          expect(jdlObject.options.options.filter.entityNames.toArray()).to.deep.equal(['C']);
+          expect(jdlObject.options.options.pagination_pager.entityNames.toArray()).to.deep.equal(['B', 'C']);
+          expect(jdlObject.options.options.service_serviceClass.entityNames.toArray()).to.deep.equal(['A', 'B']);
+          expect(jdlObject.options.options.skipClient.entityNames.toArray()).to.deep.equal(['A', 'C']);
         });
       });
     });

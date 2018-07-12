@@ -29,7 +29,7 @@ const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').
 
 describe('JSONParser', () => {
   describe('::parseEntities', () => {
-    let content = null;
+    let jdlObject = null;
 
     before(() => {
       const entities = {
@@ -43,33 +43,33 @@ describe('JSONParser', () => {
         Task: readJsonEntity('Task')
       };
       entities.Employee.relationships.filter(r => r.relationshipName === 'department')[0].javadoc = undefined;
-      content = JSONParser.parseEntities(entities);
+      jdlObject = JSONParser.parseEntities(entities);
     });
 
     context('when parsing a JSON entity to JDL', () => {
       it('parses entity javadoc', () => {
-        expect(content.entities.Employee.comment).eq('The Employee entity.');
+        expect(jdlObject.entities.Employee.comment).eq('The Employee entity.');
       });
       it('parses tableName', () => {
-        expect(content.entities.Employee.tableName).eq('emp');
+        expect(jdlObject.entities.Employee.tableName).eq('emp');
       });
       it('parses mandatory fields', () => {
-        expect(content.entities.Country.fields.countryId.type).eq('Long');
-        expect(content.entities.Country.fields.countryName.type).eq('String');
+        expect(jdlObject.entities.Country.fields.countryId.type).eq('Long');
+        expect(jdlObject.entities.Country.fields.countryName.type).eq('String');
       });
       it('parses field javadoc', () => {
-        expect(content.entities.Country.fields.countryId.comment).eq('The country Id');
-        expect(content.entities.Country.fields.countryName.comment).to.be.undefined;
+        expect(jdlObject.entities.Country.fields.countryId.comment).eq('The country Id');
+        expect(jdlObject.entities.Country.fields.countryName.comment).to.be.undefined;
       });
       it('parses validations', () => {
-        expect(content.entities.Department.fields.departmentName.validations.required.name).eq('required');
-        expect(content.entities.Department.fields.departmentName.validations.required.value).to.be.undefined;
-        expect(content.entities.Employee.fields.salary.validations.min.value).eq(10000);
-        expect(content.entities.Employee.fields.salary.validations.max.value).eq(1000000);
-        expect(content.entities.Employee.fields.employeeId.validations).to.be.empty;
+        expect(jdlObject.entities.Department.fields.departmentName.validations.required.name).eq('required');
+        expect(jdlObject.entities.Department.fields.departmentName.validations.required.value).to.be.undefined;
+        expect(jdlObject.entities.Employee.fields.salary.validations.min.value).eq(10000);
+        expect(jdlObject.entities.Employee.fields.salary.validations.max.value).eq(1000000);
+        expect(jdlObject.entities.Employee.fields.employeeId.validations).to.be.empty;
       });
       it('parses enums', () => {
-        const languageEnum = content.getEnum('Language');
+        const languageEnum = jdlObject.getEnum('Language');
         expect(languageEnum.name).eq('Language');
         expect(languageEnum.values.has('FRENCH')).to.be.true;
         expect(languageEnum.values.has('ENGLISH')).to.be.true;
@@ -77,55 +77,55 @@ describe('JSONParser', () => {
       });
       it('parses options', () => {
         expect(
-          content.getOptions().filter(
+          jdlObject.getOptions().filter(
             option => option.name === BinaryOptions.DTO
               && option.value === BinaryOptionValues.dto.MAPSTRUCT
               && option.entityNames.has('Employee')
           ).length
         ).to.eq(1);
         expect(
-          content.getOptions().filter(
+          jdlObject.getOptions().filter(
             option => option.name === BinaryOptions.PAGINATION
               && option.value === BinaryOptionValues.pagination['INFINITE-SCROLL']
               && option.entityNames.has('Employee')
           ).length
         ).to.eq(1);
         expect(
-          content.getOptions().filter(
+          jdlObject.getOptions().filter(
             option => option.name === BinaryOptions.SERVICE
               && option.value === BinaryOptionValues.service.SERVICE_CLASS
               && option.entityNames.has('Employee')
           ).length
         ).to.eq(1);
         expect(
-          content.getOptions().filter(
+          jdlObject.getOptions().filter(
             option => option.name === BinaryOptions.SEARCH_ENGINE
               && option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH
               && option.entityNames.has('Employee')
           ).length
         ).to.eq(1);
         expect(
-          content.getOptions().filter(
+          jdlObject.getOptions().filter(
             option => option.name === BinaryOptions.MICROSERVICE
               && option.value === 'mymicroservice'
               && option.entityNames.has('Employee')
           ).length
         ).to.eq(1);
         expect(
-          content.getOptions().filter(
+          jdlObject.getOptions().filter(
             option => option.name === BinaryOptions.ANGULAR_SUFFIX
               && option.value === 'myentities'
               && option.entityNames.has('Employee')
           ).length
         ).to.eq(1);
         expect(
-          content.getOptions().filter(
+          jdlObject.getOptions().filter(
             option => option.name === UnaryOptions.NO_FLUENT_METHOD
               && option.entityNames.has('Employee')
           ).length
         ).to.eq(1);
         expect(
-          content.getOptions().filter(
+          jdlObject.getOptions().filter(
             option => option.name === UnaryOptions.FILTER
               && option.entityNames.has('Employee')
           ).length
@@ -135,29 +135,27 @@ describe('JSONParser', () => {
 
     context('when parsing JSON entities to JDL', () => {
       it('parses unidirectional OneToOne relationships', () => {
-        expect(content.relationships.relationships.OneToOne).has.property('OneToOne_Department{location}_Location');
+        expect(jdlObject.relationships.getOneToOne('OneToOne_Department{location}_Location')).not.to.be.undefined;
       });
       it('parses bidirectional OneToOne relationships', () => {
-        expect(content.relationships.relationships.OneToOne).has.property('OneToOne_Country{region}_Region{country}');
+        expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')).not.to.be.undefined;
       });
       it('parses bidirectional OneToMany relationships', () => {
         expect(
-          content.relationships.relationships.OneToMany
-        ).has.property('OneToMany_Department{employee}_Employee{department(foo)}');
+          jdlObject.relationships.getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}')
+        ).not.to.be.undefined;
       });
       it('parses unidirectional ManyToOne relationships', () => {
-        expect(content.relationships.relationships.ManyToOne).has.property('ManyToOne_Employee{manager}_Employee');
+        expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{manager}_Employee')).not.to.be.undefined;
       });
       it('parses ManyToMany relationships', () => {
-        expect(content.relationships.relationships.ManyToMany).has.property('ManyToMany_Job{task(title)}_Task{job}');
+        expect(jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}')).not.to.be.undefined;
       });
       it('parses comments in relationships for owner', () => {
-        expect(
-          content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom
-        ).to.eq('A relationship');
-        expect(
-          content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo
-        ).to.be.undefined;
+        const relationship = jdlObject.relationships
+          .getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}');
+        expect(relationship.commentInFrom).to.eq('A relationship');
+        expect(relationship.commentInTo).to.be.undefined;
       });
       it('parses comments in relationships for owned', () => {
         const entities = {
@@ -165,46 +163,39 @@ describe('JSONParser', () => {
           Employee: readJsonEntity('Employee')
         };
         entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = undefined;
-        const content = JSONParser.parseEntities(entities);
-        expect(
-          content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInFrom
-        ).to.be.undefined;
-        expect(
-          content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].commentInTo
-        ).to.eq('Another side of the same relationship');
+        const jdlObject = JSONParser.parseEntities(entities);
+        const relationship = jdlObject.relationships
+          .getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}');
+        expect(relationship.commentInFrom).to.be.undefined;
+        expect(relationship.commentInTo).to.eq('Another side of the same relationship');
       });
       it('parses required relationships in owner', () => {
-        expect(
-          content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].isInjectedFieldInFromRequired
-        ).to.be.true;
-        expect(
-          content.relationships.relationships.OneToMany['OneToMany_Department{employee}_Employee{department(foo)}'].isInjectedFieldInToRequired
-        ).to.be.undefined;
+        const relationship = jdlObject.relationships
+          .getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}');
+        expect(relationship.isInjectedFieldInFromRequired).to.be.true;
+        expect(relationship.isInjectedFieldInToRequired).to.be.undefined;
       });
       it('parses required relationships in owned', () => {
-        expect(
-          content.relationships.relationships.ManyToMany['ManyToMany_Job{task(title)}_Task{job}'].isInjectedFieldInToRequired
-        ).to.be.true;
-        expect(
-          content.relationships.relationships.ManyToMany['ManyToMany_Job{task(title)}_Task{job}'].isInjectedFieldInFromRequired
-        ).to.be.undefined;
+        const relationship = jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}');
+        expect(relationship.isInjectedFieldInToRequired).to.be.true;
+        expect(relationship.isInjectedFieldInFromRequired).to.be.undefined;
       });
     });
 
     context('when parsing app config file to JDL', () => {
-      let content = null;
+      let jdlObject = null;
 
       before(() => {
         const yoRcJson = readJsonYoFile();
-        content = JSONParser.parseServerOptions(yoRcJson['generator-jhipster']);
+        jdlObject = JSONParser.parseServerOptions(yoRcJson['generator-jhipster']);
       });
 
       it('parses server options', () => {
-        expect(content.getOptions().filter(
+        expect(jdlObject.getOptions().filter(
           option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
         ).to.eq(1);
         expect(
-          content.getOptions().filter(
+          jdlObject.getOptions().filter(
             option => option.name === UnaryOptions.SKIP_SERVER && option.entityNames.has('*')).length
         ).to.eq(1);
       });
@@ -213,17 +204,17 @@ describe('JSONParser', () => {
     context('when parsing entities with relationships to User', () => {
       context('when skipUserManagement flag is not set', () => {
         context('when there is no User.json entity', () => {
-          let content = null;
+          let jdlObject = null;
 
           before(() => {
             const entities = {
               Country: readJsonEntity('Country')
             };
-            content = JSONParser.parseEntities(entities);
+            jdlObject = JSONParser.parseEntities(entities);
           });
 
           it('parses relationships to the JHipster managed User entity', () => {
-            expect(content.relationships.relationships.OneToOne).has.property('OneToOne_Country{user}_User');
+            expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User')).not.to.be.undefined;
           });
         });
         context('when there is a User.json entity', () => {
@@ -238,7 +229,7 @@ describe('JSONParser', () => {
         });
       });
       context('when skipUserManagement flag is set', () => {
-        let content = null;
+        let jdlObject = null;
 
         before(() => {
           const entities = {
@@ -248,14 +239,14 @@ describe('JSONParser', () => {
           entities.User.relationships[0].otherEntityRelationshipName = 'user';
           const yoRcJson = readJsonYoFile();
           yoRcJson['generator-jhipster'].skipUserManagement = true;
-          content = JSONParser.parseEntities(entities, JSONParser.parseServerOptions(yoRcJson['generator-jhipster']));
+          jdlObject = JSONParser.parseEntities(entities, JSONParser.parseServerOptions(yoRcJson['generator-jhipster']));
         });
 
         it('parses the User.json entity if skipUserManagement flag is set', () => {
-          expect(content.entities.Country).not.to.be.undefined;
-          expect(content.entities.User).not.to.be.undefined;
-          expect(content.entities.User.fields.regionId).not.to.be.undefined;
-          expect(content.relationships.relationships.OneToOne).has.property('OneToOne_Country{user}_User{country}');
+          expect(jdlObject.entities.Country).not.to.be.undefined;
+          expect(jdlObject.entities.User).not.to.be.undefined;
+          expect(jdlObject.entities.User.fields.regionId).not.to.be.undefined;
+          expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User{country}')).not.to.be.undefined;
         });
       });
     });

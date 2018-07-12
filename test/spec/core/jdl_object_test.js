@@ -491,7 +491,7 @@ describe('JDLObject', () => {
       });
 
       it('works', () => {
-        expect(object.relationships.relationships.ManyToMany[relationship.getId()]).to.deep.eq(relationship);
+        expect(object.relationships.getManyToMany(relationship.getId())).to.deep.eq(relationship);
       });
     });
     context('when adding twice the same relationship', () => {
@@ -510,7 +510,7 @@ describe('JDLObject', () => {
       });
 
       it('doesn\'t do anything', () => {
-        expect(Object.keys(object.relationships.relationships.ManyToMany)).to.have.lengthOf(1);
+        expect(object.relationships.manyToManyQuantity()).to.equal(1);
       });
     });
   });
