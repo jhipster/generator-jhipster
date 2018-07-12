@@ -28,35 +28,35 @@ import { Translate, translate } from 'react-jhipster';
 const adminMenuItems = (
   <>
   <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-    <DropdownItem tag={Link} to="/admin/gateway"><FontAwesomeIcon icon="road" /> <Translate contentKey="global.menu.admin.gateway" /></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/gateway"><FontAwesomeIcon icon="road" /> <Translate contentKey="global.menu.admin.gateway">Gateway</Translate></DropdownItem>
   <%_ } _%>
   <%_ if (!skipUserManagement) { _%>
-    <DropdownItem tag={Link} to="/admin/user-management"><FontAwesomeIcon icon="user" /> <Translate contentKey="global.menu.admin.userManagement" /></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/user-management"><FontAwesomeIcon icon="user" /> <Translate contentKey="global.menu.admin.userManagement">User management</Translate></DropdownItem>
   <%_ } _%>
   <%_ if (websocket === 'spring-websocket') { _%>
-    <DropdownItem tag={Link} to="/admin/tracker"><FontAwesomeIcon icon="eye" /> <Translate contentKey="global.menu.admin.tracker" /></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/tracker"><FontAwesomeIcon icon="eye" /> <Translate contentKey="global.menu.admin.tracker">User tracker</Translate></DropdownItem>
   <%_ } _%>
-    <DropdownItem tag={Link} to="/admin/metrics"><FontAwesomeIcon icon="tachometer-alt" /> <Translate contentKey="global.menu.admin.metrics" /></DropdownItem>
-    <DropdownItem tag={Link} to="/admin/health"><FontAwesomeIcon icon="heart" /> <Translate contentKey="global.menu.admin.health" /></DropdownItem>
-    <DropdownItem tag={Link} to="/admin/configuration"><FontAwesomeIcon icon="list" /> <Translate contentKey="global.menu.admin.configuration" /></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/metrics"><FontAwesomeIcon icon="tachometer-alt" /> <Translate contentKey="global.menu.admin.metrics">Metrics</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/health"><FontAwesomeIcon icon="heart" /> <Translate contentKey="global.menu.admin.health">Health</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/configuration"><FontAwesomeIcon icon="list" /> <Translate contentKey="global.menu.admin.configuration">Configuration</Translate></DropdownItem>
     <%_ if (databaseType !== 'cassandra') { _%>
-    <DropdownItem tag={Link} to="/admin/audits"><FontAwesomeIcon icon="bell" /> <Translate contentKey="global.menu.admin.audits" /></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/audits"><FontAwesomeIcon icon="bell" /> <Translate contentKey="global.menu.admin.audits">Audits</Translate></DropdownItem>
     <%_ } _%>
   {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
-    <DropdownItem tag={Link} to="/admin/logs"><FontAwesomeIcon icon="tasks" /> <Translate contentKey="global.menu.admin.logs" /></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/logs"><FontAwesomeIcon icon="tasks" /> <Translate contentKey="global.menu.admin.logs">Logs</Translate></DropdownItem>
   </>
 );
 
 const swaggerItem = (
   <DropdownItem tag={Link} to="/admin/docs">
-    <FontAwesomeIcon icon="book" /> <Translate contentKey="global.menu.admin.apidocs" />
+    <FontAwesomeIcon icon="book" /> <Translate contentKey="global.menu.admin.apidocs">API</Translate>
   </DropdownItem>
 );
 
 <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
 const databaseItem = (
   <DropdownItem tag="a" href="./h2-console" target="_tab">
-    <FontAwesomeIcon icon="hdd" /> <Translate contentKey="global.menu.admin.database" />
+    <FontAwesomeIcon icon="hdd" /> <Translate contentKey="global.menu.admin.database">Database</Translate>
   </DropdownItem>
 );
 <%_ } _%>
