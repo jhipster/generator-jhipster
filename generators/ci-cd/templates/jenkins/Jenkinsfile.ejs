@@ -23,7 +23,7 @@ node {
         checkout scm
     }
 
-<%_ if (cicdIntegrations.includes('gitlab')) { _%>
+<%_ if (sendBuildToGitlab) { _%>
     gitlabCommitStatus('build') {
 <%_ } _%>
 <%_ if (insideDocker) { _%>
@@ -95,7 +95,6 @@ node {
     <%_ } _%>
 <%= indent %>        archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
 <%= indent %>    }
-
 <%_ } else if (buildTool === 'gradle') { _%>
 <%= indent %>    stage('clean') {
 <%= indent %>        sh "chmod +x gradlew"
@@ -163,7 +162,7 @@ node {
 <%= indent %>        }
 <%= indent %>    }
 <%_ } _%>
-<%_ if (cicdIntegrations.includes('docker')) { _%>
+<%_ if (insideDocker) { _%>
 <%= gitLabIndent %>    }
 <%_ } _%>
 <%_ if (cicdIntegrations.includes('publishDocker')) { _%>
@@ -187,7 +186,7 @@ node {
 <%= gitLabIndent %>        }
 <%= gitLabIndent %>    }
 <%_ } _%>
-<%_ if (cicdIntegrations.includes('gitlab')) { _%>
+<%_ if (sendBuildToGitlab) { _%>
     }
 <%_ } _%>
 }

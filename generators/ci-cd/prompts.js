@@ -33,6 +33,8 @@ function askPipeline() {
     if (this.autoconfigureJenkins) {
         this.log('Auto-configuring Jenkins');
         this.pipeline = 'jenkins';
+        this.sendBuildToGitlab = false;
+        this.insideDocker = false;
         return;
     }
     const done = this.async();
@@ -66,6 +68,8 @@ function askIntegrations() {
     }
     if (this.autoconfigureJenkins) {
         this.cicdIntegrations = [];
+        this.sendBuildToGitlab = false;
+        this.insideDocker = false;
         return;
     }
     const done = this.async();

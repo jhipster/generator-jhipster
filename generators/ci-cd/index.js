@@ -93,7 +93,7 @@ module.exports = class extends BaseGenerator {
             },
             setTemplateConstants() {
                 if (this.abort || this.cicdIntegrations === undefined) return;
-                this.gitLabIndent = this.cicdIntegrations.includes('gitlab') ? '    ' : '';
+                this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
             }
