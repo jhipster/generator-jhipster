@@ -542,6 +542,52 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#forEachRelationship', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addRelationship(new JDLRelationship({
+        from: new JDLEntity({
+          name: 'Abc'
+        }),
+        to: new JDLEntity({
+          name: 'Abc2'
+        }),
+        injectedFieldInFrom: 'something',
+        type: RelationshipTypes.ONE_TO_ONE
+      }));
+      jdlObject.addRelationship(new JDLRelationship({
+        from: new JDLEntity({
+          name: 'Abc'
+        }),
+        to: new JDLEntity({
+          name: 'Abc2'
+        }),
+        injectedFieldInFrom: 'something',
+        type: RelationshipTypes.ONE_TO_MANY
+      }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlObject.forEachApplication();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlObject.forEachRelationship((jdlRelationship) => {
+          result.push(jdlRelationship.type);
+        });
+      });
+
+      it('uses each relationship', () => {
+        expect(result).to.deep.equal(['OneToOne', 'OneToMany']);
+      });
+    });
+  });
   describe('#addOption', () => {
     context('when adding an invalid option', () => {
       const object = new JDLObject();

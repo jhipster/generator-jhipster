@@ -451,6 +451,62 @@ describe('JDLRelationships', () => {
       expect(relationships.size()).to.equal(1);
     });
   });
+  describe('#forEach', () => {
+    let jdlRelationships;
+
+    before(() => {
+      jdlRelationships = new JDLRelationships();
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlRelationships.forEach();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlRelationships.add(new JDLRelationship({
+          from: new JDLEntity({
+            name: 'Abc'
+          }),
+          to: new JDLEntity({
+            name: 'Abc2'
+          }),
+          injectedFieldInFrom: 'something',
+          type: RelationshipTypes.ONE_TO_MANY
+        }));
+        jdlRelationships.add(new JDLRelationship({
+          from: new JDLEntity({
+            name: 'Abc'
+          }),
+          to: new JDLEntity({
+            name: 'Abc2'
+          }),
+          injectedFieldInFrom: 'something',
+          type: RelationshipTypes.ONE_TO_ONE
+        }));
+        jdlRelationships.forEach((jdlRelationship) => {
+          result.push({ from: jdlRelationship.from.name, to: jdlRelationship.to.name, type: jdlRelationship.type });
+        });
+      });
+
+      it('uses each relationship', () => {
+        expect(result).to.deep.equal([
+          {
+            from: 'Abc',
+            to: 'Abc2',
+            type: 'OneToOne'
+          },
+          {
+            from: 'Abc',
+            to: 'Abc2',
+            type: 'OneToMany'
+          }]);
+      });
+    });
+  });
   describe('#toString', () => {
     context('when there is no relationship', () => {
       it('returns an emptry string', () => {
