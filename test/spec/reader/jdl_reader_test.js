@@ -43,8 +43,8 @@ describe('JDLReader', () => {
         it('throws an error', () => {
           expect(() => {
             JDLReader.parseFromFiles(['../../test_files/invalid_file.txt']);
-          }).to.throw('The passed file \'../../test_files/invalid_file.txt\' must end ' +
-            'with \'.jh\' or \'.jdl\' to be valid.');
+          }).to.throw('The passed file \'../../test_files/invalid_file.txt\' must end '
+            + 'with \'.jh\' or \'.jdl\' to be valid.');
         });
       });
       context('such as files that do not exist', () => {

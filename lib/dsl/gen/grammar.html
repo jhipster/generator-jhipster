@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  body {
+    background-color: hsl(30, 20%, 95%)
+  }
+</style>
+
+<link rel='stylesheet' href='https://unpkg.com/chevrotain/diagrams/diagrams.css'>
+<script src='https://unpkg.com/chevrotain/diagrams/vendor/railroad-diagrams.js'></script>
+<script src='https://unpkg.com/chevrotain/diagrams/src/diagrams_builder.js'></script>
+<script src='https://unpkg.com/chevrotain/diagrams/src/diagrams_behavior.js'></script>
+<script src='https://unpkg.com/chevrotain/diagrams/src/main.js'></script>
+
+<body>
+<div id="diagrams" align="center"></div>
+
+<script src='generated_serialized_grammar.js'></script>
+
+<script>
+  const diagramsDiv = document.getElementById('diagrams');
+  main.drawDiagramsFromSerializedGrammar(serializedGrammar, diagramsDiv)
+</script>
+</body>

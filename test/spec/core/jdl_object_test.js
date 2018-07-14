@@ -53,8 +53,8 @@ describe('JDLObject', () => {
                 baseName: 'toto'
               }
             });
-          }).to.throw('The application must be valid in order to be added.\n' +
-            'Errors: No authentication type, No build tool');
+          }).to.throw('The application must be valid in order to be added.\n'
+            + 'Errors: No authentication type, No build tool');
         });
       });
     });
@@ -93,6 +93,34 @@ describe('JDLObject', () => {
 
       it('returns the number of applications', () => {
         expect(jdlObject.getApplicationQuantity()).to.equal(1);
+      });
+    });
+  });
+  describe('#forEachApplication', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addApplication(new JDLApplication({ config: { baseName: 'A' } }));
+      jdlObject.addApplication(new JDLApplication({ config: { baseName: 'B' } }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlObject.forEachApplication();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlObject.forEachApplication((application) => {
+          result.push(application.config.baseName);
+        });
+      });
+
+      it('uses each entity name', () => {
+        expect(result).to.deep.equal(['A', 'B']);
       });
     });
   });
@@ -165,6 +193,28 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#getEntity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addEntity(new JDLEntity({ name: 'A' }));
+    });
+
+    context('when not passing a name', () => {
+      it('fails', () => {
+        expect(() => {
+          jdlObject.getEntity();
+        }).to.throw('An entity name must be passed.');
+      });
+    });
+
+    context('when passing a name', () => {
+      it('returns the entity', () => {
+        expect(jdlObject.getEntity('A')).not.to.be.undefined;
+      });
+    });
+  });
   describe('#getEntityQuantity', () => {
     let jdlObject = null;
 
@@ -218,6 +268,34 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#forEachEntity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addEntity(new JDLEntity({ name: 'A' }));
+      jdlObject.addEntity(new JDLEntity({ name: 'B' }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlObject.forEachEntity();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlObject.forEachEntity((entity) => {
+          result.push(entity.name);
+        });
+      });
+
+      it('uses each entity name', () => {
+        expect(result).to.deep.equal(['A', 'B']);
+      });
+    });
+  });
   describe('#addEnum', () => {
     context('when adding an invalid enum', () => {
       const object = new JDLObject();
@@ -248,7 +326,7 @@ describe('JDLObject', () => {
       });
 
       it('works', () => {
-        expect(object.enums[enumObject.name]).to.deep.eq(enumObject);
+        expect(object.getEnum(enumObject.name)).to.deep.eq(enumObject);
       });
     });
     context('when adding an enum with the same name', () => {
@@ -265,7 +343,57 @@ describe('JDLObject', () => {
       });
 
       it('replaces the old one', () => {
-        expect(object.enums[enumObject.name]).to.deep.eq(enumObject2);
+        expect(object.getEnum(enumObject.name)).to.deep.eq(enumObject2);
+      });
+    });
+  });
+  describe('#getEnum', () => {
+    let object = null;
+
+    before(() => {
+      object = new JDLObject();
+    });
+
+    context('when fetching an absent enum', () => {
+      it('returns null', () => {
+        expect(object.getEnum('A')).to.be.undefined;
+      });
+    });
+    context('when fetching an existing enum', () => {
+      let jdlEnum;
+
+      before(() => {
+        jdlEnum = new JDLEnum({ name: 'A' });
+        object.addEnum(jdlEnum);
+      });
+
+      it('returns it', () => {
+        expect(object.getEnum(jdlEnum.name)).to.deep.equal(jdlEnum);
+      });
+    });
+  });
+  describe('#hasEnum', () => {
+    let object = null;
+
+    before(() => {
+      object = new JDLObject();
+    });
+
+    context('when fetching an absent enum', () => {
+      it('returns false', () => {
+        expect(object.hasEnum('A')).to.be.false;
+      });
+    });
+    context('when fetching an existing enum', () => {
+      let jdlEnum;
+
+      before(() => {
+        jdlEnum = new JDLEnum({ name: 'A' });
+        object.addEnum(jdlEnum);
+      });
+
+      it('returns true', () => {
+        expect(object.hasEnum(jdlEnum.name)).to.be.true;
       });
     });
   });
@@ -294,6 +422,34 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#forEachEnum', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addEnum(new JDLEnum({ name: 'A' }));
+      jdlObject.addEnum(new JDLEnum({ name: 'B' }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlObject.forEachEnum();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlObject.forEachEnum((jdlEnum) => {
+          result.push(jdlEnum.name);
+        });
+      });
+
+      it('uses each enum name', () => {
+        expect(result).to.deep.equal(['A', 'B']);
+      });
+    });
+  });
   describe('#addRelationship', () => {
     context('when adding an invalid relationship', () => {
       const object = new JDLObject();
@@ -314,8 +470,8 @@ describe('JDLObject', () => {
               type: RelationshipTypes.MANY_TO_MANY,
               injectedFieldInFrom: 'something'
             });
-          }).to.throw('The relationship must be valid in order to be added.\n' +
-            'Errors: Wrong source entity: No entity name, No table name, No fields object');
+          }).to.throw('The relationship must be valid in order to be added.\n'
+            + 'Errors: Wrong source entity: No entity name, No table name, No fields object');
         });
       });
     });
@@ -335,7 +491,7 @@ describe('JDLObject', () => {
       });
 
       it('works', () => {
-        expect(object.relationships.relationships.ManyToMany[relationship.getId()]).to.deep.eq(relationship);
+        expect(object.relationships.getManyToMany(relationship.getId())).to.deep.eq(relationship);
       });
     });
     context('when adding twice the same relationship', () => {
@@ -354,7 +510,7 @@ describe('JDLObject', () => {
       });
 
       it('doesn\'t do anything', () => {
-        expect(Object.keys(object.relationships.relationships.ManyToMany)).to.have.lengthOf(1);
+        expect(object.relationships.manyToManyQuantity()).to.equal(1);
       });
     });
   });
@@ -386,6 +542,52 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#forEachRelationship', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addRelationship(new JDLRelationship({
+        from: new JDLEntity({
+          name: 'Abc'
+        }),
+        to: new JDLEntity({
+          name: 'Abc2'
+        }),
+        injectedFieldInFrom: 'something',
+        type: RelationshipTypes.ONE_TO_ONE
+      }));
+      jdlObject.addRelationship(new JDLRelationship({
+        from: new JDLEntity({
+          name: 'Abc'
+        }),
+        to: new JDLEntity({
+          name: 'Abc2'
+        }),
+        injectedFieldInFrom: 'something',
+        type: RelationshipTypes.ONE_TO_MANY
+      }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlObject.forEachRelationship();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlObject.forEachRelationship((jdlRelationship) => {
+          result.push(jdlRelationship.type);
+        });
+      });
+
+      it('uses each relationship', () => {
+        expect(result).to.deep.equal(['OneToOne', 'OneToMany']);
+      });
+    });
+  });
   describe('#addOption', () => {
     context('when adding an invalid option', () => {
       const object = new JDLObject();
@@ -401,8 +603,8 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addOption({});
-          }).to.throw('The option must be valid in order to be added.\n' +
-            'Errors: No option name, No entity names, No excluded names, No type');
+          }).to.throw('The option must be valid in order to be added.\n'
+            + 'Errors: No option name, No entity names, No excluded names, No type');
         });
       });
       context('such as a wrong option/value', () => {
@@ -412,8 +614,8 @@ describe('JDLObject', () => {
               name: UnaryOptions.SKIP_CLIENT,
               type: 'WrongType'
             });
-          }).to.throw('The option must be valid in order to be added.\n' +
-            'Errors: No entity names, No excluded names, No type');
+          }).to.throw('The option must be valid in order to be added.\n'
+            + 'Errors: No entity names, No excluded names, No type');
         });
       });
     });
@@ -495,6 +697,38 @@ describe('JDLObject', () => {
 
       it('returns the number of options', () => {
         expect(jdlObject.getOptionQuantity()).to.equal(1);
+      });
+    });
+  });
+  describe('#forEachOption', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addOption(new JDLUnaryOption({
+        name: UnaryOptions.SKIP_CLIENT
+      }));
+      jdlObject.addOption(new JDLUnaryOption({
+        name: UnaryOptions.SKIP_SERVER
+      }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlObject.forEachOption();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlObject.forEachOption((jdlOption) => {
+          result.push(jdlOption.name);
+        });
+      });
+
+      it('uses each option', () => {
+        expect(result).to.deep.equal(['skipClient', 'skipServer']);
       });
     });
   });

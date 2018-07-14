@@ -60,7 +60,7 @@ describe('JDLExporter', () => {
           expect(fileExistence).to.be.true;
         });
         it('writes the JDL inside the file', () => {
-          expect(jdlContent).to.equal('entity Toto (Toto)\n');
+          expect(jdlContent).to.equal('entity Toto\n');
         });
       });
       context('without a path', () => {
@@ -86,7 +86,7 @@ describe('JDLExporter', () => {
           expect(fileExistence).to.be.true;
         });
         it('writes the JDL inside the file', () => {
-          expect(jdlContent).to.equal('entity Toto (Toto)\n');
+          expect(jdlContent).to.equal('entity Toto\n');
         });
       });
     });

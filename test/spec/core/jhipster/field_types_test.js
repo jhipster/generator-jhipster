@@ -108,8 +108,8 @@ describe('FieldTypes', () => {
     context('when passing an invalid argument', () => {
       expect(() => {
         FieldTypes.getIsType('thing', () => {});
-      }).to.throw('The passed database type must either be \'sql\', \'mysql\', \'mariadb\', \'postgresql\',' +
-        ' \'oracle\', \'mssql\', \'mongodb\', \'couchbase\', or \'cassandra\'');
+      }).to.throw('The passed database type must either be \'sql\', \'mysql\', \'mariadb\', \'postgresql\','
+        + ' \'oracle\', \'mssql\', \'mongodb\', \'couchbase\', or \'cassandra\'');
     });
     context('when passing \'no\' as argument', () => {
       it('does not fail', () => {

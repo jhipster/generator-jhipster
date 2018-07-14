@@ -93,8 +93,7 @@ describe('FormatUtils', () => {
       it('uses the increment with the passed date', () => {
         const now = new Date();
         const increment = 1000042;
-        const result =
-          dateFormatForLiquibase({ date: now, increment });
+        const result = dateFormatForLiquibase({ date: now, increment });
         now.setSeconds(now.getUTCSeconds() + increment);
         const nowUtc = new Date(
           now.getUTCFullYear(),

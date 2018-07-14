@@ -19,6 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
+const path = require('path');
 
 const JSONFileReader = require('../../../lib/reader/json_file_reader');
 
@@ -95,7 +96,7 @@ describe('JSONFileReader', () => {
       context('with a valid entity name', () => {
         it('returns the path', () => {
           const name = 'MyEntity';
-          expect(JSONFileReader.toFilePath(name)).to.eq(`.jhipster/${name}.json`);
+          expect(JSONFileReader.toFilePath(name)).to.eq(`.jhipster${path.sep}${name}.json`);
         });
       });
       context('with a valid entity name with the first letter lowercase', () => {
@@ -104,7 +105,7 @@ describe('JSONFileReader', () => {
           const name = 'myEntity';
           expect(
             JSONFileReader.toFilePath(name)
-          ).to.eq(`.jhipster/${expectedFirstLetter}${name.slice(1, name.length)}.json`);
+          ).to.eq(`.jhipster${path.sep}${expectedFirstLetter}${name.slice(1, name.length)}.json`);
         });
       });
     });

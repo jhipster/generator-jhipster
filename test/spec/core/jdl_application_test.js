@@ -116,16 +116,43 @@ describe('JDLApplication', () => {
       });
     });
   });
-  describe('#toString', () => {
-    let jdlApplication = null;
+  describe('#forEachEntityName', () => {
+    let application = null;
 
     before(() => {
-      jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0', path: '../../' } });
-      delete jdlApplication.config.jwtSecretKey;
+      application = new JDLApplication({ entities: ['A', 'B'] });
     });
 
-    it('stringifies the application object', () => {
-      expect(jdlApplication.toString()).to.eq(`application {
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        application.forEachEntityName();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        application.forEachEntityName((entityName) => {
+          result.push(entityName);
+        });
+      });
+
+      it('uses each entity name', () => {
+        expect(result).to.deep.equal(['A', 'B']);
+      });
+    });
+  });
+  describe('#toString', () => {
+    context('when there is no entity', () => {
+      let jdlApplication = null;
+
+      before(() => {
+        jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0', path: '../../' } });
+        delete jdlApplication.config.jwtSecretKey;
+      });
+
+      it('stringifies the application object', () => {
+        expect(jdlApplication.toString()).to.eq(`application {
   config {
     applicationType monolith
     clientPackageManager yarn
@@ -159,6 +186,18 @@ describe('JDLApplication', () => {
     skipUserManagement false
   }
 }`);
+      });
+    });
+    context('when there are listed entities', () => {
+      let jdlApplication = null;
+
+      before(() => {
+        jdlApplication = new JDLApplication({ entities: ['A', 'B', 'C', 'C'] });
+      });
+
+      it('exports the entity names', () => {
+        expect(jdlApplication.toString().includes('entities A, B, C')).to.be.true;
+      });
     });
   });
   describe('::isValid', () => {
