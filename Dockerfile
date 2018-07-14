@@ -20,6 +20,7 @@ RUN \
     fontconfig \
     python \
     g++ \
+    libpng-dev \
     build-essential && \
 
   # install node.js
