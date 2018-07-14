@@ -143,15 +143,16 @@ describe('JDLApplication', () => {
     });
   });
   describe('#toString', () => {
-    let jdlApplication = null;
+    context('when there is no entity', () => {
+      let jdlApplication = null;
 
-    before(() => {
-      jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0', path: '../../' } });
-      delete jdlApplication.config.jwtSecretKey;
-    });
+      before(() => {
+        jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0', path: '../../' } });
+        delete jdlApplication.config.jwtSecretKey;
+      });
 
-    it('stringifies the application object', () => {
-      expect(jdlApplication.toString()).to.eq(`application {
+      it('stringifies the application object', () => {
+        expect(jdlApplication.toString()).to.eq(`application {
   config {
     applicationType monolith
     clientPackageManager yarn
@@ -185,6 +186,18 @@ describe('JDLApplication', () => {
     skipUserManagement false
   }
 }`);
+      });
+    });
+    context('when there are listed entities', () => {
+      let jdlApplication = null;
+
+      before(() => {
+        jdlApplication = new JDLApplication({ entities: ['A', 'B', 'C', 'C'] });
+      });
+
+      it('exports the entity names', () => {
+        expect(jdlApplication.toString().includes('entities A, B, C')).to.be.true;
+      });
     });
   });
   describe('::isValid', () => {
