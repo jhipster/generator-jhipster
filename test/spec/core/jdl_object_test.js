@@ -571,7 +571,7 @@ describe('JDLObject', () => {
 
     context('when not passing a function', () => {
       it('does not fail', () => {
-        jdlObject.forEachApplication();
+        jdlObject.forEachRelationship();
       });
     });
     context('when passing a function', () => {
@@ -697,6 +697,38 @@ describe('JDLObject', () => {
 
       it('returns the number of options', () => {
         expect(jdlObject.getOptionQuantity()).to.equal(1);
+      });
+    });
+  });
+  describe('#forEachOption', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+      jdlObject.addOption(new JDLUnaryOption({
+        name: UnaryOptions.SKIP_CLIENT
+      }));
+      jdlObject.addOption(new JDLUnaryOption({
+        name: UnaryOptions.SKIP_SERVER
+      }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlObject.forEachOption();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlObject.forEachOption((jdlOption) => {
+          result.push(jdlOption.name);
+        });
+      });
+
+      it('uses each option', () => {
+        expect(result).to.deep.equal(['skipClient', 'skipServer']);
       });
     });
   });

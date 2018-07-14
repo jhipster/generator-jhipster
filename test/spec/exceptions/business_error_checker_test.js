@@ -713,11 +713,12 @@ describe('BusinessErrorChecker', () => {
     });
     context('when not passing a value for a binary option', () => {
       before(() => {
-        jdlObject.addOption(new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BinaryOptions.Options.PAGINATION,
           value: BinaryOptions.Values.pagination.PAGER
-        }));
-        jdlObject.options.options.pagination_pager.value = '';
+        });
+        option.value = '';
+        jdlObject.addOption(option);
         checker = new BusinessErrorChecker(jdlObject);
       });
 
@@ -729,11 +730,12 @@ describe('BusinessErrorChecker', () => {
     });
     context('when not passing a valid value for a binary option', () => {
       before(() => {
-        jdlObject.addOption(new JDLBinaryOption({
+        const option = new JDLBinaryOption({
           name: BinaryOptions.Options.PAGINATION,
           value: BinaryOptions.Values.pagination.PAGER
-        }));
-        jdlObject.options.options.pagination_pager.value = BinaryOptions.Values.dto.MAPSTRUCT;
+        });
+        option.value = BinaryOptions.Values.dto.MAPSTRUCT;
+        jdlObject.addOption(option);
         checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });
       });
 

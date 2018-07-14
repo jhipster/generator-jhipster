@@ -679,22 +679,25 @@ describe('DocumentParser', () => {
       });
       context('when parsing filtered entities', () => {
         let jdlObject = null;
+        let filterOption = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
           jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input,
           });
+          filterOption = jdlObject.getOptionsForName(UnaryOptions.FILTER)[0];
         });
 
         it('works', () => {
-          expect(jdlObject.options.options.filter.entityNames.has('*')).to.be.true;
-          expect(jdlObject.options.options.filter.excludedNames.has('B')).to.be.true;
+          expect(filterOption.entityNames.has('*')).to.be.true;
+          expect(filterOption.excludedNames.has('B')).to.be.true;
         });
       });
       context('when parsing entities with a custom client root folder', () => {
         context('inside a microservice app', () => {
           let jdlObject = null;
+          let clientRootFolderOption = null;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/client_root_folder.jdl']);
@@ -702,14 +705,16 @@ describe('DocumentParser', () => {
               document: input,
               applicationType: ApplicationTypes.MICROSERVICE
             });
+            clientRootFolderOption = jdlObject.getOptionsForName(BinaryOptions.CLIENT_ROOT_FOLDER)[0];
           });
 
           it('is ignored', () => {
-            expect(jdlObject.options.options['clientRootFolder_test-root']).to.be.undefined;
+            expect(clientRootFolderOption).to.be.undefined;
           });
         });
         context('inside any other app', () => {
           let jdlObject = null;
+          let clientRootFolderOption = null;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/client_root_folder.jdl']);
@@ -717,18 +722,20 @@ describe('DocumentParser', () => {
               document: input,
               applicationType: ApplicationTypes.MONOLITH
             });
+            clientRootFolderOption = jdlObject.getOptionsForName(BinaryOptions.CLIENT_ROOT_FOLDER)[0];
           });
 
           it('works', () => {
-            expect(jdlObject.options.options['clientRootFolder_test-root'].entityNames.has('*')).to.be.true;
-            expect(jdlObject.options.options['clientRootFolder_test-root'].excludedNames.has('C')).to.be.true;
-            expect(jdlObject.options.options['clientRootFolder_test-root'].value).to.equal('test-root');
+            expect(clientRootFolderOption.entityNames.has('*')).to.be.true;
+            expect(clientRootFolderOption.excludedNames.has('C')).to.be.true;
+            expect(clientRootFolderOption.value).to.equal('test-root');
           });
         });
       });
       context('when parsing a JDL inside a microservice app', () => {
         context('without the microservice option in the JDL', () => {
           let jdlObject = null;
+          let microserviceOption = null;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/no_microservice.jdl']);
@@ -737,15 +744,17 @@ describe('DocumentParser', () => {
               applicationType: ApplicationTypes.MICROSERVICE,
               applicationName: 'toto'
             });
+            microserviceOption = jdlObject.getOptionsForName(BinaryOptions.MICROSERVICE)[0];
           });
 
           it('adds it to every entity', () => {
-            expect(Object.keys(jdlObject.options.options).length).to.equal(1);
-            expect(jdlObject.options.options.microservice_toto.entityNames.toString()).to.equal('[A,B,C,D,E,F,G]');
+            expect(jdlObject.getOptionQuantity()).to.equal(1);
+            expect(microserviceOption.entityNames.toString()).to.equal('[A,B,C,D,E,F,G]');
           });
         });
         context('with the microservice option in the JDL', () => {
           let jdlObject = null;
+          let microserviceOption = null;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
@@ -754,11 +763,12 @@ describe('DocumentParser', () => {
               applicationType: ApplicationTypes.MICROSERVICE,
               applicationName: 'toto'
             });
+            microserviceOption = jdlObject.getOptionsForName(BinaryOptions.MICROSERVICE)[0];
           });
 
           it('does not automatically setup the microservice option', () => {
-            expect(Object.keys(jdlObject.options.options).length).to.equal(1);
-            expect(jdlObject.options.options.microservice_ms.entityNames.toString()).to.equal('[A]');
+            expect(jdlObject.getOptionQuantity()).to.equal(1);
+            expect(microserviceOption.entityNames.toString()).to.equal('[A]');
           });
         });
       });
@@ -796,6 +806,11 @@ describe('DocumentParser', () => {
       });
       context('when parsing entities with annotations', () => {
         let jdlObject = null;
+        let dtoOption = null;
+        let filterOption = null;
+        let paginationOption = null;
+        let serviceOption = null;
+        let skipClientOption = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/annotations.jdl']);
@@ -803,14 +818,19 @@ describe('DocumentParser', () => {
             document: input,
             applicationType: ApplicationTypes.MONOLITH
           });
+          dtoOption = jdlObject.getOptionsForName(BinaryOptions.DTO)[0];
+          filterOption = jdlObject.getOptionsForName(UnaryOptions.FILTER)[0];
+          paginationOption = jdlObject.getOptionsForName(BinaryOptions.PAGINATION)[0];
+          serviceOption = jdlObject.getOptionsForName(BinaryOptions.SERVICE)[0];
+          skipClientOption = jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)[0];
         });
 
         it('sets the annotations as options', () => {
-          expect(jdlObject.options.options.dto_mapstruct.entityNames.toArray()).to.deep.equal(['A', 'B']);
-          expect(jdlObject.options.options.filter.entityNames.toArray()).to.deep.equal(['C']);
-          expect(jdlObject.options.options.pagination_pager.entityNames.toArray()).to.deep.equal(['B', 'C']);
-          expect(jdlObject.options.options.service_serviceClass.entityNames.toArray()).to.deep.equal(['A', 'B']);
-          expect(jdlObject.options.options.skipClient.entityNames.toArray()).to.deep.equal(['A', 'C']);
+          expect(dtoOption.entityNames.toArray()).to.deep.equal(['A', 'B']);
+          expect(filterOption.entityNames.toArray()).to.deep.equal(['C']);
+          expect(paginationOption.entityNames.toArray()).to.deep.equal(['B', 'C']);
+          expect(serviceOption.entityNames.toArray()).to.deep.equal(['A', 'B']);
+          expect(skipClientOption.entityNames.toArray()).to.deep.equal(['A', 'C']);
         });
       });
     });

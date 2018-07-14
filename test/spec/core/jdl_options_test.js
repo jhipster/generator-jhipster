@@ -121,6 +121,38 @@ describe('JDLOptions', () => {
       expect(options.size()).to.equal(1);
     });
   });
+  describe('#forEach', () => {
+    let jdlOptions = null;
+
+    before(() => {
+      jdlOptions = new JDLOptions();
+      jdlOptions.addOption(new JDLUnaryOption({
+        name: UnaryOptions.SKIP_CLIENT
+      }));
+      jdlOptions.addOption(new JDLUnaryOption({
+        name: UnaryOptions.SKIP_SERVER
+      }));
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        jdlOptions.forEach();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        jdlOptions.forEach((jdlOption) => {
+          result.push(jdlOption.name);
+        });
+      });
+
+      it('uses each option', () => {
+        expect(result).to.deep.equal(['skipClient', 'skipServer']);
+      });
+    });
+  });
   describe('#getOptionsForName', () => {
     let jdlOptions = null;
 
