@@ -21,9 +21,9 @@
     "release-minor": "npm version minor -a -m \"Update to %s\" && yarn release",
     "release-major": "npm version major -a -m \"Update to %s\" && yarn release",
     "test": "yarn lint && nyc mocha test",
-    "test:watch": "mocha test --watch --reporter min",
+    "test:watch": "mocha test --watch --reporter min"
   },
-  "homepage": "https://github.com/jhipster/jhipster-core#readme",
+  "homepage": "https://github.com/jhipster/jhipster-core",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jhipster/jhipster-core.git"
