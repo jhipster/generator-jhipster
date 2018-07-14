@@ -722,11 +722,11 @@ check-error@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
 
-chevrotain@3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-3.7.0.tgz#9b2a4556fdc8479313b37578348d9d2824fefb5c"
+chevrotain@3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-3.7.1.tgz#2ed7d32bdeeb931e58506641a7e06d176470c8fa"
   dependencies:
-    regexp-to-ast "0.3.4"
+    regexp-to-ast "0.3.5"
 
 chokidar@^2.0.2:
   version "2.0.4"
@@ -3211,9 +3211,9 @@ regex-not@^1.0.0, regex-not@^1.0.2:
     extend-shallow "^3.0.2"
     safe-regex "^1.1.0"
 
-regexp-to-ast@0.3.4:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/regexp-to-ast/-/regexp-to-ast-0.3.4.tgz#30f1f6fe93c6dac3dbd43db76f5d15cc0be313c8"
+regexp-to-ast@0.3.5:
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/regexp-to-ast/-/regexp-to-ast-0.3.5.tgz#dedadd11bbb5f849df76b4e84b0b5335831c0473"
 
 regexpp@^1.0.1:
   version "1.0.1"
