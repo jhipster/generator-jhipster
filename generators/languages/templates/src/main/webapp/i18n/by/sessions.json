@@ -1,15 +1,15 @@
 {
     "sessions": {
-        "title": "Активные сессии для [<b>{{username}}</b>]",
+        "title": "Актыўныя сесіі для [<b>{{username}}</b>]",
         "table": {
-            "ipaddress": "IP адрес",
+            "ipaddress": "IP адрас",
             "useragent": "User Agent",
             "date": "Дата",
-            "button": "Завершить"
+            "button": "Завяршыць"
         },
         "messages": {
-            "success": "<strong>Сессия истекла!</strong>",
-            "error": "<strong>Произошла ошибка!</strong> Сессия не может быть завершена."
+            "success": "<strong>Сесія мінула!</strong>",
+            "error": "<strong>Адбылася памылка!</strong> Сесія не можа быць завершана."
         }
     }
 }

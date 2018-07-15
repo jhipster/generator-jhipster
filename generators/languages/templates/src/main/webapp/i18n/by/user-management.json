@@ -1,30 +1,30 @@
 {
     "userManagement": {
         "home": {
-            "title": "Пользователи",
-            "createLabel": "Создать нового пользователя",
-            "createOrEditLabel": "Создать или отредактировать пользователя"
+            "title": "Карыстальнікі",
+            "createLabel": "Стварыць новага карыстальніка",
+            "createOrEditLabel": "Стварыць або адрэдагаваць карыстальніка"
         },
-        "created": "Новый пользователь создан с идентификатором {{ param }}",
-        "updated": "Пользователь с идентификатором {{ param }} обновлен",
-        "deleted": "Пользователь с идентификатором {{ param }} удален",
+        "created": "Новы карыстальнік створаны з ідэнтыфікатарам {{ param }}",
+        "updated": "Карыстальнік з ідэнтыфікатарам {{param}} абноўлены",
+        "deleted": "Карыстальнік з ідэнтыфікатарам {{param}} выдалены",
         "delete": {
-            "question": "Вы уверены, что хотите удалить пользователя {{ login }}?"
+            "question": "Вы ўпэўненыя, што жадаеце выдаліць карыстальніка{{ login }}?"
         },
         "detail": {
-            "title": "Пользователь"
+            "title": "Карыстальнік"
         },
-        "login": "Логин",
-        "firstName": "Имя",
-        "lastName": "Фамилия",
+        "login": "Лагін",
+        "firstName": "Імя",
+        "lastName": "Прозвішча",
         "email": "Email",
-        "activated": "Активен",
-        "deactivated": "Неактивен",
-        "profiles": "Профили",
-        "langKey": "Язык",
-        "createdBy": "Создал",
-        "createdDate": "Дата создания",
-        "lastModifiedBy": "Изменено",
-        "lastModifiedDate": "Дата изменения"
+        "activated": "Актыўны",
+        "deactivated": "Неактыўны",
+        "profiles": "Профілі",
+        "langKey": "Мова",
+        "createdBy": "Стварыў",
+        "createdDate": "Дата стварэння",
+        "lastModifiedBy": "Зменена",
+        "lastModifiedDate": "Дата змены"
     }
 }
