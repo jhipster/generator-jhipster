@@ -155,8 +155,8 @@ describe('JDLReader', () => {
         it('throws an error', () => {
           expect(() => {
             JDLReader.lintFiles(['../../test_files/invalid_file.txt']);
-          }).to.throw('The passed file \'../../test_files/invalid_file.txt\' must end ' +
-            'with \'.jh\' or \'.jdl\' to be valid.');
+          }).to.throw('The passed file \'../../test_files/invalid_file.txt\' must end '
+            + 'with \'.jh\' or \'.jdl\' to be valid.');
         });
       });
       context('such as files that do not exist', () => {
@@ -182,7 +182,7 @@ describe('JDLReader', () => {
           content = JDLReader.lintFiles(['./test/test_files/lint/useless_curly_braces.jdl']);
         });
 
-        it('counts it', () => {
+        it('counts them', () => {
           expect(content.errors.ENT_SHORTER_DECL).to.have.lengthOf(1);
         });
         it('tells which entity', () => {
@@ -196,7 +196,7 @@ describe('JDLReader', () => {
           content = JDLReader.lintFiles(['./test/test_files/lint/useless_table_names.jdl']);
         });
 
-        it('counts it', () => {
+        it('counts them', () => {
           expect(content.errors.ENT_OPTIONAL_TABLE_NAME).to.have.lengthOf(3);
         });
         it('tells which entity', () => {
@@ -212,7 +212,7 @@ describe('JDLReader', () => {
           content = JDLReader.lintFiles(['./test/test_files/lint/ungrouped_relationships.jdl']);
         });
 
-        it('counts it', () => {
+        it('counts them', () => {
           expect(content.errors.REL_INDIVIDUAL_DECL).to.have.lengthOf(2);
         });
         it('tells which entity', () => {
@@ -227,7 +227,7 @@ describe('JDLReader', () => {
           content = JDLReader.lintFiles(['./test/test_files/lint/useless_commas_fields.jdl']);
         });
 
-        it('counts it', () => {
+        it('counts them', () => {
           expect(content.errors.FLD_OPTIONAL_COMMAS).to.have.lengthOf(3);
         });
         it('tells which entity', () => {
