@@ -18,37 +18,37 @@
 -%>
 {
     "health": {
-        "title": "Состояние",
-        "refresh.button": "Обновить",
-        "stacktrace": "Трассировки стека",
+        "title": "Cтан",
+        "refresh.button": "Абнавіць",
+        "stacktrace": "Трасіроўкі стэка",
         "details": {
-            "details": "Детали",
+            "details": "Дэталі",
             "properties": "Параметры",
-            "name": "Имя",
-            "value": "Значение",
-            "error": "Ошибка"
+            "name": "Імя",
+            "value": "Значэнне",
+            "error": "Памылка"
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
-            "binders": "Брокер сообщений",
+            "binders": "Прокер паведамленняў",
             <%_ } _%>
             <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
-            "refreshScope": "Область обновления микросервиса",
-            "configServer": "Сервер конфигурации микросервиса",
+            "refreshScope": "Вобласць абнаўлення мікрасэрвіса",
+            "configServer": "Сервер канфігурацыі мікрасэрвіса",
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
             "consul": "Consul",<% } %>
             <%_ } _%>
-            "diskSpace": "Место на диске",
+            "diskSpace": "Месца на дыску",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
-            "db": "База данных"<% } %><% if (databaseType === 'mongodb') { %>,
+            "db": "База дадзеных"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
             "couchbase": "Couchbase"<% } %>
         },
         "table": {
-            "service": "Название сервиса",
+            "service": "Назва сэрвісу",
             "status": "Статус"
         },
         "status": {
