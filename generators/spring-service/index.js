@@ -114,16 +114,30 @@ module.exports = class extends BaseGenerator {
                 this.serviceClass = _.upperFirst(this.name) + (this.name.endsWith('Service') ? '' : 'Service');
                 this.serviceInstance = _.lowerCase(this.serviceClass);
 
-                this.template(
-                    `${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
-                    `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`
-                );
+                if (useBlueprint) {
+                    this.template(
+                        `${this.fetchFromInstalledJHipster('spring-service/templates')}/${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
+                        `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`
+                    );
+                } else {
+                    this.template(
+                        `${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
+                        `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`
+                    );
+                }
 
                 if (this.useInterface) {
-                    this.template(
-                        `${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
-                        `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`
-                    );
+                    if (useBlueprint) {
+                        this.template(
+                            `${this.fetchFromInstalledJHipster('spring-service/templates')}/${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
+                            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`
+                        );
+                    } else {
+                        this.template(
+                            `${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
+                            `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`
+                        );
+                    }
                 }
             }
         };

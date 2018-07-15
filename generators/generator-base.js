@@ -2454,7 +2454,7 @@ module.exports = class extends PrivateBase {
      */
     getAllJhipsterConfig(generator = this, force) {
         let configuration = generator.config.getAll() || {};
-        if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
+        if (!configuration.baseName && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
             configuration = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }))['generator-jhipster'];
         }
         if (!configuration.get || typeof configuration.get !== 'function') {
