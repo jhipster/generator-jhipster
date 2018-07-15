@@ -45,7 +45,7 @@ module.exports = class extends BaseGenerator {
     get initializing() {
         return {
             sayHello() {
-                this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator'));
+                this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
             },
             getConfig() {
                 this.jhipsterVersion = packagejs.version;
