@@ -123,8 +123,9 @@ module.exports = class extends BaseGenerator {
                     this.artifactoryReleasesId, this.artifactoryReleasesUrl
                 );
             } else if (this.buildTool === 'gradle') {
-                // TODO
+                // TODO: add support here
                 // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
+                this.warning('No support for Artifactory yet, when using Gradle.\n');
             }
         }
 
