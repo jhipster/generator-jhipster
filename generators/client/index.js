@@ -430,15 +430,12 @@ module.exports = class extends BaseGenerator {
                 if (this.options['skip-install']) {
                     this.log(logMsg);
                 } else {
-                    this.installDependencies(installConfig).then(
-                        () => {
-                            this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
-                        },
-                        (err) => {
-                            this.warning('Install of dependencies failed!');
-                            this.log(logMsg);
-                        }
-                    );
+                    try {
+                        this.installDependencies(installConfig);
+                    } catch (e) {
+                        this.warning('Install of dependencies failed!');
+                        this.log(logMsg);
+                    }
                 }
             }
         };
@@ -453,8 +450,13 @@ module.exports = class extends BaseGenerator {
     _end() {
         return {
             end() {
-                if (this.buildResult !== undefined && this.buildResult.status !== 0) {
-                    this.error('webpack:build failed.');
+                if (!this.options['skip-install']) {
+                    this.log(chalk.green('\nStarting webpack:build\n'));
+
+                    const buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
+                    if (buildResult !== undefined && buildResult.status !== 0) {
+                        this.error('webpack:build failed.');
+                    }
                 }
                 this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
