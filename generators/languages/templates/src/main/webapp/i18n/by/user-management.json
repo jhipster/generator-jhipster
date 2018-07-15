@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Карыстальнікі",
+            "createLabel": "Стварыць новага карыстальніка",
+            "createOrEditLabel": "Стварыць або адрэдагаваць карыстальніка"
+        },
+        "created": "Новы карыстальнік створаны з ідэнтыфікатарам {{ param }}",
+        "updated": "Карыстальнік з ідэнтыфікатарам {{param}} абноўлены",
+        "deleted": "Карыстальнік з ідэнтыфікатарам {{param}} выдалены",
+        "delete": {
+            "question": "Вы ўпэўненыя, што жадаеце выдаліць карыстальніка{{ login }}?"
+        },
+        "detail": {
+            "title": "Карыстальнік"
+        },
+        "login": "Лагін",
+        "firstName": "Імя",
+        "lastName": "Прозвішча",
+        "email": "Email",
+        "activated": "Актыўны",
+        "deactivated": "Неактыўны",
+        "profiles": "Профілі",
+        "langKey": "Мова",
+        "createdBy": "Стварыў",
+        "createdDate": "Дата стварэння",
+        "lastModifiedBy": "Зменена",
+        "lastModifiedDate": "Дата змены"
+    }
+}
