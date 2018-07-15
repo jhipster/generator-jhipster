@@ -116,7 +116,7 @@ function askIntegrations() {
             default: [],
             choices: [
                 { name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' },
-                { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
+                { name: `Analyze your code with ${chalk.yellow('*Sonar*')} (requires SONAR_TOKEN set on CI service)`, value: 'sonar' },
                 { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`, value: 'heroku' }
             ]
         },
@@ -127,7 +127,7 @@ function askIntegrations() {
             message: 'What tasks/integrations do you want to include?',
             default: [],
             choices: [
-                { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
+                { name: `Analyze your code with ${chalk.yellow('*Sonar*')} (requires SONAR_TOKEN set on CI service)`, value: 'sonar' },
                 { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`, value: 'heroku' }
             ]
         },
