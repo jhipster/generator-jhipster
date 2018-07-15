@@ -19,87 +19,89 @@
 {
     "global": {
         "title": "<%= capitalizedBaseName %>",
-        "browsehappy": "Ваш браузер <strong>устарел</strong>. Пожалуйста <a href=\"http://browsehappy.com/?locale=ru\">обновите ваш браузер</a>.",
+        "browsehappy": "Dаш браўзэр <strong>састарэў</strong>. Калі ласка <a href=\"http://browsehappy
+        .com/?locale=ru\">абновіце ваш браўзэр</a>.",
         "menu": {
-            "home": "Главная",
+            "home": "Галоўная",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
-                "main": "Сущности",
+                "main": "Cутнасці",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
-                "main": "Профиль",
-                "settings": "Настройки",
+                "main": "Профіль",
+                "settings": "Налады",
                 "password": "Пароль",
-                "sessions": "Сессии",
-                "login": "Войти",
-                "logout": "Выйти",
-                "register": "Зарегистрироваться"
+                "sessions": "Сесіі",
+                "login": "Увайсці",
+                "logout": "Выйсці",
+                "register": "Зарэгістравацца"
             },
             "admin": {
-                "main": "Администрирование",
+                "main": "Адміністраванне",
                 <%_ if (applicationType === 'gateway') { _%>
                 "gateway": "Шлюз",
                 <%_ } _%>
-                "userManagement": "Управление пользователями",
-                "tracker": "Трекер польз.",
-                "metrics": "Метрики",
-                "health": "Состояние",
-                "configuration": "Настройки",
-                "logs": "Логи",
+                "userManagement": "Кіраванне карыстальнікамі",
+                "tracker": "Трэкер карыст.",
+                "metrics": "Метрыкі",
+                "health": "Стан",
+                "configuration": "Налады",
+                "logs": "Логі",
                 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-                "audits": "Аудит",
+                "audits": "Аўдыт",
                 <%_ } _%>
                 "apidocs": "API",
-                "database": "База данных",
+                "database": "База дадзеных",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
-            "language": "Язык"
+            "language": "Мова"
         },
         "form": {
-            "username": "Логин",
-            "username.placeholder": "Ваш логин",
-            "currentpassword": "Текущий пароль",
-            "currentpassword.placeholder": "Текущий пароль",
-            "newpassword": "Новый пароль",
-            "newpassword.placeholder": "Новый пароль",
-            "confirmpassword": "Подтверждение нового пароля",
-            "confirmpassword.placeholder": "Подтвердите новый пароль",
+            "username": "Лагін",
+            "username.placeholder": "Ваш лагін",
+            "currentpassword": "Цяперашні пароль",
+            "currentpassword.placeholder": "Цяперашнія пароль",
+            "newpassword": "Новы пароль",
+            "newpassword.placeholder": "Новы пароль",
+            "confirmpassword": "Пацвярджэнне новага паролю",
+            "confirmpassword.placeholder": "Пацвердзіце новы пароль",
             "email": "Email",
             "email.placeholder": "Ваш email"
         },
         "messages": {
             "info": {
                 "authenticated": {
-                    "prefix": "Если вы хотите ",
-                    "link": "авторизироваться",
-                    "suffix": ", вы можете попробовать аккаунты по умолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\")."
+                    "prefix": "Калі вы хочаце ",
+                    "link": "аўтарызавацца",
+                    "suffix": ", вы можаце паспрабаваць акаўнты па змаўчанні:<br/>- Адміністратар (лагін=\"admin\" і
+                    пароль=\"admin\") <br/>- Карыстальнік (лагін=\"user\" і пароль=\"user\")."
                 },
                 "register": {
-                    "noaccount": "У вас нет аккаунта?",
-                    "link": "Создать новый аккаунт"
+                    "noaccount": "У вас няма акаўнта?",
+                    "link": "Стварыць новы акаўнт"
                 }
             },
             "error": {
-                "dontmatch": "Пароль и его подтверждение не совпадают!"
+                "dontmatch": "Пароль і яго пацвярджэнне не супадаюць!"
             },
             "validate": {
                 "newpassword": {
-                    "required": "Пароль должен быть указан.",
-                    "minlength": "Длина пароля должна быть хотя-бы 5 символов",
-                    "maxlength": "Пароль не может быть длиннее чем 50 символов",
-                    "strength": "Сложность пароля:"
+                    "required": "Пароль павінен быць паказаны.",
+                    "minlength": "Даўжыня пароля павінна быць хаця-б 5 знакаў",
+                    "maxlength": "Пароль не можа быць даўжэй чым 50 сімвалаў",
+                    "strength": "Складанасць пароля:"
                 },
                 "confirmpassword": {
-                    "required": "подтверждение пароля должно быть указано.",
-                    "minlength": "Длина подтверждения пароля должна быть хотя-бы 5 символов",
-                    "maxlength": "Подтверждение пароля не может быть больше чем 50 символов"
+                    "required": "Пацвярджэнне пароля павінна быць паказана.",
+                    "minlength": "Даўжыня пацвярджэнне пароля павінна быць хаця-б 5 знакаў",
+                    "maxlength": "Пацвярджэнне пароля не можа быць даўжэй чым 50 сімвалаў"
                 },
                 "email": {
-                    "required": "Email должен быть указан.",
-                    "invalid": "Email не верен.",
-                    "minlength": "Длина email должна быть хотя-бы 5 символов",
-                    "maxlength": "Email не может быть длиннее чем 50 символов"
+                    "required": "Email павінен быць паказаны.",
+                    "invalid": "Email не верны.",
+                    "minlength": "Даўжыня email павінна быць хаця-б 5 знакаў",
+                    "maxlength": "Email не можа быць даўжэй чым 50 сімвалаў"
                 }
             }
         },
@@ -107,52 +109,52 @@
             "id" : "ID"
         },
         "ribbon": {
-            "dev":"Разработка"
+            "dev":"Распрацоўка"
         },
-        "item-count": "{{first}} - {{second}} из {{total}}"
+        "item-count": "{{first}} - {{second}} з {{total}}"
     },
     "entity": {
         "action": {
-            "addblob": "Добавить двоичный объект",
-            "addimage": "Добавить изображение",
+            "addblob": "Дадаць двайковы аб'ект",
+            "addimage": "Дадаць малюнак",
             "back": "Назад",
-            "cancel": "Отмена",
-            "delete": "Удалить",
-            "edit": "Изменить",
-            "open": "Открыть",
-            "save": "Сохранить",
-            "view": "Просмотр"
+            "cancel": "Адмена",
+            "delete": "Выдаліць",
+            "edit": "Змяніць",
+            "open": "Адкрыць",
+            "save": "Захаваць",
+            "view": "Прагляд"
         },
         "detail": {
             "field": "Поле",
-            "value": "Значение"
+            "value": "Значэнне"
         },
         "delete": {
-            "title": "Подтвердите операцию удаления"
+            "title": "Пацвердзіце аперацыю выдалення"
         },
         "validation": {
-            "required": "Это поле обязательно к заполнению.",
-            "minlength": "Это поле является обязательным, по крайней мере {{min}} символов.",
-            "maxlength": "Это поле не может быть длинее, чем {{max}} символов.",
-            "min": "Это поле должно быть больше, чем {{min}}.",
-            "max": "Это поле не может быть больше, чем {{max}}.",
-            "minbytes": "Это поле должно быть больше, чем {{min}} байтов.",
-            "maxbytes": "Это поле не может быть больше, чем {{max}} байтов.",
-            "pattern": "Это поле должно следовать модели {{pattern}}.",
-            "number": "Это поле должно быть число.",
-            "datetimelocal": "Это поле должно быть дата и время."
+            "required": "Гэта поле абавязкова да запаўнення.",
+            "minlength": "Гэта поле з'яўляецца абавязковым, па меншай меры {{min}} сімвалаў.",
+            "maxlength": "Гэта поле не можа быць даўжэй, чым {{max}} сімвалаў.",
+            "min": "Гэта поле павінна быць больш, чым {{min}}.",
+            "max": "Гэта поле не можа быць больш, чым {{max}}.",
+            "minbytes": "Гэта поле павінна быць больш, чым {{min}} байтаў.",
+            "maxbytes": "Гэта поле не можа быць больш, чым {{max}} байтаў.",
+            "pattern": "Гэта поле павінна прытрымлівацца мадэлі {{pattern}}.",
+            "number": "Гэта поле не можа быць лікам.",
+            "datetimelocal": "Гэта поле павінна быць дата і час."
         }
     },
     "error": {
-        "internalServerError": "Внутренняя ошибка сервера",
-        "server.not.reachable": "Сервер не доступен",
-        "url.not.found": "Не найдено",
-        "NotNull": "Поле {{fieldName}} не может быть пустым!",
+        "internalServerError": "Унутраная памылка сервера",
+        "server.not.reachable": "Сервер недаступнын",
+        "url.not.found": "Не знойдзена",
+        "NotNull": "Поле {{fieldName}} не можа быць пустым!",
         "Size": "Поле {{fieldName}} не отвечает требованиям мин/макс.го размера!",
-        "userexists": "Имя пользователя уже используется!",
-        "emailexists": "Эл. почта уже используется!!",
-        "idexists": "Новый {{entityName}} не может иметь данный ID",
-        "idnull": "Неверный ID"
+        "userexists": "Імя карыстальніка ўжо выкарыстоўваецца!",
+        "emailexists": "Эл. пошта ўжо выкарыстоўваецца !!",
+        "idexists": "Новы {{entityName}} ня можа мець дадзены ID",
+        "idnull": "Няправільны ID"
     },
-    "footer": "Это ваш футтер"
+    "footer": "Гэта ваш футэр"
 }
