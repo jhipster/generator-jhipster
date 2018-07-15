@@ -14,7 +14,6 @@ describe('JDLSyntaxValidatorVisitor', () => {
             }`)).to.not.throw();
         });
       });
-
       context('an invalid value', () => {
         context('such as a number', () => {
           it('will report a syntax error', () => {
@@ -24,6 +23,26 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   applicationType 666
                 }
               }`)).to.throw('A name is expected, but found: "666"');
+          });
+        });
+        context('such as an invalid character', () => {
+          it('will report a syntax error', () => {
+            expect(() => parse(`
+              application {
+                config {
+                  applicationType -
+                }
+              }`)).to.throw('unexpected character: ->-<-');
+          });
+        });
+        context('such as a capitalized letters', () => {
+          it('will report a syntax error', () => {
+            expect(() => parse(`
+              application {
+                config {
+                  applicationType FOO
+                }
+              }`)).to.throw('The applicationType property name must match: /^[a-z]+$/');
           });
         });
 
@@ -41,13 +60,25 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for authenticationType', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() => parse(`
+        context('with only letters', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
             application {
               config {
                 authenticationType jwt
               }
             }`)).to.not.throw();
+          });
+        });
+        context('with both letters and numbers', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
+            application {
+              config {
+                authenticationType jwt42
+              }
+            }`)).to.not.throw();
+          });
         });
       });
       context('an invalid value', () => {
@@ -75,13 +106,25 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for baseName', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() => parse(`
+        context('with only letters', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
             application {
               config {
                 baseName mySuperApp
               }
             }`)).to.not.throw();
+          });
+        });
+        context('with both letters and numbers', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
+            application {
+              config {
+                baseName mySuperApp42
+              }
+            }`)).to.not.throw();
+          });
         });
       });
       context('an invalid value', () => {
@@ -109,13 +152,25 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for buildTool', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() => parse(`
+        context('with only letters', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
             application {
               config {
                 buildTool maven
               }
             }`)).to.not.throw();
+          });
+        });
+        context('with both letters and numbers', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
+            application {
+              config {
+                buildTool maven42
+              }
+            }`)).to.not.throw();
+          });
         });
       });
       context('an invalid value', () => {
@@ -143,13 +198,25 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for cacheProvider', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() => parse(`
+        context('with only letters', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
             application {
               config {
                 cacheProvider ehcache
               }
             }`)).to.not.throw();
+          });
+        });
+        context('with both letters and numbers', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
+            application {
+              config {
+                cacheProvider ehcache42
+              }
+            }`)).to.not.throw();
+          });
         });
       });
       context('an invalid value', () => {
@@ -177,13 +244,25 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for clientFramework', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() => parse(`
+        context('with only letters', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
             application {
               config {
-                clientFramework react
+                clientFramework angular
               }
             }`)).to.not.throw();
+          });
+        });
+        context('with both letters and numbers', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
+            application {
+              config {
+                clientFramework angular42
+              }
+            }`)).to.not.throw();
+          });
         });
       });
       context('an invalid value', () => {
@@ -209,15 +288,73 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
+    context('and using for clientPackageManager', () => {
+      context('a valid value', () => {
+        context('with only letters', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
+            application {
+              config {
+                clientPackageManager yarn
+              }
+            }`)).to.not.throw();
+          });
+        });
+        context('with both letters and numbers', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
+            application {
+              config {
+                clientPackageManager yarn42
+              }
+            }`)).to.not.throw();
+          });
+        });
+      });
+      context('an invalid value', () => {
+        context('such as quotes', () => {
+          it('fails', () => {
+            expect(() => parse(`
+            application {
+              config {
+                clientPackageManager "yarn"
+              }
+            }`)).to.throw('A name is expected, but found: ""yarn""');
+          });
+        });
+        context('such as numbers', () => {
+          it('fails', () => {
+            expect(() => parse(`
+            application {
+              config {
+                clientPackageManager 42
+              }
+            }`)).to.throw('A name is expected, but found: "42"');
+          });
+        });
+      });
+    });
     context('and using for databaseType', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() => parse(`
+        context('with only letters', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
             application {
               config {
                 databaseType sql
               }
             }`)).to.not.throw();
+          });
+        });
+        context('with both letters and numbers', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
+            application {
+              config {
+                databaseType sql42
+              }
+            }`)).to.not.throw();
+          });
         });
       });
       context('an invalid value', () => {
@@ -236,7 +373,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             expect(() => parse(`
             application {
               config {
-                clientFramework 42
+                databaseType 42
               }
             }`)).to.throw('A name is expected, but found: "42"');
           });
@@ -245,13 +382,25 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for devDatabaseType', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() => parse(`
+        context('with only letters', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
             application {
               config {
                 devDatabaseType postgresql
               }
             }`)).to.not.throw();
+          });
+        });
+        context('with both letters and numbers', () => {
+          it('does not report a syntax error', () => {
+            expect(() => parse(`
+            application {
+              config {
+                devDatabaseType postgresql42
+              }
+            }`)).to.not.throw();
+          });
         });
       });
       context('an invalid value', () => {
@@ -270,7 +419,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             expect(() => parse(`
             application {
               config {
-                clientFramework 42
+                devDatabaseType 42
               }
             }`)).to.throw('A name is expected, but found: "42"');
           });
@@ -337,13 +486,25 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
 
       context('an invalid value', () => {
-        it('will report a syntax error', () => {
-          expect(() => parse(`
+        context('such as having numbers inside the list', () => {
+          it('will report a syntax error', () => {
+            expect(() => parse(`
+            application {
+              config {
+                languages [fr, en, 42]
+              }
+            }`)).to.throw('MismatchedTokenException: Expecting token of type --> NAME <-- but found --> \'42\' <--');
+          });
+        });
+        context('such as not a list', () => {
+          it('will report a syntax error', () => {
+            expect(() => parse(`
             application {
               config {
                 languages true
               }
             }`)).to.throw('An array of names is expected, but found: "true"');
+          });
         });
       });
     });
