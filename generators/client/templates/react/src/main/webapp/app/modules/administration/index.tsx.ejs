@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 <%_ if (!skipUserManagement) { _%>
@@ -30,7 +30,7 @@ import Configuration from './configuration/configuration';
 import Audits from './audits/audits';
 <%_ } _%>
 import Docs from './docs/docs';
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
 import Gateway from './gateway/gateway';
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
@@ -46,7 +46,7 @@ const Routes = ({ match }) => (
     <ErrorBoundaryRoute exact path={`${match.url}/tracker`} component={Tracker} />
 <%_ } _%>
     <ErrorBoundaryRoute exact path={`${match.url}/health`} component={Health} />
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     <ErrorBoundaryRoute exact path={`${match.url}/gateway`} component={Gateway} />
 <%_ } _%>
     <ErrorBoundaryRoute exact path={`${match.url}/metrics`} component={Metrics} />

@@ -75,16 +75,16 @@ module.exports = class extends BaseGenerator {
 
                 shelljs.exec('docker-compose -v', { silent: true }, (code, stdout, stderr) => {
                     if (stderr) {
-                        this.log(chalk.red('Docker Compose 1.6.0 or later is not installed on your computer.\n' +
-                            '         Read https://docs.docker.com/compose/install/\n'));
+                        this.log(chalk.red('Docker Compose 1.6.0 or later is not installed on your computer.\n'
+                            + '         Read https://docs.docker.com/compose/install/\n'));
                     } else {
                         const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
                         const composeVersionMajor = composeVersion.split('.')[0];
                         const composeVersionMinor = composeVersion.split('.')[1];
                         if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
-                            this.log(chalk.red(`${'Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
-                                '         Docker Compose version found: '}${composeVersion}\n` +
-                                '         Read https://docs.docker.com/compose/install/\n'));
+                            this.log(chalk.red(`${'Docker Compose version 1.6.0 or later is not installed on your computer.\n'
+                                + '         Docker Compose version found: '}${composeVersion}\n`
+                                + '         Read https://docs.docker.com/compose/install/\n'));
                         }
                     }
                     done();
@@ -272,15 +272,17 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('appsFolders', this.appsFolders);
-                this.config.set('directoryPath', this.directoryPath);
-                this.config.set('gatewayType', this.gatewayType);
-                this.config.set('clusteredDbApps', this.clusteredDbApps);
-                this.config.set('monitoring', this.monitoring);
-                this.config.set('consoleOptions', this.consoleOptions);
-                this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
-                this.config.set('adminPassword', this.adminPassword);
-                this.config.set('jwtSecretKey', this.jwtSecretKey);
+                this.config.set({
+                    appsFolders: this.appsFolders,
+                    directoryPath: this.directoryPath,
+                    gatewayType: this.gatewayType,
+                    clusteredDbApps: this.clusteredDbApps,
+                    monitoring: this.monitoring,
+                    consoleOptions: this.consoleOptions,
+                    serviceDiscoveryType: this.serviceDiscoveryType,
+                    adminPassword: this.adminPassword,
+                    jwtSecretKey: this.jwtSecretKey
+                });
             }
         };
     }

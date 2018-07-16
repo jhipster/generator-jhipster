@@ -16,43 +16,45 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import {
   DropdownItem
 } from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink as Link } from 'react-router-dom';
+import { Translate, translate } from 'react-jhipster';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
 import { NavDropdown } from '../header-components';
 
+
 const accountMenuItemsAuthenticated = (
   <>
   <%_ if (authenticationType !== 'oauth2') { _%>
-    <DropdownItem tag={Link} to="/account/settings"><FontAwesomeIcon icon="wrench" /> Settings</DropdownItem>
-    <DropdownItem tag={Link} to="/account/password"><FontAwesomeIcon icon="clock" /> Password</DropdownItem>
+    <DropdownItem tag={Link} to="/account/settings"><FontAwesomeIcon icon="wrench" /> <Translate contentKey="global.menu.account.settings">Settings</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/account/password"><FontAwesomeIcon icon="clock" /> <Translate contentKey="global.menu.account.password">Password</Translate></DropdownItem>
   <%_ } _%>
   <%_ if (authenticationType === 'session') { _%>
-    <DropdownItem tag={Link} to="/account/sessions"><FontAwesomeIcon icon="cloud" /> Sessions</DropdownItem>
+    <DropdownItem tag={Link} to="/account/sessions"><FontAwesomeIcon icon="cloud" /> <Translate contentKey="global.menu.account.sessions">Sessions</Translate></DropdownItem>
   <%_ } _%>
-    <DropdownItem tag={Link} to="/logout"><FontAwesomeIcon icon="sign-out-alt" /> Logout</DropdownItem>
+    <DropdownItem tag={Link} to="/logout"><FontAwesomeIcon icon="sign-out-alt" /> <Translate contentKey="global.menu.account.logout">Sign out</Translate></DropdownItem>
   </>
   );
 
 const accountMenuItems = (
   <>
   <%_ if (authenticationType !== 'oauth2') { _%>
-    <DropdownItem id="login-item" tag={Link} to="/login"><FontAwesomeIcon icon="sign-in-alt" /> Login</DropdownItem>
-    <DropdownItem tag={Link} to="/register"><FontAwesomeIcon icon="sign-in-alt" /> Register</DropdownItem>
+    <DropdownItem id="login-item" tag={Link} to="/login"><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/register"><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.register">Register</Translate></DropdownItem>
   <%_ } else { _%>
-    <DropdownItem id="login-item" tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" /> Login</DropdownItem>
+    <DropdownItem id="login-item" tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
   <%_ } _%>
   </>
 );
 
 export const AccountMenu = ({ isAuthenticated = false }) => (
-  <NavDropdown icon="user" name="Account" id="account-menu">
+  <NavDropdown icon="user" name={translate('global.menu.account.main')} id="account-menu">
     {isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
   </NavDropdown>
 );

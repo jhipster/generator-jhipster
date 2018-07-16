@@ -154,8 +154,8 @@ module.exports = class extends BaseGenerator {
 
                 exec('heroku --version', (err) => {
                     if (err) {
-                        this.log.error('You don\'t have the Heroku Toolbelt installed. ' +
-                            'Download it from https://toolbelt.heroku.com/');
+                        this.log.error('You don\'t have the Heroku CLI installed. '
+                            + 'Download it from https://cli.heroku.com/');
                         this.abort = true;
                     }
                     done();

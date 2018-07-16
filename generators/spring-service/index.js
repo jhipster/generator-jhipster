@@ -34,7 +34,7 @@ module.exports = class extends BaseGenerator {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(
                 blueprint,
-                'spring-controller',
+                'spring-service',
                 {
                     force: this.options.force,
                     arguments: [this.name]
@@ -58,6 +58,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get initializing() {
         if (useBlueprint) return;
         return this._initializing();
@@ -84,6 +85,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get prompting() {
         if (useBlueprint) return;
         return this._prompting();
@@ -99,6 +101,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get default() {
         if (useBlueprint) return;
         return this._default();
@@ -108,23 +111,24 @@ module.exports = class extends BaseGenerator {
     _writing() {
         return {
             write() {
-                this.serviceClass = _.upperFirst(this.name);
-                this.serviceInstance = _.lowerCase(this.name);
+                this.serviceClass = _.upperFirst(this.name) + (this.name.endsWith('Service') ? '' : 'Service');
+                this.serviceInstance = _.lowerCase(this.serviceClass);
 
                 this.template(
-                    `${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
-                    `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}Service.java`
+                    `${this.fetchFromInstalledJHipster('spring-service/templates')}/${SERVER_MAIN_SRC_DIR}package/service/Service.java.ejs`,
+                    `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/${this.serviceClass}.java`
                 );
 
                 if (this.useInterface) {
                     this.template(
-                        `${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
-                        `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}ServiceImpl.java`
+                        `${this.fetchFromInstalledJHipster('spring-service/templates')}/${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
+                        `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`
                     );
                 }
             }
         };
     }
+
     get writing() {
         if (useBlueprint) return;
         return this._writing();

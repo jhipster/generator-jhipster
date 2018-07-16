@@ -28,7 +28,7 @@ for (const idx in fields) {
 // const variables = query.variables;
 // let hasManyToMany = query.hasManyToMany;
 _%>
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
@@ -51,7 +51,7 @@ import {
   <%_ } _%>
   ICrudPutAction
 } from 'react-jhipster';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
 <%_
@@ -211,7 +211,7 @@ const ownerSide = rel.ownerSide;
 _%>
   <%_ if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
   <%= relationshipFieldName %>Update = element => {
-    const selected = Array.from(element.target.selectedOptions).map((e: any) => e.value);
+    const selected = Array.from(element.target.selectedOptions).map((e: any) => parseInt(e.value, 10));
     this.setState({
       ids<%= relationshipName %>: keysToValues(selected, this.props.<%= otherEntityNamePlural %>, '<%= otherEntityField %>')
     });
@@ -273,7 +273,6 @@ _%>
 <%_ } _%>
 <%_ }) _%>
   render() {
-    const isInvalid = false;
     const { <%= entityInstance %>Entity,<%
     uniqueRealtionFields.forEach(rel => {
     %> <%= rel %>,<% }) %> loading, updating } = this.props;
@@ -376,9 +375,14 @@ _%>
               <%_
                 const enumPrefix = angularAppName + '.'+ fieldType;
                 for (key in values) {
-                    const value = values[key]; _%>
+                    const value = values[key];
+              _%>
                 <option value="<%= value %>">
-                    <%=value%>
+                <%_ if (enableTranslation) { _%>
+                  <Translate contentKey="<%= enumPrefix %>.<%= value %>" />
+                <%_ } else { _%>
+                  <%= value %>
+                <%_ } _%>
                 </option>
               <%_ } _%>
               </AvInput>
@@ -427,6 +431,7 @@ _%>
                 </div>
               ) : null}
               <input id="file_<%= fieldName %>" type="file" onChange={this.onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
+              <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include react_validators %>/>
             </AvGroup>
 
             <%_ } else { _%>
@@ -435,7 +440,7 @@ _%>
                   <%= fieldNameHumanized %>
                 </Translate>
               </Label>
-              <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include react_validators %>/>
+              <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include react_validators %>/>
               <%_ } _%>
             <%_ } else { _%>
             <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
@@ -482,7 +487,8 @@ _%>
                 type="select"
                 className="form-control"
                 name="<%= relationshipFieldName %>.<%= otherEntityField %>"
-                onChange={this.<%= relationshipFieldName %>Update}>
+                onChange={this.<%= relationshipFieldName %>Update}
+              >
                 <option value="" key="0" />
                 {
                   <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -494,33 +500,25 @@ _%>
                   ) : null
                 }
               </AvInput>
-              <AvInput
-                id="<%= entityFileName %>-<%= relationshipName %>"
-                type="hidden"
-                name="<%= relationshipFieldName %>.id"
-                value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } else { _%>
               <AvInput
                 id="<%= entityFileName %>-<%= relationshipName %>"
                 type="select"
                 className="form-control"
-                name="<%= relationshipFieldName %>.<%= otherEntityField %>"
-                onChange={this.<%= relationshipFieldName %>Update}>
+                name="<%= relationshipFieldName %>.id"
+                onChange={this.<%= relationshipFieldName %>Update}
+                value={isNew && <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : ''}
+              >
                 {
                   <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                     <option
-                      value={otherEntity.<%=otherEntityField%>}
+                      value={otherEntity.id}
                       key={otherEntity.id}>
                       {otherEntity.<%=otherEntityField%>}
                     </option>
                   ) : null
                 }
               </AvInput>
-              <AvInput
-                id="<%= entityFileName %>-<%= relationshipName %>"
-                type="hidden"
-                name="<%= relationshipFieldName %>.id"
-                value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
@@ -547,7 +545,9 @@ _%>
                     type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
-                    onChange={this.<%= relationshipFieldName %>Update}>
+                    onChange={this.<%= relationshipFieldName %>Update}
+                    value={isNew && <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : ''}
+                  >
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
@@ -571,36 +571,34 @@ _%>
                     id="<%= entityFileName %>-<%= relationshipName %>"
                     type="select"
                     className="form-control"
-                    name="<%= relationshipFieldName %>.<%=otherEntityField%>"
-                    onChange={this.<%= relationshipFieldName %>Update}>
+                    name="<%= relationshipFieldName %>.id"
+                    onChange={this.<%= relationshipFieldName %>Update}
+                    value={isNew && <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : ''}
+                  >
                     <option value="" key="0" />
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
-                          value={otherEntity.<%=otherEntityField%>}
+                          value={otherEntity.id}
                           key={otherEntity.id}>
                           {otherEntity.<%=otherEntityField%>}
                         </option>
                       ) : null
                     }
                   </AvInput>
-                  <AvInput
-                    id="<%= entityFileName %>-<%= relationshipName %>"
-                    type="hidden"
-                    name="<%= relationshipFieldName %>.id"
-                    value={this.state.<%= relationshipFieldName %>Id} />
                 <%_ } else { _%>
                   <AvInput
                     id="<%= entityFileName %>-<%= relationshipName %>"
                     type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
-                    onChange={this.<%= relationshipFieldName %>Update}>
+                    onChange={this.<%= relationshipFieldName %>Update}
+                  >
                     <option value="" key="0" />
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
-                          value={otherEntity.id}
+                          value={otherEntity.<%=otherEntityField%>}
                           key={otherEntity.id}>
                           {otherEntity.<%=otherEntityField%>}
                         </option>
@@ -645,7 +643,7 @@ _%>
               <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
             </Button>
             &nbsp;
-            <Button color="primary" id="save-entity" type="submit" disabled={isInvalid || updating}>
+            <Button color="primary" id="save-entity" type="submit" disabled={updating}>
               <FontAwesomeIcon icon="save" />&nbsp;
               <Translate contentKey="entity.action.save">Save</Translate>
             </Button>

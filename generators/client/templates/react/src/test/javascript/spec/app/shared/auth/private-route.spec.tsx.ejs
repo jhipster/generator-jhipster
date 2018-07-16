@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Route } from 'react-router-dom';
 import { shallow } from 'enzyme';
 
@@ -26,7 +26,7 @@ describe('private-route component', () => {
     expect(error.length).toEqual(1);
     expect(error.find('.alert-danger').html()).toEqual(
       <%_ if (enableTranslation) { _%>
-      '<div class="alert alert-danger"><span>translation-not-found[error.http.403]</span></div>'
+      '<div class="alert alert-danger"><span>You are not authorized to access this page.</span></div>'
       <%_ } else { _%>
       '<div class="alert alert-danger">You are not authorized to access this page.</div>'
       <%_ } _%>

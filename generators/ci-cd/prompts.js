@@ -136,7 +136,7 @@ function askIntegrations() {
             when: (this.pipelines.includes('jenkins') || this.pipelines.includes('gitlab') || this.pipelines.includes('circle') || this.pipelines.includes('travis')) && this.herokuAppName,
             type: 'checkbox',
             name: 'heroku',
-            message: 'Deploy to heroku?',
+            message: 'Deploy to heroku (requires HEROKU_API_KEY set on CI service)?',
             default: [],
             choices: herokuChoices
         }

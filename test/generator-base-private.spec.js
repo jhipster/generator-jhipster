@@ -11,14 +11,12 @@ describe('Generator Base Private', () => {
         it('should produce correct output without margin', () => {
             const entityFolderName = 'entityFolderName';
             const entityFileName = 'entityFileName';
-            const content =
-                `|export * from './${entityFolderName}/${entityFileName}-update.component';
+            const content = `|export * from './${entityFolderName}/${entityFileName}-update.component';
                  |export * from './${entityFolderName}/${entityFileName}-delete-dialog.component';
                  |export * from './${entityFolderName}/${entityFileName}-detail.component';
                  |export * from './${entityFolderName}/${entityFileName}.component';
                  |export * from './${entityFolderName}/${entityFileName}.state';`;
-            const out =
-`export * from './entityFolderName/entityFileName-update.component';
+            const out = `export * from './entityFolderName/entityFileName-update.component';
 export * from './entityFolderName/entityFileName-delete-dialog.component';
 export * from './entityFolderName/entityFileName-detail.component';
 export * from './entityFolderName/entityFileName.component';
@@ -29,15 +27,13 @@ export * from './entityFolderName/entityFileName.state';`;
             const routerName = 'routerName';
             const enableTranslation = true;
             const glyphiconName = 'glyphiconName';
-            const content =
-                `|<li ui-sref-active="active">
+            const content = `|<li ui-sref-active="active">
                  |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
                  |        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
                  |        <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${routerName}</span>
                  |    </a>
                  |</li>`;
-            const out =
-`<li ui-sref-active="active">
+            const out = `<li ui-sref-active="active">
     <a ui-sref="routerName" ng-click="vm.collapseNavbar()">
         <span class="glyphicon glyphicon-glyphiconName"></span>&nbsp;
         <span data-translate="global.menu.routerName">routerName</span>
@@ -66,40 +62,69 @@ export * from './entityFolderName/entityFileName.state';`;
     });
 
     describe('generateEntityClientImports', () => {
-        const relationships = [
-            {
-                otherEntityAngularName: 'User'
-            },
-            {
-                otherEntityAngularName: 'AnEntity'
-            }
-        ];
-        describe('when called with dto option', () => {
-            it('return an empty Map', () => {
-                const imports = BaseGenerator.generateEntityClientImports(relationships, 'yes');
-                expect(imports.size).to.eql(0);
-            });
-        });
-        describe('when called with 2 distinct relationships without dto option', () => {
-            it('return a Map with 2 imports', () => {
-                const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
-                expect(imports).to.have.all.keys('IUser', 'IAnEntity');
-                expect(imports.size).to.eql(relationships.length);
-            });
-        });
-        describe('when called with 2 identical relationships without dto option', () => {
+        describe('with relationships from or to the User', () => {
             const relationships = [
                 {
                     otherEntityAngularName: 'User'
                 },
                 {
-                    otherEntityAngularName: 'User'
+                    otherEntityAngularName: 'AnEntity'
                 }
             ];
-            it('return a Map with 1 import', () => {
-                const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
-                expect(imports).to.have.key('IUser');
-                expect(imports.size).to.eql(1);
+            describe('when called with dto option', () => {
+                it('return an empty Map', () => {
+                    const imports = BaseGenerator.generateEntityClientImports(relationships, 'yes');
+                    expect(imports.size).to.eql(0);
+                });
+            });
+            describe('when called with 2 distinct relationships without dto option', () => {
+                it('return a Map with 2 imports', () => {
+                    const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
+                    expect(imports).to.have.all.keys('IUser', 'IAnEntity');
+                    expect(imports.size).to.eql(relationships.length);
+                });
+            });
+            describe('when called with 2 identical relationships without dto option', () => {
+                const relationships = [
+                    {
+                        otherEntityAngularName: 'User'
+                    },
+                    {
+                        otherEntityAngularName: 'User'
+                    }
+                ];
+                it('return a Map with 1 import', () => {
+                    const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
+                    expect(imports).to.have.key('IUser');
+                    expect(imports.size).to.eql(1);
+                });
+            });
+        });
+        describe('with no relationship from or to the User', () => {
+            describe('when called to have models to be imported in the templates', () => {
+                let importsForAngular = null;
+                let importsForReact = null;
+                const relationships = [
+                    {
+                        otherEntityAngularName: 'AnEntity',
+                        otherEntityFileName: 'AnEntity',
+                        otherEntityClientRootFolder: 'anEntity'
+                    },
+                    {
+                        otherEntityAngularName: 'AnotherEntity',
+                        otherEntityFileName: 'AnotherEntity',
+                        otherEntityClientRootFolder: 'anotherEntity'
+                    }
+                ];
+
+                before(() => {
+                    importsForAngular = BaseGenerator.generateEntityClientImports(relationships, 'no', 'angularX');
+                    importsForReact = BaseGenerator.generateEntityClientImports(relationships, 'no', 'react');
+                });
+
+                it('adds the same imports regardless of the client framework', () => {
+                    expect(importsForAngular).to.eql(importsForReact);
+                });
             });
         });
     });

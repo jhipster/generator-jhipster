@@ -29,7 +29,7 @@ import { JhiLanguageHelper, Principal, AccountService<% if (authenticationType !
 <%_ } else { _%>
 import { JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
-import { Principal, AccountService<% if (authenticationType !== 'oauth2') { %>, LoginModalService<% } %><% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %> } from 'app/core';
+import { Principal, AccountService<% if (authenticationType !== 'oauth2') { %>, LoginModalService<% } %><% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %> } from 'app/core';
 <%_ } _%>
 import { MockPrincipal } from './helpers/mock-principal.service';
 import { MockAccountService } from './helpers/mock-account.service';

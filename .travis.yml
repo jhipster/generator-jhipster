@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "8.11.2"
+  - "8.11.3"
 jdk:
   - oraclejdk8
 addons:
@@ -50,6 +50,7 @@ env:
     - JHIPSTER=react-default PROFILE=prod PROTRACTOR=1
     - JHIPSTER=react-noi18n-es-ws-gradle-session PROTRACTOR=1
     - JHIPSTER=ms-ngx-gateway-eureka
+    - JHIPSTER=ms-ngx-gateway-eureka-oauth2 PROTRACTOR=1
     - JHIPSTER=ms-ngx-gateway-consul
     - JHIPSTER=ms-ngx-gateway-uaa
     - JHIPSTER=ms-micro-eureka

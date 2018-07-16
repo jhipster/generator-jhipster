@@ -36,7 +36,7 @@ export * from './logs/logs.component';
 export * from './logs/logs.service';
 export * from './logs/logs.route';
 export * from './logs/log.model';
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
 export * from './gateway/gateway.component';
 export * from './gateway/gateway-routes.service';
 export * from './gateway/gateway.route';

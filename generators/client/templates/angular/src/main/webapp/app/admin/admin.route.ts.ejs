@@ -27,7 +27,7 @@ import {
     healthRoute,
     logsRoute,
     metricsRoute,
-    <%_ if (applicationType === 'gateway') { _%>
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     gatewayRoute,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
@@ -48,7 +48,7 @@ const ADMIN_ROUTES = [
     docsRoute,
     healthRoute,
     logsRoute,
-    <%_ if (applicationType === 'gateway') { _%>
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     gatewayRoute,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>

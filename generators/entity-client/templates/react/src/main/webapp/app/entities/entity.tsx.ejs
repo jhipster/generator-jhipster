@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 <%_ if (pagination === 'infinite-scroll') { _%>
-import * as InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -42,7 +42,7 @@ import {
   , getPaginationItemsNumber, JhiPagination
   <%_ }} _%>
 } from 'react-jhipster';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import {
@@ -118,12 +118,16 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   reset = () => {
-    this.props.reset();
-    this.setState({ activePage: 1 }, () => this.getEntities());
+    this.setState({ activePage: 1 }, () => {
+      this.props.reset();
+      this.getEntities();
+    });
   };
 
-  handleLoadMore = page => {
-    this.setState({ activePage: this.state.activePage + 1 }, () => this.getEntities());
+  handleLoadMore = () => {
+    if (window.pageYOffset > 0) {
+      this.setState({ activePage: this.state.activePage + 1 }, () => this.getEntities());
+    }
   };
   <%_ } _%>
 
@@ -131,10 +135,11 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   sort = prop => () => {
     this.setState(
       {
+        activePage: 1,
         order: this.state.order === 'asc' ? 'desc' : 'asc',
         sort: prop
       },
-      () => <% if (pagination === 'infinite-scroll') { %>this.reset()<% } else { %>this.sortEntities()<% } %>
+      () => <% if (pagination === 'infinite-scroll') { %>this.getEntities()<% } else { %>this.sortEntities()<% } %>
     );
   };
 
@@ -192,7 +197,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <%_ if (pagination === 'infinite-scroll') { _%>
           <InfiniteScroll pageStart={this.state.activePage}
                           loadMore={this.handleLoadMore}
-                          hasMore={this.state.activePage <= this.props.links.last}
+                          hasMore={this.state.activePage - 1 < this.props.links.next}
                           loader={<div className="loader">Loading ...</div>}
                           threshold={0}
                           initialLoad={false}>
@@ -227,6 +232,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                   <%_ for (idx in fields) {
                     const fieldType = fields[idx].fieldType;
                     const fieldName = fields[idx].fieldName;
+                    const fieldIsEnum = fields[idx].fieldIsEnum;
                   _%>
                   <td>
                   <%_ if (fieldType === 'Boolean') { _%>
@@ -235,6 +241,8 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_DATE_FORMAT} />
                   <%_ } else if (fieldType === 'LocalDate') { _%>
                     <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
+                  <%_ } else if (fieldIsEnum && enableTranslation) { _%>
+                    <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
                   <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
                     <%_
                       // blobFields
@@ -296,19 +304,19 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                       {
                         (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
                             (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, j) =>
-                                <span key={j}><Link to={`<%= otherEntityName %>/${val.id}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+                                <span key={j}><Link to={`<%= otherEntityStateName %>/${val.id}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
                             )
                         ) : null
                       }
                         <%_ } else { _%>
                             <%_ if (dto === 'no') { _%>
                       {<%= entityInstance + "." + relationshipFieldName %> ?
-                      <Link to={`<%= otherEntityName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
+                      <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
                         {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
                       </Link> : ''}
                             <%_ } else { _%>
                       {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ?
-                      <Link to={`<%= otherEntityName %>/${<%= entityInstance + "." + relationshipFieldName + "Id}" %>`}>
+                      <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + "Id}" %>`}>
                         {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}
                       </Link> : ''}
                             <%_ } _%>

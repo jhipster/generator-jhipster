@@ -32,7 +32,7 @@
             <%_ if (messageBroker === 'kafka') { _%>
             "binders": "Message broker",
             <%_ } _%>
-            <%_ if (applicationType === 'gateway') { _%>
+            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Scopo di Aggiornamento Microservice",
             "configServer": "Server di Configurazioni Microservice",
@@ -52,6 +52,7 @@
             "status": "Stato"
         },
         "status": {
+            "UNKNOWN": "UNKNOWN",
             "UP": "DISPONIBILE",
             "DOWN": "NON DISPONIBILE"
         }

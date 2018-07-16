@@ -23,7 +23,7 @@ import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navb
 import <%= entityClass %>ComponentsPage from './<%= entityFileName %>.page-object';
 import <%= entityClass %>UpdatePage from './<%= entityFileName%>-update.page-object';
 <%_ if (fieldsContainBlobOrImage) { _%>
-import * as path from 'path';
+import path from 'path';
 <%_ } _%>
 <%_
 let elementGetter = `getText()`;

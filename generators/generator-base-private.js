@@ -74,9 +74,11 @@ module.exports = class extends Generator {
         if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
             generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
+        if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {
+            generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
+        }
         generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'error.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'login.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'home.json', lang);
         generator.copyI18nFilesByName(generator, webappDir, 'metrics.json', lang);
@@ -160,9 +162,9 @@ module.exports = class extends Generator {
             languages.forEach((language, i) => {
                 content += `            '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
             });
-            content +=
-                '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
-                '        ]';
+            content
+                += '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n'
+                + '        ]';
 
             jhipsterUtils.replaceContent({
                 file: fullPath,
@@ -190,9 +192,9 @@ module.exports = class extends Generator {
             languages.forEach((language, i) => {
                 content += `    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
             });
-            content +=
-                '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n' +
-                '];';
+            content
+                += '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n'
+                + '];';
 
             jhipsterUtils.replaceContent({
                 file: fullPath,
@@ -211,18 +213,15 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguagePipe(languages) {
-        if (this.clientFramework !== 'angularX') {
-            return;
-        }
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`;
+        const fullPath = this.clientFramework === 'angularX' ? `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts` : `${CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
             let content = '{\n';
-            this.generateLanguageOptions(languages).forEach((ln, i) => {
+            this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
                 content += `        ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
             });
-            content +=
-                '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n' +
-                '    };';
+            content
+                += '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n'
+                + '    };';
 
             jhipsterUtils.replaceContent({
                 file: fullPath,
@@ -247,9 +246,9 @@ module.exports = class extends Generator {
             languages.forEach((language, i) => {
                 content += `                    { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
             });
-            content +=
-                '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
-                '                ]';
+            content
+                += '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n'
+                + '                ]';
 
             jhipsterUtils.replaceContent({
                 file: fullPath,
@@ -274,9 +273,9 @@ module.exports = class extends Generator {
             languages.forEach((language, i) => {
                 content += `                    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
             });
-            content +=
-                '                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n' +
-                '                ]';
+            content
+                += '                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n'
+                + '                ]';
 
             jhipsterUtils.replaceContent({
                 file: fullPath,
@@ -301,9 +300,9 @@ module.exports = class extends Generator {
             languages.forEach((language, i) => {
                 content += `        '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
             });
-            content +=
-                '        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n' +
-                '      ]';
+            content
+                += '        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n'
+                + '      ]';
 
             jhipsterUtils.replaceContent({
                 file: fullPath,
@@ -561,9 +560,9 @@ module.exports = class extends Generator {
             value = value.replace('.', '_');
             res = value[0];
             for (let i = 1, len = value.length - 1; i < len; i++) {
-                if (value[i - 1] !== value[i - 1].toUpperCase() &&
-                    value[i] !== value[i].toLowerCase() &&
-                    value[i + 1] !== value[i + 1].toUpperCase()
+                if (value[i - 1] !== value[i - 1].toUpperCase()
+                    && value[i] !== value[i].toLowerCase()
+                    && value[i + 1] !== value[i + 1].toUpperCase()
                 ) {
                     res += `_${value[i]}`;
                 } else {
@@ -584,6 +583,7 @@ module.exports = class extends Generator {
     contains(array, item) {
         return _.includes(array, item);
     }
+
     /**
      * Function to issue a https get request, and process the result
      *
@@ -637,6 +637,24 @@ module.exports = class extends Generator {
             _this.fs.write(_this.destinationPath(destination), res);
         });
     }
+
+    /**
+     * Utility function to render a template into a string
+     *
+     * @param {string} source - source
+     * @param {function} callback - callback to take the rendered template as a string
+     * @param {*} generator - reference to the generator
+     * @param {*} options - options object
+     * @param {*} context - context
+     */
+    render(source, callback, generator, options = {}, context) {
+        const _this = generator || this;
+        const _context = context || _this;
+        jhipsterUtils.renderContent(source, _this, _context, options, (res) => {
+            callback(res);
+        });
+    }
+
 
     /**
      * Utility function to copy files.
@@ -774,7 +792,7 @@ module.exports = class extends Generator {
     checkGitConnection() {
         if (!this.gitInstalled) return;
         const done = this.async();
-        exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 15000 }, (error) => {
+        exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 5000 }, (error) => {
             if (error) {
                 this.warning(`Failed to connect to "git://github.com"
 1. Check your Internet connection.
@@ -826,12 +844,11 @@ module.exports = class extends Generator {
                     variableName += 'Collection';
                 }
                 const relationshipFieldName = `this.${entityInstance}.${relationship.relationshipFieldName}`;
-                const relationshipFieldNameIdCheck = dto === 'no' ?
-                    `!${relationshipFieldName} || !${relationshipFieldName}.id` :
-                    `!${relationshipFieldName}Id`;
+                const relationshipFieldNameIdCheck = dto === 'no'
+                    ? `!${relationshipFieldName} || !${relationshipFieldName}.id`
+                    : `!${relationshipFieldName}Id`;
 
-                query =
-                    `this.${relationship.otherEntityName}Service
+                query = `this.${relationship.otherEntityName}Service
             .query({filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'})
             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
                 if (${relationshipFieldNameIdCheck}) {
@@ -849,8 +866,7 @@ module.exports = class extends Generator {
                 if (variableName === entityInstance) {
                     variableName += 'Collection';
                 }
-                query =
-                    `this.${relationship.otherEntityName}Service.query()
+                query = `this.${relationship.otherEntityName}Service.query()
             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
@@ -971,6 +987,7 @@ module.exports = class extends Generator {
      *
      * @param {Array|Object} relationships - array of relationships
      * @param {string} dto - dto
+     * @param {string} clientFramework the client framework, 'angularX' or 'react'.
      * @returns typeImports: Map
      */
     generateEntityClientImports(relationships, dto, clientFramework = this.clientFramework) {
@@ -996,7 +1013,7 @@ module.exports = class extends Generator {
                 if (otherEntityAngularName === 'User') {
                     importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : './user.model';
                 } else {
-                    importPath = clientFramework === 'angularX' ? `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model` : `./${relationship.otherEntityFileName}.model`;
+                    importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
                 }
                 typeImports.set(importType, importPath);
             }
@@ -1037,8 +1054,12 @@ module.exports = class extends Generator {
      * @param {string[]} languages
      * @returns generated language options
      */
-    generateLanguageOptions(languages) {
+    generateLanguageOptions(languages, clientFramework) {
         const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
+        if (clientFramework === 'react') {
+            return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
+        }
+
         return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
     }
 

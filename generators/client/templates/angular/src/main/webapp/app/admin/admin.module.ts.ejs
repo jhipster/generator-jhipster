@@ -44,7 +44,7 @@ import {
     <%=jhiPrefixCapitalized%>HealthCheckComponent,
     <%=jhiPrefixCapitalized%>ConfigurationComponent,
     <%=jhiPrefixCapitalized%>DocsComponent,
-    <%_ if (applicationType === 'gateway') { _%>
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     <%=jhiPrefixCapitalized%>GatewayComponent,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
@@ -74,7 +74,7 @@ import {
         <%=jhiPrefixCapitalized%>HealthCheckComponent,
         <%=jhiPrefixCapitalized%>HealthModalComponent,
         <%=jhiPrefixCapitalized%>DocsComponent,
-        <%_ if (applicationType === 'gateway') { _%>
+        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
         <%=jhiPrefixCapitalized%>GatewayComponent,
         <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>

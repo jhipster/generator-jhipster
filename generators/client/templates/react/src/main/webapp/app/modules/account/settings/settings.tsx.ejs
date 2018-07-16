@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { Button, Col, Alert, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Translate, translate } from 'react-jhipster';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 
 <%_ if (enableTranslation) { _%>
-import { locales } from 'app/config/translation';
+import { locales, languages } from 'app/config/translation';
 <%_ } _%>
 import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
@@ -117,12 +117,11 @@ export class SettingsPage extends React.Component<IUserSettingsProps, IUserSetti
                 label={translate('settings.form.language')}
                 value={account.langKey}
               >
-                {/* TODO: Add findLanguageFromKey translation to options */}
-                {locales.map(lang => (
-                  <option value={lang} key={lang}>
-                    {lang}
+                {locales.map(locale =>
+                  <option value={locale} key={locale}>
+                    {languages[locale].name}
                   </option>
-                ))}
+                )}
               </AvField>
               <%_ } _%>
               <Button color="primary" type="submit">

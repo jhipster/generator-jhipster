@@ -19,12 +19,12 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
+const crypto = require('crypto');
+const os = require('os');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
-const crypto = require('crypto');
-const os = require('os');
 const constants = require('../generator-constants');
 
 let useBlueprint;
@@ -239,16 +239,16 @@ module.exports = class extends BaseGenerator {
                     this.websocket = false;
                 }
 
-                const serverConfigFound = this.packageName !== undefined &&
-                    this.authenticationType !== undefined &&
-                    this.cacheProvider !== undefined &&
-                    this.enableHibernateCache !== undefined &&
-                    this.websocket !== undefined &&
-                    this.databaseType !== undefined &&
-                    this.devDatabaseType !== undefined &&
-                    this.prodDatabaseType !== undefined &&
-                    this.searchEngine !== undefined &&
-                    this.buildTool !== undefined;
+                const serverConfigFound = this.packageName !== undefined
+                    && this.authenticationType !== undefined
+                    && this.cacheProvider !== undefined
+                    && this.enableHibernateCache !== undefined
+                    && this.websocket !== undefined
+                    && this.databaseType !== undefined
+                    && this.devDatabaseType !== undefined
+                    && this.prodDatabaseType !== undefined
+                    && this.searchEngine !== undefined
+                    && this.buildTool !== undefined;
 
                 if (this.baseName !== undefined && serverConfigFound) {
                     // Generate remember me key if key does not already exist in config
@@ -276,14 +276,15 @@ module.exports = class extends BaseGenerator {
                         this.skipUserManagement = true;
                     }
 
-                    this.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
-                        'to re-generate the project...\n'));
+                    this.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n'
+                        + 'to re-generate the project...\n'));
 
                     this.existingProject = true;
                 }
             }
         };
     }
+
     get initializing() {
         if (useBlueprint) return;
         return this._initializing();
@@ -327,6 +328,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get prompting() {
         if (useBlueprint) return;
         return this._prompting();
@@ -371,35 +373,39 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('jhipsterVersion', packagejs.version);
-                this.config.set('applicationType', this.applicationType);
-                this.config.set('baseName', this.baseName);
-                this.config.set('packageName', this.packageName);
-                this.config.set('packageFolder', this.packageFolder);
-                this.config.set('serverPort', this.serverPort);
-                this.config.set('authenticationType', this.authenticationType);
-                this.config.set('uaaBaseName', this.uaaBaseName);
-                this.config.set('cacheProvider', this.cacheProvider);
-                this.config.set('enableHibernateCache', this.enableHibernateCache);
-                this.config.set('websocket', this.websocket);
-                this.config.set('databaseType', this.databaseType);
-                this.config.set('devDatabaseType', this.devDatabaseType);
-                this.config.set('prodDatabaseType', this.prodDatabaseType);
-                this.config.set('searchEngine', this.searchEngine);
-                this.config.set('messageBroker', this.messageBroker);
-                this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
-                this.config.set('buildTool', this.buildTool);
-                this.config.set('enableSwaggerCodegen', this.enableSwaggerCodegen);
-                this.config.set('jwtSecretKey', this.jwtSecretKey);
-                this.config.set('rememberMeKey', this.rememberMeKey);
-                this.config.set('enableTranslation', this.enableTranslation);
+                const config = {
+                    jhipsterVersion: packagejs.version,
+                    applicationType: this.applicationType,
+                    baseName: this.baseName,
+                    packageName: this.packageName,
+                    packageFolder: this.packageFolder,
+                    serverPort: this.serverPort,
+                    authenticationType: this.authenticationType,
+                    uaaBaseName: this.uaaBaseName,
+                    cacheProvider: this.cacheProvider,
+                    enableHibernateCache: this.enableHibernateCache,
+                    websocket: this.websocket,
+                    databaseType: this.databaseType,
+                    devDatabaseType: this.devDatabaseType,
+                    prodDatabaseType: this.prodDatabaseType,
+                    searchEngine: this.searchEngine,
+                    messageBroker: this.messageBroker,
+                    serviceDiscoveryType: this.serviceDiscoveryType,
+                    buildTool: this.buildTool,
+                    enableSwaggerCodegen: this.enableSwaggerCodegen,
+                    jwtSecretKey: this.jwtSecretKey,
+                    rememberMeKey: this.rememberMeKey,
+                    enableTranslation: this.enableTranslation
+                };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
-                    this.config.set('nativeLanguage', this.nativeLanguage);
-                    this.config.set('languages', this.languages);
+                    config.nativeLanguage = this.nativeLanguage;
+                    config.languages = this.languages;
                 }
+                this.config.set(config);
             }
         };
     }
+
     get configuring() {
         if (useBlueprint) return;
         return this._configuring();
@@ -437,6 +443,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get default() {
         if (useBlueprint) return;
         return this._default();
@@ -446,6 +453,7 @@ module.exports = class extends BaseGenerator {
     _writing() {
         return writeFiles();
     }
+
     get writing() {
         if (useBlueprint) return;
         return this._writing();
@@ -458,8 +466,8 @@ module.exports = class extends BaseGenerator {
                 if (this.prodDatabaseType === 'oracle') {
                     this.log('\n\n');
                     this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
-                    }Please follow our documentation on using Oracle to set up the \n` +
-                        'Oracle proprietary JDBC driver.');
+                    }Please follow our documentation on using Oracle to set up the \n`
+                        + 'Oracle proprietary JDBC driver.');
                 }
                 this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
@@ -471,11 +479,12 @@ module.exports = class extends BaseGenerator {
                 if (os.platform() === 'win32') {
                     logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
                 }
-                this.log(chalk.green(`${'Run your Spring Boot application:' +
-                    '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+                this.log(chalk.green(`${'Run your Spring Boot application:'
+                    + '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
             }
         };
     }
+
     get end() {
         if (useBlueprint) return;
         return this._end();

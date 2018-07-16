@@ -56,8 +56,8 @@ module.exports = class extends BaseGenerator {
 
                 shelljs.exec('kubectl version', { silent: true }, (code, stdout, stderr) => {
                     if (stderr) {
-                        this.log(`${chalk.yellow.bold('WARNING!')} kubectl 1.2 or later is not installed on your computer.\n` +
-                          'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n');
+                        this.log(`${chalk.yellow.bold('WARNING!')} kubectl 1.2 or later is not installed on your computer.\n`
+                          + 'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n');
                     }
                     done();
                 });
@@ -174,19 +174,21 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('appsFolders', this.appsFolders);
-                this.config.set('directoryPath', this.directoryPath);
-                this.config.set('clusteredDbApps', this.clusteredDbApps);
-                this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
-                this.config.set('jwtSecretKey', this.jwtSecretKey);
-                this.config.set('dockerRepositoryName', this.dockerRepositoryName);
-                this.config.set('dockerPushCommand', this.dockerPushCommand);
-                this.config.set('kubernetesNamespace', this.kubernetesNamespace);
-                this.config.set('kubernetesServiceType', this.kubernetesServiceType);
-                this.config.set('ingressDomain', this.ingressDomain);
-                this.config.set('monitoring', this.monitoring);
-                this.config.set('istio', this.istio);
-                this.config.set('istioRoute', this.istioRoute);
+                this.config.set({
+                    appsFolders: this.appsFolders,
+                    directoryPath: this.directoryPath,
+                    clusteredDbApps: this.clusteredDbApps,
+                    serviceDiscoveryType: this.serviceDiscoveryType,
+                    jwtSecretKey: this.jwtSecretKey,
+                    dockerRepositoryName: this.dockerRepositoryName,
+                    dockerPushCommand: this.dockerPushCommand,
+                    kubernetesNamespace: this.kubernetesNamespace,
+                    kubernetesServiceType: this.kubernetesServiceType,
+                    ingressDomain: this.ingressDomain,
+                    monitoring: this.monitoring,
+                    istio: this.istio,
+                    istioRoute: this.istioRoute
+                });
             }
         };
     }

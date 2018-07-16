@@ -21,8 +21,8 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const shelljs = require('shelljs');
 const pluralize = require('pluralize');
-const prompts = require('./prompts');
 const jhiCore = require('jhipster-core');
+const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 
@@ -272,6 +272,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get initializing() {
         if (useBlueprint) return;
         return this._initializing();
@@ -295,6 +296,7 @@ module.exports = class extends BaseGenerator {
             askForPagination: prompts.askForPagination
         };
     }
+
     get prompting() {
         if (useBlueprint) return;
         return this._prompting();
@@ -349,7 +351,7 @@ module.exports = class extends BaseGenerator {
                         if (_.includes(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
                             this.error(chalk.red(`fieldValidateRulesPattern is missing in .jhipster/${entityName}.json for field ${JSON.stringify(field, null, 4)}`));
                         }
-                        if (field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') {
+                        if (field.fieldType === 'ByteBuffer') {
                             this.warning(chalk.red(`Cannot use validation in .jhipster/${entityName}.json for field ${JSON.stringify(field, null, 4)} \nHibernate JPA 2 Metamodel does not work with Bean Validation 2 for LOB fields, so LOB validation is disabled`));
                             field.validation = false;
                             field.fieldValidateRules = [];
@@ -573,8 +575,8 @@ module.exports = class extends BaseGenerator {
                     }
 
                     if (_.isUndefined(field.fieldValidateRulesPatternJava)) {
-                        field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern ?
-                            field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"') : field.fieldValidateRulesPattern;
+                        field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
+                            ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"') : field.fieldValidateRulesPattern;
                     }
 
                     field.fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
@@ -636,9 +638,9 @@ module.exports = class extends BaseGenerator {
                         relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
                     }
 
-                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many' ||
-                        (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) ||
-                        (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))) {
+                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural) && (relationship.relationshipType === 'one-to-many'
+                        || (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false)
+                        || (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))) {
                         relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                     }
 
@@ -690,9 +692,9 @@ module.exports = class extends BaseGenerator {
                         if (relationship.relationshipType === 'many-to-one') {
                             if (otherEntityData && otherEntityData.relationships) {
                                 otherEntityData.relationships.forEach((otherRelationship) => {
-                                    if (_.upperFirst(otherRelationship.otherEntityName) === entityName &&
-                                        otherRelationship.otherEntityRelationshipName === relationship.relationshipName &&
-                                        otherRelationship.relationshipType === 'one-to-many') {
+                                    if (_.upperFirst(otherRelationship.otherEntityName) === entityName
+                                        && otherRelationship.otherEntityRelationshipName === relationship.relationshipName
+                                        && otherRelationship.relationshipType === 'one-to-many') {
                                         relationship.otherEntityRelationshipName = otherRelationship.relationshipName;
                                         relationship.otherEntityRelationshipNamePlural = pluralize(otherRelationship.relationshipName);
                                     }
@@ -762,7 +764,11 @@ module.exports = class extends BaseGenerator {
                     }
 
                     if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
-                        relationship.relationshipValidate = relationship.relationshipRequired = context.validation = true;
+                        if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
+                            this.warning(chalk.red('Required relationships to the same entity are not supported.'));
+                        } else {
+                            relationship.relationshipValidate = relationship.relationshipRequired = context.validation = true;
+                        }
                     }
 
                     const entityType = relationship.otherEntityNameCapitalized;
@@ -792,6 +798,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get configuring() {
         if (useBlueprint) return;
         return this._configuring();
@@ -845,6 +852,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get writing() {
         if (useBlueprint) return;
         return this._writing();
@@ -878,6 +886,7 @@ module.exports = class extends BaseGenerator {
             }
         };
     }
+
     get install() {
         if (useBlueprint) return;
         return this._install();

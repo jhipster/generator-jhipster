@@ -60,8 +60,8 @@ module.exports = class extends BaseGenerator {
             this.languages.forEach((language) => {
                 if (!this.isSupportedLanguage(language)) {
                     this.log('\n');
-                    this.error(chalk.red(`Unsupported language "${language}" passed as argument to language generator.` +
-                        `\nSupported languages: ${_.map(
+                    this.error(chalk.red(`Unsupported language "${language}" passed as argument to language generator.`
+                        + `\nSupported languages: ${_.map(
                             this.getAllSupportedLanguageOptions(),
                             o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`
                         ).join('')}`));
@@ -94,7 +94,7 @@ module.exports = class extends BaseGenerator {
         this.enableTranslation = this.config.get('enableTranslation');
         this.currentLanguages = this.config.get('languages');
         this.clientFramework = this.config.get('clientFramework');
-        this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+        this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
         // Make dist dir available in templates
         if (this.config.get('buildTool') === 'maven') {
             this.BUILD_DIR = 'target/';
@@ -170,7 +170,8 @@ module.exports = class extends BaseGenerator {
 
             saveConfig() {
                 if (this.enableTranslation) {
-                    this.config.set('languages', _.union(this.currentLanguages, this.languagesToApply));
+                    this.languages = _.union(this.currentLanguages, this.languagesToApply);
+                    this.config.set('languages', this.languages);
                 }
             }
         };
@@ -188,14 +189,14 @@ module.exports = class extends BaseGenerator {
             insight.track('languages/language', language);
         });
         if (!this.skipClient) {
-            this.updateLanguagesInLanguagePipe(this.config.get('languages'));
-            this.updateLanguagesInLanguageConstantNG2(this.config.get('languages'));
-            this.updateLanguagesInWebpack(this.config.get('languages'));
+            this.updateLanguagesInLanguagePipe(this.languages);
+            this.updateLanguagesInLanguageConstantNG2(this.languages);
+            this.updateLanguagesInWebpack(this.languages);
             if (this.clientFramework === 'angularX') {
-                this.updateLanguagesInMomentWebpackNgx(this.config.get('languages'));
+                this.updateLanguagesInMomentWebpackNgx(this.languages);
             }
             if (this.clientFramework === 'react') {
-                this.updateLanguagesInMomentWebpackReact(this.config.get('languages'));
+                this.updateLanguagesInMomentWebpackReact(this.languages);
             }
         }
     }

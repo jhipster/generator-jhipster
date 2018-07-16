@@ -16,8 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { AppContainer } from 'react-hot-loader';
@@ -25,7 +25,7 @@ import { AppContainer } from 'react-hot-loader';
 import DevTools from './config/devtools';
 import initStore from './config/store';
 <%_ if (enableTranslation) { _%>
-import { registerLocales } from './config/translation';
+import { registerLocale } from './config/translation';
 <%_ } _%>
 import setupAxiosInterceptors from './config/axios-interceptor';
 import { clearAuthentication } from './shared/reducers/authentication';
@@ -37,7 +37,7 @@ const devTools = process.env.NODE_ENV === 'development' ? <DevTools /> : null;
 
 const store = initStore();
 <%_ if (enableTranslation) { _%>
-registerLocales(store);
+registerLocale(store);
 <%_ } _%>
 
 const actions = bindActionCreators({ clearAuthentication }, store.dispatch);

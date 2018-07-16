@@ -267,7 +267,8 @@ const serverFiles = {
                 'logback-spring.xml',
                 'config/application.yml',
                 'config/application-dev.yml',
-                'config/application-prod.yml'
+                'config/application-prod.yml',
+                'i18n/messages.properties'
             ]
         },
         {
@@ -687,6 +688,13 @@ const serverFiles = {
                 { file: 'package/config/DatabaseConfiguration.java', renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java` },
                 { file: 'package/config/audit/package-info.java', renameTo: generator => `${generator.javaDir}config/audit/package-info.java` },
                 { file: 'package/config/audit/AuditEventConverter.java', renameTo: generator => `${generator.javaDir}config/audit/AuditEventConverter.java` },
+            ]
+        },
+        {
+            condition: generator => generator.databaseType === 'sql',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/config/LiquibaseConfiguration.java', renameTo: generator => `${generator.javaDir}config/LiquibaseConfiguration.java` },
             ]
         },
         {
@@ -1143,7 +1151,6 @@ const serverFiles = {
 
 function writeFiles() {
     return {
-
         setUp() {
             this.javaDir = `${this.packageFolder}/`;
             this.testDir = `${this.packageFolder}/`;
@@ -1160,12 +1167,8 @@ function writeFiles() {
             cleanup.cleanupOldServerFiles(this, `${SERVER_MAIN_SRC_DIR}/${this.javaDir}`, `${SERVER_TEST_SRC_DIR}/${this.testDir}`, SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR);
         },
 
-        writeServerPropertyFiles() {
-            this.template(`../../languages/templates/${SERVER_MAIN_RES_DIR}i18n/messages_en.properties.ejs`, `${SERVER_MAIN_RES_DIR}i18n/messages.properties`);
-        },
-
         writeFiles() {
-            this.writeFilesToDisk(serverFiles, this, false);
+            this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('server/templates'));
         }
     };
 }

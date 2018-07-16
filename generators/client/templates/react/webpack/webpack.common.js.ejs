@@ -20,12 +20,21 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+<%_ if (enableTranslation) { _%>
+const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
+<%_ } _%>
+const path = require('path');
 
 const utils = require('./utils.js');
 
 const getTsLoaderRule = env => {
   const rules = [
-    { loader: 'cache-loader' },
+    {
+      loader: 'cache-loader',
+      options: {
+        cacheDirectory: path.resolve('<%= BUILD_DIR %>cache-loader')
+      }
+    },
     {
         loader: 'thread-loader',
         options: {
@@ -88,10 +97,24 @@ module.exports = options => ({
   stats: {
     children: false
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: `'${options.env}'`,
+        <%_ if (enableTranslation) { _%>
+        BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
+        <%_ } _%>
         VERSION: `'${utils.parseVersion()}'`,
         DEBUG_INFO_ENABLED: options.env === 'development',
         // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
@@ -107,7 +130,7 @@ module.exports = options => ({
       { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
       { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
       { from: './<%= MAIN_SRC_DIR %>/swagger-ui/', to: 'swagger-ui' },
-      { from: './<%= MAIN_SRC_DIR %>static/', to: 'static' },
+      { from: './<%= MAIN_SRC_DIR %>static/', to: 'content' },
       { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
       { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
       // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
@@ -117,6 +140,15 @@ module.exports = options => ({
       template: './src/main/webapp/index.html',
       chunksSortMode: 'dependency',
       inject: 'body'
-    })
+    }),
+    <%_ if (enableTranslation) { _%>
+    new MergeJsonWebpackPlugin({
+        output: {
+            groupBy: [
+                // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
+            ]
+        }
+    }),
+    <%_ } _%>
   ]
 });

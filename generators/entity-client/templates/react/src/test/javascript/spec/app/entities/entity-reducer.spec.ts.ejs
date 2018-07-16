@@ -25,7 +25,7 @@ import axios from 'axios';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 <%_ if (pagination === 'infinite-scroll') { _%>
 import { parseHeaderForLinks } from 'react-jhipster';
 <%_ } _%>
@@ -54,7 +54,7 @@ describe('Entities reducer tests', () => {
     entity: defaultValue,
     <%_ if (pagination === 'infinite-scroll') { _%>
     links: {
-      last: 0
+      next: 0
     },
     <%_ } _%>
     <%_ if (pagination !== 'no') { _%>
@@ -148,9 +148,9 @@ describe('Entities reducer tests', () => {
 
   describe('Successes', () => {
     it('should fetch all entities', () => {
-      const payload = { data: { 1: 'fake1', 2: 'fake2' }<% if (pagination !== 'no') { %>, headers: { 'x-total-count': 123<% if (pagination === 'infinite-scroll') { %>, link: ';'<% } %> }<% } %> };
+      const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (pagination !== 'no') { %>, headers: { 'x-total-count': 123<% if (pagination === 'infinite-scroll') { %>, link: ';'<% } %> }<% } %> };
       <%_ if (pagination === 'infinite-scroll') { _%>
-      const link = parseHeaderForLinks(payload.headers.link);
+      const links = parseHeaderForLinks(payload.headers.link);
       <%_ } _%>
       expect(reducer(undefined, {
         type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
@@ -158,13 +158,13 @@ describe('Entities reducer tests', () => {
       })).toEqual({
       ...initialState,
       <%_ if (pagination === 'infinite-scroll') { _%>
-      links: { last: link.last },
+      links,
       <%_ } _%>
       loading: false,
       <%_ if (pagination !== 'no') { _%>
       totalItems: payload.headers['x-total-count'],
       <%_ } _%>
-      entities: <% if (pagination === 'infinite-scroll') { %>[payload.data]<% } else { %>payload.data<% } %>
+      entities: payload.data
       });
     });
 

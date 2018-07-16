@@ -21,12 +21,14 @@ import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import axios from 'axios';
 import thunk from 'redux-thunk';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 
 import { REQUEST, FAILURE, SUCCESS } from 'app/shared/reducers/action-type.util';
 import administration, {
   ACTION_TYPES,
+  <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
   gatewayRoutes,
+  <%_ } _%>
   systemHealth,
   systemMetrics,
   systemThreadDump,
@@ -52,7 +54,9 @@ describe('Administration reducer tests', () => {
       errorMessage: null,
       totalItems: 0
     });
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     expect(isEmpty(state.gateway.routes));
+    <%_ } _%>
     expect(isEmpty(state.logs.loggers));
     expect(isEmpty(state.threadDump));
     expect(isEmpty(state.audits));
@@ -77,7 +81,9 @@ describe('Administration reducer tests', () => {
     it('should set state to loading', () => {
       testMultipleTypes(
         [
+          <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
           REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          <%_ } _%>
           REQUEST(ACTION_TYPES.FETCH_LOGS),
           REQUEST(ACTION_TYPES.FETCH_HEALTH),
           REQUEST(ACTION_TYPES.FETCH_METRICS),
@@ -101,7 +107,9 @@ describe('Administration reducer tests', () => {
     it('should set state to failed and put an error message in errorMessage', () => {
       testMultipleTypes(
         [
+          <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
           FAILURE(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          <%_ } _%>
           FAILURE(ACTION_TYPES.FETCH_LOGS),
           FAILURE(ACTION_TYPES.FETCH_HEALTH),
           FAILURE(ACTION_TYPES.FETCH_METRICS),
@@ -122,6 +130,7 @@ describe('Administration reducer tests', () => {
   });
 
   describe('Success', () => {
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     it('should update state according to a successful fetch gateway routes request', () => {
       const payload = { data: [] };
       const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_GATEWAY_ROUTE), payload });
@@ -131,7 +140,7 @@ describe('Administration reducer tests', () => {
         gateway: { routes: payload.data }
       });
     });
-
+    <%_ } _%>
     it('should update state according to a successful fetch logs request', () => {
       const payload = { data: [{ name: 'ROOT', level: 'DEBUG' }] };
       const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_LOGS), payload });
@@ -254,6 +263,7 @@ describe('Administration reducer tests', () => {
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     it('dispatches FETCH_GATEWAY_ROUTE_PENDING and FETCH_GATEWAY_ROUTE_FULFILLED actions', async () => {
       const expectedActions = [
         {
@@ -266,6 +276,7 @@ describe('Administration reducer tests', () => {
       ];
       await store.dispatch(gatewayRoutes()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
+    <%_ } _%>
     it('dispatches FETCH_HEALTH_PENDING and FETCH_HEALTH_FULFILLED actions', async () => {
       const expectedActions = [
         {

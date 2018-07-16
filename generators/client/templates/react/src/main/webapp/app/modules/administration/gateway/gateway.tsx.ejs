@@ -16,20 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-jhipster';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Badge, Table, Button } from 'reactstrap';
 
 import { gatewayRoutes } from '../administration.reducer';
 
-export interface IGatewayPageProps {
-  gatewayRoutes: Function;
-  routes: any[];
-  account: any;
-  isFetching?: boolean;
-}
+export interface IGatewayPageProps extends StateProps, DispatchProps {}
 
 export class GatewayPage extends React.Component<IGatewayPageProps> {
 
@@ -95,16 +90,16 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
           <p>
             <Button onClick={this.gatewayRoutes} color={isFetching ? 'danger' : 'primary'} disabled={isFetching}>
               <FontAwesomeIcon icon="sync" />&nbsp;
-              <Translate component="span" contentKey="health.refresh.button" />
+              <Translate component="span" contentKey="health.refresh.button">Refresh</Translate>
             </Button>
           </p>
 
           <Table striped responsive>
             <thead>
               <tr key="header">
-                <th><Translate contentKey="gateway.routes.url"/></th>
-                <th><Translate contentKey="gateway.routes.service"/></th>
-                <th><Translate contentKey="gateway.routes.servers"/></th>
+                <th><Translate contentKey="gateway.routes.url">URL</Translate></th>
+                <th><Translate contentKey="gateway.routes.service">Service</Translate></th>
+                <th><Translate contentKey="gateway.routes.servers">Available servers</Translate></th>
               </tr>
             </thead>
             <tbody>
@@ -125,9 +120,13 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
 
 const mapStateToProps = storeState => ({
   routes: storeState.administration.gateway.routes,
-  account: storeState.authentication.account
+  account: storeState.authentication.account,
+  isFetching: storeState.administration.loading
 });
 
 const mapDispatchToProps = { gatewayRoutes };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(GatewayPage);

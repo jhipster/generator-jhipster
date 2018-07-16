@@ -98,6 +98,10 @@ const files = {
             templates: [
                 { file: 'content/images/hipster.png', method: 'copy' },
                 { file: 'content/images/hipster2x.png', method: 'copy' },
+                { file: 'content/images/hipster192.png', method: 'copy' },
+                { file: 'content/images/hipster256.png', method: 'copy' },
+                { file: 'content/images/hipster384.png', method: 'copy' },
+                { file: 'content/images/hipster512.png', method: 'copy' },
                 { file: 'content/images/logo-jhipster.png', method: 'copy' }
             ]
         }
@@ -339,7 +343,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway',
+            condition: generator => (generator.applicationType === 'gateway' && generator.serviceDiscoveryType),
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/gateway/gateway.route.ts', method: 'processJs' },
@@ -547,5 +551,5 @@ module.exports = {
 function writeFiles() {
     mkdirp(MAIN_SRC_DIR);
     // write angular 2.x and above files
-    this.writeFilesToDisk(files, this, false, 'angular');
+    this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
 }

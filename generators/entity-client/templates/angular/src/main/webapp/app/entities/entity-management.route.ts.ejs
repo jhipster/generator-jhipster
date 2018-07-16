@@ -23,7 +23,8 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@a
 import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
 <%_ } _%>
 import { UserRouteAccessService } from 'app/core';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
@@ -47,9 +48,11 @@ export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngul
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id).map((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => <%= entityInstance %>.body);
+            return this.service.find(id).pipe(
+                map((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => <%= entityInstance %>.body)
+            );
         }
-        return Observable.of(new <%= entityAngularName %>());
+        return of(new <%= entityAngularName %>());
     }
 }
 
