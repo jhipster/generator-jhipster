@@ -539,7 +539,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                 multiple
                 className="form-control"
                 name="<%= otherEntityNamePlural %>"
-                value={<%= entityInstance %>Entity.tasks && <%= entityInstance %>Entity.<%=otherEntityNamePlural %>.map(e => e.id)}
+                value={<%= entityInstance %>Entity.<%= otherEntityNamePlural %> && <%= entityInstance %>Entity.<%= otherEntityNamePlural %>.map(e => e.id)}
               >
                 <option value="" key="0" />
                 {
