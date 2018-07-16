@@ -905,6 +905,8 @@ const serverFiles = {
             templates: [
                 { file: 'package/web/rest/TestUtil.java', renameTo: generator => `${generator.testDir}web/rest/TestUtil.java` },
                 { file: 'package/web/rest/LogsResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/LogsResourceIntTest.java` },
+                { file: 'package/web/rest/errors/ExceptionTranslatorIntTest.java', renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorIntTest.java` },
+                { file: 'package/web/rest/errors/ExceptionTranslatorTestController.java', renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorTestController.java` },
                 { file: 'package/web/rest/util/PaginationUtilUnitTest.java', renameTo: generator => `${generator.testDir}web/rest/util/PaginationUtilUnitTest.java` },
             ]
         },
@@ -922,8 +924,6 @@ const serverFiles = {
             templates: [
                 { file: 'package/config/WebConfigurerTest.java', renameTo: generator => `${generator.testDir}config/WebConfigurerTest.java` },
                 { file: 'package/config/WebConfigurerTestController.java', renameTo: generator => `${generator.testDir}config/WebConfigurerTestController.java` },
-                { file: 'package/web/rest/errors/ExceptionTranslatorIntTest.java', renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorIntTest.java` },
-                { file: 'package/web/rest/errors/ExceptionTranslatorTestController.java', renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorTestController.java` },
             ]
         },
         {
@@ -1153,15 +1153,6 @@ const serverFiles = {
                 { file: 'package/web/rest/UserJWTControllerIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserJWTControllerIntTest.java` },
             ]
         },
-        /* {
-            // TODO : add tests for reactive
-            condition: generator => !generator.reactive && !generator.skipUserManagement && generator.authenticationType === 'jwt',
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                { file: 'package/security/jwt/JWTFilterTest.java', renameTo: generator => `${generator.testDir}security/jwt/JWTFilterTest.java` },
-                { file: 'package/web/rest/UserJWTControllerIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserJWTControllerIntTest.java` },
-            ]
-        }, */
         {
             // TODO : add tests for reactive
             condition: generator => !generator.reactive && !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),

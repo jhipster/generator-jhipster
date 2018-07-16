@@ -24,6 +24,7 @@ import <%= packageName %>.security.jwt.TokenProvider;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 <%_ if (!skipUserManagement) { _%>
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -43,10 +44,12 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
 <%_ if (!skipUserManagement) { _%>
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 <%_ } _%>
+import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
 
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
+@Import(SecurityProblemSupport.class)
 public class SecurityConfiguration {
 
     <%_ if (!skipUserManagement) { _%>
@@ -57,12 +60,15 @@ public class SecurityConfiguration {
 
     private final CorsWebFilter corsWebFilter;
 
-    public SecurityConfiguration(<% if (!skipUserManagement) { %>ReactiveUserDetailsService userDetailsService, <% } %>TokenProvider tokenProvider, CorsWebFilter corsWebFilter) {
+    private final SecurityProblemSupport problemSupport;
+
+    public SecurityConfiguration(<% if (!skipUserManagement) { %>ReactiveUserDetailsService userDetailsService, <% } %>TokenProvider tokenProvider, CorsWebFilter corsWebFilter, SecurityProblemSupport problemSupport) {
         <%_ if (!skipUserManagement) { _%>
         this.userDetailsService = userDetailsService;
         <%_ } _%>
         this.tokenProvider = tokenProvider;
         this.corsWebFilter = corsWebFilter;
+        this.problemSupport = problemSupport;
     }
 
     <%_ if (!skipUserManagement) { _%>
@@ -93,6 +99,10 @@ public class SecurityConfiguration {
             <%_ if (!skipUserManagement) { _%>
             .addFilterAt(new AuthenticationWebFilter(reactiveAuthenticationManager()), SecurityWebFiltersOrder.AUTHENTICATION)
             <%_ } _%>
+            .exceptionHandling()
+            .accessDeniedHandler(problemSupport)
+            .authenticationEntryPoint(problemSupport)
+        .and()
             .authorizeExchange()
             .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             <%_ if (!skipClient) { _%>

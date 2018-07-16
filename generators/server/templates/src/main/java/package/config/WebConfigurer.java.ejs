@@ -18,6 +18,12 @@
 -%>
 package <%=packageName%>.config;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.servlet.InstrumentedFilter;
+import com.codahale.metrics.servlets.MetricsServlet;
+<%_ if (reactive) { _%>
+import com.fasterxml.jackson.databind.ObjectMapper;
+<%_ } _%>
 <%_ if (!skipClient || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import io.github.jhipster.config.JHipsterConstants;
 <%_ } _%>
@@ -28,21 +34,19 @@ import io.github.jhipster.config.h2.H2ConfigurationHelper;
 <%_ if (!skipClient) { _%>
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 <%_ } _%>
-
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.MetricsServlet;
-
+import io.undertow.UndertowOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import io.undertow.UndertowOptions;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.boot.web.server.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+<%_ if (reactive) { _%>
+import org.springframework.core.annotation.Order;
+<%_ } _%>
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
@@ -55,7 +59,12 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
+import org.springframework.web.server.WebExceptionHandler;
+import org.zalando.problem.spring.webflux.advice.ProblemExceptionHandler;
+import org.zalando.problem.spring.webflux.advice.ProblemHandling;
 <%_ } _%>
+
+import javax.servlet.*;
 <%_ if (!skipClient) { _%>
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -65,7 +74,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 <%_ } _%>
 import java.util.*;
-import javax.servlet.*;
 
 <%_ if (!skipClient) { _%>
 import static java.net.URLDecoder.decode;
@@ -257,6 +265,14 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         }
         return new Cors<% if (reactive) { %>Web<% } %>Filter(source);
     }
+    <%_ if (reactive) { _%>
+
+    @Bean
+    @Order(-2) // The handler must have precedence over WebFluxResponseStatusExceptionHandler and Spring Boot's ErrorWebExceptionHandler
+    public WebExceptionHandler problemExceptionHandler(ObjectMapper mapper, ProblemHandling problemHandling) {
+        return new ProblemExceptionHandler(mapper, problemHandling);
+    }
+    <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 
     /**
