@@ -16,15 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (gitlabUseDocker) { _%>
-image: openjdk:8
+<%_ if (insideDocker) { _%>
+image: jhipster/jhipster:v<%= jhipsterVersion %>
 <%_ } _%>
 
 <%_ if (buildTool === 'gradle') { _%>
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
-        - node_modules
         - .gradle/wrapper
         - .gradle/caches
 <%_ } _%>
@@ -32,21 +31,14 @@ cache:
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
-        - node_modules
         - .maven
 <%_ } _%>
 stages:
     - build
-    - test
-    - package
-<%_ if (heroku.includes('gitlab')) { _%>
-    - deploy
-<%_ } _%>
 
 <%_ if (buildTool === 'gradle') { _%>
 before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
-    - chmod +x gradlew
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./gradlew yarn_install -PnodeInstall --no-daemon
@@ -59,48 +51,28 @@ gradle-build:
     stage: build
     script:
         - ./gradlew compileJava -x check -PnodeInstall --no-daemon
-gradle-test:
-    stage: test
-    script:
         - ./gradlew test -PnodeInstall --no-daemon
-    artifacts:
-        paths:
-            - build/reports/tests/*
-# Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
-#       expire_in: 90 day
-    <%_ if (!skipClient) { _%>
-gradle-front-test:
-    stage: test
-    script:
         <%_ if (clientPackageManager === 'yarn') { _%>
         - ./gradlew yarn_test -PnodeInstall --no-daemon
         <%_ } else if (clientPackageManager === 'npm') { _%>
         - ./gradlew npm_test -PnodeInstall --no-daemon
         <%_ } _%>
-    artifacts:
-        paths:
-            - build/test-results/jest/*
-#       expire_in: 90 day
-    <%_ } _%>
-gradle-repackage:
-    stage: package
-    script:
+        <%_ if (cicdIntegrations.includes('sonar')) { _%>
+        - ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
+        <%_ } _%>
         - ./gradlew bootWar -Pprod -x check -PnodeInstall --no-daemon
+        <%_ if (cicdIntegrations.includes('heroku')) { _%>
+        - ./gradlew deployHeroku --no-daemon
+        <%_ } _%>
     artifacts:
         paths:
             - build/libs/*.war
-#       expire_in: 90 day
-    <%_ if (heroku.includes('gitlab')) { _%>
-gradle-deploy:
-    stage: deploy
-    script:
-        - ./gradlew deployHeroku --no-daemon
-    <%_ } _%>
+        # Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
+        # expire_in: 90 day
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
 before_script:
     - export MAVEN_USER_HOME=`pwd`/.maven
-    - chmod +x mvnw
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
@@ -113,44 +85,22 @@ before_script:
 
 maven-build:
     stage: build
-    script: ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
-
-maven-test:
-    stage: test
     script:
+        - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
-    artifacts:
-        paths:
-            - target/surefire-reports/*
-# Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
-#       expire_in: 90 day
-    <%_ if (!skipClient) { _%>
-maven-front-test:
-    stage: test
-    script:
-        <%_ if (clientPackageManager === 'yarn') { _%>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments=test -Dmaven.repo.local=$MAVEN_USER_HOME
-        <%_ } else if (clientPackageManager === 'npm') { _%>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.yarn.arguments=test -Dmaven.repo.local=$MAVEN_USER_HOME
+        <%_ if (!skipClient) { _%>
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments=test -Dmaven.repo.local=$MAVEN_USER_HOME
+        <%_ } _%>
+        <%_ if (cicdIntegrations.includes('sonar')) { _%>
+        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+        <%_ } _%>
+        - ./mvnw verify <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+        <%_ if (cicdIntegrations.includes('heroku')) { _%>
+        - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %> -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } _%>
     artifacts:
         paths:
-            - target/test-results/jest/*
-#       expire_in: 90 day
-    <%_ } _%>
-    <%_ if (heroku.includes('gitlab')) { _%>
-maven-deploy:
-    stage: deploy
-    script:
-        - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %> -Dmaven.repo.local=$MAVEN_USER_HOME
-    <%_ } else { _%>
-maven-package:
-    stage: package
-    script:
-        - ./mvnw verify -Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-    <%_ } _%>
-    artifacts:
-        paths:
             - target/*.war
-#       expire_in: 90 day
+        # Uncomment following to expire the artifacts after defined period, https://docs.gitlab.com/ee/ci/yaml/README.html#artifacts-expire_in
+        # expire_in: 90 day
 <%_ } _%>

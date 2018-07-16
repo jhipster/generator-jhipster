@@ -15,11 +15,14 @@
     "useSass": false,
     "enableTranslation": true,
     "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
-    "buildTool": "maven",
+    "buildTool": "gradle",
     "clientFramework": "angularX",
-    "clientPackageManager": "npm",
+    "clientPackageManager": "yarn",
     "testFrameworks": [
       "gatling"
+    ],
+    "languages": [
+      "en"
     ]
   }
 }
