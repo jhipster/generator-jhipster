@@ -34,6 +34,13 @@ module.exports = class extends BaseGenerator {
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
 
+        this.option('default', {
+            type: String,
+            required: false,
+            description: 'default option'
+        });
+        this.defaultOption = this.options.default;
+
         const blueprint = this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
