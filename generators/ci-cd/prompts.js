@@ -52,16 +52,13 @@ function askPipeline() {
         }
     ];
     this.prompt(prompts).then((props) => {
-        if (props.pipeline.length === 0) {
-            this.abort = true;
-        }
         this.pipeline = props.pipeline;
         done();
     });
 }
 
 function askIntegrations() {
-    if (this.abort || this.pipeline === undefined) return;
+    if (this.abort || !this.pipeline) return;
     if (this.autoconfigureTravis) {
         this.cicdIntegrations = [];
         return;
