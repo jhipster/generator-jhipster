@@ -568,23 +568,15 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
-        <%_ if (!reactive) { _%>
         <dependency>
             <groupId>org.zalando</groupId>
+            <%_ if (!reactive) { _%>
             <artifactId>problem-spring-web</artifactId>
+            <%_ } else { _%>
+            <artifactId>problem-spring-webflux</artifactId>
+            <version>0.24.0-RC.0</version>
+            <%_ } _%>
         </dependency>
-        <%_ } else { _%>
-        <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>problem</artifactId>
-            <version>0.20.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>jackson-datatype-problem</artifactId>
-            <version>0.20.3</version>
-        </dependency>
-        <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
