@@ -18,58 +18,90 @@
 -%>
 package <%=packageName%>.domain;
 
-import java.io.Serializable;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;<% if (databaseType === 'sql') { %>
-import org.hibernate.envers.Audited;<% } %>
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;<% if (databaseType === 'mongodb') { %>
-import org.springframework.data.mongodb.core.mapping.Field;
-import java.time.Instant;
-<% } %><% if (databaseType === 'couchbase') { %>
+<%_ if (databaseType === 'couchbase') { _%>
 import com.couchbase.client.java.repository.annotation.Field;
-import java.time.Instant;
-<% } %><% if (databaseType === 'sql') { %>
+<%_ } _%>
+import com.fasterxml.jackson.annotation.JsonIgnore;
+<%_ if (databaseType === 'sql') { _%>
+import org.hibernate.envers.Audited;
+<%_ } _%>
+<%_ if (!reactive) { _%>
+import org.springframework.data.annotation.CreatedBy;
+<%_ } _%>
+import org.springframework.data.annotation.CreatedDate;
+<%_ if (!reactive) { _%>
+import org.springframework.data.annotation.LastModifiedBy;
+<%_ } _%>
+import org.springframework.data.annotation.LastModifiedDate;
+<%_ if (databaseType === 'mongodb') { _%>
+import org.springframework.data.mongodb.core.mapping.Field;
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+<%_ } _%>
+
+import java.io.Serializable;
 import java.time.Instant;
+<%_ if (databaseType === 'sql') { _%>
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;<% } %>
+import javax.persistence.MappedSuperclass;
+<%_ } _%>
 
 /**
  * Base abstract class for entities which will hold definitions for created, last modified by and created,
  * last modified by date.
- */<% if (databaseType === 'sql') { %>
+ */
+<%_ if (databaseType === 'sql') { _%>
 @MappedSuperclass
 @Audited
-@EntityListeners(AuditingEntityListener.class)<% } %>
+@EntityListeners(AuditingEntityListener.class)
+<%_ } _%>
 public abstract class AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @CreatedBy<% if (databaseType === 'sql') { %>
-    @Column(name = "created_by", nullable = false, length = 50, updatable = false)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-    @Field("created_by")<% } %>
+    <%_ if (!reactive) { _%>
+    @CreatedBy
+    <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    @Column(name = "created_by", nullable = false, length = 50, updatable = false)
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    @Field("created_by")
+    <%_ } _%>
     @JsonIgnore
     private String createdBy;
 
-    @CreatedDate<% if (databaseType === 'sql') { %>
-    @Column(name = "created_date", nullable = false, updatable = false)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-    @Field("created_date")<% } %>
+    @CreatedDate
+    <%_ if (databaseType === 'sql') { _%>
+    @Column(name = "created_date", nullable = false, updatable = false)
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    @Field("created_date")
+    <%_ } _%>
     @JsonIgnore
     private Instant createdDate = Instant.now();
 
-    @LastModifiedBy<% if (databaseType === 'sql') { %>
-    @Column(name = "last_modified_by", length = 50)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-    @Field("last_modified_by")<% } %>
+    <%_ if (!reactive) { _%>
+    @LastModifiedBy
+    <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    @Column(name = "last_modified_by", length = 50)
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    @Field("last_modified_by")
+    <%_ } _%>
     @JsonIgnore
     private String lastModifiedBy;
 
-    @LastModifiedDate<% if (databaseType === 'sql') { %>
-    @Column(name = "last_modified_date")<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-    @Field("last_modified_date")<% } %>
+    @LastModifiedDate
+    <%_ if (databaseType === 'sql') { _%>
+    @Column(name = "last_modified_date")
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    @Field("last_modified_date")
+    <%_ } _%>
     @JsonIgnore
     private Instant lastModifiedDate = Instant.now();
 

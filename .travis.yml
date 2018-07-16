@@ -39,6 +39,7 @@ env:
     - JHIPSTER_BRANCH=release
 
   matrix:
+    - JHIPSTER=webflux-mongodb
     - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-gradle-fr PROFILE=prod PROTRACTOR=1
