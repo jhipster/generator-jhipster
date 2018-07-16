@@ -9,7 +9,7 @@
         <p jhiTranslate="userManagement.reset.notice">The user will be able to reset his password with this link.</p>
         <form>
             <label for="reset-link"></label>
-            <input type="text" id="reset-link" [value]="resetLink" size="50" readonly #resetLinkInput />
+            <input type="text" id="reset-link" [value]="resetLink" size="50" readonly />
             <button class="btn btn-primary" (click)="generateResetLink(user.email)">
                 <span *ngIf="isGeneratingLink">
                     <i class="fas fa-sync fa-spin"></i>

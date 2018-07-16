@@ -29,6 +29,7 @@ import { ITEMS_PER_PAGE } from 'app/shared';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 <%_ } _%>
 import { Principal, UserService, User, PasswordResetService } from 'app/core';
+import { ProfileService, ProfileInfo } from 'app/layouts';
 import { UserMgmtDeleteDialogComponent, UserMgmtResetDialogComponent } from 'app/admin';
 
 @Component({
@@ -59,6 +60,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         private alertService: JhiAlertService,
         private principal: Principal,
         private passwordResetService: PasswordResetService,
+        private profileService: ProfileService,
         <%_ if (prodDatabaseType !== 'cassandra') { _%>
         private parseLinks: JhiParseLinks,
         private activatedRoute: ActivatedRoute,
@@ -84,9 +86,9 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
             this.loadAll();
             this.registerChangeInUsers();
         });
-        this.passwordResetService
-            .getMailStatus()
-            .subscribe(result => (this.isMailEnabled = result['mailEnabled']), () => (this.isMailEnabled = false));
+        this.profileService.getProfileInfo().then((profileInfo: ProfileInfo) => {
+            this.isMailEnabled = profileInfo.mailEnabled;
+        });
     }
 
     ngOnDestroy() {

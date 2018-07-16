@@ -46,6 +46,7 @@ export class ProfileService {
                         }
                         pi.inProduction = pi.activeProfiles.includes('prod');
                         pi.swaggerEnabled = pi.activeProfiles.includes('swagger');
+                        pi.mailEnabled = data.mailEnabled;
                     }
                     return pi;
                 })).toPromise();
