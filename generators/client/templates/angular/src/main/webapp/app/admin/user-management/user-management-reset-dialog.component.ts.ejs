@@ -25,7 +25,7 @@ export class UserMgmtResetDialogComponent implements OnInit {
         this.isGeneratingLink = true;
         this.passwordResetService.getResetCode(email).subscribe(
             value => {
-                this.resetLink = window.location.protocol + '//' + window.location.host + '/#/reset/finish?key=' + value;
+                this.resetLink = window.location.protocol + '//' + window.location.host + '/#/reset/finish?key=' + value.key;
                 this.isGeneratingLink = false;
             },
             () => {

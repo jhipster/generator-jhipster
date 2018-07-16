@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Map;
 
 /**
  * REST controller for managing the current user's account.
@@ -338,16 +339,21 @@ public class AccountResource {
     }
 
     /**
-     * POST /account/reset-password/code : returns a code that can be used to change a password
+     * POST /account/reset-password/key : returns a code that can be used to change a password
      *
      * @param mail the mail of the user
      * @throws EmailNotFoundException 400 (Bad Request) if the email address is not registered
      */
-    @PostMapping(path = "/account/reset-password/code")
+    @PostMapping(path = "/account/reset-password/key")
     @Timed
-    public String requestPasswordResetAndReturnLink(@RequestBody String mail) {
+    public Map<String, String> requestPasswordResetAndReturnLink(@RequestBody String mail) {
         User user  = userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new);
-        return user.getResetKey();
+        // Axios tries to cast the key to a number and thus alter the key by rounding it.
+        // Hence the map.
+        Map<String, String> map = new HashMap<>();
+        map.put("key", user.getResetKey());
+
+        return map;
     }
 
     private static boolean checkPasswordLength(String password) {

@@ -135,7 +135,7 @@ export default (state: UserManagementState = initialState, action): UserManageme
       return {
         ...state,
         isGettingResetCode: false,
-        resetCode: action.payload.data
+        resetCode: action.payload.data.key
       };
     case ACTION_TYPES.RESET:
       return {
@@ -200,7 +200,7 @@ export const deleteUser: ICrudDeleteAction<IUser> = id => async dispatch => {
 
 export const getResetCode = mail => ({
   type: ACTION_TYPES.RESET_CODE,
-  payload: axios.post('/api/account/reset-password/code', mail, { headers: { 'Content-Type': 'text/plain' } })
+  payload: axios.post('/api/account/reset-password/key', mail, { headers: { 'Content-Type': 'text/plain' } })
 });
 
 export const reset = () => ({
