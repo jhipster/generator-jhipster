@@ -436,6 +436,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                 type="select"
                 className="form-control"
                 name="<%= relationshipFieldName %>.id"
+                value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id}
               >
                 {
                   <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
