@@ -31,8 +31,8 @@ module.exports = class extends BaseGenerator {
         this.name = this.options.name;
 
         this.option('default', {
-            type: String,
-            required: false,
+            type: Boolean,
+            default: false,
             description: 'default option'
         });
         this.defaultOption = this.options.default;
