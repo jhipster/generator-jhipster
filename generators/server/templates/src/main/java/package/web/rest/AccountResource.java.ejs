@@ -348,8 +348,7 @@ public class AccountResource {
     @Timed
     public Map<String, String> requestPasswordResetAndReturnLink(@RequestBody String mail) {
         User user  = userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new);
-        // Axios tries to cast the key to a number and thus alter the key by rounding it.
-        // Hence the map.
+        // Axios tries to cast the key to a number and thus alter the key by rounding it, hence the map.
         Map<String, String> map = new HashMap<>();
         map.put("key", user.getResetKey());
 
