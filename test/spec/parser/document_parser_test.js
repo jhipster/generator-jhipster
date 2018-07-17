@@ -789,7 +789,9 @@ describe('DocumentParser', () => {
       });
       context('when parsing a relationship with no injected field', () => {
         let jdlObject = null;
-        let relationship = null;
+        let relationshipOneToOne = null;
+        let relationshipOneToMany = null;
+        let relationshipManyToMany = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/no_injected_field.jdl']);
@@ -797,11 +799,18 @@ describe('DocumentParser', () => {
             document: input,
             applicationType: ApplicationTypes.MONOLITH
           });
-          relationship = jdlObject.relationships.getOneToOne('OneToOne_A{a}_B');
+          relationshipOneToOne = jdlObject.relationships.getOneToOne('OneToOne_A{b}_B{a}');
+          relationshipOneToMany = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}');
+          relationshipManyToMany = jdlObject.relationships.getManyToMany('ManyToMany_A{b}_B{a}');
         });
 
         it('adds a default one', () => {
-          expect(relationship.injectedFieldInFrom).to.equal('a');
+          expect(relationshipOneToOne.injectedFieldInTo).to.equal('a');
+          expect(relationshipOneToOne.injectedFieldInFrom).to.equal('b');
+          expect(relationshipOneToMany.injectedFieldInTo).to.equal('a');
+          expect(relationshipOneToMany.injectedFieldInFrom).to.equal('b');
+          expect(relationshipManyToMany.injectedFieldInTo).to.equal('a');
+          expect(relationshipManyToMany.injectedFieldInFrom).to.equal('b');
         });
       });
       context('when parsing entities with annotations', () => {
