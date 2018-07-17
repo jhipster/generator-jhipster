@@ -172,10 +172,6 @@ module.exports = class extends BaseGenerator {
                 this.checkGit();
             },
 
-            validateGitConnection() {
-                this.checkGitConnection();
-            },
-
             validateYarn() {
                 this.checkYarn();
             },
