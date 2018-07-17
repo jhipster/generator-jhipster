@@ -17,7 +17,8 @@
  limitations under the License.
 -%>
 import { browser, element, by<% if (authenticationType === 'oauth2') { _%>, ExpectedConditions as ec<%_ } %> } from 'protractor';
-import { NavBarPage, SignInPage<%_ if (authenticationType !== 'oauth2') { _%>, PasswordPage, SettingsPage<%_ } _%> } from './../page-objects/jhi-page-objects';
+
+import { NavBarPage, SignInPage<%_ if (authenticationType !== 'oauth2') { _%>, PasswordPage, SettingsPage<%_ } _%> } from '../page-objects/jhi-page-objects';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
@@ -35,20 +36,17 @@ describe('account', () => {
 
     beforeAll(() => {
         browser.get('/');
-        browser.waitForAngular();
         navBarPage = new NavBarPage(true);
-        browser.waitForAngular();
     });
 
-    it('should fail to login with bad password', () => {
+    it('should fail to login with bad password', async () => {
         <%_ if (enableTranslation) { _%>
         const expect1 = /home.title/;
         <%_ } else { _%>
         const expect1 = /Welcome, Java Hipster!/;
         <%_ } _%>
-        element.all(by.css('h1')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await element(by.css('h1')).<%- elementGetter %>;
+        expect(value1).toMatch(expect1);
     <%_ if (authenticationType !== 'oauth2') { _%>
         signInPage = navBarPage.getSignInPage();
         signInPage.autoSignInUsing('admin', 'foo');
@@ -58,39 +56,33 @@ describe('account', () => {
         <%_ } else { _%>
         const expect2 = /Failed to sign in!/;
         <%_ } _%>
-        element.all(by.css('.alert-danger')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect2);
-        });
+        const value2 = await element(by.css('.alert-danger')).<%- elementGetter %>;
+        expect(value2).toMatch(expect2);
     <%_ } else { _%>
         signInPage = navBarPage.getSignInPage();
         signInPage.loginWithOAuth('admin', 'foo');
 
         // Keycloak
-        const alert = element.all(by.css('.alert-error'));
-        alert.isPresent().then((result) => {
-            if (result) {
-                expect(alert.first().getText()).toMatch('Invalid username or password.');
-            } else {
-                // Okta
-                const error = element.all(by.css('.infobox-error')).first();
-                browser.wait(ec.visibilityOf(error), 2000).then(() => {
-                    expect(error.getText()).toMatch('Sign in failed!');
-                });
-            }
-        });
+        const alert = element(by.css('.alert-error'));
+        if (await alert.isPresent()) {
+            expect(await alert.getText()).toMatch('Invalid username or password.');
+        } else {
+            // Okta
+            const error = element(by.css('.infobox-error'));
+            expect(await error.getText()).toMatch('Sign in failed!');
+        }
     <%_ } _%>
     });
 
-    it('should login successfully with admin account', () => {
+    it('should login successfully with admin account', async () => {
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%_ if (enableTranslation) { _%>
         const expect1 = /global.form.username/;
         <%_ } else { _%>
         const expect1 = /Login/;
         <%_ } _%>
-        element.all(by.css('.modal-content label')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await element(by.css('.modal-content label')).<%- elementGetter %>;
+        expect(value1).toMatch(expect1);
         <%_ } _%>
         signInPage.clearUserName();
         signInPage.setUserName('admin');
@@ -106,11 +98,10 @@ describe('account', () => {
         const expect2 = /You are logged in as user "admin"/;
         <%_ } _%>
         <%_ if (authenticationType !== 'oauth2') { _%>
-        element.all(by.css('.alert-success span')).<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect2);
-        });
+        const value2 = await element(by.css('.alert-success span')).<%- elementGetter %>;
+        expect(value2).toMatch(expect2);
         <%_ } else { _%>
-        const success = element.all(by.css('.alert-success span')).first();
+        const success = element(by.css('.alert-success span'));
         browser.wait(ec.visibilityOf(success), 5000).then(() => {
             success.<%- elementGetter %>.then((value) => {
                 expect(value).toMatch(expect2);
@@ -121,7 +112,7 @@ describe('account', () => {
         <%_ } _%>
     });
 <%_ if (authenticationType !== 'oauth2') { _%>
-    it('should be able to update settings', () => {
+    it('should be able to update settings', async () => {
         settingsPage = navBarPage.getSettingsPage();
 
         <%_ if (enableTranslation) { _%>
@@ -129,9 +120,8 @@ describe('account', () => {
         <%_ } else { _%>
         const expect1 = /User settings for \[admin\]/;
         <%_ } _%>
-        settingsPage.getTitle().then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await settingsPage.getTitle();
+        expect(value1).toMatch(expect1);
         settingsPage.save();
 
         <%_ if (enableTranslation) { _%>
@@ -139,18 +129,17 @@ describe('account', () => {
         <%_ } else { _%>
         const expect2 = /Settings saved!/;
         <%_ } _%>
-        element.all(by.css('.alert-success')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect2);
-        });
+        const value2 = await element(by.css('.alert-success')).<%- elementGetter %>;
+        expect(value2).toMatch(expect2);
     });
 
-    it('should fail to update password when using incorrect current password', () => {
+    it('should fail to update password when using incorrect current password', async () => {
         passwordPage = navBarPage.getPasswordPage();
 
         <%_ if (enableTranslation) { _%>
-        expect(passwordPage.getTitle()).toMatch(/password.title/);
+        expect(await passwordPage.getTitle()).toMatch(/password.title/);
         <%_ } else { _%>
-        expect(passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
+        expect(await passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
         <%_ } _%>
 
         passwordPage.setCurrentPassword('wrong_current_password');
@@ -163,19 +152,18 @@ describe('account', () => {
         <%_ } else { _%>
         const expect2 = /An error has occurred! The password could not be changed./;
         <%_ } _%>
-        element.all(by.css('.alert-danger')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect2);
-        });
+        const value2 = await element(by.css('.alert-danger')).<%- elementGetter %>;
+        expect(value2).toMatch(expect2);
         settingsPage = navBarPage.getSettingsPage();
     });
 
-    it('should be able to update password', () => {
+    it('should be able to update password', async () => {
         passwordPage = navBarPage.getPasswordPage();
 
         <%_ if (enableTranslation) { _%>
-        expect(passwordPage.getTitle()).toMatch(/password.title/);
+        expect(await passwordPage.getTitle()).toMatch(/password.title/);
         <%_ } else { _%>
-        expect(passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
+        expect(await passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
         <%_ } _%>
 
         passwordPage.setCurrentPassword('admin');
@@ -188,9 +176,8 @@ describe('account', () => {
         <%_ } else { _%>
         const expect2 = /Password changed!/;
         <%_ } _%>
-        element.all(by.css('.alert-success')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect2);
-        });
+        const value2 = element(by.css('.alert-success')).<%- elementGetter %>;
+        expect(value2).toMatch(expect2);
         navBarPage.autoSignOut();
         navBarPage.goToSignInPage();
         signInPage.autoSignInUsing('admin', 'newpassword');
