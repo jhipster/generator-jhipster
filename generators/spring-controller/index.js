@@ -49,7 +49,8 @@ module.exports = class extends BaseGenerator {
                 'spring-controller',
                 {
                     force: this.options.force,
-                    arguments: [this.name]
+                    arguments: [this.name],
+                    default: this.options.default
                 }
             );
         } else {
