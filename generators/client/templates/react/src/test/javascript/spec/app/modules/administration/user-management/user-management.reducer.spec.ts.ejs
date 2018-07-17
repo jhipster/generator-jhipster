@@ -32,7 +32,6 @@ import userManagement, {
   createUser,
   updateUser,
   deleteUser,
-  deleteUser,
   getMailStatus,
   getResetCode
 } from 'app/modules/administration/user-management/user-management.reducer';
@@ -181,7 +180,7 @@ describe('User management reducer tests', () => {
     });
 
     it('should set a reset code', () => {
-      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.RESET_CODE), payload: { data: 'superSecretResetCode' } });
+      const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.RESET_CODE), payload: { data: { key: 'superSecretResetCode' } } });
 
       expect(toTest).toMatchObject({
         resetCode: 'superSecretResetCode'
