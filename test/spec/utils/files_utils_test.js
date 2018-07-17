@@ -64,6 +64,13 @@ describe('FileUtils', () => {
     });
   });
   describe('::createDirectory', () => {
+    context('when not passing a directory', () => {
+      it('fails', () => {
+        expect(() => {
+          FileUtils.createDirectory();
+        }).to.throw('A directory must be passed.');
+      });
+    });
     context('when passing a directory that does not yet exist', () => {
       before(() => {
         FileUtils.createDirectory('./here');

@@ -19,12 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
-
-const ObjectUtils = require('../../../lib/utils/object_utils');
-
-const merge = ObjectUtils.merge;
-const values = ObjectUtils.values;
-const areEntitiesEqual = ObjectUtils.areEntitiesEqual;
+const { merge, values, areEntitiesEqual } = require('../../../lib/utils/object_utils');
 
 describe('ObjectUtils', () => {
   describe('::merge', () => {
@@ -150,7 +145,8 @@ describe('ObjectUtils', () => {
             fields: [
               {
                 id: 1,
-                theAnswer: 42
+                theAnswer: 42,
+                arrayThing: [42]
               },
               {
                 id: 2,
@@ -163,7 +159,8 @@ describe('ObjectUtils', () => {
             fields: [
               {
                 id: 1,
-                theAnswer: 42
+                theAnswer: 42,
+                arrayThing: [42]
               },
               {
                 id: 2,
@@ -507,7 +504,7 @@ describe('ObjectUtils', () => {
           pagination: 'no',
           service: 'no',
           searchEngine: 'no',
-          jpaMetamodelFiltering: false
+          jpaMetamodelFiltering: 'no'
         };
         const secondObject = {
           fields: [{ id: 1, theAnswer: 42 }],
@@ -516,7 +513,7 @@ describe('ObjectUtils', () => {
           pagination: 'no',
           service: 'no',
           searchEngine: 'no',
-          jpaMetamodelFiltering: false
+          jpaMetamodelFiltering: 'no'
         };
 
         context('when not having the same DTO option value', () => {
