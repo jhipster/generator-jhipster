@@ -21,9 +21,6 @@
 const expect = require('chai').expect;
 const FormatUtils = require('../../../lib/utils/format_utils');
 
-const formatComment = FormatUtils.formatComment;
-const dateFormatForLiquibase = FormatUtils.dateFormatForLiquibase;
-
 describe('FormatUtils', () => {
   describe('::formatComment', () => {
     context('when the comment is in the one-line form', () => {
@@ -38,27 +35,27 @@ describe('FormatUtils', () => {
 
       context(buildTestTitle(oneLineComment1), () => {
         it(`returns ${buildTestTitle(expectedResult1)}`, () => {
-          expect(formatComment(oneLineComment1)).to.eq(expectedResult1);
+          expect(FormatUtils.formatComment(oneLineComment1)).to.eq(expectedResult1);
         });
       });
       context(buildTestTitle(oneLineComment2), () => {
         it(`returns ${buildTestTitle(expectedResult1)}`, () => {
-          expect(formatComment(oneLineComment2)).to.eq(expectedResult1);
+          expect(FormatUtils.formatComment(oneLineComment2)).to.eq(expectedResult1);
         });
       });
       context(buildTestTitle(oneLineComment3), () => {
         it(`returns ${buildTestTitle(expectedResult2)}`, () => {
-          expect(formatComment(oneLineComment3)).to.eq(expectedResult2);
+          expect(FormatUtils.formatComment(oneLineComment3)).to.eq(expectedResult2);
         });
       });
       context(buildTestTitle(oneLineComment4), () => {
         it(`returns ${buildTestTitle(expectedResult3)}`, () => {
-          expect(formatComment(oneLineComment4)).to.eq(expectedResult3);
+          expect(FormatUtils.formatComment(oneLineComment4)).to.eq(expectedResult3);
         });
       });
       context(buildTestTitle(oneLineComment5), () => {
         it(`returns ${buildTestTitle(expectedResult3)}`, () => {
-          expect(formatComment(oneLineComment5)).to.eq(expectedResult3);
+          expect(FormatUtils.formatComment(oneLineComment5)).to.eq(expectedResult3);
         });
       });
     });
@@ -73,17 +70,17 @@ describe('FormatUtils', () => {
 
       context(buildTestTitle(multiLineComment1), () => {
         it(`returns ${buildTestTitle(expectedResult1)}`, () => {
-          expect(formatComment(multiLineComment1)).to.eq(expectedResult1);
+          expect(FormatUtils.formatComment(multiLineComment1)).to.eq(expectedResult1);
         });
       });
       context(buildTestTitle(multiLineComment2), () => {
         it(`returns ${buildTestTitle(expectedResult2)}`, () => {
-          expect(formatComment(multiLineComment2)).to.eq(expectedResult2);
+          expect(FormatUtils.formatComment(multiLineComment2)).to.eq(expectedResult2);
         });
       });
       context(buildTestTitle(multiLineComment3), () => {
         it(`returns ${buildTestTitle(expectedResult3)}`, () => {
-          expect(formatComment(multiLineComment3)).to.eq(expectedResult3);
+          expect(FormatUtils.formatComment(multiLineComment3)).to.eq(expectedResult3);
         });
       });
     });
@@ -93,7 +90,7 @@ describe('FormatUtils', () => {
       it('uses the increment with the passed date', () => {
         const now = new Date();
         const increment = 1000042;
-        const result = dateFormatForLiquibase({ date: now, increment });
+        const result = FormatUtils.dateFormatForLiquibase({ date: now, increment });
         now.setSeconds(now.getUTCSeconds() + increment);
         const nowUtc = new Date(
           now.getUTCFullYear(),
@@ -130,13 +127,13 @@ describe('FormatUtils', () => {
     });
     context('when not passing the date', () => {
       it('does not fail', () => {
-        expect(dateFormatForLiquibase().length).to.equal(14);
+        expect(FormatUtils.dateFormatForLiquibase().length).to.equal(14);
       });
     });
     context('when not passing the increment', () => {
       it('formats the current time for liquibase with no increment', () => {
         const now = new Date();
-        const result = dateFormatForLiquibase({ date: now });
+        const result = FormatUtils.dateFormatForLiquibase({ date: now });
         const nowUtc = new Date(
           now.getUTCFullYear(),
           now.getUTCMonth(),

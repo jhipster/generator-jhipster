@@ -19,12 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
-
 const ObjectUtils = require('../../../lib/utils/object_utils');
-
-const merge = ObjectUtils.merge;
-const values = ObjectUtils.values;
-const areEntitiesEqual = ObjectUtils.areEntitiesEqual;
 
 describe('ObjectUtils', () => {
   describe('::merge', () => {
@@ -41,32 +36,32 @@ describe('ObjectUtils', () => {
     context('when merging two object', () => {
       context('with the first being nil or empty', () => {
         it('returns the second', () => {
-          const merged1 = merge(null, { a: 1 });
-          const merged2 = merge({}, { a: 1 });
+          const merged1 = ObjectUtils.merge(null, { a: 1 });
+          const merged2 = ObjectUtils.merge({}, { a: 1 });
           expect(merged1).to.deep.eq({ a: 1 });
           expect(merged2).to.deep.eq({ a: 1 });
         });
       });
       context('with the second being nil or empty', () => {
         it('returns the first', () => {
-          const merged1 = merge({ a: 1 }, null);
-          const merged2 = merge({ a: 1 }, null);
+          const merged1 = ObjectUtils.merge({ a: 1 }, null);
+          const merged2 = ObjectUtils.merge({ a: 1 }, null);
           expect(merged1).to.deep.eq({ a: 1 });
           expect(merged2).to.deep.eq({ a: 1 });
         });
       });
       it('returns the merged object by merging the second into the first', () => {
         expect(
-          merge(object1, object2)
+          ObjectUtils.merge(object1, object2)
         ).to.deep.equal({ a: 1, b: 3, c: 4 });
 
         expect(
-          merge(object2, object1)
+          ObjectUtils.merge(object2, object1)
         ).to.deep.equal({ a: 1, b: 2, c: 4 });
       });
 
       it('does not modify any of the two objects', () => {
-        merge(object1, object2);
+        ObjectUtils.merge(object1, object2);
         expect(
           object1
         ).to.deep.equal({ a: 1, b: 2 });
@@ -80,13 +75,13 @@ describe('ObjectUtils', () => {
     context('when passing a nil object', () => {
       it('fails', () => {
         expect(() => {
-          values(null);
+          ObjectUtils.values(null);
         }).to.throw('The passed object must not be nil.');
       });
     });
     context('when passing a valid object', () => {
       it('returns its keys\' values', () => {
-        expect(values({
+        expect(ObjectUtils.values({
           a: 42,
           b: 'A string',
           c: [1, 2, 3, 4, 5],
@@ -110,7 +105,7 @@ describe('ObjectUtils', () => {
             fields: [],
             relationships: []
           };
-          expect(areEntitiesEqual(firstEmptyObject, secondEmptyObject)).to.be.true;
+          expect(ObjectUtils.areEntitiesEqual(firstEmptyObject, secondEmptyObject)).to.be.true;
         });
       });
       context('they have no fields, but only relationships', () => {
@@ -141,7 +136,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
         });
       });
       context('they have fields but no relationships', () => {
@@ -150,7 +145,8 @@ describe('ObjectUtils', () => {
             fields: [
               {
                 id: 1,
-                theAnswer: 42
+                theAnswer: 42,
+                arrayThing: [42]
               },
               {
                 id: 2,
@@ -163,7 +159,8 @@ describe('ObjectUtils', () => {
             fields: [
               {
                 id: 1,
-                theAnswer: 42
+                theAnswer: 42,
+                arrayThing: [42]
               },
               {
                 id: 2,
@@ -172,7 +169,7 @@ describe('ObjectUtils', () => {
             ],
             relationships: []
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
         });
       });
       context('they have both fields and relationships', () => {
@@ -221,7 +218,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
         });
       });
     });
@@ -245,7 +242,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           firstObject = {
             fields: [],
             relationships: [
@@ -263,7 +260,7 @@ describe('ObjectUtils', () => {
             fields: [],
             relationships: []
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
       });
       context('as both of them have different fields', () => {
@@ -294,7 +291,7 @@ describe('ObjectUtils', () => {
             ],
             relationships: []
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
       });
       context('as both of them have different relationships', () => {
@@ -335,7 +332,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
       });
       context('as they do not possess the same number of fields', () => {
@@ -367,7 +364,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
       });
       context('as they do not have the same number of keys in fields', () => {
@@ -409,7 +406,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
       });
       context('as they do not possess the same number of relationships', () => {
@@ -454,7 +451,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
         context('as they do not have the same number of fields in a relationship', () => {
           it('returns false', () => {
@@ -495,7 +492,7 @@ describe('ObjectUtils', () => {
                 }
               ]
             };
-            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
       });
@@ -507,7 +504,7 @@ describe('ObjectUtils', () => {
           pagination: 'no',
           service: 'no',
           searchEngine: 'no',
-          jpaMetamodelFiltering: false
+          jpaMetamodelFiltering: 'no'
         };
         const secondObject = {
           fields: [{ id: 1, theAnswer: 42 }],
@@ -516,7 +513,7 @@ describe('ObjectUtils', () => {
           pagination: 'no',
           service: 'no',
           searchEngine: 'no',
-          jpaMetamodelFiltering: false
+          jpaMetamodelFiltering: 'no'
         };
 
         context('when not having the same DTO option value', () => {
@@ -528,7 +525,7 @@ describe('ObjectUtils', () => {
           });
 
           it('returns false', () => {
-            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
         context('when not having the same pagination option value', () => {
@@ -540,7 +537,7 @@ describe('ObjectUtils', () => {
           });
 
           it('returns false', () => {
-            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
         context('when not having the same service option value', () => {
@@ -552,7 +549,7 @@ describe('ObjectUtils', () => {
           });
 
           it('returns false', () => {
-            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
         context('when not having the same search engine', () => {
@@ -564,7 +561,7 @@ describe('ObjectUtils', () => {
           });
 
           it('returns false', () => {
-            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
         context('when not having the same jpaMetaModelFiltering option value', () => {
@@ -577,7 +574,7 @@ describe('ObjectUtils', () => {
             });
 
             it('returns true', () => {
-              expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+              expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
             });
           });
           context('when they have opposite values', () => {
@@ -589,7 +586,7 @@ describe('ObjectUtils', () => {
             });
 
             it('returns false', () => {
-              expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+              expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
             });
           });
         });
@@ -648,7 +645,7 @@ describe('ObjectUtils', () => {
             pagination: 'no',
             service: 'no'
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
       });
       context('as they do not have the same comments', () => {
@@ -705,7 +702,7 @@ describe('ObjectUtils', () => {
             pagination: 'no',
             service: 'no'
           };
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
       });
     });

@@ -21,14 +21,11 @@
 const expect = require('chai').expect;
 const BinaryOptions = require('../../../../lib/core/jhipster/binary_options');
 
-const Options = BinaryOptions.Options;
-const Values = BinaryOptions.Values;
-
 describe('BinaryOptions', () => {
   describe('::exists', () => {
     context('when checking for a valid binary option', () => {
       it('returns true', () => {
-        expect(BinaryOptions.exists(Options.DTO, Values.dto.MAPSTRUCT)).to.be.true;
+        expect(BinaryOptions.exists(BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
       });
     });
     context('when checking for an invalid binary option', () => {
