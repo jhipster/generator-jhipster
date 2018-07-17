@@ -42,6 +42,7 @@ describe('administration', () => {
     beforeEach(() => {
         navBarPage.clickOnAdminMenu();
     });
+    
     <%_ if (authenticationType !== 'oauth2') { _%>
     it('should load user management', async () => {
         navBarPage.clickOnAdmin('user-management');
@@ -50,7 +51,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Users/;
         <%_ } _%>
-        const value1 = await element(by.css('h2 span')).<%- elementGetter %>;
+        const value1 = await element(by.className('userManagement-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
     <%_ } _%>
@@ -62,7 +63,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Application Metrics/;
         <%_ } _%>
-        const value1 = await element(by.css('h2 span')).<%- elementGetter %>;
+        const value1 = await element(by.className('metrics-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
 
@@ -73,7 +74,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Health Checks/;
         <%_ } _%>
-        const value1 = await element(by.css('h2 span')).<%- elementGetter %>;
+        const value1 = await element(by.className('health-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
 
@@ -84,7 +85,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Configuration/;
         <%_ } _%>
-        const value1 = await element(by.css('h2')).<%- elementGetter %>;
+        const value1 = await element(by.className('configuration-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
 
@@ -96,7 +97,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Audits/;
         <%_ } _%>
-        const value1 = await element(by.css('h2')).<%- elementGetter %>;
+        const value1 = await element(by.className('audits-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
 
@@ -108,7 +109,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Logs/;
         <%_ } _%>
-        const value1 = await element(by.css('h2')).<%- elementGetter %>;
+        const value1 = await element(by.className('logs-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
 
