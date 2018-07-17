@@ -81,7 +81,7 @@ describe('account', () => {
         <%_ } else { _%>
         const expect1 = /Login/;
         <%_ } _%>
-        const value1 = await element(by.css('.modal-content label')).<%- elementGetter %>;
+        const value1 = await element(by.className('username-label')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
         <%_ } _%>
         signInPage.clearUserName();
@@ -90,23 +90,18 @@ describe('account', () => {
         signInPage.setPassword('admin');
         signInPage.login();
 
-        browser.waitForAngular();
-
         <%_ if (enableTranslation) { _%>
         const expect2 = /home.logged.message/;
         <%_ } else { _%>
         const expect2 = /You are logged in as user "admin"/;
         <%_ } _%>
         <%_ if (authenticationType !== 'oauth2') { _%>
-        const value2 = await element(by.css('.alert-success span')).<%- elementGetter %>;
+        const value2 = await element.all(by.css('.alert-success span')).first().<%- elementGetter %>;
         expect(value2).toMatch(expect2);
         <%_ } else { _%>
-        const success = element(by.css('.alert-success span'));
-        browser.wait(ec.visibilityOf(success), 5000).then(() => {
-            success.<%- elementGetter %>.then((value) => {
-                expect(value).toMatch(expect2);
-            });
-        });
+        const success = element.all(by.css('.alert-success span')).first();
+        await browser.wait(ec.visibilityOf(success), 5000);
+        expect(await success.<%- elementGetter %>).toMatch(expect2);
 
         navBarPage.autoSignOut();
         <%_ } _%>
@@ -176,7 +171,7 @@ describe('account', () => {
         <%_ } else { _%>
         const expect2 = /Password changed!/;
         <%_ } _%>
-        const value2 = element(by.css('.alert-success')).<%- elementGetter %>;
+        const value2 = await element(by.css('.alert-success')).<%- elementGetter %>;
         expect(value2).toMatch(expect2);
         navBarPage.autoSignOut();
         navBarPage.goToSignInPage();
