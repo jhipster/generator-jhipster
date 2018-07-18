@@ -1,6 +1,7 @@
 {
   "generator-jhipster": {
-    "applicationType": "reactive",
+    "applicationType": "monolith",
+    "reactive": true,
     "baseName": "travisWebflux",
     "packageName": "io.github.jhipster.travis",
     "packageFolder": "io/github/jhipster/travis",
