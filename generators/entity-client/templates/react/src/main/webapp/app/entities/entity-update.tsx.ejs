@@ -149,11 +149,17 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
   }
 
   componentDidMount() {
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    if (!this.state.isNew) {
+      this.props.getEntity(this.props.match.params.id);
+    }
+    <%_ } else { _%>
     if (this.state.isNew) {
       this.props.reset();
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+    <%_ } _%>
 
     <%_ otherEntityActions.forEach(val => { _%>
     this.props.<%= val.action %>();
