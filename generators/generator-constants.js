@@ -104,6 +104,9 @@ const LANGUAGES = [
         name: 'Arabic (Libya)', dispName: 'العربية', value: 'ar-ly', rtl: true, skipForLocale: true
     },
     { name: 'Armenian', dispName: 'Հայերեն', value: 'hy' },
+    {
+        name: 'Belorussian', dispName: 'Беларускі', value: 'by', localeId: 'by'
+    },
     { name: 'Catalan', dispName: 'Català', value: 'ca' },
     {
         name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn', localeId: 'zh-Hans'

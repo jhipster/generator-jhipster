@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "Налады карыстальніка для [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "Імя",
+            "firstname.placeholder": "Ваше імя",
+            "lastname": "Прозвішча",
+            "lastname.placeholder": "Ваша прозвішча",
+            "language": "Мова",
+            "button": "Захаваць"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Адбылася памылка!</strong> Налады не могуць быць захаваны.",
+                "emailexists": "<strong>Email ўжо выкарыстоўваецца!</strong> Калі ласка, паспрабуйце іншы."
+            },
+            "success": "<strong>Налады захаваны!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Імя павінна быць паказана.",
+                    "minlength": "Даўжыня імя павінна быць хаця-б 1 сімвал",
+                    "maxlength": "Імя не можа быць даўжэй чым 50 сімвалаў"
+                },
+                "lastname": {
+                    "required": "Прозвішча павінна быць указана.",
+                    "minlength": "Даўжыня прозвішчы павінна быць хаця-б 1 сімвал",
+                    "maxlength": "Прозвішча не можа быць даўжэй чым 50 сімвалаў"
+                }
+            }
+        }
+    }
+}
