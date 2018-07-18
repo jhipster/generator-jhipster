@@ -574,12 +574,8 @@
         <%_ } _%>
         <dependency>
             <groupId>org.zalando</groupId>
-            <%_ if (!reactive) { _%>
-            <artifactId>problem-spring-web</artifactId>
-            <%_ } else { _%>
-            <artifactId>problem-spring-webflux</artifactId>
+            <artifactId>problem-spring-web<% if (reactive) { %>flux<%_ } _%></artifactId>
             <version>0.24.0-RC.0</version>
-            <%_ } _%>
         </dependency>
         <%_ if (websocket === 'spring-websocket') { _%>
         <dependency>

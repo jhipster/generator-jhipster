@@ -403,11 +403,11 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.reactive && generator.applicationType === 'microservice'
+            condition: generator => generator.reactive && (generator.applicationType === 'microservice'
                 || (generator.applicationType !== 'uaa'
                     && ((shouldSkipUserManagement(generator) && generator.authenticationType === 'jwt')
                         || !shouldSkipUserManagement(generator)
-                        || generator.authenticationType === 'uaa')),
+                        || generator.authenticationType === 'uaa'))),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
