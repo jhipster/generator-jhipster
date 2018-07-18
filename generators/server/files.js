@@ -680,6 +680,7 @@ const serverFiles = {
                 { file: 'package/config/LoggingConfiguration.java', renameTo: generator => `${generator.javaDir}config/LoggingConfiguration.java` },
                 { file: 'package/config/ApplicationProperties.java', renameTo: generator => `${generator.javaDir}config/ApplicationProperties.java` },
                 { file: 'package/config/JacksonConfiguration.java', renameTo: generator => `${generator.javaDir}config/JacksonConfiguration.java` },
+                { file: 'package/config/LocaleConfiguration.java', renameTo: generator => `${generator.javaDir}config/LocaleConfiguration.java` },
                 { file: 'package/config/LoggingAspectConfiguration.java', renameTo: generator => `${generator.javaDir}config/LoggingAspectConfiguration.java` },
                 { file: 'package/config/MetricsConfiguration.java', renameTo: generator => `${generator.javaDir}config/MetricsConfiguration.java` },
                 { file: 'package/config/WebConfigurer.java', renameTo: generator => `${generator.javaDir}config/WebConfigurer.java` }
@@ -692,14 +693,6 @@ const serverFiles = {
             templates: [
                 { file: 'package/config/ReactivePageableHandlerMethodArgumentResolver.java', renameTo: generator => `${generator.javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java` },
                 { file: 'package/config/ReactiveSortHandlerMethodArgumentResolver.java', renameTo: generator => `${generator.javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java` },
-            ]
-        },
-        {
-            // TODO: add reactive LocaleConfiguration
-            condition: generator => !generator.reactive,
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/config/LocaleConfiguration.java', renameTo: generator => `${generator.javaDir}config/LocaleConfiguration.java` },
             ]
         },
         {
