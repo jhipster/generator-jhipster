@@ -314,7 +314,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    compile "org.zalando:problem-spring-web<% if (reactive) { %>flux:0.24.0-RC.0<% } %>"
+    compile "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>:0.24.0-RC.0"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"

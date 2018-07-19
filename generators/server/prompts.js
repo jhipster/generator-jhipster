@@ -120,7 +120,7 @@ function askForServerSideOpts(meta) {
                         value: 'oauth2',
                         name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
                     });
-                
+
                     if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
                         opts.push({
                             value: 'session',
