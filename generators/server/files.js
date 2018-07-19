@@ -1150,7 +1150,7 @@ const serverFiles = {
     ]
 };
 
-function writeFiles(calledByBlueprint) {
+function writeFiles() {
     return {
         setUp() {
             this.javaDir = `${this.packageFolder}/`;
@@ -1169,11 +1169,7 @@ function writeFiles(calledByBlueprint) {
         },
 
         writeFiles() {
-            if (calledByBlueprint) {
-                this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('server/templates'));
-            } else {
-                this.writeFilesToDisk(serverFiles, this, false);
-            }
+            this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('server/templates'));
         }
     };
 }

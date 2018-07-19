@@ -190,7 +190,7 @@ module.exports = {
     serverFiles
 };
 
-function writeFiles(calledByBlueprint) {
+function writeFiles() {
     return {
         saveRemoteEntityPath() {
             if (_.isUndefined(this.microservicePath)) {
@@ -206,11 +206,7 @@ function writeFiles(calledByBlueprint) {
             if (this.skipServer) return;
 
             // write server side files
-            if (calledByBlueprint) {
-                this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates'));
-            } else {
-                this.writeFilesToDisk(serverFiles, this, false);
-            }
+            this.writeFilesToDisk(serverFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates'));
 
             if (this.databaseType === 'sql') {
                 if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
@@ -231,7 +227,7 @@ function writeFiles(calledByBlueprint) {
                     const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
                     if (!this.skipServer) {
                         this.template(
-                            `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
+                            `${this.fetchFromInstalledJHipster('entity-server/templates')}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
                             `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
                             this, {}, enumInfo
                         );

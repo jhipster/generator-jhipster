@@ -787,22 +787,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Check if git connection can be established
-     */
-    checkGitConnection() {
-        if (!this.gitInstalled) return;
-        const done = this.async();
-        exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 5000 }, (error) => {
-            if (error) {
-                this.warning(`Failed to connect to "git://github.com"
-1. Check your Internet connection.
-2. If you are using an HTTP proxy, try this command: ${chalk.yellow('git config --global url."https://".insteadOf git://')}`);
-            }
-            done();
-        });
-    }
-
-    /**
      * Check if Yarn is installed
      */
     checkYarn() {

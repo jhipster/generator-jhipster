@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const _ = require('lodash');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
-
+const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
@@ -44,15 +45,19 @@ module.exports = class extends BaseGenerator {
     get initializing() {
         return {
             sayHello() {
-                this.log(chalk.white('Welcome to the JHipster CI/CD Sub-Generator'));
+                this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
             },
             getConfig() {
+                this.jhipsterVersion = packagejs.version;
                 this.baseName = this.config.get('baseName');
                 this.applicationType = this.config.get('applicationType');
                 this.skipClient = this.config.get('skipClient');
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 this.buildTool = this.config.get('buildTool');
                 this.herokuAppName = this.config.get('herokuAppName');
+                if (this.herokuAppName === undefined) {
+                    this.herokuAppName = _.kebabCase(this.baseName);
+                }
                 this.clientFramework = this.config.get('clientFramework');
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
@@ -74,7 +79,7 @@ module.exports = class extends BaseGenerator {
 
     get prompting() {
         return {
-            askPipelines: prompts.askPipelines,
+            askPipeline: prompts.askPipeline,
             askIntegrations: prompts.askIntegrations
         };
     }
@@ -87,31 +92,45 @@ module.exports = class extends BaseGenerator {
                 insight.trackWithEvent('generator', 'ci-cd');
             },
             setTemplateConstants() {
-                if (this.abort || this.jenkinsIntegrations === undefined) return;
-                this.gitLabIndent = this.jenkinsIntegrations.includes('gitlab') ? '    ' : '';
-                this.indent = this.jenkinsIntegrations.includes('docker') ? '    ' : '';
+                if (this.abort || this.cicdIntegrations === undefined) return;
+                this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
+                this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
             }
         };
     }
 
     writing() {
-        if (this.pipelines.includes('jenkins')) {
+        if (this.pipeline === 'jenkins') {
             this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
             this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
             this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
-            if (this.jenkinsIntegrations.includes('publishDocker')) {
-                this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
-            }
         }
-        if (this.pipelines.includes('gitlab')) {
+        if (this.pipeline === 'gitlab') {
             this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
         }
-        if (this.pipelines.includes('circle')) {
+        if (this.pipeline === 'circle') {
             this.template('circle.yml.ejs', 'circle.yml');
         }
-        if (this.pipelines.includes('travis')) {
+        if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');
+        }
+
+        if (this.cicdIntegrations.includes('deploy')) {
+            if (this.buildTool === 'maven') {
+                this.addMavenDistributionManagement(
+                    this.artifactorySnapshotsId, this.artifactorySnapshotsUrl,
+                    this.artifactoryReleasesId, this.artifactoryReleasesUrl
+                );
+            } else if (this.buildTool === 'gradle') {
+                // TODO: add support here
+                // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
+                this.warning('No support for Artifactory yet, when using Gradle.\n');
+            }
+        }
+
+        if (this.cicdIntegrations.includes('publishDocker')) {
+            this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
         }
     }
 };
