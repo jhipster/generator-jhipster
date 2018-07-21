@@ -1967,14 +1967,14 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * get a constraint name for tables in JHipster preferred style.
+     * get a foreign key constraint name for tables in JHipster preferred style.
      *
      * @param {string} entityName - name of the entity
      * @param {string} relationshipName - name of the related entity
      * @param {string} prodDatabaseType - database type
      * @param {boolean} noSnakeCase - do not convert names to snakecase
      */
-    getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+    getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
         let constraintName;
         if (noSnakeCase) {
             constraintName = `fk_${entityName}_${relationshipName}_id`;
@@ -1997,6 +1997,35 @@ module.exports = class extends PrivateBase {
             const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
             const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 2) : this.getTableName(relationshipName).substring(0, halfLimit - 2);
             return `${entityTable}_${relationTable}_id`;
+        }
+        return constraintName;
+    }
+
+    /**
+     * get a unique constraint name for tables in JHipster preferred style.
+     *
+     * @param {string} entityName - name of the entity
+     * @param {string} columnName - name of the column
+     * @param {string} prodDatabaseType - database type
+     */
+    getUXConstraintName(entityName, columnName, prodDatabaseType) {
+        const constraintName = `ux_${entityName}_${columnName}`;
+        let limit = 0;
+
+        if (prodDatabaseType === 'oracle' && constraintName.length > 30 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(`The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
+
+            limit = 28;
+        } else if (prodDatabaseType === 'mysql' && constraintName.length > 64 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(`The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
+
+            limit = 62;
+        }
+        if (limit > 0) {
+            const halfLimit = Math.floor(limit / 2);
+            const entityTable = entityName.substring(0, halfLimit);
+            const columnTable = columnName.substring(0, halfLimit - 2);
+            return `ux_${entityTable}_${columnTable}`;
         }
         return constraintName;
     }
