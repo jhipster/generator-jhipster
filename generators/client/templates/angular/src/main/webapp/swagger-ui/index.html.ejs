@@ -38,7 +38,6 @@
     <script src='./dist/lib/backbone-min.js' type='text/javascript'></script>
     <script src='./dist/swagger-ui.min.js' type='text/javascript'></script>
     <script src='./dist/lib/highlight.9.1.0.pack.js' type='text/javascript'></script>
-    <script src='./dist/lib/highlight.9.1.0.pack.js' type='text/javascript'></script>
     <script src='./dist/lib/jsoneditor.min.js' type='text/javascript'></script>
     <script src='./dist/lib/marked.js' type='text/javascript'></script>
     <script src='./dist/lib/swagger-oauth.js' type='text/javascript'></script>
@@ -101,20 +100,9 @@
                 });
 
                 function addApiKeyAuthorization() {
-                <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+                <%_ if (authenticationType === 'session' || authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-XSRF-TOKEN", getCSRF(), "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
-                <%_ } else if (authenticationType === 'uaa') { _%>
-                    var interceptor = {
-                        requestInterceptor: {
-                            apply: function (requestObj) {
-                                var headers = requestObj.headers || {};
-                                headers['X-XSRF-TOKEN'] = getCSRF();
-                                return requestObj;
-                            }
-                        }
-                    };
-                    window.swaggerUi.options.requestInterceptor = interceptor.requestInterceptor
                 <%_ } else if (authenticationType === 'jwt') { _%>
                     var authToken = JSON.parse(localStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken") || sessionStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
@@ -122,16 +110,18 @@
                 <%_ } _%>
                 }
 
+                <%_ if (authenticationType === 'session' || authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
                 function getCSRF() {
                     var name = "XSRF-TOKEN=";
                     var ca = document.cookie.split(';');
                     for(var i=0; i<ca.length; i++) {
                         var c = ca[i];
-                        while (c.charAt(0)==' ') c = c.substring(1);
+                        while (c.charAt(0) === ' ') c = c.substring(1);
                         if (c.indexOf(name) !== -1) return c.substring(name.length,c.length);
                     }
                     return "";
                 }
+                <%_ } _%>
 
                 function log() {
                     if ('console' in window) {
