@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { browser, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor<% } %> } from 'protractor';
+import { browser, protractor } from 'protractor';
 import { NavBarPage } from './../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
 import { <%= entityClass %>ComponentsPage, <%= entityClass %>UpdatePage } from './<%= entityFileName %>.page-object';
 <%_ if (fieldsContainBlobOrImage) { _%>
@@ -86,61 +86,55 @@ describe('<%= entityClass %> e2e test', () => {
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', () => {
-        <%= entityInstance %>ComponentsPage.clickOnCreateButton();
-        <%_ fields.forEach((field) => {
-            const fieldName = field.fieldName;
-            const fieldNameCapitalized = field.fieldNameCapitalized;
-            const fieldType = field.fieldType;
-            const fieldTypeBlobContent = field.fieldTypeBlobContent;
-            const fieldIsEnum = field.fieldIsEnum;
-        _%>
-        <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
-        <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5');
-        expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('5');
-        <%_ } else if (fieldType === 'LocalDate') { _%>
-        <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('2000-12-31');
-        expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('2000-12-31');
-        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-        <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM');
-        expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toContain('2001-01-01T02:30');
-        <%_ } else if (fieldType === 'Boolean') { _%>
-        <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected().then((selected) => {
-            if (selected) {
-                <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-                expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).toBeFalsy();
-            } else {
-                <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-                expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).toBeTruthy();
-            }
-        });
-        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-        <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
-        expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('<%= fieldName %>');
-        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-        <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input(absolutePath);
-        <%_ } else if (fieldIsEnum) { _%>
-        <%= entityInstance %>UpdatePage.<%=fieldName %>SelectLastOption();
-        <%_ } else if (fieldType === 'UUID'){ _%>
-        <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
-        expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('64c99148-3908-465d-8c4a-e510e3ade974');
-        <%_ } else { _%>
-        <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
-        expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('<%= fieldName %>');
-        <%_ } _%>
-        <%_ }); _%>
-        <%_ relationships.forEach((relationship) => {
-            const relationshipType = relationship.relationshipType;
-            const ownerSide = relationship.ownerSide;
-            const relationshipName = relationship.relationshipName;
-            const relationshipFieldName = relationship.relationshipFieldName; _%>
-        <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-        <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption();
-        <%_ } else if ((relationshipType === 'many-to-many' && ownerSide === true)) { _%>
-        // <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption();
-        <%_ } _%>
-        <%_ }); _%>
-        <%= entityInstance %>UpdatePage.save();
-        expect(<%= entityInstance %>UpdatePage.getSaveButton().isPresent()).toBeFalsy();
+        <%= entityInstance %>ComponentsPage.clickOnCreateButton().then (
+            () => protractor.promise.all([
+<%_ fields.forEach((field) => {
+    const fieldName = field.fieldName;
+    const fieldNameCapitalized = field.fieldNameCapitalized;
+    const fieldType = field.fieldType;
+    const fieldTypeBlobContent = field.fieldTypeBlobContent;
+    const fieldIsEnum = field.fieldIsEnum;
+    _%>
+    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+                <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5').then(() => expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('5')),
+    <%_ } else if (fieldType === 'LocalDate') { _%>
+                <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('2000-12-31').then(() => expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('2000-12-31')),
+    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM').then(() => expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toContain('2001-01-01T02:30')),
+    <%_ } else if (fieldType === 'Boolean') { _%>
+                <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected().then((selected) => {
+                    if (selected) {
+                        <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click().then(() => expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).toBeFalsy())
+                    } else {
+                        <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click().then(() => expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).toBeTruthy())
+                    }
+                }),
+    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+                <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>').then(() => expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('<%= fieldName %>')),
+    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+                <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input(absolutePath),
+    <%_ } else if (fieldIsEnum) { _%>
+                <%= entityInstance %>UpdatePage.<%=fieldName %>SelectLastOption(),
+    <%_ } else if (fieldType === 'UUID'){ _%>
+                <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974').then(() => expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('64c99148-3908-465d-8c4a-e510e3ade974')),
+    <%_ } else { _%>
+                <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>').then(() =>expect(<%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('<%= fieldName %>')),
+    <%_ } _%>
+<%_ }); _%>
+<%_ relationships.forEach((relationship) => {
+    const relationshipType = relationship.relationshipType;
+    const ownerSide = relationship.ownerSide;
+    const relationshipName = relationship.relationshipName;
+    const relationshipFieldName = relationship.relationshipFieldName; _%>
+    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+                <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption(),
+    <%_ } else if ((relationshipType === 'many-to-many' && ownerSide === true)) { _%>
+                // <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption(),
+    <%_ } _%>
+<%_ }); _%>
+            ])
+        ).then(() => <%= entityInstance %>UpdatePage.save().then(() => expect(<%= entityInstance %>UpdatePage.getSaveButton().isPresent()).toBeFalsy())
+        )
     });<%= closeBlockComment %>
 
     afterAll(() => {

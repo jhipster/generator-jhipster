@@ -18,13 +18,27 @@
 -%>
 <%_
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
+const variablesWithTypes = generateEntityClientFields(pkType, fields, relationships, dto);
 _%>
 /* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { take, toArray } from 'rxjs/operators';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityAngularName %>, <%= entityAngularName %>, <%_ const enumsAlreadyDeclared = [];
+fields.forEach(field => {
+if (field.fieldIsEnum && !enumsAlreadyDeclared.includes(field.fieldType)) {
+    enumsAlreadyDeclared.push(field.fieldType); _%>
+<%=field.fieldType%>,
+<%_ }
+}) _%>
+} from 'app/shared/model/<%= entityModelFileName %>.model';
 import { SERVER_API_URL } from 'app/app.constants';
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+import * as moment from 'moment';
+<%_ } _%>
 
 describe('Service Tests', () => {
 
@@ -32,6 +46,8 @@ describe('Service Tests', () => {
         let injector: TestBed;
         let service: <%= entityAngularName %>Service;
         let httpMock: HttpTestingController;
+        let httpClient: HttpClient;
+        let elemDefault: I<%= entityAngularName %>;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -42,16 +58,43 @@ describe('Service Tests', () => {
             injector = getTestBed();
             service = injector.get(<%= entityAngularName %>Service);
             httpMock = injector.get(HttpTestingController);
+            httpClient = injector.get(HttpClient);
+            elemDefault = new <%= entityAngularName %>(
+                0,
+                <%_ fields.forEach((field) => {
+                    const fieldType = field.fieldType; _%>
+                    <%_ if (field.fieldIsEnum) { _%>
+                <%= fieldType + '.' + field.fieldValues.split(',')[0] %>,
+                    <%_ } else if (fieldType === 'Boolean') { _%>
+                false,
+                    <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+                0,
+                    <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
+                'AAAAAAA',
+                    <%_ } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                moment(),
+                    <%_ } else { // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' _%>
+                'AAAAAAA',
+                <%_ } _%>
+            <%_ }) _%>
+            )
         });
 
         describe('Service methods', () => {
             it('should call correct URL', () => {
-                service.find(<%- tsKeyId %>).subscribe(() => {});
-
-                const req  = httpMock.expectOne({ method: 'GET' });
-
-                const resourceUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
-                expect(req.request.url).toEqual(resourceUrl + '/' + <%- tsKeyId %>);
+                spyOn(httpClient, 'get').and.returnValue(
+                    Observable.of(
+                        new HttpResponse({
+                            body: elemDefault
+                        })
+                    )
+                );
+                const rxPromise = service
+                    .find(<%- tsKeyId %>)
+                    .pipe(take(1))
+                    .toPromise();
+                expect.assertions(1);
+                return expect(rxPromise).resolves.toMatchObject({body: elemDefault});
             });
 
             it('should create a <%= entityAngularName %>', () => {
