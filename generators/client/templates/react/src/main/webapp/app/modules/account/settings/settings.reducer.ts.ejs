@@ -21,6 +21,7 @@ import { translate } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { getSession } from 'app/shared/reducers/authentication';
+ <% if (enableTranslation) { %>import { setLocale } from 'app/shared/reducers/locale';<% } %>
 
 export const ACTION_TYPES = {
   UPDATE_ACCOUNT: 'account/UPDATE_ACCOUNT',
@@ -80,7 +81,15 @@ export const saveAccountSettings = account => async dispatch => {
       successMessage: translate('settings.messages.success')
     }
   });
+  <%_ if (enableTranslation) { _%>
+  const accountResult = await dispatch(getSession());
+
+  if (accountResult && accountResult.value && accountResult.value.status === 200) {
+    dispatch(setLocale(accountResult.value.data.langKey));
+  }
+  <%_ } else { _%>
   dispatch(getSession());
+  <%_ } _%>
 };
 
 export const reset = () => ({
