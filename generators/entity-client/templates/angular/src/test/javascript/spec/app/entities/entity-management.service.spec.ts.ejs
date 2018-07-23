@@ -24,8 +24,13 @@ _%>
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 import { take, toArray } from 'rxjs/operators';
+import { SERVER_API_URL } from 'app/app.constants';
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+import * as moment from 'moment';
+import { <%_ if (fieldsContainLocalDate) { _%>DATE_FORMAT,<%_ } if (fieldsContainInstant || fieldsContainZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from 'app/shared/constants/input.constants';
+<%_ } _%>
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %>, <%_ const enumsAlreadyDeclared = [];
 fields.forEach(field => {
@@ -35,10 +40,6 @@ if (field.fieldIsEnum && !enumsAlreadyDeclared.includes(field.fieldType)) {
 <%_ }
 }) _%>
 } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { SERVER_API_URL } from 'app/app.constants';
-<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
-import * as moment from 'moment';
-<%_ } _%>
 
 describe('Service Tests', () => {
 
@@ -60,7 +61,11 @@ describe('Service Tests', () => {
             httpMock = injector.get(HttpTestingController);
             httpClient = injector.get(HttpClient);
             elemDefault = new <%= entityAngularName %>(
-                0,
+                <%_ if (pkType === 'String') { _%>
+                'ID'
+                <%_ } else { _%>
+                0
+                <%_ } _%>,
                 <%_ fields.forEach((field) => {
                     const fieldType = field.fieldType; _%>
                     <%_ if (field.fieldIsEnum) { _%>
@@ -82,10 +87,19 @@ describe('Service Tests', () => {
 
         describe('Service methods', () => {
             it('should call correct URL', () => {
+                const returnedFromService = Object.assign({
+<%_ fields.forEach((field) => {
+    const fieldType = field.fieldType; _%>
+    <%_ if (['LocalDate'].includes(fieldType)) { _%>
+            <%= field.fieldName%>: moment().format(DATE_FORMAT),
+    <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+            <%= field.fieldName%>: moment().format(DATE_TIME_FORMAT),
+    <%_ } _%>
+<%_ }) _%>}, elemDefault);
                 spyOn(httpClient, 'get').and.returnValue(
-                    Observable.of(
+                    of(
                         new HttpResponse({
-                            body: elemDefault
+                            body: returnedFromService
                         })
                     )
                 );
