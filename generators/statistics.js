@@ -3,6 +3,8 @@ const Config = require('conf');
 const osLocale = require('os-locale');
 const axios = require('axios');
 const os = require('os');
+const Insight = require('insight');
+const packagejs = require('../package.json');
 
 const DO_NOT_ASK_LIMIT = 100;
 
@@ -24,11 +26,33 @@ class Statistics {
         this.optOut = this.config.get('optOut');
         this.isLinked = this.config.get('isLinked');
         this.noInsight = process.argv.includes('--no-insight');
+        this.configInsight();
+
         if (this.noInsight) {
             this.noInsightConfig();
         } else {
             this.configProxy();
         }
+    }
+
+    configInsight(trackingCode = 'UA-46075199-2', packageName = packagejs.name, packageVersion = packagejs.version) {
+        const insight = new Insight({
+            trackingCode,
+            packageName,
+            packageVersion
+        });
+
+        insight.trackWithEvent = (category, action) => {
+            insight.track(category, action);
+            insight.trackEvent({
+                category,
+                action,
+                label: `${category} ${action}`,
+                value: 1
+            });
+        };
+        insight.optOut = this.optOut;
+        this.insight = insight;
     }
 
     noInsightConfig() {
@@ -112,11 +136,47 @@ class Statistics {
             'user-language': osLocale.sync(),
             isARegeneration
         });
+
+        this.insight.trackWithEvent('generator', 'app');
+        this.insight.track('app/applicationType', yorc.applicationType);
+        this.insight.track('app/testFrameworks', yorc.testFrameworks);
+        this.insight.track('app/otherModules', yorc.otherModules);
+        this.insight.track('app/clientPackageManager', yorc.clientPackageManager);
     }
 
     sendSubGenEvent(source, type, event) {
         const strEvent = event === '' ? event : JSON.stringify(event);
         this.postRequest(`/s/event/${this.clientId}`, { source, type, event: strEvent });
+        this.insight.trackWithEvent(source, type);
+        if (event) {
+            this.sendInsightSubGenEvents(type, event);
+        }
+    }
+
+    /**
+     * Recursively send events that are contained in an Object.
+     * ie:
+     *      const a = { b: 'value', c: { d: 'another value' } };
+     *      sendInsightSubGenEvents('foo/bar', a);
+     *  will send :
+     *      this.insight.track('foo/bar/b', 'value');
+     *      this.insight.track('foo/bar/b/c/d', 'another value');
+     *
+     * @param {string} prefix insight event prefix
+     * @param {any} eventObject events that you want to send
+     */
+    sendInsightSubGenEvents(prefix, eventObject) {
+        if (typeof eventObject === 'object') {
+            Object.keyset(eventObject).forEach((key) => {
+                if (typeof eventObject[key] === 'object') {
+                    this.sendInsightSubGenEvents(`${prefix}/${key}`, eventObject[key]);
+                } else {
+                    this.insight.track(prefix, eventObject);
+                }
+            });
+        } else {
+            this.insight.track(prefix, eventObject);
+        }
     }
 
     sendEntityStats(fields, relationships, pagination, dto, service, fluentMethods) {
