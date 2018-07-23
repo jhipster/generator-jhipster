@@ -27,7 +27,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, toArray } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
-<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
+<%_ if (fieldsContainDate) { _%>
 import * as moment from 'moment';
 import { <%_ if (fieldsContainLocalDate) { _%>DATE_FORMAT,<%_ } if (fieldsContainInstant || fieldsContainZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from 'app/shared/constants/input.constants';
 <%_ } _%>
