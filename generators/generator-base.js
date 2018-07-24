@@ -2181,13 +2181,13 @@ module.exports = class extends PrivateBase {
             name: 'baseName',
             validate: (input) => {
                 if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
-                    return 'Your application name cannot contain special characters or a blank space';
+                    return 'Your base name cannot contain special characters or a blank space';
                 }
-                if (generator.applicationType === 'microservice' && /_/.test(input)) {
-                    return 'Your microservice name cannot contain underscores as this does not meet the URI spec';
+                if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
+                    return 'Your base name cannot contain underscores as this does not meet the URI spec';
                 }
                 if (input === 'application') {
-                    return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
+                    return 'Your base name cannot be named \'application\' as this is a reserved name for Spring Boot';
                 }
                 return true;
             },
