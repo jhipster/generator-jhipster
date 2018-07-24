@@ -15,31 +15,62 @@ addons:
       - google-chrome-stable
 cache:
   directories:
-    - $HOME/.m2
-    - $HOME/.gradle
+    - "$HOME/.m2"
+    - "$HOME/.gradle"
 env:
   global:
-    - PROFILE=dev
-    - RUN_APP=1
+    # If you add some global variables, please add it also at the end of ./travis/build-samples.sh - PROFILE=dev
+    - PROFILE="dev"
     - PROTRACTOR=0
-    - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
-    - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
-    - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
-    - APP_FOLDER=$HOME/app
-    - UAA_APP_FOLDER=$HOME/uaa
+    - JHIPSTER_TRAVIS="$TRAVIS_BUILD_DIR/travis"
+    - JHIPSTER_SAMPLES="$JHIPSTER_TRAVIS/samples"
+    - JHIPSTER_SCRIPTS="$JHIPSTER_TRAVIS/scripts"
+    - APP_FOLDER="$HOME/app"
+    - UAA_APP_FOLDER="$HOME/uaa"
     # environment properties
-    - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
-    - SPRING_JPA_SHOW_SQL=false
+    - SPRING_OUTPUT_ANSI_ENABLED="ALWAYS"
+    - SPRING_JPA_SHOW_SQL="false"
 
+    # PS4 is used for PROMPT when we trace each command thanks "set -x"
+    # In line below, spaces are insecables spaces
+    # (don't work with secables spaces)
+    - PS4='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]: \[\033[01;34m\]\w\[\033[00m\]\$: '
+
+    # Prefix of docker images for ./travis/scripts/03-docker-compose.sh
+    - DOCKER_PREFIX_NAME="jhipster-travis-build-"
+
+    # Travis CI and not ./travis/build-samples.sh
+    - IS_TRAVIS_CI=1
+
+    # Below Not used in ./travis/build-samples.sh
+    # Used only in ./travis/scripts/00-install-jhipster.sh
+    #       and ./travis/scripts/03-replace-version-generated-project.sh
     # if JHIPSTER_LIB_BRANCH value is release, use the release from Maven
-    - JHIPSTER_LIB_REPO=https://github.com/jhipster/jhipster.git
-    - JHIPSTER_LIB_BRANCH=release
+    - JHIPSTER_LIB_REPO="https://github.com/jhipster/jhipster.git"
+    - JHIPSTER_LIB_BRANCH="release"
     # if JHIPSTER_BRANCH value is release, use the release from NPM
-    - JHIPSTER_REPO=https://github.com/jhipster/generator-jhipster.git
-    - JHIPSTER_BRANCH=release
+    - JHIPSTER_REPO="https://github.com/jhipster/generator-jhipster.git"
+    - JHIPSTER_BRANCH="release"
 
   matrix:
+
+    # In ./travis/build-samples.sh we match:
+    # '^    - JHIPSTER=sample_name VAR1=whatever VAR2=whatever … VARN=whatever".
+    # In the actual file (./.travis.yml), if the indentation change please update
+    # ./travis/build-samples.sh.
+    # At the end of build-samples.sh, you must update statement:
+    # `grep --color=never -E '^    - JHIPSTER=' "$travisDotYml" | sed -n -e 's/    - JHIPSTER=//p'`
+
+
+    # File ./travis/build-samples.sh target explicitly ngx-default. Please
+    # do not rename this sample. All others samples could be renamed.
+
+
+    # In name of samples, please only use alphanumeric characters in lowercase
+    # and dash.
+
     - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
+
     - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-gradle-fr PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-mariadb-oauth2-sass-infinispan PROTRACTOR=1
@@ -68,7 +99,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
   # Install Yarn
   - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH=$HOME/.yarn/bin:$PATH
+  - export PATH="$HOME/.yarn/bin:$PATH"
   - yarn -v
 install:
   - $JHIPSTER_SCRIPTS/00-install-jhipster.sh

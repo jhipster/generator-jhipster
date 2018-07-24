@@ -1,9 +1,34 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+# -*- coding: UTF8 -*-
+
+#  Copyright 2013-2018 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+set -exu
+function echoSetX() {
+    echo -e "\\n----------------------------------------------------------\\n" \
+        "\\n$1\\n" \
+        "\\n--------------------------------------------------------------\\n"
+}
 
 #-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
+
 moveEntity() {
     local entity="$1"
     cp "$JHIPSTER_SAMPLES"/.jhipster/"$entity".json "$APP_FOLDER"/.jhipster/
@@ -12,8 +37,14 @@ moveEntity() {
 #-------------------------------------------------------------------------------
 # Copy entities json
 #-------------------------------------------------------------------------------
+set +x
+echoSetX "Copy entities json"
+set -x
 
-rm -Rf "$APP_FOLDER"
+# TODO change ../build-samples.sh to avoid this if.
+if [[ "$IS_TRAVIS_CI" -eq 1 ]] ; then
+    rm -Rf "$APP_FOLDER"
+fi
 mkdir -p "$APP_FOLDER"/.jhipster/
 
 if [[ ("$JHIPSTER" == *"mongodb"*) || ("$JHIPSTER" == *"couchbase"*) ]]; then

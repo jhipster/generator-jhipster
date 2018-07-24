@@ -44,7 +44,7 @@
     "ejslint": "ejslint",
     "pretest": "npm run lint",
     "test": "npm run test:unit -- test/*.spec.js",
-    "test:unit": "mocha --timeout 20000 --slow 0 --reporter spec",
+    "test:unit": "mocha --timeout 60000 --slow 0 --reporter spec",
     "jsdoc": "jsdoc --configure jsdoc-conf.json"
   },
   "dependencies": {

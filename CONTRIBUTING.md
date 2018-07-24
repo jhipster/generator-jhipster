@@ -232,24 +232,54 @@ To start debugging JHipster with **VSCode**, open the generator code in your wor
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
-## Local Travis Build
+## Local Travis Build and explore application generated
 
-You can run the travis builds locally by following below commands
+You can run the Travis builds locally by following below commands, and track rendered pages.
 
-CD into the travis folder `cd travis` from the generator source code root folder
+#### How to use it
 
-Run `./build-samples.sh [command_name] [sample_name:optional]`
+1. Change directory into the [./travis](./travis) folder `cd travis` from the generator source code root folder
 
-This will create the travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your editor or IDE to check it further. You can also run tests locally on the project to verify
+2. Run `./build-samples.sh generate|verify [ sample_name[,sample_name][,...] ] [ --colorizelogfile ] ` (parameters between brackets are optionals).
 
-Sample name is optional and can be any of the folder name in the `travis/samples` folder. If not specified the it will mean all samples
+    * `generate` and `verify` create the Travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your Text Editor or IDE to check it further. You can also run tests locally on the project to verify.
+        * By default, run on all samples. Choose those you want in `./build-samples.sh help`.
+        * You could build several samples in same time by separated it by comma (e.g. `ngx-default,react-default`).
+        * `--colorizelogfile`: keep color in your log file, **this optional parameter is strongly advise for readability**. Check `./build-samples.sh help` to know more about it.
+    * `verify` generate, and beside test samples like in Travis CI. Very interesting if you want check quickly know correctness of your modifications. Very interesting if you want check before push.
 
-Command name can be as below
+3. Then `./build-samples.sh start sample_name` to start the application and check what is rendered in your web browser.
 
-    `list`: List all sample names
-    `generate`: Generate the sample if specified else generate all samples
-    `build` : Generate and test the sample if specified else generate and test all samples
-    `clean` : Clean the generated code for the sample if specified else clean all samples
+**IMPORTANT NOTE**: `yarn link` is automatically performed. Therefore at the end of the execution, the command `jhipster` refers to your development project. To restore it, type `yarn unlink`.
+
+#### Synopsis
+
+Command name can be as below:
+
+    `help`: display the help (recommended to read it).
+    `generate`: Generate sample(s). Not test are performed. You could see what is generated in samples/*-sample and open the project in your Text Editor/IDE.
+    `verify` : Generate and test sample(s). Like `generate` + test as in Travis CI.
+    `start` : "Start the application generated with `generate` or `verify`. You could open the app on a Web browser."
+    `clean` : Delete all ./travis/samples/*-sample folders.
+
+### Requirements
+#### For all commands
+1. `yarn` (not `npm`)
+2. `node` and `javac` LTS
+
+#### Only for `verify`
+1. `docker` and `docker-compose` installed. `docker` service should be started, and properly configured (please read `./build-samples.sh help`).
+2. `chromium` or `google-chrome`
+
+#### Examples:
+
+    `./build-samples.sh verify ngx-default --colorizelogfile`: build and test only ngx-default.
+    `./build-samples.sh verify ngx-default,react-default --colorizelogfile`: generate and test ngx-default and react-default.
+    `./build-samples.sh verify --colorizelogfile`: generate and test all samples listed in `./build-sample.sh help`.
+    `./build-samples.sh start ngx-default`: start application generated. Open a Web browser at http://localhost:8080.
+
+#### Note:
+For `yarn e2e`, you could shift the Web Browser controlled by the automated test software to a secondary [virtual desktop](https://en.wikipedia.org/wiki/Virtual_desktop). Otherwise the focus is permanently to the Web Browser.
 
 ## <a name="rules"></a> Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
