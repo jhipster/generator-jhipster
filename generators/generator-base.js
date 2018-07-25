@@ -203,7 +203,7 @@ module.exports = class extends PrivateBase {
                     needle: 'jhipster-needle-add-entity-to-menu',
                     splicable: [
                         this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
-                        |      <FontAwesomeIcon icon="asterisk" />&nbsp; ${_.startCase(routerName)}
+                        |      <FontAwesomeIcon icon="asterisk" />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
                         |    </DropdownItem>`)
                     ]
                 }, this);
@@ -1103,6 +1103,38 @@ module.exports = class extends PrivateBase {
             }, this);
         } catch (e) {
             this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`);
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Add a distributionManagement to the Maven build.
+     *
+     * @param {string} id - id of the repository
+     * @param {string} url - url of the repository
+     */
+    addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
+        const fullPath = 'pom.xml';
+        try {
+            const repository = `${'<distributionManagement>\n'
+                + '        <snapshotRepository>\n'
+                + '            <id>'}${snapshotsId}</id>\n`
+                + `            <url>${snapshotsUrl}</url>\n`
+                + '        </snapshotRepository>\n'
+                + '        <repository>\n'
+                + `            <id>${releasesId}</id>\n`
+                + `            <url>${releasesUrl}</url>\n`
+                + '        </repository>\n'
+                + '    </distributionManagement>';
+            jhipsterUtils.rewriteFile({
+                file: fullPath,
+                needle: 'jhipster-needle-distribution-management',
+                splicable: [
+                    repository
+                ]
+            }, this);
+        } catch (e) {
+            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven repository ${chalk.yellow(' not added.\n')}`);
             this.debug('Error:', e);
         }
     }
@@ -2149,13 +2181,13 @@ module.exports = class extends PrivateBase {
             name: 'baseName',
             validate: (input) => {
                 if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
-                    return 'Your application name cannot contain special characters or a blank space';
+                    return 'Your base name cannot contain special characters or a blank space';
                 }
-                if (generator.applicationType === 'microservice' && /_/.test(input)) {
-                    return 'Your microservice name cannot contain underscores as this does not meet the URI spec';
+                if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
+                    return 'Your base name cannot contain underscores as this does not meet the URI spec';
                 }
                 if (input === 'application') {
-                    return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
+                    return 'Your base name cannot be named \'application\' as this is a reserved name for Spring Boot';
                 }
                 return true;
             },
@@ -2455,7 +2487,12 @@ module.exports = class extends PrivateBase {
     getAllJhipsterConfig(generator = this, force) {
         let configuration = generator.config.getAll() || {};
         if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
-            configuration = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }))['generator-jhipster'];
+            const yoRc = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
+            configuration = yoRc['generator-jhipster'];
+            // merge the blueprint config if available
+            if (configuration.blueprint) {
+                configuration = Object.assign(configuration, yoRc[configuration.blueprint]);
+            }
         }
         if (!configuration.get || typeof configuration.get !== 'function') {
             Object.assign(configuration, {

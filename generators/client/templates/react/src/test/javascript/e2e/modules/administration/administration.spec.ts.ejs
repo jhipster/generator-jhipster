@@ -20,9 +20,7 @@
 import { element, by, browser } from 'protractor';
 
 import NavBarPage from '../../page-objects/navbar-page';
-<%_ if (authenticationType !== 'oauth2') { _%>
 import { waitUntilDisplayed } from '../../util/utils';
-<%_ } _%>
 
 const expect = chai.expect;
 
@@ -49,6 +47,7 @@ describe('Administration', () => {
 
   it('should load metrics', async () => {
     navBarPage.clickOnAdminMenuItem('metrics');
+    waitUntilDisplayed(element(by.className('metrics-page-heading')));
     expect(await element(by.className('metrics-page-heading')).getText()).to.eq('Application Metrics');
   });
 

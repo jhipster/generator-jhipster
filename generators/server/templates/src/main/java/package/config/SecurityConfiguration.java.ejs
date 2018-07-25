@@ -176,7 +176,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/app/**/*.{js,html}")
             .antMatchers("/i18n/**")
             .antMatchers("/content/**")
-            .antMatchers("/swagger-ui/index.html")
             .antMatchers("/test/**")<% if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { %>;<% } else { %>
             .antMatchers("/h2-console/**");<% } %>
     }<% if (authenticationType === 'session' || authenticationType === 'jwt' || authenticationType === 'oauth2') { %>

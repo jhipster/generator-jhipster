@@ -35,6 +35,9 @@ import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.service.dto.UserDTO;
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%= packageName %>.security.AuthoritiesConstants;
+<%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import <%= packageName %>.service.util.RandomUtil;
 <%_ } _%>
@@ -57,7 +60,16 @@ import org.springframework.data.auditing.DateTimeProvider;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-<%_ } _%><%_ if (databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.OAuth2Request;
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.security.test.context.support.WithAnonymousUser;
 <%_ } _%>
 import org.springframework.test.context.junit4.SpringRunner;
@@ -79,6 +91,14 @@ import java.util.Optional;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import java.util.List;
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+<%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.util.Optional;
 <%_ } _%><%_ if (databaseType === 'cassandra') { _%>
@@ -89,6 +109,7 @@ import java.util.UUID;
 import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -338,6 +359,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
+
     <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 
     @Test
@@ -369,4 +391,51 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     }
     <%_ } _%>
 
+    <%_ if (authenticationType === 'oauth2') { _%>
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void assertThatUserLocaleIsCorrectlySetFromAuthenticationDetails() {
+        user.setId(Constants.ANONYMOUS_USER);
+        user.setLogin(Constants.ANONYMOUS_USER);
+        if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
+            userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        }
+
+        Map<String, Object> userDetails = new HashMap<String, Object>();
+        userDetails.put("preferred_username", user.getLogin());
+    	userDetails.put("given_name", user.getFirstName());
+    	userDetails.put("family_name", user.getLastName());
+    	userDetails.put("email", user.getEmail());
+    	userDetails.put("picture", user.getImageUrl());
+    	userDetails.put("locale", "en_US");
+
+    	OAuth2Authentication authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
+
+    	UserDTO userDTO = userService.getUserFromAuthentication(authentication);
+
+    	assertEquals("User langkey is not corretly set.", userDTO.getLangKey(), "en");
+
+    	userDetails.put("locale", "it-IT");
+    	authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
+
+    	userDTO = userService.getUserFromAuthentication(authentication);
+
+    	assertEquals("User langkey is not corretly set.", userDTO.getLangKey(), "it");
+    }
+
+    private OAuth2Authentication createMockOAuth2AuthenticationWithDetails(Map<String, Object> userDetails) {
+    	Set<String> scopes = new HashSet<String>();
+
+    	Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(Constants.ANONYMOUS_USER, Constants.ANONYMOUS_USER, authorities);
+        usernamePasswordAuthenticationToken.setDetails(userDetails);
+
+    	OAuth2Request authRequest = new OAuth2Request(null, "testClient", null, true, scopes, null, null, null, null);
+
+    	return new OAuth2Authentication(authRequest, ((Authentication)usernamePasswordAuthenticationToken));
+    }
+    <%_ } _%>
 }

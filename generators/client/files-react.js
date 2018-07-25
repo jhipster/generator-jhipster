@@ -479,12 +479,8 @@ module.exports = {
     files
 };
 
-function writeFiles(calledByBlueprint) {
+function writeFiles() {
     mkdirp(MAIN_SRC_DIR);
     // write React files
-    if (calledByBlueprint) {
-        this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/react'));
-    } else {
-        this.writeFilesToDisk(files, this, false, 'react');
-    }
+    this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/react'));
 }

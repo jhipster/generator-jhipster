@@ -11,7 +11,8 @@ module.exports = {
     '\\.(css|scss)$': 'identity-obj-proxy'
   },
   reporters: [
-    'default'
+    'default',
+    [ 'jest-junit', { output: './<%= BUILD_DIR %>test-results/jest/TESTS-results.xml' } ]
   ],
   testResultsProcessor: 'jest-sonar-reporter',
   testPathIgnorePatterns: [

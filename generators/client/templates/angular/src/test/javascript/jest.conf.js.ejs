@@ -12,7 +12,8 @@ module.exports = {
         'app/(.*)': '<rootDir>/src/main/webapp/app/$1'
     },
     reporters: [
-        'default'
+        'default',
+        [ 'jest-junit', { output: './<%= BUILD_DIR %>test-results/jest/TESTS-results.xml' } ]
     ],
     testResultsProcessor: 'jest-sonar-reporter',
     transformIgnorePatterns: ['node_modules/(?!@angular/common/locales)'],

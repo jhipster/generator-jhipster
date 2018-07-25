@@ -105,7 +105,8 @@ module.exports = (options) => ({
         <%_ } _%>
         new HtmlWebpackPlugin({
             template: './<%= MAIN_SRC_DIR %>index.html',
-            chunksSortMode: 'dependency',
+            chunks: ['vendors', 'polyfills', 'global', 'main'],
+            chunksSortMode: 'manual',
             inject: 'body'
         })
     ]
