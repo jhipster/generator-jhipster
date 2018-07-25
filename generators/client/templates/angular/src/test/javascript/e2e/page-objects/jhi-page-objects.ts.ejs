@@ -61,43 +61,43 @@ export class NavBarPage {
         await element(by.css('[routerLink="admin/' + entityName + '"]')).click();
     }
 
-    getSignInPage() {
-        this.clickOnAccountMenu();
-        this.clickOnSignIn();
+    async getSignInPage() {
+        await this.clickOnAccountMenu();
+        await this.clickOnSignIn();
         return new SignInPage();
     }
     <%_ if (authenticationType !== 'oauth2') { _%>
-    getPasswordPage() {
-        this.clickOnAccountMenu();
-        this.clickOnPasswordMenu();
+    async getPasswordPage() {
+        await this.clickOnAccountMenu();
+        await this.clickOnPasswordMenu();
         return new PasswordPage();
     }
 
-    getSettingsPage() {
-        this.clickOnAccountMenu();
-        this.clickOnSettingsMenu();
+    async getSettingsPage() {
+        await this.clickOnAccountMenu();
+        await this.clickOnSettingsMenu();
         return new SettingsPage();
     }
     <%_ } _%>
 
-    goToEntity(entityName: string) {
-        this.clickOnEntityMenu();
-        return this.clickOnEntity(entityName);
+    async goToEntity(entityName: string) {
+        await this.clickOnEntityMenu();
+        await this.clickOnEntity(entityName);
     }
 
-    goToSignInPage() {
-        this.clickOnAccountMenu();
-        this.clickOnSignIn();
+    async goToSignInPage() {
+        await this.clickOnAccountMenu();
+        await this.clickOnSignIn();
     }
 
-    goToPasswordMenu() {
-        this.clickOnAccountMenu();
-        this.clickOnPasswordMenu();
+    async goToPasswordMenu() {
+        await this.clickOnAccountMenu();
+        await this.clickOnPasswordMenu();
     }
 
-    autoSignOut() {
-        this.clickOnAccountMenu();
-        this.clickOnSignOut();
+    async autoSignOut() {
+        await this.clickOnAccountMenu();
+        await this.clickOnSignOut();
     }
 }
 
@@ -112,35 +112,35 @@ export class SignInPage {
     loginButton = element(by.css('input[type=submit]'));
     <%_ } _%>
 
-    setUserName(username) {
-        this.username.sendKeys(username);
+    async setUserName(username) {
+        await this.username.sendKeys(username);
     }
 
     getUserName() {
         return this.username.getAttribute('value');
     }
 
-    clearUserName() {
-        this.username.clear();
+    async clearUserName() {
+        await this.username.clear();
     }
 
-    setPassword(password) {
-        this.password.sendKeys(password);
+    async setPassword(password) {
+        await this.password.sendKeys(password);
     }
 
     getPassword() {
         return this.password.getAttribute('value');
     }
 
-    clearPassword() {
-        this.password.clear();
+    async clearPassword() {
+        await this.password.clear();
     }
     <%_ if (authenticationType !== 'oauth2') { _%>
 
-    autoSignInUsing(username: string, password: string) {
-        this.setUserName(username);
-        this.setPassword(password);
-        return this.login();
+    async autoSignInUsing(username: string, password: string) {
+        await this.setUserName(username);
+        await this.setPassword(password);
+        await this.login();
     }
     <%_ } else { _%>
 
@@ -159,8 +159,8 @@ export class SignInPage {
     }
     <%_ } _%>
 
-    login() {
-        return this.loginButton.click();
+    async login() {
+        await this.loginButton.click();
     }
 }
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -171,40 +171,40 @@ export class PasswordPage {
     saveButton = element(by.css('button[type=submit]'));
     title = element.all(by.css('h2')).first();
 
-    setCurrentPassword(password) {
-        this.currentPassword.sendKeys(password);
+    async setCurrentPassword(password) {
+        await this.currentPassword.sendKeys(password);
     }
 
-    setPassword(password) {
-        this.password.sendKeys(password);
+    async setPassword(password) {
+        await this.password.sendKeys(password);
     }
 
     getPassword() {
         return this.password.getAttribute('value');
     }
 
-    clearPassword() {
-        this.password.clear();
+    async clearPassword() {
+        await this.password.clear();
     }
 
-    setConfirmPassword(confirmPassword) {
-        this.confirmPassword.sendKeys(confirmPassword);
+    async setConfirmPassword(confirmPassword) {
+        await this.confirmPassword.sendKeys(confirmPassword);
     }
 
     getConfirmPassword() {
         return this.confirmPassword.getAttribute('value');
     }
 
-    clearConfirmPassword() {
-        this.confirmPassword.clear();
+    async clearConfirmPassword() {
+        await this.confirmPassword.clear();
     }
 
     getTitle() {
         return this.title.<%- elementGetter %>;
     }
 
-    save() {
-        return this.saveButton.click();
+    async save() {
+        await this.saveButton.click();
     }
 }
 
@@ -215,48 +215,48 @@ export class SettingsPage {
     saveButton = element(by.css('button[type=submit]'));
     title = element.all(by.css('h2')).first();
 
-    setFirstName(firstName) {
-        this.firstName.sendKeys(firstName);
+    async setFirstName(firstName) {
+        await this.firstName.sendKeys(firstName);
     }
 
     getFirstName() {
         return this.firstName.getAttribute('value');
     }
 
-    clearFirstName() {
-        this.firstName.clear();
+    async clearFirstName() {
+        await this.firstName.clear();
     }
 
-    setLastName(lastName) {
-        this.lastName.sendKeys(lastName);
+    async setLastName(lastName) {
+        await this.lastName.sendKeys(lastName);
     }
 
     getLastName() {
         return this.lastName.getAttribute('value');
     }
 
-    clearLastName() {
-        this.lastName.clear();
+    async clearLastName() {
+        await this.lastName.clear();
     }
 
-    setEmail(email) {
-        this.email.sendKeys(email);
+    async setEmail(email) {
+        await this.email.sendKeys(email);
     }
 
     getEmail() {
         return this.email.getAttribute('value');
     }
 
-    clearEmail() {
-        this.email.clear();
+    async clearEmail() {
+        await this.email.clear();
     }
 
     getTitle() {
         return this.title.<%- elementGetter %>;
     }
 
-    save() {
-        return this.saveButton.click();
+    async save() {
+        await this.saveButton.click();
     }
 }
 <%_ } _%>
