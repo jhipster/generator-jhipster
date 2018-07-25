@@ -21,44 +21,44 @@ export class NavBarPage {
         }
     }
 
-    clickOnEntityMenu() {
-        return this.entityMenu.click();
+    async clickOnEntityMenu() {
+        await this.entityMenu.click();
     }
 
-    clickOnAccountMenu() {
-        return this.accountMenu.click();
+    async clickOnAccountMenu() {
+        await this.accountMenu.click();
     }
 
-    clickOnAdminMenu() {
-        return this.adminMenu.click();
+    async clickOnAdminMenu() {
+        await this.adminMenu.click();
     }
 
-    clickOnSignIn() {
-        return this.signIn.click();
+    async clickOnSignIn() {
+        await this.signIn.click();
     }
 
-    clickOnRegister() {
-        return this.signIn.click();
+    async clickOnRegister() {
+        await this.signIn.click();
     }
 
-    clickOnSignOut() {
-        return this.signOut.click();
+    async clickOnSignOut() {
+        await this.signOut.click();
     }
 
-    clickOnPasswordMenu() {
-        return this.passwordMenu.click();
+    async clickOnPasswordMenu() {
+        await this.passwordMenu.click();
     }
 
-    clickOnSettingsMenu() {
-        return this.settingsMenu.click();
+    async clickOnSettingsMenu() {
+        await this.settingsMenu.click();
     }
 
-    clickOnEntity(entityName: string) {
-        return element(by.css('[routerLink="' + entityName + '"]')).click();
+    async clickOnEntity(entityName: string) {
+        await element(by.css('[routerLink="' + entityName + '"]')).click();
     }
 
-    clickOnAdmin(entityName: string) {
-        return element(by.css('[routerLink="admin/' + entityName + '"]')).click();
+    async clickOnAdmin(entityName: string) {
+        await element(by.css('[routerLink="admin/' + entityName + '"]')).click();
     }
 
     getSignInPage() {

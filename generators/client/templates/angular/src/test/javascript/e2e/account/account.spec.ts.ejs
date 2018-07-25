@@ -34,8 +34,8 @@ describe('account', () => {
     let settingsPage: SettingsPage;
     <%_ } _%>
 
-    beforeAll(() => {
-        browser.get('/');
+    beforeAll(async () => {
+        await browser.get('/');
         navBarPage = new NavBarPage(true);
     });
 
@@ -96,8 +96,8 @@ describe('account', () => {
         const expect2 = /You are logged in as user "admin"/;
         <%_ } _%>
         <%_ if (authenticationType !== 'oauth2') { _%>
-        const value2 = await element.all(by.css('.alert-success span')).first().<%- elementGetter %>;
-        expect(value2).toMatch(expect2);
+        const value2 = element.all(by.css('.alert-success span')).first();
+        expect(await value2.<%- elementGetter %>).toMatch(expect2);
         <%_ } else { _%>
         const success = element.all(by.css('.alert-success span')).first();
         await browser.wait(ec.visibilityOf(success), 5000);
