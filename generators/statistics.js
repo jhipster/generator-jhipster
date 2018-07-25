@@ -80,7 +80,7 @@ class Statistics {
 
     configProxy() {
         this.axiosClient = axios.create({
-            baseURL: this.statisticsAPI
+            baseURL: this.statisticsAPIPath
         });
 
         const npmHttpsProxy = process.env.npm_config_https_proxy || process.env.npm_config_proxy;
@@ -167,11 +167,11 @@ class Statistics {
      */
     sendInsightSubGenEvents(prefix, eventObject) {
         if (typeof eventObject === 'object') {
-            Object.keyset(eventObject).forEach((key) => {
+            Object.keys(eventObject).forEach((key) => {
                 if (typeof eventObject[key] === 'object') {
                     this.sendInsightSubGenEvents(`${prefix}/${key}`, eventObject[key]);
-                } else {
-                    this.insight.track(prefix, eventObject);
+                } else if (eventObject[key]) {
+                    this.insight.track(`${prefix}/${key}`, eventObject[key]);
                 }
             });
         } else {
