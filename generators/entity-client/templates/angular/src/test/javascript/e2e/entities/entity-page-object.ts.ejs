@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { element, by, promise, ElementFinder } from 'protractor';
+import { element, by, ElementFinder } from 'protractor';
 
 <%_
 let elementGetter = `getText()`;
@@ -36,12 +36,12 @@ export class <%= entityClass %>ComponentsPage {
     createButton = element(by.id('jh-create-entity'));
     title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
 
-    clickOnCreateButton(): promise.Promise<void> {
-        return this.createButton.click();
+    async clickOnCreateButton() {
+        await this.createButton.click();
     }
 
-    getTitle(): any {
-        return this.title.<%- elementGetter %>;
+    async getTitle() {
+        await this.title.<%- elementGetter %>;
     }
 }
 
@@ -75,8 +75,8 @@ export class <%= entityClass %>UpdatePage {
     <%_ } _%>
     <%_ }); _%>
 
-    getPageTitle() {
-        return this.pageTitle.<%- elementGetter %>;
+    async getPageTitle() {
+        await this.pageTitle.<%- elementGetter %>;
     }
 
     <%_ fields.forEach((field) => {
@@ -94,33 +94,34 @@ export class <%= entityClass %>UpdatePage {
         return this.<%= fieldName %>Input;
     }
             <%_ } else if (fieldIsEnum) { _%>
-    set<%= fieldNameCapitalized %>Select(<%= fieldName %>): promise.Promise<void> {
-        return this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
+    async set<%= fieldNameCapitalized %>Select(<%= fieldName %>) {
+        await this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Select() {
-        return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
+    async get<%= fieldNameCapitalized %>Select() {
+        await this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
     }
 
-    <%=fieldName %>SelectLastOption(): promise.Promise<void> {
-        return this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
+    async <%=fieldName %>SelectLastOption() {
+        await this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
     }
+
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    set<%= fieldNameCapitalized %>Input(<%= fieldName %>): promise.Promise<void> {
-        return this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
+        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Input() {
-        return this.<%= fieldName %>Input.getAttribute('value');
+    async get<%= fieldNameCapitalized %>Input() {
+        await this.<%= fieldName %>Input.getAttribute('value');
     }
 
     <%_ } else { _%>
-    set<%= fieldNameCapitalized %>Input(<%= fieldName %>): promise.Promise<void> {
-        return this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
+        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Input() {
-        return this.<%= fieldName %>Input.getAttribute('value');
+    async get<%= fieldNameCapitalized %>Input() {
+        await this.<%= fieldName %>Input.getAttribute('value');
     }
 
     <%_ } _%>
@@ -131,31 +132,32 @@ export class <%= entityClass %>UpdatePage {
         const relationshipName = relationship.relationshipName;
         const relationshipFieldName = relationship.relationshipFieldName;
         const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
+
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    <%=relationshipName %>SelectLastOption(): promise.Promise<void> {
-        return this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
+    async <%=relationshipName %>SelectLastOption() {
+        await this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
     }
 
-    <%=relationshipName %>SelectOption(option): promise.Promise<void> {
-        return this.<%=relationshipName %>Select.sendKeys(option);
+    async <%=relationshipName %>SelectOption(option) {
+        await this.<%=relationshipName %>Select.sendKeys(option);
     }
 
     get<%=relationshipNameCapitalized %>Select(): ElementFinder {
         return this.<%=relationshipName %>Select;
     }
 
-    get<%=relationshipNameCapitalized %>SelectedOption() {
-        return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
+    async get<%=relationshipNameCapitalized %>SelectedOption() {
+        await this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
     }
 
     <%_ } _%>
     <%_ }); _%>
-    save(): promise.Promise<void> {
-        return this.saveButton.click();
+    async save() {
+        await this.saveButton.click();
     }
 
-    cancel(): promise.Promise<void> {
-        return this.cancelButton.click();
+    async cancel() {
+        await this.cancelButton.click();
     }
 
     getSaveButton(): ElementFinder {

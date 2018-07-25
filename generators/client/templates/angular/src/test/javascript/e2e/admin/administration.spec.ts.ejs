@@ -18,7 +18,7 @@
 -%>
 import { browser, element, by } from 'protractor';
 
-import { NavBarPage } from '../page-objects/jhi-page-objects';
+import { NavBarPage, SignInPage } from '../page-objects/jhi-page-objects';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
@@ -28,12 +28,14 @@ if (enableTranslation) {
 describe('administration', () => {
 
     let navBarPage: NavBarPage;
+    let signInPage: SignInPage;
 
     beforeAll(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage(true);
         <%_ if (authenticationType !== 'oauth2') { _%>
-        navBarPage.getSignInPage().autoSignInUsing('admin', 'admin');
+        signInPage = await navBarPage.getSignInPage();
+        await signInPage.autoSignInUsing('admin', 'admin');
         <%_ } else { _%>
         navBarPage.getSignInPage().loginWithOAuth('admin', 'admin');
         <%_ } _%>
