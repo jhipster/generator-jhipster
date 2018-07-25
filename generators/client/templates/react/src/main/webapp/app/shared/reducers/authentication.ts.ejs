@@ -148,10 +148,11 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     payload: axios.post('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
   });
  <%_ if (enableTranslation) { _%>
-  const accountResult = await dispatch(getSession());
+  await dispatch(getSession());
 
-  if (accountResult && accountResult.value && accountResult.value.status === 200) {
-    dispatch(setLocale(accountResult.value.data.langKey));
+  const account = getState().authentication.account;
+  if (account && account.langKey) {
+    dispatch(setLocale(account.langKey));
   }
   <%_ } else { _%>
   dispatch(getSession());
@@ -173,10 +174,11 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     }
   }
  <%_ if (enableTranslation) { _%>
-  const accountResult = await dispatch(getSession());
+  await dispatch(getSession());
 
-  if (accountResult && accountResult.value && accountResult.value.status === 200) {
-    dispatch(setLocale(accountResult.value.data.langKey));
+  const account = getState().authentication.account;
+  if (account && account.langKey) {
+    dispatch(setLocale(account.langKey));
   }
   <%_ } else { _%>
   dispatch(getSession());
@@ -189,10 +191,11 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     payload: axios.post('auth/login', { username, password })
   });
  <%_ if (enableTranslation) { _%>
-  const accountResult = await dispatch(getSession());
+  await dispatch(getSession());
 
-  if (accountResult && accountResult.value && accountResult.value.status === 200) {
-    dispatch(setLocale(accountResult.value.data.langKey));
+  const account = getState().authentication.account;
+  if (account && account.langKey) {
+    dispatch(setLocale(account.langKey));
   }
   <%_ } else { _%>
   dispatch(getSession());
