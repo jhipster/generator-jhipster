@@ -47,7 +47,7 @@ export default (state: LocaleState = initialState, action): LocaleState => {
 };
 
 export const setLocale = locale => async dispatch => {
-  if (Object.keys(TranslatorContext.context.translations).indexOf(locale) === -1) {
+  if (!Object.keys(TranslatorContext.context.translations).includes(locale)) {
     const response = await axios.get(`i18n/${locale}.json?buildTimestamp=${process.env.BUILD_TIMESTAMP}`);
     TranslatorContext.registerTranslations(locale, response.data);
   }
