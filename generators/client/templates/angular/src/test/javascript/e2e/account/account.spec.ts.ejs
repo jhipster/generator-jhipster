@@ -96,7 +96,7 @@ describe('account', () => {
         const expect2 = /You are logged in as user "admin"/;
         <%_ } _%>
         <%_ if (authenticationType !== 'oauth2') { _%>
-        const value2 = element.all(by.css('.alert-success span')).first();
+        const value2 = element(by.id('home-logged-message'));
         expect(await value2.<%- elementGetter %>).toMatch(expect2);
         <%_ } else { _%>
         const success = element.all(by.css('.alert-success span')).first();
@@ -106,6 +106,7 @@ describe('account', () => {
         await navBarPage.autoSignOut();
         <%_ } _%>
     });
+    
 <%_ if (authenticationType !== 'oauth2') { _%>
     it('should be able to update settings', async () => {
         settingsPage = await navBarPage.getSettingsPage();
