@@ -41,7 +41,7 @@ export class <%= entityClass %>ComponentsPage {
     }
 
     async getTitle() {
-        await this.title.<%- elementGetter %>;
+        return this.title.<%- elementGetter %>;
     }
 }
 
@@ -76,7 +76,7 @@ export class <%= entityClass %>UpdatePage {
     <%_ }); _%>
 
     async getPageTitle() {
-        await this.pageTitle.<%- elementGetter %>;
+        return this.pageTitle.<%- elementGetter %>;
     }
 
     <%_ fields.forEach((field) => {
@@ -99,7 +99,7 @@ export class <%= entityClass %>UpdatePage {
     }
 
     async get<%= fieldNameCapitalized %>Select() {
-        await this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
+        return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
     }
 
     async <%=fieldName %>SelectLastOption() {
@@ -112,7 +112,7 @@ export class <%= entityClass %>UpdatePage {
     }
 
     async get<%= fieldNameCapitalized %>Input() {
-        await this.<%= fieldName %>Input.getAttribute('value');
+        return this.<%= fieldName %>Input.getAttribute('value');
     }
 
     <%_ } else { _%>
@@ -121,7 +121,7 @@ export class <%= entityClass %>UpdatePage {
     }
 
     async get<%= fieldNameCapitalized %>Input() {
-        await this.<%= fieldName %>Input.getAttribute('value');
+        return this.<%= fieldName %>Input.getAttribute('value');
     }
 
     <%_ } _%>
@@ -147,7 +147,7 @@ export class <%= entityClass %>UpdatePage {
     }
 
     async get<%=relationshipNameCapitalized %>SelectedOption() {
-        await this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
+        return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
     }
 
     <%_ } _%>

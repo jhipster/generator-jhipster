@@ -116,7 +116,7 @@ export class SignInPage {
         await this.username.sendKeys(username);
     }
 
-    getUserName() {
+    async getUserName() {
         return this.username.getAttribute('value');
     }
 
@@ -128,7 +128,7 @@ export class SignInPage {
         await this.password.sendKeys(password);
     }
 
-    getPassword() {
+    async getPassword() {
         return this.password.getAttribute('value');
     }
 
@@ -179,7 +179,7 @@ export class PasswordPage {
         await this.password.sendKeys(password);
     }
 
-    getPassword() {
+    async getPassword() {
         return this.password.getAttribute('value');
     }
 
@@ -191,7 +191,7 @@ export class PasswordPage {
         await this.confirmPassword.sendKeys(confirmPassword);
     }
 
-    getConfirmPassword() {
+    async getConfirmPassword() {
         return this.confirmPassword.getAttribute('value');
     }
 
@@ -199,7 +199,7 @@ export class PasswordPage {
         await this.confirmPassword.clear();
     }
 
-    getTitle() {
+    async getTitle() {
         return this.title.<%- elementGetter %>;
     }
 
@@ -219,7 +219,7 @@ export class SettingsPage {
         await this.firstName.sendKeys(firstName);
     }
 
-    getFirstName() {
+    async getFirstName() {
         return this.firstName.getAttribute('value');
     }
 
@@ -231,7 +231,7 @@ export class SettingsPage {
         await this.lastName.sendKeys(lastName);
     }
 
-    getLastName() {
+    async getLastName() {
         return this.lastName.getAttribute('value');
     }
 
@@ -243,7 +243,7 @@ export class SettingsPage {
         await this.email.sendKeys(email);
     }
 
-    getEmail() {
+    async getEmail() {
         return this.email.getAttribute('value');
     }
 
@@ -251,7 +251,7 @@ export class SettingsPage {
         await this.email.clear();
     }
 
-    getTitle() {
+    async getTitle() {
         return this.title.<%- elementGetter %>;
     }
 
