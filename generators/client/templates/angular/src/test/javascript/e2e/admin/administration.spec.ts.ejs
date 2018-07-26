@@ -53,7 +53,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Users/;
         <%_ } _%>
-        const value1 = await element(by.className('userManagement-page-heading')).<%- elementGetter %>;
+        const value1 = await element(by.id('user-management-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
     <%_ } _%>
@@ -65,7 +65,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Application Metrics/;
         <%_ } _%>
-        const value1 = await element(by.className('metrics-page-heading')).<%- elementGetter %>;
+        const value1 = await element(by.id('metrics-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
 
@@ -76,7 +76,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Health Checks/;
         <%_ } _%>
-        const value1 = await element(by.className('health-page-heading')).<%- elementGetter %>;
+        const value1 = await element(by.id('health-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
 
@@ -87,7 +87,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Configuration/;
         <%_ } _%>
-        const value1 = await element(by.className('configuration-page-heading')).<%- elementGetter %>;
+        const value1 = await element(by.id('configuration-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
 
@@ -99,7 +99,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Audits/;
         <%_ } _%>
-        const value1 = await element(by.className('audits-page-heading')).<%- elementGetter %>;
+        const value1 = await element(by.id('audits-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
 
@@ -111,7 +111,7 @@ describe('administration', () => {
         <%_ } else { _%>
         const expect1 = /Logs/;
         <%_ } _%>
-        const value1 = await element(by.className('logs-page-heading')).<%- elementGetter %>;
+        const value1 = await element(by.id('logs-page-heading')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
     });
 

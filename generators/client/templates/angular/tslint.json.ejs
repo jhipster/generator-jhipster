@@ -117,7 +117,13 @@
         "import-spacing": true,
         "no-consecutive-blank-lines": [true],
         "object-literal-shorthand": true,
-        "space-before-function-paren": [true, "never"],
+        "space-before-function-paren": [true, {
+            "asyncArrow": "always",
+            "anonymous": "never",
+            "constructor": "never",
+            "method": "never",
+            "named": "never"
+        }],
 
         "directive-selector": [true, "attribute", "<%=jhiPrefix%>", "camelCase"],
         "component-selector": [true, "element", "<%= jhiPrefixDashed %>", "kebab-case"],
