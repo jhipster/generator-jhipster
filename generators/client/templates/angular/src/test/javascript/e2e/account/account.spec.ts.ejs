@@ -59,8 +59,8 @@ describe('account', () => {
         const value2 = await element(by.css('.alert-danger')).<%- elementGetter %>;
         expect(value2).toMatch(expect2);
     <%_ } else { _%>
-        signInPage = navBarPage.getSignInPage();
-        signInPage.loginWithOAuth('admin', 'foo');
+        signInPage = await navBarPage.getSignInPage();
+        await signInPage.loginWithOAuth('admin', 'foo');
 
         // Keycloak
         const alert = element(by.css('.alert-error'));
@@ -103,7 +103,7 @@ describe('account', () => {
         await browser.wait(ec.visibilityOf(success), 5000);
         expect(await success.<%- elementGetter %>).toMatch(expect2);
 
-        navBarPage.autoSignOut();
+        await navBarPage.autoSignOut();
         <%_ } _%>
     });
 <%_ if (authenticationType !== 'oauth2') { _%>
