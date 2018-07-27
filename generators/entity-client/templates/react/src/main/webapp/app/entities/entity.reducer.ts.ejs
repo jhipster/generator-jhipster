@@ -20,9 +20,6 @@
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
-<%_ if (pagination === 'infinite-scroll') { _%>
-import isEqual from 'lodash/isEqual';
-<%_ } _%>
 import axios from 'axios';
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
