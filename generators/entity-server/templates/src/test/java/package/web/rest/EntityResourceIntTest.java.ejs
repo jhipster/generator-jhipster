@@ -270,11 +270,11 @@ _%>
     <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
 
     <%_ if (databaseType !== 'cassandra') { _%>
-    private static final byte[] <%=defaultValueName %> = TestUtil.createByteArray(<%= defaultValue %>, "0");
-    private static final byte[] <%=updatedValueName %> = TestUtil.createByteArray(<%= updatedValue %>, "1");
+    private static final byte[] <%=defaultValueName %> = TestUtil.createByteArray(1, "0");
+    private static final byte[] <%=updatedValueName %> = TestUtil.createByteArray(1, "1");
     <%_ } else { _%>
-    private static final ByteBuffer <%=defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(<%= defaultValue %>, "0"));
-    private static final ByteBuffer <%=updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(<%= updatedValue %>, "1"));
+    private static final ByteBuffer <%=defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "0"));
+    private static final ByteBuffer <%=updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "1"));
     <%_ } _%>
     private static final String <%=defaultValueName %>_CONTENT_TYPE = "image/jpg";
     private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";
@@ -292,22 +292,29 @@ _%>
     private UserRepository userRepository;
     <%_ } _%>
     <%_ if (reactiveRepositories && service === 'no') { _%>
+
     @Autowired
     private <%= entityClass %>ReactiveRepository <%= entityInstance %>ReactiveRepository;
-
     <%_ } _%>
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+
     @Mock
-    private <%= entityClass %>Repository <%= entityInstance %>RepositoryMock;<%_ } _%><% if (dto === 'mapstruct') { %>
+    private <%= entityClass %>Repository <%= entityInstance %>RepositoryMock;
+    <%_ } _%>
+    <%_ if (dto === 'mapstruct') { _%>
 
     @Autowired
-    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } if (service !== 'no') { %>
+    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
+    <%_ } if (service !== 'no') { _%>
     <% if (fieldsContainOwnerManyToMany === true) { %>
+
     @Mock
-    private <%= entityClass %>Service <%= entityInstance %>ServiceMock;<% } %>
+    private <%= entityClass %>Service <%= entityInstance %>ServiceMock;
+    <%_ } _%>
 
     @Autowired
-    private <%= entityClass %>Service <%= entityInstance %>Service;<% } if (searchEngine === 'elasticsearch') { %>
+    private <%= entityClass %>Service <%= entityInstance %>Service;
+    <%_ } if (searchEngine === 'elasticsearch') { _%>
 
     /**
      * This repository is mocked in the <%=packageName%>.repository.search test package.
@@ -315,7 +322,8 @@ _%>
      * @see <%= packageName %>.repository.search.<%=entityClass%>SearchRepositoryMockConfiguration
      */
     @Autowired
-    private <%= entityClass %>SearchRepository mock<%= entityClass %>SearchRepository;<% } %>
+    private <%= entityClass %>SearchRepository mock<%= entityClass %>SearchRepository;
+    <%_ } _%>
     <%_ if (jpaMetamodelFiltering) { _%>
 
     @Autowired
@@ -567,7 +575,8 @@ _%>
         <%_ } else { _%>
             verify(<%= entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(any());
         <%_ } _%>
-    }<% } %>
+    }
+    <%_ } _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
@@ -771,8 +780,8 @@ _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ }} _%>
     }
-
     <%_  } _%>
+
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void getNonExisting<%= entityClass %>() throws Exception {
@@ -854,7 +863,7 @@ _%>
         // Create the <%= entityClass %><% if (dto === 'mapstruct') { %>
         <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);<% } %>
 
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException 
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)))

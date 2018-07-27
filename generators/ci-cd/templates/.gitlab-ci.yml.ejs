@@ -89,7 +89,7 @@ maven-build:
         - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ if (!skipClient) { _%>
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments=test -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='test<%= frontTests%>' -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } _%>
         <%_ if (cicdIntegrations.includes('sonar')) { _%>
         - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME

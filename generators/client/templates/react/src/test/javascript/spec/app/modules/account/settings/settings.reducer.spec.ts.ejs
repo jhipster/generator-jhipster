@@ -75,7 +75,7 @@ describe('Settings reducer tests', () => {
         updateFailure: false
       };
       expect(
-        account({ data: { id: 1}}, {
+        account({ ...initialState, loading: true }, {
           type: ACTION_TYPES.RESET
         })
         ).toEqual({

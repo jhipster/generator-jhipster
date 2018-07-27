@@ -21,7 +21,7 @@ import org.gradle.internal.os.OperatingSystem
 buildscript {
     repositories {
         mavenLocal()
-        jcenter()
+        mavenCentral()
         maven { url "http://repo.spring.io/plugins-release" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
@@ -44,6 +44,9 @@ plugins {
     id "io.spring.dependency-management" version "1.0.5.RELEASE"
     <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
+    <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    id 'org.liquibase.gradle' version '2.0.0'
     <%_ } _%>
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
@@ -153,10 +156,7 @@ task cucumberTestReport(type: TestReport) {
 <%_ } _%>
 apply from: 'gradle/docker.gradle'
 apply from: 'gradle/sonar.gradle'
-<%_ if (databaseType === 'sql') { _%>
-apply from: 'gradle/liquibase.gradle'
-<%_ } _%>
-<%_ if (enableSwaggerCodegen) { _%>
+<%_ if (enableSwaggerCodegen) { _%>hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServerDialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
 apply from: 'gradle/swagger.gradle'
 <%_ } _%>
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
@@ -167,17 +167,49 @@ if (project.hasProperty('prod')) {
     apply from: 'gradle/profile_dev.gradle'
 }
 
-if (project.hasProperty('graphite')) {
-    apply from: 'gradle/graphite.gradle'
-}
-
-if (project.hasProperty('prometheus')) {
-    apply from: 'gradle/prometheus.gradle'
-}
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
 
 if (project.hasProperty('zipkin')) {
     apply from: 'gradle/zipkin.gradle'
+}
+<%_ } _%>
+
+<%_ if (databaseType === 'sql') { _%>
+if (!project.hasProperty('runList')) {
+    project.ext.runList = 'main'
+}
+
+project.ext.diffChangelogFile = '<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/' + new Date().format('yyyyMMddHHmmss') + '_changelog.xml'
+
+liquibase {
+    activities {
+        main {
+            driver '<% if (devDatabaseType === 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>'
+            url '<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>'
+            username '<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>'
+            password '<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>'
+            changeLogFile '<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml'
+            defaultSchemaName '<% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %>'
+            logLevel 'debug'
+            classpath '<%= SERVER_MAIN_RES_DIR %>'
+        }
+        diffLog {
+            driver '<% if (devDatabaseType === 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>'
+            url '<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>'
+            username '<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>'
+            password '<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>'
+            changeLogFile project.ext.diffChangelogFile
+            referenceUrl 'hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServerDialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy'
+            defaultSchemaName '<% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %>'
+            logLevel 'debug'
+            classpath '<%= SERVER_MAIN_RES_DIR %>'
+            <%_ if (authenticationType === 'oauth2') { _%>
+            excludeObjects 'oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token'
+            <%_ } _%>
+        }
+    }
+
+    runList = project.ext.runList
 }
 <%_ } _%>
 
@@ -188,7 +220,7 @@ configurations {
 
 repositories {
     mavenLocal()
-    jcenter()
+    mavenCentral()
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
     // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
     maven { url "https://maven.oracle.com" }
@@ -280,6 +312,9 @@ dependencies {
     compile "org.hibernate.validator:hibernate-validator"
     compile "org.liquibase:liquibase-core"
     compile "com.mattbertolini:liquibase-slf4j"
+    liquibaseRuntime "org.liquibase:liquibase-core"
+    liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibase_hibernate5_version}"
+    liquibaseRuntime sourceSets.main.compileClasspath
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-loader-tools"
     compile "org.springframework.boot:spring-boot-starter-mail"
@@ -291,9 +326,14 @@ dependencies {
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
-    // needed to get around elasticsearch stacktrace about jna not found
-    // https://github.com/elastic/elasticsearch/issues/13245
-    compile "net.java.dev.jna:jna"
+    // Spring Data Jest dependencies for Elasticsearch
+    runtime ("com.github.vanroy:spring-boot-starter-data-jest") {
+        exclude module: 'commons-logging'
+    }
+    // log4j needed to create embedded elasticsearch instance
+    runtime "org.apache.logging.log4j:log4j-api:2.7"
+    runtime "org.apache.logging.log4j:log4j-core:2.7"
+    // end of Spring Data Jest dependencies
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
     compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %>"
@@ -360,7 +400,9 @@ dependencies {
         <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
-    compile "io.jsonwebtoken:jjwt"
+    compile "io.jsonwebtoken:jjwt-api"
+    runtime "io.jsonwebtoken:jjwt-impl"
+    runtime "io.jsonwebtoken:jjwt-jackson"
     <%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
     compile "org.springframework.security.oauth:spring-security-oauth2"
@@ -372,6 +414,7 @@ dependencies {
     <%_ if (databaseType === 'couchbase') { _%>
     compile "com.github.differentway:couchmove"
     compile "com.couchbase.client:java-client"
+    compile "com.couchbase.client:encryption"
     <%_ } _%>
     compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'
@@ -379,16 +422,21 @@ dependencies {
     compile "io.springfox:springfox-bean-validators"
     <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
     compile "mysql:mysql-connector-java"
+    liquibaseRuntime "mysql:mysql-connector-java"
     <%_ } _%>
     <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
     compile "org.postgresql:postgresql"
+    liquibaseRuntime "org.postgresql:postgresql"
     <%_ } _%>
     <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
     compile "org.mariadb.jdbc:mariadb-java-client"
+    liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
     <%_ } _%>
     <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
     compile "com.microsoft.sqlserver:mssql-jdbc"
     compile "com.github.sabomichal:liquibase-mssql"
+    liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
+    liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
     <%_ } _%>
     compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
@@ -428,9 +476,11 @@ dependencies {
     testCompile "org.hamcrest:hamcrest-library"
     <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>
     testCompile "com.h2database:h2"
+    liquibaseRuntime "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
     compile "com.oracle.jdbc:ojdbc8"
+    liquibaseRuntime "com.oracle.jdbc:ojdbc8"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testCompile "org.springframework.cloud:spring-cloud-stream-test-support"

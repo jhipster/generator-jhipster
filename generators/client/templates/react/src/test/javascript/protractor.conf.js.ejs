@@ -19,9 +19,11 @@ exports.config = {
 
   directConnect: true,
 
-  baseUrl: 'http://localhost:<%= serverPort %>/',
+  baseUrl: 'http://localhost:8080/',
 
   framework: 'mocha',
+
+  SELENIUM_PROMISE_MANAGER: false,
 
   mochaOpts: {
     reporter: 'spec',

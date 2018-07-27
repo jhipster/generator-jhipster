@@ -81,32 +81,32 @@ export default class <%= entityClass %>UpdatePage {
         return this.<%= fieldName %>Input;
     }
             <%_ } else if (fieldIsEnum) { _%>
-    set<%= fieldNameCapitalized %>Select(<%= fieldName %>) {
-        this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
+    async set<%= fieldNameCapitalized %>Select(<%= fieldName %>) {
+        await this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Select() {
+    async get<%= fieldNameCapitalized %>Select() {
         return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
     }
 
-    <%=fieldName %>SelectLastOption() {
-        this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
+    async <%=fieldName %>SelectLastOption() {
+        await this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
     }
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
-        this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
+        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Input() {
+    async get<%= fieldNameCapitalized %>Input() {
         return this.<%= fieldName %>Input.getAttribute('value');
     }
 
     <%_ } else { _%>
-    set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
-        this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
+        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Input() {
+    async get<%= fieldNameCapitalized %>Input() {
         return this.<%= fieldName %>Input.getAttribute('value');
     }
 
@@ -119,30 +119,30 @@ export default class <%= entityClass %>UpdatePage {
         const relationshipFieldName = relationship.relationshipFieldName;
         const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    <%=relationshipName %>SelectLastOption() {
-        this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
+    async <%=relationshipName %>SelectLastOption() {
+        await this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
     }
 
-    <%=relationshipName %>SelectOption(option) {
-        this.<%=relationshipName %>Select.sendKeys(option);
+    async <%=relationshipName %>SelectOption(option) {
+        await this.<%=relationshipName %>Select.sendKeys(option);
     }
 
     get<%=relationshipNameCapitalized %>Select() {
         return this.<%=relationshipName %>Select;
     }
 
-    get<%=relationshipNameCapitalized %>SelectedOption() {
+    async get<%=relationshipNameCapitalized %>SelectedOption() {
         return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
     }
 
     <%_ } _%>
     <%_ }); _%>
-    save() {
-        return this.saveButton.click();
+    async save() {
+        await this.saveButton.click();
     }
 
-    cancel() {
-        this.cancelButton.click();
+    async cancel() {
+        await this.cancelButton.click();
     }
 
     getSaveButton() {

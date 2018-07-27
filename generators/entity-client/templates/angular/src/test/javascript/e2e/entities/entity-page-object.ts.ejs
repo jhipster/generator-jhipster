@@ -34,10 +34,19 @@ for (let relationship of relationships) {
 } _%>
 export class <%= entityClass %>ComponentsPage {
     createButton = element(by.id('jh-create-entity'));
+    deleteButtons = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div table .btn-danger'));
     title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
 
     async clickOnCreateButton() {
         await this.createButton.click();
+    }
+
+    async clickOnLastDeleteButton() {
+        await this.deleteButtons.last().click();
+    }
+
+    async countDeleteButtons() {
+        return this.deleteButtons.count();
     }
 
     async getTitle() {
@@ -162,5 +171,18 @@ export class <%= entityClass %>UpdatePage {
 
     getSaveButton(): ElementFinder {
         return this.saveButton;
+    }
+}
+
+export class <%= entityClass %>DeleteDialog {
+    private dialogTitle = element(by.id('<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading'));
+    private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
+
+    async getDialogTitle() {
+        return this.dialogTitle.<%- elementGetter %>;
+    }
+
+    async clickOnConfirmButton() {
+        await this.confirmButton.click();
     }
 }

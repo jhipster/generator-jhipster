@@ -53,3 +53,8 @@ spring:
         mongodb:
             uri: ${MONGODB_URI}?authMode=scram-sha1
 <%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+    data:
+        jest:
+            uri: ${BONSAI_URL}
+<%_ } _%>

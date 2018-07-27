@@ -23,7 +23,6 @@ const fs = require('fs');
 const Generator = require('yeoman-generator');
 const Storage = require('yeoman-generator/lib/util/storage');
 const chalk = require('chalk');
-const Insight = require('insight');
 const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
@@ -271,7 +270,7 @@ module.exports = class extends Generator {
         try {
             let content = 'localesToKeep: [\n';
             languages.forEach((language, i) => {
-                content += `                    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
+                content += `                    '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
             });
             content
                 += '                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n'
@@ -298,7 +297,7 @@ module.exports = class extends Generator {
         try {
             let content = 'localesToKeep: [\n';
             languages.forEach((language, i) => {
-                content += `        '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
+                content += `        '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
             });
             content
                 += '        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n'
@@ -313,34 +312,6 @@ module.exports = class extends Generator {
             this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
             this.debug('Error:', e);
         }
-    }
-
-    /**
-     * insight
-     *
-     * @param trackingCode
-     * @param packageName
-     * @param packageVersion
-     * @returns {Insight}
-     */
-    insight(trackingCode = 'UA-46075199-2', packageName = packagejs.name, packageVersion = packagejs.version) {
-        const insight = new Insight({
-            trackingCode,
-            packageName,
-            packageVersion
-        });
-
-        insight.trackWithEvent = (category, action) => {
-            insight.track(category, action);
-            insight.trackEvent({
-                category,
-                action,
-                label: `${category} ${action}`,
-                value: 1
-            });
-        };
-
-        return insight;
     }
 
     /**
@@ -802,6 +773,7 @@ module.exports = class extends Generator {
             } else {
                 this.useYarn = true;
             }
+            this.useNpm = !this.useYarn;
             done();
         });
     }

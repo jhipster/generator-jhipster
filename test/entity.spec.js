@@ -346,7 +346,7 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2WithRootFolder);
-            assert.fileContent('.jhipster/Foo.json', 'clientRootFolder');
+            assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'test-root' });
         });
     });
 
@@ -372,7 +372,52 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2WithRootFolderAndSuffix);
-            assert.fileContent('.jhipster/Foo.json', 'clientRootFolder');
+            assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'test-root' });
+        });
+    });
+
+    describe('with client-root-folder microservice', () => {
+        beforeEach((done) => {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
+                })
+                .withArguments(['foo'])
+                .withOptions({ 'client-root-folder': 'test-root' })
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'yes',
+                    service: 'serviceImpl',
+                    pagination: 'infinite-scroll'
+                })
+                .on('end', done);
+        });
+
+        it('sets expected custom clientRootFolder', () => {
+            assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'test-root' });
+        });
+    });
+
+    describe('with default microservice', () => {
+        beforeEach((done) => {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
+                })
+                .withArguments(['foo'])
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'yes',
+                    service: 'serviceImpl',
+                    pagination: 'pagination'
+                })
+                .on('end', done);
+        });
+
+        it('sets expected default clientRootFolder', () => {
+            assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'sampleMicroservice' });
         });
     });
 

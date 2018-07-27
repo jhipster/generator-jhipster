@@ -176,7 +176,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2',
+            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice',
             path: DOCKER_DIR,
             templates: [
                 'keycloak.yml',
@@ -196,19 +196,11 @@ const serverFiles = {
                 'gradle/docker.gradle',
                 { file: 'gradle/profile_dev.gradle', options: { interpolate: INTERPOLATE_REGEX } },
                 { file: 'gradle/profile_prod.gradle', options: { interpolate: INTERPOLATE_REGEX } },
-                'gradle/graphite.gradle',
-                'gradle/prometheus.gradle',
                 'gradle/zipkin.gradle',
                 { file: 'gradlew', method: 'copy', noEjs: true },
                 { file: 'gradlew.bat', method: 'copy', noEjs: true },
                 { file: 'gradle/wrapper/gradle-wrapper.jar', method: 'copy', noEjs: true },
                 { file: 'gradle/wrapper/gradle-wrapper.properties', method: 'copy', noEjs: true }
-            ]
-        },
-        {
-            condition: generator => generator.buildTool === 'gradle' && generator.databaseType === 'sql',
-            templates: [
-                'gradle/liquibase.gradle'
             ]
         },
         {
@@ -726,13 +718,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.searchEngine === 'elasticsearch',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/config/ElasticsearchConfiguration.java', renameTo: generator => `${generator.javaDir}config/ElasticsearchConfiguration.java` },
-            ]
-        },
-        {
             condition: generator => generator.messageBroker === 'kafka',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -949,14 +934,16 @@ const serverFiles = {
     ],
     serverJavaUserManagement: [
         {
-            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2') || (!generator.skipUserManagement && generator.databaseType === 'sql'),
+            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice')
+                || (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 'config/liquibase/users.csv',
             ]
         },
         {
-            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.databaseType === 'sql') || (!generator.skipUserManagement && generator.databaseType === 'sql'),
+            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice' && generator.databaseType === 'sql')
+                || (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 'config/liquibase/authorities.csv',
@@ -1154,9 +1141,7 @@ function writeFiles() {
             // Create Java resource files
             mkdirp(SERVER_MAIN_RES_DIR);
             mkdirp(`${SERVER_TEST_SRC_DIR}/${this.testDir}`);
-            if (this.applicationType === 'uaa') {
-                this.generateKeyStore();
-            }
+            this.generateKeyStore();
         },
 
         cleanupOldServerFiles() {

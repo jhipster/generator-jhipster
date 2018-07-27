@@ -114,8 +114,9 @@ spring:
         username: <%= baseName %>
         password:
         <%_ } _%>
-        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb' || devDatabaseType === 'mssql') { _%>
         hikari:
+            auto-commit: false
+        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb' || devDatabaseType === 'mssql') { _%>
             data-source-properties:
                 cachePrepStmts: true
                 prepStmtCacheSize: 250
@@ -153,6 +154,7 @@ spring:
         show-sql: true
         properties:
             hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
@@ -193,12 +195,9 @@ spring:
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
         elasticsearch:
-            cluster-name:
-            cluster-nodes: localhost:9300
             properties:
                 path:
-                    logs: <%= BUILD_DIR %>elasticsearch/log
-                    data: <%= BUILD_DIR %>elasticsearch/data
+                    home: <%= BUILD_DIR %>elasticsearch
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -230,24 +229,21 @@ spring:
 <%_ } _%>
 
 # ===================================================================
-# To enable SSL, generate a certificate using:
-# keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# To enable SSL in development, uncomment the the "server.ssl" properties below.
 #
-# You can also use Let's Encrypt:
-# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
+# JHipster has generated a self-signed certificate, which will be used to encrypt traffic.
+# As your browser will not understand this certificate, you will need to import it.
 #
-# Then, modify the server.ssl properties so your "server" configuration looks like:
-#
-# server:
-#    port: 8443
-#    ssl:
-#        key-store: keystore.p12
-#        key-store-password: <your-password>
-#        key-store-type: PKCS12
-#        key-alias: <%= baseName.toLowerCase() %>
+# Another (easiest) solution with Chrome is to enable the "allow-insecure-localhost" flag
+# at chrome://flags/#allow-insecure-localhost
 # ===================================================================
 server:
     port: <%= serverPort %>
+#    ssl:
+#        key-store: classpath:config/tls/keystore.p12
+#        key-store-password: password
+#        key-store-type: PKCS12
+#        key-alias: selfsigned
 
 # ===================================================================
 # JHipster specific properties
@@ -336,7 +332,8 @@ jhipster:
     security:
         authentication:
             jwt:
-                secret: my-secret-token-to-change-in-production
+                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+                base64-secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
@@ -375,7 +372,7 @@ jhipster:
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     key-store:
-        name: keystore.jks
+        name: config/tls/keystore.p12
         password: password
         alias: selfsigned
     web-client-configuration:

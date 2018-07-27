@@ -254,7 +254,7 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
     const { servicesStats, cachesStats } = this.getStats(data);
     return (
         <div>
-          <h2 className="metrics-page-heading">Application Metrics</h2>
+          <h2 id="metrics-page-heading">Application Metrics</h2>
           <p>
             <Button onClick={this.getMetrics} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
               <FontAwesomeIcon icon="sync" />&nbsp;

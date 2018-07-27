@@ -28,6 +28,6 @@
     ],
     "travis": true,
     "clientFramework": "angularX",
-    "clientPackageManager": "yarn"
+    "clientPackageManager": "npm"
   }
 }

@@ -14,7 +14,7 @@
     "searchEngine": false,
     "messageBroker": false,
     "buildTool": "gradle",
-    "useSass": false,
+    "useSass": true,
     "applicationType": "monolith",
     "testFrameworks": [
       "gatling",
@@ -29,8 +29,7 @@
     ],
     "travis": true,
     "serviceDiscoveryType": false,
-    "jwtSecretKey": "82c6dce0d969c5bc3ab2530ecc5c18baaef1c987",
-    "clientPackageManager": "yarn",
+    "clientPackageManager": "npm",
     "clientFramework": "angularX"
   }
 }

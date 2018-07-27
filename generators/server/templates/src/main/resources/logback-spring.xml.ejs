@@ -72,6 +72,9 @@
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <logger name="io.searchbox" level="WARN"/>
+    <%_ } _%>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
     <%_ if (cacheProvider === 'ehcache') { _%>
@@ -99,6 +102,9 @@
     <%_ if (cacheProvider === 'memcached') { _%>
     <logger name="net.rubyeye.xmemcached" level="INFO"/>
     <%_ } _%>
+    <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
+    <logger name="org.postgresql.jdbc" level="WARN"/>
+    <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
@@ -109,7 +115,7 @@
     <logger name="kafka" level="WARN"/>
     <logger name="org.I0Itec" level="WARN"/>
     <%_ } _%>
-    <%_ if (devDatabaseType === 'mssql') { _%>
+    <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
     <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
     <%_ } _%>
     <logger name="springfox" level="WARN"/>

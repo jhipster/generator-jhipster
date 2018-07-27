@@ -62,8 +62,14 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}shared/user/account.model.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/user/user.model.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/user/user.service.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-dialog.component.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-modal.service.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-modal.service.ts`);
 
         generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/user/user.service.spec.ts`);
+        generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-dialog.component.spec.ts`);
+        generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/entry.ts`);
+        generator.removeFile(`${CLIENT_TEST_SRC_DIR}karma.conf.js`);
     }
 }
 
@@ -141,11 +147,22 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     }
     if (generator.isJhipsterVersionLessThan('5.0.0')) {
         generator.removeFile(`${javaDir}config/ThymeleafConfiguration.java`);
+        generator.removeFile(`${javaDir}web/rest/ProfileInfoResource.java`);
         generator.removeFile(`${mainResourceDir}mails/activationEmail.html`);
         generator.removeFile(`${mainResourceDir}mails/creationEmail.html`);
         generator.removeFile(`${mainResourceDir}mails/passwordResetEmail.html`);
         generator.removeFile(`${mainResourceDir}mails/socialRegistrationValidationEmail.html`);
         generator.removeFile(`${testResourceDir}mail/testEmail.html`);
+        generator.removeFile(`${testDir}web/rest/ProfileInfoResourceIntTest.java`);
         generator.removeFile('gradle/mapstruct.gradle');
+    }
+    if (generator.isJhipsterVersionLessThan('5.2.2')) {
+        generator.removeFile(`${javaDir}config/ElasticsearchConfiguration.java`);
+        generator.removeFile('gradle/liquibase.gradle');
+
+        if (generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice') {
+            generator.removeFolder(`${constants.DOCKER_DIR}realm-config`);
+            generator.removeFile(`${constants.DOCKER_DIR}keycloak.yml`);
+        }
     }
 }

@@ -513,6 +513,16 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * return the momentLocaleId from the given language key (from constants.LANGUAGES)
+     * if no momentLocaleId is defined, return the language key (which is a localeId itself)
+     * @param {string} language - language key
+     */
+    getMomentLocaleId(language) {
+        const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
+        return langObj.momentLocaleId || language;
+    }
+
+    /**
      * get all the languages options supported by JHipster
      */
     getAllSupportedLanguageOptions() {
@@ -2080,25 +2090,28 @@ module.exports = class extends PrivateBase {
      */
     generateKeyStore() {
         const done = this.async();
-        const keyStoreFile = `${SERVER_MAIN_RES_DIR}keystore.jks`;
+        const keyStoreFile = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
         if (this.fs.exists(keyStoreFile)) {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
             done();
         } else {
-            shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
+            shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
             const javaHome = shelljs.env.JAVA_HOME;
             let keytoolPath = '';
             if (javaHome) {
                 keytoolPath = `${javaHome}/bin/`;
             }
+            // Generate the PKCS#12 keystore
             shelljs.exec(
                 `"${keytoolPath}keytool" -genkey -noprompt `
+                + '-storetype PKCS12 '
                 + '-keyalg RSA '
                 + '-alias selfsigned '
                 + `-keystore ${keyStoreFile} `
                 + '-storepass password '
                 + '-keypass password '
                 + '-keysize 2048 '
+                + '-validity 99999 '
                 + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
                 (code) => {
                     if (code !== 0) {
@@ -2150,14 +2163,14 @@ module.exports = class extends PrivateBase {
     checkForNewVersion() {
         try {
             const done = this.async();
-            shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version`, { silent: true }, (code, stdout, stderr) => {
+            shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version --fetch-retries 1 --fetch-retry-mintimeout 500 --fetch-retry-maxtimeout 500`, { silent: true }, (code, stdout, stderr) => {
                 if (!stderr && semver.lt(packagejs.version, stdout)) {
                     this.log(`${chalk.yellow(' ______________________________________________________________________________\n\n')
                         + chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`);
-                    if (this.useYarn) {
-                        this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
-                    } else {
+                    if (this.useNpm) {
                         this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+                    } else {
+                        this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
                     }
                     this.log(chalk.yellow(' ______________________________________________________________________________\n'));
                 }
@@ -2223,6 +2236,9 @@ module.exports = class extends PrivateBase {
                 }
                 if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
                     return 'Your base name cannot contain underscores as this does not meet the URI spec';
+                }
+                if (generator.applicationType === 'uaa' && input === 'auth') {
+                    return 'Your UAA base name cannot be named \'auth\' as it conflicts with the gateway login routes';
                 }
                 if (input === 'application') {
                     return 'Your base name cannot be named \'application\' as this is a reserved name for Spring Boot';
