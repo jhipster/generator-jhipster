@@ -3,6 +3,7 @@ module.exports = {
     '^.+\\.tsx?$': 'ts-jest'
   },
   rootDir: '../../../',
+  testURL: "http://localhost/",
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
   testMatch: ['<rootDir>/src/test/javascript/spec/**/+(*.)+(spec.ts?(x))'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
