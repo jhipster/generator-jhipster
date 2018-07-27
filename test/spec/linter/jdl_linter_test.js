@@ -57,8 +57,8 @@ describe('JDLLinter', () => {
       });
 
       it('reports the issue', () => {
-        expect(issues.getEntityIssues('B')).to.have.lengthOf(1);
-        expect(issues.getEntityIssues('B')[0].ruleName).to.equal('ENT_SHORTER_DECL');
+        expect(issues.getEntityIssuesForEntityName('B')).to.have.lengthOf(1);
+        expect(issues.getEntityIssuesForEntityName('B')[0].ruleName).to.equal('ENT_SHORTER_DECL');
       });
     });
   });
