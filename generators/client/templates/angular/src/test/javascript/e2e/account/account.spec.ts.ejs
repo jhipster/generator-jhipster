@@ -86,24 +86,21 @@ describe('account', () => {
         <%_ } _%>
         const value1 = await element(by.className('username-label')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
-        <%_ } _%>
-
         await signInPage.autoSignInUsing('admin', 'admin');
+        <%_ } else {_%>
+        await signInPage.loginWithOAuth('', 'admin');
+        <%_ } _%>
 
         <%_ if (enableTranslation) { _%>
         const expect2 = /home.logged.message/;
         <%_ } else { _%>
         const expect2 = /You are logged in as user "admin"/;
         <%_ } _%>
-        <%_ if (authenticationType !== 'oauth2') { _%>
         const value2 = element(by.id('home-logged-message'));
         await browser.wait(ec.visibilityOf(value2), 5000);
         expect(await value2.<%- elementGetter %>).toMatch(expect2);
-        <%_ } else { _%>
-        const success = element.all(by.css('.alert-success span')).first();
-        await browser.wait(ec.visibilityOf(success), 5000);
-        expect(await success.<%- elementGetter %>).toMatch(expect2);
-
+    
+        <%_ if (authenticationType === 'oauth2') { _%>
         await navBarPage.autoSignOut();
         <%_ } _%>
     });
