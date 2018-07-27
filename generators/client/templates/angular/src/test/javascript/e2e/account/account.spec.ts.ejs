@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { browser, element, by<% if (authenticationType === 'oauth2') { _%>, ExpectedConditions as ec<%_ } %> } from 'protractor';
+import { browser, element, by, ExpectedConditions as ec } from 'protractor';
 
 import { NavBarPage, SignInPage<%_ if (authenticationType !== 'oauth2') { _%>, PasswordPage, SettingsPage<%_ } _%> } from '../page-objects/jhi-page-objects';
 <%_
@@ -97,6 +97,7 @@ describe('account', () => {
         <%_ } _%>
         <%_ if (authenticationType !== 'oauth2') { _%>
         const value2 = element(by.id('home-logged-message'));
+        await browser.wait(ec.visibilityOf(value2), 5000);
         expect(await value2.<%- elementGetter %>).toMatch(expect2);
         <%_ } else { _%>
         const success = element.all(by.css('.alert-success span')).first();
