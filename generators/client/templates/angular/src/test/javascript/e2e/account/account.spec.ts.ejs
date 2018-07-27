@@ -76,6 +76,9 @@ describe('account', () => {
 
     it('should login successfully with admin account', async () => {
         <%_ if (authenticationType !== 'oauth2') { _%>
+        await browser.get('/');
+        signInPage = await navBarPage.getSignInPage();
+
         <%_ if (enableTranslation) { _%>
         const expect1 = /global.form.username/;
         <%_ } else { _%>
@@ -84,11 +87,8 @@ describe('account', () => {
         const value1 = await element(by.className('username-label')).<%- elementGetter %>;
         expect(value1).toMatch(expect1);
         <%_ } _%>
-        await signInPage.clearUserName();
-        await signInPage.setUserName('admin');
-        await signInPage.clearPassword();
-        await signInPage.setPassword('admin');
-        await signInPage.login();
+
+        await signInPage.autoSignInUsing('admin', 'admin');
 
         <%_ if (enableTranslation) { _%>
         const expect2 = /home.logged.message/;
