@@ -38,9 +38,9 @@ buildscript {
 
 plugins {
     id "org.sonarqube" version "2.6.2"
-    id "net.ltgt.apt-eclipse" version "0.15"
-    id "net.ltgt.apt-idea" version "0.15"
-    id "net.ltgt.apt" version "0.15"
+    id "net.ltgt.apt-eclipse" version "0.18"
+    id "net.ltgt.apt-idea" version "0.18"
+    id "net.ltgt.apt" version "0.18"
     id "io.spring.dependency-management" version "1.0.5.RELEASE"
     <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
@@ -442,7 +442,7 @@ task cleanResources(type: Delete) {
     delete 'build/resources'
 }
 
-task wrapper(type: Wrapper) {
+wrapper {
     gradleVersion = '4.9'
 }
 
