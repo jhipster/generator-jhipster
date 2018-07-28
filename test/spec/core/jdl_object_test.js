@@ -791,7 +791,7 @@ describe('JDLObject', () => {
       const field = new JDLField({ name: 'myField', type: 'String' });
       field.addValidation(new JDLValidation());
       entityA.addField(field);
-      object.addEntNjdity(entityA);
+      object.addEntity(entityA);
       entityB = new JDLEntity({ name: 'EntityB', tableName: 't_entity_b' });
       object.addEntity(entityB);
       enumObject = new JDLEnum({ name: 'MyEnum', values: ['A', 'B'] });
