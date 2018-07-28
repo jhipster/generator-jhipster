@@ -25,13 +25,13 @@ h4 {
     font-weight: 300;
 }
 
-a {
-    color: #533f03;
+body a {
+    color: #286396; 
     font-weight: bold;
 }
 
-a:hover {
-    color: #533f03;
+body a:hover {
+    color: #255c8c;
     font-weight: bold;
 }
 
@@ -239,6 +239,15 @@ ui bootstrap tweaks
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* ==========================================================================
+bootstrap color tweaks to comply with WCAG 2.0 AA standard
+========================================================================== */
+.progress-bar {
+    &.bg-warning {
+        color: #000;
+    }
 }
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */

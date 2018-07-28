@@ -28,14 +28,14 @@ body {
   margin: 0;
 }
 
-a {
-  color: #533f03;
-  font-weight: bold;
+body a {
+    color: #286396; 
+    font-weight: bold;
 }
 
-a:hover {
-  color: #533f03;
-  font-weight: bold;
+body a:hover {
+    color: #255c8c;
+    font-weight: bold;
 }
 
 * {
@@ -360,6 +360,21 @@ http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 
 .width-min {
   width: 1% !important;
+}
+
+/* ==========================================================================
+bootstrap color tweaks to comply with WCAG 2.0 AA standard
+========================================================================== */
+.progress-bar {
+    &.bg-warning {
+        color: #000;
+    }
+}
+
+.btn {
+  &.btn-link {
+    color: #3871a3;
+  }
 }
 
 /* jhipster-needle-css-add-main JHipster will add new css style */
