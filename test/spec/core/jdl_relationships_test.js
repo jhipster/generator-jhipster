@@ -32,7 +32,7 @@ describe('JDLRelationships', () => {
         it('fails', () => {
           expect(() => {
             new JDLRelationships().add();
-          }).to.throw('A relationship must be passed.');
+          }).to.throw('A relationship must be passed so as to be added.');
         });
       });
       context('because it is invalid', () => {
@@ -42,7 +42,7 @@ describe('JDLRelationships', () => {
               to: { name: 'A' },
               from: { name: 'B' }
             });
-          }).to.throw('A valid relationship must be passed.');
+          }).to.throw('A valid relationship must be passed so as to be added.');
         });
       });
     });
@@ -83,14 +83,14 @@ describe('JDLRelationships', () => {
       it('fails', () => {
         expect(() => {
           new JDLRelationships().get('oops', 42);
-        }).to.throw('A valid relationship type must be passed, got \'oops\'.');
+        }).to.throw('A valid relationship type must be passed so as to retrieve the relationship, got \'oops\'.');
       });
     });
     context('when passing an invalid id', () => {
       it('fails', () => {
         expect(() => {
           new JDLRelationships().get(RelationshipTypes.ONE_TO_MANY);
-        }).to.throw('A relationship id must be passed.');
+        }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
     context('when passing valid arguments', () => {
@@ -129,7 +129,7 @@ describe('JDLRelationships', () => {
       it('fails', () => {
         expect(() => {
           new JDLRelationships().getOneToOne();
-        }).to.throw('A relationship id must be passed.');
+        }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
     context('when passing valid arguments', () => {
@@ -168,7 +168,7 @@ describe('JDLRelationships', () => {
       it('fails', () => {
         expect(() => {
           new JDLRelationships().getOneToMany();
-        }).to.throw('A relationship id must be passed.');
+        }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
     context('when passing valid arguments', () => {
@@ -207,7 +207,7 @@ describe('JDLRelationships', () => {
       it('fails', () => {
         expect(() => {
           new JDLRelationships().getManyToOne();
-        }).to.throw('A relationship id must be passed.');
+        }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
     context('when passing valid arguments', () => {
@@ -246,7 +246,7 @@ describe('JDLRelationships', () => {
       it('fails', () => {
         expect(() => {
           new JDLRelationships().getManyToMany();
-        }).to.throw('A relationship id must be passed.');
+        }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
     context('when passing valid arguments', () => {
