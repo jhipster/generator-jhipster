@@ -791,7 +791,7 @@ describe('JDLObject', () => {
       const field = new JDLField({ name: 'myField', type: 'String' });
       field.addValidation(new JDLValidation());
       entityA.addField(field);
-      object.addEntity(entityA);
+      object.addEntNjdity(entityA);
       entityB = new JDLEntity({ name: 'EntityB', tableName: 't_entity_b' });
       object.addEntity(entityB);
       enumObject = new JDLEnum({ name: 'MyEnum', values: ['A', 'B'] });
@@ -805,13 +805,13 @@ describe('JDLObject', () => {
       });
       object.addRelationship(relationship);
       option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-      option.excludeEntity(entityA);
+      option.excludeEntityName(entityA.name);
       object.addOption(option);
       option2 = new JDLBinaryOption({
         name: BinaryOptions.Options.DTO,
         value: BinaryOptions.Values.dto.MAPSTRUCT
       });
-      option2.addEntity(entityB);
+      option2.addEntityName(entityB.name);
       object.addOption(option2);
     });
 
