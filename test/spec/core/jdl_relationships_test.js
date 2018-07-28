@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 const JDLRelationships = require('../../../lib/core/jdl_relationships');
