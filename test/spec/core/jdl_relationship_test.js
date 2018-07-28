@@ -20,7 +20,6 @@
 /* eslint-disable no-new, no-unused-expressions */
 const expect = require('chai').expect;
 
-const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 
@@ -30,56 +29,19 @@ describe('JDLRelationship', () => {
       it('fails', () => {
         expect(() => {
           new JDLRelationship({
-            from: new JDLEntity({
-              name: 'Abc'
-            }),
-            to: new JDLEntity({
-              name: 'Abc2'
-            }),
+            from: 'Abc',
+            to: 'Abc2',
             type: RelationshipTypes.MANY_TO_MANY
           });
         }).to.throw('The type, and at least one injected field must be passed');
-      });
-    });
-    context('when having invalid entities as source and/or destination', () => {
-      it('fails', () => {
-        expect(() => {
-          new JDLRelationship({
-            from: {},
-            to: new JDLEntity({
-              name: 'Abc2'
-            }),
-            injectedFieldInFrom: 'something'
-          });
-        }).to.throw('Valid source and destination entities are required.');
-        expect(() => {
-          new JDLRelationship({
-            from: new JDLEntity({
-              name: 'Abc1'
-            }),
-            to: {},
-            injectedFieldInFrom: 'something'
-          });
-        }).to.throw('Valid source and destination entities are required.');
-        expect(() => {
-          new JDLRelationship({
-            from: {},
-            to: {},
-            injectedFieldInFrom: 'something'
-          });
-        }).to.throw('Valid source and destination entities are required.');
       });
     });
     context('when passing an invalid type', () => {
       it('fails', () => {
         expect(() => {
           new JDLRelationship({
-            from: new JDLEntity({
-              name: 'Abc'
-            }),
-            to: new JDLEntity({
-              name: 'Abc2'
-            }),
+            from: 'Abc',
+            to: 'Abc2',
             injectedFieldInFrom: 'something',
             type: 'WRONG_TYPE'
           });
@@ -91,20 +53,16 @@ describe('JDLRelationship', () => {
 
       before(() => {
         relationship = new JDLRelationship({
-          from: new JDLEntity({
-            name: 'Abc'
-          }),
-          to: new JDLEntity({
-            name: 'Abc2'
-          }),
+          from: 'Abc',
+          to: 'Abc2',
           injectedFieldInFrom: 'something',
           type: RelationshipTypes.ONE_TO_ONE
         });
       });
 
       it('succeeds', () => {
-        expect(relationship.to.name).to.eq('Abc2');
-        expect(relationship.from.name).to.eq('Abc');
+        expect(relationship.to).to.eq('Abc2');
+        expect(relationship.from).to.eq('Abc');
         expect(relationship.injectedFieldInFrom).to.eq('something');
         expect(relationship.type).to.eq(RelationshipTypes.ONE_TO_ONE);
       });
@@ -118,30 +76,12 @@ describe('JDLRelationship', () => {
           expect(JDLRelationship.isValid(undefined)).to.be.false;
         });
       });
-      context('because the entities are invalid', () => {
-        it('returns false', () => {
-          expect(
-            JDLRelationship.isValid({
-              from: {},
-              to: { name: 'Valid', tableName: 't_valid', fields: [] },
-              type: RelationshipTypes.MANY_TO_MANY,
-              injectedFieldInFrom: 'something'
-            })
-          ).to.be.false;
-          expect(JDLRelationship.isValid({
-            to: {},
-            from: { name: 'Valid', tableName: 't_valid', fields: [] },
-            type: RelationshipTypes.MANY_TO_MANY,
-            injectedFieldInFrom: 'something'
-          })).to.be.false;
-        });
-      });
       context('because the type is invalid', () => {
         it('returns false', () => {
           expect(
             JDLRelationship.isValid({
-              from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-              to: { name: 'Valid', tableName: 't_valid', fields: [] },
+              from: 'Valid2',
+              to: 'Valid',
               type: 'WRONG',
               injectedFieldInFrom: 'something'
             })
@@ -153,8 +93,8 @@ describe('JDLRelationship', () => {
       it('returns true', () => {
         expect(
           JDLRelationship.isValid({
-            from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-            to: { name: 'Valid', tableName: 't_valid', fields: [] },
+            from: 'Valid2',
+            to: 'Valid',
             type: RelationshipTypes.MANY_TO_MANY,
             injectedFieldInFrom: 'something'
           })
@@ -169,8 +109,8 @@ describe('JDLRelationship', () => {
 
         before(() => {
           relationship = new JDLRelationship({
-            from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-            to: { name: 'Valid', tableName: 't_valid', fields: [] },
+            from: 'Valid2',
+            to: 'Valid',
             type: RelationshipTypes.MANY_TO_MANY,
             injectedFieldInFrom: 'something'
           });
@@ -188,8 +128,8 @@ describe('JDLRelationship', () => {
 
         before(() => {
           relationship = new JDLRelationship({
-            from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-            to: { name: 'Valid', tableName: 't_valid', fields: [] },
+            from: 'Valid2',
+            to: 'Valid',
             type: RelationshipTypes.MANY_TO_MANY,
             injectedFieldInFrom: 'something'
           });
@@ -199,7 +139,7 @@ describe('JDLRelationship', () => {
         it('fails', () => {
           expect(() => {
             relationship.validate();
-          }).to.throw('The exception is not in a valid state.\nErrors: Wrong type: got \'WRONG\'.');
+          }).to.throw('The relationship is not valid.\nErrors: Wrong type: got \'WRONG\'.');
         });
       });
       context('because the source entity is not in a One-to-One', () => {
@@ -207,8 +147,8 @@ describe('JDLRelationship', () => {
 
         before(() => {
           relationship = new JDLRelationship({
-            from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-            to: { name: 'Valid', tableName: 't_valid', fields: [] },
+            from: 'Valid2',
+            to: 'Valid',
             type: RelationshipTypes.ONE_TO_ONE,
             injectedFieldInTo: 'something'
           });
@@ -226,8 +166,8 @@ describe('JDLRelationship', () => {
 
         before(() => {
           relationship = new JDLRelationship({
-            from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-            to: { name: 'Valid', tableName: 't_valid', fields: [] },
+            from: 'Valid2',
+            to: 'Valid',
             type: RelationshipTypes.ONE_TO_MANY,
             injectedFieldInFrom: 'something'
           });
@@ -246,8 +186,8 @@ describe('JDLRelationship', () => {
 
         before(() => {
           relationship = new JDLRelationship({
-            from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-            to: { name: 'Valid', tableName: 't_valid', fields: [] },
+            from: 'Valid2',
+            to: 'Valid',
             type: RelationshipTypes.MANY_TO_ONE,
             injectedFieldInFrom: 'something',
             injectedFieldInTo: 'somethingElse'
@@ -266,8 +206,8 @@ describe('JDLRelationship', () => {
 
         before(() => {
           relationship = new JDLRelationship({
-            from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-            to: { name: 'Valid', tableName: 't_valid', fields: [] },
+            from: 'Valid2',
+            to: 'Valid',
             type: RelationshipTypes.MANY_TO_MANY,
             injectedFieldInFrom: 'something'
           });
@@ -287,15 +227,15 @@ describe('JDLRelationship', () => {
 
     before(() => {
       relationship = new JDLRelationship({
-        from: new JDLEntity({ name: 'A' }),
-        to: new JDLEntity({ name: 'B' }),
+        from: 'A',
+        to: 'B',
         type: RelationshipTypes.ONE_TO_ONE,
         injectedFieldInFrom: 'b'
       });
     });
 
     it('returns an unique representation of the relationship', () => {
-      expect(relationship.getId()).to.eq(`${relationship.type}_${relationship.from.name}{${relationship.injectedFieldInFrom}}_${relationship.to.name}`);
+      expect(relationship.getId()).to.eq(`${relationship.type}_${relationship.from}{${relationship.injectedFieldInFrom}}_${relationship.to}`);
     });
   });
   describe('#toString', () => {
@@ -304,8 +244,8 @@ describe('JDLRelationship', () => {
 
       before(() => {
         relationship = new JDLRelationship({
-          from: new JDLEntity({ name: 'A' }),
-          to: new JDLEntity({ name: 'B' }),
+          from: 'A',
+          to: 'B',
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b'
         });
@@ -314,7 +254,7 @@ describe('JDLRelationship', () => {
       it('stringifies the relationship', () => {
         expect(relationship.toString()).to.eq(
           `relationship ${relationship.type} {
-  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}
+  ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
 }`
         );
       });
@@ -324,8 +264,8 @@ describe('JDLRelationship', () => {
 
       before(() => {
         relationship = new JDLRelationship({
-          from: new JDLEntity({ name: 'A' }),
-          to: new JDLEntity({ name: 'B' }),
+          from: 'A',
+          to: 'B',
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
           commentInFrom: 'Some comment.',
@@ -339,11 +279,11 @@ describe('JDLRelationship', () => {
   /**
    * ${relationship.commentInFrom}
    */
-  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to
+  ${relationship.from}{${relationship.injectedFieldInFrom}} to
   /**
    * ${relationship.commentInTo}
    */
-  ${relationship.to.name}
+  ${relationship.to}
 }`
         );
       });
@@ -353,8 +293,8 @@ describe('JDLRelationship', () => {
 
       before(() => {
         relationship = new JDLRelationship({
-          from: new JDLEntity({ name: 'A' }),
-          to: new JDLEntity({ name: 'B' }),
+          from: 'A',
+          to: 'B',
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
           commentInFrom: 'Some comment.'
@@ -367,7 +307,7 @@ describe('JDLRelationship', () => {
   /**
    * ${relationship.commentInFrom}
    */
-  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}
+  ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
 }`
         );
       });
@@ -377,8 +317,8 @@ describe('JDLRelationship', () => {
 
       before(() => {
         relationship = new JDLRelationship({
-          from: new JDLEntity({ name: 'A' }),
-          to: new JDLEntity({ name: 'B' }),
+          from: 'A',
+          to: 'B',
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
           commentInTo: 'Some other comment.'
@@ -388,11 +328,11 @@ describe('JDLRelationship', () => {
       it('stringifies the relationship', () => {
         expect(relationship.toString()).to.eq(
           `relationship ${relationship.type} {
-  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to
+  ${relationship.from}{${relationship.injectedFieldInFrom}} to
   /**
    * ${relationship.commentInTo}
    */
-  ${relationship.to.name}
+  ${relationship.to}
 }`
         );
       });
@@ -402,8 +342,8 @@ describe('JDLRelationship', () => {
 
       before(() => {
         relationship = new JDLRelationship({
-          from: new JDLEntity({ name: 'A' }),
-          to: new JDLEntity({ name: 'B' }),
+          from: 'A',
+          to: 'B',
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b'
         });
@@ -412,7 +352,7 @@ describe('JDLRelationship', () => {
       it('stringifies the relationship', () => {
         expect(relationship.toString()).to.eq(
           `relationship ${relationship.type} {
-  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}
+  ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
 }`
         );
       });
@@ -422,8 +362,8 @@ describe('JDLRelationship', () => {
 
       before(() => {
         relationship = new JDLRelationship({
-          from: new JDLEntity({ name: 'A' }),
-          to: new JDLEntity({ name: 'B' }),
+          from: 'A',
+          to: 'B',
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
           injectedFieldInTo: 'a(id)'
@@ -433,7 +373,7 @@ describe('JDLRelationship', () => {
       it('stringifies the relationship', () => {
         expect(relationship.toString()).to.eq(
           `relationship ${relationship.type} {
-  ${relationship.from.name}{${relationship.injectedFieldInFrom}} to ${relationship.to.name}{${relationship.injectedFieldInTo}}
+  ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{${relationship.injectedFieldInTo}}
 }`
         );
       });
