@@ -464,14 +464,12 @@ describe('JDLObject', () => {
       context('such as an incomplete relationship', () => {
         it('fails', () => {
           expect(() => {
-            object.addRelationship({
-              from: {},
-              to: { name: 'Valid', tableName: 't_valid', fields: [] },
+            object.addRelationship(new JDLRelationship({
+              to: 'Valid',
               type: RelationshipTypes.MANY_TO_MANY,
               injectedFieldInFrom: 'something'
-            });
-          }).to.throw('The relationship must be valid in order to be added.\n'
-            + 'Errors: Wrong source entity: No entity name, No table name, No fields object');
+            }));
+          }).to.throw('Source and destination entities must be passed to create a relationship.');
         });
       });
     });
@@ -482,8 +480,8 @@ describe('JDLObject', () => {
       before(() => {
         object = new JDLObject();
         relationship = new JDLRelationship({
-          from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-          to: { name: 'Valid', tableName: 't_valid', fields: [] },
+          from: 'Valid2',
+          to: 'Valid',
           type: RelationshipTypes.MANY_TO_MANY,
           injectedFieldInFrom: 'something'
         });
@@ -500,8 +498,8 @@ describe('JDLObject', () => {
       before(() => {
         object = new JDLObject();
         const relationship = new JDLRelationship({
-          from: { name: 'Valid2', tableName: 't_valid2', fields: [] },
-          to: { name: 'Valid', tableName: 't_valid', fields: [] },
+          from: 'Valid2',
+          to: 'Valid',
           type: RelationshipTypes.MANY_TO_MANY,
           injectedFieldInFrom: 'something'
         });
@@ -530,8 +528,8 @@ describe('JDLObject', () => {
     context('when having one or more relationships', () => {
       before(() => {
         jdlObject.addRelationship(new JDLRelationship({
-          from: new JDLEntity({ name: 'a' }),
-          to: new JDLEntity({ name: 'b' }),
+          from: 'A',
+          to: 'B',
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b'
         }));
@@ -548,22 +546,14 @@ describe('JDLObject', () => {
     before(() => {
       jdlObject = new JDLObject();
       jdlObject.addRelationship(new JDLRelationship({
-        from: new JDLEntity({
-          name: 'Abc'
-        }),
-        to: new JDLEntity({
-          name: 'Abc2'
-        }),
+        from: 'Abc',
+        to: 'Abc2',
         injectedFieldInFrom: 'something',
         type: RelationshipTypes.ONE_TO_ONE
       }));
       jdlObject.addRelationship(new JDLRelationship({
-        from: new JDLEntity({
-          name: 'Abc'
-        }),
-        to: new JDLEntity({
-          name: 'Abc2'
-        }),
+        from: 'Abc',
+        to: 'Abc2',
         injectedFieldInFrom: 'something',
         type: RelationshipTypes.ONE_TO_MANY
       }));
@@ -807,8 +797,8 @@ describe('JDLObject', () => {
       enumObject = new JDLEnum({ name: 'MyEnum', values: ['A', 'B'] });
       object.addEnum(enumObject);
       relationship = new JDLRelationship({
-        from: entityA,
-        to: entityB,
+        from: entityA.name,
+        to: entityB.name,
         type: RelationshipTypes.ONE_TO_ONE,
         injectedFieldInFrom: 'entityB',
         injectedFieldInTo: 'entityA(myField)'

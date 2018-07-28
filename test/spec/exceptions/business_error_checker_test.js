@@ -86,8 +86,8 @@ describe('BusinessErrorChecker', () => {
           name: Validations.REQUIRED
         });
         const relationship = new JDLRelationship({
-          from: entity,
-          to: otherEntity,
+          from: entity.name,
+          to: otherEntity.name,
           type: RelationshipTypes.ONE_TO_MANY,
           injectedFieldInFrom: 'other'
         });
@@ -483,8 +483,8 @@ describe('BusinessErrorChecker', () => {
           name: 'Valid'
         });
         const relationship = new JDLRelationship({
-          from: userEntity,
-          to: otherEntity,
+          from: userEntity.name,
+          to: otherEntity.name,
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'other'
         });
@@ -509,8 +509,8 @@ describe('BusinessErrorChecker', () => {
           name: 'Valid'
         });
         const relationship = new JDLRelationship({
-          from: sourceEntity,
-          to: otherEntity,
+          from: sourceEntity.name,
+          to: otherEntity.name,
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'other'
         });
@@ -537,8 +537,8 @@ describe('BusinessErrorChecker', () => {
             name: 'User'
           });
           const relationship = new JDLRelationship({
-            from: sourceEntity,
-            to: otherEntity,
+            from: sourceEntity.name,
+            to: otherEntity.name,
             type: RelationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other'
           });
@@ -564,8 +564,8 @@ describe('BusinessErrorChecker', () => {
             name: 'Other'
           });
           const relationship = new JDLRelationship({
-            from: sourceEntity,
-            to: otherEntity,
+            from: sourceEntity.name,
+            to: otherEntity.name,
             type: RelationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other'
           });
@@ -590,8 +590,8 @@ describe('BusinessErrorChecker', () => {
             name: 'A'
           });
           const relationship = new JDLRelationship({
-            from: entity,
-            to: entity,
+            from: entity.name,
+            to: entity.name,
             type: RelationshipTypes.ONE_TO_MANY,
             injectedFieldInFrom: 'a',
             isInjectedFieldInFromRequired: true
@@ -613,8 +613,8 @@ describe('BusinessErrorChecker', () => {
             name: 'A'
           });
           const relationship = new JDLRelationship({
-            from: entity,
-            to: entity,
+            from: entity.name,
+            to: entity.name,
             type: RelationshipTypes.ONE_TO_MANY,
             injectedFieldInFrom: 'a',
             isInjectedFieldInToRequired: true

@@ -65,8 +65,8 @@ describe('EntityParser', () => {
           const entityA = new JDLEntity({ name: 'A' });
           const entityB = new JDLEntity({ name: 'B' });
           const relationship = new JDLRelationship({
-            from: entityA,
-            to: entityB,
+            from: entityA.name,
+            to: entityB.name,
             injectedFieldInFrom: 'b',
             injectedFieldInTo: 'a',
             type: RelationshipTypes.MANY_TO_MANY
@@ -123,8 +123,8 @@ describe('EntityParser', () => {
         });
         const oneToOneRelationship = new JDLRelationship({
           type: RelationshipTypes.ONE_TO_ONE,
-          from: entityA,
-          to: entityB,
+          from: entityA.name,
+          to: entityB.name,
           injectedFieldInFrom: 'b',
           injectedFieldInTo: 'a',
           isInjectedFieldInFromRequired: true
@@ -464,29 +464,29 @@ describe('EntityParser', () => {
             name: 'B'
           });
           const oneToManyRelationship = new JDLRelationship({
-            from: entityA,
-            to: entityB,
+            from: entityA.name,
+            to: entityB.name,
             injectedFieldInFrom: 'b',
             injectedFieldInTo: 'a',
             type: RelationshipTypes.ONE_TO_MANY
           });
           const manyToOneRelationship = new JDLRelationship({
-            from: entityA,
-            to: entityB,
+            from: entityA.name,
+            to: entityB.name,
             injectedFieldInFrom: 'bb',
             injectedFieldInTo: 'aa',
             type: RelationshipTypes.MANY_TO_ONE
           });
           const manyToManyRelationship = new JDLRelationship({
-            from: entityA,
-            to: entityB,
+            from: entityA.name,
+            to: entityB.name,
             injectedFieldInFrom: 'bbb',
             injectedFieldInTo: 'aaa',
             type: RelationshipTypes.MANY_TO_MANY
           });
           const oneToOneRelationship = new JDLRelationship({
-            from: entityA,
-            to: entityB,
+            from: entityA.name,
+            to: entityB.name,
             injectedFieldInFrom: 'bbbb',
             injectedFieldInTo: 'aaaa',
             type: RelationshipTypes.ONE_TO_ONE
@@ -750,8 +750,8 @@ describe('EntityParser', () => {
           const entityA = new JDLEntity({ name: 'A' });
           const entityB = new JDLEntity({ name: 'B' });
           const relationship = new JDLRelationship({
-            from: entityA,
-            to: entityB,
+            from: entityA.name,
+            to: entityB.name,
             injectedFieldInTo: 'a',
             type: RelationshipTypes.ONE_TO_ONE
           });
@@ -838,8 +838,8 @@ describe('EntityParser', () => {
           name: 'B'
         });
         const relationship = new JDLRelationship({
-          from: entityA,
-          to: entityB,
+          from: entityA.name,
+          to: entityB.name,
           type: RelationshipTypes.ONE_TO_MANY,
           injectedFieldInFrom: 'b',
           injectedFieldInTo: 'a'
