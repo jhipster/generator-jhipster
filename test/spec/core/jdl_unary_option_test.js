@@ -71,7 +71,7 @@ describe('JDLUnaryOption', () => {
       });
     });
   });
-  describe('#setEnityNames', () => {
+  describe('#setEntityNames', () => {
     let option = null;
 
     before(() => {
