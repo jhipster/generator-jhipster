@@ -22,6 +22,7 @@ import { Storage } from 'react-jhipster';
 <%_ } _%>
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+<% if (enableTranslation) { %>import { setLocale } from 'app/shared/reducers/locale';<% } %>
 
 export const ACTION_TYPES = {
   <%_ if (authenticationType !== 'oauth2') { _%>
@@ -146,7 +147,16 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
   });
+ <%_ if (enableTranslation) { _%>
+  await dispatch(getSession());
+
+  const account = getState().authentication.account;
+  if (account && account.langKey) {
+    dispatch(setLocale(account.langKey));
+  }
+  <%_ } else { _%>
   dispatch(getSession());
+  <%_ } _%>
 };
 <%_ } else if (authenticationType === 'jwt') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
@@ -163,7 +173,16 @@ export const login = (username, password, rememberMe = false) => async (dispatch
       Storage.session.set(AUTH_TOKEN_KEY, jwt);
     }
   }
+ <%_ if (enableTranslation) { _%>
+  await dispatch(getSession());
+
+  const account = getState().authentication.account;
+  if (account && account.langKey) {
+    dispatch(setLocale(account.langKey));
+  }
+  <%_ } else { _%>
   dispatch(getSession());
+  <%_ } _%>
 };
 <%_ } else if (authenticationType === 'uaa') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
@@ -171,7 +190,16 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('auth/login', { username, password })
   });
+ <%_ if (enableTranslation) { _%>
+  await dispatch(getSession());
+
+  const account = getState().authentication.account;
+  if (account && account.langKey) {
+    dispatch(setLocale(account.langKey));
+  }
+  <%_ } else { _%>
   dispatch(getSession());
+  <%_ } _%>
 };
 <%_ } _%>
 
