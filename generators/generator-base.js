@@ -1966,23 +1966,24 @@ module.exports = class extends PrivateBase {
         return joinTableName;
     }
 
+
     /**
-     * get a foreign key constraint name for tables in JHipster preferred style.
+     * get a constraint name for tables in JHipster preferred style after applying any length limits required.
      *
      * @param {string} entityName - name of the entity
-     * @param {string} relationshipName - name of the related entity
+     * @param {string} columnOrRelationName - name of the column or related entity
      * @param {string} prodDatabaseType - database type
      * @param {boolean} noSnakeCase - do not convert names to snakecase
+     * @param {string} constraintNamePrefix - constraintName prefix for the constraintName
      */
-    getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+    getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, constraintNamePrefix = '') {
         let constraintName;
         if (noSnakeCase) {
-            constraintName = `fk_${entityName}_${relationshipName}_id`;
+            constraintName = `${constraintNamePrefix}${entityName}_${columnOrRelationName}`;
         } else {
-            constraintName = `fk_${this.getTableName(entityName)}_${this.getTableName(relationshipName)}_id`;
+            constraintName = `${constraintNamePrefix}${this.getTableName(entityName)}_${this.getTableName(columnOrRelationName)}`;
         }
         let limit = 0;
-
         if (prodDatabaseType === 'oracle' && constraintName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
@@ -1995,10 +1996,35 @@ module.exports = class extends PrivateBase {
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
             const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
-            const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 2) : this.getTableName(relationshipName).substring(0, halfLimit - 2);
-            return `${entityTable}_${relationTable}_id`;
+            const otherTable = noSnakeCase ? columnOrRelationName.substring(0, halfLimit - 2) : this.getTableName(columnOrRelationName).substring(0, halfLimit - 2);
+            return `${entityTable}_${otherTable}`;
         }
         return constraintName;
+    }
+
+    /**
+     * get a foreign key constraint name for tables in JHipster preferred style.
+     *
+     * @param {string} entityName - name of the entity
+     * @param {string} relationshipName - name of the related entity
+     * @param {string} prodDatabaseType - database type
+     * @param {boolean} noSnakeCase - do not convert names to snakecase
+     */
+    getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+        // for backward compatibility
+        return this.getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase);
+    }
+
+    /**
+     * get a foreign key constraint name for tables in JHipster preferred style.
+     *
+     * @param {string} entityName - name of the entity
+     * @param {string} relationshipName - name of the related entity
+     * @param {string} prodDatabaseType - database type
+     * @param {boolean} noSnakeCase - do not convert names to snakecase
+     */
+    getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+        return `${this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_')}_id`;
     }
 
     /**
@@ -2007,27 +2033,10 @@ module.exports = class extends PrivateBase {
      * @param {string} entityName - name of the entity
      * @param {string} columnName - name of the column
      * @param {string} prodDatabaseType - database type
+     * @param {boolean} noSnakeCase - do not convert names to snakecase
      */
-    getUXConstraintName(entityName, columnName, prodDatabaseType) {
-        const constraintName = `ux_${entityName}_${columnName}`;
-        let limit = 0;
-
-        if (prodDatabaseType === 'oracle' && constraintName.length > 30 && !this.skipCheckLengthOfIdentifier) {
-            this.warning(`The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
-
-            limit = 28;
-        } else if (prodDatabaseType === 'mysql' && constraintName.length > 64 && !this.skipCheckLengthOfIdentifier) {
-            this.warning(`The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
-
-            limit = 62;
-        }
-        if (limit > 0) {
-            const halfLimit = Math.floor(limit / 2);
-            const entityTable = entityName.substring(0, halfLimit);
-            const columnTable = columnName.substring(0, halfLimit - 2);
-            return `ux_${entityTable}_${columnTable}`;
-        }
-        return constraintName;
+    getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
+        return `ux_${this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase)}`;
     }
 
     /**

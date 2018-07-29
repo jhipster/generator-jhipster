@@ -138,19 +138,30 @@ describe('Generator Base', () => {
     describe('getUXConstraintName', () => {
         describe('when called with a value', () => {
             it('returns a constraint name', () => {
-                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'mysql')).to.equal('ux_entityName_columnName');
+                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'mysql')).to.equal('ux_entity_name_column_name');
+            });
+        });
+        describe('when called with a value and no snake case', () => {
+            it('returns a constraint name', () => {
+                expect(BaseGenerator.getUXConstraintName('entityName', 'columnName', 'mysql', true)).to.equal('ux_entityName_columnName');
             });
         });
         describe('when called with a long name and oracle', () => {
             it('returns a proper constraint name', () => {
                 expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', 'oracle')).to.have.length(30);
-                expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', 'oracle')).to.equal('ux_entityNameLong_columnLonger');
+                expect(BaseGenerator.getUXConstraintName('entityNameLongerName', 'columnLongerName', 'oracle')).to.equal('ux_entity_name_lo_column_longe');
             });
         });
         describe('when called with a long name and mysql', () => {
             it('returns a proper constraint name', () => {
                 expect(BaseGenerator.getUXConstraintName('entityLongerNameWithPaginationAndDTO', 'columnLongerNameWithPaginationAndDTO', 'mysql')).to.have.length(64);
-                expect(BaseGenerator.getUXConstraintName('entityLongerNameWithPaginationAndDTO', 'columnLongerNameWithPaginationAndDTO', 'mysql')).to.equal('ux_entityLongerNameWithPaginationA_columnLongerNameWithPaginatio');
+                expect(BaseGenerator.getUXConstraintName('entityLongerNameWithPaginationAndDTO', 'columnLongerNameWithPaginationAndDTO', 'mysql')).to.equal('ux_entity_longer_name_with_paginat_column_longer_name_with_pagin');
+            });
+        });
+        describe('when called with a long name and mysql and no snake case', () => {
+            it('returns a proper constraint name', () => {
+                expect(BaseGenerator.getUXConstraintName('entityLongerNameWithPaginationAndDTO', 'columnLongerNameWithPaginationAndDTO', 'mysql', true)).to.have.length(64);
+                expect(BaseGenerator.getUXConstraintName('entityLongerNameWithPaginationAndDTO', 'columnLongerNameWithPaginationAndDTO', 'mysql', true)).to.equal('ux_entityLongerNameWithPaginationA_columnLongerNameWithPaginatio');
             });
         });
     });
