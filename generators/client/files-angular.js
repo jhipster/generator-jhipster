@@ -468,7 +468,8 @@ const files = {
                 'spec/helpers/mock-login.service.ts',
                 'spec/helpers/mock-event-manager.service.ts',
                 'spec/helpers/mock-active-modal.service.ts',
-                'spec/helpers/mock-state-storage.service.ts'
+                'spec/helpers/mock-state-storage.service.ts',
+                'spec/helpers/mock-alert.service.ts'
             ]
         },
         {
@@ -483,7 +484,8 @@ const files = {
                 'spec/app/account/register/register.component.spec.ts',
                 'spec/app/account/settings/settings.component.spec.ts',
                 // login component tests
-                'spec/app/shared/login/login.component.spec.ts'
+                'spec/app/shared/login/login.component.spec.ts',
+                'spec/app/shared/alert/alert-error.component.spec.ts'
             ]
         },
         {

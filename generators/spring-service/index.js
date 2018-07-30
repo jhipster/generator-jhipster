@@ -29,6 +29,14 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
+
+        this.option('default', {
+            type: Boolean,
+            default: false,
+            description: 'default option'
+        });
+        this.defaultOption = this.options.default;
+
         const blueprint = this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
@@ -37,7 +45,8 @@ module.exports = class extends BaseGenerator {
                 'spring-service',
                 {
                     force: this.options.force,
-                    arguments: [this.name]
+                    arguments: [this.name],
+                    default: this.options.default
                 }
             );
         } else {
@@ -68,8 +77,6 @@ module.exports = class extends BaseGenerator {
     _prompting() {
         return {
             prompting() {
-                const done = this.async();
-
                 const prompts = [
                     {
                         type: 'confirm',
@@ -78,10 +85,15 @@ module.exports = class extends BaseGenerator {
                         default: false
                     }
                 ];
-                this.prompt(prompts).then((props) => {
-                    this.useInterface = props.useInterface;
-                    done();
-                });
+                if (!this.defaultOption) {
+                    const done = this.async();
+                    this.prompt(prompts).then((props) => {
+                        this.useInterface = props.useInterface;
+                        done();
+                    });
+                } else {
+                    this.useInterface = true;
+                }
             }
         };
     }

@@ -854,7 +854,7 @@ _%>
         // Create the <%= entityClass %><% if (dto === 'mapstruct') { %>
         <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);<% } %>
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException 
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)))

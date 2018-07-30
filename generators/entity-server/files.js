@@ -227,7 +227,7 @@ function writeFiles() {
                     const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
                     if (!this.skipServer) {
                         this.template(
-                            `${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
+                            `${this.fetchFromInstalledJHipster('entity-server/templates')}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
                             `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
                             this, {}, enumInfo
                         );
