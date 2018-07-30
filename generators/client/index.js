@@ -450,14 +450,6 @@ module.exports = class extends BaseGenerator {
     _end() {
         return {
             end() {
-                if (!this.options['skip-install']) {
-                    this.log(chalk.green('\nStarting webpack:build\n'));
-
-                    const buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
-                    if (buildResult !== undefined && buildResult.status !== 0) {
-                        this.error('webpack:build failed.');
-                    }
-                }
                 this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
                 const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;

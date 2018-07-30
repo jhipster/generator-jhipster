@@ -40,11 +40,11 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webpack_test(type: <%= clientPackageManager.charAt(0).toUpperCase() + clientPackageManager.slice(1) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
+task webpack_test(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
     args = ["run", "webpack:test"]
 }
 
-task webpack(type: <%= clientPackageManager.charAt(0).toUpperCase() + clientPackageManager.slice(1) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
+task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
     args = ["run", "webpack:prod"]
 }
 
