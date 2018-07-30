@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { browser, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor<% } %> } from 'protractor';
+import { browser, ExpectedConditions as ec, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor<% } %> } from 'protractor';
 import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
 
 import { <%= entityClass %>ComponentsPage, <%= entityClass %>UpdatePage } from './<%= entityFileName %>.page-object';
@@ -58,6 +58,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ } else { _%>
         await signInPage.autoSignInUsing('admin', 'admin');
         <%_ } _%>
+        await browser.wait(ec.visibilityOf(navBarPage.entityMenu), 5000);
     });
 
     it('should load <%= entityClassPlural %>', async () => {
