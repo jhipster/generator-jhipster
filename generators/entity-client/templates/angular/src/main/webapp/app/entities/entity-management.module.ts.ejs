@@ -23,13 +23,23 @@ import { <%= angularXAppName %>SharedModule } from 'app/shared';
 <%_ Object.keys(differentRelationships).forEach(key => {
        if (key === 'User') { _%>
 import { <%= angularXAppName %>AdminModule } from 'app/admin/admin.module';
-<%_ }}); _%>
+<%_ } else {
+    const needOther = differentRelationships[key].some(rel => (rel.relationshipType === 'many-to-one' || rel.ownerSide === true));
+    const firstRel = differentRelationships[key][0];
+    if (needOther && firstRel.otherEntityAngularName !== entityAngularName) {
+_%>
+import { <%= firstRel.otherEntityModuleName %> } from '../<%= firstRel.otherEntityModulePath %>/<%= firstRel.otherEntityModulePath %>.module';
+<%_
+    }
+}}); _%>
 import {
     <%= entityAngularName %>Component,
     <%= entityAngularName %>DetailComponent,
     <%= entityAngularName %>UpdateComponent,
     <%= entityAngularName %>DeletePopupComponent,
     <%= entityAngularName %>DeleteDialogComponent,
+    <%= entityAngularName %>SelectionComponent,
+    <%= entityAngularName %>MultiSelectionComponent,
     <%= entityInstance %>Route,
     <%= entityInstance %>PopupRoute
 } from './';
@@ -45,7 +55,14 @@ const ENTITY_STATES = [
         <%_ Object.keys(differentRelationships).forEach(key => {
               if (key === 'User') { _%>
         <%= angularXAppName %>AdminModule,
-        <%_ }}); _%>
+        <%_ } else {
+            const needOther = differentRelationships[key].some(rel => (rel.relationshipType === 'many-to-one' || rel.ownerSide === true));
+            const firstRel = differentRelationships[key][0];
+            if (needOther && firstRel.otherEntityAngularName !== entityAngularName) { _%>
+        <%= firstRel.otherEntityModuleName %>,
+        <%_
+            }
+        }}); _%>
         RouterModule.forChild(ENTITY_STATES)
     ],
     declarations: [
@@ -54,6 +71,8 @@ const ENTITY_STATES = [
         <%= entityAngularName %>UpdateComponent,
         <%= entityAngularName %>DeleteDialogComponent,
         <%= entityAngularName %>DeletePopupComponent,
+        <%= entityAngularName %>SelectionComponent,
+        <%= entityAngularName %>MultiSelectionComponent,
     ],
     entryComponents: [
         <%= entityAngularName %>Component,
@@ -61,6 +80,10 @@ const ENTITY_STATES = [
         <%= entityAngularName %>DeleteDialogComponent,
         <%= entityAngularName %>DeletePopupComponent,
     ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    exports: [
+        <%= entityAngularName %>SelectionComponent,
+        <%= entityAngularName %>MultiSelectionComponent,
+    ]
 })
 export class <%= angularXAppName %><%= entityAngularName %>Module {}

@@ -405,7 +405,9 @@ const files = {
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert-error.component.ts',
                 // dates
-                'shared/util/datepicker-adapter.ts'
+                'shared/util/datepicker-adapter.ts',
+                // fields
+                'shared/fields/base-form-field.component.ts'
             ]
         },
         {

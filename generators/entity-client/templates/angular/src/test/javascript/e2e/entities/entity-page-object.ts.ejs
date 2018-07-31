@@ -145,7 +145,7 @@ export class <%= entityClass %>UpdatePage {
     }
 
     get<%=relationshipNameCapitalized %>SelectedOption() {
-        return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
+        return this.<%=relationshipName %>Select.getAttribute('value');
     }
 
     <%_ } _%>
