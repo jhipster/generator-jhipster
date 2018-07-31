@@ -49,7 +49,7 @@ module.exports = {
         argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
     },
-    'link-account': {
+    login: {
         desc: 'Link the installed JHipster CLI to your JHipster Online account'
     },
     openshift: {

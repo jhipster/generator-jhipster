@@ -68,13 +68,15 @@ module.exports = class extends BaseGenerator {
         return {
             authenticateAndLink() {
                 if (!this.showGuid) {
+                    const done = this.async();
                     authenticateAndLink(
                         statistics.axiosClient,
                         this,
                         this.login,
                         this.password,
                         statistics.clientId,
-                        statistics.statisticsAPIPath
+                        statistics.statisticsAPIPath,
+                        done
                     ).catch((error) => {
                         if (statistics.axiosProxyClient && error !== undefined) {
                             authenticateAndLink(
@@ -83,12 +85,15 @@ module.exports = class extends BaseGenerator {
                                 this.login,
                                 this.password,
                                 statistics.clientId,
-                                statistics.statisticsAPIPath
+                                statistics.statisticsAPIPath,
+                                done
                             ).catch((error) => {
                                 this.log(`Could not authenticate! (with proxy ${error})`);
+                                done();
                             });
                         } else if (error !== undefined) {
                             this.log(`Could not authenticate! (without proxy ${error})`);
+                            done();
                         }
                     });
                 }
@@ -102,7 +107,7 @@ module.exports = class extends BaseGenerator {
     }
 };
 
-function authenticateAndLink(axiosClient, generator, username, password, generatorId, statisticsPath) {
+function authenticateAndLink(axiosClient, generator, username, password, generatorId, statisticsPath, done) {
     return axiosClient.post(`${statistics.statisticsAPIPath}/authenticate`, {
         username,
         password,
@@ -113,12 +118,15 @@ function authenticateAndLink(axiosClient, generator, username, password, generat
         }
     }).then((success) => {
         generator.log('Link successful!');
+        done();
         statistics.setLinkedStatus(true);
     }, (error) => {
         if (error.response.status === 409) {
             generator.log.error('It looks like this generator has already been linked to an account.');
+            done();
         } else {
             generator.log.error(`Link failed! (${error})`);
+            done();
         }
     }), error => Promise.reject(error)).then(error => Promise.reject(error));
 }
