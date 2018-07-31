@@ -55,4 +55,23 @@ describe('JHipster generator service', () => {
             ]);
         });
     });
+
+    describe('creates service with --default flag', () => {
+        beforeEach((done) => {
+            helpers.run(require.resolve('../generators/spring-service'))
+                .inTmpDir((dir) => {
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
+                })
+                .withArguments(['foo'])
+                .withOptions({ default: true })
+                .on('end', done);
+        });
+
+        it('creates service file', () => {
+            assert.file([
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
+            ]);
+        });
+    });
 });

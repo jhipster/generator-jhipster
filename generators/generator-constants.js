@@ -18,7 +18,7 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v3.3.0';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v4.0.0';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.20';
 const DOCKER_MARIADB = 'mariadb:10.3.7';
@@ -104,6 +104,9 @@ const LANGUAGES = [
         name: 'Arabic (Libya)', dispName: 'العربية', value: 'ar-ly', rtl: true, skipForLocale: true
     },
     { name: 'Armenian', dispName: 'Հայերեն', value: 'hy' },
+    {
+        name: 'Belorussian', dispName: 'Беларускі', value: 'by', localeId: 'by'
+    },
     { name: 'Catalan', dispName: 'Català', value: 'ca' },
     {
         name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn', localeId: 'zh-Hans'

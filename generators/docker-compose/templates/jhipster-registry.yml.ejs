@@ -27,9 +27,11 @@ services:
         # "native" profile means the filesystem is used to store data, see
         # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
         environment:
-            - SPRING_PROFILES_ACTIVE=dev,native<% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
+            - SPRING_PROFILES_ACTIVE=dev<% if (authenticationType === 'oauth2') { %>,oauth2<% } %>
             - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
             - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
+            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
             <%_ if (monitoring === 'elk') { _%>
             - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true
             - JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash

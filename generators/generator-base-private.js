@@ -758,22 +758,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Check if git connection can be established
-     */
-    checkGitConnection() {
-        if (!this.gitInstalled) return;
-        const done = this.async();
-        exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', { timeout: 5000 }, (error) => {
-            if (error) {
-                this.warning(`Failed to connect to "git://github.com"
-1. Check your Internet connection.
-2. If you are using an HTTP proxy, try this command: ${chalk.yellow('git config --global url."https://".insteadOf git://')}`);
-            }
-            done();
-        });
-    }
-
-    /**
      * Check if Yarn is installed
      */
     checkYarn() {
@@ -958,6 +942,7 @@ module.exports = class extends Generator {
      *
      * @param {Array|Object} relationships - array of relationships
      * @param {string} dto - dto
+     * @param {string} clientFramework the client framework, 'angularX' or 'react'.
      * @returns typeImports: Map
      */
     generateEntityClientImports(relationships, dto, clientFramework = this.clientFramework) {
@@ -983,7 +968,7 @@ module.exports = class extends Generator {
                 if (otherEntityAngularName === 'User') {
                     importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : './user.model';
                 } else {
-                    importPath = clientFramework === 'angularX' ? `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model` : `./${relationship.otherEntityFileName}.model`;
+                    importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
                 }
                 typeImports.set(importType, importPath);
             }

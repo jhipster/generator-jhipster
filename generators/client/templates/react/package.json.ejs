@@ -27,8 +27,8 @@ limitations under the License.
     "node_modules"
   ],
   "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "5.1.0",
-    "@fortawesome/fontawesome-svg-core": "1.2.0",
+    "@fortawesome/free-solid-svg-icons": "5.1.1",
+    "@fortawesome/fontawesome-svg-core": "1.2.1",
     "@fortawesome/react-fontawesome": "0.1.0",
     "availity-reactstrap-validation": "2.0.2",
     "axios": "0.18.0",
@@ -41,7 +41,7 @@ limitations under the License.
     "react-addons-transition-group": "16.0.0-alpha.3",
     "react-dom": "16.4.1",
     "react-hot-loader": "3.1.1",
-    "react-jhipster": "0.5.3",
+    "react-jhipster": "0.5.4",
     "react-loadable": "5.4.0",
     "react-redux": "5.0.7",
     "react-redux-loading-bar": "4.0.5",
@@ -106,6 +106,7 @@ limitations under the License.
     <%_ } _%>
     "image-webpack-loader": "4.3.1",
     "jest": "23.2.0",
+    "jest-junit": "5.1.0",
     "jest-sonar-reporter": "2.0.0",
     <%_ if (protractorTests) { _%>
     "chai-as-promised": "7.1.1",
@@ -208,6 +209,6 @@ limitations under the License.
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",
-    "reportFile": "TESTS-results.xml"
+    "reportFile": "TESTS-results-sonar.xml"
   }
 }

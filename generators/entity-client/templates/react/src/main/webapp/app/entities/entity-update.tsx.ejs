@@ -211,7 +211,7 @@ const ownerSide = rel.ownerSide;
 _%>
   <%_ if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
   <%= relationshipFieldName %>Update = element => {
-    const selected = Array.from(element.target.selectedOptions).map((e: any) => e.value);
+    const selected = Array.from(element.target.selectedOptions).map((e: any) => parseInt(e.value, 10));
     this.setState({
       ids<%= relationshipName %>: keysToValues(selected, this.props.<%= otherEntityNamePlural %>, '<%= otherEntityField %>')
     });
@@ -375,9 +375,14 @@ _%>
               <%_
                 const enumPrefix = angularAppName + '.'+ fieldType;
                 for (key in values) {
-                    const value = values[key]; _%>
+                    const value = values[key];
+              _%>
                 <option value="<%= value %>">
-                    <%=value%>
+                <%_ if (enableTranslation) { _%>
+                  <Translate contentKey="<%= enumPrefix %>.<%= value %>" />
+                <%_ } else { _%>
+                  <%= value %>
+                <%_ } _%>
                 </option>
               <%_ } _%>
               </AvInput>

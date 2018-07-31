@@ -34,9 +34,9 @@
     "@angular/platform-browser": "6.0.0",
     "@angular/platform-browser-dynamic": "6.0.0",
     "@angular/router": "6.0.0",
-    "@fortawesome/angular-fontawesome": "0.1.0-9",
-    "@fortawesome/fontawesome-svg-core": "1.2.0-11",
-    "@fortawesome/free-solid-svg-icons": "5.1.0-8",
+    "@fortawesome/angular-fontawesome": "0.1.1",
+    "@fortawesome/fontawesome-svg-core": "1.2.1",
+    "@fortawesome/free-solid-svg-icons": "5.1.1",
     "@ng-bootstrap/ng-bootstrap": "2.0.0",
     "bootstrap": "4.0.0",
     "core-js": "2.5.3",
@@ -86,6 +86,7 @@
     "husky": "0.14.3",
     <%_ } _%>
     "jest": "22.4.3",
+    "jest-junit": "5.1.0",
     "jest-preset-angular": "5.2.2",
     "jest-sonar-reporter": "2.0.0",
     <%_ if (protractorTests) { _%>
@@ -180,6 +181,6 @@
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",
-    "reportFile": "TESTS-results.xml"
+    "reportFile": "TESTS-results-sonar.xml"
   }
 }
