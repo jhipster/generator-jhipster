@@ -1960,7 +1960,7 @@ module.exports = class extends PrivateBase {
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
             const entityTable = this.getTableName(entityName).substring(0, halfLimit);
-            const relationTable = this.getTableName(relationshipName).substring(0, halfLimit - 1);
+            const relationTable = this.getTableName(relationshipName).substring(0, limit - entityTable.length - 1);
             return `${entityTable}_${relationTable}`;
         }
         return joinTableName;
@@ -1984,11 +1984,11 @@ module.exports = class extends PrivateBase {
             constraintName = `${constraintNamePrefix}${this.getTableName(entityName)}_${this.getTableName(columnOrRelationName)}`;
         }
         let limit = 0;
-        if (prodDatabaseType === 'oracle' && constraintName.length > 30 && !this.skipCheckLengthOfIdentifier) {
+        if (prodDatabaseType === 'oracle' && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
             limit = 28;
-        } else if (prodDatabaseType === 'mysql' && constraintName.length > 64 && !this.skipCheckLengthOfIdentifier) {
+        } else if (prodDatabaseType === 'mysql' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
             limit = 62;
@@ -1996,7 +1996,7 @@ module.exports = class extends PrivateBase {
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
             const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
-            const otherTable = noSnakeCase ? columnOrRelationName.substring(0, halfLimit - 2) : this.getTableName(columnOrRelationName).substring(0, halfLimit - 2);
+            const otherTable = noSnakeCase ? columnOrRelationName.substring(0, limit - entityTable.length - 2) : this.getTableName(columnOrRelationName).substring(0, limit - entityTable.length - 2);
             return `${entityTable}_${otherTable}`;
         }
         return constraintName;
