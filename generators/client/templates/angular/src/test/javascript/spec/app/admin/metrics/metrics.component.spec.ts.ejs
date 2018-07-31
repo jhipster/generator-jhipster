@@ -1,0 +1,82 @@
+<%#
+Copyright 2013-2018 the original author or authors from the JHipster project.
+
+    This file is part of the JHipster project, see https://www.jhipster.tech/
+    for more information.
+
+        Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+limitations under the License.
+-%>
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { of, throwError } from 'rxjs';
+
+import { <%=angularXAppName%>TestModule } from '../../../test.module';
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from 'app/admin/metrics/metrics.component';
+import { <%=jhiPrefixCapitalized%>MetricsService } from 'app/admin/metrics/metrics.service';
+
+describe('Component Tests', () => {
+    describe('<%=jhiPrefixCapitalized%>MetricsMonitoringComponent', () => {
+        let comp: <%=jhiPrefixCapitalized%>MetricsMonitoringComponent;
+        let fixture: ComponentFixture<<%=jhiPrefixCapitalized%>MetricsMonitoringComponent>;
+        let service: <%=jhiPrefixCapitalized%>MetricsService;
+
+        beforeEach(async(() => {
+            TestBed.configureTestingModule({
+                imports: [<%=angularXAppName%>TestModule],
+                declarations: [<%=jhiPrefixCapitalized%>MetricsMonitoringComponent]
+            })
+                .overrideTemplate(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent, '')
+                .compileComponents();
+        }));
+
+        beforeEach(() => {
+            fixture = TestBed.createComponent(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent);
+            comp = fixture.componentInstance;
+            service = fixture.debugElement.injector.get(<%=jhiPrefixCapitalized%>MetricsService);
+        });
+
+        describe('refresh', () => {
+            it('should call refresh on init', () => {
+                // GIVEN
+                const response = {
+                    timers: {
+                        service: 'test',
+                        unrelatedKey: 'test'
+                    },
+                    gauges: {
+                        'jcache.statistics': {
+                            value: 2
+                        },
+                        unrelatedKey: 'test'
+                    }
+                }
+                spyOn(service, 'getMetrics').and.returnValue(of((response)));
+
+                // WHEN
+                comp.ngOnInit()
+
+                // THEN
+                expect(service.getMetrics).toHaveBeenCalled();
+                expect(comp.servicesStats).toEqual({ service: 'test' });
+                expect(comp.cachesStats).toEqual({ jcache: { name: 17, value: 2 } });
+            });
+        });
+
+        describe('isNan', () => {
+            it('should return if a variable is NaN', () => {
+                expect(comp.filterNaN(1)).toBe(1);
+                expect(comp.filterNaN('test')).toBe(0);
+            });
+        });
+    });
+});
