@@ -878,9 +878,9 @@ module.exports = class extends Generator {
             const fieldName = field.fieldName;
             if (fieldType === 'Boolean') {
                 if (clientFramework === 'react') {
-                    defaultVariablesValues[fieldName] = `${fieldName}: false,`;
+                    defaultVariablesValues[fieldName] = `${fieldName}: ${fieldName} || false,`;
                 } else {
-                    defaultVariablesValues[fieldName] = `this.${fieldName} = false;`;
+                    defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} || false;`;
                 }
             }
         });
