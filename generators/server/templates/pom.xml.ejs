@@ -44,7 +44,7 @@
     </repositories>
 
     <!-- jhipster-needle-distribution-management -->
-    
+
     <properties>
         <!-- Build properties -->
         <maven.version>3.0.0</maven.version>
@@ -1158,7 +1158,7 @@
             <id>webpack</id>
             <activation>
                 <file>
-                    <missing>${basedir}/target/www/app/global.bundle.js</missing>
+                    <missing>${basedir}/target/www/app/<% if (clientFramework === 'angularX') { %>global<% } else if (clientFramework === 'react') { %>main<% } %>.bundle.js</missing>
                 </file>
             </activation>
             <dependencies>

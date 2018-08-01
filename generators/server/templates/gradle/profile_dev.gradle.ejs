@@ -75,6 +75,6 @@ processResources.dependsOn webpackBuildDev
 yarn_install.onlyIf { shouldWebpackRun() == true }
 
 def shouldWebpackRun() {
-    file('build/www/app/global.bundle.js').exists() == false || project.hasProperty('webpack')
+    file('build/www/app/<% if (clientFramework === 'angularX') { %>global<% } else if (clientFramework === 'react') { %>main<% } %>.bundle.js').exists() == false || project.hasProperty('webpack')
 }
 <%_ } _%>
