@@ -262,6 +262,7 @@ module.exports = class extends BaseGenerator {
                     this.configOptions.devDatabaseType = this.options.db;
                     this.configOptions.prodDatabaseType = this.options.db;
                     this.configOptions.authenticationType = this.options.auth;
+                    this.configOptions.uaaBaseName = this.options.uaaBaseName;
                 }
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
