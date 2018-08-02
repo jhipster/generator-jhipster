@@ -20,9 +20,6 @@
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
-<%_ if (pagination === 'infinite-scroll') { _%>
-import isEqual from 'lodash/isEqual';
-<%_ } _%>
 import axios from 'axios';
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -43,9 +40,6 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 
 <%_ } _%>
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
-<%_ if (pagination === 'infinite-scroll') { _%>
-import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
-<%_ } _%>
 
 export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -140,7 +134,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         totalItems: action.payload.headers['x-total-count'],
         <%_ } _%>
         <%_ if (pagination === 'infinite-scroll') { _%>
-        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links, ITEMS_PER_PAGE)
+        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links)
         <%_ } else { _%>
         entities: action.payload.data
         <%_ } _%>
@@ -230,7 +224,9 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 
@@ -239,7 +235,9 @@ export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 
@@ -249,7 +247,9 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     payload: axios.delete(requestUrl)
   });
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 
