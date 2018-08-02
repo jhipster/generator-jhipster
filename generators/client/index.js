@@ -455,6 +455,9 @@ module.exports = class extends BaseGenerator {
                 const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
 
                 this.log(chalk.green(logMsg));
+                if (!this.options['skip-install']) {
+                    this.spawnCommandSync(this.clientPackageManager, ['run', 'cleanup']);
+                }
             }
         };
     }
