@@ -90,9 +90,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   componentDidMount() {
     <%_ if (pagination !== 'no') { _%>
       <%_ if (pagination === 'infinite-scroll') { _%>
-      if (!this.props.<%=entityInstance %>List.length) {
-        this.getEntities();
-      }
+      this.reset();
       <%_ } else { _%>
       this.getEntities();
       <%_ } _%>
