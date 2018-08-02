@@ -17,7 +17,8 @@
  limitations under the License.
 -%>
 import { browser, element, by } from 'protractor';
-import { NavBarPage } from './../page-objects/jhi-page-objects';
+
+import { NavBarPage, SignInPage } from '../page-objects/jhi-page-objects';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
@@ -27,99 +28,94 @@ if (enableTranslation) {
 describe('administration', () => {
 
     let navBarPage: NavBarPage;
+    let signInPage: SignInPage;
 
-    beforeAll(() => {
-        browser.get('/');
-        browser.waitForAngular();
+    beforeAll(async () => {
+        await browser.get('/');
         navBarPage = new NavBarPage(true);
+        signInPage = await navBarPage.getSignInPage();
         <%_ if (authenticationType !== 'oauth2') { _%>
-        navBarPage.getSignInPage().autoSignInUsing('admin', 'admin');
+        await signInPage.autoSignInUsing('admin', 'admin');
         <%_ } else { _%>
-        navBarPage.getSignInPage().loginWithOAuth('admin', 'admin');
+        await signInPage.loginWithOAuth('admin', 'admin');
         <%_ } _%>
-        browser.waitForAngular();
     });
 
-    beforeEach(() => {
-        navBarPage.clickOnAdminMenu();
+    beforeEach(async () => {
+        await navBarPage.clickOnAdminMenu();
     });
+    
     <%_ if (authenticationType !== 'oauth2') { _%>
-    it('should load user management', () => {
-        navBarPage.clickOnAdmin('user-management');
+    it('should load user management', async () => {
+        await navBarPage.clickOnAdmin('user-management');
         <%_ if (enableTranslation) { _%>
         const expect1 = /userManagement.home.title/;
         <%_ } else { _%>
         const expect1 = /Users/;
         <%_ } _%>
-        element.all(by.css('h2 span')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await element(by.id('user-management-page-heading')).<%- elementGetter %>;
+        expect(value1).toMatch(expect1);
     });
     <%_ } _%>
 
-    it('should load metrics', () => {
-        navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-metrics');
+    it('should load metrics', async () => {
+        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-metrics');
         <%_ if (enableTranslation) { _%>
         const expect1 = /metrics.title/;
         <%_ } else { _%>
         const expect1 = /Application Metrics/;
         <%_ } _%>
-        element.all(by.css('h2 span')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await element(by.id('metrics-page-heading')).<%- elementGetter %>;
+        expect(value1).toMatch(expect1);
     });
 
-    it('should load health', () => {
-        navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-health');
+    it('should load health', async () => {
+        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-health');
         <%_ if (enableTranslation) { _%>
         const expect1 = /health.title/;
         <%_ } else { _%>
         const expect1 = /Health Checks/;
         <%_ } _%>
-        element.all(by.css('h2 span')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await element(by.id('health-page-heading')).<%- elementGetter %>;
+        expect(value1).toMatch(expect1);
     });
 
-    it('should load configuration', () => {
-        navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-configuration');
+    it('should load configuration', async () => {
+        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-configuration');
         <%_ if (enableTranslation) { _%>
         const expect1 = /configuration.title/;
         <%_ } else { _%>
         const expect1 = /Configuration/;
         <%_ } _%>
-        element.all(by.css('h2')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await element(by.id('configuration-page-heading')).<%- elementGetter %>;
+        expect(value1).toMatch(expect1);
     });
 
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-    it('should load audits', () => {
-        navBarPage.clickOnAdmin('audits');
+    it('should load audits', async () => {
+        await navBarPage.clickOnAdmin('audits');
         <%_ if (enableTranslation) { _%>
         const expect1 = /audits.title/;
         <%_ } else { _%>
         const expect1 = /Audits/;
         <%_ } _%>
-        element.all(by.css('h2')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await element(by.id('audits-page-heading')).<%- elementGetter %>;
+        expect(value1).toMatch(expect1);
     });
 
 <%_ } _%>
-    it('should load logs', () => {
-        navBarPage.clickOnAdmin('logs');
+    it('should load logs', async () => {
+        await navBarPage.clickOnAdmin('logs');
         <%_ if (enableTranslation) { _%>
         const expect1 = /logs.title/;
         <%_ } else { _%>
         const expect1 = /Logs/;
         <%_ } _%>
-        element.all(by.css('h2')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await element(by.id('logs-page-heading')).<%- elementGetter %>;
+        expect(value1).toMatch(expect1);
     });
 
-    afterAll(() => {
-        navBarPage.autoSignOut();
+    afterAll(async () => {
+        await navBarPage.autoSignOut();
     });
 });

@@ -13,13 +13,8 @@
             Your JHipster account has been created, please click on the URL below to activate it:
         </p>
         <p>
-            <% if (clientFramework === 'react') { %>
-            <a th:href="@{|${baseUrl}/#/activate/${user.activationKey}|}"
-               th:text="@{|${baseUrl}/#/activate/${user.activationKey}|}">Activation Link</a>
-            <% } else { %>
             <a th:href="@{|${baseUrl}/#/activate?key=${user.activationKey}|}"
                th:text="@{|${baseUrl}/#/activate?key=${user.activationKey}|}">Activation Link</a>
-            <% } %>
         </p>
         <p>
             <span th:text="#{email.activation.text2}">Regards, </span>
