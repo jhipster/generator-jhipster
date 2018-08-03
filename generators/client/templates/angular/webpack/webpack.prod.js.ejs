@@ -101,6 +101,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         minimizer: [
             new TerserPlugin({
                 parallel: true,
+                cache: true,
                 terserOptions: {
                     ie8: false,
                     // sourceMap: true, // Enable source maps. Please note that this will slow down the build
