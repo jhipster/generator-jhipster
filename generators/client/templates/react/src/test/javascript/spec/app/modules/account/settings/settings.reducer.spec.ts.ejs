@@ -24,7 +24,7 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
 
-import account, { ACTION_TYPES, saveAccountSettings } from 'app/modules/account/settings/settings.reducer';
+import account, { ACTION_TYPES, saveAccountSettings, reset } from 'app/modules/account/settings/settings.reducer';
 import { ACTION_TYPES as authActionTypes } from 'app/shared/reducers/authentication';
 <% if (enableTranslation) { %>import { ACTION_TYPES as localeActionTypes } from 'app/shared/reducers/locale';<% } %>
 
@@ -64,6 +64,22 @@ describe('Settings reducer tests', () => {
         updateSuccess: false,
         updateFailure: true,
         loading: false
+      });
+    });
+
+    it('should reset the state', () => {
+      const initialState = {
+        loading: false,
+        errorMessage: null,
+        updateSuccess: false,
+        updateFailure: false
+      };
+      expect(
+        account({ data: { id: 1}}, {
+          type: ACTION_TYPES.RESET
+        })
+        ).toEqual({
+          ...initialState
       });
     });
   });
@@ -115,6 +131,15 @@ describe('Settings reducer tests', () => {
         }<% } %>
       ];
       await store.dispatch(saveAccountSettings({})).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches ACTION_TYPES.RESET actions', async () => {
+      const expectedActions = [
+        {
+          type: ACTION_TYPES.RESET
+        }
+      ];
+      await store.dispatch(reset());
+      expect(store.getActions()).toEqual(expectedActions);
     });
   });
 });
