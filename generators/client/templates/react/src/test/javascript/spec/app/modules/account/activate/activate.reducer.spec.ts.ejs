@@ -24,7 +24,7 @@ import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 
 import { SUCCESS, FAILURE, REQUEST } from 'app/shared/reducers/action-type.util';
-import activate, { ACTION_TYPES, activateAction } from 'app/modules/account/activate/activate.reducer';
+import activate, { ACTION_TYPES, activateAction, reset } from 'app/modules/account/activate/activate.reducer';
 
 describe('Activate reducer tests', () => {
   it('should return the initial state', () => {
@@ -48,10 +48,31 @@ describe('Activate reducer tests', () => {
     });
   });
 
+  it('should return the same state on request', () => {
+    expect(activate(undefined, { type: REQUEST(ACTION_TYPES.ACTIVATE_ACCOUNT) })).toMatchObject({
+      activationSuccess: false,
+      activationFailure: false
+    });
+  });
+
   it('should detect a failure', () => {
     expect(activate(undefined, { type: FAILURE(ACTION_TYPES.ACTIVATE_ACCOUNT) })).toMatchObject({
       activationSuccess: false,
       activationFailure: true
+    });
+  });
+
+  it('should reset the state', () => {
+    const initialState = {
+      activationSuccess: false,
+      activationFailure: false
+    };
+    expect(
+      activate({ data: { id: 1}}, {
+        type: ACTION_TYPES.RESET
+      })
+      ).toEqual({
+        ...initialState
     });
   });
 
@@ -77,5 +98,15 @@ describe('Activate reducer tests', () => {
       ];
       await store.dispatch(activateAction('')).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
+    it('dispatches ACTION_TYPES.RESET actions', async () => {
+      const expectedActions = [
+        {
+          type: ACTION_TYPES.RESET
+        }
+      ];
+      await store.dispatch(reset());
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+
   });
 });

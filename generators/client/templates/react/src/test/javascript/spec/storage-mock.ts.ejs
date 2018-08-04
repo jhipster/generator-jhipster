@@ -1,8 +1,8 @@
 let StorageMock = () => {
   let store = {};
   return {
-    getItem: (key: any) => store[key] || null,
-    setItem: (key: any, value: any) => (store[key] = value.toString()),
+    get: (key: any) => store[key] || null,
+    set: (key: any, value: any) => (store[key] = value.toString()),
     clear: () => (store = {})
   };
 };
