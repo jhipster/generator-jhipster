@@ -112,7 +112,7 @@ module.exports = class extends BaseGenerator {
 
     _gitCommitAll(commitMsg, callback) {
         const commit = () => {
-            this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty'], { silent: this.silent }, (code, msg, err) => {
+            this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'], { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) this.error(`Unable to commit in git:\n${err}`);
                 this.success(`Committed with message "${commitMsg}"`);
                 callback();
