@@ -379,6 +379,10 @@ module.exports = class extends BaseGenerator {
 
                 this.styleSheetExt = this.useSass ? 'scss' : 'css';
                 this.pkType = this.getPkType(this.databaseType);
+                if (this.authenticationType === 'uaa' && !this.uaaBaseName) {
+                    this.error('UAA base name is undefined! When using UAA, an UAA base name must be defined with the argument \'--uaa-base-name\' ');
+                    return;
+                }
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             },
