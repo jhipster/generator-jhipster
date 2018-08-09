@@ -880,7 +880,7 @@ module.exports = class extends Generator {
                 if (clientFramework === 'react') {
                     defaultVariablesValues[fieldName] = `${fieldName}: false,`;
                 } else {
-                    defaultVariablesValues[fieldName] = `this.${fieldName} = false;`;
+                    defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} || false;`;
                 }
             }
         });
