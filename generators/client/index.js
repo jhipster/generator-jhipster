@@ -217,6 +217,9 @@ module.exports = class extends BaseGenerator {
                 if (this.skipServer && !(this.databaseType && this.devDatabaseType && this.prodDatabaseType && this.authenticationType)) {
                     this.error(`When using skip-server flag, you must pass a database option and authentication type using ${chalk.yellow('--db')} and ${chalk.yellow('--auth')} flags`);
                 }
+                if (this.skipServer && this.authenticationType === 'uaa' && !this.uaaBaseName) {
+                    this.error(`When using skip-server flag and UAA as authentication method, you must pass a UAA base name using ${chalk.yellow('--uaa-base-name')} flag`);
+                }
             }
         };
     }
