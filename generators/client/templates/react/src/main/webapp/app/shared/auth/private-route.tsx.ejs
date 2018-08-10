@@ -14,7 +14,7 @@ export interface IPrivateRouteProps extends IOwnProps, StateProps {}
 export const PrivateRouteComponent = ({
   component: Component,
   isAuthenticated,
-  isGettingTheSession,
+  sessionHasBeenFetched,
   isAuthorized,
   hasAnyAuthorities = [],
   ...rest
@@ -33,8 +33,8 @@ export const PrivateRouteComponent = ({
     );
 
     const renderRedirect = props => {
-      if (isGettingTheSession) {
-        return (<div>Checking you authentication status.</div>);
+      if (!sessionHasBeenFetched) {
+        return (<div></div>);
       } else {
         return isAuthenticated ? (
           checkAuthorities(props)
@@ -66,10 +66,10 @@ export const hasAnyAuthority = (authorities: string[], hasAnyAuthorities: string
   return false;
 };
 
-const mapStateToProps = ({ authentication: { isAuthenticated, account, isGettingTheSession } }: IRootState, { hasAnyAuthorities = [] }: IOwnProps) => ({
+const mapStateToProps = ({ authentication: { isAuthenticated, account, sessionHasBeenFetched } }: IRootState, { hasAnyAuthorities = [] }: IOwnProps) => ({
   isAuthenticated,
   isAuthorized: hasAnyAuthority(account.authorities, hasAnyAuthorities),
-  isGettingTheSession
+  sessionHasBeenFetched
 });
 
 type StateProps = ReturnType<typeof mapStateToProps>;

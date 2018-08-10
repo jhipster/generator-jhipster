@@ -49,7 +49,7 @@ const initialState = {
   account: {} as any,
   errorMessage: null as string, // Errors returned from server side
   redirectMessage: null as string,
-  isGettingTheSession: true
+  sessionHasBeenFetched: false
 };
 
 export type AuthenticationState =  Readonly<typeof initialState>;
@@ -64,8 +64,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
     case REQUEST(ACTION_TYPES.GET_SESSION):
       return {
         ...state,
-        loading: true,
-        isGettingTheSession: true
+        loading: true
       };
     <%_ if (authenticationType !== 'oauth2') { _%>
     case FAILURE(ACTION_TYPES.LOGIN):
@@ -81,7 +80,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         ...state,
         loading: false,
         isAuthenticated: false,
-        isGettingTheSession: false,
+        sessionHasBeenFetched: true,
       <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: true,
       <%_ } _%>
@@ -100,7 +99,6 @@ export default (state: AuthenticationState = initialState, action): Authenticati
     case ACTION_TYPES.LOGOUT:
       return {
         ...initialState,
-        isGettingTheSession: false,
       <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: true
       <%_ } _%>
@@ -112,14 +110,13 @@ export default (state: AuthenticationState = initialState, action): Authenticati
           ...state,
           isAuthenticated,
           loading: false,
-          isGettingTheSession: false,
+          sessionHasBeenFetched: true,
           account: action.payload.data
         };
       }
     case ACTION_TYPES.ERROR_MESSAGE:
       return {
         ...initialState,
-        isGettingTheSession: false,
       <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: true,
       <%_ } _%>
