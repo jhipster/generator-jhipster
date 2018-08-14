@@ -242,7 +242,7 @@
                 "login"
             ],
             "env": {
-                "JHIPSTER_ONLINE_API_URL": "http://localhost:8080/api"
+                "JHIPSTER_ONLINE_URL": "http://localhost:8080"
             },
             "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
             "console": "integratedTerminal"
@@ -256,7 +256,7 @@
                 "logout"
             ],
             "env": {
-                "JHIPSTER_ONLINE_API_URL": "http://localhost:8080/api"
+                "JHIPSTER_ONLINE_URL": "http://localhost:8080"
             },
             "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
             "console": "integratedTerminal"
