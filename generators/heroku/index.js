@@ -227,7 +227,7 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
                 const child = exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
                     if (err) {
-                        if (stderr.includes('Name is already taken')) {
+                        if (stderr.includes('is already taken')) {
                             const prompts = [
                                 {
                                     type: 'list',
