@@ -8,7 +8,7 @@ const packagejs = require('../package.json');
 
 const DO_NOT_ASK_LIMIT = 100;
 
-const API_PATH = 'https://start.jhipster.tech/api';
+const DEFAULT_JHIPSTER_ONLINE_URL = 'https://start.jhipster.tech';
 
 class Statistics {
     constructor() {
@@ -20,7 +20,8 @@ class Statistics {
                 isLinked: false
             }
         });
-        this.statisticsAPIPath = API_PATH;
+        this.jhipsterOnlineUrl = (process.env.JHIPSTER_ONLINE_URL || DEFAULT_JHIPSTER_ONLINE_URL);
+        this.statisticsAPIPath = `${this.jhipsterOnlineUrl}/api`;
         this.clientId = this.config.get('clientId');
         this.doNotAskCounter = this.config.get('doNotAskCounter');
         this.optOut = this.config.get('optOut');
@@ -111,6 +112,10 @@ class Statistics {
     setConfig(key, value) {
         this.config.set(key, value);
         this[key] = value;
+    }
+
+    deleteConfig(key) {
+        this.config.delete(key);
     }
 
     setOptoutStatus(status) {

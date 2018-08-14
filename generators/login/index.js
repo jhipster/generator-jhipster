@@ -23,43 +23,33 @@ const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        // Shows the generator's id
-        this.argument('id', {
-            type: Boolean,
-            required: false,
-            default: false,
-            description: 'Show the generator ID'
-        });
-
-        this.showGuid = this.options.guid;
-    }
-
     get prompting() {
         return {
             askForLoginAndPassword() {
-                if (!this.showGuid) {
-                    const done = this.async();
-
-                    const prompts = [{
-                        type: 'input',
-                        name: 'login',
-                        message: 'JHipster online login',
-                        default: undefined
-                    }, {
-                        type: 'password',
-                        name: 'password',
-                        message: 'JHipster online password',
-                        default: undefined
-                    }];
-
-                    this.prompt(prompts).then((props) => {
-                        this.login = props.login;
-                        this.password = props.password;
-                        done();
-                    });
+                if (statistics.isLinked) {
+                    this.log(`Generator already linked with clientId: ${statistics.clientId}`);
+                    return;
                 }
+
+                const done = this.async();
+
+                const prompts = [{
+                    type: 'input',
+                    name: 'login',
+                    message: 'JHipster online login',
+                    default: undefined
+                }, {
+                    type: 'password',
+                    name: 'password',
+                    message: 'JHipster online password',
+                    default: undefined
+                }];
+
+                this.prompt(prompts).then((props) => {
+                    this.login = props.login;
+                    this.password = props.password;
+                    done();
+                });
             }
         };
     }
@@ -67,57 +57,50 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             authenticateAndLink() {
-                if (!this.showGuid) {
-                    const done = this.async();
-                    authenticateAndLink(
-                        statistics.axiosClient,
-                        this,
-                        this.login,
-                        this.password,
-                        statistics.clientId,
-                        statistics.statisticsAPIPath,
-                        done
-                    ).catch((error) => {
-                        if (statistics.axiosProxyClient && error !== undefined) {
-                            authenticateAndLink(
-                                statistics.axiosProxyClient,
-                                this,
-                                this.login,
-                                this.password,
-                                statistics.clientId,
-                                statistics.statisticsAPIPath,
-                                done
-                            ).catch((error) => {
-                                this.log(`Could not authenticate! (with proxy ${error})`);
-                                done();
-                            });
-                        } else if (error !== undefined) {
-                            this.log(`Could not authenticate! (without proxy ${error})`);
+                if (statistics.isLinked) {
+                    return;
+                }
+                const done = this.async();
+                authenticateAndLink(
+                    statistics.axiosClient,
+                    this,
+                    this.login,
+                    this.password,
+                    done
+                ).catch((error) => {
+                    if (statistics.axiosProxyClient && error !== undefined) {
+                        authenticateAndLink(
+                            statistics.axiosProxyClient,
+                            this,
+                            this.login,
+                            this.password,
+                            done
+                        ).catch((error) => {
+                            this.log(`Could not authenticate! (with proxy ${error})`);
                             done();
-                        }
-                    });
-                }
-            },
-            displayGuid() {
-                if (this.showGuid) {
-                    this.log('You generator ID is :', chalk.bold(statistics.clientId));
-                }
+                        });
+                    } else if (error !== undefined) {
+                        this.log(`Could not authenticate! (without proxy ${error})`);
+                        done();
+                    }
+                });
             }
         };
     }
 };
 
-function authenticateAndLink(axiosClient, generator, username, password, generatorId, statisticsPath, done) {
+function authenticateAndLink(axiosClient, generator, username, password, done) {
     return axiosClient.post(`${statistics.statisticsAPIPath}/authenticate`, {
         username,
         password,
         rememberMe: false
-    }, true).then(answer => axiosClient.post(`${statistics.statisticsAPIPath}/s/link/${generatorId}`, {}, {
+    }, true).then(answer => axiosClient.post(`${statistics.statisticsAPIPath}/s/link/${statistics.clientId}`, {}, {
         headers: {
             Authorization: answer.headers.authorization
         }
     }).then((success) => {
-        generator.log('Link successful!');
+        generator.log(chalk.green('Link successful!'), 'Your generator ID is :', chalk.bold(statistics.clientId));
+        generator.log(`Go to ${statistics.jhipsterOnlineUrl}/#/your-generators to manage your JHipster Online personal data.`);
         done();
         statistics.setLinkedStatus(true);
     }, (error) => {

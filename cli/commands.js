@@ -52,6 +52,9 @@ module.exports = {
     login: {
         desc: 'Link the installed JHipster CLI to your JHipster Online account'
     },
+    logout: {
+        desc: 'Unlink the installed JHipster CLI from your JHipster Online account'
+    },
     openshift: {
         desc: 'Deploy the current application to OpenShift'
     },
