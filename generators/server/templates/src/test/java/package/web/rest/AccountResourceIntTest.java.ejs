@@ -87,26 +87,6 @@ public class AccountResourceIntTest<% if (databaseType === 'cassandra') { %>exte
             .build();
     }
 
-    @Test
-    public void testNonAuthenticatedUser() throws Exception {
-        restUserMockMvc.perform(get("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().string(""));
-    }
-
-    @Test
-    public void testAuthenticatedUser() throws Exception {
-        restUserMockMvc.perform(get("/api/authenticate")
-            .with(request -> {
-                request.setRemoteUser("test");
-                return request;
-            })
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().string("test"));
-    }
-
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void testGetExistingAccount() throws Exception {
