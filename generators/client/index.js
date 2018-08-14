@@ -25,6 +25,7 @@ const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
+const statistics = require('../statistics');
 
 let useBlueprint;
 
@@ -253,13 +254,15 @@ module.exports = class extends BaseGenerator {
     _configuring() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'client');
-                insight.track('app/clientFramework', this.clientFramework);
-                insight.track('app/useSass', this.useSass);
-                insight.track('app/enableTranslation', this.enableTranslation);
-                insight.track('app/nativeLanguage', this.nativeLanguage);
-                insight.track('app/languages', this.languages);
+                statistics.sendSubGenEvent('generator', 'client', {
+                    app: {
+                        clientFramework: this.clientFramework,
+                        useSass: this.useSass,
+                        enableTranslation: this.enableTranslation,
+                        nativeLanguage: this.nativeLanguage,
+                        languages: this.languages
+                    }
+                });
             },
 
             configureGlobal() {

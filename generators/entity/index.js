@@ -25,6 +25,7 @@ const jhiCore = require('jhipster-core');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
+const statistics = require('../statistics');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
@@ -786,15 +787,16 @@ module.exports = class extends BaseGenerator {
 
             insight() {
                 // track insights
-                const insight = this.insight();
                 const context = this.context;
-                insight.trackWithEvent('generator', 'entity');
-                insight.track('entity/fields', context.fields.length);
-                insight.track('entity/relationships', context.relationships.length);
-                insight.track('entity/pagination', context.pagination);
-                insight.track('entity/dto', context.dto);
-                insight.track('entity/service', context.service);
-                insight.track('entity/fluentMethods', context.fluentMethods);
+
+                statistics.sendEntityStats(
+                    context.fields.length,
+                    context.relationships.length,
+                    context.pagination,
+                    context.dto,
+                    context.service,
+                    context.fluentMethods
+                );
             }
         };
     }

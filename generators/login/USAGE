@@ -1,0 +1,4 @@
+Description:
+    Link the installed JHipster CLI to your JHipster Online account
+Example:
+    jhipster login
