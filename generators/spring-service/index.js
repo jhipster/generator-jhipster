@@ -20,6 +20,7 @@
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
+const statistics = require('../statistics');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
@@ -107,9 +108,7 @@ module.exports = class extends BaseGenerator {
     _default() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'service');
-                insight.track('service/interface', this.useInterface);
+                statistics.sendSubGenEvent('generator', 'service', { interface: this.useInterface });
             }
         };
     }

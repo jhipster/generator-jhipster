@@ -167,13 +167,6 @@ if (project.hasProperty('prod')) {
     apply from: 'gradle/profile_dev.gradle'
 }
 
-if (project.hasProperty('graphite')) {
-    apply from: 'gradle/graphite.gradle'
-}
-
-if (project.hasProperty('prometheus')) {
-    apply from: 'gradle/prometheus.gradle'
-}
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
 
 if (project.hasProperty('zipkin')) {

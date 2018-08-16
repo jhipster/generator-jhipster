@@ -232,6 +232,34 @@
             ],
             "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
             "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster login",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "args": [
+                "login"
+            ],
+            "env": {
+                "JHIPSTER_ONLINE_URL": "http://localhost:8080"
+            },
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster logout",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "args": [
+                "logout"
+            ],
+            "env": {
+                "JHIPSTER_ONLINE_URL": "http://localhost:8080"
+            },
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         }
     ]
 }

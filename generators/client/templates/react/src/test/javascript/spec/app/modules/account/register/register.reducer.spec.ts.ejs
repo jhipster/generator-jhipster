@@ -24,7 +24,7 @@ import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 
 import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
-import register, { ACTION_TYPES, handleRegister } from 'app/modules/account/register/register.reducer';
+import register, { ACTION_TYPES, handleRegister, reset } from 'app/modules/account/register/register.reducer';
 
 describe('Creating account tests', () => {
   const initialState = {
@@ -113,5 +113,15 @@ describe('Creating account tests', () => {
       ];
       await store.dispatch(handleRegister('', '', '')).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
+    it('dispatches ACTION_TYPES.RESET actions', async () => {
+      const expectedActions = [
+        {
+          type: ACTION_TYPES.RESET
+        }
+      ];
+      await store.dispatch(reset());
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+
   });
 });

@@ -44,7 +44,7 @@
     </repositories>
 
     <!-- jhipster-needle-distribution-management -->
-    
+
     <properties>
         <!-- Build properties -->
         <maven.version>3.0.0</maven.version>
@@ -71,10 +71,10 @@
         <profile.swagger />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.14</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.15</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.0.3.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
@@ -104,10 +104,11 @@
         <%_ } _%>
         <jacoco-maven-plugin.version>0.8.1</jacoco-maven-plugin.version>
         <scala-maven-plugin.version>3.4.1</scala-maven-plugin.version>
-        <sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.4.1.1168</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
         <openapi-generator-maven-plugin.version>3.0.1</openapi-generator-maven-plugin.version>
         <%_ } _%>
+        <git-commit-id-plugin.version>2.2.4</git-commit-id-plugin.version>
 
         <!-- Sonar properties -->
         <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
@@ -1158,7 +1159,7 @@
             <id>webpack</id>
             <activation>
                 <file>
-                    <missing>${basedir}/target/www/app/global.bundle.js</missing>
+                    <missing>${basedir}/target/www/app/main.bundle.js</missing>
                 </file>
             </activation>
             <dependencies>
@@ -1454,7 +1455,7 @@
                     <plugin>
                         <groupId>pl.project13.maven</groupId>
                         <artifactId>git-commit-id-plugin</artifactId>
-                        <version>2.2.4</version>
+                        <version>${git-commit-id-plugin.version}</version>
                             <executions>
                                 <execution>
                                     <goals>
@@ -1576,38 +1577,6 @@
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev,swagger</spring.profiles.active>
             </properties>
-        </profile>
-        <profile>
-            <!--
-                Profile for monitoring the application with Graphite.
-            -->
-            <id>graphite</id>
-            <dependencies>
-                <dependency>
-                    <groupId>io.dropwizard.metrics</groupId>
-                    <artifactId>metrics-graphite</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <!--
-                Profile for monitoring the application with Prometheus.
-            -->
-            <id>prometheus</id>
-            <dependencies>
-                <dependency>
-                    <groupId>io.prometheus</groupId>
-                    <artifactId>simpleclient</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.prometheus</groupId>
-                    <artifactId>simpleclient_servlet</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.prometheus</groupId>
-                    <artifactId>simpleclient_dropwizard</artifactId>
-                </dependency>
-            </dependencies>
         </profile>
         <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
         <profile>

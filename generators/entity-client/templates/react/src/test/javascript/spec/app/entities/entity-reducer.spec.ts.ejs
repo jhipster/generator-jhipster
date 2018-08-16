@@ -31,7 +31,7 @@ import { parseHeaderForLinks } from 'react-jhipster';
 <%_ } _%>
 
 import reducer, {
-  ACTION_TYPES, createEntity, deleteEntity, getEntities, getEntity, updateEntity<% if (pagination === 'infinite-scroll') { %>, reset<% } %>
+  ACTION_TYPES, createEntity, deleteEntity, getEntities, getEntity, updateEntity, reset
 } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -122,6 +122,16 @@ describe('Entities reducer tests', () => {
         }
       );
     });
+   
+    it('should reset the state', () => {
+      expect(
+        reducer({ data: { id: 1}}, {
+          type: ACTION_TYPES.RESET
+        })
+        ).toEqual({
+          ...initialState
+      });
+    });
   });
 
   describe('Failures', () => {
@@ -165,6 +175,20 @@ describe('Entities reducer tests', () => {
       totalItems: payload.headers['x-total-count'],
       <%_ } _%>
       entities: payload.data
+      });
+    });
+
+    it('should fetch a single entity', () => {
+      const payload = { data: { 1: 'fake1' } };
+      expect(
+        reducer(undefined, {
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>),
+          payload
+        })
+      ).toEqual({
+        ...initialState,
+        loading: false,
+        entity: payload.data
       });
     });
 
@@ -242,7 +266,7 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>),
           payload: resolvedObject
-        },
+        }<%_ if (pagination !== 'infinite-scroll') { _%>,
         {
           type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -250,6 +274,7 @@ describe('Entities reducer tests', () => {
           type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
+        <%_ } _%>
       ];
       await store.dispatch(createEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
@@ -262,7 +287,7 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>),
           payload: resolvedObject
-        },
+        }<%_ if (pagination !== 'infinite-scroll') { _%>,
         {
           type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -270,6 +295,7 @@ describe('Entities reducer tests', () => {
           type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
+        <%_ } _%>
       ];
       await store.dispatch(updateEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
@@ -282,7 +308,7 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>),
           payload: resolvedObject
-        },
+        }<%_ if (pagination !== 'infinite-scroll') { _%>,
         {
           type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -290,8 +316,19 @@ describe('Entities reducer tests', () => {
           type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
+        <%_ } _%>
       ];
       await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+
+    it('dispatches ACTION_TYPES.RESET actions', async () => {
+      const expectedActions = [
+        {
+          type: ACTION_TYPES.RESET
+        }
+      ];
+      await store.dispatch(reset());
+      expect(store.getActions()).toEqual(expectedActions);
     });
   });
 

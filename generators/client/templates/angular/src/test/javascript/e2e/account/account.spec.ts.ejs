@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { browser, element, by<% if (authenticationType === 'oauth2') { _%>, ExpectedConditions as ec<%_ } %> } from 'protractor';
-import { NavBarPage, SignInPage<%_ if (authenticationType !== 'oauth2') { _%>, PasswordPage, SettingsPage<%_ } _%> } from './../page-objects/jhi-page-objects';
+import { browser, element, by, ExpectedConditions as ec } from 'protractor';
+
+import { NavBarPage, SignInPage<%_ if (authenticationType !== 'oauth2') { _%>, PasswordPage, SettingsPage<%_ } _%> } from '../page-objects/jhi-page-objects';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
@@ -33,178 +34,158 @@ describe('account', () => {
     let settingsPage: SettingsPage;
     <%_ } _%>
 
-    beforeAll(() => {
-        browser.get('/');
-        browser.waitForAngular();
+    beforeAll(async () => {
+        await browser.get('/');
         navBarPage = new NavBarPage(true);
-        browser.waitForAngular();
     });
 
-    it('should fail to login with bad password', () => {
+    it('should fail to login with bad password', async () => {
         <%_ if (enableTranslation) { _%>
         const expect1 = /home.title/;
         <%_ } else { _%>
         const expect1 = /Welcome, Java Hipster!/;
         <%_ } _%>
-        element.all(by.css('h1')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await element(by.css('h1')).<%- elementGetter %>;
+        expect(value1).toMatch(expect1);
     <%_ if (authenticationType !== 'oauth2') { _%>
-        signInPage = navBarPage.getSignInPage();
-        signInPage.autoSignInUsing('admin', 'foo');
+        signInPage = await navBarPage.getSignInPage();
+        await signInPage.autoSignInUsing('admin', 'foo');
 
         <%_ if (enableTranslation) { _%>
         const expect2 = /login.messages.error.authentication/;
         <%_ } else { _%>
         const expect2 = /Failed to sign in!/;
         <%_ } _%>
-        element.all(by.css('.alert-danger')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect2);
-        });
+        const value2 = await element(by.css('.alert-danger')).<%- elementGetter %>;
+        expect(value2).toMatch(expect2);
     <%_ } else { _%>
-        signInPage = navBarPage.getSignInPage();
-        signInPage.loginWithOAuth('admin', 'foo');
+        signInPage = await navBarPage.getSignInPage();
+        await signInPage.loginWithOAuth('admin', 'foo');
 
         // Keycloak
-        const alert = element.all(by.css('.alert-error'));
-        alert.isPresent().then((result) => {
-            if (result) {
-                expect(alert.first().getText()).toMatch('Invalid username or password.');
-            } else {
-                // Okta
-                const error = element.all(by.css('.infobox-error')).first();
-                browser.wait(ec.visibilityOf(error), 2000).then(() => {
-                    expect(error.getText()).toMatch('Sign in failed!');
-                });
-            }
-        });
+        const alert = element(by.css('.alert-error'));
+        if (await alert.isPresent()) {
+            expect(await alert.getText()).toMatch('Invalid username or password.');
+        } else {
+            // Okta
+            const error = element(by.css('.infobox-error'));
+            expect(await error.getText()).toMatch('Sign in failed!');
+        }
     <%_ } _%>
     });
 
-    it('should login successfully with admin account', () => {
+    it('should login successfully with admin account', async () => {
         <%_ if (authenticationType !== 'oauth2') { _%>
+        await browser.get('/');
+        signInPage = await navBarPage.getSignInPage();
+
         <%_ if (enableTranslation) { _%>
         const expect1 = /global.form.username/;
         <%_ } else { _%>
         const expect1 = /Login/;
         <%_ } _%>
-        element.all(by.css('.modal-content label')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect1);
-        });
+        const value1 = await element(by.className('username-label')).<%- elementGetter %>;
+        expect(value1).toMatch(expect1);
+        await signInPage.autoSignInUsing('admin', 'admin');
+        <%_ } else {_%>
+        await signInPage.loginWithOAuth('', 'admin');
         <%_ } _%>
-        signInPage.clearUserName();
-        signInPage.setUserName('admin');
-        signInPage.clearPassword();
-        signInPage.setPassword('admin');
-        signInPage.login();
-
-        browser.waitForAngular();
 
         <%_ if (enableTranslation) { _%>
         const expect2 = /home.logged.message/;
         <%_ } else { _%>
         const expect2 = /You are logged in as user "admin"/;
         <%_ } _%>
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        element.all(by.css('.alert-success span')).<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect2);
-        });
-        <%_ } else { _%>
-        const success = element.all(by.css('.alert-success span')).first();
-        browser.wait(ec.visibilityOf(success), 5000).then(() => {
-            success.<%- elementGetter %>.then((value) => {
-                expect(value).toMatch(expect2);
-            });
-        });
-
-        navBarPage.autoSignOut();
+        const value2 = element(by.id('home-logged-message'));
+        await browser.wait(ec.visibilityOf(value2), 5000);
+        expect(await value2.<%- elementGetter %>).toMatch(expect2);
+    
+        <%_ if (authenticationType === 'oauth2') { _%>
+        await navBarPage.autoSignOut();
         <%_ } _%>
     });
+    
 <%_ if (authenticationType !== 'oauth2') { _%>
-    it('should be able to update settings', () => {
-        settingsPage = navBarPage.getSettingsPage();
+    it('should be able to update settings', async () => {
+        settingsPage = await navBarPage.getSettingsPage();
 
         <%_ if (enableTranslation) { _%>
         const expect1 = /settings.title/;
         <%_ } else { _%>
         const expect1 = /User settings for \[admin\]/;
         <%_ } _%>
-        settingsPage.getTitle().then((value) => {
-            expect(value).toMatch(expect1);
-        });
-        settingsPage.save();
+        const value1 = await settingsPage.getTitle();
+        expect(value1).toMatch(expect1);
+        await settingsPage.save();
 
         <%_ if (enableTranslation) { _%>
         const expect2 = /settings.messages.success/;
         <%_ } else { _%>
         const expect2 = /Settings saved!/;
         <%_ } _%>
-        element.all(by.css('.alert-success')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect2);
-        });
+        const value2 = await element(by.css('.alert-success')).<%- elementGetter %>;
+        expect(value2).toMatch(expect2);
     });
 
-    it('should fail to update password when using incorrect current password', () => {
-        passwordPage = navBarPage.getPasswordPage();
+    it('should fail to update password when using incorrect current password', async () => {
+        passwordPage = await navBarPage.getPasswordPage();
 
         <%_ if (enableTranslation) { _%>
-        expect(passwordPage.getTitle()).toMatch(/password.title/);
+        expect(await passwordPage.getTitle()).toMatch(/password.title/);
         <%_ } else { _%>
-        expect(passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
+        expect(await passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
         <%_ } _%>
 
-        passwordPage.setCurrentPassword('wrong_current_password');
-        passwordPage.setPassword('new_password');
-        passwordPage.setConfirmPassword('new_password');
-        passwordPage.save();
+        await passwordPage.setCurrentPassword('wrong_current_password');
+        await passwordPage.setPassword('new_password');
+        await passwordPage.setConfirmPassword('new_password');
+        await passwordPage.save();
 
         <%_ if (enableTranslation) { _%>
         const expect2 = /password.messages.error/;
         <%_ } else { _%>
         const expect2 = /An error has occurred! The password could not be changed./;
         <%_ } _%>
-        element.all(by.css('.alert-danger')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect2);
-        });
-        settingsPage = navBarPage.getSettingsPage();
+        const value2 = await element(by.css('.alert-danger')).<%- elementGetter %>;
+        expect(value2).toMatch(expect2);
+        settingsPage = await navBarPage.getSettingsPage();
     });
 
-    it('should be able to update password', () => {
-        passwordPage = navBarPage.getPasswordPage();
+    it('should be able to update password', async () => {
+        passwordPage = await navBarPage.getPasswordPage();
 
         <%_ if (enableTranslation) { _%>
-        expect(passwordPage.getTitle()).toMatch(/password.title/);
+        expect(await passwordPage.getTitle()).toMatch(/password.title/);
         <%_ } else { _%>
-        expect(passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
+        expect(await passwordPage.getTitle()).toMatch(/Password for \[admin\]/);
         <%_ } _%>
 
-        passwordPage.setCurrentPassword('admin');
-        passwordPage.setPassword('newpassword');
-        passwordPage.setConfirmPassword('newpassword');
-        passwordPage.save();
+        await passwordPage.setCurrentPassword('admin');
+        await passwordPage.setPassword('newpassword');
+        await passwordPage.setConfirmPassword('newpassword');
+        await passwordPage.save();
 
         <%_ if (enableTranslation) { _%>
         const expect2 = /password.messages.success/;
         <%_ } else { _%>
         const expect2 = /Password changed!/;
         <%_ } _%>
-        element.all(by.css('.alert-success')).first().<%- elementGetter %>.then((value) => {
-            expect(value).toMatch(expect2);
-        });
-        navBarPage.autoSignOut();
-        navBarPage.goToSignInPage();
-        signInPage.autoSignInUsing('admin', 'newpassword');
+        const value2 = await element(by.css('.alert-success')).<%- elementGetter %>;
+        expect(value2).toMatch(expect2);
+        await navBarPage.autoSignOut();
+        await navBarPage.goToSignInPage();
+        await signInPage.autoSignInUsing('admin', 'newpassword');
 
         // change back to default
-        navBarPage.goToPasswordMenu();
-        passwordPage.setCurrentPassword('newpassword');
-        passwordPage.setPassword('admin');
-        passwordPage.setConfirmPassword('admin');
-        passwordPage.save();
+        await navBarPage.goToPasswordMenu();
+        await passwordPage.setCurrentPassword('newpassword');
+        await passwordPage.setPassword('admin');
+        await passwordPage.setConfirmPassword('admin');
+        await passwordPage.save();
     });
 
-    afterAll(() => {
-        navBarPage.autoSignOut();
+    afterAll(async () => {
+        await navBarPage.autoSignOut();
     });
 <%_ } _%>
 });

@@ -359,7 +359,7 @@ jhipster:
 <%_ } _%>
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: <%= baseName %>@localhost
-        base-url: http://127.0.0.1:<%= serverPort %>
+        base-url: http://127.0.0.1:<%= applicationType !== 'uaa' ? serverPort : 8080 %>
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx:
             enabled: true

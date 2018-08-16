@@ -22,6 +22,7 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
+const statistics = require('../statistics');
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -112,7 +113,7 @@ module.exports = class extends BaseGenerator {
 
     _gitCommitAll(commitMsg, callback) {
         const commit = () => {
-            this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty'], { silent: this.silent }, (code, msg, err) => {
+            this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'], { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) this.error(`Unable to commit in git:\n${err}`);
                 this.success(`Committed with message "${commitMsg}"`);
                 callback();
@@ -292,8 +293,7 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'upgrade');
+                statistics.sendSubGenEvent('generator', 'upgrade');
             },
 
             checkoutUpgradeBranch() {

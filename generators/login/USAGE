@@ -1,0 +1,5 @@
+Description:
+    Link the installed JHipster CLI to your JHipster Online account
+    Set the JHIPSTER_ONLINE_URL environment variable to use a different JHipster Online instance (default: https://start.jhipster.tech)
+Example:
+    jhipster login

@@ -22,6 +22,7 @@ const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
+const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -226,6 +227,8 @@ module.exports = class extends BaseGenerator {
     get prompting() {
         return {
             askForInsightOptIn: prompts.askForInsightOptIn,
+            // TODO : enable this. It's a bit messy for now, it need better sync.
+            // askForAccountLinking: prompts.askForAccountLinking,
             askForApplicationType: prompts.askForApplicationType,
             askForModuleName: prompts.askForModuleName
         };
@@ -262,9 +265,16 @@ module.exports = class extends BaseGenerator {
                     this.configOptions.devDatabaseType = this.options.db;
                     this.configOptions.prodDatabaseType = this.options.db;
                     this.configOptions.authenticationType = this.options.auth;
+                    this.configOptions.uaaBaseName = this.options.uaaBaseName;
                 }
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
+
+            // composeAccountLinking() {
+            //     if (!this.linkAccount) return;
+
+            //     this.composeWith(require.resolve('../link-account'));
+            // },
 
             composeServer() {
                 if (this.skipServer) return;
@@ -307,15 +317,6 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
 
-            insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'app');
-                insight.track('app/applicationType', this.applicationType);
-                insight.track('app/testFrameworks', this.testFrameworks);
-                insight.track('app/otherModules', this.otherModules);
-                insight.track('app/clientPackageManager', this.clientPackageManager);
-            },
-
             composeLanguages() {
                 if (this.skipI18n) return;
                 this.composeLanguagesSub(this, this.configOptions, this.generatorType);
@@ -342,7 +343,21 @@ module.exports = class extends BaseGenerator {
                 this.skipServer && (config.skipServer = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
                 this.config.set(config);
+            },
+
+            insight() {
+                const yorc = Object.assign({}, _.omit(this.configOptions, [
+                    'jhiPrefix',
+                    'baseName',
+                    'jwtSecretKey',
+                    'packageName',
+                    'packagefolder',
+                    'rememberMeKey'
+                ]));
+                yorc.applicationType = this.applicationType;
+                statistics.sendYoRc(yorc, this.existingProject, this.jhipsterVersion);
             }
+
         };
     }
 

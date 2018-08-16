@@ -23,6 +23,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const glob = require('glob');
 const BaseGenerator = require('../generator-base');
+const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
 
@@ -167,8 +168,7 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'heroku');
+                statistics.sendSubGenEvent('generator', 'heroku');
             },
 
             gitInit() {
@@ -227,7 +227,7 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
                 const child = exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
                     if (err) {
-                        if (stderr.includes('Name is already taken')) {
+                        if (stderr.includes('is already taken')) {
                             const prompts = [
                                 {
                                     type: 'list',
