@@ -1,4 +1,4 @@
-# generator-jhipster-vuejs
+# jhipster-vuejs
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > JHipster blueprint, A vueJs blueprint for JHipster. It will use VueJS as the frontend library
 
@@ -95,7 +95,7 @@ Apache-2.0 © [Deepu K Sasidharan](https://deepu.js.org)
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-vuejs.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster-vuejs
-[travis-image]: https://travis-ci.org/deepu105/generator-jhipster-vuejs.svg?branch=master
-[travis-url]: https://travis-ci.org/deepu105/generator-jhipster-vuejs
-[daviddm-image]: https://david-dm.org/deepu105/generator-jhipster-vuejs.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/deepu105/generator-jhipster-vuejs
+[travis-image]: https://travis-ci.org/jhipster/jhipster-vuejs.svg?branch=master
+[travis-url]: https://travis-ci.org/jhipster/jhipster-vuejs
+[daviddm-image]: https://david-dm.org/jhipster/jhipster-vuejs.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/jhipster/jhipster-vuejs

@@ -7,7 +7,7 @@
     "jhipster-blueprint",
     "jhipster-5"
   ],
-  "homepage": "https://github.com/deepu105/generator-jhipster-vuejs",
+  "homepage": "https://github.com/jhipster/jhipster-vuejs",
   "author": {
     "name": "Deepu K Sasidharan",
     "email": "d4udts@gmail.com",
@@ -19,7 +19,7 @@
   "main": "generators/app/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepu105/generator-jhipster-vuejs.git"
+    "url": "git+https://github.com/jhipster/jhipster-vuejs.git"
   },
   "dependencies": {
     "chalk": "2.4.1",
@@ -69,6 +69,6 @@
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/deepu105/generator-jhipster-vuejs/issues"
+    "url": "https://github.com/jhipster/jhipster-vuejs/issues"
   }
 }
