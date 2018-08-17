@@ -1,6 +1,6 @@
-# jhipster-vuejs
+# JHipster-vuejs
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
-> JHipster blueprint, A vueJs blueprint for JHipster. It will use VueJS as the frontend library
+> JHipster-vuejs, A vueJs blueprint for JHipster. It will use VueJS as the frontend library
 
 # Introduction
 
@@ -44,7 +44,7 @@ npm update -g generator-jhipster-vuejs
 
 # Usage
 
-To use this blueprint, run the below command
+To use this blueprint, run 
 
 ```bash
 jhipster --blueprint vuejs
@@ -60,7 +60,7 @@ During development of blueprint, please note the below steps. They are very impo
 Note: If you do not want to link the blueprint(step 3) to each project being created, use NPM instead of Yarn as yeoman doesn't seem to fetch globally linked Yarn modules. On the other hand, this means you have to use NPM in all the below steps as well.
 
 ```bash
-cd vuejs
+cd jhipster-vuejs
 npm link
 ```
 
