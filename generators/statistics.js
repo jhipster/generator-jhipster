@@ -27,6 +27,7 @@ class Statistics {
         this.optOut = this.config.get('optOut');
         this.isLinked = this.config.get('isLinked');
         this.noInsight = process.argv.includes('--no-insight');
+        this.forceInsight = process.argv.includes('--force-insight');
         this.configInsight();
 
         if (this.noInsight) {
@@ -98,7 +99,7 @@ class Statistics {
     }
 
     shouldWeAskForOptIn() {
-        if (this.noInsight) {
+        if (this.noInsight || this.forceInsight) {
             return false;
         }
         if (this.optOut) {
@@ -140,7 +141,7 @@ class Statistics {
             memory: os.totalmem(),
             'user-language': osLocale.sync(),
             isARegeneration
-        });
+        }, this.forceInsight);
 
         this.insight.trackWithEvent('generator', 'app');
         this.insight.track('app/applicationType', yorc.applicationType);
@@ -151,7 +152,9 @@ class Statistics {
 
     sendSubGenEvent(source, type, event) {
         const strEvent = event === '' ? event : JSON.stringify(event);
-        this.postRequest(`/s/event/${this.clientId}`, { source, type, event: strEvent });
+        this.postRequest(`/s/event/${this.clientId}`,
+            { source, type, event: strEvent },
+            this.forceInsight);
         this.insight.trackWithEvent(source, type);
         if (event) {
             this.sendInsightSubGenEvents(type, event);
@@ -192,7 +195,7 @@ class Statistics {
             dto,
             service,
             fluentMethods
-        });
+        }, this.forceInsight);
     }
 }
 

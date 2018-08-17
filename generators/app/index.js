@@ -357,7 +357,6 @@ module.exports = class extends BaseGenerator {
                 yorc.applicationType = this.applicationType;
                 statistics.sendYoRc(yorc, this.existingProject, this.jhipsterVersion);
             }
-
         };
     }
 
