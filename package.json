@@ -1,0 +1,74 @@
+{
+  "name": "generator-jhipster-vuejs",
+  "version": "0.0.0",
+  "description": "A vueJs blueprint for JHipster. It will use VueJS as the frontend library",
+  "keywords": [
+    "yeoman-generator",
+    "jhipster-blueprint",
+    "jhipster-5"
+  ],
+  "homepage": "https://github.com/deepu105/generator-jhipster-vuejs",
+  "author": {
+    "name": "Deepu K Sasidharan",
+    "email": "d4udts@gmail.com",
+    "url": "https://deepu.js.org"
+  },
+  "files": [
+    "generators"
+  ],
+  "main": "generators/app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepu105/generator-jhipster-vuejs.git"
+  },
+  "dependencies": {
+    "chalk": "2.4.1",
+    "ejs": "2.6.1",
+    "glob": "7.1.2",
+    "gulp-filter": "5.1.0",
+    "insight": "0.10.1",
+    "jhipster-core": "3.0.2",
+    "js-yaml": "3.12.0",
+    "lodash": "4.17.10",
+    "meow": "5.0.0",
+    "mkdirp": "0.5.1",
+    "pluralize": "7.0.0",
+    "prettier": "1.13.5",
+    "randexp": "0.4.9",
+    "semver": "5.5.0",
+    "shelljs": "0.8.2",
+    "through2": "2.0.3",
+    "generator-jhipster": ">=5.0.0",
+    "yeoman-environment": "2.3.0",
+    "yeoman-generator": "2.0.5"
+  },
+  "devDependencies": {
+    "chai": "4.1.2",
+    "ejs-lint": "0.3.0",
+    "eslint": "5.0.0",
+    "eslint-config-airbnb-base": "13.0.0",
+    "eslint-plugin-import": "2.12.0",
+    "fs-extra": "6.0.1",
+    "jsdoc": "3.5.5",
+    "mocha": "5.2.0",
+    "sinon": "6.0.0",
+    "yeoman-assert": "3.1.1",
+    "yeoman-test": "1.7.2"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint-fix": "npm run lint -- --fix",
+    "pretest": "npm run lint",
+    "test": "npm run test:unit -- test/*.spec.js",
+    "test:unit": "mocha --timeout 20000 --slow 0 --reporter spec",
+    "jsdoc": "jsdoc --configure jsdoc-conf.json",
+    "release": "git push && git push --tags && npm publish",
+    "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
+    "release:minor": "npm version minor -a -m \"Update to %s\" && npm run release",
+    "release:major": "npm version major -a -m \"Update to %s\" && npm run release"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/deepu105/generator-jhipster-vuejs/issues"
+  }
+}
