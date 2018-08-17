@@ -72,7 +72,7 @@ You could also use Yarn for this if you prefer
 cd generator-jhipster
 npm link
 
-cd vuejs
+cd jhipster-vuejs
 npm link generator-jhipster
 ```
 
