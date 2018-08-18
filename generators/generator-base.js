@@ -2150,7 +2150,7 @@ module.exports = class extends PrivateBase {
     checkForNewVersion() {
         try {
             const done = this.async();
-            shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version`, { silent: true }, (code, stdout, stderr) => {
+            shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version --fetch-retries 1 --fetch-retry-mintimeout 500 --fetch-retry-maxtimeout 500`, { silent: true }, (code, stdout, stderr) => {
                 if (!stderr && semver.lt(packagejs.version, stdout)) {
                     this.log(`${chalk.yellow(' ______________________________________________________________________________\n\n')
                         + chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`);
