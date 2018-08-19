@@ -97,10 +97,6 @@ module.exports = (options) => ({
             // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
             { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
         ]),
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery"
-        }),
         <%_ if (enableTranslation) { _%>
         new MergeJsonWebpackPlugin({
             output: {
