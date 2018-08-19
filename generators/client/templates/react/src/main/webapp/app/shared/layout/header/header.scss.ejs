@@ -78,11 +78,18 @@ Navbar styles
       margin-left: 1.5rem;
     }
   }
-  a.nav-link {
+  .navbar-nav  a.nav-link {
     font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
     > span {
       margin-left: 5px;
     }
+    &:hover {
+        color: #fff;
+    }
+  }
+  .navbar-nav .active > .nav-link {
+      color: #fff;
   }
   .jh-navbar-toggler {
     color: #ccc;

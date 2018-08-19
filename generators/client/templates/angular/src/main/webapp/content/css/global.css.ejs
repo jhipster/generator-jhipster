@@ -28,13 +28,13 @@ body {
     background: #e4e5e6;
 }
 
-a {
-    color: #533f03;
+body a {
+    color: #286396; 
     font-weight: bold;
 }
 
-a:hover {
-    color: #533f03;
+body a:hover {
+    color: #255c8c;
     font-weight: bold;
 }
 
@@ -241,6 +241,107 @@ ui bootstrap tweaks
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* ==========================================================================
+bootstrap color tweaks to comply with WCAG 2.0 AA standard
+========================================================================== */
+.progress-bar.bg-primary {
+    background-color: #317ab9 !important;
+}
+
+.progress-bar.bg-success {
+    background-color: #218838 !important;
+}
+
+.progress-bar.bg-info {
+    background-color: #128091 !important;
+}
+
+.progress-bar.bg-warning {
+    color: #000;
+}
+
+.btn.btn-primary {
+    background-color: #317ab9;
+    border-color: #317ab9;
+}
+
+.btn.btn-primary:hover {
+    background-color: #29669b;
+    border-color: #265f91;
+}
+
+.btn.btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(49, 122, 185, 0.5);
+}
+
+.btn.btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #265f91;
+    border-color: #245987;
+}
+
+.btn.btn-info {
+    background-color: #128091;
+    border-color: #128091;
+}
+
+.btn.btn-info:hover {
+    background-color: #0e626f;
+    border-color: #0c5864;
+}
+
+.btn.btn-info:focus {
+    box-shadow: 0 0 0 0.2rem rgba(18, 128, 145, 0.5);
+}
+
+.btn.btn-info:not(:disabled):not(.disabled):active {
+    background-color: #0c5864;
+    border-color: #0b4e58;
+}
+
+.btn.btn-success {
+    background-color: #218838;
+    border-color: #218838;
+}
+
+.btn.btn-success:hover {
+    background-color: #1a692b;
+    border-color: #175f27;
+}
+
+.btn.btn-success:focus {
+    box-shadow: 0 0 0 0.2rem rgba(33, 136, 56, 0.5);
+}
+
+.btn.btn-success:not(:disabled):not(.disabled):active {
+    background-color: #175f27;
+    border-color: #155523;
+}
+
+.btn.btn-link {
+    color: #3871a3;
+}
+
+.badge.badge-primary {
+    background-color: #317ab9;
+}
+
+.badge.badge-info {
+    background-color: #128091;
+}
+
+.badge.badge-success {
+    background-color: #218838;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #317ab9;
+    border-color: #317ab9;
+}
+
+.pagination .page-item .page-link {
+    color: #286396;
 }
 
 /* jhipster-needle-css-add-main JHipster will add new css style */
