@@ -2224,6 +2224,9 @@ module.exports = class extends PrivateBase {
                 if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
                     return 'Your base name cannot contain underscores as this does not meet the URI spec';
                 }
+                if (generator.applicationType === 'uaa' && input === 'auth') {
+                    return 'Your UAA base name cannot be named \'auth\' as it conflicts with the gateway login routes';
+                }
                 if (input === 'application') {
                     return 'Your base name cannot be named \'application\' as this is a reserved name for Spring Boot';
                 }
