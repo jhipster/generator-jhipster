@@ -79,7 +79,6 @@ public class OAuth2SsoConfiguration extends WebSecurityConfigurerAdapter {
             .logoutSuccessHandler(ajaxLogoutSuccessHandler())
         .and()
             .authorizeRequests()
-            .antMatchers("/api/profile-info").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)

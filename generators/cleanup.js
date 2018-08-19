@@ -141,11 +141,13 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     }
     if (generator.isJhipsterVersionLessThan('5.0.0')) {
         generator.removeFile(`${javaDir}config/ThymeleafConfiguration.java`);
+        generator.removeFile(`${javaDir}web/rest/ProfileInfoResource.java`);
         generator.removeFile(`${mainResourceDir}mails/activationEmail.html`);
         generator.removeFile(`${mainResourceDir}mails/creationEmail.html`);
         generator.removeFile(`${mainResourceDir}mails/passwordResetEmail.html`);
         generator.removeFile(`${mainResourceDir}mails/socialRegistrationValidationEmail.html`);
         generator.removeFile(`${testResourceDir}mail/testEmail.html`);
+        generator.removeFile(`${testDir}web/rest/ProfileInfoResourceIntTest.java`);
         generator.removeFile('gradle/mapstruct.gradle');
     }
 }
