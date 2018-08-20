@@ -47,12 +47,12 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
       <%_ if (useSass) { _%>
       {
         test: /\.(sa|sc|c)ss$/,
-        loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
       },
       <%_ } else { _%>
       {
         test: /\.css$/,
-        loaders: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader']
       }
       <%_ } _%>
     ]

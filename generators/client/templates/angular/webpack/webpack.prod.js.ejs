@@ -56,12 +56,12 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     module: {
         rules: [{
             test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
-            use: [ '@ngtools/webpack' ]
+            loader: '@ngtools/webpack'
         },
         <%_ if (useSass) { _%>
         {
             test: /\.scss$/,
-            loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
+            use: ['to-string-loader', 'css-loader', 'sass-loader'],
             exclude: /(vendor\.scss|global\.scss)/
         },
         {
@@ -75,7 +75,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         <%_ } _%>
         {
             test: /\.css$/,
-            loaders: ['to-string-loader', 'css-loader'],
+            use: ['to-string-loader', 'css-loader'],
             exclude: /(vendor\.css|global\.css)/
         },
         {

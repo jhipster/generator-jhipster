@@ -79,7 +79,12 @@ module.exports = options => ({
       },
       {
         test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
-        loaders: ['file-loader?hash=sha512&digest=hex&name=content/[hash].[ext]']
+        loader: 'file-loader',
+        options: {
+            digest: 'hex',
+            hash: 'sha512',
+            name: 'content/[hash].[ext]'
+        }
       },
       {
         enforce: 'pre',
@@ -89,7 +94,7 @@ module.exports = options => ({
       {
         test: /\.tsx?$/,
         enforce: 'pre',
-        loaders: 'tslint-loader',
+        loader: 'tslint-loader',
         exclude: ['node_modules']
       }
     ]
