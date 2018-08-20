@@ -125,11 +125,11 @@
         <sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey>squid:UndocumentedApi</sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey>
         <%_ if (authenticationType === 'jwt') { _%>
         <!-- Rule https://sonarcloud.io/coding_rules?open=squid%3AS4502&rule_key=squid%3AS4502 is ignored, as for JWT tokens we are not subject to CSRF attack -->
-        <sonar.issue.ignore.multicriteria.S4502.resourceKey>src/main/java/**/*</sonar.issue.ignore.multicriteria.S4502.resourceKey>
+        <sonar.issue.ignore.multicriteria.S4502.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S4502.resourceKey>
         <sonar.issue.ignore.multicriteria.S4502.ruleKey>squid:S4502</sonar.issue.ignore.multicriteria.S4502.ruleKey>
         <%_ } _%>
         <!-- Rule https://sonarcloud.io/coding_rules?open=squid%3AS4684&rule_key=squid%3AS4684 -->
-        <sonar.issue.ignore.multicriteria.S4684.resourceKey>src/main/java/**/*</sonar.issue.ignore.multicriteria.S4684.resourceKey>
+        <sonar.issue.ignore.multicriteria.S4684.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S4684.resourceKey>
         <sonar.issue.ignore.multicriteria.S4684.ruleKey>squid:S4684</sonar.issue.ignore.multicriteria.S4684.ruleKey>
         <sonar.jacoco.reportPaths>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPaths>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
@@ -841,7 +841,7 @@
                             <outputDirectory>target/</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/docker/</directory>
+                                    <directory><%= MAIN_DIR %>docker/</directory>
                                     <filtering>false</filtering>
                                     <excludes>
                                         <exclude>**/*.yml</exclude>
@@ -1236,7 +1236,7 @@
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory>src/main/webapp</directory>
+                                    <directory><%= MAIN_DIR %>webapp</directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -1286,7 +1286,7 @@
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory>src/main/webapp</directory>
+                                    <directory><%= MAIN_DIR %>webapp</directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -1333,7 +1333,7 @@
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory>src/main/webapp</directory>
+                                    <directory><%= MAIN_DIR %>webapp</directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -1511,7 +1511,7 @@
                         <version>${maven-war-plugin.version}</version>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <warSourceDirectory>src/main/webapp/</warSourceDirectory>
+                            <warSourceDirectory><%= MAIN_DIR %>webapp/</warSourceDirectory>
                         </configuration>
                     </plugin>
                     <plugin>
