@@ -36,6 +36,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
+<%_ } _%>
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 <%_ if (serviceDiscoveryType) { _%>
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -59,7 +63,7 @@ import java.util.Collection;
     excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = OAuth2InterceptedFeignConfiguration.class)
 )
 <%_ } _%>
-@SpringBootApplication<% if (databaseType === 'sql' && messageBroker === 'kafka') { %>(exclude = DataSourcePoolMetricsAutoConfiguration.class)<% } %>
+@SpringBootApplication<% if (databaseType === 'sql' && messageBroker === 'kafka' && searchEngine === 'elasticsearch') { %>(exclude = DataSourcePoolMetricsAutoConfiguration.class, ElasticsearchAutoConfiguration.class, ElasticsearchDataAutoConfiguration.class)<% } else if (searchEngine === 'elasticsearch') { %>(exclude = ElasticsearchAutoConfiguration.class, ElasticsearchDataAutoConfiguration.class)<% } %>
 @EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
 <%_ if (serviceDiscoveryType) { _%>
 @EnableDiscoveryClient
