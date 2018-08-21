@@ -1152,9 +1152,7 @@ function writeFiles() {
             // Create Java resource files
             mkdirp(SERVER_MAIN_RES_DIR);
             mkdirp(`${SERVER_TEST_SRC_DIR}/${this.testDir}`);
-            if (this.applicationType === 'uaa') {
-                this.generateKeyStore();
-            }
+            this.generateKeyStore();
         },
 
         cleanupOldServerFiles() {

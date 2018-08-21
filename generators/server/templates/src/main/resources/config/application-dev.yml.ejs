@@ -230,24 +230,21 @@ spring:
 <%_ } _%>
 
 # ===================================================================
-# To enable SSL, generate a certificate using:
-# keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# To enable SSL in development, uncomment the the "server.ssl" properties below.
 #
-# You can also use Let's Encrypt:
-# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
+# JHipster has generated a self-signed certificate, which will be used to encrypt traffic.
+# As your browser will not understand this certificate, you will need to import it.
 #
-# Then, modify the server.ssl properties so your "server" configuration looks like:
-#
-# server:
-#    port: 8443
-#    ssl:
-#        key-store: keystore.p12
-#        key-store-password: <your-password>
-#        key-store-type: PKCS12
-#        key-alias: <%= baseName.toLowerCase() %>
+# Another (easiest) solution with Chrome is to enable the "allow-insecure-localhost" flag
+# at chrome://flags/#allow-insecure-localhost
 # ===================================================================
 server:
     port: <%= serverPort %>
+#    ssl:
+#        key-store: classpath:config/ssl/keystore.p12
+#        key-store-password: password
+#        key-store-type: PKCS12
+#        key-alias: selfsigned
 
 # ===================================================================
 # JHipster specific properties

@@ -2080,31 +2080,51 @@ module.exports = class extends PrivateBase {
      */
     generateKeyStore() {
         const done = this.async();
-        const keyStoreFile = `${SERVER_MAIN_RES_DIR}keystore.jks`;
+        const keyStoreFile = `${SERVER_MAIN_RES_DIR}config/ssl/keystore.p12`;
+        const publicCertificateFile = `${SERVER_MAIN_RES_DIR}config/ssl/public-certificate.pem`;
         if (this.fs.exists(keyStoreFile)) {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
             done();
         } else {
-            shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
+            shelljs.mkdir('-p', SERVER_MAIN_RES_DIR + 'config/ssl');
             const javaHome = shelljs.env.JAVA_HOME;
             let keytoolPath = '';
             if (javaHome) {
                 keytoolPath = `${javaHome}/bin/`;
             }
+            // Generate the PKCS#12 keystore
             shelljs.exec(
                 `"${keytoolPath}keytool" -genkey -noprompt `
+                + '-storetype PKCS12 '
                 + '-keyalg RSA '
                 + '-alias selfsigned '
                 + `-keystore ${keyStoreFile} `
                 + '-storepass password '
                 + '-keypass password '
                 + '-keysize 2048 '
+                + '-validity 99999 '
                 + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
                 (code) => {
                     if (code !== 0) {
                         this.error('\nFailed to create a KeyStore with \'keytool\'', code);
                     } else {
                         this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
+                        // Create the public certificate (to be imported in browsers)
+                        shelljs.exec(
+                            `"${keytoolPath}keytool" -exportcert -noprompt -rfc `
+                            + `-keystore ${keyStoreFile} `
+                            + '-storepass password '
+                            + '-alias selfsigned '
+                            + `-file ${publicCertificateFile}`,
+                            (code) => {
+                                if (code !== 0) {
+                                    this.error('\nFailed to create a public certificate with \'keytool\'', code);
+                                } else {
+                                    this.log(chalk.green(`\nKeyStore '${publicCertificateFile}' generated successfully.\n`));
+                                }
+                                done();
+                            }
+                        );
                     }
                     done();
                 }
