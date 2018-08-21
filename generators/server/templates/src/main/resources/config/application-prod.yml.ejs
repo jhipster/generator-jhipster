@@ -214,8 +214,8 @@ spring:
 # server:
 #    port: 443
 #    ssl:
-#        key-store: keystore.p12
-#        key-store-password: <your-password>
+#        key-store: classpath:config/tls/keystore.p12
+#        key-store-password: password
 #        key-store-type: PKCS12
 #        key-alias: <%= baseName.toLowerCase() %>
 #        # The ciphers suite enforce the security by deactivating some old and deprecated SSL cipher, this list was tested against SSL Labs (https://www.ssllabs.com/ssltest/)
@@ -339,9 +339,9 @@ jhipster:
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     #be sure to to change to a different keystore in production!
-    #create one using: keytool -genkeypair -keyalg RSA -keystore keystore_prod.jks -storepass <secretpasswd> -alias <myalias>
+    #create one using: keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
     key-store:
-        name: keystore.jks
+        name: config/tls/keystore.p12
         password: password
         alias: selfsigned
     web-client-configuration:

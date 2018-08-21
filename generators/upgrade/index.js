@@ -127,7 +127,7 @@ module.exports = class extends BaseGenerator {
 
     _regenerate(version, callback) {
         this._generate(version, () => {
-            const keystore = `${SERVER_MAIN_RES_DIR}keystore.jks`;
+            const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
             this.info(`Removing ${keystore}`);
             shelljs.rm('-Rf', keystore);
             this._gitCommitAll(`Generated with JHipster ${version}`, () => {
