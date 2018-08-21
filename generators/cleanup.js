@@ -62,8 +62,14 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}shared/user/account.model.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/user/user.model.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/user/user.service.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-management-dialog.component.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-modal.service.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/user-management/user-modal.service.ts`);
 
         generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/user/user.service.spec.ts`);
+        generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-dialog.component.spec.ts`);
+        generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/entry.ts`);
+        generator.removeFile(`${CLIENT_TEST_SRC_DIR}karma.conf.js`);
     }
 }
 
