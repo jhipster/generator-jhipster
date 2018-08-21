@@ -260,6 +260,7 @@ const serverFiles = {
                 'logback-spring.xml',
                 'config/application.yml',
                 'config/application-dev.yml',
+                'config/application-tls.yml',
                 'config/application-prod.yml',
                 'i18n/messages.properties'
             ]
