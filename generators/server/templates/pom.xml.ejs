@@ -69,6 +69,7 @@
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
         <profile.swagger />
+        <profile.tls />
 
         <!-- Dependency versions -->
         <jhipster-dependencies.version>2.0.20</jhipster-dependencies.version>
@@ -1177,6 +1178,12 @@
                 <profile.swagger>,swagger</profile.swagger>
             </properties>
         </profile>
+        <profile>
+            <id>tls</id>
+            <properties>
+                <profile.tls>,tls</profile.tls>
+            </properties>
+        </profile>
         <%_ if (!skipClient) { _%>
         <profile>
             <id>webpack</id>
@@ -1321,7 +1328,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>
