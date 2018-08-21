@@ -42,6 +42,7 @@ import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
 <%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 <%_ } _%>
+import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
@@ -122,6 +123,6 @@ import {
 })
 export class <%=angularXAppName%>AppModule {
     constructor(private dpConfig: NgbDatepickerConfig) {
-        this.dpConfig.minDate = {year: 100, month: 1, day: 1};
+        this.dpConfig.minDate = {year: moment().year() - 100, month: 1, day: 1};
     }
 }
