@@ -125,6 +125,13 @@ management:
         enabled: false # http://micrometer.io/ is disabled by default, as we use http://metrics.dropwizard.io/ instead
 
 spring:
+    <%_ (searchEngine === 'elasticsearch') { _%>
+    autoconfigure:
+        exclude: <% if (databaseType === 'sql' && messageBroker === 'kafka') { %>org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration,<% } %>org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration,org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
+    <%_ } else if (databaseType === 'sql' && messageBroker === 'kafka') _%>
+    autoconfigure:
+        exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
+    <%_ } _%>
     application:
         name: <%= baseName %>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
