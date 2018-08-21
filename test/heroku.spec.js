@@ -235,7 +235,7 @@ describe('JHipster Heroku Sub Generator', () => {
             beforeEach((done) => {
                 stub.withArgs(`heroku create ${herokuAppName}`).yields(false, '', '');
                 stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${herokuAppName}`).yields(false, '', '');
-                stub.withArgs(`heroku addons:create searchbox:starter --as SEARCHBOX --app ${herokuAppName}`).yields(false, '', '');
+                stub.withArgs(`heroku addons:create bonsai --as BONSAI --app ${herokuAppName}`).yields(false, '', '');
 
                 helpers
                     .run(require.resolve('../generators/heroku'))

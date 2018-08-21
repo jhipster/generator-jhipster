@@ -323,7 +323,7 @@ module.exports = class extends BaseGenerator {
 
                 this.log(chalk.bold('\nProvisioning addons'));
                 if (this.searchEngine === 'elasticsearch') {
-                    exec(`heroku addons:create searchbox:starter --as SEARCHBOX --app ${this.herokuAppName}`, addonCreateCallback.bind(this, 'Elasticsearch'));
+                    exec(`heroku addons:create bonsai --as BONSAI --app ${this.herokuAppName}`, addonCreateCallback.bind(this, 'Elasticsearch'));
                 }
 
                 let dbAddOn = '';
