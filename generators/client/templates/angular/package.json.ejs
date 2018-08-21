@@ -164,6 +164,7 @@
     "postinstall": "webdriver-manager update --gecko false",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
+    "start-tls": "<%= clientPackageManager %> run  start --env.tls",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",
     "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
