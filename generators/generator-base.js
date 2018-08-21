@@ -2081,12 +2081,11 @@ module.exports = class extends PrivateBase {
     generateKeyStore() {
         const done = this.async();
         const keyStoreFile = `${SERVER_MAIN_RES_DIR}config/ssl/keystore.p12`;
-        const publicCertificateFile = `${SERVER_MAIN_RES_DIR}config/ssl/public-certificate.pem`;
         if (this.fs.exists(keyStoreFile)) {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
             done();
         } else {
-            shelljs.mkdir('-p', SERVER_MAIN_RES_DIR + 'config/ssl');
+            shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/ssl`);
             const javaHome = shelljs.env.JAVA_HOME;
             let keytoolPath = '';
             if (javaHome) {
