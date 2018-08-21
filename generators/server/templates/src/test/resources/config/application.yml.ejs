@@ -82,7 +82,7 @@ spring:
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
