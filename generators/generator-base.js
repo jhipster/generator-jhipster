@@ -2080,7 +2080,7 @@ module.exports = class extends PrivateBase {
      */
     generateKeyStore() {
         const done = this.async();
-        const keyStoreFile = `${SERVER_MAIN_RES_DIR}config/ssl/keystore.p12`;
+        const keyStoreFile = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
         if (this.fs.exists(keyStoreFile)) {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
             done();
