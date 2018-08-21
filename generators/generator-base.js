@@ -2109,22 +2109,6 @@ module.exports = class extends PrivateBase {
                         this.error('\nFailed to create a KeyStore with \'keytool\'', code);
                     } else {
                         this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
-                        // Create the public certificate (to be imported in browsers)
-                        shelljs.exec(
-                            `"${keytoolPath}keytool" -exportcert -noprompt -rfc `
-                            + `-keystore ${keyStoreFile} `
-                            + '-storepass password '
-                            + '-alias selfsigned '
-                            + `-file ${publicCertificateFile}`,
-                            (code) => {
-                                if (code !== 0) {
-                                    this.error('\nFailed to create a public certificate with \'keytool\'', code);
-                                } else {
-                                    this.log(chalk.green(`\nKeyStore '${publicCertificateFile}' generated successfully.\n`));
-                                }
-                                done();
-                            }
-                        );
                     }
                     done();
                 }
