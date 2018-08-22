@@ -286,6 +286,8 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
     // Jest dependencies for Elasticsearch
     runtime ("com.github.vanroy:spring-boot-starter-data-jest:3.1.4.RELEASE") {
+        exclude module: 'commons-logging'
+    }
     // log4j needed to create embedded elasticsearch instance
     runtime "org.apache.logging.log4j:log4j-api:2.7"
     runtime "org.apache.logging.log4j:log4j-core:2.7"
