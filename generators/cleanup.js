@@ -156,7 +156,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${testDir}web/rest/ProfileInfoResourceIntTest.java`);
         generator.removeFile('gradle/mapstruct.gradle');
     }
-    if (generator.isJhipsterVersionLessThan('5.2.1')) {
+    if (generator.isJhipsterVersionLessThan('5.2.2')) {
         generator.removeFile(`${javaDir}config/ElasticsearchConfiguration.java`);
     }
 }
