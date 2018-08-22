@@ -284,14 +284,14 @@ dependencies {
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
-    // Jest dependencies for Elasticsearch
+    // Spring Data Jest dependencies for Elasticsearch
     runtime ("com.github.vanroy:spring-boot-starter-data-jest:3.1.4.RELEASE") {
         exclude module: 'commons-logging'
     }
     // log4j needed to create embedded elasticsearch instance
     runtime "org.apache.logging.log4j:log4j-api:2.7"
     runtime "org.apache.logging.log4j:log4j-core:2.7"
-    // end of Jest dependencies
+    // end of Spring Data Jest dependencies
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
     compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %>"
