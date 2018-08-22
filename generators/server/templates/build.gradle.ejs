@@ -353,7 +353,9 @@ dependencies {
         <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
-    compile "io.jsonwebtoken:jjwt"
+    compile "io.jsonwebtoken:jjwt-api"
+    runtime "io.jsonwebtoken:jjwt-impl"
+    runtime "io.jsonwebtoken:jjwt-jackson"
     <%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
     compile "org.springframework.security.oauth:spring-security-oauth2"
