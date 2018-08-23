@@ -14,7 +14,7 @@
     "searchEngine": false,
     "messageBroker": false,
     "buildTool": "gradle",
-    "useSass": false,
+    "useSass": true,
     "applicationType": "monolith",
     "testFrameworks": [
       "gatling",
