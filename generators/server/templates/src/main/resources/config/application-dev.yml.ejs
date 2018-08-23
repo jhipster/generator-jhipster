@@ -251,7 +251,7 @@ jhipster:
             app1: /api,/v2/api-docs # recommended dev configuration
     <%_ } _%>
     http:
-        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
+        version: V_1_1 # To use HTTP/2 you will need to activate TLS (see application-tls.yml)
     <%_ if (cacheProvider !== 'no') { _%>
     cache: # Cache configuration
         <%_ if (cacheProvider === 'hazelcast') { _%>
