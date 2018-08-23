@@ -115,15 +115,17 @@ public class <%= mainClass %> {
         }
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
-                "Local: \t\t{}://localhost:{}\n\t" +
-                "External: \t{}://{}:{}\n\t" +
+                "Local: \t\t{}://localhost:{}/{}\n\t" +
+                "External: \t{}://{}:{}/{}\n\t" +
                 "Profile(s): \t{}\n----------------------------------------------------------",
             env.getProperty("spring.application.name"),
             protocol,
             env.getProperty("server.port"),
+			env.getProperty("spring.application.name"),
             protocol,
             hostAddress,
             env.getProperty("server.port"),
+			env.getProperty("spring.application.name"),
             env.getActiveProfiles());
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
 
