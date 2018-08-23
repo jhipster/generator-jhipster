@@ -497,22 +497,31 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <!-- Spring Data Jest dependencies for Elasticsearch -->
+        <dependency>
+            <groupId>com.github.vanroy</groupId>
+            <artifactId>spring-boot-starter-data-jest</artifactId>
+            <version>3.1.4.RELEASE</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>*</artifactId>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- log4j needed to create embedded elasticsearch instance -->
         <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.7</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-to-slf4j</artifactId>
-            <scope>runtime</scope>
+            <artifactId>log4j-core</artifactId>
+            <version>2.7</version>
         </dependency>
+        <!-- end of Spring Data Jest dependencies -->
         <%_ } _%>
         <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
         <dependency>

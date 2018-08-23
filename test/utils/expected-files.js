@@ -553,7 +553,6 @@ const expectedFiles = {
     elasticsearch: [
         `${DOCKER_DIR}elasticsearch.yml`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepository.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/ElasticsearchConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`
     ],
 

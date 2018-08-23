@@ -171,9 +171,8 @@ spring:
             keyspaceName: <%= baseName %>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
-        elasticsearch:
-            cluster-name:
-            cluster-nodes: localhost:9300
+        jest:
+            uri: http://localhost:9200
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
