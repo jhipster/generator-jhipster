@@ -281,11 +281,11 @@ function askForServerSideOpts(meta) {
         }
 
         if (this.authenticationType === 'session') {
-            this.rememberMeKey = crypto.randomBytes(40).toString('hex');
+            this.rememberMeKey = crypto.randomBytes(50).toString('hex');
         }
 
         if (this.authenticationType === 'jwt' || this.applicationType === 'microservice') {
-            this.jwtSecretKey = crypto.randomBytes(40).toString('hex');
+            this.jwtSecretKey = crypto.randomBytes(50).toString('hex');
         }
 
         // user-management will be handled by UAA app, oauth expects users to be managed in IpP
