@@ -254,12 +254,12 @@ module.exports = class extends BaseGenerator {
                 if (this.baseName !== undefined && serverConfigFound) {
                     // Generate remember me key if key does not already exist in config
                     if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
-                        this.rememberMeKey = crypto.randomBytes(20).toString('hex');
+                        this.rememberMeKey = crypto.randomBytes(40).toString('hex');
                     }
 
                     // Generate JWT secret key if key does not already exist in config
                     if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
-                        this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
+                        this.jwtSecretKey = crypto.randomBytes(40).toString('hex');
                     }
 
                     // If translation is not defined, it is enabled by default
