@@ -285,7 +285,7 @@ function askForServerSideOpts(meta) {
         }
 
         if (this.authenticationType === 'jwt' || this.applicationType === 'microservice') {
-            this.jwtSecretKey = crypto.randomBytes(50).toString('hex');
+            this.jwtSecretKey = Buffer.from(crypto.randomBytes(50).toString('hex')).toString('base64');
         }
 
         // user-management will be handled by UAA app, oauth expects users to be managed in IpP
