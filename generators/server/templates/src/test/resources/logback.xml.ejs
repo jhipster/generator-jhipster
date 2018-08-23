@@ -48,6 +48,9 @@
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <logger name="io.searchbox" level="WARN"/>
+    <%_ } _%>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
     <%_ if (cacheProvider === 'memcached') { _%>
