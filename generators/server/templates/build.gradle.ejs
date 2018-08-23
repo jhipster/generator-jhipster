@@ -285,7 +285,7 @@ dependencies {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     compile "org.springframework.boot:spring-boot-starter-data-elasticsearch"
     // Spring Data Jest dependencies for Elasticsearch
-    runtime ("com.github.vanroy:spring-boot-starter-data-jest:3.1.4.RELEASE") {
+    runtime ("com.github.vanroy:spring-boot-starter-data-jest") {
         exclude module: 'commons-logging'
     }
     // log4j needed to create embedded elasticsearch instance
