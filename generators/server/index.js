@@ -259,7 +259,7 @@ module.exports = class extends BaseGenerator {
 
                     // Generate JWT secret key if key does not already exist in config
                     if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
-                        this.jwtSecretKey = Buffer.from(crypto.randomBytes(50).toString('hex')).toString('base64');
+                        this.jwtSecretKey = Buffer.from(crypto.randomBytes(100).toString('hex')).toString('base64');
                     }
 
                     // If translation is not defined, it is enabled by default
