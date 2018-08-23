@@ -86,22 +86,22 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
         </h2>
         <Table responsive striped>
           <thead>
-            <tr>
-              <th className="hand" onClick={this.sort('id')}><Translate contentKey="global.field.id">ID</Translate><FontAwesomeIcon icon="sort" /></th>
-              <th className="hand" onClick={this.sort('login')}><Translate contentKey="userManagement.login">Login</Translate><FontAwesomeIcon icon="sort" /></th>
-              <th className="hand" onClick={this.sort('email')}><Translate contentKey="userManagement.email">Email</Translate><FontAwesomeIcon icon="sort" /></th>
+            <tr className="text-nowrap">
+              <th className="hand" onClick={this.sort('id')}><Translate contentKey="global.field.id">ID</Translate> <FontAwesomeIcon icon="sort" /></th>
+              <th className="hand" onClick={this.sort('login')}><Translate contentKey="userManagement.login">Login</Translate> <FontAwesomeIcon icon="sort" /></th>
+              <th className="hand" onClick={this.sort('email')}><Translate contentKey="userManagement.email">Email</Translate> <FontAwesomeIcon icon="sort" /></th>
               <th />
               <%_ if (enableTranslation) { _%>
-              <th className="hand" onClick={this.sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate><FontAwesomeIcon icon="sort" /></th>
+              <th className="hand" onClick={this.sort('langKey')}><Translate contentKey="userManagement.langKey">Lang Key</Translate> <FontAwesomeIcon icon="sort" /></th>
               <%_ } _%>
               <th><Translate contentKey="userManagement.profiles">Profiles</Translate></th>
               <%_ if (databaseType !== 'cassandra') { _%>
-              <th className="hand" onClick={this.sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate><FontAwesomeIcon icon="sort" /></th>
+              <th className="hand" onClick={this.sort('createdDate')}><Translate contentKey="userManagement.createdDate">Created Date</Translate> <FontAwesomeIcon icon="sort" /></th>
               <th className="hand" onClick={this.sort('lastModifiedBy')}>
-                <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate><FontAwesomeIcon icon="sort" />
+                <Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate> <FontAwesomeIcon icon="sort" />
               </th>
               <th className="hand" onClick={this.sort('lastModifiedDate')}>
-                <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate><FontAwesomeIcon icon="sort" />
+                <Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate> <FontAwesomeIcon icon="sort" />
               </th>
               <th />
               <%_ } _%>
