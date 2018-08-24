@@ -164,7 +164,7 @@ function askForServerSideOpts(meta) {
                     },
                     {
                         value: 'couchbase',
-                        name: '[BETA] Couchbase'
+                        name: 'Couchbase'
                     }
                 ];
                 if (
