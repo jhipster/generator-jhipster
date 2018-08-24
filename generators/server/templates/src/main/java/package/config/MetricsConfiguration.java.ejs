@@ -75,16 +75,13 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
     private HikariDataSource hikariDataSource;
 <%_ } _%>
+
 <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
-
-private final CacheManager cacheManager;
+    // The cacheManager is injected here to force its initialization, so the JCacheGaugeSet
+    // will be correctly created below.
 <%_ } _%>
-
     public MetricsConfiguration(JHipsterProperties jHipsterProperties<% if (['ehcache', 'infinispan'].includes(cacheProvider)) { %>, CacheManager cacheManager<% } %>) {
         this.jHipsterProperties = jHipsterProperties;
-        <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
-        this.cacheManager = cacheManager;
-        <%_ } _%>
     }
 <%_ if (databaseType === 'sql') { _%>
 
