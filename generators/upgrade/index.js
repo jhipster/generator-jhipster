@@ -20,6 +20,8 @@
 const chalk = require('chalk');
 const shelljs = require('shelljs');
 const semver = require('semver');
+const fs = require('fs');
+const gitignore = require('parse-gitignore');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
@@ -85,7 +87,8 @@ module.exports = class extends BaseGenerator {
     }
 
     _cleanUp() {
-        const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn'];
+        const ignoredFiles = gitignore(fs.readFileSync('.gitignore'));
+        const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn', ...ignoredFiles];
         shelljs.ls('-A').forEach((file) => {
             if (!filesToKeep.includes(file)) {
                 this.info(`Removing ${file}`);

@@ -63,6 +63,7 @@
     "meow": "5.0.0",
     "mkdirp": "0.5.1",
     "os-locale": "2.1.0",
+    "parse-gitignore": "1.0.1",
     "pluralize": "7.0.0",
     "prettier": "1.13.7",
     "randexp": "0.4.9",
