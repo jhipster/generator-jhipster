@@ -13,7 +13,6 @@
     "searchEngine": false,
     "serviceDiscoveryType": "consul",
     "buildTool": "maven",
-    "jwtSecretKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "enableTranslation": true,
     "nativeLanguage": "en",
     "languages": [
