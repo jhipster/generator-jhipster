@@ -175,7 +175,7 @@ jhipster:
         authentication:
     <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
             jwt:
-                # This token must be encoded using Base64 (you can use https://www.base64encode.org/ to help)
+                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
                 secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
