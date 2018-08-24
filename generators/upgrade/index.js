@@ -85,7 +85,7 @@ module.exports = class extends BaseGenerator {
     }
 
     _cleanUp() {
-        const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn'];
+        const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn', 'application.properties'];
         shelljs.ls('-A').forEach((file) => {
             if (!filesToKeep.includes(file)) {
                 this.info(`Removing ${file}`);
