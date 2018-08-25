@@ -30,28 +30,28 @@ describe('JSONFileReader', () => {
         it('fails', () => {
           expect(() => {
             JSONFileReader.readEntityJSON();
-          }).to.throw('The passed file path must not be nil.');
+          }).to.throw('The passed file path must not be nil to read the JSON entity.');
         });
       });
       context('because it is empty', () => {
         it('fails', () => {
           expect(() => {
             JSONFileReader.readEntityJSON('');
-          }).to.throw('The passed file path must not be nil.');
+          }).to.throw('The passed file path must not be nil to read the JSON entity.');
         });
       });
       context('because the file does not exist', () => {
         it('fails', () => {
           expect(() => {
             JSONFileReader.readEntityJSON('test/test_files/WrongFile.json');
-          }).to.throw('The passed file \'test/test_files/WrongFile.json\' must exist and must not be a directory.');
+          }).to.throw('The passed file \'test/test_files/WrongFile.json\' must exist and must not be a directory to be read.');
         });
       });
       context('because the file is a folder', () => {
         it('fails', () => {
           expect(() => {
             JSONFileReader.readEntityJSON('test/test_files/');
-          }).to.throw('The passed file \'test/test_files/\' must exist and must not be a directory.');
+          }).to.throw('The passed file \'test/test_files/\' must exist and must not be a directory to be read.');
         });
       });
     });
@@ -83,14 +83,14 @@ describe('JSONFileReader', () => {
         it('fails', () => {
           expect(() => {
             JSONFileReader.toFilePath();
-          }).to.throw('The passed entity name must not be nil.');
+          }).to.throw('The passed entity name must not be nil to be converted to file path.');
         });
       });
       context('with an empty entity name', () => {
         it('fails', () => {
           expect(() => {
             JSONFileReader.toFilePath('');
-          }).to.throw('The passed entity name must not be nil.');
+          }).to.throw('The passed entity name must not be nil to be converted to file path.');
         });
       });
       context('with a valid entity name', () => {

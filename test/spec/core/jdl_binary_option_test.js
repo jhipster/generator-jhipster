@@ -29,21 +29,21 @@ describe('JDLBinaryOption', () => {
       it('fails', () => {
         expect(() => {
           new JDLBinaryOption();
-        }).to.throw('The option\'s name must be passed.');
+        }).to.throw('The option\'s name must be passed to create an option.');
       });
     });
     context('when passing an invalid name', () => {
       it('fails', () => {
         expect(() => {
           new JDLBinaryOption({ name: 'IsNotAnOption' });
-        }).to.throw('The option\'s name and value must be valid, got no value for \'IsNotAnOption\'.');
+        }).to.throw('The option\'s name and value must be valid to create an option, got no value for \'IsNotAnOption\'.');
       });
     });
     context('when passing a name but no value', () => {
       it('fails', () => {
         expect(() => {
           new JDLBinaryOption({ name: BinaryOptions.Options.DTO });
-        }).to.throw('The option\'s name and value must be valid, got no value for \'dto\'.');
+        }).to.throw('The option\'s name and value must be valid to create an option, got no value for \'dto\'.');
       });
     });
     context('when passing a name and a value', () => {

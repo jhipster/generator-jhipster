@@ -30,21 +30,21 @@ describe('JDLField', () => {
       it('fails', () => {
         expect(() => {
           new JDLField();
-        }).to.throw('The field name and type are mandatory.');
+        }).to.throw('The field name and type are mandatory to create a field.');
       });
     });
     context('when not passing the name', () => {
       it('fails', () => {
         expect(() => {
           new JDLField({ name: null, type: 'String' });
-        }).to.throw('The field name and type are mandatory.');
+        }).to.throw('The field name and type are mandatory to create a field.');
       });
     });
     context('when not passing the type', () => {
       it('fails', () => {
         expect(() => {
           new JDLField({ name: 'abc', type: null });
-        }).to.throw('The field name and type are mandatory.');
+        }).to.throw('The field name and type are mandatory to create a field.');
       });
     });
     context('when passing arguments', () => {
@@ -136,10 +136,10 @@ describe('JDLField', () => {
       it('fails', () => {
         expect(() => {
           field.addValidation(null);
-        }).to.throw('The passed validation must be valid.\nErrors: No validation');
+        }).to.throw('The passed validation must be valid to be added to the field.\nErrors: No validation');
         expect(() => {
           field.addValidation({ name: Validations.MIN });
-        }).to.throw('The passed validation must be valid.\nErrors: No value');
+        }).to.throw('The passed validation must be valid to be added to the field.\nErrors: No value');
       });
     });
     context('when adding a valid validation', () => {

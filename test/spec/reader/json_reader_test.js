@@ -30,21 +30,21 @@ describe('JSONReader', () => {
         it('throws an error', () => {
           expect(() => {
             JSONReader.parseFromDir(null);
-          }).to.throw('The app directory must be passed.');
+          }).to.throw('The app directory must be passed to read JSON files.');
         });
       });
       describe('such as a file', () => {
         it('throws an error', () => {
           expect(() => {
             JSONReader.parseFromDir('../../test_files/invalid_file.txt');
-          }).to.throw('The passed directory \'../../test_files/invalid_file.txt\' must exist and must be a directory.');
+          }).to.throw('The passed directory \'../../test_files/invalid_file.txt\' must exist and must be a directory to read JSON files.');
         });
       });
       describe('such as a dir that does not exist', () => {
         it('throws an error', () => {
           expect(() => {
             JSONReader.parseFromDir('nodir');
-          }).to.throw('The passed directory \'nodir\' must exist and must be a directory.');
+          }).to.throw('The passed directory \'nodir\' must exist and must be a directory to read JSON files.');
         });
       });
     });

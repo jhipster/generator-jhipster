@@ -33,7 +33,7 @@ describe('JDLRelationship', () => {
             to: 'Abc2',
             type: RelationshipTypes.MANY_TO_MANY
           });
-        }).to.throw('The type, and at least one injected field must be passed');
+        }).to.throw('A valid type and at least one injected field must be passed to create a relationship.');
       });
     });
     context('when passing an invalid type', () => {
@@ -45,7 +45,7 @@ describe('JDLRelationship', () => {
             injectedFieldInFrom: 'something',
             type: 'WRONG_TYPE'
           });
-        }).to.throw('The type, and at least one injected field must be passed.');
+        }).to.throw('A valid type and at least one injected field must be passed to create a relationship.');
       });
     });
     context('when passing valid args', () => {

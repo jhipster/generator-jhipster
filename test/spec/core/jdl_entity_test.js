@@ -144,10 +144,10 @@ describe('JDLEntity', () => {
       it('fails', () => {
         expect(() => {
           entity.addField(null);
-        }).to.throw(`The passed field '' must be valid for entity '${entity.name}'.\nErrors: No field`);
+        }).to.throw(`The passed field '' must be valid to be added in entity '${entity.name}'.\nErrors: No field`);
         expect(() => {
           entity.addField({ name: 'myField' });
-        }).to.throw(`The passed field 'myField' must be valid for entity '${entity.name}'.\nErrors: No field type`);
+        }).to.throw(`The passed field 'myField' must be valid to be added in entity '${entity.name}'.\nErrors: No field type`);
       });
     });
     context('when adding a valid field', () => {

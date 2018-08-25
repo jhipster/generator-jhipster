@@ -247,7 +247,7 @@ describe('DocumentParser', () => {
             DocumentParser.parseFromConfigurationObject({
               document: input
             });
-          }).to.throw('The option\'s name and value must be valid, got value \'wrong\' for \'dto\'.');
+          }).to.throw('The option\'s name and value must be valid to create an option, got value \'wrong\' for \'dto\'.');
         });
       });
       context('with a required enum', () => {

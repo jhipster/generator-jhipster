@@ -34,14 +34,14 @@ describe('JDLEnums', () => {
       it('fails', () => {
         expect(() => {
           jdlEnums.add(new JDLEnum({ name: '' }));
-        }).to.throw('The enum\'s name must be passed.');
+        }).to.throw('The enum\'s name must be passed to create an enum.');
       });
     });
     context('when adding an invalid element', () => {
       it('fails', () => {
         expect(() => {
           jdlEnums.add();
-        }).to.throw('The enum must be valid in order to be added.\nErrors: No enumeration');
+        }).to.throw('The enum must be valid in order to be added to the enums.\nErrors: No enumeration');
       });
     });
     context('when adding a valid enum', () => {
