@@ -68,7 +68,7 @@ describe('FileUtils', () => {
       it('fails', () => {
         expect(() => {
           FileUtils.createDirectory();
-        }).to.throw('A directory must be passed.');
+        }).to.throw('A directory must be passed to be created.');
       });
     });
     context('when passing a directory that does not yet exist', () => {

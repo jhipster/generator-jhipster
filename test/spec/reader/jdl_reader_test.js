@@ -29,14 +29,14 @@ describe('JDLReader', () => {
         it('throws an error', () => {
           expect(() => {
             JDLReader.parseFromFiles(null);
-          }).to.throw('The files must be passed.');
+          }).to.throw('The files must be passed to be parsed.');
         });
       });
       context('such as an empty array', () => {
         it('throws an error', () => {
           expect(() => {
             JDLReader.parseFromFiles([]);
-          }).to.throw('The files must be passed.');
+          }).to.throw('The files must be passed to be parsed.');
         });
       });
       context('such as files without the \'.jh\' or \'.jdl\' file extension', () => {
@@ -51,14 +51,14 @@ describe('JDLReader', () => {
         it('throws an error', () => {
           expect(() => {
             JDLReader.parseFromFiles(['nofile.jh']);
-          }).to.throw('The passed file \'nofile.jh\' must exist and must not be a directory.');
+          }).to.throw('The passed file \'nofile.jh\' must exist and must not be a directory to be read.');
         });
       });
       context('such as folders', () => {
         it('throws an error', () => {
           expect(() => {
             JDLReader.parseFromFiles(['../../test_files/folder.jdl']);
-          }).to.throw('The passed file \'../../test_files/folder.jdl\' must exist and must not be a directory.');
+          }).to.throw('The passed file \'../../test_files/folder.jdl\' must exist and must not be a directory to be read.');
         });
       });
     });

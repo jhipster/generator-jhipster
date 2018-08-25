@@ -75,7 +75,7 @@ describe('Set', () => {
       it('fails', () => {
         expect(() => {
           set.addArrayElements(null);
-        }).to.throw('Can\'t add elements from a nil object.');
+        }).to.throw('Can\'t add elements to the set from a nil object.');
       });
     });
     context('when trying to add an array\'s elements', () => {
@@ -102,7 +102,7 @@ describe('Set', () => {
       it('fails', () => {
         expect(() => {
           set.addSetElements(null);
-        }).to.throw('Can\'t add elements from a nil object.');
+        }).to.throw('Can\'t add elements to the set from a nil object.');
       });
     });
     context('when passing an empty Set', () => {

@@ -42,7 +42,7 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addApplication(null);
-          }).to.throw('The application must be valid in order to be added.\nErrors: No application');
+          }).to.throw('The application must be valid in order to be added to the JDL object.\nErrors: No application');
         });
       });
       context('such as an incomplete application', () => {
@@ -53,7 +53,7 @@ describe('JDLObject', () => {
                 baseName: 'toto'
               }
             });
-          }).to.throw('The application must be valid in order to be added.\n'
+          }).to.throw('The application must be valid in order to be added to the JDL object.\n'
             + 'Errors: No authentication type, No build tool');
         });
       });
@@ -132,7 +132,7 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addEntity(null);
-          }).to.throw('The entity must be valid in order to be added.\nErrors: No entity');
+          }).to.throw('The entity must be valid in order to be added to the JDL object.\nErrors: No entity');
         });
       });
       context('such as an incomplete entity', () => {
@@ -146,7 +146,7 @@ describe('JDLObject', () => {
               validations: []
             }]
           });
-        }).to.throw('The entity must be valid in order to be added.\nErrors: For field #1: No field name');
+        }).to.throw('The entity must be valid in order to be added to the JDL object.\nErrors: For field #1: No field name');
       });
     });
     context('when adding a valid entity', () => {
@@ -205,7 +205,7 @@ describe('JDLObject', () => {
       it('fails', () => {
         expect(() => {
           jdlObject.getEntity();
-        }).to.throw('An entity name must be passed.');
+        }).to.throw('An entity name must be passed so as to be retrieved.');
       });
     });
 
@@ -304,14 +304,14 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addEnum(null);
-          }).to.throw('The enum must be valid in order to be added.\nErrors: No enumeration');
+          }).to.throw('The enum must be valid in order to be added to the JDL object.\nErrors: No enumeration');
         });
       });
       context('such as an incomplete enum', () => {
         it('fails', () => {
           expect(() => {
             object.addEnum({ values: ['A', 'B'] });
-          }).to.throw('The enum must be valid in order to be added.\nErrors: No enumeration name');
+          }).to.throw('The enum must be valid in order to be added to the JDL object.\nErrors: No enumeration name');
         });
       });
     });
@@ -458,7 +458,7 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addRelationship(null);
-          }).to.throw('The relationship must be valid in order to be added.\nErrors: No relationship');
+          }).to.throw('The relationship must be valid in order to be added to the JDL object.\nErrors: No relationship');
         });
       });
       context('such as an incomplete relationship', () => {
@@ -586,14 +586,14 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addOption(null);
-          }).to.throw('The option must be valid in order to be added.\nErrors: No option');
+          }).to.throw('The option must be valid in order to be added to the JDL object.\nErrors: No option');
         });
       });
       context('such as an empty object', () => {
         it('fails', () => {
           expect(() => {
             object.addOption({});
-          }).to.throw('The option must be valid in order to be added.\n'
+          }).to.throw('The option must be valid in order to be added to the JDL object.\n'
             + 'Errors: No option name, No entity names, No excluded names, No type');
         });
       });
@@ -604,7 +604,7 @@ describe('JDLObject', () => {
               name: UnaryOptions.SKIP_CLIENT,
               type: 'WrongType'
             });
-          }).to.throw('The option must be valid in order to be added.\n'
+          }).to.throw('The option must be valid in order to be added to the JDL object.\n'
             + 'Errors: No entity names, No excluded names, No type');
         });
       });

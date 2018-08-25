@@ -27,14 +27,14 @@ describe('JDLEnum', () => {
       it('fails', () => {
         expect(() => {
           new JDLEnum();
-        }).to.throw('The enum\'s name must be passed.');
+        }).to.throw('The enum\'s name must be passed to create an enum.');
       });
     });
     context('when not passing a name', () => {
       it('fails', () => {
         expect(() => {
           new JDLEnum({ values: ['ABC'], comment: 'My enumeration.' });
-        }).to.throw('The enum\'s name must be passed.');
+        }).to.throw('The enum\'s name must be passed to create an enum.');
       });
     });
     context('when passing arguments', () => {
@@ -54,7 +54,7 @@ describe('JDLEnum', () => {
       it('fails', () => {
         expect(() => {
           jdlEnum.addValue(null);
-        }).to.throw('A valid value must be passed, got nil.');
+        }).to.throw('A valid value must be passed to be added to the enum, got nil');
       });
     });
     context('when passing a value', () => {
