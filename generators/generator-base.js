@@ -513,6 +513,16 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * return the momentLocaleId from the given language key (from constants.LANGUAGES)
+     * if no momentLocaleId is defined, return the language key (which is a localeId itself)
+     * @param {string} language - language key
+     */
+    getMomentLocaleId(language) {
+        const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
+        return langObj.momentLocaleId || language;
+    }
+
+    /**
      * get all the languages options supported by JHipster
      */
     getAllSupportedLanguageOptions() {

@@ -270,7 +270,7 @@ module.exports = class extends Generator {
         try {
             let content = 'localesToKeep: [\n';
             languages.forEach((language, i) => {
-                content += `                    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
+                content += `                    '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
             });
             content
                 += '                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n'
@@ -297,7 +297,7 @@ module.exports = class extends Generator {
         try {
             let content = 'localesToKeep: [\n';
             languages.forEach((language, i) => {
-                content += `        '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
+                content += `        '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
             });
             content
                 += '        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n'

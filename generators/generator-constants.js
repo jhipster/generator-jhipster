@@ -103,9 +103,11 @@ const LANGUAGES = [
     {
         name: 'Arabic (Libya)', dispName: 'العربية', value: 'ar-ly', rtl: true, skipForLocale: true
     },
-    { name: 'Armenian', dispName: 'Հայերեն', value: 'hy' },
     {
-        name: 'Belorussian', dispName: 'Беларускі', value: 'by', localeId: 'by'
+        name: 'Armenian', dispName: 'Հայերեն', value: 'hy', momentLocaleId: 'hy-am'
+    },
+    {
+        name: 'Belorussian', dispName: 'Беларускі', value: 'by', momentLocaleId: 'be-by'
     },
     { name: 'Catalan', dispName: 'Català', value: 'ca' },
     {
@@ -150,7 +152,7 @@ const LANGUAGES = [
     { name: 'Tamil', dispName: 'தமிழ்', value: 'ta' },
     { name: 'Thai', dispName: 'ไทย', value: 'th' },
     {
-        name: 'Ukrainian', dispName: 'Українська', value: 'ua', localeId: 'uk'
+        name: 'Ukrainian', dispName: 'Українська', value: 'ua', localeId: 'uk', momentLocaleId: 'uk'
     },
     {
         name: 'Uzbek (latin)', dispName: 'O`zbekcha', value: 'uz-lat', localeId: 'uz'

@@ -122,10 +122,10 @@ describe('Entities reducer tests', () => {
         }
       );
     });
-   
+
     it('should reset the state', () => {
       expect(
-        reducer({ data: { id: 1}}, {
+        reducer({ ...initialState, loading: true }, {
           type: ACTION_TYPES.RESET
         })
         ).toEqual({
