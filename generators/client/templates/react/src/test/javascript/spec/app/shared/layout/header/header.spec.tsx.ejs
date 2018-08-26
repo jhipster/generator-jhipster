@@ -91,7 +91,7 @@ describe('Header', () => {
     expect(nav.find(LocaleMenu).length).toEqual(1);
     <% } %>
     expect(nav.find(AccountMenu).length).toEqual(1);
-    const ribbon = component.find('.ribbon .dev');
+    const ribbon = component.find('.ribbon.dev');
     expect(ribbon.length).toEqual(1);
   });
 
@@ -111,7 +111,7 @@ describe('Header', () => {
     expect(nav.find(LocaleMenu).length).toEqual(1);
     <% } %>
     expect(nav.find(AccountMenu).length).toEqual(1);
-    const ribbon = component.find('.ribbon .dev');
+    const ribbon = component.find('.ribbon.dev');
     expect(ribbon.length).toEqual(0);
   });
 
