@@ -11,8 +11,8 @@ const ErrorComp = () => {
 describe('error-boundary-route component', () => {
   beforeEach(() => {
     // ignore console and jsdom errors
-    jest.spyOn(window._virtualConsole, 'emit').mockImplementation(() => false);
-    jest.spyOn(global.console, 'error').mockImplementation(() => false);
+    jest.spyOn((window as any)._virtualConsole, 'emit').mockImplementation(() => false);
+    jest.spyOn((window as any).console, 'error').mockImplementation(() => false);
   });
 
   // All tests will go here
