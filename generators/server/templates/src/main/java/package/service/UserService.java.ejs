@@ -193,7 +193,9 @@ public class UserService {
         userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(u -> {
             if (!u.getActivated()) {
                 userRepository.delete(u);
+                <%_ if (databaseType === 'sql') { _%>
                 userRepository.flush();
+                <%_ } _%>
             } else {
                 throw new EmailAlreadyUsedException();
             }
