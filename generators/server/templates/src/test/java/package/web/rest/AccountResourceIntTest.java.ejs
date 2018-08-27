@@ -383,6 +383,34 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
+    public void testRegisterUppercaseEmail() throws Exception {
+        ManagedUserVM uppercaseEmailUser = new ManagedUserVM();
+        uppercaseEmailUser.setLogin("joe");
+        uppercaseEmailUser.setPassword("password");
+        uppercaseEmailUser.setFirstName("Joe");
+        uppercaseEmailUser.setLastName("Shmoe");
+        uppercaseEmailUser.setEmail("Joe@example.com");
+        uppercaseEmailUser.setActivated(true);
+        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        uppercaseEmailUser.setImageUrl("http://placehold.it/50x50");
+        <%_ } _%>
+        uppercaseEmailUser.setLangKey(Constants.DEFAULT_LANGUAGE);
+        uppercaseEmailUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        assertThat(userRepository.findOneByLogin("joe").isPresent()).isFalse();
+
+        restMvc.perform(
+            post("/api/register")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(uppercaseEmailUser)))
+            .andExpect(status().isCreated());
+
+        Optional<User> user = userRepository.findOneByLogin("joe");
+        assertThat(user.isPresent()).isTrue();
+        assertThat(user.get().getEmail()).isEqualTo("joe@example.com");
+    }
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
     public void testRegisterInvalidLogin() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setLogin("funky-log!n");// <-- invalid
