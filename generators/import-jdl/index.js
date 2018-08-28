@@ -70,10 +70,10 @@ class ImporterGenerator extends BaseGenerator {
             this.clientFramework = this.clientFramework || 'angularX';
             this.clientPackageManager = configuration.clientPackageManager;
             if (!this.clientPackageManager) {
-                if (this.useYarn) {
-                    this.clientPackageManager = 'yarn';
-                } else {
+                if (this.useNpm) {
                     this.clientPackageManager = 'npm';
+                } else {
+                    this.clientPackageManager = 'yarn';
                 }
             }
         }
@@ -153,10 +153,10 @@ module.exports = class extends ImporterGenerator {
                 this.clientFramework = this.clientFramework || 'angularX';
                 this.clientPackageManager = configuration.clientPackageManager;
                 if (!this.clientPackageManager) {
-                    if (this.useYarn) {
-                        this.clientPackageManager = 'yarn';
-                    } else {
+                    if (this.useNpm) {
                         this.clientPackageManager = 'npm';
+                    } else {
+                        this.clientPackageManager = 'yarn';
                     }
                 }
             }

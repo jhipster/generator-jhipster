@@ -113,9 +113,9 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        // This adds support for a `--npm` flag
-        this.option('npm', {
-            desc: 'Use npm instead of yarn',
+        // This adds support for a `--yarn` flag
+        this.option('yarn', {
+            desc: 'Use yarn instead of npm',
             type: Boolean,
             defaults: false
         });
@@ -205,11 +205,13 @@ module.exports = class extends BaseGenerator {
 
                     this.existingProject = true;
                 }
+                this.useNpm = this.configOptions.useNpm = !this.options.yarn;
+                this.useYarn = !this.useNpm;
                 if (!this.clientPackageManager) {
-                    if (this.useYarn) {
-                        this.clientPackageManager = 'yarn';
-                    } else {
+                    if (this.useNpm) {
                         this.clientPackageManager = 'npm';
+                    } else {
+                        this.clientPackageManager = 'yarn';
                     }
                 }
             },
