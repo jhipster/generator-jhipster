@@ -24,7 +24,7 @@
   "dependencies": {
     "chalk": "2.4.1",
     "ejs": "2.6.1",
-    "generator-jhipster": ">=5.0.0",
+    "generator-jhipster": ">=5.2.1",
     "glob": "7.1.2",
     "gulp-filter": "5.1.0",
     "insight": "0.10.1",

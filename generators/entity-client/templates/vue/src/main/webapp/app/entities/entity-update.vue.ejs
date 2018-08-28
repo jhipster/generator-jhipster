@@ -1,0 +1,114 @@
+<template>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <form name="editForm" role="form" novalidate v-on:submit.prevent="save()" >
+                <h2 id="jhi-<%= entityInstance %>-heading" v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.home.createOrEditLabel')">Create or edit a <%= entityAngularName %></h2>
+                <div>
+                    <!--<jhi-alert-error></jhi-alert-error>-->
+                    <div class="form-group" v-if="<%= entityInstance %>.id">
+                        <label for="id" v-text="$t('global.field.id')">ID</label>
+                        <input type="text" class="form-control" id="id" name="id"
+                               v-model="<%= entityInstance %>.id" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.name')" for="field_name">Name</label>
+                        <input type="text" class="form-control" name="name" id="field_name"
+                               :class="{'valid': !$v.<%= entityInstance %>.name.$invalid, 'invalid': $v.<%= entityInstance %>.name.$invalid }"
+                               v-model="$v.<%= entityInstance %>.name.$model" required/>
+                        <div v-if="$v.<%= entityInstance %>.name.$anyDirty && $v.<%= entityInstance %>.name.$invalid">
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.name.required" v-text="$t('entity.validation.required')">
+                                This field is required.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.max')" for="field_max">Max</label>
+                        <input type="number" class="form-control" name="max" id="field_max"
+                               :class="{'valid': !$v.<%= entityInstance %>.max.$invalid, 'invalid': $v.<%= entityInstance %>.max.$invalid }"
+                               v-model="$v.<%= entityInstance %>.max.$model" required/>
+                        <div v-if="$v.<%= entityInstance %>.max.$anyDirty && $v.<%= entityInstance %>.max.$invalid">
+                            <small class="form-text text-danger"
+                                   v-if="!$v.<%= entityInstance %>.max.required" v-text="$t('entity.validation.required')">
+                                This field is required.
+                            </small>
+                            <small class="form-text text-danger"
+                                   v-if="!$v.<%= entityInstance %>.name.integer" v-text="$t('entity.validation.number')">
+                                This field should be a number.
+                            </small>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">
+                        <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
+                    </button>
+                    <button type="submit" id="save-entity" :disabled="$v.<%= entityInstance %>.$invalid || isSaving" class="btn btn-primary">
+                        <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>
+<script>
+    import {integer, required} from 'vuelidate/lib/validators'
+    import axios from 'axios'
+    import {SERVER_API_URL} from "../constants";
+
+    export default {
+        data() {
+            return {
+                <%= entityInstance %>: {
+                    name: null,
+                    max: null
+                },
+                isSaving: false
+            }
+        },
+        validations: {
+            <%= entityInstance %>: {
+                name: {
+                    required
+                },
+                max: {
+                    required,
+                    integer
+                }
+            }
+        },
+        beforeRouteEnter (to, from, next) {
+            next(vm => {
+                if (to.params.<%= entityInstance %>Id) {
+                    vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
+                }
+            })
+        },
+        methods: {
+            save() {
+                let vm = this;
+                this.isSaving = true;
+                if (this.<%= entityInstance %>.id) {
+                    axios.put(SERVER_API_URL + 'api/<%= entityInstance %>s', this.<%= entityInstance %>).then(() => {
+                        vm.$router.go(-1);
+                        vm.isSaving = false;
+                    });
+                } else {
+                    axios.post(SERVER_API_URL + 'api/<%= entityInstance %>s', this.<%= entityInstance %>).then(() => {
+                        vm.$router.go(-1);
+                        vm.isSaving = false;
+                    });
+                }
+            },
+            retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
+                let vm = this;
+                axios.get(SERVER_API_URL + 'api/<%= entityInstance %>s/' + <%= entityInstance %>Id).then(res => {
+                    vm.<%= entityInstance %> = res.data;
+                });
+            },
+            previousState() {
+                this.$router.go(-1);
+            }
+        }
+    }
+</script>

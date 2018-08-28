@@ -1,0 +1,81 @@
+<template>
+    <div>
+        <h2 id="page-heading">
+            <span v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.home.title')"><%= entityAngularName %>s</span>
+            <router-link to="/<%= entityInstance %>/new" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityInstance %>">
+                <font-awesome-icon icon="plus"></font-awesome-icon>
+                <span  v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.home.createLabel')">
+                    Create new <%= entityAngularName %>
+                </span>
+            </router-link>
+        </h2>
+        <!--<jhi-alert></jhi-alert>-->
+        <br/>
+        <div class="table-responsive" v-if="<%= entityInstance %>s">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><span v-text="$t('global.field.id')">ID</span></th>
+                    <th><span v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.name')">Name</span></th>
+                    <th><span v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.occupant')">Occupant(s)</span></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="<%= entityInstance %> in <%= entityInstance %>s">
+                    <td><router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}">{{<%= entityInstance %>.id}}</router-link></td>
+                    <td>{{<%= entityInstance %>.name}}</td>
+                    <td>{{<%= entityInstance %>.occupants ? <%= entityInstance %>.occupants : 0}} / {{<%= entityInstance %>.max}} <font-awesome-icon style="color: #28a745;" icon="['fas', 'thumbs-up']" v-if="<%= entityInstance %>.occupants > 0 && <%= entityInstance %>.max === <%= entityInstance %>.occupants"></font-awesome-icon></td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-info btn-sm">
+                                <font-awesome-icon icon="eye"></font-awesome-icon>
+                                <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
+                            </router-link>
+                            <router-link :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}"  tag="button" class="btn btn-primary btn-sm">
+                                <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                                <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
+                            </router-link>
+                            <!--<button type="submit"
+                                    [routerLink]="['/', { outlets: { popup: '<%= entityInstance %>/'+ <%= entityInstance %>.id + '/delete'} }]"
+                                    replaceUrl="true"
+                                    queryParamsHandling="merge"
+                                    class="btn btn-danger btn-sm">
+                                <font-awesome-icon icon="times"></font-awesome-icon>
+                                <span class="d-none d-md-inline" v-text="$t('entity.action.delete')">Delete</span>
+                            </button>-->
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+<script>
+    import axios from 'axios'
+    import {SERVER_API_URL} from "../constants";
+    import Principal from '../components/account/Principal';
+
+    export default {
+        mixins: [Principal],
+        data() {
+          return {
+              <%= entityInstance %>s: []
+          }
+        },
+        beforeRouteEnter (to, from, next) {
+            next(vm => {
+                vm.retrieve<%= entityAngularName %>s();
+            })
+        },
+        methods: {
+            retrieve<%= entityAngularName %>s() {
+                let vm = this;
+                axios.get(SERVER_API_URL + 'api/<%= entityInstance %>s').then(res => {
+                    vm.<%= entityInstance %>s = res.data;
+                });
+            }
+        }
+    }
+</script>
