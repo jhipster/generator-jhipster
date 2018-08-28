@@ -183,18 +183,24 @@ public class UserService {
     }
 
     public User registerUser(UserDTO userDTO, String password) {
-        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(u -> {
-            if (!u.getActivated()) {
-                userRepository.delete(u);
+        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+            if (!existingUser.getActivated()) {
+                userRepository.delete(existingUser);
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                this.clearUserCaches(existingUser);
+                <%_ } _%>
             } else {
                 throw new LoginAlreadyUsedException();
             }
         });
-        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(u -> {
-            if (!u.getActivated()) {
-                userRepository.delete(u);
+        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+            if (!existingUser.getActivated()) {
+                userRepository.delete(existingUser);
                 <%_ if (databaseType === 'sql') { _%>
                 userRepository.flush();
+                <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                this.clearUserCaches(existingUser);
                 <%_ } _%>
             } else {
                 throw new EmailAlreadyUsedException();
