@@ -145,8 +145,7 @@ module.exports = class extends BaseGenerator {
         this.blueprint = this.configOptions.blueprint = blueprint;
         this.useNpm = this.configOptions.useNpm = !this.options.yarn;
         this.useYarn = !this.useNpm;
-        console.log('this.useNpm='+this.useNpm);
-        console.log('this.useYarn='+this.useYarn);
+
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
         this.experimental = this.configOptions.experimental = this.options.experimental;
         this.registerClientTransforms();

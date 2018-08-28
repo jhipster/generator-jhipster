@@ -29,7 +29,7 @@
     "jhiPrefix": "jhi",
     "travis": true,
     "messageBroker": false,
-    "clientPackageManager": "yarn",
+    "clientPackageManager": "npm",
     "clientFramework": "angularX"
   }
 }
