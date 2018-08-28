@@ -270,11 +270,11 @@ _%>
     <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
 
     <%_ if (databaseType !== 'cassandra') { _%>
-    private static final byte[] <%=defaultValueName %> = TestUtil.createByteArray(<%= defaultValue %>, "0");
-    private static final byte[] <%=updatedValueName %> = TestUtil.createByteArray(<%= updatedValue %>, "1");
+    private static final byte[] <%=defaultValueName %> = TestUtil.createByteArray(1, "0");
+    private static final byte[] <%=updatedValueName %> = TestUtil.createByteArray(1, "1");
     <%_ } else { _%>
-    private static final ByteBuffer <%=defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(<%= defaultValue %>, "0"));
-    private static final ByteBuffer <%=updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(<%= updatedValue %>, "1"));
+    private static final ByteBuffer <%=defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "0"));
+    private static final ByteBuffer <%=updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "1"));
     <%_ } _%>
     private static final String <%=defaultValueName %>_CONTENT_TYPE = "image/jpg";
     private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";
