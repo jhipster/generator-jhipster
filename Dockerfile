@@ -32,7 +32,7 @@ RUN \
   npm install -g yarn && \
   su -c "yarn config set prefix /home/jhipster/.yarn-global" jhipster && \
   # install yeoman
-  su -c "yarn global add yo" jhipster && \
+  npm install -g yo && \
   # cleanup
   apt-get clean && \
   rm -rf \
@@ -45,16 +45,16 @@ RUN \
 COPY . /home/jhipster/generator-jhipster
 
 RUN \
+  # clean jhipster folder
+  rm -Rf /home/jhipster/generator-jhipster/node_modules \
+    /home/jhipster/generator-jhipster/yarn.lock \
+    /home/jhipster/generator-jhipster/yarn-error.log && \
+  # install jhipster
+  npm install -g /home/jhipster/generator-jhipster && \
   # fix jhipster user permissions
   chown -R jhipster:jhipster \
     /home/jhipster \
     /usr/lib/node_modules && \
-  # install jhipster
-  rm -Rf /home/jhipster/generator-jhipster/node_modules \
-    /home/jhipster/generator-jhipster/yarn.lock \
-    /home/jhipster/generator-jhipster/yarn-error.log && \
-  su -c "cd /home/jhipster/generator-jhipster && yarn install" jhipster && \
-  su -c "yarn global add file:/home/jhipster/generator-jhipster" jhipster && \
   # cleanup
   rm -rf \
     /home/jhipster/.cache/ \
