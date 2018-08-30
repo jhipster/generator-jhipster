@@ -940,14 +940,16 @@ const serverFiles = {
     ],
     serverJavaUserManagement: [
         {
-            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2') || (!generator.skipUserManagement && generator.databaseType === 'sql'),
+            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType === 'monolith')
+                || (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 'config/liquibase/users.csv',
             ]
         },
         {
-            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.databaseType === 'sql') || (!generator.skipUserManagement && generator.databaseType === 'sql'),
+            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType === 'monolith' && generator.databaseType === 'sql')
+                || (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 'config/liquibase/authorities.csv',
