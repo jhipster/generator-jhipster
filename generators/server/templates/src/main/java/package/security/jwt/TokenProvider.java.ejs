@@ -60,15 +60,15 @@ public class TokenProvider {
 
     @PostConstruct
     public void init() {
-        byte[] keyBytes = null;
-        String base64Secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret();
-        if (StringUtils.isEmpty(base64Secret)) {
+        byte[] keyBytes;
+        String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
+        if (!StringUtils.isEmpty(secret)) {
             log.warn("Warning: the JWT key used is not Base64-encoded. " +
                 "We recommend using the `jhipster.security.authentication.jwt.base64-secret` key for optimum security.");
-            keyBytes = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret().getBytes(StandardCharsets.UTF_8);
+            keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         } else {
             log.debug("Using a Base64-encoded JWT secret key");
-            keyBytes = Decoders.BASE64.decode(base64Secret);
+            keyBytes = Decoders.BASE64.decode(jHipsterProperties.getSecurity().getAuthentication().getJwt().getBase64Secret());
         }
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.tokenValidityInMilliseconds =
