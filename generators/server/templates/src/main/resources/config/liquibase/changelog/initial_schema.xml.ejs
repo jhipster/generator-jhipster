@@ -159,7 +159,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
+    <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
         <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"

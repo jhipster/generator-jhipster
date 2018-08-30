@@ -940,7 +940,7 @@ const serverFiles = {
     ],
     serverJavaUserManagement: [
         {
-            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType === 'monolith')
+            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice')
                 || (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
             templates: [
@@ -948,7 +948,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType === 'monolith' && generator.databaseType === 'sql')
+            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice' && generator.databaseType === 'sql')
                 || (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
             templates: [
