@@ -139,13 +139,14 @@
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
                                  referencedTableName="<%= jhiTablePrefix %>_authority"/>
-    <%_ if (authenticationType !== 'oauth2') { _%>
+
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="<%= jhiTablePrefix %>_user_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
 
+    <%_ if (authenticationType !== 'oauth2') { _%>
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
                                 tableName="<%= jhiTablePrefix %>_user"/>
@@ -158,7 +159,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType === 'monolith')) { _%>
+    <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
         <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
@@ -170,7 +171,6 @@
             <column name="created_date" type="timestamp"/>
         </<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
         <dropDefaultValue tableName="<%= jhiTablePrefix %>_user" columnName="created_date" columnDataType="datetime"/>
-    <%_ } _%>
         <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
                   file="config/liquibase/authorities.csv"
                   separator=";"
@@ -186,6 +186,7 @@
                   identityInsertEnabled="true"
                   <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_user_authority"/>
+    <%_ } _%>
 <%_ } _%>
         <createTable tableName="<%= jhiTablePrefix %>_persistent_audit_event">
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">

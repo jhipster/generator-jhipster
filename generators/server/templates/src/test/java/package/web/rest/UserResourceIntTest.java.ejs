@@ -716,7 +716,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         assertThat(userList).hasSize(databaseSizeBeforeDelete - 1);
     }
     <%_ } _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')
+        && (!(authenticationType === 'oauth2' && applicationType === 'microservice'))) { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
