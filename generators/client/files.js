@@ -34,7 +34,7 @@ function writeFiles() {
     this.copy('webapp/app/locale/TranslationService.vue', 'src/main/webapp/app/locale/TranslationService.vue');
     this.copy('webapp/app/components/Home.vue', 'src/main/webapp/app/components/Home.vue');
     this.copy('webapp/app/components/JhiFooter.vue', 'src/main/webapp/app/components/JhiFooter.vue');
-    this.template('webapp/app/components/JhipNavBar.vue.ejs', 'src/main/webapp/app/components/JhipNavBar.vue');
+    this.template('webapp/app/components/JhiNavBar.vue.ejs', 'src/main/webapp/app/components/JhiNavBar.vue');
     this.copy('webapp/app/components/Ribbon.vue', 'src/main/webapp/app/components/Ribbon.vue');
     this.copy('webapp/app/components/account/ChangePassword.vue', 'src/main/webapp/app/components/account/ChangePassword.vue');
     this.copy('webapp/app/components/account/LoginForm.vue', 'src/main/webapp/app/components/account/LoginForm.vue');

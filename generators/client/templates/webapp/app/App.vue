@@ -24,7 +24,7 @@
 <script>
     import Ribbon from './components/Ribbon'
     import JhiFooter from './components/JhiFooter'
-    import JhiNavBar from './components/JhipNavBar'
+    import JhiNavBar from './components/JhiNavBar'
     import LoginForm from './components/account/LoginForm'
 
     export default {
