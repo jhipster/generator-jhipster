@@ -9,7 +9,7 @@ const TestComp = () => <div>Test</div>;
 describe('private-route component', () => {
   // All tests will go here
   it('Should throw error when no component is provided', () => {
-    expect(() => shallow(<PrivateRouteComponent component={null} isAuthenticated isAuthorized />)).toThrow(Error);
+    expect(() => shallow(<PrivateRouteComponent component={null} isAuthenticated sessionHasBeenFetched isAuthorized />)).toThrow(Error);
   });
 
   it('Should render an error message when the user has no authorities', () => {
