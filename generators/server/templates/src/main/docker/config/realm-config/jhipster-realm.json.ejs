@@ -274,8 +274,8 @@
       ],
       "security-admin-console": [],
       "web_app": [],
-      "admin-cli": [],
-      "jhipster-registry": [],
+      "admin-cli": [],<% if (serviceDiscoveryType === 'eureka') { %>
+      "jhipster-registry": [],<% } %>
       "broker": [
         {
           "id": "225066d4-4a07-4550-a851-3d9359cbbac2",
