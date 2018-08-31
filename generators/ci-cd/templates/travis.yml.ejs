@@ -76,9 +76,9 @@ script:
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>
     <%_ if (clientPackageManager === 'yarn') { _%>
-  - yarn test
+  - yarn test<%= frontTests%>
     <%_ } else if (clientPackageManager === 'npm') { _%>
-  - npm test
+  - npm test<%= frontTests%>
     <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
