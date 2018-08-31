@@ -423,8 +423,11 @@ module.exports = class extends BaseGenerator {
                     this.warning(`pagination is missing in .jhipster/${entityName}.json, using no as fallback`);
                     context.pagination = 'no';
                 }
-                if (!context.clientRootFolder && !context.skipUiGrouping && context.applicationType === 'gateway' && context.useMicroserviceJson) {
-                    context.clientRootFolder = context.microserviceName;
+                if (!context.clientRootFolder && !context.skipUiGrouping) {
+                    // if it is a gateway generating from a microservice, or a microservice
+                    if (context.useMicroserviceJson || context.applicationType === 'microservice') {
+                        context.clientRootFolder = context.microserviceName;
+                    }
                 }
             },
 
