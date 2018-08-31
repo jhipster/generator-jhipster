@@ -19,7 +19,7 @@
 import { browser, ExpectedConditions as ec, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor<% } %> } from 'protractor';
 import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
 
-import { <%= entityClass %>ComponentsPage, <%= entityClass %>UpdatePage } from './<%= entityFileName %>.page-object';
+import { <%= entityClass %>ComponentsPage, <%= entityClass %>DeleteDialog, <%= entityClass %>UpdatePage } from './<%= entityFileName %>.page-object';
 <%_ if (fieldsContainBlobOrImage) { _%>
 import * as path from 'path';
 <%_ } _%>
@@ -44,6 +44,7 @@ describe('<%= entityClass %> e2e test', () => {
     let signInPage: SignInPage;
     let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
+    <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
     <%_ if (fieldsContainBlobOrImage) { _%>
     const fileToUpload = '../../../../../<%= entityParentPathAddition %>main/webapp/content/images/logo-jhipster.png';
     const absolutePath = path.resolve(__dirname, fileToUpload);
@@ -141,6 +142,24 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ }); _%>
         await <%= entityInstance %>UpdatePage.save();
         expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).toBeFalsy();
+    });<%= closeBlockComment %>
+
+
+    <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
+        const nbButtonsBeforeDelete = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
+        await <%= entityInstance %>ComponentsPage.clickOnLastDeleteButton();
+
+        <%= entityInstance %>DeleteDialog = new <%= entityClass %>DeleteDialog();
+        <%_ if (enableTranslation) { _%>
+        expect(await <%= entityInstance %>DeleteDialog.getDialogTitle())
+            .toMatch(/<%= i18nKeyPrefix %>.delete.question/);
+        <%_ } else { _%>
+        expect(await <%= entityInstance %>DeleteDialog.getDialogTitle())
+            .toMatch(/Are you sure you want to delete this <%= entityClassHumanized %>?/);
+        <%_ } _%>
+        await <%= entityInstance %>DeleteDialog.clickOnConfirmButton();
+
+        expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).toBe(nbButtonsBeforeDelete - 1);
     });<%= closeBlockComment %>
 
     afterAll(async () => {

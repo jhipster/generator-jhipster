@@ -21,6 +21,7 @@ import { browser<% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %
 
 import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
 import <%= entityClass %>ComponentsPage from './<%= entityFileName %>.page-object';
+import { <%= entityClass %>DeleteDialog } from './<%= entityFileName %>.page-object';
 import <%= entityClass %>UpdatePage from './<%= entityFileName%>-update.page-object';
 <%_ if (fieldsContainBlobOrImage) { _%>
 import path from 'path';
@@ -47,6 +48,7 @@ describe('<%= entityClass %> e2e test', () => {
     let navBarPage: NavBarPage;
     let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
+    <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
     <%_ if (fieldsContainBlobOrImage) { _%>
     const fileToUpload = '../../../../../<%= entityParentPathAddition %>main/webapp/static/images/logo-jhipster.png';
     const absolutePath = path.resolve(__dirname, fileToUpload);
@@ -136,6 +138,19 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ }); _%>
         await <%= entityInstance %>UpdatePage.save();
         expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).to.be.false;
+    });<%= closeBlockComment %>
+
+    <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
+        <%= entityInstance %>ComponentsPage.waitUntilLoaded();
+        const nbButtonsBeforeDelete = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
+        await <%= entityInstance %>ComponentsPage.clickOnLastDeleteButton();
+
+        <%= entityInstance %>DeleteDialog = new <%= entityClass %>DeleteDialog();
+        expect(await <%= entityInstance %>DeleteDialog.getDialogTitle().getAttribute('id')).to.match(/<%= i18nKeyPrefix %>.delete.question/);
+        await <%= entityInstance %>DeleteDialog.clickOnConfirmButton();
+
+        <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeDelete - 1);
+        expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });<%= closeBlockComment %>
 
     after(() => {

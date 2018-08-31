@@ -204,12 +204,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.buildTool === 'gradle' && generator.databaseType === 'sql',
-            templates: [
-                'gradle/liquibase.gradle'
-            ]
-        },
-        {
             condition: generator => generator.buildTool === 'gradle' && !!generator.enableSwaggerCodegen,
             templates: [
                 'gradle/swagger.gradle'
@@ -940,14 +934,16 @@ const serverFiles = {
     ],
     serverJavaUserManagement: [
         {
-            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2') || (!generator.skipUserManagement && generator.databaseType === 'sql'),
+            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice')
+                || (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 'config/liquibase/users.csv',
             ]
         },
         {
-            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.databaseType === 'sql') || (!generator.skipUserManagement && generator.databaseType === 'sql'),
+            condition: generator => (generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice' && generator.databaseType === 'sql')
+                || (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 'config/liquibase/authorities.csv',

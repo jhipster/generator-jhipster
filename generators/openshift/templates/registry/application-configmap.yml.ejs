@@ -71,7 +71,7 @@ objects:
           security:
             authentication:
               jwt:
-                secret: <%= jwtSecretKey %>
+                base64-secret: <%= jwtSecretKey %>
       # app specific configuration
       <%_ if (serviceDiscoveryType === 'eureka') {  _%>
       jhipster-registry.yml: |-

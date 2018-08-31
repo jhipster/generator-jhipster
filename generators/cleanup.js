@@ -158,5 +158,6 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     }
     if (generator.isJhipsterVersionLessThan('5.2.2')) {
         generator.removeFile(`${javaDir}config/ElasticsearchConfiguration.java`);
+        generator.removeFile('gradle/liquibase.gradle');
     }
 }

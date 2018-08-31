@@ -192,6 +192,12 @@ module.exports = class extends BaseGenerator {
                 context.mainClass = this.getMainClassName(context.baseName);
                 context.microserviceAppName = '';
 
+                if (context.applicationType === 'microservice') {
+                    context.microserviceName = context.baseName;
+                    if (!context.clientRootFolder) {
+                        context.clientRootFolder = context.microserviceName;
+                    }
+                }
                 context.filename = `${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
                 if (shelljs.test('-f', context.filename)) {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
