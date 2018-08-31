@@ -204,12 +204,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.buildTool === 'gradle' && generator.databaseType === 'sql',
-            templates: [
-                'gradle/liquibase.gradle'
-            ]
-        },
-        {
             condition: generator => generator.buildTool === 'gradle' && !!generator.enableSwaggerCodegen,
             templates: [
                 'gradle/swagger.gradle'
