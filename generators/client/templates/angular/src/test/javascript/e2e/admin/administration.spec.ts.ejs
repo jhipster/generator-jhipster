@@ -25,12 +25,14 @@ if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
 } _%>
 
+const expect = chai.expect;
+
 describe('administration', () => {
 
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
 
-    beforeAll(async () => {
+    before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage(true);
         signInPage = await navBarPage.getSignInPage();
@@ -44,78 +46,78 @@ describe('administration', () => {
     beforeEach(async () => {
         await navBarPage.clickOnAdminMenu();
     });
-    
+
     <%_ if (authenticationType !== 'oauth2') { _%>
     it('should load user management', async () => {
         await navBarPage.clickOnAdmin('user-management');
         <%_ if (enableTranslation) { _%>
-        const expect1 = /userManagement.home.title/;
+        const expect1 = 'userManagement.home.title';
         <%_ } else { _%>
-        const expect1 = /Users/;
+        const expect1 = 'Users';
         <%_ } _%>
         const value1 = await element(by.id('user-management-page-heading')).<%- elementGetter %>;
-        expect(value1).toMatch(expect1);
+        expect(value1).to.eq(expect1);
     });
     <%_ } _%>
 
     it('should load metrics', async () => {
         await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-metrics');
         <%_ if (enableTranslation) { _%>
-        const expect1 = /metrics.title/;
+        const expect1 = 'metrics.title';
         <%_ } else { _%>
-        const expect1 = /Application Metrics/;
+        const expect1 = 'Application Metrics';
         <%_ } _%>
         const value1 = await element(by.id('metrics-page-heading')).<%- elementGetter %>;
-        expect(value1).toMatch(expect1);
+        expect(value1).to.eq(expect1);
     });
 
     it('should load health', async () => {
         await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-health');
         <%_ if (enableTranslation) { _%>
-        const expect1 = /health.title/;
+        const expect1 = 'health.title';
         <%_ } else { _%>
-        const expect1 = /Health Checks/;
+        const expect1 = 'Health Checks';
         <%_ } _%>
         const value1 = await element(by.id('health-page-heading')).<%- elementGetter %>;
-        expect(value1).toMatch(expect1);
+        expect(value1).to.eq(expect1);
     });
 
     it('should load configuration', async () => {
         await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-configuration');
         <%_ if (enableTranslation) { _%>
-        const expect1 = /configuration.title/;
+        const expect1 = 'configuration.title';
         <%_ } else { _%>
-        const expect1 = /Configuration/;
+        const expect1 = 'Configuration';
         <%_ } _%>
         const value1 = await element(by.id('configuration-page-heading')).<%- elementGetter %>;
-        expect(value1).toMatch(expect1);
+        expect(value1).to.eq(expect1);
     });
 
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
     it('should load audits', async () => {
         await navBarPage.clickOnAdmin('audits');
         <%_ if (enableTranslation) { _%>
-        const expect1 = /audits.title/;
+        const expect1 = 'audits.title';
         <%_ } else { _%>
-        const expect1 = /Audits/;
+        const expect1 = 'Audits';
         <%_ } _%>
         const value1 = await element(by.id('audits-page-heading')).<%- elementGetter %>;
-        expect(value1).toMatch(expect1);
+        expect(value1).to.eq(expect1);
     });
 
 <%_ } _%>
     it('should load logs', async () => {
         await navBarPage.clickOnAdmin('logs');
         <%_ if (enableTranslation) { _%>
-        const expect1 = /logs.title/;
+        const expect1 = 'logs.title';
         <%_ } else { _%>
-        const expect1 = /Logs/;
+        const expect1 = 'Logs';
         <%_ } _%>
         const value1 = await element(by.id('logs-page-heading')).<%- elementGetter %>;
-        expect(value1).toMatch(expect1);
+        expect(value1).to.eq(expect1);
     });
 
-    afterAll(async () => {
+    after(async () => {
         await navBarPage.autoSignOut();
     });
 });
