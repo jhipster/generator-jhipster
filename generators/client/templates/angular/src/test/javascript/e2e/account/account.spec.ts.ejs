@@ -99,7 +99,6 @@ describe('account', () => {
         const expect2 = 'You are logged in as user "admin"';
         <%_ } _%>
         const value2 = element(by.id('home-logged-message'));
-        await browser.wait(ec.visibilityOf(value2), 5000);
         expect(await value2.<%- elementGetter %>).to.eq(expect2);
 
         <%_ if (authenticationType === 'oauth2') { _%>
@@ -126,7 +125,6 @@ describe('account', () => {
         const expect2 = 'Settings saved!';
         <%_ } _%>
         const alert = element(by.css('.alert-success'));
-        await browser.wait(ec.visibilityOf(alert), 5000);
         const value2 = await alert.<%- elementGetter %>;
         expect(value2).to.eq(expect2);
     });
@@ -151,7 +149,6 @@ describe('account', () => {
         const expect2 = 'An error has occurred! The password could not be changed.';
         <%_ } _%>
         const alert = element(by.css('.alert-danger'));
-        await browser.wait(ec.visibilityOf(alert), 5000);
         const value2 = await alert.<%- elementGetter %>;
         expect(value2).to.eq(expect2);
         settingsPage = await navBarPage.getSettingsPage();
@@ -177,14 +174,11 @@ describe('account', () => {
         const expect2 = 'Password changed!';
         <%_ } _%>
         const alert = element(by.css('.alert-success'));
-        await browser.wait(ec.visibilityOf(alert), 5000);
         const value2 = await alert.<%- elementGetter %>;
         expect(value2).to.eq(expect2);
         await navBarPage.autoSignOut();
         await navBarPage.goToSignInPage();
         await signInPage.autoSignInUsing('admin', 'newpassword');
-        const success = element(by.id('home-logged-message'));
-        await browser.wait(ec.visibilityOf(success), 5000);
 
         // change back to default
         await navBarPage.goToPasswordMenu();
