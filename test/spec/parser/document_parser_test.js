@@ -700,16 +700,17 @@ describe('DocumentParser', () => {
           let clientRootFolderOption = null;
 
           before(() => {
-            const input = JDLReader.parseFromFiles(['./test/test_files/client_root_folder.jdl']);
+            const input = JDLReader.parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
             jdlObject = DocumentParser.parseFromConfigurationObject({
               document: input,
-              applicationType: ApplicationTypes.MICROSERVICE
+              applicationType: ApplicationTypes.MICROSERVICE,
+              applicationName: 'ms'
             });
             clientRootFolderOption = jdlObject.getOptionsForName(BinaryOptions.CLIENT_ROOT_FOLDER)[0];
           });
 
-          it('is ignored', () => {
-            expect(clientRootFolderOption).to.be.undefined;
+          it('sets the microservice name as clientRootFolder', () => {
+            expect(clientRootFolderOption.value).to.equal('ms');
           });
         });
         context('inside any other app', () => {
@@ -725,7 +726,7 @@ describe('DocumentParser', () => {
             clientRootFolderOption = jdlObject.getOptionsForName(BinaryOptions.CLIENT_ROOT_FOLDER)[0];
           });
 
-          it('works', () => {
+          it('sets the option\'s value', () => {
             expect(clientRootFolderOption.entityNames.has('*')).to.be.true;
             expect(clientRootFolderOption.excludedNames.has('C')).to.be.true;
             expect(clientRootFolderOption.value).to.equal('test-root');
@@ -748,7 +749,7 @@ describe('DocumentParser', () => {
           });
 
           it('adds it to every entity', () => {
-            expect(jdlObject.getOptionQuantity()).to.equal(1);
+            expect(jdlObject.getOptionQuantity()).to.equal(2);
             expect(microserviceOption.entityNames.toString()).to.equal('[A,B,C,D,E,F,G]');
           });
         });
@@ -767,7 +768,7 @@ describe('DocumentParser', () => {
           });
 
           it('does not automatically setup the microservice option', () => {
-            expect(jdlObject.getOptionQuantity()).to.equal(1);
+            expect(jdlObject.getOptionQuantity()).to.equal(2);
             expect(microserviceOption.entityNames.toString()).to.equal('[A]');
           });
         });
