@@ -98,7 +98,8 @@ describe('FormatUtils', () => {
           now.getUTCDate(),
           now.getUTCHours(),
           now.getUTCMinutes(),
-          now.getUTCSeconds());
+          now.getUTCSeconds()
+        );
         const year = `${nowUtc.getFullYear()}`;
         let month = `${nowUtc.getMonth() + 1}`;
         if (month.length === 1) {
@@ -120,9 +121,7 @@ describe('FormatUtils', () => {
         if (second.length === 1) {
           second = `0${second}`;
         }
-        expect(
-          result
-        ).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
+        expect(result).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
       });
     });
     context('when not passing the date', () => {
@@ -140,7 +139,8 @@ describe('FormatUtils', () => {
           now.getUTCDate(),
           now.getUTCHours(),
           now.getUTCMinutes(),
-          now.getUTCSeconds());
+          now.getUTCSeconds()
+        );
         const year = `${nowUtc.getFullYear()}`;
         let month = `${nowUtc.getMonth() + 1}`;
         if (month.length === 1) {
@@ -158,13 +158,11 @@ describe('FormatUtils', () => {
         if (minute.length === 1) {
           minute = `0${minute}`;
         }
-        let second = `${(nowUtc.getSeconds()) % 60}`;
+        let second = `${nowUtc.getSeconds() % 60}`;
         if (second.length === 1) {
           second = `0${second}`;
         }
-        expect(
-          result
-        ).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
+        expect(result).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
       });
     });
   });

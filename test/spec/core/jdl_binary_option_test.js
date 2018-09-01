@@ -29,21 +29,21 @@ describe('JDLBinaryOption', () => {
       it('fails', () => {
         expect(() => {
           new JDLBinaryOption();
-        }).to.throw('The option\'s name must be passed to create an option.');
+        }).to.throw("The option's name must be passed to create an option.");
       });
     });
     context('when passing an invalid name', () => {
       it('fails', () => {
         expect(() => {
           new JDLBinaryOption({ name: 'IsNotAnOption' });
-        }).to.throw('The option\'s name and value must be valid to create an option, got no value for \'IsNotAnOption\'.');
+        }).to.throw("The option's name and value must be valid to create an option, got no value for 'IsNotAnOption'.");
       });
     });
     context('when passing a name but no value', () => {
       it('fails', () => {
         expect(() => {
           new JDLBinaryOption({ name: BinaryOptions.Options.DTO });
-        }).to.throw('The option\'s name and value must be valid to create an option, got no value for \'dto\'.');
+        }).to.throw("The option's name and value must be valid to create an option, got no value for 'dto'.");
       });
     });
     context('when passing a name and a value', () => {
@@ -165,7 +165,7 @@ describe('JDLBinaryOption', () => {
         }).to.throw('The entity must have a name so as to be added to the option.');
       });
     });
-    context('when passing a valid entity that hasn\'t been added yet', () => {
+    context("when passing a valid entity that hasn't been added yet", () => {
       let result = null;
 
       before(() => {
@@ -264,7 +264,7 @@ describe('JDLBinaryOption', () => {
         }).to.throw('The entity must have a name so as to be excluded from the option.');
       });
     });
-    context('when passing a valid entity that hasn\'t been excluded yet', () => {
+    context("when passing a valid entity that hasn't been excluded yet", () => {
       let result = null;
 
       before(() => {
@@ -317,12 +317,18 @@ describe('JDLBinaryOption', () => {
       expect(option.toString()).to.eq(`${BinaryOptions.Options.DTO} D with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
       option.addEntityName('E');
       option.addEntityName('F');
-      expect(option.toString()).to.eq(`${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
+      expect(option.toString()).to.eq(
+        `${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT}`
+      );
       option.excludeEntityName('A');
-      expect(option.toString()).to.eq(`${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT} except A`);
+      expect(option.toString()).to.eq(
+        `${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT} except A`
+      );
       option.excludeEntityName('B');
       option.excludeEntityName('C');
-      expect(option.toString()).to.eq(`${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT} except A, B, C`);
+      expect(option.toString()).to.eq(
+        `${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT} except A, B, C`
+      );
       option = new JDLBinaryOption({
         name: BinaryOptions.Options.PAGINATION,
         value: BinaryOptions.Values.pagination.PAGER

@@ -96,9 +96,7 @@ describe('JDLField', () => {
       });
       context('with a reserved keyword as name', () => {
         it('returns false', () => {
-          expect(
-            JDLField.isValid({ name: 'class', type: 'String' })
-          ).to.be.false;
+          expect(JDLField.isValid({ name: 'class', type: 'String' })).to.be.false;
         });
       });
       context('because its validations are invalid', () => {
@@ -107,9 +105,11 @@ describe('JDLField', () => {
             JDLField.isValid({
               name: 'myField',
               type: 'String',
-              validations: [{
-                value: 42
-              }]
+              validations: [
+                {
+                  value: 42
+                }
+              ]
             })
           ).to.be.false;
         });
@@ -186,8 +186,7 @@ describe('JDLField', () => {
       });
 
       it('stringifies the fields', () => {
-        expect(field.toString()).to.eq(`/**\n * ${args.comment}\n */\n`
-          + `${args.name} ${args.type}`);
+        expect(field.toString()).to.eq(`/**\n * ${args.comment}\n */\n${args.name} ${args.type}`);
       });
     });
     context('with everything', () => {
@@ -199,18 +198,23 @@ describe('JDLField', () => {
           name: 'abc',
           type: 'String',
           comment: 'comment',
-          validations: [new JDLValidation(), new JDLValidation({
-            name: 'minlength',
-            value: 42
-          })]
+          validations: [
+            new JDLValidation(),
+            new JDLValidation({
+              name: 'minlength',
+              value: 42
+            })
+          ]
         };
         field = new JDLField(args);
       });
 
       it('stringifies the field', () => {
-        expect(field.toString()).to.eq(`/**\n * ${args.comment}\n */\n`
-          + `${args.name} ${args.type} ${args.validations[0].name} `
-          + `${args.validations[1].name}(${args.validations[1].value})`);
+        expect(field.toString()).to.eq(
+          `/**\n * ${args.comment}\n */\n` +
+            `${args.name} ${args.type} ${args.validations[0].name} ` +
+            `${args.validations[1].name}(${args.validations[1].value})`
+        );
       });
     });
   });

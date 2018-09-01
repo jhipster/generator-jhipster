@@ -31,7 +31,7 @@ describe('JDLValidation', () => {
         validation = new JDLValidation();
       });
 
-      it('defaults on the \'required\' validation', () => {
+      it("defaults on the 'required' validation", () => {
         expect(validation.name).to.eq('required');
         expect(validation.value).to.eq('');
       });
@@ -79,10 +79,12 @@ describe('JDLValidation', () => {
     context('when checking the validity of a valid object', () => {
       it('returns true', () => {
         expect(JDLValidation.isValid({ name: Validations.REQUIRED })).to.be.true;
-        expect(JDLValidation.isValid({
-          name: Validations.MIN,
-          value: 42
-        })).to.be.true;
+        expect(
+          JDLValidation.isValid({
+            name: Validations.MIN,
+            value: 42
+          })
+        ).to.be.true;
       });
     });
   });
@@ -116,10 +118,12 @@ describe('JDLValidation', () => {
     });
     context('when exporting a regexp pattern', () => {
       it('properly formats it', () => {
-        expect(new JDLValidation({
-          name: Validations.PATTERN,
-          value: '[A-z0-9]'
-        }).toString()).to.equal('pattern(/[A-z0-9]/)');
+        expect(
+          new JDLValidation({
+            name: Validations.PATTERN,
+            value: '[A-z0-9]'
+          }).toString()
+        ).to.equal('pattern(/[A-z0-9]/)');
       });
     });
   });

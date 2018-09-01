@@ -44,36 +44,36 @@ describe('JSONFileReader', () => {
         it('fails', () => {
           expect(() => {
             JSONFileReader.readEntityJSON('test/test_files/WrongFile.json');
-          }).to.throw('The passed file \'test/test_files/WrongFile.json\' must exist and must not be a directory to be read.');
+          }).to.throw(
+            "The passed file 'test/test_files/WrongFile.json' must exist and must not be a directory to be read."
+          );
         });
       });
       context('because the file is a folder', () => {
         it('fails', () => {
           expect(() => {
             JSONFileReader.readEntityJSON('test/test_files/');
-          }).to.throw('The passed file \'test/test_files/\' must exist and must not be a directory to be read.');
+          }).to.throw("The passed file 'test/test_files/' must exist and must not be a directory to be read.");
         });
       });
     });
     context('when passing a valid entity name', () => {
       const content = JSONFileReader.readEntityJSON('test/test_files/MyEntity.json');
       it('reads the file', () => {
-        expect(content).to.deep.eq(
-          {
-            relationships: [],
-            fields: [
-              {
-                fieldName: 'myField',
-                fieldType: 'String'
-              }
-            ],
-            changelogDate: '20160705183933',
-            dto: 'no',
-            service: 'no',
-            entityTableName: 'my_entity',
-            pagination: 'no'
-          }
-        );
+        expect(content).to.deep.eq({
+          relationships: [],
+          fields: [
+            {
+              fieldName: 'myField',
+              fieldType: 'String'
+            }
+          ],
+          changelogDate: '20160705183933',
+          dto: 'no',
+          service: 'no',
+          entityTableName: 'my_entity',
+          pagination: 'no'
+        });
       });
     });
   });
@@ -103,9 +103,9 @@ describe('JSONFileReader', () => {
         it('returns the path, with the first letter upper-cased', () => {
           const expectedFirstLetter = 'M';
           const name = 'myEntity';
-          expect(
-            JSONFileReader.toFilePath(name)
-          ).to.eq(`.jhipster${path.sep}${expectedFirstLetter}${name.slice(1, name.length)}.json`);
+          expect(JSONFileReader.toFilePath(name)).to.eq(
+            `.jhipster${path.sep}${expectedFirstLetter}${name.slice(1, name.length)}.json`
+          );
         });
       });
     });

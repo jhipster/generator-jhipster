@@ -120,10 +120,12 @@ describe('JDLRelationship', () => {
         it('fails', () => {
           expect(() => {
             relationship.validate();
-          }).to.throw('In the Many-to-Many relationship from Valid2 to Valid, only bidirectionality is supported for a Many-to-Many relationship.');
+          }).to.throw(
+            'In the Many-to-Many relationship from Valid2 to Valid, only bidirectionality is supported for a Many-to-Many relationship.'
+          );
         });
       });
-      context('because the type doesn\'t exist', () => {
+      context("because the type doesn't exist", () => {
         let relationship = null;
 
         before(() => {
@@ -139,7 +141,7 @@ describe('JDLRelationship', () => {
         it('fails', () => {
           expect(() => {
             relationship.validate();
-          }).to.throw('The relationship is not valid.\nErrors: Wrong type: got \'WRONG\'.');
+          }).to.throw("The relationship is not valid.\nErrors: Wrong type: got 'WRONG'.");
         });
       });
       context('because the source entity is not in a One-to-One', () => {
@@ -157,8 +159,10 @@ describe('JDLRelationship', () => {
         it('fails', () => {
           expect(() => {
             relationship.validate();
-          }).to.throw('In the One-to-One relationship from Valid2 to Valid, the source entity must possess the '
-            + 'destination in a One-to-One  relationship, or you must invert the direction of the relationship.');
+          }).to.throw(
+            'In the One-to-One relationship from Valid2 to Valid, the source entity must possess the ' +
+              'destination in a One-to-One  relationship, or you must invert the direction of the relationship.'
+          );
         });
       });
       context('because one of the injected fields is not present in a One-to-Many (not bidirectional)', () => {
@@ -197,8 +201,10 @@ describe('JDLRelationship', () => {
         it('fails', () => {
           expect(() => {
             relationship.validate();
-          }).to.throw('In the Many-to-One relationship from Valid2 to Valid, only unidirectionality is supported f'
-            + 'or a Many-to-One relationship, you should create a bidirectional One-to-Many relationship instead.');
+          }).to.throw(
+            'In the Many-to-One relationship from Valid2 to Valid, only unidirectionality is supported f' +
+              'or a Many-to-One relationship, you should create a bidirectional One-to-Many relationship instead.'
+          );
         });
       });
       context('because one of the sides is not present in a Many-to-Many (not bidirectional)', () => {
@@ -216,8 +222,10 @@ describe('JDLRelationship', () => {
         it('fails', () => {
           expect(() => {
             relationship.validate();
-          }).to.throw('In the Many-to-Many relationship from Valid2 to Valid, only bidirectionality is supported '
-            + 'for a Many-to-Many relationship.');
+          }).to.throw(
+            'In the Many-to-Many relationship from Valid2 to Valid, only bidirectionality is supported ' +
+              'for a Many-to-Many relationship.'
+          );
         });
       });
     });
@@ -235,7 +243,9 @@ describe('JDLRelationship', () => {
     });
 
     it('returns an unique representation of the relationship', () => {
-      expect(relationship.getId()).to.eq(`${relationship.type}_${relationship.from}{${relationship.injectedFieldInFrom}}_${relationship.to}`);
+      expect(relationship.getId()).to.eq(
+        `${relationship.type}_${relationship.from}{${relationship.injectedFieldInFrom}}_${relationship.to}`
+      );
     });
   });
   describe('#toString', () => {

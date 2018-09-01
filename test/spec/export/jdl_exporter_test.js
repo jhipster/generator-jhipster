@@ -44,9 +44,11 @@ describe('JDLExporter', () => {
 
         before(() => {
           const jdlObject = new JDLObject();
-          jdlObject.addEntity(new JDLEntity({
-            name: 'Toto'
-          }));
+          jdlObject.addEntity(
+            new JDLEntity({
+              name: 'Toto'
+            })
+          );
           JDLExporter.exportToJDL(jdlObject, PATH);
           fileExistence = fs.statSync(PATH).isFile();
           jdlContent = fs.readFileSync(PATH, 'utf-8').toString();
@@ -70,9 +72,11 @@ describe('JDLExporter', () => {
 
         before(() => {
           const jdlObject = new JDLObject();
-          jdlObject.addEntity(new JDLEntity({
-            name: 'Toto'
-          }));
+          jdlObject.addEntity(
+            new JDLEntity({
+              name: 'Toto'
+            })
+          );
           JDLExporter.exportToJDL(jdlObject);
           fileExistence = fs.statSync(DEFAULT_PATH).isFile();
           jdlContent = fs.readFileSync(DEFAULT_PATH, 'utf-8').toString();

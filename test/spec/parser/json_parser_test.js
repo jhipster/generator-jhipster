@@ -77,58 +77,75 @@ describe('JSONParser', () => {
       });
       it('parses options', () => {
         expect(
-          jdlObject.getOptions().filter(
-            option => option.name === BinaryOptions.DTO
-              && option.value === BinaryOptionValues.dto.MAPSTRUCT
-              && option.entityNames.has('Employee')
-          ).length
+          jdlObject
+            .getOptions()
+            .filter(
+              option =>
+                option.name === BinaryOptions.DTO &&
+                option.value === BinaryOptionValues.dto.MAPSTRUCT &&
+                option.entityNames.has('Employee')
+            ).length
         ).to.eq(1);
         expect(
-          jdlObject.getOptions().filter(
-            option => option.name === BinaryOptions.PAGINATION
-              && option.value === BinaryOptionValues.pagination['INFINITE-SCROLL']
-              && option.entityNames.has('Employee')
-          ).length
+          jdlObject
+            .getOptions()
+            .filter(
+              option =>
+                option.name === BinaryOptions.PAGINATION &&
+                option.value === BinaryOptionValues.pagination['INFINITE-SCROLL'] &&
+                option.entityNames.has('Employee')
+            ).length
         ).to.eq(1);
         expect(
-          jdlObject.getOptions().filter(
-            option => option.name === BinaryOptions.SERVICE
-              && option.value === BinaryOptionValues.service.SERVICE_CLASS
-              && option.entityNames.has('Employee')
-          ).length
+          jdlObject
+            .getOptions()
+            .filter(
+              option =>
+                option.name === BinaryOptions.SERVICE &&
+                option.value === BinaryOptionValues.service.SERVICE_CLASS &&
+                option.entityNames.has('Employee')
+            ).length
         ).to.eq(1);
         expect(
-          jdlObject.getOptions().filter(
-            option => option.name === BinaryOptions.SEARCH_ENGINE
-              && option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH
-              && option.entityNames.has('Employee')
-          ).length
+          jdlObject
+            .getOptions()
+            .filter(
+              option =>
+                option.name === BinaryOptions.SEARCH_ENGINE &&
+                option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH &&
+                option.entityNames.has('Employee')
+            ).length
         ).to.eq(1);
         expect(
-          jdlObject.getOptions().filter(
-            option => option.name === BinaryOptions.MICROSERVICE
-              && option.value === 'mymicroservice'
-              && option.entityNames.has('Employee')
-          ).length
+          jdlObject
+            .getOptions()
+            .filter(
+              option =>
+                option.name === BinaryOptions.MICROSERVICE &&
+                option.value === 'mymicroservice' &&
+                option.entityNames.has('Employee')
+            ).length
         ).to.eq(1);
         expect(
-          jdlObject.getOptions().filter(
-            option => option.name === BinaryOptions.ANGULAR_SUFFIX
-              && option.value === 'myentities'
-              && option.entityNames.has('Employee')
-          ).length
+          jdlObject
+            .getOptions()
+            .filter(
+              option =>
+                option.name === BinaryOptions.ANGULAR_SUFFIX &&
+                option.value === 'myentities' &&
+                option.entityNames.has('Employee')
+            ).length
         ).to.eq(1);
         expect(
-          jdlObject.getOptions().filter(
-            option => option.name === UnaryOptions.NO_FLUENT_METHOD
-              && option.entityNames.has('Employee')
-          ).length
+          jdlObject
+            .getOptions()
+            .filter(option => option.name === UnaryOptions.NO_FLUENT_METHOD && option.entityNames.has('Employee'))
+            .length
         ).to.eq(1);
         expect(
-          jdlObject.getOptions().filter(
-            option => option.name === UnaryOptions.FILTER
-              && option.entityNames.has('Employee')
-          ).length
+          jdlObject
+            .getOptions()
+            .filter(option => option.name === UnaryOptions.FILTER && option.entityNames.has('Employee')).length
         ).to.eq(1);
       });
     });
@@ -141,9 +158,8 @@ describe('JSONParser', () => {
         expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')).not.to.be.undefined;
       });
       it('parses bidirectional OneToMany relationships', () => {
-        expect(
-          jdlObject.relationships.getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}')
-        ).not.to.be.undefined;
+        expect(jdlObject.relationships.getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}')).not.to
+          .be.undefined;
       });
       it('parses unidirectional ManyToOne relationships', () => {
         expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{manager}_Employee')).not.to.be.undefined;
@@ -152,8 +168,9 @@ describe('JSONParser', () => {
         expect(jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}')).not.to.be.undefined;
       });
       it('parses comments in relationships for owner', () => {
-        const relationship = jdlObject.relationships
-          .getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}');
+        const relationship = jdlObject.relationships.getOneToMany(
+          'OneToMany_Department{employee}_Employee{department(foo)}'
+        );
         expect(relationship.commentInFrom).to.eq('A relationship');
         expect(relationship.commentInTo).to.be.undefined;
       });
@@ -164,14 +181,16 @@ describe('JSONParser', () => {
         };
         entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = undefined;
         const jdlObject = JSONParser.parseEntities(entities);
-        const relationship = jdlObject.relationships
-          .getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}');
+        const relationship = jdlObject.relationships.getOneToMany(
+          'OneToMany_Department{employee}_Employee{department(foo)}'
+        );
         expect(relationship.commentInFrom).to.be.undefined;
         expect(relationship.commentInTo).to.eq('Another side of the same relationship');
       });
       it('parses required relationships in owner', () => {
-        const relationship = jdlObject.relationships
-          .getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}');
+        const relationship = jdlObject.relationships.getOneToMany(
+          'OneToMany_Department{employee}_Employee{department(foo)}'
+        );
         expect(relationship.isInjectedFieldInFromRequired).to.be.true;
         expect(relationship.isInjectedFieldInToRequired).to.be.undefined;
       });
@@ -191,12 +210,15 @@ describe('JSONParser', () => {
       });
 
       it('parses server options', () => {
-        expect(jdlObject.getOptions().filter(
-          option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
+        expect(
+          jdlObject
+            .getOptions()
+            .filter(option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
         ).to.eq(1);
         expect(
-          jdlObject.getOptions().filter(
-            option => option.name === UnaryOptions.SKIP_SERVER && option.entityNames.has('*')).length
+          jdlObject
+            .getOptions()
+            .filter(option => option.name === UnaryOptions.SKIP_SERVER && option.entityNames.has('*')).length
         ).to.eq(1);
       });
     });
@@ -255,10 +277,9 @@ describe('JSONParser', () => {
 
 function readJsonEntity(entityName) {
   return JSON.parse(
-    fs.readFileSync(
-      path.join('test', 'test_files', 'jhipster_app', '.jhipster', `${entityName}.json`),
-      'utf-8'
-    ).toString()
+    fs
+      .readFileSync(path.join('test', 'test_files', 'jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8')
+      .toString()
   );
 }
 

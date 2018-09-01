@@ -14,7 +14,7 @@ module.exports = {
     library: 'jdlCore',
     libraryTarget: 'umd',
     // https://github.com/webpack/webpack/issues/6784
-    globalObject: 'typeof self !== \'undefined\' ? self : this'
+    globalObject: "typeof self !== 'undefined' ? self : this"
   },
   externals: {
     // https://webpack.js.org/guides/author-libraries/#externalize-lodash

@@ -38,7 +38,7 @@ describe('JDLOptions', () => {
       it('fails', () => {
         expect(() => {
           options.addOption(null);
-        }).to.throw('The passed option is invalid and can\'t be added.\nErrors: No option');
+        }).to.throw("The passed option is invalid and can't be added.\nErrors: No option");
       });
     });
     context('when passing a valid option', () => {
@@ -48,7 +48,11 @@ describe('JDLOptions', () => {
 
       before(() => {
         options = new JDLOptions();
-        option1 = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT, entityNames: ['A', 'B', 'C'], excludedNames: ['M'] });
+        option1 = new JDLUnaryOption({
+          name: UnaryOptions.SKIP_CLIENT,
+          entityNames: ['A', 'B', 'C'],
+          excludedNames: ['M']
+        });
         option2 = new JDLUnaryOption({ name: UnaryOptions.SKIP_SERVER, entityNames: ['D'] });
         options.addOption(option1);
         options.addOption(option2);
@@ -63,20 +67,22 @@ describe('JDLOptions', () => {
 
       context('that has been added before', () => {
         before(() => {
-          options.addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT, entityNames: ['A', 'J'], excludedNames: ['N', 'O'] }));
+          options.addOption(
+            new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT, entityNames: ['A', 'J'], excludedNames: ['N', 'O'] })
+          );
         });
 
         it('does not duplicate it', () => {
           expect(options.getOptions().length).to.equal(2);
         });
         it('merges the entity names and excluded names', () => {
-          expect(
-            options.getOptions()[0]
-          ).to.deep.eq(new JDLUnaryOption({
-            name: UnaryOptions.SKIP_CLIENT,
-            entityNames: ['A', 'B', 'C', 'J'],
-            excludedNames: ['M', 'N', 'O']
-          }));
+          expect(options.getOptions()[0]).to.deep.eq(
+            new JDLUnaryOption({
+              name: UnaryOptions.SKIP_CLIENT,
+              entityNames: ['A', 'B', 'C', 'J'],
+              excludedNames: ['M', 'N', 'O']
+            })
+          );
         });
       });
     });
@@ -95,10 +101,12 @@ describe('JDLOptions', () => {
       });
 
       it('returns whether the option is present', () => {
-        options.addOption(new JDLUnaryOption({
-          name: UnaryOptions.SKIP_CLIENT,
-          entityNames: ['A']
-        }));
+        options.addOption(
+          new JDLUnaryOption({
+            name: UnaryOptions.SKIP_CLIENT,
+            entityNames: ['A']
+          })
+        );
         expect(options.has(UnaryOptions.SKIP_CLIENT)).to.be.true;
         expect(options.has(UnaryOptions.SKIP_SERVER)).to.be.false;
       });
@@ -113,11 +121,13 @@ describe('JDLOptions', () => {
 
     it('returns the number of options', () => {
       expect(options.size()).to.equal(0);
-      options.addOption(new JDLUnaryOption({
-        name: UnaryOptions.SKIP_CLIENT,
-        entityNames: ['A', 'B', 'C'],
-        excludedNames: ['M']
-      }));
+      options.addOption(
+        new JDLUnaryOption({
+          name: UnaryOptions.SKIP_CLIENT,
+          entityNames: ['A', 'B', 'C'],
+          excludedNames: ['M']
+        })
+      );
       expect(options.size()).to.equal(1);
     });
   });
@@ -126,12 +136,16 @@ describe('JDLOptions', () => {
 
     before(() => {
       jdlOptions = new JDLOptions();
-      jdlOptions.addOption(new JDLUnaryOption({
-        name: UnaryOptions.SKIP_CLIENT
-      }));
-      jdlOptions.addOption(new JDLUnaryOption({
-        name: UnaryOptions.SKIP_SERVER
-      }));
+      jdlOptions.addOption(
+        new JDLUnaryOption({
+          name: UnaryOptions.SKIP_CLIENT
+        })
+      );
+      jdlOptions.addOption(
+        new JDLUnaryOption({
+          name: UnaryOptions.SKIP_SERVER
+        })
+      );
     });
 
     context('when not passing a function', () => {
@@ -143,7 +157,7 @@ describe('JDLOptions', () => {
       const result = [];
 
       before(() => {
-        jdlOptions.forEach((jdlOption) => {
+        jdlOptions.forEach(jdlOption => {
           result.push(jdlOption.name);
         });
       });
@@ -207,17 +221,21 @@ describe('JDLOptions', () => {
     const options = new JDLOptions();
 
     before(() => {
-      options.addOption(new JDLUnaryOption({
-        name: UnaryOptions.SKIP_CLIENT,
-        entityNames: ['A', 'B', 'C'],
-        excludedNames: ['M']
-      }));
+      options.addOption(
+        new JDLUnaryOption({
+          name: UnaryOptions.SKIP_CLIENT,
+          entityNames: ['A', 'B', 'C'],
+          excludedNames: ['M']
+        })
+      );
       options.addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_SERVER, entityNames: ['D'] }));
-      options.addOption(new JDLUnaryOption({
-        name: UnaryOptions.SKIP_CLIENT,
-        entityNames: ['A', 'J'],
-        excludedNames: ['N', 'O']
-      }));
+      options.addOption(
+        new JDLUnaryOption({
+          name: UnaryOptions.SKIP_CLIENT,
+          entityNames: ['A', 'J'],
+          excludedNames: ['N', 'O']
+        })
+      );
     });
 
     it('stringifies the options', () => {
