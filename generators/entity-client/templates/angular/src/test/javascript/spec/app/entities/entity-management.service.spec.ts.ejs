@@ -22,10 +22,10 @@ const variablesWithTypes = generateEntityClientFields(pkType, fields, relationsh
 _%>
 /* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
-import { take, catchError, map } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
 <%_ if (fieldsContainDate) { _%>
 import * as moment from 'moment';
 import { <%_ if (fieldsContainLocalDate) { _%>DATE_FORMAT,<%_ } if (fieldsContainInstant || fieldsContainZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from 'app/shared/constants/input.constants';
@@ -48,7 +48,7 @@ describe('Service Tests', () => {
         let httpClient: HttpClient;
         let elemDefault: I<%= entityAngularName %>;
         <%_ if (fieldsContainDate) { _%>
-        let date: moment.Moment;
+        let currentDate: moment.Moment;
         <%_ } _%>
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -60,15 +60,15 @@ describe('Service Tests', () => {
             service = injector.get(<%= entityAngularName %>Service);
             httpClient = injector.get(HttpClient);
             <%_ if (fieldsContainDate) { _%>
-            date = moment();
+            currentDate = moment();
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(
                 <%_ if (pkType === 'String') { _%>
-                'ID'
+                'ID',
                 <%_ } else { _%>
-                0
-                <%_ } _%>,
+                0,
+                <%_ } _%>
                 <%_ fields.forEach((field) => {
                     const fieldType = field.fieldType; _%>
                     <%_ if (field.fieldIsEnum) { _%>
@@ -80,7 +80,7 @@ describe('Service Tests', () => {
                     <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
                 'AAAAAAA',
                     <%_ } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                date,
+                currentDate,
                     <%_ } else { // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' _%>
                 'AAAAAAA',
                     <%_ } _%>
@@ -94,9 +94,9 @@ describe('Service Tests', () => {
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
     <%_ if (['LocalDate'].includes(fieldType)) { _%>
-                    <%= field.fieldName%>: date.format(DATE_FORMAT),
+                    <%= field.fieldName%>: currentDate.format(DATE_FORMAT),
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                    <%= field.fieldName%>: date.format(DATE_TIME_FORMAT),
+                    <%= field.fieldName%>: currentDate.format(DATE_TIME_FORMAT),
     <%_ } _%>
 <%_ }) _%>
                 }, elemDefault);
@@ -118,16 +118,16 @@ describe('Service Tests', () => {
             it('should create a <%= entityAngularName %>', async () => {
                 const returnedFromService = Object.assign({
 <%_ if (pkType === 'String') { _%>
-                    id: 'ID'
+                    id: 'ID',
 <%_ } else { _%>
-                    id: 0
+                    id: 0,
 <%_ } _%>
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
     <%_ if (['LocalDate'].includes(fieldType)) { _%>
-                    , <%= field.fieldName%>: date.format(DATE_FORMAT)
+                    <%= field.fieldName%>: currentDate.format(DATE_FORMAT),
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                    , <%= field.fieldName%>: date.format(DATE_TIME_FORMAT)
+                    <%= field.fieldName%>: currentDate.format(DATE_TIME_FORMAT),
     <%_ } _%>
 <%_ }) _%>
                 }, elemDefault);
@@ -135,9 +135,9 @@ describe('Service Tests', () => {
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
     <%_ if (['LocalDate'].includes(fieldType)) { _%>
-                    , <%= field.fieldName%>: date
+                    <%= field.fieldName%>: currentDate,
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                    , <%= field.fieldName%>: date
+                    <%= field.fieldName%>: currentDate,
     <%_ } _%>
 <%_ }) _%>
                 }, returnedFromService);
@@ -167,9 +167,9 @@ describe('Service Tests', () => {
     <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
                     <%= field.fieldName%>: 'BBBBBB',
     <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
-                    <%= field.fieldName%>: date.format(DATE_FORMAT),
+                    <%= field.fieldName%>: currentDate.format(DATE_FORMAT),
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                    <%= field.fieldName%>: date.format(DATE_TIME_FORMAT),
+                    <%= field.fieldName%>: currentDate.format(DATE_TIME_FORMAT),
     <%_ } else { _%>
                     <%= field.fieldName%>: 'BBBBBB',
     <%_ } _%>
@@ -180,9 +180,9 @@ describe('Service Tests', () => {
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
     <%_ if (['LocalDate'].includes(fieldType)) { _%>
-                    , <%= field.fieldName%>: date
+                    <%= field.fieldName%>: currentDate,
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                    , <%= field.fieldName%>: date
+                    <%= field.fieldName%>: currentDate,
     <%_ } _%>
 <%_ }) _%>
                 }, returnedFromService);
@@ -213,9 +213,9 @@ describe('Service Tests', () => {
     <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
                     <%= field.fieldName%>: 'BBBBBB',
     <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
-                    <%= field.fieldName%>: date.format(DATE_FORMAT),
+                    <%= field.fieldName%>: currentDate.format(DATE_FORMAT),
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                    <%= field.fieldName%>: date.format(DATE_TIME_FORMAT),
+                    <%= field.fieldName%>: currentDate.format(DATE_TIME_FORMAT),
     <%_ } else { // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' _%>
                     <%= field.fieldName%>: 'BBBBBB',
     <%_ } _%>
@@ -232,9 +232,9 @@ describe('Service Tests', () => {
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
     <%_ if (['LocalDate'].includes(fieldType)) { _%>
-                    , <%= field.fieldName%>: date
+                    <%= field.fieldName%>: currentDate,
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                    , <%= field.fieldName%>: date
+                    <%= field.fieldName%>: currentDate,
     <%_ } _%>
 <%_ }) _%>
                 }, returnedFromService);
