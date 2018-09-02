@@ -393,9 +393,9 @@ check-error@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
 
-chevrotain@3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-3.7.1.tgz#2ed7d32bdeeb931e58506641a7e06d176470c8fa"
+chevrotain@3.7.4:
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/chevrotain/-/chevrotain-3.7.4.tgz#d2fea706d74fab60cdd879ed6425cc1feb522a9b"
   dependencies:
     regexp-to-ast "0.3.5"
 
@@ -1812,11 +1812,11 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
-jhipster-core@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-3.1.0.tgz#472abf80d227fdcd45b3572f733b53663b66cc71"
+jhipster-core@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-3.3.0.tgz#0256578116829a6d047768a69a6ad4dd2abaccaa"
   dependencies:
-    chevrotain "3.7.1"
+    chevrotain "3.7.4"
     fs-extra "7.0.0"
     lodash "4.17.10"
     winston "3.0.0"
