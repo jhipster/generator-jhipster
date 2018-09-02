@@ -46,7 +46,7 @@ describe('JDLApplication', () => {
           buildTool: 'maven',
           cacheProvider: 'ehcache',
           clientFramework: 'angularX',
-          clientPackageManager: 'yarn',
+          clientPackageManager: 'npm',
           databaseType: 'sql',
           devDatabaseType: 'h2Disk',
           enableHibernateCache: true,
@@ -152,7 +152,7 @@ describe('JDLApplication', () => {
         expect(jdlApplication.toString()).to.eq(`application {
   config {
     applicationType monolith
-    clientPackageManager yarn
+    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true

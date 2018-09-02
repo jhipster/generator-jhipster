@@ -668,7 +668,7 @@ describe('DocumentParser', () => {
             buildTool: 'maven',
             cacheProvider: 'ehcache',
             clientFramework: 'angularX',
-            clientPackageManager: 'yarn',
+            clientPackageManager: 'npm',
             databaseType: 'sql',
             devDatabaseType: 'h2Disk',
             enableHibernateCache: true,
