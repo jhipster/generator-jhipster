@@ -30,6 +30,6 @@
     "websocket": false,
     "messageBroker": false,
     "clientFramework": "angularX",
-    "clientPackageManager": "yarn"
+    "clientPackageManager": "npm"
   }
 }

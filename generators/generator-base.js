@@ -2167,10 +2167,10 @@ module.exports = class extends PrivateBase {
                 if (!stderr && semver.lt(packagejs.version, stdout)) {
                     this.log(`${chalk.yellow(' ______________________________________________________________________________\n\n')
                         + chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`);
-                    if (this.useYarn) {
-                        this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
-                    } else {
+                    if (this.useNpm) {
                         this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+                    } else {
+                        this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
                     }
                     this.log(chalk.yellow(' ______________________________________________________________________________\n'));
                 }

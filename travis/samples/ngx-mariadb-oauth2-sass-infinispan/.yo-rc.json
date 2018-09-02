@@ -25,7 +25,7 @@
     "travis": true,
     "serviceDiscoveryType": false,
     "enableTranslation": false,
-    "clientPackageManager": "yarn",
+    "clientPackageManager": "npm",
     "clientFramework": "angularX"
   }
 }

@@ -70,15 +70,15 @@ describe('JHipster client generator', () => {
         it('contains clientFramework with angularX value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
         });
-        it('contains clientPackageManager with yarn value', () => {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
+        it('contains clientPackageManager with npm value', () => {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
         });
     });
 
-    describe('generate client with Angular using npm flag', () => {
+    describe('generate client with Angular using yarn flag', () => {
         beforeEach((done) => {
             helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({ skipInstall: true, auth: 'jwt', npm: true })
+                .withOptions({ skipInstall: true, auth: 'jwt', yarn: true })
                 .withPrompts({
                     baseName: 'jhipster',
                     serviceDiscoveryType: false,
@@ -106,8 +106,8 @@ describe('JHipster client generator', () => {
         it('contains clientFramework with angularX value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
         });
-        it('contains clientPackageManager with npm value', () => {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
+        it('contains clientPackageManager with yarn value', () => {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
         });
     });
 });

@@ -99,9 +99,9 @@ module.exports = class extends BaseGenerator {
             defaults: 'jhi'
         });
 
-        // This adds support for a `--npm` flag
-        this.option('npm', {
-            desc: 'Use npm instead of yarn',
+        // This adds support for a `--yarn` flag
+        this.option('yarn', {
+            desc: 'Use yarn instead of npm',
             type: Boolean,
             defaults: false
         });
@@ -143,7 +143,9 @@ module.exports = class extends BaseGenerator {
             blueprint = `generator-jhipster-${blueprint}`;
         }
         this.blueprint = this.configOptions.blueprint = blueprint;
-        this.useYarn = this.configOptions.useYarn = !this.options.npm;
+        this.useNpm = this.configOptions.useNpm = !this.options.yarn;
+        this.useYarn = !this.useNpm;
+
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
         this.experimental = this.configOptions.experimental = this.options.experimental;
         this.registerClientTransforms();
@@ -214,10 +216,10 @@ module.exports = class extends BaseGenerator {
                 }
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 if (!this.clientPackageManager) {
-                    if (this.useYarn) {
-                        this.clientPackageManager = 'yarn';
-                    } else {
+                    if (this.useNpm) {
                         this.clientPackageManager = 'npm';
+                    } else {
+                        this.clientPackageManager = 'yarn';
                     }
                 }
             }
