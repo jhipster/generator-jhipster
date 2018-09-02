@@ -818,5 +818,44 @@ describe('BusinessErrorChecker', () => {
         }).to.throw('Selecting DTOs without services is forbidden, for entities A, C.');
       });
     });
+    context('when having DTOs with services', () => {
+      before(() => {
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'A'
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'B'
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'C'
+          })
+        );
+        jdlObject.addOption(
+          new JDLBinaryOption({
+            name: BinaryOptions.Options.DTO,
+            value: BinaryOptions.Values.dto.MAPSTRUCT,
+            entityNames: ['A', 'B']
+          })
+        );
+        jdlObject.addOption(
+          new JDLBinaryOption({
+            name: BinaryOptions.Options.SERVICE,
+            value: BinaryOptions.Values.service.SERVICE_CLASS,
+            excludedNames: ['C']
+          })
+        );
+        checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.SQL });
+      });
+      it("doesn't fail", () => {
+        expect(() => {
+          checker.checkForOptionErrors();
+        }).not.to.throw();
+      });
+    });
   });
 });
