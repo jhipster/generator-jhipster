@@ -460,7 +460,14 @@ const files = {
                 'jest.ts',
                 'jest-global-mocks.ts',
                 'spec/test.module.ts',
+                'spec/app/admin/configuration/configuration.component.spec.ts',
+                'spec/app/admin/configuration/configuration.service.spec.ts',
                 'spec/app/admin/health/health.component.spec.ts',
+                'spec/app/admin/logs/logs.component.spec.ts',
+                'spec/app/admin/logs/logs.service.spec.ts',
+                'spec/app/admin/metrics/metrics.component.spec.ts',
+                'spec/app/admin/metrics/metrics.service.spec.ts',
+                'spec/app/admin/metrics/metrics-modal.component.spec.ts',
                 'spec/helpers/spyobject.ts',
                 'spec/helpers/mock-account.service.ts',
                 'spec/helpers/mock-principal.service.ts',
@@ -468,7 +475,8 @@ const files = {
                 'spec/helpers/mock-login.service.ts',
                 'spec/helpers/mock-event-manager.service.ts',
                 'spec/helpers/mock-active-modal.service.ts',
-                'spec/helpers/mock-state-storage.service.ts'
+                'spec/helpers/mock-state-storage.service.ts',
+                'spec/helpers/mock-alert.service.ts'
             ]
         },
         {
@@ -483,7 +491,8 @@ const files = {
                 'spec/app/account/register/register.component.spec.ts',
                 'spec/app/account/settings/settings.component.spec.ts',
                 // login component tests
-                'spec/app/shared/login/login.component.spec.ts'
+                'spec/app/shared/login/login.component.spec.ts',
+                'spec/app/shared/alert/alert-error.component.spec.ts'
             ]
         },
         {

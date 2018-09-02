@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "5.1.0",
+  "version": "5.2.1",
   "description": "Spring Boot + Angular/React in one handy generator",
   "files": [
     "cli",
@@ -48,8 +48,10 @@
     "jsdoc": "jsdoc --configure jsdoc-conf.json"
   },
   "dependencies": {
+    "axios": "0.18.0",
     "chalk": "2.4.1",
     "commander": "2.16.0",
+    "conf": "2.0.0",
     "didyoumean": "1.2.1",
     "ejs": "2.6.1",
     "glob": "7.1.2",
@@ -60,6 +62,8 @@
     "lodash": "4.17.10",
     "meow": "5.0.0",
     "mkdirp": "0.5.1",
+    "os-locale": "2.1.0",
+    "parse-gitignore": "1.0.1",
     "pluralize": "7.0.0",
     "prettier": "1.13.7",
     "randexp": "0.4.9",
@@ -67,6 +71,7 @@
     "shelljs": "0.8.2",
     "tabtab": "2.2.2",
     "through2": "2.0.3",
+    "uuid": "3.3.2",
     "yeoman-environment": "2.3.0",
     "yeoman-generator": "3.0.0"
   },

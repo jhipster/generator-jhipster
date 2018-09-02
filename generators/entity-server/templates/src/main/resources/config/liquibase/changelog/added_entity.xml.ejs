@@ -110,8 +110,10 @@
             <%_ } else { _%>
             <column name="<%=columnName %>" type="<%=columnType %>" remarks="<%- formatAsLiquibaseRemarks(fields[idx].javadoc) %>">
             <%_ } _%>
-                <%_ if (unique) { _%>
-                <constraints nullable="<%= nullable %>" unique="true" />
+                <%_ if (unique) { 
+                    const uniqueConstraintName = getUXConstraintName(entityTableName, columnName, prodDatabaseType);
+                _%>
+                <constraints nullable="<%= nullable %>" unique="true" uniqueConstraintName="<%= uniqueConstraintName %>" />
                 <%_ } else { _%>
                 <constraints nullable="<%= nullable %>" />
                 <%_ } _%>
@@ -132,9 +134,11 @@
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%_ if (relationshipName === 'user' && authenticationType === 'oauth2') { _%>varchar(100)<%_ } else { _%>bigint<%_ } _%>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
-            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true) { _%>
+            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true) { 
+                const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
+            _%>
             <column name="<%=getColumnName(relationshipName) %>_id" type="bigint">
-                <constraints unique="true" nullable="<%= nullable_relation %>" />
+                <constraints unique="true" nullable="<%= nullable_relation %>" uniqueConstraintName="<%= uniqueConstraintName %>" />
             </column><% } %><% } %>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>

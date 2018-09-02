@@ -20,8 +20,11 @@
 const chalk = require('chalk');
 const shelljs = require('shelljs');
 const semver = require('semver');
+const fs = require('fs');
+const gitignore = require('parse-gitignore');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
+const statistics = require('../statistics');
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -84,7 +87,8 @@ module.exports = class extends BaseGenerator {
     }
 
     _cleanUp() {
-        const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn'];
+        const ignoredFiles = gitignore(fs.readFileSync('.gitignore'));
+        const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn', ...ignoredFiles];
         shelljs.ls('-A').forEach((file) => {
             if (!filesToKeep.includes(file)) {
                 this.info(`Removing ${file}`);
@@ -101,7 +105,7 @@ module.exports = class extends BaseGenerator {
             const generatorDir = this.clientPackageManager === 'yarn' ? shelljs.exec('yarn bin', { silent: this.silent }).stdout : shelljs.exec('npm bin', { silent: this.silent }).stdout;
             generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
-        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install`;
+        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --no-insight`;
         this.info(regenerateCmd);
         shelljs.exec(regenerateCmd, { silent: this.silent }, (code, msg, err) => {
             if (code === 0) this.success(`Successfully regenerated application with JHipster ${version}`);
@@ -112,7 +116,7 @@ module.exports = class extends BaseGenerator {
 
     _gitCommitAll(commitMsg, callback) {
         const commit = () => {
-            this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty'], { silent: this.silent }, (code, msg, err) => {
+            this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'], { silent: this.silent }, (code, msg, err) => {
                 if (code !== 0) this.error(`Unable to commit in git:\n${err}`);
                 this.success(`Committed with message "${commitMsg}"`);
                 callback();
@@ -126,7 +130,7 @@ module.exports = class extends BaseGenerator {
 
     _regenerate(version, callback) {
         this._generate(version, () => {
-            const keystore = `${SERVER_MAIN_RES_DIR}keystore.jks`;
+            const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
             this.info(`Removing ${keystore}`);
             shelljs.rm('-Rf', keystore);
             this._gitCommitAll(`Generated with JHipster ${version}`, () => {
@@ -292,8 +296,7 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'upgrade');
+                statistics.sendSubGenEvent('generator', 'upgrade');
             },
 
             checkoutUpgradeBranch() {

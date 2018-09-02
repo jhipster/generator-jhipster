@@ -65,6 +65,8 @@ spring:
         name:
         username:
         password:
+        hikari:
+            auto-commit: false
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         database: H2
@@ -77,12 +79,13 @@ spring:
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         properties:
             hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
@@ -98,6 +101,12 @@ spring:
             protocolVersion: V4
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
+    <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+        elasticsearch:
+            properties:
+                path:
+                    home: <%= BUILD_DIR %>elasticsearch
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -118,11 +127,11 @@ spring:
             enabled: false
     thymeleaf:
         mode: HTML
-        
+
 <%_ if (authenticationType === 'oauth2') { _%>
 security:
     oauth2:
-    # client configuration needed : for condition in Spring Boot 
+    # client configuration needed : for condition in Spring Boot
         client:
             access-token-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/token
             user-authorization-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/auth
@@ -169,7 +178,8 @@ jhipster:
         authentication:
     <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
             jwt:
-                secret: <%= jwtSecretKey %>
+                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+                base64-secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
     <%_ } _%>

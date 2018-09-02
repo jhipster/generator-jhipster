@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "8.11.3"
+  - "8.11.4"
 jdk:
   - oraclejdk8
 addons:
@@ -46,7 +46,7 @@ env:
     - JHIPSTER=ngx-h2mem-ws-nol2
     - JHIPSTER=ngx-mongodb-kafka-cucumber
     - JHIPSTER=ngx-session-cassandra-fr
-    - JHIPSTER=ngx-couchbase
+    - JHIPSTER=ngx-couchbase PROFILE=prod
     - JHIPSTER=react-default PROFILE=prod PROTRACTOR=1
     - JHIPSTER=react-noi18n-es-ws-gradle-session PROTRACTOR=1
     - JHIPSTER=ms-ngx-gateway-eureka

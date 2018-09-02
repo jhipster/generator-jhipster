@@ -66,7 +66,7 @@ function checkImages() {
  */
 function generateJwtSecret() {
     if (this.jwtSecretKey === undefined) {
-        this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
+        this.jwtSecretKey = Buffer.from(crypto.randomBytes(50).toString('hex')).toString('base64');
     }
 }
 

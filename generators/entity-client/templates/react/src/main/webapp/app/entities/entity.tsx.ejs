@@ -90,14 +90,22 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   componentDidMount() {
     <%_ if (pagination !== 'no') { _%>
       <%_ if (pagination === 'infinite-scroll') { _%>
-    this.reset();
+      this.reset();
       <%_ } else { _%>
-    this.getEntities();
+      this.getEntities();
       <%_ } _%>
     <%_ } else { _%>
     this.props.getEntities();
     <%_ } _%>
   }
+
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  componentDidUpdate() {
+    if (this.props.updateSuccess) {
+      this.reset();
+    }
+  }
+  <%_ } _%>
 
   <%_ if (searchEngine === 'elasticsearch') { _%>
   search = () => {
@@ -118,8 +126,8 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   reset = () => {
+    this.props.reset();
     this.setState({ activePage: 1 }, () => {
-      this.props.reset();
       this.getEntities();
     });
   };
@@ -135,11 +143,10 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   sort = prop => () => {
     this.setState(
       {
-        activePage: 1,
         order: this.state.order === 'asc' ? 'desc' : 'asc',
         sort: prop
       },
-      () => <% if (pagination === 'infinite-scroll') { %>this.getEntities()<% } else { %>this.sortEntities()<% } %>
+      () => <% if (pagination === 'infinite-scroll') { %>{ this.reset(); }<% } else { %>this.sortEntities()<% } %>
     );
   };
 
@@ -368,7 +375,9 @@ const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
   totalItems: <%= entityInstance %>.totalItems,
   <%_ } _%>
   <%_ if (pagination === 'infinite-scroll') { _%>
-  links: <%= entityInstance %>.links
+  links: <%= entityInstance %>.links,
+  entity: <%= entityInstance %>.entity,
+  updateSuccess: <%= entityInstance %>.updateSuccess,
   <%_ } _%>
 });
 

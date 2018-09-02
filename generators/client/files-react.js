@@ -442,13 +442,13 @@ const files = {
                 'spec/app/shared/reducers/user-management.spec.ts'
             ]
         },
-        {
-            condition: generator => generator.authenticationType === 'session',
-            path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
-            ]
-        },
+        // {
+        //     condition: generator => generator.authenticationType === 'session',
+        //     path: TEST_SRC_DIR,
+        //     templates: [
+        //         'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
+        //     ]
+        // },
         {
             condition: generator => generator.protractorTests,
             path: TEST_SRC_DIR,

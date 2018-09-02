@@ -80,7 +80,7 @@ import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasItems;
 <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -210,7 +210,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
      */
     public static User createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
         User user = new User();
-        <%_ if (databaseType === 'cassandra' || authenticationType === 'oauth2') { _%>
+        <%_ if (databaseType === 'cassandra' || (authenticationType === 'oauth2' && databaseType !== 'couchbase')) { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
         user.setLogin(DEFAULT_LOGIN<% if (databaseType === 'sql') { %> + RandomStringUtils.randomAlphabetic(5)<% } %>);
@@ -716,7 +716,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         assertThat(userList).hasSize(databaseSizeBeforeDelete - 1);
     }
     <%_ } _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')
+        && (!(authenticationType === 'oauth2' && applicationType === 'microservice'))) { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -729,7 +730,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").value(containsInAnyOrder(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
+            .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
     }
     <%_ } _%>
 

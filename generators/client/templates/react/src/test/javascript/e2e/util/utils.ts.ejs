@@ -1,4 +1,4 @@
-import { ExpectedConditions, ElementFinder, browser, by, element } from 'protractor';
+import { ExpectedConditions, ElementArrayFinder, ElementFinder, browser, by, element } from 'protractor';
 
 const waitUntilDisplayedTimeout = 30000;
 
@@ -37,6 +37,18 @@ export const waitUntilHidden = (selector: ElementFinder, classname = '', timeout
     isHidden(selector),
     timeout,
     `Failed while waiting for "${selector.locator()}" of Page Object Class '${classname}' to be hidden.`
+  );
+};
+
+export const waitForCount = (elementArrayFinder: ElementArrayFinder, expectedCount: number) => () => {
+  return elementArrayFinder.count().then(actualCount => expectedCount === actualCount);
+};
+
+export const waitUntilCount = (elementArrayFinder: ElementArrayFinder, expectedCount: number, timeout = waitUntilDisplayedTimeout) => {
+  browser.wait(
+    waitForCount(elementArrayFinder, expectedCount),
+    timeout,
+    `Failed while waiting for "${elementArrayFinder.locator()}" to have ${expectedCount} elements.`
   );
 };
 

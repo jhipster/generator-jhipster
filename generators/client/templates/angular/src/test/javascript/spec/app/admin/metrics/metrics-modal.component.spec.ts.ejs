@@ -1,0 +1,106 @@
+<%#
+Copyright 2013-2018 the original author or authors from the JHipster project.
+
+    This file is part of the JHipster project, see https://www.jhipster.tech/
+    for more information.
+
+        Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+limitations under the License.
+-%>
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { of, throwError } from 'rxjs';
+
+import { <%=angularXAppName%>TestModule } from '../../../test.module';
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from 'app/admin/metrics/metrics-modal.component';
+import { <%=jhiPrefixCapitalized%>MetricsService } from 'app/admin/metrics/metrics.service';
+
+describe('Component Tests', () => {
+    describe('<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent', () => {
+        let comp: <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent;
+        let fixture: ComponentFixture<<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent>;
+        let service: <%=jhiPrefixCapitalized%>MetricsService;
+
+        beforeEach(async(() => {
+            TestBed.configureTestingModule({
+                imports: [<%=angularXAppName%>TestModule],
+                declarations: [<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent]
+            })
+                .overrideTemplate(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent, '')
+                .compileComponents();
+        }));
+
+        beforeEach(() => {
+            fixture = TestBed.createComponent(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent);
+            comp = fixture.componentInstance;
+            service = fixture.debugElement.injector.get(<%=jhiPrefixCapitalized%>MetricsService);
+        });
+
+        describe('ngOnInit', () => {
+            it('should count the numbers of each thread type', () => {
+                comp.threadDump = [
+                    {name: 'test1', threadState: 'RUNNABLE'},
+                    {name: 'test2', threadState: 'WAITING'},
+                    {name: 'test3', threadState: 'TIMED_WAITING'},
+                    {name: 'test4', threadState: 'BLOCKED'},
+                    {name: 'test5', threadState: 'BLOCKED'},
+                    {name: 'test5', threadState: 'NONE'}
+                ]
+                fixture.detectChanges()
+
+                expect(comp.threadDumpRunnable).toBe(1)
+                expect(comp.threadDumpWaiting).toBe(1)
+                expect(comp.threadDumpTimedWaiting).toBe(1)
+                expect(comp.threadDumpBlocked).toBe(2)
+                expect(comp.threadDumpAll).toBe(5)
+            });
+
+            it('should return badge-info for WAITING', () => {
+                expect(comp.getBadgeClass('WAITING')).toBe('badge-info');
+            });
+
+            it('should return badge-warning for TIMED_WAITING', () => {
+                expect(comp.getBadgeClass('TIMED_WAITING')).toBe('badge-warning');
+            });
+
+            it('should return badge-danger for BLOCKED', () => {
+                expect(comp.getBadgeClass('BLOCKED')).toBe('badge-danger');
+            });
+
+            it('should return undefined for anything else', () => {
+                expect(comp.getBadgeClass('')).toBe(undefined);
+            });
+        });
+
+        describe('getBadgeClass', () => {
+            it('should return badge-success for RUNNABLE', () => {
+                expect(comp.getBadgeClass('RUNNABLE')).toBe('badge-success');
+            });
+
+            it('should return badge-info for WAITING', () => {
+                expect(comp.getBadgeClass('WAITING')).toBe('badge-info');
+            });
+
+            it('should return badge-warning for TIMED_WAITING', () => {
+                expect(comp.getBadgeClass('TIMED_WAITING')).toBe('badge-warning');
+            });
+
+            it('should return badge-danger for BLOCKED', () => {
+                expect(comp.getBadgeClass('BLOCKED')).toBe('badge-danger');
+            });
+
+            it('should return undefined for anything else', () => {
+                expect(comp.getBadgeClass('')).toBe(undefined);
+            });
+        });
+    });
+});
