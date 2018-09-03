@@ -128,6 +128,7 @@ class Statistics {
     }
 
     sendYoRc(yorc, isARegeneration, generatorVersion) {
+        if (this.noInsight) return;
         this.postRequest('/s/entry', {
             'generator-jhipster': yorc,
             'generator-id': this.clientId,
@@ -151,6 +152,7 @@ class Statistics {
     }
 
     sendSubGenEvent(source, type, event) {
+        if (this.noInsight) return;
         const strEvent = event === '' ? event : JSON.stringify(event);
         this.postRequest(`/s/event/${this.clientId}`,
             { source, type, event: strEvent },
@@ -174,6 +176,7 @@ class Statistics {
      * @param {any} eventObject events that you want to send
      */
     sendInsightSubGenEvents(prefix, eventObject) {
+        if (this.noInsight) return;
         if (typeof eventObject === 'object') {
             Object.keys(eventObject).forEach((key) => {
                 if (typeof eventObject[key] === 'object') {
@@ -188,6 +191,7 @@ class Statistics {
     }
 
     sendEntityStats(fields, relationships, pagination, dto, service, fluentMethods) {
+        if (this.noInsight) return;
         this.postRequest(`/s/entity/${this.clientId}`, {
             fields,
             relationships,
