@@ -136,7 +136,11 @@ describe('Component Tests', () => {
             <%_ } _%>
 
             // THEN
+            <%_ if (pagination === 'pagination') { _%>
+            expect(comp.page).toEqual(1);
+            <%_ } else { _%>
             expect(comp.page).toEqual(0);
+            <%_ } _%>
             expect(service.query).toHaveBeenCalledTimes(2);
             expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
         });
