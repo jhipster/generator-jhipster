@@ -2106,6 +2106,7 @@ module.exports = class extends PrivateBase {
                 `"${keytoolPath}keytool" -genkey -noprompt `
                 + '-storetype PKCS12 '
                 + '-keyalg RSA '
+                + '-alias selfsigned '
                 + `-keystore ${keyStoreFile} `
                 + '-storepass password '
                 + '-keypass password '
