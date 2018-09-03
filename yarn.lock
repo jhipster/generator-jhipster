@@ -1812,9 +1812,9 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
-jhipster-core@3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-3.3.0.tgz#0256578116829a6d047768a69a6ad4dd2abaccaa"
+jhipster-core@3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-3.3.1.tgz#984073fa7678ac01fcc3f4f3357d18044c14392b"
   dependencies:
     chevrotain "3.7.4"
     fs-extra "7.0.0"
