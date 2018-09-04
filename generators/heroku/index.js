@@ -202,7 +202,7 @@ module.exports = class extends BaseGenerator {
                         done();
                     } else {
                         this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-                        const child = exec(`heroku plugins:install ${cliPlugin} --force`, (err, stdout) => {
+                        const child = exec(`heroku plugins:install ${cliPlugin}`, (err, stdout) => {
                             if (err) {
                                 this.abort = true;
                                 this.log.error(err);
