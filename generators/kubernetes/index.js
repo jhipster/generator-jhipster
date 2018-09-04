@@ -23,6 +23,7 @@ const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
+const statistics = require('../statistics');
 
 /* Constants used throughout */
 const constants = require('../generator-constants');
@@ -155,8 +156,7 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'kubernetes');
+                statistics.sendSubGenEvent('generator', 'kubernetes');
             },
 
             checkImages: docker.checkImages,

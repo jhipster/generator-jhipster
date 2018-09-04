@@ -16,7 +16,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -%>
-<% var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- '%>
+<%_ var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- ' _%>
 {
   "name": "<%= dasherizedBaseName %>",
   "version": "0.0.0",
@@ -27,151 +27,151 @@ limitations under the License.
     "node_modules"
   ],
   "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "5.1.0",
-    "@fortawesome/fontawesome-svg-core": "1.2.0",
-    "@fortawesome/react-fontawesome": "0.1.0",
-    "availity-reactstrap-validation": "2.0.2",
+    "@fortawesome/fontawesome-svg-core": "1.2.2",
+    "@fortawesome/free-solid-svg-icons": "5.2.0",
+    "@fortawesome/react-fontawesome": "0.1.2",
+    "availity-reactstrap-validation": "2.0.6",
     "axios": "0.18.0",
-    "bootstrap": "4.1.1",
+    "bootstrap": "4.1.3",
     "loaders.css": "0.1.2",
     "lodash": "4.17.10",
     "moment": "2.22.2",
-    "react": "16.4.1",
+    "react": "16.4.2",
     "react-addons-css-transition-group": "16.0.0-alpha.3",
     "react-addons-transition-group": "16.0.0-alpha.3",
-    "react-dom": "16.4.1",
+    "react-dom": "16.4.2",
     "react-hot-loader": "3.1.1",
-    "react-jhipster": "0.5.4",
-    "react-loadable": "5.4.0",
+    "react-jhipster": "0.5.8",
+    "react-loadable": "5.5.0",
     "react-redux": "5.0.7",
     "react-redux-loading-bar": "4.0.5",
     "react-router-dom": "4.3.1",
-    "react-toastify": "4.1.0",
+    "react-toastify": "4.2.0",
     "react-transition-group": "2.4.0",
-    "reactstrap": "6.2.0",
+    "reactstrap": "6.4.0",
     "redux": "4.0.0",
     "redux-devtools": "3.4.1",
     "redux-devtools-dock-monitor": "1.1.3",
     "redux-devtools-log-monitor": "1.4.0",
     "redux-promise-middleware": "5.1.1",
     "redux-thunk": "2.3.0",
-    "tslib": "1.9.3",
     <%_ if (websocket === 'spring-websocket') { _%>
     "rxjs": "5.5.6",
     "sockjs-client": "1.1.5",
-    "webstomp-client": "1.2.0",
+    "webstomp-client": "1.2.4",
     <%_ } _%>
+    "tslib": "1.9.3",
     "uuid": "3.3.2"
   },
   "devDependencies": {
     <%_ if (protractorTests) { _%>
     "@types/chai": "4.1.4",
     <%_ } _%>
-    "@types/jest": "23.1.3",
-    "@types/lodash": "4.14.110",
+    "@types/enzyme": "3.1.13",
+    "@types/jest": "23.3.1",
+    "@types/lodash": "4.14.116",
     <%_ if (protractorTests) { _%>
-    "@types/mocha": "5.2.4",
+    "@types/mocha": "5.2.5",
     <%_ } _%>
-    "@types/node": "10.5.1",
-    "@types/react": "16.4.6",
-    "@types/react-dom": "16.0.6",
-    "@types/react-router-dom": "4.2.7",
+    "@types/node": "10.9.2",
+    "@types/react": "16.4.12",
+    "@types/react-dom": "16.0.7",
+    "@types/react-redux": "6.0.6",
+    "@types/react-router-dom": "4.3.0",
     "@types/redux": "3.6.31",
-    "@types/react-redux": "6.0.3",
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "3.0.10",
     <%_ } _%>
     "@types/webpack-env": "1.13.6",
-    "browser-sync": "2.24.5",
+    "browser-sync": "2.24.6",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "1.2.2",
     <%_ if (protractorTests) { _%>
     "chai": "4.1.2",
+    "chai-as-promised": "7.1.1",
     <%_ } _%>
     "copy-webpack-plugin": "4.5.2",
     "core-js": "2.5.7",
     "cross-env": "5.2.0",
-    "css-loader": "0.28.11",
-    "enzyme": "3.3.0",
-    "enzyme-adapter-react-16": "1.1.1",
-    "file-loader": "1.1.11",
-    "fork-ts-checker-webpack-plugin": "0.4.2",
+    "css-loader": "1.0.0",
+    "enzyme": "3.5.0",
+    "enzyme-adapter-react-16": "1.3.0",
+    "enzyme-to-json": "3.3.4",
+    "file-loader": "2.0.0",
+    "fork-ts-checker-webpack-plugin": "0.4.9",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-webpack-plugin": "3.2.0",
     "http-proxy-middleware": "0.18.0",
-    "identity-obj-proxy": "3.0.0",
     <%_ if(!skipCommitHook) { _%>
     "husky": "0.14.3",
     <%_ } _%>
+    "identity-obj-proxy": "3.0.0",
     "image-webpack-loader": "4.3.1",
-    "jest": "23.2.0",
+    "jest": "23.5.0",
     "jest-junit": "5.1.0",
     "jest-sonar-reporter": "2.0.0",
-    <%_ if (protractorTests) { _%>
-    "chai-as-promised": "7.1.1",
-    <%_ } _%>
     "json-loader": "0.5.7",
     <%_ if(!skipCommitHook) { _%>
-    "lint-staged": "7.2.0",
+    "lint-staged": "7.2.2",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "1.0.16",
+    "merge-jsons-webpack-plugin": "1.0.17",
     <%_ } _%>
-    "mini-css-extract-plugin": "0.4.1",
+    "mini-css-extract-plugin": "0.4.2",
     <%_ if (protractorTests) { _%>
     "mocha": "5.2.0",
     <%_ } _%>
     "moment-locales-webpack-plugin": "1.0.7",
-    "optimize-css-assets-webpack-plugin": "4.0.3",
-    "prettier": "1.13.7",
+    "optimize-css-assets-webpack-plugin": "5.0.0",
+    "prettier": "1.14.2",
     <%_ if (protractorTests) { _%>
-    "protractor": "5.3.2",
+    "protractor": "5.4.0",
     <%_ } _%>
     "react-infinite-scroller": "1.2.0",
     "redux-mock-store": "1.5.3",
     "rimraf": "2.6.2",
     "simple-progress-webpack-plugin": "1.1.2",
-    "sinon": "6.0.1",
-    "source-map-loader": "0.2.3",
+    "sinon": "6.1.5",
+    "source-map-loader": "0.2.4",
     "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "stripcomment-loader": "0.1.0",
-    "style-loader": "0.21.0",
+    "style-loader": "0.22.1",
     "swagger-ui": "2.2.10",
-    "thread-loader": "1.1.5",
     <%_ if (useSass) { _%>
-    "sass-loader": "7.0.3",
-    "node-sass": "4.9.0",
-    "postcss-loader": "2.1.5",
+    "postcss-loader": "3.0.0",
+    "sass": "1.13.0",
+    "sass-loader": "7.1.0",
     <%_ } _%>
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
+    "terser-webpack-plugin": "1.0.2",
+    "thread-loader": "1.2.0",
     "to-string-loader": "1.1.5",
-    "ts-jest": "23.0.0",
-    "ts-loader": "4.4.2",
+    "ts-jest": "23.1.4",
+    "ts-loader": "4.5.0",
     <%_ if (protractorTests) { _%>
-    "ts-node": "7.0.0",
+    "ts-node": "7.0.1",
     <%_ } _%>
-    "tslint": "5.10.0",
-    "tslint-config-prettier": "1.13.0",
-    "tslint-eslint-rules": "5.3.1",
+    "tslint": "5.11.0",
+    "tslint-config-prettier": "1.15.0",
+    "tslint-eslint-rules": "5.4.0",
     "tslint-loader": "3.6.0",
     "tslint-react": "3.6.0",
-    "typescript": "2.9.2",
-    "uglifyjs-webpack-plugin": "1.2.7",
-    "webpack": "4.14.0",
-    "webpack-cli": "3.0.8",
-    "webpack-dev-server": "3.1.4",
-    "webpack-merge": "4.1.3",
+    "typescript": "3.0.1",
+    "webpack": "4.17.1",
+    "webpack-cli": "3.1.0",
+    "webpack-dev-server": "3.1.6",
+    "webpack-merge": "4.1.4",
     "webpack-notifier": "1.6.0",
-    "workbox-webpack-plugin": "3.3.1",
+    "workbox-webpack-plugin": "3.4.1",
     "write-file-webpack-plugin": "4.3.2"<% if (buildTool === 'maven') { %>,
     "xml2js": "0.4.19"
     <%_ } _%>
   },
   "resolutions": {
-    "@types/react": "16.4.6"
+    "@types/react": "16.4.12"
   },
   "engines": {
     "node": ">=8.9.0"<% if (clientPackageManager === 'yarn') { %>,

@@ -23,6 +23,7 @@ const chalk = require('chalk');
 const jhiCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
 const packagejs = require('../../package.json');
+const statistics = require('../statistics');
 
 class ImporterGenerator extends BaseGenerator {
     constructor(args, opts) {
@@ -69,10 +70,10 @@ class ImporterGenerator extends BaseGenerator {
             this.clientFramework = this.clientFramework || 'angularX';
             this.clientPackageManager = configuration.clientPackageManager;
             if (!this.clientPackageManager) {
-                if (this.useYarn) {
-                    this.clientPackageManager = 'yarn';
-                } else {
+                if (this.useNpm) {
                     this.clientPackageManager = 'npm';
+                } else {
+                    this.clientPackageManager = 'yarn';
                 }
             }
         }
@@ -152,10 +153,10 @@ module.exports = class extends ImporterGenerator {
                 this.clientFramework = this.clientFramework || 'angularX';
                 this.clientPackageManager = configuration.clientPackageManager;
                 if (!this.clientPackageManager) {
-                    if (this.useYarn) {
-                        this.clientPackageManager = 'yarn';
-                    } else {
+                    if (this.useNpm) {
                         this.clientPackageManager = 'npm';
+                    } else {
+                        this.clientPackageManager = 'yarn';
                     }
                 }
             }
@@ -165,8 +166,7 @@ module.exports = class extends ImporterGenerator {
     get configuring() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'import-jdl');
+                statistics.sendSubGenEvent('generator', 'import-jdl');
             }
         };
     }

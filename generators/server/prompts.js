@@ -165,14 +165,23 @@ function askForServerSideOpts(meta) {
                     });
                 }
                 opts.push({
-                    value: 'mongodb',
-                    name: 'MongoDB'
+                        value: 'mongodb',
+                        name: 'MongoDB'
                 });
                 if (!reactive) {
                     opts.push({
                         value: 'couchbase',
-                        name: '[BETA] Couchbase'
+                        name: 'Couchbase'
                     });
+                    if (
+                        (response.authenticationType !== 'oauth2' && applicationType === 'microservice')
+                        || (response.authenticationType === 'uaa' && applicationType === 'gateway')
+                    ) {
+                        opts.push({
+                            value: 'no',
+                            name: 'No database'
+                        });
+                    }
                     if (
                         (response.authenticationType !== 'oauth2' && applicationType === 'microservice')
                         || (response.authenticationType === 'uaa' && applicationType === 'gateway')
@@ -288,11 +297,11 @@ function askForServerSideOpts(meta) {
         }
 
         if (this.authenticationType === 'session') {
-            this.rememberMeKey = crypto.randomBytes(20).toString('hex');
+            this.rememberMeKey = crypto.randomBytes(50).toString('hex');
         }
 
         if (this.authenticationType === 'jwt' || this.applicationType === 'microservice') {
-            this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
+            this.jwtSecretKey = Buffer.from(crypto.randomBytes(64).toString('hex')).toString('base64');
         }
 
         // user-management will be handled by UAA app, oauth expects users to be managed in IpP

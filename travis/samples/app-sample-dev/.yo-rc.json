@@ -29,9 +29,7 @@
     "travis": true,
     "messageBroker": false,
     "serviceDiscoveryType": false,
-    "clientPackageManager": "yarn",
-    "clientFramework": "angularX",
-    "jhipsterVersion": "5.0.0-beta.1",
-    "jwtSecretKey": "0c3341dde3992ef4024d26f225c4ccd63a5275aa"
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX"
   }
 }

@@ -178,26 +178,10 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         <%_ if (!reactive) { _%>
-        userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {throw new LoginAlreadyUsedException();});
-        userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {throw new EmailAlreadyUsedException();});
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
         <%_ } else { _%>
-        return userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase())
-            .hasElement()
-            .flatMap(loginExists -> {
-                if (loginExists) {
-                    throw new LoginAlreadyUsedException();
-                }
-                return userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail());
-            })
-            .hasElement()
-            .flatMap(emailExists -> {
-                if (emailExists) {
-                    throw new EmailAlreadyUsedException();
-                }
-                return userService.registerUser(managedUserVM, managedUserVM.getPassword());
-            })
+        return userService.registerUser(managedUserVM, managedUserVM.getPassword())
             .doOnSuccess(mailService::sendActivationEmail)
             .then();
         <%_ } _%>

@@ -336,7 +336,7 @@ function askForDTO() {
                 },
                 {
                     value: 'mapstruct',
-                    name: '[BETA] Yes, generate a DTO with MapStruct'
+                    name: 'Yes, generate a DTO with MapStruct'
                 }
             ],
             default: 0

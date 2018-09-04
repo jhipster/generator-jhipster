@@ -24,6 +24,9 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
+<%_ if (useSass) { _%>
+const sass = require('sass');
+<%_ } _%>
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -47,12 +50,16 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
       <%_ if (useSass) { _%>
       {
         test: /\.(sa|sc|c)ss$/,
-        loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+        use: ['style-loader', 'css-loader', 'postcss-loader', {
+            loader: 'sass-loader',
+            options: { implementation: sass }
+          }
+        ]
       },
       <%_ } else { _%>
       {
         test: /\.css$/,
-        loaders: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader']
       }
       <%_ } _%>
     ]
@@ -88,7 +95,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   },
   plugins: [
     new SimpleProgressWebpackPlugin({
-        format: options.stats === 'minimal' ? 'compact' : 'expanded'
+      format: options.stats === 'minimal' ? 'compact' : 'expanded'
     }),
     new FriendlyErrorsWebpackPlugin(),
     new BrowserSyncPlugin({
@@ -99,7 +106,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         ws: true<% } %>
       }
     }, {
-        reload: false
+      reload: false
     }),
     new webpack.HotModuleReplacementPlugin(),
     new writeFilePlugin(),

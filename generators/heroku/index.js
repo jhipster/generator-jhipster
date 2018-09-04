@@ -23,6 +23,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const glob = require('glob');
 const BaseGenerator = require('../generator-base');
+const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
 
@@ -167,8 +168,7 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'heroku');
+                statistics.sendSubGenEvent('generator', 'heroku');
             },
 
             gitInit() {
@@ -202,7 +202,7 @@ module.exports = class extends BaseGenerator {
                         done();
                     } else {
                         this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-                        const child = exec(`heroku plugins:install ${cliPlugin} --force`, (err, stdout) => {
+                        const child = exec(`heroku plugins:install ${cliPlugin}`, (err, stdout) => {
                             if (err) {
                                 this.abort = true;
                                 this.log.error(err);
@@ -227,7 +227,7 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
                 const child = exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
                     if (err) {
-                        if (stderr.includes('Name is already taken')) {
+                        if (stderr.includes('is already taken')) {
                             const prompts = [
                                 {
                                     type: 'list',
@@ -323,7 +323,7 @@ module.exports = class extends BaseGenerator {
 
                 this.log(chalk.bold('\nProvisioning addons'));
                 if (this.searchEngine === 'elasticsearch') {
-                    exec(`heroku addons:create searchbox:starter --as SEARCHBOX --app ${this.herokuAppName}`, addonCreateCallback.bind(this, 'Elasticsearch'));
+                    exec(`heroku addons:create bonsai --as BONSAI --app ${this.herokuAppName}`, addonCreateCallback.bind(this, 'Elasticsearch'));
                 }
 
                 let dbAddOn = '';

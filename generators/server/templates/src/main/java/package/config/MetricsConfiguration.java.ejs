@@ -41,6 +41,9 @@ import org.slf4j.MarkerFactory;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
+<%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
+import org.springframework.cache.CacheManager;
+<%_ } _%>
 import org.springframework.context.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -73,7 +76,11 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
     private HikariDataSource hikariDataSource;
 <%_ } _%>
 
-    public MetricsConfiguration(JHipsterProperties jHipsterProperties) {
+<%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
+    // The cacheManager is injected here to force its initialization, so the JCacheGaugeSet
+    // will be correctly created below.
+<%_ } _%>
+    public MetricsConfiguration(JHipsterProperties jHipsterProperties<% if (['ehcache', 'infinispan'].includes(cacheProvider)) { %>, CacheManager cacheManager<% } %>) {
         this.jHipsterProperties = jHipsterProperties;
     }
 <%_ if (databaseType === 'sql') { _%>

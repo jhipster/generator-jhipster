@@ -40,7 +40,7 @@ import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.dto.UserDTO;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.service.util.RandomUtil;
-import <%=packageName%>.web.rest.errors.InvalidPasswordException;
+import <%=packageName%>.web.rest.errors.*;
 <%_ } _%>
 
 import org.slf4j.Logger;
@@ -225,17 +225,44 @@ public class UserService {
     }
 
     public <% if (reactive) { %>Mono<User><% } else { %>User<% } %> registerUser(UserDTO userDTO, String password) {
-
-        User newUser = new User();<% if (databaseType === 'cassandra') { %>
-        newUser.setId(UUID.randomUUID().toString());<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
-        Set<String> authorities = new HashSet<>();<% } %>
+    <%_ if (!reactive) { _%>
+        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+            if (!existingUser.getActivated()) {
+                userRepository.delete(existingUser);
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                this.clearUserCaches(existingUser);
+                <%_ } _%>
+            } else {
+                throw new LoginAlreadyUsedException();
+            }
+        });
+        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+            if (!existingUser.getActivated()) {
+                userRepository.delete(existingUser);
+                <%_ if (databaseType === 'sql') { _%>
+                userRepository.flush();
+                <%_ } _%>
+                <%_ if (cacheManagerIsAvailable === true) { _%>
+                this.clearUserCaches(existingUser);
+                <%_ } _%>
+            } else {
+                throw new EmailAlreadyUsedException();
+            }
+        });
+        User newUser = new User();
+        <%_ if (databaseType === 'cassandra') { _%>
+        newUser.setId(UUID.randomUUID().toString());
+        <%_ } _%>
+        <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+        Set<String> authorities = new HashSet<>();
+        <%_ } _%>
         String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin());
+        newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
-        newUser.setEmail(userDTO.getEmail());
+        newUser.setEmail(userDTO.getEmail().toLowerCase());
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         newUser.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
@@ -244,7 +271,6 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-    <%_ if (!reactive) { _%>
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
@@ -261,26 +287,58 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     <%_ } else { _%>
-        Set<Authority> authorities = new HashSet<>();
-        return authorityRepository.findById(AuthoritiesConstants.USER)
-            .map(authorities::add)
-            .thenReturn(newUser)
-            .doOnNext(user -> user.setAuthorities(authorities))
-            .flatMap(this::createUser)
-            <%_ if (cacheManagerIsAvailable === true) { _%>
-            .doOnNext(this::clearUserCaches)
-            <%_ } _%>
-            .doOnNext(user -> log.debug("Created Information for User: {}", user));
-    <%_ } _%>    
+        return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase())
+            .flatMap(existingUser -> {
+                if (!existingUser.getActivated()) {
+                    this.clearUserCaches(existingUser);
+                    return userRepository.delete(existingUser);
+                } else {
+                    throw new LoginAlreadyUsedException();
+                }
+            })
+            .then(userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()))
+            .flatMap(existingUser -> {
+                if (!existingUser.getActivated()) {
+                    this.clearUserCaches(existingUser);
+                    return userRepository.delete(existingUser);
+                } else {
+                    throw new EmailAlreadyUsedException();
+                }
+            })
+            .thenReturn(new User())
+            .flatMap(newUser -> {
+                String encryptedPassword = passwordEncoder.encode(password);
+                newUser.setLogin(userDTO.getLogin().toLowerCase());
+                // new user gets initially a generated password
+                newUser.setPassword(encryptedPassword);
+                newUser.setFirstName(userDTO.getFirstName());
+                newUser.setLastName(userDTO.getLastName());
+                newUser.setEmail(userDTO.getEmail().toLowerCase());
+                newUser.setImageUrl(userDTO.getImageUrl());
+                newUser.setLangKey(userDTO.getLangKey());
+                // new user is not active
+                newUser.setActivated(false);
+                // new user gets registration key
+                newUser.setActivationKey(RandomUtil.generateActivationKey());
+                Set<Authority> authorities = new HashSet<>();
+                return authorityRepository.findById(AuthoritiesConstants.USER)
+                    .map(authorities::add)
+                    .thenReturn(newUser)
+                    .doOnNext(user -> user.setAuthorities(authorities))
+                    .flatMap(this::createUser)
+                    .doOnNext(this::clearUserCaches)
+                    .doOnNext(user -> log.debug("Created Information for User: {}", user));
+            });
+    <%_ } _%>
     }
 
     public <% if (reactive) { %>Mono<User><% } else { %>User<% } %> createUser(UserDTO userDTO) {
         User user = new User();<% if (databaseType === 'cassandra') { %>
         user.setId(UUID.randomUUID().toString());<% } %>
-        user.setLogin(userDTO.getLogin());
+        user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
+        user.setEmail(userDTO.getEmail().toLowerCase());
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         user.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
@@ -345,7 +403,7 @@ public class UserService {
             .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
-                user.setEmail(email);
+                user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
                 user.setImageUrl(imageUrl);
@@ -398,10 +456,10 @@ public class UserService {
                 <%_ if (cacheManagerIsAvailable === true) { _%>
                 this.clearUserCaches(user);
                 <%_ } _%>
-                user.setLogin(userDTO.getLogin());
+                user.setLogin(userDTO.getLogin().toLowerCase());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
-                user.setEmail(userDTO.getEmail());
+                user.setEmail(userDTO.getEmail().toLowerCase());
                 <%_ if (databaseType === 'sql' || databaseType === 'mongodb'|| databaseType === 'couchbase') { _%>
                 user.setImageUrl(userDTO.getImageUrl());
                 <%_ } _%>
@@ -742,7 +800,7 @@ public class UserService {
     private static User getUser(Map<String, Object> details) {
         User user = new User();
         user.setId((String) details.get("sub"));
-        user.setLogin((String) details.get("preferred_username"));
+        user.setLogin(((String) details.get("preferred_username")).toLowerCase());
         if (details.get("given_name") != null) {
             user.setFirstName((String) details.get("given_name"));
         }
@@ -753,7 +811,7 @@ public class UserService {
             user.setActivated((Boolean) details.get("email_verified"));
         }
         if (details.get("email") != null) {
-            user.setEmail((String) details.get("email"));
+            user.setEmail(((String) details.get("email")).toLowerCase());
         }
         if (details.get("langKey") != null) {
             user.setLangKey((String) details.get("langKey"));

@@ -20,6 +20,7 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
+const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
@@ -88,14 +89,18 @@ module.exports = class extends BaseGenerator {
         return {
             insight() {
                 if (this.abort) return;
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'ci-cd');
+                statistics.sendSubGenEvent('generator', 'ci-cd');
             },
             setTemplateConstants() {
                 if (this.abort || this.cicdIntegrations === undefined) return;
                 this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
+                if (this.clientPackageManager === 'yarn') {
+                    this.frontTests = ' -u';
+                } else if (this.clientPackageManager === 'npm') {
+                    this.frontTests = ' -- -u';
+                }
             }
         };
     }

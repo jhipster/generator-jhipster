@@ -18,5 +18,6 @@ module.exports = {
     testResultsProcessor: 'jest-sonar-reporter',
     transformIgnorePatterns: ['node_modules/(?!@angular/common/locales)'],
     testMatch: ['<rootDir>/src/test/javascript/spec/**/+(*.)+(spec.ts)'],
-    rootDir: '../../../'
+    rootDir: '../../../',
+    testURL: "http://localhost/"
 };

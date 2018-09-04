@@ -33,7 +33,7 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "types": ["webpack-env"],
+    "types": ["webpack-env", "jest"],
     "allowJs": true,
     "checkJs": false,
     "baseUrl": "./",
@@ -46,7 +46,8 @@
   },
   "include": [
     "<%= MAIN_SRC_DIR %>app/typing.d.ts",
-    "<%= MAIN_SRC_DIR %>app/**/*"
+    "<%= MAIN_SRC_DIR %>app/**/*",
+    "<%= TEST_SRC_DIR %>spec/**/*"
   ],
   "exclude": [
     "node_modules"

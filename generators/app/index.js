@@ -22,6 +22,7 @@ const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
+const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -98,9 +99,9 @@ module.exports = class extends BaseGenerator {
             defaults: 'jhi'
         });
 
-        // This adds support for a `--npm` flag
-        this.option('npm', {
-            desc: 'Use npm instead of yarn',
+        // This adds support for a `--yarn` flag
+        this.option('yarn', {
+            desc: 'Use yarn instead of npm',
             type: Boolean,
             defaults: false
         });
@@ -142,7 +143,9 @@ module.exports = class extends BaseGenerator {
             blueprint = `generator-jhipster-${blueprint}`;
         }
         this.blueprint = this.configOptions.blueprint = blueprint;
-        this.useYarn = this.configOptions.useYarn = !this.options.npm;
+        this.useNpm = this.configOptions.useNpm = !this.options.yarn;
+        this.useYarn = !this.useNpm;
+
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
         this.experimental = this.configOptions.experimental = this.options.experimental;
         this.registerClientTransforms();
@@ -213,10 +216,10 @@ module.exports = class extends BaseGenerator {
                 }
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 if (!this.clientPackageManager) {
-                    if (this.useYarn) {
-                        this.clientPackageManager = 'yarn';
-                    } else {
+                    if (this.useNpm) {
                         this.clientPackageManager = 'npm';
+                    } else {
+                        this.clientPackageManager = 'yarn';
                     }
                 }
             }
@@ -226,6 +229,8 @@ module.exports = class extends BaseGenerator {
     get prompting() {
         return {
             askForInsightOptIn: prompts.askForInsightOptIn,
+            // TODO : enable this. It's a bit messy for now, it need better sync.
+            // askForAccountLinking: prompts.askForAccountLinking,
             askForApplicationType: prompts.askForApplicationType,
             askForModuleName: prompts.askForModuleName
         };
@@ -267,9 +272,16 @@ module.exports = class extends BaseGenerator {
                     this.configOptions.devDatabaseType = this.options.db;
                     this.configOptions.prodDatabaseType = this.options.db;
                     this.configOptions.authenticationType = this.options.auth;
+                    this.configOptions.uaaBaseName = this.options.uaaBaseName;
                 }
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
+
+            // composeAccountLinking() {
+            //     if (!this.linkAccount) return;
+
+            //     this.composeWith(require.resolve('../link-account'));
+            // },
 
             composeServer() {
                 if (this.skipServer) return;
@@ -312,15 +324,6 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
 
-            insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'app');
-                insight.track('app/applicationType', this.applicationType);
-                insight.track('app/testFrameworks', this.testFrameworks);
-                insight.track('app/otherModules', this.otherModules);
-                insight.track('app/clientPackageManager', this.clientPackageManager);
-            },
-
             composeLanguages() {
                 if (this.skipI18n) return;
                 this.composeLanguagesSub(this, this.configOptions, this.generatorType);
@@ -348,6 +351,19 @@ module.exports = class extends BaseGenerator {
                 this.skipServer && (config.skipServer = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
                 this.config.set(config);
+            },
+
+            insight() {
+                const yorc = Object.assign({}, _.omit(this.configOptions, [
+                    'jhiPrefix',
+                    'baseName',
+                    'jwtSecretKey',
+                    'packageName',
+                    'packagefolder',
+                    'rememberMeKey'
+                ]));
+                yorc.applicationType = this.applicationType;
+                statistics.sendYoRc(yorc, this.existingProject, this.jhipsterVersion);
             }
         };
     }
@@ -435,7 +451,7 @@ module.exports = class extends BaseGenerator {
                     this.log(`\n${chalk.bold.red('Running post run module hooks failed. No modification done to the generated app.')}`);
                     this.debug('Error:', err);
                 }
-                this.log(chalk.white(`If you find JHipster useful consider supporting our collective ${chalk.yellow('https://opencollective.com/generator-jhipster')}`));
+                this.log(chalk.green(`\nIf you find JHipster useful consider supporting our collective ${chalk.yellow('https://opencollective.com/generator-jhipster')}`));
             }
         };
     }

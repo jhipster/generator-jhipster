@@ -40,7 +40,8 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webpackBuildDev(type: <%= clientPackageManager.charAt(0).toUpperCase() + clientPackageManager.slice(1) %>Task) {
+task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
+    onlyIf { shouldWebpackRun() == true }
     args = ["run", "webpack:build"]
 }
 
@@ -71,5 +72,9 @@ processResources {
 
 <%_ if (!skipClient) { _%>
 processResources.dependsOn webpackBuildDev
-webpackBuildDev.onlyIf { project.hasProperty('webpack') }
+yarn_install.onlyIf { shouldWebpackRun() == true }
+
+def shouldWebpackRun() {
+    file('build/www/app/main.bundle.js').exists() == false || project.hasProperty('webpack')
+}
 <%_ } _%>

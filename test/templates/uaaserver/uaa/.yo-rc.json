@@ -13,7 +13,7 @@
     "prodDatabaseType": "mysql",
     "searchEngine": "no",
     "buildTool": "maven",
-    "jwtSecretKey": "49b0ecb9c928d00534a86594ccb2192120befdf0",
+    "jwtSecretKey": "fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8",
     "enableTranslation": true,
     "applicationType": "uaa",
     "testFrameworks": [

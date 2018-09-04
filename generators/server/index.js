@@ -26,6 +26,7 @@ const BaseGenerator = require('../generator-base');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
+const statistics = require('../statistics');
 
 let useBlueprint;
 
@@ -258,12 +259,12 @@ module.exports = class extends BaseGenerator {
                 if (this.baseName !== undefined && serverConfigFound) {
                     // Generate remember me key if key does not already exist in config
                     if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
-                        this.rememberMeKey = crypto.randomBytes(20).toString('hex');
+                        this.rememberMeKey = crypto.randomBytes(50).toString('hex');
                     }
 
                     // Generate JWT secret key if key does not already exist in config
                     if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
-                        this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
+                        this.jwtSecretKey = Buffer.from(crypto.randomBytes(64).toString('hex')).toString('base64');
                     }
 
                     // If translation is not defined, it is enabled by default
@@ -343,20 +344,22 @@ module.exports = class extends BaseGenerator {
     _configuring() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'server');
-                insight.track('app/authenticationType', this.authenticationType);
-                insight.track('app/cacheProvider', this.cacheProvider);
-                insight.track('app/enableHibernateCache', this.enableHibernateCache);
-                insight.track('app/websocket', this.websocket);
-                insight.track('app/databaseType', this.databaseType);
-                insight.track('app/devDatabaseType', this.devDatabaseType);
-                insight.track('app/prodDatabaseType', this.prodDatabaseType);
-                insight.track('app/searchEngine', this.searchEngine);
-                insight.track('app/messageBroker', this.messageBroker);
-                insight.track('app/serviceDiscoveryType', this.serviceDiscoveryType);
-                insight.track('app/buildTool', this.buildTool);
-                insight.track('app/enableSwaggerCodegen', this.enableSwaggerCodegen);
+                statistics.sendSubGenEvent('generator', 'server', {
+                    app: {
+                        authenticationType: this.authenticationType,
+                        cacheProvider: this.cacheProvider,
+                        enableHibernateCache: this.enableHibernateCache,
+                        websocket: this.websocket,
+                        databaseType: this.databaseType,
+                        devDatabaseType: this.devDatabaseType,
+                        prodDatabaseType: this.prodDatabaseType,
+                        searchEngine: this.searchEngine,
+                        messageBroker: this.messageBroker,
+                        serviceDiscoveryType: this.serviceDiscoveryType,
+                        buildTool: this.buildTool,
+                        enableSwaggerCodegen: this.enableSwaggerCodegen
+                    }
+                });
             },
 
             configureGlobal() {

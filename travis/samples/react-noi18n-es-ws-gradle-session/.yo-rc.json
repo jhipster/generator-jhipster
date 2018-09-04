@@ -12,7 +12,7 @@
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "mysql",
     "searchEngine": "elasticsearch",
-    "useSass": true,
+    "useSass": false,
     "buildTool": "gradle",
     "enableTranslation": false,
     "messageBroker": false,
@@ -24,7 +24,7 @@
     "jhiPrefix": "myPrefix",
     "travis": true,
     "serviceDiscoveryType": false,
-    "clientPackageManager": "yarn",
+    "clientPackageManager": "npm",
     "clientFramework": "react"
   }
 }

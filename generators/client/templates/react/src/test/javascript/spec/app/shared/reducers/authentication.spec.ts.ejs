@@ -21,10 +21,14 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
+<%_ if (authenticationType === 'jwt') { _%>
+import { Storage } from 'react-jhipster';
+<%_ } _%>
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 
-import authentication, { ACTION_TYPES, getSession<% if (authenticationType !== 'oauth2') { %>, login<% } %> } from 'app/shared/reducers/authentication';
+import authentication, { ACTION_TYPES, getSession<% if (authenticationType !== 'oauth2') { %>, login<% } %>, clearAuthentication, logout<% if (authenticationType === 'jwt') { %>, clearAuthToken<% } %> } from 'app/shared/reducers/authentication';
+<% if (enableTranslation && authenticationType !== 'oauth2') { %>import { ACTION_TYPES as localeActionTypes } from 'app/shared/reducers/locale';<% } %>
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {
@@ -182,7 +186,7 @@ describe('Authentication reducer tests', () => {
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
       const mockStore = configureStore([thunk, promiseMiddleware()]);
-      store = mockStore({});
+      store = mockStore({ authentication: { account: { <%_ if (enableTranslation) { _%> langKey: '<%= nativeLanguage %>' <% } %> } } });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
@@ -198,5 +202,116 @@ describe('Authentication reducer tests', () => {
       ];
       await store.dispatch(getSession()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
+
+    it('dispatches LOGOUT actions', async () => {
+      <%_ if (authenticationType !== 'jwt') { _%>
+      axios.post = sinon.stub().returns(Promise.resolve({}));
+      <%_ } _%>
+      const expectedActions = [
+        <%_ if (authenticationType === 'jwt') { _%>
+        {
+          type: ACTION_TYPES.LOGOUT
+        }
+        <%_ } else { _%>
+        {
+          type: REQUEST(ACTION_TYPES.LOGOUT)
+        },
+        {
+         "payload": {},
+         type: SUCCESS(ACTION_TYPES.LOGOUT),
+        },
+        {
+         type: REQUEST(ACTION_TYPES.GET_SESSION),
+        },
+        {
+         "payload": resolvedObject,
+         type: SUCCESS(ACTION_TYPES.GET_SESSION),
+        }
+        <%_ } _%>
+      ];
+      await store.dispatch(logout());
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+
+    it('dispatches CLEAR_AUTH actions', async () => {
+      const expectedActions = [
+        {
+          message: 'message',
+          type: ACTION_TYPES.ERROR_MESSAGE
+        },
+        {
+          type: ACTION_TYPES.CLEAR_AUTH
+        }
+      ];
+      await store.dispatch(clearAuthentication('message'));
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    it('dispatches LOGIN, GET_SESSION and SET_LOCALE success and request actions', async () => {
+      <%_ if (authenticationType === 'jwt') { _%>
+      const loginResponse = { headers: { authorization: 'auth' } };
+      <%_ } else { _%>
+      const loginResponse = { value: 'any' };
+      <%_ } _%>
+      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.LOGIN)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.LOGIN),
+          payload: loginResponse
+        },
+        {
+          type: REQUEST(ACTION_TYPES.GET_SESSION)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.GET_SESSION),
+          payload: resolvedObject
+        }<% if (enableTranslation) { %>,
+        {
+          type: localeActionTypes.SET_LOCALE,
+          locale: '<%= nativeLanguage %>'
+        }<% } %>
+      ];
+      await store.dispatch(login('test', 'test')).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    <%_ } _%>
   });
+  <%_ if (authenticationType === 'jwt') { _%>
+  describe('clearAuthToken', () => {
+    let store;
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      store = mockStore({ authentication: { account: { langKey: 'en' } } });
+    });
+    it('clears the session token on clearAuthToken', async () => {
+      const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
+      const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
+      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+
+      await store.dispatch(login('test', 'test')).then(() => {
+          expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe('TestToken');
+          expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
+          clearAuthToken()
+          expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
+          expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      });
+    });
+    it('clears the local storage token on clearAuthToken', async () => {
+      const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
+      const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
+      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+
+      await store.dispatch(login('user', 'user', true)).then(() => {
+          expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
+          expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe('TestToken');
+          clearAuthToken()
+          expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);
+          expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
+      });
+    });
+  });
+  <%_ } _%>
 });

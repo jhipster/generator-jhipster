@@ -513,6 +513,16 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * return the momentLocaleId from the given language key (from constants.LANGUAGES)
+     * if no momentLocaleId is defined, return the language key (which is a localeId itself)
+     * @param {string} language - language key
+     */
+    getMomentLocaleId(language) {
+        const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
+        return langObj.momentLocaleId || language;
+    }
+
+    /**
      * get all the languages options supported by JHipster
      */
     getAllSupportedLanguageOptions() {
@@ -1960,34 +1970,35 @@ module.exports = class extends PrivateBase {
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
             const entityTable = this.getTableName(entityName).substring(0, halfLimit);
-            const relationTable = this.getTableName(relationshipName).substring(0, halfLimit - 1);
+            const relationTable = this.getTableName(relationshipName).substring(0, limit - entityTable.length - 1);
             return `${entityTable}_${relationTable}`;
         }
         return joinTableName;
     }
 
+
     /**
-     * get a constraint name for tables in JHipster preferred style.
+     * get a constraint name for tables in JHipster preferred style after applying any length limits required.
      *
      * @param {string} entityName - name of the entity
-     * @param {string} relationshipName - name of the related entity
+     * @param {string} columnOrRelationName - name of the column or related entity
      * @param {string} prodDatabaseType - database type
      * @param {boolean} noSnakeCase - do not convert names to snakecase
+     * @param {string} constraintNamePrefix - constraintName prefix for the constraintName
      */
-    getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+    getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, constraintNamePrefix = '') {
         let constraintName;
         if (noSnakeCase) {
-            constraintName = `fk_${entityName}_${relationshipName}_id`;
+            constraintName = `${constraintNamePrefix}${entityName}_${columnOrRelationName}`;
         } else {
-            constraintName = `fk_${this.getTableName(entityName)}_${this.getTableName(relationshipName)}_id`;
+            constraintName = `${constraintNamePrefix}${this.getTableName(entityName)}_${this.getTableName(columnOrRelationName)}`;
         }
         let limit = 0;
-
-        if (prodDatabaseType === 'oracle' && constraintName.length > 30 && !this.skipCheckLengthOfIdentifier) {
+        if (prodDatabaseType === 'oracle' && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
 
             limit = 28;
-        } else if (prodDatabaseType === 'mysql' && constraintName.length > 64 && !this.skipCheckLengthOfIdentifier) {
+        } else if (prodDatabaseType === 'mysql' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
             this.warning(`The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
 
             limit = 62;
@@ -1995,10 +2006,47 @@ module.exports = class extends PrivateBase {
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
             const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
-            const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 2) : this.getTableName(relationshipName).substring(0, halfLimit - 2);
-            return `${entityTable}_${relationTable}_id`;
+            const otherTable = noSnakeCase ? columnOrRelationName.substring(0, limit - entityTable.length - 2) : this.getTableName(columnOrRelationName).substring(0, limit - entityTable.length - 2);
+            return `${entityTable}_${otherTable}`;
         }
         return constraintName;
+    }
+
+    /**
+     * get a foreign key constraint name for tables in JHipster preferred style.
+     *
+     * @param {string} entityName - name of the entity
+     * @param {string} relationshipName - name of the related entity
+     * @param {string} prodDatabaseType - database type
+     * @param {boolean} noSnakeCase - do not convert names to snakecase
+     */
+    getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+        // for backward compatibility
+        return this.getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase);
+    }
+
+    /**
+     * get a foreign key constraint name for tables in JHipster preferred style.
+     *
+     * @param {string} entityName - name of the entity
+     * @param {string} relationshipName - name of the related entity
+     * @param {string} prodDatabaseType - database type
+     * @param {boolean} noSnakeCase - do not convert names to snakecase
+     */
+    getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+        return `${this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_')}_id`;
+    }
+
+    /**
+     * get a unique constraint name for tables in JHipster preferred style.
+     *
+     * @param {string} entityName - name of the entity
+     * @param {string} columnName - name of the column
+     * @param {string} prodDatabaseType - database type
+     * @param {boolean} noSnakeCase - do not convert names to snakecase
+     */
+    getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
+        return `ux_${this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase)}`;
     }
 
     /**
@@ -2042,29 +2090,32 @@ module.exports = class extends PrivateBase {
      */
     generateKeyStore() {
         const done = this.async();
-        const keyStoreFile = `${SERVER_MAIN_RES_DIR}keystore.jks`;
+        const keyStoreFile = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
         if (this.fs.exists(keyStoreFile)) {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
             done();
         } else {
-            shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
+            shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
             const javaHome = shelljs.env.JAVA_HOME;
             let keytoolPath = '';
             if (javaHome) {
                 keytoolPath = `${javaHome}/bin/`;
             }
+            // Generate the PKCS#12 keystore
             shelljs.exec(
                 `"${keytoolPath}keytool" -genkey -noprompt `
+                + '-storetype PKCS12 '
                 + '-keyalg RSA '
                 + '-alias selfsigned '
                 + `-keystore ${keyStoreFile} `
                 + '-storepass password '
                 + '-keypass password '
                 + '-keysize 2048 '
+                + '-validity 99999 '
                 + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
                 (code) => {
                     if (code !== 0) {
-                        this.error('\nFailed to create a KeyStore with \'keytool\'', code);
+                        this.warning('\nFailed to create a KeyStore with \'keytool\'', code);
                     } else {
                         this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
                     }
@@ -2112,14 +2163,14 @@ module.exports = class extends PrivateBase {
     checkForNewVersion() {
         try {
             const done = this.async();
-            shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version`, { silent: true }, (code, stdout, stderr) => {
+            shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version --fetch-retries 1 --fetch-retry-mintimeout 500 --fetch-retry-maxtimeout 500`, { silent: true }, (code, stdout, stderr) => {
                 if (!stderr && semver.lt(packagejs.version, stdout)) {
                     this.log(`${chalk.yellow(' ______________________________________________________________________________\n\n')
                         + chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`);
-                    if (this.useYarn) {
-                        this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
-                    } else {
+                    if (this.useNpm) {
                         this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+                    } else {
+                        this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
                     }
                     this.log(chalk.yellow(' ______________________________________________________________________________\n'));
                 }
@@ -2181,13 +2232,16 @@ module.exports = class extends PrivateBase {
             name: 'baseName',
             validate: (input) => {
                 if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
-                    return 'Your application name cannot contain special characters or a blank space';
+                    return 'Your base name cannot contain special characters or a blank space';
                 }
-                if (generator.applicationType === 'microservice' && /_/.test(input)) {
-                    return 'Your microservice name cannot contain underscores as this does not meet the URI spec';
+                if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
+                    return 'Your base name cannot contain underscores as this does not meet the URI spec';
+                }
+                if (generator.applicationType === 'uaa' && input === 'auth') {
+                    return 'Your UAA base name cannot be named \'auth\' as it conflicts with the gateway login routes';
                 }
                 if (input === 'application') {
-                    return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
+                    return 'Your base name cannot be named \'application\' as this is a reserved name for Spring Boot';
                 }
                 return true;
             },
