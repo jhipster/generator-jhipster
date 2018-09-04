@@ -2115,7 +2115,7 @@ module.exports = class extends PrivateBase {
                 + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
                 (code) => {
                     if (code !== 0) {
-                        this.error('\nFailed to create a KeyStore with \'keytool\'', code);
+                        this.warning('\nFailed to create a KeyStore with \'keytool\'', code);
                     } else {
                         this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
                     }
