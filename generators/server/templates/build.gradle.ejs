@@ -474,8 +474,10 @@ dependencies {
     testCompile "com.github.differentway:couchbase-testcontainer"
     <%_ } _%>
     testCompile "org.hamcrest:hamcrest-library"
-    <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>
+    <%_ if (databaseType === 'sql') { _%>
     testCompile "com.h2database:h2"
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     liquibaseRuntime "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>

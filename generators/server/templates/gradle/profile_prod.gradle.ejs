@@ -23,7 +23,9 @@ apply plugin: 'com.moowork.node'
 <%_ } _%>
 
 dependencies {
+    <%_ if (databaseType === 'sql') { _%>
     testCompile "com.h2database:h2"
+    <%_ } _%>
 }
 
 def profiles = 'prod'
