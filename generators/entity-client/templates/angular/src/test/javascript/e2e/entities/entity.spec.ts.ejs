@@ -38,6 +38,8 @@ for (let relationship of relationships) {
     }
 } _%>
 
+const expect = chai.expect;
+
 describe('<%= entityClass %> e2e test', () => {
 
     let navBarPage: NavBarPage;
@@ -49,7 +51,7 @@ describe('<%= entityClass %> e2e test', () => {
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
 
-    beforeAll(async () => {
+    before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
         signInPage = await navBarPage.getSignInPage();
@@ -66,10 +68,10 @@ describe('<%= entityClass %> e2e test', () => {
         <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
         <%_ if (enableTranslation) { _%>
         expect(await <%= entityInstance %>ComponentsPage.getTitle())
-            .toMatch(/<%= angularAppName %>.<%= entityTranslationKey %>.home.title/);
+            .to.eq('<%= angularAppName %>.<%= entityTranslationKey %>.home.title');
         <%_ } else { _%>
         expect(await <%= entityInstance %>ComponentsPage.getTitle())
-            .toMatch(/<%= entityClassPluralHumanized %>/);
+            .to.eq('<%= entityClassPluralHumanized %>');
         <%_ } _%>
     });
 
@@ -78,10 +80,10 @@ describe('<%= entityClass %> e2e test', () => {
         <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
         <%_ if (enableTranslation) { _%>
         expect(await <%= entityInstance %>UpdatePage.getPageTitle())
-            .toMatch(/<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel/);
+            .to.eq('<%= angularAppName %>.<%= entityTranslationKey %>.home.createOrEditLabel');
         <%_ } else { _%>
         expect(await <%= entityInstance %>UpdatePage.getPageTitle())
-            .toMatch(/Create or edit a <%= entityClassHumanized %>/);
+            .to.eq('Create or edit a <%= entityClassHumanized %>');
         <%_ } _%>
         await <%= entityInstance %>UpdatePage.cancel();
     });
@@ -97,10 +99,10 @@ describe('<%= entityClass %> e2e test', () => {
         _%>
         <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5');
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('5');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5');
         <%_ } else if (fieldType === 'LocalDate') { _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('2000-12-31');
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('2000-12-31');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('2000-12-31');
         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM');
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toContain('2001-01-01T02:30');
@@ -108,24 +110,24 @@ describe('<%= entityClass %> e2e test', () => {
         const selected<%= fieldNameCapitalized %> = <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input();
         if (await selected<%= fieldNameCapitalized %>.isSelected()) {
             await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).toBeFalsy();
+            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.false;
         } else {
             await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
             expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).toBeTruthy();
         }
         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('<%= fieldName %>');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldName %>');
         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input(absolutePath);
         <%_ } else if (fieldIsEnum) { _%>
         await <%= entityInstance %>UpdatePage.<%=fieldName %>SelectLastOption();
         <%_ } else if (fieldType === 'UUID'){ _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('64c99148-3908-465d-8c4a-e510e3ade974');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('64c99148-3908-465d-8c4a-e510e3ade974');
         <%_ } else { _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toMatch('<%= fieldName %>');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldName %>');
         <%_ } _%>
         <%_ }); _%>
         <%_ relationships.forEach((relationship) => {
@@ -140,10 +142,10 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ } _%>
         <%_ }); _%>
         await <%= entityInstance %>UpdatePage.save();
-        expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).toBeFalsy();
+        expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).to.be.false;
     });<%= closeBlockComment %>
 
-    afterAll(async () => {
+    after(async () => {
         await navBarPage.autoSignOut();
     });
 });
