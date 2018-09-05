@@ -165,8 +165,8 @@ function askForServerSideOpts(meta) {
                     });
                 }
                 opts.push({
-                        value: 'mongodb',
-                        name: 'MongoDB'
+                    value: 'mongodb',
+                    name: 'MongoDB'
                 });
                 if (!reactive) {
                     opts.push({
