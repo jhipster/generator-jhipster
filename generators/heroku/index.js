@@ -75,7 +75,10 @@ module.exports = class extends BaseGenerator {
                 if (this.herokuAppName) {
                     exec('heroku apps:info --json', (err, stdout) => {
                         if (err) {
-                            this.config.set('herokuAppName', null);
+                            this.config.set({
+                                herokuAppName: null,
+                                herokuDeployType: this.herokuDeployType
+                            });
                             this.abort = true;
                             this.log.error(`Could not find app: ${chalk.cyan(this.herokuAppName)}`);
                             this.log.error('Run the generator again to create a new app.');
@@ -87,7 +90,10 @@ module.exports = class extends BaseGenerator {
                             }
                             this.log(`Deploying as existing app: ${chalk.bold(this.herokuAppName)}`);
                             this.herokuAppExists = true;
-                            this.config.set('herokuAppName', this.herokuAppName);
+                            this.config.set({
+                                herokuAppName: this.herokuAppName,
+                                herokuDeployType: this.herokuDeployType
+                            });
                         }
                         done();
                     });
@@ -140,7 +146,6 @@ module.exports = class extends BaseGenerator {
 
                 this.prompt(prompts).then((props) => {
                     this.herokuDeployType = props.herokuDeployType;
-                    this.config.set('herokuDeployType', this.herokuDeployType);
                     done();
                 });
             }
@@ -160,6 +165,13 @@ module.exports = class extends BaseGenerator {
                         this.abort = true;
                     }
                     done();
+                });
+            },
+
+            saveConfig() {
+                this.config.set({
+                    herokuAppName: this.herokuAppName,
+                    herokuDeployType: this.herokuDeployType
                 });
             }
         };
@@ -253,7 +265,10 @@ module.exports = class extends BaseGenerator {
                                         } else {
                                             this.log(stdout.trim());
                                         }
-                                        this.config.set('herokuAppName', this.herokuAppName);
+                                        this.config.set({
+                                            herokuAppName: this.herokuAppName,
+                                            herokuDeployType: this.herokuDeployType
+                                        });
                                         done();
                                     });
                                 } else {
@@ -272,7 +287,10 @@ module.exports = class extends BaseGenerator {
                                                     this.abort = true;
                                                     this.log.error(err);
                                                 } else {
-                                                    this.config.set('herokuAppName', this.herokuAppName);
+                                                    this.config.set({
+                                                        herokuAppName: this.herokuAppName,
+                                                        herokuDeployType: this.herokuDeployType
+                                                    });
                                                 }
                                                 done();
                                             });
