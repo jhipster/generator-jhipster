@@ -446,7 +446,7 @@ module.exports = class extends BaseGenerator {
 
             addHerokuMavenProfile() {
                 if (this.buildTool === 'maven') {
-                    fs.readFile(path.join(__dirname, 'templates', 'pom-profile.xml.ejs'), (err, profile) => {
+                    this.render('pom-profile.xml.ejs', (profile) => {
                         this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
                     });
                 }
