@@ -64,7 +64,7 @@ module.exports = class extends BaseGenerator {
         this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
         this.herokuAppName = this.config.get('herokuAppName');
         this.dynoSize = 'Free';
-        this.herokuDeployType = this.config.get('herokuDeployType') || (this.herokuAppName ? 'jar' : null);
+        this.herokuDeployType = this.config.get('herokuDeployType');
     }
 
     get prompting() {
