@@ -161,8 +161,8 @@ public class CacheConfiguration {
             cm.createCache("oAuth2Authentication", jcacheConfiguration);
             <%_ } _%>
             <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-            cm.createCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
-            cm.createCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+            cm.createCache(<%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            cm.createCache(<%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
                 <%_ if (enableHibernateCache) { _%>
             cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);

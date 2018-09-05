@@ -16,13 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
+package <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>;
 
-import <%=packageName%>.domain.Authority;<% if (databaseType === 'sql') { %>
+import <%=packageName%>.domain.Authority;
 
-import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType === 'mongodb') { %>
-
-import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.data.jpa.repository.JpaRepository;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
+<%_ } _%>
 
 <%_ if (databaseType === 'sql') { _%>
 /**
@@ -39,5 +42,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
  * Spring Data Couchbase repository for the Authority entity.
  */
 <%_ } _%>
-public interface AuthorityRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><Authority, String> {
+public interface AuthorityRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><Authority, String> {
 }

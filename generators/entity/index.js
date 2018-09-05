@@ -143,6 +143,7 @@ module.exports = class extends BaseGenerator {
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
                 context.packageName = configuration.get('packageName');
                 context.applicationType = configuration.get('applicationType');
+                context.reactive = configuration.get('reactive');
                 context.packageFolder = configuration.get('packageFolder');
                 context.authenticationType = configuration.get('authenticationType');
                 context.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
@@ -494,7 +495,7 @@ module.exports = class extends BaseGenerator {
                 context.entityTranslationKey = context.clientRootFolder ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`) : context.entityInstance;
                 context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-                context.reactiveRepositories = context.applicationType === 'reactive' && ['mongodb', 'cassandra', 'couchbase'].includes(context.databaseType);
+                context.reactiveRepositories = context.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(context.databaseType);
 
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;
