@@ -773,6 +773,7 @@ module.exports = class extends Generator {
             } else {
                 this.useYarn = true;
             }
+            this.useNpm = !this.useYarn;
             done();
         });
     }

@@ -159,5 +159,10 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     if (generator.isJhipsterVersionLessThan('5.2.2')) {
         generator.removeFile(`${javaDir}config/ElasticsearchConfiguration.java`);
         generator.removeFile('gradle/liquibase.gradle');
+
+        if (generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice') {
+            generator.removeFolder(`${constants.DOCKER_DIR}realm-config`);
+            generator.removeFile(`${constants.DOCKER_DIR}keycloak.yml`);
+        }
     }
 }

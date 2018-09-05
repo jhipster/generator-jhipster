@@ -48,14 +48,14 @@ if [[ "$TRAVIS_REPO_SLUG" == *"/generator-jhipster" ]]; then
     echo "No need to clone generator-jhipster: use local version"
 
     cd "$TRAVIS_BUILD_DIR"/
-    yarn install
-    yarn global add file:"$TRAVIS_BUILD_DIR"
+    npm install
+    npm install -g "$TRAVIS_BUILD_DIR"
     if [[ "$JHIPSTER" == "" || "$JHIPSTER" == "ngx-default" ]]; then
-        yarn test
+        npm test
     fi
 
 elif [[ "$JHIPSTER_BRANCH" == "release" ]]; then
-    yarn global add generator-jhipster
+    npm install -g generator-jhipster
 
 else
     git clone "$JHIPSTER_REPO" generator-jhipster
@@ -68,8 +68,8 @@ else
     fi
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
-    yarn install
-    yarn global add file:"$HOME"/generator-jhipster
+    npm install
+    npm install -g "$HOME"/generator-jhipster
 fi
 
 #-------------------------------------------------------------------------------

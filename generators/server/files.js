@@ -176,7 +176,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2',
+            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice',
             path: DOCKER_DIR,
             templates: [
                 'keycloak.yml',
