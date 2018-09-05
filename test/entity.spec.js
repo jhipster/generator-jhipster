@@ -31,6 +31,7 @@ describe('JHipster generator for entity', () => {
 
         it('does creates search files', () => {
             assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`);
+            assert.file(expectedFiles.gatling);
         });
     });
 });
@@ -57,6 +58,7 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2);
+            assert.file(expectedFiles.gatling);
         });
     });
 
@@ -81,6 +83,7 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2);
+            assert.file(expectedFiles.gatling);
         });
     });
 
@@ -105,6 +108,7 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2);
+            assert.file(expectedFiles.gatling);
         });
     });
 
@@ -129,6 +133,7 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2);
+            assert.file(expectedFiles.gatling);
             assert.file([
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
@@ -157,6 +162,7 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2);
+            assert.file(expectedFiles.gatling);
             assert.file([
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`,
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
@@ -186,6 +192,7 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2);
+            assert.file(expectedFiles.gatling);
             assert.noFile([`${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`, `${CLIENT_MAIN_SRC_DIR}i18n/fr/foo.json`]);
         });
     });
@@ -212,6 +219,7 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2WithSuffix);
+            assert.file(expectedFiles.gatling);
             assert.fileContent('.jhipster/Foo.json', 'angularJSSuffix');
         });
     });
@@ -265,6 +273,7 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2WithRootFolder);
+            assert.file(expectedFiles.gatling);
             assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'test-root' });
         });
     });
@@ -292,6 +301,7 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2WithRootFolderAndSuffix);
+            assert.file(expectedFiles.gatling);
             assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'test-root' });
         });
     });
@@ -317,6 +327,8 @@ describe('JHipster generator entity for angularX', () => {
 
         it('sets expected custom clientRootFolder', () => {
             assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'test-root' });
+            assert.file(expectedFiles.server);
+            assert.noFile(expectedFiles.clientNg2WithRootFolder);
         });
     });
 
@@ -341,9 +353,67 @@ describe('JHipster generator entity for angularX', () => {
         it('sets expected default clientRootFolder', () => {
             assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'sampleMicroservice' });
         });
+        it('generates expected files', () => {
+            assert.file(expectedFiles.server);
+            assert.noFile(expectedFiles.gatling);
+            assert.noFile(expectedFiles.clientNg2WithRootFolder);
+        });
     });
 
-    describe('JHipster generator entity with all languages and client-root-folder', () => {
+    describe('with default gateway entity from microservice', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, '../test/templates/default-gateway'), dir);
+                })
+                .withPrompts({
+                    useMicroserviceJson: true,
+                    microservicePath: '../'
+                })
+                .withArguments(['bar'])
+                .on('end', done);
+        });
+
+        it('sets expected default clientRootFolder', () => {
+            assert.jsonFileContent('.jhipster/Bar.json', { clientRootFolder: 'sampleMicroservice' });
+        });
+        it('generates expected files', () => {
+            assert.file(`${CLIENT_MAIN_SRC_DIR}i18n/en/sampleMicroserviceBar.json`);
+            assert.file(expectedFiles.clientNg2GatewayMicroserviceEntity);
+            assert.noFile(expectedFiles.gatling);
+            assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.service.ts`, 'samplemicroservice');
+            assert.noFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/BarResource.java`);
+        });
+    });
+
+    describe('with default gateway entity from microservice with custom client-root-folder', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, '../test/templates/default-gateway'), dir);
+                })
+                .withArguments(['foo'])
+                .withPrompts({
+                    useMicroserviceJson: true,
+                    microservicePath: '../'
+                })
+                .on('end', done);
+        });
+
+        it('sets expected custom clientRootFolder', () => {
+            assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'test-root' });
+        });
+        it('generates expected files', () => {
+            assert.file(`${CLIENT_MAIN_SRC_DIR}i18n/en/testRootFoo.json`);
+            assert.file(expectedFiles.clientNg2WithRootFolder);
+            assert.noFile(expectedFiles.gatling);
+            assert.noFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`);
+        });
+    });
+
+    describe('with all languages and client-root-folder', () => {
         describe('no dto, no service, no pagination', () => {
             beforeEach(done => {
                 helpers
@@ -365,8 +435,9 @@ describe('JHipster generator entity for angularX', () => {
 
             it('creates expected languages files', () => {
                 constants.LANGUAGES.forEach(language => {
-                    assert.file([`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/testRootFoo.json`]);
+                    assert.file(`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/testRootFoo.json`);
                 });
+                assert.file(expectedFiles.clientNg2WithRootFolder);
             });
         });
     });

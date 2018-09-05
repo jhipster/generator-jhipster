@@ -190,14 +190,24 @@ module.exports = class extends PrivateBase {
      */
     addEntityToWebpack(microserviceName, clientFramework) {
         const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.dev.js`;
-        jhipsterUtils.rewriteFile(
-            {
-                file: webpackDevPath,
-                needle: 'jhipster-needle-add-entity-to-webpack',
-                splicable: [`'/${microserviceName.toLowerCase()}',`]
-            },
-            this
-        );
+        try {
+            jhipsterUtils.rewriteFile(
+                {
+                    file: webpackDevPath,
+                    needle: 'jhipster-needle-add-entity-to-webpack',
+                    splicable: [`'/${microserviceName.toLowerCase()}',`]
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                `${chalk.yellow('\nUnable to find ') +
+                    webpackDevPath +
+                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
+                    microserviceName} ${chalk.yellow('not added to menu.\n')}`
+            );
+            this.debug('Error:', e);
+        }
     }
 
     /**
