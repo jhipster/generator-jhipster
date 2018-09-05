@@ -105,7 +105,7 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('2000-12-31');
         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM');
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).toContain('2001-01-01T02:30');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30');
         <%_ } else if (fieldType === 'Boolean') { _%>
         const selected<%= fieldNameCapitalized %> = <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input();
         if (await selected<%= fieldNameCapitalized %>.isSelected()) {
@@ -113,7 +113,7 @@ describe('<%= entityClass %> e2e test', () => {
             expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.false;
         } else {
             await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).toBeTruthy();
+            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.true;
         }
         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
