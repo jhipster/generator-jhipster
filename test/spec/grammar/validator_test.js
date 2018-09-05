@@ -727,7 +727,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             parse(`
             application {
               config {
-                languages [a,b, c]
+                languages [ab,bc, cd, zh-cn]
               }
             }`)
           ).to.not.throw();
@@ -862,7 +862,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   nativeLanguage FOO
                 }
               }`)
-            ).to.throw('The nativeLanguage property name must match: /^[a-z]+$/');
+            ).to.throw('The nativeLanguage property name must match: /^[a-z]+(-[A-Za-z0-9]+)*$/');
           });
         });
 
