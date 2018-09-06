@@ -109,7 +109,7 @@
     }
 
     clear() {
-        this.page = 0;
+        this.page = 1;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.currentSearch = '';
         <%_ } _%>
@@ -126,7 +126,7 @@
         if (!query) {
             return this.clear();
         }
-        this.page = 0;
+        this.page = 1;
         this.currentSearch = query;
         this.router.navigate(['/<%= entityUrl %>', {
             search: this.currentSearch,
