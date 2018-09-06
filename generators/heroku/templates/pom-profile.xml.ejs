@@ -1,6 +1,5 @@
             <build>
                 <plugins>
-                    <%_ if (herokuDeployType == 'git' && (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb')) { _%>
                     <plugin>
                         <groupId>org.liquibase</groupId>
                         <artifactId>liquibase-maven-plugin</artifactId>
@@ -18,7 +17,6 @@
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                     </plugin>
-                    <%_ } _%>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
                         <version>${maven-clean-plugin.version}</version>
