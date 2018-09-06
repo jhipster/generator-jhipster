@@ -37,14 +37,6 @@ export default class <%= entityClass %>ComponentsPage {
         return this.deleteButtons.count();
     }
 
-    async clickOnLastDeleteButton() {
-        await this.deleteButtons.last().click();
-    }
-
-    async countDeleteButtons() {
-        return this.deleteButtons.count();
-    }
-
     getTitle() {
         return this.title;
     }
