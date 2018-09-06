@@ -154,14 +154,14 @@ describe('<%= entityClass %> e2e test', () => {
         <%= entityInstance %>DeleteDialog = new <%= entityClass %>DeleteDialog();
         <%_ if (enableTranslation) { _%>
         expect(await <%= entityInstance %>DeleteDialog.getDialogTitle())
-            .toMatch(/<%= i18nKeyPrefix %>.delete.question/);
+            .to.eq('<%= i18nKeyPrefix %>.delete.question');
         <%_ } else { _%>
         expect(await <%= entityInstance %>DeleteDialog.getDialogTitle())
-            .toMatch(/Are you sure you want to delete this <%= entityClassHumanized %>?/);
+            .to.eq('Are you sure you want to delete this <%= entityClassHumanized %>?');
         <%_ } _%>
         await <%= entityInstance %>DeleteDialog.clickOnConfirmButton();
 
-        expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).toBe(nbButtonsBeforeDelete - 1);
+        expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });<%= closeBlockComment %>
 
         await navBarPage.autoSignOut();
