@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const fs = require('fs');
-const path = require('path');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
 const _ = require('lodash');
@@ -264,11 +263,11 @@ module.exports = class extends BaseGenerator {
                                             this.log.error(err);
                                         } else {
                                             this.log(stdout.trim());
+                                            this.config.set({
+                                                herokuAppName: this.herokuAppName,
+                                                herokuDeployType: this.herokuDeployType
+                                            });
                                         }
-                                        this.config.set({
-                                            herokuAppName: this.herokuAppName,
-                                            herokuDeployType: this.herokuDeployType
-                                        });
                                         done();
                                     });
                                 } else {
@@ -446,7 +445,7 @@ module.exports = class extends BaseGenerator {
 
             addHerokuMavenProfile() {
                 if (this.buildTool === 'maven') {
-                    fs.readFile(path.join(__dirname, 'templates', 'pom-profile.xml.ejs'), (err, profile) => {
+                    this.render('pom-profile.xml.ejs', (profile) => {
                         this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
                     });
                 }
