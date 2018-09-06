@@ -793,7 +793,10 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
         assertThat(testUser4.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
         testUser4.get().setActivated(true);
-        userRepository.save(testUser4.get())<% if (reactive) { %>.block()<% } %>;
+        userService.updateUser((new UserDTO(testUser4.get())));
+        <%_ if (reactive) { _%>
+        userRepository.save(testUser4.get()).block();
+        <%_ } _%>;
 
         // Register 4th (already activated) user
         <%_ if (!reactive) { _%>
