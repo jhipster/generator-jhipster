@@ -23,7 +23,9 @@ apply plugin: 'com.moowork.node'
 <%_ } _%>
 
 dependencies {
+    <%_ if (databaseType === 'sql') { _%>
     testCompile "com.h2database:h2"
+    <%_ } _%>
 }
 
 def profiles = 'prod'
@@ -50,6 +52,11 @@ task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%
 
 war {
     webAppDirName = '<%= CLIENT_DIST_DIR %>'
+}
+
+task copyIntoStatic (type: Copy) {
+    from '<%= CLIENT_DIST_DIR %>'
+    into 'build/resources/main/static'
 }
 <%_ } _%>
 
@@ -86,4 +93,6 @@ gitProperties {
 <%_ if (!skipClient) { _%>
 test.dependsOn webpack_test
 processResources.dependsOn webpack
+copyIntoStatic.dependsOn processResources
+bootJar.dependsOn copyIntoStatic
 <%_ } _%>

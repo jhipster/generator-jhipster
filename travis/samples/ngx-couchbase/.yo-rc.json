@@ -11,7 +11,6 @@
       "databaseType": "couchbase",
       "devDatabaseType": "couchbase",
       "prodDatabaseType": "couchbase",
-      "reactive": true,
       "searchEngine": false,
       "messageBroker": false,
       "serviceDiscoveryType": false,

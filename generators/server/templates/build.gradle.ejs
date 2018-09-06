@@ -231,7 +231,9 @@ repositories {
 dependencies {
     // Use ", version: jhipster_dependencies_version, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
-    compile group: "io.github.jhipster", name: "jhipster-framework"
+    compile group: "io.github.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
+        exclude group: 'org.springframework', module: 'spring-webmvc'
+    }<% } %>
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
@@ -244,7 +246,6 @@ dependencies {
     compile "io.dropwizard.metrics:metrics-servlet"
     compile "io.dropwizard.metrics:metrics-servlets"
     compile "net.logstash.logback:logstash-logback-encoder"
-    compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     <%_ if (databaseType === 'sql') { _%>
@@ -336,7 +337,7 @@ dependencies {
     // end of Spring Data Jest dependencies
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
-    compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (applicationType === 'reactive') { %>-reactive<% } %>"
+    compile "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (reactive) { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     compile "org.springframework.cloud:spring-cloud-stream"
@@ -344,18 +345,15 @@ dependencies {
     compile "org.springframework.kafka:spring-kafka"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-security"
-    compile ("org.springframework.boot:spring-boot-starter-web") {
+    compile ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
         exclude module: 'spring-boot-starter-tomcat'
     }
-    <%_ if (applicationType === 'reactive') { _%>
-    compile "org.springframework.boot:spring-boot-starter-webflux"
-    <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-undertow"
     <%_ if (websocket === 'spring-websocket') { _%>
     compile "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    compile "org.zalando:problem-spring-web"
+    compile "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>:0.24.0-RC.0"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
@@ -416,10 +414,12 @@ dependencies {
     compile "com.couchbase.client:java-client"
     compile "com.couchbase.client:encryption"
     <%_ } _%>
+    <%_ if (!reactive) { _%>
     compile ("io.springfox:springfox-swagger2") {
         exclude module: 'mapstruct'
     }
     compile "io.springfox:springfox-bean-validators"
+    <%_ } _%>
     <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
     compile "mysql:mysql-connector-java"
     liquibaseRuntime "mysql:mysql-connector-java"
@@ -474,8 +474,11 @@ dependencies {
     testCompile "com.github.differentway:couchbase-testcontainer"
     <%_ } _%>
     testCompile "org.hamcrest:hamcrest-library"
-    <%_ if (devDatabaseType !== 'h2Disk' && devDatabaseType !== 'h2Memory') { _%>
+    <%_ if (databaseType === 'sql') { _%>
     testCompile "com.h2database:h2"
+    liquibaseRuntime "com.h2database:h2"
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     liquibaseRuntime "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>

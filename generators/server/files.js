@@ -367,25 +367,45 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}security/jwt/TokenProvider.java`
                 },
                 {
-                    file: 'package/security/jwt/JWTConfigurer.java',
-                    renameTo: generator => `${generator.javaDir}security/jwt/JWTConfigurer.java`
-                },
-                {
                     file: 'package/security/jwt/JWTFilter.java',
                     renameTo: generator => `${generator.javaDir}security/jwt/JWTFilter.java`
                 }
             ]
         },
         {
-            condition: generator => generator.applicationType === 'microservice'
+            condition: generator => generator.authenticationType === 'jwt' && !generator.reactive,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/jwt/JWTConfigurer.java',
+                    renameTo: generator => `${generator.javaDir}security/jwt/JWTConfigurer.java`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.reactive && (generator.applicationType === 'microservice'
                 || (generator.applicationType !== 'uaa'
                     && ((shouldSkipUserManagement(generator) && generator.authenticationType === 'jwt')
                         || !shouldSkipUserManagement(generator)
-                        || generator.authenticationType === 'uaa')),
+                        || generator.authenticationType === 'uaa'))),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
                     file: 'package/config/SecurityConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.reactive && (generator.applicationType === 'microservice'
+                || (generator.applicationType !== 'uaa'
+                    && ((shouldSkipUserManagement(generator) && generator.authenticationType === 'jwt')
+                        || !shouldSkipUserManagement(generator)
+                        || generator.authenticationType === 'uaa'))),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/ReactiveSecurityConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java`
                 }
             ]
@@ -549,7 +569,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
+            condition: generator => !generator.reactive && !(generator.applicationType !== 'microservice' && !(generator.applicationType === 'gateway' && (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')))
                 && generator.applicationType === 'microservice' && generator.authenticationType === 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -562,7 +582,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'microservice' && generator.authenticationType === 'jwt',
+            condition: generator => !generator.reactive && generator.applicationType === 'microservice' && generator.authenticationType === 'jwt',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/FeignConfiguration.java', renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java` },
@@ -654,7 +674,16 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(generator.cacheProvider),
+            // TODO: remove when supported by spring-data
+            condition: generator => generator.reactive,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/config/ReactivePageableHandlerMethodArgumentResolver.java', renameTo: generator => `${generator.javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java` },
+                { file: 'package/config/ReactiveSortHandlerMethodArgumentResolver.java', renameTo: generator => `${generator.javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java` },
+            ]
+        },
+        {
+            condition: generator => ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(generator.cacheProvider) || generator.applicationType === 'gateway',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/CacheConfiguration.java', renameTo: generator => `${generator.javaDir}config/CacheConfiguration.java` }
@@ -847,8 +876,6 @@ const serverFiles = {
         {
             path: SERVER_TEST_SRC_DIR,
             templates: [
-                { file: 'package/config/WebConfigurerTest.java', renameTo: generator => `${generator.testDir}config/WebConfigurerTest.java` },
-                { file: 'package/config/WebConfigurerTestController.java', renameTo: generator => `${generator.testDir}config/WebConfigurerTestController.java` },
                 { file: 'package/web/rest/TestUtil.java', renameTo: generator => `${generator.testDir}web/rest/TestUtil.java` },
                 { file: 'package/web/rest/LogsResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/LogsResourceIntTest.java` },
                 { file: 'package/web/rest/errors/ExceptionTranslatorIntTest.java', renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorIntTest.java` },
@@ -861,6 +888,15 @@ const serverFiles = {
             templates: [
                 'config/application.yml',
                 'logback.xml'
+            ]
+        },
+        {
+            // TODO : add these tests to reactive
+            condition: generator => !generator.reactive,
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                { file: 'package/config/WebConfigurerTest.java', renameTo: generator => `${generator.testDir}config/WebConfigurerTest.java` },
+                { file: 'package/config/WebConfigurerTestController.java', renameTo: generator => `${generator.testDir}config/WebConfigurerTestController.java` },
             ]
         },
         {
@@ -1038,7 +1074,7 @@ const serverFiles = {
             templates: [
                 { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
                 { file: 'package/repository/CustomAuditEventRepository.java', renameTo: generator => `${generator.javaDir}repository/CustomAuditEventRepository.java` },
-                { file: 'package/repository/AuthorityRepository.java', renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java` },
+                { file: 'package/repository/AuthorityRepository.java', renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}AuthorityRepository.java` },
                 { file: 'package/repository/PersistenceAuditEventRepository.java', renameTo: generator => `${generator.javaDir}repository/PersistenceAuditEventRepository.java` },
                 { file: 'package/service/AuditEventService.java', renameTo: generator => `${generator.javaDir}service/AuditEventService.java` },
                 { file: 'package/web/rest/AuditResource.java', renameTo: generator => `${generator.javaDir}web/rest/AuditResource.java` },
@@ -1050,7 +1086,7 @@ const serverFiles = {
             templates: [
                 /* User management java domain files */
                 { file: 'package/domain/User.java', renameTo: generator => `${generator.javaDir}domain/User.java` },
-                { file: 'package/repository/UserRepository.java', renameTo: generator => `${generator.javaDir}repository/UserRepository.java` },
+                { file: 'package/repository/UserRepository.java', renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}UserRepository.java` },
 
                 /* User management java service files */
                 { file: 'package/service/UserService.java', renameTo: generator => `${generator.javaDir}service/UserService.java` },
@@ -1087,9 +1123,17 @@ const serverFiles = {
             condition: generator => !generator.skipUserManagement && generator.authenticationType === 'jwt',
             path: SERVER_TEST_SRC_DIR,
             templates: [
-                { file: 'package/security/jwt/JWTFilterTest.java', renameTo: generator => `${generator.testDir}security/jwt/JWTFilterTest.java` },
                 { file: 'package/security/jwt/TokenProviderTest.java', renameTo: generator => `${generator.testDir}security/jwt/TokenProviderTest.java` },
+                { file: 'package/security/jwt/JWTFilterTest.java', renameTo: generator => `${generator.testDir}security/jwt/JWTFilterTest.java` },
                 { file: 'package/web/rest/UserJWTControllerIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserJWTControllerIntTest.java` },
+            ]
+        },
+        {
+            // TODO : add tests for reactive
+            condition: generator => !generator.reactive && !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                { file: 'package/web/rest/AuditResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/AuditResourceIntTest.java` },
             ]
         },
         {
@@ -1097,7 +1141,6 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 { file: 'package/repository/CustomAuditEventRepositoryIntTest.java', renameTo: generator => `${generator.testDir}repository/CustomAuditEventRepositoryIntTest.java` },
-                { file: 'package/web/rest/AuditResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/AuditResourceIntTest.java` },
             ]
         },
         {
@@ -1124,9 +1167,9 @@ const serverFiles = {
             templates: [
                 { file: 'package/service/MailServiceIntTest.java', renameTo: generator => `${generator.testDir}service/MailServiceIntTest.java` },
                 { file: 'package/service/UserServiceIntTest.java', renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java` },
-                { file: 'package/web/rest/UserResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserResourceIntTest.java` },
-                { file: 'package/web/rest/AccountResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/AccountResourceIntTest.java` },
                 { file: 'package/security/SecurityUtilsUnitTest.java', renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java` },
+                { file: 'package/web/rest/AccountResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/AccountResourceIntTest.java` },
+                { file: 'package/web/rest/UserResourceIntTest.java', renameTo: generator => `${generator.testDir}web/rest/UserResourceIntTest.java` },
             ]
         }
     ]
