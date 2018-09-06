@@ -264,11 +264,11 @@ module.exports = class extends BaseGenerator {
                                             this.log.error(err);
                                         } else {
                                             this.log(stdout.trim());
+                                            this.config.set({
+                                                herokuAppName: this.herokuAppName,
+                                                herokuDeployType: this.herokuDeployType
+                                            });
                                         }
-                                        this.config.set({
-                                            herokuAppName: this.herokuAppName,
-                                            herokuDeployType: this.herokuDeployType
-                                        });
                                         done();
                                     });
                                 } else {
