@@ -132,12 +132,12 @@ module.exports = class extends BaseGenerator {
                         message: 'Which type of deployment do you want ?',
                         choices: [
                             {
-                                value: 'jar',
-                                name: 'JAR (compile locally)'
-                            },
-                            {
                                 value: 'git',
                                 name: 'Git (compile on Heroku)'
+                            },
+                            {
+                                value: 'jar',
+                                name: 'JAR (compile locally)'
                             }
                         ],
                         default: 0
@@ -525,12 +525,12 @@ module.exports = class extends BaseGenerator {
                                         exec(`heroku buildpacks:add -i 1 heroku/nodejs --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                                             if (err) {
                                                 const line = stderr.toString().trimRight();
-                                                if (line.trim().length !== 0) this.log(line);
+                                                if (line.trim().length !== 0 && line.indexOf('is already set') < 0) this.log(line);
                                             }
                                             exec(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                                                 if (err) {
                                                     const line = stderr.toString().trimRight();
-                                                    if (line.trim().length !== 0) this.log(line);
+                                                    if (line.trim().length !== 0 && line.indexOf('is already set') < 0) this.log(line);
                                                 }
                                                 this.log(chalk.bold('\nDeploying application'));
                                                 const child = exec('git push heroku HEAD:master', { maxBuffer: 1024 * 10000 }, (err) => {
