@@ -1,2 +1,0 @@
-hello vuejs!
-It's dummy.txt
