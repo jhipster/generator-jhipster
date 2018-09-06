@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const fs = require('fs');
-const path = require('path');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
 const _ = require('lodash');
@@ -64,7 +63,7 @@ module.exports = class extends BaseGenerator {
         this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
         this.herokuAppName = this.config.get('herokuAppName');
         this.dynoSize = 'Free';
-        this.herokuDeployType = this.config.get('herokuDeployType') || (this.herokuAppName ? 'jar' : null);
+        this.herokuDeployType = this.config.get('herokuDeployType');
     }
 
     get prompting() {
@@ -75,7 +74,10 @@ module.exports = class extends BaseGenerator {
                 if (this.herokuAppName) {
                     exec('heroku apps:info --json', (err, stdout) => {
                         if (err) {
-                            this.config.set('herokuAppName', null);
+                            this.config.set({
+                                herokuAppName: null,
+                                herokuDeployType: this.herokuDeployType
+                            });
                             this.abort = true;
                             this.log.error(`Could not find app: ${chalk.cyan(this.herokuAppName)}`);
                             this.log.error('Run the generator again to create a new app.');
@@ -87,7 +89,10 @@ module.exports = class extends BaseGenerator {
                             }
                             this.log(`Deploying as existing app: ${chalk.bold(this.herokuAppName)}`);
                             this.herokuAppExists = true;
-                            this.config.set('herokuAppName', this.herokuAppName);
+                            this.config.set({
+                                herokuAppName: this.herokuAppName,
+                                herokuDeployType: this.herokuDeployType
+                            });
                         }
                         done();
                     });
@@ -140,7 +145,6 @@ module.exports = class extends BaseGenerator {
 
                 this.prompt(prompts).then((props) => {
                     this.herokuDeployType = props.herokuDeployType;
-                    this.config.set('herokuDeployType', this.herokuDeployType);
                     done();
                 });
             }
@@ -160,6 +164,13 @@ module.exports = class extends BaseGenerator {
                         this.abort = true;
                     }
                     done();
+                });
+            },
+
+            saveConfig() {
+                this.config.set({
+                    herokuAppName: this.herokuAppName,
+                    herokuDeployType: this.herokuDeployType
                 });
             }
         };
@@ -252,8 +263,11 @@ module.exports = class extends BaseGenerator {
                                             this.log.error(err);
                                         } else {
                                             this.log(stdout.trim());
+                                            this.config.set({
+                                                herokuAppName: this.herokuAppName,
+                                                herokuDeployType: this.herokuDeployType
+                                            });
                                         }
-                                        this.config.set('herokuAppName', this.herokuAppName);
                                         done();
                                     });
                                 } else {
@@ -272,7 +286,10 @@ module.exports = class extends BaseGenerator {
                                                     this.abort = true;
                                                     this.log.error(err);
                                                 } else {
-                                                    this.config.set('herokuAppName', this.herokuAppName);
+                                                    this.config.set({
+                                                        herokuAppName: this.herokuAppName,
+                                                        herokuDeployType: this.herokuDeployType
+                                                    });
                                                 }
                                                 done();
                                             });
@@ -428,7 +445,7 @@ module.exports = class extends BaseGenerator {
 
             addHerokuMavenProfile() {
                 if (this.buildTool === 'maven') {
-                    fs.readFile(path.join(__dirname, 'templates', 'pom-profile.xml.ejs'), (err, profile) => {
+                    this.render('pom-profile.xml.ejs', (profile) => {
                         this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
                     });
                 }
