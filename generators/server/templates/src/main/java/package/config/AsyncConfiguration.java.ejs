@@ -35,12 +35,10 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-
-
 @Configuration
 @EnableAsync
 @EnableScheduling
-public class AsyncConfiguration implements AsyncConfigurer,SchedulingConfigurer {
+public class AsyncConfiguration implements AsyncConfigurer, SchedulingConfigurer {
 
     private final Logger log = LoggerFactory.getLogger(AsyncConfiguration.class);
 
