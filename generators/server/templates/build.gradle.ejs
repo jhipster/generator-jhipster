@@ -156,7 +156,7 @@ task cucumberTestReport(type: TestReport) {
 <%_ } _%>
 apply from: 'gradle/docker.gradle'
 apply from: 'gradle/sonar.gradle'
-<%_ if (enableSwaggerCodegen) {
+<%_ if (enableSwaggerCodegen) { _%>
 apply from: 'gradle/swagger.gradle'
 <%_ } _%>
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
