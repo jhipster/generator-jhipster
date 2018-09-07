@@ -98,8 +98,8 @@ describe('account', () => {
         <%_ } else { _%>
         const expect2 = 'You are logged in as user "admin"';
         <%_ } _%>
-        const value2 = element(by.id('home-logged-message'));
-        expect(await value2.<%- elementGetter %>).to.eq(expect2);
+        const value2 = await element(by.id('home-logged-message')).<%- elementGetter %>;
+        expect(value2).to.eq(expect2);
 
         <%_ if (authenticationType === 'oauth2') { _%>
         await navBarPage.autoSignOut();
