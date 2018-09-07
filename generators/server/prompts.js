@@ -182,15 +182,6 @@ function askForServerSideOpts(meta) {
                             name: 'No database'
                         });
                     }
-                    if (
-                        (response.authenticationType !== 'oauth2' && applicationType === 'microservice')
-                        || (response.authenticationType === 'uaa' && applicationType === 'gateway')
-                    ) {
-                        opts.push({
-                            value: 'no',
-                            name: 'No database'
-                        });
-                    }
                     if (response.authenticationType !== 'oauth2') {
                         opts.push({
                             value: 'cassandra',
