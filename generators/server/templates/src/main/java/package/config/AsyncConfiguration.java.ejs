@@ -65,7 +65,7 @@ public class AsyncConfiguration implements AsyncConfigurer, SchedulingConfigurer
         return new SimpleAsyncUncaughtExceptionHandler();
     }
     
-        @Override
+    @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.setScheduler(taskScheduledExecutor());
     }
@@ -73,6 +73,5 @@ public class AsyncConfiguration implements AsyncConfigurer, SchedulingConfigurer
     @Bean(destroyMethod="shutdown")
     public Executor taskScheduledExecutor() {
         return Executors.newScheduledThreadPool(jHipsterProperties.getAsync().getCorePoolSize());
-
     }
 }
