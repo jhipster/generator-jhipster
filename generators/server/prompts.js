@@ -182,8 +182,6 @@ function askForServerSideOpts(meta) {
                             name: 'No database'
                         });
                     }
-                    }
-                    }
                     if (response.authenticationType !== 'oauth2') {
                         opts.push({
                             value: 'cassandra',
