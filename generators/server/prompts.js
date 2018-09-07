@@ -183,6 +183,7 @@ function askForServerSideOpts(meta) {
                         });
                     }
                     }
+                    }
                     if (response.authenticationType !== 'oauth2') {
                         opts.push({
                             value: 'cassandra',
