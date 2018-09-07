@@ -71,7 +71,7 @@ public class AsyncConfiguration implements AsyncConfigurer, SchedulingConfigurer
     }
 
     @Bean(destroyMethod="shutdown")
-    public Executor taskScheduledExecutor() {
+    public Executor scheduledTaskExecutor() {
         return Executors.newScheduledThreadPool(jHipsterProperties.getAsync().getCorePoolSize());
     }
 }
