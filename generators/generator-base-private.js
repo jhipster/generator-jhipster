@@ -924,7 +924,7 @@ module.exports = class extends Generator {
                         fieldName = `${relationshipFieldName}${otherEntityFieldCapitalized}`;
                         variablesWithTypes.push(`${fieldName}?: ${fieldType}`);
                     }
-                    fieldType = 'number';
+                    fieldType = tsKeyType; // review: added for mongodb-with-relations
                     fieldName = `${relationshipFieldName}Id`;
                 } else {
                     fieldType = tsKeyType;
