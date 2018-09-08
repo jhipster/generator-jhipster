@@ -109,7 +109,12 @@ const LANGUAGES = [
     {
         name: 'Belorussian', dispName: 'Беларускі', value: 'by', momentLocaleId: 'be-by'
     },
-    { name: 'Catalan', dispName: 'Català', value: 'ca' },
+    {
+        name: 'Bengali', dispName: 'বাংলা', value: 'bn', momentLocaleId: 'bn-bd'
+    },
+    { 
+        name: 'Catalan', dispName: 'Català', value: 'ca' 
+    },
     {
         name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn', localeId: 'zh-Hans'
     },
