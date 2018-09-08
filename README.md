@@ -1,15 +1,13 @@
 
 [![Logo][jhipster-image]][jhipster-url]
 
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url-main] [![Dependency Status][daviddm-image]][daviddm-url]
+
 Greetings, Java Hipster!
 
 Full documentation and information is available on our website at [https://www.jhipster.tech/][jhipster-url]
 
 Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here](issue-template). For feature requests and queries you can use [this template][feature-template].
-
-[![NPM version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url-main]
-[![Dependency Status][daviddm-image]][daviddm-url]
 
 ## Sponsors
 
@@ -37,14 +35,13 @@ Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hip
 | ngx-maven     | [![Build Status][image-ngx-maven]][travis-url]           | Builds for ngx Maven           |
 | ngx-gradle    | [![Build Status][image-ngx-gradle]][travis-url]          | Builds for ngx Gradle          |
 | microservices | [![Build Status][image-microservices]][travis-url]       | Builds for Microservices       |
+| ms-gradle     | [![Build Status][image-ms-gradle]][travis-url]           | Builds for MS+Gradle           |
 | react         | [![Build Status][image-react]][travis-url]               | Builds for React               |
+| node latest   | [![Build Status][image-node-latest]][travis-url]         | Builds for Node Latest         |
 
 ## Analysis of the sample JHipster project
 
-[![sonar-quality-gate][sonar-quality-gate]][sonar-url]
-[![sonar-coverage][sonar-coverage]][sonar-url]
-[![sonar-bugs][sonar-bugs]][sonar-url]
-[![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
+[![sonar-quality-gate][sonar-quality-gate]][sonar-url] [![sonar-coverage][sonar-coverage]][sonar-url] [![sonar-bugs][sonar-bugs]][sonar-url] [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
 
 
 [travis-url]: https://travis-ci.org/hipster-labs/jhipster-travis-build/branches
@@ -52,7 +49,9 @@ Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hip
 [image-ngx-maven]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=ngx-maven
 [image-ngx-gradle]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=ngx-gradle
 [image-microservices]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=microservices
+[image-ms-gradle]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=microservices-gradle
 [image-react]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=react
+[image-node-latest]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=node-latest
 
 [sonar-url]: https://sonarcloud.io/dashboard?id=io.github.jhipster.sample%3Ajhipster-sample-application
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=alert_status
