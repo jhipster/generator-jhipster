@@ -29,6 +29,12 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
 
         this.configOptions = {};
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side application generation',
@@ -153,6 +159,12 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
+            validateFromCLi() {
+                if (!this.options['from-cli']) {
+                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                }
+            },
+
             displayLogo() {
                 this.printJHipsterLogo();
             },

@@ -30,6 +30,12 @@ class ImporterGenerator extends BaseGenerator {
         super(args, opts);
         this.argument('jdlFiles', { type: Array, required: true });
         this.jdlFiles = this.options.jdlFiles;
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
 
         // This adds support for a `--db` flag
         this.option('db', {
@@ -128,6 +134,12 @@ module.exports = class extends ImporterGenerator {
 
     get initializing() {
         return {
+            validateFromCLi() {
+                if (!this.options['from-cli']) {
+                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                }
+            },
+
             validate() {
                 if (this.jdlFiles) {
                     this.jdlFiles.forEach((key) => {
