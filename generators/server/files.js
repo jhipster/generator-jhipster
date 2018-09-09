@@ -747,6 +747,13 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.searchEngine === 'elasticsearch',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/config/ElasticsearchConfiguration.java', renameTo: generator => `${generator.javaDir}config/ElasticsearchConfiguration.java` },
+            ]
+        },
+        {
             condition: generator => generator.messageBroker === 'kafka',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
