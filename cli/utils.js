@@ -139,6 +139,7 @@ const getCommandOptions = (pkg, argv) => {
     const options = meow({ help: false, pkg, argv });
     const flags = options ? options.flags : null;
     if (flags) {
+        flags['from-cli'] = true;
         // Add un-camelized options too, for legacy
         Object.keys(flags).forEach((key) => {
             const legacyKey = key.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`);
@@ -146,7 +147,7 @@ const getCommandOptions = (pkg, argv) => {
         });
         return flags;
     }
-    return {};
+    return { 'from-cli': true };
 };
 
 module.exports = {
