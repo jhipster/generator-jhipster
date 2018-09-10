@@ -47,7 +47,7 @@ describe('JDLLinter', () => {
     });
   });
   describe('#check', () => {
-    context('when checking a for useless entity braces', () => {
+    context('when checking for useless entity braces', () => {
       let linter = null;
       let issues = null;
 
@@ -61,6 +61,26 @@ describe('JDLLinter', () => {
       it('reports the issue', () => {
         expect(issues.getEntityIssuesForEntityName('B')).to.have.lengthOf(1);
         expect(issues.getEntityIssuesForEntityName('B')[0].ruleName).to.equal('ENT_SHORTER_DECL');
+      });
+    });
+    context('when checking for useless table names', () => {
+      let linter = null;
+      let issues = null;
+
+      before(() => {
+        linter = new JDLLinter({
+          filePath: path.join('test', 'test_files', 'lint', 'useless_table_names.jdl')
+        });
+        issues = linter.check();
+      });
+
+      it('reports the issues', () => {
+        expect(issues.getEntityIssuesForEntityName('B')).to.have.lengthOf(1);
+        expect(issues.getEntityIssuesForEntityName('B')[0].ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
+        expect(issues.getEntityIssuesForEntityName('Toto')).to.have.lengthOf(1);
+        expect(issues.getEntityIssuesForEntityName('Toto')[0].ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
+        expect(issues.getEntityIssuesForEntityName('SuperToto')).to.have.lengthOf(1);
+        expect(issues.getEntityIssuesForEntityName('SuperToto')[0].ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
       });
     });
   });
