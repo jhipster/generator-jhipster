@@ -42,7 +42,7 @@ describe('JDLLinter', () => {
       it('fails', () => {
         expect(() => {
           new JDLLinter({ filePath: '.' });
-        }).to.throw('The path to the JDL file doesn\'t exist, got \'.\'.');
+        }).to.throw("The path to the JDL file doesn't exist, got '.'.");
       });
     });
   });
@@ -52,7 +52,9 @@ describe('JDLLinter', () => {
       let issues = null;
 
       before(() => {
-        linter = new JDLLinter({ filePath: path.join('test', 'test_files', 'lint', 'useless_entity_curly_braces.jdl') });
+        linter = new JDLLinter({
+          filePath: path.join('test', 'test_files', 'lint', 'useless_entity_curly_braces.jdl')
+        });
         issues = linter.check();
       });
 

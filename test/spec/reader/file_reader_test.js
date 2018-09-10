@@ -34,7 +34,7 @@ describe('FileReader', () => {
       it('fails', () => {
         expect(() => {
           FileReader.readFile('.');
-        }).to.throw('The passed file \'.\' must exist and must not be a directory to be read.');
+        }).to.throw("The passed file '.' must exist and must not be a directory to be read.");
       });
     });
     context('when passing a valid text file', () => {
@@ -66,7 +66,7 @@ describe('FileReader', () => {
       it('fails', () => {
         expect(() => {
           FileReader.readFiles(['.']);
-        }).to.throw('The passed file \'.\' must exist and must not be a directory to be read.');
+        }).to.throw("The passed file '.' must exist and must not be a directory to be read.");
       });
     });
     context('when passing valid text files', () => {

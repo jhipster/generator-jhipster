@@ -41,8 +41,10 @@ describe('JHipsterApplicationExporter', () => {
             JHipsterApplicationExporter.exportApplication({
               config: {}
             });
-          }).to.throw('The application must be valid in order to be converted.\n'
-            + 'Errors: No name, No authentication type, No build tool');
+          }).to.throw(
+            'The application must be valid in order to be converted.\n' +
+              'Errors: No name, No authentication type, No build tool'
+          );
         });
       });
     });
@@ -51,16 +53,18 @@ describe('JHipsterApplicationExporter', () => {
         let content = null;
         let returned = null;
 
-        before((done) => {
-          returned = JHipsterApplicationExporter.exportApplication(new JDLApplication({
-            config: {
-              baseName: 'toto',
-              packageName: 'com.mathieu.sample',
-              enableTranslation: false,
-              languages: ['en', 'fr'],
-              jhipsterVersion: '4.9.0'
-            }
-          }));
+        before(done => {
+          returned = JHipsterApplicationExporter.exportApplication(
+            new JDLApplication({
+              config: {
+                baseName: 'toto',
+                packageName: 'com.mathieu.sample',
+                enableTranslation: false,
+                languages: ['en', 'fr'],
+                jhipsterVersion: '4.9.0'
+              }
+            })
+          );
           fs.readFile(path.join('.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
             if (err) {
               return done(err);
@@ -86,7 +90,7 @@ describe('JHipsterApplicationExporter', () => {
               buildTool: 'maven',
               cacheProvider: 'ehcache',
               clientFramework: 'angularX',
-              clientPackageManager: 'yarn',
+              clientPackageManager: 'npm',
               databaseType: 'sql',
               devDatabaseType: 'h2Disk',
               enableHibernateCache: true,
@@ -94,10 +98,7 @@ describe('JHipsterApplicationExporter', () => {
               enableTranslation: false,
               jhiPrefix: 'jhi',
               jhipsterVersion: '4.9.0',
-              languages: [
-                'en',
-                'fr'
-              ],
+              languages: ['en', 'fr'],
               messageBroker: false,
               nativeLanguage: 'en',
               packageFolder: 'com/mathieu/sample',
@@ -130,7 +131,7 @@ describe('JHipsterApplicationExporter', () => {
             buildTool: 'maven',
             cacheProvider: 'ehcache',
             clientFramework: 'angularX',
-            clientPackageManager: 'yarn',
+            clientPackageManager: 'npm',
             databaseType: 'sql',
             devDatabaseType: 'h2Disk',
             enableSwaggerCodegen: false,
@@ -138,10 +139,7 @@ describe('JHipsterApplicationExporter', () => {
             enableHibernateCache: true,
             jhiPrefix: 'jhi',
             jhipsterVersion: '4.9.0',
-            languages: [
-              'en',
-              'fr'
-            ],
+            languages: ['en', 'fr'],
             messageBroker: false,
             nativeLanguage: 'en',
             packageFolder: 'com/mathieu/sample',
@@ -204,7 +202,7 @@ describe('JHipsterApplicationExporter', () => {
         context('for the first application', () => {
           let content = null;
 
-          before('setup for the first application', (done) => {
+          before('setup for the first application', done => {
             fs.readFile(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
               if (err) {
                 return done(err);
@@ -219,7 +217,7 @@ describe('JHipsterApplicationExporter', () => {
             fs.rmdirSync('toto');
           });
 
-          it('exports it', (done) => {
+          it('exports it', done => {
             fs.readFile(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' }, done);
           });
 
@@ -235,7 +233,7 @@ describe('JHipsterApplicationExporter', () => {
               buildTool: 'maven',
               cacheProvider: 'ehcache',
               clientFramework: 'angularX',
-              clientPackageManager: 'yarn',
+              clientPackageManager: 'npm',
               databaseType: 'sql',
               devDatabaseType: 'h2Disk',
               enableSwaggerCodegen: false,
@@ -243,10 +241,7 @@ describe('JHipsterApplicationExporter', () => {
               enableHibernateCache: true,
               jhiPrefix: 'jhi',
               jhipsterVersion: '4.9.0',
-              languages: [
-                'en',
-                'fr'
-              ],
+              languages: ['en', 'fr'],
               messageBroker: false,
               nativeLanguage: 'en',
               packageFolder: 'com/mathieu/toto',
@@ -267,7 +262,7 @@ describe('JHipsterApplicationExporter', () => {
         context('for the second application', () => {
           let content = null;
 
-          before('setup for the first application', (done) => {
+          before('setup for the first application', done => {
             fs.readFile(path.join('titi', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
               if (err) {
                 return done(err);
@@ -282,7 +277,7 @@ describe('JHipsterApplicationExporter', () => {
             fs.rmdirSync('titi');
           });
 
-          it('exports it', (done) => {
+          it('exports it', done => {
             fs.readFile(path.join('titi', '.yo-rc.json'), { encoding: 'utf8' }, done);
           });
 
@@ -298,7 +293,7 @@ describe('JHipsterApplicationExporter', () => {
               buildTool: 'maven',
               cacheProvider: 'ehcache',
               clientFramework: 'angularX',
-              clientPackageManager: 'yarn',
+              clientPackageManager: 'npm',
               databaseType: 'sql',
               devDatabaseType: 'h2Disk',
               enableSwaggerCodegen: false,
@@ -306,10 +301,7 @@ describe('JHipsterApplicationExporter', () => {
               enableHibernateCache: true,
               jhiPrefix: 'jhi',
               jhipsterVersion: '4.9.0',
-              languages: [
-                'en',
-                'fr'
-              ],
+              languages: ['en', 'fr'],
               messageBroker: false,
               nativeLanguage: 'en',
               packageFolder: 'com/mathieu/titi',

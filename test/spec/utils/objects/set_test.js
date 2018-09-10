@@ -41,7 +41,7 @@ describe('Set', () => {
         set = new Set([1, 2, 3, 4]);
       });
 
-      it('creates a Set with the array\'s elements', () => {
+      it("creates a Set with the array's elements", () => {
         expect(set.size()).to.eq(4);
       });
     });
@@ -51,7 +51,7 @@ describe('Set', () => {
       it('fails', () => {
         expect(() => {
           set.add(null);
-        }).to.throw('Can\'t add a nil element to the set.');
+        }).to.throw("Can't add a nil element to the set.");
       });
     });
     context('when trying to add a new element', () => {
@@ -75,10 +75,10 @@ describe('Set', () => {
       it('fails', () => {
         expect(() => {
           set.addArrayElements(null);
-        }).to.throw('Can\'t add elements to the set from a nil object.');
+        }).to.throw("Can't add elements to the set from a nil object.");
       });
     });
-    context('when trying to add an array\'s elements', () => {
+    context("when trying to add an array's elements", () => {
       context('but every element already exists in the Set', () => {
         it('returns false', () => {
           set.addArrayElements([1, 2, 3, 4, 5, 6]);
@@ -102,11 +102,11 @@ describe('Set', () => {
       it('fails', () => {
         expect(() => {
           set.addSetElements(null);
-        }).to.throw('Can\'t add elements to the set from a nil object.');
+        }).to.throw("Can't add elements to the set from a nil object.");
       });
     });
     context('when passing an empty Set', () => {
-      it('doesn\'t change the Set and returns false', () => {
+      it("doesn't change the Set and returns false", () => {
         set.addArrayElements([1, 2, 3, 4, 5, 6]);
         const otherSet = new Set();
         const result = set.addSetElements(otherSet);
@@ -115,7 +115,7 @@ describe('Set', () => {
       });
     });
     context('when passing a Set containing already present elements', () => {
-      it('doesn\'t change the Set and returns false', () => {
+      it("doesn't change the Set and returns false", () => {
         set.addArrayElements([1, 2, 3, 4, 5, 6]);
         const otherSet = new Set();
         otherSet.addArrayElements([1, 2, 3, 4, 5, 6]);

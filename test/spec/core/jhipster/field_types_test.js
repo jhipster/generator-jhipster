@@ -100,18 +100,22 @@ describe('FieldTypes', () => {
     });
     context('when passing a valid argument and callback', () => {
       it('returns true', () => {
-        expect(FieldTypes.getIsType('sql', () => {
-          // do nothing
-        })).to.eq(FieldTypes.isCommonDBType);
+        expect(
+          FieldTypes.getIsType('sql', () => {
+            // do nothing
+          })
+        ).to.eq(FieldTypes.isCommonDBType);
       });
     });
     context('when passing an invalid argument', () => {
       expect(() => {
         FieldTypes.getIsType('thing', () => {});
-      }).to.throw('The passed database type must either be \'sql\', \'mysql\', \'mariadb\', \'postgresql\','
-        + ' \'oracle\', \'mssql\', \'mongodb\', \'couchbase\', or \'cassandra\'');
+      }).to.throw(
+        "The passed database type must either be 'sql', 'mysql', 'mariadb', 'postgresql'," +
+          " 'oracle', 'mssql', 'mongodb', 'couchbase', or 'cassandra'"
+      );
     });
-    context('when passing \'no\' as argument', () => {
+    context("when passing 'no' as argument", () => {
       it('does not fail', () => {
         expect(() => {
           FieldTypes.getIsType(DatabaseTypes.NO, () => {});

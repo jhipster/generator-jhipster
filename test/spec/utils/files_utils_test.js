@@ -88,7 +88,7 @@ describe('FileUtils', () => {
       it('fails', () => {
         expect(() => {
           FileUtils.createDirectory('./package.json');
-        }).to.throw('The directory to create \'./package.json\' is a file.');
+        }).to.throw("The directory to create './package.json' is a file.");
       });
     });
     context('when passing a directory that exists', () => {

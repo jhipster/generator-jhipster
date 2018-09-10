@@ -59,12 +59,14 @@ describe('JDLEntity', () => {
           name: 'Abc',
           tableName: 'String',
           comment: 'comment',
-          fields: [new JDLField({
-            name: 'abc',
-            type: 'String',
-            comment: 'comment',
-            validations: [new JDLValidation()]
-          })]
+          fields: [
+            new JDLField({
+              name: 'abc',
+              type: 'String',
+              comment: 'comment',
+              validations: [new JDLValidation()]
+            })
+          ]
         };
         entity = new JDLEntity(args);
       });
@@ -87,23 +89,17 @@ describe('JDLEntity', () => {
       });
       context('without a name attribute', () => {
         it('returns false', () => {
-          expect(
-            JDLEntity.isValid({ tableName: 'Something', fields: [] })
-          ).to.be.false;
+          expect(JDLEntity.isValid({ tableName: 'Something', fields: [] })).to.be.false;
         });
       });
       context('with a reserved keyword as name', () => {
         it('returns false', () => {
-          expect(
-            JDLEntity.isValid({ name: 'class' })
-          ).to.be.false;
+          expect(JDLEntity.isValid({ name: 'class' })).to.be.false;
         });
       });
       context('without a table name', () => {
         it('returns false', () => {
-          expect(
-            JDLEntity.isValid({ name: 'Something', fields: [] })
-          ).to.be.false;
+          expect(JDLEntity.isValid({ name: 'Something', fields: [] })).to.be.false;
         });
       });
       context('because its fields are invalid', () => {
@@ -112,11 +108,13 @@ describe('JDLEntity', () => {
             JDLEntity.isValid({
               name: 'Something',
               tableName: 't_something',
-              fields: [{
-                type: 'String',
-                comment: 'comment',
-                validations: []
-              }]
+              fields: [
+                {
+                  type: 'String',
+                  comment: 'comment',
+                  validations: []
+                }
+              ]
             })
           ).to.be.false;
         });
@@ -124,9 +122,7 @@ describe('JDLEntity', () => {
     });
     context('when checking the validity of a valid object', () => {
       it('returns true', () => {
-        expect(
-          JDLEntity.isValid({ name: 'Valid', tableName: 't_valid', fields: [] })
-        ).to.be.true;
+        expect(JDLEntity.isValid({ name: 'Valid', tableName: 't_valid', fields: [] })).to.be.true;
       });
     });
   });
@@ -147,7 +143,9 @@ describe('JDLEntity', () => {
         }).to.throw(`The passed field '' must be valid to be added in entity '${entity.name}'.\nErrors: No field`);
         expect(() => {
           entity.addField({ name: 'myField' });
-        }).to.throw(`The passed field 'myField' must be valid to be added in entity '${entity.name}'.\nErrors: No field type`);
+        }).to.throw(
+          `The passed field 'myField' must be valid to be added in entity '${entity.name}'.\nErrors: No field type`
+        );
       });
     });
     context('when adding a valid field', () => {

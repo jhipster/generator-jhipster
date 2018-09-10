@@ -34,7 +34,7 @@ describe('JDLEnums', () => {
       it('fails', () => {
         expect(() => {
           jdlEnums.add(new JDLEnum({ name: '' }));
-        }).to.throw('The enum\'s name must be passed to create an enum.');
+        }).to.throw("The enum's name must be passed to create an enum.");
       });
     });
     context('when adding an invalid element', () => {
@@ -120,7 +120,7 @@ describe('JDLEnums', () => {
       before(() => {
         jdlEnums.add(new JDLEnum({ name: 'A' }));
         jdlEnums.add(new JDLEnum({ name: 'B' }));
-        jdlEnums.forEach((jdlEnum) => {
+        jdlEnums.forEach(jdlEnum => {
           result.push(jdlEnum.name);
         });
       });

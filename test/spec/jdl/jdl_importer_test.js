@@ -81,9 +81,7 @@ describe('JDLImporter', () => {
             {
               fieldName: 'name',
               fieldType: 'String',
-              fieldValidateRules: [
-                'required'
-              ]
+              fieldValidateRules: ['required']
             },
             {
               fieldName: 'description',
@@ -207,10 +205,7 @@ describe('JDLImporter', () => {
             {
               fieldName: 'title',
               fieldType: 'String',
-              fieldValidateRules: [
-                'minlength',
-                'maxlength'
-              ],
+              fieldValidateRules: ['minlength', 'maxlength'],
               fieldValidateRulesMinlength: 5,
               fieldValidateRulesMaxlength: 25
             },
@@ -414,24 +409,28 @@ describe('JDLImporter', () => {
         const importer = new JDLImporter([path.join('test', 'test_files', 'big_sample.jdl')], {
           applicationName: 'MyApp',
           applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL,
+          databaseType: DatabaseTypes.SQL
         });
         returned = importer.import();
-        returned.exportedEntities = returned.exportedEntities.sort((exportedEntityA, exportedEntityB) => {
-          if (exportedEntityA.entityTableName < exportedEntityB.entityTableName) {
-            return -1;
-          }
-          return 1;
-        }).map((exportedEntity) => {
-          exportedEntity.javadoc = exportedEntity.javadoc || '';
-          delete exportedEntity.changelogDate;
-          return exportedEntity;
-        });
-        filesExist = ENTITY_NAMES.reduce((result, entityName) => result && fs.statSync(path.join('.jhipster', `${entityName}.json`)).isFile());
+        returned.exportedEntities = returned.exportedEntities
+          .sort((exportedEntityA, exportedEntityB) => {
+            if (exportedEntityA.entityTableName < exportedEntityB.entityTableName) {
+              return -1;
+            }
+            return 1;
+          })
+          .map(exportedEntity => {
+            exportedEntity.javadoc = exportedEntity.javadoc || '';
+            delete exportedEntity.changelogDate;
+            return exportedEntity;
+          });
+        filesExist = ENTITY_NAMES.reduce(
+          (result, entityName) => result && fs.statSync(path.join('.jhipster', `${entityName}.json`)).isFile()
+        );
       });
 
       after(() => {
-        ENTITY_NAMES.forEach((entityName) => {
+        ENTITY_NAMES.forEach(entityName => {
           fs.unlinkSync(path.join('.jhipster', `${entityName}.json`));
         });
         fs.rmdirSync('.jhipster');
@@ -440,8 +439,14 @@ describe('JDLImporter', () => {
       it('returns the final state', () => {
         expect(returned).to.deep.equal({
           exportedEntities: [
-            expectedContent.Country, expectedContent.Department, expectedContent.Employee, expectedContent.Job,
-            expectedContent.JobHistory, expectedContent.Location, expectedContent.Region, expectedContent.Task
+            expectedContent.Country,
+            expectedContent.Department,
+            expectedContent.Employee,
+            expectedContent.Job,
+            expectedContent.JobHistory,
+            expectedContent.Location,
+            expectedContent.Region,
+            expectedContent.Task
           ],
           exportedApplications: []
         });
@@ -450,7 +455,7 @@ describe('JDLImporter', () => {
         expect(filesExist).to.be.true;
       });
       it('exports their content', () => {
-        ENTITY_NAMES.forEach((entityName) => {
+        ENTITY_NAMES.forEach(entityName => {
           const entityContent = JSON.parse(fs.readFileSync(path.join('.jhipster', `${entityName}.json`), 'utf-8'));
           expect(entityContent.changelogDate).not.to.be.undefined;
           delete entityContent.changelogDate;
@@ -507,9 +512,7 @@ describe('JDLImporter', () => {
             applicationType: 'monolith',
             cacheProvider: 'ehcache',
             testFrameworks: [],
-            languages: [
-              'en', 'fr'
-            ],
+            languages: ['en', 'fr'],
             serverPort: '8080',
             enableSwaggerCodegen: false,
             enableHibernateCache: true,
@@ -517,7 +520,7 @@ describe('JDLImporter', () => {
             jhiPrefix: 'jhi',
             messageBroker: false,
             serviceDiscoveryType: false,
-            clientPackageManager: 'yarn',
+            clientPackageManager: 'npm',
             clientFramework: 'angularX',
             nativeLanguage: 'en',
             skipUserManagement: false,
@@ -542,9 +545,7 @@ describe('JDLImporter', () => {
             applicationType: 'gateway',
             cacheProvider: 'ehcache',
             testFrameworks: [],
-            languages: [
-              'en', 'fr'
-            ],
+            languages: ['en', 'fr'],
             serverPort: '8080',
             enableSwaggerCodegen: false,
             enableHibernateCache: true,
@@ -552,7 +553,7 @@ describe('JDLImporter', () => {
             jhiPrefix: 'jhi',
             messageBroker: false,
             serviceDiscoveryType: false,
-            clientPackageManager: 'yarn',
+            clientPackageManager: 'npm',
             clientFramework: 'angularX',
             nativeLanguage: 'en',
             skipUserManagement: false,
@@ -576,9 +577,7 @@ describe('JDLImporter', () => {
             enableTranslation: true,
             applicationType: 'microservice',
             testFrameworks: [],
-            languages: [
-              'en', 'fr'
-            ],
+            languages: ['en', 'fr'],
             serverPort: '8081',
             enableSwaggerCodegen: false,
             enableHibernateCache: true,
@@ -587,7 +586,7 @@ describe('JDLImporter', () => {
             jhiPrefix: 'jhi',
             messageBroker: false,
             serviceDiscoveryType: false,
-            clientPackageManager: 'yarn',
+            clientPackageManager: 'npm',
             clientFramework: 'angularX',
             nativeLanguage: 'en',
             skipUserManagement: false,
@@ -612,9 +611,7 @@ describe('JDLImporter', () => {
             applicationType: 'monolith',
             cacheProvider: 'ehcache',
             testFrameworks: [],
-            languages: [
-              'en', 'fr'
-            ],
+            languages: ['en', 'fr'],
             serverPort: '8080',
             enableSwaggerCodegen: false,
             enableHibernateCache: true,
@@ -622,7 +619,7 @@ describe('JDLImporter', () => {
             jhiPrefix: 'jhi',
             messageBroker: false,
             serviceDiscoveryType: false,
-            clientPackageManager: 'yarn',
+            clientPackageManager: 'npm',
             clientFramework: 'angularX',
             nativeLanguage: 'en',
             skipUserManagement: false,
@@ -636,26 +633,26 @@ describe('JDLImporter', () => {
       before(() => {
         const importer = new JDLImporter([path.join('test', 'test_files', 'applications2.jdl')]);
         importer.import();
-        APPLICATION_NAMES.forEach((applicationName) => {
+        APPLICATION_NAMES.forEach(applicationName => {
           contents.push(JSON.parse(fs.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
         });
       });
 
       after(() => {
-        APPLICATION_NAMES.forEach((applicationName) => {
+        APPLICATION_NAMES.forEach(applicationName => {
           fs.unlinkSync(path.join(applicationName, '.yo-rc.json'));
           fs.rmdirSync(applicationName);
         });
       });
 
       it('creates the folders and the .yo-rc.json files', () => {
-        APPLICATION_NAMES.forEach((applicationName) => {
+        APPLICATION_NAMES.forEach(applicationName => {
           expect(fs.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
           expect(fs.statSync(applicationName).isDirectory()).to.be.true;
         });
       });
       it('exports the application contents', () => {
-        contents.forEach((content) => {
+        contents.forEach(content => {
           expect(content['generator-jhipster'].jwtSecretKey).not.to.be.undefined;
           delete content['generator-jhipster'].jwtSecretKey;
         });
@@ -667,12 +664,7 @@ describe('JDLImporter', () => {
       const ENTITY_NAMES = ['A', 'B', 'E', 'F']; // C & D don't get to be generated
       const expectedApplications = [
         {
-          entities: [
-            'A',
-            'B',
-            'E',
-            'F'
-          ],
+          entities: ['A', 'B', 'E', 'F'],
           'generator-jhipster': {
             baseName: 'myFirstApp',
             packageName: 'com.mycompany.myfirstapp',
@@ -689,16 +681,14 @@ describe('JDLImporter', () => {
             applicationType: 'monolith',
             cacheProvider: 'ehcache',
             testFrameworks: [],
-            languages: [
-              'en', 'fr'
-            ],
+            languages: ['en', 'fr'],
             serverPort: '8080',
             enableSwaggerCodegen: false,
             useSass: false,
             jhiPrefix: 'jhi',
             messageBroker: false,
             serviceDiscoveryType: false,
-            clientPackageManager: 'yarn',
+            clientPackageManager: 'npm',
             clientFramework: 'angularX',
             nativeLanguage: 'en',
             skipUserManagement: false,
@@ -707,9 +697,7 @@ describe('JDLImporter', () => {
           }
         },
         {
-          entities: [
-            'E'
-          ],
+          entities: ['E'],
           'generator-jhipster': {
             baseName: 'mySecondApp',
             packageName: 'com.mycompany.myapp',
@@ -726,16 +714,14 @@ describe('JDLImporter', () => {
             applicationType: 'microservice',
             cacheProvider: 'hazelcast',
             testFrameworks: [],
-            languages: [
-              'en', 'fr'
-            ],
+            languages: ['en', 'fr'],
             serverPort: '8091',
             enableSwaggerCodegen: false,
             useSass: false,
             jhiPrefix: 'jhi',
             messageBroker: false,
             serviceDiscoveryType: false,
-            clientPackageManager: 'yarn',
+            clientPackageManager: 'npm',
             clientFramework: 'angularX',
             nativeLanguage: 'en',
             skipUserManagement: false,
@@ -744,9 +730,7 @@ describe('JDLImporter', () => {
           }
         },
         {
-          entities: [
-            'F'
-          ],
+          entities: ['F'],
           'generator-jhipster': {
             baseName: 'myThirdApp',
             packageName: 'com.mycompany.myapp',
@@ -763,16 +747,14 @@ describe('JDLImporter', () => {
             applicationType: 'microservice',
             cacheProvider: 'hazelcast',
             testFrameworks: [],
-            languages: [
-              'en', 'fr'
-            ],
+            languages: ['en', 'fr'],
             serverPort: '8092',
             enableSwaggerCodegen: false,
             useSass: false,
             jhiPrefix: 'jhi',
             messageBroker: false,
             serviceDiscoveryType: false,
-            clientPackageManager: 'yarn',
+            clientPackageManager: 'npm',
             clientFramework: 'angularX',
             nativeLanguage: 'en',
             skipUserManagement: false,
@@ -793,9 +775,7 @@ describe('JDLImporter', () => {
           jpaMetamodelFiltering: false,
           fluentMethods: true,
           clientRootFolder: '',
-          applications: [
-            'myFirstApp'
-          ]
+          applications: ['myFirstApp']
         },
         {
           name: 'B',
@@ -808,9 +788,7 @@ describe('JDLImporter', () => {
           jpaMetamodelFiltering: false,
           fluentMethods: true,
           clientRootFolder: '',
-          applications: [
-            'myFirstApp'
-          ]
+          applications: ['myFirstApp']
         },
         {
           name: 'E',
@@ -823,10 +801,7 @@ describe('JDLImporter', () => {
           jpaMetamodelFiltering: false,
           fluentMethods: true,
           clientRootFolder: '',
-          applications: [
-            'myFirstApp',
-            'mySecondApp'
-          ],
+          applications: ['myFirstApp', 'mySecondApp'],
           microserviceName: 'mySecondApp'
         },
         {
@@ -840,10 +815,7 @@ describe('JDLImporter', () => {
           jpaMetamodelFiltering: false,
           fluentMethods: true,
           clientRootFolder: '',
-          applications: [
-            'myFirstApp',
-            'myThirdApp'
-          ]
+          applications: ['myFirstApp', 'myThirdApp']
         }
       ];
 
@@ -862,7 +834,7 @@ describe('JDLImporter', () => {
         fs.unlinkSync(path.join('myFirstApp', '.jhipster', 'F.json'));
         fs.unlinkSync(path.join('mySecondApp', '.jhipster', 'E.json'));
         fs.unlinkSync(path.join('myThirdApp', '.jhipster', 'F.json'));
-        APPLICATION_NAMES.forEach((applicationName) => {
+        APPLICATION_NAMES.forEach(applicationName => {
           fs.unlinkSync(path.join(applicationName, '.yo-rc.json'));
           fs.rmdirSync(path.join(applicationName, '.jhipster'));
           fs.rmdirSync(path.join(applicationName));
@@ -881,56 +853,50 @@ describe('JDLImporter', () => {
         });
       });
       it('exports the entities for each application', () => {
-        APPLICATION_NAMES.forEach((applicationName) => {
+        APPLICATION_NAMES.forEach(applicationName => {
           let readJSON = null;
           expect(fs.statSync(path.join(applicationName, '.jhipster')).isDirectory()).to.be.true;
           switch (applicationName) {
-          case 'myFirstApp': // A, B, E, F
-            ENTITY_NAMES.forEach((entityName, index) => {
+            case 'myFirstApp': // A, B, E, F
+              ENTITY_NAMES.forEach((entityName, index) => {
+                readJSON = JSON.parse(
+                  fs.readFileSync(path.join(applicationName, '.jhipster', `${entityName}.json`), 'utf-8').toString()
+                );
+                expect(readJSON.changelogDate).not.to.be.undefined;
+                delete readJSON.changelogDate;
+                expect(readJSON).to.deep.equal(expectedEntities[index]);
+              });
+              break;
+            case 'mySecondApp': // only E
               readJSON = JSON.parse(
-                fs.readFileSync(
-                  path.join(applicationName, '.jhipster', `${entityName}.json`),
-                  'utf-8'
-                ).toString());
+                fs.readFileSync(path.join(applicationName, '.jhipster', 'E.json'), 'utf-8').toString()
+              );
               expect(readJSON.changelogDate).not.to.be.undefined;
               delete readJSON.changelogDate;
-              expect(readJSON).to.deep.equal(expectedEntities[index]);
-            });
-            break;
-          case 'mySecondApp': // only E
-            readJSON = JSON.parse(
-              fs.readFileSync(
-                path.join(applicationName, '.jhipster', 'E.json'),
-                'utf-8'
-              ).toString());
-            expect(readJSON.changelogDate).not.to.be.undefined;
-            delete readJSON.changelogDate;
-            expect(readJSON).to.deep.equal(expectedEntities[2]);
-            break;
-          case 'myThirdApp': // only F
-            readJSON = JSON.parse(
-              fs.readFileSync(
-                path.join(applicationName, '.jhipster', 'F.json'),
-                'utf-8'
-              ).toString());
-            expect(readJSON.changelogDate).not.to.be.undefined;
-            delete readJSON.changelogDate;
-            expect(readJSON).to.deep.equal(expectedEntities[3]);
-            break;
-          default:
+              expect(readJSON).to.deep.equal(expectedEntities[2]);
+              break;
+            case 'myThirdApp': // only F
+              readJSON = JSON.parse(
+                fs.readFileSync(path.join(applicationName, '.jhipster', 'F.json'), 'utf-8').toString()
+              );
+              expect(readJSON.changelogDate).not.to.be.undefined;
+              delete readJSON.changelogDate;
+              expect(readJSON).to.deep.equal(expectedEntities[3]);
+              break;
+            default:
             // nothing to do
           }
         });
       });
     });
-    context('when choosing \'no\' as database type', () => {
+    context("when choosing 'no' as database type", () => {
       let importer = null;
 
-      before('importing a JDL file with the \'no\' database type', () => {
+      before("importing a JDL file with the 'no' database type", () => {
         importer = new JDLImporter([path.join('test', 'test_files', 'simple.jdl')], {
           applicationName: 'MyApp',
           applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.NO,
+          databaseType: DatabaseTypes.NO
         });
       });
 
@@ -948,7 +914,9 @@ describe('JDLImporter', () => {
       let returned = null;
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'annotations.jdl')], { databaseType: DatabaseTypes.SQL });
+        const importer = new JDLImporter([path.join('test', 'test_files', 'annotations.jdl')], {
+          databaseType: DatabaseTypes.SQL
+        });
         returned = importer.import();
       });
 

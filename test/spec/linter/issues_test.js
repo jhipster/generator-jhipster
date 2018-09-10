@@ -39,7 +39,12 @@ describe('Issues', () => {
 
       it('returns them', () => {
         expect(issues.getEntityIssuesForEntityName('A')).to.have.lengthOf(2);
-        expect(issues.getEntityIssuesForEntityName('A').map(issue => issue.ruleName).join(', ')).to.equal('Toto, Titi');
+        expect(
+          issues
+            .getEntityIssuesForEntityName('A')
+            .map(issue => issue.ruleName)
+            .join(', ')
+        ).to.equal('Toto, Titi');
       });
     });
   });

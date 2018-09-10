@@ -52,14 +52,7 @@ const copyright = `/** Copyright 2013-2018 the original author or authors from t
 
 // generated a JavaScript file which exports the serialized grammar on the global scope (Window)
 fs.writeFileSync(
-  path.join(
-    __dirname,
-    '..',
-    'lib',
-    'dsl',
-    'gen',
-    'generated_serialized_grammar.js'
-  ),
+  path.join(__dirname, '..', 'lib', 'dsl', 'gen', 'generated_serialized_grammar.js'),
   `${copyright}
 /* eslint-disable no-unused-vars */
 const serializedGrammar = ${serializedGrammarText}`

@@ -40,7 +40,6 @@ const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Optio
 const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').Values;
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 
-
 describe('EntityParser', () => {
   describe('::parse', () => {
     context('when passing invalid parameters', () => {
@@ -83,7 +82,7 @@ describe('EntityParser', () => {
               jdlObject,
               databaseType: DatabaseTypes.MONGODB
             });
-          }).to.throw('NoSQL entities don\'t have relationships.');
+          }).to.throw("NoSQL entities don't have relationships.");
         });
       });
     });
@@ -238,10 +237,10 @@ describe('EntityParser', () => {
                   otherEntityRelationshipName: 'b',
                   ownerSide: false,
                   relationshipName: 'a',
-                  relationshipType: 'one-to-one',
+                  relationshipType: 'one-to-one'
                 }
               ],
-              service: 'no',
+              service: 'no'
             }
           });
         });
@@ -309,7 +308,7 @@ describe('EntityParser', () => {
               microserviceName: 'myMs',
               pagination: 'no',
               relationships: [],
-              service: 'no',
+              service: 'no'
             }
           });
         });
@@ -377,7 +376,7 @@ describe('EntityParser', () => {
               microserviceName: 'myMs',
               pagination: 'no',
               relationships: [],
-              service: 'no',
+              service: 'no'
             }
           });
         });
@@ -448,7 +447,7 @@ describe('EntityParser', () => {
               microserviceName: 'myMs',
               pagination: 'no',
               relationships: [],
-              service: 'no',
+              service: 'no'
             }
           });
         });
@@ -505,68 +504,64 @@ describe('EntityParser', () => {
         });
 
         it('converts it', () => {
-          expect(content.A.relationships).to.deep.eq(
-            [
-              {
-                relationshipName: 'bbbb',
-                otherEntityName: 'b',
-                relationshipType: 'one-to-one',
-                otherEntityField: 'id',
-                ownerSide: true,
-                otherEntityRelationshipName: 'aaaa'
-              },
-              {
-                relationshipName: 'b',
-                otherEntityName: 'b',
-                relationshipType: 'one-to-many',
-                otherEntityRelationshipName: 'a'
-              },
-              {
-                relationshipName: 'bb',
-                otherEntityName: 'b',
-                relationshipType: 'many-to-one',
-                otherEntityField: 'id'
-              },
-              {
-                relationshipName: 'bbb',
-                otherEntityName: 'b',
-                relationshipType: 'many-to-many',
-                otherEntityField: 'id',
-                ownerSide: true,
-                otherEntityRelationshipName: 'aaa'
-              }
-            ]
-          );
-          expect(content.B.relationships).to.deep.eq(
-            [
-              {
-                relationshipName: 'aaaa',
-                otherEntityName: 'a',
-                relationshipType: 'one-to-one',
-                ownerSide: false,
-                otherEntityRelationshipName: 'bbbb'
-              },
-              {
-                relationshipName: 'a',
-                otherEntityName: 'a',
-                relationshipType: 'many-to-one',
-                otherEntityField: 'id'
-              },
-              {
-                relationshipName: 'aa',
-                otherEntityName: 'a',
-                relationshipType: 'one-to-many',
-                otherEntityRelationshipName: 'bb'
-              },
-              {
-                relationshipName: 'aaa',
-                otherEntityName: 'a',
-                relationshipType: 'many-to-many',
-                ownerSide: false,
-                otherEntityRelationshipName: 'bbb'
-              }
-            ]
-          );
+          expect(content.A.relationships).to.deep.eq([
+            {
+              relationshipName: 'bbbb',
+              otherEntityName: 'b',
+              relationshipType: 'one-to-one',
+              otherEntityField: 'id',
+              ownerSide: true,
+              otherEntityRelationshipName: 'aaaa'
+            },
+            {
+              relationshipName: 'b',
+              otherEntityName: 'b',
+              relationshipType: 'one-to-many',
+              otherEntityRelationshipName: 'a'
+            },
+            {
+              relationshipName: 'bb',
+              otherEntityName: 'b',
+              relationshipType: 'many-to-one',
+              otherEntityField: 'id'
+            },
+            {
+              relationshipName: 'bbb',
+              otherEntityName: 'b',
+              relationshipType: 'many-to-many',
+              otherEntityField: 'id',
+              ownerSide: true,
+              otherEntityRelationshipName: 'aaa'
+            }
+          ]);
+          expect(content.B.relationships).to.deep.eq([
+            {
+              relationshipName: 'aaaa',
+              otherEntityName: 'a',
+              relationshipType: 'one-to-one',
+              ownerSide: false,
+              otherEntityRelationshipName: 'bbbb'
+            },
+            {
+              relationshipName: 'a',
+              otherEntityName: 'a',
+              relationshipType: 'many-to-one',
+              otherEntityField: 'id'
+            },
+            {
+              relationshipName: 'aa',
+              otherEntityName: 'a',
+              relationshipType: 'one-to-many',
+              otherEntityRelationshipName: 'bb'
+            },
+            {
+              relationshipName: 'aaa',
+              otherEntityName: 'a',
+              relationshipType: 'many-to-many',
+              ownerSide: false,
+              otherEntityRelationshipName: 'bbb'
+            }
+          ]);
         });
       });
       context('when converting a JDL with blobs', () => {
@@ -574,23 +569,25 @@ describe('EntityParser', () => {
 
         before(() => {
           const jdlObject = new JDLObject();
-          jdlObject.addEntity(new JDLEntity({
-            name: 'A',
-            fields: {
-              anyBlob: new JDLField({
-                name: 'anyBlob',
-                type: FieldTypes.CommonDBTypes.ANY_BLOB
-              }),
-              imageBlob: new JDLField({
-                name: 'imageBlob',
-                type: FieldTypes.CommonDBTypes.IMAGE_BLOB
-              }),
-              textBlob: new JDLField({
-                name: 'textBlob',
-                type: FieldTypes.CommonDBTypes.TEXT_BLOB
-              })
-            }
-          }));
+          jdlObject.addEntity(
+            new JDLEntity({
+              name: 'A',
+              fields: {
+                anyBlob: new JDLField({
+                  name: 'anyBlob',
+                  type: FieldTypes.CommonDBTypes.ANY_BLOB
+                }),
+                imageBlob: new JDLField({
+                  name: 'imageBlob',
+                  type: FieldTypes.CommonDBTypes.IMAGE_BLOB
+                }),
+                textBlob: new JDLField({
+                  name: 'textBlob',
+                  type: FieldTypes.CommonDBTypes.TEXT_BLOB
+                })
+              }
+            })
+          );
           content = EntityParser.parse({
             jdlObject,
             databaseType: DatabaseTypes.SQL
@@ -598,25 +595,23 @@ describe('EntityParser', () => {
         });
 
         it('converts it', () => {
-          expect(content.A.fields).to.deep.eq(
-            [
-              {
-                fieldName: 'anyBlob',
-                fieldType: 'byte[]',
-                fieldTypeBlobContent: 'any'
-              },
-              {
-                fieldName: 'imageBlob',
-                fieldType: 'byte[]',
-                fieldTypeBlobContent: 'image'
-              },
-              {
-                fieldName: 'textBlob',
-                fieldType: 'byte[]',
-                fieldTypeBlobContent: 'text'
-              }
-            ]
-          );
+          expect(content.A.fields).to.deep.eq([
+            {
+              fieldName: 'anyBlob',
+              fieldType: 'byte[]',
+              fieldTypeBlobContent: 'any'
+            },
+            {
+              fieldName: 'imageBlob',
+              fieldType: 'byte[]',
+              fieldTypeBlobContent: 'image'
+            },
+            {
+              fieldName: 'textBlob',
+              fieldType: 'byte[]',
+              fieldTypeBlobContent: 'text'
+            }
+          ]);
         });
       });
       context('when converting a JDL with elastic except', () => {
@@ -771,7 +766,7 @@ describe('EntityParser', () => {
         });
       });
     });
-    context('when passing \'no\' as database type', () => {
+    context("when passing 'no' as database type", () => {
       let jdlObject = null;
       let result = null;
 
@@ -862,8 +857,7 @@ describe('EntityParser', () => {
             databaseType: DatabaseTypes.SQL,
             applicationType: ApplicationTypes.MICROSERVICE
           });
-        }).to.throw('No valable field type could be resolved for field \'toto\' of entity \'A\', '
-          + 'got \'DoesNotExistAtAll\'');
+        }).to.throw("No valable field type could be resolved for field 'toto' of entity 'A', got 'DoesNotExistAtAll'");
       });
     });
   });

@@ -59,78 +59,86 @@ describe('DocumentParser', () => {
 
         it('builds a JDLObject', () => {
           expect(jdlObject).not.to.be.null;
-          expect(jdlObject.entities.Department).to.deep.eq(new JDLEntity({
-            name: 'Department',
-            tableName: 'Department',
-            fields: {
-              name: new JDLField({
-                name: 'name',
-                type: FieldTypes.STRING,
-                validations: { required: new JDLValidation({ name: Validations.REQUIRED }) }
-              }),
-              description: new JDLField({
-                name: 'description',
-                type: FieldTypes.TEXT_BLOB
-              }),
-              advertisement: new JDLField({
-                name: 'advertisement',
-                type: FieldTypes.BLOB
-              }),
-              logo: new JDLField({
-                name: 'logo',
-                type: FieldTypes.IMAGE_BLOB
-              })
-            }
-          }));
-          expect(jdlObject.entities.JobHistory).to.deep.eq(new JDLEntity({
-            name: 'JobHistory',
-            tableName: 'JobHistory',
-            fields: {
-              startDate: new JDLField({
-                name: 'startDate',
-                type: FieldTypes.ZONED_DATE_TIME
-              }),
-              endDate: new JDLField({
-                name: 'endDate',
-                type: FieldTypes.ZONED_DATE_TIME
-              }),
-              language: new JDLField({ name: 'language', type: 'Language' })
-            },
-            comment: 'JobHistory comment.'
-          }));
-          expect(jdlObject.getEnum('JobType')).to.deep.eq(new JDLEnum({
-            name: 'JobType',
-            values: ['TYPE1', 'TYPE2']
-          }));
-          expect(jdlObject.entities.Job).to.deep.eq(new JDLEntity({
-            name: 'Job',
-            tableName: 'Job',
-            fields: {
-              jobTitle: new JDLField({
-                name: 'jobTitle',
-                type: FieldTypes.STRING,
-                validations: {
-                  minlength: new JDLValidation({
-                    name: Validations.MINLENGTH,
-                    value: 5
-                  }),
-                  maxlength: new JDLValidation({
-                    name: Validations.MAXLENGTH,
-                    value: 25
-                  })
-                }
-              }),
-              jobType: new JDLField({ name: 'jobType', type: 'JobType' }),
-              minSalary: new JDLField({
-                name: 'minSalary',
-                type: FieldTypes.LONG
-              }),
-              maxSalary: new JDLField({
-                name: 'maxSalary',
-                type: FieldTypes.LONG
-              })
-            }
-          }));
+          expect(jdlObject.entities.Department).to.deep.eq(
+            new JDLEntity({
+              name: 'Department',
+              tableName: 'Department',
+              fields: {
+                name: new JDLField({
+                  name: 'name',
+                  type: FieldTypes.STRING,
+                  validations: { required: new JDLValidation({ name: Validations.REQUIRED }) }
+                }),
+                description: new JDLField({
+                  name: 'description',
+                  type: FieldTypes.TEXT_BLOB
+                }),
+                advertisement: new JDLField({
+                  name: 'advertisement',
+                  type: FieldTypes.BLOB
+                }),
+                logo: new JDLField({
+                  name: 'logo',
+                  type: FieldTypes.IMAGE_BLOB
+                })
+              }
+            })
+          );
+          expect(jdlObject.entities.JobHistory).to.deep.eq(
+            new JDLEntity({
+              name: 'JobHistory',
+              tableName: 'JobHistory',
+              fields: {
+                startDate: new JDLField({
+                  name: 'startDate',
+                  type: FieldTypes.ZONED_DATE_TIME
+                }),
+                endDate: new JDLField({
+                  name: 'endDate',
+                  type: FieldTypes.ZONED_DATE_TIME
+                }),
+                language: new JDLField({ name: 'language', type: 'Language' })
+              },
+              comment: 'JobHistory comment.'
+            })
+          );
+          expect(jdlObject.getEnum('JobType')).to.deep.eq(
+            new JDLEnum({
+              name: 'JobType',
+              values: ['TYPE1', 'TYPE2']
+            })
+          );
+          expect(jdlObject.entities.Job).to.deep.eq(
+            new JDLEntity({
+              name: 'Job',
+              tableName: 'Job',
+              fields: {
+                jobTitle: new JDLField({
+                  name: 'jobTitle',
+                  type: FieldTypes.STRING,
+                  validations: {
+                    minlength: new JDLValidation({
+                      name: Validations.MINLENGTH,
+                      value: 5
+                    }),
+                    maxlength: new JDLValidation({
+                      name: Validations.MAXLENGTH,
+                      value: 25
+                    })
+                  }
+                }),
+                jobType: new JDLField({ name: 'jobType', type: 'JobType' }),
+                minSalary: new JDLField({
+                  name: 'minSalary',
+                  type: FieldTypes.LONG
+                }),
+                maxSalary: new JDLField({
+                  name: 'maxSalary',
+                  type: FieldTypes.LONG
+                })
+              }
+            })
+          );
           expect(jdlObject.getOptions()).to.deep.eq([
             new JDLUnaryOption({
               name: UnaryOptions.SKIP_SERVER,
@@ -176,7 +184,7 @@ describe('DocumentParser', () => {
           input = JDLReader.parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
         });
 
-        it('doesn\'t check for field types', () => {
+        it("doesn't check for field types", () => {
           DocumentParser.parseFromConfigurationObject({
             document: input,
             applicationType: ApplicationTypes.GATEWAY
@@ -200,7 +208,7 @@ describe('DocumentParser', () => {
           expect(relationship.isInjectedFieldInToRequired).to.be.false;
         });
       });
-      context('with a field name \'id\'', () => {
+      context("with a field name 'id'", () => {
         let jdlObject = null;
 
         before(() => {
@@ -210,14 +218,16 @@ describe('DocumentParser', () => {
           });
         });
 
-        it('doesn\'t add it', () => {
-          expect(jdlObject.entities.A).to.deep.eq(new JDLEntity({
-            name: 'A',
-            tableName: 'A',
-            fields: {
-              email: new JDLField({ name: 'email', type: FieldTypes.STRING })
-            }
-          }));
+        it("doesn't add it", () => {
+          expect(jdlObject.entities.A).to.deep.eq(
+            new JDLEntity({
+              name: 'A',
+              tableName: 'A',
+              fields: {
+                email: new JDLField({ name: 'email', type: FieldTypes.STRING })
+              }
+            })
+          );
         });
       });
       context('with User entity as destination for a relationship', () => {
@@ -247,7 +257,7 @@ describe('DocumentParser', () => {
             DocumentParser.parseFromConfigurationObject({
               document: input
             });
-          }).to.throw('The option\'s name and value must be valid to create an option, got value \'wrong\' for \'dto\'.');
+          }).to.throw("The option's name and value must be valid to create an option, got value 'wrong' for 'dto'.");
         });
       });
       context('with a required enum', () => {
@@ -263,16 +273,20 @@ describe('DocumentParser', () => {
             name: 'sourceType',
             type: 'MyEnum'
           });
-          enumField.addValidation(new JDLValidation({
-            name: Validations.REQUIRED
-          }));
+          enumField.addValidation(
+            new JDLValidation({
+              name: Validations.REQUIRED
+            })
+          );
         });
 
         it('adds it', () => {
-          expect(jdlObject.getEnum('MyEnum')).to.deep.eq(new JDLEnum({
-            name: 'MyEnum',
-            values: ['AAA', 'BBB', 'CCC']
-          }));
+          expect(jdlObject.getEnum('MyEnum')).to.deep.eq(
+            new JDLEnum({
+              name: 'MyEnum',
+              values: ['AAA', 'BBB', 'CCC']
+            })
+          );
           expect(jdlObject.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
         });
       });
@@ -561,7 +575,7 @@ describe('DocumentParser', () => {
           });
         });
 
-        it('assigns the constants\' value when needed', () => {
+        it("assigns the constants' value when needed", () => {
           expect(jdlObject.entities.A.fields).to.deep.eq({
             name: {
               name: 'name',
@@ -654,7 +668,7 @@ describe('DocumentParser', () => {
             buildTool: 'maven',
             cacheProvider: 'ehcache',
             clientFramework: 'angularX',
-            clientPackageManager: 'yarn',
+            clientPackageManager: 'npm',
             databaseType: 'sql',
             devDatabaseType: 'h2Disk',
             enableHibernateCache: true,
@@ -684,7 +698,7 @@ describe('DocumentParser', () => {
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
           jdlObject = DocumentParser.parseFromConfigurationObject({
-            document: input,
+            document: input
           });
           filterOption = jdlObject.getOptionsForName(UnaryOptions.FILTER)[0];
         });
@@ -700,16 +714,17 @@ describe('DocumentParser', () => {
           let clientRootFolderOption = null;
 
           before(() => {
-            const input = JDLReader.parseFromFiles(['./test/test_files/client_root_folder.jdl']);
+            const input = JDLReader.parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
             jdlObject = DocumentParser.parseFromConfigurationObject({
               document: input,
-              applicationType: ApplicationTypes.MICROSERVICE
+              applicationType: ApplicationTypes.MICROSERVICE,
+              applicationName: 'ms'
             });
             clientRootFolderOption = jdlObject.getOptionsForName(BinaryOptions.CLIENT_ROOT_FOLDER)[0];
           });
 
-          it('is ignored', () => {
-            expect(clientRootFolderOption).to.be.undefined;
+          it('sets the microservice name as clientRootFolder', () => {
+            expect(clientRootFolderOption.value).to.equal('ms');
           });
         });
         context('inside any other app', () => {
@@ -725,7 +740,7 @@ describe('DocumentParser', () => {
             clientRootFolderOption = jdlObject.getOptionsForName(BinaryOptions.CLIENT_ROOT_FOLDER)[0];
           });
 
-          it('works', () => {
+          it("sets the option's value", () => {
             expect(clientRootFolderOption.entityNames.has('*')).to.be.true;
             expect(clientRootFolderOption.excludedNames.has('C')).to.be.true;
             expect(clientRootFolderOption.value).to.equal('test-root');
@@ -748,7 +763,7 @@ describe('DocumentParser', () => {
           });
 
           it('adds it to every entity', () => {
-            expect(jdlObject.getOptionQuantity()).to.equal(1);
+            expect(jdlObject.getOptionQuantity()).to.equal(2);
             expect(microserviceOption.entityNames.toString()).to.equal('[A,B,C,D,E,F,G]');
           });
         });
@@ -767,7 +782,7 @@ describe('DocumentParser', () => {
           });
 
           it('does not automatically setup the microservice option', () => {
-            expect(jdlObject.getOptionQuantity()).to.equal(1);
+            expect(jdlObject.getOptionQuantity()).to.equal(2);
             expect(microserviceOption.entityNames.toString()).to.equal('[A]');
           });
         });

@@ -47,11 +47,13 @@ describe('JHipsterEntityExporter', () => {
         before(() => {
           entities = {
             A: {
-              fields: [{
-                fieldName: 'myEnum',
-                fieldType: 'MyEnum',
-                fieldValues: 'FRENCH,ENGLISH'
-              }],
+              fields: [
+                {
+                  fieldName: 'myEnum',
+                  fieldType: 'MyEnum',
+                  fieldValues: 'FRENCH,ENGLISH'
+                }
+              ],
               relationships: [],
               changelogDate: '42',
               javadoc: '',
@@ -93,14 +95,16 @@ describe('JHipsterEntityExporter', () => {
         let newChangelogDate = null;
         let returned = null;
 
-        before((done) => {
+        before(done => {
           entities = {
             A: {
-              fields: [{
-                fieldName: 'myEnum',
-                fieldType: 'MyEnum',
-                fieldValues: 'FRENCH,ENGLISH'
-              }],
+              fields: [
+                {
+                  fieldName: 'myEnum',
+                  fieldType: 'MyEnum',
+                  fieldValues: 'FRENCH,ENGLISH'
+                }
+              ],
               relationships: [],
               changelogDate: '42',
               javadoc: '',
@@ -364,7 +368,8 @@ describe('JHipsterEntityExporter', () => {
                 clientRootFolder: '',
                 applications: '*',
                 microserviceName: 'store'
-              }]);
+              }
+            ]);
           });
           it('exports every entity', () => {
             expect(FileUtils.doesFileExist('.jhipster/Client.json'));
@@ -489,13 +494,13 @@ describe('JHipsterEntityExporter', () => {
             });
 
             it('exports every entity', () => {
-              ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach((entityName) => {
+              ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
                 expect(FileUtils.doesFileExist(`.jhipster/${entityName}.json`)).to.be.true;
               });
             });
 
             after(() => {
-              ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach((entityName) => {
+              ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
                 fs.unlinkSync(`.jhipster/${entityName}.json`);
               });
               fs.rmdirSync('.jhipster');
@@ -656,7 +661,7 @@ describe('JHipsterEntityExporter', () => {
           JHipsterEntityExporter.exportEntitiesInApplications({
             entities: { A: entity },
             applications: {
-              toto: application,
+              toto: application
             }
           });
         });
@@ -682,11 +687,13 @@ describe('JHipsterEntityExporter', () => {
         before(() => {
           entities = {
             A: {
-              fields: [{
-                fieldName: 'myEnum',
-                fieldType: 'MyEnum',
-                fieldValues: 'FRENCH,ENGLISH'
-              }],
+              fields: [
+                {
+                  fieldName: 'myEnum',
+                  fieldType: 'MyEnum',
+                  fieldValues: 'FRENCH,ENGLISH'
+                }
+              ],
               relationships: [],
               changelogDate: '42',
               javadoc: '',
@@ -700,10 +707,12 @@ describe('JHipsterEntityExporter', () => {
               applications: ['toto']
             },
             B: {
-              fields: [{
-                fieldName: 'myString',
-                fieldType: 'String',
-              }],
+              fields: [
+                {
+                  fieldName: 'myString',
+                  fieldType: 'String'
+                }
+              ],
               relationships: [],
               changelogDate: '43',
               javadoc: '',

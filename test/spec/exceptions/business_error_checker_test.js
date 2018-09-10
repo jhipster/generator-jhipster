@@ -149,13 +149,15 @@ describe('BusinessErrorChecker', () => {
 
     context('when having an UAA application with skipped user management', () => {
       before(() => {
-        jdlObject.addApplication(new JDLApplication({
-          config: {
-            applicationType: ApplicationTypes.UAA,
-            skipUserManagement: true,
-            uaaBaseName: 'uaa'
-          }
-        }));
+        jdlObject.addApplication(
+          new JDLApplication({
+            config: {
+              applicationType: ApplicationTypes.UAA,
+              skipUserManagement: true,
+              uaaBaseName: 'uaa'
+            }
+          })
+        );
         checker = new BusinessErrorChecker(jdlObject);
       });
 
@@ -168,13 +170,15 @@ describe('BusinessErrorChecker', () => {
     context('when having no database type', () => {
       context('for a microservice without oauth2', () => {
         before(() => {
-          jdlObject.addApplication(new JDLApplication({
-            config: {
-              applicationType: ApplicationTypes.MICROSERVICE,
-              authenticationType: 'jwt',
-              databaseType: DatabaseTypes.NO
-            }
-          }));
+          jdlObject.addApplication(
+            new JDLApplication({
+              config: {
+                applicationType: ApplicationTypes.MICROSERVICE,
+                authenticationType: 'jwt',
+                databaseType: DatabaseTypes.NO
+              }
+            })
+          );
           checker = new BusinessErrorChecker(jdlObject);
 
           it('does not fail', () => {
@@ -186,13 +190,15 @@ describe('BusinessErrorChecker', () => {
       });
       context('for a gateway with uaa', () => {
         before(() => {
-          jdlObject.addApplication(new JDLApplication({
-            config: {
-              applicationType: ApplicationTypes.GATEWAY,
-              authenticationType: 'uaa',
-              databaseType: DatabaseTypes.NO
-            }
-          }));
+          jdlObject.addApplication(
+            new JDLApplication({
+              config: {
+                applicationType: ApplicationTypes.GATEWAY,
+                authenticationType: 'uaa',
+                databaseType: DatabaseTypes.NO
+              }
+            })
+          );
           checker = new BusinessErrorChecker(jdlObject);
         });
         it('does not fail', () => {
@@ -203,20 +209,24 @@ describe('BusinessErrorChecker', () => {
       });
       context('for any other case', () => {
         before(() => {
-          jdlObject.addApplication(new JDLApplication({
-            config: {
-              applicationType: ApplicationTypes.MONOLITH,
-              authenticationType: 'jwt',
-              databaseType: DatabaseTypes.NO
-            }
-          }));
+          jdlObject.addApplication(
+            new JDLApplication({
+              config: {
+                applicationType: ApplicationTypes.MONOLITH,
+                authenticationType: 'jwt',
+                databaseType: DatabaseTypes.NO
+              }
+            })
+          );
           checker = new BusinessErrorChecker(jdlObject);
         });
         it('fails', () => {
           expect(() => {
             checker.checkForApplicationErrors();
-          }).to.throw('Having no database type is only allowed for microservices without oauth2 authentication '
-            + 'type and gateways with UAA authentication type.');
+          }).to.throw(
+            'Having no database type is only allowed for microservices without oauth2 authentication ' +
+              'type and gateways with UAA authentication type.'
+          );
         });
       });
     });
@@ -228,9 +238,11 @@ describe('BusinessErrorChecker', () => {
 
     before(() => {
       jdlObject = new JDLObject();
-      jdlObject.addEntity(new JDLEntity({
-        name: 'valid'
-      }));
+      jdlObject.addEntity(
+        new JDLEntity({
+          name: 'valid'
+        })
+      );
     });
     afterEach(() => {
       jdlObject = new JDLObject();
@@ -252,9 +264,11 @@ describe('BusinessErrorChecker', () => {
     });
     context('when having an entity with a reserved name', () => {
       before(() => {
-        jdlObject.addEntity(new JDLEntity({
-          name: 'valid'
-        }));
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'valid'
+          })
+        );
         checker = new BusinessErrorChecker(jdlObject);
         jdlObject.entities.Continue = jdlObject.getEntity('valid');
         jdlObject.entities.Continue.name = 'Continue';
@@ -264,16 +278,18 @@ describe('BusinessErrorChecker', () => {
       it('fails', () => {
         expect(() => {
           checker.checkForEntityErrors();
-        }).to.throw('The name \'Continue\' is a reserved keyword and can not be used as an entity class name.');
+        }).to.throw("The name 'Continue' is a reserved keyword and can not be used as an entity class name.");
       });
     });
     context('when not having applications but only entities', () => {
       context('with an entity having a reserved table name', () => {
         before(() => {
-          jdlObject.addEntity(new JDLEntity({
-            name: 'valid',
-            tableName: 'continue'
-          }));
+          jdlObject.addEntity(
+            new JDLEntity({
+              name: 'valid',
+              tableName: 'continue'
+            })
+          );
           checker = new BusinessErrorChecker(jdlObject, {
             databaseType: DatabaseTypes.SQL
           });
@@ -282,31 +298,37 @@ describe('BusinessErrorChecker', () => {
         it('fails', () => {
           expect(() => {
             checker.checkForEntityErrors();
-          }).to.throw('The name \'continue\' is a reserved keyword and can not be used as an entity table name.');
+          }).to.throw("The name 'continue' is a reserved keyword and can not be used as an entity table name.");
         });
       });
     });
     context('when having entities in applications', () => {
       context('with an entity having a reserved table name', () => {
         before(() => {
-          jdlObject.addApplication(new JDLApplication({
-            config: {
-              databaseType: DatabaseTypes.SQL
-            },
-            entities: ['valid']
-          }));
-          jdlObject.addEntity(new JDLEntity({
-            name: 'valid',
-            tableName: 'continue'
-          }));
+          jdlObject.addApplication(
+            new JDLApplication({
+              config: {
+                databaseType: DatabaseTypes.SQL
+              },
+              entities: ['valid']
+            })
+          );
+          jdlObject.addEntity(
+            new JDLEntity({
+              name: 'valid',
+              tableName: 'continue'
+            })
+          );
           checker = new BusinessErrorChecker(jdlObject);
         });
 
         it('fails', () => {
           expect(() => {
             checker.checkForEntityErrors();
-          }).to.throw('The name \'continue\' is a reserved keyword and can not be used as an entity table name for '
-            + 'at least one of these applications: jhipster.');
+          }).to.throw(
+            "The name 'continue' is a reserved keyword and can not be used as an entity table name for " +
+              'at least one of these applications: jhipster.'
+          );
         });
       });
     });
@@ -321,10 +343,12 @@ describe('BusinessErrorChecker', () => {
       const entity = new JDLEntity({
         name: 'Valid'
       });
-      entity.addField(new JDLField({
-        name: 'validField',
-        type: FieldTypes.CommonDBTypes.STRING
-      }));
+      entity.addField(
+        new JDLField({
+          name: 'validField',
+          type: FieldTypes.CommonDBTypes.STRING
+        })
+      );
       jdlObject.addEntity(entity);
     });
 
@@ -354,7 +378,7 @@ describe('BusinessErrorChecker', () => {
       it('fails', () => {
         expect(() => {
           checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
-        }).to.throw('The name \'catch\' is a reserved keyword and can not be used as an entity field name.');
+        }).to.throw("The name 'catch' is a reserved keyword and can not be used as an entity field name.");
       });
     });
     context('when passing gateway as application type', () => {
@@ -363,10 +387,12 @@ describe('BusinessErrorChecker', () => {
           const validEntity = new JDLEntity({
             name: 'Valid'
           });
-          validEntity.addField(new JDLField({
-            name: 'validField',
-            type: FieldTypes.CassandraTypes.UUID
-          }));
+          validEntity.addField(
+            new JDLField({
+              name: 'validField',
+              type: FieldTypes.CassandraTypes.UUID
+            })
+          );
           jdlObject.addEntity(validEntity);
           checker = new BusinessErrorChecker(jdlObject, {
             databaseType: DatabaseTypes.SQL,
@@ -384,19 +410,23 @@ describe('BusinessErrorChecker', () => {
     context('if the field type is invalid for a database type', () => {
       context('when checking a JDL object with a JDL application', () => {
         before(() => {
-          jdlObject.addApplication(new JDLApplication({
-            config: {
-              databaseType: DatabaseTypes.SQL
-            },
-            entities: ['Valid']
-          }));
+          jdlObject.addApplication(
+            new JDLApplication({
+              config: {
+                databaseType: DatabaseTypes.SQL
+              },
+              entities: ['Valid']
+            })
+          );
           const validEntity = new JDLEntity({
             name: 'Valid'
           });
-          validEntity.addField(new JDLField({
-            name: 'validField',
-            type: 'WeirdType'
-          }));
+          validEntity.addField(
+            new JDLField({
+              name: 'validField',
+              type: 'WeirdType'
+            })
+          );
           jdlObject.addEntity(validEntity);
           checker = new BusinessErrorChecker(jdlObject);
         });
@@ -404,7 +434,7 @@ describe('BusinessErrorChecker', () => {
         it('fails', () => {
           expect(() => {
             checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
-          }).to.throw('The type \'WeirdType\' is an unknown field type for field \'validField\' of entity \'Valid\'.');
+          }).to.throw("The type 'WeirdType' is an unknown field type for field 'validField' of entity 'Valid'.");
         });
       });
       context('when checking a JDL object with no JDL application', () => {
@@ -412,10 +442,12 @@ describe('BusinessErrorChecker', () => {
           const validEntity = new JDLEntity({
             name: 'Valid'
           });
-          validEntity.addField(new JDLField({
-            name: 'validField',
-            type: 'WeirdType'
-          }));
+          validEntity.addField(
+            new JDLField({
+              name: 'validField',
+              type: 'WeirdType'
+            })
+          );
           jdlObject.addEntity(validEntity);
           checker = new BusinessErrorChecker(jdlObject, {
             databaseType: DatabaseTypes.SQL
@@ -425,7 +457,7 @@ describe('BusinessErrorChecker', () => {
         it('fails', () => {
           expect(() => {
             checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
-          }).to.throw('The type \'WeirdType\' is an unknown field type for field \'validField\' of entity \'Valid\'.');
+          }).to.throw("The type 'WeirdType' is an unknown field type for field 'validField' of entity 'Valid'.");
         });
       });
     });
@@ -447,10 +479,12 @@ describe('BusinessErrorChecker', () => {
           name: 'validField',
           type: FieldTypes.CommonDBTypes.STRING
         });
-        field.addValidation(new JDLValidation({
-          name: Validations.MIN,
-          value: 42
-        }));
+        field.addValidation(
+          new JDLValidation({
+            name: Validations.MIN,
+            value: 42
+          })
+        );
         entity.addField(field);
         jdlObject.addEntity(entity);
         checker = new BusinessErrorChecker(jdlObject);
@@ -459,7 +493,7 @@ describe('BusinessErrorChecker', () => {
       it('fails', () => {
         expect(() => {
           checker.checkForValidationErrors(jdlObject.getEntity('Valid').fields.validField);
-        }).to.throw('The validation \'min\' isn\'t supported for the type \'String\'.');
+        }).to.throw("The validation 'min' isn't supported for the type 'String'.");
       });
     });
   });
@@ -497,7 +531,9 @@ describe('BusinessErrorChecker', () => {
       it('fails', () => {
         expect(() => {
           checker.checkForRelationshipErrors();
-        }).to.throw('Relationships from the User entity is not supported in the declaration between \'User\' and \'Valid\'.');
+        }).to.throw(
+          "Relationships from the User entity is not supported in the declaration between 'User' and 'Valid'."
+        );
       });
     });
     context('when the source entity is missing', () => {
@@ -604,7 +640,7 @@ describe('BusinessErrorChecker', () => {
         it('fails', () => {
           expect(() => {
             checker.checkForRelationshipErrors();
-          }).to.throw('Required relationships to the same entity are not supported, for relationship from \'A\' to \'A\'.');
+          }).to.throw("Required relationships to the same entity are not supported, for relationship from 'A' to 'A'.");
         });
       });
       context('for the source entity', () => {
@@ -627,7 +663,7 @@ describe('BusinessErrorChecker', () => {
         it('fails', () => {
           expect(() => {
             checker.checkForRelationshipErrors();
-          }).to.throw('Required relationships to the same entity are not supported, for relationship from \'A\' to \'A\'.');
+          }).to.throw("Required relationships to the same entity are not supported, for relationship from 'A' to 'A'.");
         });
       });
     });
@@ -645,16 +681,18 @@ describe('BusinessErrorChecker', () => {
 
     context('when having a reserved name as class name', () => {
       before(() => {
-        jdlObject.addEnum(new JDLEnum({
-          name: 'Catch'
-        }));
+        jdlObject.addEnum(
+          new JDLEnum({
+            name: 'Catch'
+          })
+        );
         checker = new BusinessErrorChecker(jdlObject);
       });
 
       it('fails', () => {
         expect(() => {
           checker.checkForEnumErrors();
-        }).to.throw('The enum name \'Catch\' is reserved keyword and can not be used as enum class name.');
+        }).to.throw("The enum name 'Catch' is reserved keyword and can not be used as enum class name.");
       });
     });
   });
@@ -672,42 +710,52 @@ describe('BusinessErrorChecker', () => {
     context('when having a JDL with pagination and Cassandra as database type', () => {
       context('inside a JDL application', () => {
         before(() => {
-          jdlObject.addApplication(new JDLApplication({
-            config: {
-              databaseType: DatabaseTypes.CASSANDRA
-            },
-            entities: ['A']
-          }));
-          jdlObject.addEntity(new JDLEntity({
-            name: 'A'
-          }));
-          jdlObject.addOption(new JDLBinaryOption({
-            name: BinaryOptions.Options.PAGINATION,
-            value: BinaryOptions.Values.pagination.PAGER,
-            entityNames: ['A']
-          }));
+          jdlObject.addApplication(
+            new JDLApplication({
+              config: {
+                databaseType: DatabaseTypes.CASSANDRA
+              },
+              entities: ['A']
+            })
+          );
+          jdlObject.addEntity(
+            new JDLEntity({
+              name: 'A'
+            })
+          );
+          jdlObject.addOption(
+            new JDLBinaryOption({
+              name: BinaryOptions.Options.PAGINATION,
+              value: BinaryOptions.Values.pagination.PAGER,
+              entityNames: ['A']
+            })
+          );
           checker = new BusinessErrorChecker(jdlObject);
         });
 
         it('fails', () => {
           expect(() => {
             checker.checkForOptionErrors();
-          }).to.throw('Pagination isn\'t allowed when the app uses Cassandra, for entity: \'A\' and application: \'jhipster\'');
+          }).to.throw(
+            "Pagination isn't allowed when the app uses Cassandra, for entity: 'A' and application: 'jhipster'"
+          );
         });
       });
       context('not inside a JDL application', () => {
         before(() => {
-          jdlObject.addOption(new JDLBinaryOption({
-            name: BinaryOptions.Options.PAGINATION,
-            value: BinaryOptions.Values.pagination.PAGER
-          }));
+          jdlObject.addOption(
+            new JDLBinaryOption({
+              name: BinaryOptions.Options.PAGINATION,
+              value: BinaryOptions.Values.pagination.PAGER
+            })
+          );
           checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });
         });
 
         it('fails', () => {
           expect(() => {
             checker.checkForOptionErrors();
-          }).to.throw('Pagination isn\'t allowed when the app uses Cassandra.');
+          }).to.throw("Pagination isn't allowed when the app uses Cassandra.");
         });
       });
     });
@@ -725,7 +773,7 @@ describe('BusinessErrorChecker', () => {
       it('fails', () => {
         expect(() => {
           checker.checkForOptionErrors();
-        }).to.throw('The \'pagination\' option needs a value.');
+        }).to.throw("The 'pagination' option needs a value.");
       });
     });
     context('when not passing a valid value for a binary option', () => {
@@ -742,21 +790,25 @@ describe('BusinessErrorChecker', () => {
       it('fails', () => {
         expect(() => {
           checker.checkForOptionErrors();
-        }).to.throw('The \'pagination\' option is not valid for value \'mapstruct\'.');
+        }).to.throw("The 'pagination' option is not valid for value 'mapstruct'.");
       });
     });
     context('when having DTOs without services', () => {
       before(() => {
-        jdlObject.addOption(new JDLBinaryOption({
-          name: BinaryOptions.Options.DTO,
-          value: BinaryOptions.Values.dto.MAPSTRUCT,
-          entityNames: ['A', 'B', 'C']
-        }));
-        jdlObject.addOption(new JDLBinaryOption({
-          name: BinaryOptions.Options.SERVICE,
-          value: BinaryOptions.Values.service.SERVICE_CLASS,
-          entityNames: ['B']
-        }));
+        jdlObject.addOption(
+          new JDLBinaryOption({
+            name: BinaryOptions.Options.DTO,
+            value: BinaryOptions.Values.dto.MAPSTRUCT,
+            entityNames: ['A', 'B', 'C']
+          })
+        );
+        jdlObject.addOption(
+          new JDLBinaryOption({
+            name: BinaryOptions.Options.SERVICE,
+            value: BinaryOptions.Values.service.SERVICE_CLASS,
+            entityNames: ['B']
+          })
+        );
         checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.SQL });
       });
 
@@ -764,6 +816,45 @@ describe('BusinessErrorChecker', () => {
         expect(() => {
           checker.checkForOptionErrors();
         }).to.throw('Selecting DTOs without services is forbidden, for entities A, C.');
+      });
+    });
+    context('when having DTOs with services', () => {
+      before(() => {
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'A'
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'B'
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'C'
+          })
+        );
+        jdlObject.addOption(
+          new JDLBinaryOption({
+            name: BinaryOptions.Options.DTO,
+            value: BinaryOptions.Values.dto.MAPSTRUCT,
+            entityNames: ['A', 'B']
+          })
+        );
+        jdlObject.addOption(
+          new JDLBinaryOption({
+            name: BinaryOptions.Options.SERVICE,
+            value: BinaryOptions.Values.service.SERVICE_CLASS,
+            excludedNames: ['C']
+          })
+        );
+        checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.SQL });
+      });
+      it("doesn't fail", () => {
+        expect(() => {
+          checker.checkForOptionErrors();
+        }).not.to.throw();
       });
     });
   });

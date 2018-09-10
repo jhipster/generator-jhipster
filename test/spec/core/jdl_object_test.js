@@ -53,8 +53,10 @@ describe('JDLObject', () => {
                 baseName: 'toto'
               }
             });
-          }).to.throw('The application must be valid in order to be added to the JDL object.\n'
-            + 'Errors: No authentication type, No build tool');
+          }).to.throw(
+            'The application must be valid in order to be added to the JDL object.\n' +
+              'Errors: No authentication type, No build tool'
+          );
         });
       });
     });
@@ -114,7 +116,7 @@ describe('JDLObject', () => {
       const result = [];
 
       before(() => {
-        jdlObject.forEachApplication((application) => {
+        jdlObject.forEachApplication(application => {
           result.push(application.config.baseName);
         });
       });
@@ -140,13 +142,17 @@ describe('JDLObject', () => {
           object.addEntity({
             name: 'Something',
             tableName: 't_something',
-            fields: [{
-              type: 'String',
-              comment: 'comment',
-              validations: []
-            }]
+            fields: [
+              {
+                type: 'String',
+                comment: 'comment',
+                validations: []
+              }
+            ]
           });
-        }).to.throw('The entity must be valid in order to be added to the JDL object.\nErrors: For field #1: No field name');
+        }).to.throw(
+          'The entity must be valid in order to be added to the JDL object.\nErrors: For field #1: No field name'
+        );
       });
     });
     context('when adding a valid entity', () => {
@@ -230,9 +236,11 @@ describe('JDLObject', () => {
 
     context('when having one or more entities', () => {
       before(() => {
-        jdlObject.addEntity(new JDLEntity({
-          name: 'toto'
-        }));
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'toto'
+          })
+        );
       });
 
       it('returns the number of entities', () => {
@@ -286,7 +294,7 @@ describe('JDLObject', () => {
       const result = [];
 
       before(() => {
-        jdlObject.forEachEntity((entity) => {
+        jdlObject.forEachEntity(entity => {
           result.push(entity.name);
         });
       });
@@ -412,9 +420,11 @@ describe('JDLObject', () => {
 
     context('when having one or more enums', () => {
       before(() => {
-        jdlObject.addEnum(new JDLEnum({
-          name: 'toto'
-        }));
+        jdlObject.addEnum(
+          new JDLEnum({
+            name: 'toto'
+          })
+        );
       });
 
       it('returns the number of enums', () => {
@@ -440,7 +450,7 @@ describe('JDLObject', () => {
       const result = [];
 
       before(() => {
-        jdlObject.forEachEnum((jdlEnum) => {
+        jdlObject.forEachEnum(jdlEnum => {
           result.push(jdlEnum.name);
         });
       });
@@ -458,17 +468,21 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addRelationship(null);
-          }).to.throw('The relationship must be valid in order to be added to the JDL object.\nErrors: No relationship');
+          }).to.throw(
+            'The relationship must be valid in order to be added to the JDL object.\nErrors: No relationship'
+          );
         });
       });
       context('such as an incomplete relationship', () => {
         it('fails', () => {
           expect(() => {
-            object.addRelationship(new JDLRelationship({
-              to: 'Valid',
-              type: RelationshipTypes.MANY_TO_MANY,
-              injectedFieldInFrom: 'something'
-            }));
+            object.addRelationship(
+              new JDLRelationship({
+                to: 'Valid',
+                type: RelationshipTypes.MANY_TO_MANY,
+                injectedFieldInFrom: 'something'
+              })
+            );
           }).to.throw('Source and destination entities must be passed to create a relationship.');
         });
       });
@@ -507,7 +521,7 @@ describe('JDLObject', () => {
         object.addRelationship(relationship);
       });
 
-      it('doesn\'t do anything', () => {
+      it("doesn't do anything", () => {
         expect(object.relationships.manyToManyQuantity()).to.equal(1);
       });
     });
@@ -527,12 +541,14 @@ describe('JDLObject', () => {
 
     context('when having one or more relationships', () => {
       before(() => {
-        jdlObject.addRelationship(new JDLRelationship({
-          from: 'A',
-          to: 'B',
-          type: RelationshipTypes.ONE_TO_ONE,
-          injectedFieldInFrom: 'b'
-        }));
+        jdlObject.addRelationship(
+          new JDLRelationship({
+            from: 'A',
+            to: 'B',
+            type: RelationshipTypes.ONE_TO_ONE,
+            injectedFieldInFrom: 'b'
+          })
+        );
       });
 
       it('returns the number of relationships', () => {
@@ -545,18 +561,22 @@ describe('JDLObject', () => {
 
     before(() => {
       jdlObject = new JDLObject();
-      jdlObject.addRelationship(new JDLRelationship({
-        from: 'Abc',
-        to: 'Abc2',
-        injectedFieldInFrom: 'something',
-        type: RelationshipTypes.ONE_TO_ONE
-      }));
-      jdlObject.addRelationship(new JDLRelationship({
-        from: 'Abc',
-        to: 'Abc2',
-        injectedFieldInFrom: 'something',
-        type: RelationshipTypes.ONE_TO_MANY
-      }));
+      jdlObject.addRelationship(
+        new JDLRelationship({
+          from: 'Abc',
+          to: 'Abc2',
+          injectedFieldInFrom: 'something',
+          type: RelationshipTypes.ONE_TO_ONE
+        })
+      );
+      jdlObject.addRelationship(
+        new JDLRelationship({
+          from: 'Abc',
+          to: 'Abc2',
+          injectedFieldInFrom: 'something',
+          type: RelationshipTypes.ONE_TO_MANY
+        })
+      );
     });
 
     context('when not passing a function', () => {
@@ -568,7 +588,7 @@ describe('JDLObject', () => {
       const result = [];
 
       before(() => {
-        jdlObject.forEachRelationship((jdlRelationship) => {
+        jdlObject.forEachRelationship(jdlRelationship => {
           result.push(jdlRelationship.type);
         });
       });
@@ -593,8 +613,10 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addOption({});
-          }).to.throw('The option must be valid in order to be added to the JDL object.\n'
-            + 'Errors: No option name, No entity names, No excluded names, No type');
+          }).to.throw(
+            'The option must be valid in order to be added to the JDL object.\n' +
+              'Errors: No option name, No entity names, No excluded names, No type'
+          );
         });
       });
       context('such as a wrong option/value', () => {
@@ -604,8 +626,10 @@ describe('JDLObject', () => {
               name: UnaryOptions.SKIP_CLIENT,
               type: 'WrongType'
             });
-          }).to.throw('The option must be valid in order to be added to the JDL object.\n'
-            + 'Errors: No entity names, No excluded names, No type');
+          }).to.throw(
+            'The option must be valid in order to be added to the JDL object.\n' +
+              'Errors: No entity names, No excluded names, No type'
+          );
         });
       });
     });
@@ -680,9 +704,11 @@ describe('JDLObject', () => {
 
     context('when having one or more options', () => {
       before(() => {
-        jdlObject.addOption(new JDLUnaryOption({
-          name: UnaryOptions.SKIP_CLIENT
-        }));
+        jdlObject.addOption(
+          new JDLUnaryOption({
+            name: UnaryOptions.SKIP_CLIENT
+          })
+        );
       });
 
       it('returns the number of options', () => {
@@ -695,12 +721,16 @@ describe('JDLObject', () => {
 
     before(() => {
       jdlObject = new JDLObject();
-      jdlObject.addOption(new JDLUnaryOption({
-        name: UnaryOptions.SKIP_CLIENT
-      }));
-      jdlObject.addOption(new JDLUnaryOption({
-        name: UnaryOptions.SKIP_SERVER
-      }));
+      jdlObject.addOption(
+        new JDLUnaryOption({
+          name: UnaryOptions.SKIP_CLIENT
+        })
+      );
+      jdlObject.addOption(
+        new JDLUnaryOption({
+          name: UnaryOptions.SKIP_SERVER
+        })
+      );
     });
 
     context('when not passing a function', () => {
@@ -712,7 +742,7 @@ describe('JDLObject', () => {
       const result = [];
 
       before(() => {
-        jdlObject.forEachOption((jdlOption) => {
+        jdlObject.forEachOption(jdlOption => {
           result.push(jdlOption.name);
         });
       });
@@ -827,7 +857,8 @@ ${relationship.toString()}
 
 ${option.toString()}
 ${option2.toString()}
-`);
+`
+      );
     });
   });
 });

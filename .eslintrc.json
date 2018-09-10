@@ -4,15 +4,19 @@
     "es6": true,
     "mocha": true
   },
-  "extends": ["airbnb-base"],
+  "extends": [
+    "airbnb-base",
+    "plugin:prettier/recommended"
+  ],
   "plugins": [
-    "mocha"
+    "mocha",
+    "prettier"
   ],
   "rules": {
-    "indent": [2, 2],
+    "prettier/prettier": "error",
+    "indent": [2, 2, { "SwitchCase": 1 }],
     "linebreak-style": ["error", "unix"],
     "eol-last": 2,
-    "quotes": [2, "single"],
     "semi": [2, "always"],
     "eqeqeq": [2, "smart"],
     "no-use-before-define": [2, "nofunc"],

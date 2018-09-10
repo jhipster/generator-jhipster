@@ -46,7 +46,7 @@ describe('JDLApplication', () => {
           buildTool: 'maven',
           cacheProvider: 'ehcache',
           clientFramework: 'angularX',
-          clientPackageManager: 'yarn',
+          clientPackageManager: 'npm',
           databaseType: 'sql',
           devDatabaseType: 'h2Disk',
           enableHibernateCache: true,
@@ -66,15 +66,15 @@ describe('JDLApplication', () => {
           skipServer: false,
           skipUserManagement: false,
           useSass: false,
-          websocket: false,
+          websocket: false
         });
       });
     });
     context('when choosing session as authentication type', () => {
       before(() => {
-        jdlApplicationConfig = new JDLApplication(
-          { config: { jhipsterVersion: '4.9.0', authenticationType: 'session' } }
-        ).config;
+        jdlApplicationConfig = new JDLApplication({
+          config: { jhipsterVersion: '4.9.0', authenticationType: 'session' }
+        }).config;
       });
       it('sets the rememberMeKey value', () => {
         expect(jdlApplicationConfig.rememberMeKey).not.to.be.undefined;
@@ -83,9 +83,8 @@ describe('JDLApplication', () => {
     });
     context('when choosing jwt as authentication type', () => {
       before(() => {
-        jdlApplicationConfig = new JDLApplication(
-          { config: { jhipsterVersion: '4.9.0', authenticationType: 'jwt' } }
-        ).config;
+        jdlApplicationConfig = new JDLApplication({ config: { jhipsterVersion: '4.9.0', authenticationType: 'jwt' } })
+          .config;
       });
       it('sets the jwtSecretKey value', () => {
         expect(jdlApplicationConfig.rememberMeKey).to.be.undefined;
@@ -94,9 +93,9 @@ describe('JDLApplication', () => {
     });
     context('when choosing microservice as app type', () => {
       before(() => {
-        jdlApplicationConfig = new JDLApplication(
-          { config: { jhipsterVersion: '4.9.0', applicationType: 'microservice' } }
-        ).config;
+        jdlApplicationConfig = new JDLApplication({
+          config: { jhipsterVersion: '4.9.0', applicationType: 'microservice' }
+        }).config;
       });
       it('sets the jwtSecretKey value', () => {
         expect(jdlApplicationConfig.rememberMeKey).to.be.undefined;
@@ -105,9 +104,7 @@ describe('JDLApplication', () => {
     });
     context('when having session as authentication type', () => {
       before(() => {
-        jdlApplicationConfig = new JDLApplication(
-          { config: { authenticationType: 'session' } }
-        ).config;
+        jdlApplicationConfig = new JDLApplication({ config: { authenticationType: 'session' } }).config;
       });
 
       it('sets the remember me key', () => {
@@ -132,7 +129,7 @@ describe('JDLApplication', () => {
       const result = [];
 
       before(() => {
-        application.forEachEntityName((entityName) => {
+        application.forEachEntityName(entityName => {
           result.push(entityName);
         });
       });
@@ -155,7 +152,7 @@ describe('JDLApplication', () => {
         expect(jdlApplication.toString()).to.eq(`application {
   config {
     applicationType monolith
-    clientPackageManager yarn
+    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true

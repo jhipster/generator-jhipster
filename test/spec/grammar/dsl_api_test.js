@@ -75,8 +75,8 @@ describe('JDL DSL API', () => {
         });
 
         it('throws an error with position information', () => {
-          expect(parseWrongClosingBraces).to
-            .throw()
+          expect(parseWrongClosingBraces)
+            .to.throw()
             .and.to.have.property('message')
             .that.includes('line: 1')
             .that.includes('column: 17');
@@ -153,22 +153,14 @@ describe('JDL DSL API', () => {
 
       before(() => {
         const input = 'lastName string ';
-        result = getSyntacticAutoCompleteSuggestions(
-          input,
-          'fieldDeclaration'
-        );
+        result = getSyntacticAutoCompleteSuggestions(input, 'fieldDeclaration');
       });
 
       it('provides suggestions', () => {
         expect(result).to.have.lengthOf(4);
         // Note that because we are using token Inheritance with the MIN_MAX_KEYWORD an auto-complete provider would have
         // to translate this to concrete tokens (MIN/MAX/MAX_BYTES/MIN_BYTES/...)
-        expect(result).to.have.members([
-          tokens.REQUIRED,
-          tokens.MIN_MAX_KEYWORD,
-          tokens.PATTERN,
-          tokens.COMMENT
-        ]);
+        expect(result).to.have.members([tokens.REQUIRED, tokens.MIN_MAX_KEYWORD, tokens.PATTERN, tokens.COMMENT]);
       });
     });
     context('with a default start rule', () => {

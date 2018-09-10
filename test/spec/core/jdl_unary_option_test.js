@@ -30,13 +30,13 @@ describe('JDLUnaryOption', () => {
       it('fails', () => {
         expect(() => {
           new JDLUnaryOption();
-        }).to.throw('The option\'s name must be passed to create an option.');
+        }).to.throw("The option's name must be passed to create an option.");
       });
     });
     context('when passing an invalid name', () => {
       expect(() => {
         new JDLUnaryOption({ name: 'IsNotAnOption' });
-      }).to.throw('The option\'s name must exist to create an option, got \'IsNotAnOption\'.');
+      }).to.throw("The option's name must exist to create an option, got 'IsNotAnOption'.");
     });
     context('when passing a name at least', () => {
       let option = null;
@@ -149,7 +149,7 @@ describe('JDLUnaryOption', () => {
         }).to.throw('The entity must have a name so as to be added to the option.');
       });
     });
-    context('when passing a valid entity that hasn\'t been added yet', () => {
+    context("when passing a valid entity that hasn't been added yet", () => {
       let option = null;
       let result = null;
 
@@ -215,7 +215,7 @@ describe('JDLUnaryOption', () => {
         }).to.throw('An entity name has to be passed so as to be added to the option.');
       });
     });
-    context('when passing a name that hasn\'t been added yet', () => {
+    context("when passing a name that hasn't been added yet", () => {
       let option = null;
       let result = null;
 
@@ -333,7 +333,7 @@ describe('JDLUnaryOption', () => {
         }).to.throw('The entity must have a name so as to be excluded from the option.');
       });
     });
-    context('when passing a valid entity that hasn\'t been excluded yet', () => {
+    context("when passing a valid entity that hasn't been excluded yet", () => {
       let option = null;
       let result = null;
 
@@ -398,7 +398,7 @@ describe('JDLUnaryOption', () => {
         }).to.throw('An entity name has to be passed so as to be excluded from the option.');
       });
     });
-    context('when passing a name that hasn\'t been excluded yet', () => {
+    context("when passing a name that hasn't been excluded yet", () => {
       let option = null;
       let result = null;
 
