@@ -67,10 +67,10 @@ public class AsyncConfiguration implements AsyncConfigurer, SchedulingConfigurer
     
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        taskRegistrar.setScheduler(taskScheduledExecutor());
+        taskRegistrar.setScheduler(scheduledTaskExecutor());
     }
 
-    @Bean(destroyMethod="shutdown")
+    @Bean
     public Executor scheduledTaskExecutor() {
         return Executors.newScheduledThreadPool(jHipsterProperties.getAsync().getCorePoolSize());
     }
