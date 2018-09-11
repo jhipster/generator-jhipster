@@ -1,7 +1,7 @@
 
 [![Logo][jhipster-image]][jhipster-url]
 
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url-main] [![Dependency Status][daviddm-image]][daviddm-url]
+[![NPM version][npm-image]][npm-url] [![Travis Build Status][travis-image]][travis-url-main] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main] [![Dependency Status][daviddm-image]][daviddm-url]
 
 Greetings, Java Hipster!
 
@@ -64,7 +64,9 @@ Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hip
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster
 [travis-image]: https://travis-ci.org/jhipster/generator-jhipster.svg?branch=master
+[azure-devops-image]: https://dev.azure.com/jhipster/generator-jhipster/_apis/build/status/jhipster.generator-jhipster?branchName=master
 [travis-url-main]: https://travis-ci.org/jhipster/generator-jhipster
+[azure-devops-url-main]: https://dev.azure.com/jhipster/generator-jhipster/_build
 [daviddm-image]: https://david-dm.org/jhipster/generator-jhipster.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jhipster/generator-jhipster
 [backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=40&width=890
