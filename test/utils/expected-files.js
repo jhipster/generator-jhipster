@@ -37,6 +37,7 @@ const expectedFiles = {
         'README.md',
         '.gitignore',
         '.gitattributes',
+        '.gitpod',
         `${SERVER_MAIN_RES_DIR}banner.txt`,
         `${SERVER_MAIN_RES_DIR}.h2.server.properties`,
         `${SERVER_MAIN_RES_DIR}templates/error.html`,
