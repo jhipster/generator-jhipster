@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { browser, element, by, ExpectedConditions } from 'protractor';
+import { browser, element, by, ExpectedConditions as ec } from 'protractor';
 
 import { NavBarPage, SignInPage<%_ if (authenticationType !== 'oauth2') { _%>, PasswordPage, SettingsPage<%_ } _%> } from '../page-objects/jhi-page-objects';
 <%_
@@ -98,7 +98,7 @@ describe('account', () => {
         <%_ } else { _%>
         const expect2 = 'You are logged in as user "admin".';
         <%_ } _%>
-        await browser.wait(ExpectedConditions.visibilityOf(element(by.id('home-logged-message'))));
+        await browser.wait(ec.visibilityOf(element(by.id('home-logged-message'))));
         const value2 = await element(by.id('home-logged-message')).<%- elementGetter %>;
         expect(value2).to.eq(expect2);
 
