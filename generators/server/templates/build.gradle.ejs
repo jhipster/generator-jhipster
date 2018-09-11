@@ -221,6 +221,7 @@ configurations {
 repositories {
     mavenLocal()
     mavenCentral()
+    jcenter()
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
     // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
     maven { url "https://maven.oracle.com" }
