@@ -56,7 +56,7 @@ describe('account', () => {
         <%_ if (enableTranslation) { _%>
         const expect2 = 'login.messages.error.authentication';
         <%_ } else { _%>
-        const expect2 = 'Failed to sign in!';
+        const expect2 = 'Failed to sign in! Please check your credentials and try again.';
         <%_ } _%>
         const value2 = await element(by.css('.alert-danger')).<%- elementGetter %>;
         expect(value2).to.eq(expect2);
@@ -96,7 +96,7 @@ describe('account', () => {
         <%_ if (enableTranslation) { _%>
         const expect2 = 'home.logged.message';
         <%_ } else { _%>
-        const expect2 = 'You are logged in as user "admin"';
+        const expect2 = 'You are logged in as user "admin".';
         <%_ } _%>
         await browser.wait(ExpectedConditions.visibilityOf(element(by.id('home-logged-message'))));
         const value2 = await element(by.id('home-logged-message')).<%- elementGetter %>;
