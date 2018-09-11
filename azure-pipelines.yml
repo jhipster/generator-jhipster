@@ -24,3 +24,6 @@ steps:
 - script: |
     npm link
   displayName: 'npm link'
+- script: |
+    echo 'Hello World'
+  displayName: 'Test PR'
