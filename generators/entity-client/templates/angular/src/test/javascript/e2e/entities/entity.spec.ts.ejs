@@ -147,7 +147,6 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).to.be.false;
     });<%= closeBlockComment %>
 
-    after(async () => {
     <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
         const nbButtonsBeforeDelete = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
         await <%= entityInstance %>ComponentsPage.clickOnLastDeleteButton();
@@ -165,6 +164,7 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });<%= closeBlockComment %>
 
+    after(async () => {
         await navBarPage.autoSignOut();
     });
 });
