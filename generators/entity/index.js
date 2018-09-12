@@ -684,7 +684,7 @@ module.exports = class extends BaseGenerator {
                     const jhiTablePrefix = context.jhiTablePrefix;
 
                     if (context.dto && context.dto === 'mapstruct') {
-                        if (otherEntityData && (!otherEntityData.dto || otherEntityData.dto !== 'mapstruct')) {
+                        if (otherEntityData && (!otherEntityData.dto || otherEntityData.dto !== 'mapstruct') && otherEntityName !== 'user') {
                             this.warning(chalk.red(`This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`));
                         }
                     }
