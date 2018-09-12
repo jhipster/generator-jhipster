@@ -53,6 +53,11 @@ task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%
 war {
     webAppDirName = '<%= CLIENT_DIST_DIR %>'
 }
+
+task copyIntoStatic (type: Copy) {
+    from '<%= CLIENT_DIST_DIR %>'
+    into 'build/resources/main/static'
+}
 <%_ } _%>
 
 processResources {
@@ -88,4 +93,6 @@ gitProperties {
 <%_ if (!skipClient) { _%>
 test.dependsOn webpack_test
 processResources.dependsOn webpack
+copyIntoStatic.dependsOn processResources
+bootJar.dependsOn copyIntoStatic
 <%_ } _%>

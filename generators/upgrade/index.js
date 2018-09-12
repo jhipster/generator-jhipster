@@ -37,7 +37,12 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         this.force = this.options.force;
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // This adds support for a `--target-version` flag
         this.option('target-version', {
             desc: 'Upgrade to a specific version instead of the latest',
@@ -65,6 +70,12 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
+            validateFromCLi() {
+                if (!this.options['from-cli']) {
+                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                }
+            },
+
             displayLogo() {
                 this.log(chalk.green('Welcome to the JHipster Upgrade Sub-Generator'));
                 this.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));

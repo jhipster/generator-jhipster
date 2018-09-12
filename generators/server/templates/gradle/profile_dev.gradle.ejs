@@ -48,6 +48,11 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task, depend
 war {
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
 }
+
+task copyIntoStatic (type: Copy) {
+    from '<%= CLIENT_DIST_DIR %>'
+    into 'build/resources/main/static'
+}
 <%_ } _%>
 
 processResources {
@@ -72,6 +77,9 @@ processResources {
 
 <%_ if (!skipClient) { _%>
 processResources.dependsOn webpackBuildDev
+copyIntoStatic.dependsOn processResources
+bootJar.dependsOn copyIntoStatic
+
 yarn_install.onlyIf { shouldWebpackRun() == true }
 
 def shouldWebpackRun() {

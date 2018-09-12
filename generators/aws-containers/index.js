@@ -64,7 +64,12 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
 
         this.configOptions = this.options.configOptions || {};
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // This adds support for a `--skip-build` flag
         this.option('skip-build', {
             desc: 'Disables the project build step',
@@ -82,6 +87,11 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
+            validateFromCLi() {
+                if (!this.options['from-cli']) {
+                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                }
+            },
             bonjour() {
                 this.log(chalk.bold('This AWS generator will help you deploy your JHipster app as a Docker container on AWS.'));
             },

@@ -30,7 +30,12 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
 
         configOptions = this.options.configOptions || {};
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // This makes it possible to pass `languages` by argument
         this.argument('languages', {
             type: Array,
@@ -72,6 +77,10 @@ module.exports = class extends BaseGenerator {
     }
 
     initializing() {
+        if (!this.options['from-cli']) {
+            this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+        }
+
         if (this.languages) {
             if (this.skipClient) {
                 this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));

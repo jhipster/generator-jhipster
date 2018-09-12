@@ -18,7 +18,15 @@
 -%>
 package <%=packageName%>.config;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.servlet.InstrumentedFilter;
+import com.codahale.metrics.servlets.MetricsServlet;
+<%_ if (reactive) { _%>
+import com.fasterxml.jackson.databind.ObjectMapper;
+<%_ } _%>
+<%_ if (!skipClient || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import io.github.jhipster.config.JHipsterConstants;
+<%_ } _%>
 import io.github.jhipster.config.JHipsterProperties;
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import io.github.jhipster.config.h2.H2ConfigurationHelper;
@@ -26,26 +34,37 @@ import io.github.jhipster.config.h2.H2ConfigurationHelper;
 <%_ if (!skipClient) { _%>
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 <%_ } _%>
-
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.MetricsServlet;
-
+import io.undertow.UndertowOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import io.undertow.UndertowOptions;
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.boot.web.server.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+<%_ if (reactive) { _%>
+import org.springframework.core.annotation.Order;
+<%_ } _%>
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
+<%_ if (!reactive) { _%>
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+<%_ } _%>
+<%_ if (reactive) { _%>
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
+import org.springframework.web.server.WebExceptionHandler;
+import org.zalando.problem.spring.webflux.advice.ProblemExceptionHandler;
+import org.zalando.problem.spring.webflux.advice.ProblemHandling;
+<%_ } _%>
+
+import javax.servlet.*;
 <%_ if (!skipClient) { _%>
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -55,7 +74,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 <%_ } _%>
 import java.util.*;
-import javax.servlet.*;
 
 <%_ if (!skipClient) { _%>
 import static java.net.URLDecoder.decode;
@@ -65,7 +83,7 @@ import static java.net.URLDecoder.decode;
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory> {
+public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory><% if (reactive) { %>, WebFluxConfigurer<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
@@ -81,19 +99,33 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         this.jHipsterProperties = jHipsterProperties;
     }
 
+    <%_ 
+        // TODO: remove when this is supported in spring-data / spring-boot
+        if (reactive) { _%>
+    @Override
+    public void configureArgumentResolvers(ArgumentResolverConfigurer configurer) {
+        configurer.addCustomResolver(new ReactiveSortHandlerMethodArgumentResolver(),
+            new ReactivePageableHandlerMethodArgumentResolver());
+    }
+
+    <%_ } _%>
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         if (env.getActiveProfiles().length != 0) {
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-        initMetrics(servletContext, disps);<% if (!skipClient) { %>
+        initMetrics(servletContext, disps);
+        <%_ if (!skipClient) { _%>
         if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
-        }<% } %><% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+        }
+        <%_ } _%>
+        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
             initH2Console(servletContext);
-        }<% } %>
+        }
+        <%_ } _%>
         log.info("Web application fully configured");
     }
 
@@ -212,7 +244,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
     }
 
     @Bean
-    public CorsFilter corsFilter() {
+    public Cors<% if (reactive) { %>Web<% } %>Filter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
         if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
@@ -231,8 +263,17 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
             <%_ } _%>
             <%_ } _%>
         }
-        return new CorsFilter(source);
-    }<% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
+        return new Cors<% if (reactive) { %>Web<% } %>Filter(source);
+    }
+    <%_ if (reactive) { _%>
+
+    @Bean
+    @Order(-2) // The handler must have precedence over WebFluxResponseStatusExceptionHandler and Spring Boot's ErrorWebExceptionHandler
+    public WebExceptionHandler problemExceptionHandler(ObjectMapper mapper, ProblemHandling problemHandling) {
+        return new ProblemExceptionHandler(mapper, problemHandling);
+    }
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 
     /**
      * Initializes H2 console.
@@ -240,7 +281,8 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
     private void initH2Console(ServletContext servletContext) {
         log.debug("Initialize H2 console");
         H2ConfigurationHelper.initH2Console(servletContext);
-    }<% } %>
+    }
+    <%_ } _%>
 
     @Autowired(required = false)
     public void setMetricRegistry(MetricRegistry metricRegistry) {

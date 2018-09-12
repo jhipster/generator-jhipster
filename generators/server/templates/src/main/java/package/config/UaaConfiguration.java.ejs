@@ -155,6 +155,7 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
             .withClient(jHipsterProperties.getSecurity().getClientAuthorization().getClientId())
             .secret(passwordEncoder.encode(jHipsterProperties.getSecurity().getClientAuthorization().getClientSecret()))
             .scopes("web-app")
+            .authorities("ROLE_ADMIN")
             .autoApprove(true)
             .authorizedGrantTypes("client_credentials")
             .accessTokenValiditySeconds((int) jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds())

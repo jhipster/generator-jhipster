@@ -37,8 +37,10 @@ env:
     # if JHIPSTER_BRANCH value is release, use the release from NPM
     - JHIPSTER_REPO=https://github.com/jhipster/generator-jhipster.git
     - JHIPSTER_BRANCH=release
+    - DISABLE_WEBPACK_LOGS=true
 
   matrix:
+    - JHIPSTER=webflux-mongodb
     - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-gradle-fr PROFILE=prod PROTRACTOR=1

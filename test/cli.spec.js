@@ -18,7 +18,7 @@ describe('jhipster cli test', () => {
             // corrected test for windows user
             cmd = cmd.replace(/\\/g, '/');
         }
-        expect(cmd).to.match(/node (.*)generator-jhipster\/cli\/jhipster/g);
+        expect(cmd).to.match(/node (.*)\/cli\/jhipster/g);
     });
 
     it('--help should run without errors', (done) => {

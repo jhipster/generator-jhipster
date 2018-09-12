@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const fs = require('fs');
-const path = require('path');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
 const _ = require('lodash');
@@ -30,7 +29,12 @@ const constants = require('../generator-constants');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         this.option('skip-build', {
             desc: 'Skips building the app',
             type: Boolean,
@@ -48,6 +52,10 @@ module.exports = class extends BaseGenerator {
     }
 
     initializing() {
+        if (!this.options['from-cli']) {
+            this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+        }
+
         this.log(chalk.bold('Heroku configuration is starting'));
         this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
         this.baseName = this.config.get('baseName');
@@ -64,7 +72,7 @@ module.exports = class extends BaseGenerator {
         this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
         this.herokuAppName = this.config.get('herokuAppName');
         this.dynoSize = 'Free';
-        this.herokuDeployType = this.config.get('herokuDeployType') || (this.herokuAppName ? 'jar' : null);
+        this.herokuDeployType = this.config.get('herokuDeployType');
     }
 
     get prompting() {
@@ -75,7 +83,10 @@ module.exports = class extends BaseGenerator {
                 if (this.herokuAppName) {
                     exec('heroku apps:info --json', (err, stdout) => {
                         if (err) {
-                            this.config.set('herokuAppName', null);
+                            this.config.set({
+                                herokuAppName: null,
+                                herokuDeployType: this.herokuDeployType
+                            });
                             this.abort = true;
                             this.log.error(`Could not find app: ${chalk.cyan(this.herokuAppName)}`);
                             this.log.error('Run the generator again to create a new app.');
@@ -87,7 +98,10 @@ module.exports = class extends BaseGenerator {
                             }
                             this.log(`Deploying as existing app: ${chalk.bold(this.herokuAppName)}`);
                             this.herokuAppExists = true;
-                            this.config.set('herokuAppName', this.herokuAppName);
+                            this.config.set({
+                                herokuAppName: this.herokuAppName,
+                                herokuDeployType: this.herokuDeployType
+                            });
                         }
                         done();
                     });
@@ -127,12 +141,12 @@ module.exports = class extends BaseGenerator {
                         message: 'Which type of deployment do you want ?',
                         choices: [
                             {
-                                value: 'jar',
-                                name: 'JAR (compile locally)'
-                            },
-                            {
                                 value: 'git',
                                 name: 'Git (compile on Heroku)'
+                            },
+                            {
+                                value: 'jar',
+                                name: 'JAR (compile locally)'
                             }
                         ],
                         default: 0
@@ -140,7 +154,6 @@ module.exports = class extends BaseGenerator {
 
                 this.prompt(prompts).then((props) => {
                     this.herokuDeployType = props.herokuDeployType;
-                    this.config.set('herokuDeployType', this.herokuDeployType);
                     done();
                 });
             }
@@ -160,6 +173,13 @@ module.exports = class extends BaseGenerator {
                         this.abort = true;
                     }
                     done();
+                });
+            },
+
+            saveConfig() {
+                this.config.set({
+                    herokuAppName: this.herokuAppName,
+                    herokuDeployType: this.herokuDeployType
                 });
             }
         };
@@ -252,8 +272,11 @@ module.exports = class extends BaseGenerator {
                                             this.log.error(err);
                                         } else {
                                             this.log(stdout.trim());
+                                            this.config.set({
+                                                herokuAppName: this.herokuAppName,
+                                                herokuDeployType: this.herokuDeployType
+                                            });
                                         }
-                                        this.config.set('herokuAppName', this.herokuAppName);
                                         done();
                                     });
                                 } else {
@@ -272,7 +295,10 @@ module.exports = class extends BaseGenerator {
                                                     this.abort = true;
                                                     this.log.error(err);
                                                 } else {
-                                                    this.config.set('herokuAppName', this.herokuAppName);
+                                                    this.config.set({
+                                                        herokuAppName: this.herokuAppName,
+                                                        herokuDeployType: this.herokuDeployType
+                                                    });
                                                 }
                                                 done();
                                             });
@@ -428,7 +454,7 @@ module.exports = class extends BaseGenerator {
 
             addHerokuMavenProfile() {
                 if (this.buildTool === 'maven') {
-                    fs.readFile(path.join(__dirname, 'templates', 'pom-profile.xml.ejs'), (err, profile) => {
+                    this.render('pom-profile.xml.ejs', (profile) => {
                         this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
                     });
                 }
@@ -508,12 +534,12 @@ module.exports = class extends BaseGenerator {
                                         exec(`heroku buildpacks:add -i 1 heroku/nodejs --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                                             if (err) {
                                                 const line = stderr.toString().trimRight();
-                                                if (line.trim().length !== 0) this.log(line);
+                                                if (line.trim().length !== 0 && line.indexOf('is already set') < 0) this.log(line);
                                             }
                                             exec(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                                                 if (err) {
                                                     const line = stderr.toString().trimRight();
-                                                    if (line.trim().length !== 0) this.log(line);
+                                                    if (line.trim().length !== 0 && line.indexOf('is already set') < 0) this.log(line);
                                                 }
                                                 this.log(chalk.bold('\nDeploying application'));
                                                 const child = exec('git push heroku HEAD:master', { maxBuffer: 1024 * 10000 }, (err) => {

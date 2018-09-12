@@ -26,5 +26,8 @@ services:
         environment:
             - ACCEPT_EULA=Y
             - SA_PASSWORD=yourStrong(!)Password
+            - MSSQL_DATABASE=<%= baseName %>
+            - MSSQL_SLEEP=7
         ports:
             - 1433:1433
+        command: /bin/bash -c '/opt/mssql/bin/sqlservr & echo "wait $$MSSQL_SLEEP sec for DB to start "; sleep $$MSSQL_SLEEP; /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -d tempdb -q "EXIT(CREATE DATABASE $$MSSQL_DATABASE)"; wait;'

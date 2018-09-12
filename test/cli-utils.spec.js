@@ -63,8 +63,8 @@ describe('jhipster cli utils test', () => {
     });
     describe('getCommandOptions', () => {
         describe('when called with empty argv', () => {
-            it('returns an empty object', () => {
-                expect(cliUtil.getCommandOptions(packageJson, [])).to.eql({});
+            it('returns the default object', () => {
+                expect(cliUtil.getCommandOptions(packageJson, [])).to.eql({ 'from-cli': true });
             });
         });
         describe('when called with argv flags', () => {
@@ -73,7 +73,8 @@ describe('jhipster cli utils test', () => {
                 expect(cliUtil.getCommandOptions(packageJson, argv)).to.eql({
                     force: true,
                     'skip-install': true,
-                    skipInstall: true
+                    skipInstall: true,
+                    'from-cli': true
                 });
             });
         });
@@ -84,7 +85,8 @@ describe('jhipster cli utils test', () => {
                     force: true,
                     'skip-install': true,
                     skipInstall: true,
-                    foo: 'bar'
+                    foo: 'bar',
+                    'from-cli': true
                 });
             });
         });
@@ -95,7 +97,8 @@ describe('jhipster cli utils test', () => {
                     force: true,
                     'skip-install': true,
                     skipInstall: true,
-                    foo: 'bar,who'
+                    foo: 'bar,who',
+                    'from-cli': true
                 });
             });
         });

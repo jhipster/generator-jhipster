@@ -65,33 +65,42 @@ function askForApplicationType(meta) {
     if (!meta && this.existingProject) return;
 
     const DEFAULT_APPTYPE = 'monolith';
+
+    const applicationTypeChoices = [
+        {
+            value: DEFAULT_APPTYPE,
+            name: 'Monolithic application (recommended for simple projects)'
+        },
+        {
+            value: 'microservice',
+            name: 'Microservice application'
+        },
+        {
+            value: 'gateway',
+            name: 'Microservice gateway'
+        },
+        {
+            value: 'uaa',
+            name: 'JHipster UAA server (for microservice OAuth2 authentication)'
+        }
+    ];
+
+    if (this.experimental) {
+        applicationTypeChoices.push({
+            value: 'reactive',
+            name: '[Alpha] Reactive monolithic application'
+        });
+        applicationTypeChoices.push({
+            value: 'reactive-micro',
+            name: '[Alpha] Reactive microservice application'
+        });
+    }
+
     const PROMPT = {
         type: 'list',
         name: 'applicationType',
         message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
-        choices: [
-            {
-                value: DEFAULT_APPTYPE,
-                name: 'Monolithic application (recommended for simple projects)'
-            },
-            {
-                value: 'microservice',
-                name: 'Microservice application'
-            },
-            {
-                value: 'gateway',
-                name: 'Microservice gateway'
-            },
-            // Reactive applications are not yet supported!
-            //    {
-            //        value: 'reactive',
-            //        name: 'Reactive application'
-            //    },
-            {
-                value: 'uaa',
-                name: 'JHipster UAA server (for microservice OAuth2 authentication)'
-            }
-        ],
+        choices: applicationTypeChoices,
         default: DEFAULT_APPTYPE
     };
 
@@ -103,7 +112,16 @@ function askForApplicationType(meta) {
         ? Promise.resolve({ applicationType: DEFAULT_APPTYPE })
         : this.prompt(PROMPT);
     promise.then((prompt) => {
-        this.applicationType = this.configOptions.applicationType = prompt.applicationType;
+        if (prompt.applicationType === 'reactive') {
+            this.applicationType = this.configOptions.applicationType = DEFAULT_APPTYPE;
+            this.reactive = this.configOptions.reactive = true;
+        } else if (prompt.applicationType === 'reactive-micro') {
+            this.applicationType = this.configOptions.applicationType = 'microservice';
+            this.reactive = this.configOptions.reactive = true;
+        } else {
+            this.applicationType = this.configOptions.applicationType = prompt.applicationType;
+            this.reactive = this.configOptions.reactive = false;
+        }
         done();
     });
 }

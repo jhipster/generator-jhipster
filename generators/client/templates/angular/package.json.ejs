@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 <% var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- '%>
+
 {
   "name": "<%= dasherizedBaseName %>",
   "version": "0.0.0",
@@ -34,9 +35,9 @@
     "@angular/platform-browser": "6.1.0",
     "@angular/platform-browser-dynamic": "6.1.0",
     "@angular/router": "6.1.0",
-    "@fortawesome/angular-fontawesome": "0.1.1",
-    "@fortawesome/fontawesome-svg-core": "1.2.2",
-    "@fortawesome/free-solid-svg-icons": "5.2.0",
+    "@fortawesome/angular-fontawesome": "0.2.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.4",
+    "@fortawesome/free-solid-svg-icons": "5.3.1",
     "@ng-bootstrap/ng-bootstrap": "3.0.0",
     "bootstrap": "4.1.3",
     "core-js": "2.5.7",
@@ -84,7 +85,6 @@
     "copy-webpack-plugin": "4.5.1",
     "css-loader": "0.28.10",
     "exports-loader": "0.7.0",
-    "extract-text-webpack-plugin": "4.0.0-beta.0",
     "file-loader": "1.1.11",
     "fork-ts-checker-webpack-plugin": "0.4.1",
     "friendly-errors-webpack-plugin": "1.7.0",
@@ -107,7 +107,9 @@
     <%_ if (protractorTests) { _%>
     "mocha": "5.2.0",
     <%_ } _%>
+    "mini-css-extract-plugin": "0.4.2",
     "moment-locales-webpack-plugin": "1.0.5",
+    "optimize-css-assets-webpack-plugin": "5.0.1",
     "prettier": "1.11.1",
     <%_ if (protractorTests) { _%>
     "protractor": "5.4.0",
@@ -132,8 +134,8 @@
     <%_ if (useSass) { _%>
     "sass": "1.13.0",
     "sass-loader": "7.1.0",
-    "postcss-loader": "2.1.1",
     <%_ } _%>
+    "postcss-loader": "2.1.1",
     <%_ if (buildTool === 'maven') { _%>
     "xml2js": "0.4.19",
     <%_ } _%>
@@ -155,14 +157,17 @@
   },
   <%_ if(!skipCommitHook) { _%>
   "lint-staged": {
-    "src/**/*.{ts,css,scss}": ["prettier --write", "git add"]
+    "src/**/*.{ts,css,scss}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   <%_ } _%>
   "scripts": {
     <%_ if(!skipCommitHook) { _%>
     "precommit": "lint-staged",
     <%_ } _%>
-    "prettier:format": "<%= clientPackageManager %> prettier --write 'src/**/*.{ts,css,scss}'",
+    "prettier:format": "prettier --write \"src/**/*.{ts,css,scss}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "ngc": "ngc -p tsconfig-aot.json",
