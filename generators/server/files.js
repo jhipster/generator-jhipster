@@ -52,6 +52,10 @@ const serverFiles = {
                     file: 'editorconfig',
                     renameTo: () => '.editorconfig',
                     method: 'copy'
+                },
+                {
+                    file: 'gitpod',
+                    renameTo: () => '.gitpod'
                 }
             ]
         }

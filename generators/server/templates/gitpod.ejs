@@ -1,0 +1,12 @@
+ports:
+- port: <%= serverPort %>
+  protocol: "http"
+<%_ if (!skipClient) { _%>
+- port: 9000
+  protocol: "http"
+- port: 3001
+ protocol: "http"
+<%_ } _%>
+
+tasks:
+- command: "<%= clientPackageManager %> install && ./<%= buildTool %>w"
