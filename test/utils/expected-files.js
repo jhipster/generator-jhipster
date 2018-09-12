@@ -200,6 +200,7 @@ const expectedFiles = {
         '.prettierignore',
         '.prettierrc',
         'package.json',
+        'postcss.config.js',
         'proxy.conf.json',
         'src/main/webapp/404.html',
         `${CLIENT_MAIN_SRC_DIR}app/account/account.module.ts`,
