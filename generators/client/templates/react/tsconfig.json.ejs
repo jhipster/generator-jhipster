@@ -28,7 +28,7 @@
     "removeComments": false,
     "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": true,
-    "outDir": "target/www/app",
+    "outDir": "<%= DIST_DIR %>app",
     "lib": ["es2015", "es2017", "dom"],
     "typeRoots": [
       "node_modules/@types"
@@ -38,7 +38,7 @@
     "checkJs": false,
     "baseUrl": "./",
     "paths": {
-        "app/*": ["src/main/webapp/app/*"]
+        "app/*": ["<%= MAIN_SRC_DIR %>app/*"]
     },
     "importHelpers": true,
     "esModuleInterop": true,
