@@ -30,18 +30,16 @@ loopDir(){
 
 <%_ if (kubernetesNamespace !== 'default') { _%>
 kubectl apply -f namespace.yml
+<%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+kubectl apply -f registry/
 <%_ } _%> <%_ if (istio === 'autoInjection') { _%>
 kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled
 <%_ } _%> <%_ if (istio === 'manualInjection') { _%>
-<%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-loopDir "registry"
-<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+<%_ appConfigs.forEach((appConfig, index) =>  { _%>
 loopDir "<%- appConfig.baseName.toLowerCase() %>"
 <%_ }) _%>
 <%_ } else {_%>
-<%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-kubectl apply -f registry/
-<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+<%_ appConfigs.forEach((appConfig, index) =>  { _%>
 kubectl apply -f <%- appConfig.baseName.toLowerCase() %>/
 <%_ }) _%> <%_ } _%> <%_ if (useKafka === true) { _%>
 kubectl apply -f messagebroker/
