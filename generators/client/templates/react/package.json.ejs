@@ -17,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -%>
 <%_ var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- ' _%>
-<%_ var clientPackageManagerExecuteCommand = clientPackageManager == 'npm' ? 'npx' : 'yarn' _%>
 
 {
   "name": "<%= dasherizedBaseName %>",
@@ -188,7 +187,7 @@ limitations under the License.
     <%_ if(!skipCommitHook) { _%>
     "precommit": "lint-staged",
     <%_ } _%>
-    "prettier:format": "<%= clientPackageManagerExecuteCommand %> prettier --write \"src/**/*.{ts,tsx,css,scss}\"",
+    "prettier:format": "prettier --write \"src/**/*.{ts,tsx,css,scss}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= BUILD_DIR %>www",
