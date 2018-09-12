@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 <% var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- '%>
+
 {
   "name": "<%= dasherizedBaseName %>",
   "version": "0.0.0",
@@ -156,7 +157,7 @@
     <%_ if(!skipCommitHook) { _%>
     "precommit": "lint-staged",
     <%_ } _%>
-    "prettier:format": "<%= clientPackageManager %> prettier --write 'src/**/*.{ts,css,scss}'",
+    "prettier:format": "prettier --write \"src/**/*.{ts,css,scss}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "ngc": "ngc -p tsconfig-aot.json",
