@@ -36,8 +36,12 @@ const log = function (msg) {
     console.log(msg);
 };
 
-const error = function (msg) {
+const error = function (msg, trace) {
     console.error(`${chalk.red.bold('ERROR!')} ${chalk.red(msg)}`);
+    if (trace) {
+        console.log(trace);
+    }
+    process.exit(1);
 };
 
 const init = function (program) {
@@ -150,6 +154,10 @@ const getCommandOptions = (pkg, argv) => {
     return { 'from-cli': true };
 };
 
+const done = () => {
+    logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+};
+
 module.exports = {
     CLI_NAME,
     toString,
@@ -158,5 +166,6 @@ module.exports = {
     getArgs,
     getOptionsFromArgs,
     getCommand,
-    getCommandOptions
+    getCommandOptions,
+    done
 };

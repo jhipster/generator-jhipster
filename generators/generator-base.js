@@ -50,11 +50,13 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  */
 module.exports = class extends PrivateBase {
     /**
+     * Deprecated
      * Get the JHipster configuration from the .yo-rc.json file.
      *
      * @param {string} namespace - namespace of the .yo-rc.json config file. By default: generator-jhipster
      */
     getJhipsterAppConfig(namespace = 'generator-jhipster') {
+        this.warning('This method is deprecated. Use getAllJhipsterConfig');
         const fromPath = '.yo-rc.json';
         if (shelljs.test('-f', fromPath)) {
             const fileData = this.fs.readJSON(fromPath);
@@ -2540,23 +2542,7 @@ module.exports = class extends PrivateBase {
      * @param {boolean} force force getting direct from file
      */
     getAllJhipsterConfig(generator = this, force) {
-        let configuration = generator.config.getAll() || {};
-        if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
-            const yoRc = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
-            configuration = yoRc['generator-jhipster'];
-            // merge the blueprint config if available
-            if (configuration.blueprint) {
-                configuration = Object.assign(configuration, yoRc[configuration.blueprint]);
-            }
-        }
-        if (!configuration.get || typeof configuration.get !== 'function') {
-            Object.assign(configuration, {
-                getAll: () => configuration,
-                get: key => configuration[key],
-                set: (key, value) => { configuration[key] = value; }
-            });
-        }
-        return configuration;
+        return jhipsterUtils.getAllJhipsterConfig(generator, force);
     }
 
     /**

@@ -31,7 +31,6 @@ if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
     }\nJHipster requires Node version ${minimumNodeVersion
     }\nPlease update your version of Node.`);
     /* eslint-enable  */
-    process.exit(1);
 }
 
 let preferLocal = true;

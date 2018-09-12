@@ -29,8 +29,10 @@ const getCommand = require('./utils').getCommand;
 const getCommandOptions = require('./utils').getCommandOptions;
 const getArgs = require('./utils').getArgs;
 const CLI_NAME = require('./utils').CLI_NAME;
+const done = require('./utils').done;
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
+const importJdl = require('./import-jdl');
 
 const version = packageJson.version;
 const env = yeoman.createEnv();
@@ -43,10 +45,6 @@ logger.init(program);
 Object.keys(SUB_GENERATORS).forEach((generator) => {
     env.register(require.resolve(`../generators/${generator}`), `${JHIPSTER_NS}:${generator}`);
 });
-
-const done = () => {
-    logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
-};
 
 /**
  *  Run a yeoman command
@@ -62,9 +60,7 @@ const runYoCommand = (cmd, args, opts) => {
     try {
         env.run(command, options, done);
     } catch (e) {
-        logger.error(e.message);
-        logger.log(e);
-        process.exit(1);
+        logger.error(e.message, e);
     }
 };
 
@@ -80,7 +76,11 @@ Object.keys(SUB_GENERATORS).forEach((key) => {
     command.allowUnknownOption()
         .description(opts.desc)
         .action((args) => {
-            runYoCommand(key, program.args, opts);
+            if (key === 'import-jdl') {
+                importJdl(key, program.args, opts, env);
+            } else {
+                runYoCommand(key, program.args, opts);
+            }
         })
         .on('--help', () => {
             logger.debug('Adding additional help info');
