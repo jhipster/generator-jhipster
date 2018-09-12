@@ -1,0 +1,26 @@
+# Node.js
+# Build a general Node.js application with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/vsts/pipelines/languages/javascript
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '8.11.4'
+  displayName: 'Install Node.js'
+
+- script: |
+    docker version
+  displayName: 'docker version'
+- script: |
+    docker-compose version
+  displayName: 'docker-compose version'
+- script: |
+    npm install
+  displayName: 'npm install'
+- script: |
+    npm link
+  displayName: 'npm link'

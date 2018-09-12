@@ -66,6 +66,15 @@ if [[ "$JHIPSTER" == *"uaa"* ]]; then
 fi
 
 #-------------------------------------------------------------------------------
+# Decrease Angular timeout for Protractor tests
+#-------------------------------------------------------------------------------
+if [ "$PROTRACTOR" == 1 ] && [ -e "src/main/webapp/app/shared/shared-libs.module.ts" ]; then
+    sed -e 's/alertAsToast: false,/alertAsToast: false, alertTimeout: 1,/1;' src/main/webapp/app/shared/shared-libs.module.ts > src/main/webapp/app/shared/shared-libs.module.ts.sed
+    mv -f src/main/webapp/app/shared/shared-libs.module.ts.sed src/main/webapp/app/shared/shared-libs.module.ts
+    cat src/main/webapp/app/shared/shared-libs.module.ts | grep alertTimeout
+fi
+
+#-------------------------------------------------------------------------------
 # Package the application
 #-------------------------------------------------------------------------------
 cd "$APP_FOLDER"

@@ -227,7 +227,7 @@ objects:
               value: ${APPLICATION_NAME}
             <%_ } _%>
             <%_ if (app.searchEngine === 'elasticsearch') { _%>
-            - name: SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES
+            - name: SPRING_DATA_JEST_URI
               value: ${APPLICATION_NAME}-elasticsearch:9300
             <%_ } _%>
             <%_ if (app.messageBroker === 'kafka') { _%>
