@@ -92,6 +92,7 @@ module.exports = class extends BaseGenerator {
                 'server',
                 {
                     'client-hook': !this.skipClient,
+                    'from-cli': this.options['from-cli'],
                     configOptions: this.configOptions,
                     force: this.options.force
                 }

@@ -259,6 +259,7 @@ function generateApplicationFiles(args) {
     callSubGenerator(args.generator, '..', 'app', {
         force: args.generator.options.force,
         debug: args.generator.options.debug,
+        'from-cli': args.generator.options['from-cli'],
         'skip-client': args.generator.options.skipClient,
         'skip-server': args.generator.options.skipServer,
         'skip-install': args.generator.options['skip-install'],
@@ -278,6 +279,7 @@ function generateEntityFiles(generator, entity) {
         'skip-server': entity.skipServer,
         'no-fluent-methods': entity.noFluentMethod,
         'skip-user-management': entity.skipUserManagement,
+        'from-cli': generator.options['from-cli'],
         'skip-ui-grouping': generator.options['skip-ui-grouping'],
         arguments: [entity.name]
     });

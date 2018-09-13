@@ -141,6 +141,7 @@ module.exports = class extends BaseGenerator {
                 'client',
                 {
                     'skip-install': this.options['skip-install'],
+                    'from-cli': this.options['from-cli'],
                     configOptions: this.configOptions,
                     force: this.options.force
                 }

@@ -128,6 +128,7 @@ module.exports = class extends BaseGenerator {
                 'entity',
                 {
                     'skip-install': this.options['skip-install'],
+                    'from-cli': this.options['from-cli'],
                     force: this.options.force,
                     arguments: [this.context.name]
                 }

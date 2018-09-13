@@ -2313,6 +2313,7 @@ module.exports = class extends PrivateBase {
                 'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
+                'from-cli': generator.options['from-cli'],
                 languages: generator.languages,
                 force: generator.options.force,
                 debug: generator.options.debug

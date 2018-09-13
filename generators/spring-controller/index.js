@@ -54,6 +54,7 @@ module.exports = class extends BaseGenerator {
                 blueprint,
                 'spring-controller',
                 {
+                    'from-cli': this.options['from-cli'],
                     force: this.options.force,
                     arguments: [this.name],
                     default: this.options.default
