@@ -156,6 +156,7 @@ module.exports = class extends BaseGenerator {
                 this.appsYaml = [];
                 this.keycloakRedirectUri = '';
                 let portIndex = 8080;
+                this.serverPort = portIndex;
                 this.appsFolders.forEach((appsFolder, index) => {
                     const appConfig = this.appConfigs[index];
                     const lowercaseBaseName = appConfig.baseName.toLowerCase();
