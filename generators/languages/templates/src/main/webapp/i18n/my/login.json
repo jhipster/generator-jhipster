@@ -3,7 +3,7 @@
         "title": "ဆိုင်းအင်လုပ်ခြင်း",
         "form": {
             "password": "လျှို့ဝှက်ကုဒ်",
-            "password.placeholder": "သင့်ရဲ့လျှို့ဝှက်ကုဒ်",
+            "password.placeholder": "သင်၏ လျှို့ဝှက်ကုဒ်",
             "rememberme": "ကျွန်တော့်ကိုမှတ်ထားပါ။",
             "button": "ဝင်မည်"
         },
