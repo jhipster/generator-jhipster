@@ -91,6 +91,8 @@ describe('<%= entityClass %> e2e test', () => {
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
+        const nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
+
         await <%= entityInstance %>ComponentsPage.clickOnCreateButton();
         <%_ fields.forEach((field) => {
             const fieldName = field.fieldName;
@@ -145,6 +147,8 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ }); _%>
         await <%= entityInstance %>UpdatePage.save();
         expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).to.be.false;
+
+        expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
     });<%= closeBlockComment %>
 
     <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
