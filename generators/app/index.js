@@ -343,6 +343,27 @@ module.exports = class extends BaseGenerator {
                 this.composeLanguagesSub(this, this.configOptions, this.generatorType);
             },
 
+            insight() {
+                const yorc = Object.assign({}, _.omit(this.configOptions, [
+                    'jhiPrefix',
+                    'baseName',
+                    'jwtSecretKey',
+                    'packageName',
+                    'packagefolder',
+                    'rememberMeKey'
+                ]));
+                yorc.applicationType = this.applicationType;
+                statistics.sendYoRc(yorc, this.existingProject, this.jhipsterVersion);
+            }
+        };
+    }
+
+    get writing() {
+        return {
+            cleanup() {
+                cleanup.cleanupOldFiles(this);
+            },
+
             saveConfig() {
                 const config = {
                     jhipsterVersion: packagejs.version,
@@ -365,27 +386,6 @@ module.exports = class extends BaseGenerator {
                 this.skipServer && (config.skipServer = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
                 this.config.set(config);
-            },
-
-            insight() {
-                const yorc = Object.assign({}, _.omit(this.configOptions, [
-                    'jhiPrefix',
-                    'baseName',
-                    'jwtSecretKey',
-                    'packageName',
-                    'packagefolder',
-                    'rememberMeKey'
-                ]));
-                yorc.applicationType = this.applicationType;
-                statistics.sendYoRc(yorc, this.existingProject, this.jhipsterVersion);
-            }
-        };
-    }
-
-    get writing() {
-        return {
-            cleanup() {
-                cleanup.cleanupOldFiles(this);
             },
 
             regenerateEntities() {
