@@ -27,7 +27,7 @@ import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileNam
 import { IRootState } from 'app/shared/reducers';
 import { getEntity, deleteEntity } from './<%= entityFileName %>.reducer';
 
-export interface I<%= entityReactName %>DeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{id: number}>  {}
+export interface I<%= entityReactName %>DeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}
 
 export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= entityReactName %>DeleteDialogProps> {
   componentDidMount() {
