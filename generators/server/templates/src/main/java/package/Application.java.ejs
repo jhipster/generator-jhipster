@@ -26,6 +26,7 @@ import <%=packageName%>.config.DefaultProfileUtil;
 
 import io.github.jhipster.config.JHipsterConstants;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -103,9 +104,18 @@ public class <%= mainClass %> {
         SpringApplication app = new SpringApplication(<%= mainClass %>.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
+        logApplicationStartup(env);
+    }
+
+    private static void logApplicationStartup(Environment env) {
         String protocol = "http";
         if (env.getProperty("server.ssl.key-store") != null) {
             protocol = "https";
+        }
+        String serverPort = env.getProperty("server.port");
+        String contextPath = env.getProperty("server.servlet.context-path");
+        if (StringUtils.isBlank(contextPath)) {
+            contextPath = "/";
         }
         String hostAddress = "localhost";
         try {
@@ -115,15 +125,17 @@ public class <%= mainClass %> {
         }
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
-                "Local: \t\t{}://localhost:{}\n\t" +
-                "External: \t{}://{}:{}\n\t" +
+                "Local: \t\t{}://localhost:{}{}\n\t" +
+                "External: \t{}://{}:{}{}\n\t" +
                 "Profile(s): \t{}\n----------------------------------------------------------",
             env.getProperty("spring.application.name"),
             protocol,
-            env.getProperty("server.port"),
+            serverPort,
+            contextPath,
             protocol,
             hostAddress,
-            env.getProperty("server.port"),
+            serverPort,
+            contextPath,
             env.getActiveProfiles());
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
 
