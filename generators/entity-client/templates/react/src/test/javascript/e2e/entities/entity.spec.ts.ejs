@@ -144,6 +144,7 @@ describe('<%= entityClass %> e2e test', () => {
         // <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption();
         <%_ } _%>
         <%_ }); _%>
+        await waitUntilDisplayed(<%= entityInstance %>UpdatePage.getSaveButton());
         await <%= entityInstance %>UpdatePage.save();
         await waitUntilHidden(<%= entityInstance %>UpdatePage.getSaveButton());
         expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).to.be.false;
