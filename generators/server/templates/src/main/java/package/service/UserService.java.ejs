@@ -227,25 +227,14 @@ public class UserService {
     public <% if (reactive) { %>Mono<User><% } else { %>User<% } %> registerUser(UserDTO userDTO, String password) {
     <%_ if (!reactive) { _%>
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
-            if (!existingUser.getActivated()) {
-                userRepository.delete(existingUser);
-                <%_ if (cacheManagerIsAvailable === true) { _%>
-                this.clearUserCaches(existingUser);
-                <%_ } _%>
-            } else {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
                 throw new LoginAlreadyUsedException();
             }
         });
         userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
-            if (!existingUser.getActivated()) {
-                userRepository.delete(existingUser);
-                <%_ if (databaseType === 'sql') { _%>
-                userRepository.flush();
-                <%_ } _%>
-                <%_ if (cacheManagerIsAvailable === true) { _%>
-                this.clearUserCaches(existingUser);
-                <%_ } _%>
-            } else {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
                 throw new EmailAlreadyUsedException();
             }
         });
@@ -330,6 +319,19 @@ public class UserService {
                     .doOnNext(user -> log.debug("Created Information for User: {}", user));
             });
     <%_ } _%>
+    }
+    private boolean removeNonActivatedUser(User existingUser){
+        if(existingUser.getActivated()) {
+             return false;
+        }
+        userRepository.delete(existingUser);
+        <%_ if (databaseType === 'sql') { _%>
+        userRepository.flush();
+        <%_ } _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
+        this.clearUserCaches(existingUser);
+        <%_ } _%>
+        return true;
     }
 
     public <% if (reactive) { %>Mono<User><% } else { %>User<% } %> createUser(UserDTO userDTO) {
