@@ -21,10 +21,6 @@ kind: Ingress
 metadata:
   name: <%= app.baseName.toLowerCase() %>
   namespace: <%= kubernetesNamespace %>
-  <%_ if (istio !== 'no') { _%>
-  annotations:
-    kubernetes.io/ingress.class: istio
-  <%_ } _%>
 spec:
   rules:
   - host: <%= app.baseName.toLowerCase() %>.<%= ingressDomain %>
