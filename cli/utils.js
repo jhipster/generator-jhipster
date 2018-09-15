@@ -20,8 +20,12 @@
 const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 const meow = require('meow');
+const yeoman = require('yeoman-environment');
+
+const SUB_GENERATORS = require('./commands');
 
 const CLI_NAME = 'jhipster';
+const GENERATOR_NAME = 'generator-jhipster';
 const debug = function (msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
@@ -158,8 +162,18 @@ const done = () => {
     logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
 };
 
+const createYeomanEnv = () => {
+    const env = yeoman.createEnv();
+    /* Register yeoman generators */
+    Object.keys(SUB_GENERATORS).forEach((generator) => {
+        env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
+    });
+    return env;
+};
+
 module.exports = {
     CLI_NAME,
+    GENERATOR_NAME,
     toString,
     logger,
     initHelp,
@@ -167,5 +181,6 @@ module.exports = {
     getOptionsFromArgs,
     getCommand,
     getCommandOptions,
-    done
+    done,
+    createYeomanEnv
 };

@@ -18,32 +18,21 @@
  */
 /* eslint-disable no-console */
 const program = require('commander');
-const yeoman = require('yeoman-environment');
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
-const logger = require('./utils').logger;
-const initHelp = require('./utils').initHelp;
-const toString = require('./utils').toString;
-const getCommand = require('./utils').getCommand;
-const getCommandOptions = require('./utils').getCommandOptions;
-const getArgs = require('./utils').getArgs;
-const CLI_NAME = require('./utils').CLI_NAME;
-const done = require('./utils').done;
+const {
+    CLI_NAME, initHelp, logger, createYeomanEnv, toString, getCommand, getCommandOptions, getArgs, done
+} = require('./utils');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 
 const version = packageJson.version;
-const env = yeoman.createEnv();
 const JHIPSTER_NS = CLI_NAME;
+const env = createYeomanEnv();
 
 /* setup debugging */
 logger.init(program);
-
-/* Register yeoman generators */
-Object.keys(SUB_GENERATORS).forEach((generator) => {
-    env.register(require.resolve(`../generators/${generator}`), `${JHIPSTER_NS}:${generator}`);
-});
 
 /**
  *  Run a yeoman command
