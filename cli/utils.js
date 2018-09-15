@@ -54,8 +54,9 @@ const init = function (program) {
     const argv = program.normalize(process.argv);
     this.debugEnabled = program.debug = argv.includes('-d') || argv.includes('--debug'); // Need this early
 
+    info(argv);
     if (this.debugEnabled) {
-        debug('Debug logging is on');
+        info('Debug logging is on');
     }
 };
 

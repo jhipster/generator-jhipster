@@ -2,19 +2,14 @@ const chalk = require('chalk');
 
 const packageJson = require('../package.json');
 const {
-    CLI_NAME, logger, createYeomanEnv, toString, getCommand, getCommandOptions, done
+    logger, createYeomanEnv, toString, getCommandOptions, done
 } = require('./utils');
 
 const env = createYeomanEnv();
 
-// logger.debug(`cmd: ${toString(cmd)}`);
-// logger.debug(`args: ${toString(args)}`);
-// logger.debug(`opts: ${toString(opts)}`);
-// const command = getCommand(cmd, args, opts);
-const command = `${CLI_NAME}:app`;
-
-const options = getCommandOptions(packageJson, process.argv.slice(2));
-logger.info(chalk.yellow(`Executing ${command}`));
+const command = process.argv[2];
+const options = getCommandOptions(packageJson, process.argv.slice(3));
+logger.info(chalk.yellow(`Executing ${command} on ${process.cwd()}`));
 logger.info(chalk.yellow(`Options: ${toString(options)}`));
 try {
     env.run(command, options, done);

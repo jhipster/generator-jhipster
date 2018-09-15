@@ -12,6 +12,7 @@
         "semi": [2, "always"],
         "eqeqeq": [2, "smart"],
         "no-use-before-define": [2, "nofunc"],
+        "no-confusing-arrow": "off",
         "no-unused-vars": [2, {"vars": "local", "args": "none"}],
         "no-multi-str": 2,
         "no-irregular-whitespace": 2,

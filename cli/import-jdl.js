@@ -8,13 +8,15 @@ const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
 const {
-    CLI_NAME, GENERATOR_NAME, logger, createYeomanEnv, toString, getOptionsFromArgs, getCommandOptions
+    CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, getCommandOptions
 } = require('./utils');
 const jhipsterUtils = require('../generators/utils');
 const packageJson = require('../package.json');
 
 const packagejs = require('../package.json');
 const statistics = require('../generators/statistics');
+
+const runYeomanProcess = require.resolve('./run-yeoman-process.js');
 
 function importJDL() {
     logger.info('The JDL is being parsed.');
@@ -54,64 +56,66 @@ function importJDL() {
     return importState;
 }
 
-function shouldGenerateApplications(generator) {
-    return !generator.options['ignore-application'] && generator.importState.exportedApplications.length !== 0;
-}
+const shouldGenerateApplications = generator => !generator.options['ignore-application'] && generator.importState.exportedApplications.length !== 0;
 
-function generateApplicationFiles({
-    generator, application, withEntities, inAppFolder
-}) {
-    const baseName = application[GENERATOR_NAME].baseName;
-    logger.info(`Generating application: ${baseName}`);
-    logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
-    // if (inAppFolder) {
-    //     logger.debug(`Pwd "${generator.pwd}"`);
-    //     logger.debug(`Switching directory to "${baseName}" for app generation`);
-    //     shelljs.cd(path.join(generator.pwd, application[GENERATOR_NAME].baseName));
-    // }
-    // const runYeomanProcess = require.resolve(path.join(process.cwd(), 'node_modules', 'generator-jhipster', 'cli', 'run-yeoman-process.js'));
-    const runYeomanProcess = require.resolve('./run-yeoman-process.js');
-    logger.debug(`Child process will be triggered for ${runYeomanProcess}`);
-    fork(runYeomanProcess, ['--from-cli'], {
-        cwd: inAppFolder ? path.join(generator.pwd, application[GENERATOR_NAME].baseName) : generator.pwd
+const getOptionAsArgs = (options, withEntities) => {
+    const args = Object.entries(options).map(([key, value]) => {
+        if (value === true) {
+            return `--${_.kebabCase(key)}`;
+        }
+        return value ? `--${_.kebabCase(key)} ${value}` : '';
     });
-    // const command = `${CLI_NAME}:app`;
-    // const env = createYeomanEnv();
+    if (withEntities) args.push('--with-entities');
+    args.push('--from-cli');
+    logger.debug(`converted options: ${args}`);
+    return _.uniq(args.join(' ').split(' '));
+};
 
-    // env.run(command, {
-    //     force: generator.options.force,
-    //     debug: generator.options.debug,
-    //     'from-cli': true,
-    //     'skip-client': generator.options.skipClient,
-    //     'skip-server': generator.options.skipServer,
-    //     'skip-install': generator.options['skip-install'],
-    //     'skip-user-management': application[GENERATOR_NAME].skipUserManagement,
-    //     'jhi-prefix': application[GENERATOR_NAME].jhiPrefix,
-    //     'with-entities': withEntities
-    // }, () => {
-    //     logger.info(chalk.green.bold(`Application: ${baseName} generated succesfully.cd`));
-    // });
-}
+const generateApplicationFiles = ({
+    generator, application, withEntities, inAppFolder
+}) => {
+    const baseName = application[GENERATOR_NAME].baseName;
+    logger.info(`Generating application ${baseName} in a new parellel process`);
+    logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
 
-function generateEntityFiles(generator, entity) {
-    callSubGenerator(generator, '..', 'entity', {
-        force: generator.options.force,
-        debug: generator.options.debug,
+    const cwd = inAppFolder ? path.join(generator.pwd, baseName) : generator.pwd;
+    logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
+
+    const command = `${CLI_NAME}:app`;
+    fork(runYeomanProcess, [command, ...getOptionAsArgs(generator.options, withEntities)], {
+        cwd
+    });
+};
+
+const generateEntity = (baseName, inAppFolder, generator, entity) => {
+    logger.info(`Generating entities for application ${baseName} in a new parellel process`);
+    const runYeomanProcess = require.resolve('./run-yeoman-process.js');
+    const cwd = inAppFolder ? path.join(generator.pwd, baseName) : generator.pwd;
+    logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
+
+    const command = `${CLI_NAME}:entity ${entity.name}`;
+    fork(runYeomanProcess, [command, ...getOptionAsArgs({
+        ...generator.options,
         regenerate: true,
         'skip-install': true,
         'skip-client': entity.skipClient,
         'skip-server': entity.skipServer,
         'no-fluent-methods': entity.noFluentMethod,
         'skip-user-management': entity.skipUserManagement,
-        'skip-ui-grouping': generator.options['skip-ui-grouping'],
-        arguments: [entity.name]
-    });
-}
+        'skip-ui-grouping': generator.options['skip-ui-grouping']
+    })], { cwd });
+};
 
-function callSubGenerator(generator, subgenPath, name, args) {
-    generator.composeWith(require.resolve(path.join(subgenPath, name)), args);
-    // env.run(command, options, done);
-}
+const generateEntityFiles = (generator, entity, inAppFolder) => {
+    if (inAppFolder) {
+        const baseNames = entity.applications;
+        baseNames.forEach((baseName) => {
+            generateEntity(baseName, inAppFolder, generator, entity);
+        });
+    } else {
+        generateEntity('', inAppFolder, generator, entity);
+    }
+};
 
 class JDLProcessor {
     constructor(jdlFiles, options) {
@@ -119,8 +123,6 @@ class JDLProcessor {
         this.jdlFiles = jdlFiles;
         this.options = options;
         this.pwd = process.cwd();
-        this.applicationsLeftToGenerate = [];
-        this.entitiesLeftToGenerate = [];
     }
 
     validate() {
@@ -178,7 +180,7 @@ class JDLProcessor {
                     generator: this,
                     application,
                     withEntities: this.importState.exportedEntities.length !== 0,
-                    inAppFolder: this.importState.exportedApplications.length !== 1
+                    inAppFolder: this.importState.exportedApplications.length > 1
                 });
             } catch (error) {
                 logger.error(`Error while generating applications from the parsed JDL\n${error}`);
@@ -187,7 +189,7 @@ class JDLProcessor {
     }
 
     generateEntities() {
-        if (this.importState.exportedEntities.length === 0 || this.importState.exportedApplications.length !== 0) {
+        if (this.importState.exportedEntities.length === 0 || shouldGenerateApplications(this)) {
             return;
         }
         if (this.options['json-only']) {
@@ -196,16 +198,10 @@ class JDLProcessor {
         }
         try {
             this.importState.exportedEntities.forEach((exportedEntity) => {
-                if (this.importState.exportedApplications.length === 0
-                    || this.importState.exportedApplications.length === 1) {
-                    logger.log(`Generating ${this.importState.exportedEntities.length} `
-                        + `${pluralize('entity', this.importState.exportedEntities.length)}.`);
+                logger.log(`Generating ${this.importState.exportedEntities.length} `
+                    + `${pluralize('entity', this.importState.exportedEntities.length)}.`);
 
-                    generateEntityFiles(this, exportedEntity);
-                } else {
-                    // sub-folder generation, not yet handled
-                    this.entitiesLeftToGenerate.push(exportedEntity.name);
-                }
+                generateEntityFiles(this, exportedEntity, this.importState.exportedApplications.length > 1);
             });
         } catch (error) {
             logger.error(`Error while generating entities from the parsed JDL\n${error}`);
@@ -218,16 +214,10 @@ class JDLProcessor {
             logger.debug('Building client');
             // this.rebuildClient();
         }
-        if (this.applicationsLeftToGenerate.length !== 0) {
-            logger.info(`Here are the application names to generate manually: ${this.applicationsLeftToGenerate.join(', ')}`);
-        }
-        if (this.entitiesLeftToGenerate.length !== 0) {
-            logger.info(`Here are the entity names to generate manually: ${_.uniq(this.entitiesLeftToGenerate).join(', ')}`);
-        }
     }
 }
 
-module.exports = function (cmd, args, opts, env) {
+module.exports = (cmd, args, opts) => {
     logger.debug(`cmd: ${toString(cmd)} from ./import-jdl`);
     logger.debug(`args: ${toString(args)}`);
     logger.debug(`opts: ${toString(opts)}`);
