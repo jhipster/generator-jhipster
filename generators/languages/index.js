@@ -135,6 +135,17 @@ module.exports = class extends BaseGenerator {
         }
     }
 
+    get configuring() {
+        return {
+            saveConfig() {
+                if (this.enableTranslation) {
+                    this.languages = _.union(this.currentLanguages, this.languagesToApply);
+                    this.config.set('languages', this.languages);
+                }
+            }
+        };
+    }
+
     get default() {
         return {
             insight() {
@@ -174,13 +185,6 @@ module.exports = class extends BaseGenerator {
                 }
                 if (configOptions.clientFramework) {
                     this.clientFramework = configOptions.clientFramework;
-                }
-            },
-
-            saveConfig() {
-                if (this.enableTranslation) {
-                    this.languages = _.union(this.currentLanguages, this.languagesToApply);
-                    this.config.set('languages', this.languages);
                 }
             }
         };
