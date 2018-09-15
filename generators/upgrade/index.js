@@ -82,6 +82,7 @@ module.exports = class extends BaseGenerator {
             },
 
             loadConfig() {
+                this.config = this.getAllJhipsterConfig(this, true);
                 this.currentVersion = this.config.get('jhipsterVersion');
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 this.clientFramework = this.config.get('clientFramework');
@@ -155,7 +156,7 @@ module.exports = class extends BaseGenerator {
 
             assertJHipsterProject() {
                 const done = this.async();
-                if (!this.getAllJhipsterConfig().baseName) {
+                if (!this.config.baseName) {
                     this.error('Current directory does not contain a JHipster project.');
                 }
                 done();
