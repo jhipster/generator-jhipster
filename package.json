@@ -1,6 +1,6 @@
 {
   "name": "jhipster-core",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "description": "JHipster's own domain language and core objects",
   "main": "module/index.js",
   "keywords": [
