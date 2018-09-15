@@ -32,7 +32,6 @@ const CLI_NAME = require('./utils').CLI_NAME;
 const done = require('./utils').done;
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
-const importJdl = require('./import-jdl');
 
 const version = packageJson.version;
 const env = yeoman.createEnv();
@@ -76,15 +75,22 @@ Object.keys(SUB_GENERATORS).forEach((key) => {
     command.allowUnknownOption()
         .description(opts.desc)
         .action((args) => {
-            if (key === 'import-jdl') {
-                importJdl(key, program.args, opts, env);
+            if (opts.cliOnly) {
+                logger.debug('Executing CLI script');
+                /* eslint-disable global-require, import/no-dynamic-require */
+                require(`./${key}`)(key, program.args, opts, env);
+                /* eslint-enable */
             } else {
                 runYoCommand(key, program.args, opts);
             }
         })
         .on('--help', () => {
-            logger.debug('Adding additional help info');
-            env.run(`${JHIPSTER_NS}:${key} --help`, done);
+            if (opts.help) {
+                logger.info(opts.help);
+            } else {
+                logger.debug('Adding additional help info');
+                env.run(`${JHIPSTER_NS}:${key} --help`, done);
+            }
         });
 });
 
