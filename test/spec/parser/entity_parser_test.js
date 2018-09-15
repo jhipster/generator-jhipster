@@ -57,34 +57,6 @@ describe('EntityParser', () => {
           }).to.throw('The JDL object and the database type are both mandatory.');
         });
       });
-      context('such as invalid databaseType', () => {
-        let jdlObject = null;
-
-        before(() => {
-          const entityA = new JDLEntity({ name: 'A' });
-          const entityB = new JDLEntity({ name: 'B' });
-          const relationship = new JDLRelationship({
-            from: entityA.name,
-            to: entityB.name,
-            injectedFieldInFrom: 'b',
-            injectedFieldInTo: 'a',
-            type: RelationshipTypes.MANY_TO_MANY
-          });
-          jdlObject = new JDLObject();
-          jdlObject.addEntity(entityA);
-          jdlObject.addEntity(entityB);
-          jdlObject.addRelationship(relationship);
-        });
-
-        it('throws an error', () => {
-          expect(() => {
-            EntityParser.parse({
-              jdlObject,
-              databaseType: DatabaseTypes.MONGODB
-            });
-          }).to.throw("NoSQL entities don't have relationships.");
-        });
-      });
     });
     context('when passing valid arguments', () => {
       let content = null;
@@ -247,7 +219,6 @@ describe('EntityParser', () => {
       });
       context('when converting JDL to entity json for MongoDB type', () => {
         before(() => {
-          jdlObject.relationships = new JDLRelationships();
           content = EntityParser.parse({
             jdlObject,
             databaseType: DatabaseTypes.MONGODB
@@ -285,7 +256,17 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'pager',
-              relationships: [],
+              relationships: [
+                {
+                  otherEntityField: 'id',
+                  otherEntityName: 'entityB',
+                  otherEntityRelationshipName: 'a',
+                  ownerSide: true,
+                  relationshipName: 'b',
+                  relationshipType: 'one-to-one',
+                  relationshipValidateRules: 'required'
+                }
+              ],
               service: 'no',
               skipClient: true
             },
@@ -307,7 +288,15 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'no',
-              relationships: [],
+              relationships: [
+                {
+                  otherEntityName: 'entityA',
+                  otherEntityRelationshipName: 'b',
+                  ownerSide: false,
+                  relationshipName: 'a',
+                  relationshipType: 'one-to-one'
+                }
+              ],
               service: 'no'
             }
           });
