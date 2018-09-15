@@ -212,6 +212,7 @@ class JDLProcessor {
         if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']
             && !shouldGenerateApplications(this)) {
             logger.debug('Building client');
+            // TODO figure out a way to do this nicely
             // this.rebuildClient();
         }
     }
