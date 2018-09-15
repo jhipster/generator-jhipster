@@ -1,8 +1,8 @@
 /* global describe, it */
 
 const expect = require('chai').expect;
-const cliUtil = require('../cli/utils');
-const packageJson = require('../package.json');
+const cliUtil = require('../../cli/utils');
+const packageJson = require('../../package.json');
 
 describe('jhipster cli utils test', () => {
     describe('getArgs', () => {

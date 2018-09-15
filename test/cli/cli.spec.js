@@ -2,7 +2,6 @@
 /* eslint-disable no-unused-expressions, no-console */
 
 const expect = require('chai').expect;
-// const assert = require('chai').assert;
 const exec = require('child_process').exec;
 const path = require('path');
 const os = require('os');

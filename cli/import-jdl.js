@@ -236,8 +236,6 @@ module.exports = (cmd, args, opts) => {
         jdlImporter.generateEntities();
         jdlImporter.end();
     } catch (e) {
-        logger.error(e.message);
-        logger.log(e);
-        process.exit(1);
+        logger.error(e.message, e);
     }
 };

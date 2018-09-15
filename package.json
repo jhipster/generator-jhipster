@@ -43,7 +43,7 @@
     "ejs-lint": "npm run test:unit -- test/ejslint.js",
     "ejslint": "ejslint",
     "pretest": "npm run lint",
-    "test": "npm run test:unit -- test/*.spec.js --no-insight",
+    "test": "npm run test:unit -- test/*.spec.js test/**/*.spec.js --no-insight",
     "test:unit": "mocha --timeout 20000 --slow 0 --reporter spec",
     "jsdoc": "jsdoc --configure jsdoc-conf.json"
   },
