@@ -11,4 +11,4 @@ sonar-project.properties
 .nyc_output/*
 yarn-error.log
 jhipster-core.iml
-/dist
+.project
