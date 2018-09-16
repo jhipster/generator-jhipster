@@ -140,6 +140,7 @@ const LANGUAGES = [
     { name: 'Japanese', dispName: '日本語', value: 'ja' },
     { name: 'Korean', dispName: '한국어', value: 'ko' },
     { name: 'Marathi', dispName: 'मराठी', value: 'mr' },
+    { name: 'Myanmar', dispName: 'မြန်မာ', value: 'my' },
     { name: 'Polish', dispName: 'Polski', value: 'pl' },
     {
         name: 'Portuguese (Brazilian)', dispName: 'Português (Brasil)', value: 'pt-br', localeId: 'pt'
