@@ -25,7 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 <% if (enableTranslation) { %>import { languages } from 'app/config/translation';<% } %>
-import { getUser } from './user-management.reducer';
+import { getUser, reset } from './user-management.reducer';
 import { IRootState } from 'app/shared/reducers';
 
 export interface IUserManagementDetailProps extends StateProps, DispatchProps, RouteComponentProps<{login: string}> {}
@@ -33,6 +33,10 @@ export interface IUserManagementDetailProps extends StateProps, DispatchProps, R
 export class UserManagementDetail extends React.Component<IUserManagementDetailProps> {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
+  }
+
+  componentWillUnmount() {
+    this.props.reset();
   }
 
   render() {
@@ -103,7 +107,7 @@ const mapStateToProps = (storeState: IRootState) => ({
   user: storeState.userManagement.user
 });
 
-const mapDispatchToProps = { getUser };
+const mapDispatchToProps = { getUser, reset };
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
