@@ -37,12 +37,11 @@ logger.init(program);
 /**
  *  Run a yeoman command
  */
-const runYoCommand = (cmd, args, opts) => {
+const runYoCommand = (cmd, args, options, opts) => {
     logger.debug(`cmd: ${toString(cmd)}`);
     logger.debug(`args: ${toString(args)}`);
     logger.debug(`opts: ${toString(opts)}`);
     const command = getCommand(cmd, args, opts);
-    const options = getCommandOptions(packageJson, process.argv.slice(2));
     logger.info(chalk.yellow(`Executing ${command}`));
     logger.info(chalk.yellow(`Options: ${toString(options)}`));
     try {
@@ -64,13 +63,14 @@ Object.keys(SUB_GENERATORS).forEach((key) => {
     command.allowUnknownOption()
         .description(opts.desc)
         .action((args) => {
+            const options = getCommandOptions(packageJson, process.argv.slice(2));
             if (opts.cliOnly) {
-                logger.debug('Executing CLI script');
+                logger.debug('Executing CLI only script');
                 /* eslint-disable global-require, import/no-dynamic-require */
-                require(`./${key}`)(key, program.args, opts, env);
+                require(`./${key}`)(program.args, options, env);
                 /* eslint-enable */
             } else {
-                runYoCommand(key, program.args, opts);
+                runYoCommand(key, program.args, options, opts);
             }
         })
         .on('--help', () => {

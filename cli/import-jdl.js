@@ -8,10 +8,9 @@ const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
 const {
-    CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, getCommandOptions
+    CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done
 } = require('./utils');
 const jhipsterUtils = require('../generators/utils');
-const packageJson = require('../package.json');
 
 const packagejs = require('../package.json');
 const statistics = require('../generators/statistics');
@@ -87,14 +86,8 @@ const generateApplicationFiles = ({
     });
 };
 
-const generateEntity = (baseName, inAppFolder, generator, entity) => {
-    logger.info(`Generating entities for application ${baseName} in a new parellel process`);
-    const runYeomanProcess = require.resolve('./run-yeoman-process.js');
-    const cwd = inAppFolder ? path.join(generator.pwd, baseName) : generator.pwd;
-    logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
-
-    const command = `${CLI_NAME}:entity ${entity.name}`;
-    fork(runYeomanProcess, [command, ...getOptionAsArgs({
+const generateEntityFiles = (generator, entity, inAppFolder, env) => {
+    const options = {
         ...generator.options,
         regenerate: true,
         'skip-install': true,
@@ -103,17 +96,20 @@ const generateEntity = (baseName, inAppFolder, generator, entity) => {
         'no-fluent-methods': entity.noFluentMethod,
         'skip-user-management': entity.skipUserManagement,
         'skip-ui-grouping': generator.options['skip-ui-grouping']
-    })], { cwd });
-};
-
-const generateEntityFiles = (generator, entity, inAppFolder) => {
+    };
+    const command = `${CLI_NAME}:entity ${entity.name}`;
     if (inAppFolder) {
         const baseNames = entity.applications;
         baseNames.forEach((baseName) => {
-            generateEntity(baseName, inAppFolder, generator, entity);
+            logger.info(`Generating entities for application ${baseName} in a new parellel process`);
+            const cwd = path.join(generator.pwd, baseName);
+            logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
+
+            fork(runYeomanProcess, [command, ...getOptionAsArgs(options)], { cwd });
         });
     } else {
-        generateEntity('', inAppFolder, generator, entity);
+        /* Traditional entity only generation */
+        env.run(command, options, done);
     }
 };
 
@@ -188,7 +184,7 @@ class JDLProcessor {
         });
     }
 
-    generateEntities() {
+    generateEntities(env) {
         if (this.importState.exportedEntities.length === 0 || shouldGenerateApplications(this)) {
             return;
         }
@@ -201,7 +197,7 @@ class JDLProcessor {
                 logger.log(`Generating ${this.importState.exportedEntities.length} `
                     + `${pluralize('entity', this.importState.exportedEntities.length)}.`);
 
-                generateEntityFiles(this, exportedEntity, this.importState.exportedApplications.length > 1);
+                generateEntityFiles(this, exportedEntity, this.importState.exportedApplications.length > 1, env);
             });
         } catch (error) {
             logger.error(`Error while generating entities from the parsed JDL\n${error}`);
@@ -218,22 +214,20 @@ class JDLProcessor {
     }
 }
 
-module.exports = (cmd, args, opts) => {
-    logger.debug(`cmd: ${toString(cmd)} from ./import-jdl`);
+module.exports = (args, options, env) => {
+    logger.debug('cmd: import-jdl from ./import-jdl');
     logger.debug(`args: ${toString(args)}`);
-    logger.debug(`opts: ${toString(opts)}`);
-    const parsedArgs = getOptionsFromArgs(args);
-    const options = getCommandOptions(packageJson, process.argv.slice(2));
-    logger.info(chalk.yellow(`Executing import-jdl ${parsedArgs.join(' ')}`));
+    const jdlFiles = getOptionsFromArgs(args);
+    logger.info(chalk.yellow(`Executing import-jdl ${jdlFiles.join(' ')}`));
     logger.info(chalk.yellow(`Options: ${toString(options)}`));
     try {
-        const jdlImporter = new JDLProcessor(parsedArgs, options);
+        const jdlImporter = new JDLProcessor(jdlFiles, options);
         jdlImporter.validate();
         jdlImporter.getConfig();
         jdlImporter.importJDL();
         jdlImporter.sendInsight();
         jdlImporter.generateApplications();
-        jdlImporter.generateEntities();
+        jdlImporter.generateEntities(env);
         jdlImporter.end();
     } catch (e) {
         logger.error(e.message, e);
