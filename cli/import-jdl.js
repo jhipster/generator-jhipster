@@ -61,7 +61,7 @@ const generateApplicationFiles = ({
     generator, application, withEntities, inAppFolder
 }) => {
     const baseName = application[GENERATOR_NAME].baseName;
-    logger.info(`Generating application ${baseName} in a new parellel process`);
+    logger.info(`Generating application ${baseName} in a new parallel process`);
     logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
 
     const cwd = inAppFolder ? path.join(generator.pwd, baseName) : generator.pwd;
@@ -89,7 +89,7 @@ const generateEntityFiles = (generator, entity, inAppFolder, env) => {
     if (inAppFolder) {
         const baseNames = entity.applications;
         baseNames.forEach((baseName) => {
-            logger.info(`Generating entities for application ${baseName} in a new parellel process`);
+            logger.info(`Generating entities for application ${baseName} in a new parallel process`);
             const cwd = path.join(generator.pwd, baseName);
             logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
