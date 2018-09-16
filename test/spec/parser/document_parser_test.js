@@ -857,6 +857,21 @@ describe('DocumentParser', () => {
           expect(skipClientOption.entityNames.toArray()).to.deep.equal(['A', 'C']);
         });
       });
+      context('when having a pattern validation with a quote in it', () => {
+        let jdlObject = null;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/pattern_validation_with_quote.jdl']);
+          jdlObject = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            applicationType: ApplicationTypes.MONOLITH
+          });
+        });
+
+        it('formats it', () => {
+          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value.includes("\\'")).be.true;
+        });
+      });
     });
   });
 });

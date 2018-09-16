@@ -939,5 +939,26 @@ describe('JDLImporter', () => {
         expect(returned.exportedEntities[2].pagination).to.equal('pager');
       });
     });
+    context('when parsing a JDL with a pattern validation containing a quote', () => {
+      let returned = null;
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'pattern_validation_with_quote.jdl')], {
+          applicationName: 'MyApp',
+          applicationType: ApplicationTypes.MONOLITH,
+          databaseType: DatabaseTypes.SQL
+        });
+        returned = importer.import();
+      });
+
+      after(() => {
+        fs.unlinkSync(path.join('.jhipster', 'Alumni.json'));
+        fs.rmdirSync('.jhipster');
+      });
+
+      it('escapes the quote', () => {
+        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes("\\'")).to.be.true;
+      });
+    });
   });
 });
