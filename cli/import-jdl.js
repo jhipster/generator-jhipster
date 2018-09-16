@@ -8,7 +8,7 @@ const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
 const {
-    CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done
+    CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done, getOptionAsArgs
 } = require('./utils');
 const jhipsterUtils = require('../generators/utils');
 
@@ -57,19 +57,6 @@ function importJDL() {
 
 const shouldGenerateApplications = generator => !generator.options['ignore-application'] && generator.importState.exportedApplications.length !== 0;
 
-const getOptionAsArgs = (options, withEntities) => {
-    const args = Object.entries(options).map(([key, value]) => {
-        if (value === true) {
-            return `--${_.kebabCase(key)}`;
-        }
-        return value ? `--${_.kebabCase(key)} ${value}` : '';
-    });
-    if (withEntities) args.push('--with-entities');
-    args.push('--from-cli');
-    logger.debug(`converted options: ${args}`);
-    return _.uniq(args.join(' ').split(' '));
-};
-
 const generateApplicationFiles = ({
     generator, application, withEntities, inAppFolder
 }) => {
@@ -90,6 +77,7 @@ const generateEntityFiles = (generator, entity, inAppFolder, env) => {
     const options = {
         ...generator.options,
         regenerate: true,
+        'from-cli': true,
         'skip-install': true,
         'skip-client': entity.skipClient,
         'skip-server': entity.skipServer,
@@ -230,6 +218,6 @@ module.exports = (args, options, env) => {
         jdlImporter.generateEntities(env);
         jdlImporter.end();
     } catch (e) {
-        logger.error(e.message, e);
+        logger.error(`Error during import-jdl: ${e.message}`, e);
     }
 };

@@ -21,6 +21,7 @@ const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 const meow = require('meow');
 const yeoman = require('yeoman-environment');
+const _ = require('lodash');
 
 const SUB_GENERATORS = require('./commands');
 
@@ -127,6 +128,20 @@ const getOptionsFromArgs = (args) => {
     return options;
 };
 
+/* Convert option objects to commandline args */
+const getOptionAsArgs = (options, withEntities) => {
+    const args = Object.entries(options).map(([key, value]) => {
+        if (value === true) {
+            return `--${_.kebabCase(key)}`;
+        }
+        return value ? `--${_.kebabCase(key)} ${value}` : '';
+    });
+    if (withEntities) args.push('--with-entities');
+    args.push('--from-cli');
+    logger.debug(`converted options: ${args}`);
+    return _.uniq(args.join(' ').split(' '));
+};
+
 /**
  *  Get options for the command
  */
@@ -183,5 +198,6 @@ module.exports = {
     getCommand,
     getCommandOptions,
     done,
-    createYeomanEnv
+    createYeomanEnv,
+    getOptionAsArgs
 };
