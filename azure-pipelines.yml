@@ -3,24 +3,52 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/vsts/pipelines/languages/javascript
 
-pool:
-  vmImage: 'Ubuntu 16.04'
+jobs:
+- job: Test
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  # global variables
+  variables:
+    PROFILE: dev
+    RUN_APP: 1
+    PROTRACTOR: 0
+    SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
+    SPRING_JPA_SHOW_SQL: false
+  # specific variables in parallel
+  strategy:
+    maxParallel: 10
+    matrix:
+      ngx-default:
+        JHIPSTER: ngx-default
+        PROFILE: prod
+        PROTRACTOR: 1
+      ngx-h2mem-ws-nol2:
+        JHIPSTER: ngx-h2mem-ws-nol2
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '8.12.0'
-  displayName: 'Install Node.js'
-
-- script: |
-    docker version
-  displayName: 'docker version'
-- script: |
-    docker-compose version
-  displayName: 'docker-compose version'
-- script: |
-    npm install
-  displayName: 'npm install'
-- script: |
-    npm link
-  displayName: 'npm link'
+  steps:
+  - script: |
+      echo JHIPSTER=$(JHIPSTER)
+      echo PROFILE=$(PROFILE)
+      echo RUN_APP=$(RUN_APP)
+      echo PROTRACTOR=$(PROTRACTOR)
+      echo SPRING_OUTPUT_ANSI_ENABLED=$(SPRING_OUTPUT_ANSI_ENABLED)
+      echo SPRING_JPA_SHOW_SQL=$(SPRING_JPA_SHOW_SQL)
+    displayName: 'Display configuration'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '8.12.0'
+    displayName: 'Install Node.js'
+  - script: sudo npm install -g npm
+    displayName: 'Update NPM'
+  - script: |
+      java -version
+      node -v
+      npm -v
+      docker version
+      docker-compose version
+    displayName: 'Check installed tools'
+  # start installing
+  - script: npm install
+    displayName: 'npm install'
+  - script: npm link
+    displayName: 'npm link'
