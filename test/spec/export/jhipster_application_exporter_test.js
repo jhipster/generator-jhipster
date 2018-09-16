@@ -23,7 +23,7 @@ const expect = require('chai').expect;
 const fs = require('fs');
 const path = require('path');
 const JHipsterApplicationExporter = require('../../../lib/export/jhipster_application_exporter');
-const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 
 describe('JHipsterApplicationExporter', () => {
   describe('::exportApplication', () => {
@@ -55,7 +55,7 @@ describe('JHipsterApplicationExporter', () => {
 
         before(done => {
           returned = JHipsterApplicationExporter.exportApplication(
-            new JDLApplication({
+            new JDLMonolithApplication({
               config: {
                 baseName: 'toto',
                 packageName: 'com.mathieu.sample',
@@ -171,7 +171,7 @@ describe('JHipsterApplicationExporter', () => {
 
         before('common setup for both applications', () => {
           returned = JHipsterApplicationExporter.exportApplications({
-            toto: new JDLApplication({
+            toto: new JDLMonolithApplication({
               config: {
                 baseName: 'toto',
                 packageName: 'com.mathieu.toto',
@@ -180,7 +180,7 @@ describe('JHipsterApplicationExporter', () => {
                 jhipsterVersion: '4.9.0'
               }
             }),
-            titi: new JDLApplication({
+            titi: new JDLMonolithApplication({
               config: {
                 baseName: 'titi',
                 packageName: 'com.mathieu.titi',

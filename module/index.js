@@ -26,7 +26,10 @@ const Validations = require('../lib/core/jhipster/validations');
 const DatabaseTypes = require('../lib/core/jhipster/database_types');
 
 const JDLObject = require('../lib/core/jdl_object');
-const JDLApplication = require('../lib/core/jdl_application');
+const JDLMonolithApplication = require('../lib/core/jdl_monolith_application');
+const JDLGatewayApplication = require('../lib/core/jdl_gateway_application');
+const JDLMicroserviceApplication = require('../lib/core/jdl_microservice_application');
+const JDLUaaApplication = require('../lib/core/jdl_uaa_application');
 const JDLEntity = require('../lib/core/jdl_entity');
 const JDLField = require('../lib/core/jdl_field');
 const JDLValidation = require('../lib/core/jdl_validation');
@@ -69,7 +72,10 @@ module.exports = {
   isReservedFieldName: ReservedKeywords.isReservedFieldName,
   /* JDL objects */
   JDLObject,
-  JDLApplication,
+  JDLMonolithApplication,
+  JDLGatewayApplication,
+  JDLMicroserviceApplication,
+  JDLUaaApplication,
   JDLEntity,
   JDLField,
   JDLValidation,

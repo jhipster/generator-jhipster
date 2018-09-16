@@ -34,7 +34,10 @@ const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const Validations = require('../../../lib/core/jhipster/validations');
 const JDLObject = require('../../../lib/core/jdl_object');
-const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLGatewayApplication = require('../../../lib/core/jdl_gateway_application');
+const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
+const JDLMicroserviceApplication = require('../../../lib/core/jdl_microservice_application');
+const JDLUaaApplication = require('../../../lib/core/jdl_uaa_application');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLEnum = require('../../../lib/core/jdl_enum');
@@ -69,7 +72,7 @@ describe('BusinessErrorChecker', () => {
 
       before(() => {
         const jdlObject = new JDLObject();
-        const application = new JDLApplication({
+        const application = new JDLMonolithApplication({
           entities: ['MyEntity']
         });
         const entity = new JDLEntity({
@@ -150,9 +153,8 @@ describe('BusinessErrorChecker', () => {
     context('when having an UAA application with skipped user management', () => {
       before(() => {
         jdlObject.addApplication(
-          new JDLApplication({
+          new JDLUaaApplication({
             config: {
-              applicationType: ApplicationTypes.UAA,
               skipUserManagement: true,
               uaaBaseName: 'uaa'
             }
@@ -171,9 +173,8 @@ describe('BusinessErrorChecker', () => {
       context('for a microservice without oauth2', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLMicroserviceApplication({
               config: {
-                applicationType: ApplicationTypes.MICROSERVICE,
                 authenticationType: 'jwt',
                 databaseType: DatabaseTypes.NO
               }
@@ -191,9 +192,8 @@ describe('BusinessErrorChecker', () => {
       context('for a gateway with uaa', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLGatewayApplication({
               config: {
-                applicationType: ApplicationTypes.GATEWAY,
                 authenticationType: 'uaa',
                 databaseType: DatabaseTypes.NO
               }
@@ -210,9 +210,8 @@ describe('BusinessErrorChecker', () => {
       context('for any other case', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLMonolithApplication({
               config: {
-                applicationType: ApplicationTypes.MONOLITH,
                 authenticationType: 'jwt',
                 databaseType: DatabaseTypes.NO
               }
@@ -306,7 +305,7 @@ describe('BusinessErrorChecker', () => {
       context('with an entity having a reserved table name', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLMonolithApplication({
               config: {
                 databaseType: DatabaseTypes.SQL
               },
@@ -411,7 +410,7 @@ describe('BusinessErrorChecker', () => {
       context('when checking a JDL object with a JDL application', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLMonolithApplication({
               config: {
                 databaseType: DatabaseTypes.SQL
               },
@@ -711,7 +710,7 @@ describe('BusinessErrorChecker', () => {
       context('inside a JDL application', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLMonolithApplication({
               config: {
                 databaseType: DatabaseTypes.CASSANDRA
               },

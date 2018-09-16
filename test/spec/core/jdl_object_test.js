@@ -24,7 +24,7 @@ const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 const JDLObject = require('../../../lib/core/jdl_object');
-const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
@@ -66,7 +66,7 @@ describe('JDLObject', () => {
 
       before(() => {
         object = new JDLObject();
-        application = new JDLApplication({ jhipsterVersion: '4.9.0' });
+        application = new JDLMonolithApplication({ jhipsterVersion: '4.9.0' });
         object.addApplication(application);
       });
 
@@ -90,7 +90,7 @@ describe('JDLObject', () => {
 
     context('when having one or more applications', () => {
       before(() => {
-        jdlObject.addApplication(new JDLApplication({}));
+        jdlObject.addApplication(new JDLMonolithApplication({}));
       });
 
       it('returns the number of applications', () => {
@@ -103,8 +103,8 @@ describe('JDLObject', () => {
 
     before(() => {
       jdlObject = new JDLObject();
-      jdlObject.addApplication(new JDLApplication({ config: { baseName: 'A' } }));
-      jdlObject.addApplication(new JDLApplication({ config: { baseName: 'B' } }));
+      jdlObject.addApplication(new JDLMonolithApplication({ config: { baseName: 'A' } }));
+      jdlObject.addApplication(new JDLMonolithApplication({ config: { baseName: 'B' } }));
     });
 
     context('when not passing a function', () => {
@@ -815,7 +815,7 @@ describe('JDLObject', () => {
 
     before(() => {
       object = new JDLObject();
-      application = new JDLApplication({ jhipsterVersion: '4.9.0' });
+      application = new JDLMonolithApplication({ jhipsterVersion: '4.9.0' });
       object.addApplication(application);
       entityA = new JDLEntity({ name: 'EntityA', tableName: 't_entity_a' });
       const field = new JDLField({ name: 'myField', type: 'String' });
