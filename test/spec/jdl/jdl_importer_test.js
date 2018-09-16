@@ -652,10 +652,6 @@ describe('JDLImporter', () => {
         });
       });
       it('exports the application contents', () => {
-        contents.forEach(content => {
-          expect(content['generator-jhipster'].jwtSecretKey).not.to.be.undefined;
-          delete content['generator-jhipster'].jwtSecretKey;
-        });
         expect(contents).to.deep.equal(expectedContents);
       });
     });
@@ -847,8 +843,6 @@ describe('JDLImporter', () => {
           const appConfPath = path.join(applicationName, '.yo-rc.json');
           expect(fs.statSync(appConfPath).isFile()).to.be.true;
           const readJSON = JSON.parse(fs.readFileSync(appConfPath, 'utf-8').toString());
-          expect(readJSON['generator-jhipster'].jwtSecretKey).not.to.be.undefined;
-          delete readJSON['generator-jhipster'].jwtSecretKey;
           expect(readJSON).to.deep.equal(expectedApplications[index]);
         });
       });

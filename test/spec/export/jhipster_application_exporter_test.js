@@ -79,8 +79,6 @@ describe('JHipsterApplicationExporter', () => {
         });
 
         it('returns the exported application', () => {
-          expect(returned['generator-jhipster'].jwtSecretKey).not.to.be.undefined;
-          delete returned['generator-jhipster'].jwtSecretKey;
           expect(returned).to.deep.equal({
             entities: [],
             'generator-jhipster': {
@@ -122,8 +120,6 @@ describe('JHipsterApplicationExporter', () => {
         it('formats it', () => {
           expect(content['generator-jhipster']).not.to.be.undefined;
           const config = content['generator-jhipster'];
-          expect(config.jwtSecretKey).not.to.be.undefined;
-          delete config.jwtSecretKey;
           expect(config).to.deep.equal({
             applicationType: 'monolith',
             authenticationType: 'jwt',
@@ -224,8 +220,6 @@ describe('JHipsterApplicationExporter', () => {
           it('formats it', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
-            expect(config.jwtSecretKey).not.to.be.undefined;
-            delete config.jwtSecretKey;
             expect(config).to.deep.equal({
               applicationType: 'monolith',
               authenticationType: 'jwt',
@@ -284,8 +278,6 @@ describe('JHipsterApplicationExporter', () => {
           it('formats it', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
-            expect(config.jwtSecretKey).not.to.be.undefined;
-            delete config.jwtSecretKey;
             expect(config).to.deep.equal({
               applicationType: 'monolith',
               authenticationType: 'jwt',

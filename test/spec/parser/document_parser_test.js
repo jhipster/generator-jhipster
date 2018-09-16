@@ -655,10 +655,8 @@ describe('DocumentParser', () => {
 
         it('parses it', () => {
           expect(application.languages.has('en') && application.languages.has('fr')).to.be.true;
-          expect(application.jwtSecretKey).not.to.be.undefined;
           expect(application.testFrameworks.size()).to.equal(0);
           delete application.languages;
-          delete application.jwtSecretKey;
           delete application.testFrameworks;
 
           expect(application).to.deep.equal({

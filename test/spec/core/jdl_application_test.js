@@ -33,10 +33,8 @@ describe('JDLApplication', () => {
     context('without specifying special options', () => {
       it('uses default values', () => {
         expect(jdlApplicationConfig.languages.has('en') && jdlApplicationConfig.languages.has('fr')).to.be.true;
-        expect(jdlApplicationConfig.jwtSecretKey).not.to.be.undefined;
         expect(jdlApplicationConfig.testFrameworks).not.to.be.undefined;
         delete jdlApplicationConfig.languages;
-        delete jdlApplicationConfig.jwtSecretKey;
         delete jdlApplicationConfig.testFrameworks;
 
         expect(jdlApplicationConfig).to.deep.equal({
@@ -68,48 +66,6 @@ describe('JDLApplication', () => {
           useSass: false,
           websocket: false
         });
-      });
-    });
-    context('when choosing session as authentication type', () => {
-      before(() => {
-        jdlApplicationConfig = new JDLApplication({
-          config: { jhipsterVersion: '4.9.0', authenticationType: 'session' }
-        }).config;
-      });
-      it('sets the rememberMeKey value', () => {
-        expect(jdlApplicationConfig.rememberMeKey).not.to.be.undefined;
-        expect(jdlApplicationConfig.jwtSecretKey).to.be.undefined;
-      });
-    });
-    context('when choosing jwt as authentication type', () => {
-      before(() => {
-        jdlApplicationConfig = new JDLApplication({ config: { jhipsterVersion: '4.9.0', authenticationType: 'jwt' } })
-          .config;
-      });
-      it('sets the jwtSecretKey value', () => {
-        expect(jdlApplicationConfig.rememberMeKey).to.be.undefined;
-        expect(jdlApplicationConfig.jwtSecretKey).not.to.be.undefined;
-      });
-    });
-    context('when choosing microservice as app type', () => {
-      before(() => {
-        jdlApplicationConfig = new JDLApplication({
-          config: { jhipsterVersion: '4.9.0', applicationType: 'microservice' }
-        }).config;
-      });
-      it('sets the jwtSecretKey value', () => {
-        expect(jdlApplicationConfig.rememberMeKey).to.be.undefined;
-        expect(jdlApplicationConfig.jwtSecretKey).not.to.be.undefined;
-      });
-    });
-    context('when having session as authentication type', () => {
-      before(() => {
-        jdlApplicationConfig = new JDLApplication({ config: { authenticationType: 'session' } }).config;
-      });
-
-      it('sets the remember me key', () => {
-        expect(jdlApplicationConfig.rememberMeKey).not.to.be.undefined;
-        expect(jdlApplicationConfig.jwtSecretKey).to.be.undefined;
       });
     });
   });
@@ -145,7 +101,6 @@ describe('JDLApplication', () => {
 
       before(() => {
         jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0', path: '../../' } });
-        delete jdlApplication.config.jwtSecretKey;
       });
 
       it('stringifies the application object', () => {
@@ -216,42 +171,6 @@ describe('JDLApplication', () => {
           before(() => {
             jdlApplication = new JDLApplication({});
             delete jdlApplication.config.nativeLanguage;
-          });
-
-          it('returns false', () => {
-            expect(JDLApplication.isValid(jdlApplication)).to.be.false;
-          });
-        });
-      });
-      context('when having jwt as authentication type', () => {
-        context('and no JWT secret key', () => {
-          let jdlApplication = null;
-
-          before(() => {
-            jdlApplication = new JDLApplication({
-              config: {
-                authenticationType: 'jwt'
-              }
-            });
-            delete jdlApplication.config.jwtSecretKey;
-          });
-
-          it('returns false', () => {
-            expect(JDLApplication.isValid(jdlApplication)).to.be.false;
-          });
-        });
-      });
-      context('when having session as authentication type', () => {
-        context('and no remember me key', () => {
-          let jdlApplication = null;
-
-          before(() => {
-            jdlApplication = new JDLApplication({
-              config: {
-                authenticationType: 'session'
-              }
-            });
-            delete jdlApplication.config.rememberMeKey;
           });
 
           it('returns false', () => {
