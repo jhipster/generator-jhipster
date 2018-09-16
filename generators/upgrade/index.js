@@ -70,7 +70,7 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
-            validateFromCLi() {
+            validateFromCli() {
                 if (!this.options['from-cli']) {
                     this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
                 }
@@ -82,6 +82,7 @@ module.exports = class extends BaseGenerator {
             },
 
             loadConfig() {
+                this.config = this.getAllJhipsterConfig(this, true);
                 this.currentVersion = this.config.get('jhipsterVersion');
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 this.clientFramework = this.config.get('clientFramework');
@@ -155,7 +156,7 @@ module.exports = class extends BaseGenerator {
 
             assertJHipsterProject() {
                 const done = this.async();
-                if (!this.getJhipsterAppConfig()) {
+                if (!this.config.baseName) {
                     this.error('Current directory does not contain a JHipster project.');
                 }
                 done();

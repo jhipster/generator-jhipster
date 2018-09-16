@@ -16,12 +16,12 @@ if [[ "$JHIPSTER" == *"uaa"* ]]; then
     mkdir -p "$UAA_APP_FOLDER"
     cp -f "$JHIPSTER_SAMPLES"/uaa/.yo-rc.json "$UAA_APP_FOLDER"/
     cd "$UAA_APP_FOLDER"
-    jhipster --force --no-insight --with-entities --skip-checks --skip-git --skip-commit-hook
+    jhipster --force --no-insight --with-entities --skip-checks --skip-git --skip-commit-hook --from-cli
     ls -al "$UAA_APP_FOLDER"
 fi
 
 mkdir -p "$APP_FOLDER"
 cp -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$APP_FOLDER"/
 cd "$APP_FOLDER"
-jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook
+jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook --from-cli
 ls -al "$APP_FOLDER"

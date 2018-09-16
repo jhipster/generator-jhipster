@@ -982,10 +982,7 @@ module.exports = class extends Generator {
      * @param {string} db - db
      */
     getDBTypeFromDBValue(db) {
-        if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
-            return 'sql';
-        }
-        return db;
+        return jhipsterUtils.getDBTypeFromDBValue(db);
     }
 
     /**

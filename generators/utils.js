@@ -21,6 +21,9 @@ const path = require('path');
 const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
+const jhiCore = require('jhipster-core');
+const fs = require('fs');
+
 const constants = require('./generator-constants');
 
 const LANGUAGES_MAIN_SRC_DIR = `../../languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
@@ -37,7 +40,9 @@ module.exports = {
     getJavadoc,
     buildEnumInfo,
     copyObjectProps,
-    decodeBase64
+    decodeBase64,
+    getAllJhipsterConfig,
+    getDBTypeFromDBValue
 };
 
 /**
@@ -387,4 +392,40 @@ function copyObjectProps(toObj, fromObj) {
  */
 function decodeBase64(string, encoding = 'utf-8') {
     return Buffer.from(string, 'base64').toString(encoding);
+}
+
+/**
+ * Get all the generator configuration from the .yo-rc.json file
+ * @param {Generator} generator the generator instance to use
+ * @param {boolean} force force getting direct from file
+ */
+function getAllJhipsterConfig(generator, force) {
+    let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
+    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
+        const yoRc = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
+        configuration = yoRc['generator-jhipster'];
+        // merge the blueprint config if available
+        if (configuration.blueprint) {
+            configuration = Object.assign(configuration, yoRc[configuration.blueprint]);
+        }
+    }
+    if (!configuration.get || typeof configuration.get !== 'function') {
+        Object.assign(configuration, {
+            getAll: () => configuration,
+            get: key => configuration[key],
+            set: (key, value) => { configuration[key] = value; }
+        });
+    }
+    return configuration;
+}
+
+/**
+ * Get DB type from DB value
+ * @param {string} db - db
+ */
+function getDBTypeFromDBValue(db) {
+    if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
+        return 'sql';
+    }
+    return db;
 }
