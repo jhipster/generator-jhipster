@@ -400,12 +400,6 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Transactional
     <%_ } _%>
     public void assertThatUserLocaleIsCorrectlySetFromAuthenticationDetails() {
-        user.setId(Constants.ANONYMOUS_USER);
-        user.setLogin(Constants.ANONYMOUS_USER);
-        if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
-            userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
-        }
-
         Map<String, Object> userDetails = new HashMap<String, Object>();
         userDetails.put("preferred_username", user.getLogin());
     	userDetails.put("given_name", user.getFirstName());
