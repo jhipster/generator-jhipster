@@ -658,7 +658,7 @@ module.exports = class extends Generator {
      */
     composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
-            this.checkBlueprint(blueprint);
+            this.checkBlueprint(blueprint, subGen);
             this.log(`Trying to use blueprint ${blueprint}`);
             try {
                 const finalOptions = Object.assign(
@@ -685,22 +685,29 @@ module.exports = class extends Generator {
      * Check if the generator specified as blueprint is installed.
      * @param {string} blueprint - generator name
      */
-    checkBlueprint(blueprint) {
+    checkBlueprint(blueprint, subGen = '') {
         if (blueprint === 'generator-jhipster') {
             this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
         }
         const done = this.async();
         const localModule = path.join(process.cwd(), 'node_modules', blueprint);
-        if (!fs.existsSync(localModule)) {
-            shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
-                if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${blueprint.replace('generator-', '')}\n`)) {
-                    this.error(`The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(`npm i -g ${blueprint}`)}.`);
-                }
-                done();
-            });
-        } else {
+        if (fs.existsSync(localModule)) {
             done();
+            return;
         }
+
+        const generatorName = blueprint.replace('generator-', '');
+        if (this.env.get(`${generatorName}:${subGen}`)) {
+            done();
+            return;
+        }
+
+        shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
+            if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${blueprint.replace('generator-', '')}\n`)) {
+                this.error(`The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(`npm i -g ${blueprint}`)}.`);
+            }
+            done();
+        });
     }
 
     /**
