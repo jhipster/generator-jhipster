@@ -119,7 +119,7 @@ public class <%= entityClass %>Criteria implements Serializable {
     public int hashCode() {
         return Objects.hash(
 <%_ filterVariables.forEach((filterVariable, index) => { _%>
-    <%_ if (filterVariables.length == (index - 1)) { _%>
+    <%_ if (filterVariables.length === (index + 1)) { _%>
         <%= filterVariable.name %>
     <%_ } else { _%>
         <%= filterVariable.name %>,
