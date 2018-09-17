@@ -134,7 +134,7 @@ spec:
         <%_ } _%>
         <%_ if (app.searchEngine === 'elasticsearch') { _%>
         - name: SPRING_DATA_JEST_URI
-          value: <%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9300
+          value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
         <%_ } _%>
         <%_ if (app.messageBroker === 'kafka') { _%>
         - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
