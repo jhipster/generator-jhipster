@@ -448,7 +448,7 @@ module.exports = class extends BaseGenerator {
 
             addHerokuBuildPlugin() {
                 if (this.buildTool !== 'gradle') return;
-                this.addGradlePlugin('gradle.plugin.com.heroku.sdk', 'heroku-gradle', '0.2.0');
+                this.addGradlePlugin('gradle.plugin.com.heroku.sdk', 'heroku-gradle', '1.0.4');
                 this.applyFromGradleScript('gradle/heroku');
             },
 
