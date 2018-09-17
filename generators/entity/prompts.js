@@ -852,7 +852,7 @@ function askForField(done) {
                 fieldValidateRules: props.fieldValidateRules,
                 fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
                 fieldValidateRulesMaxlength: props.fieldValidateRulesMaxlength,
-                fieldValidateRulesPattern: formatPattern(props.fieldValidateRulesPattern),
+                fieldValidateRulesPattern: props.fieldValidateRulesPattern,
                 fieldValidateRulesMin: props.fieldValidateRulesMin,
                 fieldValidateRulesMax: props.fieldValidateRulesMax,
                 fieldValidateRulesMinbytes: props.fieldValidateRulesMinbytes,
@@ -869,19 +869,6 @@ function askForField(done) {
             done();
         }
     });
-}
-
-function formatPattern(value) {
-    if (!value.includes('\'')) {
-        return value;
-    }
-    const chunks = value.split('\'').map((chunk) => {
-        if (!chunk.endsWith('\\')) {
-            return `${chunk}\\`;
-        }
-        return chunk;
-    });
-    return chunks.join('\\\'');
 }
 
 /**
