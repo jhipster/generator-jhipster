@@ -98,6 +98,18 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
     }
 
     /**
+     * Return the number of matching entities in the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(<%= criteria %> criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<<%= entityClass %>> specification = createSpecification(criteria);
+        return <%= repository %>.count(specification);
+    }
+
+    /**
      * Function to convert <%= criteria %> to a {@link Specification}
      */
     private Specification<<%= entityClass %>> createSpecification(<%= criteria %> criteria) {
