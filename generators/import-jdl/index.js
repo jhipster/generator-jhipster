@@ -25,8 +25,8 @@ const BaseGenerator = require('../generator-base');
 module.exports = class extends BaseGenerator {
     initializing() {
         if (!this.options['from-cli']) {
-            // this.warning('Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI');
-            // this.error(`Deprecated: Run ${chalk.red('jhipster import-jdl')} instead of ${chalk.red('yo jhipster:import-jdl')}`);
+            this.warning('Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI');
+            this.error(`Deprecated: Run ${chalk.red('jhipster import-jdl')} instead of ${chalk.red('yo jhipster:import-jdl')}`);
         }
     }
 };
