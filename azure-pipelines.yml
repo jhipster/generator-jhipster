@@ -38,9 +38,9 @@ jobs:
     displayName: 'Install Node.js'
   - script: sudo npm install -g npm
     displayName: 'Update NPM'
-  - bash: $(JH_INTEG)/01-display-configuration.sh
+  - bash: $(JH_SCRIPTS)/01-display-configuration.sh
     displayName: 'Display configuration'
-  - bash: $(JH_INTEG)/02-display-tools.sh
+  - bash: $(JH_SCRIPTS)/02-display-tools.sh
     displayName: 'Display installed tools'
   # start installing
   - script: npm install
