@@ -188,7 +188,7 @@ describe('JHipsterApplicationExporter', () => {
 
           expect(content).to.deep.equal({
             entities: [],
-            test: 123,
+            test: 1234,
             'generator-jhipster': {
               applicationType: 'monolith',
               authenticationType: 'jwt',
