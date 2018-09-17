@@ -159,7 +159,7 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
-            validateFromCLi() {
+            validateFromCli() {
                 if (!this.options['from-cli']) {
                     this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
                 }
@@ -300,6 +300,7 @@ module.exports = class extends BaseGenerator {
 
                 this.composeWith(require.resolve('../server'), {
                     'client-hook': !this.skipClient,
+                    'from-cli': this.options['from-cli'],
                     configOptions: this.configOptions,
                     force: this.options.force,
                     debug: this.isDebugEnabled
@@ -312,6 +313,7 @@ module.exports = class extends BaseGenerator {
                 this.composeWith(require.resolve('../client'), {
                     'skip-install': this.options['skip-install'],
                     'skip-commit-hook': this.options['skip-commit-hook'],
+                    'from-cli': this.options['from-cli'],
                     configOptions: this.configOptions,
                     force: this.options.force,
                     debug: this.isDebugEnabled
@@ -392,6 +394,7 @@ module.exports = class extends BaseGenerator {
                         this.composeWith(require.resolve('../entity'), {
                             regenerate: true,
                             'skip-install': true,
+                            'from-cli': this.options['from-cli'],
                             force: this.options.force,
                             debug: this.isDebugEnabled,
                             arguments: [entity.name]

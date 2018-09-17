@@ -51,6 +51,7 @@ module.exports = class extends BaseGenerator {
                 blueprint,
                 'spring-service',
                 {
+                    'from-cli': this.options['from-cli'],
                     force: this.options.force,
                     arguments: [this.name],
                     default: this.options.default
@@ -64,7 +65,7 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
-            validateFromCLi() {
+            validateFromCli() {
                 if (!this.options['from-cli']) {
                     this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
                 }

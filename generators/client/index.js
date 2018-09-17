@@ -141,6 +141,7 @@ module.exports = class extends BaseGenerator {
                 'client',
                 {
                     'skip-install': this.options['skip-install'],
+                    'from-cli': this.options['from-cli'],
                     configOptions: this.configOptions,
                     force: this.options.force
                 }
@@ -153,7 +154,7 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
-            validateFromCLi() {
+            validateFromCli() {
                 if (!this.options['from-cli']) {
                     this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
                 }

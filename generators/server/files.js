@@ -260,6 +260,7 @@ const serverFiles = {
                 'logback-spring.xml',
                 'config/application.yml',
                 'config/application-dev.yml',
+                'config/application-tls.yml',
                 'config/application-prod.yml',
                 'i18n/messages.properties'
             ]
@@ -745,6 +746,13 @@ const serverFiles = {
             templates: [
                 { file: 'package/config/cassandra/CassandraConfiguration.java', renameTo: generator => `${generator.javaDir}config/cassandra/CassandraConfiguration.java` },
                 { file: 'package/config/cassandra/package-info.java', renameTo: generator => `${generator.javaDir}config/cassandra/package-info.java` },
+            ]
+        },
+        {
+            condition: generator => generator.searchEngine === 'elasticsearch',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                { file: 'package/config/ElasticsearchConfiguration.java', renameTo: generator => `${generator.javaDir}config/ElasticsearchConfiguration.java` },
             ]
         },
         {
