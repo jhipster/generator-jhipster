@@ -53,7 +53,7 @@ module.exports = class extends BaseGenerator {
 
     initializing() {
         if (!this.options['from-cli']) {
-            this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+            // this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
         }
 
         this.log(chalk.bold('Heroku configuration is starting'));
