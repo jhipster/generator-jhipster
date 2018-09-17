@@ -29,9 +29,9 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "io.spring.gradle:propdeps-plugin:0.0.10.RELEASE"
         <%_ if (enableSwaggerCodegen) { _%>
-        classpath "org.openapitools:openapi-generator-gradle-plugin:3.0.1"
+        classpath "org.openapitools:openapi-generator-gradle-plugin:3.2.3"
         <%_ } _%>
-        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.5.1"
+        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.5.2"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -41,12 +41,12 @@ plugins {
     id "net.ltgt.apt-eclipse" version "0.18"
     id "net.ltgt.apt-idea" version "0.18"
     id "net.ltgt.apt" version "0.18"
-    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
     <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
-    id 'org.liquibase.gradle' version '2.0.0'
+    id 'org.liquibase.gradle' version '2.0.1'
     <%_ } _%>
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
