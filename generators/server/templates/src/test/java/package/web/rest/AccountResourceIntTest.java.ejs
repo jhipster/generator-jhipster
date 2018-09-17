@@ -338,7 +338,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
-            .expectBody().isEmpty();
+            .expectBody().json("");
     <%_ } _%>
     }
 
