@@ -76,10 +76,9 @@ public class <%= entityClass %>Criteria implements Serializable {
      */
     public static class <%= extraFilter.type %> extends <%- extraFilter.superType %> {
     }
-
 <%_ }); _%>
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 <%_ filterVariables.forEach((filterVariable) => { _%>
 
     private <%- filterVariable.filterType %> <%= filterVariable.name %>;
