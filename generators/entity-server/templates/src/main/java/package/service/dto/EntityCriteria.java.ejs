@@ -13,13 +13,17 @@ import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 <%_ if (fieldsContainBigDecimal === true) { _%>
-import io.github.jhipster.service.filter.BigDecimalFilter;<% } %>
+import io.github.jhipster.service.filter.BigDecimalFilter;
+<%_ } _%>
 <%_ if (fieldsContainInstant === true) { _%>
-import io.github.jhipster.service.filter.InstantFilter;<% } %>
+import io.github.jhipster.service.filter.InstantFilter;
+<%_ } _%>
 <%_ if (fieldsContainLocalDate === true) { _%>
-import io.github.jhipster.service.filter.LocalDateFilter;<% } %>
+import io.github.jhipster.service.filter.LocalDateFilter;
+<%_ } _%>
 <%_ if (fieldsContainZonedDateTime === true) { _%>
-import io.github.jhipster.service.filter.ZonedDateTimeFilter;<% } %>
+import io.github.jhipster.service.filter.ZonedDateTimeFilter;
+<%_ } _%>
 
 <%_
   const referenceFilterType = '' + pkType + 'Filter';
@@ -56,7 +60,6 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;<% } %>
         fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id' });
   });
 _%>
-
 /**
  * Criteria class for the <%= entityClass %> entity. This class is used in <%= entityClass %>Resource to
  * receive all the possible filtering options from the Http GET request parameters.
