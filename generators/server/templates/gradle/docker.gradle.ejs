@@ -18,30 +18,27 @@
 -%>
 buildscript {
     repositories {
-        jcenter()
+      gradlePluginPortal()
     }
-
     dependencies {
-        classpath 'com.bmuschko:gradle-docker-plugin:3.5.0'
+      classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:0.9.10"
     }
 }
 
-apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
+apply plugin: com.google.cloud.tools.jib.gradle.JibPlugin
 
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
-
-task copyDockerFiles(type: Copy) {
-    description = "Copy Dockerfile and required data to build directory"
-    from 'src/main/docker'
-    from "${project.buildDir}/libs"
-    into { "${project.buildDir}/docker" }
-    include "*"
-    exclude "**/*.yml"
+jib {
+    from {
+        image = 'openjdk:8-jre-alpine'
+    }
+    to {
+        image = '<%= baseName.toLowerCase() %>:latest'
+    }
+    container {
+        jvmFlags = ['-Djava.security.egd=file:/dev/./urandom']
+        ports = ['8080']
+        useCurrentTimestamp = true
+    }
 }
 
-task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
-    description = "Package application as Docker image"
-    group = "Docker"
-    inputDir = project.file("${project.buildDir}/docker")
-    tags = ["<%= baseName.toLowerCase() %>:latest".toString(), "<%= baseName.toLowerCase() %>:${project.version}".toString()]
-}
+jibDockerBuild.dependsOn bootJar
