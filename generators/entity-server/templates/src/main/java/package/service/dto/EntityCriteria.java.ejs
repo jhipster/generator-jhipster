@@ -106,10 +106,10 @@ public class <%= entityClass %>Criteria implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final <%= entityClass %> that = (<%= entityClass %>Criteria) o;
+        final <%= entityClass %>Criteria that = (<%= entityClass %>Criteria) o;
         return
 <%_ filterVariables.forEach((filterVariable, index) => { _%>
-    <%_ if (filterVariables.length == (index - 1)) { _%>
+    <%_ if (filterVariables.length === index + 1) { _%>
             Objects.equals(<%= filterVariable.name %>, that.<%= filterVariable.name %>);
     <%_ } else { _%>
             Objects.equals(<%= filterVariable.name %>, that.<%= filterVariable.name %>) &&
