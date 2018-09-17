@@ -153,6 +153,78 @@ describe('JHipsterApplicationExporter', () => {
           });
         });
       });
+      describe('when exporting an existing application to JSON', () => {
+        after(() => {
+          fs.unlinkSync(path.join('.yo-rc.json'));
+        });
+
+        it('content has the exported application', done => {
+          let content = null;
+          fs.writeFileSync(
+            '.yo-rc.json',
+            JSON.stringify(
+              {
+                'generator-jhipster': {
+                  jwtSecretKey: '1234'
+                },
+                test: 1234
+              },
+              null,
+              2
+            )
+          );
+          JHipsterApplicationExporter.exportApplication(
+            new JDLMonolithApplication({
+              config: {
+                baseName: 'toto',
+                packageName: 'com.mathieu.sample',
+                enableTranslation: false,
+                languages: ['en', 'fr'],
+                jhipsterVersion: '4.9.0'
+              }
+            })
+          );
+          content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
+
+          expect(content).to.deep.equal({
+            entities: [],
+            test: 123,
+            'generator-jhipster': {
+              applicationType: 'monolith',
+              authenticationType: 'jwt',
+              baseName: 'toto',
+              buildTool: 'maven',
+              cacheProvider: 'ehcache',
+              clientFramework: 'angularX',
+              clientPackageManager: 'npm',
+              databaseType: 'sql',
+              devDatabaseType: 'h2Disk',
+              enableHibernateCache: true,
+              enableSwaggerCodegen: false,
+              enableTranslation: false,
+              jhiPrefix: 'jhi',
+              jhipsterVersion: '4.9.0',
+              languages: ['en', 'fr'],
+              messageBroker: false,
+              nativeLanguage: 'en',
+              packageFolder: 'com/mathieu/sample',
+              packageName: 'com.mathieu.sample',
+              prodDatabaseType: 'mysql',
+              searchEngine: false,
+              serverPort: '8080',
+              serviceDiscoveryType: false,
+              skipClient: false,
+              skipServer: false,
+              skipUserManagement: false,
+              testFrameworks: [],
+              useSass: false,
+              websocket: false,
+              jwtSecretKey: '1234'
+            }
+          });
+          done();
+        });
+      });
     });
   });
   describe('::exportApplications', () => {
