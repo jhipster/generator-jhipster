@@ -47,10 +47,9 @@ export class App extends React.Component<IAppProps> {
   }
 
   render() {
-    const paddingTop = '60px';
     return (
       <Router>
-        <div className="app-container" style={{ paddingTop }}>
+        <div className="app-container">
           <ToastContainer position={toast.POSITION.TOP_LEFT as ToastPosition} className="toastify-container" toastClassName="toastify-toast"/>
           <ErrorBoundary>
             <Header
@@ -65,8 +64,8 @@ export class App extends React.Component<IAppProps> {
               isSwaggerEnabled={this.props.isSwaggerEnabled}
             />
           </ErrorBoundary>
-          <div className="container-fluid view-container" id="app-view-container">
-            <Card className="jh-card">
+          <div className="container-fluid view-container mt-3" id="app-view-container">
+            <Card className="jh-card p-3">
               <ErrorBoundary>
                 <AppRoutes/>
               </ErrorBoundary>
