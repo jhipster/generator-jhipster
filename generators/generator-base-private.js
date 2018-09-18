@@ -651,6 +651,17 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Normalize blueprint name: prepend 'generator-jhipster-' if needed
+     * @param {string} blueprint - name of the blueprint
+     */
+    normalizeBlueprintName(blueprint) {
+        if (blueprint && !blueprint.startsWith('generator-jhipster')) {
+            blueprint = `generator-jhipster-${blueprint}`;
+        }
+        return blueprint;
+    }
+
+    /**
      * Compose external blueprint module
      * @param {string} blueprint - name of the blueprint
      * @param {string} subGen - sub generator
@@ -658,6 +669,7 @@ module.exports = class extends Generator {
      */
     composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
+            blueprint = this.normalizeBlueprintName(blueprint);
             this.checkBlueprint(blueprint, subGen);
             this.log(`Trying to use blueprint ${blueprint}`);
             try {
@@ -695,13 +707,11 @@ module.exports = class extends Generator {
             done();
             return;
         }
-
         const generatorName = blueprint.replace('generator-', '');
         if (this.env.get(`${generatorName}:${subGen}`)) {
             done();
             return;
         }
-
         shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
             if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${blueprint.replace('generator-', '')}\n`)) {
                 this.error(`The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(`npm i -g ${blueprint}`)}.`);
