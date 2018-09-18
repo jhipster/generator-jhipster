@@ -368,7 +368,7 @@ public class AccountResource {
             .switchIfEmpty(Mono.error(new EmailNotFoundException()))
             .doOnSuccess(mailService::sendPasswordResetMail)
             .then();
-    <%_ } _%> 
+    <%_ } _%>
     }
 
     /**

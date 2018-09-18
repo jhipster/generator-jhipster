@@ -23,6 +23,8 @@ exports.config = {
 
   framework: 'mocha',
 
+  SELENIUM_PROMISE_MANAGER: false,
+
   mochaOpts: {
     reporter: 'spec',
     slow: 3000,

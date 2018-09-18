@@ -20,58 +20,69 @@
 import { element, by, browser } from 'protractor';
 
 import NavBarPage from '../../page-objects/navbar-page';
+import SignInPage from '../../page-objects/signin-page';
 import { waitUntilDisplayed } from '../../util/utils';
 
 const expect = chai.expect;
 
 describe('Administration', () => {
   let navBarPage: NavBarPage;
+  let signInPage: SignInPage;
 
-  before(() => {
-    browser.get('/');
-    navBarPage = new NavBarPage(true);
+  before(async () => {
+    await browser.get('/');
+    navBarPage = new NavBarPage();
+    signInPage = await navBarPage.getSignInPage();
     <%_ if (authenticationType !== 'oauth2') { _%>
-    navBarPage.autoSignIn();
+    await signInPage.waitUntilDisplayed();
+
+    await signInPage.username.sendKeys('admin');
+    await signInPage.password.sendKeys('admin');
+    await signInPage.loginButton.click();
+    await signInPage.waitUntilHidden();
+
     <%_ } _%>
+    await waitUntilDisplayed(navBarPage.adminMenu);
   });
 
   <%_ if (authenticationType !== 'oauth2') { _%>
-  describe('User management', () => {
-    it('should load user management', async () => {
-      navBarPage.clickOnAdminMenuItem('user-management');
-      // Title should be equal to 'Users'
-      expect(await element(by.className('userManagement-page-heading')).isPresent()).to.be.true;
-    });
+  it('should load user management', async () => {
+    await navBarPage.clickOnAdminMenuItem('user-management');
+    const heading = element(by.id('user-management-page-heading'));
+    await waitUntilDisplayed(heading);
+    // Title should be equal to 'Users'
+    expect(await heading.isPresent()).to.be.true;
   });
   <%_ } _%>
 
   it('should load metrics', async () => {
-    navBarPage.clickOnAdminMenuItem('metrics');
-    waitUntilDisplayed(element(by.className('metrics-page-heading')));
-    expect(await element(by.className('metrics-page-heading')).getText()).to.eq('Application Metrics');
+    await navBarPage.clickOnAdminMenuItem('metrics');
+    expect(await element(by.id('metrics-page-heading')).getText()).to.eq('Application Metrics');
   });
 
   it('should load health', async () => {
-    navBarPage.clickOnAdminMenuItem('health');
-    expect(await element(by.className('health-page-heading')).getText()).to.eq('Health Checks');
+    await navBarPage.clickOnAdminMenuItem('health');
+    expect(await element(by.id('health-page-heading')).getText()).to.eq('Health Checks');
   });
 
   it('should load configuration', async () => {
-    navBarPage.clickOnAdminMenuItem('configuration');
-    expect(await element(by.className('configuration-page-heading')).getText()).to.eq('Configuration');
+    await navBarPage.clickOnAdminMenuItem('configuration');
+    expect(await element(by.id('configuration-page-heading')).getText()).to.eq('Configuration');
   });
 
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
   it('should load audits', async () => {
-    navBarPage.clickOnAdminMenuItem('audits');
-    expect(await element(by.className('audits-page-heading')).getText()).to.eq('Audits');
+    await navBarPage.clickOnAdminMenuItem('audits');
+    expect(await element(by.id('audits-page-heading')).getText()).to.eq('Audits');
   });
 
 <%_ } _%>
   it('should load logs', async () => {
-    navBarPage.clickOnAdminMenuItem('logs');
-    expect(await element(by.className('logs-page-heading')).getText()).to.eq('Logs');
+    await navBarPage.clickOnAdminMenuItem('logs');
+    expect(await element(by.id('logs-page-heading')).getText()).to.eq('Logs');
   });
 
-  after(() => navBarPage.autoSignOut());
+  after(async () => {
+    await navBarPage.autoSignOut()
+  });
 });

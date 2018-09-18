@@ -17,40 +17,40 @@ export default class RegisterPage extends BasePage {
     this.selector = selector;
   }
 
-  get() {
-    browser.get('#/register');
-    this.waitUntilDisplayed();
+  async get() {
+    await browser.get('#/register');
+    await this.waitUntilDisplayed();
   }
 
-  getTitle() {
+  async getTitle() {
     return this.title.getAttribute('id');
   }
 
-  setUserName(username: string) {
-    return this.username.sendKeys(username);
+  async setUserName(username: string) {
+    await this.username.sendKeys(username);
   }
 
-  setEmail(email: string) {
-    return this.email.sendKeys(email);
+  async setEmail(email: string) {
+    await this.email.sendKeys(email);
   }
 
-  setFirstPassword(password: string) {
-    return this.firstPassword.sendKeys(password);
+  async setFirstPassword(password: string) {
+    await this.firstPassword.sendKeys(password);
   }
 
-  setSecondPassword(password: string) {
-    return this.secondPassword.sendKeys(password);
+  async setSecondPassword(password: string) {
+    await this.secondPassword.sendKeys(password);
   }
 
-  autoSignUpUsing(username: string, email: string, password: string) {
-    this.setUserName(username);
-    this.setEmail(email);
-    this.setFirstPassword(password);
-    this.setSecondPassword(password);
-    return this.save();
+  async autoSignUpUsing(username: string, email: string, password: string) {
+    await this.setUserName(username);
+    await this.setEmail(email);
+    await this.setFirstPassword(password);
+    await this.setSecondPassword(password);
+    await this.save();
   }
 
-  save() {
-    return this.saveButton.click();
+  async save() {
+    await this.saveButton.click();
   }
 }
