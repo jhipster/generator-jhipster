@@ -37,7 +37,6 @@ const JDLObject = require('../../../lib/core/jdl_object');
 const JDLGatewayApplication = require('../../../lib/core/jdl_gateway_application');
 const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 const JDLMicroserviceApplication = require('../../../lib/core/jdl_microservice_application');
-const JDLUaaApplication = require('../../../lib/core/jdl_uaa_application');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLEnum = require('../../../lib/core/jdl_enum');
@@ -150,25 +149,6 @@ describe('BusinessErrorChecker', () => {
       jdlObject = new JDLObject();
     });
 
-    context('when having an UAA application with skipped user management', () => {
-      before(() => {
-        jdlObject.addApplication(
-          new JDLUaaApplication({
-            config: {
-              skipUserManagement: true,
-              uaaBaseName: 'uaa'
-            }
-          })
-        );
-        checker = new BusinessErrorChecker(jdlObject);
-      });
-
-      it('fails', () => {
-        expect(() => {
-          checker.checkForApplicationErrors();
-        }).to.throw('Skipping user management in a UAA app is forbidden.');
-      });
-    });
     context('when having no database type', () => {
       context('for a microservice without oauth2', () => {
         before(() => {
