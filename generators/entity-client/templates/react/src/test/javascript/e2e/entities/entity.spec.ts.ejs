@@ -151,7 +151,7 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilHidden(<%= entityInstance %>UpdatePage.getSaveButton());
         expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).to.be.false;
 
-        <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeCreate + 1);
+        await <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeCreate + 1);
         expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
     });<%= closeBlockComment %>
 
