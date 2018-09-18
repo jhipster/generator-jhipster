@@ -12,7 +12,10 @@ const options = getCommandOptions(packageJson, process.argv.slice(3));
 logger.info(chalk.yellow(`Executing ${command} on ${process.cwd()}`));
 logger.info(chalk.yellow(`Options: ${toString(options)}`));
 try {
-    env.run(command, options, done);
+    env.run(command, options, () => {
+        done();
+        process.exit(0);
+    });
 } catch (e) {
     logger.error(e.message, e);
 }
