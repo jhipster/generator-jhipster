@@ -29,14 +29,14 @@ apply plugin: com.google.cloud.tools.jib.gradle.JibPlugin
 
 jib {
     from {
-        image = 'openjdk:8-jre-alpine'
+        image = '<%= DOCKER_JAVA_JRE %>'
     }
     to {
         image = '<%= baseName.toLowerCase() %>:latest'
     }
     container {
-        jvmFlags = ['-Djava.security.egd=file:/dev/./urandom']
-        ports = ['8080']
+        entrypoint = ['sh', '-c', 'chmod +x /entrypoint.sh && /entrypoint.sh']
+        ports = ['<%= serverPort %>'<% if (cacheProvider === 'hazelcast') { %>, '5701/udp' <% } %>]
         useCurrentTimestamp = true
     }
 }

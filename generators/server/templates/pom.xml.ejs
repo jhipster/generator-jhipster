@@ -1012,17 +1012,22 @@
                 <version>${jib-maven-plugin.version}</version>
                 <configuration>
                     <from>
-                        <image>openjdk:8-jre-alpine</image>
+                        <image><%= DOCKER_JAVA_JRE %></image>
                     </from>
                     <to>
                         <image><%= baseName.toLowerCase() %>:latest</image>
                     </to>
                     <container>
-                        <jvmFlags>
-                            <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
-                        </jvmFlags>
+                        <entrypoint>
+                            <shell>sh</shell>
+                            <option>-c</option>
+                            <arg>chmod +x /entrypoint.sh &amp;&amp; /entrypoint.sh</arg>
+                        </entrypoint>
                         <ports>
-                            <port>8080</port>
+                            <port><%= serverPort %></port>
+                            <% if (cacheProvider === 'hazelcast') { %>
+                            <port>5701/udp</port>
+                            <% } %>
                         </ports>
                         <useCurrentTimestamp>true</useCurrentTimestamp>
                     </container>
