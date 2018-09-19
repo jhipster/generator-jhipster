@@ -232,7 +232,7 @@ maven-package:
 #        - docker info
 #        - cp target/*.war src/main/docker
 #    script:
-#        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" REGISTRY_URL
+#        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $REGISTRY_URL
 #        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker
 #        - docker push $IMAGE_TAG
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
