@@ -656,7 +656,7 @@ module.exports = class extends Generator {
      */
     normalizeBlueprintName(blueprint) {
         if (blueprint && !blueprint.startsWith('generator-jhipster')) {
-            blueprint = `generator-jhipster-${blueprint}`;
+            return `generator-jhipster-${blueprint}`;
         }
         return blueprint;
     }
@@ -713,7 +713,7 @@ module.exports = class extends Generator {
             return;
         }
         shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
-            if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${blueprint.replace('generator-', '')}\n`)) {
+            if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
                 this.error(`The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(`npm i -g ${blueprint}`)}.`);
             }
             done();

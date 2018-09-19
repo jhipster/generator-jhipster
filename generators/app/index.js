@@ -144,8 +144,8 @@ module.exports = class extends BaseGenerator {
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        const blueprint = this.options.blueprint || this.config.get('blueprint');
-        this.blueprint = this.configOptions.blueprint = this.normalizeBlueprintName(blueprint);
+        const blueprint = this.normalizeBlueprintName(this.options.blueprint || this.config.get('blueprint'));
+        this.blueprint = this.configOptions.blueprint = blueprint;
         this.useNpm = this.configOptions.useNpm = !this.options.yarn;
         this.useYarn = !this.useNpm;
 
