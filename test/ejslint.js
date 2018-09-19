@@ -1,5 +1,3 @@
-/* global describe, beforeEach, it */
-
 const assert = require('assert');
 const ejslint = require('ejs-lint');
 const fs = require('fs');
