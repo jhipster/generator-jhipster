@@ -121,7 +121,7 @@ import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
 import { mapIdList } from 'app/shared/util/entity-utils';
 <%_ } _%>
 
-export interface I<%= entityReactName %>UpdateProps extends StateProps, DispatchProps, RouteComponentProps<{id: number}>  {}
+export interface I<%= entityReactName %>UpdateProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}
 
 export interface I<%= entityReactName %>UpdateState {
   isNew: boolean;
@@ -129,7 +129,7 @@ export interface I<%= entityReactName %>UpdateState {
   ids<%= val.relationshipName %>: any[];
   <%_ }) _%>
   <%_ relFieldNames.forEach(val => { _%>
-  <%= val.relationshipFieldName %>Id: number;
+  <%= val.relationshipFieldName %>Id: string;
   <%_ }) _%>
 }
 
@@ -142,7 +142,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
       ids<%= val.relationshipName %>: [],
       <%_ }) _%>
       <%_ relFieldNames.forEach(val => { _%>
-      <%= val.relationshipFieldName %>Id: 0,
+      <%= val.relationshipFieldName %>Id: '0',
       <%_ }) _%>
       isNew: !this.props.match.params || !this.props.match.params.id,
     };
@@ -329,7 +329,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                   <%= fieldNameHumanized %>
                 </Translate>
               </Label>
-              <AvField id="<%= entityFileName %>-<%= fieldName %>" type="number" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
+              <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
             <%_
             } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 

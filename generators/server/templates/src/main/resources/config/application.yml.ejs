@@ -111,7 +111,7 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump"]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile" ]
     endpoint:
         health:
             show-details: when_authorized
@@ -217,7 +217,7 @@ security:
 
 server:
     servlet:
-        <%_ if (applicationType === 'microservice' && !serviceDiscoveryType) { _%>
+        <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { _%>
         context-path: /${spring.application.name}
         <%_ } _%>
         session:
@@ -265,6 +265,9 @@ jhipster:
         contact-email:
         license:
         license-url:
+
+logging:
+    file: <%= BUILD_DIR %><%=baseName%>.log
 
 # ===================================================================
 # Application specific properties

@@ -35,7 +35,12 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
 
         this.configOptions = this.options.configOptions || {};
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // This adds support for a `--[no-]client-hook` flag
         this.option('client-hook', {
             desc: 'Enable Webpack hook from maven/gradle build',
@@ -87,6 +92,7 @@ module.exports = class extends BaseGenerator {
                 'server',
                 {
                     'client-hook': !this.skipClient,
+                    'from-cli': this.options['from-cli'],
                     configOptions: this.configOptions,
                     force: this.options.force
                 }
@@ -99,6 +105,12 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                }
+            },
+
             displayLogo() {
                 if (this.logo) {
                     this.printJHipsterLogo();
@@ -154,12 +166,17 @@ module.exports = class extends BaseGenerator {
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
+                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
+                this.reactiveRepository = this.reactive ? 'reactive/' : '';
                 this.packageName = configuration.get('packageName');
                 this.serverPort = configuration.get('serverPort');
                 if (this.serverPort === undefined) {
                     this.serverPort = '8080';
                 }
                 this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
+                if (this.websocket === undefined) {
+                    this.websocket = false;
+                }
                 this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
                 if (this.searchEngine === undefined) {
                     this.searchEngine = false;

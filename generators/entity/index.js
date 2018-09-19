@@ -42,6 +42,13 @@ module.exports = class extends BaseGenerator {
             description: 'Entity name'
         });
 
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
+
         // This method adds support for a `--[no-]regenerate` flag
         this.option('regenerate', {
             desc: 'Regenerate the entity without presenting an option to update it',
@@ -121,6 +128,7 @@ module.exports = class extends BaseGenerator {
                 'entity',
                 {
                     'skip-install': this.options['skip-install'],
+                    'from-cli': this.options['from-cli'],
                     force: this.options.force,
                     arguments: [this.context.name]
                 }
@@ -133,6 +141,12 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                }
+            },
+
             getConfig() {
                 const context = this.context;
                 const configuration = this.getAllJhipsterConfig(this, true);
@@ -143,6 +157,7 @@ module.exports = class extends BaseGenerator {
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
                 context.packageName = configuration.get('packageName');
                 context.applicationType = configuration.get('applicationType');
+                context.reactive = configuration.get('reactive');
                 context.packageFolder = configuration.get('packageFolder');
                 context.authenticationType = configuration.get('authenticationType');
                 context.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
@@ -494,7 +509,7 @@ module.exports = class extends BaseGenerator {
                 context.entityTranslationKey = context.clientRootFolder ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`) : context.entityInstance;
                 context.entityTranslationKeyMenu = _.camelCase(context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-                context.reactiveRepositories = context.applicationType === 'reactive' && ['mongodb', 'cassandra', 'couchbase'].includes(context.databaseType);
+                context.reactiveRepositories = context.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(context.databaseType);
 
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;
@@ -670,7 +685,7 @@ module.exports = class extends BaseGenerator {
                     const jhiTablePrefix = context.jhiTablePrefix;
 
                     if (context.dto && context.dto === 'mapstruct') {
-                        if (otherEntityData && (!otherEntityData.dto || otherEntityData.dto !== 'mapstruct')) {
+                        if (otherEntityData && (!otherEntityData.dto || otherEntityData.dto !== 'mapstruct') && otherEntityName !== 'user') {
                             this.warning(chalk.red(`This entity has the DTO option, and it has a relationship with entity "${otherEntityName}" that doesn't have the DTO option. This will result in an error.`));
                         }
                     }

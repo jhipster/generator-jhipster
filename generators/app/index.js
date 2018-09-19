@@ -29,6 +29,12 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
 
         this.configOptions = {};
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side application generation',
@@ -153,6 +159,12 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                }
+            },
+
             displayLogo() {
                 this.printJHipsterLogo();
             },
@@ -244,6 +256,11 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.logo = false;
                 this.configOptions.otherModules = this.otherModules;
                 this.generatorType = 'app';
+                if (this.reactive) {
+                    // TODO: support client in reactive app
+                    this.skipClient = true;
+                    this.generatorType = 'server';
+                }
                 if (this.applicationType === 'microservice') {
                     this.skipClient = true;
                     this.generatorType = 'server';
@@ -283,6 +300,7 @@ module.exports = class extends BaseGenerator {
 
                 this.composeWith(require.resolve('../server'), {
                     'client-hook': !this.skipClient,
+                    'from-cli': this.options['from-cli'],
                     configOptions: this.configOptions,
                     force: this.options.force,
                     debug: this.isDebugEnabled
@@ -295,6 +313,7 @@ module.exports = class extends BaseGenerator {
                 this.composeWith(require.resolve('../client'), {
                     'skip-install': this.options['skip-install'],
                     'skip-commit-hook': this.options['skip-commit-hook'],
+                    'from-cli': this.options['from-cli'],
                     configOptions: this.configOptions,
                     force: this.options.force,
                     debug: this.isDebugEnabled
@@ -341,6 +360,7 @@ module.exports = class extends BaseGenerator {
                     config.languages = this.languages;
                 }
                 this.blueprint && (config.blueprint = this.blueprint);
+                this.reactive && (config.reactive = this.reactive);
                 this.skipClient && (config.skipClient = true);
                 this.skipServer && (config.skipServer = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
@@ -374,6 +394,7 @@ module.exports = class extends BaseGenerator {
                         this.composeWith(require.resolve('../entity'), {
                             regenerate: true,
                             'skip-install': true,
+                            'from-cli': this.options['from-cli'],
                             force: this.options.force,
                             debug: this.isDebugEnabled,
                             arguments: [entity.name]

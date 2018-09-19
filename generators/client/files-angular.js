@@ -44,6 +44,7 @@ const files = {
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
                 'webpack/webpack.prod.js',
+                'postcss.config.js',
                 { file: 'webpack/logo-jhipster.png', method: 'copy' }
             ]
         }
@@ -83,12 +84,6 @@ const files = {
             path: MAIN_SRC_DIR,
             templates: [
                 'content/scss/rtl.scss',
-            ]
-        },
-        {
-            condition: generator => generator.useSass,
-            templates: [
-                'postcss.config.js'
             ]
         }
     ],

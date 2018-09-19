@@ -30,12 +30,12 @@
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
-            "binders": "Message broker",
+            "binders": "Broker wiadomości",
             <%_ } _%>
             <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
-            "refreshScope": "Microservice Refresh Scope",
-            "configServer": "Microservice Config Server",
+            "refreshScope": "Obszar aktualizacji mikroserwisów",
+            "configServer": "Serwer konfiguracyjny mikroserwisów",
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
             "consul": "Consul",<% } %>
             <%_ } _%>
@@ -52,9 +52,9 @@
             "status": "Status"
         },
         "status": {
-            "UNKNOWN": "UNKNOWN",
-            "UP": "DOSTĘPNE",
-            "DOWN": "NIEDZIAŁAJĄCY"
+            "UNKNOWN": "NIEZNANY",
+            "UP": "DOSTĘPNA",
+            "DOWN": "NIEDOSTĘPNA"
         }
     }
 }

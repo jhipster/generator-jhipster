@@ -45,9 +45,10 @@ import <%=packageName%>.domain.*; // for static metamodels
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %>
 import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
-<% if (dto === 'mapstruct') { %>
+<%_ if (dto === 'mapstruct') { _%>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
-import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
+<%_ } _%>
 
 /**
  * Service for executing complex queries for <%= entityClass %> entities in the database.
@@ -124,5 +125,4 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
         }
         return specification;
     }
-
 }

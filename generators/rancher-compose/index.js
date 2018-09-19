@@ -31,7 +31,12 @@ const constants = require('../generator-constants');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
             desc: 'Check the status of the required tools',
@@ -44,6 +49,12 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                }
+            },
+
             sayHello() {
                 this.log(chalk.white(`${chalk.bold('🐮')} [BETA] Welcome to the JHipster Rancher Compose Generator ${chalk.bold('🐮')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
@@ -70,6 +81,7 @@ module.exports = class extends BaseGenerator {
 
             loadConfig() {
                 this.defaultAppsFolders = this.config.get('appsFolders');
+                this.authenticationType = this.config.get('authenticationType');
                 this.directoryPath = this.config.get('directoryPath');
                 this.monitoring = this.config.get('monitoring');
                 this.useKafka = false;
@@ -197,6 +209,10 @@ module.exports = class extends BaseGenerator {
 
                         parentConfiguration[databaseServiceName] = databaseYamlConfig;
                     }
+
+                    // Expose authenticationType
+                    this.authenticationType = appConfig.authenticationType;
+
                     // Add search engine configuration
                     const searchEngine = appConfig.searchEngine;
                     if (searchEngine === 'elasticsearch') {

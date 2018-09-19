@@ -20,8 +20,13 @@
 const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 const meow = require('meow');
+const yeoman = require('yeoman-environment');
+const _ = require('lodash');
+
+const SUB_GENERATORS = require('./commands');
 
 const CLI_NAME = 'jhipster';
+const GENERATOR_NAME = 'generator-jhipster';
 const debug = function (msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
@@ -36,8 +41,12 @@ const log = function (msg) {
     console.log(msg);
 };
 
-const error = function (msg) {
+const error = function (msg, trace) {
     console.error(`${chalk.red.bold('ERROR!')} ${chalk.red(msg)}`);
+    if (trace) {
+        console.log(trace);
+    }
+    process.exit(1);
 };
 
 const init = function (program) {
@@ -47,7 +56,7 @@ const init = function (program) {
     this.debugEnabled = program.debug = argv.includes('-d') || argv.includes('--debug'); // Need this early
 
     if (this.debugEnabled) {
-        debug('Debug logging is on');
+        info('Debug logging is on');
     }
 };
 
@@ -118,6 +127,20 @@ const getOptionsFromArgs = (args) => {
     return options;
 };
 
+/* Convert option objects to commandline args */
+const getOptionAsArgs = (options, withEntities) => {
+    const args = Object.entries(options).map(([key, value]) => {
+        if (value === true) {
+            return `--${_.kebabCase(key)}`;
+        }
+        return value ? `--${_.kebabCase(key)} ${value}` : '';
+    });
+    if (withEntities) args.push('--with-entities');
+    args.push('--from-cli');
+    logger.debug(`converted options: ${args}`);
+    return _.uniq(args.join(' ').split(' '));
+};
+
 /**
  *  Get options for the command
  */
@@ -139,6 +162,7 @@ const getCommandOptions = (pkg, argv) => {
     const options = meow({ help: false, pkg, argv });
     const flags = options ? options.flags : null;
     if (flags) {
+        flags['from-cli'] = true;
         // Add un-camelized options too, for legacy
         Object.keys(flags).forEach((key) => {
             const legacyKey = key.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`);
@@ -146,16 +170,33 @@ const getCommandOptions = (pkg, argv) => {
         });
         return flags;
     }
-    return {};
+    return { 'from-cli': true };
+};
+
+const done = () => {
+    logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+};
+
+const createYeomanEnv = () => {
+    const env = yeoman.createEnv();
+    /* Register yeoman generators */
+    Object.keys(SUB_GENERATORS).forEach((generator) => {
+        env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
+    });
+    return env;
 };
 
 module.exports = {
     CLI_NAME,
+    GENERATOR_NAME,
     toString,
     logger,
     initHelp,
     getArgs,
     getOptionsFromArgs,
     getCommand,
-    getCommandOptions
+    getCommandOptions,
+    done,
+    createYeomanEnv,
+    getOptionAsArgs
 };

@@ -88,8 +88,6 @@ spring:
         username: <%= baseName %>
         password:
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        # If you use the Docker Compose configuration provided by JHipster, the database name is "tempdb"
-        # So you should use url: jdbc:sqlserver://localhost:1433;database=tempdb
         url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
         username: SA
         password: yourStrong(!)Password
@@ -204,7 +202,7 @@ spring:
 <%_ } _%>
 
 # ===================================================================
-# To enable SSL in production, generate a certificate using:
+# To enable TLS in production, generate a certificate using:
 # keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
 #
 # You can also use Let's Encrypt:

@@ -21,7 +21,6 @@ const path = require('path');
 const _ = require('lodash');
 const fs = require('fs');
 const Generator = require('yeoman-generator');
-const Storage = require('yeoman-generator/lib/util/storage');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
 const semver = require('semver');
@@ -54,7 +53,6 @@ module.exports = class extends Generator {
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
         // expose lodash to templates
         this._ = _;
-        this.createConfigFromNewConfFile();
     }
 
     /* ======================================================================== */
@@ -982,10 +980,7 @@ module.exports = class extends Generator {
      * @param {string} db - db
      */
     getDBTypeFromDBValue(db) {
-        if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
-            return 'sql';
-        }
-        return db;
+        return jhipsterUtils.getDBTypeFromDBValue(db);
     }
 
     /**
@@ -1166,24 +1161,5 @@ module.exports = class extends Generator {
                 prettierFilter.restore
             ]);
         }
-    }
-
-    /**
-     * Creates a new config file and binds it to the passed generator.
-     * @param {any} generator
-     */
-    createConfigFromNewConfFile(generator = this) {
-        const storePath = path.join(generator.destinationRoot(), '.yo-rc.json');
-        if (!jhiCore.FileUtils.doesFileExist(storePath)) {
-            return;
-        }
-        const customFs = this.fs;
-        customFs.readJSON = (filePath) => {
-            if (!jhiCore.FileUtils.doesFileExist(filePath)) {
-                return {};
-            }
-            return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
-        };
-        generator.config = new Storage(generator.rootGeneratorName(), customFs, storePath);
     }
 };

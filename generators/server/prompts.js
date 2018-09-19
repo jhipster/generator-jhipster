@@ -39,6 +39,7 @@ function askForServerSideOpts(meta) {
     if (!meta && this.existingProject) return;
 
     const applicationType = this.applicationType;
+    const reactive = this.reactive;
     let defaultPort = applicationType === 'gateway' ? '8080' : '8081';
     if (applicationType === 'uaa') {
         defaultPort = '9999';
@@ -83,7 +84,7 @@ function askForServerSideOpts(meta) {
             default: 'eureka'
         },
         {
-            when: response => applicationType === 'monolith',
+            when: applicationType === 'monolith',
             type: 'list',
             name: 'serviceDiscoveryType',
             message: 'Do you want to use the JHipster Registry to configure, monitor and scale your application?',
@@ -112,22 +113,25 @@ function askForServerSideOpts(meta) {
                     {
                         value: 'jwt',
                         name: 'JWT authentication (stateless, with a token)'
-                    },
-                    {
-                        value: 'oauth2',
-                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
                     }
                 ];
-                if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
+                if (!reactive) {
                     opts.push({
-                        value: 'session',
-                        name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
+                        value: 'oauth2',
+                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
                     });
-                } else if (['gateway', 'microservice'].includes(applicationType)) {
-                    opts.push({
-                        value: 'uaa',
-                        name: 'Authentication with JHipster UAA server (the server must be generated separately)'
-                    });
+
+                    if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
+                        opts.push({
+                            value: 'session',
+                            name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
+                        });
+                    } else if (['gateway', 'microservice'].includes(applicationType)) {
+                        opts.push({
+                            value: 'uaa',
+                            name: 'Authentication with JHipster UAA server (the server must be generated separately)'
+                        });
+                    }
                 }
                 return opts;
             },
@@ -153,34 +157,37 @@ function askForServerSideOpts(meta) {
             name: 'databaseType',
             message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
             choices: (response) => {
-                const opts = [
-                    {
+                const opts = [];
+                if (!reactive) {
+                    opts.push({
                         value: 'sql',
                         name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
-                    },
-                    {
-                        value: 'mongodb',
-                        name: 'MongoDB'
-                    },
-                    {
-                        value: 'couchbase',
-                        name: 'Couchbase'
-                    }
-                ];
-                if (
-                    (response.authenticationType !== 'oauth2' && applicationType === 'microservice')
-                    || (response.authenticationType === 'uaa' && applicationType === 'gateway')
-                ) {
-                    opts.push({
-                        value: 'no',
-                        name: 'No database'
                     });
                 }
-                if (response.authenticationType !== 'oauth2') {
+                opts.push({
+                    value: 'mongodb',
+                    name: 'MongoDB'
+                });
+                if (!reactive) {
                     opts.push({
-                        value: 'cassandra',
-                        name: 'Cassandra'
+                        value: 'couchbase',
+                        name: 'Couchbase'
                     });
+                    if (
+                        (response.authenticationType !== 'oauth2' && applicationType === 'microservice')
+                        || (response.authenticationType === 'uaa' && applicationType === 'gateway')
+                    ) {
+                        opts.push({
+                            value: 'no',
+                            name: 'No database'
+                        });
+                    }
+                    if (response.authenticationType !== 'oauth2') {
+                        opts.push({
+                            value: 'cassandra',
+                            name: 'Cassandra'
+                        });
+                    }
                 }
                 return opts;
             },
@@ -338,6 +345,7 @@ function askForServerSideOpts(meta) {
 
 function askForOptionalItems(meta) {
     if (!meta && this.existingProject) return;
+    if (this.reactive) return;
 
     const applicationType = this.applicationType;
     const choices = [];

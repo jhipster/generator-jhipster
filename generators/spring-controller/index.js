@@ -34,7 +34,12 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         this.option('default', {
             type: Boolean,
             default: false,
@@ -49,6 +54,7 @@ module.exports = class extends BaseGenerator {
                 blueprint,
                 'spring-controller',
                 {
+                    'from-cli': this.options['from-cli'],
                     force: this.options.force,
                     arguments: [this.name],
                     default: this.options.default
@@ -62,6 +68,12 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                }
+            },
+
             initializing() {
                 this.log(`The spring-controller ${this.name} is being created.`);
                 const configuration = this.getAllJhipsterConfig(this, true);
@@ -71,9 +83,8 @@ module.exports = class extends BaseGenerator {
                 this.databaseType = configuration.get('databaseType');
                 this.reactiveController = false;
                 this.applicationType = configuration.get('applicationType');
-                if (this.applicationType === 'reactive') {
-                    this.reactiveController = true;
-                }
+                this.reactive = configuration.get('reactive');
+                this.reactiveController = this.reactive;
                 this.controllerActions = [];
             }
         };

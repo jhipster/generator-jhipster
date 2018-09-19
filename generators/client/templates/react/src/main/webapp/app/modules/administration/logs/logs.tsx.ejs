@@ -65,7 +65,7 @@ export class LogsPage extends React.Component<ILogsPageProps, ILogsPageState> {
     const loggers = logs ? logs.loggers : [];
     return (
         <div>
-          <h2 className="logs-page-heading"><Translate contentKey="logs.title">Logs</Translate></h2>
+          <h2 id="logs-page-heading"><Translate contentKey="logs.title">Logs</Translate></h2>
           <p><Translate contentKey="logs.nbloggers" interpolate={{ total: loggers.length }}>There are {loggers.length.toString()} loggers.</Translate></p>
 
           <span><Translate contentKey="logs.filter">Filter</Translate></span>

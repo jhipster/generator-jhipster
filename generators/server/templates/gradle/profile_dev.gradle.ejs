@@ -34,6 +34,9 @@ def profiles = 'dev'
 if (project.hasProperty('no-liquibase')) {
     profiles += ',no-liquibase'
 }
+if (project.hasProperty('tls')) {
+    profiles += ',tls'
+}
 
 bootRun {
     args = []
@@ -47,6 +50,11 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task, depend
 
 war {
     webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
+}
+
+task copyIntoStatic (type: Copy) {
+    from '<%= CLIENT_DIST_DIR %>'
+    into 'build/resources/main/static'
 }
 <%_ } _%>
 
@@ -72,6 +80,9 @@ processResources {
 
 <%_ if (!skipClient) { _%>
 processResources.dependsOn webpackBuildDev
+copyIntoStatic.dependsOn processResources
+bootJar.dependsOn copyIntoStatic
+
 yarn_install.onlyIf { shouldWebpackRun() == true }
 
 def shouldWebpackRun() {

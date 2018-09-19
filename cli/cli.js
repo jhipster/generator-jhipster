@@ -18,53 +18,36 @@
  */
 /* eslint-disable no-console */
 const program = require('commander');
-const yeoman = require('yeoman-environment');
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
-const logger = require('./utils').logger;
-const initHelp = require('./utils').initHelp;
-const toString = require('./utils').toString;
-const getCommand = require('./utils').getCommand;
-const getCommandOptions = require('./utils').getCommandOptions;
-const getArgs = require('./utils').getArgs;
-const CLI_NAME = require('./utils').CLI_NAME;
+const {
+    CLI_NAME, initHelp, logger, createYeomanEnv, toString, getCommand, getCommandOptions, getArgs, done
+} = require('./utils');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 
 const version = packageJson.version;
-const env = yeoman.createEnv();
 const JHIPSTER_NS = CLI_NAME;
+const env = createYeomanEnv();
 
 /* setup debugging */
 logger.init(program);
 
-/* Register yeoman generators */
-Object.keys(SUB_GENERATORS).forEach((generator) => {
-    env.register(require.resolve(`../generators/${generator}`), `${JHIPSTER_NS}:${generator}`);
-});
-
-const done = () => {
-    logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
-};
-
 /**
  *  Run a yeoman command
  */
-const runYoCommand = (cmd, args, opts) => {
+const runYoCommand = (cmd, args, options, opts) => {
     logger.debug(`cmd: ${toString(cmd)}`);
     logger.debug(`args: ${toString(args)}`);
     logger.debug(`opts: ${toString(opts)}`);
     const command = getCommand(cmd, args, opts);
-    const options = getCommandOptions(packageJson, process.argv.slice(2));
     logger.info(chalk.yellow(`Executing ${command}`));
     logger.info(chalk.yellow(`Options: ${toString(options)}`));
     try {
         env.run(command, options, done);
     } catch (e) {
-        logger.error(e.message);
-        logger.log(e);
-        process.exit(1);
+        logger.error(e.message, e);
     }
 };
 
@@ -80,11 +63,23 @@ Object.keys(SUB_GENERATORS).forEach((key) => {
     command.allowUnknownOption()
         .description(opts.desc)
         .action((args) => {
-            runYoCommand(key, program.args, opts);
+            const options = getCommandOptions(packageJson, process.argv.slice(2));
+            if (opts.cliOnly) {
+                logger.debug('Executing CLI only script');
+                /* eslint-disable global-require, import/no-dynamic-require */
+                require(`./${key}`)(program.args, options, env);
+                /* eslint-enable */
+            } else {
+                runYoCommand(key, program.args, options, opts);
+            }
         })
         .on('--help', () => {
-            logger.debug('Adding additional help info');
-            env.run(`${JHIPSTER_NS}:${key} --help`, done);
+            if (opts.help) {
+                logger.info(opts.help);
+            } else {
+                logger.debug('Adding additional help info');
+                env.run(`${JHIPSTER_NS}:${key} --help`, done);
+            }
         });
 });
 
@@ -100,5 +95,6 @@ program.parse(process.argv);
 if (program.args.length < 1) {
     logger.debug('No command specified. Running default');
     logger.info(chalk.yellow('Running default command'));
-    runYoCommand('app', [], {});
+    const options = getCommandOptions(packageJson, process.argv.slice(2));
+    runYoCommand('app', [], options, {});
 }

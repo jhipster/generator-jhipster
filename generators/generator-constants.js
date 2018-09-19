@@ -18,7 +18,7 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v4.0.1';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v4.0.3';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.20';
 const DOCKER_MARIADB = 'mariadb:10.3.7';
@@ -42,7 +42,7 @@ const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v3.0.1';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v3.0.1';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v3.0.1';
 const DOCKER_TRAEFIK = 'traefik:1.5.3';
-const DOCKER_CONSUL = 'consul:1.2.0';
+const DOCKER_CONSUL = 'consul:1.2.3';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v1.6.3';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.6.2';
@@ -109,7 +109,12 @@ const LANGUAGES = [
     {
         name: 'Belorussian', dispName: 'Беларускі', value: 'by', momentLocaleId: 'be-by'
     },
-    { name: 'Catalan', dispName: 'Català', value: 'ca' },
+    {
+        name: 'Bengali', dispName: 'বাংলা', value: 'bn', momentLocaleId: 'bn-bd'
+    },
+    {
+        name: 'Catalan', dispName: 'Català', value: 'ca'
+    },
     {
         name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn', localeId: 'zh-Hans'
     },
@@ -135,6 +140,7 @@ const LANGUAGES = [
     { name: 'Japanese', dispName: '日本語', value: 'ja' },
     { name: 'Korean', dispName: '한국어', value: 'ko' },
     { name: 'Marathi', dispName: 'मराठी', value: 'mr' },
+    { name: 'Myanmar', dispName: 'မြန်မာ', value: 'my' },
     { name: 'Polish', dispName: 'Polski', value: 'pl' },
     {
         name: 'Portuguese (Brazilian)', dispName: 'Português (Brasil)', value: 'pt-br', localeId: 'pt'
