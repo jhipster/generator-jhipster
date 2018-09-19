@@ -12,13 +12,6 @@ jobs:
     JH_PROFILE: dev
     JH_RUN_APP: 1
     JH_PROTRACTOR: 0
-    JH_HOME: $BUILD_REPOSITORY_LOCALPATH
-    JH_REPO: $BUILD_REPOSITORY_URI
-    JH_INTEG: $JH_HOME/test-integration
-    JH_SAMPLES: $JH_INTEG/samples
-    JH_SCRIPTS: $JH_INTEG/scripts
-    JH_FOLDER_APP: $HOME/app
-    JH_FOLDER_UAA: $HOME/uaa
     JH_LIB_REPO: https://github.com/jhipster/jhipster.git
     JH_LIB_BRANCH: release
     JH_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
@@ -26,6 +19,7 @@ jobs:
     SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
     SPRING_JPA_SHOW_SQL: false
     DISABLE_WEBPACK_LOGS: true
+    JH_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
 
   # specific variables in parallel
   strategy:
