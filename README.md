@@ -14,19 +14,6 @@ As this is a [JHipster](http://jhipster.github.io/) blueprint, we expect you hav
 
 # Installation
 
-## With Yarn
-
-To install this blueprint:
-
-```bash
-yarn global add generator-jhipster-vuejs
-```
-
-To update this blueprint:
-
-```bash
-yarn global upgrade generator-jhipster-vuejs
-```
 
 ## With NPM
 
@@ -42,6 +29,20 @@ To update this blueprint:
 npm update -g generator-jhipster-vuejs
 ```
 
+## With Yarn
+
+To install this blueprint:
+
+```bash
+yarn global add generator-jhipster-vuejs
+```
+
+To update this blueprint:
+
+```bash
+yarn global upgrade generator-jhipster-vuejs
+```
+
 # Usage
 
 To use this blueprint, run 
@@ -55,18 +56,15 @@ jhipster --blueprint vuejs
 
 During development of blueprint, please note the below steps. They are very important.
 
-1. Link your blueprint globally 
-
-Note: If you do not want to link the blueprint(step 3) to each project being created, use NPM instead of Yarn as yeoman doesn't seem to fetch globally linked Yarn modules. On the other hand, this means you have to use NPM in all the below steps as well.
+1. Clone this repo locally and cd into it, then link your blueprint globally 
 
 ```bash
+git clone https://github.com/jhipster/jhipster-vuejs.git
 cd jhipster-vuejs
 npm link
 ```
 
-2. Link a development version of JHipster to your blueprint (optional: required only if you want to use a non-released JHipster version, like the master branch or your own custom fork)
-
-You could also use Yarn for this if you prefer
+2. optional: Link a development version of JHipster to your blueprint (optional: required only if you want to use a non-released JHipster version, like the master branch or your own custom fork)
 
 ```bash
 cd generator-jhipster
