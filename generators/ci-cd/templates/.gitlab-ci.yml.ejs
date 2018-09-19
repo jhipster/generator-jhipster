@@ -72,6 +72,7 @@ gradle-test:
             - build/test-results/
             - build/jacoco/
         expire_in: 1 day
+
 <%_ if (!skipClient) { _%>
 frontend-test:
     stage: test
@@ -89,6 +90,7 @@ frontend-test:
             - build/jacoco/
         expire_in: 1 day
 <%_ } _%>
+
 <%_ if (cicdIntegrations.includes('sonar')) { _%>
 sonar-analyze:  
     stage: analyze
@@ -101,6 +103,7 @@ sonar-analyze:
         - ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
     allow_failure: true
 <%_ } _%>
+
 gradle-package:
     stage: package
     script:
@@ -130,6 +133,7 @@ gradle-package:
 #        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" REGISTRY_URL
 #        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker
 #        - docker push $IMAGE_TAG
+
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
     stage: deploy
@@ -140,6 +144,7 @@ deploy-to-production:
     environment:
         name: production
     when: manual
+<%_ } _%>
 <%_ } _%>
 
 <%_ if (buildTool === 'maven') { _%>
@@ -175,6 +180,7 @@ maven-test:
         paths:
             - target/test-results
         expire_in: 1 day
+
 <%_ if (!skipClient) { _%>
 frontend-test:
     stage: test
@@ -187,6 +193,7 @@ frontend-test:
             - target/test-results
         expire_in: 1 day
 <%_ } _%>
+<%_ if (cicdIntegrations.includes('sonar')) { _%>
 sonar-analyze:  
     stage: analyze
     dependencies:
@@ -197,6 +204,7 @@ sonar-analyze:
     script:
         - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=atomfrede-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
     allow_failure: true
+<%_ } _%>
 
 maven-package:
     stage: package
@@ -227,7 +235,7 @@ maven-package:
 #        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" REGISTRY_URL
 #        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker
 #        - docker push $IMAGE_TAG
-
+<%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
     stage: deploy
     before_script:
@@ -237,4 +245,5 @@ deploy-to-production:
     environment:
         name: production
     when: manual
+<%_ } _%>
 <%_ } _%>
