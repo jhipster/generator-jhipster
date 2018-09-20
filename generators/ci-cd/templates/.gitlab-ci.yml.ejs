@@ -238,12 +238,9 @@ maven-package:
 #        - docker push $IMAGE_TAG
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
-    image: ruby:2.5.1
-    before_script:
-        - gem install dpl
     stage: deploy
     script:
-        - dpl --provider=heroku --strategy=git --app=<%= herokuAppName %> --api-key=$HEROKU_API_KEY
+      - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %> -Dmaven.repo.local=$MAVEN_USER_HOME
     environment:
         name: production
     when: manual
