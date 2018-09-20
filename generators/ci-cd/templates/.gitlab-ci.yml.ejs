@@ -136,12 +136,9 @@ gradle-package:
 
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
-    image: ruby:2.5.1
-    before_script:
-        - gem install dpl
     stage: deploy
     script:
-        - dpl --provider=heroku --strategy=git --app=<%= herokuAppName %> --api-key=$HEROKU_API_KEY
+        - ./gradlew deployHeroku --no-daemon
     environment:
         name: production
     when: manual
