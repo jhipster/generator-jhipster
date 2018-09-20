@@ -77,7 +77,7 @@ gradle-test:
 frontend-test:
     stage: test
     script:
-        <%_ if (clientPackageManager === 'yarn') { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>    
         - ./gradlew yarn_test -PnodeInstall --no-daemon
         <%_ } else if (clientPackageManager === 'npm') { _%>
         - ./gradlew npm_test -PnodeInstall --no-daemon
@@ -92,7 +92,7 @@ frontend-test:
 <%_ } _%>
 
 <%_ if (cicdIntegrations.includes('sonar')) { _%>
-sonar-analyze:
+sonar-analyze:  
     stage: analyze
     dependencies:
         - gradle-test
@@ -136,12 +136,11 @@ gradle-package:
 
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
-    image: ruby:2.5.1
-    before_script:
-        - gem install dpl
     stage: deploy
+    before_script:
+        - curl https://cli-assets.heroku.com/install.sh | sh
     script:
-        - dpl --provider=heroku --strategy=git --app=<%= herokuAppName %> --api-key=$HEROKU_API_KEY
+        - ./gradlew deployHeroku --no-daemon
     environment:
         name: production
     when: manual
@@ -195,7 +194,7 @@ frontend-test:
         expire_in: 1 day
 <%_ } _%>
 <%_ if (cicdIntegrations.includes('sonar')) { _%>
-sonar-analyze:
+sonar-analyze:  
     stage: analyze
     dependencies:
         - maven-test
@@ -214,7 +213,7 @@ maven-package:
     artifacts:
         paths:
             - target/*.war
-        expire_in: 1 day
+        expire_in: 1 day   
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
@@ -238,12 +237,11 @@ maven-package:
 #        - docker push $IMAGE_TAG
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
-    image: ruby:2.5.1
-    before_script:
-        - gem install dpl
     stage: deploy
+    before_script:
+        - curl https://cli-assets.heroku.com/install.sh | sh
     script:
-        - dpl --provider=heroku --strategy=git --app=<%= herokuAppName %> --api-key=$HEROKU_API_KEY
+        - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=jhigitlabmvnpipeline -Dmaven.repo.local=$MAVEN_USER_HOME
     environment:
         name: production
     when: manual
