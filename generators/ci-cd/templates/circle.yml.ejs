@@ -67,7 +67,7 @@ test:
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
     <%_ if (cicdIntegrations.includes('circle')) { _%>
-        - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+        - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
     <%_ } else { _%>
         - ./mvnw verify -Pprod -DskipTests
     <%_ } _%>
