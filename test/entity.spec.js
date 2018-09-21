@@ -5,98 +5,12 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const constants = require('../generators/generator-constants');
+const expectedFiles = require('./utils/expected-files').entity;
 
-const TEST_DIR = constants.TEST_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
-const expectedFiles = {
-    clientNg2: [
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-detail.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-update.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-delete-dialog.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo.route.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-update.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-delete-dialog.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo-detail.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/model/foo.model.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-delete-dialog.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-detail.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-update.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo.service.spec.ts`
-    ],
-    clientNg2WithSuffix: [
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management-detail.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management-update.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management-delete-dialog.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management.route.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management-update.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management-delete-dialog.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management-detail.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/model/foo-management.model.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management-delete-dialog.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management-detail.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management-update.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management.service.spec.ts`
-    ],
-    clientNg2WithRootFolder: [
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-detail.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-update.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-delete-dialog.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo.route.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-update.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-delete-dialog.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo-detail.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/model/test-root/foo.model.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo-delete-dialog.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo-detail.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo-update.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo.service.spec.ts`
-    ],
-    clientNg2WithRootFolderAndSuffix: [
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-detail.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-update.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-delete-dialog.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management.route.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-update.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-delete-dialog.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management-detail.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/model/test-root/foo-management.model.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management-delete-dialog.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management-detail.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management-update.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management.service.spec.ts`
-    ],
-    server: [
-        '.jhipster/Foo.json',
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
-        // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIntTest.java`,
-        `${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`
-    ]
-};
-
-describe('JHipster generator for server', () => {
+describe('JHipster generator for entity', () => {
     describe('search, no dto, no service, no pagination', () => {
         beforeEach((done) => {
             helpers.run(require.resolve('../generators/entity'))

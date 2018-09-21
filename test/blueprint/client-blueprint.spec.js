@@ -3,10 +3,10 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const expectedFiles = require('./utils/expected-files');
-const ServerGenerator = require('../generators/server');
+const expectedFiles = require('../utils/expected-files');
+const ClientGenerator = require('../../generators/client');
 
-const blueprintSubGen = class extends ServerGenerator {
+const mockBlueprintSubGen = class extends ClientGenerator {
     constructor(args, opts) {
         super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
         const jhContext = this.jhipsterContext = this.options.jhipsterContext;
@@ -15,7 +15,7 @@ const blueprintSubGen = class extends ServerGenerator {
         }
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupServerOptions(this, jhContext);
+        jhContext.setupClientOptions(this, jhContext);
     }
 
     get initializing() {
@@ -37,11 +37,15 @@ const blueprintSubGen = class extends ServerGenerator {
     get writing() {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
-            addDummyMavenProperty() {
-                this.addMavenProperty('dummy-blueprint-property', 'foo');
+            addDummyProperty() {
+                this.addNpmDependency('dummy-blueprint-property', '2.0');
             }
         };
         return Object.assign(phaseFromJHipster, customPhaseSteps);
+    }
+
+    get install() {
+        return super._install();
     }
 
     get end() {
@@ -49,50 +53,43 @@ const blueprintSubGen = class extends ServerGenerator {
     }
 };
 
-describe('JHipster server generator with blueprint', () => {
+describe('JHipster client generator with blueprint', () => {
     const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
 
     blueprintNames.forEach((blueprintName) => {
-        describe(`generate server with blueprint option '${blueprintName}'`, () => {
+        describe(`generate client with blueprint option '${blueprintName}'`, () => {
             before((done) => {
-                helpers.run(path.join(__dirname, '../generators/server'))
+                helpers.run(path.join(__dirname, '../../generators/client'))
                     .withOptions({
+                        'from-cli': true,
+                        build: 'maven',
+                        auth: 'jwt',
+                        db: 'mysql',
                         skipInstall: true,
                         blueprint: blueprintName,
                         skipChecks: true
                     })
                     .withGenerators([
-                        [blueprintSubGen, 'jhipster-myblueprint:server']
+                        [mockBlueprintSubGen, 'jhipster-myblueprint:client']
                     ])
                     .withPrompts({
                         baseName: 'jhipster',
-                        packageName: 'com.mycompany.myapp',
-                        packageFolder: 'com/mycompany/myapp',
-                        serviceDiscoveryType: false,
-                        authenticationType: 'jwt',
-                        cacheProvider: 'ehcache',
-                        enableHibernateCache: true,
-                        databaseType: 'sql',
-                        devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
+                        clientFramework: 'angularX',
+                        useSass: false,
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['fr'],
-                        buildTool: 'maven',
-                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        languages: ['fr']
                     })
                     .on('end', done);
             });
 
-            it('creates expected files from jhipster server generator', () => {
-                assert.file(expectedFiles.server);
-                assert.file(expectedFiles.jwtServer);
-                assert.file(expectedFiles.maven);
+            it('creates expected files from jhipster client generator', () => {
+                assert.file(expectedFiles.client);
+                assert.file(expectedFiles.i18nJson);
             });
 
             it('contains the specific change added by the blueprint', () => {
-                assert.fileContent('pom.xml', /dummy-blueprint-property/);
+                assert.fileContent('package.json', /dummy-blueprint-property/);
             });
         });
     });
