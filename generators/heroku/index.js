@@ -397,6 +397,9 @@ module.exports = class extends BaseGenerator {
 
                     this.log('');
                     this.prompt(prompts).then((props) => {
+                        // Encode username/password to avoid errors caused by spaces
+                        props.herokuJHipsterRegistryUsername = encodeURIComponent(props.herokuJHipsterRegistryUsername);
+                        props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
                         const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
                         const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
                         const child = exec(configSetCmd, (err, stdout, stderr) => {
