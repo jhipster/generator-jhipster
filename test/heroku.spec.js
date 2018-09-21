@@ -257,6 +257,7 @@ describe('JHipster Heroku Sub Generator', () => {
                 assert.file(expectedFiles.monolith);
                 assert.fileContent('.yo-rc.json', '"herokuDeployType": "jar"');
                 assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
+                assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'jest');
                 assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
             });
         });

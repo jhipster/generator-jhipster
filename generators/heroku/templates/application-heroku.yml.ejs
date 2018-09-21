@@ -49,12 +49,8 @@ spring:
         hikari:
             maximumPoolSize: 8
 <%_ } else if (prodDatabaseType === 'mongodb') { _%>
-    data:
-        mongodb:
-            uri: ${MONGODB_URI}?authMode=scram-sha1
+    data.mongodb.uri: ${MONGODB_URI}?authMode=scram-sha1
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-    data:
-        jest:
-            uri: ${BONSAI_URL}
+    data.jest.uri: ${BONSAI_URL}
 <%_ } _%>
