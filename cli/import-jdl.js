@@ -17,6 +17,10 @@ const statistics = require('../generators/statistics');
 
 const runYeomanProcess = require.resolve('./run-yeoman-process.js');
 
+/**
+ * Imports the Applications and Entities defined in JDL
+ * The app .yo-rc.json files and entity json files are written to disk
+ */
 function importJDL() {
     logger.info('The JDL is being parsed.');
     const jdlImporter = new jhiCore.JDLImporter(this.jdlFiles, {
@@ -55,8 +59,16 @@ function importJDL() {
     return importState;
 }
 
+/**
+ * Check if application needs to be generated
+ * @param {any} generator
+ */
 const shouldGenerateApplications = generator => !generator.options['ignore-application'] && generator.importState.exportedApplications.length !== 0;
 
+/**
+ * Generate application source code for JDL apps defined.
+ * @param {*} config
+ */
 const generateApplicationFiles = ({
     generator, application, withEntities, inAppFolder
 }) => {
@@ -73,7 +85,15 @@ const generateApplicationFiles = ({
     });
 };
 
-const generateEntityFiles = (generator, entity, inAppFolder, env) => {
+/**
+ * Generate entities for the applications
+ * @param {any} generator
+ * @param {any} entity
+ * @param {boolean} inAppFolder
+ * @param {any} env
+ * @param {boolean} shouldTriggerInstall
+ */
+const generateEntityFiles = (generator, entity, inAppFolder, env, shouldTriggerInstall) => {
     const options = {
         ...generator.options,
         regenerate: true,
@@ -87,6 +107,7 @@ const generateEntityFiles = (generator, entity, inAppFolder, env) => {
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;
     if (inAppFolder) {
+        /* Generating entities inside multiple apps */
         const baseNames = entity.applications;
         baseNames.forEach((baseName) => {
             logger.info(`Generating entities for application ${baseName} in a new parallel process`);
@@ -97,9 +118,24 @@ const generateEntityFiles = (generator, entity, inAppFolder, env) => {
         });
     } else {
         /* Traditional entity only generation */
-        env.run(command, options, done);
+        env.run(command, {
+            ...options,
+            'skip-install': !shouldTriggerInstall
+        }, done);
     }
 };
+
+/**
+ * Check if NPM/Yarn install needs to be triggered. This will be done for the last entity.
+ * @param {any} generator
+ * @param {number} index
+ */
+const shouldTriggerInstall = (generator, index) =>
+    index === generator.importState.exportedEntities.length - 1
+    && !generator.options['skip-install'] && !generator.skipClient
+    && !generator.options['json-only']
+    && !shouldGenerateApplications(generator)
+
 
 class JDLProcessor {
     constructor(jdlFiles, options) {
@@ -174,6 +210,7 @@ class JDLProcessor {
 
     generateEntities(env) {
         if (this.importState.exportedEntities.length === 0 || shouldGenerateApplications(this)) {
+            logger.debug('Entities not generated');
             return;
         }
         if (this.options['json-only']) {
@@ -181,27 +218,24 @@ class JDLProcessor {
             return;
         }
         try {
-            this.importState.exportedEntities.forEach((exportedEntity) => {
+            this.importState.exportedEntities.forEach((exportedEntity, i) => {
                 logger.log(`Generating ${this.importState.exportedEntities.length} `
                     + `${pluralize('entity', this.importState.exportedEntities.length)}.`);
 
-                generateEntityFiles(this, exportedEntity, this.importState.exportedApplications.length > 1, env);
+                generateEntityFiles(this, exportedEntity, this.importState.exportedApplications.length > 1, env, shouldTriggerInstall(this, i));
             });
         } catch (error) {
             logger.error(`Error while generating entities from the parsed JDL\n${error}`);
         }
     }
-
-    end() {
-        if (!this.options['skip-install'] && !this.skipClient && !this.options['json-only']
-            && !shouldGenerateApplications(this)) {
-            logger.debug('Building client');
-            // TODO figure out a way to do this nicely
-            // this.rebuildClient();
-        }
-    }
 }
 
+/**
+ * Import-JDL sub generator
+ * @param {any} args arguments passed for import-jdl
+ * @param {*} options options passed from CLI
+ * @param {*} env the yeoman environment
+ */
 module.exports = (args, options, env) => {
     logger.debug('cmd: import-jdl from ./import-jdl');
     logger.debug(`args: ${toString(args)}`);
@@ -216,7 +250,6 @@ module.exports = (args, options, env) => {
         jdlImporter.sendInsight();
         jdlImporter.generateApplications();
         jdlImporter.generateEntities(env);
-        jdlImporter.end();
     } catch (e) {
         logger.error(`Error during import-jdl: ${e.message}`, e);
     }
