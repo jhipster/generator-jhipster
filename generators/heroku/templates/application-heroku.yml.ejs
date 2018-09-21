@@ -48,9 +48,15 @@ spring:
         password: ${JDBC_DATABASE_PASSWORD}
         hikari:
             maximumPoolSize: 8
-<%_ } else if (prodDatabaseType === 'mongodb') { _%>
-    data.mongodb.uri: ${MONGODB_URI}?authMode=scram-sha1
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
-    data.jest.uri: ${BONSAI_URL}
+<%_ if (prodDatabaseType === 'mongodb' || searchEngine === 'elasticsearch') { _%>
+    data:
+  <%_ if (prodDatabaseType === 'mongodb') { _%>
+        mongodb:
+            uri: ${MONGODB_URI}?authMode=scram-sha1
+  <%_ } _%>
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+        jest:
+            uri: ${BONSAI_URL}
+  <%_ } _%>
 <%_ } _%>
