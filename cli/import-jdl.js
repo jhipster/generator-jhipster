@@ -67,11 +67,12 @@ const shouldGenerateApplications = generator => !generator.options['ignore-appli
 
 /**
  * Generate application source code for JDL apps defined.
- * @param {*} config
+ * @param {any} config
+ * @param {function} forkProcess
  */
 const generateApplicationFiles = ({
     generator, application, withEntities, inAppFolder
-}) => {
+}, forkProcess) => {
     const baseName = application[GENERATOR_NAME].baseName;
     logger.info(`Generating application ${baseName} in a new parallel process`);
     logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
@@ -80,7 +81,7 @@ const generateApplicationFiles = ({
     logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
     const command = `${CLI_NAME}:app`;
-    fork(runYeomanProcess, [command, ...getOptionAsArgs(generator.options, withEntities)], {
+    forkProcess(runYeomanProcess, [command, ...getOptionAsArgs(generator.options, withEntities)], {
         cwd
     });
 };
@@ -92,8 +93,9 @@ const generateApplicationFiles = ({
  * @param {boolean} inAppFolder
  * @param {any} env
  * @param {boolean} shouldTriggerInstall
+ * @param {function} forkProcess
  */
-const generateEntityFiles = (generator, entity, inAppFolder, env, shouldTriggerInstall) => {
+const generateEntityFiles = (generator, entity, inAppFolder, env, shouldTriggerInstall, forkProcess) => {
     const options = {
         ...generator.options,
         regenerate: true,
@@ -114,7 +116,7 @@ const generateEntityFiles = (generator, entity, inAppFolder, env, shouldTriggerI
             const cwd = path.join(generator.pwd, baseName);
             logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
-            fork(runYeomanProcess, [command, ...getOptionAsArgs(options)], { cwd });
+            forkProcess(runYeomanProcess, [command, ...getOptionAsArgs(options)], { cwd });
         });
     } else {
         /* Traditional entity only generation */
@@ -130,11 +132,10 @@ const generateEntityFiles = (generator, entity, inAppFolder, env, shouldTriggerI
  * @param {any} generator
  * @param {number} index
  */
-const shouldTriggerInstall = (generator, index) =>
-    index === generator.importState.exportedEntities.length - 1
+const shouldTriggerInstall = (generator, index) => index === generator.importState.exportedEntities.length - 1
     && !generator.options['skip-install'] && !generator.skipClient
     && !generator.options['json-only']
-    && !shouldGenerateApplications(generator)
+    && !shouldGenerateApplications(generator);
 
 
 class JDLProcessor {
@@ -186,7 +187,7 @@ class JDLProcessor {
         statistics.sendSubGenEvent('generator', 'import-jdl');
     }
 
-    generateApplications() {
+    generateApplications(forkProcess) {
         if (!shouldGenerateApplications(this)) {
             logger.debug('Applications not generated');
             return;
@@ -201,14 +202,14 @@ class JDLProcessor {
                     application,
                     withEntities: this.importState.exportedEntities.length !== 0,
                     inAppFolder: this.importState.exportedApplications.length > 1
-                });
+                }, forkProcess);
             } catch (error) {
                 logger.error(`Error while generating applications from the parsed JDL\n${error}`);
             }
         });
     }
 
-    generateEntities(env) {
+    generateEntities(env, forkProcess) {
         if (this.importState.exportedEntities.length === 0 || shouldGenerateApplications(this)) {
             logger.debug('Entities not generated');
             return;
@@ -222,7 +223,7 @@ class JDLProcessor {
                 logger.log(`Generating ${this.importState.exportedEntities.length} `
                     + `${pluralize('entity', this.importState.exportedEntities.length)}.`);
 
-                generateEntityFiles(this, exportedEntity, this.importState.exportedApplications.length > 1, env, shouldTriggerInstall(this, i));
+                generateEntityFiles(this, exportedEntity, this.importState.exportedApplications.length > 1, env, shouldTriggerInstall(this, i), forkProcess);
             });
         } catch (error) {
             logger.error(`Error while generating entities from the parsed JDL\n${error}`);
@@ -233,10 +234,11 @@ class JDLProcessor {
 /**
  * Import-JDL sub generator
  * @param {any} args arguments passed for import-jdl
- * @param {*} options options passed from CLI
- * @param {*} env the yeoman environment
+ * @param {any} options options passed from CLI
+ * @param {any} env the yeoman environment
+ * @param {function} forkProcess the method to use for process forking
  */
-module.exports = (args, options, env) => {
+module.exports = (args, options, env, forkProcess = fork) => {
     logger.debug('cmd: import-jdl from ./import-jdl');
     logger.debug(`args: ${toString(args)}`);
     const jdlFiles = getOptionsFromArgs(args);
@@ -248,8 +250,8 @@ module.exports = (args, options, env) => {
         jdlImporter.getConfig();
         jdlImporter.importJDL();
         jdlImporter.sendInsight();
-        jdlImporter.generateApplications();
-        jdlImporter.generateEntities(env);
+        jdlImporter.generateApplications(forkProcess);
+        jdlImporter.generateEntities(env, forkProcess);
     } catch (e) {
         logger.error(`Error during import-jdl: ${e.message}`, e);
     }

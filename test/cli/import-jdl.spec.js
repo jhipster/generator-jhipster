@@ -10,14 +10,22 @@ const { testInTempDir } = require('../utils/utils');
 
 let subGenCallParams = {};
 
-const env = () => ({
+const env = {
     run(command, options, done) {
         subGenCallParams.count++;
         subGenCallParams.commands.push(command);
         subGenCallParams.options.push(options);
         done();
     }
-});
+};
+
+const mockFork = (runYeomanProcess, argv, opts) => {
+    const command = argv[0];
+    const options = argv.slice(1);
+    subGenCallParams.count++;
+    subGenCallParams.commands.push(command);
+    subGenCallParams.options.push(options);
+};
 
 describe('JHipster generator import jdl', () => {
     beforeEach(() => {
@@ -31,7 +39,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach((done) => {
             testInTempDir((dir) => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['jdl.jdl'], { 'json-only': true });
+                importJdl(['jdl.jdl'], { 'json-only': true, skipInstall: true }, env);
                 done();
             });
         });
@@ -56,7 +64,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach((done) => {
             testInTempDir((dir) => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['jdl.jdl'], {}, env());
+                importJdl(['jdl.jdl'], { skipInstall: true }, env);
                 done();
             });
         });
@@ -86,6 +94,7 @@ describe('JHipster generator import jdl', () => {
             ]);
             expect(subGenCallParams.options[0]).to.eql({
                 regenerate: true,
+                skipInstall: true,
                 'from-cli': true,
                 'no-fluent-methods': undefined,
                 'skip-client': undefined,
@@ -100,7 +109,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach((done) => {
             testInTempDir((dir) => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['apps-and-entities.jdl'], {}, env());
+                importJdl(['apps-and-entities.jdl'], { skipInstall: true }, env, mockFork);
                 done();
             });
         });
@@ -122,12 +131,25 @@ describe('JHipster generator import jdl', () => {
                 path.join('myThirdApp', '.jhipster', 'F.json')
             ]);
         });
+        it('calls application generator', () => {
+            expect(subGenCallParams.count).to.equal(3);
+            expect(subGenCallParams.commands).to.eql([
+                'jhipster:app',
+                'jhipster:app',
+                'jhipster:app'
+            ]);
+            expect(subGenCallParams.options[0]).to.eql([
+                '--skip-install',
+                '--with-entities',
+                '--from-cli'
+            ]);
+        });
     });
     describe('imports single app and entities', () => {
         beforeEach((done) => {
             testInTempDir((dir) => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['single-app-and-entities.jdl'], { skipInstall: true }, env());
+                importJdl(['single-app-and-entities.jdl'], { skipInstall: true }, env, mockFork);
                 done();
             });
         });
@@ -141,12 +163,23 @@ describe('JHipster generator import jdl', () => {
                 path.join('.jhipster', 'B.json'),
             ]);
         });
+        it('calls application generator', () => {
+            expect(subGenCallParams.count).to.equal(1);
+            expect(subGenCallParams.commands).to.eql([
+                'jhipster:app'
+            ]);
+            expect(subGenCallParams.options[0]).to.eql([
+                '--skip-install',
+                '--with-entities',
+                '--from-cli'
+            ]);
+        });
     });
     describe('imports a JDL model from multiple files', () => {
         beforeEach((done) => {
             testInTempDir((dir) => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['jdl.jdl', 'jdl2.jdl', 'jdl-ambiguous.jdl'], {}, env());
+                importJdl(['jdl.jdl', 'jdl2.jdl', 'jdl-ambiguous.jdl'], { skipInstall: true }, env);
                 done();
             });
         });
@@ -187,6 +220,7 @@ describe('JHipster generator import jdl', () => {
             ]);
             expect(subGenCallParams.options[0]).to.eql({
                 regenerate: true,
+                skipInstall: true,
                 'from-cli': true,
                 'no-fluent-methods': undefined,
                 'skip-client': undefined,
@@ -201,7 +235,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach((done) => {
             testInTempDir((dir) => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['search.jdl'], {}, env());
+                importJdl(['search.jdl'], { skipInstall: true }, env);
                 done();
             });
         });
@@ -221,6 +255,7 @@ describe('JHipster generator import jdl', () => {
             ]);
             expect(subGenCallParams.options[0]).to.eql({
                 regenerate: true,
+                skipInstall: true,
                 'from-cli': true,
                 'no-fluent-methods': undefined,
                 'skip-client': undefined,
