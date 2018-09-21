@@ -400,39 +400,42 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Transactional
     <%_ } _%>
     public void assertThatUserLocaleIsCorrectlySetFromAuthenticationDetails() {
+        user.setId(Constants.ANONYMOUS_USER);
+        user.setLogin(Constants.ANONYMOUS_USER);
+
         Map<String, Object> userDetails = new HashMap<String, Object>();
         userDetails.put("preferred_username", user.getLogin());
-    	userDetails.put("given_name", user.getFirstName());
-    	userDetails.put("family_name", user.getLastName());
-    	userDetails.put("email", user.getEmail());
-    	userDetails.put("picture", user.getImageUrl());
-    	userDetails.put("locale", "en_US");
+    	  userDetails.put("given_name", user.getFirstName());
+    	 	userDetails.put("family_name", user.getLastName());
+    	 	userDetails.put("email", user.getEmail());
+    	 	userDetails.put("picture", user.getImageUrl());
+    	 	userDetails.put("locale", "en_US");
 
-    	OAuth2Authentication authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
+    	 	OAuth2Authentication authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
 
-    	UserDTO userDTO = userService.getUserFromAuthentication(authentication);
+    	 	UserDTO userDTO = userService.getUserFromAuthentication(authentication);
 
-    	assertEquals("User langkey is not corretly set.", userDTO.getLangKey(), "en");
+    	 	assertEquals("User langkey is not corretly set.", userDTO.getLangKey(), "en");
 
-    	userDetails.put("locale", "it-IT");
-    	authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
+    	 	userDetails.put("locale", "it-IT");
+    	 	authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
 
-    	userDTO = userService.getUserFromAuthentication(authentication);
+    	 	userDTO = userService.getUserFromAuthentication(authentication);
 
-    	assertEquals("User langkey is not corretly set.", userDTO.getLangKey(), "it");
+    	 	assertEquals("User langkey is not corretly set.", userDTO.getLangKey(), "it");
     }
 
     private OAuth2Authentication createMockOAuth2AuthenticationWithDetails(Map<String, Object> userDetails) {
-    	Set<String> scopes = new HashSet<String>();
+    	 	Set<String> scopes = new HashSet<String>();
 
-    	Collection<GrantedAuthority> authorities = new ArrayList<>();
+    	 	Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(Constants.ANONYMOUS_USER, Constants.ANONYMOUS_USER, authorities);
         usernamePasswordAuthenticationToken.setDetails(userDetails);
 
-    	OAuth2Request authRequest = new OAuth2Request(null, "testClient", null, true, scopes, null, null, null, null);
+    	 	OAuth2Request authRequest = new OAuth2Request(null, "testClient", null, true, scopes, null, null, null, null);
 
-    	return new OAuth2Authentication(authRequest, ((Authentication)usernamePasswordAuthenticationToken));
+    	 	return new OAuth2Authentication(authRequest, ((Authentication)usernamePasswordAuthenticationToken));
     }
     <%_ } _%>
 }
