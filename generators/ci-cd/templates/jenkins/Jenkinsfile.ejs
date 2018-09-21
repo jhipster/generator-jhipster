@@ -88,7 +88,7 @@ node {
     <%_ } _%>
     <%_ if (cicdIntegrations.includes('heroku')) { _%>
 <%= indent %>    stage('package and deploy') {
-<%= indent %>        sh "./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>"
+<%= indent %>        sh "./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>"
     <%_ } else { _%>
 <%= indent %>    stage('packaging') {
 <%= indent %>        sh "./mvnw verify <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests"
