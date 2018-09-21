@@ -20,6 +20,7 @@ apply plugin: 'com.heroku.sdk.heroku-gradle'
 
 heroku {
   appName = "<%= herokuAppName %>"
+  buildpacks = ["heroku/jvm"]
 }
 
 gradle.taskGraph.whenReady {taskGraph ->
