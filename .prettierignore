@@ -3,3 +3,4 @@ travis
 docs
 .jhipster
 .vscode
+**/templates/**/
