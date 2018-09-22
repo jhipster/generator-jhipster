@@ -5,8 +5,9 @@ const expect = require('chai').expect;
 const BaseGenerator = require('../generators/generator-base').prototype;
 
 BaseGenerator.log = msg => {
+    // eslint-disable-next-line no-console
     console.log(msg);
-}; // eslint-disable-line no-console
+};
 
 describe('Generator Base Private', () => {
     describe('stripMargin', () => {

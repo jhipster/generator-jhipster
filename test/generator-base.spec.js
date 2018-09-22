@@ -6,8 +6,9 @@ const expectedFiles = require('./utils/expected-files');
 const BaseGenerator = require('../generators/generator-base').prototype;
 
 BaseGenerator.log = msg => {
+    // eslint-disable-next-line no-console
     console.log(msg);
-}; // eslint-disable-line no-console
+};
 
 describe('Generator Base', () => {
     describe('getAllSupportedLanguages', () => {
