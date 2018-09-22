@@ -18,12 +18,12 @@
 -%>
 {
     "health": {
-        "title": Kontrollo shëndetin",
-        "refresh.button": "Rifreskim",
+        "title": "Kontrolli shendetit",
+        "refresh.button": "Rifresko",
         "stacktrace": "Stacktrace",
         "details": {
             "details": "Detaje",
-            "properties": "Tiapre",
+            "properties": "Tipare",
             "name": "Emri",
             "value": "Vlera",
             "error": "Gabim"
@@ -39,7 +39,7 @@
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
             "consul": "Consul",<% } %>
             <%_ } _%>
-            "diskSpace": "Hapsira e diskut",
+            "diskSpace": "Disk space",
             "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
             "db": "Database"<% } %><% if (databaseType === 'mongodb') { %>,
@@ -48,13 +48,13 @@
             "couchbase": "Couchbase"<% } %>
         },
         "table": {
-            "service": "Emri i shërbimit",
+            "service": "Emri i sherbimit",
             "status": "Statusi"
         },
         "status": {
-            "UNKNOWN": "PANJOHUR",
-            "UP": "LART",
-            "DOWN": "POSHTË"
+            "UNKNOWN": "UNKNOWN",
+            "UP": "UP",
+            "DOWN": "DOWN"
         }
     }
 }
