@@ -49,7 +49,7 @@ describe('Data Utils service test', () => {
 
         it('should download the csv file', inject([JhiDataUtils], (service: JhiDataUtils) => {
             // create spy object with a click() method
-            const spyObj = spyOn('a', ['click']);
+            const spyObj = spyOn('a', 'click');
             // spy on document.createElement() and return the spy object
             spyOn(document, 'createElement').and.returnValue(spyObj);
         
