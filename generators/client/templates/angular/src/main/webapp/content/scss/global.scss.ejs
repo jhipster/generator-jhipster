@@ -33,6 +33,8 @@ a {
 a:hover {
     color: #533f03;
     font-weight: bold;
+    /* make sure browsers use the pointer cursor for anchors, even with no href */
+    cursor: pointer;
 }
 
 /* ==========================================================================
@@ -96,13 +98,6 @@ Generic styles
 
 .footer {
     border-top: 1px solid rgba(0, 0, 0, 0.125);
-}
-
-/* ==========================================================================
-make sure browsers use the pointer cursor for anchors, even with no href
-========================================================================== */
-a:hover {
-    cursor: pointer;
 }
 
 .hand,
