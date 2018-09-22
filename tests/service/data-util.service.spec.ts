@@ -67,6 +67,6 @@ describe('Data Utils service test', () => {
             expect(spyObj.download).toBe('test-download-file.csv');
             expect(spyObj.click).toHaveBeenCalledTimes(1);
             expect(spyObj.click).toHaveBeenCalledWith();
-        });
+        }));
     });
 });
