@@ -101,18 +101,15 @@ module.exports = class extends BaseGenerator {
                 this.skipBuild = this.options['skip-build'];
             },
             getConfig() {
-                this.aws = Object.assign(
-                    {},
-                    {
-                        apps: [],
-                        vpc: {},
-                        dockerLogin: {
-                            accountId: null,
-                            password: null
-                        }
+                this.aws = {
+                    apps: [],
+                    vpc: {},
+                    dockerLogin: {
+                        accountId: null,
+                        password: null
                     },
-                    this.config.get('aws')
-                );
+                    ...this.config.get('aws')
+                };
 
                 this.defaultAppsFolders = this.aws.apps.map(a => a.baseName);
             },

@@ -108,16 +108,13 @@ module.exports = class CloudFormation {
             const complete = (result) => {
                 clearInterval(listenerInterval);
                 _.forEach(nestedStacks, o => clearInterval(o.listenerInterval));
-                resolve(Object.assign(
-                    {},
-                    result.Stacks[0],
-                    {
-                        nestedStacks: _.map(nestedStacks, (stack, key) => ({
-                            appName: stack.appName,
-                            stackId: key
-                        }))
-                    }
-                ));
+                resolve({
+                    ...result.Stacks[0],
+                    nestedStacks: _.map(nestedStacks, (stack, key) => ({
+                        appName: stack.appName,
+                        stackId: key
+                    }))
+                });
             };
 
             listenerInterval = setInterval(

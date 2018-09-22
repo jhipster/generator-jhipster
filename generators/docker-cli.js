@@ -31,14 +31,11 @@ function setOutputs(stdout, stderr) {
  * @attr maxBuffer value of the buffer to store the live outputs. Default to 10240000
  */
 function command(cmd, cb, opts = {}) {
-    const options = Object.assign(
-        {},
-        {
-            silent: false,
-            maxBuffer: 10240000
-        },
-        opts
-    );
+    const options = {
+        silent: false,
+        maxBuffer: 10240000,
+        ...opts
+    };
     const command = exec(`${cmd}`, { maxBuffer: options.maxBuffer }, cb);
 
     if (!options.silent) {

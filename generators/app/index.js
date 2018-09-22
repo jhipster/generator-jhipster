@@ -365,14 +365,16 @@ module.exports = class extends BaseGenerator {
             },
 
             insight() {
-                const yorc = Object.assign({}, _.omit(this.configOptions, [
-                    'jhiPrefix',
-                    'baseName',
-                    'jwtSecretKey',
-                    'packageName',
-                    'packagefolder',
-                    'rememberMeKey'
-                ]));
+                const yorc = {
+                    ..._.omit(this.configOptions, [
+                        'jhiPrefix',
+                        'baseName',
+                        'jwtSecretKey',
+                        'packageName',
+                        'packagefolder',
+                        'rememberMeKey'
+                    ])
+                };
                 yorc.applicationType = this.applicationType;
                 statistics.sendYoRc(yorc, this.existingProject, this.jhipsterVersion);
             }

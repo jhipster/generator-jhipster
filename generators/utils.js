@@ -382,6 +382,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
  * @param {*} fromObj
  */
 function copyObjectProps(toObj, fromObj) {
+    // we use Object.assign instead of spread as we want to mutilate the object.
     Object.assign(toObj, fromObj);
 }
 
@@ -406,15 +407,16 @@ function getAllJhipsterConfig(generator, force) {
         configuration = yoRc['generator-jhipster'];
         // merge the blueprint config if available
         if (configuration.blueprint) {
-            configuration = Object.assign(configuration, yoRc[configuration.blueprint]);
+            configuration = { ...configuration, ...yoRc[configuration.blueprint] };
         }
     }
     if (!configuration.get || typeof configuration.get !== 'function') {
-        Object.assign(configuration, {
+        configuration = {
+            ...configuration,
             getAll: () => configuration,
             get: key => configuration[key],
             set: (key, value) => { configuration[key] = value; }
-        });
+        };
     }
     return configuration;
 }

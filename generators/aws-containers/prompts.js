@@ -230,8 +230,8 @@ function askPerformances() {
         return promptPerformance.call(this, config, awsConfig).then((performance) => {
             awsConfig.performance = performance;
 
-            awsConfig.fargate = Object.assign({}, awsConfig.fargate, PERF_TO_CONFIG[performance].fargate);
-            awsConfig.database = Object.assign({}, awsConfig.database, PERF_TO_CONFIG[performance].database);
+            awsConfig.fargate = { ...awsConfig.fargate, ...PERF_TO_CONFIG[performance].fargate };
+            awsConfig.database = { ...awsConfig.database, ...PERF_TO_CONFIG[performance].database };
 
             _.remove(this.aws.apps, a => _.isEqual(a, awsConfig));
             this.aws.apps.push(awsConfig);
@@ -298,8 +298,8 @@ function askScaling() {
         const awsConfig = this.aws.apps.find(a => a.baseName === config.baseName) || { baseName: config.baseName };
         return promptScaling.call(this, config, awsConfig).then((scaling) => {
             awsConfig.scaling = scaling;
-            awsConfig.fargate = Object.assign({}, awsConfig.fargate, SCALING_TO_CONFIG[scaling].fargate);
-            awsConfig.database = Object.assign({}, awsConfig.database, SCALING_TO_CONFIG[scaling].database);
+            awsConfig.fargate = { ...awsConfig.fargate, ...SCALING_TO_CONFIG[scaling].fargate };
+            awsConfig.database = { ...awsConfig.database, ...SCALING_TO_CONFIG[scaling].database };
 
             _.remove(this.aws.apps, a => _.isEqual(a, awsConfig));
             this.aws.apps.push(awsConfig);
