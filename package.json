@@ -36,6 +36,7 @@
     "url": "git://github.com/jhipster/generator-jhipster.git"
   },
   "scripts": {
+    "prettier:format": "prettier --write '**/*.js'",
     "completion": "tabtab install --name jhipster --auto",
     "lint": "npm run eslint && npm run ejs-lint",
     "lint-fix": "npm run eslint -- --fix",
@@ -81,7 +82,9 @@
     "ejs-lint": "0.3.0",
     "eslint": "5.1.0",
     "eslint-config-airbnb-base": "13.0.0",
+    "eslint-config-prettier": "3.0.1",
     "eslint-plugin-import": "2.13.0",
+    "eslint-plugin-prettier": "2.6.2",
     "fs-extra": "6.0.1",
     "jsdoc": "3.5.5",
     "mocha": "5.2.0",
