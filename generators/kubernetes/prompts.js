@@ -16,16 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
 const dockerPrompts = require('../docker-prompts');
 
-module.exports = _.extend({
+module.exports = {
     askForKubernetesNamespace,
     askForKubernetesServiceType,
     askForIngressDomain,
     askForIstioSupport,
-    askForIstioRouteFiles
-}, dockerPrompts);
+    askForIstioRouteFiles,
+    ...dockerPrompts
+};
 
 function askForKubernetesNamespace() {
     const done = this.async();

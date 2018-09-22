@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
 const dockerPrompts = require('../docker-prompts');
 
-module.exports = _.extend({}, dockerPrompts);
+module.exports = {
+    ...dockerPrompts
+};
