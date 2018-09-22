@@ -8,7 +8,7 @@ const ServerGenerator = require('../../generators/server');
 
 const mockBlueprintSubGen = class extends ServerGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
         const jhContext = this.jhipsterContext = this.options.jhipsterContext;
         if (!jhContext) {
             this.error('This is a JHipster blueprint and should be used only like \'jhipster --blueprint myblueprint\')}');
@@ -41,7 +41,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                 this.addMavenProperty('dummy-blueprint-property', 'foo');
             }
         };
-        return Object.assign(phaseFromJHipster, customPhaseSteps);
+        return { ...phaseFromJHipster, ...customPhaseSteps };
     }
 
     get end() {
