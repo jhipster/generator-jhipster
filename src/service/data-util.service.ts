@@ -136,4 +136,24 @@ export class JhiDataUtils {
             });
         }
     }
+
+    /**
+     * Method to download file
+     */
+    downloadFile(contentType: string, data: string, fileName: string) {
+        const byteCharacters = atob(data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], {
+            type: contentType
+        });
+        const tempLink = document.createElement('a');
+        tempLink.href = window.URL.createObjectURL(blob);
+        tempLink.download = fileName;
+        tempLink.target = '_blank';
+        tempLink.click();
+    }
 }
