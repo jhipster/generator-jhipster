@@ -26,14 +26,16 @@ module.exports = {
 function askForRancherLoadBalancing() {
     const done = this.async();
 
-    const prompts = [{
-        type: 'confirm',
-        name: 'enableRancherLoadBalancing',
-        message: 'Would you like to enable rancher load balancing support?',
-        default: false
-    }];
+    const prompts = [
+        {
+            type: 'confirm',
+            name: 'enableRancherLoadBalancing',
+            message: 'Would you like to enable rancher load balancing support?',
+            default: false
+        }
+    ];
 
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.enableRancherLoadBalancing = props.enableRancherLoadBalancing;
         done();
     });

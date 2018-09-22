@@ -36,7 +36,10 @@ function writeFiles() {
                 if (this.app.searchEngine === 'elasticsearch') {
                     this.template('db/elasticsearch.yml.ejs', `${appName}/${appName}-elasticsearch.yml`);
                 }
-                if ((this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') && this.kubernetesServiceType === 'Ingress') {
+                if (
+                    (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') &&
+                    this.kubernetesServiceType === 'Ingress'
+                ) {
                     this.template('ingress.yml.ejs', `${appName}/${appName}-ingress.yml`);
                 }
                 if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {

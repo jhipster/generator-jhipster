@@ -12,9 +12,10 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 describe('JHipster generator for entity', () => {
     describe('search, no dto, no service, no pagination', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-elasticsearch'), dir);
                 })
                 .withArguments(['foo'])
@@ -36,9 +37,10 @@ describe('JHipster generator for entity', () => {
 
 describe('JHipster generator entity for angularX', () => {
     describe('no dto, no service, no pagination', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -59,9 +61,10 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('no dto, no service, with pagination', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -82,9 +85,10 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('no dto, no service, with infinite-scroll', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -105,9 +109,10 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('no dto, with serviceImpl, no pagination', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -132,9 +137,10 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with dto, service, no pagination', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -160,9 +166,10 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with dto, serviceImpl, with hazelcast, elasticsearch and no i18n', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/noi18n'), dir);
                 })
                 .withArguments(['foo'])
@@ -179,17 +186,15 @@ describe('JHipster generator entity for angularX', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientNg2);
-            assert.noFile([
-                `${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`,
-                `${CLIENT_MAIN_SRC_DIR}i18n/fr/foo.json`
-            ]);
+            assert.noFile([`${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`, `${CLIENT_MAIN_SRC_DIR}i18n/fr/foo.json`]);
         });
     });
 
     describe('with angular suffix', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -213,9 +218,10 @@ describe('JHipster generator entity for angularX', () => {
 
     describe('JHipster generator entity with all languages', () => {
         describe('no dto, no service, no pagination', () => {
-            beforeEach((done) => {
-                helpers.run(require.resolve('../generators/entity'))
-                    .inTmpDir((dir) => {
+            beforeEach(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, '../test/templates/all-languages'), dir);
                     })
                     .withArguments(['foo'])
@@ -230,19 +236,18 @@ describe('JHipster generator entity for angularX', () => {
             });
 
             it('creates expected languages files', () => {
-                constants.LANGUAGES.forEach((language) => {
-                    assert.file([
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/foo.json`
-                    ]);
+                constants.LANGUAGES.forEach(language => {
+                    assert.file([`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/foo.json`]);
                 });
             });
         });
     });
 
     describe('with client-root-folder', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -265,9 +270,10 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with client-root-folder and angular-suffix', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
                 })
                 .withArguments(['foo'])
@@ -291,9 +297,10 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with client-root-folder microservice', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
                 })
                 .withArguments(['foo'])
@@ -314,9 +321,10 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with default microservice', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/entity'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default-microservice'), dir);
                 })
                 .withArguments(['foo'])
@@ -337,9 +345,10 @@ describe('JHipster generator entity for angularX', () => {
 
     describe('JHipster generator entity with all languages and client-root-folder', () => {
         describe('no dto, no service, no pagination', () => {
-            beforeEach((done) => {
-                helpers.run(require.resolve('../generators/entity'))
-                    .inTmpDir((dir) => {
+            beforeEach(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, '../test/templates/all-languages'), dir);
                     })
                     .withArguments(['foo'])
@@ -355,10 +364,8 @@ describe('JHipster generator entity for angularX', () => {
             });
 
             it('creates expected languages files', () => {
-                constants.LANGUAGES.forEach((language) => {
-                    assert.file([
-                        `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/testRootFoo.json`
-                    ]);
+                constants.LANGUAGES.forEach(language => {
+                    assert.file([`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/testRootFoo.json`]);
                 });
             });
         });

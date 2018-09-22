@@ -38,7 +38,11 @@ module.exports = class extends BaseGenerator {
         return {
             validateFromCli() {
                 if (!this.options['from-cli']) {
-                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
                 }
             },
 
@@ -54,7 +58,9 @@ module.exports = class extends BaseGenerator {
     }
 
     writing() {
-        const content = `// JDL definition for application '${this.baseName}' generated with command 'jhipster export-jdl'\n\n${this.jdl.toString()}`;
+        const content = `// JDL definition for application '${
+            this.baseName
+        }' generated with command 'jhipster export-jdl'\n\n${this.jdl.toString()}`;
         this.fs.write(this.jdlFile, content);
     }
 

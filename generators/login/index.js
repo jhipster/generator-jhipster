@@ -33,19 +33,22 @@ module.exports = class extends BaseGenerator {
 
                 const done = this.async();
 
-                const prompts = [{
-                    type: 'input',
-                    name: 'login',
-                    message: 'JHipster online login',
-                    default: undefined
-                }, {
-                    type: 'password',
-                    name: 'password',
-                    message: 'JHipster online password',
-                    default: undefined
-                }];
+                const prompts = [
+                    {
+                        type: 'input',
+                        name: 'login',
+                        message: 'JHipster online login',
+                        default: undefined
+                    },
+                    {
+                        type: 'password',
+                        name: 'password',
+                        message: 'JHipster online password',
+                        default: undefined
+                    }
+                ];
 
-                this.prompt(prompts).then((props) => {
+                this.prompt(prompts).then(props => {
                     this.login = props.login;
                     this.password = props.password;
                     done();
@@ -61,21 +64,9 @@ module.exports = class extends BaseGenerator {
                     return;
                 }
                 const done = this.async();
-                authenticateAndLink(
-                    statistics.axiosClient,
-                    this,
-                    this.login,
-                    this.password,
-                    done
-                ).catch((error) => {
+                authenticateAndLink(statistics.axiosClient, this, this.login, this.password, done).catch(error => {
                     if (statistics.axiosProxyClient && error !== undefined) {
-                        authenticateAndLink(
-                            statistics.axiosProxyClient,
-                            this,
-                            this.login,
-                            this.password,
-                            done
-                        ).catch((error) => {
+                        authenticateAndLink(statistics.axiosProxyClient, this, this.login, this.password, done).catch(error => {
                             this.log(`Could not authenticate! (with proxy ${error})`);
                             done();
                         });
@@ -90,26 +81,48 @@ module.exports = class extends BaseGenerator {
 };
 
 function authenticateAndLink(axiosClient, generator, username, password, done) {
-    return axiosClient.post(`${statistics.statisticsAPIPath}/authenticate`, {
-        username,
-        password,
-        rememberMe: false
-    }, true).then(answer => axiosClient.post(`${statistics.statisticsAPIPath}/s/link/${statistics.clientId}`, {}, {
-        headers: {
-            Authorization: answer.headers.authorization
-        }
-    }).then((success) => {
-        generator.log(chalk.green('Link successful!'), 'Your generator ID is :', chalk.bold(statistics.clientId));
-        generator.log(`Go to ${statistics.jhipsterOnlineUrl}/#/your-generators to manage your JHipster Online personal data.`);
-        done();
-        statistics.setLinkedStatus(true);
-    }, (error) => {
-        if (error.response.status === 409) {
-            generator.log.error('It looks like this generator has already been linked to an account.');
-            done();
-        } else {
-            generator.log.error(`Link failed! (${error})`);
-            done();
-        }
-    }), error => Promise.reject(error)).then(error => Promise.reject(error));
+    return axiosClient
+        .post(
+            `${statistics.statisticsAPIPath}/authenticate`,
+            {
+                username,
+                password,
+                rememberMe: false
+            },
+            true
+        )
+        .then(
+            answer =>
+                axiosClient
+                    .post(
+                        `${statistics.statisticsAPIPath}/s/link/${statistics.clientId}`,
+                        {},
+                        {
+                            headers: {
+                                Authorization: answer.headers.authorization
+                            }
+                        }
+                    )
+                    .then(
+                        success => {
+                            generator.log(chalk.green('Link successful!'), 'Your generator ID is :', chalk.bold(statistics.clientId));
+                            generator.log(
+                                `Go to ${statistics.jhipsterOnlineUrl}/#/your-generators to manage your JHipster Online personal data.`
+                            );
+                            done();
+                            statistics.setLinkedStatus(true);
+                        },
+                        error => {
+                            if (error.response.status === 409) {
+                                generator.log.error('It looks like this generator has already been linked to an account.');
+                                done();
+                            } else {
+                                generator.log.error(`Link failed! (${error})`);
+                                done();
+                            }
+                        }
+                    ),
+            error => Promise.reject(error)
+        )
+        .then(error => Promise.reject(error));
 }

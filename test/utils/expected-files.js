@@ -108,13 +108,7 @@ const expectedFiles = {
         'gradle/wrapper/gradle-wrapper.properties'
     ],
 
-    maven: [
-        'pom.xml',
-        'mvnw',
-        'mvnw.cmd',
-        '.mvn/wrapper/maven-wrapper.jar',
-        '.mvn/wrapper/maven-wrapper.properties'
-    ],
+    maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties'],
 
     server: [
         'README.md',
@@ -211,18 +205,11 @@ const expectedFiles = {
         '.editorconfig'
     ],
 
-    infinispan: [
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`
-    ],
+    infinispan: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`],
 
-    memcached: [
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-        `${DOCKER_DIR}memcached.yml`
-    ],
+    memcached: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`, `${DOCKER_DIR}memcached.yml`],
 
-    gatling: [
-        `${TEST_DIR}gatling/conf/gatling.conf`
-    ],
+    gatling: [`${TEST_DIR}gatling/conf/gatling.conf`],
 
     i18nJson: [
         `${CLIENT_MAIN_SRC_DIR}i18n/en/activate.json`,
@@ -275,7 +262,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-update.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`
     ],
 
     client: [
@@ -519,18 +506,11 @@ const expectedFiles = {
         `${DOCKER_DIR}keycloak.yml`
     ],
 
-    messageBroker: [
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MessagingConfiguration.java`,
-        `${DOCKER_DIR}kafka.yml`
-    ],
+    messageBroker: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MessagingConfiguration.java`, `${DOCKER_DIR}kafka.yml`],
 
-    swaggerCodegen: [
-        `${SERVER_MAIN_RES_DIR}swagger/api.yml`,
-    ],
+    swaggerCodegen: [`${SERVER_MAIN_RES_DIR}swagger/api.yml`],
 
-    swaggerCodegenGradle: [
-        'gradle/swagger.gradle',
-    ],
+    swaggerCodegenGradle: ['gradle/swagger.gradle'],
 
     uaa: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaConfiguration.java`,
@@ -559,39 +539,19 @@ const expectedFiles = {
         'package.json'
     ],
 
-    microserviceGradle: [
-        'gradle/docker.gradle'
-    ],
+    microserviceGradle: ['gradle/docker.gradle'],
 
-    dockerServices: [
-        `${DOCKER_DIR}app.yml`,
-        `${DOCKER_DIR}Dockerfile`,
-        `${DOCKER_DIR}sonar.yml`
-    ],
+    dockerServices: [`${DOCKER_DIR}app.yml`, `${DOCKER_DIR}Dockerfile`, `${DOCKER_DIR}sonar.yml`],
 
-    mysql: [
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
-        `${DOCKER_DIR}mysql.yml`
-    ],
+    mysql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mysql.yml`],
 
-    mariadb: [
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
-        `${DOCKER_DIR}mariadb.yml`
-    ],
+    mariadb: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mariadb.yml`],
 
-    mssql: [
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
-        `${DOCKER_DIR}mssql.yml`
-    ],
+    mssql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mssql.yml`],
 
-    postgresql: [
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
-        `${DOCKER_DIR}postgresql.yml`
-    ],
+    postgresql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}postgresql.yml`],
 
-    hazelcast: [
-        `${DOCKER_DIR}hazelcast-management-center.yml`
-    ],
+    hazelcast: [`${DOCKER_DIR}hazelcast-management-center.yml`],
 
     mongodb: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/dbmigrations/package-info.java`,
@@ -653,11 +613,7 @@ const expectedFiles = {
         `${DOCKER_DIR}jhipster-registry.yml`
     ],
 
-    consul: [
-        `${DOCKER_DIR}central-server-config/application.yml`,
-        `${DOCKER_DIR}consul.yml`,
-        `${DOCKER_DIR}config/git2consul.json`
-    ]
+    consul: [`${DOCKER_DIR}central-server-config/application.yml`, `${DOCKER_DIR}consul.yml`, `${DOCKER_DIR}config/git2consul.json`]
 };
 
 module.exports = expectedFiles;

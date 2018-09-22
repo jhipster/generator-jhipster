@@ -78,7 +78,8 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
         this.option('experimental', {
-            desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
+            desc:
+                'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
             defaults: false
         });
@@ -87,16 +88,12 @@ module.exports = class extends BaseGenerator {
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(
-                blueprint,
-                'server',
-                {
-                    'client-hook': !this.skipClient,
-                    'from-cli': this.options['from-cli'],
-                    configOptions: this.configOptions,
-                    force: this.options.force
-                }
-            );
+            useBlueprint = this.composeBlueprint(blueprint, 'server', {
+                'client-hook': !this.skipClient,
+                'from-cli': this.options['from-cli'],
+                configOptions: this.configOptions,
+                force: this.options.force
+            });
         } else {
             useBlueprint = false;
         }
@@ -107,7 +104,11 @@ module.exports = class extends BaseGenerator {
         return {
             validateFromCli() {
                 if (!this.options['from-cli']) {
-                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
                 }
             },
 
@@ -190,13 +191,18 @@ module.exports = class extends BaseGenerator {
 
                 this.enableSwaggerCodegen = configuration.get('enableSwaggerCodegen');
 
-                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
+                this.serviceDiscoveryType =
+                    configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
                 if (this.serviceDiscoveryType === undefined) {
                     this.serviceDiscoveryType = false;
                 }
 
                 this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
-                this.enableHibernateCache = configuration.get('enableHibernateCache') || (configuration.get('hibernateCache') !== undefined && configuration.get('hibernateCache') !== 'no' && configuration.get('hibernateCache') !== 'memcached');
+                this.enableHibernateCache =
+                    configuration.get('enableHibernateCache') ||
+                    (configuration.get('hibernateCache') !== undefined &&
+                        configuration.get('hibernateCache') !== 'no' &&
+                        configuration.get('hibernateCache') !== 'memcached');
 
                 this.databaseType = configuration.get('databaseType');
                 if (this.databaseType === 'mongodb') {
@@ -257,16 +263,17 @@ module.exports = class extends BaseGenerator {
                     this.websocket = false;
                 }
 
-                const serverConfigFound = this.packageName !== undefined
-                    && this.authenticationType !== undefined
-                    && this.cacheProvider !== undefined
-                    && this.enableHibernateCache !== undefined
-                    && this.websocket !== undefined
-                    && this.databaseType !== undefined
-                    && this.devDatabaseType !== undefined
-                    && this.prodDatabaseType !== undefined
-                    && this.searchEngine !== undefined
-                    && this.buildTool !== undefined;
+                const serverConfigFound =
+                    this.packageName !== undefined &&
+                    this.authenticationType !== undefined &&
+                    this.cacheProvider !== undefined &&
+                    this.enableHibernateCache !== undefined &&
+                    this.websocket !== undefined &&
+                    this.databaseType !== undefined &&
+                    this.devDatabaseType !== undefined &&
+                    this.prodDatabaseType !== undefined &&
+                    this.searchEngine !== undefined &&
+                    this.buildTool !== undefined;
 
                 if (this.baseName !== undefined && serverConfigFound) {
                     // Generate remember me key if key does not already exist in config
@@ -294,8 +301,12 @@ module.exports = class extends BaseGenerator {
                         this.skipUserManagement = true;
                     }
 
-                    this.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n'
-                        + 'to re-generate the project...\n'));
+                    this.log(
+                        chalk.green(
+                            'This is an existing project, using the configuration from your .yo-rc.json file \n' +
+                                'to re-generate the project...\n'
+                        )
+                    );
 
                     this.existingProject = true;
                 }
@@ -342,7 +353,9 @@ module.exports = class extends BaseGenerator {
                 this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
                 // Make documentation URL available in templates
                 this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-                this.DOCUMENTATION_ARCHIVE_URL = `${constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${this.jhipsterVersion}`;
+                this.DOCUMENTATION_ARCHIVE_URL = `${constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${
+                    this.jhipsterVersion
+                }`;
             }
         };
     }
@@ -485,9 +498,11 @@ module.exports = class extends BaseGenerator {
             end() {
                 if (this.prodDatabaseType === 'oracle') {
                     this.log('\n\n');
-                    this.warning(`${chalk.yellow.bold('You have selected Oracle database.\n')
-                    }Please follow our documentation on using Oracle to set up the \n`
-                        + 'Oracle proprietary JDBC driver.');
+                    this.warning(
+                        `${chalk.yellow.bold(
+                            'You have selected Oracle database.\n'
+                        )}Please follow our documentation on using Oracle to set up the \nOracle proprietary JDBC driver.`
+                    );
                 }
                 this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
@@ -499,8 +514,7 @@ module.exports = class extends BaseGenerator {
                 if (os.platform() === 'win32') {
                     logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
                 }
-                this.log(chalk.green(`${'Run your Spring Boot application:'
-                    + '\n '}${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
+                this.log(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
             }
         };
     }

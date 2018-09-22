@@ -101,25 +101,46 @@ const SQL_DB_OPTIONS = [
 
 const LANGUAGES = [
     {
-        name: 'Arabic (Libya)', dispName: 'العربية', value: 'ar-ly', rtl: true, skipForLocale: true
+        name: 'Arabic (Libya)',
+        dispName: 'العربية',
+        value: 'ar-ly',
+        rtl: true,
+        skipForLocale: true
     },
     {
-        name: 'Armenian', dispName: 'Հայերեն', value: 'hy', momentLocaleId: 'hy-am'
+        name: 'Armenian',
+        dispName: 'Հայերեն',
+        value: 'hy',
+        momentLocaleId: 'hy-am'
     },
     {
-        name: 'Belorussian', dispName: 'Беларускі', value: 'by', momentLocaleId: 'be-by'
+        name: 'Belorussian',
+        dispName: 'Беларускі',
+        value: 'by',
+        momentLocaleId: 'be-by'
     },
     {
-        name: 'Bengali', dispName: 'বাংলা', value: 'bn', momentLocaleId: 'bn-bd'
+        name: 'Bengali',
+        dispName: 'বাংলা',
+        value: 'bn',
+        momentLocaleId: 'bn-bd'
     },
     {
-        name: 'Catalan', dispName: 'Català', value: 'ca'
+        name: 'Catalan',
+        dispName: 'Català',
+        value: 'ca'
     },
     {
-        name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn', localeId: 'zh-Hans'
+        name: 'Chinese (Simplified)',
+        dispName: '中文（简体）',
+        value: 'zh-cn',
+        localeId: 'zh-Hans'
     },
     {
-        name: 'Chinese (Traditional)', dispName: '繁體中文', value: 'zh-tw', localeId: 'zh-Hant'
+        name: 'Chinese (Traditional)',
+        dispName: '繁體中文',
+        value: 'zh-tw',
+        localeId: 'zh-Hant'
     },
     { name: 'Czech', dispName: 'Český', value: 'cs' },
     { name: 'Danish', dispName: 'Dansk', value: 'da' },
@@ -127,7 +148,10 @@ const LANGUAGES = [
     { name: 'English', dispName: 'English', value: 'en' },
     { name: 'Estonian', dispName: 'Eesti', value: 'et' },
     {
-        name: 'Farsi', dispName: 'فارسی', value: 'fa', rtl: true
+        name: 'Farsi',
+        dispName: 'فارسی',
+        value: 'fa',
+        rtl: true
     },
     { name: 'French', dispName: 'Français', value: 'fr' },
     { name: 'Galician', dispName: 'Galego', value: 'gl' },
@@ -143,10 +167,16 @@ const LANGUAGES = [
     { name: 'Myanmar', dispName: 'မြန်မာ', value: 'my' },
     { name: 'Polish', dispName: 'Polski', value: 'pl' },
     {
-        name: 'Portuguese (Brazilian)', dispName: 'Português (Brasil)', value: 'pt-br', localeId: 'pt'
+        name: 'Portuguese (Brazilian)',
+        dispName: 'Português (Brasil)',
+        value: 'pt-br',
+        localeId: 'pt'
     },
     {
-        name: 'Portuguese', dispName: 'Português', value: 'pt-pt', localeId: 'pt-PT'
+        name: 'Portuguese',
+        dispName: 'Português',
+        value: 'pt-pt',
+        localeId: 'pt-PT'
     },
     { name: 'Romanian', dispName: 'Română', value: 'ro' },
     { name: 'Russian', dispName: 'Русский', value: 'ru' },
@@ -158,10 +188,17 @@ const LANGUAGES = [
     { name: 'Tamil', dispName: 'தமிழ்', value: 'ta' },
     { name: 'Thai', dispName: 'ไทย', value: 'th' },
     {
-        name: 'Ukrainian', dispName: 'Українська', value: 'ua', localeId: 'uk', momentLocaleId: 'uk'
+        name: 'Ukrainian',
+        dispName: 'Українська',
+        value: 'ua',
+        localeId: 'uk',
+        momentLocaleId: 'uk'
     },
     {
-        name: 'Uzbek (latin)', dispName: 'O`zbekcha', value: 'uz-lat', localeId: 'uz'
+        name: 'Uzbek (latin)',
+        dispName: 'O`zbekcha',
+        value: 'uz-lat',
+        localeId: 'uz'
     },
     { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
 ];

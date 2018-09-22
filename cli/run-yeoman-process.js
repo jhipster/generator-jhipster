@@ -1,9 +1,7 @@
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
-const {
-    logger, createYeomanEnv, toString, getCommandOptions, done
-} = require('./utils');
+const { logger, createYeomanEnv, toString, getCommandOptions, done } = require('./utils');
 
 const env = createYeomanEnv();
 

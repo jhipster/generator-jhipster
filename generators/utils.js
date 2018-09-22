@@ -115,7 +115,8 @@ function rewrite(args) {
 
     let spaceStr = '';
 
-    while ((spaces -= 1) >= 0) { // eslint-disable-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
+    while ((spaces -= 1) >= 0) {
         spaceStr += ' ';
     }
 
@@ -165,20 +166,20 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
     if (generator.enableTranslation) {
         generator.template(source, dest, generator, opt);
     } else {
-        renderContent(source, generator, generator, opt, (body) => {
+        renderContent(source, generator, generator, opt, body => {
             body = body.replace(regex, '');
             switch (type) {
-            case 'html':
-                body = replacePlaceholders(body, generator);
-                break;
-            case 'js':
-                body = replaceTitle(body, generator);
-                break;
-            case 'jsx':
-                body = replaceTranslation(body, generator);
-                break;
-            default:
-                break;
+                case 'html':
+                    body = replacePlaceholders(body, generator);
+                    break;
+                case 'js':
+                    body = replaceTitle(body, generator);
+                    break;
+                case 'jsx':
+                    body = replaceTranslation(body, generator);
+                    break;
+                default:
+                    break;
             }
             generator.fs.write(dest, body);
         });
@@ -214,7 +215,8 @@ function replaceTitle(body, generator) {
     const re = /pageTitle[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
     let match;
 
-    while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
+    while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
         const key = match[1];
         const target = key;
@@ -237,7 +239,8 @@ function replacePlaceholders(body, generator) {
     const re = /placeholder=['|"]([{]{2}['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)[}]{2})['|"]/g;
     let match;
 
-    while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
+    while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
         const key = match[2];
         const target = match[1];
@@ -259,7 +262,8 @@ function replacePlaceholders(body, generator) {
 function replaceTranslation(body, generator) {
     const replaceRegex = (re, defultReplaceText) => {
         let match;
-        while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
+        // eslint-disable-next-line no-cond-assign
+        while ((match = re.exec(body)) !== null) {
             // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
             const key = match[2];
             const target = match[1];
@@ -274,7 +278,7 @@ function replaceTranslation(body, generator) {
     };
 
     replaceRegex(/(\{translate\('([a-zA-Z0-9.\-_]+)'(, ?null, ?'.*')?\)\})/g, '""');
-    replaceRegex(/(translate\(\s*'([a-zA-Z0-9.\-_]+)'(,\s*(null|\{.*\}),?\s*('.*')?\s*)?\))/g, '\'\'');
+    replaceRegex(/(translate\(\s*'([a-zA-Z0-9.\-_]+)'(,\s*(null|\{.*\}),?\s*('.*')?\s*)?\))/g, "''");
 
     return body;
 }
@@ -319,7 +323,8 @@ function geti18nJson(key, generator) {
 function deepFind(obj, path, placeholder) {
     const paths = path.split('.');
     let current = obj;
-    if (placeholder) { // dirty fix for placeholders, the json files needs to be corrected
+    if (placeholder) {
+        // dirty fix for placeholders, the json files needs to be corrected
         paths[paths.length - 2] = `${paths[paths.length - 2]}.${paths[paths.length - 1]}`;
         paths.pop();
     }
@@ -371,7 +376,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         enums: field.fieldValues.replace(/\s/g, '').split(','),
         angularAppName,
         packageName,
-        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
+        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
     };
     return enumInfo;
 }
@@ -415,7 +420,9 @@ function getAllJhipsterConfig(generator, force) {
             ...configuration,
             getAll: () => configuration,
             get: key => configuration[key],
-            set: (key, value) => { configuration[key] = value; }
+            set: (key, value) => {
+                configuration[key] = value;
+            }
         };
     }
     return configuration;

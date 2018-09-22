@@ -50,13 +50,23 @@ module.exports = class extends BaseGenerator {
         return {
             validateFromCli() {
                 if (!this.options['from-cli']) {
-                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
                 }
             },
 
             sayHello() {
                 this.log(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
-                this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())} or in the root directory path that you select in the subsequent step`));
+                this.log(
+                    chalk.white(
+                        `Files will be generated in folder: ${chalk.yellow(
+                            this.destinationRoot()
+                        )} or in the root directory path that you select in the subsequent step`
+                    )
+                );
             },
 
             checkDocker: docker.checkDocker,
@@ -67,9 +77,11 @@ module.exports = class extends BaseGenerator {
 
                 shelljs.exec('oc version', { silent: true }, (code, stdout, stderr) => {
                     if (stderr) {
-                        this.log(`${chalk.yellow.bold('WARNING!')} oc 1.3 or later is not installed on your computer.\n`
-                          + 'Make sure you have OpenShift Origin / OpenShift Container Platform and CLI installed. Read'
-                            + ' https://github.com/openshift/origin/\n');
+                        this.log(
+                            `${chalk.yellow.bold('WARNING!')} oc 1.3 or later is not installed on your computer.\n` +
+                                'Make sure you have OpenShift Origin / OpenShift Container Platform and CLI installed. Read' +
+                                ' https://github.com/openshift/origin/\n'
+                        );
                     }
                     done();
                 });
@@ -125,10 +137,9 @@ module.exports = class extends BaseGenerator {
         const files = shelljs.ls('-l', this.destinationPath(input));
         const appsFolders = [];
 
-        files.forEach((file) => {
+        files.forEach(file => {
             if (file.isDirectory()) {
-                if ((shelljs.test('-f', `${file.name}/.yo-rc.json`))
-                    && (shelljs.test('-f', `${file.name}/src/main/docker/app.yml`))) {
+                if (shelljs.test('-f', `${file.name}/.yo-rc.json`) && shelljs.test('-f', `${file.name}/src/main/docker/app.yml`)) {
                     try {
                         const fileData = this.fs.readJSON(`${file.name}/.yo-rc.json`);
                         if (fileData['generator-jhipster'].baseName !== undefined) {
@@ -176,7 +187,7 @@ module.exports = class extends BaseGenerator {
             },
 
             setPostPromptProp() {
-                this.appConfigs.some((element) => {
+                this.appConfigs.some(element => {
                     if (element.messageBroker === 'kafka') {
                         this.useKafka = true;
                         return true;
@@ -215,7 +226,11 @@ module.exports = class extends BaseGenerator {
             this.log(`\n${chalk.bold.green('OpenShift configuration successfully generated!')}`);
         }
 
-        this.log(`${chalk.yellow.bold('WARNING!')} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`);
+        this.log(
+            `${chalk.yellow.bold(
+                'WARNING!'
+            )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
+        );
         for (let i = 0; i < this.appsFolders.length; i++) {
             const originalImageName = this.appConfigs[i].baseName.toLowerCase();
             const targetImageName = this.appConfigs[i].targetImageName;
@@ -242,7 +257,9 @@ module.exports = class extends BaseGenerator {
             const app = this.appConfigs[i];
             const appName = app.baseName.toLowerCase();
             if (app.searchEngine === 'elasticsearch') {
-                this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-elasticsearch.yml | oc apply -f -`)}`);
+                this.log(
+                    `  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-elasticsearch.yml | oc apply -f -`)}`
+                );
             }
             if (app.serviceDiscoveryType !== false && regIndex++ === 0) {
                 this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/registry/application-configmap.yml | oc apply -f -`)}`);
@@ -253,13 +270,17 @@ module.exports = class extends BaseGenerator {
                 }
             }
             if (app.prodDatabaseType !== 'no') {
-                this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-${app.prodDatabaseType}.yml | oc apply -f -`)}`);
+                this.log(
+                    `  ${chalk.cyan(
+                        `oc process -f ${this.directoryPath}ocp/${appName}/${appName}-${app.prodDatabaseType}.yml | oc apply -f -`
+                    )}`
+                );
             }
             this.log(`  ${chalk.cyan(`oc process -f ${this.directoryPath}ocp/${appName}/${appName}-deployment.yml | oc apply -f -`)}`);
         }
 
         if (this.gatewayNb + this.monolithicNb >= 1) {
-            this.log('\nUse these commands to find your application\'s IP addresses:');
+            this.log("\nUse these commands to find your application's IP addresses:");
             for (let i = 0; i < this.appsFolders.length; i++) {
                 if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
                     this.log(`  ${chalk.cyan(`oc get svc ${this.appConfigs[i].baseName}`)}`);

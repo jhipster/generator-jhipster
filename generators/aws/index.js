@@ -47,25 +47,29 @@ module.exports = class extends BaseGenerator {
                     this.dbName = awsConfig.dbName;
                     this.dbInstanceClass = awsConfig.dbInstanceClass;
 
-                    this.log(chalk.green('This is an existing deployment, using the configuration from your .yo-rc.json file \n'
-                        + 'to deploy your application...\n'));
+                    this.log(
+                        chalk.green(
+                            'This is an existing deployment, using the configuration from your .yo-rc.json file \n' +
+                                'to deploy your application...\n'
+                        )
+                    );
                 }
             },
             checkDatabase() {
                 const prodDatabaseType = this.config.get('prodDatabaseType');
 
                 switch (prodDatabaseType.toLowerCase()) {
-                case 'mariadb':
-                    this.dbEngine = 'mariadb';
-                    break;
-                case 'mysql':
-                    this.dbEngine = 'mysql';
-                    break;
-                case 'postgresql':
-                    this.dbEngine = 'postgres';
-                    break;
-                default:
-                    this.error(chalk.red('Sorry deployment for this database is not possible'));
+                    case 'mariadb':
+                        this.dbEngine = 'mariadb';
+                        break;
+                    case 'mysql':
+                        this.dbEngine = 'mysql';
+                        break;
+                    case 'postgresql':
+                        this.dbEngine = 'postgres';
+                        break;
+                    default:
+                        this.error(chalk.red('Sorry deployment for this database is not possible'));
                 }
             }
         };
@@ -105,7 +109,7 @@ module.exports = class extends BaseGenerator {
                 const cb = this.async();
                 this.log(chalk.bold('Building application'));
 
-                const child = this.buildApplication(this.buildTool, 'prod', (err) => {
+                const child = this.buildApplication(this.buildTool, 'prod', err => {
                     if (err) {
                         this.error(chalk.red(err));
                     } else {
@@ -113,7 +117,7 @@ module.exports = class extends BaseGenerator {
                     }
                 });
 
-                child.stdout.on('data', (data) => {
+                child.stdout.on('data', data => {
                     this.log(data.toString());
                 });
             },
@@ -127,7 +131,7 @@ module.exports = class extends BaseGenerator {
                 s3.createBucket({ bucket: this.bucketName }, (err, data) => {
                     if (err) {
                         if (err.message == null) {
-                            this.error(chalk.red(('The S3 bucket could not be created. Are you sure its name is not already used?')));
+                            this.error(chalk.red('The S3 bucket could not be created. Are you sure its name is not already used?'));
                         } else {
                             this.error(chalk.red(err.message));
                         }
@@ -214,7 +218,7 @@ module.exports = class extends BaseGenerator {
                 this.log();
                 this.log(chalk.bold('Verifying ElasticBeanstalk Roles'));
                 const iam = this.awsFactory.getIam();
-                iam.verifyRoles({}, (err) => {
+                iam.verifyRoles({}, err => {
                     if (err) {
                         this.error(chalk.red(err.message));
                     } else {

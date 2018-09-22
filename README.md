@@ -1,4 +1,3 @@
-
 [![Logo][jhipster-image]][jhipster-url]
 
 [![NPM version][npm-image]][npm-url] [![Travis Build Status][travis-image]][travis-url-main] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main] [![Dependency Status][daviddm-image]][daviddm-url]
@@ -13,7 +12,7 @@ Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submit
 
 Support this project by becoming a sponsor! [Become a sponsor](https://opencollective.com/generator-jhipster) or [learn more about sponsoring the project](https://www.jhipster.tech/sponsors/).
 
-__Thank you to our sponsors!__
+**Thank you to our sponsors!**
 
 [![Okta][okta-image]][okta-url]
 
@@ -21,7 +20,7 @@ __Thank you to our sponsors!__
 
 [![CUBA Platform][cubaplatform-image]][cubaplatform-url]
 
-__Thank you to all our backers!__
+**Thank you to all our backers!**
 
 [![Backers][backers-image]][backers-url]
 
@@ -29,20 +28,19 @@ __Thank you to all our backers!__
 
 Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hipster-labs/jhipster-travis-build)
 
-| Type          | Status                                                   | Description                    |
-|:--------------|:---------------------------------------------------------|:-------------------------------|
-| docker        | [![Build Status][image-docker]][travis-url]              | Build for testing Docker image |
-| ngx-maven     | [![Build Status][image-ngx-maven]][travis-url]           | Builds for ngx Maven           |
-| ngx-gradle    | [![Build Status][image-ngx-gradle]][travis-url]          | Builds for ngx Gradle          |
-| microservices | [![Build Status][image-microservices]][travis-url]       | Builds for Microservices       |
-| ms-gradle     | [![Build Status][image-ms-gradle]][travis-url]           | Builds for MS+Gradle           |
-| react         | [![Build Status][image-react]][travis-url]               | Builds for React               |
-| node latest   | [![Build Status][image-node-latest]][travis-url]         | Builds for Node Latest         |
+| Type          | Status                                             | Description                    |
+| :------------ | :------------------------------------------------- | :----------------------------- |
+| docker        | [![Build Status][image-docker]][travis-url]        | Build for testing Docker image |
+| ngx-maven     | [![Build Status][image-ngx-maven]][travis-url]     | Builds for ngx Maven           |
+| ngx-gradle    | [![Build Status][image-ngx-gradle]][travis-url]    | Builds for ngx Gradle          |
+| microservices | [![Build Status][image-microservices]][travis-url] | Builds for Microservices       |
+| ms-gradle     | [![Build Status][image-ms-gradle]][travis-url]     | Builds for MS+Gradle           |
+| react         | [![Build Status][image-react]][travis-url]         | Builds for React               |
+| node latest   | [![Build Status][image-node-latest]][travis-url]   | Builds for Node Latest         |
 
 ## Analysis of the sample JHipster project
 
 [![sonar-quality-gate][sonar-quality-gate]][sonar-url] [![sonar-coverage][sonar-coverage]][sonar-url] [![sonar-bugs][sonar-bugs]][sonar-url] [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
-
 
 [travis-url]: https://travis-ci.org/hipster-labs/jhipster-travis-build/branches
 [image-docker]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=docker
@@ -52,13 +50,11 @@ Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hip
 [image-ms-gradle]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=microservices-gradle
 [image-react]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=react
 [image-node-latest]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=node-latest
-
 [sonar-url]: https://sonarcloud.io/dashboard?id=io.github.jhipster.sample%3Ajhipster-sample-application
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=alert_status
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=coverage
 [sonar-bugs]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=bugs
 [sonar-vulnerabilities]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=vulnerabilities
-
 [jhipster-image]: https://raw.githubusercontent.com/jhipster/jhipster.github.io/master/images/logo/logo-jhipster2x.png
 [jhipster-url]: https://www.jhipster.tech/
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg

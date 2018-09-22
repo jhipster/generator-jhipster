@@ -13,21 +13,21 @@ describe('jhipster cli test', () => {
         expect(cmd).to.match(/node (.*)\/cli\/jhipster/g);
     });
 
-    it('--help should run without errors', (done) => {
+    it('--help should run without errors', done => {
         exec(`${cmd} --help`, (error, stdout, stderr) => {
             expect(error).to.be.null;
             done();
         });
     });
 
-    it('--version should run without errors', (done) => {
+    it('--version should run without errors', done => {
         exec(`${cmd} --version`, (error, stdout, stderr) => {
             expect(error).to.be.null;
             done();
         });
     });
 
-    it('should return error on unknown command', function (done) {
+    it('should return error on unknown command', function(done) {
         this.timeout(4000);
 
         exec(`${cmd} junkcmd`, (error, stdout, stderr) => {

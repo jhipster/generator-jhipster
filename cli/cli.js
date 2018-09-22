@@ -21,9 +21,7 @@ const program = require('commander');
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
-const {
-    CLI_NAME, initHelp, logger, createYeomanEnv, toString, getCommand, getCommandOptions, getArgs, done
-} = require('./utils');
+const { CLI_NAME, initHelp, logger, createYeomanEnv, toString, getCommand, getCommandOptions, getArgs, done } = require('./utils');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 
@@ -51,18 +49,22 @@ const runYoCommand = (cmd, args, options, opts) => {
     }
 };
 
-program.version(version).usage('[command] [options]').allowUnknownOption();
+program
+    .version(version)
+    .usage('[command] [options]')
+    .allowUnknownOption();
 
 /* create commands */
-Object.keys(SUB_GENERATORS).forEach((key) => {
+Object.keys(SUB_GENERATORS).forEach(key => {
     const opts = SUB_GENERATORS[key];
     const command = program.command(`${key} ${getArgs(opts)}`, '', { isDefault: opts.default });
     if (opts.alias) {
         command.alias(opts.alias);
     }
-    command.allowUnknownOption()
+    command
+        .allowUnknownOption()
         .description(opts.desc)
-        .action((args) => {
+        .action(args => {
             const options = getCommandOptions(packageJson, process.argv.slice(2));
             if (opts.cliOnly) {
                 logger.debug('Executing CLI only script');
