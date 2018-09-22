@@ -10,12 +10,11 @@ const constants = require('../../generators/generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
-
 const mockBlueprintSubGen = class extends EntityGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        const jhContext = this.jhipsterContext = this.options.jhipsterContext;
+        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
             this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
@@ -63,11 +62,12 @@ const mockBlueprintSubGen = class extends EntityGenerator {
 describe('JHipster entity generator with blueprint', () => {
     const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
 
-    blueprintNames.forEach((blueprintName) => {
+    blueprintNames.forEach(blueprintName => {
         describe(`generate entity with blueprint option '${blueprintName}'`, () => {
-            before((done) => {
-                helpers.run(path.join(__dirname, '../../generators/entity'))
-                    .inTmpDir((dir) => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../../generators/entity'))
+                    .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, '../../test/templates/default-ng2'), dir);
                     })
                     .withArguments('foo')
@@ -77,9 +77,7 @@ describe('JHipster entity generator with blueprint', () => {
                         blueprint: blueprintName,
                         skipChecks: true
                     })
-                    .withGenerators([
-                        [mockBlueprintSubGen, 'jhipster-myblueprint:entity']
-                    ])
+                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:entity']])
                     .withPrompts({
                         fieldAdd: false,
                         relationshipAdd: false,

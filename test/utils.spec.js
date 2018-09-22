@@ -60,8 +60,7 @@ describe('JHipster Utils', () => {
     describe('::deepFind function', () => {
         const jsonData = {
             foo11: 'foo11value',
-            fooNested:
-                { foo21: 'foo21value' },
+            fooNested: { foo21: 'foo21value' },
             foo21: 'foo21value'
         };
         describe('the key is found in the object that is searched', () => {

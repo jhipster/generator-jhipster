@@ -7,9 +7,7 @@ const pretty = require('js-object-pretty-print').pretty;
 const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
-const {
-    CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done, getOptionAsArgs
-} = require('./utils');
+const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done, getOptionAsArgs } = require('./utils');
 const jhipsterUtils = require('../generators/utils');
 
 const packagejs = require('../package.json');
@@ -39,9 +37,7 @@ function importJDL() {
         logger.debug(`importState exportedEntities: ${importState.exportedEntities.length}`);
         logger.debug(`importState exportedApplications: ${importState.exportedApplications.length}`);
         if (importState.exportedEntities.length > 0) {
-            const entityNames = _.uniq(importState.exportedEntities
-                .map(exportedEntity => exportedEntity.name))
-                .join(', ');
+            const entityNames = _.uniq(importState.exportedEntities.map(exportedEntity => exportedEntity.name)).join(', ');
             logger.log(`Found entities: ${chalk.yellow(entityNames)}.`);
         } else {
             logger.log(chalk.yellow('No change in entity configurations, no entities were updated.'));
@@ -63,16 +59,15 @@ function importJDL() {
  * Check if application needs to be generated
  * @param {any} generator
  */
-const shouldGenerateApplications = generator => !generator.options['ignore-application'] && generator.importState.exportedApplications.length !== 0;
+const shouldGenerateApplications = generator =>
+    !generator.options['ignore-application'] && generator.importState.exportedApplications.length !== 0;
 
 /**
  * Generate application source code for JDL apps defined.
  * @param {any} config
  * @param {function} forkProcess
  */
-const generateApplicationFiles = ({
-    generator, application, withEntities, inAppFolder
-}, forkProcess) => {
+const generateApplicationFiles = ({ generator, application, withEntities, inAppFolder }, forkProcess) => {
     const baseName = application[GENERATOR_NAME].baseName;
     logger.info(`Generating application ${baseName} in a new parallel process`);
     logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
@@ -111,7 +106,7 @@ const generateEntityFiles = (generator, entity, inAppFolder, env, shouldTriggerI
     if (inAppFolder) {
         /* Generating entities inside multiple apps */
         const baseNames = entity.applications;
-        baseNames.forEach((baseName) => {
+        baseNames.forEach(baseName => {
             logger.info(`Generating entities for application ${baseName} in a new parallel process`);
             const cwd = path.join(generator.pwd, baseName);
             logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
@@ -120,10 +115,14 @@ const generateEntityFiles = (generator, entity, inAppFolder, env, shouldTriggerI
         });
     } else {
         /* Traditional entity only generation */
-        env.run(command, {
-            ...options,
-            'skip-install': !shouldTriggerInstall
-        }, done);
+        env.run(
+            command,
+            {
+                ...options,
+                'skip-install': !shouldTriggerInstall
+            },
+            done
+        );
     }
 };
 
@@ -132,11 +131,12 @@ const generateEntityFiles = (generator, entity, inAppFolder, env, shouldTriggerI
  * @param {any} generator
  * @param {number} index
  */
-const shouldTriggerInstall = (generator, index) => index === generator.importState.exportedEntities.length - 1
-    && !generator.options['skip-install'] && !generator.skipClient
-    && !generator.options['json-only']
-    && !shouldGenerateApplications(generator);
-
+const shouldTriggerInstall = (generator, index) =>
+    index === generator.importState.exportedEntities.length - 1 &&
+    !generator.options['skip-install'] &&
+    !generator.skipClient &&
+    !generator.options['json-only'] &&
+    !shouldGenerateApplications(generator);
 
 class JDLProcessor {
     constructor(jdlFiles, options) {
@@ -148,7 +148,7 @@ class JDLProcessor {
 
     validate() {
         if (this.jdlFiles) {
-            this.jdlFiles.forEach((key) => {
+            this.jdlFiles.forEach(key => {
                 if (!shelljs.test('-f', key)) {
                     logger.error(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
                 }
@@ -192,17 +192,22 @@ class JDLProcessor {
             logger.debug('Applications not generated');
             return;
         }
-        logger.log(`Generating ${this.importState.exportedApplications.length} `
-            + `${pluralize('application', this.importState.exportedApplications.length)}.`);
+        logger.log(
+            `Generating ${this.importState.exportedApplications.length} ` +
+                `${pluralize('application', this.importState.exportedApplications.length)}.`
+        );
 
-        this.importState.exportedApplications.forEach((application) => {
+        this.importState.exportedApplications.forEach(application => {
             try {
-                generateApplicationFiles({
-                    generator: this,
-                    application,
-                    withEntities: this.importState.exportedEntities.length !== 0,
-                    inAppFolder: this.importState.exportedApplications.length > 1
-                }, forkProcess);
+                generateApplicationFiles(
+                    {
+                        generator: this,
+                        application,
+                        withEntities: this.importState.exportedEntities.length !== 0,
+                        inAppFolder: this.importState.exportedApplications.length > 1
+                    },
+                    forkProcess
+                );
             } catch (error) {
                 logger.error(`Error while generating applications from the parsed JDL\n${error}`);
             }
@@ -220,10 +225,19 @@ class JDLProcessor {
         }
         try {
             this.importState.exportedEntities.forEach((exportedEntity, i) => {
-                logger.log(`Generating ${this.importState.exportedEntities.length} `
-                    + `${pluralize('entity', this.importState.exportedEntities.length)}.`);
+                logger.log(
+                    `Generating ${this.importState.exportedEntities.length} ` +
+                        `${pluralize('entity', this.importState.exportedEntities.length)}.`
+                );
 
-                generateEntityFiles(this, exportedEntity, this.importState.exportedApplications.length > 1, env, shouldTriggerInstall(this, i), forkProcess);
+                generateEntityFiles(
+                    this,
+                    exportedEntity,
+                    this.importState.exportedApplications.length > 1,
+                    env,
+                    shouldTriggerInstall(this, i),
+                    forkProcess
+                );
             });
         } catch (error) {
             logger.error(`Error while generating entities from the parsed JDL\n${error}`);
