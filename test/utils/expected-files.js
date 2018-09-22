@@ -83,15 +83,33 @@ const expectedFiles = {
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management.service.spec.ts`
         ],
+        clientNg2GatewayMicroserviceEntity: [
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.component.html`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar-detail.component.html`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar-update.component.html`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar-delete-dialog.component.html`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.route.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.component.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar-update.component.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar-delete-dialog.component.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar-detail.component.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.service.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/shared/model/sampleMicroservice/bar.model.ts`,
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar-delete-dialog.component.spec.ts`,
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar-detail.component.spec.ts`,
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar-update.component.spec.ts`,
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar.component.spec.ts`,
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar.service.spec.ts`
+        ],
         server: [
             '.jhipster/Foo.json',
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`,
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
             // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-            `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIntTest.java`,
-            `${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`
-        ]
+            `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIntTest.java`
+        ],
+        gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`]
     },
 
     gradle: [
