@@ -46,5 +46,27 @@ describe('Data Utils service test', () => {
         it('should return the bytesize of the text', inject([JhiDataUtils], (service: JhiDataUtils) => {
             expect(service.byteSize('Hello Jhipster')).toBe(`10.5 bytes`);
         }));
+
+        it('should download the csv file', inject([JhiDataUtils], (service: JhiDataUtils) => {
+            // create spy object with a click() method
+            const spyObj = spyOn('a', ['click']);
+            // spy on document.createElement() and return the spy object
+            spyOn(document, 'createElement').and.returnValue(spyObj);
+        
+            // call downloadFile function
+            // csv content:
+            // ID,Name
+            // 1,Toto
+            const contentType = 'text/csv';
+            const data = 'SUQsTmFtZQ0KMSxUb3Rv';
+            const fileName = 'test-download-file.csv';
+            service.downloadFile(contentType, data, fileName);
+        
+            expect(document.createElement).toHaveBeenCalledTimes(1);
+            expect(document.createElement).toHaveBeenCalledWith('a');
+            expect(spyObj.download).toBe('test-download-file.csv');
+            expect(spyObj.click).toHaveBeenCalledTimes(1);
+            expect(spyObj.click).toHaveBeenCalledWith();
+        });
     });
 });
