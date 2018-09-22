@@ -150,11 +150,10 @@ export class JhiDataUtils {
         const blob = new Blob([byteArray], {
             type: contentType
         });
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.setAttribute('download', fileName);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);        
+        const tempLink = document.createElement('a');
+        tempLink.href = window.URL.createObjectURL(blob);
+        tempLink.download = fileName;
+        tempLink.target = '_blank';
+        tempLink.click();
     }
 }
