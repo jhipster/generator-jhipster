@@ -52,7 +52,6 @@ describe('Data Utils service test', () => {
             const spyObj = spyOn('a', 'click');
             // spy on document.createElement() and return the spy object
             spyOn(document, 'createElement').and.returnValue(spyObj);
-        
             // call downloadFile function
             // csv content:
             // ID,Name
@@ -61,7 +60,6 @@ describe('Data Utils service test', () => {
             const data = 'SUQsTmFtZQ0KMSxUb3Rv';
             const fileName = 'test-download-file.csv';
             service.downloadFile(contentType, data, fileName);
-        
             expect(document.createElement).toHaveBeenCalledTimes(1);
             expect(document.createElement).toHaveBeenCalledWith('a');
             expect(spyObj.download).toBe('test-download-file.csv');
