@@ -17,17 +17,18 @@
  limitations under the License.
 -%>
 import React from 'react';
-import {
-  DropdownItem
-} from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Translate, translate } from 'react-jhipster';
-import { NavLink as Link } from 'react-router-dom';
-import { NavDropdown } from '../header-components';
 
-export const EntitiesMenu = props => (
-  // tslint:disable-next-line:jsx-self-close
-  <NavDropdown icon="th-list" name={translate('global.menu.entities.main')} id="entity-menu">
-    {/* jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here */}
-  </NavDropdown>
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+export const NavDropdown = props => (
+<UncontrolledDropdown nav inNavbar id={props.id}>
+  <DropdownToggle nav caret className="d-flex align-items-center">
+    <FontAwesomeIcon icon={props.icon} />
+    <span>{props.name}</span>
+  </DropdownToggle>
+  <DropdownMenu right style={props.style}>
+    {props.children}
+  </DropdownMenu>
+</UncontrolledDropdown>
 );

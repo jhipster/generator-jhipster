@@ -17,40 +17,39 @@
  limitations under the License.
 -%>
 import React from 'react';
+import MenuItem from 'app/shared/layout/menus/menu-item';
 import {
   DropdownItem
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink as Link } from 'react-router-dom';
-import { NavDropdown } from '../header-components';
+import { NavDropdown } from './menu-components';
 import { Translate, translate } from 'react-jhipster';
 
 const adminMenuItems = (
   <>
   <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-    <DropdownItem tag={Link} to="/admin/gateway"><FontAwesomeIcon icon="road" fixedWidth /> <Translate contentKey="global.menu.admin.gateway">Gateway</Translate></DropdownItem>
+    <MenuItem icon="road" to="/admin/gateway"><Translate contentKey="global.menu.admin.gateway">Gateway</Translate></MenuItem>
   <%_ } _%>
   <%_ if (!skipUserManagement) { _%>
-    <DropdownItem tag={Link} to="/admin/user-management"><FontAwesomeIcon icon="user" fixedWidth /> <Translate contentKey="global.menu.admin.userManagement">User management</Translate></DropdownItem>
+    <MenuItem icon="user" to="/admin/user-management"><Translate contentKey="global.menu.admin.userManagement">User management</Translate></MenuItem>
   <%_ } _%>
   <%_ if (websocket === 'spring-websocket') { _%>
-    <DropdownItem tag={Link} to="/admin/tracker"><FontAwesomeIcon icon="eye" fixedWidth /> <Translate contentKey="global.menu.admin.tracker">User tracker</Translate></DropdownItem>
+    <MenuItem icon="eye" to="/admin/tracker"><Translate contentKey="global.menu.admin.tracker">User tracker</Translate></MenuItem>
   <%_ } _%>
-    <DropdownItem tag={Link} to="/admin/metrics"><FontAwesomeIcon icon="tachometer-alt" fixedWidth/> <Translate contentKey="global.menu.admin.metrics">Metrics</Translate></DropdownItem>
-    <DropdownItem tag={Link} to="/admin/health"><FontAwesomeIcon icon="heart" fixedWidth /> <Translate contentKey="global.menu.admin.health">Health</Translate></DropdownItem>
-    <DropdownItem tag={Link} to="/admin/configuration"><FontAwesomeIcon icon="list" fixedWidth /> <Translate contentKey="global.menu.admin.configuration">Configuration</Translate></DropdownItem>
+    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>
+    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>
+    <MenuItem icon="list" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>
     <%_ if (databaseType !== 'cassandra') { _%>
-    <DropdownItem tag={Link} to="/admin/audits"><FontAwesomeIcon icon="bell" fixedWidth /> <Translate contentKey="global.menu.admin.audits">Audits</Translate></DropdownItem>
+    <MenuItem icon="bell" to="/admin/audits"><Translate contentKey="global.menu.admin.audits">Audits</Translate></MenuItem>
     <%_ } _%>
   {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
-    <DropdownItem tag={Link} to="/admin/logs"><FontAwesomeIcon icon="tasks" fixedWidth /> <Translate contentKey="global.menu.admin.logs">Logs</Translate></DropdownItem>
+    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>
   </>
 );
 
 const swaggerItem = (
-  <DropdownItem tag={Link} to="/admin/docs">
-    <FontAwesomeIcon icon="book" fixedWidth /> <Translate contentKey="global.menu.admin.apidocs">API</Translate>
-  </DropdownItem>
+  <MenuItem icon="book" to="/admin/docs"><Translate contentKey="global.menu.admin.apidocs">API</Translate></MenuItem>
 );
 
 <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>

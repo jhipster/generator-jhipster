@@ -37,7 +37,7 @@ import { isRTL } from 'app/config/translation';
 <%_ } _%>
 
 import { Home, Brand } from './header-components';
-import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from './menus';
+import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from '../menus';
 
 export interface IHeaderProps {
   isAuthenticated: boolean;

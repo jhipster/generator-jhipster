@@ -23,8 +23,8 @@ import { shallow } from 'enzyme';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
-import { NavDropdown } from 'app/shared/layout/header/header-components';
-import { AccountMenu } from 'app/shared/layout/header/menus';
+import { NavDropdown } from 'app/shared/layout/menus/menu-components';
+import { AccountMenu } from 'app/shared/layout/menus';
 
 describe('AccountMenu', () => {
   let mountedWrapper;
