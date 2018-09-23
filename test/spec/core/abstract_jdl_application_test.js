@@ -19,14 +19,14 @@
 
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
-const JDLApplication = require('../../../lib/core/abstract_jdl_application');
+const AbstractJDLApplication = require('../../../lib/core/abstract_jdl_application');
 
-describe.skip('JDLApplication', () => {
+describe('AbstractJDLApplication', () => {
   describe('::new', () => {
     let jdlApplicationConfig = null;
 
     before(() => {
-      const jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0' } });
+      const jdlApplication = new AbstractJDLApplication({ config: { jhipsterVersion: '4.9.0' } });
       jdlApplicationConfig = jdlApplication.config;
     });
 
@@ -38,12 +38,8 @@ describe.skip('JDLApplication', () => {
         delete jdlApplicationConfig.testFrameworks;
 
         expect(jdlApplicationConfig).to.deep.equal({
-          applicationType: 'monolith',
-          authenticationType: 'jwt',
           baseName: 'jhipster',
           buildTool: 'maven',
-          cacheProvider: 'ehcache',
-          clientFramework: 'angularX',
           clientPackageManager: 'npm',
           databaseType: 'sql',
           devDatabaseType: 'h2Disk',
@@ -58,14 +54,41 @@ describe.skip('JDLApplication', () => {
           packageName: 'com.mycompany.myapp',
           prodDatabaseType: 'mysql',
           searchEngine: false,
-          serverPort: '8080',
           serviceDiscoveryType: false,
           skipClient: false,
           skipServer: false,
           skipUserManagement: false,
-          useSass: false,
           websocket: false
         });
+      });
+    });
+  });
+  describe('#getEntityNames', () => {
+    context('when there is no entity', () => {
+      let result;
+
+      before(() => {
+        const jdlApplication = new AbstractJDLApplication({ config: { jhipsterVersion: '4.9.0' } });
+        result = jdlApplication.getEntityNames();
+      });
+
+      it('returns an empty list', () => {
+        expect(result).to.deep.equal([]);
+      });
+    });
+    context('when there are entities', () => {
+      let result;
+
+      before(() => {
+        const jdlApplication = new AbstractJDLApplication({
+          config: { jhipsterVersion: '4.9.0' },
+          entities: ['A', 'B']
+        });
+        result = jdlApplication.getEntityNames();
+      });
+
+      it('returns the entity list', () => {
+        expect(result).to.deep.equal(['A', 'B']);
       });
     });
   });
@@ -73,7 +96,7 @@ describe.skip('JDLApplication', () => {
     let application = null;
 
     before(() => {
-      application = new JDLApplication({ entities: ['A', 'B'] });
+      application = new AbstractJDLApplication({ entities: ['A', 'B'] });
     });
 
     context('when not passing a function', () => {
@@ -100,13 +123,12 @@ describe.skip('JDLApplication', () => {
       let jdlApplication = null;
 
       before(() => {
-        jdlApplication = new JDLApplication({ config: { jhipsterVersion: '4.9.0', path: '../../' } });
+        jdlApplication = new AbstractJDLApplication({ config: { jhipsterVersion: '4.9.0' } });
       });
 
       it('stringifies the application object', () => {
         expect(jdlApplication.toString()).to.eq(`application {
   config {
-    applicationType monolith
     clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
@@ -125,16 +147,10 @@ describe.skip('JDLApplication', () => {
     skipClient false
     skipServer false
     testFrameworks
-    useSass false
     websocket false
     jhipsterVersion 4.9.0
-    path ../../
-    authenticationType jwt
     baseName jhipster
     buildTool maven
-    cacheProvider ehcache
-    clientFramework angularX
-    serverPort 8080
     skipUserManagement false
   }
 }`);
@@ -144,7 +160,7 @@ describe.skip('JDLApplication', () => {
       let jdlApplication = null;
 
       before(() => {
-        jdlApplication = new JDLApplication({ entities: ['A', 'B', 'C', 'C'] });
+        jdlApplication = new AbstractJDLApplication({ entities: ['A', 'B', 'C', 'C'] });
       });
 
       it('exports the entity names', () => {
@@ -156,12 +172,12 @@ describe.skip('JDLApplication', () => {
     context('when checking the validity of an invalid object', () => {
       context('because it is nil', () => {
         it('returns false', () => {
-          expect(JDLApplication.isValid()).to.be.false;
+          expect(AbstractJDLApplication.isValid()).to.be.false;
         });
       });
       context('when not having a config attribute', () => {
         it('returns false', () => {
-          expect(JDLApplication.isValid({})).to.be.false;
+          expect(AbstractJDLApplication.isValid({})).to.be.false;
         });
       });
       context('when having translations', () => {
@@ -169,12 +185,12 @@ describe.skip('JDLApplication', () => {
           let jdlApplication = null;
 
           before(() => {
-            jdlApplication = new JDLApplication({});
+            jdlApplication = new AbstractJDLApplication({});
             delete jdlApplication.config.nativeLanguage;
           });
 
           it('returns false', () => {
-            expect(JDLApplication.isValid(jdlApplication)).to.be.false;
+            expect(AbstractJDLApplication.isValid(jdlApplication)).to.be.false;
           });
         });
       });
