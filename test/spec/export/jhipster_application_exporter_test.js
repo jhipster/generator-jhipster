@@ -109,7 +109,7 @@ describe('JHipsterApplicationExporter', () => {
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              useSass: false,
+              useSass: true,
               websocket: false
             }
           });
@@ -148,7 +148,7 @@ describe('JHipsterApplicationExporter', () => {
             skipServer: false,
             skipUserManagement: false,
             testFrameworks: [],
-            useSass: false,
+            useSass: true,
             websocket: false
           });
         });
@@ -217,7 +217,7 @@ describe('JHipsterApplicationExporter', () => {
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              useSass: false,
+              useSass: true,
               websocket: false,
               jwtSecretKey: '1234'
             }
@@ -320,7 +320,7 @@ describe('JHipsterApplicationExporter', () => {
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              useSass: false,
+              useSass: true,
               websocket: false
             });
           });
@@ -378,7 +378,7 @@ describe('JHipsterApplicationExporter', () => {
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              useSass: false,
+              useSass: true,
               websocket: false
             });
           });
