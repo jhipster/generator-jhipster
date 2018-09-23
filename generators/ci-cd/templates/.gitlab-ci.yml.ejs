@@ -183,7 +183,7 @@ maven-test:
 frontend-test:
     stage: test
     script:
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='test -- -u' -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='test<%= frontTests%>' -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
             junit: target/test-results/jest/TESTS-*.xml
