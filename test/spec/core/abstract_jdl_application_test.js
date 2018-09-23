@@ -19,7 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 const expect = require('chai').expect;
-const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLApplication = require('../../../lib/core/abstract_jdl_application');
 
 describe.skip('JDLApplication', () => {
   describe('::new', () => {
