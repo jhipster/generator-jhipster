@@ -1,8 +1,8 @@
 {
     "metrics": {
-        "title": "Pengukuran Aplikasi",
-        "refresh.button": "Refresh",
-        "updating": "Updating...",
+        "title": "Metrik Aplikasi",
+        "refresh.button": "Muat ulang",
+        "updating": "Memperbarui...",
         "jvm": {
             "title": "JVM Metrics",
             "memory": {
