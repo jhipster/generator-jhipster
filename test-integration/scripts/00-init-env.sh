@@ -10,14 +10,14 @@ init_var() {
     echo $result
 }
 
-# folder where the repo is cloned
-JH_HOME=$(init_var "$BUILD_REPOSITORY_LOCALPATH" "$TRAVIS_BUILD_DIR")
-
 # uri of repo
 JH_REPO=$(init_var "$BUILD_REPOSITORY_URI" "$TRAVIS_REPO_SLUG")
 
+# folder where the repo is cloned
+JH_HOME=$(init_var "$BUILD_REPOSITORY_LOCALPATH" "$TRAVIS_BUILD_DIR")
+
 # folder for test-integration
-JH_INTEG="$JH_REPO"/test-integration
+JH_INTEG="$JH_HOME"/test-integration
 
 # folder for samples
 JH_SAMPLES="$JH_INTEG"/samples
