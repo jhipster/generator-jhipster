@@ -47,9 +47,9 @@ jobs:
   # Install JHipster
   - bash: $(JH_SCRIPTS)/10-install-jhipster.sh
     displayName: 'Install JHipster'
-  # - bash: $(JH_SCRIPTS)/11-generate-entities.sh
-  #   displayName: 'Generate Entities'
-  # - bash: $(JH_SCRIPTS)/12-generate-project.sh
-  #   displayName: 'Generate Project'
+  - bash: $(JH_SCRIPTS)/11-generate-entities.sh
+    displayName: 'Generate Entities'
+  - bash: $(JH_SCRIPTS)/12-generate-project.sh
+    displayName: 'Generate Project'
   # - bash: $(JH_SCRIPTS)/13-replace-version-generated-project.sh
   #   displayName: 'Replace version in generated project'
