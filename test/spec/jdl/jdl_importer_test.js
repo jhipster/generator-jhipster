@@ -587,9 +587,8 @@ describe('JDLImporter', () => {
             serviceDiscoveryType: 'eureka',
             clientPackageManager: 'npm',
             nativeLanguage: 'en',
-            skipUserManagement: false,
-            skipClient: true,
-            skipServer: false
+            skipUserManagement: true,
+            skipClient: true
           }
         },
         {
@@ -716,9 +715,8 @@ describe('JDLImporter', () => {
             serviceDiscoveryType: 'eureka',
             clientPackageManager: 'npm',
             nativeLanguage: 'en',
-            skipUserManagement: false,
-            skipClient: true,
-            skipServer: false
+            skipUserManagement: true,
+            skipClient: true
           }
         },
         {
@@ -747,9 +745,8 @@ describe('JDLImporter', () => {
             serviceDiscoveryType: 'eureka',
             clientPackageManager: 'npm',
             nativeLanguage: 'en',
-            skipUserManagement: false,
-            skipClient: true,
-            skipServer: false
+            skipUserManagement: true,
+            skipClient: true
           }
         }
       ];
