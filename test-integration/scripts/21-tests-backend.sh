@@ -47,6 +47,3 @@ elif [ -f "gradlew" ]; then
         -Dlogging.level.io.github.jhipster.sample=OFF \
         -Dlogging.level.io.github.jhipster.travis=OFF
 fi
-if [ -f "tsconfig.json" ]; then
-    npm test -- -u
-fi

@@ -29,6 +29,14 @@ jobs:
         JH_APP: ngx-default
         JH_PROFILE: prod
         JH_PROTRACTOR: 1
+      ngx-psql-es-noi18n:
+        JH_APP: ngx-psql-es-noi18n
+        JH_PROFILE: prod
+        JH_PROTRACTOR: 1
+      ngx-gradle-fr:
+        JH_APP: ngx-gradle-fr
+        JH_PROFILE: prod
+        JH_PROTRACTOR: 1
       ngx-h2mem-ws-nol2:
         JH_APP: ngx-h2mem-ws-nol2
 
@@ -61,3 +69,5 @@ jobs:
     displayName: 'Backend tests'
   - bash: $(JH_SCRIPTS)/22-tests-frontend.sh
     displayName: 'Frontend tests'
+  - bash: $(JH_SCRIPTS)/23-tests-e2e.sh
+    displayName: 'Packaging and End-to-End tests'
