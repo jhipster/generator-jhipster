@@ -44,7 +44,9 @@ jobs:
     displayName: 'Display configuration'
   - bash: $(JH_SCRIPTS)/02-display-tools.sh
     displayName: 'Display installed tools'
-  # Install JHipster
+  - bash: $(JH_SCRIPTS)/03-system.sh
+    displayName: 'Configure tools installed by the system'
+    # Install JHipster
   - bash: $(JH_SCRIPTS)/10-install-jhipster.sh
     displayName: 'Install JHipster'
   - bash: $(JH_SCRIPTS)/11-generate-entities.sh
