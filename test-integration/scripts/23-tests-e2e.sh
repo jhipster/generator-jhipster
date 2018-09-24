@@ -103,21 +103,23 @@ if [ "$JH_RUN_APP" == 1 ]; then
     if [[ "$JH_APP" == *"uaa"* ]]; then
         cd "$JH_FOLDER_UAA"
         java -jar target/*.war \
-            --spring.profiles.active="$JH_PROFILE" \
-            --logging.level.org.zalando=OFF \
-            --logging.level.io.github.jhipster=OFF \
-            --logging.level.io.github.jhipster.sample=OFF \
-            --logging.level.io.github.jhipster.travis=OFF &
+            --spring.profiles.active="$JH_PROFILE"
+            # --spring.profiles.active="$JH_PROFILE" \
+            # --logging.level.org.zalando=OFF \
+            # --logging.level.io.github.jhipster=OFF \
+            # --logging.level.io.github.jhipster.sample=OFF \
+            # --logging.level.io.github.jhipster.travis=OFF &
         sleep 80
     fi
 
     cd "$JH_FOLDER_APP"
     java -jar app.war \
-        --spring.profiles.active="$JH_PROFILE" \
-        --logging.level.org.zalando=OFF \
-        --logging.level.io.github.jhipster=OFF \
-        --logging.level.io.github.jhipster.sample=OFF \
-        --logging.level.io.github.jhipster.travis=OFF &
+        --spring.profiles.active="$JH_PROFILE"
+        # --spring.profiles.active="$JH_PROFILE" \
+        # --logging.level.org.zalando=OFF \
+        # --logging.level.io.github.jhipster=OFF \
+        # --logging.level.io.github.jhipster.sample=OFF \
+        # --logging.level.io.github.jhipster.travis=OFF &
     echo $! > .pid
     sleep 40
 
