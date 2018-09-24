@@ -57,6 +57,12 @@ const serverFiles = {
             ]
         }
     ],
+    jib: [
+        {
+            path: 'src/main/jib/',
+            templates: ['entrypoint.sh']
+        }
+    ],
     docker: [
         {
             path: DOCKER_DIR,

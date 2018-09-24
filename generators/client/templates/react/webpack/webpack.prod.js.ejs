@@ -40,7 +40,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     main: './<%= MAIN_SRC_DIR %>app/index'
   },
   output: {
-    path: utils.root('<%= BUILD_DIR %>www'),
+    path: utils.root('<%= BUILD_DIR %><% if (buildTool === 'maven') { %>classes/public<% } %><% if (buildTool === 'gradle'){ %>resources/main/public<% } %>'),
     filename: 'app/[name].[hash].bundle.js',
     chunkFilename: 'app/[name].[hash].chunk.js'
   },
@@ -63,8 +63,8 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
           },
           'css-loader',
           'postcss-loader',
-          { 
-            loader: 'sass-loader', 
+          {
+            loader: 'sass-loader',
             options: { implementation: sass }
           }
         ]
