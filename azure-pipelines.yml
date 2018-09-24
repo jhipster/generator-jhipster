@@ -71,6 +71,6 @@ jobs:
   - bash: $(JH_SCRIPTS)/22-tests-frontend.sh
     displayName: 'Frontend tests'
   - bash: $(JH_SCRIPTS)/23-package.sh
-    displayName: 'Packaging and End-to-End tests'
+    displayName: 'Packaging'
   - bash: $(JH_SCRIPTS)/24-tests-e2e.sh
-    displayName: 'Packaging and End-to-End tests'
+    displayName: 'End-to-End tests'

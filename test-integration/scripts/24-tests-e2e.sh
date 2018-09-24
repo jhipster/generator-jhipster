@@ -37,7 +37,7 @@ launchCurlOrProtractor() {
         return 1
     fi
 
-    if [ "$PROTRACTOR" != 1 ]; then
+    if [ "$JH_PROTRACTOR" != 1 ]; then
         return 0
     fi
 
