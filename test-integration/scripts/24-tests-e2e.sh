@@ -47,7 +47,6 @@ launchCurlOrProtractor() {
     do
         result=0
         if [[ -f "tsconfig.json" ]]; then
-            ls -al node_modules/webdriver-manager/selenium/
             npm run e2e
         fi
         result=$?
