@@ -49,10 +49,10 @@ function checkImages() {
         const appConfig = this.appConfigs[index];
         if (appConfig.buildTool === 'maven') {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/docker`);
-            runCommand = './mvnw verify -Pprod dockerfile:build';
+            runCommand = './mvnw package -Pprod jib:dockerBuild';
         } else {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/docker`);
-            runCommand = './gradlew -Pprod bootWar buildDocker';
+            runCommand = './gradlew bootWar -Pprod jibDockerBuild';
         }
         if (shelljs.ls(imagePath).length === 0) {
             this.warning = true;
