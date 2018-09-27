@@ -146,7 +146,6 @@ module.exports = class extends BaseGenerator {
                     method => `static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.${method.toLowerCase()}`
                 );
 
-                // IntelliJ optimizes imports after a certain count
                 this.mockRequestImports =
                     this.mockRequestImports.length > 3
                         ? ['static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*']
