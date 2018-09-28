@@ -103,7 +103,8 @@ const LANGUAGES = [
     {
         name: 'Albanian',
         dispName: 'Shqip',
-        value: 'al'
+        value: 'al',
+        momentLocaleId: 'sq'
     },
     {
         name: 'Arabic (Libya)',
