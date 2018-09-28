@@ -67,10 +67,10 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
     this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
     if (opts.appConfig.buildTool === 'maven') {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/target/docker`);
-        this.dockerBuildCommand = './mvnw verify -Pprod dockerfile:build';
+        this.dockerBuildCommand = './mvnw package -Pprod jib:dockerBuild';
     } else {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/build/docker`);
-        this.dockerBuildCommand = './gradlew -Pprod bootWar buildDocker';
+        this.dockerBuildCommand = './gradlew bootWar -Pprod jibDockerBuild';
     }
 
     if (shelljs.ls(imagePath).length === 0) {
