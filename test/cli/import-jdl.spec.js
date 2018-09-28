@@ -35,6 +35,45 @@ describe('JHipster generator import jdl', () => {
             options: []
         };
     });
+    describe('imports a JDL model with relations for mongodb', () => {
+        beforeEach((done) => {
+            testInTempDir((dir) => {
+                fse.copySync(path.join(__dirname, '../templates/mongodb-with-relations'), dir);
+                importJdl(['orders-model.jdl'], {}, env());
+                done();
+            });
+        });
+
+        it('creates entity json files', () => {
+            assert.file([
+                '.jhipster/Customer.json',
+                '.jhipster/CustomerOrder.json',
+                '.jhipster/OrderedItem.json',
+                '.jhipster/PaymentDetails.json',
+                '.jhipster/ShippingDetails.json'
+            ]);
+        });
+        it('calls entity subgenerator', () => {
+            expect(subGenCallParams.count).to.equal(5);
+            expect(subGenCallParams.commands).to.eql([
+                'jhipster:entity Customer',
+                'jhipster:entity CustomerOrder',
+                'jhipster:entity OrderedItem',
+                'jhipster:entity PaymentDetails',
+                'jhipster:entity ShippingDetails'
+            ]);
+            expect(subGenCallParams.options[0]).to.eql({
+                regenerate: true,
+                'from-cli': true,
+                'no-fluent-methods': undefined,
+                'skip-client': undefined,
+                'skip-install': true,
+                'skip-server': undefined,
+                'skip-ui-grouping': undefined,
+                'skip-user-management': undefined
+            });
+        });
+    });
     describe('imports a JDL model from single file with --json-only flag', () => {
         beforeEach(done => {
             testInTempDir(dir => {
