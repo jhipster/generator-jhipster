@@ -165,4 +165,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
             generator.removeFile(`${constants.DOCKER_DIR}keycloak.yml`);
         }
     }
+    if (generator.isJhipsterVersionLessThan('5.3.4')) {
+        generator.removeFile(`${javaDir}gateway/responserewriting/SwaggerBasePathRewritingFilter.java`);
+        generator.removeFile(`${testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`);
+    }
 }

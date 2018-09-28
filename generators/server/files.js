@@ -510,10 +510,9 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}gateway/accesscontrol/AccessControlFilter.java`
                 },
                 {
-                    file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilter.java',
-                    renameTo: generator => `${generator.javaDir}gateway/responserewriting/SwaggerBasePathRewritingFilter.java`
+                    file: 'package/web/rest/vm/RouteVM.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/vm/RouteVM.java`
                 },
-                { file: 'package/web/rest/vm/RouteVM.java', renameTo: generator => `${generator.javaDir}web/rest/vm/RouteVM.java` },
                 {
                     file: 'package/web/rest/GatewayResource.java',
                     renameTo: generator => `${generator.javaDir}web/rest/GatewayResource.java`
@@ -1221,17 +1220,6 @@ const serverFiles = {
                 {
                     file: 'package/config/WebConfigurerTestController.java',
                     renameTo: generator => `${generator.testDir}config/WebConfigurerTestController.java`
-                }
-            ]
-        },
-        {
-            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                // Create Gateway tests files
-                {
-                    file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java',
-                    renameTo: generator => `${generator.testDir}gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`
                 }
             ]
         },
