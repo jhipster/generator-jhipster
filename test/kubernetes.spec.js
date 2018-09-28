@@ -50,6 +50,7 @@ const expectedFiles = {
         './monitoring/jhipster-grafana.yml',
         './monitoring/jhipster-grafana-dashboard.yml'
     ],
+    jhgategateway: ['./jhgate/jhgate-gateway.yml', './jhgate/jhgate-destination-rule.yml', './jhgate/jhgate-virtual-service.yml'],
     applyScript: ['./kubectl-apply.sh']
 };
 
@@ -376,6 +377,43 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);
+        });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
+        });
+    });
+
+    describe('gateway with istio routing', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/kubernetes'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    composeApplicationType: 'microservice',
+                    directoryPath: './',
+                    chosenApps: ['01-gateway'],
+                    dockerRepositoryName: 'jhipster',
+                    dockerPushCommand: 'docker push',
+                    kubernetesNamespace: 'default',
+                    kubernetesServiceType: 'Ingress',
+                    ingressDomain: 'example.com',
+                    clusteredDbApps: [],
+                    istio: 'manualInjection',
+                    istioRoute: true
+                })
+                .on('end', done);
+        });
+        it('creates expected registry files', () => {
+            assert.file(expectedFiles.eurekaregistry);
+        });
+        it('creates expected service gateway files', () => {
+            assert.file(expectedFiles.jhgate);
+        });
+        it('creates expected routing gateway and istio files', () => {
+            assert.file(expectedFiles.jhgategateway);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);

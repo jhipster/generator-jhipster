@@ -73,6 +73,10 @@ spec:
       labels:
         app: jhipster-registry
         version: "1.0"
+     <%_ if (istio !== 'no') { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       terminationGracePeriodSeconds: 10
       containers:
