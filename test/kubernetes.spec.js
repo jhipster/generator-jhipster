@@ -50,11 +50,7 @@ const expectedFiles = {
         './monitoring/jhipster-grafana.yml',
         './monitoring/jhipster-grafana-dashboard.yml'
     ],
-    jhgategateway: [
-        './jhgate/jhgate-gateway.yml',
-        './jhgate/jhgate-destination-rule.yml',
-        './jhgate/jhgate-virtual-service.yml'
-    ],
+    jhgategateway: ['./jhgate/jhgate-gateway.yml', './jhgate/jhgate-destination-rule.yml', './jhgate/jhgate-virtual-service.yml'],
     applyScript: ['./kubectl-apply.sh']
 };
 
@@ -388,19 +384,17 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('gateway with istio routing', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway'
-                    ],
+                    chosenApps: ['01-gateway'],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
