@@ -268,7 +268,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 -   All features or bug fixes **must be tested** by one or more tests.
 -   All files must follow the [.editorconfig file](http://editorconfig.org/) located at the root of the JHipster generator project. Please note that generated projects use the same `.editorconfig` file, so that both the generator and the generated projects share the same configuration.
--   Java files **must be** formatted using Eclipse's default code formatter.
+-   Java files **must be** formatted using Intellij IDEA default code style.
 -   Generators JavaScript files **must follow** the eslint configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 -   Any client side feature/change should be done for both Angular and react clients
 -   Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
