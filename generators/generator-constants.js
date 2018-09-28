@@ -101,6 +101,12 @@ const SQL_DB_OPTIONS = [
 
 const LANGUAGES = [
     {
+        name: 'Albanian',
+        dispName: 'Shqip',
+        value: 'al',
+        momentLocaleId: 'sq'
+    },
+    {
         name: 'Arabic (Libya)',
         dispName: 'العربية',
         value: 'ar-ly',

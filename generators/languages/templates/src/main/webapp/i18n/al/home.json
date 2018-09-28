@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Mirëseerdhët në, Java Hipster!",
+        "subtitle": "Ky është kreu juaj",
+        "logged": {
+            "message": "Ju jeni futur si \"{{username}}\"."
+        },
+        "question": "Në qoftë se keni ndonjë pyetje rreth JHipster:",
+        "link": {
+            "homepage": "Kreu i JHipster",
+            "stackoverflow": "JHipster tek Stack Overflow",
+            "bugtracker": "JHipster bug tracker",
+            "chat": "JHipster dhoma e chatit publik",
+            "follow": "ndiq @java_hipster në Twitter"
+        },
+        "like": "Në qoftë se ju pëlqen JHipster, mos harroni të na jepni një yll në",
+        "github": "GitHub"
+    }
+}
