@@ -39,7 +39,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach(done => {
             testInTempDir(dir => {
                 fse.copySync(path.join(__dirname, '../templates/mongodb-with-relations'), dir);
-                importJdl(['orders-model.jdl'], {}, env());
+                importJdl(['orders-model.jdl'], {}, env);
                 done();
             });
         });
