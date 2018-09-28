@@ -36,8 +36,8 @@ describe('JHipster generator import jdl', () => {
         };
     });
     describe('imports a JDL model with relations for mongodb', () => {
-        beforeEach((done) => {
-            testInTempDir((dir) => {
+        beforeEach(done => {
+            testInTempDir(dir => {
                 fse.copySync(path.join(__dirname, '../templates/mongodb-with-relations'), dir);
                 importJdl(['orders-model.jdl'], {}, env());
                 done();
