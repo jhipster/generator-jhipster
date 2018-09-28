@@ -38,9 +38,11 @@ module.exports = class ECR {
      * @returns {Promise.<string>}
      */
     getEcrRepositoryURI(respositoryName) {
-        return this.ecr.describeRepositories({
-            repositoryNames: [respositoryName]
-        }).promise()
+        return this.ecr
+            .describeRepositories({
+                repositoryNames: [respositoryName]
+            })
+            .promise()
             .then(result => _(result.repositories).first().repositoryUri);
     }
 };

@@ -50,15 +50,12 @@ module.exports = class extends BaseGenerator {
         const blueprint = this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(
-                blueprint,
-                'spring-controller',
-                {
-                    force: this.options.force,
-                    arguments: [this.name],
-                    default: this.options.default
-                }
-            );
+            useBlueprint = this.composeBlueprint(blueprint, 'spring-controller', {
+                'from-cli': this.options['from-cli'],
+                force: this.options.force,
+                arguments: [this.name],
+                default: this.options.default
+            });
         } else {
             useBlueprint = false;
         }
@@ -67,9 +64,13 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
-            validateFromCLi() {
+            validateFromCli() {
                 if (!this.options['from-cli']) {
-                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
                 }
             },
 
@@ -141,25 +142,37 @@ module.exports = class extends BaseGenerator {
                 this.usedMethods = this.usedMethods.sort();
 
                 this.mappingImports = this.usedMethods.map(method => `org.springframework.web.bind.annotation.${method}Mapping`);
-                this.mockRequestImports = this.usedMethods.map(method => `static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.${method.toLowerCase()}`);
+                this.mockRequestImports = this.usedMethods.map(
+                    method => `static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.${method.toLowerCase()}`
+                );
 
-                // IntelliJ optimizes imports after a certain count
-                this.mockRequestImports = this.mockRequestImports.length > 3 ? ['static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*'] : this.mockRequestImports;
+                this.mockRequestImports =
+                    this.mockRequestImports.length > 3
+                        ? ['static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*']
+                        : this.mockRequestImports;
 
                 this.mainClass = this.getMainClassName();
 
-                this.controllerActions.forEach((action) => {
+                this.controllerActions.forEach(action => {
                     action.actionPath = _.kebabCase(action.actionName);
                     action.actionNameUF = _.upperFirst(action.actionName);
-                    this.log(chalk.green(`adding ${action.actionMethod} action '${action.actionName}' for /api/${this.apiPrefix}/${action.actionPath}`));
+                    this.log(
+                        chalk.green(
+                            `adding ${action.actionMethod} action '${action.actionName}' for /api/${this.apiPrefix}/${action.actionPath}`
+                        )
+                    );
                 });
 
                 this.template(
-                    `${this.fetchFromInstalledJHipster('spring-controller/templates')}/${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
+                    `${this.fetchFromInstalledJHipster(
+                        'spring-controller/templates'
+                    )}/${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
                     `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}.java`
                 );
                 this.template(
-                    `${this.fetchFromInstalledJHipster('spring-controller/templates')}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIntTest.java.ejs`,
+                    `${this.fetchFromInstalledJHipster(
+                        'spring-controller/templates'
+                    )}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIntTest.java.ejs`,
                     `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IntTest.java`
                 );
             }

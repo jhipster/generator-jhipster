@@ -50,9 +50,13 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
-            validateFromCLi() {
+            validateFromCli() {
                 if (!this.options['from-cli']) {
-                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
                 }
             },
             sayHello() {
@@ -134,8 +138,10 @@ module.exports = class extends BaseGenerator {
         if (this.cicdIntegrations.includes('deploy')) {
             if (this.buildTool === 'maven') {
                 this.addMavenDistributionManagement(
-                    this.artifactorySnapshotsId, this.artifactorySnapshotsUrl,
-                    this.artifactoryReleasesId, this.artifactoryReleasesUrl
+                    this.artifactorySnapshotsId,
+                    this.artifactorySnapshotsUrl,
+                    this.artifactoryReleasesId,
+                    this.artifactoryReleasesUrl
                 );
             } else if (this.buildTool === 'gradle') {
                 // TODO: add support here

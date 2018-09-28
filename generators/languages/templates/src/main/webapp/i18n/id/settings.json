@@ -11,7 +11,7 @@
         },
         "messages": {
             "error": {
-                "fail": "<strong>Muncul error!</strong> Pengaturan gagal tersimpan.",
+                "fail": "<strong>Terjadi kesalahan!</strong> Pengaturan gagal tersimpan.",
                 "emailexists": "<strong>Email sudah digunakan!</strong> Silakan pilih yang lain."
             },
             "success": "<strong>Pengaturan berhasil disimpan!</strong>",

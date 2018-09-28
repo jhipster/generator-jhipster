@@ -17,6 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -%>
 <%_ var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- ' _%>
+
 {
   "name": "<%= dasherizedBaseName %>",
   "version": "0.0.0",
@@ -27,9 +28,9 @@ limitations under the License.
     "node_modules"
   ],
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "1.2.2",
-    "@fortawesome/free-solid-svg-icons": "5.2.0",
-    "@fortawesome/react-fontawesome": "0.1.2",
+    "@fortawesome/react-fontawesome": "0.1.3",
+    "@fortawesome/fontawesome-svg-core": "1.2.4",
+    "@fortawesome/free-solid-svg-icons": "5.3.1",
     "availity-reactstrap-validation": "2.0.6",
     "axios": "0.18.0",
     "bootstrap": "4.1.3",
@@ -167,8 +168,7 @@ limitations under the License.
     "webpack-notifier": "1.6.0",
     "workbox-webpack-plugin": "3.4.1",
     "write-file-webpack-plugin": "4.3.2"<% if (buildTool === 'maven') { %>,
-    "xml2js": "0.4.19"
-    <%_ } _%>
+    "xml2js": "0.4.19"<% } %>
   },
   "resolutions": {
     "@types/react": "16.4.12"
@@ -189,7 +189,7 @@ limitations under the License.
     <%_ if(!skipCommitHook) { _%>
     "precommit": "lint-staged",
     <%_ } _%>
-    "prettier:format": "<%= clientPackageManager %> prettier --write 'src/**/*.{ts,tsx,css,scss}'",
+    "prettier:format": "prettier --write \"src/**/*.{ts,tsx,css,scss}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= BUILD_DIR %>www",
@@ -198,6 +198,7 @@ limitations under the License.
     "postinstall": "webdriver-manager update --gecko false",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
+    "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",
     "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
     "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",

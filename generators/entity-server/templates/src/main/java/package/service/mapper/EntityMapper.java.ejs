@@ -80,9 +80,9 @@ _%>
     <%_ if (renMapAnotDto === true) { _%>
     <%= entityClass %> toEntity(<%= entityClass%>DTO <%= entityInstance %>DTO);
     <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
-    default <%= entityClass %> fromId(Long id) {
+    default <%= entityClass %> fromId(<%= pkType %> id) {
         if (id == null) {
             return null;
         }

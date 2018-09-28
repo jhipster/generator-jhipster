@@ -10,9 +10,10 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 describe('JHipster generator service', () => {
     describe('creates service without interface', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/spring-service'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/spring-service'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
@@ -23,22 +24,19 @@ describe('JHipster generator service', () => {
         });
 
         it('creates service file', () => {
-            assert.file([
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
-            ]);
+            assert.file([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`]);
         });
 
         it('doesnt create interface', () => {
-            assert.noFile([
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
-            ]);
+            assert.noFile([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`]);
         });
     });
 
     describe('creates service with interface', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/spring-service'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/spring-service'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])
@@ -57,9 +55,10 @@ describe('JHipster generator service', () => {
     });
 
     describe('creates service with --default flag', () => {
-        beforeEach((done) => {
-            helpers.run(require.resolve('../generators/spring-service'))
-                .inTmpDir((dir) => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/spring-service'))
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                 })
                 .withArguments(['foo'])

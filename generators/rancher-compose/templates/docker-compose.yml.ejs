@@ -50,7 +50,7 @@ services:
         #volumes:
         #    - ./central-server-config:/central-config
         environment:
-            - SPRING_PROFILES_ACTIVE=dev
+            - SPRING_PROFILES_ACTIVE=dev<% if (authenticationType === 'oauth2') { %>,oauth2<% } %><% if (authenticationType === 'uaa') { %>,uaa<% } %>
             - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
             <%_ if (monitoring === 'elk') { _%>
             - JHIPSTER_LOGGING_LOGSTASH_ENABLED=true

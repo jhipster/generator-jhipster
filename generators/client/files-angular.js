@@ -27,7 +27,7 @@ const ANGULAR_DIR = constants.ANGULAR_DIR;
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
-*/
+ */
 const files = {
     common: [
         {
@@ -44,6 +44,7 @@ const files = {
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
                 'webpack/webpack.prod.js',
+                'postcss.config.js',
                 { file: 'webpack/logo-jhipster.png', method: 'copy' }
             ]
         }
@@ -54,42 +55,24 @@ const files = {
         {
             condition: generator => !generator.useSass,
             path: MAIN_SRC_DIR,
-            templates: [
-                'content/css/global.css',
-                'content/css/vendor.css',
-                'content/css/documentation.css'
-            ]
+            templates: ['content/css/global.css', 'content/css/vendor.css', 'content/css/documentation.css']
         },
         {
             condition: generator => !generator.useSass && generator.enableI18nRTL,
             path: MAIN_SRC_DIR,
-            templates: [
-                'content/css/rtl.css',
-            ]
+            templates: ['content/css/rtl.css']
         }
     ],
     sass: [
         {
             condition: generator => generator.useSass,
             path: MAIN_SRC_DIR,
-            templates: [
-                'content/scss/_bootstrap-variables.scss',
-                'content/scss/global.scss',
-                'content/scss/vendor.scss'
-            ]
+            templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss']
         },
         {
             condition: generator => generator.useSass && generator.enableI18nRTL,
             path: MAIN_SRC_DIR,
-            templates: [
-                'content/scss/rtl.scss',
-            ]
-        },
-        {
-            condition: generator => generator.useSass,
-            templates: [
-                'postcss.config.js'
-            ]
+            templates: ['content/scss/rtl.scss']
         }
     ],
     image: [
@@ -109,22 +92,13 @@ const files = {
     swagger: [
         {
             path: MAIN_SRC_DIR,
-            templates: [
-                'swagger-ui/index.html',
-                { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }
-            ]
+            templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }]
         }
     ],
     commonWeb: [
         {
             path: MAIN_SRC_DIR,
-            templates: [
-                { file: 'favicon.ico', method: 'copy' },
-                'robots.txt',
-                '404.html',
-                'index.html',
-                'manifest.webapp'
-            ]
+            templates: [{ file: 'favicon.ico', method: 'copy' }, 'robots.txt', '404.html', 'index.html', 'manifest.webapp']
         }
     ],
     angularApp: [
@@ -148,9 +122,7 @@ const files = {
         {
             condition: generator => generator.authenticationType === 'jwt',
             path: ANGULAR_DIR,
-            templates: [
-                'blocks/interceptor/auth.interceptor.ts'
-            ]
+            templates: ['blocks/interceptor/auth.interceptor.ts']
         }
     ],
     angularMain: [
@@ -185,28 +157,18 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: [
-                'layouts/navbar/active-menu.directive.ts'
-            ]
+            templates: ['layouts/navbar/active-menu.directive.ts']
         },
         {
             condition: generator => generator.useSass,
             path: ANGULAR_DIR,
-            templates: [
-                'layouts/profiles/page-ribbon.scss',
-                'layouts/navbar/navbar.scss',
-                'home/home.scss'
-            ]
+            templates: ['layouts/profiles/page-ribbon.scss', 'layouts/navbar/navbar.scss', 'home/home.scss']
         },
         {
             condition: generator => !generator.useSass,
             path: ANGULAR_DIR,
-            templates: [
-                'layouts/profiles/page-ribbon.css',
-                'layouts/navbar/navbar.css',
-                'home/home.css'
-            ]
-        },
+            templates: ['layouts/profiles/page-ribbon.css', 'layouts/navbar/navbar.css', 'home/home.css']
+        }
     ],
     angularAccountModule: [
         {
@@ -256,16 +218,12 @@ const files = {
         {
             condition: generator => generator.useSass && generator.authenticationType !== 'oauth2',
             path: ANGULAR_DIR,
-            templates: [
-                'account/password/password-strength-bar.scss'
-            ]
+            templates: ['account/password/password-strength-bar.scss']
         },
         {
             condition: generator => !generator.useSass && generator.authenticationType !== 'oauth2',
             path: ANGULAR_DIR,
-            templates: [
-                'account/password/password-strength-bar.css'
-            ]
+            templates: ['account/password/password-strength-bar.css']
         }
     ],
     angularAdminModule: [
@@ -303,7 +261,7 @@ const files = {
             ]
         },
         {
-            condition: generator => (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra'),
+            condition: generator => generator.databaseType !== 'no' && generator.databaseType !== 'cassandra',
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/audits/audits.route.ts', method: 'processJs' },
@@ -341,7 +299,7 @@ const files = {
             ]
         },
         {
-            condition: generator => (generator.applicationType === 'gateway' && generator.serviceDiscoveryType),
+            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/gateway/gateway.route.ts', method: 'processJs' },
@@ -374,18 +332,12 @@ const files = {
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
-            templates: [
-                'core/user/user.service.ts',
-                'core/user/user.model.ts'
-            ]
+            templates: ['core/user/user.service.ts', 'core/user/user.model.ts']
         },
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: [
-                'core/language/language.constants.ts',
-                'core/language/language.helper.ts'
-            ]
+            templates: ['core/language/language.constants.ts', 'core/language/language.helper.ts']
         }
     ],
     angularShared: [
@@ -420,9 +372,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: [
-                'shared/language/find-language-from-key.pipe.ts'
-            ]
+            templates: ['shared/language/find-language-from-key.pipe.ts']
         }
     ],
     angularAuthService: [
@@ -440,16 +390,12 @@ const files = {
         {
             condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
             path: ANGULAR_DIR,
-            templates: [
-                'core/auth/auth-jwt.service.ts'
-            ]
+            templates: ['core/auth/auth-jwt.service.ts']
         },
         {
             condition: generator => generator.authenticationType === 'session' || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
-            templates: [
-                'core/auth/auth-session.service.ts'
-            ]
+            templates: ['core/auth/auth-session.service.ts']
         }
     ],
     clientTestFw: [
@@ -496,12 +442,9 @@ const files = {
             ]
         },
         {
-            condition: generator => (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra'),
+            condition: generator => generator.databaseType !== 'no' && generator.databaseType !== 'cassandra',
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/admin/audits/audits.component.spec.ts',
-                'spec/app/admin/audits/audits.service.spec.ts'
-            ]
+            templates: ['spec/app/admin/audits/audits.component.spec.ts', 'spec/app/admin/audits/audits.service.spec.ts']
         },
         {
             condition: generator => !generator.skipUserManagement,
@@ -518,23 +461,17 @@ const files = {
         {
             condition: generator => generator.authenticationType === 'session',
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/account/sessions/sessions.component.spec.ts'
-            ]
+            templates: ['spec/app/account/sessions/sessions.component.spec.ts']
         },
         {
             condition: generator => generator.enableTranslation,
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/helpers/mock-language.service.ts'
-            ]
+            templates: ['spec/helpers/mock-language.service.ts']
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/helpers/mock-tracker.service.ts'
-            ]
+            templates: ['spec/helpers/mock-tracker.service.ts']
         },
         {
             condition: generator => generator.protractorTests,

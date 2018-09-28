@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "စာရင်းစစ်ဆေးခြင်း",
+        "filter": {
+            "title": "နေ့စွဲအလိုက်ရှာရန်",
+            "from": "မှ",
+            "to": "ထိ",
+            "button": {
+                "weeks": "ရက်သတ္တပတ်",
+                "today": "ယနေ့",
+                "clear": "ရှင်းလင်းမည်",
+                "close": "ပိတ်မည်"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "အသုံးပြုသူ",
+                "date": "နေ့စွဲ",
+                "status": "အခြေအနေ",
+                "data": "အခြားဒေတာ"
+            },
+            "data": {
+                "remoteAddress": "Remote Address:"
+            }
+        }
+    }
+}

@@ -1,11 +1,9 @@
-
 module.exports = {
     writeFiles
 };
 
 function writeFiles() {
     return {
-
         writeDeployments() {
             for (let i = 0; i < this.appConfigs.length; i++) {
                 const appName = this.appConfigs[i].baseName.toLowerCase();
@@ -13,7 +11,10 @@ function writeFiles() {
                 this.template('deployment.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-deployment.yml`);
 
                 if (this.app.prodDatabaseType !== 'no') {
-                    this.template(`db/${this.app.prodDatabaseType}.yml.ejs`, `${this.directoryPath}/ocp/${appName}/${appName}-${this.app.prodDatabaseType}.yml`);
+                    this.template(
+                        `db/${this.app.prodDatabaseType}.yml.ejs`,
+                        `${this.directoryPath}/ocp/${appName}/${appName}-${this.app.prodDatabaseType}.yml`
+                    );
                 }
                 if (this.app.searchEngine === 'elasticsearch') {
                     this.template('db/elasticsearch.yml.ejs', `${this.directoryPath}/ocp/${appName}/${appName}-elasticsearch.yml`);

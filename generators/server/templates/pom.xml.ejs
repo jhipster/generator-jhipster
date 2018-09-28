@@ -69,12 +69,13 @@
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.no-liquibase />
         <profile.swagger />
+        <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.20</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.22</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.0.4.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.5.RELEASE</spring-boot.version>
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
@@ -92,23 +93,23 @@
 
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.2</maven-war-plugin.version>
-        <dockerfile-maven-plugin.version>1.4.3</dockerfile-maven-plugin.version>
+        <jib-maven-plugin.version>0.9.11</jib-maven-plugin.version>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
         <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
-        <scala-maven-plugin.version>3.4.1</scala-maven-plugin.version>
-        <sonar-maven-plugin.version>3.4.1.1168</sonar-maven-plugin.version>
+        <scala-maven-plugin.version>3.4.2</scala-maven-plugin.version>
+        <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>3.0.1</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>3.2.3</openapi-generator-maven-plugin.version>
         <%_ } _%>
-        <git-commit-id-plugin.version>2.2.4</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>2.2.5</git-commit-id-plugin.version>
 
         <!-- Sonar properties -->
         <sonar.host.url>http://localhost:9001</sonar.host.url>
@@ -857,19 +858,16 @@
                     </execution>
                     <execution>
                         <id>docker-resources</id>
-                        <phase>validate</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>target/</outputDirectory>
+                            <outputDirectory>target/classes/static/</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory><%= MAIN_DIR %>docker/</directory>
+                                    <directory>target/www</directory>
                                     <filtering>false</filtering>
-                                    <excludes>
-                                        <exclude>**/*.yml</exclude>
-                                    </excludes>
                                 </resource>
                             </resources>
                         </configuration>
@@ -1009,57 +1007,35 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>${dockerfile-maven-plugin.version}</version>
-                <executions>
-                    <!--
-                     Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                    -->
-                    <execution>
-                        <id>tag-latest</id>
-                        <phase>none</phase>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>tag</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>version</id>
-                        <phase>none</phase>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>tag</goal>
-                            <goal>push</goal>
-                        </goals>
-                        <configuration>
-                            <tag>${project.version}</tag>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>commit</id>
-                        <phase>none</phase>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>tag</goal>
-                            <goal>push</goal>
-                        </goals>
-                        <configuration>
-                            <tag>${git.commit.id.describe}</tag>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib-maven-plugin.version}</version>
                 <configuration>
-                    <repository><%= baseName.toLowerCase()%></repository>
-                    <contextDirectory>${project.build.directory}</contextDirectory>
+                    <from>
+                        <image><%= DOCKER_JAVA_JRE %></image>
+                    </from>
+                    <to>
+                        <image><%= baseName.toLowerCase() %>:latest</image>
+                    </to>
+                    <container>
+                        <entrypoint>
+                            <shell>sh</shell>
+                            <option>-c</option>
+                            <arg>chmod +x /entrypoint.sh &amp;&amp; /entrypoint.sh</arg>
+                        </entrypoint>
+                        <ports>
+                            <port><%= serverPort %></port>
+                            <% if (cacheProvider === 'hazelcast') { %>
+                            <port>5701/udp</port>
+                            <% } %>
+                        </ports>
+                        <environment>
+                            <%_ if (cacheProvider === 'infinispan') { _%><JAVA_OPTS>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true</JAVA_OPTS><%_ } _%>
+                            <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
+                            <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
+                        </environment>
+                        <useCurrentTimestamp>true</useCurrentTimestamp>
+                    </container>
                 </configuration>
             </plugin>
             <%_ if (enableSwaggerCodegen) { _%>
@@ -1177,6 +1153,12 @@
             <id>swagger</id>
             <properties>
                 <profile.swagger>,swagger</profile.swagger>
+            </properties>
+        </profile>
+        <profile>
+            <id>tls</id>
+            <properties>
+                <profile.tls>,tls</profile.tls>
             </properties>
         </profile>
         <%_ if (!skipClient) { _%>
@@ -1323,7 +1305,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
             </properties>
         </profile>
         <profile>

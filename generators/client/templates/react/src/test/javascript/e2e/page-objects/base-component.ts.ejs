@@ -40,13 +40,13 @@ export default class BasePage {
   /**
    * Wait until this page is displayed.
    */
-  waitUntilDisplayed() {
+  async waitUntilDisplayed() {
     this.checkSelectorExist();
-    waitUntilDisplayed(this.selector, this.constructor.name);
+    await waitUntilDisplayed(this.selector, this.constructor.name);
   }
 
-  waitUntilHidden() {
+  async waitUntilHidden() {
     this.checkSelectorExist();
-    waitUntilHidden(this.selector, this.constructor.name);
+    await waitUntilHidden(this.selector, this.constructor.name);
   }
 }

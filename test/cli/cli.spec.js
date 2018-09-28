@@ -2,40 +2,32 @@
 /* eslint-disable no-unused-expressions, no-console */
 
 const expect = require('chai').expect;
-// const assert = require('chai').assert;
 const exec = require('child_process').exec;
-const path = require('path');
-const os = require('os');
 
+const { getJHipsterCli } = require('../utils/utils');
 
 describe('jhipster cli test', () => {
-    const cmdPath = path.join(__dirname, '../cli/jhipster');
-    let cmd = `node ${cmdPath} `;
-    console.log(cmd);
+    const cmd = getJHipsterCli();
 
     it('verify correct cmd format', () => {
-        if (os.platform() === 'win32') {
-            // corrected test for windows user
-            cmd = cmd.replace(/\\/g, '/');
-        }
         expect(cmd).to.match(/node (.*)\/cli\/jhipster/g);
     });
 
-    it('--help should run without errors', (done) => {
+    it('--help should run without errors', done => {
         exec(`${cmd} --help`, (error, stdout, stderr) => {
             expect(error).to.be.null;
             done();
         });
     });
 
-    it('--version should run without errors', (done) => {
+    it('--version should run without errors', done => {
         exec(`${cmd} --version`, (error, stdout, stderr) => {
             expect(error).to.be.null;
             done();
         });
     });
 
-    it('should return error on unknown command', function (done) {
+    it('should return error on unknown command', function(done) {
         this.timeout(4000);
 
         exec(`${cmd} junkcmd`, (error, stdout, stderr) => {

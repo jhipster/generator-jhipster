@@ -49,9 +49,13 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
-            validateFromCLi() {
+            validateFromCli() {
                 if (!this.options['from-cli']) {
-                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
                 }
             },
 
@@ -81,6 +85,7 @@ module.exports = class extends BaseGenerator {
 
             loadConfig() {
                 this.defaultAppsFolders = this.config.get('appsFolders');
+                this.authenticationType = this.config.get('authenticationType');
                 this.directoryPath = this.config.get('directoryPath');
                 this.monitoring = this.config.get('monitoring');
                 this.useKafka = false;
@@ -132,7 +137,7 @@ module.exports = class extends BaseGenerator {
                 this.hasFrontApp = false;
 
                 let portIndex = 8080;
-                this.appsFolders.forEach(function (appsFolder, index) {
+                this.appsFolders.forEach(function(appsFolder, index) {
                     const appConfig = this.appConfigs[index];
                     const lowercaseBaseName = appConfig.baseName.toLowerCase();
                     const parentConfiguration = {};
@@ -208,6 +213,10 @@ module.exports = class extends BaseGenerator {
 
                         parentConfiguration[databaseServiceName] = databaseYamlConfig;
                     }
+
+                    // Expose authenticationType
+                    this.authenticationType = appConfig.authenticationType;
+
                     // Add search engine configuration
                     const searchEngine = appConfig.searchEngine;
                     if (searchEngine === 'elasticsearch') {
@@ -236,11 +245,10 @@ module.exports = class extends BaseGenerator {
                 }, this);
             },
 
-
             setAppsRancherYaml() {
                 this.appsRancherYaml = [];
 
-                this.appsYaml.forEach(function (appYaml, index) {
+                this.appsYaml.forEach(function(appYaml, index) {
                     // Add application configuration
                     const yaml = jsyaml.load(appYaml);
                     const rancherConfiguration = {};
@@ -295,7 +303,11 @@ module.exports = class extends BaseGenerator {
             this.log(`\n${chalk.bold.green('Rancher Compose configuration successfully generated!')}`);
         }
 
-        this.log(`${chalk.yellow.bold('WARNING!')} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`);
+        this.log(
+            `${chalk.yellow.bold(
+                'WARNING!'
+            )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
+        );
         for (let i = 0; i < this.appsFolders.length; i++) {
             const originalImageName = this.appConfigs[i].baseName.toLowerCase();
             const targetImageName = this.appConfigs[i].targetImageName;

@@ -79,8 +79,9 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         '/h2-console',
         '/auth'
       ],
-      target: 'http://127.0.0.1:<%= serverPort %>',
+      target: `http${options.tls ? 's' : ''}://127.0.0.1:<%= serverPort %>`,
       secure: false,
+      changeOrigin: options.tls,
       headers: { host: 'localhost:9000' }
     }<% if (websocket === 'spring-websocket') { %>,{
       context: [
@@ -107,6 +108,11 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
       proxy: {
         target: 'http://localhost:9060'<% if (websocket === 'spring-websocket') { %>,
         ws: true<% } %>
+      },
+      socket: {
+        clients: {
+          heartbeatTimeout: 60000
+        }
       }
     }, {
       reload: false
