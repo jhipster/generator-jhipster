@@ -22,7 +22,6 @@ import io.github.jhipster.config.JHipsterProperties;
 
 import <%=packageName%>.gateway.ratelimiting.RateLimitingFilter;
 import <%=packageName%>.gateway.accesscontrol.AccessControlFilter;
-import <%=packageName%>.gateway.responserewriting.SwaggerBasePathRewritingFilter;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
@@ -31,15 +30,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GatewayConfiguration {
-
-    @Configuration
-    public static class SwaggerBasePathRewritingConfiguration {
-
-        @Bean
-        public SwaggerBasePathRewritingFilter swaggerBasePathRewritingFilter(){
-            return new SwaggerBasePathRewritingFilter();
-        }
-    }
 
     @Configuration
     public static class AccessControlFilterConfiguration {
