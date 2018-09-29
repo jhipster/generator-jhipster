@@ -32,6 +32,7 @@ jobs:
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
     JH_DISABLE_WEBPACK_LOGS: true
+    JH_E2E_HEADLESS: true
     JH_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
 
   strategy:
