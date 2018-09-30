@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const JSONToJDLApplicationConverter = require('../../../lib/converters/json_to_jdl_application_converter');
+const { convertApplicationsToJDL } = require('../../../lib/converters/json_to_jdl_application_converter');
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
@@ -29,8 +29,7 @@ describe('JSONToJDLApplicationConverter', () => {
       let jdlObject;
 
       before(() => {
-        const converter = new JSONToJDLApplicationConverter();
-        jdlObject = converter.convert();
+        jdlObject = convertApplicationsToJDL();
       });
 
       it('returns an empty jdl object', () => {
@@ -41,10 +40,9 @@ describe('JSONToJDLApplicationConverter', () => {
       let jdlObject;
 
       before(() => {
-        const converter = new JSONToJDLApplicationConverter({
+        jdlObject = convertApplicationsToJDL({
           applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: ApplicationTypes.MONOLITH } }]
         });
-        jdlObject = converter.convert();
       });
 
       it('returns the converted applications', () => {
@@ -59,11 +57,10 @@ describe('JSONToJDLApplicationConverter', () => {
         previousJDLObject.addApplication(
           new JDLMonolithApplication({ config: { baseName: 'tata', applicationType: ApplicationTypes.MONOLITH } })
         );
-        const converter = new JSONToJDLApplicationConverter({
+        jdlObject = convertApplicationsToJDL({
           applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: ApplicationTypes.MONOLITH } }],
-          jdlObject: previousJDLObject
+          jdl: previousJDLObject
         });
-        jdlObject = converter.convert();
       });
 
       it('adds the converted applications', () => {

@@ -22,13 +22,15 @@ const expect = require('chai').expect;
 
 const fs = require('fs');
 const path = require('path');
-const { convertEntitiesToJDL, parseServerOptions } = require('../../../lib/converters/json_to_jdl_entity_converter');
+const { convertEntitiesToJDL } = require('../../../lib/converters/json_to_jdl_entity_converter');
+const JDLObject = require('../../../lib/core/jdl_object');
+const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Options;
 const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').Values;
 
 describe('JSONToJDLEntityConverter', () => {
-  describe('::parseEntities', () => {
+  describe('::convertEntitiesToJDL', () => {
     let jdlObject = null;
 
     before(() => {
@@ -201,28 +203,6 @@ describe('JSONToJDLEntityConverter', () => {
       });
     });
 
-    context('when parsing app config file to JDL', () => {
-      let jdlObject = null;
-
-      before(() => {
-        const yoRcJson = readJsonYoFile();
-        jdlObject = parseServerOptions(yoRcJson['generator-jhipster']);
-      });
-
-      it('parses server options', () => {
-        expect(
-          jdlObject
-            .getOptions()
-            .filter(option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
-        ).to.eq(1);
-        expect(
-          jdlObject
-            .getOptions()
-            .filter(option => option.name === UnaryOptions.SKIP_SERVER && option.entityNames.has('*')).length
-        ).to.eq(1);
-      });
-    });
-
     context('when parsing entities with relationships to User', () => {
       context('when skipUserManagement flag is not set', () => {
         context('when there is no User.json entity', () => {
@@ -259,9 +239,13 @@ describe('JSONToJDLEntityConverter', () => {
             User: readJsonEntity('Region')
           };
           entities.User.relationships[0].otherEntityRelationshipName = 'user';
-          const yoRcJson = readJsonYoFile();
-          yoRcJson['generator-jhipster'].skipUserManagement = true;
-          jdlObject = convertEntitiesToJDL(entities, parseServerOptions(yoRcJson['generator-jhipster']));
+          jdlObject = new JDLObject();
+          jdlObject.addOption(
+            new JDLUnaryOption({
+              name: UnaryOptions.SKIP_USER_MANAGEMENT
+            })
+          );
+          jdlObject = convertEntitiesToJDL(entities, jdlObject);
         });
 
         it('parses the User.json entity if skipUserManagement flag is set', () => {
@@ -281,8 +265,4 @@ function readJsonEntity(entityName) {
       .readFileSync(path.join('test', 'test_files', 'jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8')
       .toString()
   );
-}
-
-function readJsonYoFile() {
-  return JSON.parse(fs.readFileSync('./test/test_files/jhipster_app/.yo-rc.json'));
 }
