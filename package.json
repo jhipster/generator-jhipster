@@ -60,14 +60,14 @@
     "winston": "3.1.0"
   },
   "devDependencies": {
-    "chai": "4.1.2",
-    "eslint": "5.6.0",
+    "chai": "4.2.0",
+    "eslint": "5.6.1",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-config-prettier": "3.1.0",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-mocha": "5.2.0",
-    "eslint-plugin-prettier": "2.6.2",
-    "husky": "1.0.0-rc.13",
+    "eslint-plugin-prettier": "2.7.0",
+    "husky": "1.0.1",
     "lint-staged": "7.3.0",
     "mocha": "5.2.0",
     "mocha-clean": "1.0.0",
@@ -76,8 +76,8 @@
     "sinon": "6.3.4",
     "sinon-chai": "3.2.0",
     "terser-webpack-plugin": "1.1.0",
-    "webpack": "4.19.1",
-    "webpack-cli": "3.1.1"
+    "webpack": "4.20.2",
+    "webpack-cli": "3.1.2"
   },
   "peerDependencies": {},
   "engines": {
