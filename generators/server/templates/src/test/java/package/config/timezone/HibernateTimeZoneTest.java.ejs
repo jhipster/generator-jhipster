@@ -1,0 +1,135 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config.timezone;
+
+import <%= packageName %>.<%= mainClass %>;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+
+import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * Unit tests for the UTC Hibernate configuration.
+ */
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = <%= mainClass %>.class)
+@EnableJpaRepositories
+public class HibernateTimeZoneTest {
+
+    @Autowired
+    private DateTimeWrapperRepository dateTimeWrapperRepository;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    private DateTimeWrapper dateTimeWrapper;
+    private DateTimeFormatter formatter;
+
+    @Before
+    public void setup() {
+        dateTimeWrapper = new DateTimeWrapper();
+        dateTimeWrapper.setInstant(Instant.parse("2014-11-12T06:50:00.0Z"));
+        dateTimeWrapper.setLocalDateTime(LocalDateTime.parse("2014-11-12T09:30:00.0"));
+        dateTimeWrapper.setOffsetDateTime(OffsetDateTime.parse("2014-11-12T06:50:00.0Z"));
+        dateTimeWrapper.setZonedDateTime(ZonedDateTime.parse("2014-11-12T06:50:00.0Z"));
+
+        formatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss.S")
+            .withZone(ZoneId.of("UTC"));
+    }
+
+    @Test
+    @Transactional
+    public void storeInstantWithUtcConfigShouldBeStoredOnGMTTimeZone() {
+        dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
+
+        String request = generateSqlRequest("instant", dateTimeWrapper.getId());
+        SqlRowSet resultSet = jdbcTemplate.queryForRowSet(request);
+        String expectedValue = formatter.format(dateTimeWrapper.getInstant());
+
+        assertThatDateStoredValueIsEqualToInsertDateValueOnGMTTimeZone(resultSet, expectedValue);
+    }
+
+    @Test
+    @Transactional
+    public void storeLocalDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone() {
+        dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
+
+        String request = generateSqlRequest("local_date_time", dateTimeWrapper.getId());
+        SqlRowSet resultSet = jdbcTemplate.queryForRowSet(request);
+        String expectedValue = dateTimeWrapper
+            .getLocalDateTime()
+            .atZone(ZoneId.systemDefault())
+            .format(formatter);
+
+        assertThatDateStoredValueIsEqualToInsertDateValueOnGMTTimeZone(resultSet, expectedValue);
+    }
+
+    @Test
+    @Transactional
+    public void storeOffsetDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone() {
+        dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
+
+        String request = generateSqlRequest("offset_date_time", dateTimeWrapper.getId());
+        SqlRowSet resultSet = jdbcTemplate.queryForRowSet(request);
+        String expectedValue = dateTimeWrapper
+            .getOffsetDateTime()
+            .format(formatter);
+
+        assertThatDateStoredValueIsEqualToInsertDateValueOnGMTTimeZone(resultSet, expectedValue);
+    }
+
+    @Test
+    @Transactional
+    public void storeZoneDateTimeWithUtcConfigShouldBeStoredOnGMTTimeZone() {
+        dateTimeWrapperRepository.saveAndFlush(dateTimeWrapper);
+
+        String request = generateSqlRequest("zoned_date_time", dateTimeWrapper.getId());
+        SqlRowSet resultSet = jdbcTemplate.queryForRowSet(request);
+        String expectedValue = dateTimeWrapper
+            .getZonedDateTime()
+            .format(formatter);
+
+        assertThatDateStoredValueIsEqualToInsertDateValueOnGMTTimeZone(resultSet, expectedValue);
+    }
+
+    private String generateSqlRequest(String fieldName, long id) {
+        return format("SELECT %s FROM <%= jhiTablePrefix %>_date_time_wrapper where id=%d", fieldName, id);
+    }
+
+    private void assertThatDateStoredValueIsEqualToInsertDateValueOnGMTTimeZone(SqlRowSet sqlRowSet, String expectedValue) {
+        while (sqlRowSet.next()) {
+            String dbValue = sqlRowSet.getString(1);
+
+            assertThat(dbValue).isNotNull();
+            assertThat(dbValue).isEqualTo(expectedValue);
+        }
+    }
+}

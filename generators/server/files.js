@@ -1208,6 +1208,24 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.databaseType === 'sql',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/timezone/HibernateTimeZoneTest.java',
+                    renameTo: generator => `${generator.testDir}config/timezone/HibernateTimeZoneTest.java`
+                },
+                {
+                    file: 'package/config/timezone/DateTimeWrapper.java',
+                    renameTo: generator => `${generator.testDir}config/timezone/DateTimeWrapper.java`
+                },
+                {
+                    file: 'package/config/timezone/DateTimeWrapperRepository.java',
+                    renameTo: generator => `${generator.testDir}config/timezone/DateTimeWrapperRepository.java`
+                }
+            ]
+        },
+        {
             path: SERVER_TEST_RES_DIR,
             templates: ['config/application.yml', 'logback.xml']
         },
