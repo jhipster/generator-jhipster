@@ -54,7 +54,7 @@
     }
   ],
   "dependencies": {
-    "chevrotain": "3.7.4",
+    "chevrotain": "4.1.0",
     "fs-extra": "7.0.0",
     "lodash": "4.17.11",
     "winston": "3.1.0"
