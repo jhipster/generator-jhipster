@@ -22,12 +22,12 @@ const expect = require('chai').expect;
 
 const fs = require('fs');
 const path = require('path');
-const JSONParser = require('../../../lib/parser/json_parser');
+const { convertEntitiesToJDL, parseServerOptions } = require('../../../lib/converters/json_to_jdl_entity_converter');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Options;
 const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').Values;
 
-describe('JSONParser', () => {
+describe('JSONToJDLEntityConverter', () => {
   describe('::parseEntities', () => {
     let jdlObject = null;
 
@@ -43,7 +43,7 @@ describe('JSONParser', () => {
         Task: readJsonEntity('Task')
       };
       entities.Employee.relationships.filter(r => r.relationshipName === 'department')[0].javadoc = undefined;
-      jdlObject = JSONParser.parseEntities(entities);
+      jdlObject = convertEntitiesToJDL(entities);
     });
 
     context('when parsing a JSON entity to JDL', () => {
@@ -180,7 +180,7 @@ describe('JSONParser', () => {
           Employee: readJsonEntity('Employee')
         };
         entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = undefined;
-        const jdlObject = JSONParser.parseEntities(entities);
+        const jdlObject = convertEntitiesToJDL(entities);
         const relationship = jdlObject.relationships.getOneToMany(
           'OneToMany_Department{employee}_Employee{department(foo)}'
         );
@@ -206,7 +206,7 @@ describe('JSONParser', () => {
 
       before(() => {
         const yoRcJson = readJsonYoFile();
-        jdlObject = JSONParser.parseServerOptions(yoRcJson['generator-jhipster']);
+        jdlObject = parseServerOptions(yoRcJson['generator-jhipster']);
       });
 
       it('parses server options', () => {
@@ -232,7 +232,7 @@ describe('JSONParser', () => {
             const entities = {
               Country: readJsonEntity('Country')
             };
-            jdlObject = JSONParser.parseEntities(entities);
+            jdlObject = convertEntitiesToJDL(entities);
           });
 
           it('parses relationships to the JHipster managed User entity', () => {
@@ -242,7 +242,7 @@ describe('JSONParser', () => {
         context('when there is a User.json entity', () => {
           it('throws an error ', () => {
             expect(() => {
-              JSONParser.parseEntities({
+              convertEntitiesToJDL({
                 Country: readJsonEntity('Country'),
                 User: readJsonEntity('Region')
               });
@@ -261,7 +261,7 @@ describe('JSONParser', () => {
           entities.User.relationships[0].otherEntityRelationshipName = 'user';
           const yoRcJson = readJsonYoFile();
           yoRcJson['generator-jhipster'].skipUserManagement = true;
-          jdlObject = JSONParser.parseEntities(entities, JSONParser.parseServerOptions(yoRcJson['generator-jhipster']));
+          jdlObject = convertEntitiesToJDL(entities, parseServerOptions(yoRcJson['generator-jhipster']));
         });
 
         it('parses the User.json entity if skipUserManagement flag is set', () => {
