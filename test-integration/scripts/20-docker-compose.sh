@@ -12,6 +12,8 @@ if [ -a src/main/docker/jhipster-registry.yml ]; then
 fi
 if [ -a src/main/docker/elasticsearch.yml ]; then
     docker-compose -f src/main/docker/elasticsearch.yml up -d
+    sleep 30
+    curl -i http://localhost:9200
 fi
 if [ -a src/main/docker/kafka.yml ]; then
     docker-compose -f src/main/docker/kafka.yml up -d

@@ -74,6 +74,7 @@ if [ "$JH_RUN_APP" == 1 ]; then
         sleep 80
     fi
 
+    free -m
     cd "$JH_FOLDER_APP"
     java -jar app.war \
         --spring.profiles.active="$JH_PROFILE" &
