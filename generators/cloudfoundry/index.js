@@ -37,7 +37,9 @@ module.exports = class extends BaseGenerator {
         this.packageName = this.config.get('packageName');
         this.packageFolder = this.config.get('packageFolder');
         this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-        this.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
+        this.enableHibernateCache =
+            this.config.get('enableHibernateCache') ||
+            (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
         this.databaseType = this.config.get('databaseType');
         this.devDatabaseType = this.config.get('devDatabaseType');
         this.prodDatabaseType = this.config.get('prodDatabaseType');
@@ -75,10 +77,12 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
 
-                exec('cf -v', (err) => {
+                exec('cf -v', err => {
                     if (err) {
-                        this.log.error('cloudfoundry\'s cf command line interface is not available. '
-                            + 'You can install it via https://github.com/cloudfoundry/cli/releases');
+                        this.log.error(
+                            "cloudfoundry's cf command line interface is not available. " +
+                                'You can install it via https://github.com/cloudfoundry/cli/releases'
+                        );
                         this.abort = true;
                     }
                     done();
@@ -97,7 +101,7 @@ module.exports = class extends BaseGenerator {
                 exec(`cf app ${this.cloudfoundryDeployedName} `, {}, (err, stdout, stderr) => {
                     // Unauthenticated
                     if (stdout.search('cf login') >= 0) {
-                        this.log.error('Error: Not authenticated. Run \'cf login\' to login to your cloudfoundry account and try again.');
+                        this.log.error("Error: Not authenticated. Run 'cf login' to login to your cloudfoundry account and try again.");
                         this.abort = true;
                     }
                     done();
@@ -113,13 +117,15 @@ module.exports = class extends BaseGenerator {
                 if (this.databaseType !== 'no') {
                     this.log(chalk.bold('Creating the database'));
                     const child = exec(
-                        `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${this.cloudfoundryDeployedName}`,
+                        `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${
+                            this.cloudfoundryDeployedName
+                        }`,
                         {},
                         (err, stdout, stderr) => {
                             done();
                         }
                     );
-                    child.stdout.on('data', (data) => {
+                    child.stdout.on('data', data => {
                         this.log(data.toString());
                     });
                 } else {
@@ -133,7 +139,7 @@ module.exports = class extends BaseGenerator {
 
                 this.log(chalk.bold(`\nBuilding the application with the ${this.cloudfoundryProfile} profile`));
 
-                const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, (err) => {
+                const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, err => {
                     if (err) {
                         this.log.error(err);
                     }
@@ -142,7 +148,7 @@ module.exports = class extends BaseGenerator {
 
                 this.buildCmd = child.buildCmd;
 
-                child.stdout.on('data', (data) => {
+                child.stdout.on('data', data => {
                     this.log(data.toString());
                 });
             }
@@ -168,7 +174,7 @@ module.exports = class extends BaseGenerator {
                 }
 
                 this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
-                const child = exec(cloudfoundryDeployCommand, (err) => {
+                const child = exec(cloudfoundryDeployCommand, err => {
                     if (err) {
                         this.log.error(err);
                     }
@@ -178,7 +184,7 @@ module.exports = class extends BaseGenerator {
                     done();
                 });
 
-                child.stdout.on('data', (data) => {
+                child.stdout.on('data', data => {
                     this.log(data.toString());
                 });
             },

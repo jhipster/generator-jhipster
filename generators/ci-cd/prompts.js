@@ -51,7 +51,7 @@ function askPipeline() {
             ]
         }
     ];
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.pipeline = props.pipeline;
         done();
     });
@@ -206,7 +206,7 @@ function askIntegrations() {
             default: `${this.herokuAppName}`
         }
     ];
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.cicdIntegrations = props.cicdIntegrations;
 
         this.artifactorySnapshotsId = props.artifactorySnapshotsId;

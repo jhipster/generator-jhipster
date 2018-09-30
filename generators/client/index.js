@@ -127,7 +127,8 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
         this.option('experimental', {
-            desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
+            desc:
+                'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
             defaults: false
         });
@@ -136,16 +137,12 @@ module.exports = class extends BaseGenerator {
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         // use global variable since getters dont have access to instance property
         if (!opts.fromBlueprint) {
-            useBlueprint = this.composeBlueprint(
-                blueprint,
-                'client',
-                {
-                    'skip-install': this.options['skip-install'],
-                    'from-cli': this.options['from-cli'],
-                    configOptions: this.configOptions,
-                    force: this.options.force
-                }
-            );
+            useBlueprint = this.composeBlueprint(blueprint, 'client', {
+                'skip-install': this.options['skip-install'],
+                'from-cli': this.options['from-cli'],
+                configOptions: this.configOptions,
+                force: this.options.force
+            });
         } else {
             useBlueprint = false;
         }
@@ -156,7 +153,11 @@ module.exports = class extends BaseGenerator {
         return {
             validateFromCli() {
                 if (!this.options['from-cli']) {
-                    this.warning(`Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red('jhipster <command>')} instead of ${chalk.red('yo jhipster:<command>')}`);
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
                 }
             },
 
@@ -197,7 +198,10 @@ module.exports = class extends BaseGenerator {
                     this.baseName = baseName;
                 }
 
-                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType') === 'no' ? false : (configuration.get('serviceDiscoveryType') || this.configOptions.serviceDiscoveryType);
+                this.serviceDiscoveryType =
+                    configuration.get('serviceDiscoveryType') === 'no'
+                        ? false
+                        : configuration.get('serviceDiscoveryType') || this.configOptions.serviceDiscoveryType;
                 if (this.serviceDiscoveryType === undefined) {
                     this.serviceDiscoveryType = false;
                 }
@@ -230,10 +234,18 @@ module.exports = class extends BaseGenerator {
 
             validateSkipServer() {
                 if (this.skipServer && !(this.databaseType && this.devDatabaseType && this.prodDatabaseType && this.authenticationType)) {
-                    this.error(`When using skip-server flag, you must pass a database option and authentication type using ${chalk.yellow('--db')} and ${chalk.yellow('--auth')} flags`);
+                    this.error(
+                        `When using skip-server flag, you must pass a database option and authentication type using ${chalk.yellow(
+                            '--db'
+                        )} and ${chalk.yellow('--auth')} flags`
+                    );
                 }
                 if (this.skipServer && this.authenticationType === 'uaa' && !this.uaaBaseName) {
-                    this.error(`When using skip-server flag and UAA as authentication method, you must pass a UAA base name using ${chalk.yellow('--uaa-base-name')} flag`);
+                    this.error(
+                        `When using skip-server flag and UAA as authentication method, you must pass a UAA base name using ${chalk.yellow(
+                            '--uaa-base-name'
+                        )} flag`
+                    );
                 }
             }
         };
@@ -421,10 +433,10 @@ module.exports = class extends BaseGenerator {
         return {
             write() {
                 switch (this.clientFramework) {
-                case 'react':
-                    return writeReactFiles.call(this, useBlueprint);
-                default:
-                    return writeAngularFiles.call(this, useBlueprint);
+                    case 'react':
+                        return writeReactFiles.call(this, useBlueprint);
+                    default:
+                        return writeAngularFiles.call(this, useBlueprint);
                 }
             }
         };

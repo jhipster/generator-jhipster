@@ -23,7 +23,7 @@ module.exports = {
 };
 
 function askForControllerActions() {
-    const askForControllerAction = (done) => {
+    const askForControllerAction = done => {
         const prompts = [
             {
                 type: 'confirm',
@@ -35,14 +35,17 @@ function askForControllerActions() {
                 when: response => response.actionAdd === true,
                 type: 'input',
                 name: 'actionName',
-                validate: (input) => {
-                    if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                validate: input => {
+                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
                         return 'Your action name cannot contain special characters';
-                    } if (input === '') {
+                    }
+                    if (input === '') {
                         return 'Your action name cannot be empty';
-                    } if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+                    }
+                    if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                         return 'Your action name cannot start with an upper case letter';
-                    } if (jhiCore.isReservedFieldName(input)) {
+                    }
+                    if (jhiCore.isReservedFieldName(input)) {
                         return 'Your action name cannot contain a Java, Angular or React reserved keyword';
                     }
 
@@ -78,7 +81,7 @@ function askForControllerActions() {
         ];
 
         if (!this.defaultOption) {
-            this.prompt(prompts).then((props) => {
+            this.prompt(prompts).then(props => {
                 if (props.actionAdd) {
                     const controllerAction = {
                         actionName: props.actionName,

@@ -30,13 +30,14 @@ import org.springframework.data.repository.query.Param;
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     <%_ let importList = fieldsContainOwnerManyToMany;
     for (r of relationships) {
@@ -63,12 +64,13 @@ import java.util.UUID;
 @Repository
 public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'cassandra') { %>CassandraRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><<%=entityClass%>, <%= pkType %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%=entityClass%>><% } %> {
     <%_ for (idx in relationships) {
-        if (relationships[idx].relationshipType === 'many-to-one' && relationships[idx].otherEntityName === 'user') { _%>
+        if (relationships[idx].relationshipType === 'many-to-one' && relationships[idx].otherEntityName === 'user' && databaseType === 'sql') { _%>
 
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %> where <%= entityTableName %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
     List<<%= entityClass %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();
     <%_ } } _%>
-    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
+    <%_ if (fieldsContainOwnerManyToMany === true) {
+        if (databaseType === 'sql') { _%>
 
     @Query(value = "select distinct <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>",
@@ -81,7 +83,18 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
 
     @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
-    Optional<<%=entityClass%>> findOneWithEagerRelationships(@Param("id") Long id);
-    <%_ } _%>
+    Optional<<%=entityClass%>> findOneWithEagerRelationships(@Param("id") <%= pkType %> id);
+    <%_
+        } else if (databaseType === 'mongodb')  { _%>
+    @Query("{}")
+    Page<<%=entityClass%>> findAllWithEagerRelationships(Pageable pageable);
+
+    @Query("{}")
+    List<<%=entityClass%>> findAllWithEagerRelationships();
+
+    @Query("{'id': ?0}")
+    Optional<<%=entityClass%>> findOneWithEagerRelationships(<%= pkType %> id);
+    <%_ }
+    } _%>
 
 }

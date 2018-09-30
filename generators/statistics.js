@@ -20,7 +20,7 @@ class Statistics {
                 isLinked: false
             }
         });
-        this.jhipsterOnlineUrl = (process.env.JHIPSTER_ONLINE_URL || DEFAULT_JHIPSTER_ONLINE_URL);
+        this.jhipsterOnlineUrl = process.env.JHIPSTER_ONLINE_URL || DEFAULT_JHIPSTER_ONLINE_URL;
         this.statisticsAPIPath = `${this.jhipsterOnlineUrl}/api`;
         this.clientId = this.config.get('clientId');
         this.doNotAskCounter = this.config.get('doNotAskCounter');
@@ -63,16 +63,20 @@ class Statistics {
 
     postRequest(url, data, force = false) {
         if (!this.optOut || force) {
-            this.axiosClient.post(url, data).then(
-                () => {},
-                (error) => {
-                    if (this.axiosProxyClient) {
-                        this.axiosProxyClient.post(url, data)
-                            .then(() => {})
-                            .catch(() => {});
+            this.axiosClient
+                .post(url, data)
+                .then(
+                    () => {},
+                    error => {
+                        if (this.axiosProxyClient) {
+                            this.axiosProxyClient
+                                .post(url, data)
+                                .then(() => {})
+                                .catch(() => {});
+                        }
                     }
-                }
-            ).catch(() => {});
+                )
+                .catch(() => {});
         }
     }
 
@@ -104,7 +108,7 @@ class Statistics {
         }
         if (this.optOut) {
             this.doNotAskCounter++;
-            this.config.set('doNotAskCounter', this.doNotAskCounter % (DO_NOT_ASK_LIMIT));
+            this.config.set('doNotAskCounter', this.doNotAskCounter % DO_NOT_ASK_LIMIT);
         }
 
         return this.optOut === undefined || (this.optOut && this.doNotAskCounter >= DO_NOT_ASK_LIMIT);
@@ -129,20 +133,24 @@ class Statistics {
 
     sendYoRc(yorc, isARegeneration, generatorVersion) {
         if (this.noInsight) return;
-        this.postRequest('/s/entry', {
-            'generator-jhipster': yorc,
-            'generator-id': this.clientId,
-            'generator-version': generatorVersion,
-            'git-provider': 'local',
-            'node-version': process.version,
-            os: `${os.platform()}:${os.release()}`,
-            arch: os.arch(),
-            cpu: os.cpus()[0].model,
-            cores: os.cpus().length,
-            memory: os.totalmem(),
-            'user-language': osLocale.sync(),
-            isARegeneration
-        }, this.forceInsight);
+        this.postRequest(
+            '/s/entry',
+            {
+                'generator-jhipster': yorc,
+                'generator-id': this.clientId,
+                'generator-version': generatorVersion,
+                'git-provider': 'local',
+                'node-version': process.version,
+                os: `${os.platform()}:${os.release()}`,
+                arch: os.arch(),
+                cpu: os.cpus()[0].model,
+                cores: os.cpus().length,
+                memory: os.totalmem(),
+                'user-language': osLocale.sync(),
+                isARegeneration
+            },
+            this.forceInsight
+        );
 
         this.insight.trackWithEvent('generator', 'app');
         this.insight.track('app/applicationType', yorc.applicationType);
@@ -154,9 +162,7 @@ class Statistics {
     sendSubGenEvent(source, type, event) {
         if (this.noInsight) return;
         const strEvent = event === '' ? event : JSON.stringify(event);
-        this.postRequest(`/s/event/${this.clientId}`,
-            { source, type, event: strEvent },
-            this.forceInsight);
+        this.postRequest(`/s/event/${this.clientId}`, { source, type, event: strEvent }, this.forceInsight);
         this.insight.trackWithEvent(source, type);
         if (event) {
             this.sendInsightSubGenEvents(type, event);
@@ -178,7 +184,7 @@ class Statistics {
     sendInsightSubGenEvents(prefix, eventObject) {
         if (this.noInsight) return;
         if (typeof eventObject === 'object') {
-            Object.keys(eventObject).forEach((key) => {
+            Object.keys(eventObject).forEach(key => {
                 if (typeof eventObject[key] === 'object') {
                     this.sendInsightSubGenEvents(`${prefix}/${key}`, eventObject[key]);
                 } else if (eventObject[key]) {
@@ -192,14 +198,18 @@ class Statistics {
 
     sendEntityStats(fields, relationships, pagination, dto, service, fluentMethods) {
         if (this.noInsight) return;
-        this.postRequest(`/s/entity/${this.clientId}`, {
-            fields,
-            relationships,
-            pagination,
-            dto,
-            service,
-            fluentMethods
-        }, this.forceInsight);
+        this.postRequest(
+            `/s/entity/${this.clientId}`,
+            {
+                fields,
+                relationships,
+                pagination,
+                dto,
+                service,
+                fluentMethods
+            },
+            this.forceInsight
+        );
     }
 }
 

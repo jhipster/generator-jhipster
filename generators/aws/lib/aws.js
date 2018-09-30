@@ -7,7 +7,7 @@ const Iam = require('./iam.js');
 let Aws;
 let generator;
 
-const AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
+const AwsFactory = (module.exports = function AwsFactory(generatorRef, cb) {
     generator = generatorRef;
     try {
         Aws = require('aws-sdk'); // eslint-disable-line
@@ -18,13 +18,13 @@ const AwsFactory = module.exports = function AwsFactory(generatorRef, cb) {
         if (generator.config.get('clientPackageManager') === 'npm') {
             installCommand = 'npm install aws-sdk progress uuid --save';
         }
-        shelljs.exec(installCommand, { silent: false }, (code) => {
+        shelljs.exec(installCommand, { silent: false }, code => {
             if (code !== 0) generator.error('Something went wrong while installing the aws-sdk\n');
             Aws = require('aws-sdk'); // eslint-disable-line
             cb();
         });
     }
-};
+});
 
 AwsFactory.prototype.init = function initAws(options) {
     Aws.config.region = options.region;

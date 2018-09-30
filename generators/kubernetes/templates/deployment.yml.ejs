@@ -26,12 +26,12 @@ spec:
   selector:
     matchLabels:
       app: <%= app.baseName.toLowerCase() %>
-      version: "1.0"
+      version: "v1"
   template:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>
-        version: "1.0"
+        version: "v1"
     spec:
       initContainers:
         - name: init-ds

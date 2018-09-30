@@ -117,24 +117,26 @@ function askTypeOfApplication() {
     if (this.abort) return null;
     const done = this.async();
 
-    const prompts = [{
-        type: 'list',
-        name: 'applicationType',
-        message: 'Which *type* of application would you like to deploy?',
-        choices: [
-            {
-                value: 'monolith',
-                name: 'Monolithic application'
-            },
-            {
-                value: 'microservice',
-                name: 'Microservice application'
-            }
-        ],
-        default: 'monolith'
-    }];
+    const prompts = [
+        {
+            type: 'list',
+            name: 'applicationType',
+            message: 'Which *type* of application would you like to deploy?',
+            choices: [
+                {
+                    value: 'monolith',
+                    name: 'Monolithic application'
+                },
+                {
+                    value: 'microservice',
+                    name: 'Microservice application'
+                }
+            ],
+            default: 'monolith'
+        }
+    ];
 
-    return this.prompt(prompts).then((props) => {
+    return this.prompt(prompts).then(props => {
         const applicationType = props.applicationType;
         this.composeApplicationType = props.applicationType;
         if (applicationType) {
@@ -146,7 +148,6 @@ function askTypeOfApplication() {
         }
     });
 }
-
 
 /**
  * Ask user what type of Region is to be created?
@@ -160,11 +161,11 @@ function askRegion() {
             name: 'region',
             message: 'Which region?',
             choices: regionList,
-            default: (this.aws.region) ? _.indexOf(regionList, this.aws.region) : this.awsFacts.defaultRegion
+            default: this.aws.region ? _.indexOf(regionList, this.aws.region) : this.awsFacts.defaultRegion
         }
     ];
 
-    return this.prompt(prompts).then((props) => {
+    return this.prompt(prompts).then(props => {
         const region = props.region;
         if (region) {
             this.aws.region = region;
@@ -186,9 +187,9 @@ function askCloudFormation() {
         {
             type: 'input',
             name: 'cloudFormationName',
-            message: 'Please enter your stack\'s name. (must be unique within a region)',
+            message: "Please enter your stack's name. (must be unique within a region)",
             default: this.aws.cloudFormationName || this.baseName,
-            validate: (input) => {
+            validate: input => {
                 if (_.isEmpty(input) || !input.match(CLOUDFORMATION_STACK_NAME)) {
                     return 'Stack name must contain letters, digits, or hyphens ';
                 }
@@ -197,7 +198,7 @@ function askCloudFormation() {
         }
     ];
 
-    return this.prompt(prompts).then((props) => {
+    return this.prompt(prompts).then(props => {
         const cloudFormationName = props.cloudFormationName;
         if (cloudFormationName) {
             this.aws.cloudFormationName = cloudFormationName;
@@ -213,25 +214,24 @@ function askCloudFormation() {
     });
 }
 
-
 /**
  * As user to select AWS performance.
  */
 function askPerformances() {
     if (this.abort) return null;
     const done = this.async();
-    const chainPromises = (index) => {
+    const chainPromises = index => {
         if (index === this.appConfigs.length) {
             done();
             return null;
         }
         const config = this.appConfigs[index];
         const awsConfig = this.aws.apps.find(a => a.baseName === config.baseName) || { baseName: config.baseName };
-        return promptPerformance.call(this, config, awsConfig).then((performance) => {
+        return promptPerformance.call(this, config, awsConfig).then(performance => {
             awsConfig.performance = performance;
 
-            awsConfig.fargate = Object.assign({}, awsConfig.fargate, PERF_TO_CONFIG[performance].fargate);
-            awsConfig.database = Object.assign({}, awsConfig.database, PERF_TO_CONFIG[performance].database);
+            awsConfig.fargate = { ...awsConfig.fargate, ...PERF_TO_CONFIG[performance].fargate };
+            awsConfig.database = { ...awsConfig.database, ...PERF_TO_CONFIG[performance].database };
 
             _.remove(this.aws.apps, a => _.isEqual(a, awsConfig));
             this.aws.apps.push(awsConfig);
@@ -251,13 +251,16 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
         this.log(' ⚠️ Postgresql databases are currently only supported by Aurora on high-performance database instances');
     }
 
-    const performanceLevels = _(PERF_TO_CONFIG).keys()
-        .map((key) => {
+    const performanceLevels = _(PERF_TO_CONFIG)
+        .keys()
+        .map(key => {
             const perf = PERF_TO_CONFIG[key];
             const isEngineSupported = perf.database.supportedEngines.includes(prodDatabaseType);
             if (isEngineSupported) {
                 return {
-                    name: `${_.startCase(key)} Performance \t ${chalk.green(`Task: ${perf.fargate.CPU} CPU Units, ${perf.fargate.memory} Ram`)}\t ${chalk.yellow(`DB: Size: ${perf.database.size}`)}`,
+                    name: `${_.startCase(key)} Performance \t ${chalk.green(
+                        `Task: ${perf.fargate.CPU} CPU Units, ${perf.fargate.memory} Ram`
+                    )}\t ${chalk.yellow(`DB: Size: ${perf.database.size}`)}`,
                     value: key,
                     short: key
                 };
@@ -276,12 +279,11 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
         }
     ];
 
-    return this.prompt(prompts).then((props) => {
+    return this.prompt(prompts).then(props => {
         const performance = props.performance;
         return performance;
     });
 }
-
 
 /**
  * Ask about scaling
@@ -289,17 +291,17 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
 function askScaling() {
     if (this.abort) return null;
     const done = this.async();
-    const chainPromises = (index) => {
+    const chainPromises = index => {
         if (index === this.appConfigs.length) {
             done();
             return null;
         }
         const config = this.appConfigs[index];
         const awsConfig = this.aws.apps.find(a => a.baseName === config.baseName) || { baseName: config.baseName };
-        return promptScaling.call(this, config, awsConfig).then((scaling) => {
+        return promptScaling.call(this, config, awsConfig).then(scaling => {
             awsConfig.scaling = scaling;
-            awsConfig.fargate = Object.assign({}, awsConfig.fargate, SCALING_TO_CONFIG[scaling].fargate);
-            awsConfig.database = Object.assign({}, awsConfig.database, SCALING_TO_CONFIG[scaling].database);
+            awsConfig.fargate = { ...awsConfig.fargate, ...SCALING_TO_CONFIG[scaling].fargate };
+            awsConfig.database = { ...awsConfig.database, ...SCALING_TO_CONFIG[scaling].database };
 
             _.remove(this.aws.apps, a => _.isEqual(a, awsConfig));
             this.aws.apps.push(awsConfig);
@@ -313,15 +315,19 @@ function askScaling() {
 function promptScaling(config, awsConfig = { scaling: 'low' }) {
     if (this.abort) return null;
 
-    const scalingLevels = _(SCALING_TO_CONFIG).keys()
-        .map((key) => {
+    const scalingLevels = _(SCALING_TO_CONFIG)
+        .keys()
+        .map(key => {
             const scale = SCALING_TO_CONFIG[key];
             return {
-                name: `${chalk.green(`${_.startCase(key)} Scaling \t\t Number of Tasks: ${scale.fargate.taskCount}`)}\t ${chalk.yellow(`DB Instances: ${scale.database.instances}`)}`,
+                name: `${chalk.green(`${_.startCase(key)} Scaling \t\t Number of Tasks: ${scale.fargate.taskCount}`)}\t ${chalk.yellow(
+                    `DB Instances: ${scale.database.instances}`
+                )}`,
                 value: key,
                 short: key
             };
-        }).value();
+        })
+        .value();
     const prompts = [
         {
             type: 'list',
@@ -342,7 +348,7 @@ function askVPC() {
     if (this.abort) return null;
     const done = this.async();
 
-    const vpcList = this.awsFacts.availableVpcs.map((vpc) => {
+    const vpcList = this.awsFacts.availableVpcs.map(vpc => {
         const friendlyName = _getFriendlyNameFromTag(vpc);
         return {
             name: `ID: ${vpc.VpcId} (${friendlyName ? `name: '${friendlyName}', ` : ''}default: ${vpc.IsDefault}, state: ${vpc.State})`,
@@ -361,7 +367,7 @@ function askVPC() {
         }
     ];
 
-    return this.prompt(prompts).then((props) => {
+    return this.prompt(prompts).then(props => {
         const targetVPC = props.targetVPC;
         if (targetVPC) {
             this.aws.vpc.id = targetVPC;
@@ -381,18 +387,22 @@ function askForSubnets() {
     if (this.abort) return null;
     const done = this.async();
 
-    const subnetList = _.map(this.awsFacts.availableSubnets, (sn) => {
+    const subnetList = _.map(this.awsFacts.availableSubnets, sn => {
         const friendlyName = _getFriendlyNameFromTag(sn);
         const formattedFriendlyName = friendlyName ? `name: '${friendlyName}', ` : '';
         return {
-            name: `${sn.SubnetId} (${formattedFriendlyName}Availability Zone: ${sn.AvailabilityZone}, Public IP On Launch: ${sn.MapPublicIpOnLaunch ? 'yes' : 'no'})`,
+            name: `${sn.SubnetId} (${formattedFriendlyName}Availability Zone: ${sn.AvailabilityZone}, Public IP On Launch: ${
+                sn.MapPublicIpOnLaunch ? 'yes' : 'no'
+            })`,
             value: sn.SubnetId,
             short: sn.SubnetId
         };
     });
 
-    const defaultSubnetValue = storedSubnetValue => storedSubnetValue || [_.get(this.awsFacts.availableSubnets, '[0].SubnetId'), _.get(this.awsFacts.availableSubnets, '[1].SubnetId')];
-    const validateSubnet = input => (_.isEmpty(input) || (_.isArray(input) && input.length < 2) ? 'You must select two or more subnets' : true);
+    const defaultSubnetValue = storedSubnetValue =>
+        storedSubnetValue || [_.get(this.awsFacts.availableSubnets, '[0].SubnetId'), _.get(this.awsFacts.availableSubnets, '[1].SubnetId')];
+    const validateSubnet = input =>
+        _.isEmpty(input) || (_.isArray(input) && input.length < 2) ? 'You must select two or more subnets' : true;
 
     const prompts = [
         {
@@ -410,20 +420,25 @@ function askForSubnets() {
             choices: subnetList,
             default: defaultSubnetValue(this.aws.vpc.appSubnets),
             validate: validateSubnet
-        },
+        }
     ];
 
-    return this.prompt(prompts).then((props) => {
-        const publicIpOnLaunchArray = appSubnets => _.chain(this.awsFacts.availableSubnets)
-            .filter(availableSubnet => _.includes(appSubnets, availableSubnet.SubnetId))
-            .map('MapPublicIpOnLaunch')
-            .uniq()
-            .value();
+    return this.prompt(prompts).then(props => {
+        const publicIpOnLaunchArray = appSubnets =>
+            _.chain(this.awsFacts.availableSubnets)
+                .filter(availableSubnet => _.includes(appSubnets, availableSubnet.SubnetId))
+                .map('MapPublicIpOnLaunch')
+                .uniq()
+                .value();
 
         const uniqueIPLaunch = publicIpOnLaunchArray(props.appSubnets);
         const shouldAppHavePublicIP = _.head(uniqueIPLaunch);
         if (uniqueIPLaunch.length !== 1) {
-            this.log.ok(`⚠️ Mix of Application Subnets containing contradictory 'MapPublic Ip On Launch' values. Defaulting to '${shouldAppHavePublicIP ? 'yes' : 'no'}'`);
+            this.log.ok(
+                `⚠️ Mix of Application Subnets containing contradictory 'MapPublic Ip On Launch' values. Defaulting to '${
+                    shouldAppHavePublicIP ? 'yes' : 'no'
+                }'`
+            );
         }
 
         this.aws.vpc.elbSubnets = props.elbSubnets;
@@ -436,14 +451,14 @@ function askForSubnets() {
 function askForDBPasswords() {
     if (this.abort) return null;
     const done = this.async();
-    const chainPromises = (index) => {
+    const chainPromises = index => {
         if (index === this.appConfigs.length) {
             done();
             return null;
         }
         const config = this.appConfigs[index];
         const appConfig = this.awsFacts.apps.find(a => a.baseName === config.baseName) || { baseName: config.baseName };
-        return promptDBPassword.call(this, appConfig).then((password) => {
+        return promptDBPassword.call(this, appConfig).then(password => {
             appConfig.database_Password = password;
             _.remove(this.awsFacts.apps, a => _.isEqual(a, appConfig));
             this.awsFacts.apps.push(appConfig);
@@ -461,8 +476,13 @@ function promptDBPassword(config) {
         {
             type: 'password',
             name: 'database_Password',
-            message: `${chalk.red(config.baseName)} Please enter the password for the database. ${chalk.yellow('This value will be stored within Amazon SSM, and not within .yo-rc.json')}`,
-            validate: input => ((_.isEmpty(input) || !input.match(AURORA_DB_PASSORD_REGEX)) ? 'Password must be between 8 - 42 characters, and not contain an """, "/" or "@"' : true)
+            message: `${chalk.red(config.baseName)} Please enter the password for the database. ${chalk.yellow(
+                'This value will be stored within Amazon SSM, and not within .yo-rc.json'
+            )}`,
+            validate: input =>
+                _.isEmpty(input) || !input.match(AURORA_DB_PASSORD_REGEX)
+                    ? 'Password must be between 8 - 42 characters, and not contain an """, "/" or "@"'
+                    : true
         }
     ];
 
@@ -484,7 +504,7 @@ function askDeployNow() {
         }
     ];
 
-    return this.prompt(prompts).then((props) => {
+    return this.prompt(prompts).then(props => {
         this.deployNow = props.deployNow;
         done();
     });

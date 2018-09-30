@@ -8,13 +8,13 @@ const prettierOptions = {
     // js and ts rules:
     arrowParens: 'avoid',
     // jsx and tsx rules:
-    jsxBracketSameLine: false,
+    jsxBracketSameLine: false
 };
 
-const prettierTransform = function (defaultOptions) {
+const prettierTransform = function(defaultOptions) {
     const transform = (file, encoding, callback) => {
         /* resolve from the projects config */
-        prettier.resolveConfig(file.relative).then((options) => {
+        prettier.resolveConfig(file.relative).then(options => {
             const str = file.contents.toString('utf8');
             if (!options || Object.keys(options).length === 0) {
                 options = defaultOptions;

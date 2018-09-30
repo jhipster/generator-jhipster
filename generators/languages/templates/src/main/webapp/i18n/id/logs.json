@@ -1,7 +1,7 @@
 {
     "logs": {
-        "title": "Logs",
-        "nbloggers": "Ada {{ total }} loggers.",
+        "title": "Log",
+        "nbloggers": "Ada {{ total }} logger.",
         "filter": "Filter",
         "table": {
             "name": "Nama",

@@ -43,8 +43,8 @@ eureka:
         instance-info-replication-interval-seconds: 10
         registry-fetch-interval-seconds: 10
     instance:
-        appname: <%= baseName %>
-        instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
+        appname: <%= baseName.toLowerCase() %>
+        instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
         lease-renewal-interval-in-seconds: 5
         lease-expiration-duration-in-seconds: 10
         status-page-url-path: ${management.endpoints.web.base-path}/info

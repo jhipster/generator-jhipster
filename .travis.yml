@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "8.11.4"
+  - "8.12.0"
 jdk:
   - oraclejdk8
 addons:
@@ -37,7 +37,7 @@ env:
     # if JHIPSTER_BRANCH value is release, use the release from NPM
     - JHIPSTER_REPO=https://github.com/jhipster/generator-jhipster.git
     - JHIPSTER_BRANCH=release
-    - DISABLE_WEBPACK_LOGS=true
+    - JH_DISABLE_WEBPACK_LOGS=true
 
   matrix:
     - JHIPSTER=webflux-mongodb

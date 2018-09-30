@@ -99,7 +99,7 @@
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.2</maven-war-plugin.version>
-        <dockerfile-maven-plugin.version>1.4.4</dockerfile-maven-plugin.version>
+        <jib-maven-plugin.version>0.9.11</jib-maven-plugin.version>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
@@ -858,19 +858,16 @@
                     </execution>
                     <execution>
                         <id>docker-resources</id>
-                        <phase>validate</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>target/</outputDirectory>
+                            <outputDirectory>target/classes/static/</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory><%= MAIN_DIR %>docker/</directory>
+                                    <directory>target/www</directory>
                                     <filtering>false</filtering>
-                                    <excludes>
-                                        <exclude>**/*.yml</exclude>
-                                    </excludes>
                                 </resource>
                             </resources>
                         </configuration>
@@ -1010,57 +1007,35 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>${dockerfile-maven-plugin.version}</version>
-                <executions>
-                    <!--
-                     Uncomment the section below to build the docker image with mvn package and and push it with mvn deploy
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                    -->
-                    <execution>
-                        <id>tag-latest</id>
-                        <phase>none</phase>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>tag</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>version</id>
-                        <phase>none</phase>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>tag</goal>
-                            <goal>push</goal>
-                        </goals>
-                        <configuration>
-                            <tag>${project.version}</tag>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>commit</id>
-                        <phase>none</phase>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>tag</goal>
-                            <goal>push</goal>
-                        </goals>
-                        <configuration>
-                            <tag>${git.commit.id.describe}</tag>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib-maven-plugin.version}</version>
                 <configuration>
-                    <repository><%= baseName.toLowerCase()%></repository>
-                    <contextDirectory>${project.build.directory}</contextDirectory>
+                    <from>
+                        <image><%= DOCKER_JAVA_JRE %></image>
+                    </from>
+                    <to>
+                        <image><%= baseName.toLowerCase() %>:latest</image>
+                    </to>
+                    <container>
+                        <entrypoint>
+                            <shell>sh</shell>
+                            <option>-c</option>
+                            <arg>chmod +x /entrypoint.sh &amp;&amp; /entrypoint.sh</arg>
+                        </entrypoint>
+                        <ports>
+                            <port><%= serverPort %></port>
+                            <% if (cacheProvider === 'hazelcast') { %>
+                            <port>5701/udp</port>
+                            <% } %>
+                        </ports>
+                        <environment>
+                            <%_ if (cacheProvider === 'infinispan') { _%><JAVA_OPTS>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true</JAVA_OPTS><%_ } _%>
+                            <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
+                            <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
+                        </environment>
+                        <useCurrentTimestamp>true</useCurrentTimestamp>
+                    </container>
                 </configuration>
             </plugin>
             <%_ if (enableSwaggerCodegen) { _%>
@@ -1229,6 +1204,15 @@
                                     <yarnVersion>${yarn.version}</yarnVersion>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>yarn install</id>
+                                <goals>
+                                    <goal>yarn</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install</arguments>
+                                </configuration>
+                            </execution>
                             <%_ } else if (clientPackageManager === 'npm') { _%>
                             <execution>
                                 <id>install node and npm</id>
@@ -1238,6 +1222,15 @@
                                 <configuration>
                                     <nodeVersion>${node.version}</nodeVersion>
                                     <npmVersion>${npm.version}</npmVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>install</arguments>
                                 </configuration>
                             </execution>
                             <%_ } _%>
@@ -1412,11 +1405,7 @@
                                     <goal>yarn</goal>
                                 </goals>
                                 <configuration>
-                                    <%_ if (useSass) { _%>
-                                    <arguments>install --force</arguments>
-                                    <%_ } else { _%>
                                     <arguments>install</arguments>
-                                    <%_ } _%>
                                 </configuration>
                             </execution>
                             <%_ } else if (clientPackageManager === 'npm') { _%>

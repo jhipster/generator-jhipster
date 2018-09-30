@@ -34,6 +34,19 @@
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     <%_ } _%>
     }
+
+    /**
+    * GET  /<%= entityApiUrl %>/count : count all the <%= entityInstancePlural %>.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/<%= entityApiUrl %>/count")
+    @Timed
+    public ResponseEntity<Long> count<%= entityClassPlural %> (<%= entityClass %>Criteria criteria) {
+        log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
+        return ResponseEntity.ok().body(<%= entityInstance %>QueryService.countByCriteria(criteria));
+    }
 <% } else { %>
     <%_ if (pagination === 'no') { _%>
     public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (fieldsContainOwnerManyToMany) { %>@RequestParam(required = false, defaultValue = "false") boolean eagerload<% }%>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>

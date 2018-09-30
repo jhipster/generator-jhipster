@@ -9,8 +9,9 @@ const angularfiles = require('../generators/client/files-angular').files;
 
 describe('JHipster server generator', () => {
     describe('generate server', () => {
-        beforeEach((done) => {
-            helpers.run(path.join(__dirname, '../generators/server'))
+        beforeEach(done => {
+            helpers
+                .run(path.join(__dirname, '../generators/server'))
                 .withOptions({ skipInstall: true, gatling: true, skipChecks: true })
                 .withPrompts({
                     baseName: 'jhipster',
@@ -38,13 +39,15 @@ describe('JHipster server generator', () => {
             assert.file(expectedFiles.jwtServer);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.gatling);
-            assert.noFile(getFilesForOptions(angularfiles, {
-                useSass: false,
-                enableTranslation: true,
-                serviceDiscoveryType: false,
-                authenticationType: 'jwt',
-                testFrameworks: []
-            }));
+            assert.noFile(
+                getFilesForOptions(angularfiles, {
+                    useSass: false,
+                    enableTranslation: true,
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    testFrameworks: []
+                })
+            );
         });
     });
 });
