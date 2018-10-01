@@ -14,6 +14,7 @@ fi
 #-------------------------------------------------------------------------------
 # Decrease Angular timeout for Protractor tests
 #-------------------------------------------------------------------------------
+cd "$JH_FOLDER_APP"
 if [ "$JH_PROTRACTOR" == 1 ] && [ -e "src/main/webapp/app/shared/shared-libs.module.ts" ]; then
     sed -e 's/alertAsToast: false,/alertAsToast: false, alertTimeout: 1,/1;' src/main/webapp/app/shared/shared-libs.module.ts > src/main/webapp/app/shared/shared-libs.module.ts.sed
     mv -f src/main/webapp/app/shared/shared-libs.module.ts.sed src/main/webapp/app/shared/shared-libs.module.ts
@@ -23,8 +24,6 @@ fi
 #-------------------------------------------------------------------------------
 # Package the application
 #-------------------------------------------------------------------------------
-cd "$JH_FOLDER_APP"
-
 if [ -f "mvnw" ]; then
     ./mvnw verify -DskipTests -P"$JH_PROFILE"
     mv target/*.war app.war

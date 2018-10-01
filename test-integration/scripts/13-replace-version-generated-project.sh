@@ -10,7 +10,7 @@ if [[ "$JH_LIB_BRANCH" == "release" ]]; then
 fi
 
 if [[ $JH_VERSION == '' ]]; then
-    JH_VERSION=0.0.0-TRAVIS
+    JH_VERSION=0.0.0-CICD
 fi
 
 # jhipster-dependencies.version in generated pom.xml or gradle.properties
