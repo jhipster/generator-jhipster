@@ -718,11 +718,11 @@ function askForField(done) {
                     {
                         name: 'Required',
                         value: 'required'
-                    } /* ,
+                    },
                     {
                         name: 'Unique',
                         value: 'unique'
-                    } */
+                    }
                 ];
                 if (response.fieldType === 'String' || response.fieldTypeBlobContent === 'text') {
                     opts.push(
