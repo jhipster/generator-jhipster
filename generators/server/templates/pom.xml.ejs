@@ -1025,9 +1025,9 @@
                         </entrypoint>
                         <ports>
                             <port><%= serverPort %></port>
-                            <% if (cacheProvider === 'hazelcast') { %>
+                            <%_ if (cacheProvider === 'hazelcast') { _%>
                             <port>5701/udp</port>
-                            <% } %>
+                            <%_ } _%>
                         </ports>
                         <environment>
                             <%_ if (cacheProvider === 'infinispan') { _%><JAVA_OPTS>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true</JAVA_OPTS><%_ } _%>
