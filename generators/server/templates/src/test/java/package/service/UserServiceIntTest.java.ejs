@@ -435,7 +435,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
         OAuth2Request authRequest = new OAuth2Request(null, "testClient", null, true, scopes, null, null, null, null);
 
-        return new OAuth2Authentication(authRequest, ((Authentication)usernamePasswordAuthenticationToken));
+        return new OAuth2Authentication(authRequest, usernamePasswordAuthenticationToken);
     }
     <%_ } _%>
 }
