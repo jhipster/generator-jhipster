@@ -11,22 +11,22 @@ init_var() {
 }
 
 # uri of repo
-JH_REPO=$(init_var "$BUILD_REPOSITORY_URI" "$TRAVIS_REPO_SLUG")
+JHI_REPO=$(init_var "$BUILD_REPOSITORY_URI" "$TRAVIS_REPO_SLUG")
 
 # folder where the repo is cloned
-JH_HOME=$(init_var "$BUILD_REPOSITORY_LOCALPATH" "$TRAVIS_BUILD_DIR")
+JHI_HOME=$(init_var "$BUILD_REPOSITORY_LOCALPATH" "$TRAVIS_BUILD_DIR")
 
 # folder for test-integration
-JH_INTEG="$JH_HOME"/test-integration
+JHI_INTEG="$JHI_HOME"/test-integration
 
 # folder for samples
-JH_SAMPLES="$JH_INTEG"/samples
+JHI_SAMPLES="$JHI_INTEG"/samples
 
 # folder for scripts
-JH_SCRIPTS="$JH_INTEG"/scripts
+JHI_SCRIPTS="$JHI_INTEG"/scripts
 
 # folder for app
-JH_FOLDER_APP="$HOME"/app
+JHI_FOLDER_APP="$HOME"/app
 
 # folder for uaa app
-JH_FOLDER_UAA="$HOME"/uaa
+JHI_FOLDER_UAA="$HOME"/uaa

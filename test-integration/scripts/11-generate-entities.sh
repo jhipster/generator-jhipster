@@ -8,17 +8,17 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 moveEntity() {
     local entity="$1"
-    cp "$JH_SAMPLES"/.jhipster/"$entity".json "$JH_FOLDER_APP"/.jhipster/
+    cp "$JHI_SAMPLES"/.jhipster/"$entity".json "$JHI_FOLDER_APP"/.jhipster/
 }
 
 #-------------------------------------------------------------------------------
 # Copy entities json
 #-------------------------------------------------------------------------------
 
-rm -Rf "$JH_FOLDER_APP"
-mkdir -p "$JH_FOLDER_APP"/.jhipster/
+rm -Rf "$JHI_FOLDER_APP"
+mkdir -p "$JHI_FOLDER_APP"/.jhipster/
 
-if [[ ("$JH_APP" == *"mongodb"*) || ("$JH_APP" == *"couchbase"*) ]]; then
+if [[ ("$JHI_APP" == *"mongodb"*) || ("$JHI_APP" == *"couchbase"*) ]]; then
     moveEntity DocumentBankAccount
 
     moveEntity FieldTestEntity
@@ -29,7 +29,7 @@ if [[ ("$JH_APP" == *"mongodb"*) || ("$JH_APP" == *"couchbase"*) ]]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [[ "$JH_APP" == *"cassandra"* ]]; then
+elif [[ "$JHI_APP" == *"cassandra"* ]]; then
     moveEntity CassBankAccount
 
     moveEntity CassTestEntity
@@ -37,7 +37,7 @@ elif [[ "$JH_APP" == *"cassandra"* ]]; then
     moveEntity CassTestServiceClassEntity
     moveEntity CassTestServiceImplEntity
 
-elif [[ "$JH_APP" == *"micro"* ]]; then
+elif [[ "$JHI_APP" == *"micro"* ]]; then
     moveEntity MicroserviceBankAccount
     moveEntity MicroserviceOperation
     moveEntity MicroserviceLabel
@@ -50,7 +50,7 @@ elif [[ "$JH_APP" == *"micro"* ]]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [[ "$JH_APP" == *"react"* ]]; then
+elif [[ "$JHI_APP" == *"react"* ]]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation
@@ -75,7 +75,7 @@ elif [[ "$JH_APP" == *"react"* ]]; then
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
 
-elif [[ "$JH_APP" == *"uaa"* ]]; then
+elif [[ "$JHI_APP" == *"uaa"* ]]; then
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructEntity
     moveEntity FieldTestServiceClassEntity
@@ -84,7 +84,7 @@ elif [[ "$JH_APP" == *"uaa"* ]]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [[ ( "$JH_APP" == *"mysql"* ) || ( "$JH_APP" == *"psql"* ) ]]; then
+elif [[ ( "$JHI_APP" == *"mysql"* ) || ( "$JHI_APP" == *"psql"* ) ]]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation
@@ -150,4 +150,4 @@ else
     moveEntity EntityWithServiceImplPaginationAndDTO
 fi
 
-ls -l "$JH_FOLDER_APP"/.jhipster/
+ls -l "$JHI_FOLDER_APP"/.jhipster/

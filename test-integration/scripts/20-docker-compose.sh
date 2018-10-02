@@ -6,7 +6,7 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 # Start docker container
 #-------------------------------------------------------------------------------
-cd "$JH_FOLDER_APP"
+cd "$JHI_FOLDER_APP"
 if [ -a src/main/docker/jhipster-registry.yml ]; then
     docker-compose -f src/main/docker/jhipster-registry.yml up -d
 fi

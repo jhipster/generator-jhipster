@@ -5,7 +5,7 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 # Specific for couchbase
 #-------------------------------------------------------------------------------
-cd "$JH_FOLDER_APP"
+cd "$JHI_FOLDER_APP"
 if [ -a src/main/docker/couchbase.yml ]; then
     docker-compose -f src/main/docker/couchbase.yml up -d
     sleep 10
@@ -18,7 +18,7 @@ launchCurlOrProtractor() {
     retryCount=1
     maxRetry=10
     httpUrl="http://localhost:8080"
-    if [[ "$JH_APP" == *"micro"* ]]; then
+    if [[ "$JHI_APP" == *"micro"* ]]; then
         httpUrl="http://localhost:8081/management/health"
     fi
 
@@ -37,7 +37,7 @@ launchCurlOrProtractor() {
         return 1
     fi
 
-    if [ "$JH_PROTRACTOR" != 1 ]; then
+    if [ "$JHI_PROTRACTOR" != 1 ]; then
         return 0
     fi
 
@@ -61,13 +61,13 @@ launchCurlOrProtractor() {
 #-------------------------------------------------------------------------------
 # Run the application
 #-------------------------------------------------------------------------------
-if [ "$JH_RUN_APP" == 1 ]; then
-    if [[ "$JH_APP" == *"uaa"* ]]; then
-        cd "$JH_FOLDER_UAA"
+if [ "$JHI_RUN_APP" == 1 ]; then
+    if [[ "$JHI_APP" == *"uaa"* ]]; then
+        cd "$JHI_FOLDER_UAA"
         java \
             -jar app.war \
-            --spring.profiles.active="$JH_PROFILE" &
-            # --spring.profiles.active="$JH_PROFILE" \
+            --spring.profiles.active="$JHI_PROFILE" &
+            # --spring.profiles.active="$JHI_PROFILE" \
             # --logging.level.org.zalando=OFF \
             # --logging.level.io.github.jhipster=OFF \
             # --logging.level.io.github.jhipster.sample=OFF \
@@ -75,12 +75,16 @@ if [ "$JH_RUN_APP" == 1 ]; then
         sleep 80
     fi
 
+    # TODO: delete me
     free -m
-    cd "$JH_FOLDER_APP"
+    export SPRING_DATA_JEST_MAXCONNECTIONIDLETIME=60000
+
+    cd "$JHI_FOLDER_APP"
     java \
+        -Djava.net.preferIPv4Stack=true \
         -jar app.war \
-        --spring.profiles.active="$JH_PROFILE" &
-        # --spring.profiles.active="$JH_PROFILE" \
+        --spring.profiles.active="$JHI_PROFILE" &
+        # --spring.profiles.active="$JHI_PROFILE" \
         # --logging.level.org.zalando=OFF \
         # --logging.level.io.github.jhipster=OFF \
         # --logging.level.io.github.jhipster.sample=OFF \

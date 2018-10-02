@@ -6,7 +6,7 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 # Display environment information like JDK version
 #-------------------------------------------------------------------------------
-cd "$JH_FOLDER_APP"
+cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
     ./mvnw enforcer:display-info
 elif [ -f "gradlew" ]; then
@@ -25,15 +25,15 @@ fi
 #-------------------------------------------------------------------------------
 # Launch UAA tests
 #-------------------------------------------------------------------------------
-if [[ "$JH_APP" == *"uaa"* ]]; then
-    cd "$JH_FOLDER_UAA"
+if [[ "$JHI_APP" == *"uaa"* ]]; then
+    cd "$JHI_FOLDER_UAA"
     ./mvnw test
 fi
 
 #-------------------------------------------------------------------------------
 # Launch tests
 #-------------------------------------------------------------------------------
-cd "$JH_FOLDER_APP"
+cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
     ./mvnw test \
         -Dlogging.level.org.zalando=OFF \

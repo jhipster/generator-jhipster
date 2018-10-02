@@ -22,36 +22,36 @@ jobs:
   pool:
     vmImage: 'Ubuntu 16.04'
   variables:
-    JH_PROFILE: dev
-    JH_RUN_APP: 1
-    JH_PROTRACTOR: 0
-    JH_LIB_REPO: https://github.com/jhipster/jhipster.git
-    JH_LIB_BRANCH: release
-    JH_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
-    JH_GEN_BRANCH: release
+    JHI_PROFILE: dev
+    JHI_RUN_APP: 1
+    JHI_PROTRACTOR: 0
+    JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
+    JHI_LIB_BRANCH: release
+    JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
+    JHI_GEN_BRANCH: release
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
-    JH_DISABLE_WEBPACK_LOGS: true
-    JH_E2E_HEADLESS: true
-    JH_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
+    JHI_DISABLE_WEBPACK_LOGS: true
+    JHI_E2E_HEADLESS: true
+    JHI_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
 
   strategy:
     maxParallel: 10
     matrix:
       ngx-default:
-        JH_APP: ngx-default
-        JH_PROFILE: prod
-        JH_PROTRACTOR: 1
+        JHI_APP: ngx-default
+        JHI_PROFILE: prod
+        JHI_PROTRACTOR: 1
       ngx-psql-es-noi18n:
-        JH_APP: ngx-psql-es-noi18n
-        JH_PROFILE: prod
-        JH_PROTRACTOR: 1
+        JHI_APP: ngx-psql-es-noi18n
+        JHI_PROFILE: prod
+        JHI_PROTRACTOR: 1
       ngx-gradle-fr:
-        JH_APP: ngx-gradle-fr
-        JH_PROFILE: prod
-        JH_PROTRACTOR: 1
+        JHI_APP: ngx-gradle-fr
+        JHI_PROFILE: prod
+        JHI_PROTRACTOR: 1
       ngx-h2mem-ws-nol2:
-        JH_APP: ngx-h2mem-ws-nol2
+        JHI_APP: ngx-h2mem-ws-nol2
 
   steps:
   #----------------------------------------------------------------------
@@ -69,35 +69,35 @@ jobs:
     displayName: 'TOOLS: install google-chrome-stable'
   - script: sudo npm install -g npm
     displayName: 'TOOLS: update NPM'
-  - bash: $(JH_SCRIPTS)/01-display-configuration.sh
+  - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
     displayName: 'TOOLS: display configuration'
-  - bash: $(JH_SCRIPTS)/02-display-tools.sh
+  - bash: $(JHI_SCRIPTS)/02-display-tools.sh
     displayName: 'TOOLS: display installed tools'
-  - bash: $(JH_SCRIPTS)/03-system.sh
+  - bash: $(JHI_SCRIPTS)/03-system.sh
     displayName: 'TOOLS: configure tools installed by the system'
 
   #----------------------------------------------------------------------
   # Install JHipster and generate project+entities
   #----------------------------------------------------------------------
-  - bash: $(JH_SCRIPTS)/10-install-jhipster.sh
+  - bash: $(JHI_SCRIPTS)/10-install-jhipster.sh
     displayName: 'GENERATION: install JHipster'
-  - bash: $(JH_SCRIPTS)/11-generate-entities.sh
+  - bash: $(JHI_SCRIPTS)/11-generate-entities.sh
     displayName: 'GENERATION: entities'
-  - bash: $(JH_SCRIPTS)/12-generate-project.sh
+  - bash: $(JHI_SCRIPTS)/12-generate-project.sh
     displayName: 'GENERATION: project'
-  - bash: $(JH_SCRIPTS)/13-replace-version-generated-project.sh
+  - bash: $(JHI_SCRIPTS)/13-replace-version-generated-project.sh
     displayName: 'GENERATION: replace version in generated project'
 
   #----------------------------------------------------------------------
   # Launch tests
   #----------------------------------------------------------------------
-  - bash: $(JH_SCRIPTS)/20-docker-compose.sh
+  - bash: $(JHI_SCRIPTS)/20-docker-compose.sh
     displayName: 'TESTS: Start docker-compose containers'
-  - bash: $(JH_SCRIPTS)/21-tests-backend.sh
+  - bash: $(JHI_SCRIPTS)/21-tests-backend.sh
     displayName: 'TESTS: backend'
-  - bash: $(JH_SCRIPTS)/22-tests-frontend.sh
+  - bash: $(JHI_SCRIPTS)/22-tests-frontend.sh
     displayName: 'TESTS: frontend'
-  - bash: $(JH_SCRIPTS)/23-package.sh
+  - bash: $(JHI_SCRIPTS)/23-package.sh
     displayName: 'TESTS: packaging'
-  - bash: $(JH_SCRIPTS)/24-tests-e2e.sh
+  - bash: $(JHI_SCRIPTS)/24-tests-e2e.sh
     displayName: 'TESTS: End-to-End'
