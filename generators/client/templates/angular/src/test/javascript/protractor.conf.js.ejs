@@ -65,6 +65,8 @@ exports.config = {
         const chai = require('chai');
         const chaiAsPromised = require('chai-as-promised');
         chai.use(chaiAsPromised);
+        const chaiString = require('chai-string');
+        chai.use(chaiString);
         // @ts-ignore
         global.chai = chai;
     },
