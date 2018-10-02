@@ -22,7 +22,7 @@ const variablesWithTypes = generateEntityClientFields(pkType, fields, relationsh
 _%>
 /* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
@@ -45,7 +45,7 @@ describe('Service Tests', () => {
     describe('<%= entityAngularName %> Service', () => {
         let injector: TestBed;
         let service: <%= entityAngularName %>Service;
-        let httpClient: HttpClient;
+        let httpMock: HttpTestingController;
         let elemDefault: I<%= entityAngularName %>;
         <%_ if (fieldsContainDate) { _%>
         let currentDate: moment.Moment;
@@ -58,7 +58,7 @@ describe('Service Tests', () => {
             });
             injector = getTestBed();
             service = injector.get(<%= entityAngularName %>Service);
-            httpClient = injector.get(HttpClient);
+            httpMock = injector.get(HttpTestingController);
             <%_ if (fieldsContainDate) { _%>
             currentDate = moment();
             <%_ } _%>
@@ -100,19 +100,13 @@ describe('Service Tests', () => {
     <%_ } _%>
 <%_ }) _%>
                 }, elemDefault);
-                spyOn(httpClient, 'get').and.returnValue(
-                    of(
-                        new HttpResponse({
-                            body: returnedFromService
-                        })
-                    )
-                );
-                const rxPromise = service
+                service
                     .find(<%- tsKeyId %>)
-                    .pipe(take(1))
-                    .toPromise();
-                expect.assertions(1);
-                expect(await rxPromise).toMatchObject({body: elemDefault});
+                    .pipe(take(1)).subscribe(resp => expect(resp).toMatchObject({body: elemDefault}));
+
+                const req  = httpMock.expectOne({ method: 'GET' });
+                req.flush(JSON.stringify(returnedFromService));
+                httpMock.verify();
             });
 
             it('should create a <%= entityAngularName %>', async () => {
@@ -141,19 +135,12 @@ describe('Service Tests', () => {
     <%_ } _%>
 <%_ }) _%>
                 }, returnedFromService);
-                spyOn(httpClient, 'post').and.returnValue(
-                    of(
-                        new HttpResponse({
-                            body: returnedFromService
-                        })
-                    )
-                );
-                const rxPromise = service
-                                    .create(new <%= entityAngularName %>(null))
-                                    .pipe(take(1))
-                                    .toPromise();
-                expect.assertions(1);
-                expect(await rxPromise).toMatchObject({body: expected});
+                service
+                    .create(new <%= entityAngularName %>(null))
+                    .pipe(take(1)).subscribe(resp => expect(resp).toMatchObject({body: expected}));
+                const req  = httpMock.expectOne({ method: 'POST' });
+                req.flush(JSON.stringify(returnedFromService));
+                httpMock.verify();
             });
 
             it('should update a <%= entityAngularName %>', async () => {
@@ -186,20 +173,12 @@ describe('Service Tests', () => {
     <%_ } _%>
 <%_ }) _%>
                 }, returnedFromService);
-
-                spyOn(httpClient, 'put').and.returnValue(
-                    of(
-                        new HttpResponse({
-                            body: returnedFromService
-                        })
-                    )
-                );
-                const rxPromise = service
-                                    .update(expected)
-                                    .pipe(take(1))
-                                    .toPromise();
-                expect.assertions(1);
-                expect(await rxPromise).toMatchObject({body: expected});
+                service
+                    .update(expected)
+                    .pipe(take(1)).subscribe(resp => expect(resp).toMatchObject({body: expected}));
+                const req  = httpMock.expectOne({ method: 'PUT' });
+                req.flush(JSON.stringify(returnedFromService));
+                httpMock.verify();
             });
 
             it('should return a list of <%= entityAngularName %>', async () => {
@@ -221,13 +200,6 @@ describe('Service Tests', () => {
     <%_ } _%>
 <%_ }) _%>
                 }, elemDefault);
-                spyOn(httpClient, 'get').and.returnValue(
-                    of(
-                        new HttpResponse({
-                            body: [returnedFromService]
-                        })
-                    )
-                );
                 const expected = Object.assign({
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
@@ -238,24 +210,25 @@ describe('Service Tests', () => {
     <%_ } _%>
 <%_ }) _%>
                 }, returnedFromService);
-                const rxPromise = service
-                                    .query(expected)
-                                    .pipe(
-                                        take(1),
-                                        map(resp => resp.body)
-                                    )
-                                    .toPromise();
-                expect.assertions(1);
-                expect(await rxPromise).toContainEqual(expected);
+                service
+                    .query(expected)
+                    .pipe(
+                        take(1),
+                        map(resp => resp.body)
+                    ).subscribe(body  => expect(body).toContainEqual(expected));
+                const req  = httpMock.expectOne({ method: 'GET' });
+                req.flush(JSON.stringify([returnedFromService]));
+                httpMock.verify();
+
             });
 
             it('should delete a <%= entityAngularName %>', async () => {
-                spyOn(httpClient, 'delete');
                 const rxPromise = service
-                    .delete(<%- tsKeyId %>);
-                expect.assertions(1);
-                await rxPromise;
-                expect(httpClient.delete).toHaveBeenCalled();
+                    .delete(<%- tsKeyId %>).subscribe(resp => expect(resp.ok));
+
+                const req  = httpMock.expectOne({ method: 'DELETE' });
+                req.flush({ status: 200 });
+                httpMock.verify();
             });
         });
 
