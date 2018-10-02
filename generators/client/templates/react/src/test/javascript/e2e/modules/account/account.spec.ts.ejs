@@ -28,7 +28,9 @@ import SettingsPage from '../../page-objects/settings-page';
 import {
   getToastByInnerText,
   getUserDeactivatedButtonByLogin,
+<%_ if (databaseType !== 'cassandra') { _%>
   getModifiedDateSortButton,
+<%_ } _%>
   waitUntilDisplayed,
   waitUntilHidden
 } from '../../util/utils';
@@ -155,10 +157,12 @@ describe('Account', () => {
 
   it('should activate the new registered user', async () => {
     expect(await element(by.id('user-management-page-heading')).isPresent()).to.be.true;
+<%_ if (databaseType !== 'cassandra') { _%>
 
     const modifiedDateSortButton = getModifiedDateSortButton();
     await waitUntilDisplayed(modifiedDateSortButton);
     await modifiedDateSortButton.click();
+<%_ } _%>
 
     const deactivatedButton = getUserDeactivatedButtonByLogin('user_test');
     await waitUntilDisplayed(deactivatedButton);
