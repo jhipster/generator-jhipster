@@ -41,7 +41,6 @@ export const waitUntilHidden = async (selector: ElementFinder, classname = '', t
   );
 };
 
-<%_ if (authenticationType !== 'oauth2') { _%>
 export const waitForCount = (elementArrayFinder: ElementArrayFinder, expectedCount: number) => () => {
   return elementArrayFinder.count().then(actualCount => expectedCount === actualCount);
 };
@@ -53,10 +52,11 @@ export const waitUntilCount = async (elementArrayFinder: ElementArrayFinder, exp
     `Failed while waiting for "${elementArrayFinder.locator()}" to have ${expectedCount} elements.`
   );
 };
-<%_ if (databaseType !== 'cassandra') { _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (databaseType !== 'cassandra') { _%>
 
 export const getModifiedDateSortButton = (): ElementFinder => element(by.id('modified-date-sort'));
-<%_ } _%>
+    <%_ } _%>
 
 export const getUserDeactivatedButtonByLogin = (login: string): ElementFinder =>
   element(by.css('table > tbody')).element(by.id(login)).element(by.buttonText('Deactivated'));
