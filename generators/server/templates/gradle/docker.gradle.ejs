@@ -18,30 +18,30 @@
 -%>
 buildscript {
     repositories {
-        jcenter()
+        gradlePluginPortal()
     }
-
     dependencies {
-        classpath 'com.bmuschko:gradle-docker-plugin:3.5.0'
+        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:0.9.11"
     }
 }
 
-apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
+apply plugin: com.google.cloud.tools.jib.gradle.JibPlugin
 
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
-
-task copyDockerFiles(type: Copy) {
-    description = "Copy Dockerfile and required data to build directory"
-    from 'src/main/docker'
-    from "${project.buildDir}/libs"
-    into { "${project.buildDir}/docker" }
-    include "*"
-    exclude "**/*.yml"
-}
-
-task buildDocker(type: DockerBuildImage, dependsOn: 'copyDockerFiles') {
-    description = "Package application as Docker image"
-    group = "Docker"
-    inputDir = project.file("${project.buildDir}/docker")
-    tags = ["<%= baseName.toLowerCase() %>:latest".toString(), "<%= baseName.toLowerCase() %>:${project.version}".toString()]
+jib {
+    from {
+        image = '<%= DOCKER_JAVA_JRE %>'
+    }
+    to {
+        image = '<%= baseName.toLowerCase() %>:latest'
+    }
+    container {
+        entrypoint = ['sh', '-c', 'chmod +x /entrypoint.sh && /entrypoint.sh']
+        ports = ['<%= serverPort %>'<% if (cacheProvider === 'hazelcast') { %>, '5701/udp' <% } %>]
+        environment = [
+            <%_ if (cacheProvider === 'infinispan') { _%>JAVA_OPTS: '-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true',<%_ } _%>
+            SPRING_OUTPUT_ANSI_ENABLED: 'ALWAYS',
+            JHIPSTER_SLEEP: '0'
+        ]
+        useCurrentTimestamp = true
+    }
 }

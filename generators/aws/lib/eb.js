@@ -1,14 +1,14 @@
 let aws;
 let uuidV4;
 
-const Eb = module.exports = function Eb(Aws, generator) {
+const Eb = (module.exports = function Eb(Aws, generator) {
     aws = Aws;
     try {
         uuidV4 = require('uuid/v4'); // eslint-disable-line
     } catch (e) {
         generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
     }
-};
+});
 
 Eb.prototype.createApplication = function createApplication(params, callback) {
     const applicationName = params.applicationName;
@@ -28,7 +28,7 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
         warKey
     };
 
-    createApplicationVersion(applicationParams, (err) => {
+    createApplicationVersion(applicationParams, err => {
         if (err) {
             callback({ message: err.message }, null);
         } else {
@@ -85,7 +85,7 @@ function createApplicationVersion(params, callback) {
         }
     };
 
-    elasticbeanstalk.createApplicationVersion(applicationParams, (err) => {
+    elasticbeanstalk.createApplicationVersion(applicationParams, err => {
         if (err) {
             callback(err, null);
         } else {
@@ -174,7 +174,7 @@ function createEnvironment(params, callback) {
             }
         };
 
-        elasticbeanstalk.createEnvironment(environmentParams, (err) => {
+        elasticbeanstalk.createEnvironment(environmentParams, err => {
             if (err) callback(err, null);
             else callback(null, { message: `Environment ${environmentName} created successfully` });
         });
@@ -218,7 +218,7 @@ function updateEnvironment(params, callback) {
         VersionLabel: versionLabel
     };
 
-    elasticbeanstalk.updateEnvironment(environmentParams, (err) => {
+    elasticbeanstalk.updateEnvironment(environmentParams, err => {
         if (err) {
             callback(err, null);
         } else {

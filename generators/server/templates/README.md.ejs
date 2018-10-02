@@ -72,7 +72,7 @@ auto-refreshes when files change on your hard drive.
     ./gradlew<% } %>
     <%= clientPackageManager %> start
 
-[<%= clientPackageMngrName %>][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
+<%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
 Add the `help` flag on any command to see how you can use it. For example, `<%= clientPackageManager %> help update`.
 
@@ -292,7 +292,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool === 'maven') { %>./mvnw verify -Pprod dockerfile:build dockerfile:tag@version dockerfile:tag@commit<% } %><% if (buildTool === 'gradle') { %>./gradlew bootWar -Pprod buildDocker<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw package -Pprod jib:dockerBuild<% } %><% if (buildTool === 'gradle') { %>./gradlew bootWar -Pprod jibDockerBuild<% } %>
 
 Then run:
 

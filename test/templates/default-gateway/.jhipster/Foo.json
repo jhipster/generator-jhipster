@@ -1,0 +1,20 @@
+{
+    "name": "Foo",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20180905045309",
+    "entityTableName": "foo",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "test-root",
+    "applications": "*",
+    "microserviceName": "sampleMicroservice"
+}

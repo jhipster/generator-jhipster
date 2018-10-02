@@ -18,6 +18,7 @@
  */
 /* eslint-disable consistent-return */
 const _ = require('lodash');
+const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
@@ -30,7 +31,12 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         this.option('default', {
             type: Boolean,
             default: false,
@@ -41,15 +47,12 @@ module.exports = class extends BaseGenerator {
         const blueprint = this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(
-                blueprint,
-                'spring-service',
-                {
-                    force: this.options.force,
-                    arguments: [this.name],
-                    default: this.options.default
-                }
-            );
+            useBlueprint = this.composeBlueprint(blueprint, 'spring-service', {
+                'from-cli': this.options['from-cli'],
+                force: this.options.force,
+                arguments: [this.name],
+                default: this.options.default
+            });
         } else {
             useBlueprint = false;
         }
@@ -58,6 +61,16 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
+                }
+            },
+
             initializing() {
                 this.log(`The service ${this.name} is being created.`);
                 const configuration = this.getAllJhipsterConfig(this, true);
@@ -88,7 +101,7 @@ module.exports = class extends BaseGenerator {
                 ];
                 if (!this.defaultOption) {
                     const done = this.async();
-                    this.prompt(prompts).then((props) => {
+                    this.prompt(prompts).then(props => {
                         this.useInterface = props.useInterface;
                         done();
                     });
@@ -132,7 +145,9 @@ module.exports = class extends BaseGenerator {
 
                 if (this.useInterface) {
                     this.template(
-                        `${this.fetchFromInstalledJHipster('spring-service/templates')}/${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
+                        `${this.fetchFromInstalledJHipster(
+                            'spring-service/templates'
+                        )}/${SERVER_MAIN_SRC_DIR}package/service/impl/ServiceImpl.java.ejs`,
                         `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`
                     );
                 }

@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "Active sessions for [<b>{{username}}</b>]",
+        "title": "Sesi aktif untuk [<b>{{username}}</b>]",
         "table": {
             "ipaddress": "Alamat IP",
             "useragent": "User Agent",
@@ -8,8 +8,8 @@
             "button": "Validasi Ulang"
         },
         "messages": {
-            "success": "<strong>Session berhasil divalidasi ulang!</strong>",
-            "error": "<strong>Muncul error!</strong> Sesi tidak bisa di validasi ulang."
+            "success": "<strong>Sesi berhasil divalidasi ulang!</strong>",
+            "error": "<strong>Terjadi kesalahan!</strong> Sesi tidak bisa divalidasi ulang."
         }
     }
 }

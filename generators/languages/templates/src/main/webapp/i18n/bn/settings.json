@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "ইউজার সেটিংস [<b>{{username}}</b>] এর জন্য",
+        "form": {
+            "firstname": "নামের প্রথম অংশ",
+            "firstname.placeholder": "নামের প্রথম অংশ",
+            "lastname": "নামের শেষ অংশ",
+            "lastname.placeholder": "নামের শেষ অংশ",
+            "language": "ভাষা",
+            "button": "সেইভ"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>ত্রুটি হয়েছে!</strong> সেটিংস সেইভ করা যায়নি।",
+                "emailexists": "<strong>এই ইমেইল দিয়ে এরই মধ্যে একাউন্ট খোলা হয়েছে!</strong> অন্য একটি দিয়ে চেষ্টা করুন।"
+            },
+            "success": "<strong>সেটিংস সেইভ হয়েছে!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "নামের প্রথম অংশ দিতে হবে",
+                    "minlength": "নামের প্রথম অংশ কমপক্ষে ১ অক্ষর হতে হবে",
+                    "maxlength": "নামের প্রথম অংশ ৫০ অক্ষরের বেশি হতে পারবে না"
+                },
+                "lastname": {
+                    "required": "নামের শেষ অংশ দিতে হবে",
+                    "minlength": "নামের শেষ অংশ কমপক্ষে ১ অক্ষর হতে হবে",
+                    "maxlength": "নামের শেষ অংশ ৫০ অক্ষরের বেশি হতে পারবে না"
+                }
+            }
+        }
+    }
+}

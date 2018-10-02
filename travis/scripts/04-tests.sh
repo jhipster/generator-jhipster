@@ -46,5 +46,5 @@ elif [ -f "gradlew" ]; then
         -Dlogging.level.io.github.jhipster.travis=OFF
 fi
 if [ -f "tsconfig.json" ]; then
-    yarn test -u
+    npm test -- -u
 fi

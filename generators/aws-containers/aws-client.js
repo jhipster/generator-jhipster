@@ -31,7 +31,6 @@ const AwsCF = require('./lib/cloudFormation');
 const DEFAULT_REGION = 'us-east-1';
 const S3_MIN_PART_SIZE = 5242880;
 
-
 // Instance from aws-sdk
 let AWS;
 let credentials;
@@ -62,7 +61,7 @@ module.exports = {
     saveCredentialsInAWS,
     initAwsStuff,
     sanitizeBucketName,
-    uploadTemplate,
+    uploadTemplate
 };
 
 /**
@@ -74,7 +73,7 @@ module.exports = {
 function loadAWS(generator) {
     return new Promise((resolve, reject) => {
         try {
-            AWS = require('aws-sdk') // eslint-disable-line
+            AWS = require('aws-sdk'); // eslint-disable-line
             ProgressBar = require('progress'); // eslint-disable-line
             ora = require('ora'); // eslint-disable-line
         } catch (e) {
@@ -83,14 +82,14 @@ function loadAWS(generator) {
             if (generator.config.get('clientPackageManager') === 'npm') {
                 installCommand = 'npm install aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0--save';
             }
-            shelljs.exec(installCommand, { silent: false }, (code) => {
+            shelljs.exec(installCommand, { silent: false }, code => {
                 if (code !== 0) {
                     generator.error('Something went wrong while installing the dependencies\n');
                     reject();
                 }
-                AWS = require('aws-sdk') // eslint-disable-line
+                AWS = require('aws-sdk'); // eslint-disable-line
                 ProgressBar = require('progress'); // eslint-disable-line
-                ora = require('ora');  // eslint-disable-line
+                ora = require('ora'); // eslint-disable-line
             });
         }
         resolve();
@@ -120,16 +119,17 @@ function initAwsStuff(region = DEFAULT_REGION) {
 function spinner(promise, text = 'loading', spinnerIcon = 'monkey') {
     const spinner = ora({ spinner: spinnerIcon, text }).start();
     return new Promise((resolve, reject) => {
-        promise.then((resolved) => {
-            spinner.stop();
-            resolve(resolved);
-        }).catch((err) => {
-            spinner.stop();
-            reject(err);
-        });
+        promise
+            .then(resolved => {
+                spinner.stop();
+                resolve(resolved);
+            })
+            .catch(err => {
+                spinner.stop();
+                reject(err);
+            });
     });
 }
-
 
 /**
  * listRegions() returns a Promise, which resolves to an array of AWS region objects,
@@ -139,9 +139,12 @@ function spinner(promise, text = 'loading', spinnerIcon = 'monkey') {
  * @returns {Promise<EC2.Region[]>}
  */
 function listRegions() {
-    return spinner(ec2.describeRegions({})
-        .promise()
-        .then(data => data.Regions));
+    return spinner(
+        ec2
+            .describeRegions({})
+            .promise()
+            .then(data => data.Regions)
+    );
 }
 
 /**
@@ -149,9 +152,12 @@ function listRegions() {
  * @returns {Promise<EC2.Vpc[]>}
  */
 function listVpcs() {
-    return spinner(ec2.describeVpcs({})
-        .promise()
-        .then(data => data.Vpcs));
+    return spinner(
+        ec2
+            .describeVpcs({})
+            .promise()
+            .then(data => data.Vpcs)
+    );
 }
 
 /**
@@ -166,14 +172,19 @@ function listSubnets(vpcId) {
             {
                 Name: 'vpc-id',
                 Values: [vpcId]
-            }, {
+            },
+            {
                 Name: 'state',
                 Values: ['available']
             }
         ]
     };
-    return spinner(ec2.describeSubnets(params)
-        .promise().then(data => data.Subnets));
+    return spinner(
+        ec2
+            .describeSubnets(params)
+            .promise()
+            .then(data => data.Subnets)
+    );
 }
 
 /**
@@ -184,13 +195,15 @@ function listSubnets(vpcId) {
  */
 function saveCredentialsInAWS(profile = 'default') {
     credentials = new AWS.SharedIniFileCredentials({ profile });
-    return new Promise((resolve, reject) => credentials.refresh((err) => {
-        if (err) {
-            reject(err);
-        }
-        AWS.config.credentials = credentials;
-        resolve();
-    }));
+    return new Promise((resolve, reject) =>
+        credentials.refresh(err => {
+            if (err) {
+                reject(err);
+            }
+            AWS.config.credentials = credentials;
+            resolve();
+        })
+    );
 }
 
 /**
@@ -198,18 +211,25 @@ function saveCredentialsInAWS(profile = 'default') {
  * @returns {Promise} Returns a promise that resolves when the informations are retrieved.
  */
 function getDockerLogin() {
-    return spinner(new Promise((resolve, reject) => _getAuthorizationToken()
-        .then(authToken => sts.getCallerIdentity({}).promise()
-            .then((data) => {
-                const decoded = utils.decodeBase64(authToken.authorizationToken);
-                const splitResult = decoded.split(':');
-                resolve({
-                    username: splitResult[0],
-                    password: splitResult[1],
-                    accountId: data.Account
-                });
-            })
-            .catch(() => reject(new Error('Couldn\'t retrieve the user informations'))))));
+    return spinner(
+        new Promise((resolve, reject) =>
+            _getAuthorizationToken().then(authToken =>
+                sts
+                    .getCallerIdentity({})
+                    .promise()
+                    .then(data => {
+                        const decoded = utils.decodeBase64(authToken.authorizationToken);
+                        const splitResult = decoded.split(':');
+                        resolve({
+                            username: splitResult[0],
+                            password: splitResult[1],
+                            accountId: data.Account
+                        });
+                    })
+                    .catch(() => reject(new Error("Couldn't retrieve the user informations")))
+            )
+        )
+    );
 }
 
 /**
@@ -218,14 +238,20 @@ function getDockerLogin() {
  * @private
  */
 function _getAuthorizationToken() {
-    return spinner(new Promise((resolve, reject) => ECR.sdk.getAuthorizationToken({}).promise()
-        .then((data) => {
-            if (!_.has(data, 'authorizationData.0')) {
-                reject(new Error('No authorization data found.'));
-                return;
-            }
-            resolve(data.authorizationData[0]);
-        })));
+    return spinner(
+        new Promise((resolve, reject) =>
+            ECR.sdk
+                .getAuthorizationToken({})
+                .promise()
+                .then(data => {
+                    if (!_.has(data, 'authorizationData.0')) {
+                        reject(new Error('No authorization data found.'));
+                        return;
+                    }
+                    resolve(data.authorizationData[0]);
+                })
+        )
+    );
 }
 
 /**
@@ -239,17 +265,41 @@ function createS3Bucket(bucketName, region = DEFAULT_REGION) {
     const createBuckerParams = {
         Bucket: bucketName
     };
-    return spinner(new Promise((resolve, reject) => s3.headBucket({
-        Bucket: bucketName
-    }).promise()
-        .catch((error) => {
-            if (error.code !== 'NotFound') {
-                reject(new Error(`The S3 Bucket ${chalk.bold(bucketName)} in region ${chalk.bold(region)} already exists and you don't have access to it. Error code: ${chalk.bold(error.code)}`));
-            }
-        })
-        .then(() => s3.createBucket(createBuckerParams).promise()
-            .then(resolve)
-            .catch(error => reject(new Error(`There was an error during the creation of the S3 Bucket ${chalk.bold(bucketName)} in region ${chalk.bold(region)}`))))));
+    return spinner(
+        new Promise((resolve, reject) =>
+            s3
+                .headBucket({
+                    Bucket: bucketName
+                })
+                .promise()
+                .catch(error => {
+                    if (error.code !== 'NotFound') {
+                        reject(
+                            new Error(
+                                `The S3 Bucket ${chalk.bold(bucketName)} in region ${chalk.bold(
+                                    region
+                                )} already exists and you don't have access to it. Error code: ${chalk.bold(error.code)}`
+                            )
+                        );
+                    }
+                })
+                .then(() =>
+                    s3
+                        .createBucket(createBuckerParams)
+                        .promise()
+                        .then(resolve)
+                        .catch(error =>
+                            reject(
+                                new Error(
+                                    `There was an error during the creation of the S3 Bucket ${chalk.bold(
+                                        bucketName
+                                    )} in region ${chalk.bold(region)}`
+                                )
+                            )
+                        )
+                )
+        )
+    );
 }
 
 /**
@@ -260,41 +310,46 @@ function createS3Bucket(bucketName, region = DEFAULT_REGION) {
  * @returns {Promise}
  */
 function uploadTemplate(bucketName, filename, path) {
-    return spinner(new Promise((resolve, reject) => fs.stat(path, (error, stats) => {
-        if (!stats) {
-            reject(new Error(`File ${chalk.bold(path)} not found`));
-        }
-        const upload = s3.upload(
-            {
-                Bucket: bucketName,
-                Key: filename,
-                Body: fs.createReadStream(path)
-            },
-            {
-                partSize: Math.max(stats.size, S3_MIN_PART_SIZE),
-                queueSize: 1
-            }
-        );
-        let bar;
-        upload.on('httpUploadProgress', (evt) => {
-            if (!bar && evt.total) {
-                const total = evt.total / 1000000;
-                bar = new ProgressBar('uploading [:bar] :percent :etas', {
-                    complete: '=',
-                    incomplete: ' ',
-                    width: 20,
-                    total,
-                    clear: true
-                });
-            }
+    return spinner(
+        new Promise((resolve, reject) =>
+            fs.stat(path, (error, stats) => {
+                if (!stats) {
+                    reject(new Error(`File ${chalk.bold(path)} not found`));
+                }
+                const upload = s3.upload(
+                    {
+                        Bucket: bucketName,
+                        Key: filename,
+                        Body: fs.createReadStream(path)
+                    },
+                    {
+                        partSize: Math.max(stats.size, S3_MIN_PART_SIZE),
+                        queueSize: 1
+                    }
+                );
+                let bar;
+                upload.on('httpUploadProgress', evt => {
+                    if (!bar && evt.total) {
+                        const total = evt.total / 1000000;
+                        bar = new ProgressBar('uploading [:bar] :percent :etas', {
+                            complete: '=',
+                            incomplete: ' ',
+                            width: 20,
+                            total,
+                            clear: true
+                        });
+                    }
 
-            const curr = evt.loaded / 1000000;
-            bar.tick(curr - bar.curr);
-        });
-        return upload.promise()
-            .then(resolve)
-            .catch(reject);
-    })));
+                    const curr = evt.loaded / 1000000;
+                    bar.tick(curr - bar.curr);
+                });
+                return upload
+                    .promise()
+                    .then(resolve)
+                    .catch(reject);
+            })
+        )
+    );
 }
 
 /**

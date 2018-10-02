@@ -35,7 +35,8 @@ module.exports = class extends BaseGenerator {
                 context: opts.context,
                 force: opts.force,
                 debug: opts.context.isDebugEnabled,
-                'skip-install': opts.context.options['skip-install']
+                'skip-install': opts.context.options['skip-install'],
+                'from-cli': opts.context.options['from-cli']
             });
         } else {
             useBlueprint = false;

@@ -26,12 +26,12 @@ spec:
   selector:
     matchLabels:
       app: <%= app.baseName.toLowerCase() %>
-      version: "1.0"
+      version: "v1"
   template:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>
-        version: "1.0"
+        version: "v1"
     spec:
       initContainers:
         - name: init-ds
@@ -133,8 +133,8 @@ spec:
           value: <%= app.baseName.toLowerCase() %>
         <%_ } _%>
         <%_ if (app.searchEngine === 'elasticsearch') { _%>
-        - name: SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES
-          value: <%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9300
+        - name: SPRING_DATA_JEST_URI
+          value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
         <%_ } _%>
         <%_ if (app.messageBroker === 'kafka') { _%>
         - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS

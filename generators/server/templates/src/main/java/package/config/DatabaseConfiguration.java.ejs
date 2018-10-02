@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;
     <%_ } _%>
 <%_ } _%>
@@ -54,7 +54,7 @@ import org.springframework.context.annotation.Configuration;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.context.annotation.Import;
 <%_ } _%>
-<%_ if ((searchEngine === 'elasticsearch' || applicationType === 'reactive') && databaseType === 'mongodb') { _%>
+<%_ if ((searchEngine === 'elasticsearch' || reactive) && databaseType === 'mongodb') { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
@@ -69,11 +69,11 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
-    <%_ if (searchEngine === 'elasticsearch' || applicationType === 'reactive') { _%>
+    <%_ if (searchEngine === 'elasticsearch' || reactive) { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
     <%_ } _%>
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
     <%_ } _%>
 <%_ } _%>
@@ -85,7 +85,7 @@ import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversion
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
     <%_ } _%>
 import org.springframework.util.StringUtils;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
@@ -122,12 +122,12 @@ import java.util.List;
 @EnableElasticsearchRepositories("<%=packageName%>.repository.search")
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
-    <%_ if (searchEngine === 'elasticsearch' || applicationType === 'reactive') { _%>
+    <%_ if (searchEngine === 'elasticsearch' || reactive) { _%>
 @EnableMongoRepositories(basePackages = "<%=packageName%>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
     <%_ } else { _%>
 @EnableMongoRepositories("<%=packageName%>.repository")
     <%_ } _%>
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 @EnableReactiveMongoRepositories("<%=packageName%>.repository.reactive")
     <%_ } _%>
 <%_ } _%>
@@ -135,7 +135,7 @@ import java.util.List;
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 @Import(value = {MongoAutoConfiguration.class, MongoReactiveAutoConfiguration.class})
     <%_ } else { _%>
 @Import(value = MongoAutoConfiguration.class)
@@ -144,7 +144,7 @@ import java.util.List;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 @EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 @EnableReactiveCouchbaseRepositories("<%=packageName%>.repository.reactive")
     <%_ } _%>
 @Import(value = CouchbaseAutoConfiguration.class)

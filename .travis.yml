@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "8.11.4"
+  - "8.12.0"
 jdk:
   - oraclejdk8
 addons:
@@ -37,8 +37,10 @@ env:
     # if JHIPSTER_BRANCH value is release, use the release from NPM
     - JHIPSTER_REPO=https://github.com/jhipster/generator-jhipster.git
     - JHIPSTER_BRANCH=release
+    - JHI_DISABLE_WEBPACK_LOGS=true
 
   matrix:
+    - JHIPSTER=webflux-mongodb
     - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=ngx-gradle-fr PROFILE=prod PROTRACTOR=1
@@ -66,10 +68,8 @@ before_install:
   # Use this for Protractor
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  # Install Yarn
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH=$HOME/.yarn/bin:$PATH
-  - yarn -v
+  # Update NPM
+  - npm install -g npm
 install:
   - $JHIPSTER_SCRIPTS/00-install-jhipster.sh
   # generate project and entities

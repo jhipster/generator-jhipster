@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "Audite",
+        "filter": {
+            "title": "Filtro me datë",
+            "from": "nga",
+            "to": "deri",
+            "button": {
+                "weeks": "Javë",
+                "today": "sot",
+                "clear": "fshi",
+                "close": "mbyll"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Përdorues",
+                "date": "Data",
+                "status": "Statusi",
+                "data": "Të dhëna të tjera"
+            },
+            "data": {
+                "remoteAddress": "Adresa e jashtëme: "
+            }
+        }
+    }
+}

@@ -31,7 +31,12 @@ const constants = require('../generator-constants');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
             desc: 'Check the status of the required tools',
@@ -44,6 +49,16 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
+                }
+            },
+
             sayHello() {
                 this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
@@ -57,8 +72,10 @@ module.exports = class extends BaseGenerator {
 
                 shelljs.exec('kubectl version', { silent: true }, (code, stdout, stderr) => {
                     if (stderr) {
-                        this.log(`${chalk.yellow.bold('WARNING!')} kubectl 1.2 or later is not installed on your computer.\n`
-                          + 'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n');
+                        this.log(
+                            `${chalk.yellow.bold('WARNING!')} kubectl 1.2 or later is not installed on your computer.\n` +
+                                'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n'
+                        );
                     }
                     done();
                 });
@@ -115,10 +132,9 @@ module.exports = class extends BaseGenerator {
         const files = shelljs.ls('-l', this.destinationPath(input));
         const appsFolders = [];
 
-        files.forEach((file) => {
+        files.forEach(file => {
             if (file.isDirectory()) {
-                if ((shelljs.test('-f', `${file.name}/.yo-rc.json`))
-                    && (shelljs.test('-f', `${file.name}/src/main/docker/app.yml`))) {
+                if (shelljs.test('-f', `${file.name}/.yo-rc.json`) && shelljs.test('-f', `${file.name}/src/main/docker/app.yml`)) {
                     try {
                         const fileData = this.fs.readJSON(`${file.name}/.yo-rc.json`);
                         if (fileData['generator-jhipster'].baseName !== undefined) {
@@ -165,8 +181,8 @@ module.exports = class extends BaseGenerator {
             setAppsFolderPaths: docker.setAppsFolderPaths,
 
             setPostPromptProp() {
-                this.appConfigs.forEach((element) => {
-                    element.clusteredDb ? element.dbPeerCount = 3 : element.dbPeerCount = 1;
+                this.appConfigs.forEach(element => {
+                    element.clusteredDb ? (element.dbPeerCount = 3) : (element.dbPeerCount = 1);
                     if (element.messageBroker === 'kafka') {
                         this.useKafka = true;
                     }
@@ -199,13 +215,18 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (this.warning) {
-            this.log(`\n${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated with missing images!`);
+            this.log(`\n${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated, but no Jib cache found`);
+            this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(this.warningMessage);
         } else {
             this.log(`\n${chalk.bold.green('Kubernetes configuration successfully generated!')}`);
         }
 
-        this.log(`${chalk.yellow.bold('WARNING!')} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`);
+        this.log(
+            `${chalk.yellow.bold(
+                'WARNING!'
+            )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
+        );
         for (let i = 0; i < this.appsFolders.length; i++) {
             const originalImageName = this.appConfigs[i].baseName.toLowerCase();
             const targetImageName = this.appConfigs[i].targetImageName;
@@ -219,7 +240,7 @@ module.exports = class extends BaseGenerator {
         this.log(`  ${chalk.cyan('./kubectl-apply.sh')}`);
         if (this.gatewayNb + this.monolithicNb >= 1) {
             const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
-            this.log('\nUse these commands to find your application\'s IP addresses:');
+            this.log("\nUse these commands to find your application's IP addresses:");
             for (let i = 0; i < this.appsFolders.length; i++) {
                 if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
                     this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}${namespaceSuffix}`)}`);
@@ -231,7 +252,11 @@ module.exports = class extends BaseGenerator {
         try {
             fs.chmodSync('kubectl-apply.sh', '755');
         } catch (err) {
-            this.log(`${chalk.yellow.bold('WARNING!')}Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'`);
+            this.log(
+                `${chalk.yellow.bold(
+                    'WARNING!'
+                )}Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'`
+            );
         }
     }
 };

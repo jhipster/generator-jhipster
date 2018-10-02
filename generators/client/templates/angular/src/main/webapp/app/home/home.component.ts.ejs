@@ -19,8 +19,8 @@
 import { Component, OnInit } from '@angular/core';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-<%_ } _%>
 import { JhiEventManager } from 'ng-jhipster';
+<%_ } _%>
 
 import { <% if (authenticationType !== 'oauth2') { %>LoginModalService<% } else { %>LoginService<% } %>, Principal, Account } from 'app/core';
 
@@ -46,10 +46,10 @@ export class HomeComponent implements OnInit {
         private principal: Principal,
         <%_ if (authenticationType !== 'oauth2') { _%>
         private loginModalService: LoginModalService,
-        <%_ } else { _%>
-        private loginService: LoginService,
-        <%_ } _%>
         private eventManager: JhiEventManager
+        <%_ } else { _%>
+        private loginService: LoginService
+        <%_ } _%>
     ) {
     }
 
@@ -57,6 +57,7 @@ export class HomeComponent implements OnInit {
         this.principal.identity().then((account) => {
             this.account = account;
         });
+        <%_ if (authenticationType !== 'oauth2') { _%>
         this.registerAuthenticationSuccess();
     }
 
@@ -66,6 +67,7 @@ export class HomeComponent implements OnInit {
                 this.account = account;
             });
         });
+        <%_ } _%>
     }
 
     isAuthenticated() {

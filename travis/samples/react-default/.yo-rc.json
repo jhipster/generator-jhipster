@@ -25,6 +25,7 @@
     "nativeLanguage": "en",
     "languages": [
       "en",
+      "al",
       "ar-ly",
       "hy",
       "by",
@@ -65,7 +66,7 @@
     ],
     "travis": true,
     "serviceDiscoveryType": false,
-    "clientPackageManager": "yarn",
+    "clientPackageManager": "npm",
     "clientFramework": "react"
   }
 }

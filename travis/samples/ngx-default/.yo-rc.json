@@ -18,7 +18,10 @@
     "nativeLanguage": "en",
     "languages": [
       "en",
+      "al",
       "ar-ly",
+      "hy",
+      "bn",
       "by",
       "hy",
       "ca",
@@ -66,7 +69,7 @@
     "travis": true,
     "messageBroker": false,
     "serviceDiscoveryType": false,
-    "clientPackageManager": "yarn",
+    "clientPackageManager": "npm",
     "clientFramework": "angularX"
   }
 }

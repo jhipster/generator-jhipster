@@ -31,7 +31,12 @@ const constants = require('../generator-constants');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
             desc: 'Check the status of the required tools',
@@ -44,6 +49,16 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
+                }
+            },
+
             sayHello() {
                 this.log(chalk.white(`${chalk.bold('🐮')} [BETA] Welcome to the JHipster Rancher Compose Generator ${chalk.bold('🐮')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
@@ -70,6 +85,7 @@ module.exports = class extends BaseGenerator {
 
             loadConfig() {
                 this.defaultAppsFolders = this.config.get('appsFolders');
+                this.authenticationType = this.config.get('authenticationType');
                 this.directoryPath = this.config.get('directoryPath');
                 this.monitoring = this.config.get('monitoring');
                 this.useKafka = false;
@@ -121,7 +137,7 @@ module.exports = class extends BaseGenerator {
                 this.hasFrontApp = false;
 
                 let portIndex = 8080;
-                this.appsFolders.forEach(function (appsFolder, index) {
+                this.appsFolders.forEach(function(appsFolder, index) {
                     const appConfig = this.appConfigs[index];
                     const lowercaseBaseName = appConfig.baseName.toLowerCase();
                     const parentConfiguration = {};
@@ -197,6 +213,10 @@ module.exports = class extends BaseGenerator {
 
                         parentConfiguration[databaseServiceName] = databaseYamlConfig;
                     }
+
+                    // Expose authenticationType
+                    this.authenticationType = appConfig.authenticationType;
+
                     // Add search engine configuration
                     const searchEngine = appConfig.searchEngine;
                     if (searchEngine === 'elasticsearch') {
@@ -225,11 +245,10 @@ module.exports = class extends BaseGenerator {
                 }, this);
             },
 
-
             setAppsRancherYaml() {
                 this.appsRancherYaml = [];
 
-                this.appsYaml.forEach(function (appYaml, index) {
+                this.appsYaml.forEach(function(appYaml, index) {
                     // Add application configuration
                     const yaml = jsyaml.load(appYaml);
                     const rancherConfiguration = {};
@@ -277,14 +296,18 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (this.warning) {
-            this.log('\n');
-            this.log(chalk.red('Rancher Compose configuration generated with missing images!'));
+            this.log(`\n${chalk.yellow.bold('WARNING!')} Rancher Compose configuration generated, but no Jib cache found`);
+            this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(chalk.red(this.warningMessage));
         } else {
             this.log(`\n${chalk.bold.green('Rancher Compose configuration successfully generated!')}`);
         }
 
-        this.log(`${chalk.yellow.bold('WARNING!')} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`);
+        this.log(
+            `${chalk.yellow.bold(
+                'WARNING!'
+            )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
+        );
         for (let i = 0; i < this.appsFolders.length; i++) {
             const originalImageName = this.appConfigs[i].baseName.toLowerCase();
             const targetImageName = this.appConfigs[i].targetImageName;

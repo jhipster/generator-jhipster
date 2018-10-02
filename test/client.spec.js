@@ -10,8 +10,9 @@ const reactFiles = require('../generators/client/files-react').files;
 
 describe('JHipster client generator', () => {
     describe('generate client with React', () => {
-        beforeEach((done) => {
-            helpers.run(path.join(__dirname, '../generators/client'))
+        beforeEach(done => {
+            helpers
+                .run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'jwt', experimental: true })
                 .withPrompts({
                     baseName: 'jhipster',
@@ -26,13 +27,15 @@ describe('JHipster client generator', () => {
         });
         it('creates expected files for react configuration for client generator', () => {
             assert.noFile(expectedFiles.maven);
-            assert.file(getFilesForOptions(reactFiles, {
-                useSass: true,
-                enableTranslation: true,
-                serviceDiscoveryType: false,
-                authenticationType: 'jwt',
-                testFrameworks: []
-            }));
+            assert.file(
+                getFilesForOptions(reactFiles, {
+                    useSass: true,
+                    enableTranslation: true,
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    testFrameworks: []
+                })
+            );
         });
         it('contains clientFramework with react value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
@@ -40,8 +43,9 @@ describe('JHipster client generator', () => {
     });
 
     describe('generate client with Angular', () => {
-        beforeEach((done) => {
-            helpers.run(path.join(__dirname, '../generators/client'))
+        beforeEach(done => {
+            helpers
+                .run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'jwt' })
                 .withPrompts({
                     baseName: 'jhipster',
@@ -59,26 +63,29 @@ describe('JHipster client generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
-            assert.file(getFilesForOptions(angularFiles, {
-                useSass: true,
-                enableTranslation: true,
-                serviceDiscoveryType: false,
-                authenticationType: 'jwt',
-                testFrameworks: []
-            }));
+            assert.file(
+                getFilesForOptions(angularFiles, {
+                    useSass: true,
+                    enableTranslation: true,
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    testFrameworks: []
+                })
+            );
         });
         it('contains clientFramework with angularX value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
         });
-        it('contains clientPackageManager with yarn value', () => {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
+        it('contains clientPackageManager with npm value', () => {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
         });
     });
 
-    describe('generate client with Angular using npm flag', () => {
-        beforeEach((done) => {
-            helpers.run(path.join(__dirname, '../generators/client'))
-                .withOptions({ skipInstall: true, auth: 'jwt', npm: true })
+    describe('generate client with Angular using yarn flag', () => {
+        beforeEach(done => {
+            helpers
+                .run(path.join(__dirname, '../generators/client'))
+                .withOptions({ skipInstall: true, auth: 'jwt', yarn: true })
                 .withPrompts({
                     baseName: 'jhipster',
                     serviceDiscoveryType: false,
@@ -95,19 +102,21 @@ describe('JHipster client generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
-            assert.file(getFilesForOptions(angularFiles, {
-                useSass: true,
-                enableTranslation: true,
-                serviceDiscoveryType: false,
-                authenticationType: 'jwt',
-                testFrameworks: []
-            }));
+            assert.file(
+                getFilesForOptions(angularFiles, {
+                    useSass: true,
+                    enableTranslation: true,
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    testFrameworks: []
+                })
+            );
         });
         it('contains clientFramework with angularX value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
         });
-        it('contains clientPackageManager with npm value', () => {
-            assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
+        it('contains clientPackageManager with yarn value', () => {
+            assert.fileContent('.yo-rc.json', /"clientPackageManager": "yarn"/);
         });
     });
 });

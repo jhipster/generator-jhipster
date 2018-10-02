@@ -27,7 +27,12 @@ const constants = require('../generator-constants');
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // Automatically configure Travis
         this.argument('autoconfigure-travis', {
             type: Boolean,
@@ -45,6 +50,15 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
+                }
+            },
             sayHello() {
                 this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
             },
@@ -96,6 +110,11 @@ module.exports = class extends BaseGenerator {
                 this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
+                if (this.clientPackageManager === 'yarn') {
+                    this.frontTests = ' -u';
+                } else if (this.clientPackageManager === 'npm') {
+                    this.frontTests = ' -- -u';
+                }
             }
         };
     }
@@ -119,8 +138,10 @@ module.exports = class extends BaseGenerator {
         if (this.cicdIntegrations.includes('deploy')) {
             if (this.buildTool === 'maven') {
                 this.addMavenDistributionManagement(
-                    this.artifactorySnapshotsId, this.artifactorySnapshotsUrl,
-                    this.artifactoryReleasesId, this.artifactoryReleasesUrl
+                    this.artifactorySnapshotsId,
+                    this.artifactorySnapshotsUrl,
+                    this.artifactoryReleasesId,
+                    this.artifactoryReleasesUrl
                 );
             } else if (this.buildTool === 'gradle') {
                 // TODO: add support here

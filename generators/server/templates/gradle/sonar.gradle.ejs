@@ -63,7 +63,7 @@ sonarqube {
         property "sonar.testExecutionReportPaths", "${project.buildDir}/test-results/jest/TESTS-results-sonar.xml"
         <%_ } _%>
         property "sonar.typescript.lcov.reportPaths", "${project.buildDir}/test-results/lcov.info"
-        property "sonar.junit.reportsPath", "${project.buildDir}/test-results/test/"
+        property "sonar.junit.reportPaths", "${project.buildDir}/test-results/test"
         property "sonar.sources", "${project.projectDir}/<%= MAIN_DIR %>"
         property "sonar.tests", "${project.projectDir}/<%= TEST_DIR %>"
     }

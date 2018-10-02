@@ -36,8 +36,15 @@ function writeFiles() {
                 if (this.app.searchEngine === 'elasticsearch') {
                     this.template('db/elasticsearch.yml.ejs', `${appName}/${appName}-elasticsearch.yml`);
                 }
-                if ((this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') && this.kubernetesServiceType === 'Ingress') {
-                    this.template('ingress.yml.ejs', `${appName}/${appName}-ingress.yml`);
+                if (
+                    (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') &&
+                    this.kubernetesServiceType === 'Ingress'
+                ) {
+                    if (this.istio !== 'no') {
+                        this.template('gateway.yml.ejs', `${appName}/${appName}-gateway.yml`);
+                    } else {
+                        this.template('ingress.yml.ejs', `${appName}/${appName}-ingress.yml`);
+                    }
                 }
                 if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
                     this.template('secret/jwt-secret.yml.ejs', `${appName}/jwt-secret.yml`);
@@ -46,8 +53,8 @@ function writeFiles() {
                     this.template('monitoring/jhipster-prometheus-sm.yml.ejs', `${appName}/${appName}-prometheus-sm.yml`);
                 }
                 if (this.istioRoute === true) {
-                    this.template('istio/destination-policy.yml.ejs', `${appName}/${appName}-deployment-policy.yml`);
-                    this.template('istio/route-rule.yml.ejs', `${appName}/${appName}-route-rule.yml`);
+                    this.template('istio/destination-rule.yml.ejs', `${appName}/${appName}-destination-rule.yml`);
+                    this.template('istio/virtual-service.yml.ejs', `${appName}/${appName}-virtual-service.yml`);
                 }
             }
         },
