@@ -404,6 +404,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         user.setLogin(Constants.ANONYMOUS_USER);
 
         Map<String, Object> userDetails = new HashMap<>();
+        userDetails.put("sub", user.getId());
         userDetails.put("preferred_username", user.getLogin());
         userDetails.put("given_name", user.getFirstName());
         userDetails.put("family_name", user.getLastName());
