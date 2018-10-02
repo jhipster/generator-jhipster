@@ -403,7 +403,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         user.setId(Constants.ANONYMOUS_USER);
         user.setLogin(Constants.ANONYMOUS_USER);
 
-        Map<String, Object> userDetails = new HashMap<String, Object>();
+        Map<String, Object> userDetails = new HashMap<>();
         userDetails.put("preferred_username", user.getLogin());
         userDetails.put("given_name", user.getFirstName());
         userDetails.put("family_name", user.getLastName());
