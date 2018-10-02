@@ -50,7 +50,10 @@
         computed:{
             userAuthorities(){
                 return this.$store.getters.account.authorities;
-            }
+            },
+             username() {
+                  return this.$store.getters.account ? this.$store.getters.account.login : ''
+             }
         }
     }
 </script>

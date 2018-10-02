@@ -2,7 +2,7 @@
     <div>
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <h2 v-if="account"><span v-text="$t('password.title')">Password for </span>[<b>{{account.login}}</b>]</h2>
+                <h2 v-if="account"><span v-bind:html="$t('password.title')">Password for [<b>{{username}}</b>]</span></h2>
 
                 <div class="alert alert-success" v-if="success" v-html="$t('password.messages.success')">
                     <strong>Password changed!</strong>
@@ -21,7 +21,7 @@
                         <label class="form-control-label" for="currentPassword" v-text="$t('global.form.currentpassword')">Current password</label>
                         <input type="password" class="form-control" id="currentPassword" name="currentPassword"
                                :class="{'valid': !$v.resetPassword.currentPassword.$invalid, 'invalid': $v.resetPassword.currentPassword.$invalid }"
-                               v-bind:placeholder="$t('global.form.currentpassword-placeholder')"
+                               v-bind:placeholder="$t('global.form[\'currentpassword.placeholder\']')"
                                v-model="$v.resetPassword.currentPassword.$model" required>
                         <div v-if="$v.resetPassword.currentPassword.$anyDirty && $v.resetPassword.currentPassword.$invalid">
                             <small class="form-text text-danger"
@@ -33,7 +33,7 @@
                     <div class="form-group">
                         <label class="form-control-label" for="newPassword" v-text="$t('global.form.newpassword')">New password</label>
                         <input type="password" class="form-control" id="newPassword" name="newPassword"
-                               v-bind:placeholder="$t('global.form.newpassword-placeholder')"
+                               v-bind:placeholder="$t('global.form[\'newpassword.placeholder\']')"
                                :class="{'valid': !$v.resetPassword.newPassword.$invalid, 'invalid': $v.resetPassword.newPassword.$invalid }"
                                v-model="$v.resetPassword.newPassword.$model" minlength=4 maxlength=50 required>
                         <div v-if="$v.resetPassword.newPassword.$anyDirty && $v.resetPassword.newPassword.$invalid">
@@ -56,7 +56,7 @@
                         <label class="form-control-label" for="confirmPassword" v-text="$t('global.form.confirmpassword')">New password confirmation</label>
                         <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
                                :class="{'valid': !$v.resetPassword.confirmPassword.$invalid, 'invalid': $v.resetPassword.confirmPassword.$invalid }"
-                               v-bind:placeholder="$t('global.form.confirmpassword-placeholder')"
+                               v-bind:placeholder="$t('global.form[\'confirmpassword.placeholder\']')"
                                v-model="$v.resetPassword.confirmPassword.$model" minlength=4 maxlength=50 required>
                         <div v-if="$v.resetPassword.confirmPassword.$anyDirty && $v.resetPassword.confirmPassword.$invalid">
                             <small class="form-text text-danger"
@@ -84,10 +84,12 @@
     import {maxLength, minLength, required} from 'vuelidate/lib/validators'
     import axios from 'axios'
     import {SERVER_API_URL} from "../../constants";
+    import Principal from './Principal';
     import {mapGetters} from 'vuex'
 
 
     export default {
+        mixins: [Principal],
         data() {
             return {
                 success: null,

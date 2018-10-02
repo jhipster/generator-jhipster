@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 v-if="account"><span v-text="$t('sessions.title')">Active sessions for </span> [<b>{{account.login}}</b>]</h2>
+        <h2 v-if="account"><span v-bind:value="$t('sessions.title')">Active sessions for [<b>{{username}}</b>]</span></h2>
 
         <div class="alert alert-success" v-if="success" v-html="$t('sessions.messages.success')">
             <strong>Session invalidated!</strong>

@@ -7,15 +7,15 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <form class="form" role="form" v-on:submit.prevent="login()">
+                <form class="form" role="form" v-on:submit.prevent="doLogin()">
                     <div class="form-group">
                         <label for="_username" v-text="$t('global.form.username')">Login</label>
-                        <input type="text" class="form-control" name="username" id="_username" v-bind:placeholder="$t('global.form.username-placeholder')"
-                               v-model="username">
+                        <input type="text" class="form-control" name="username" id="_username" v-bind:placeholder="$t('global.form[\'username.placeholder\']')"
+                               v-model="login">
                     </div>
                     <div class="form-group">
                         <label for="_password" v-text="$t('login.form.password')">Password</label>
-                        <input type="password" class="form-control" name="password" id="_password" v-bind:placeholder="$t('login.form.password-placeholder')"
+                        <input type="password" class="form-control" name="password" id="_password" v-bind:placeholder="$t('login.form[\'password.placeholder\']')"
                                v-model="password">
                     </div>
                     <div class="form-check">
@@ -48,17 +48,17 @@
         data() {
           return {
               authenticationError: null,
-              username: null,
+              login: null,
               password: null,
               rememberMe: null
           }
         },
         methods: {
-            login: function () {
+            doLogin: function () {
                 let vm = this;
                 const data =
                     'j_username=' +
-                    encodeURIComponent(this.username) +
+                    encodeURIComponent(this.login) +
                     '&j_password=' +
                     encodeURIComponent(this.password) +
                     '&remember-me=' +

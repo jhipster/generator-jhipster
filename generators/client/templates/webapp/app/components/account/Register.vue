@@ -32,7 +32,7 @@
                         <label class="form-control-label" for="login" v-text="$t('global.form.username')">Username</label>
                         <input type="text" class="form-control" v-model="$v.registerAccount.login.$model" id="login" name="login"
                                :class="{'valid': !$v.registerAccount.login.$invalid, 'invalid': $v.registerAccount.login.$invalid }"
-                               required minlength="1" maxlength="50" pattern="^[_.@A-Za-z0-9-]*$" v-bind:placeholder="$t('global.form.username-placeholder')">
+                               required minlength="1" maxlength="50" pattern="^[_.@A-Za-z0-9-]*$" v-bind:placeholder="$t('global.form[\'username.placeholder\']')">
                         <div v-if="$v.registerAccount.login.$anyDirty && $v.registerAccount.login.$invalid">
                             <small class="form-text text-danger" v-if="!$v.registerAccount.login.required"
                                    v-text="$t('register.messages.validate.login.required')">
@@ -56,7 +56,7 @@
                         <label class="form-control-label" for="email" v-text="$t('global.form.email')">Email</label>
                         <input type="email" class="form-control" id="email" name="email"
                                :class="{'valid': !$v.registerAccount.email.$invalid, 'invalid': $v.registerAccount.email.$invalid }"
-                               v-model="$v.registerAccount.email.$model" minlength=5 maxlength=254 email required  v-bind:placeholder="$t('global.form.email-placeholder')">
+                               v-model="$v.registerAccount.email.$model" minlength=5 maxlength=254 email required  v-bind:placeholder="$t('global.form[\'email.placeholder\']')">
                         <div v-if="$v.registerAccount.email.$anyDirty && $v.registerAccount.email.$invalid">
                             <small class="form-text text-danger" v-if="!$v.registerAccount.email.required"
                                    v-text="$t('global.messages.validate.email.required')">
@@ -80,7 +80,7 @@
                         <label class="form-control-label" for="password" v-text="$t('global.form.newpassword')">New password</label>
                         <input type="password" class="form-control" id="password" name="password"
                                :class="{'valid': !$v.registerAccount.password.$invalid, 'invalid': $v.registerAccount.password.$invalid }"
-                               v-model="$v.registerAccount.password.$model" minlength=4 maxlength=50 required  v-bind:placeholder="$t('global.form.newpassword-placeholder')">
+                               v-model="$v.registerAccount.password.$model" minlength=4 maxlength=50 required v-bind:placeholder="$t('global.form[\'newpassword.placeholder\']')">
                         <div v-if="$v.registerAccount.password.$anyDirty && $v.registerAccount.password.$invalid">
                             <small class="form-text text-danger" v-if="!$v.registerAccount.password.required"
                                    v-text="$t('global.messages.validate.newpassword.required')">
@@ -101,7 +101,7 @@
                         <label class="form-control-label" for="confirmPassword" v-text="$t('global.form.confirmpassword')">New password confirmation</label>
                         <input type="password" class="form-control" id="confirmPassword" name="confirmPasswordInput"
                                :class="{'valid': !$v.confirmPassword.$invalid, 'invalid': $v.confirmPassword.$invalid }"
-                               v-model="$v.confirmPassword.$model" minlength=4 maxlength=50 required  v-bind:placeholder="$t('global.form.confirmpassword-placeholder')">
+                               v-model="$v.confirmPassword.$model" minlength=4 maxlength=50 required v-bind:placeholder="$t('global.form[\'confirmpassword.placeholder\']')">
                         <div v-if="$v.confirmPassword.$dirty && $v.confirmPassword.$invalid">
                             <small class="form-text text-danger" v-if="!$v.confirmPassword.required"
                                    v-text="$t('global.messages.validate.confirmpassword.required')">
