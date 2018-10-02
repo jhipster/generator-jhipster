@@ -40,7 +40,7 @@ spec:
           value: http://jhipster-elasticsearch:9200
         # TODO - better to update to an Ingress endpoint
         - name: ZIPKIN_UI_LOGS_URL
-          value: "http://jhipster-console/app/kibana#/dashboard/logs-dashboard?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-1h,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!f),panels:!((col:1,id:logs-levels,panelIndex:2,row:1,size_x:6,size_y:3,type:visualization),(col:7,columns:!(stack_trace),id:Stacktraces,panelIndex:7,row:1,size_x:4,size_y:3,sort:!('@timestamp',desc),type:search),(col:11,id:Log-forwarding-instructions,panelIndex:8,row:1,size_x:2,size_y:3,type:visualization),(col:1,columns:!(app_name,level,message),id:All-logs,panelIndex:9,row:4,size_x:12,size_y:7,sort:!('@timestamp',asc),type:search)),query:(query_string:(analyze_wildcard:!t,query:'{traceId}')),title:logs-dashboard,uiState:())"
+          value: "http://localhost:5601/app/kibana#/discover/d0682f20-e0e9-11e7-9c68-0b9a0f0c183c?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-30d,mode:quick,to:now))&_a=(columns:!(X-B3-TraceId,app_name,level,message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logs-*',key:X-B3-TraceId,negate:!f,params:(query:'trace',type:phrase),type:phrase,value:'trace'),query:(match:(X-B3-TraceId:(query:'{traceId}',type:phrase))))),index:'logs-*',interval:auto,query:(language:lucene,query:''),sort:!('@timestamp',desc))"
       restartPolicy: Always
 ---
 apiVersion: v1
