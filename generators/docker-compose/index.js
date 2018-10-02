@@ -282,17 +282,14 @@ module.exports = class extends BaseGenerator {
                     this.authenticationType = appConfig.authenticationType;
 
                     // Dump the file
-                    let yamlString = jsyaml.dump(parentConfiguration, { indent: 4 });
+                    let yamlString = jsyaml.dump(parentConfiguration, { indent: 4, lineWidth: -1 });
 
-                    // Fix the output file which is totally broken!!!
+                    // Add extra indentation for each lines
                     const yamlArray = yamlString.split('\n');
                     for (let j = 0; j < yamlArray.length; j++) {
                         yamlArray[j] = `    ${yamlArray[j]}`;
-                        yamlArray[j] = yamlArray[j].replace(/'/g, '');
                     }
                     yamlString = yamlArray.join('\n');
-                    yamlString = yamlString.replace(/>-\n/g, '');
-                    yamlString = yamlString.replace(/-\s\s+/g, '- ');
                     this.appsYaml.push(yamlString);
                 });
             },
