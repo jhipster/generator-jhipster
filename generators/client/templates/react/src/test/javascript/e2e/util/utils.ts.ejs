@@ -53,8 +53,10 @@ export const waitUntilCount = async (elementArrayFinder: ElementArrayFinder, exp
     `Failed while waiting for "${elementArrayFinder.locator()}" to have ${expectedCount} elements.`
   );
 };
+<%_ if (databaseType !== 'cassandra') { _%>
 
 export const getModifiedDateSortButton = (): ElementFinder => element(by.id('modified-date-sort'));
+<%_ } _%>
 
 export const getUserDeactivatedButtonByLogin = (login: string): ElementFinder =>
   element(by.css('table > tbody')).element(by.id(login)).element(by.buttonText('Deactivated'));
