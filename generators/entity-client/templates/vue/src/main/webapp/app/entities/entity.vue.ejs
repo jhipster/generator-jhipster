@@ -1,10 +1,10 @@
 <template>
     <div>
         <h2 id="page-heading">
-            <span v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.home.title')"><%= entityAngularName %>s</span>
+            <span v-text="$t('<%= angularAppName  %>.<%= entityInstance %>.home.title')"><%= entityAngularName %>s</span>
             <router-link to="/<%= entityInstance %>/new" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityInstance %>">
                 <font-awesome-icon icon="plus"></font-awesome-icon>
-                <span  v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.home.createLabel')">
+                <span  v-text="$t('<%= angularAppName  %>.<%= entityInstance %>.home.createLabel')">
                     Create new <%= entityAngularName %>
                 </span>
             </router-link>
@@ -16,8 +16,7 @@
                 <thead>
                 <tr>
                     <th><span v-text="$t('global.field.id')">ID</span></th>
-                    <th><span v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.name')">Name</span></th>
-                    <th><span v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.occupant')">Occupant(s)</span></th>
+                    <th><span v-text="$t('<%= angularAppName  %>.<%= entityInstance %>.name')">Name</span></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -25,7 +24,6 @@
                 <tr v-for="<%= entityInstance %> in <%= entityInstance %>s">
                     <td><router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}">{{<%= entityInstance %>.id}}</router-link></td>
                     <td>{{<%= entityInstance %>.name}}</td>
-                    <td>{{<%= entityInstance %>.occupants ? <%= entityInstance %>.occupants : 0}} / {{<%= entityInstance %>.max}} <font-awesome-icon style="color: #28a745;" icon="['fas', 'thumbs-up']" v-if="<%= entityInstance %>.occupants > 0 && <%= entityInstance %>.max === <%= entityInstance %>.occupants"></font-awesome-icon></td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-info btn-sm">
@@ -54,8 +52,8 @@
 </template>
 <script>
     import axios from 'axios'
-    import {SERVER_API_URL} from "../constants";
-    import Principal from '../components/account/Principal';
+    import {SERVER_API_URL} from "../../constants";
+    import Principal from '../../components/account/Principal';
 
     export default {
         mixins: [Principal],

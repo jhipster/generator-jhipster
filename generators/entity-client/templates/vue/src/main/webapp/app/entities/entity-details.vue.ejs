@@ -2,12 +2,12 @@
     <div class="row justify-content-center">
         <div class="col-8">
             <div v-if="<%= entityInstance %>">
-                <h2><span v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.id}}</h2>
+                <h2><span v-text="$t('<%= angularAppName  %>.<%= entityInstance %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.id}}</h2>
                 <hr>
                 <!--<jhi-alert-error></jhi-alert-error>-->
                 <dl class="row-md jh-entity-details">
                     <dt>
-                      <span v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.name')">Name</span>
+                      <span v-text="$t('<%= angularAppName  %>.<%= entityInstance %>.name')">Name</span>
                     </dt>
                     <dd>
                         <span>{{<%= entityInstance %>.name}}</span>
@@ -29,7 +29,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import {SERVER_API_URL} from "../constants";
+    import {SERVER_API_URL} from "../../constants";
 
     export default {
         data() {

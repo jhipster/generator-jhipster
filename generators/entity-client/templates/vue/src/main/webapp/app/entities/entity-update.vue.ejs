@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-8">
             <form name="editForm" role="form" novalidate v-on:submit.prevent="save()" >
-                <h2 id="jhi-<%= entityInstance %>-heading" v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.home.createOrEditLabel')">Create or edit a <%= entityAngularName %></h2>
+                <h2 id="jhi-<%= entityInstance %>-heading" v-text="$t('<%= angularAppName  %>.<%= entityInstance %>.home.createOrEditLabel')">Create or edit a <%= entityAngularName %></h2>
                 <div>
                     <!--<jhi-alert-error></jhi-alert-error>-->
                     <div class="form-group" v-if="<%= entityInstance %>.id">
@@ -11,7 +11,7 @@
                                v-model="<%= entityInstance %>.id" readonly />
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.name')" for="field_name">Name</label>
+                        <label class="form-control-label" v-text="$t('<%= angularAppName  %>.<%= entityInstance %>.name')" for="field_name">Name</label>
                         <input type="text" class="form-control" name="name" id="field_name"
                                :class="{'valid': !$v.<%= entityInstance %>.name.$invalid, 'invalid': $v.<%= entityInstance %>.name.$invalid }"
                                v-model="$v.<%= entityInstance %>.name.$model" required/>
@@ -21,23 +21,6 @@
                             </small>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-control-label" v-text="$t('<%= camelizedBaseName  %>.<%= entityInstance %>.max')" for="field_max">Max</label>
-                        <input type="number" class="form-control" name="max" id="field_max"
-                               :class="{'valid': !$v.<%= entityInstance %>.max.$invalid, 'invalid': $v.<%= entityInstance %>.max.$invalid }"
-                               v-model="$v.<%= entityInstance %>.max.$model" required/>
-                        <div v-if="$v.<%= entityInstance %>.max.$anyDirty && $v.<%= entityInstance %>.max.$invalid">
-                            <small class="form-text text-danger"
-                                   v-if="!$v.<%= entityInstance %>.max.required" v-text="$t('entity.validation.required')">
-                                This field is required.
-                            </small>
-                            <small class="form-text text-danger"
-                                   v-if="!$v.<%= entityInstance %>.name.integer" v-text="$t('entity.validation.number')">
-                                This field should be a number.
-                            </small>
-                        </div>
-                    </div>
-
                 </div>
                 <div>
                     <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">
@@ -54,7 +37,7 @@
 <script>
     import {integer, required} from 'vuelidate/lib/validators'
     import axios from 'axios'
-    import {SERVER_API_URL} from "../constants";
+    import {SERVER_API_URL} from "../../constants";
 
     export default {
         data() {
