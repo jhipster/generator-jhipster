@@ -48,10 +48,10 @@ function checkImages() {
     this.appsFolders.forEach((appsFolder, index) => {
         const appConfig = this.appConfigs[index];
         if (appConfig.buildTool === 'maven') {
-            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/docker`);
+            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/jib-cache`);
             runCommand = './mvnw package -Pprod jib:dockerBuild';
         } else {
-            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/docker`);
+            imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/jib-cache`);
             runCommand = './gradlew bootWar -Pprod jibDockerBuild';
         }
         if (shelljs.ls(imagePath).length === 0) {

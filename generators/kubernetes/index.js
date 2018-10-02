@@ -215,7 +215,8 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (this.warning) {
-            this.log(`\n${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated with missing images!`);
+            this.log(`\n${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated, but no Jib cache found`);
+            this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(this.warningMessage);
         } else {
             this.log(`\n${chalk.bold.green('Kubernetes configuration successfully generated!')}`);

@@ -316,8 +316,8 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (this.warning) {
-            this.log('\n');
-            this.log(chalk.red('Docker Compose configuration generated with missing images!'));
+            this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
+            this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(chalk.red(this.warningMessage));
         } else {
             this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
