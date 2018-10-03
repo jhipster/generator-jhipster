@@ -44,12 +44,15 @@ bootRun {
 
 <%_ if (!skipClient) { _%>
 task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
-    onlyIf { shouldWebpackRun() == true }
+    inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
+    inputs.files(fileTree('<%= CLIENT_MAIN_SRC_DIR %>'))
+    outputs.dir("<%= CLIENT_DIST_DIR %>")
+    outputs.file("<%= CLIENT_DIST_DIR %>app/main.bundle.js")
     args = ["run", "webpack:build"]
 }
 
 war {
-    webAppDirName = '<%= CLIENT_MAIN_SRC_DIR %>'
+    webAppDirName = '<%= CLIENT_DIST_DIR %>'
 }
 
 task copyIntoStatic (type: Copy) {
@@ -83,9 +86,9 @@ processResources.dependsOn webpackBuildDev
 copyIntoStatic.dependsOn processResources
 bootJar.dependsOn copyIntoStatic
 
-yarn_install.onlyIf { shouldWebpackRun() == true }
+<%= clientPackageManager %>_install.onlyIf { shouldWebpackRun() == true }
 
 def shouldWebpackRun() {
-    file('build/www/app/main.bundle.js').exists() == false || project.hasProperty('webpack')
+    project.hasProperty('webpack')
 }
 <%_ } _%>
