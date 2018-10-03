@@ -137,7 +137,7 @@
             <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true) { 
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
-            <column name="<%=getColumnName(relationshipName) %>_id" type="bigint">
+            <column name="<%=getColumnName(relationshipName) %>_id" type="<%_ if (relationshipName === 'user' && authenticationType === 'oauth2') { _%>varchar(100)<%_ } else { _%>bigint<%_ } _%>">
                 <constraints unique="true" nullable="<%= nullable_relation %>" uniqueConstraintName="<%= uniqueConstraintName %>" />
             </column><% } %><% } %>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
