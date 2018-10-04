@@ -30,6 +30,8 @@ package <%=packageName%>.service;
     const criteria = entityClass + 'Criteria'; _%>
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -130,7 +132,8 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
             relationships.forEach((relationship) => {
                 const metamodelFieldName = (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
             if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(), <%= entityClass %>_.<%= metamodelFieldName %>, <%= relationship.otherEntityNameCapitalized %>_.id));
+                specification = specification.and(buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
+                    root -> root.join(<%= entityClass %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= relationship.otherEntityNameCapitalized %>_.id)));
             }
             <%_ }); // forEach
         _%>
