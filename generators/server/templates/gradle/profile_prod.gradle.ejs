@@ -47,6 +47,10 @@ task webpack_test(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn
 }
 
 task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
+    inputs.dir("CLIENT_MAIN_SRC_DIR")
+    inputs.files(fileTree('CLIENT_MAIN_SRC_DIRp'))
+    outputs.dir("<%= CLIENT_DIST_DIR %>")
+    outputs.file("<%= CLIENT_DIST_DIR %>app/main.bundle.js")
     args = ["run", "webpack:prod"]
 }
 
