@@ -49,6 +49,10 @@ const files = {
         {
             condition: generator => generator.protractorTests,
             templates: ['tsconfig.e2e.json']
+        },
+        {
+            condition: generator => !generator.skipCommitHook,
+            templates: [{ file: '.huskyrc', method: 'copy', noEjs: true }]
         }
     ],
     sass: [
