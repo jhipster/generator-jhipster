@@ -107,7 +107,7 @@
         <scala-maven-plugin.version>3.4.2</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>3.2.3</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>3.3.0</openapi-generator-maven-plugin.version>
         <%_ } _%>
         <git-commit-id-plugin.version>2.2.5</git-commit-id-plugin.version>
 
@@ -1058,6 +1058,7 @@
                             <apiPackage><%= packageName %>.web.api</apiPackage>
                             <modelPackage><%= packageName %>.web.api.model</modelPackage>
                             <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+                            <validateSpec>true</validateSpec>
                             <configOptions>
                                 <delegatePattern>true</delegatePattern>
                             </configOptions>
