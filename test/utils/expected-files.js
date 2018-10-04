@@ -285,6 +285,7 @@ const expectedFiles = {
 
     client: [
         'angular.json',
+        '.huskyrc',
         '.prettierignore',
         '.prettierrc',
         'package.json',
