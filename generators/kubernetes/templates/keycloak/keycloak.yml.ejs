@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-postgres-keycloak
+  name: postgres-keycloak
   namespace: <%= kubernetesNamespace %>
 spec:
   serviceName: postgres-keycloak
@@ -9,7 +9,7 @@ spec:
   template:
     metadata:
       labels:
-        app: <%= app.baseName.toLowerCase() %>-postgres-keycloak
+        app: postgres-keycloak
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -41,36 +41,36 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-postgres-keycloak
+  name: postgres-keycloak
   namespace: <%= kubernetesNamespace %>
   labels:
-    app: <%= app.baseName.toLowerCase() %>-postgres-keycloak
+    app: postgres-keycloak
 spec:
   ports:
   - port: 5432
   type: ClusterIP
   selector:
-    app: <%= app.baseName.toLowerCase() %>-postgres-keycloak
+    app: postgres-keycloak
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-keycloak
+  name: keycloak
   namespace: <%= kubernetesNamespace %>
   labels:
-    app: <%= app.baseName.toLowerCase() %>-keycloak
+    app: keycloak
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: <%= app.baseName.toLowerCase() %>-keycloak
+      app: keycloak
   template:
     metadata:
       labels:
-        app: <%= app.baseName.toLowerCase() %>-keycloak
+        app: keycloak
     spec:
       containers:
-      - name: <%= app.baseName.toLowerCase() %>-keycloak
+      - name: keycloak
         image: jboss/keycloak
         ports:
         - containerPort: 8080
@@ -87,7 +87,7 @@ spec:
           value: "keycloak"
         # The PostgreSQL database address: "<postgres-service-name>"."<namespace>"
         - name: DB_ADDR
-          value: "postgres-keycloak.jwt"
+          value: "postgres-keycloak.<%= kubernetesNamespace %>"
         # The Keycloak user, which will be used for the Keycloak "Admin Console"
         - name: KEYCLOAK_USER
           value: "admin"
@@ -98,21 +98,21 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-keycloak
+  name: keycloak
   namespace: <%= kubernetesNamespace %>
   labels:
-    app: <%= app.baseName.toLowerCase() %>-keycloak
+    app: keycloak
 spec:
   ports:
   - port: 8080
   type: ClusterIP
   selector:
-    app: <%= app.baseName.toLowerCase() %>-keycloak
+    app: keycloak
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-keycloak
+  name: keycloak
   namespace: <%= kubernetesNamespace %>
 spec:
   rules:
@@ -121,5 +121,5 @@ spec:
       paths:
       - path: /.*
         backend:
-          serviceName: <%= app.baseName.toLowerCase() %>-keycloak
+          serviceName: keycloak
           servicePort: 8080
