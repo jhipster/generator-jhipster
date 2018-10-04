@@ -50,7 +50,7 @@ const files = {
         },
         {
             condition: generator => !generator.skipCommitHook,
-            templates: [{ file: '../.huskyrc', method: 'copy', noEjs: true, renameTo: () => '.huskyrc' }]
+            templates: [{ file: '.huskyrc', method: 'copy', noEjs: true }]
         }
     ],
     css: [
