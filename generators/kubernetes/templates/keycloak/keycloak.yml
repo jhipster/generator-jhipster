@@ -1,0 +1,125 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-postgres-keycloak
+  namespace: <%= kubernetesNamespace %>
+spec:
+  serviceName: postgres-keycloak
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-postgres-keycloak
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: postgres
+          image: postgres
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: root
+              mountPath: /var/lib/postgresql/data
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            # The name of the PostgreSQL user, that will be used from the Keycloak
+            - name: POSTGRES_USER
+              value: keycloak
+            # The password for the PostgreSQL user, that will be used from the Keycloak
+            - name: POSTGRES_PASSWORD
+              value: keycloak
+  volumeClaimTemplates:
+    - metadata:
+        name: root
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-postgres-keycloak
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: <%= app.baseName.toLowerCase() %>-postgres-keycloak
+spec:
+  ports:
+  - port: 5432
+  type: ClusterIP
+  selector:
+    app: <%= app.baseName.toLowerCase() %>-postgres-keycloak
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-keycloak
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: <%= app.baseName.toLowerCase() %>-keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-keycloak
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-keycloak
+    spec:
+      containers:
+      - name: <%= app.baseName.toLowerCase() %>-keycloak
+        image: jboss/keycloak
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PROXY_ADDRESS_FORWARDING
+          value: "true"
+        - name: DB_VENDOR
+          value: "postgres"
+        # The PostgreSQL user
+        - name: DB_USER
+          value: "keycloak"
+        # The PostgreSQL user's password
+        - name: DB_PASSWORD
+          value: "keycloak"
+        # The PostgreSQL database address: "<postgres-service-name>"."<namespace>"
+        - name: DB_ADDR
+          value: "postgres-keycloak.jwt"
+        # The Keycloak user, which will be used for the Keycloak "Admin Console"
+        - name: KEYCLOAK_USER
+          value: "admin"
+        # The Keycloak user's password
+        - name: KEYCLOAK_PASSWORD
+          value: "admin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-keycloak
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: <%= app.baseName.toLowerCase() %>-keycloak
+spec:
+  ports:
+  - port: 8080
+  type: ClusterIP
+  selector:
+    app: <%= app.baseName.toLowerCase() %>-keycloak
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-keycloak
+  namespace: <%= kubernetesNamespace %>
+spec:
+  rules:
+  - host: <%= app.baseName.toLowerCase() %>.keycloak.192.168.99.100.nip.io
+    http:
+      paths:
+      - path: /.*
+        backend:
+          serviceName: <%= app.baseName.toLowerCase() %>-keycloak
+          servicePort: 8080

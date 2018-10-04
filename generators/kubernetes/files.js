@@ -49,6 +49,9 @@ function writeFiles() {
                 if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
                     this.template('secret/jwt-secret.yml.ejs', `${appName}/jwt-secret.yml`);
                 }
+                if (this.app.authenticationType === 'oauth2') {
+                    this.template('keycloak/keycloak.yml', `${appName}/${appName}-keycloak.yml`);
+                }
                 if (this.monitoring === 'prometheus') {
                     this.template('monitoring/jhipster-prometheus-sm.yml.ejs', `${appName}/${appName}-prometheus-sm.yml`);
                 }
