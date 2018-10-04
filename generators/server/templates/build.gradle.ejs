@@ -333,8 +333,8 @@ dependencies {
         exclude module: 'commons-logging'
     }
     // log4j needed to create embedded elasticsearch instance
-    runtime "org.apache.logging.log4j:log4j-api:2.7"
-    runtime "org.apache.logging.log4j:log4j-core:2.7"
+    runtime "org.apache.logging.log4j:log4j-api:2.8.1"
+    runtime "org.apache.logging.log4j:log4j-core:2.8.1"
     // end of Spring Data Jest dependencies
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
@@ -422,8 +422,8 @@ dependencies {
     compile "io.springfox:springfox-bean-validators"
     <%_ } _%>
     <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
-    compile "mysql:mysql-connector-java"
-    liquibaseRuntime "mysql:mysql-connector-java"
+    compile "mysql:mysql-connector-java:5.1.47"
+    liquibaseRuntime "mysql:mysql-connector-java:5.1.47"
     <%_ } _%>
     <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
     compile "org.postgresql:postgresql"
