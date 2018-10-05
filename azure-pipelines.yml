@@ -38,20 +38,20 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
-      ngx-default:
-        JHI_APP: ngx-default
-        JHI_PROFILE: prod
-        JHI_PROTRACTOR: 1
+      # ngx-default:
+      #   JHI_APP: ngx-default
+      #   JHI_PROFILE: prod
+      #   JHI_PROTRACTOR: 1
       ngx-psql-es-noi18n:
         JHI_APP: ngx-psql-es-noi18n
         JHI_PROFILE: prod
         JHI_PROTRACTOR: 1
-      ngx-gradle-fr:
-        JHI_APP: ngx-gradle-fr
-        JHI_PROFILE: prod
-        JHI_PROTRACTOR: 1
-      ngx-h2mem-ws-nol2:
-        JHI_APP: ngx-h2mem-ws-nol2
+      # ngx-gradle-fr:
+      #   JHI_APP: ngx-gradle-fr
+      #   JHI_PROFILE: prod
+      #   JHI_PROTRACTOR: 1
+      # ngx-h2mem-ws-nol2:
+      #   JHI_APP: ngx-h2mem-ws-nol2
 
   steps:
   #----------------------------------------------------------------------

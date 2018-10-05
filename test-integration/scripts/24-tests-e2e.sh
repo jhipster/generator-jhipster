@@ -75,13 +75,8 @@ if [ "$JHI_RUN_APP" == 1 ]; then
         sleep 80
     fi
 
-    # TODO: delete me
-    free -m
-    export SPRING_DATA_JEST_MAXCONNECTIONIDLETIME=60000
-
     cd "$JHI_FOLDER_APP"
     java \
-        -Djava.net.preferIPv4Stack=true \
         -jar app.war \
         --spring.profiles.active="$JHI_PROFILE" &
         # --spring.profiles.active="$JHI_PROFILE" \
@@ -95,5 +90,9 @@ if [ "$JHI_RUN_APP" == 1 ]; then
     launchCurlOrProtractor
     result=$?
     kill $(cat .pid)
+
+    echo "ELASTICSEARCH logs:"
+    docker logs docker_travispsqlesnoi18n-elasticsearch_1
+
     exit $result
 fi
