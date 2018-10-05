@@ -1,15 +1,15 @@
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
-  name: postgres-keycloak
+  name: <%= app.baseName.toLowerCase() %>-postgres-keycloak
   namespace: <%= kubernetesNamespace %>
 spec:
-  serviceName: postgres-keycloak
+  serviceName: <%= app.baseName.toLowerCase() %>-postgres-keycloak
   replicas: 1
   template:
     metadata:
       labels:
-        app: postgres-keycloak
+        app: <%= app.baseName.toLowerCase() %>-postgres-keycloak
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -41,36 +41,36 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-keycloak
+  name: <%= app.baseName.toLowerCase() %>-postgres-keycloak
   namespace: <%= kubernetesNamespace %>
   labels:
-    app: postgres-keycloak
+    app: <%= app.baseName.toLowerCase() %>-postgres-keycloak
 spec:
   ports:
   - port: 5432
   type: ClusterIP
   selector:
-    app: postgres-keycloak
+    app: <%= app.baseName.toLowerCase() %>-postgres-keycloak
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: keycloak
+  name: <%= app.baseName.toLowerCase() %>-keycloak
   namespace: <%= kubernetesNamespace %>
   labels:
-    app: keycloak
+    app: <%= app.baseName.toLowerCase() %>-keycloak
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: keycloak
+      app: <%= app.baseName.toLowerCase() %>-keycloak
   template:
     metadata:
       labels:
-        app: keycloak
+        app: <%= app.baseName.toLowerCase() %>-keycloak
     spec:
       containers:
-      - name: keycloak
+      - name: <%= app.baseName.toLowerCase() %>-keycloak
         image: jboss/keycloak
         ports:
         - containerPort: 8080
@@ -87,7 +87,7 @@ spec:
           value: "keycloak"
         # The PostgreSQL database address: "<postgres-service-name>"."<namespace>"
         - name: DB_ADDR
-          value: "postgres-keycloak.<%= kubernetesNamespace %>"
+          value: "<%= app.baseName.toLowerCase() %>-postgres-keycloak.<%= kubernetesNamespace %>"
         # The Keycloak user, which will be used for the Keycloak "Admin Console"
         - name: KEYCLOAK_USER
           value: "admin"
@@ -98,21 +98,25 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: keycloak
+  name: <%= app.baseName.toLowerCase() %>-keycloak
   namespace: <%= kubernetesNamespace %>
   labels:
-    app: keycloak
+    app: <%= app.baseName.toLowerCase() %>-keycloak
 spec:
   ports:
   - port: 8080
-  type: ClusterIP
+    <%_ if (kubernetesServiceType !== 'Ingress') { _%>
+    type: <%= kubernetesServiceType %>
+    <%_ } else { _%>
+    type: ClusterIP
+    <%_ } _%>
   selector:
-    app: keycloak
+    app: <%= app.baseName.toLowerCase() %>-keycloak
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: keycloak
+  name: <%= app.baseName.toLowerCase() %>-keycloak
   namespace: <%= kubernetesNamespace %>
 spec:
   rules:
@@ -121,5 +125,5 @@ spec:
       paths:
       - path: /.*
         backend:
-          serviceName: keycloak
+          serviceName: <%= app.baseName.toLowerCase() %>-keycloak
           servicePort: 8080
