@@ -46,6 +46,13 @@ module.exports = class extends BaseGenerator {
             defaults: false,
             description: 'Automatically configure Jenkins'
         });
+
+        // Automatically configure Gitlab
+        this.argument('autoconfigure-gitlab', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure Gitlab'
+        });
     }
 
     get initializing() {
@@ -77,6 +84,7 @@ module.exports = class extends BaseGenerator {
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
                 this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
+                this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
                 this.abort = false;
             },
             initConstants() {
