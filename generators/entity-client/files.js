@@ -77,7 +77,7 @@ function writeFiles() {
           needle: 'jhipster-needle-add-entity-to-menu',
           splicable: [
               // prettier-ignore
-              `<router-link to="${className}" tag="b-dropdown-item" class="dropdown-item" v-on:click="collapseNavbar()">
+              `<router-link to="${entityName}" tag="b-dropdown-item" class="dropdown-item" v-on:click="collapseNavbar()">
                     <font-awesome-icon icon="asterisk" />
                     <span v-text="$t('global.menu.entities.${entityName}')">${className}</span>
               </router-link>`
@@ -115,7 +115,7 @@ function writeFiles() {
                     component: ${className}
               },{
                    path: '/${entityName}/new',
-                   name: '${className}Create',
+                   name: '${className}Edit',
                    component: ${className}Update
              },{
                    path: '/${entityName}/:${entityName}Id/edit',

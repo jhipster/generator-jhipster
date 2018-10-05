@@ -71,10 +71,6 @@
                         <%_ if (fieldType === 'LocalDate') { _%>
                         <div class="input-group">
                             <input id="field_<%= fieldName %>" type="date" class="form-control" name="<%= fieldName %>"  :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %> />
-
-                            <span class="input-group-append">
-                                <button type="button" class="btn btn-secondary" v-on:click="<%= fieldName %>Dp.toggle()"><font-awesome-icon icon="'calendar-alt'"></font-awesome-icon></button>
-                            </span>
                         </div>
                         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                         <div class="d-flex">
@@ -100,40 +96,40 @@
                                 </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('minlength')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minlength" v-text="$t('entity.validation.minlength')">
+                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minLength" v-bind:value="$t('entity.validation.minlength')">
                                     This field is required to be at least <%= fields[idx].fieldValidateRulesMinlength %> characters.
                                 </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxlength" v-text="$t('entity.validation.maxlength')">
+                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxLength" v-bind:value="$t('entity.validation.maxlength')">
                                     This field cannot be longer than <%= fields[idx].fieldValidateRulesMaxlength %> characters.
                                 </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('min')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.min" v-text="$t('entity.validation.min')">
+                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minLength" v-bind:value="$t('entity.validation.min')">
                                     This field should be at least <%= fields[idx].fieldValidateRulesMin %> characters.
                                 </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('max')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.max" v-text="$t('entity.validation.max')">
+                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxLength" v-bind:value="$t('entity.validation.max')">
                                     This field cannot be longer than <%= fields[idx].fieldValidateRulesMax %> characters.
                                 </small>
                             <%_ } _%>
-                            <%_ if (fields[idx].fieldValidateRules.includes('minbytes')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minbytes" v-text="$t('entity.validation.minbytes')">
+                            <!--<%_ if (fields[idx].fieldValidateRules.includes('minbytes')) { _%>
+                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minbytes" v-bind:value="$t('entity.validation.minbytes')">
                                     This field should be at least <%= fields[idx].fieldValidateRulesMinbytes %> characters.
                                 </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('maxbytes')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxbytes" v-text="$t('entity.validation.maxbytes')">
+                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxbytes" v-bind:value="$t('entity.validation.maxbytes')">
                                     This field should be at least <%= fields[idx].fieldValidateRulesMaxbytes %> characters.
                                 </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('pattern')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.pattern" v-text="$t('entity.validation.pattern')">
+                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.pattern" v-bind:value="$t('entity.validation.pattern')">
                                     This field should follow pattern for "<%= fieldNameHumanized %>".
                                 </small>
-                            <%_ } _%>
+                            <%_ } _%>-->
                             <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
                                 <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.number" v-text="$t('entity.validation.number')">
                                     This field should be a number.
@@ -163,7 +159,7 @@
     </div>
 </template>
 <script>
-    import {integer, required} from 'vuelidate/lib/validators'
+    import {integer, required, minLength, maxLength, pattern} from 'vuelidate/lib/validators'
     import axios from 'axios'
     import {SERVER_API_URL} from "../../constants";
 
@@ -184,12 +180,18 @@
             <%= entityInstance %>: {
                 <%_ for (idx in fields) {
                     const fieldName = fields[idx].fieldName;
-                    const validate = fields[idx].fieldValidate;
+                    const fieldType = fields[idx].fieldType;
                     _%>
                     <%= fieldName %>:  {
                         <%_ if (fields[idx].fieldValidate === true) { _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('required')) { _%>
                                 required,
+                            <%_ } _%>
+                            <%_ if (fields[idx].fieldValidateRules.includes('minlength')) { _%>
+                                minLength: minLength(<%= fields[idx].fieldValidateRulesMinlength %>),
+                            <%_ } _%>
+                            <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
+                                maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
                             <%_ } _%>
                             <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
                                 integer
@@ -202,10 +204,14 @@
         },
         beforeRouteEnter (to, from, next) {
             next(vm => {
-                if (to.params.<%= entityInstance %>Id) {
-                    vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
+                if (to.params.authorId) {
+                    vm.retrieveAuthor(to.params.authorId);
+                } else {
+                    for (var key in vm.author) {
+                        vm.author[key] = null;
+                    }
                 }
-            })
+            });
         },
         methods: {
             save() {

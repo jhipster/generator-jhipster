@@ -24,9 +24,11 @@
                         vm.$router.push('/');
                     } else {
                         vm.$store.commit('logout');
+                        vm.$router.push('/');
                     }
                 }).catch(function () {
                     vm.$store.commit('logout');
+                    vm.$router.push('/');
                 });
             },
             hasAnyAuthority: function(authorities) {
