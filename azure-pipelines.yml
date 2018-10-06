@@ -38,20 +38,37 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
-      # ngx-default:
-      #   JHI_APP: ngx-default
-      #   JHI_PROFILE: prod
-      #   JHI_PROTRACTOR: 1
+      ngx-default:
+        JHI_APP: ngx-default
+        JHI_PROFILE: prod
+        JHI_PROTRACTOR: 1
       ngx-psql-es-noi18n:
         JHI_APP: ngx-psql-es-noi18n
         JHI_PROFILE: prod
         JHI_PROTRACTOR: 1
-      # ngx-gradle-fr:
-      #   JHI_APP: ngx-gradle-fr
-      #   JHI_PROFILE: prod
-      #   JHI_PROTRACTOR: 1
-      # ngx-h2mem-ws-nol2:
-      #   JHI_APP: ngx-h2mem-ws-nol2
+      ngx-gradle-fr:
+        JHI_APP: ngx-gradle-fr
+        JHI_PROFILE: prod
+        JHI_PROTRACTOR: 1
+      ngx-mariadb-oauth2-sass-infinispan:
+        JHI_APP: ngx-mariadb-oauth2-sass-infinispan
+        JHI_PROTRACTOR: 1
+      ngx-h2mem-ws-nol2:
+        JHI_APP: ngx-h2mem-ws-nol2
+      ngx-mongodb-kafka-cucumber:
+        JHI_APP: ngx-mongodb-kafka-cucumber
+      ngx-session-cassandra-fr:
+        JHI_APP: ngx-session-cassandra-fr
+      ngx-couchbase:
+        JHI_APP: ngx-couchbase
+        JHI_PROFILE: prod
+      react-default:
+        JHI_APP: react-default
+        JHI_PROFILE: prod
+        JHI_PROTRACTOR: 1
+      react-noi18n-es-ws-gradle-session:
+        JHI_APP: react-noi18n-es-ws-gradle-session
+        JHI_PROTRACTOR: 1
 
   steps:
   #----------------------------------------------------------------------

@@ -91,8 +91,5 @@ if [ "$JHI_RUN_APP" == 1 ]; then
     result=$?
     kill $(cat .pid)
 
-    echo "ELASTICSEARCH logs:"
-    docker logs docker_travispsqlesnoi18n-elasticsearch_1
-
     exit $result
 fi
