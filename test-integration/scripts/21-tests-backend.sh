@@ -36,12 +36,14 @@ fi
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
     ./mvnw test \
+        -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
         -Dlogging.level.io.github.jhipster.sample=OFF \
         -Dlogging.level.io.github.jhipster.travis=OFF
 elif [ -f "gradlew" ]; then
     ./gradlew test \
+        -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
         -Dlogging.level.io.github.jhipster.sample=OFF \

@@ -8,7 +8,8 @@ source $(dirname $0)/00-init-env.sh
 cd "$JHI_FOLDER_APP"
 if [ -a src/main/docker/couchbase.yml ]; then
     docker-compose -f src/main/docker/couchbase.yml up -d
-    sleep 10
+    sleep 20
+    docker ps -a
 fi
 
 #-------------------------------------------------------------------------------
@@ -66,24 +67,24 @@ if [ "$JHI_RUN_APP" == 1 ]; then
         cd "$JHI_FOLDER_UAA"
         java \
             -jar app.war \
-            --spring.profiles.active="$JHI_PROFILE" &
-            # --spring.profiles.active="$JHI_PROFILE" \
-            # --logging.level.org.zalando=OFF \
-            # --logging.level.io.github.jhipster=OFF \
-            # --logging.level.io.github.jhipster.sample=OFF \
-            # --logging.level.io.github.jhipster.travis=OFF &
+            --spring.profiles.active="$JHI_PROFILE" \
+            --logging.level.ROOT=OFF \
+            --logging.level.org.zalando=OFF \
+            --logging.level.io.github.jhipster=OFF \
+            --logging.level.io.github.jhipster.sample=OFF \
+            --logging.level.io.github.jhipster.travis=OFF &
         sleep 80
     fi
 
     cd "$JHI_FOLDER_APP"
     java \
         -jar app.war \
-        --spring.profiles.active="$JHI_PROFILE" &
-        # --spring.profiles.active="$JHI_PROFILE" \
-        # --logging.level.org.zalando=OFF \
-        # --logging.level.io.github.jhipster=OFF \
-        # --logging.level.io.github.jhipster.sample=OFF \
-        # --logging.level.io.github.jhipster.travis=OFF &
+        --spring.profiles.active="$JHI_PROFILE" \
+        --logging.level.ROOT=OFF \
+        --logging.level.org.zalando=OFF \
+        --logging.level.io.github.jhipster=OFF \
+        --logging.level.io.github.jhipster.sample=OFF \
+        --logging.level.io.github.jhipster.travis=OFF &
     echo $! > .pid
     sleep 40
 
