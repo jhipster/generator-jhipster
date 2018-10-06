@@ -55,6 +55,7 @@ function askPipeline() {
             default: 'jenkins',
             choices: [
                 { name: 'Jenkins pipeline', value: 'jenkins' },
+                { name: 'Azure Pipelines', value: 'azure' },
                 { name: 'GitLab CI', value: 'gitlab' },
                 { name: 'Travis CI', value: 'travis' }
             ]
@@ -67,7 +68,7 @@ function askPipeline() {
 }
 
 function askIntegrations() {
-    if (this.abort || !this.pipeline) return;
+    if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
     if (this.autoconfigureTravis) {
         this.cicdIntegrations = [];
         return;

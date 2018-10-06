@@ -114,7 +114,10 @@ module.exports = class extends BaseGenerator {
                 statistics.sendSubGenEvent('generator', 'ci-cd');
             },
             setTemplateConstants() {
-                if (this.abort || this.cicdIntegrations === undefined) return;
+                if (this.abort) return;
+                if (this.cicdIntegrations === undefined) {
+                    this.cicdIntegrations = [];
+                }
                 this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
@@ -141,6 +144,9 @@ module.exports = class extends BaseGenerator {
         }
         if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');
+        }
+        if (this.pipeline === 'azure') {
+            this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
         }
 
         if (this.cicdIntegrations.includes('deploy')) {

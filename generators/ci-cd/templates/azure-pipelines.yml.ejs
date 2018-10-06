@@ -1,0 +1,71 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+jobs:
+- job: Test
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  variables:
+    NODE_VERSION: <%= NODE_VERSION %>
+    SPRING_OUTPUT_ANSI_ENABLED: NEVER
+    SPRING_JPA_SHOW_SQL: false
+
+  steps:
+  #----------------------------------------------------------------------
+  # Install all tools and check configuration
+  #----------------------------------------------------------------------
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '<%= NODE_VERSION %>'
+    displayName: 'TOOLS: install Node.js'
+  <%_ if (clientPackageManager === 'npm') { _%>
+  - script: sudo npm install -g npm
+    displayName: 'TOOLS: update NPM'
+  <%_ } else if (clientPackageManager === 'yarn') { _%>
+  - script: |
+      curl -o- -L https://yarnpkg.com/install.sh | bash
+      export PATH=$HOME/.yarn/bin:$PATH
+    displayName: 'TOOLS: install Yarn'
+  <%_ } _%>
+  - script: sudo /etc/init.d/mysql stop
+    displayName: 'TOOLS: stop MySQL'
+  #----------------------------------------------------------------------
+  # Tests
+  #----------------------------------------------------------------------
+  - script: <%= clientPackageManager %> install
+    displayName: 'INSTALL: launch <%= clientPackageManager %> install'
+  <%_ if (buildTool === 'maven') { _%>
+  - script: |
+      chmod +x mvnw
+      ./mvnw clean test
+  <%_ } else if (buildTool === 'gradle') { _%>
+  - script: |
+      chmod +x gradlew
+      ./gradlew clean test
+  <%_ } _%>
+    displayName: 'TESTS: backend'
+<%_ if (applicationType !== 'microservice') { _%>
+  - script: <%= clientPackageManager %> test<%= frontTests %>
+    displayName: 'TESTS: frontend'
+<%_ } _%>
+<%_ if (buildTool === 'maven') { _%>
+  - script: ./mvnw verify -Pprod -DskipTests
+<%_ } else if (buildTool === 'gradle') { _%>
+  - script: ./gradlew bootWar -Pprod -x test
+<%_ } _%>
+    displayName: 'TESTS: packaging'
