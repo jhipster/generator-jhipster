@@ -161,6 +161,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LocaleConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LoggingAspectConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MetricsConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/PageableSpringEncoder.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/WebConfigurer.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/audit/package-info.java`,

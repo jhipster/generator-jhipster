@@ -18,13 +18,28 @@
 -%>
 package <%=packageName%>.config;
 
+import feign.codec.Encoder;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignClientsConfiguration;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Pageable;
+import <%=packageName%>.config.PageableSpringEncoder;
 
 @Configuration
 @EnableFeignClients(basePackages = "<%=packageName%>")
+@Import(FeignClientsConfiguration.class)
 public class FeignConfiguration {
+
+    @Autowired
+    private ObjectFactory<HttpMessageConverters> messageConverters;
 
     /**
      * Set the Feign specific log level to log client REST requests
@@ -32,5 +47,12 @@ public class FeignConfiguration {
     @Bean
     feign.Logger.Level feignLoggerLevel() {
         return feign.Logger.Level.BASIC;
+    }
+
+    @Bean
+    @ConditionalOnClass(Pageable.class)
+    @Primary
+    public Encoder feignEncoderPageable() {
+        return new PageableSpringEncoder(new SpringEncoder(this.messageConverters));
     }
 }
