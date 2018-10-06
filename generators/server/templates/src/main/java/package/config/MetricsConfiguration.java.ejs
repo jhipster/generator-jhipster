@@ -34,6 +34,9 @@ import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 <%_ if (databaseType === 'sql') { _%>
 import com.zaxxer.hikari.HikariDataSource;
 <%_ } _%>
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.dropwizard.DropwizardExports;
+import io.prometheus.client.exporter.MetricsServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -48,6 +51,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.TimeUnit;
 
