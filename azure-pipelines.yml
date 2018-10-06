@@ -69,6 +69,21 @@ jobs:
       react-noi18n-es-ws-gradle-session:
         JHI_APP: react-noi18n-es-ws-gradle-session
         JHI_PROTRACTOR: 1
+      ms-ngx-gateway-eureka:
+        JHI_APP: ms-ngx-gateway-eureka
+      ms-ngx-gateway-eureka-oauth2:
+        JHI_APP: ms-ngx-gateway-eureka-oauth2
+        JHI_PROTRACTOR: 1
+      ms-ngx-gateway-consul:
+        JHI_APP: ms-ngx-gateway-consul
+      ms-ngx-gateway-uaa:
+        JHI_APP: ms-ngx-gateway-uaa
+      ms-micro-eureka:
+        JHI_APP: ms-micro-eureka
+      ms-micro-consul:
+        JHI_APP: ms-micro-consul
+      webflux-mongodb:
+        JHI_APP: webflux-mongodb
 
   steps:
   #----------------------------------------------------------------------
