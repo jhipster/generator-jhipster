@@ -238,7 +238,7 @@ spec:
             - name: datadir
               mountPath: /data/db
       containers:
-        - name: mongodb-replicaset
+        - name: mongodb
           image: <%= DOCKER_MONGODB %>
           imagePullPolicy: "IfNotPresent"
           env:
@@ -254,7 +254,7 @@ spec:
             - name: PORT
               value: "27017"
           ports:
-            - name: mongodb
+            - name: peer
               containerPort: 27017
           command:
             - mongod
