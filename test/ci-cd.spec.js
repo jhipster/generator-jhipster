@@ -357,6 +357,26 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
     });
 
+    describe('GitLab: maven AngularX Yarn inside Docker Autoconfigure', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
+                })
+                .withOptions({ autoconfigureGitlab: true })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.gitlab);
+        });
+        it('contains image: jhipster, Sonar, Heroku', () => {
+            assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
+            assert.noFileContent('.gitlab-ci.yml', /sonar/);
+            assert.noFileContent('.gitlab-ci.yml', /heroku/);
+        });
+    });
+
     //--------------------------------------------------
     // Travis CI tests
     //--------------------------------------------------

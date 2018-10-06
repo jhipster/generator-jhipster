@@ -37,6 +37,15 @@ function askPipeline() {
         this.insideDocker = false;
         return;
     }
+
+    if (this.autoconfigureGitlab) {
+        this.log('Auto-configuring Gitlab');
+        this.pipeline = 'gitlab';
+        this.sendBuildToGitlab = true;
+        this.insideDocker = true;
+        return;
+    }
+
     const done = this.async();
     const prompts = [
         {
@@ -69,6 +78,14 @@ function askIntegrations() {
         this.insideDocker = false;
         return;
     }
+
+    if (this.autoconfigureGitlab) {
+        this.cicdIntegrations = [];
+        this.sendBuildToGitlab = true;
+        this.insideDocker = true;
+        return;
+    }
+
     const done = this.async();
     const prompts = [
         {
