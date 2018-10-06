@@ -58,5 +58,5 @@ spec:
         command:
           - '/bin/sh'
           - '-c'
-          - 'metricbeat setup --dashboards -E output.elasticsearch.hosts="[$ELASTICSEARCH_URL]" -E setup.kibana.host=$KIBANA_URL -E setup.dashboards.directory=/tmp'
+          - 'metricbeat setup --dashboards -E output.elasticsearch.hosts="[$ELASTICSEARCH_URL]" -E setup.kibana.host=$KIBANA_URL -E setup.dashboards.directory=/usr/share/metricbeat/import'
       restartPolicy: OnFailure

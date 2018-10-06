@@ -27,7 +27,7 @@ data:
     unicast.host: jhipster-elasticsearch-discovery
     network.host: 0.0.0.0
     http.enabled: "true"
-    memory.opts: -Xms512m -Xmx512m
+    memory.opts: -Djava.net.preferIPv4Stack=true -Xms512m -Xmx512m
     cluster.name: jhipster-elasticsearch-cluster
     memory.lock: "false"
     path.data: /es/data
@@ -63,7 +63,7 @@ spec:
         - -w
         - vm.max_map_count=262144
         securityContext:
-          runAsUser: 0
+          privileged: true
         volumeMounts:
         - name: storage
           mountPath: /es
@@ -142,10 +142,10 @@ spec:
               key: path.logs
         resources:
           requests:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "200m"
           limits:
-            memory: "512Mi"
+            memory: "1024Mi"
             cpu: "400m"
         ports:
         - containerPort: 9300
@@ -201,7 +201,7 @@ spec:
         - -w
         - vm.max_map_count=262144
         securityContext:
-          runAsUser: 0
+          privileged: true
         volumeMounts:
         - name: storage
           mountPath: /es
@@ -280,10 +280,10 @@ spec:
               key: path.logs
         resources:
           requests:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "200m"
           limits:
-            memory: "512Mi"
+            memory: "1024Mi"
             cpu: "400m"
         ports:
         - containerPort: 9300
@@ -411,10 +411,10 @@ spec:
               key: path.logs
         resources:
           requests:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "200m"
           limits:
-            memory: "512Mi"
+            memory: "1024Mi"
             cpu: "400m"
         ports:
         - containerPort: 9300
