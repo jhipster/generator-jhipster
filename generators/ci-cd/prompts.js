@@ -74,7 +74,7 @@ function askPipeline() {
 }
 
 function askIntegrations() {
-    if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
+    if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
     if (this.autoconfigureTravis) {
         this.cicdIntegrations = [];
         return;
