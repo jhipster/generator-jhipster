@@ -41,6 +41,7 @@ import org.slf4j.MarkerFactory;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
@@ -52,7 +53,7 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableMetrics(proxyTargetClass = true)
-public class MetricsConfiguration extends MetricsConfigurerAdapter {
+public class MetricsConfiguration extends MetricsConfigurerAdapter implements ServletContextInitializer {
 
     private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
     private static final String PROP_METRIC_REG_JVM_GARBAGE = "jvm.garbage";
@@ -138,6 +139,21 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
             reporter.start(jHipsterProperties.getMetrics().getLogs().getReportFrequency(), TimeUnit.SECONDS);
+        }
+    }
+
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+
+        if (jHipsterProperties.getMetrics().getPrometheus().isEnabled()) {
+            String endpoint = jHipsterProperties.getMetrics().getPrometheus().getEndpoint();
+
+            log.debug("Initializing prometheus metrics exporting via {}", endpoint);
+
+            CollectorRegistry.defaultRegistry.register(new DropwizardExports(metricRegistry));
+            servletContext
+                .addServlet("prometheusMetrics", new MetricsServlet(CollectorRegistry.defaultRegistry))
+                .addMapping(endpoint);
         }
     }
 }
