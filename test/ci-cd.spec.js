@@ -10,6 +10,7 @@ const expectedFiles = {
     jenkins: ['Jenkinsfile', 'src/main/docker/jenkins.yml', 'src/main/resources/idea.gdsl'],
     gitlab: ['.gitlab-ci.yml'],
     circle: ['circle.yml'],
+    azure: ['azure-pipelines.yml'],
     dockerRegistry: ['src/main/docker/docker-registry.yml']
 };
 
@@ -500,6 +501,100 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
         it('contains distributionManagement in pom.xml', () => {
             assert.fileContent('pom.xml', /distributionManagement/);
+        });
+    });
+
+    //--------------------------------------------------
+    // Azure Pipelines tests
+    //--------------------------------------------------
+    describe('Azure Pipelines: maven AngularX Yarn', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'azure',
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
+        });
+    });
+
+    describe('Azure Pipelines: maven AngularX NPM', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'azure',
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
+        });
+    });
+
+    describe('Azure Pipelines: Gradle AngularX Yarn', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-yarn'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'azure',
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
+        });
+    });
+
+    describe('Azure Pipelines: Gradle AngularX NPM', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'azure',
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
+        });
+    });
+
+    describe('Azure Pipelines: Autoconfigure', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
+                })
+                .withOptions({ autoconfigureAzure: true })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
         });
     });
 });
