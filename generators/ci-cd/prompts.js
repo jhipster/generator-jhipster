@@ -46,6 +46,12 @@ function askPipeline() {
         return;
     }
 
+    if (this.autoconfigureAzure) {
+        this.log('Auto-configuring Azure');
+        this.pipeline = 'azure';
+        return;
+    }
+
     const done = this.async();
     const prompts = [
         {
@@ -84,6 +90,12 @@ function askIntegrations() {
         this.cicdIntegrations = [];
         this.sendBuildToGitlab = true;
         this.insideDocker = true;
+        return;
+    }
+
+    if (this.autoconfigureAzure) {
+        this.log('Auto-configuring Azure');
+        this.pipeline = 'azure';
         return;
     }
 

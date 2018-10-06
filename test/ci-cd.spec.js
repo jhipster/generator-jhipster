@@ -582,4 +582,19 @@ describe('JHipster CI-CD Sub Generator', () => {
             assert.file(expectedFiles.azure);
         });
     });
+
+    describe('Azure Pipelines: Autoconfigure', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
+                })
+                .withOptions({ autoconfigureAzure: true })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
+        });
+    });
 });

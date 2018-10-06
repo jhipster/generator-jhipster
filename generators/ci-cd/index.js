@@ -53,6 +53,13 @@ module.exports = class extends BaseGenerator {
             defaults: false,
             description: 'Automatically configure Gitlab'
         });
+
+        // Automatically configure Azure
+        this.argument('autoconfigure-azure', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure Azure'
+        });
     }
 
     get initializing() {
@@ -85,6 +92,7 @@ module.exports = class extends BaseGenerator {
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
                 this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
                 this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
+                this.autoconfigureAzure = this.options['autoconfigure-azure'];
                 this.abort = false;
             },
             initConstants() {
