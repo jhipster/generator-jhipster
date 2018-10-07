@@ -35,7 +35,7 @@ jib {
         image = '<%= baseName.toLowerCase() %>:latest'
     }
     container {
-        entrypoint = ['sh', '-c', 'chmod +x /entrypoint.sh && /entrypoint.sh']
+        entrypoint = ['sh', '-c', 'chmod +x /entrypoint.sh && sync && /entrypoint.sh']
         ports = ['<%= serverPort %>'<% if (cacheProvider === 'hazelcast') { %>, '5701/udp' <% } %>]
         environment = [
             <%_ if (cacheProvider === 'infinispan') { _%>JAVA_OPTS: '-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true',<%_ } _%>
