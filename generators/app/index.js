@@ -436,7 +436,7 @@ module.exports = class extends BaseGenerator {
                                 }
                             });
                         } else {
-                            this.warning('Git repo could not be initialized, as Git is not installed on your system');
+                            this.warning('Git repository could not be initialized, as Git is not installed on your system');
                         }
                     });
                 }
@@ -473,7 +473,9 @@ module.exports = class extends BaseGenerator {
                                 );
                             });
                         } else {
-                            this.warning('The generated application could not be added to Git, as the Git repository was not initialized.');
+                            this.warning(
+                                'The generated application could not be committed to Git, as Git repository could not be initialized.'
+                            );
                         }
                     });
                 }
