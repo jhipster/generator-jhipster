@@ -9,7 +9,7 @@
     "JDL"
   ],
   "scripts": {
-    "bundle": "rm -rf ./dist && webpack",
+    "bundle": "node ./scripts/bundle.js && webpack",
     "coverage": "nyc --reporter=text-summary report",
     "diagrams": "node ./scripts/serialize_grammar.js && eslint lib/dsl/gen/generated_serialized_grammar.js --fix",
     "lint": "eslint .",
