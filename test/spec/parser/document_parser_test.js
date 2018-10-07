@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const JDLReader = require('../../../lib/reader/jdl_reader');
 const DocumentParser = require('../../../lib/parser/document_parser');
@@ -59,7 +59,7 @@ describe('DocumentParser', () => {
 
         it('builds a JDLObject', () => {
           expect(jdlObject).not.to.be.null;
-          expect(jdlObject.entities.Department).to.deep.eq(
+          expect(jdlObject.entities.Department).to.deep.equal(
             new JDLEntity({
               name: 'Department',
               tableName: 'Department',
@@ -67,7 +67,10 @@ describe('DocumentParser', () => {
                 name: new JDLField({
                   name: 'name',
                   type: FieldTypes.STRING,
-                  validations: { required: new JDLValidation({ name: Validations.REQUIRED }) }
+                  validations: {
+                    required: new JDLValidation({ name: Validations.REQUIRED }),
+                    unique: new JDLValidation({ name: Validations.UNIQUE })
+                  }
                 }),
                 description: new JDLField({
                   name: 'description',
@@ -868,6 +871,22 @@ describe('DocumentParser', () => {
 
         it('formats it', () => {
           expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value.includes("\\'")).be.true;
+        });
+      });
+      context('when parsing a JDL with the unique constraint', () => {
+        let jdlObject = null;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/unique.jdl']);
+          jdlObject = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            applicationType: ApplicationTypes.MONOLITH
+          });
+        });
+
+        it('accepts it', () => {
+          expect(jdlObject.entities.A.fields.myString.validations.unique).not.to.be.undefined;
+          expect(jdlObject.entities.A.fields.myInteger.validations.unique).not.to.be.undefined;
         });
       });
     });

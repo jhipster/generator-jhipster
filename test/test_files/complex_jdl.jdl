@@ -1,5 +1,5 @@
 entity Department {
-  name String required,
+  name String required unique,
   description TextBlob,
   advertisement Blob,
   logo ImageBlob

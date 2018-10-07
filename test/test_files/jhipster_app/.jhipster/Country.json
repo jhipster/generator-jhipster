@@ -26,7 +26,10 @@
     },
     {
       "fieldName": "countryName",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "unique"
+      ]
     }
   ],
   "changelogDate": "20160926101210",
