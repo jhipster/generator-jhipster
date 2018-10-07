@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const fs = require('fs');
 const path = require('path');
@@ -26,8 +26,15 @@ const { convertEntitiesToJDL } = require('../../../lib/converters/json_to_jdl_en
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
-const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Options;
-const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').Values;
+const {
+  Options: { DTO, SEARCH_ENGINE, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
+  Values: {
+    dto: { MAPSTRUCT },
+    pagination,
+    service: { SERVICE_CLASS },
+    searchEngine: { ELASTIC_SEARCH }
+  }
+} = require('../../../lib/core/jhipster/binary_options');
 
 describe('JSONToJDLEntityConverter', () => {
   describe('::convertEntitiesToJDL', () => {
@@ -81,10 +88,16 @@ describe('JSONToJDLEntityConverter', () => {
         expect(
           jdlObject
             .getOptions()
+            .filter(option => option.name === DTO && option.value === MAPSTRUCT && option.entityNames.has('Employee'))
+            .length
+        ).to.eq(1);
+        expect(
+          jdlObject
+            .getOptions()
             .filter(
               option =>
-                option.name === BinaryOptions.DTO &&
-                option.value === BinaryOptionValues.dto.MAPSTRUCT &&
+                option.name === PAGINATION &&
+                option.value === pagination['INFINITE-SCROLL'] &&
                 option.entityNames.has('Employee')
             ).length
         ).to.eq(1);
@@ -92,10 +105,7 @@ describe('JSONToJDLEntityConverter', () => {
           jdlObject
             .getOptions()
             .filter(
-              option =>
-                option.name === BinaryOptions.PAGINATION &&
-                option.value === BinaryOptionValues.pagination['INFINITE-SCROLL'] &&
-                option.entityNames.has('Employee')
+              option => option.name === SERVICE && option.value === SERVICE_CLASS && option.entityNames.has('Employee')
             ).length
         ).to.eq(1);
         expect(
@@ -103,9 +113,7 @@ describe('JSONToJDLEntityConverter', () => {
             .getOptions()
             .filter(
               option =>
-                option.name === BinaryOptions.SERVICE &&
-                option.value === BinaryOptionValues.service.SERVICE_CLASS &&
-                option.entityNames.has('Employee')
+                option.name === SEARCH_ENGINE && option.value === ELASTIC_SEARCH && option.entityNames.has('Employee')
             ).length
         ).to.eq(1);
         expect(
@@ -113,9 +121,7 @@ describe('JSONToJDLEntityConverter', () => {
             .getOptions()
             .filter(
               option =>
-                option.name === BinaryOptions.SEARCH_ENGINE &&
-                option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH &&
-                option.entityNames.has('Employee')
+                option.name === MICROSERVICE && option.value === 'mymicroservice' && option.entityNames.has('Employee')
             ).length
         ).to.eq(1);
         expect(
@@ -123,19 +129,7 @@ describe('JSONToJDLEntityConverter', () => {
             .getOptions()
             .filter(
               option =>
-                option.name === BinaryOptions.MICROSERVICE &&
-                option.value === 'mymicroservice' &&
-                option.entityNames.has('Employee')
-            ).length
-        ).to.eq(1);
-        expect(
-          jdlObject
-            .getOptions()
-            .filter(
-              option =>
-                option.name === BinaryOptions.ANGULAR_SUFFIX &&
-                option.value === 'myentities' &&
-                option.entityNames.has('Employee')
+                option.name === ANGULAR_SUFFIX && option.value === 'myentities' && option.entityNames.has('Employee')
             ).length
         ).to.eq(1);
         expect(

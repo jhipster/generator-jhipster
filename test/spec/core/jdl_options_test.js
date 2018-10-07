@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const JDLOptions = require('../../../lib/core/jdl_options');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');

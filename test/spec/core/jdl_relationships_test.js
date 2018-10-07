@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');

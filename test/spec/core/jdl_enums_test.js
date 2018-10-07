@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const JDLEnums = require('../../../lib/core/jdl_enums');
 const JDLEnum = require('../../../lib/core/jdl_enum');
 

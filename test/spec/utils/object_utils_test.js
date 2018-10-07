@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const ObjectUtils = require('../../../lib/utils/object_utils');
 
 describe('ObjectUtils', () => {

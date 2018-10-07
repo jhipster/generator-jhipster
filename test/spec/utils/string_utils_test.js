@@ -19,7 +19,7 @@
 
 /* define global expect */
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const StringUtils = require('../../../lib/utils/string_utils');
 

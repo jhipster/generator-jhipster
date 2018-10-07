@@ -19,7 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
 

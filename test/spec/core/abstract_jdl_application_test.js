@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const AbstractJDLApplication = require('../../../lib/core/abstract_jdl_application');
 
 describe('AbstractJDLApplication', () => {

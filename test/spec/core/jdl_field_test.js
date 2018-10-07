@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');

@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const fs = require('fs');
 const path = require('path');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');

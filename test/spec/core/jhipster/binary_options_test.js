@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const BinaryOptions = require('../../../../lib/core/jhipster/binary_options');
 
 describe('BinaryOptions', () => {

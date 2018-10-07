@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const EntityParser = require('../../../lib/parser/entity_parser');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');

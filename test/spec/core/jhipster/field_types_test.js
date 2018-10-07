@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const DatabaseTypes = require('../../../../lib/core/jhipster/database_types');
 const FieldTypes = require('../../../../lib/core/jhipster/field_types');

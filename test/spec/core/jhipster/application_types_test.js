@@ -20,7 +20,7 @@
 /* eslint-disable no-new */
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const ApplicationTypes = require('../../../../lib/core/jhipster/application_types');
 
 describe('ApplicationTypes', () => {

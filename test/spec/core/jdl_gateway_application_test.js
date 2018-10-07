@@ -19,7 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
 const JDLGatewayApplication = require('../../../lib/core/jdl_gateway_application');
 

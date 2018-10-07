@@ -19,7 +19,7 @@
 
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 const JHipsterApplicationExporter = require('../../../lib/export/jhipster_application_exporter');

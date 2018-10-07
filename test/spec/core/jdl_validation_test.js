@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const JDLValidation = require('../../../lib/core/jdl_validation');
 const Validations = require('../../../lib/core/jhipster/validations');
 

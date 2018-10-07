@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const parse = require('../../../lib/dsl/api').parse;
 
 describe('JDLSyntaxValidatorVisitor', () => {
