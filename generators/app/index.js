@@ -473,7 +473,7 @@ module.exports = class extends BaseGenerator {
                                 );
                             });
                         } else {
-                            this.warning('The generated application could not be added to Git, as Git is not installed on your system');
+                            this.warning('The generated application could not be added to Git, as the Git repository was not initialized.');
                         }
                     });
                 }
