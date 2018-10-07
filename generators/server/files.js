@@ -605,11 +605,8 @@ const serverFiles = {
     serverMicroservice: [
         {
             condition: generator =>
-                ( generator.applicationType === 'microservice' ||
-                    ( generator.applicationType === 'gateway' &&
-                        ( generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2' )
-                    )
-                ) && generator.authenticationType === 'uaa',
+                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway') &&
+                generator.authenticationType === 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -633,12 +630,7 @@ const serverFiles = {
         {
             condition: generator =>
                 !generator.reactive &&
-                ( generator.applicationType === 'microservice' ||
-                    ( generator.applicationType === 'gateway' &&
-                        ( generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2' )
-                    )
-                ) &&
-                generator.applicationType === 'microservice' && // I think that there's a mistake here...
+                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway') &&
                 generator.authenticationType === 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -674,7 +666,9 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive && generator.applicationType === 'microservice' && generator.authenticationType === 'jwt',
+                !generator.reactive &&
+                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway') &&
+                generator.authenticationType === 'jwt',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -697,11 +691,8 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                ( generator.applicationType === 'microservice' ||
-                    ( generator.applicationType === 'gateway' &&
-                        ( generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2' )
-                    )
-                ) && generator.authenticationType === 'oauth2',
+                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway') &&
+                generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -734,7 +725,7 @@ const serverFiles = {
         {
             condition: generator =>
                 generator.authenticationType === 'oauth2' &&
-                ( generator.applicationType === 'microservice' || generator.applicationType === 'gateway' ),
+                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway'),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -764,14 +755,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                ( generator.applicationType === 'microservice' ||
-                    (
-                        generator.applicationType === 'gateway' &&
-                        (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')
-                    )
-                ) &&
-                (generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway'),
+            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -781,13 +765,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                ( generator.applicationType === 'microservice' ||
-                    (
-                        generator.applicationType === 'gateway' &&
-                        (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')
-                    )
-                ) && generator.applicationType === 'microservice',
+            condition: generator => generator.applicationType === 'microservice',
             path: SERVER_MAIN_RES_DIR,
             templates: [{ file: 'static/microservices_index.html', method: 'copy', renameTo: () => 'static/index.html' }]
         }
