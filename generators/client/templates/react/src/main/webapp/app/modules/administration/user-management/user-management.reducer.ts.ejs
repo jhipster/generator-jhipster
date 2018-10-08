@@ -107,7 +107,7 @@ export default (state: UserManagementState = initialState, action): UserManageme
         ...state,
         updating: false,
         updateSuccess: true,
-        user: action.payload.data
+        user: {}
       };
     case SUCCESS(ACTION_TYPES.DELETE_USER):
       return {
