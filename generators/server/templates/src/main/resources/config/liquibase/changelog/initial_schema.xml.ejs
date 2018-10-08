@@ -24,28 +24,10 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <property name="now" value="now()" dbms="h2"/>
     <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-    <property name="now" value="now()" dbms="mysql"/>
     <property name="autoIncrement" value="true"/>
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql') { _%>
-    <property name="now" value="current_timestamp" dbms="postgresql"/>
-
-    <changeSet id="00000000000000" author="jhipster">
-        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
-    </changeSet>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'oracle') { _%>
-    <property name="now" value="sysdate" dbms="oracle"/>
-
-    <changeSet id="00000000000000" author="jhipster">
-        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
-    </changeSet>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'mssql') { _%>
-    <property name="now" value="GETDATE()" dbms="mssql"/>
-
+    <%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'oracle' || prodDatabaseType === 'mssql') { _%>
     <changeSet id="00000000000000" author="jhipster">
         <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
     </changeSet>
@@ -90,9 +72,7 @@
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" type="timestamp" defaultValueDate="${now}">
-                <constraints nullable="false"/>
-            </column>
+            <column name="created_date" type="timestamp"/>
             <%_ if (authenticationType !== 'oauth2') { _%>
             <column name="reset_date" type="timestamp">
                 <constraints nullable="true"/>
