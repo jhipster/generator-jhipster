@@ -103,11 +103,6 @@ export default (state: UserManagementState = initialState, action): UserManageme
       };
     case SUCCESS(ACTION_TYPES.CREATE_USER):
     case SUCCESS(ACTION_TYPES.UPDATE_USER):
-      return {
-        ...state,
-        updating: false,
-        updateSuccess: true
-      };
     case SUCCESS(ACTION_TYPES.DELETE_USER):
       return {
         ...state,
