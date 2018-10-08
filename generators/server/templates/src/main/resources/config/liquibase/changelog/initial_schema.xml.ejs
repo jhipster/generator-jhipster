@@ -235,11 +235,13 @@
             <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="<%= jhiTablePrefix %>_date_time_wrapperPK"/>
             </column>
-            <column name="name" type="VARCHAR(50)"/>
             <column name="instant" type="timestamp"/>
             <column name="local_date_time" type="timestamp"/>
             <column name="offset_date_time" type="timestamp"/>
             <column name="zoned_date_time" type="timestamp"/>
+            <column name="local_time" type="time"/>
+            <column name="offset_time" type="time"/>
+            <column name="local_date" type="date"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

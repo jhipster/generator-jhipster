@@ -1216,12 +1216,12 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}config/timezone/HibernateTimeZoneTest.java`
                 },
                 {
-                    file: 'package/config/timezone/DateTimeWrapper.java',
-                    renameTo: generator => `${generator.testDir}config/timezone/DateTimeWrapper.java`
+                    file: 'package/repository/timezone/DateTimeWrapper.java',
+                    renameTo: generator => `${generator.testDir}repository/timezone/DateTimeWrapper.java`
                 },
                 {
-                    file: 'package/config/timezone/DateTimeWrapperRepository.java',
-                    renameTo: generator => `${generator.testDir}config/timezone/DateTimeWrapperRepository.java`
+                    file: 'package/repository/timezone/DateTimeWrapperRepository.java',
+                    renameTo: generator => `${generator.testDir}repository/timezone/DateTimeWrapperRepository.java`
                 }
             ]
         },

@@ -16,14 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config.timezone;
+package <%= packageName %>.repository.timezone;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Objects;
 
 @Entity
@@ -52,6 +49,15 @@ public class DateTimeWrapper implements Serializable {
 
     @Column(name = "zoned_date_time")
     private ZonedDateTime zonedDateTime;
+
+    @Column(name = "local_time")
+    private LocalTime localTime;
+
+    @Column(name = "offset_time")
+    private OffsetTime offsetTime;
+
+    @Column(name = "local_date")
+    private LocalDate localDate;
 
     public Long getId() {
         return id;
@@ -91,6 +97,30 @@ public class DateTimeWrapper implements Serializable {
 
     public void setZonedDateTime(ZonedDateTime zonedDateTime) {
         this.zonedDateTime = zonedDateTime;
+    }
+
+    public LocalTime getLocalTime() {
+        return localTime;
+    }
+
+    public void setLocalTime(LocalTime localTime) {
+        this.localTime = localTime;
+    }
+
+    public OffsetTime getOffsetTime() {
+        return offsetTime;
+    }
+
+    public void setOffsetTime(OffsetTime offsetTime) {
+        this.offsetTime = offsetTime;
+    }
+
+    public LocalDate getLocalDate() {
+        return localDate;
+    }
+
+    public void setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
     }
 
     @Override
