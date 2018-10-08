@@ -14,11 +14,11 @@
         </p>
         <p>
           <% if (clientFramework === 'react') { %>
-            <a th:href="@{|${baseUrl}/#/reset/finish/${user.resetKey}|}"
-             th:text="@{|${baseUrl}/#/reset/finish/${user.resetKey}|}">Login link</a>
+            <a th:with="url=(@{|${baseUrl}/#/reset/finish/${user.resetKey}|})" th:href="${url}"
+            th:text="${url}">Login link</a>
             <% } else { %>
-            <a th:href="@{|${baseUrl}/#/reset/finish?key=${user.resetKey}|}"
-             th:text="@{|${baseUrl}/#/reset/finish?key=${user.resetKey}|}">Login link</a>
+            <a th:with="url=(@{|${baseUrl}/#/reset/finish?key=${user.resetKey}|})" th:href="${url}"
+            th:text="${url}">Login link</a>
             <% } %>
         </p>
         <p>
