@@ -152,7 +152,6 @@ describe('User management reducer tests', () => {
       const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_ROLES), payload });
 
       expect(toTest).toMatchObject({
-        loading: false,
         authorities: payload.data
       });
     });
