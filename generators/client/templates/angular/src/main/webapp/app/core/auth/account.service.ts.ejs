@@ -26,6 +26,9 @@ import { Observable, Subject } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
+<%_ if (websocket === 'spring-websocket') { _%>
+import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
+<%_ } _%>
 
 @Injectable({providedIn: 'root'})
 export class AccountService  {
