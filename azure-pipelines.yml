@@ -79,8 +79,6 @@ jobs:
     displayName: 'TOOLS: update NPM'
   - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
     displayName: 'TOOLS: display configuration'
-  - bash: $(JHI_SCRIPTS)/02-display-tools.sh
-    displayName: 'TOOLS: display installed tools'
   - bash: $(JHI_SCRIPTS)/03-system.sh
     displayName: 'TOOLS: configure tools installed by the system'
 
@@ -95,6 +93,8 @@ jobs:
     displayName: 'GENERATION: project'
   - bash: $(JHI_SCRIPTS)/13-replace-version-generated-project.sh
     displayName: 'GENERATION: replace version in generated project'
+  - bash: $(JHI_SCRIPTS)/14-jhipster-info.sh
+    displayName: 'GENERATION: jhipster info'
 
   #----------------------------------------------------------------------
   # Launch tests
