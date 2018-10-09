@@ -33,7 +33,6 @@ env:
     - JHI_DISABLE_WEBPACK_LOGS=true
     - JHI_SCRIPTS=$TRAVIS_BUILD_DIR/test-integration/scripts
   matrix:
-    - JHI_APP=webflux-mongodb
     - JHI_APP=ngx-default JHI_PROFILE=prod JHI_PROTRACTOR=1
     - JHI_APP=ngx-psql-es-noi18n JHI_PROFILE=prod JHI_PROTRACTOR=1
     - JHI_APP=ngx-gradle-fr JHI_PROFILE=prod JHI_PROTRACTOR=1
@@ -50,6 +49,7 @@ env:
     - JHI_APP=ms-ngx-gateway-uaa
     - JHI_APP=ms-micro-eureka
     - JHI_APP=ms-micro-consul
+    - JHI_APP=webflux-mongodb
 
 #----------------------------------------------------------------------
 # Install all tools and check configuration
@@ -84,7 +84,7 @@ script:
   - $JHI_SCRIPTS/22-tests-frontend.sh
   - $JHI_SCRIPTS/23-package.sh
   - $JHI_SCRIPTS/24-tests-e2e.sh
-  - $JHI_SCRIPTS/25-sonar.sh
+  - $JHI_SCRIPTS/25-sonar-analyze.sh
 
 #----------------------------------------------------------------------
 # Cache
