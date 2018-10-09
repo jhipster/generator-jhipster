@@ -57,7 +57,7 @@ export class UserRouteAccessService implements CanActivate {
             }
 
             if (account) {
-                const hasAnyAuthority = accountService.hasAnyAuthority(authorities);
+                const hasAnyAuthority = this.accountService.hasAnyAuthority(authorities);
                 if (hasAnyAuthority) {
                     return true;
                 }
