@@ -40,7 +40,7 @@
         private <%= entityInstance %>Service: <%= entityAngularName %>Service,
         private parseLinks: JhiParseLinks,
         private jhiAlertService: JhiAlertService,
-        private principal: Principal,
+        private accountService: AccountService,
         private activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
         private dataUtils: JhiDataUtils,
