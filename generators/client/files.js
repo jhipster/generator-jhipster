@@ -47,6 +47,7 @@ function writeFiles() {
     this.copy('webapp/app/components/account/ResetPassword.vue', 'src/main/webapp/app/components/account/ResetPassword.vue');
     this.copy('webapp/app/components/account/Sessions.vue', 'src/main/webapp/app/components/account/Sessions.vue');
     this.copy('webapp/app/components/account/Settings.vue', 'src/main/webapp/app/components/account/Settings.vue');
+    this.copy('webapp/app/shared/date/filters.js', 'src/main/webapp/app/shared/date/filters.js');
     this.template('webapp/app/config/axios-interceptor.js.ejs', 'src/main/webapp/app/config/axios-interceptor.js');
 
     // Specs tests

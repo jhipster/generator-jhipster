@@ -53,9 +53,9 @@
                         <%_ } else if (fields[idx].fieldIsEnum) { _%>
                             <td v-text="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</td>
                         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                            <td>{{<%=entityInstance %>.<%=fieldName%> | date:'medium'}}</td>
+                            <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
                         <%_ } else if (fieldType === 'LocalDate') { _%>
-                            <td>{{<%=entityInstance %>.<%=fieldName%> | date:'mediumDate'}}</td>
+                            <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
                         <%_ } else { _%>
                             <td>{{<%=entityInstance %>.<%=fieldName%>}}</td>
                         <%_ } _%>
