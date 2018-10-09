@@ -50,23 +50,21 @@ export class UserRouteAccessService implements CanActivate {
     }
 
     checkLogin(authorities: string[], url: string): Promise<boolean> {
-        const accountService = this.accountService;
-        return Promise.resolve(accountService.identity().then((account) => {
+        return this.accountService.identity().then((account) => {
 
             if (!authorities || authorities.length === 0) {
                 return true;
             }
 
             if (account) {
-                return accountService.hasAnyAuthority(authorities).then((response) => {
-                    if (response) {
-                        return true;
-                    }
-                    if (isDevMode()) {
-                        console.error('User has not any of required authorities: ', authorities);
-                    }
-                    return false;
-                });
+                const hasAnyAuthority = accountService.hasAnyAuthority(authorities);
+                if (hasAnyAuthority) {
+                    return true;
+                }
+                if (isDevMode()) {
+                    console.error('User has not any of required authorities: ', authorities);
+                }
+                return false;
             }
 
             this.stateStorageService.storeUrl(url);

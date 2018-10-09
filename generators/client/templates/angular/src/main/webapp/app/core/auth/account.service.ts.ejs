@@ -59,11 +59,7 @@ export class AccountService  {
         this.authenticationState.next(this.userIdentity);
     }
 
-    hasAnyAuthority(authorities: string[]): Promise<boolean> {
-        return Promise.resolve(this.hasAnyAuthorityDirect(authorities));
-    }
-
-    hasAnyAuthorityDirect(authorities: string[]): boolean {
+    hasAnyAuthority(authorities: string[]): boolean {
         if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
             return false;
         }
