@@ -144,6 +144,86 @@
                         <%_ } _%>
                     </div>
                     <%_ } _%>
+
+                    <%_ for (idx in relationships) {
+                        const relationshipType = relationships[idx].relationshipType;
+                        const ownerSide = relationships[idx].ownerSide;
+                        const otherEntityName = relationships[idx].otherEntityName;
+                        const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+                        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+                        const relationshipName = relationships[idx].relationshipName;
+                        const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
+                        const relationshipFieldName = relationships[idx].relationshipFieldName;
+                        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+                        const otherEntityField = relationships[idx].otherEntityField;
+                        const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+                        const relationshipRequired = relationships[idx].relationshipRequired;
+                        const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
+                    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
+                        <div class="form-group">
+                            <label class="form-control-label" v-bind:value="$t('<%= translationKey %>')" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                            <%_ if (dto === 'no') { _%>
+                                <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>" <% if (relationshipRequired) { %> required<% } %>>
+                                    <%_ if (!relationshipRequired) { _%>
+                                    <option value="null"></option>
+                                    <%_ } else { _%>
+                                        <option v-if="!editForm.value.<%= relationshipName %>" value="null" selected></option>
+                                    <%_ } _%>
+                                    <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural.toLowerCase() %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                                </select>
+                            <%_ } else { _%>
+                                <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>Id" <% if (relationshipRequired) { %> required<% } %>>
+                                    <%_ if (!relationshipRequired) { _%>
+                                    <option value="null"></option>
+                                    <%_ } else { _%>
+                                        <option v-if="!editForm.value.<%= relationshipName %>" value="null" selected></option>
+                                    <%_ } _%>
+                                    <option v-bind:value="<%=otherEntityName %>Option.id" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural.toLowerCase() %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                                </select>
+                            <%_ } _%>
+                        </div>
+                    <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
+                        <div class="form-group">
+                            <label class="form-control-label" v-text="$t('<%= translationKey %>')" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                            <%_ if (dto === 'no') { _%>
+                                <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
+                                    <%_ if (!relationshipRequired) { _%>
+                                    <option value="null"></option>
+                                    <%_ } else { _%>
+                                        <option v-if="!editForm.value.<%= relationshipName %>" value="null" selected></option>
+                                    <%_ } _%>
+                                    <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=relationshipFieldNamePlural.toLowerCase() %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                                </select>
+                            <%_ } else { _%>
+                                <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>Id"<% if (relationshipRequired) { %> required<% } %>>
+                                    <%_ if (!relationshipRequired) { _%>
+                                    <option value="null"></option>
+                                    <%_ } else { _%>
+                                        <option v-if="!editForm.value.<%= relationshipName %>" value="null" selected></option>
+                                    <%_ } _%>
+                                    <option v-bind:value="<%=otherEntityName %>Option.id" v-for="<%=otherEntityName %>Option in <%=relationshipFieldNamePlural.toLowerCase() %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                                </select>
+                            <%_ } _%>
+                        </div>
+                    <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
+                        <div class="form-group">
+                            <label v-text="$t('<%= translationKey %>')" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                            <select class="form-control" id="field_<%= relationshipName %>" multiple name="<%= relationshipName %>" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
+                                <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option)" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural.toLowerCase() %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                            </select>
+                        </div>
+                    <%_ } _%>
+                    <%_ if (relationships[idx].relationshipValidate === true) { _%>
+                        <div :hidden="!(editForm.controls.<%= relationshipName %>?.dirty && editForm.controls.<%= relationshipName %>?.invalid)">
+                            <%_ if (relationshipRequired) { _%>
+                                <small class="form-text text-danger"
+                                       :hidden="!editForm.controls.<%= relationshipName %>?.errors?.required" v-text="$t('entity.validation.required')">
+                                    This field is required.
+                                </small>
+                            <%_ } _%>
+                        </div>
+                    <%_ } _%>
+                <%_ } _%>
                     
                 </div>
                 <div>
@@ -185,6 +265,11 @@
                     <%= fieldName %>: null,
                     <%_ } _%>
                 },
+                <%_ for (idx in relationships) {
+                    const otherEntityName = relationships[idx].otherEntityName;
+                _%>
+                        <%= otherEntityName %>s: [],
+                <%_ } _%>
                 isSaving: false
             }
         },
@@ -223,6 +308,9 @@
                         vm.author[key] = null;
                     }
                 }
+                <%_ if (relationships.length > 0) { _%>
+                vm.initRelationships();
+                <%_ } _%>
             });
         },
         methods: {
@@ -264,6 +352,16 @@
             },
             previousState() {
                 this.$router.go(-1);
+            },
+            initRelationships() {
+                let vm = this;
+                <%_ for (idx in relationships) {
+                    const otherEntityName = relationships[idx].otherEntityName;
+                _%>
+                axios.get(SERVER_API_URL + 'api/<%= otherEntityName %>s').then(res => {
+                    vm.<%= otherEntityName %>s = res.data;
+                });
+                <%_ } _%>
             }
         }
     }

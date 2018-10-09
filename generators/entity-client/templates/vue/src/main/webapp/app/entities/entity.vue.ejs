@@ -80,7 +80,7 @@
                                     </span>
                                 <%_ } else { _%>
                                     <%_ if (dto === 'no') { _%>
-                                        {{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}
+                                        {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
                                     <%_ } else { _%>
                                         {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
                                     <%_ } _%>
@@ -88,16 +88,16 @@
                             <%_ } else { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
                                     <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                                        <router-link class="form-control-static" :to="['../<%= otherEntityStateName %>', <%= relationshipFieldName %>?.id, 'view' ]">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</router-link>{{last ? '' : ', '}}
+                                        <router-link class="form-control-static" :to="'../<%= otherEntityStateName %>/' + <%= relationshipFieldName %>.id}} + '/View'">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</router-link>{{last ? '' : ', '}}
                                     </span>
                                 <%_ } else { _%>
                                     <%_ if (dto === 'no') { _%>
                                         <div v-if="<%= entityInstance + "." + relationshipFieldName %>">
-                                            <router-link :to="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?.id" %>, 'view' ]" >{{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}</router-link>
+                                            <router-link :to="'../<%= otherEntityStateName %>/' + <%= entityInstance + "." + relationshipFieldName + ".id" %> + '/View'" >{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
                                         </div>
                                     <%_ } else { _%>
                                         <div v-if="<%= entityInstance + "." + relationshipFieldName + "Id" %>">
-                                            <router-link :to="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "Id" %> %>, 'view' ]" >{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</router-link>
+                                            <router-link :to="'../<%= otherEntityStateName %>/' + <%= entityInstance + "." + relationshipFieldName + "Id" %> + '/View'" >{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</router-link>
                                         </div>
                                     <%_ } _%>
                                 <%_ } _%>
