@@ -36,7 +36,7 @@ jobs:
     JHI_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
 
   strategy:
-    maxParallel: 10
+    timeoutInMinutes: 32
     matrix:
       ngx-mongodb-kafka-cucumber:
         JHI_APP: ngx-mongodb-kafka-cucumber
