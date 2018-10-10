@@ -154,7 +154,12 @@ class <%= entityClass %>GatlingTest extends Simulation {
             .exec(http("Create new <%= entityInstance %>")
             .post("<% if (applicationType === 'microservice') {%>/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null<% for (idx in fields) { %>, "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType === 'String') { %>"SAMPLE_TEXT"<% } else if (['Integer', 'BigDecimal'].includes(fields[idx].fieldType)) { %>"0"<% } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { %>"2020-01-01T00:00:00.000Z"<% } else { %>null<% } } %>}""")).asJSON
+            .body(StringBody("""{
+                "id":null
+                <%_ for (idx in fields) { _%>
+                , "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType === 'String') { %>"SAMPLE_TEXT"<% } else if (['Integer', 'BigDecimal'].includes(fields[idx].fieldType)) { %>"0"<% } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { %>"2020-01-01T00:00:00.000Z"<% } else if (fields[idx].fieldIsEnum) { %>"<%= fields[idx].fieldValues.split(',')[0] %>"<% } else { %>null<% } %>
+                <%_ } _%>
+                }""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_<%= entityInstance %>_url"))).exitHereIfFailed
             .pause(10)
