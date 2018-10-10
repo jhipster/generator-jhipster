@@ -114,7 +114,7 @@ export default (state: UserManagementState = initialState, action): UserManageme
         ...state,
         updating: false,
         updateSuccess: true,
-        user: {}
+        user: defaultValue
       };
     case ACTION_TYPES.RESET:
       return {
