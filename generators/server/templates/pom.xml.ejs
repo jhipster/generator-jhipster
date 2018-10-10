@@ -1242,6 +1242,9 @@
                                     <%_ } else if (clientPackageManager === 'npm') { _%>
                                     <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
                                     <%_ } _%>
+                                    <environmentVariables>
+                                        <JHI_DISABLE_WEBPACK_LOGS>true</JHI_DISABLE_WEBPACK_LOGS>
+                                    </environmentVariables>
                                 </configuration>
                             </execution>
                         </executions>
