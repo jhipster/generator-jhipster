@@ -52,7 +52,7 @@ const files = {
         },
         {
             condition: generator => !generator.skipCommitHook,
-            templates: [{ file: '.huskyrc', method: 'copy', noEjs: true }]
+            templates: ['.huskyrc']
         }
     ],
     sass: [
