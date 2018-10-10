@@ -17,6 +17,9 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
+<%_ if (enableTranslation && !(authenticationType === 'oauth2')) { _%>
+import { JhiLanguageService } from 'ng-jhipster';
+<%_ } _%>
 import { Observable, Subject } from 'rxjs';
 import { AccountService } from './account.service';
 <%_ if (websocket === 'spring-websocket') { _%>
@@ -30,6 +33,9 @@ export class Principal {
     private authenticationState = new Subject<any>();
 
     constructor(
+        <%_ if (enableTranslation && !(authenticationType === 'oauth2')) { _%>
+        private languageService: JhiLanguageService,
+        <%_ } _%>
         private account: AccountService<% if (websocket === 'spring-websocket') { %>,
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService<% } %>
     ) {}
@@ -90,6 +96,13 @@ export class Principal {
                 <%_ if (websocket === 'spring-websocket') { _%>
                 this.trackerService.connect();
                 <%_ } _%>
+
+                <%_ if (enableTranslation) { _%>
+                // After retrieve the account info, the language will be changed to
+                // the user's preferred language configured in the account setting
+                this.languageService.changeLanguage(this.userIdentity.langKey);
+                <%_ } _%>
+
             } else {
                 this.userIdentity = null;
                 this.authenticated = false;
