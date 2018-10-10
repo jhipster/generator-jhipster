@@ -152,7 +152,6 @@ describe('User management reducer tests', () => {
       const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_ROLES), payload });
 
       expect(toTest).toMatchObject({
-        loading: false,
         authorities: payload.data
       });
     });
@@ -161,9 +160,9 @@ describe('User management reducer tests', () => {
       testMultipleTypes([SUCCESS(ACTION_TYPES.CREATE_USER), SUCCESS(ACTION_TYPES.UPDATE_USER)], { data: 'some handsome user' }, types => {
         expect(types).toMatchObject({
           updating: false,
-          updateSuccess: true,
-          user: 'some handsome user'
+          updateSuccess: true
         });
+        expect(isEmpty(types.user))
       });
     });
 
