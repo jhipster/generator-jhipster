@@ -915,7 +915,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   packageName FOO
                 }
               }`)
-            ).to.throw('The packageName property name must match: /^[a-z]+$/');
+            ).to.throw('The packageName property name must match: /^[a-z_][a-z0-9_]*$/');
           });
         });
       });
