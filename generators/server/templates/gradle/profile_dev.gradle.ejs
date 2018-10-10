@@ -51,6 +51,12 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task, depend
     args = ["run", "webpack:build"]
 }
 
+webpackBuildDev {
+  environment = [
+    'JHI_DISABLE_WEBPACK_LOGS': 'true'
+  ]
+}
+
 war {
     webAppDirName = '<%= CLIENT_DIST_DIR %>'
 }
