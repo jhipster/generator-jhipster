@@ -1060,6 +1060,9 @@
                             <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                             <validateSpec>true</validateSpec>
                             <configOptions>
+                                <%_ if (reactive) { _%>
+                                <reactive>true</reactive>
+                                <%_ } _%>
                                 <delegatePattern>true</delegatePattern>
                             </configOptions>
                         </configuration>

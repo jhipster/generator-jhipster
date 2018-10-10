@@ -352,30 +352,31 @@ function askForServerSideOpts(meta) {
 
 function askForOptionalItems(meta) {
     if (!meta && this.existingProject) return;
-    if (this.reactive) return;
 
     const applicationType = this.applicationType;
     const choices = [];
     const defaultChoice = [];
-    if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+    if (!this.reactive) {
+        if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            choices.push({
+                name: 'Search engine using Elasticsearch',
+                value: 'searchEngine:elasticsearch'
+            });
+        }
+        if (applicationType === 'monolith' || applicationType === 'gateway') {
+            choices.push({
+                name: 'WebSockets using Spring Websocket',
+                value: 'websocket:spring-websocket'
+            });
+        }
         choices.push({
-            name: 'Search engine using Elasticsearch',
-            value: 'searchEngine:elasticsearch'
-        });
-    }
-    if (applicationType === 'monolith' || applicationType === 'gateway') {
-        choices.push({
-            name: 'WebSockets using Spring Websocket',
-            value: 'websocket:spring-websocket'
+            name: 'Asynchronous messages using Apache Kafka',
+            value: 'messageBroker:kafka'
         });
     }
     choices.push({
         name: 'API first development using OpenAPI-generator',
         value: 'enableSwaggerCodegen:true'
-    });
-    choices.push({
-        name: 'Asynchronous messages using Apache Kafka',
-        value: 'messageBroker:kafka'
     });
 
     const PROMPTS = {
