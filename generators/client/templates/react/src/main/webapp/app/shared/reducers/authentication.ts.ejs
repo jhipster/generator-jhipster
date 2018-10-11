@@ -197,7 +197,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     await dispatch(setLocale(account.langKey));
   }
   <%_ } else { _%>
-  dispatch(getSession());
+  await dispatch(getSession());
   <%_ } _%>
 };
 <%_ } _%>
