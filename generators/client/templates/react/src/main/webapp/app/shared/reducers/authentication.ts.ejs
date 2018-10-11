@@ -138,10 +138,24 @@ export default (state: AuthenticationState = initialState, action): Authenticati
 
 export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, message });
 
-export const getSession = () => dispatch => dispatch({
-  type: ACTION_TYPES.GET_SESSION,
-  payload: axios.get('<%= apiUaaPath %>api/account')
-});
+export const getSession = () => async (dispatch, getState) => {
+    <%_ if (enableTranslation) { _%>
+    await dispatch({
+      type: ACTION_TYPES.GET_SESSION,
+      payload: axios.get('<%= apiUaaPath %>api/account')
+    });
+  
+    const account = getState().authentication.account;
+    if (account && account.langKey) {
+      dispatch(setLocale(account.langKey));
+    }
+    <%_ } else { _%>
+    dispatch({
+      type: ACTION_TYPES.GET_SESSION,
+      payload: axios.get('<%= apiUaaPath %>api/account')
+    });
+    <%_ } _%>
+}
 
 <%_ if (authenticationType === 'session') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
@@ -150,16 +164,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
   });
- <%_ if (enableTranslation) { _%>
-  await dispatch(getSession());
-
-  const account = getState().authentication.account;
-  if (account && account.langKey) {
-    dispatch(setLocale(account.langKey));
-  }
-  <%_ } else { _%>
   dispatch(getSession());
-  <%_ } _%>
 };
 <%_ } else if (authenticationType === 'jwt') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
