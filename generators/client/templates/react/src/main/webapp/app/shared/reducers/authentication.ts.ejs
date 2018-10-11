@@ -147,7 +147,7 @@ export const getSession = () => async (dispatch, getState) => {
   
     const account = getState().authentication.account;
     if (account && account.langKey) {
-      dispatch(setLocale(account.langKey));
+      await dispatch(setLocale(account.langKey));
     }
     <%_ } else { _%>
     dispatch({
@@ -181,16 +181,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
       Storage.session.set(AUTH_TOKEN_KEY, jwt);
     }
   }
- <%_ if (enableTranslation) { _%>
-  await dispatch(getSession());
-
-  const account = getState().authentication.account;
-  if (account && account.langKey) {
-    await dispatch(setLocale(account.langKey));
-  }
-  <%_ } else { _%>
   dispatch(getSession());
-  <%_ } _%>
 };
 <%_ } else if (authenticationType === 'uaa') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
