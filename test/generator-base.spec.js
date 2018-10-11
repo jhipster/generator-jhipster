@@ -1,5 +1,3 @@
-/* global describe, before, it */
-
 const expect = require('chai').expect;
 const jhiCore = require('jhipster-core');
 const expectedFiles = require('./utils/expected-files');

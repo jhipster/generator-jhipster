@@ -519,15 +519,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- log4j needed to create embedded elasticsearch instance -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-        </dependency>
         <!-- end of Spring Data Jest dependencies -->
         <%_ } _%>
         <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
@@ -1205,6 +1196,9 @@
                                 <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                                 <validateSpec>true</validateSpec>
                                 <configOptions>
+                                    <%_ if (reactive) { _%>
+                                    <reactive>true</reactive>
+                                    <%_ } _%>
                                     <delegatePattern>true</delegatePattern>
                                 </configOptions>
                             </configuration>

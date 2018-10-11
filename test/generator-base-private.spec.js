@@ -1,5 +1,3 @@
-/* global describe, before, it */
-
 const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGenerator = require('../generators/generator-base').prototype;

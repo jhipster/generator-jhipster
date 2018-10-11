@@ -26,9 +26,11 @@ import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %>
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-<%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
+<%_ if ( fieldsContainDate ) { _%>
 import * as moment from 'moment';
+    <%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
 import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+    <%_ } _%>
 <%_ } _%>
 <%_ if (queries && queries.length > 0 || fieldsContainBlob) { _%>
 import { <% if (queries && queries.length > 0) { %>JhiAlertService, <% } %><% if (fieldsContainBlob) { %>JhiDataUtils<% } %> } from 'ng-jhipster';
@@ -66,7 +68,7 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= 
 })
 export class <%= entityAngularName %>UpdateComponent implements OnInit {
 
-    private _<%= entityInstance %>: I<%= entityAngularName %>;
+    <%= entityInstance %>: I<%= entityAngularName %>;
     isSaving: boolean;
     <%_
     for ( const idx in variables ) { %>
@@ -110,6 +112,13 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
             this.<%= entityInstance %> = <%= entityInstance %>;
+<%_ for (idx in fields) {
+    const fieldName = fields[idx].fieldName;
+    const fieldType = fields[idx].fieldType;
+    if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+            this.<%= fieldName %> = this.<%= entityInstance %>.<%= fieldName %> != null ? this.<%= entityInstance %>.<%= fieldName %>.format(DATE_TIME_FORMAT) : null;
+    <%_ } _%>
+<%_ } _%>
         });
         <%_ for (idx in queries) { _%>
         <%- queries[idx] %>
@@ -146,7 +155,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
             const fieldName = fields[ idx ].fieldName;
             const fieldType = fields[idx].fieldType;
             if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) { _%>
-                this.<%= entityInstance %>.<%= fieldName %> = moment(this.<%= fieldName %>, DATE_TIME_FORMAT);
+                this.<%= entityInstance %>.<%= fieldName %> = this.<%= fieldName %> != null ? moment(this.<%= fieldName %>, DATE_TIME_FORMAT) : null;
         <%_ }
         } _%>
         if (this.<%= entityInstance %>.id !== undefined) {
@@ -201,17 +210,4 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
         return option;
     }
     <%_ } _%>
-    get <%= entityInstance %>() {
-        return this._<%= entityInstance %>;
-    }
-
-    set <%= entityInstance %>(<%= entityInstance %>: I<%= entityAngularName %>) {
-        this._<%= entityInstance %> = <%= entityInstance %>;
-    <%_ for (idx in fields) {
-        const fieldName = fields[idx].fieldName;
-        const fieldType = fields[idx].fieldType;
-        if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-        this.<%= fieldName %> = moment(<%= entityInstance %>.<%= fieldName %>).format(DATE_TIME_FORMAT);
-     <%_ } } _%>
-    }
 }

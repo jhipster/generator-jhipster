@@ -35,9 +35,9 @@ type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 @Injectable({providedIn: 'root'})
 export class <%= entityAngularName %>Service {
 
-    private resourceUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
+    public resourceUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
     <%_ if (searchEngine === 'elasticsearch') { _%>
-    private resourceSearchUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
+    public resourceSearchUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
     <%_ } _%>
 
     constructor(private http: HttpClient) { }
