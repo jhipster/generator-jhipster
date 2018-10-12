@@ -147,7 +147,7 @@ export const getSession = () => async (dispatch, getState) => {
   
     const account = getState().authentication.account;
     if (account && account.langKey) {
-      await dispatch(setLocale(account.langKey));
+      dispatch(setLocale(account.langKey));
     }
     <%_ } else { _%>
     dispatch({
