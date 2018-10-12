@@ -674,7 +674,9 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive && generator.applicationType === 'microservice' && generator.authenticationType === 'jwt',
+                !generator.reactive &&
+                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway') &&
+                generator.authenticationType === 'jwt',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
