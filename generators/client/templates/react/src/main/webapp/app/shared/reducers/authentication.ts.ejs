@@ -181,7 +181,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
       Storage.session.set(AUTH_TOKEN_KEY, jwt);
     }
   }
-  await dispatch(getSession());
+  dispatch(getSession());
 };
 <%_ } else if (authenticationType === 'uaa') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
@@ -189,7 +189,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('auth/login', { username, password })
   });
-  await dispatch(getSession());
+  dispatch(getSession());
 };
 <%_ } _%>
 
