@@ -446,19 +446,7 @@ module.exports = class extends BaseGenerator {
 
     get end() {
         return {
-            localInstall() {
-                if (this.skipClient) {
-                    if (!this.options['skip-install']) {
-                        if (this.clientPackageManager === 'yarn') {
-                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
-                            this.yarnInstall();
-                        } else if (this.clientPackageManager === 'npm') {
-                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
-                            this.npmInstall();
-                        }
-                    }
-                }
-
+            gitCommit() {
                 if (!this.options['skip-git']) {
                     this.debug('Committing files to git');
                     this.isGitInstalled(code => {
