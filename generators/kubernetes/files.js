@@ -49,8 +49,12 @@ function writeFiles() {
                 if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
                     this.template('secret/jwt-secret.yml.ejs', `${appName}/jwt-secret.yml`);
                 }
-                if (this.app.authenticationType === 'oauth2') {
+                if (this.app.applicationType === 'monolith' && this.app.authenticationType === 'oauth2') {
                     this.template('keycloak/keycloak.yml.ejs', `${appName}/${appName}-keycloak.yml`);
+                    this.template('keycloak/keycloak-configmap.yml.ejs', `${appName}/${appName}-keycloak-configmap.yml`);
+                    if (this.kubernetesServiceType === 'Ingress') {
+                        this.template('keycloak/keycloak-ingress.yml.ejs', `${appName}/${appName}-keycloak-ingress.yml`);
+                    }
                 }
                 if (this.monitoring === 'prometheus') {
                     this.template('monitoring/jhipster-prometheus-sm.yml.ejs', `${appName}/${appName}-prometheus-sm.yml`);

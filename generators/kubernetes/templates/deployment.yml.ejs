@@ -70,6 +70,7 @@ spec:
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
+        
         <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
         - name: SPRING_CLOUD_CONFIG_URI
           value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/config
@@ -100,6 +101,30 @@ spec:
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
           value: <%= app.baseName.toLowerCase() %>
           <%_ } _%>
+        <%_ } _%>
+        <%_ if (app.applicationType === 'monolith' && app.authenticationType === 'oauth2') { _%>
+        <%_if (kubernetesServiceType === 'Ingress') { _%>
+        - name: SECURITY_OAUTH2_CLIENT_ACCESS-TOKEN-URI
+          value: http://<%= app.baseName.toLowerCase() %>-keycloak.<%= ingressDomain %>/auth/realms/jhipster/protocol/openid-connect/token
+        - name: SECURITY_OAUTH2_CLIENT_USER-AUTHORIZATION-URI
+          value: http://<%= app.baseName.toLowerCase() %>-keycloak.<%= ingressDomain %>/auth/realms/jhipster/protocol/openid-connect/auth
+        - name: SECURITY_OAUTH2_RESOURCE_USER_INFO_URI
+          value: http://<%= app.baseName.toLowerCase() %>-keycloak.<%= ingressDomain %>/auth/realms/jhipster/protocol/openid-connect/userinfo
+        <%_ } else if (kubernetesServiceType === 'NodePort') { _%>
+        - name: SECURITY_OAUTH2_CLIENT_ACCESS-TOKEN-URI
+          value: http://localhost:30000/auth/realms/jhipster/protocol/openid-connect/token
+        - name: SECURITY_OAUTH2_CLIENT_USER-AUTHORIZATION-URI
+          value: http://localhost:30000/auth/realms/jhipster/protocol/openid-connect/auth
+        - name: SECURITY_OAUTH2_RESOURCE_USER_INFO_URI
+          value: http://localhost:30000/auth/realms/jhipster/protocol/openid-connect/userinfo
+        <%_ } else if (kubernetesServiceType === 'LoadBalancer') { _%>
+        - name: SECURITY_OAUTH2_CLIENT_ACCESS-TOKEN-URI
+          value: http://KEYCLOAK_IP/auth/realms/jhipster/protocol/openid-connect/token
+        - name: SECURITY_OAUTH2_CLIENT_USER-AUTHORIZATION-URI
+          value: http://KEYCLOAK_IP/auth/realms/jhipster/protocol/openid-connect/auth
+        - name: SECURITY_OAUTH2_RESOURCE_USER_INFO_URI
+          value: http://KEYCLOAK_IP/auth/realms/jhipster/protocol/openid-connect/userinfo
+        <%_ } _%>
         <%_ } _%>
         <%_ if (!app.serviceDiscoveryType && app.authenticationType === 'jwt') { _%>
         - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET

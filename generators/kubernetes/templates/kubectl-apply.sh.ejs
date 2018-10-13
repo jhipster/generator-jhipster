@@ -51,9 +51,7 @@ until [ $(kubectl get crd prometheuses.monitoring.coreos.com 2>>/dev/null | wc -
     echo "Waiting for the custom resource prometheus operator to get initialised";
     sleep 5;
 done
-<%_ if (app.authenticationType === 'oauth2') { _%>
-kubectl apply -f keycloak/keycloak.yml
-<%_ } _%> 
+
 kubectl apply -f monitoring/jhipster-prometheus-cr.yml
 kubectl apply -f monitoring/jhipster-grafana.yml
 kubectl apply -f monitoring/jhipster-grafana-dashboard.yml

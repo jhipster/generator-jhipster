@@ -23,7 +23,6 @@ You can deploy all your apps by running the below bash command:
 
 ## Exploring your services
 
-
 <%_ if (gatewayNb + monolithicNb >= 1) { _%>
 Use these commands to find your application's IP addresses:
 
@@ -35,7 +34,9 @@ $ kubectl get svc <%= appConfigs[i].baseName.toLowerCase() %><%= kubernetesNames
     <%_ } _%>
 <%_ } _%>
 ```
+### Configuring Keycloak
 
+In case any of our apps uses Oauth2 you have a running keycloak in your cluster.
 ## Scaling your deployments
 
 You can scale your apps using

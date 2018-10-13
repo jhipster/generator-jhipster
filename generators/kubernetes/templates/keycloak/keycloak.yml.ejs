@@ -1,3 +1,21 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
@@ -72,8 +90,14 @@ spec:
       containers:
       - name: <%= app.baseName.toLowerCase() %>-keycloak
         image: jboss/keycloak
+        command: ["-b", "0.0.0.0", "-Dkeycloak.migration.action=import", "-Dkeycloak.migration.provider=dir", "-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config", "-Dkeycloak.migration.strategy=OVERWRITE_EXISTING", "-Djboss.socket.binding.port-offset=1000"]
+        volumeMounts:
+        - name: config-volume
+          mountPath: /opt/jboss/keycloak/realm-config
         ports:
-        - containerPort: 8080
+        - containerPort: 9080
+        - containerPort: 9443
+        - containerPort: 10990
         env:
         - name: PROXY_ADDRESS_FORWARDING
           value: "true"
@@ -104,7 +128,7 @@ metadata:
     app: <%= app.baseName.toLowerCase() %>-keycloak
 spec:
   ports:
-  - port: 8080
+  - port: 9080
     <%_ if (kubernetesServiceType !== 'Ingress') { _%>
     type: <%= kubernetesServiceType %>
     <%_ } else { _%>
@@ -112,18 +136,4 @@ spec:
     <%_ } _%>
   selector:
     app: <%= app.baseName.toLowerCase() %>-keycloak
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: <%= app.baseName.toLowerCase() %>-keycloak
-  namespace: <%= kubernetesNamespace %>
-spec:
-  rules:
-  - host: <%= app.baseName.toLowerCase() %>.keycloak.192.168.99.100.nip.io
-    http:
-      paths:
-      - path: /.*
-        backend:
-          serviceName: <%= app.baseName.toLowerCase() %>-keycloak
-          servicePort: 8080
+
