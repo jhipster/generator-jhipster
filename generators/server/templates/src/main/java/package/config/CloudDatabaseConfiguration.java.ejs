@@ -57,12 +57,15 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 <%_ if (databaseType === 'sql') { _%>
 
 import javax.sql.DataSource;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import static <%=packageName%>.config.Constants.CLOUD_CONFIGURATION_PREFIX;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 
 import java.util.ArrayList;
 import java.util.List;
 <%_ } _%>
+
 
 @Configuration
 <%_ if (databaseType === 'mongodb') { _%>
@@ -77,6 +80,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     <%_ if (databaseType === 'sql') { _%>
 
     @Bean
+    @ConfigurationProperties(CLOUD_CONFIGURATION_PREFIX)
     public DataSource dataSource(<% if (cacheProvider === 'hazelcast') { %>CacheManager cacheManager<% } %>) {
         log.info("Configuring JDBC datasource from a cloud provider");
         return connectionFactory().dataSource();

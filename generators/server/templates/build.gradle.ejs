@@ -384,7 +384,7 @@ dependencies {
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     compile "org.springframework.cloud:spring-cloud-starter-openfeign"
     <%_ } _%>
-    compile "org.springframework.cloud:spring-cloud-spring-service-connector"
+    compile "org.springframework.boot:spring-boot-starter-cloud-connectors"
     compile "org.springframework.security:spring-security-config"
     compile "org.springframework.security:spring-security-data"
     compile "org.springframework.security:spring-security-web"
