@@ -493,14 +493,18 @@ module.exports = class extends BaseGenerator {
     }
 
     _install() {
-        if (this.skipClient) {
-            if (!this.options['skip-install']) {
-                if (this.clientPackageManager === 'yarn') {
-                    this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
-                    this.yarnInstall();
-                } else if (this.clientPackageManager === 'npm') {
-                    this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
-                    this.npmInstall();
+        return {
+            installing() {
+                if (this.skipClient) {
+                    if (!this.options['skip-install']) {
+                        if (this.clientPackageManager === 'yarn') {
+                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
+                            this.yarnInstall();
+                        } else if (this.clientPackageManager === 'npm') {
+                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
+                            this.npmInstall();
+                        }
+                    }
                 }
             }
         }
