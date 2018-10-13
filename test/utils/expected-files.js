@@ -522,7 +522,9 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/User.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AccountResource.java`,
-        `${DOCKER_DIR}keycloak.yml`
+        `${DOCKER_DIR}keycloak.yml`,
+        `${DOCKER_DIR}realm-config/jhipster-realm.json`,
+        `${DOCKER_DIR}realm-config/jhipster-users-0.json`
     ],
 
     messageBroker: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MessagingConfiguration.java`, `${DOCKER_DIR}kafka.yml`],

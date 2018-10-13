@@ -159,7 +159,7 @@ const serverFiles = {
             templates: ['swagger-editor.yml']
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice',
+            condition: generator => generator.authenticationType === 'oauth2',
             path: DOCKER_DIR,
             templates: [
                 'keycloak.yml',
