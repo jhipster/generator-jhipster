@@ -507,7 +507,7 @@ module.exports = class extends BaseGenerator {
                     }
                 }
             }
-        }
+        };
     }
 
     get install() {
