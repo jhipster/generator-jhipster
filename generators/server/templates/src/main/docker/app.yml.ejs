@@ -21,7 +21,7 @@ services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
         environment:
-            # - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            - _JAVA_OPTIONS=-Xmx512m -Xms256m
             - SPRING_PROFILES_ACTIVE=prod,swagger
             <%_ if (serviceDiscoveryType === 'consul') { _%>
             - SPRING_CLOUD_CONSUL_HOST=consul

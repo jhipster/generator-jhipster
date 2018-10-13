@@ -1,5 +1,3 @@
-/* global describe, context, beforeEach, it */
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -1400,6 +1398,7 @@ describe('JHipster generator', () => {
             it('creates expected files with the gateway application type', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gateway);
+                assert.file(expectedFiles.feignConfig);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
             });
@@ -1436,6 +1435,7 @@ describe('JHipster generator', () => {
             it('creates expected files with the microservice application type', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.microservice);
+                assert.file(expectedFiles.feignConfig);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
@@ -1511,6 +1511,7 @@ describe('JHipster generator', () => {
             it('creates expected files with the microservice application type', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.microservice);
+                assert.file(expectedFiles.feignConfig);
                 assert.file(expectedFiles.microserviceGradle);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);

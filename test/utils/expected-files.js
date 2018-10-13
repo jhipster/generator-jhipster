@@ -550,6 +550,11 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.ts`
     ],
 
+    feignConfig: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/FeignConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/client/UserFeignClientInterceptor.java`
+    ],
+
     microservice: [
         `${SERVER_MAIN_RES_DIR}static/index.html`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,

@@ -1,0 +1,66 @@
+{
+    "fluentMethods": true,
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "bankNumber",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "agencyNumber",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "lastOperationDuration",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "meanOperationDuration",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "balance",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "openingDay",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "lastOperationDate",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "accountType",
+            "fieldType": "BankAccountType",
+            "fieldValues": "CHECKING,SAVINGS,LOAN"
+        },
+        {
+            "fieldName": "attachment",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        }
+    ],
+    "changelogDate": "20150805124838",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "pagination": "no"
+}

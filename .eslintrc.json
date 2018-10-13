@@ -29,5 +29,11 @@
         "no-multi-assign": "off",
         "no-param-reassign": "off",
         "no-shadow": "off"
-    }
+    },
+    "overrides": [
+        {
+            "files": ["test/**/*.js"],
+            "env": { "mocha": true }
+        }
+    ]
 }

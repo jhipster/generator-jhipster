@@ -35,9 +35,11 @@ eureka:
         non-secure-port: 80
         prefer-ip-address: false
 <%_ } _%>
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
     client:
         service-url:
             defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
+<%_ } _%>
 
 spring:
 <%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>

@@ -127,7 +127,7 @@
                 let nullable_relation = true,
                 relationshipType = relationships[idx].relationshipType,
                 relationshipName = relationships[idx].relationshipName,
-                relationshipColumnType = relationshipName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
+                relationshipColumnType = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
                 if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
                     nullable_relation = false;
                 }
