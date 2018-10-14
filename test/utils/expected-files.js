@@ -417,6 +417,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/vendor.ts`,
         `${CLIENT_MAIN_SRC_DIR}content/css/documentation.css`,
         `${CLIENT_MAIN_SRC_DIR}content/css/global.css`,
+        `${CLIENT_MAIN_SRC_DIR}content/css/loading.css`,
         `${CLIENT_MAIN_SRC_DIR}content/css/vendor.css`,
         `${CLIENT_MAIN_SRC_DIR}content/images/hipster.png`,
         `${CLIENT_MAIN_SRC_DIR}content/images/hipster2x.png`,
