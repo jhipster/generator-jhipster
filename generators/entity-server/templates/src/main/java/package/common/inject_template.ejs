@@ -22,9 +22,6 @@
         if (queryService) {
             beans.push({class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService`});
         }
-        if (saveUserSnapshot) {
-            beans.push({class: 'UserRepository', instance: 'userRepository'});
-        }
     } else {
         beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
         if (dto === 'mapstruct') {
@@ -36,6 +33,9 @@
         if (reactiveRepositories) {
             beans.push({class: `${entityClass}ReactiveRepository`, instance: `${entityInstance}ReactiveRepository`});
         }
+    }
+    if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) {
+        beans.push({class: 'UserRepository', instance: 'userRepository'});
     }
 _%>
 
