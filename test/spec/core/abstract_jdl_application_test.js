@@ -25,12 +25,12 @@ describe('AbstractJDLApplication', () => {
   describe('::new', () => {
     let jdlApplicationConfig = null;
 
-    before(() => {
-      const jdlApplication = new AbstractJDLApplication({ config: { jhipsterVersion: '4.9.0' } });
-      jdlApplicationConfig = jdlApplication.config;
-    });
-
     context('without specifying special options', () => {
+      before(() => {
+        const jdlApplication = new AbstractJDLApplication({ config: { jhipsterVersion: '4.9.0' } });
+        jdlApplicationConfig = jdlApplication.config;
+      });
+
       it('uses default values', () => {
         expect(jdlApplicationConfig.languages.has('en') && jdlApplicationConfig.languages.has('fr')).to.be.true;
         expect(jdlApplicationConfig.testFrameworks).not.to.be.undefined;
@@ -60,6 +60,18 @@ describe('AbstractJDLApplication', () => {
           skipUserManagement: false,
           websocket: false
         });
+      });
+    });
+    context("when having as cleint framework 'angular'", () => {
+      before(() => {
+        const jdlApplication = new AbstractJDLApplication({
+          config: { clientFramework: 'angular', jhipsterVersion: '4.9.0' }
+        });
+        jdlApplicationConfig = jdlApplication.config;
+      });
+
+      it("replaces it by 'angularX'", () => {
+        expect(jdlApplicationConfig.clientFramework).to.equal('angularX');
       });
     });
   });
