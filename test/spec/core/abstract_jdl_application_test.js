@@ -141,7 +141,6 @@ describe('AbstractJDLApplication', () => {
       it('stringifies the application object', () => {
         expect(jdlApplication.toString()).to.eq(`application {
   config {
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
@@ -164,6 +163,7 @@ describe('AbstractJDLApplication', () => {
     baseName jhipster
     buildTool maven
     skipUserManagement false
+    clientPackageManager npm
   }
 }`);
       });
