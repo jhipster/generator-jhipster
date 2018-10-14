@@ -267,10 +267,15 @@ function replaceTranslation(body, generator) {
             // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
             const key = match[2];
             const target = match[1];
+            const limit = match[4]; // string indicating validation limit (e.g. "{ max: 4 }")
             const jsonData = geti18nJson(key, generator);
             let keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
             if (!keyValue) {
                 keyValue = deepFind(jsonData, key, true); // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
+            }
+            if (limit) {
+                // Replace "{{ placeholder }}" with numeric limit
+                keyValue = keyValue.replace(/{{.+}}/, /{.+:\s(.+)\s}/.exec(limit)[1]);
             }
 
             body = body.replace(target, keyValue !== undefined ? `"${keyValue}"` : defultReplaceText);
