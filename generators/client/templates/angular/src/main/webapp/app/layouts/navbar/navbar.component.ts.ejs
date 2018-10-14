@@ -84,7 +84,7 @@ export class NavbarComponent implements OnInit {
 
     <%_ if (enableTranslation) { _%>
     changeLanguage(languageKey: string) {
-        this.sessionStorage.store('local', languageKey);
+        this.sessionStorage.store('locale', languageKey);
         this.languageService.changeLanguage(languageKey);
     }
 
