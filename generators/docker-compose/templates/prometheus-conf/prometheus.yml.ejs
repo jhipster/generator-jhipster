@@ -45,5 +45,4 @@ scrape_configs:
     # scheme defaults to 'http'.
     metrics_path: /prometheusMetrics
     static_configs:
-         - targets:
-<%= appsToMonitorList %>
+         - targets: [<%= appsToMonitorList %>]
