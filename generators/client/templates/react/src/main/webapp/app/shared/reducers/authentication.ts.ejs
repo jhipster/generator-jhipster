@@ -165,7 +165,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
   });
-  dispatch(getSession());
+  await dispatch(getSession());
 };
 <%_ } else if (authenticationType === 'jwt') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
@@ -182,7 +182,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
       Storage.session.set(AUTH_TOKEN_KEY, jwt);
     }
   }
-  dispatch(getSession());
+  await dispatch(getSession());
 };
 <%_ } else if (authenticationType === 'uaa') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
@@ -190,7 +190,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('auth/login', { username, password })
   });
-  dispatch(getSession());
+  await dispatch(getSession());
 };
 <%_ } _%>
 
