@@ -81,16 +81,7 @@ export const saveAccountSettings = account => async <% if (enableTranslation) { 
       successMessage: translate('settings.messages.success')
     }
   });
-  <%_ if (enableTranslation) { _%>
   await dispatch(getSession());
-
-  const accountState = getState().authentication.account;
-  if (accountState && accountState.langKey) {
-    await dispatch(setLocale(accountState.langKey));
-  }
-  <%_ } else { _%>
-  dispatch(getSession());
-  <%_ } _%>
 };
 
 export const reset = () => ({

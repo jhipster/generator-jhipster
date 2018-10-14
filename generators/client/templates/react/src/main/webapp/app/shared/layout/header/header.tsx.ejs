@@ -19,7 +19,7 @@
 import './header.<%= styleSheetExt %>';
 
 import React from 'react';
-import { Translate<% if (enableI18nRTL) { %>, Storage<% } %> } from 'react-jhipster';
+import { Translate<% if (enableTranslation) { %>, Storage<% } %> } from 'react-jhipster';
 import {
   Navbar,
   Nav,
@@ -67,9 +67,11 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 
   <%_ if (enableTranslation) { _%>
   handleLocaleChange = event => {
-    this.props.onLocaleChange(event.target.value);
+    const langKey = event.target.value;
+    Storage.session.set('locale', langKey);
+    this.props.onLocaleChange(langKey);
     <%_ if (enableI18nRTL) { _%>
-    document.querySelector('html').setAttribute('dir', isRTL(event.target.value) ? 'rtl' : 'ltr');
+    document.querySelector('html').setAttribute('dir', isRTL(langKey) ? 'rtl' : 'ltr');
     <%_ } _%>
   }
   <%_ } _%>
