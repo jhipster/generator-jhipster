@@ -51,7 +51,8 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .silentResources // Silence all resources like css or css so they don't clutter the results
 <%_ if (authenticationType === 'oauth2') { _%>
         .disableFollowRedirect // We must follow redirects manually to get the xsrf token from the keycloak redirect
-        .disableAutoReferer<%_ } _%>    
+        .disableAutoReferer
+<%_ } _%>    
 
     val headers_http = Map(
         "Accept" -> """application/json"""
