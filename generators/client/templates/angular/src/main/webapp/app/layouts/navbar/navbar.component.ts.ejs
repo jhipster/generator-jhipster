@@ -25,6 +25,9 @@ import { JhiLanguageService } from 'ng-jhipster';
 
 import { VERSION } from 'app/app.constants';
 import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from 'app/core';
+<%_ if (enableTranslation) { _%>
+import { SessionStorageService } from 'ngx-webstorage';
+<%_ } _%>
 import { ProfileService } from '../profiles/profile.service';
 
 @Component({
@@ -53,6 +56,7 @@ export class NavbarComponent implements OnInit {
         <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         private languageHelper: JhiLanguageHelper,
+        private sessionStorage: SessionStorageService,
         <%_ } _%>
         private principal: Principal,
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -80,7 +84,8 @@ export class NavbarComponent implements OnInit {
 
     <%_ if (enableTranslation) { _%>
     changeLanguage(languageKey: string) {
-      this.languageService.changeLanguage(languageKey);
+        this.sessionStorage.store('local', languageKey);
+        this.languageService.changeLanguage(languageKey);
     }
 
     <%_ } _%>

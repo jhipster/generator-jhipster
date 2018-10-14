@@ -19,6 +19,7 @@
 import { Injectable } from '@angular/core';
 <%_ if (enableTranslation && authenticationType !== 'oauth2') { _%>
 import { JhiLanguageService } from 'ng-jhipster';
+import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 import { Observable, Subject } from 'rxjs';
 import { AccountService } from './account.service';
@@ -35,6 +36,7 @@ export class Principal {
     constructor(
         <%_ if (enableTranslation && authenticationType !== 'oauth2') { _%>
         private languageService: JhiLanguageService,
+        private sessionStorage: SessionStorageService,
         <%_ } _%>
         private account: AccountService<% if (websocket === 'spring-websocket') { %>,
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService<% } %>
@@ -100,7 +102,8 @@ export class Principal {
                 <%_ if (enableTranslation && authenticationType !== 'oauth2') { _%>
                 // After retrieve the account info, the language will be changed to
                 // the user's preferred language configured in the account setting
-                this.languageService.changeLanguage(this.userIdentity.langKey);
+                const langKey = this.sessionStorage.retrieve('local') || this.userIdentity.langKey;
+                this.languageService.changeLanguage(langKey);
                 <%_ } _%>
 
             } else {
