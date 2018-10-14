@@ -103,8 +103,15 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
-        .check(status.is(401))<% if (authenticationType === 'session' || authenticationType === 'oauth2') { %>
-        .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))<% } %>).exitHereIfFailed
+        <%_ if ((applicationType === 'microservice' || applicationType === 'gateway') && authenticationType === 'oauth2') { _%>
+        .check(status.is(302))
+        <%_ } else { _%>
+        .check(status.is(401))
+        <%_ } _%>        
+        <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+        .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))
+        <%_ } _%>
+        ).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
 <%_ if (authenticationType === 'session') { _%>
@@ -119,6 +126,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .get("/login")
         .check(status.is(302))
         .check(header("Location").saveAs("loginUrl"))).exitHereIfFailed
+        .pause(2)
         .exec(http("Login Redirect")
         .get("${loginUrl}")
         .silent
@@ -134,6 +142,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("submit", "Login")
         .check(status.is(302))
         .check(header("Location").saveAs("afterLoginUrl"))).exitHereIfFailed
+        .pause(2)
         .exec(http("After Login Redirect")
         .get("${afterLoginUrl}")
         .silent
@@ -161,7 +170,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .body(StringBody("""{"username":"admin", "password":"admin"}""")).asJSON
         .check(header.get("Authorization").saveAs("access_token"))).exitHereIfFailed
 <%_ } _%>
-        .pause(1)
+        .pause(2)
         .exec(http("Authenticated request")
         .get("/api/account")
         .headers(headers_http_authenticated)
