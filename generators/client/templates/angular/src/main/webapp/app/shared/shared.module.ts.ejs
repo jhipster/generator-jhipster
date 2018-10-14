@@ -26,7 +26,8 @@ import {
     <%_ if (authenticationType !== 'oauth2') { _%>
     <%=jhiPrefixCapitalized%>LoginModalComponent,
     <%_ } _%>
-    HasAnyAuthorityDirective
+    HasAnyAuthorityDirective,
+    HasNotAuthorityDirective
 } from './';
 
 @NgModule({
@@ -38,7 +39,8 @@ import {
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        HasNotAuthorityDirective
     ],
     providers: [
         { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter},
@@ -51,7 +53,8 @@ import {
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
+        HasNotAuthorityDirective
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
