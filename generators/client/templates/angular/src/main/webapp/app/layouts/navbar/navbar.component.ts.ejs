@@ -22,12 +22,12 @@ import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 import { JhiLanguageService } from 'ng-jhipster';
-
-import { VERSION } from 'app/app.constants';
-import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from 'app/core';
 <%_ if (enableTranslation) { _%>
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
+
+import { VERSION } from 'app/app.constants';
+import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from 'app/core';
 import { ProfileService } from '../profiles/profile.service';
 
 @Component({
