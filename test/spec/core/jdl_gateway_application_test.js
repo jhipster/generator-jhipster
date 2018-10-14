@@ -64,20 +64,6 @@ describe('JDLGatewayApplication', () => {
         expect(jdlApplicationConfig.useSass).to.be.true;
       });
     });
-    context(`when the authentication type is ${ApplicationOptions.authenticationType.uaa}`, () => {
-      let jdlApplicationConfig = null;
-
-      before(() => {
-        const jdlApplication = new JDLGatewayApplication({
-          config: { authenticationType: ApplicationOptions.authenticationType.uaa, jhipsterVersion: '4.9.0' }
-        });
-        jdlApplicationConfig = jdlApplication.config;
-      });
-
-      it('sets the skipUserManagement flag to true', () => {
-        expect(jdlApplicationConfig.skipUserManagement).to.be.true;
-      });
-    });
     context(`when the authentication type is ${ApplicationOptions.authenticationType.oauth2}`, () => {
       let jdlApplicationConfig = null;
 
