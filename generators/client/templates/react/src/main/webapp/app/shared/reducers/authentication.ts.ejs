@@ -138,10 +138,25 @@ export default (state: AuthenticationState = initialState, action): Authenticati
 
 export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, message });
 
-export const getSession = () => dispatch => dispatch({
-  type: ACTION_TYPES.GET_SESSION,
-  payload: axios.get('<%= apiUaaPath %>api/account')
-});
+export const getSession = () => async (dispatch, getState) => {
+    <%_ if (enableTranslation) { _%>
+    await dispatch({
+      type: ACTION_TYPES.GET_SESSION,
+      payload: axios.get('<%= apiUaaPath %>api/account')
+    });
+  
+    const account = getState().authentication.account;
+    if (account && account.langKey) {
+      const langKey = Storage.session.get('locale', account.langKey);
+      await dispatch(setLocale(langKey));
+    }
+    <%_ } else { _%>
+    dispatch({
+      type: ACTION_TYPES.GET_SESSION,
+      payload: axios.get('<%= apiUaaPath %>api/account')
+    });
+    <%_ } _%>
+}
 
 <%_ if (authenticationType === 'session') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
@@ -150,13 +165,8 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
   });
- <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
   await dispatch(getSession());
-
-  const account = getState().authentication.account;
-  if (account && account.langKey) {
-    dispatch(setLocale(account.langKey));
-  }
   <%_ } else { _%>
   dispatch(getSession());
   <%_ } _%>
@@ -176,13 +186,8 @@ export const login = (username, password, rememberMe = false) => async (dispatch
       Storage.session.set(AUTH_TOKEN_KEY, jwt);
     }
   }
- <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
   await dispatch(getSession());
-
-  const account = getState().authentication.account;
-  if (account && account.langKey) {
-    await dispatch(setLocale(account.langKey));
-  }
   <%_ } else { _%>
   dispatch(getSession());
   <%_ } _%>
@@ -193,13 +198,8 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('auth/login', { username, password })
   });
- <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
   await dispatch(getSession());
-
-  const account = getState().authentication.account;
-  if (account && account.langKey) {
-    await dispatch(setLocale(account.langKey));
-  }
   <%_ } else { _%>
   dispatch(getSession());
   <%_ } _%>
