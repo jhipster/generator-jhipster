@@ -5,26 +5,26 @@ module.exports = {
 
 
 function writeFiles() {
-    //Dependency management files
+    // Dependency management files
     this.template('package.json.ejs', 'package.json');
     this.template('package-lock.json.ejs', 'package-lock.json');
 
     this.copy('.babelrc', '.babelrc');
     this.copy('.postcssrc.js', '.postcssrc.js');
 
-    //Config files
+    // Config files
     this.copy('config/index.js', 'config/index.js');
     this.copy('config/dev.env.js', 'config/dev.env.js');
     this.copy('config/prod.env.js', 'config/prod.env.js');
 
-    //Webpack config files
+    // Webpack config files
     this.copy('webpack/vue.utils.js', 'webpack/vue.utils.js');
     this.copy('webpack/loader.conf.js', 'webpack/loader.conf.js');
     this.copy('webpack/webpack.common.js', 'webpack/webpack.common.js');
     this.copy('webpack/webpack.dev.js', 'webpack/webpack.dev.js');
     this.copy('webpack/webpack.prod.js', 'webpack/webpack.prod.js');
 
-    //App files
+    // App files
     this.copy('webapp/index.html', 'src/main/webapp/index.html');
     this.copy('webapp/app/App.vue', 'src/main/webapp/app/App.vue');
     this.copy('webapp/app/constants.js', 'src/main/webapp/app/constants.js');
