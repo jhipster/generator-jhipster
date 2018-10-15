@@ -6,6 +6,8 @@ import ResetPassword from '../components/account/ResetPassword'
 import ChangePassword from '../components/account/ChangePassword'
 import Sessions from '../components/account/Sessions'
 import Settings from '../components/account/Settings'
+// jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
+
 Vue.use(Router)
 
 export default new Router({
@@ -40,7 +42,7 @@ export default new Router({
             name: 'Settings',
             component: Settings
         }
-        //dynamic entities routes
+        // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
 
     ]
 })
