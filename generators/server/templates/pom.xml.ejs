@@ -191,6 +191,18 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-json</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_dropwizard</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_servlet</artifactId>
+        </dependency>
         <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
@@ -1060,6 +1072,9 @@
                             <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                             <validateSpec>true</validateSpec>
                             <configOptions>
+                                <%_ if (reactive) { _%>
+                                <reactive>true</reactive>
+                                <%_ } _%>
                                 <delegatePattern>true</delegatePattern>
                             </configOptions>
                         </configuration>

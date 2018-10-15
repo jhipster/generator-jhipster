@@ -52,7 +52,7 @@ const files = {
         },
         {
             condition: generator => !generator.skipCommitHook,
-            templates: [{ file: '.huskyrc', method: 'copy', noEjs: true }]
+            templates: ['.huskyrc']
         }
     ],
     sass: [
@@ -90,7 +90,14 @@ const files = {
     commonWeb: [
         {
             path: MAIN_SRC_DIR,
-            templates: [{ file: 'favicon.ico', method: 'copy' }, 'robots.txt', '404.html', 'index.html', 'manifest.webapp']
+            templates: [
+                { file: 'favicon.ico', method: 'copy' },
+                'robots.txt',
+                '404.html',
+                'index.html',
+                'manifest.webapp',
+                'static/css/loading.css'
+            ]
         }
     ],
     reactApp: [

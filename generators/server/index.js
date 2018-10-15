@@ -492,6 +492,29 @@ module.exports = class extends BaseGenerator {
         return this._writing();
     }
 
+    _install() {
+        return {
+            installing() {
+                if (this.skipClient) {
+                    if (!this.options['skip-install']) {
+                        if (this.clientPackageManager === 'yarn') {
+                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
+                            this.yarnInstall();
+                        } else if (this.clientPackageManager === 'npm') {
+                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
+                            this.npmInstall();
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    get install() {
+        if (useBlueprint) return;
+        return this._install();
+    }
+
     // Public API method used by the getter and also by Blueprints
     _end() {
         return {

@@ -775,6 +775,18 @@ module.exports = class extends BaseGenerator {
                             : field.fieldValidateRulesPattern;
                     }
 
+                    if (_.isUndefined(field.fieldValidateRulesPatternAngular)) {
+                        field.fieldValidateRulesPatternAngular = field.fieldValidateRulesPattern
+                            ? field.fieldValidateRulesPattern.replace(/"/g, '&#34;')
+                            : field.fieldValidateRulesPattern;
+                    }
+
+                    if (_.isUndefined(field.fieldValidateRulesPatternReact)) {
+                        field.fieldValidateRulesPatternReact = field.fieldValidateRulesPattern
+                            ? field.fieldValidateRulesPattern.replace(/'/g, "\\'")
+                            : field.fieldValidateRulesPattern;
+                    }
+
                     field.fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
 
                     if (fieldType === 'ZonedDateTime') {
@@ -888,7 +900,10 @@ module.exports = class extends BaseGenerator {
                         }
                     }
                     context.saveUserSnapshot =
-                        context.applicationType === 'microservice' && context.authenticationType === 'oauth2' && context.hasUserField;
+                        context.applicationType === 'microservice' &&
+                        context.authenticationType === 'oauth2' &&
+                        context.hasUserField &&
+                        context.dto === 'no';
 
                     if (_.isUndefined(relationship.otherEntityNamePlural)) {
                         relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);

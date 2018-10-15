@@ -152,8 +152,8 @@ import java.util.List;
 <%_ } _%>
 public class DatabaseConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType === 'sql') { %>
-
+    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+<%_ if (databaseType === 'sql') { _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 
     /**

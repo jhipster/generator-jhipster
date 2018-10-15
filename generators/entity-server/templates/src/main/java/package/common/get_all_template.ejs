@@ -43,7 +43,7 @@
     */
     @GetMapping("/<%= entityApiUrl %>/count")
     @Timed
-    public ResponseEntity<Long> count<%= entityClassPlural %> (<%= entityClass %>Criteria criteria) {
+    public ResponseEntity<Long> count<%= entityClassPlural %>(<%= entityClass %>Criteria criteria) {
         log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
         return ResponseEntity.ok().body(<%= entityInstance %>QueryService.countByCriteria(criteria));
     }

@@ -24,9 +24,8 @@ services:
       - ./prometheus-conf/:/etc/prometheus/
       - prometheus_data:/prometheus
     command:
-      - '-config.file=/etc/prometheus/prometheus.yml'
-      - '-storage.local.path=/prometheus'
-      - '-alertmanager.url=http://alertmanager:9093'
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
     expose:
       - 9090
     ports:
@@ -39,8 +38,8 @@ services:
     volumes:
       - ./alertmanager-conf/:/etc/alertmanager/
     command:
-      - '-config.file=/etc/alertmanager/config.yml'
-      - '-storage.path=/alertmanager'
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
 
   grafana:
     image: <%= DOCKER_GRAFANA %>
