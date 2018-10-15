@@ -28,13 +28,15 @@ const ora = require('ora'); // eslint-disable-line
 function spinner(promise, text = 'loading', spinnerIcon = 'monkey') {
     const spinner = ora({ spinner: spinnerIcon, text }).start();
     return new Promise((resolve, reject) => {
-        promise.then((resolved) => {
-            spinner.stop();
-            resolve(resolved);
-        }).catch((err) => {
-            spinner.stop();
-            reject(err);
-        });
+        promise
+            .then(resolved => {
+                spinner.stop();
+                resolve(resolved);
+            })
+            .catch(err => {
+                spinner.stop();
+                reject(err);
+            });
     });
 }
 

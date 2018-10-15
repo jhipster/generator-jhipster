@@ -106,7 +106,7 @@ export class AuditsPage extends React.Component<IAuditsPageProps, IAuditsPageSta
     const { fromDate, toDate } = this.state;
     return (
       <div>
-        <h2 className="audits-page-heading">Audits</h2>
+        <h2 id="audits-page-heading">Audits</h2>
         <span><Translate contentKey="audits.filter.from">from</Translate></span>
         <Input type="date" value={fromDate} onChange={this.onChangeFromDate} name="fromDate" id="fromDate" />
         <span><Translate contentKey="audits.filter.to">to</Translate></span>

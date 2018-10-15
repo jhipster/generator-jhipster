@@ -37,7 +37,22 @@ module.exports = {
     },
     'import-jdl': {
         argument: ['jdlFiles...'],
-        desc: 'Create entities from the JDL file passed in argument'
+        cliOnly: true,
+        desc: 'Create entities from the JDL file passed in argument',
+        help: `
+    --skip-install        # Do not automatically install dependencies                              Default: false
+    --db                  # Provide DB option for the application when using skip-server flag
+    --json-only           # Generate only the JSON files and skip entity regeneration              Default: false
+    --ignore-application  # Ignores application generation                                         Default: false
+    --skip-ui-grouping    # Disable the UI grouping behaviour for entity client side code          Default: false
+
+Arguments:
+    jdlFiles  # The JDL file names  Type: String[]  Required: true
+
+Example:
+    jhipster import-jdl myfile.jdl
+    jhipster import-jdl myfile1.jdl myfile2.jdl
+        `
     },
     info: {
         desc: 'Display information about your current project and system'
@@ -49,6 +64,12 @@ module.exports = {
         argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
     },
+    // login: {
+    //     desc: 'Link the installed JHipster CLI to your JHipster Online account'
+    // },
+    // logout: {
+    //     desc: 'Unlink the installed JHipster CLI from your JHipster Online account'
+    // },
     openshift: {
         desc: 'Deploy the current application to OpenShift'
     },

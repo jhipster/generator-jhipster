@@ -43,8 +43,8 @@ eureka:
         instance-info-replication-interval-seconds: 10
         registry-fetch-interval-seconds: 10
     instance:
-        appname: <%= baseName %>
-        instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
+        appname: <%= baseName.toLowerCase() %>
+        instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
         lease-renewal-interval-in-seconds: 5
         lease-expiration-duration-in-seconds: 10
         status-page-url-path: ${management.endpoints.web.base-path}/info
@@ -63,6 +63,7 @@ ribbon:
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
 # See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
 zuul: # those values must be configured depending on the application specific needs
+    sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
     host:
         max-total-connections: 1000
         max-per-route-connections: 100
@@ -110,7 +111,7 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump"]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile" ]
     endpoint:
         health:
             show-details: when_authorized
@@ -124,6 +125,13 @@ management:
         enabled: false # http://micrometer.io/ is disabled by default, as we use http://metrics.dropwizard.io/ instead
 
 spring:
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    autoconfigure:
+        exclude: <% if (databaseType === 'sql' && messageBroker === 'kafka') { %>org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration,<% } %>org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration,org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
+    <%_ } else if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
+    autoconfigure:
+        exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
+    <%_ } _%>
     application:
         name: <%= baseName %>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
@@ -209,7 +217,7 @@ security:
 
 server:
     servlet:
-        <%_ if (applicationType === 'microservice' && !serviceDiscoveryType) { _%>
+        <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { _%>
         context-path: /${spring.application.name}
         <%_ } _%>
         session:
@@ -257,6 +265,9 @@ jhipster:
         contact-email:
         license:
         license-url:
+
+logging:
+    file: <%= BUILD_DIR %><%=baseName%>.log
 
 # ===================================================================
 # Application specific properties

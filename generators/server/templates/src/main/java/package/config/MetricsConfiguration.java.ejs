@@ -34,6 +34,9 @@ import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 <%_ if (databaseType === 'sql') { _%>
 import com.zaxxer.hikari.HikariDataSource;
 <%_ } _%>
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.dropwizard.DropwizardExports;
+import io.prometheus.client.exporter.MetricsServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -41,15 +44,20 @@ import org.slf4j.MarkerFactory;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+<%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
+import org.springframework.cache.CacheManager;
+<%_ } _%>
 import org.springframework.context.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableMetrics(proxyTargetClass = true)
-public class MetricsConfiguration extends MetricsConfigurerAdapter {
+public class MetricsConfiguration extends MetricsConfigurerAdapter implements ServletContextInitializer {
 
     private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
     private static final String PROP_METRIC_REG_JVM_GARBAGE = "jvm.garbage";
@@ -73,7 +81,11 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
     private HikariDataSource hikariDataSource;
 <%_ } _%>
 
-    public MetricsConfiguration(JHipsterProperties jHipsterProperties) {
+<%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
+    // The cacheManager is injected here to force its initialization, so the JCacheGaugeSet
+    // will be correctly created below.
+<%_ } _%>
+    public MetricsConfiguration(JHipsterProperties jHipsterProperties<% if (['ehcache', 'infinispan'].includes(cacheProvider)) { %>, CacheManager cacheManager<% } %>) {
         this.jHipsterProperties = jHipsterProperties;
     }
 <%_ if (databaseType === 'sql') { _%>
@@ -131,6 +143,21 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
             reporter.start(jHipsterProperties.getMetrics().getLogs().getReportFrequency(), TimeUnit.SECONDS);
+        }
+    }
+
+    @Override
+    public void onStartup(ServletContext servletContext) {
+
+        if (jHipsterProperties.getMetrics().getPrometheus().isEnabled()) {
+            String endpoint = jHipsterProperties.getMetrics().getPrometheus().getEndpoint();
+
+            log.debug("Initializing prometheus metrics exporting via {}", endpoint);
+
+            CollectorRegistry.defaultRegistry.register(new DropwizardExports(metricRegistry));
+            servletContext
+                .addServlet("prometheusMetrics", new MetricsServlet(CollectorRegistry.defaultRegistry))
+                .addMapping(endpoint);
         }
     }
 }

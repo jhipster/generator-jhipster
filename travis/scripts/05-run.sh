@@ -46,7 +46,7 @@ launchCurlOrProtractor() {
         result=0
         if [[ -f "tsconfig.json" ]]; then
             ls -al node_modules/webdriver-manager/selenium/
-            yarn e2e
+            npm run e2e
         fi
         result=$?
         [ $result -eq 0 ] && break
@@ -63,6 +63,15 @@ launchCurlOrProtractor() {
 if [[ "$JHIPSTER" == *"uaa"* ]]; then
     cd "$UAA_APP_FOLDER"
     ./mvnw verify -DskipTests -P"$PROFILE"
+fi
+
+#-------------------------------------------------------------------------------
+# Decrease Angular timeout for Protractor tests
+#-------------------------------------------------------------------------------
+if [ "$PROTRACTOR" == 1 ] && [ -e "src/main/webapp/app/shared/shared-libs.module.ts" ]; then
+    sed -e 's/alertTimeout: 5000/alertTimeout: 1/1;' src/main/webapp/app/shared/shared-libs.module.ts > src/main/webapp/app/shared/shared-libs.module.ts.sed
+    mv -f src/main/webapp/app/shared/shared-libs.module.ts.sed src/main/webapp/app/shared/shared-libs.module.ts
+    cat src/main/webapp/app/shared/shared-libs.module.ts | grep alertTimeout
 fi
 
 #-------------------------------------------------------------------------------

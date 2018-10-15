@@ -1,4 +1,4 @@
-import { ExpectedConditions, ElementFinder, browser, by, element } from 'protractor';
+import { ExpectedConditions, ElementArrayFinder, ElementFinder, browser, by, element } from 'protractor';
 
 const waitUntilDisplayedTimeout = 30000;
 
@@ -20,25 +20,43 @@ export const isHidden = (selector: ElementFinder) => {
 /**
  * Wait until this page is displayed.
  */
-export const waitUntilDisplayed = (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
+export const waitUntilDisplayed = async (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
   if (!checkSelectorExist(selector)) return;
 
-  browser.wait(
+  await browser.wait(
     isDisplayed(selector),
     timeout,
     `Failed while waiting for "${selector.locator()}" of Page Object Class '${classname}' to display.`
   );
 };
 
-export const waitUntilHidden = (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
+
+export const waitUntilHidden = async (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
   if (!checkSelectorExist(selector)) return;
 
-  browser.wait(
+  await browser.wait(
     isHidden(selector),
     timeout,
     `Failed while waiting for "${selector.locator()}" of Page Object Class '${classname}' to be hidden.`
   );
 };
+
+export const waitForCount = (elementArrayFinder: ElementArrayFinder, expectedCount: number) => () => {
+  return elementArrayFinder.count().then(actualCount => expectedCount === actualCount);
+};
+
+export const waitUntilCount = async (elementArrayFinder: ElementArrayFinder, expectedCount: number, timeout = waitUntilDisplayedTimeout) => {
+  await browser.wait(
+    waitForCount(elementArrayFinder, expectedCount),
+    timeout,
+    `Failed while waiting for "${elementArrayFinder.locator()}" to have ${expectedCount} elements.`
+  );
+};
+<%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (databaseType !== 'cassandra') { _%>
+
+export const getModifiedDateSortButton = (): ElementFinder => element(by.id('modified-date-sort'));
+    <%_ } _%>
 
 export const getUserDeactivatedButtonByLogin = (login: string): ElementFinder =>
   element(by.css('table > tbody')).element(by.id(login)).element(by.buttonText('Deactivated'));
@@ -46,3 +64,4 @@ export const getUserDeactivatedButtonByLogin = (login: string): ElementFinder =>
 export const getToastByInnerText = (text: string): ElementFinder =>
   element(by.css('.toastify-container'))
     .element(by.cssContainingText('div[role=alert]', text));
+<%_ } _%>

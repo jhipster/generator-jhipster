@@ -37,6 +37,21 @@ function askPipeline() {
         this.insideDocker = false;
         return;
     }
+
+    if (this.autoconfigureGitlab) {
+        this.log('Auto-configuring Gitlab');
+        this.pipeline = 'gitlab';
+        this.sendBuildToGitlab = true;
+        this.insideDocker = true;
+        return;
+    }
+
+    if (this.autoconfigureAzure) {
+        this.log('Auto-configuring Azure');
+        this.pipeline = 'azure';
+        return;
+    }
+
     const done = this.async();
     const prompts = [
         {
@@ -46,19 +61,20 @@ function askPipeline() {
             default: 'jenkins',
             choices: [
                 { name: 'Jenkins pipeline', value: 'jenkins' },
+                { name: 'Azure Pipelines', value: 'azure' },
                 { name: 'GitLab CI', value: 'gitlab' },
                 { name: 'Travis CI', value: 'travis' }
             ]
         }
     ];
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.pipeline = props.pipeline;
         done();
     });
 }
 
 function askIntegrations() {
-    if (this.abort || !this.pipeline) return;
+    if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
     if (this.autoconfigureTravis) {
         this.cicdIntegrations = [];
         return;
@@ -69,6 +85,20 @@ function askIntegrations() {
         this.insideDocker = false;
         return;
     }
+
+    if (this.autoconfigureGitlab) {
+        this.cicdIntegrations = [];
+        this.sendBuildToGitlab = true;
+        this.insideDocker = true;
+        return;
+    }
+
+    if (this.autoconfigureAzure) {
+        this.log('Auto-configuring Azure');
+        this.pipeline = 'azure';
+        return;
+    }
+
     const done = this.async();
     const prompts = [
         {
@@ -206,7 +236,7 @@ function askIntegrations() {
             default: `${this.herokuAppName}`
         }
     ];
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.cicdIntegrations = props.cicdIntegrations;
 
         this.artifactorySnapshotsId = props.artifactorySnapshotsId;

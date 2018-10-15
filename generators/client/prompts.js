@@ -50,7 +50,7 @@ function askForClient(meta) {
     const PROMPT = {
         type: 'list',
         name: 'clientFramework',
-        when: response => (applicationType !== 'microservice' && applicationType !== 'uaa'),
+        when: response => applicationType !== 'microservice' && applicationType !== 'uaa',
         message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
         choices,
         default: 'angularX'
@@ -60,7 +60,7 @@ function askForClient(meta) {
 
     const done = this.async();
 
-    this.prompt(PROMPT).then((prompt) => {
+    this.prompt(PROMPT).then(prompt => {
         this.clientFramework = prompt.clientFramework;
         done();
     });
@@ -74,11 +74,11 @@ function askForClientSideOpts() {
         {
             type: 'confirm',
             name: 'useSass',
-            message: `Would you like to enable ${chalk.yellow('*SASS*')} support using the LibSass stylesheet preprocessor?`,
-            default: false
+            message: `Would you like to enable ${chalk.yellow('*SASS*')} stylesheet preprocessor?`,
+            default: true
         }
     ];
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.useSass = props.useSass;
         done();
     });

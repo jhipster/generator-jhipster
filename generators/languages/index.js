@@ -19,6 +19,7 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
+const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
 
@@ -29,7 +30,12 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
 
         configOptions = this.options.configOptions || {};
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // This makes it possible to pass `languages` by argument
         this.argument('languages', {
             type: Array,
@@ -57,20 +63,32 @@ module.exports = class extends BaseGenerator {
         // Validate languages passed as argument
         this.languages = this.options.languages;
         if (this.languages) {
-            this.languages.forEach((language) => {
+            this.languages.forEach(language => {
                 if (!this.isSupportedLanguage(language)) {
                     this.log('\n');
-                    this.error(chalk.red(`Unsupported language "${language}" passed as argument to language generator.`
-                        + `\nSupported languages: ${_.map(
-                            this.getAllSupportedLanguageOptions(),
-                            o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`
-                        ).join('')}`));
+                    this.error(
+                        chalk.red(
+                            `Unsupported language "${language}" passed as argument to language generator.` +
+                                `\nSupported languages: ${_.map(
+                                    this.getAllSupportedLanguageOptions(),
+                                    o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`
+                                ).join('')}`
+                        )
+                    );
                 }
             });
         }
     }
 
     initializing() {
+        if (!this.options['from-cli']) {
+            this.warning(
+                `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                    'jhipster <command>'
+                )} instead of ${chalk.red('yo jhipster:<command>')}`
+            );
+        }
+
         if (this.languages) {
             if (this.skipClient) {
                 this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));
@@ -114,9 +132,10 @@ module.exports = class extends BaseGenerator {
                 name: 'languages',
                 message: 'Please choose additional languages to install',
                 choices: languageOptions
-            }];
+            }
+        ];
         if (this.enableTranslation || configOptions.enableTranslation) {
-            this.prompt(prompts).then((props) => {
+            this.prompt(prompts).then(props => {
                 this.languagesToApply = props.languages || [];
                 done();
             });
@@ -125,11 +144,21 @@ module.exports = class extends BaseGenerator {
         }
     }
 
+    get configuring() {
+        return {
+            saveConfig() {
+                if (this.enableTranslation) {
+                    this.languages = _.union(this.currentLanguages, this.languagesToApply);
+                    this.config.set('languages', this.languages);
+                }
+            }
+        };
+    }
+
     get default() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'languages');
+                statistics.sendSubGenEvent('generator', 'languages');
             },
 
             getSharedConfigOptions() {
@@ -166,27 +195,19 @@ module.exports = class extends BaseGenerator {
                 if (configOptions.clientFramework) {
                     this.clientFramework = configOptions.clientFramework;
                 }
-            },
-
-            saveConfig() {
-                if (this.enableTranslation) {
-                    this.languages = _.union(this.currentLanguages, this.languagesToApply);
-                    this.config.set('languages', this.languages);
-                }
             }
         };
     }
 
     writing() {
-        const insight = this.insight();
-        this.languagesToApply.forEach((language) => {
+        this.languagesToApply.forEach(language => {
             if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
             }
             if (!this.skipServer) {
                 this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language);
             }
-            insight.track('languages/language', language);
+            statistics.sendSubGenEvent('languages/language', language);
         });
         if (!this.skipClient) {
             this.updateLanguagesInLanguagePipe(this.languages);

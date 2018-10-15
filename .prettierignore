@@ -1,0 +1,6 @@
+node_modules
+travis
+docs
+.jhipster
+.vscode
+**/templates/**/

@@ -1,10 +1,11 @@
-/* global describe, before, it */
-
 const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGenerator = require('../generators/generator-base').prototype;
 
-BaseGenerator.log = (msg) => { console.log(msg); }; // eslint-disable-line no-console
+BaseGenerator.log = msg => {
+    // eslint-disable-next-line no-console
+    console.log(msg);
+};
 
 describe('Generator Base Private', () => {
     describe('stripMargin', () => {
@@ -165,13 +166,13 @@ export * from './entityFolderName/entityFileName.state';`;
             });
         });
         describe('when called with String', () => {
-            it('return \'123\'', () => {
-                expect(BaseGenerator.generateTestEntityId('String')).to.equal('\'123\'');
+            it("return '123'", () => {
+                expect(BaseGenerator.generateTestEntityId('String')).to.equal("'123'");
             });
         });
         describe('when called with String and cassandra', () => {
-            it('return \'9fec3727-3421-4967-b213-ba36557ca194\'', () => {
-                expect(BaseGenerator.generateTestEntityId('String', 'cassandra')).to.equal('\'9fec3727-3421-4967-b213-ba36557ca194\'');
+            it("return '9fec3727-3421-4967-b213-ba36557ca194'", () => {
+                expect(BaseGenerator.generateTestEntityId('String', 'cassandra')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
             });
         });
     });
@@ -190,7 +191,9 @@ export * from './entityFolderName/entityFileName.state';`;
         describe('when formatting normal texts', () => {
             describe('when having empty lines', () => {
                 it('discards them', () => {
-                    expect(BaseGenerator.formatAsApiDescription('First line\n \nSecond line\n\nThird line')).to.equal('First line Second line Third line');
+                    expect(BaseGenerator.formatAsApiDescription('First line\n \nSecond line\n\nThird line')).to.equal(
+                        'First line Second line Third line'
+                    );
                 });
             });
             describe('when having HTML tags', () => {
@@ -200,7 +203,9 @@ export * from './entityFolderName/entityFileName.state';`;
             });
             describe('when having a plain text', () => {
                 it('puts a space before each line', () => {
-                    expect(BaseGenerator.formatAsApiDescription('JHipster is\na great generator')).to.equal('JHipster is a great generator');
+                    expect(BaseGenerator.formatAsApiDescription('JHipster is\na great generator')).to.equal(
+                        'JHipster is a great generator'
+                    );
                 });
             });
             describe('when having quotes', () => {
@@ -226,17 +231,23 @@ export * from './entityFolderName/entityFileName.state';`;
         describe('when formatting normal texts', () => {
             describe('when having empty lines', () => {
                 it('discards them', () => {
-                    expect(BaseGenerator.formatAsLiquibaseRemarks('First line\n \nSecond line\n\nThird line')).to.equal('First line Second line Third line');
+                    expect(BaseGenerator.formatAsLiquibaseRemarks('First line\n \nSecond line\n\nThird line')).to.equal(
+                        'First line Second line Third line'
+                    );
                 });
             });
             describe('when having a plain text', () => {
                 it('puts a space before each line', () => {
-                    expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is\na great generator')).to.equal('JHipster is a great generator');
+                    expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is\na great generator')).to.equal(
+                        'JHipster is a great generator'
+                    );
                 });
             });
             describe('when having ampersand', () => {
                 it('formats the text to escape it', () => {
-                    expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster uses Spring & Hibernate')).to.equal('JHipster uses Spring &amp; Hibernate');
+                    expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster uses Spring & Hibernate')).to.equal(
+                        'JHipster uses Spring &amp; Hibernate'
+                    );
                 });
             });
             describe('when having quotes', () => {
@@ -248,7 +259,7 @@ export * from './entityFolderName/entityFileName.state';`;
             describe('when having apostrophe', () => {
                 it('formats the text to escape it', () => {
                     // eslint-disable-next-line quotes
-                    expect(BaseGenerator.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal("JHipster is &apos;the&apos; best");
+                    expect(BaseGenerator.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal('JHipster is &apos;the&apos; best');
                 });
             });
             describe('when having HTML tags < and >', () => {

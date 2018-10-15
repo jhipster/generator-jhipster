@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Seksione aktive për [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "Adresa e IP",
+            "useragent": "User Agent",
+            "date": "Data",
+            "button": "Zhvlerëso"
+        },
+        "messages": {
+            "success": "<strong>Seksioni u zhvlerësua!</strong>",
+            "error": "<strong>Ndodhi një gabim!</strong> Ky seksion nuk mund të zhvlerësohej."
+        }
+    }
+}

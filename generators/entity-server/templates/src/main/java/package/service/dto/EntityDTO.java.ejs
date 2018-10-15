@@ -56,10 +56,8 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
  * A DTO for the <%= entityClass %> entity.
  */
 public class <%= entityClass %>DTO implements Serializable {
-<% if (databaseType === 'sql') { %>
-    private Long id;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-    private String id;<% } %><% if (databaseType === 'cassandra') { %>
-    private UUID id;<% } %>
+
+    private <%= pkType %> id;
     <%_ for (idx in fields) {
         const fieldValidate = fields[idx].fieldValidate;
         const fieldValidateRules = fields[idx].fieldValidateRules;
@@ -106,17 +104,17 @@ public class <%= entityClass %>DTO implements Serializable {
     private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
-    private <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> <%= relationshipFieldName %>Id;
+    private <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= pkType %><% } %> <%= relationshipFieldName %>Id;
     <%_ if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') { _%>
 
     private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
     <%_ } } } _%>
 
-    public <% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
+    public <%= pkType %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
+    public void setId(<%= pkType %> id) {
         this.id = id;
     }
     <%_ for (idx in fields) {
@@ -175,19 +173,19 @@ public class <%= entityClass %>DTO implements Serializable {
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
     <%_ if (relationshipNameCapitalized.length > 1) { _%>
-    public <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> get<%= relationshipNameCapitalized %>Id() {
+    public <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= pkType %><% } %> get<%= relationshipNameCapitalized %>Id() {
         return <%= relationshipFieldName %>Id;
     }
 
-    public void set<%= relationshipNameCapitalized %>Id(<% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> <%= otherEntityName %>Id) {
+    public void set<%= relationshipNameCapitalized %>Id(<% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= pkType %><% } %> <%= otherEntityName %>Id) {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
     }
     <%_ } else { // special case when the entity name has one character _%>
-    public Long get<%= relationshipNameCapitalized.toLowerCase() %>Id() {
+    public <%= pkType %> get<%= relationshipNameCapitalized.toLowerCase() %>Id() {
         return <%= relationshipFieldName %>Id;
     }
 
-    public void set<%= relationshipNameCapitalized.toLowerCase() %>Id(Long <%= otherEntityName %>Id) {
+    public void set<%= relationshipNameCapitalized.toLowerCase() %>Id(<%= pkType %> <%= otherEntityName %>Id) {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
     }
     <%_ } _%>

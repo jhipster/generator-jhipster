@@ -49,7 +49,7 @@ if (field.fieldValidate === true) {
         validators.push('maxbytes="' + field.fieldValidateRulesMaxbytes +'"');
     }
     if (rules.includes('pattern')) {
-        validators.push('pattern="' + field.fieldValidateRulesPattern.replace(/"/g, '&#34;') + '"');
+        validators.push('pattern="' + field.fieldValidateRulesPatternAngular + '"');
     }
 
     result = validators.join(' ');

@@ -17,32 +17,32 @@ export default class SettingsPage extends BasePage {
     this.selector = selector;
   }
 
-  get() {
-    browser.get('#/account/settings');
-    this.waitUntilDisplayed();
+  async get() {
+    await browser.get('#/account/settings');
+    await this.waitUntilDisplayed();
   }
 
-  getTitle() {
+  async getTitle() {
     return this.title.getAttribute('id');
   }
 
-  setFirstName(firstName) {
-    return this.firstName.sendKeys(firstName);
+  async setFirstName(firstName) {
+    await this.firstName.sendKeys(firstName);
   }
 
-  setLastName(lastName) {
-    return this.lastName.sendKeys(lastName);
+  async setLastName(lastName) {
+    await this.lastName.sendKeys(lastName);
   }
 
-  setEmail(email) {
-    return this.email.sendKeys(email);
+  async setEmail(email) {
+    await this.email.sendKeys(email);
   }
 
-  clearEmail() {
-    return this.email.clear();
+  async clearEmail() {
+    await this.email.clear();
   }
 
-  save() {
-    return this.saveButton.click();
+  async save() {
+    await this.saveButton.click();
   }
 }

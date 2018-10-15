@@ -20,13 +20,19 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
+const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // Automatically configure Travis
         this.argument('autoconfigure-travis', {
             type: Boolean,
@@ -40,10 +46,33 @@ module.exports = class extends BaseGenerator {
             defaults: false,
             description: 'Automatically configure Jenkins'
         });
+
+        // Automatically configure Gitlab
+        this.argument('autoconfigure-gitlab', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure Gitlab'
+        });
+
+        // Automatically configure Azure
+        this.argument('autoconfigure-azure', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure Azure'
+        });
     }
 
     get initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
+                }
+            },
             sayHello() {
                 this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
             },
@@ -62,6 +91,8 @@ module.exports = class extends BaseGenerator {
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
                 this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
+                this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
+                this.autoconfigureAzure = this.options['autoconfigure-azure'];
                 this.abort = false;
             },
             initConstants() {
@@ -88,14 +119,21 @@ module.exports = class extends BaseGenerator {
         return {
             insight() {
                 if (this.abort) return;
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'ci-cd');
+                statistics.sendSubGenEvent('generator', 'ci-cd');
             },
             setTemplateConstants() {
-                if (this.abort || this.cicdIntegrations === undefined) return;
+                if (this.abort) return;
+                if (this.cicdIntegrations === undefined) {
+                    this.cicdIntegrations = [];
+                }
                 this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
+                if (this.clientPackageManager === 'yarn') {
+                    this.frontTests = ' -u';
+                } else if (this.clientPackageManager === 'npm') {
+                    this.frontTests = ' -- -u';
+                }
             }
         };
     }
@@ -115,12 +153,17 @@ module.exports = class extends BaseGenerator {
         if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');
         }
+        if (this.pipeline === 'azure') {
+            this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
+        }
 
         if (this.cicdIntegrations.includes('deploy')) {
             if (this.buildTool === 'maven') {
                 this.addMavenDistributionManagement(
-                    this.artifactorySnapshotsId, this.artifactorySnapshotsUrl,
-                    this.artifactoryReleasesId, this.artifactoryReleasesUrl
+                    this.artifactorySnapshotsId,
+                    this.artifactorySnapshotsUrl,
+                    this.artifactoryReleasesId,
+                    this.artifactoryReleasesUrl
                 );
             } else if (this.buildTool === 'gradle') {
                 // TODO: add support here

@@ -21,7 +21,7 @@ services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
         environment:
-            # - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            - _JAVA_OPTIONS=-Xmx512m -Xms256m
             - SPRING_PROFILES_ACTIVE=prod,swagger
             <%_ if (serviceDiscoveryType === 'consul') { _%>
             - SPRING_CLOUD_CONSUL_HOST=consul
@@ -41,7 +41,7 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:postgresql://<%= baseName.toLowerCase() %>-postgresql:5432/<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mssql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:sqlserver://<%= baseName.toLowerCase() %>-mssql:1433;database=tempdb
+            - SPRING_DATASOURCE_URL=jdbc:sqlserver://<%= baseName.toLowerCase() %>-mssql:1433;database=<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'oracle') { _%>
             - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@<%= baseName.toLowerCase() %>-oracle:1521:<%= baseName %>
@@ -86,7 +86,7 @@ services:
                 <%_ } _%>
             <%_ } _%>
             <%_ if (searchEngine === 'elasticsearch') { _%>
-            - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=<%= baseName.toLowerCase() %>-elasticsearch:9300
+            - SPRING_DATA_JEST_URI=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
             - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka

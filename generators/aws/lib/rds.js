@@ -1,8 +1,8 @@
 let aws;
 
-const Rds = module.exports = function Rds(Aws) {
+const Rds = (module.exports = function Rds(Aws) {
     aws = Aws;
-};
+});
 
 Rds.prototype.createDatabase = function createDatabase(params, callback) {
     const dbInstanceClass = params.dbInstanceClass;
@@ -20,24 +20,27 @@ Rds.prototype.createDatabase = function createDatabase(params, callback) {
             if (!rdsSecurityGroupId) {
                 callback(null, { message: `Database ${dbName} already exists (based on security group)` });
             } else {
-                authorizeSecurityGroupIngress({ rdsSecurityGroupId }, (err) => {
+                authorizeSecurityGroupIngress({ rdsSecurityGroupId }, err => {
                     if (err) {
                         callback({ message: err.message }, null);
                     } else {
-                        createDbInstance({
-                            dbInstanceClass,
-                            dbName,
-                            dbEngine,
-                            dbPassword,
-                            dbUsername,
-                            rdsSecurityGroupId
-                        }, (err, data) => {
-                            if (err) {
-                                callback({ message: err.message }, null);
-                            } else {
-                                callback(null, { message: data.message });
+                        createDbInstance(
+                            {
+                                dbInstanceClass,
+                                dbName,
+                                dbEngine,
+                                dbPassword,
+                                dbUsername,
+                                rdsSecurityGroupId
+                            },
+                            (err, data) => {
+                                if (err) {
+                                    callback({ message: err.message }, null);
+                                } else {
+                                    callback(null, { message: data.message });
+                                }
                             }
-                        });
+                        );
                     }
                 });
             }
@@ -92,7 +95,7 @@ function authorizeSecurityGroupIngress(params, callback) {
         CidrIp: '0.0.0.0/0'
     };
 
-    ec2.authorizeSecurityGroupIngress(securityGroupParams, (err) => {
+    ec2.authorizeSecurityGroupIngress(securityGroupParams, err => {
         if (err) {
             callback(err, null);
         } else {
@@ -117,7 +120,7 @@ function createDbInstance(params, callback) {
         Iops: 0
     };
 
-    rds.createDBInstance(dbInstanceParams, (err) => {
+    rds.createDBInstance(dbInstanceParams, err => {
         if (err && err.code === 'DBInstanceAlreadyExists') {
             callback(null, { message: 'Database already exists' });
         } else if (err) {

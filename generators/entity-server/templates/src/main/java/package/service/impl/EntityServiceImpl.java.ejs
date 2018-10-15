@@ -57,12 +57,22 @@ import reactor.core.publisher.Flux;
 <%_ } _%>
 
 <%_ if (dto === 'mapstruct' && (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true)) { _%>
-import java.util.LinkedList;<% } %><% if (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true) { %>
-import java.util.List;<% } %>
-import java.util.Optional;<% if (databaseType === 'cassandra') { %>
-import java.util.UUID;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch' && !viaService) || dto === 'mapstruct'))) { %>
-import java.util.stream.Collectors;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch' && !viaService)) { %>
-import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsearch') { %>
+import java.util.LinkedList;
+<%_ } _%>
+<%_ if (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true) { _%>
+import java.util.List;
+<%_ } _%>
+import java.util.Optional;
+<%_ if (databaseType === 'cassandra') { _%>
+import java.util.UUID;
+<%_ } _%>
+<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch' && !viaService) || dto === 'mapstruct'))) { _%>
+import java.util.stream.Collectors;
+<%_ } _%>
+<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch' && !viaService)) { _%>
+import java.util.stream.StreamSupport;
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
@@ -87,7 +97,8 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     @Override
     <%_ } _%>
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
-        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);<%- include('../../common/save_template', {viaService: viaService, returnDirectly: true}); -%>
+        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
+<%- include('../../common/save_template', {viaService: viaService, returnDirectly: true}); -%>
     }
 
     /**

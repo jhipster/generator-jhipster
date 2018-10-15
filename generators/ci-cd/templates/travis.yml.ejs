@@ -76,9 +76,9 @@ script:
 <%_ } _%>
 <%_ if (applicationType !== 'microservice') { _%>
     <%_ if (clientPackageManager === 'yarn') { _%>
-  - yarn test
+  - yarn test<%= frontTests%>
     <%_ } else if (clientPackageManager === 'npm') { _%>
-  - npm test
+  - npm test<%= frontTests%>
     <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
@@ -87,7 +87,7 @@ script:
   <%_ } _%>
   - ./mvnw verify -Pprod -DskipTests
   <%_ if (cicdIntegrations.includes('heroku')) { _%>
-  - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+  - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
   <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
   <%_ if (cicdIntegrations.includes('sonar')) { _%>

@@ -30,6 +30,8 @@ package <%=packageName%>.service;
     const criteria = entityClass + 'Criteria'; _%>
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -45,9 +47,10 @@ import <%=packageName%>.domain.*; // for static metamodels
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %>
 import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
-<% if (dto === 'mapstruct') { %>
+<%_ if (dto === 'mapstruct') { _%>
 import <%=packageName%>.service.dto.<%= entityClass %>DTO;
-import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
+<%_ } _%>
 
 /**
  * Service for executing complex queries for <%= entityClass %> entities in the database.
@@ -97,6 +100,18 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
     }
 
     /**
+     * Return the number of matching entities in the database
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the number of matching entities.
+     */
+    @Transactional(readOnly = true)
+    public long countByCriteria(<%= criteria %> criteria) {
+        log.debug("count by criteria : {}", criteria);
+        final Specification<<%= entityClass %>> specification = createSpecification(criteria);
+        return <%= repository %>.count(specification);
+    }
+
+    /**
      * Function to convert <%= criteria %> to a {@link Specification}
      */
     private Specification<<%= entityClass %>> createSpecification(<%= criteria %> criteria) {
@@ -117,12 +132,12 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
             relationships.forEach((relationship) => {
                 const metamodelFieldName = (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
             if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(), <%= entityClass %>_.<%= metamodelFieldName %>, <%= relationship.otherEntityNameCapitalized %>_.id));
+                specification = specification.and(buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
+                    root -> root.join(<%= entityClass %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= relationship.otherEntityNameCapitalized %>_.id)));
             }
             <%_ }); // forEach
         _%>
         }
         return specification;
     }
-
 }

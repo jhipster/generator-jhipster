@@ -20,10 +20,13 @@ const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const path = require('path');
+<%_ if (useSass) { _%>
+const sass = require('sass');
+<%_ } _%>
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -37,7 +40,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     main: './<%= MAIN_SRC_DIR %>app/index'
   },
   output: {
-    path: utils.root('<%= BUILD_DIR %>www'),
+    path: utils.root('<%= BUILD_DIR %><% if (buildTool === 'maven') { %>classes/public<% } %><% if (buildTool === 'gradle'){ %>resources/main/public<% } %>'),
     filename: 'app/[name].[hash].bundle.js',
     chunkFilename: 'app/[name].[hash].chunk.js'
   },
@@ -60,7 +63,10 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
           },
           'css-loader',
           'postcss-loader',
-          'sass-loader'
+          {
+            loader: 'sass-loader',
+            options: { implementation: sass }
+          }
         ]
       },
       <%_ } else { _%>
@@ -82,11 +88,11 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
   optimization: {
     runtimeChunk: false,
     minimizer: [
-      new UglifyJsPlugin({
+      new TerserPlugin({
         cache: true,
         parallel: true,
         // sourceMap: true, // Enable source maps. Please note that this will slow down the build
-        uglifyOptions: {
+        terserOptions: {
           beautify: false,
           comments: false,
           compress: {

@@ -1,0 +1,129 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+import <%= packageName %>.security.AuthoritiesConstants;
+import <%= packageName %>.security.jwt.JWTFilter;
+import <%= packageName %>.security.jwt.TokenProvider;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
+<%_ if (!skipUserManagement) { _%>
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
+<%_ } _%>
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+<%_ if (!skipUserManagement) { _%>
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+<%_ } _%>
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+<%_ if (!skipUserManagement) { _%>
+import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+<%_ } _%>
+import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
+
+@Configuration
+@EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
+@Import(SecurityProblemSupport.class)
+public class SecurityConfiguration {
+
+    <%_ if (!skipUserManagement) { _%>
+    private final ReactiveUserDetailsService userDetailsService;
+
+    <%_ } _%>
+    private final TokenProvider tokenProvider;
+
+    private final CorsWebFilter corsWebFilter;
+
+    private final SecurityProblemSupport problemSupport;
+
+    public SecurityConfiguration(<% if (!skipUserManagement) { %>ReactiveUserDetailsService userDetailsService, <% } %>TokenProvider tokenProvider, CorsWebFilter corsWebFilter, SecurityProblemSupport problemSupport) {
+        <%_ if (!skipUserManagement) { _%>
+        this.userDetailsService = userDetailsService;
+        <%_ } _%>
+        this.tokenProvider = tokenProvider;
+        this.corsWebFilter = corsWebFilter;
+        this.problemSupport = problemSupport;
+    }
+
+    <%_ if (!skipUserManagement) { _%>
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ReactiveAuthenticationManager reactiveAuthenticationManager() {
+        UserDetailsRepositoryReactiveAuthenticationManager authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+        authenticationManager.setPasswordEncoder(passwordEncoder());
+        return authenticationManager;
+    }
+
+    <%_ } _%>
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        http
+            .csrf()
+            .disable()
+            .headers()
+            .frameOptions()
+            .disable()
+        .and()
+            .addFilterAt(corsWebFilter, SecurityWebFiltersOrder.HTTP_HEADERS_WRITER)
+            .addFilterAt(new JWTFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
+            <%_ if (!skipUserManagement) { _%>
+            .addFilterAt(new AuthenticationWebFilter(reactiveAuthenticationManager()), SecurityWebFiltersOrder.AUTHENTICATION)
+            <%_ } _%>
+            .exceptionHandling()
+            .accessDeniedHandler(problemSupport)
+            .authenticationEntryPoint(problemSupport)
+        .and()
+            .authorizeExchange()
+            .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            <%_ if (!skipClient) { _%>
+            .pathMatchers("/app/**/*.js").permitAll()
+            .pathMatchers("/app/**/*.html").permitAll()
+            .pathMatchers("/i18n/**").permitAll()
+            .pathMatchers("/content/**").permitAll()
+            .pathMatchers("/swagger-ui/index.html").permitAll()
+            .pathMatchers("/test/**").permitAll()
+            <%_ } _%>
+            <%_ if (!skipUserManagement) { _%>
+            .pathMatchers("/api/register").permitAll()
+            .pathMatchers("/api/activate").permitAll()
+            .pathMatchers("/api/authenticate").permitAll()
+            .pathMatchers("/api/account/reset-password/init").permitAll()
+            .pathMatchers("/api/account/reset-password/finish").permitAll()
+            <%_ } _%>
+            .pathMatchers("/api/**").authenticated()
+            .pathMatchers("/management/health").permitAll()
+            .pathMatchers("/management/info").permitAll()
+            .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
+        return http.build();
+    }
+}

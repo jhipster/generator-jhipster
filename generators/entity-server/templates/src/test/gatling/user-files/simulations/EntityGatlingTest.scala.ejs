@@ -48,6 +48,11 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .acceptLanguageHeader("fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3")
         .connectionHeader("keep-alive")
         .userAgentHeader("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:33.0) Gecko/20100101 Firefox/33.0")
+        .silentResources // Silence all resources like css or css so they don't clutter the results
+<%_ if (authenticationType === 'oauth2') { _%>
+        .disableFollowRedirect // We must follow redirects manually to get the xsrf token from the keycloak redirect
+        .disableAutoReferer
+<%_ } _%>    
 
     val headers_http = Map(
         "Accept" -> """application/json"""
@@ -68,7 +73,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
 <%_ } _%>
 <%_ if (authenticationType === 'uaa') { _%>
 
-    val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:my-secret-token-to-change-in-production".getBytes(StandardCharsets.UTF_8))
+    val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:bXktc2VjcmV0LXRva2VuLXRvLWNoYW5nZS1pbi1wcm9kdWN0aW9uLWFuZC10by1rZWVwLWluLWEtc2VjdXJlLXBsYWNl".getBytes(StandardCharsets.UTF_8))
 
     val headers_http_authentication = Map(
         "Content-Type" -> """application/x-www-form-urlencoded""",
@@ -98,8 +103,15 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
-        .check(status.is(401))<% if (authenticationType === 'session' || authenticationType === 'oauth2') { %>
-        .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))<% } %>).exitHereIfFailed
+        <%_ if ((applicationType === 'microservice' || applicationType === 'gateway') && authenticationType === 'oauth2') { _%>
+        .check(status.is(302))
+        <%_ } else { _%>
+        .check(status.is(401))
+        <%_ } _%>        
+        <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+        .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))
+        <%_ } _%>
+        ).exitHereIfFailed
         .pause(10)
         .exec(http("Authentication")
 <%_ if (authenticationType === 'session') { _%>
@@ -112,15 +124,34 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))).exitHereIfFailed
 <%_ } else if (authenticationType === 'oauth2') { _%>
         .get("/login")
+        .check(status.is(302))
+        .check(header("Location").saveAs("loginUrl"))).exitHereIfFailed
+        .pause(2)
+        .exec(http("Login Redirect")
+        .get("${loginUrl}")
+        .silent
         .headers(keycloakHeaders)
         .check(css("#kc-form-login", "action").saveAs("kc-form-login"))).exitHereIfFailed
         .pause(10)
         .exec(http("Authenticate")
         .post("${kc-form-login}")
+        .silent
         .headers(keycloakHeaders)
         .formParam("username", "admin")
         .formParam("password", "admin")
         .formParam("submit", "Login")
+        .check(status.is(302))
+        .check(header("Location").saveAs("afterLoginUrl"))).exitHereIfFailed
+        .pause(2)
+        .exec(http("After Login Redirect")
+        .get("${afterLoginUrl}")
+        .silent
+        .check(status.is(302))
+        .check(header("Location").saveAs("finalRedirectUrl"))
+        .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token")))
+        .exec(http("Final Redirect")
+        .get("${finalRedirectUrl}")
+        .silent
         .check(status.is(200))).exitHereIfFailed
 <%_ } else if (authenticationType === 'uaa') { _%>
         .post("/oauth/token")
@@ -129,7 +160,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("password", "admin")
         .formParam("grant_type", "password")
         .formParam("scope", "read write")
-        .formParam("client_secret", "my-secret-token-to-change-in-production")
+        .formParam("client_secret", "bXktc2VjcmV0LXRva2VuLXRvLWNoYW5nZS1pbi1wcm9kdWN0aW9uLWFuZC10by1rZWVwLWluLWEtc2VjdXJlLXBsYWNl")
         .formParam("client_id", "<%= baseName%>app")
         .formParam("submit", "Login")
         .check(jsonPath("$.access_token").saveAs("access_token"))).exitHereIfFailed
@@ -139,7 +170,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .body(StringBody("""{"username":"admin", "password":"admin"}""")).asJSON
         .check(header.get("Authorization").saveAs("access_token"))).exitHereIfFailed
 <%_ } _%>
-        .pause(1)
+        .pause(2)
         .exec(http("Authenticated request")
         .get("/api/account")
         .headers(headers_http_authenticated)
@@ -154,7 +185,12 @@ class <%= entityClass %>GatlingTest extends Simulation {
             .exec(http("Create new <%= entityInstance %>")
             .post("<% if (applicationType === 'microservice') {%>/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null<% for (idx in fields) { %>, "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType === 'String') { %>"SAMPLE_TEXT"<% } else if (['Integer', 'BigDecimal'].includes(fields[idx].fieldType)) { %>"0"<% } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { %>"2020-01-01T00:00:00.000Z"<% } else { %>null<% } } %>}""")).asJSON
+            .body(StringBody("""{
+                "id":null
+                <%_ for (idx in fields) { _%>
+                , "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType === 'String') { %>"SAMPLE_TEXT"<% } else if (['Integer', 'BigDecimal'].includes(fields[idx].fieldType)) { %>"0"<% } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { %>"2020-01-01T00:00:00.000Z"<% } else if (fields[idx].fieldIsEnum) { %>"<%= fields[idx].fieldValues.split(',')[0] %>"<% } else { %>null<% } %>
+                <%_ } _%>
+                }""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_<%= entityInstance %>_url"))).exitHereIfFailed
             .pause(10)

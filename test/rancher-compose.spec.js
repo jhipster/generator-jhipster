@@ -1,31 +1,24 @@
-/* global describe, beforeEach, it */
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    ranchercompose: [
-        'docker-compose.yml',
-        'rancher-compose.yml'
-    ]
+    ranchercompose: ['docker-compose.yml', 'rancher-compose.yml']
 };
 
 describe('JHipster Rancher Compose Sub Generator', () => {
     describe('only gateway', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/rancher-compose'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway'
-                    ],
+                    chosenApps: ['01-gateway'],
                     clusteredDbApps: [],
                     monitoring: 'no',
                     adminPassword: 'meetup',
@@ -41,18 +34,16 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     });
 
     describe('only one microservice', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/rancher-compose'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '02-mysql'
-                    ],
+                    chosenApps: ['02-mysql'],
                     clusteredDbApps: [],
                     monitoring: 'no',
                     adminPassword: 'meetup',
@@ -68,19 +59,16 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/rancher-compose'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '02-mysql'
-                    ],
+                    chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
                     monitoring: 'no',
                     adminPassword: 'meetup',
@@ -97,19 +85,16 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with elk', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/rancher-compose'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '02-mysql'
-                    ],
+                    chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
                     monitoring: 'elk',
                     adminPassword: 'meetup',
@@ -126,19 +111,16 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with prometheus', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/rancher-compose'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '02-mysql'
-                    ],
+                    chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
                     monitoring: 'prometheus',
                     adminPassword: 'meetup',
@@ -155,21 +137,17 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     });
 
     describe('gateway, uaa server and one microservice, with elk', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/rancher-compose'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ force: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '02-mysql',
-                        '06-uaa'
-                    ],
+                    chosenApps: ['01-gateway', '02-mysql', '06-uaa'],
                     clusteredDbApps: [],
                     monitoring: 'elk',
                     adminPassword: 'meetup',
@@ -192,21 +170,16 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     });
 
     describe('loadbalancing and multi microservices, with elk', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/rancher-compose'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '02-mysql',
-                        '03-psql',
-                        '04-mongo',
-                        '07-mariadb'
-                    ],
+                    chosenApps: ['02-mysql', '03-psql', '04-mongo', '07-mariadb'],
                     clusteredDbApps: [],
                     monitoring: 'elk',
                     adminPassword: 'meetup',
@@ -234,24 +207,17 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     });
 
     describe('loadbalancing, gateway and multi microservices, with 1 mongodb cluster ', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/rancher-compose'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '02-mysql',
-                        '03-psql',
-                        '04-mongo'
-                    ],
-                    clusteredDbApps: [
-                        '04-mongo'
-                    ],
+                    chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo'],
+                    clusteredDbApps: ['04-mongo'],
                     monitoring: 'elk',
                     adminPassword: 'meetup',
                     dockerRepositoryName: 'jhipsterrepository',
@@ -278,19 +244,16 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     });
 
     describe('gateway and 1 microservice, with Cassandra cluster', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/rancher-compose'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '05-cassandra'
-                    ],
+                    chosenApps: ['01-gateway', '05-cassandra'],
                     clusteredDbApps: [],
                     monitoring: 'elk',
                     adminPassword: 'meetup',
@@ -311,18 +274,16 @@ describe('JHipster Rancher Compose Sub Generator', () => {
     });
 
     describe('loadbalancing and a monolith app', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/rancher-compose'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
-                    chosenApps: [
-                        '08-monolith'
-                    ],
+                    chosenApps: ['08-monolith'],
                     clusteredDbApps: [],
                     monitoring: 'elk',
                     adminPassword: 'meetup',

@@ -18,35 +18,35 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v4.0.0';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v4.0.4';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
 const DOCKER_MYSQL = 'mysql:5.7.20';
 const DOCKER_MARIADB = 'mariadb:10.3.7';
 const DOCKER_POSTGRESQL = 'postgres:10.4';
-const DOCKER_MONGODB = 'mongo:3.6.3';
-const DOCKER_COUCHBASE = 'couchbase/server:5.1.0';
+const DOCKER_MONGODB = 'mongo:4.0.2';
+const DOCKER_COUCHBASE = 'couchbase/server:5.5.1';
 const DOCKER_CASSANDRA = 'cassandra:3.9';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.9.3';
 const DOCKER_MEMCACHED = 'memcached:1.5.8-alpine';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:4.0.0.Final';
+const DOCKER_KEYCLOAK = 'jboss/keycloak:4.5.0.Final';
 const DOCKER_ELASTICSEARCH = 'elasticsearch:5.6.5'; // docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1
 const DOCKER_KAFKA = 'wurstmeister/kafka:1.0.0';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
 const DOCKER_SONAR = 'sonarqube:7.1-alpine';
-const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v3.0.1';
-const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v3.0.1';
-const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v3.0.1';
-const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v3.0.1';
-const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v3.0.1';
-const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v3.0.1';
-const DOCKER_TRAEFIK = 'traefik:1.5.3';
-const DOCKER_CONSUL = 'consul:1.2.0';
+const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v4.0.0';
+const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v4.0.0';
+const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v4.0.0';
+const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v4.0.0';
+const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v4.0.0';
+const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.0.0';
+const DOCKER_TRAEFIK = 'traefik:1.7.2';
+const DOCKER_CONSUL = 'consul:1.2.3';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v1.6.3';
-const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.6.2';
-const DOCKER_GRAFANA = 'grafana/grafana:4.3.2';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v2.4.3';
+const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.15.2';
+const DOCKER_GRAFANA = 'grafana/grafana:5.3.0';
 const DOCKER_JENKINS = 'jenkins:latest';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
@@ -58,9 +58,9 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '8.11.3';
-const YARN_VERSION = '1.6.0';
-const NPM_VERSION = '6.1.0';
+const NODE_VERSION = '8.12.0';
+const YARN_VERSION = '1.10.1';
+const NPM_VERSION = '6.4.1';
 
 // all constants used throughout all generators
 
@@ -101,15 +101,52 @@ const SQL_DB_OPTIONS = [
 
 const LANGUAGES = [
     {
-        name: 'Arabic (Libya)', dispName: 'العربية', value: 'ar-ly', rtl: true, skipForLocale: true
-    },
-    { name: 'Armenian', dispName: 'Հայերեն', value: 'hy' },
-    { name: 'Catalan', dispName: 'Català', value: 'ca' },
-    {
-        name: 'Chinese (Simplified)', dispName: '中文（简体）', value: 'zh-cn', localeId: 'zh-Hans'
+        name: 'Albanian',
+        dispName: 'Shqip',
+        value: 'al',
+        momentLocaleId: 'sq'
     },
     {
-        name: 'Chinese (Traditional)', dispName: '繁體中文', value: 'zh-tw', localeId: 'zh-Hant'
+        name: 'Arabic (Libya)',
+        dispName: 'العربية',
+        value: 'ar-ly',
+        rtl: true,
+        skipForLocale: true
+    },
+    {
+        name: 'Armenian',
+        dispName: 'Հայերեն',
+        value: 'hy',
+        momentLocaleId: 'hy-am'
+    },
+    {
+        name: 'Belorussian',
+        dispName: 'Беларускі',
+        value: 'by',
+        momentLocaleId: 'be-by'
+    },
+    {
+        name: 'Bengali',
+        dispName: 'বাংলা',
+        value: 'bn',
+        momentLocaleId: 'bn-bd'
+    },
+    {
+        name: 'Catalan',
+        dispName: 'Català',
+        value: 'ca'
+    },
+    {
+        name: 'Chinese (Simplified)',
+        dispName: '中文（简体）',
+        value: 'zh-cn',
+        localeId: 'zh-Hans'
+    },
+    {
+        name: 'Chinese (Traditional)',
+        dispName: '繁體中文',
+        value: 'zh-tw',
+        localeId: 'zh-Hant'
     },
     { name: 'Czech', dispName: 'Český', value: 'cs' },
     { name: 'Danish', dispName: 'Dansk', value: 'da' },
@@ -117,7 +154,10 @@ const LANGUAGES = [
     { name: 'English', dispName: 'English', value: 'en' },
     { name: 'Estonian', dispName: 'Eesti', value: 'et' },
     {
-        name: 'Farsi', dispName: 'فارسی', value: 'fa', rtl: true
+        name: 'Farsi',
+        dispName: 'فارسی',
+        value: 'fa',
+        rtl: true
     },
     { name: 'French', dispName: 'Français', value: 'fr' },
     { name: 'Galician', dispName: 'Galego', value: 'gl' },
@@ -130,12 +170,19 @@ const LANGUAGES = [
     { name: 'Japanese', dispName: '日本語', value: 'ja' },
     { name: 'Korean', dispName: '한국어', value: 'ko' },
     { name: 'Marathi', dispName: 'मराठी', value: 'mr' },
+    { name: 'Myanmar', dispName: 'မြန်မာ', value: 'my' },
     { name: 'Polish', dispName: 'Polski', value: 'pl' },
     {
-        name: 'Portuguese (Brazilian)', dispName: 'Português (Brasil)', value: 'pt-br', localeId: 'pt'
+        name: 'Portuguese (Brazilian)',
+        dispName: 'Português (Brasil)',
+        value: 'pt-br',
+        localeId: 'pt'
     },
     {
-        name: 'Portuguese', dispName: 'Português', value: 'pt-pt', localeId: 'pt-PT'
+        name: 'Portuguese',
+        dispName: 'Português',
+        value: 'pt-pt',
+        localeId: 'pt-PT'
     },
     { name: 'Romanian', dispName: 'Română', value: 'ro' },
     { name: 'Russian', dispName: 'Русский', value: 'ru' },
@@ -147,10 +194,17 @@ const LANGUAGES = [
     { name: 'Tamil', dispName: 'தமிழ்', value: 'ta' },
     { name: 'Thai', dispName: 'ไทย', value: 'th' },
     {
-        name: 'Ukrainian', dispName: 'Українська', value: 'ua', localeId: 'uk'
+        name: 'Ukrainian',
+        dispName: 'Українська',
+        value: 'ua',
+        localeId: 'uk',
+        momentLocaleId: 'uk'
     },
     {
-        name: 'Uzbek (latin)', dispName: 'O`zbekcha', value: 'uz-lat', localeId: 'uz'
+        name: 'Uzbek (latin)',
+        dispName: 'O`zbekcha',
+        value: 'uz-lat',
+        localeId: 'uz'
     },
     { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
 ];

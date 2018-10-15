@@ -26,3 +26,5 @@ services:
             - 9200:9200
             - 9300:9300
         command: -Enetwork.host=0.0.0.0 -Ediscovery.type=single-node
+        environment:
+            - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"

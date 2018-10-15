@@ -20,18 +20,17 @@
 const semver = require('semver');
 const path = require('path');
 const packageJson = require('../package.json');
-const logger = require('./utils').logger;
+const { logger } = require('./utils');
 
 const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;
 
 if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
     /* eslint-disable no-console */
-    logger.error(`You are running Node version ${currentNodeVersion
-    }\nJHipster requires Node version ${minimumNodeVersion
-    }\nPlease update your version of Node.`);
+    logger.error(
+        `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${minimumNodeVersion}\nPlease update your version of Node.`
+    );
     /* eslint-enable  */
-    process.exit(1);
 }
 
 let preferLocal = true;
@@ -56,7 +55,7 @@ function requireCLI(preferLocal) {
             if (__dirname !== path.dirname(localCLI)) {
                 // load local version
                 /* eslint-disable import/no-dynamic-require */
-                logger.info('Using JHipster version installed locally in current project\'s node_modules');
+                logger.info("Using JHipster version installed locally in current project's node_modules");
                 require(localCLI);
                 return;
             }

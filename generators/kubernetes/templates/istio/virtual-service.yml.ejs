@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-virtualservice
+  namespace: <%= kubernetesNamespace %>
+spec:
+  hosts:
+  - <%= app.baseName.toLowerCase() %>
+  http:
+  - route:
+    - destination:
+        host: <%= app.baseName.toLowerCase() %>
+        subset: "v1"
+      weight: 100
+    retries:
+      attempts: 3
+      perTryTimeout: 2s

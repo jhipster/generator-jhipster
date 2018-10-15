@@ -31,7 +31,7 @@
             ownerSide = relationships[idx].ownerSide,
             otherEntityTableName = relationships[idx].otherEntityTableName;
             if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
-                const constraintName = getConstraintName(name, relationshipName, prodDatabaseType);%>
+                const constraintName = getFKConstraintName(name, relationshipName, prodDatabaseType);%>
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
@@ -39,8 +39,8 @@
                                  referencedTableName="<%= otherEntityTableName %>"/>
         <%_ } else if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
-                const constraintName = getConstraintName(joinTableName, getPluralColumnName(name), prodDatabaseType, true);
-                const otherEntityConstraintName = getConstraintName(joinTableName, getPluralColumnName(relationshipName), prodDatabaseType, true);
+                const constraintName = getFKConstraintName(joinTableName, getPluralColumnName(name), prodDatabaseType, true);
+                const otherEntityConstraintName = getFKConstraintName(joinTableName, getPluralColumnName(relationshipName), prodDatabaseType, true);
           _%>
 
         <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(name) %>_id"

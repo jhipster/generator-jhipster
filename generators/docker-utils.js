@@ -11,7 +11,7 @@ const dockerCLI = require('./docker-cli');
 module.exports = {
     checkDocker,
     checkImageExist,
-    checkAndBuildImages,
+    checkAndBuildImages
 };
 
 /**
@@ -24,17 +24,25 @@ function checkDocker() {
 
     shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
         if (stderr) {
-            this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n'
-                + '         Read http://docs.docker.com/engine/installation/#installation\n'));
+            this.log(
+                chalk.red(
+                    'Docker version 1.10.0 or later is not installed on your computer.\n' +
+                        '         Read http://docs.docker.com/engine/installation/#installation\n'
+                )
+            );
             this.abort = true;
         } else {
             const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
             const dockerVersionMajor = dockerVersion.split('.')[0];
             const dockerVersionMinor = dockerVersion.split('.')[1];
             if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-                this.log(chalk.red(`${'Docker version 1.10.0 or later is not installed on your computer.\n'
-                    + '         Docker version found: '}${dockerVersion}\n`
-                    + '         Read http://docs.docker.com/engine/installation/#installation\n'));
+                this.log(
+                    chalk.red(
+                        `${'Docker version 1.10.0 or later is not installed on your computer.\n' +
+                            '         Docker version found: '}${dockerVersion}\n` +
+                            '         Read http://docs.docker.com/engine/installation/#installation\n'
+                    )
+                );
                 this.abort = true;
             } else {
                 this.log.ok('Docker is installed');
@@ -59,10 +67,10 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
     this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
     if (opts.appConfig.buildTool === 'maven') {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/target/docker`);
-        this.dockerBuildCommand = './mvnw verify -Pprod dockerfile:build';
+        this.dockerBuildCommand = './mvnw package -Pprod jib:dockerBuild';
     } else {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/build/docker`);
-        this.dockerBuildCommand = './gradlew -Pprod bootWar buildDocker';
+        this.dockerBuildCommand = './gradlew bootWar -Pprod jibDockerBuild';
     }
 
     if (shelljs.ls(imagePath).length === 0) {
@@ -84,13 +92,15 @@ function checkAndBuildImages(opts = { cwd: './', forceBuild: false, appConfig: {
     checkImageExist.call(this, opts);
     const pwd = shelljs.pwd();
     shelljs.cd(opts.cwd);
-    return new Promise((resolve, reject) => dockerCLI.command(`${opts.cwd}${this.dockerBuildCommand}`, (err) => {
-        shelljs.cd(pwd);
-        if (err) {
-            this.log.error(chalk.red(`The Docker image build failed. ${err}`));
-            this.abort = true;
-            reject();
-        }
-        resolve();
-    }));
+    return new Promise((resolve, reject) =>
+        dockerCLI.command(`${opts.cwd}${this.dockerBuildCommand}`, err => {
+            shelljs.cd(pwd);
+            if (err) {
+                this.log.error(chalk.red(`The Docker image build failed. ${err}`));
+                this.abort = true;
+                reject();
+            }
+            resolve();
+        })
+    );
 }

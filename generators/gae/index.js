@@ -23,6 +23,7 @@ const execSync = require('child_process').execSync;
 const chalk = require('chalk');
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
+const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
 
@@ -37,10 +38,11 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
 
-                exec('gcloud version', (err) => {
+                exec('gcloud version', err => {
                     if (err) {
-                        this.log.error('You don\'t have the Cloud SDK (gcloud) installed. '
-                            + 'Download it from https://cloud.google.com/sdk/install');
+                        this.log.error(
+                            "You don't have the Cloud SDK (gcloud) installed. \nDownload it from https://cloud.google.com/sdk/install"
+                        );
                         this.abort = true;
                     }
                     done();
@@ -58,9 +60,13 @@ module.exports = class extends BaseGenerator {
                     } else {
                         this.log(chalk.bold('\nInstalling App Engine Java SDK'));
                         this.log(`... Running: gcloud components install ${component} --quiet`);
-                        const child = spawn('gcloud', ['components', 'install', component, '--quiet'], { stdio: [process.stdin, process.stdout, process.stderr] });
-                        child.on('exit', (code) => {
-                            if (code !== 0) { this.abort = true; }
+                        const child = spawn('gcloud', ['components', 'install', component, '--quiet'], {
+                            stdio: [process.stdin, process.stdout, process.stderr]
+                        });
+                        child.on('exit', code => {
+                            if (code !== 0) {
+                                this.abort = true;
+                            }
                             done();
                         });
                     }
@@ -73,7 +79,9 @@ module.exports = class extends BaseGenerator {
                 this.packageName = this.config.get('packageName');
                 this.packageFolder = this.config.get('packageFolder');
                 this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-                this.enableHibernateCache = this.config.get('enableHibernateCache') || (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
+                this.enableHibernateCache =
+                    this.config.get('enableHibernateCache') ||
+                    (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
                 this.databaseType = this.config.get('databaseType');
                 this.prodDatabaseType = this.config.get('prodDatabaseType');
                 this.searchEngine = this.config.get('searchEngine');
@@ -113,7 +121,8 @@ module.exports = class extends BaseGenerator {
     defaultServiceNameChoices(defaultServiceExists) {
         if (this.applicationType === 'monolith') {
             return defaultServiceExists ? ['default', _.kebabCase(this.baseName)] : ['default'];
-        } if (this.applicationType === 'gateway') {
+        }
+        if (this.applicationType === 'gateway') {
             return ['default'];
         }
 
@@ -131,7 +140,7 @@ module.exports = class extends BaseGenerator {
                         name: 'gcpProjectId',
                         message: 'Google Cloud Project ID',
                         default: this.defaultProjectId(),
-                        validate: (input) => {
+                        validate: input => {
                             if (input.length === 0) {
                                 return 'Project ID cannot empty';
                             }
@@ -144,9 +153,10 @@ module.exports = class extends BaseGenerator {
                             }
                             return true;
                         }
-                    }];
+                    }
+                ];
 
-                this.prompt(prompts).then((props) => {
+                this.prompt(prompts).then(props => {
                     this.gcpProjectId = props.gcpProjectId;
                     done();
                 });
@@ -177,9 +187,10 @@ module.exports = class extends BaseGenerator {
                                     { value: 'australia-southeast1', name: 'australia-southeast1 - Sydney' }
                                 ],
                                 default: this.gaeLocation ? this.gaeLocation : 0
-                            }];
+                            }
+                        ];
 
-                        this.prompt(prompts).then((props) => {
+                        this.prompt(prompts).then(props => {
                             this.gaeLocation = props.gaeLocation;
                             this.gaeLocationExists = false;
                             done();
@@ -211,9 +222,10 @@ module.exports = class extends BaseGenerator {
                         message: 'Google App Engine Service Name',
                         choices: this.defaultServiceNameChoices(this.defaultServiceExists),
                         default: this.gaeServiceName ? this.gaeServiceName : 0
-                    }];
+                    }
+                ];
 
-                this.prompt(prompts).then((props) => {
+                this.prompt(prompts).then(props => {
                     this.gaeServiceName = props.gaeServiceName;
                     done();
                 });
@@ -237,12 +249,13 @@ module.exports = class extends BaseGenerator {
                             { value: 'B2', name: 'B2 - 1.2GHz, 256MB, Basic or Manual Scaling' },
                             { value: 'B4', name: 'B4 - 2.4GHz, 512MB, Basic or Manual Scaling' },
                             { value: 'B4_1G', name: 'B4_1G - 2.4GHz, 1GB, Basic or Manual Scaling' },
-                            { value: 'B8', name: 'B8 - 4.8GHz, 1GB, Basic or Manual Scaling' },
+                            { value: 'B8', name: 'B8 - 4.8GHz, 1GB, Basic or Manual Scaling' }
                         ],
                         default: this.gaeInstanceClass ? this.gaeInstanceClass : 0
-                    }];
+                    }
+                ];
 
-                this.prompt(prompts).then((props) => {
+                this.prompt(prompts).then(props => {
                     this.gaeInstanceClass = props.gaeInstanceClass;
                     done();
                 });
@@ -253,7 +266,11 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 if (this.gaeInstanceClass.startsWith('F')) {
-                    this.log(`Instance Class "${chalk.cyan(this.gaeInstanceClass)}" can only be automatically scaled. Setting scaling type to automatic.`);
+                    this.log(
+                        `Instance Class "${chalk.cyan(
+                            this.gaeInstanceClass
+                        )}" can only be automatically scaled. Setting scaling type to automatic.`
+                    );
                     this.gaeScalingType = 'automatic';
                     done();
                 } else {
@@ -264,9 +281,10 @@ module.exports = class extends BaseGenerator {
                             message: 'Basic or Manual Scaling',
                             choices: ['basic', 'manual'],
                             default: this.gaeScalingType ? this.gaeScalingType : 0
-                        }];
+                        }
+                    ];
 
-                    this.prompt(prompts).then((props) => {
+                    this.prompt(prompts).then(props => {
                         this.gaeScalingType = props.gaeScalingType;
                         done();
                     });
@@ -285,7 +303,7 @@ module.exports = class extends BaseGenerator {
                         name: 'gaeInstances',
                         message: 'How many instances to run ?',
                         default: this.gaeInstances ? this.gaeInstances : '1',
-                        validate: (input) => {
+                        validate: input => {
                             if (input.length === 0) {
                                 return 'Instances cannot be empty';
                             }
@@ -303,7 +321,7 @@ module.exports = class extends BaseGenerator {
                         name: 'gaeMinInstances',
                         message: 'How many instances minimum ?',
                         default: this.gaeMinInstances ? this.gaeMinInstances : '0',
-                        validate: (input) => {
+                        validate: input => {
                             if (input.length === 0) {
                                 return 'Minimum Instances cannot be empty';
                             }
@@ -321,7 +339,7 @@ module.exports = class extends BaseGenerator {
                         name: 'gaeMaxInstances',
                         message: 'How many instances max (0 for unlimited) ?',
                         default: this.gaeMaxInstances ? this.gaeMaxInstances : '0',
-                        validate: (input) => {
+                        validate: input => {
                             if (input.length === 0) {
                                 return 'Max Instances cannot be empty';
                             }
@@ -334,7 +352,7 @@ module.exports = class extends BaseGenerator {
                     });
                 }
 
-                this.prompt(prompts).then((props) => {
+                this.prompt(prompts).then(props => {
                     this.gaeInstances = props.gaeInstances;
                     this.gaeMaxInstances = props.gaeMaxInstances;
                     this.gaeMinInstances = props.gaeMinInstances;
@@ -350,31 +368,35 @@ module.exports = class extends BaseGenerator {
 
                 const cloudSqlInstances = [{ value: '', name: 'New Cloud SQL Instance' }];
 
-                exec(`gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`, (err, stdout, stderr) => {
-                    if (err) {
-                        this.log.error(err);
-                    } else {
-                        _.forEach(stdout.toString().split(os.EOL), (instance) => {
-                            if (!instance) return;
-                            cloudSqlInstances.push({ value: instance, name: instance });
+                exec(
+                    `gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`,
+                    (err, stdout, stderr) => {
+                        if (err) {
+                            this.log.error(err);
+                        } else {
+                            _.forEach(stdout.toString().split(os.EOL), instance => {
+                                if (!instance) return;
+                                cloudSqlInstances.push({ value: instance, name: instance });
+                            });
+                        }
+
+                        const prompts = [
+                            {
+                                type: 'list',
+                                name: 'gcpCloudSqlInstanceName',
+                                message: 'Google Cloud SQL Instance Name',
+                                choices: cloudSqlInstances,
+                                default: this.gcpCloudSqlInstanceName ? this.gcpCloudSqlInstanceName : 0
+                            }
+                        ];
+
+                        this.prompt(prompts).then(props => {
+                            this.gcpCloudSqlInstanceName = props.gcpCloudSqlInstanceName;
+                            this.gcpCloudSqlInstanceNameExists = true;
+                            done();
                         });
                     }
-
-                    const prompts = [
-                        {
-                            type: 'list',
-                            name: 'gcpCloudSqlInstanceName',
-                            message: 'Google Cloud SQL Instance Name',
-                            choices: cloudSqlInstances,
-                            default: this.gcpCloudSqlInstanceName ? this.gcpCloudSqlInstanceName : 0
-                        }];
-
-                    this.prompt(prompts).then((props) => {
-                        this.gcpCloudSqlInstanceName = props.gcpCloudSqlInstanceName;
-                        this.gcpCloudSqlInstanceNameExists = true;
-                        done();
-                    });
-                });
+                );
             },
 
             promptForCloudSqlInstanceNameIfNeeded() {
@@ -389,9 +411,10 @@ module.exports = class extends BaseGenerator {
                         name: 'gcpCloudSqlInstanceName',
                         message: 'Google Cloud SQL Instance Name',
                         default: this.gcpCloudSqlInstanceName ? this.gcpCloudSqlInstanceName : this.baseName
-                    }];
+                    }
+                ];
 
-                this.prompt(prompts).then((props) => {
+                this.prompt(prompts).then(props => {
                     this.gcpCloudSqlInstanceName = props.gcpCloudSqlInstanceName;
                     this.gcpCloudSqlInstanceNameExists = false;
                     done();
@@ -409,7 +432,7 @@ module.exports = class extends BaseGenerator {
                         name: 'gcpCloudSqlUserName',
                         message: 'Google Cloud SQL User Name',
                         default: this.gcpCloudSqlUserName ? this.gcpCloudSqlUserName : 'root',
-                        validate: (input) => {
+                        validate: input => {
                             if (input.length === 0) {
                                 return 'User Name cannot empty';
                             }
@@ -421,9 +444,10 @@ module.exports = class extends BaseGenerator {
                         name: 'gcpCloudSqlPassword',
                         message: 'Google Cloud SQL Password',
                         default: this.gcpCloudSqlPassword ? this.gcpCloudSqlPassword : ''
-                    }];
+                    }
+                ];
 
-                this.prompt(prompts).then((props) => {
+                this.prompt(prompts).then(props => {
                     this.gcpCloudSqlUserName = props.gcpCloudSqlUserName;
                     this.gcpCloudSqlPassword = props.gcpCloudSqlPassword;
                     done();
@@ -438,31 +462,35 @@ module.exports = class extends BaseGenerator {
 
                 const cloudSqlDatabases = [{ value: '', name: 'New Database' }];
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
-                exec(`gcloud sql databases list -i ${name} --format='value(name)' --project="${this.gcpProjectId}"`, (err, stdout, stderr) => {
-                    if (err) {
-                        this.log.error(err);
-                    } else {
-                        _.forEach(stdout.toString().split(os.EOL), (database) => {
-                            if (!database) return;
-                            cloudSqlDatabases.push({ value: database, name: database });
+                exec(
+                    `gcloud sql databases list -i ${name} --format='value(name)' --project="${this.gcpProjectId}"`,
+                    (err, stdout, stderr) => {
+                        if (err) {
+                            this.log.error(err);
+                        } else {
+                            _.forEach(stdout.toString().split(os.EOL), database => {
+                                if (!database) return;
+                                cloudSqlDatabases.push({ value: database, name: database });
+                            });
+                        }
+
+                        const prompts = [
+                            {
+                                type: 'list',
+                                name: 'gcpCloudSqlDatabaseName',
+                                message: 'Google Cloud SQL Database Name',
+                                choices: cloudSqlDatabases,
+                                default: this.gcpCloudSqlDatabaseName ? this.gcpCloudSqlDatabaseName : 0
+                            }
+                        ];
+
+                        this.prompt(prompts).then(props => {
+                            this.gcpCloudSqlDatabaseName = props.gcpCloudSqlDatabaseName;
+                            this.gcpCloudSqlDatabaseNameExists = true;
+                            done();
                         });
                     }
-
-                    const prompts = [
-                        {
-                            type: 'list',
-                            name: 'gcpCloudSqlDatabaseName',
-                            message: 'Google Cloud SQL Database Name',
-                            choices: cloudSqlDatabases,
-                            default: this.gcpCloudSqlDatabaseName ? this.gcpCloudSqlDatabaseName : 0
-                        }];
-
-                    this.prompt(prompts).then((props) => {
-                        this.gcpCloudSqlDatabaseName = props.gcpCloudSqlDatabaseName;
-                        this.gcpCloudSqlDatabaseNameExists = true;
-                        done();
-                    });
-                });
+                );
             },
 
             promptForCloudSqlDatabaseNameIfNeeded() {
@@ -477,28 +505,26 @@ module.exports = class extends BaseGenerator {
                         name: 'gcpCloudSqlDatabaseName',
                         message: 'Google Cloud SQL Database Name',
                         default: this.gcpCloudSqlDatabaseName ? this.gcpCloudSqlDatabaseName : this.baseName
-                    }];
+                    }
+                ];
 
-                this.prompt(prompts).then((props) => {
+                this.prompt(prompts).then(props => {
                     this.gcpCloudSqlDatabaseName = props.gcpCloudSqlDatabaseName;
                     this.gcpCloudSqlDatabaseNameExists = false;
                     done();
                 });
             }
-
         };
     }
 
     get default() {
-        return {
-        };
+        return {};
     }
 
     get configuring() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'gae');
+                statistics.sendSubGenEvent('generator', 'gae');
             },
 
             configureProject() {
@@ -539,7 +565,10 @@ module.exports = class extends BaseGenerator {
                         this.log.error(err);
                     }
 
-                    this.gcpCloudSqlInstanceName = execSync(`gcloud sql instances describe jhipster --format="value(connectionName)" --project="${this.gcpProjectId}"`, { encoding: 'utf8' });
+                    this.gcpCloudSqlInstanceName = execSync(
+                        `gcloud sql instances describe jhipster --format="value(connectionName)" --project="${this.gcpProjectId}"`,
+                        { encoding: 'utf8' }
+                    );
 
                     done();
                 });
@@ -556,11 +585,15 @@ module.exports = class extends BaseGenerator {
                 exec(`gcloud sql users list -i jhipster --format='value(name)' --project="${this.gcpProjectId}"`, (err, stdout) => {
                     if (_.includes(stdout, this.gcpCloudSqlUserName)) {
                         this.log(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
-                        const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" "%" --project="${this.gcpProjectId}" --password="..."`;
+                        const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" "%" --project="${
+                            this.gcpProjectId
+                        }" --password="..."`;
                         this.log(chalk.bold(`... To set its password, run: ${cmd}`));
                         done();
                     } else {
-                        const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" "%" --password="${this.gcpCloudSqlPassword}" --project="${this.gcpProjectId}"`;
+                        const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" "%" --password="${
+                            this.gcpCloudSqlPassword
+                        }" --project="${this.gcpProjectId}"`;
                         this.log(chalk.bold(`... Running: ${cmd}`));
                         exec(cmd, (err, stdout, stderr) => {
                             if (err) {
@@ -580,7 +613,9 @@ module.exports = class extends BaseGenerator {
 
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 this.log(chalk.bold(`\nCreating Database ${chalk.cyan(this.gcpCloudSqlDatabaseName)}`));
-                const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${this.gcpProjectId}"`;
+                const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${
+                    this.gcpProjectId
+                }"`;
                 this.log(chalk.bold(`... Running: ${cmd}`));
                 exec(cmd, (err, stdout, stderr) => {
                     if (err) {
@@ -625,7 +660,7 @@ module.exports = class extends BaseGenerator {
                 }
 */
 
-                this.conflicter.resolve((err) => {
+                this.conflicter.resolve(err => {
                     done();
                 });
             },
@@ -650,10 +685,10 @@ module.exports = class extends BaseGenerator {
 
             addMaven() {
                 if (this.buildTool === 'maven') {
-                    this.render('pom-plugin.xml.ejs', (rendered) => {
+                    this.render('pom-plugin.xml.ejs', rendered => {
                         this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.2', rendered.trim());
                     });
-                    this.render('pom-profile.xml.ejs', (rendered) => {
+                    this.render('pom-profile.xml.ejs', rendered => {
                         this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
                     });
                 }

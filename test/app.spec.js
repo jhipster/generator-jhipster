@@ -1,5 +1,3 @@
-/* global describe, context, beforeEach, it */
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -19,8 +17,9 @@ const TEST_DIR = constants.TEST_DIR;
 describe('JHipster generator', () => {
     context('Default configuration with', () => {
         describe('AngularX', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true, jhiPrefix: 'test' })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -53,13 +52,15 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
-                assert.file(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: []
-                }));
+                assert.file(
+                    getFilesForOptions(angularFiles, {
+                        useSass: false,
+                        enableTranslation: true,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        testFrameworks: []
+                    })
+                );
             });
             it('contains clientFramework with angularX value', () => {
                 assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
@@ -70,10 +71,14 @@ describe('JHipster generator', () => {
         });
 
         describe('React', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({
-                        skipInstall: true, skipChecks: true, jhiPrefix: 'test', experimental: true
+                        skipInstall: true,
+                        skipChecks: true,
+                        jhiPrefix: 'test',
+                        experimental: true
                     })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -106,13 +111,15 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
-                assert.file(getFilesForOptions(reactFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: []
-                }));
+                assert.file(
+                    getFilesForOptions(reactFiles, {
+                        useSass: false,
+                        enableTranslation: true,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        testFrameworks: []
+                    })
+                );
             });
             it('contains clientFramework with react value', () => {
                 assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
@@ -120,8 +127,9 @@ describe('JHipster generator', () => {
         });
 
         describe('using npm flag', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true, npm: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -154,13 +162,15 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
-                assert.file(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: []
-                }));
+                assert.file(
+                    getFilesForOptions(angularFiles, {
+                        useSass: false,
+                        enableTranslation: true,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        testFrameworks: []
+                    })
+                );
             });
             it('contains clientPackageManager with npm value', () => {
                 assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
@@ -171,8 +181,9 @@ describe('JHipster generator', () => {
         });
 
         describe('Gradle', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -203,21 +214,24 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
-                assert.file(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: []
-                }));
+                assert.file(
+                    getFilesForOptions(angularFiles, {
+                        useSass: false,
+                        enableTranslation: true,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        testFrameworks: []
+                    })
+                );
             });
         });
     });
 
     context('Application with DB option', () => {
         describe('mariadb configuration', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -250,20 +264,23 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mariadb);
-                assert.file(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: []
-                }));
+                assert.file(
+                    getFilesForOptions(angularFiles, {
+                        useSass: false,
+                        enableTranslation: true,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        testFrameworks: []
+                    })
+                );
             });
             shouldBeV3DockerfileCompatible('mariadb');
         });
 
         describe('mongodb', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -297,8 +314,9 @@ describe('JHipster generator', () => {
         });
 
         describe('couchbase', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -332,8 +350,9 @@ describe('JHipster generator', () => {
         });
 
         describe('mssql', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -363,14 +382,18 @@ describe('JHipster generator', () => {
             it('creates expected files with "Microsoft SQL Server"', () => {
                 assert.file(expectedFiles.mssql);
                 assert.fileContent('pom.xml', /mssql-jdbc/);
-                assert.fileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`, /identityInsertEnabled/);
+                assert.fileContent(
+                    `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
+                    /identityInsertEnabled/
+                );
             });
             shouldBeV3DockerfileCompatible('mssql');
         });
 
         describe('cassandra', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -404,8 +427,9 @@ describe('JHipster generator', () => {
         });
 
         describe('cassandra no i18n', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -438,8 +462,9 @@ describe('JHipster generator', () => {
         });
 
         describe('postgresql and elasticsearch', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -461,9 +486,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: [
-                            'searchEngine:elasticsearch'
-                        ]
+                        serverSideOptions: ['searchEngine:elasticsearch']
                     })
                     .on('end', done);
             });
@@ -478,8 +501,9 @@ describe('JHipster generator', () => {
 
     context('Application with other options', () => {
         describe('oauth2', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -510,8 +534,9 @@ describe('JHipster generator', () => {
         });
 
         describe('oauth2 + elasticsearch', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -531,9 +556,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: [
-                            'searchEngine:elasticsearch'
-                        ]
+                        serverSideOptions: ['searchEngine:elasticsearch']
                     })
                     .on('end', done);
             });
@@ -545,8 +568,9 @@ describe('JHipster generator', () => {
         });
 
         describe('oauth2 + mongodb', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -578,8 +602,9 @@ describe('JHipster generator', () => {
         });
 
         describe('hazelcast', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -610,8 +635,9 @@ describe('JHipster generator', () => {
         });
 
         describe('Infinispan', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -643,8 +669,9 @@ describe('JHipster generator', () => {
         });
 
         describe('Infinispan and Eureka', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -677,8 +704,9 @@ describe('JHipster generator', () => {
         });
 
         describe('Memcached', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -710,8 +738,9 @@ describe('JHipster generator', () => {
         });
 
         describe('Messaging with Kafka configuration', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -732,18 +761,12 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         useSass: false,
                         applicationType: 'monolith',
-                        testFrameworks: [
-                            'gatling'
-                        ],
+                        testFrameworks: ['gatling'],
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: [
-                            'en'
-                        ],
-                        serverSideOptions: [
-                            'messageBroker:kafka'
-                        ]
+                        languages: ['en'],
+                        serverSideOptions: ['messageBroker:kafka']
                     })
                     .on('end', done);
             });
@@ -757,8 +780,9 @@ describe('JHipster generator', () => {
         });
 
         describe('API first using OpenAPI-generator (maven)', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -779,18 +803,12 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         useSass: false,
                         applicationType: 'monolith',
-                        testFrameworks: [
-                            'gatling'
-                        ],
+                        testFrameworks: ['gatling'],
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: [
-                            'en'
-                        ],
-                        serverSideOptions: [
-                            'enableSwaggerCodegen:true'
-                        ]
+                        languages: ['en'],
+                        serverSideOptions: ['enableSwaggerCodegen:true']
                     })
                     .on('end', done);
             });
@@ -804,8 +822,9 @@ describe('JHipster generator', () => {
         });
 
         describe('API first using OpenAPI-generator (gradle)', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -826,18 +845,12 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         useSass: false,
                         applicationType: 'monolith',
-                        testFrameworks: [
-                            'gatling'
-                        ],
+                        testFrameworks: ['gatling'],
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: [
-                            'en'
-                        ],
-                        serverSideOptions: [
-                            'enableSwaggerCodegen:true'
-                        ]
+                        languages: ['en'],
+                        serverSideOptions: ['enableSwaggerCodegen:true']
                     })
                     .on('end', done);
             });
@@ -855,8 +868,9 @@ describe('JHipster generator', () => {
 
     context('Application names', () => {
         describe('package names', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -882,17 +896,16 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with correct package names', () => {
-                assert.file([
-                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/JhipsterApp.java`
-                ]);
+                assert.file([`${SERVER_MAIN_SRC_DIR}com/otherpackage/JhipsterApp.java`]);
                 assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/otherpackage/JhipsterApp.java`, /package com\.otherpackage;/);
                 assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/otherpackage/JhipsterApp.java`, /public class JhipsterApp/);
             });
         });
 
         describe('bad application name for java', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: '21Points',
@@ -927,8 +940,9 @@ describe('JHipster generator', () => {
         });
 
         describe('application names', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'myapplication',
@@ -954,9 +968,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with correct application name', () => {
-                assert.file([
-                    `${CLIENT_MAIN_SRC_DIR}app/home/home.route.ts`
-                ]);
+                assert.file([`${CLIENT_MAIN_SRC_DIR}app/home/home.route.ts`]);
                 assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.module.ts`, /MyapplicationAppModule/);
             });
         });
@@ -964,8 +976,9 @@ describe('JHipster generator', () => {
 
     context('i18n', () => {
         describe('no i18n', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -995,8 +1008,9 @@ describe('JHipster generator', () => {
         });
 
         describe('with RTL support', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -1025,13 +1039,15 @@ describe('JHipster generator', () => {
 
             it('creates expected default files for i18n with RTL support', () => {
                 assert.file(expectedFiles.i18nRtl);
-                assert.file(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: []
-                }));
+                assert.file(
+                    getFilesForOptions(angularFiles, {
+                        useSass: false,
+                        enableTranslation: true,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        testFrameworks: []
+                    })
+                );
             });
             it('contains updatePageDirection in language helper', () => {
                 assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`, /private updatePageDirection/);
@@ -1041,8 +1057,9 @@ describe('JHipster generator', () => {
 
     context('Auth options', () => {
         describe('JWT authentication', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -1069,19 +1086,22 @@ describe('JHipster generator', () => {
 
             it('creates expected files with JWT authentication', () => {
                 assert.file(expectedFiles.jwtServer);
-                assert.file(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: []
-                }));
+                assert.file(
+                    getFilesForOptions(angularFiles, {
+                        useSass: false,
+                        enableTranslation: true,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        testFrameworks: []
+                    })
+                );
             });
         });
 
         describe('HTTP session authentication', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -1108,21 +1128,24 @@ describe('JHipster generator', () => {
 
             it('creates expected files with HTTP session authentication', () => {
                 assert.file(expectedFiles.session);
-                assert.file(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'session',
-                    testFrameworks: []
-                }));
+                assert.file(
+                    getFilesForOptions(angularFiles, {
+                        useSass: false,
+                        enableTranslation: true,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'session',
+                        testFrameworks: []
+                    })
+                );
             });
         });
     });
 
     context('Testing options', () => {
         describe('Protractor tests', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -1143,40 +1166,34 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         useSass: false,
                         applicationType: 'monolith',
-                        testFrameworks: [
-                            'protractor'
-                        ],
+                        testFrameworks: ['protractor'],
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: [
-                            'en'
-                        ]
+                        languages: ['en']
                     })
                     .on('end', done);
             });
 
             it('creates expected files with Protractor enabled', () => {
                 assert.file(expectedFiles.server);
-                assert.file(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: [
-                        'protractor'
-                    ]
-                }));
-                assert.noFile([
-                    `${TEST_DIR}gatling/conf/gatling.conf`,
-                    `${TEST_DIR}gatling/conf/logback.xml`
-                ]);
+                assert.file(
+                    getFilesForOptions(angularFiles, {
+                        useSass: false,
+                        enableTranslation: true,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        testFrameworks: ['protractor']
+                    })
+                );
+                assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
             });
         });
 
         describe('Cucumber tests', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -1197,15 +1214,11 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         useSass: false,
                         applicationType: 'monolith',
-                        testFrameworks: [
-                            'cucumber'
-                        ],
+                        testFrameworks: ['cucumber'],
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: [
-                            'en'
-                        ]
+                        languages: ['en']
                     })
                     .on('end', done);
             });
@@ -1213,18 +1226,16 @@ describe('JHipster generator', () => {
             it('creates expected files with Cucumber enabled', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.cucumber);
-                assert.noFile([
-                    `${TEST_DIR}gatling/conf/gatling.conf`,
-                    `${TEST_DIR}gatling/conf/logback.xml`
-                ]);
+                assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
             });
         });
     });
 
     context('App with skip client', () => {
         describe('Maven', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipClient: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -1250,19 +1261,27 @@ describe('JHipster generator', () => {
             it('creates expected files for default configuration with skip client option enabled', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.maven);
-                assert.noFile(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'session',
-                    testFrameworks: []
-                }, '', ['package.json']));
+                assert.noFile(
+                    getFilesForOptions(
+                        angularFiles,
+                        {
+                            useSass: false,
+                            enableTranslation: true,
+                            serviceDiscoveryType: false,
+                            authenticationType: 'session',
+                            testFrameworks: []
+                        },
+                        '',
+                        ['package.json']
+                    )
+                );
             });
         });
 
         describe('Gradle', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipClient: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -1288,13 +1307,20 @@ describe('JHipster generator', () => {
             it('creates expected files for default configuration with skip client option enabled', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.gradle);
-                assert.noFile(getFilesForOptions(angularFiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: []
-                }, '', ['package.json']));
+                assert.noFile(
+                    getFilesForOptions(
+                        angularFiles,
+                        {
+                            useSass: false,
+                            enableTranslation: true,
+                            serviceDiscoveryType: false,
+                            authenticationType: 'jwt',
+                            testFrameworks: []
+                        },
+                        '',
+                        ['package.json']
+                    )
+                );
                 assert.noFile(['gradle/yeoman.gradle']);
             });
         });
@@ -1302,8 +1328,9 @@ describe('JHipster generator', () => {
 
     context('App with skip client and skip user management', () => {
         describe('Maven', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({
                         skipInstall: true,
                         skipClient: true,
@@ -1340,8 +1367,9 @@ describe('JHipster generator', () => {
 
     context('Eureka', () => {
         describe('gateway with eureka', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
@@ -1370,14 +1398,16 @@ describe('JHipster generator', () => {
             it('creates expected files with the gateway application type', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gateway);
+                assert.file(expectedFiles.feignConfig);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
             });
         });
 
         describe('microservice with eureka', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
@@ -1405,6 +1435,7 @@ describe('JHipster generator', () => {
             it('creates expected files with the microservice application type', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.microservice);
+                assert.file(expectedFiles.feignConfig);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
@@ -1412,8 +1443,9 @@ describe('JHipster generator', () => {
         });
 
         describe('monolith with eureka', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'monolith',
@@ -1447,8 +1479,9 @@ describe('JHipster generator', () => {
         });
 
         describe('microservice with gradle and eureka', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
@@ -1478,6 +1511,7 @@ describe('JHipster generator', () => {
             it('creates expected files with the microservice application type', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.microservice);
+                assert.file(expectedFiles.feignConfig);
                 assert.file(expectedFiles.microserviceGradle);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
@@ -1485,8 +1519,9 @@ describe('JHipster generator', () => {
         });
 
         describe('UAA server with Eureka', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'uaa',
@@ -1520,10 +1555,11 @@ describe('JHipster generator', () => {
         });
 
         describe('UAA gateway with eureka', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
-                    .inTmpDir((dir) => {
+                    .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/uaaserver/'), dir);
                     })
                     .withPrompts({
@@ -1562,8 +1598,9 @@ describe('JHipster generator', () => {
 
     context('Consul', () => {
         describe('gateway with consul', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
@@ -1598,8 +1635,9 @@ describe('JHipster generator', () => {
         });
 
         describe('microservice with consul', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
@@ -1636,8 +1674,9 @@ describe('JHipster generator', () => {
 
     context('No Service Discovery', () => {
         describe('gateway with no service discovery', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
@@ -1672,8 +1711,9 @@ describe('JHipster generator', () => {
         });
 
         describe('microservice with no service discovery', () => {
-            beforeEach((done) => {
-                helpers.run(path.join(__dirname, '../generators/app'))
+            beforeEach(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',

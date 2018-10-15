@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;
     <%_ } _%>
 <%_ } _%>
@@ -54,7 +54,7 @@ import org.springframework.context.annotation.Configuration;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.context.annotation.Import;
 <%_ } _%>
-<%_ if ((searchEngine === 'elasticsearch' || applicationType === 'reactive') && databaseType === 'mongodb') { _%>
+<%_ if ((searchEngine === 'elasticsearch' || reactive) && databaseType === 'mongodb') { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
@@ -69,11 +69,11 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
-    <%_ if (searchEngine === 'elasticsearch' || applicationType === 'reactive') { _%>
+    <%_ if (searchEngine === 'elasticsearch' || reactive) { _%>
 import org.springframework.data.mongodb.repository.MongoRepository;
     <%_ } _%>
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
     <%_ } _%>
 <%_ } _%>
@@ -85,12 +85,15 @@ import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversion
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
     <%_ } _%>
 import org.springframework.util.StringUtils;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %>
 <%_ if (databaseType === 'sql') { _%>
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+import org.springframework.core.env.Environment;
+    <%_ } _%>
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -122,12 +125,12 @@ import java.util.List;
 @EnableElasticsearchRepositories("<%=packageName%>.repository.search")
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
-    <%_ if (searchEngine === 'elasticsearch' || applicationType === 'reactive') { _%>
+    <%_ if (searchEngine === 'elasticsearch' || reactive) { _%>
 @EnableMongoRepositories(basePackages = "<%=packageName%>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
     <%_ } else { _%>
 @EnableMongoRepositories("<%=packageName%>.repository")
     <%_ } _%>
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 @EnableReactiveMongoRepositories("<%=packageName%>.repository.reactive")
     <%_ } _%>
 <%_ } _%>
@@ -135,7 +138,7 @@ import java.util.List;
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 @Import(value = {MongoAutoConfiguration.class, MongoReactiveAutoConfiguration.class})
     <%_ } else { _%>
 @Import(value = MongoAutoConfiguration.class)
@@ -144,7 +147,7 @@ import java.util.List;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 @EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
-    <%_ if (applicationType === 'reactive') { _%>
+    <%_ if (reactive) { _%>
 @EnableReactiveCouchbaseRepositories("<%=packageName%>.repository.reactive")
     <%_ } _%>
 @Import(value = CouchbaseAutoConfiguration.class)
@@ -152,9 +155,15 @@ import java.util.List;
 <%_ } _%>
 public class DatabaseConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType === 'sql') { %>
-
+    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+<%_ if (databaseType === 'sql') { _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+
+    private final Environment env;
+
+    public DatabaseConfiguration(Environment env) {
+        this.env = env;
+    }
 
     /**
      * Open the TCP port for the H2 database, so it is available remotely.
@@ -165,8 +174,9 @@ public class DatabaseConfiguration {
     @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
     public Object h2TCPServer() throws SQLException {
-        log.debug("Starting H2 database");
-        return H2ConfigurationHelper.createServer();
+        String port = "1" + env.getProperty("server.port");
+        log.debug("H2 database is available on port {}", port);
+        return H2ConfigurationHelper.createServer(port);
     }
     <%_ } _%>
 <%_ } _%>
@@ -316,5 +326,6 @@ public class DatabaseConfiguration {
         public byte[] convert(String source) {
             return Base64.decodeBase64(source);
         }
-    }<% } %>
+    }
+<%_ } _%>
 }

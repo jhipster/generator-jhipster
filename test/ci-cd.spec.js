@@ -1,28 +1,15 @@
-/* global describe, beforeEach, it */
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    travis: [
-        '.travis.yml'
-    ],
-    jenkins: [
-        'Jenkinsfile',
-        'src/main/docker/jenkins.yml',
-        'src/main/resources/idea.gdsl'
-    ],
-    gitlab: [
-        '.gitlab-ci.yml'
-    ],
-    circle: [
-        'circle.yml'
-    ],
-    dockerRegistry: [
-        'src/main/docker/docker-registry.yml'
-    ]
+    travis: ['.travis.yml'],
+    jenkins: ['Jenkinsfile', 'src/main/docker/jenkins.yml', 'src/main/resources/idea.gdsl'],
+    gitlab: ['.gitlab-ci.yml'],
+    circle: ['circle.yml'],
+    azure: ['azure-pipelines.yml'],
+    dockerRegistry: ['src/main/docker/docker-registry.yml']
 };
 
 describe('JHipster CI-CD Sub Generator', () => {
@@ -30,25 +17,24 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Jenkins tests
     //--------------------------------------------------
     describe('Jenkins: maven AngularX Yarn', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'jenkins',
                     insideDocker: false,
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.jenkins);
         });
-        it('doesn\'t contain Docker, Sonar, Heroku', () => {
+        it("doesn't contain Docker, Sonar, Heroku", () => {
             assert.noFileContent('Jenkinsfile', /docker/);
             assert.noFileContent('Jenkinsfile', /sonar/);
             assert.noFileContent('Jenkinsfile', /heroku/);
@@ -56,25 +42,24 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Jenkins: maven AngularX NPM', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'jenkins',
                     insideDocker: false,
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.jenkins);
         });
-        it('doesn\'t contain Docker, Sonar, Heroku', () => {
+        it("doesn't contain Docker, Sonar, Heroku", () => {
             assert.noFileContent('Jenkinsfile', /docker/);
             assert.noFileContent('Jenkinsfile', /sonar/);
             assert.noFileContent('Jenkinsfile', /heroku/);
@@ -82,25 +67,24 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Jenkins: Gradle AngularX Yarn', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'jenkins',
                     insideDocker: false,
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.jenkins);
         });
-        it('doesn\'t contain Docker, Sonar, Heroku', () => {
+        it("doesn't contain Docker, Sonar, Heroku", () => {
             assert.noFileContent('Jenkinsfile', /docker/);
             assert.noFileContent('Jenkinsfile', /sonar/);
             assert.noFileContent('Jenkinsfile', /heroku/);
@@ -108,25 +92,24 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Jenkins: Gradle AngularX NPM', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'jenkins',
                     insideDocker: false,
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.jenkins);
         });
-        it('doesn\'t contain Docker, Sonar, Heroku', () => {
+        it("doesn't contain Docker, Sonar, Heroku", () => {
             assert.noFileContent('Jenkinsfile', /docker/);
             assert.noFileContent('Jenkinsfile', /sonar/);
             assert.noFileContent('Jenkinsfile', /heroku/);
@@ -134,22 +117,17 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Jenkins: maven AngularX Yarn with full options', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'jenkins',
                     insideDocker: false,
-                    cicdIntegrations: [
-                        'deploy',
-                        'sonar',
-                        'publishDocker',
-                        'heroku'
-                    ],
+                    cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
                     artifactorySnapshotsId: 'snapshots',
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
@@ -175,22 +153,17 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Jenkins: maven AngularX Yarn inside Docker', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'jenkins',
                     insideDocker: true,
-                    cicdIntegrations: [
-                        'deploy',
-                        'sonar',
-                        'publishDocker',
-                        'heroku'
-                    ],
+                    cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
                     artifactorySnapshotsId: 'snapshots',
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
@@ -217,25 +190,24 @@ describe('JHipster CI-CD Sub Generator', () => {
     // GitLab CI tests
     //--------------------------------------------------
     describe('GitLab: maven AngularX Yarn', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'gitlab',
                     insideDocker: false,
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.gitlab);
         });
-        it('doesn\'t contain image: jhipster, Sonar, Heroku', () => {
+        it("doesn't contain image: jhipster, Sonar, Heroku", () => {
             assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.noFileContent('.gitlab-ci.yml', /sonar/);
             assert.noFileContent('.gitlab-ci.yml', /heroku/);
@@ -243,25 +215,24 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: maven AngularX NPM', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'gitlab',
                     insideDocker: false,
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.gitlab);
         });
-        it('doesn\'t contain image: jhipster, Sonar, Heroku', () => {
+        it("doesn't contain image: jhipster, Sonar, Heroku", () => {
             assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.noFileContent('.gitlab-ci.yml', /sonar/);
             assert.noFileContent('.gitlab-ci.yml', /heroku/);
@@ -269,24 +240,23 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: Gradle AngularX Yarn', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'gitlab',
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.gitlab);
         });
-        it('doesn\'t contain image: jhipster, Sonar, Heroku', () => {
+        it("doesn't contain image: jhipster, Sonar, Heroku", () => {
             assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.noFileContent('.gitlab-ci.yml', /sonar/);
             assert.noFileContent('.gitlab-ci.yml', /heroku/);
@@ -294,24 +264,23 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: Gradle AngularX NPM', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'gitlab',
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.gitlab);
         });
-        it('doesn\'t contain jhipster/jhipster, Sonar, Heroku', () => {
+        it("doesn't contain jhipster/jhipster, Sonar, Heroku", () => {
             assert.noFileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.noFileContent('.gitlab-ci.yml', /sonar/);
             assert.noFileContent('.gitlab-ci.yml', /heroku/);
@@ -319,21 +288,17 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: maven AngularX Yarn with full options', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'gitlab',
                     insideDocker: false,
-                    cicdIntegrations: [
-                        'deploy',
-                        'sonar',
-                        'heroku'
-                    ],
+                    cicdIntegrations: ['deploy', 'sonar', 'heroku'],
                     artifactorySnapshotsId: 'snapshots',
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
@@ -356,21 +321,17 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: maven AngularX Yarn inside Docker', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'gitlab',
                     insideDocker: true,
-                    cicdIntegrations: [
-                        'deploy',
-                        'sonar',
-                        'heroku'
-                    ],
+                    cicdIntegrations: ['deploy', 'sonar', 'heroku'],
                     artifactorySnapshotsId: 'snapshots',
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
@@ -395,120 +356,132 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
     });
 
+    describe('GitLab: maven AngularX Yarn inside Docker Autoconfigure', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
+                })
+                .withOptions({ autoconfigureGitlab: true })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.gitlab);
+        });
+        it('contains image: jhipster, Sonar, Heroku', () => {
+            assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
+            assert.noFileContent('.gitlab-ci.yml', /sonar/);
+            assert.noFileContent('.gitlab-ci.yml', /heroku/);
+        });
+    });
+
     //--------------------------------------------------
     // Travis CI tests
     //--------------------------------------------------
     describe('Travis CI: maven AngularX Yarn', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'travis',
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.travis);
         });
-        it('doesn\'t contain Sonar, Heroku', () => {
+        it("doesn't contain Sonar, Heroku", () => {
             assert.noFileContent('.travis.yml', /sonar/);
             assert.noFileContent('.travis.yml', /heroku/);
         });
     });
 
     describe('Travis CI: maven AngularX NPM', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'travis',
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.travis);
         });
-        it('doesn\'t contain Sonar, Heroku', () => {
+        it("doesn't contain Sonar, Heroku", () => {
             assert.noFileContent('.travis.yml', /sonar/);
             assert.noFileContent('.travis.yml', /heroku/);
         });
     });
 
     describe('Travis CI: Gradle AngularX Yarn', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'travis',
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.travis);
         });
-        it('doesn\'t contain Sonar, Heroku', () => {
+        it("doesn't contain Sonar, Heroku", () => {
             assert.noFileContent('.travis.yml', /sonar/);
             assert.noFileContent('.travis.yml', /heroku/);
         });
     });
 
     describe('Travis CI: Gradle AngularX NPM', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'travis',
-                    cicdIntegrations: [
-                    ]
+                    cicdIntegrations: []
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.travis);
         });
-        it('doesn\'t contain Sonar, Heroku', () => {
+        it("doesn't contain Sonar, Heroku", () => {
             assert.noFileContent('.travis.yml', /sonar/);
             assert.noFileContent('.travis.yml', /heroku/);
         });
     });
 
     describe('Travis CI: maven AngularX Yarn with full options', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'travis',
-                    cicdIntegrations: [
-                        'deploy',
-                        'sonar',
-                        'heroku'
-                    ],
+                    cicdIntegrations: ['deploy', 'sonar', 'heroku'],
                     artifactorySnapshotsId: 'snapshots',
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
@@ -526,6 +499,100 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
         it('contains distributionManagement in pom.xml', () => {
             assert.fileContent('pom.xml', /distributionManagement/);
+        });
+    });
+
+    //--------------------------------------------------
+    // Azure Pipelines tests
+    //--------------------------------------------------
+    describe('Azure Pipelines: maven AngularX Yarn', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'azure',
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
+        });
+    });
+
+    describe('Azure Pipelines: maven AngularX NPM', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-npm'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'azure',
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
+        });
+    });
+
+    describe('Azure Pipelines: Gradle AngularX Yarn', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-yarn'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'azure',
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
+        });
+    });
+
+    describe('Azure Pipelines: Gradle AngularX NPM', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-npm'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'azure',
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
+        });
+    });
+
+    describe('Azure Pipelines: Autoconfigure', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
+                })
+                .withOptions({ autoconfigureAzure: true })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.azure);
         });
     });
 });

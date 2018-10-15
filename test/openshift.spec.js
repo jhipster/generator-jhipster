@@ -1,51 +1,19 @@
-/* global describe, beforeEach, it */
-
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    sccconfig: [
-        './ocp/registry/scc-config.yml'
-    ],
-    elk: [
-        './ocp/monitoring/jhipster-monitoring.yml'
-    ],
-    eurekaregistry: [
-        './ocp/registry/jhipster-registry.yml',
-        './ocp/registry/application-configmap.yml'
-    ],
-    consulregistry: [
-        './ocp/registry/consul.yml',
-        './ocp/registry/application-configmap.yml'
-    ],
-    applcgw: [
-        './ocp/jhgate/jhgate-deployment.yml',
-        './ocp/jhgate/jhgate-mysql.yml'
-    ],
-    msmysql: [
-        './ocp/msmysql/msmysql-deployment.yml',
-        './ocp/msmysql/msmysql-mysql.yml'
-    ],
-    mspsql: [
-        './ocp/mspsql/mspsql-deployment.yml',
-        './ocp/mspsql/mspsql-postgresql.yml',
-        './ocp/mspsql/mspsql-elasticsearch.yml'
-    ],
-    msmongodb: [
-        './ocp/msmongodb/msmongodb-deployment.yml',
-        './ocp/msmongodb/msmongodb-mongodb.yml',
-    ],
-    mscassandra: [
-        './ocp/mscassandra/mscassandra-deployment.yml',
-        './ocp/mscassandra/mscassandra-cassandra.yml',
-    ],
-    msmariadb: [
-        './ocp/msmariadb/msmariadb-deployment.yml',
-        './ocp/msmariadb/msmariadb-mariadb.yml'
-    ],
+    sccconfig: ['./ocp/registry/scc-config.yml'],
+    elk: ['./ocp/monitoring/jhipster-monitoring.yml'],
+    eurekaregistry: ['./ocp/registry/jhipster-registry.yml', './ocp/registry/application-configmap.yml'],
+    consulregistry: ['./ocp/registry/consul.yml', './ocp/registry/application-configmap.yml'],
+    applcgw: ['./ocp/jhgate/jhgate-deployment.yml', './ocp/jhgate/jhgate-mysql.yml'],
+    msmysql: ['./ocp/msmysql/msmysql-deployment.yml', './ocp/msmysql/msmysql-mysql.yml'],
+    mspsql: ['./ocp/mspsql/mspsql-deployment.yml', './ocp/mspsql/mspsql-postgresql.yml', './ocp/mspsql/mspsql-elasticsearch.yml'],
+    msmongodb: ['./ocp/msmongodb/msmongodb-deployment.yml', './ocp/msmongodb/msmongodb-mongodb.yml'],
+    mscassandra: ['./ocp/mscassandra/mscassandra-deployment.yml', './ocp/mscassandra/mscassandra-cassandra.yml'],
+    msmariadb: ['./ocp/msmariadb/msmariadb-deployment.yml', './ocp/msmariadb/msmariadb-mariadb.yml'],
     monolith: [
         './ocp/samplemysql/samplemysql-deployment.yml',
         './ocp/samplemysql/samplemysql-mysql.yml',
@@ -55,19 +23,17 @@ const expectedFiles = {
 
 describe('JHipster OpenShift Sub Generator', () => {
     describe('only gateway', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway'
-                    ],
+                    chosenApps: ['01-gateway'],
                     adminPassword: 'openshiftpaas',
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
@@ -90,20 +56,17 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('gateway and one microservice with mysql', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '02-mysql'
-                    ],
+                    chosenApps: ['01-gateway', '02-mysql'],
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default',
@@ -126,20 +89,17 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('gateway and one microservice with mysql and elk', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '02-mysql'
-                    ],
+                    chosenApps: ['01-gateway', '02-mysql'],
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default',
@@ -165,20 +125,17 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('two microservices backed by mysql and postgres without gateway', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '02-mysql',
-                        '03-psql'
-                    ],
+                    chosenApps: ['02-mysql', '03-psql'],
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default',
@@ -192,7 +149,7 @@ describe('JHipster OpenShift Sub Generator', () => {
         it('creates expected scc files', () => {
             assert.file(expectedFiles.sccconfig);
         });
-        it('doesn\'t creates gateway files', () => {
+        it("doesn't creates gateway files", () => {
             assert.noFile(expectedFiles.applcgw);
         });
         it('creates expected mysql files', () => {
@@ -204,24 +161,17 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('gateway with multiple microservices backed by mysql, postgres, mongo, cassandra and mariadb', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '02-mysql',
-                        '03-psql',
-                        '04-mongo',
-                        '05-cassandra',
-                        '07-mariadb'
-                    ],
+                    chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '05-cassandra', '07-mariadb'],
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default'
@@ -255,19 +205,17 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('monolith application', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
-                    chosenApps: [
-                        '08-monolith'
-                    ],
+                    chosenApps: ['08-monolith'],
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default'
@@ -283,19 +231,17 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('monolith application with elk', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     composeApplicationType: 'monolith',
                     directoryPath: './',
-                    chosenApps: [
-                        '08-monolith'
-                    ],
+                    chosenApps: ['08-monolith'],
                     dockerRepositoryName: 'ocrepo',
                     dockerPushCommand: 'docker push',
                     openshiftNamespace: 'default',

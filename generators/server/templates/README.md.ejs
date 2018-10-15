@@ -72,7 +72,7 @@ auto-refreshes when files change on your hard drive.
     ./gradlew<% } %>
     <%= clientPackageManager %> start
 
-[<%= clientPackageMngrName %>][] is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
+<%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageManager %> update` and `<%= clientPackageManager %> install` to manage dependencies.
 Add the `help` flag on any command to see how you can use it. For example, `<%= clientPackageManager %> help update`.
 
@@ -261,6 +261,22 @@ To use those tests, you must install Gatling from [https://gatling.io/](https://
 <% } %>
 For more information, refer to the [Running tests page][].
 
+### Code quality
+
+Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
+
+```
+docker-compose -f src/main/docker/sonar.yml up -d
+```
+
+Then, run a Sonar analysis:
+
+```
+<% if (buildTool === 'maven') { %>./mvnw -Pprod clean test sonar:sonar<% } else { %>./gradlew -Pprod clean test sonarqube<% } %>
+```
+
+For more information, refer to the [Code quality page][].
+
 ## Using Docker to simplify development (optional)
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
@@ -276,7 +292,7 @@ To stop it and remove the container, run:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
-    <% if (buildTool === 'maven') { %>./mvnw verify -Pprod dockerfile:build dockerfile:tag@version dockerfile:tag@commit<% } %><% if (buildTool === 'gradle') { %>./gradlew bootWar -Pprod buildDocker<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw package -Pprod jib:dockerBuild<% } %><% if (buildTool === 'gradle') { %>./gradlew bootWar -Pprod jibDockerBuild<% } %>
 
 Then run:
 
@@ -302,6 +318,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Using Docker and Docker-Compose]: <%= DOCUMENTATION_ARCHIVE_URL %>/docker-compose
 [Using JHipster in production]: <%= DOCUMENTATION_ARCHIVE_URL %>/production/
 [Running tests page]: <%= DOCUMENTATION_ARCHIVE_URL %>/running-tests/
+[Code quality page]: <%= DOCUMENTATION_ARCHIVE_URL %>/code-quality/
 [Setting up Continuous Integration]: <%= DOCUMENTATION_ARCHIVE_URL %>/setting-up-ci/
 
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: http://gatling.io/<% } %>

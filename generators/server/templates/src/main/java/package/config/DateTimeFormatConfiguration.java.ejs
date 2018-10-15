@@ -21,10 +21,17 @@ package <%=packageName%>.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
+<%_ if (reactive) { _%>
+import org.springframework.web.reactive.config.WebFluxConfigurer;
+<%_ } else { _%>
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+<%_ } _%>
 
+/**
+ * Configure the converters to use the ISO format for dates by default.
+ */
 @Configuration
-public class DateTimeFormatConfiguration implements WebMvcConfigurer {
+public class DateTimeFormatConfiguration implements Web<% if (reactive) { %>Flux<% } else { %>Mvc<% } %>Configurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {

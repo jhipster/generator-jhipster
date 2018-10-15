@@ -41,11 +41,6 @@ a {
   font-weight: bold;
 }
 
-a:hover {
-  color: #533f03;
-  font-weight: bold;
-}
-
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */
@@ -191,6 +186,11 @@ http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-boots
 http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 .width-min {
   width: 1% !important;
+}
+
+// Fix checkbox alignment https://github.com/jhipster/generator-jhipster/issues/8463
+.form-check-input {
+  margin-top: -0.5rem;
 }
 
 /* Makes toolbar not wrap on smaller screens

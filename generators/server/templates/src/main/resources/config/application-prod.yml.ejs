@@ -88,8 +88,6 @@ spring:
         username: <%= baseName %>
         password:
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        # If you use the Docker Compose configuration provided by JHipster, the database name is "tempdb"
-        # So you should use url: jdbc:sqlserver://localhost:1433;database=tempdb
         url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
         username: SA
         password: yourStrong(!)Password
@@ -98,8 +96,9 @@ spring:
         username: system
         password: oracle
         <%_ } _%>
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
         hikari:
+            auto-commit: false
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
             data-source-properties:
                 cachePrepStmts: true
                 prepStmtCacheSize: 250
@@ -132,6 +131,7 @@ spring:
         show-sql: false
         properties:
             hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: false
@@ -171,16 +171,15 @@ spring:
             keyspaceName: <%= baseName %>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
-        elasticsearch:
-            cluster-name:
-            cluster-nodes: localhost:9300
+        jest:
+            uri: http://localhost:9200
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
         bootstrap-hosts: localhost
         bucket:
             name: <%= baseName %>
-            password: changeit
+            password: password
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
@@ -194,6 +193,9 @@ spring:
     thymeleaf:
         cache: true
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+    sleuth:
+        sampler:
+            probability: 1 # report 100% of traces
     zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
         base-url: http://localhost:9411
         enabled: false
@@ -203,7 +205,7 @@ spring:
 <%_ } _%>
 
 # ===================================================================
-# To enable SSL, generate a certificate using:
+# To enable TLS in production, generate a certificate using:
 # keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
 #
 # You can also use Let's Encrypt:
@@ -214,8 +216,8 @@ spring:
 # server:
 #    port: 443
 #    ssl:
-#        key-store: keystore.p12
-#        key-store-password: <your-password>
+#        key-store: classpath:config/tls/keystore.p12
+#        key-store-password: password
 #        key-store-type: PKCS12
 #        key-alias: <%= baseName.toLowerCase() %>
 #        # The ciphers suite enforce the security by deactivating some old and deprecated SSL cipher, this list was tested against SSL Labs (https://www.ssllabs.com/ssltest/)
@@ -292,7 +294,12 @@ jhipster:
     security:
         authentication:
             jwt:
-                secret: <%= jwtSecretKey %>
+                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+                # As this is the PRODUCTION configuration, you MUST change the default key, and store it securely:
+                # - In the JHipster Registry (which includes a Spring Cloud Config server)
+                # - In a separate `application-prod.yml` file, in the same folder as your executable WAR file
+                # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET` environment variable
+                base64-secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
@@ -328,6 +335,8 @@ jhipster:
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx:
             enabled: true
+        prometheus: 
+            enabled: false #expose metrics via prometheus 
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
@@ -340,9 +349,9 @@ jhipster:
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     #be sure to to change to a different keystore in production!
-    #create one using: keytool -genkeypair -keyalg RSA -keystore keystore_prod.jks -storepass <secretpasswd> -alias <myalias>
+    #create one using: keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
     key-store:
-        name: keystore.jks
+        name: config/tls/keystore.p12
         password: password
         alias: selfsigned
     web-client-configuration:
