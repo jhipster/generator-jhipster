@@ -458,7 +458,7 @@ module.exports = class extends BaseGenerator {
                                     commitMsg += ` with blueprint: ${this.blueprint.replace('generator-jhipster-', '')}`;
                                 }
                                 this.gitExec(`commit -am "${commitMsg}"`, { trace: false }, () => {
-                                    this.log(chalk.green.bold('Application successfully committed to Git.'))
+                                    this.log(chalk.green.bold('Application successfully committed to Git.'));
                                     done();
                                 });
                             });
