@@ -900,7 +900,10 @@ module.exports = class extends BaseGenerator {
                         }
                     }
                     context.saveUserSnapshot =
-                        context.applicationType === 'microservice' && context.authenticationType === 'oauth2' && context.hasUserField;
+                        context.applicationType === 'microservice' &&
+                        context.authenticationType === 'oauth2' &&
+                        context.hasUserField &&
+                        context.dto === 'no';
 
                     if (_.isUndefined(relationship.otherEntityNamePlural)) {
                         relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
