@@ -658,7 +658,7 @@ describe('DocumentParser', () => {
 
         it('parses it', () => {
           expect(application.languages.has('en') && application.languages.has('fr')).to.be.true;
-          expect(application.testFrameworks.size()).to.equal(0);
+          expect(application.testFrameworks.size).to.equal(0);
           delete application.languages;
           delete application.testFrameworks;
 
@@ -800,7 +800,7 @@ describe('DocumentParser', () => {
 
         it('adds the application entities in the application object', () => {
           expect(jdlObject.applications.MyApp.entityNames.has('BankAccount')).to.be.true;
-          expect(jdlObject.applications.MyApp.entityNames.size()).to.equal(1);
+          expect(jdlObject.applications.MyApp.entityNames.size).to.equal(1);
         });
       });
       context('when parsing a relationship with no injected field', () => {

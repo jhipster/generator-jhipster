@@ -147,7 +147,7 @@ describe('AbstractJDLApplication', () => {
     enableSwaggerCodegen false
     enableTranslation true
     jhiPrefix jhi
-    languages en,fr
+    languages en, fr
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.myapp
