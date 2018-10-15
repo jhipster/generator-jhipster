@@ -81,6 +81,9 @@ describe('Service Tests', () => {
                 'AAAAAAA',
                     <%_ } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                 currentDate,
+                    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && field.fieldTypeBlobContent !== 'text') { _%>
+                'image/png',
+                'AAAAAAA',
                     <%_ } else { // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' _%>
                 'AAAAAAA',
                     <%_ } _%>
