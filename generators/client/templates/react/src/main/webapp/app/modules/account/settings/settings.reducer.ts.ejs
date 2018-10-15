@@ -17,11 +17,10 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import { translate } from 'react-jhipster';
+import { translate<% if (enableTranslation) { %>, Storage<% } %> } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { getSession } from 'app/shared/reducers/authentication';
-<% if (enableTranslation) { %>import { Storage } from 'react-jhipster';<% } %>
 
 export const ACTION_TYPES = {
   UPDATE_ACCOUNT: 'account/UPDATE_ACCOUNT',
