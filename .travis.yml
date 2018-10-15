@@ -1,15 +1,71 @@
 os:
-    - linux
+  - linux
+services:
+  - docker
 language: node_js
 node_js:
-    - "8.9.1"
+  - "8.12.0"
+jdk:
+  - oraclejdk8
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle
+env:
+  global:
+    - JHI_PROFILE=dev
+    - JHI_RUN_APP=1
+    - JHI_PROTRACTOR=0
+    # if JHI_LIB_BRANCH value is release, use the release from Maven
+    - JHI_LIB_REPO=https://github.com/jhipster/jhipster.git
+    - JHI_LIB_BRANCH=release
+    # if JHI_GEN_BRANCH value is release, use the release from NPM
+    - JHI_GEN_REPO=https://github.com/jhipster/generator-jhipster.git
+    - JHI_GEN_BRANCH=release
+    - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
+    - SPRING_JPA_SHOW_SQL=false
+    - JHI_DISABLE_WEBPACK_LOGS=true
+    - JHI_SCRIPTS=$TRAVIS_BUILD_DIR/test-integration/scripts
+  matrix:
+    - JHI_APP=ngx-default JHI_PROFILE=prod JHI_PROTRACTOR=1
+
+#----------------------------------------------------------------------
+# Install all tools and check configuration
+#----------------------------------------------------------------------
 before_install:
-    - npm install -g npm
-    # Repo for Yarn
-    - curl -o- -L https://yarnpkg.com/install.sh | bash
-    - export PATH=$HOME/.yarn/bin:$PATH
+  - jdk_switcher use oraclejdk8
+  - java -version
+  - export TZ=Australia/Canberra
+  - date
+  - sudo /etc/init.d/mysql stop
+  - sudo /etc/init.d/postgresql stop
+  # Use this for Protractor
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  # Update NPM
+  - npm install -g npm
+
+#----------------------------------------------------------------------
+# Install JHipster and generate project+entities
+#----------------------------------------------------------------------
 install:
-    - yarn install
-    - yarn link
+  - $JHI_SCRIPTS/10-install-jhipster-vuejs.sh
+#----------------------------------------------------------------------
+# Launch tests
+#----------------------------------------------------------------------
 script:
-    - yarn test
+  - echo "Nothing for now"
+
+#----------------------------------------------------------------------
+# Cache
+#----------------------------------------------------------------------
+before_cache:
+  - rm -rf $HOME/.m2/repository/io/github/jhipster/jhipster-framework/
+  - rm -rf $HOME/.m2/repository/io/github/jhipster/jhipster-dependencies/
+  - rm -rf $HOME/.m2/repository/io/github/jhipster/jhipster-parent/
