@@ -81,4 +81,5 @@ npm install
 npm link
 npm link generator-jhipster
 
-npm test
+npm run lint
+# npm test
