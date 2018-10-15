@@ -449,6 +449,7 @@ module.exports = class extends BaseGenerator {
             gitCommit() {
                 if (!this.options['skip-git']) {
                     this.debug('Committing files to git');
+                    const done = this.async();
                     this.isGitInstalled(code => {
                         if (code === 0 && this.gitInitialized) {
                             this.gitExec('add -A', { trace: false }, () => {
@@ -456,9 +457,10 @@ module.exports = class extends BaseGenerator {
                                 if (this.blueprint) {
                                     commitMsg += ` with blueprint: ${this.blueprint.replace('generator-jhipster-', '')}`;
                                 }
-                                this.gitExec(`commit -am "${commitMsg}"`, { trace: false }, () =>
-                                    this.log(chalk.green.bold('Application successfully committed to Git.'))
-                                );
+                                this.gitExec(`commit -am "${commitMsg}"`, { trace: false }, () => {
+                                    this.log(chalk.green.bold('Application successfully committed to Git.'));
+                                    done();
+                                });
                             });
                         } else {
                             this.warning(
