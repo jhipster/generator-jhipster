@@ -58,7 +58,7 @@ const files = {
     sass: [
         {
             condition: generator => generator.useSass,
-            templates: [{ file: 'postcss.config.js', method: 'copy' }]
+            templates: ['postcss.config.js']
         },
         {
             condition: generator => generator.useSass && generator.enableI18nRTL,
