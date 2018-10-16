@@ -11,6 +11,7 @@ function writeFiles() {
 
     this.copy('.babelrc', '.babelrc');
     this.copy('.postcssrc.js', '.postcssrc.js');
+    this.copy('.eslintrc.json', '.eslintrc.json');
 
     // Config files
     this.copy('config/index.js', 'config/index.js');
@@ -29,6 +30,7 @@ function writeFiles() {
     this.copy('webapp/app/App.vue', 'src/main/webapp/app/App.vue');
     this.copy('webapp/app/constants.js', 'src/main/webapp/app/constants.js');
     this.copy('webapp/app/main.js', 'src/main/webapp/app/main.js');
+    this.copy('webapp/app/shared/config.js', 'src/main/webapp/app/shared/config.js');
     this.copy('webapp/app/router/index.js', 'src/main/webapp/app/router/index.js');
     this.copy('webapp/app/locale/LanguageService.vue', 'src/main/webapp/app/locale/LanguageService.vue');
     this.copy('webapp/app/locale/TranslationService.vue', 'src/main/webapp/app/locale/TranslationService.vue');
@@ -46,4 +48,7 @@ function writeFiles() {
     this.copy('webapp/app/components/account/Sessions.vue', 'src/main/webapp/app/components/account/Sessions.vue');
     this.copy('webapp/app/components/account/Settings.vue', 'src/main/webapp/app/components/account/Settings.vue');
     this.template('webapp/app/config/axios-interceptor.js.ejs', 'src/main/webapp/app/config/axios-interceptor.js');
+
+    // Specs tests
+    this.copy('webapp/app/components/account/specs/settings.component.test.js', 'src/main/webapp/app/components/account/specs/settings.component.test.js');
 }

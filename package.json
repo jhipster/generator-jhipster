@@ -24,6 +24,8 @@
   "dependencies": {
     "chalk": "2.4.1",
     "ejs": "2.6.1",
+    "eslint-plugin-vue": "^4.7.1",
+    "generator-jhipster": ">=5.0.0",
     "glob": "7.1.2",
     "gulp-filter": "5.1.0",
     "insight": "0.10.1",
@@ -38,7 +40,6 @@
     "semver": "5.5.0",
     "shelljs": "0.8.2",
     "through2": "2.0.3",
-    "generator-jhipster": ">=5.0.0",
     "yeoman-environment": "2.3.0",
     "yeoman-generator": "2.0.5"
   },

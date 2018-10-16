@@ -1,5 +1,4 @@
 coverage
-generators/**/templates
 node_modules
 travis
 docs
