@@ -251,6 +251,24 @@ describe('JSONToJDLEntityConverter', () => {
       });
     });
   });
+
+  describe('::convertEntitiesToJDL without relationship', () => {
+    let jdlObject = null;
+
+    before(() => {
+      const entities = {
+        CassBankAccount: readJsonEntity('CassBankAccount')
+      };
+      // entities.Employee.relationships.filter(r => r.relationshipName === 'department')[0].javadoc = undefined;
+      jdlObject = convertEntitiesToJDL(entities);
+    });
+
+    context('when parsing a JSON entity to JDL', () => {
+      it('parses tableName', () => {
+        expect(jdlObject.entities.CassBankAccount.tableName).eq('cassBankAccount');
+      });
+    });
+  });
 });
 
 function readJsonEntity(entityName) {
