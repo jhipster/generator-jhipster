@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
 const jhipsterUtils = require('generator-jhipster/generators/utils');
 const constants = require('generator-jhipster/generators/generator-constants');
 
@@ -61,34 +60,32 @@ module.exports = {
 };
 
 function writeFiles() {
+    if (this.skipClient) return;
+    // write client side files for VueJS
+    this.writeFilesToDisk(vueFiles, this, false, this.fetchFromInstalledJHipster(`../../../../jhipster-vuejs/generators/entity-client/templates/${CLIENT_VUE_TEMPLATES_DIR}`));
 
-  if (this.skipClient) return;
-
-  // write client side files for VueJS
-  this.writeFilesToDisk(vueFiles, this, false, this.fetchFromInstalledJHipster(`../../../../jhipster-vuejs/generators/entity-client/templates/${CLIENT_VUE_TEMPLATES_DIR}`));
-
-  //Add entity to menu
-  const className = this.entityClass;
-  const entityName = this.entityInstance;
-  entityMenuPath = `${CLIENT_MAIN_SRC_DIR}/app/components/JhipNavBar.vue`;
-  jhipsterUtils.rewriteFile(
-      {
-          file: entityMenuPath,
-          needle: 'jhipster-needle-add-entity-to-menu',
-          splicable: [
-              // prettier-ignore
-              `<router-link to="${entityName}" tag="b-dropdown-item" class="dropdown-item" v-on:click="collapseNavbar()">
+    // Add entity to menu
+    const className = this.entityClass;
+    const entityName = this.entityInstance;
+    const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}/app/components/JhipNavBar.vue`;
+    jhipsterUtils.rewriteFile(
+        {
+            file: entityMenuPath,
+            needle: 'jhipster-needle-add-entity-to-menu',
+            splicable: [
+                // prettier-ignore
+                `<router-link to="${entityName}" tag="b-dropdown-item" class="dropdown-item" v-on:click="collapseNavbar()">
                     <font-awesome-icon icon="asterisk" />
                     <span v-text="$t('global.menu.entities.${entityName}')">${className}</span>
               </router-link>`
-          ]
-      },
-      this
-  );
+            ]
+        },
+        this
+    );
 
-  //Add entity paths to routing system
-  routerPath = `${CLIENT_MAIN_SRC_DIR}/app/router/index.js`;
-  jhipsterUtils.rewriteFile(
+    // Add entity paths to routing system
+    const routerPath = `${CLIENT_MAIN_SRC_DIR}/app/router/index.js`;
+    jhipsterUtils.rewriteFile(
         {
             file: routerPath,
             needle: 'jhipster-needle-add-entity-to-router-import',
@@ -103,13 +100,13 @@ function writeFiles() {
         },
         this
     );
-  jhipsterUtils.rewriteFile(
-      {
-          file: routerPath,
-          needle: 'jhipster-needle-add-entity-to-router',
-          splicable: [
-              // prettier-ignore
-              `,{
+    jhipsterUtils.rewriteFile(
+        {
+            file: routerPath,
+            needle: 'jhipster-needle-add-entity-to-router',
+            splicable: [
+                // prettier-ignore
+                `,{
                     path: '/${entityName}',
                     name: '${className}',
                     component: ${className}
@@ -127,8 +124,8 @@ function writeFiles() {
                    component: ${className}Details
              }
               `
-          ]
-      },
-      this
-  );
+            ]
+        },
+        this
+    );
 }

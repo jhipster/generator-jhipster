@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
 const EntityClientGenerator = require('generator-jhipster/generators/entity-client');
 const writeFiles = require('./files').writeFiles;
 
@@ -10,12 +9,11 @@ module.exports = class extends EntityClientGenerator {
 
 
     get writing() {
-
-      return {
-          writeAdditionalFile() {
-              writeFiles.call(this);
-          }
-      };
+        return {
+            writeAdditionalFile() {
+                writeFiles.call(this);
+            }
+        };
     }
 
     get end() {
