@@ -90,7 +90,6 @@ describe('Component Tests', () => {
                     tick(); // simulate async
 
                     // THEN
-                    expect(comp.authenticationError).toEqual(false);
                     expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
                     expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
                     expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
@@ -122,7 +121,6 @@ describe('Component Tests', () => {
                     tick(); // simulate async
 
                     // THEN
-                    expect(comp.authenticationError).toEqual(false);
                     expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
                     expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
                     expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
@@ -153,7 +151,6 @@ describe('Component Tests', () => {
             comp.cancel();
 
             // THEN
-            expect(comp.authenticationError).toEqual(false);
             expect(comp.credentials).toEqual(expected);
             expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('cancel');
         });
