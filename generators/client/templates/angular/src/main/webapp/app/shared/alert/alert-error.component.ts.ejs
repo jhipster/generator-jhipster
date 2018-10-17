@@ -20,7 +20,7 @@ import { Component, OnDestroy } from '@angular/core';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlert, JhiAlertService } from 'ng-jhipster';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -38,6 +38,8 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
 
     alerts: any[];
     cleanHttpErrorListener: Subscription;
+    defaultTimeout = 5000;
+    noTimeout = 0;
     /* tslint:disable */
     constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager<% if (enableTranslation) { %>, private translateService: TranslateService<% } %>) {
     /* tslint:enable */
@@ -65,7 +67,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                     });
                     if (errorHeader) {
                         const entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
-                        this.addErrorAlert(errorHeader, errorHeader, { entityName });
+                        this.addErrorAlert(errorHeader, errorHeader, this.defaultTimeout, { entityName });
                     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
                         const fieldErrors = httpErrorResponse.error.fieldErrors;
                         for (i = 0; i < fieldErrors.length; i++) {
@@ -79,17 +81,38 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                                 fieldError.objectName + '.' + convertedField)<% } else { %>convertedField.charAt(0).toUpperCase() +
                                 convertedField.slice(1)<% } %>;
                             this.addErrorAlert(
-                                'Error on field "' + fieldName + '"', 'error.' + fieldError.message, { fieldName });
+                                'Error on field "' + fieldName + '"', 'error.' + fieldError.message, this.defaultTimeout, { fieldName });
                         }
                     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-                        this.addErrorAlert(httpErrorResponse.error.message, httpErrorResponse.error.message, httpErrorResponse.error.params);
+                        this.addErrorAlert(
+                            httpErrorResponse.error.message,
+                            httpErrorResponse.error.message,
+                            this.defaultTimeout,
+                            httpErrorResponse.error.params
+                        );
                     } else {
                         this.addErrorAlert(httpErrorResponse.error);
                     }
                     break;
 
+                case 401:
+                    if (httpErrorResponse.url && httpErrorResponse.url.includes('/api/authenticate')) {
+                        this.addErrorAlert(
+                            '<strong>Failed to sign in!</strong> Please check your credentials and try again.',
+                            'login.messages.error.authentication',
+                            this.noTimeout
+                        );
+                    }
+                    break;
+
                 case 404:
                     this.addErrorAlert('Not found', 'error.url.not.found');
+                    break;
+
+                case 504:
+                    if (httpErrorResponse.url && httpErrorResponse.url.includes('/api/authenticate')) {
+                        this.addErrorAlert('The backend is not started yet', 'error.backend.notStarted', this.noTimeout);
+                    }
                     break;
 
                 default:
@@ -116,35 +139,33 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
         }
     }
 
-    addErrorAlert(message, key?, data?) {
+    addErrorAlert(message, key?, t = this.defaultTimeout, data?) {
         <%_ if (enableTranslation) { _%>
-        key = (key && key !== null) ? key : message;
-        this.alerts.push(
-            this.alertService.addAlert(
-                {
-                    type: 'danger',
-                    msg: key,
-                    params: data,
-                    timeout: 5000,
-                    toast: this.alertService.isToast(),
-                    scoped: true
-                },
-                this.alerts
-            )
-        );
+        const info = (key && key !== null) ? key : message;
         <%_ } else { _%>
-        this.alerts.push(
-            this.alertService.addAlert(
-                {
-                    type: 'danger',
-                    msg: message,
-                    timeout: 5000,
-                    toast: this.alertService.isToast(),
-                    scoped: true
-                },
-                this.alerts
-            )
-        );
+        const info = message;
         <%_ } _%>
+
+        const newAlert: JhiAlert = {
+            type: 'danger',
+            msg: info,
+            <%_ if (enableTranslation) { _%>
+            params: data,
+            <%_ } _%>
+            timeout: t,
+            toast: this.alertService.isToast(),
+            scoped: true
+        };
+
+        const alertsMessage: string[] = this.alerts.map(alert => alert.msg);
+        <%_ if (enableTranslation) { _%>
+        const newAlertMessage = this.translateService.instant(newAlert.msg);
+        <%_ } else { _%>
+        const newAlertMessage = newAlert.msg;
+        <%_ } _%>
+
+        if (!alertsMessage.includes(newAlertMessage) || newAlert.timeout !== 0) {
+            this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
+        }
     }
 }

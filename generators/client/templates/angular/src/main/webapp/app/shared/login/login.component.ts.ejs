@@ -29,7 +29,6 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
     templateUrl: './login.component.html'
 })
 export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewInit {
-    authenticationError: boolean;
     password: string;
     rememberMe: boolean;
     username: string;
@@ -57,7 +56,6 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
             password: null,
             rememberMe: true
         };
-        this.authenticationError = false;
         this.activeModal.dismiss('cancel');
     }
 
@@ -67,7 +65,6 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
             password: this.password,
             rememberMe: this.rememberMe
         }).then(() => {
-            this.authenticationError = false;
             this.activeModal.dismiss('login success');
             if (this.router.url === '/register' || (/^\/activate\//.test(this.router.url)) ||
                 (/^\/reset\//.test(this.router.url))) {
@@ -80,14 +77,12 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
             });
 
             // previousState was set in the authExpiredInterceptor before being redirected to login modal.
-            // since login is succesful, go to stored previousState and clear previousState
+            // since login is successful, go to stored previousState and clear previousState
             const redirect = this.stateStorageService.getUrl();
             if (redirect) {
                 this.stateStorageService.storeUrl(null);
                 this.router.navigate([redirect]);
             }
-        }).catch(() => {
-            this.authenticationError = true;
         });
     }
 

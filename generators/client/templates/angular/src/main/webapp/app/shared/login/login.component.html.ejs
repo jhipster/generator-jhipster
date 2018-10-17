@@ -24,9 +24,7 @@
 <div class="modal-body">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="alert alert-danger" *ngIf="authenticationError" jhiTranslate="login.messages.error.authentication">
-                <strong>Failed to sign in!</strong> Please check your credentials and try again.
-            </div>
+            <jhi-alert-error></jhi-alert-error>
         </div>
         <div class="col-md-8">
             <form class="form" role="form" (ngSubmit)="login()">
