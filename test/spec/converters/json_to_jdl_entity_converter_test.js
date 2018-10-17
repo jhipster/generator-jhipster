@@ -249,6 +249,20 @@ describe('JSONToJDLEntityConverter', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User{country}')).not.to.be.undefined;
         });
       });
+      context('without relationship', () => {
+        let jdlObject = null;
+
+        before(() => {
+          const entities = {
+            CassBankAccount: readJsonEntity('CassBankAccount')
+          };
+          jdlObject = convertEntitiesToJDL(entities);
+        });
+
+        it('parses tableName', () => {
+          expect(jdlObject.entities.CassBankAccount.tableName).eq('cassBankAccount');
+        });
+      });
     });
   });
 });
