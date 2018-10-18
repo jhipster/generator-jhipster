@@ -36,15 +36,8 @@ jobs:
     JHI_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
 
   strategy:
-    timeoutInMinutes: 32
+    timeoutInMinutes: 40
     matrix:
-      ngx-mongodb-kafka-cucumber:
-        JHI_APP: ngx-mongodb-kafka-cucumber
-      ngx-session-cassandra-fr:
-        JHI_APP: ngx-session-cassandra-fr
-      ngx-couchbase:
-        JHI_APP: ngx-couchbase
-        JHI_PROFILE: prod
       ms-ngx-gateway-eureka:
         JHI_APP: ms-ngx-gateway-eureka
       ms-ngx-gateway-eureka-oauth2:
@@ -58,6 +51,13 @@ jobs:
         JHI_APP: ms-micro-eureka
       ms-micro-consul:
         JHI_APP: ms-micro-consul
+      ngx-mongodb-kafka-cucumber:
+        JHI_APP: ngx-mongodb-kafka-cucumber
+      ngx-session-cassandra-fr:
+        JHI_APP: ngx-session-cassandra-fr
+      ngx-couchbase:
+        JHI_APP: ngx-couchbase
+        JHI_PROFILE: prod
       webflux-mongodb:
         JHI_APP: webflux-mongodb
 
