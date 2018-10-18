@@ -29,7 +29,11 @@ import { Subscription } from 'rxjs';
         <div class="alerts" role="alert">
             <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
                 <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="alert.close(alerts)">
-                    <span [innerHTML]="alert.msg"></span>
+                    <%_ if (enableTranslation) { _%>
+                    <span jhiTranslate="{{alert.msg}}">{{alert.msg}}</span>
+                    <%_ } else { _%>
+                    <span>{{alert.msg}}</span>
+                    <%_ } _%>
                 </ngb-alert>
             </div>
         </div>`
@@ -158,7 +162,8 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
         <%_ } _%>
 
         if (!alertsMessage.includes(newAlertMessage) || newAlert.timeout !== 0) {
-            this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
+            // this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
+            this.alerts.push(newAlert); // WIP for e2e tests
         }
     }
 }

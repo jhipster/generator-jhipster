@@ -51,18 +51,21 @@ describe('account', () => {
         expect(value1).to.eq(expect1);
     <%_ if (authenticationType !== 'oauth2') { _%>
         signInPage = await navBarPage.getSignInPage();
-        await signInPage.autoSignInUsing('admin', 'foo');
+        await signInPage.autoSignInUsing('admin', 'foo bar');
 
         <%_ if (enableTranslation) { _%>
         const expect2 = 'login.messages.error.authentication';
+        const value2 = await element(by.css('.alert-danger > span')).getAttribute('ng-reflect-jhi-translate'); // trim to 30 characters
+        expect(expect2).to.contain(value2);
         <%_ } else { _%>
-        const expect2 = 'Failed to sign in! Please check your credentials and try again.';
-        <%_ } _%>
-        const value2 = await element(by.css('.alert-danger')).<%- elementGetter %>;
+        const expect2 = '<strong>Failed to sign in!</strong> Please check your credentials and try again.';
+        const value2 = await element(by.css('.alert-danger > span')).<%- elementGetter %>;
         expect(value2).to.eq(expect2);
+        <%_ } _%>
+
     <%_ } else { _%>
         signInPage = await navBarPage.getSignInPage();
-        await signInPage.loginWithOAuth('admin', 'foo');
+        await signInPage.loginWithOAuth('admin', 'foo bar');
 
         // Keycloak
         const alert = element(by.css('.alert-error'));
