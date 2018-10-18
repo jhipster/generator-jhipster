@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
@@ -38,8 +38,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
 
     alerts: any[];
     cleanHttpErrorListener: Subscription;
-    defaultTimeout = 5000;
-    noTimeout = 0;
+    @Input() timeout = 5000;
     /* tslint:disable */
     constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager<% if (enableTranslation) { %>, private translateService: TranslateService<% } %>) {
     /* tslint:enable */
@@ -67,7 +66,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                     });
                     if (errorHeader) {
                         const entityName = <% if (enableTranslation) { %>translateService.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
-                        this.addErrorAlert(errorHeader, errorHeader, this.defaultTimeout, { entityName });
+                        this.addErrorAlert(errorHeader, errorHeader, { entityName });
                     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
                         const fieldErrors = httpErrorResponse.error.fieldErrors;
                         for (i = 0; i < fieldErrors.length; i++) {
@@ -81,15 +80,10 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                                 fieldError.objectName + '.' + convertedField)<% } else { %>convertedField.charAt(0).toUpperCase() +
                                 convertedField.slice(1)<% } %>;
                             this.addErrorAlert(
-                                'Error on field "' + fieldName + '"', 'error.' + fieldError.message, this.defaultTimeout, { fieldName });
+                                'Error on field "' + fieldName + '"', 'error.' + fieldError.message, { fieldName });
                         }
                     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
-                        this.addErrorAlert(
-                            httpErrorResponse.error.message,
-                            httpErrorResponse.error.message,
-                            this.defaultTimeout,
-                            httpErrorResponse.error.params
-                        );
+                        this.addErrorAlert(httpErrorResponse.error.message, httpErrorResponse.error.message, httpErrorResponse.error.params);
                     } else {
                         this.addErrorAlert(httpErrorResponse.error);
                     }
@@ -99,8 +93,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                     if (httpErrorResponse.url && httpErrorResponse.url.includes('/api/authenticate')) {
                         this.addErrorAlert(
                             '<strong>Failed to sign in!</strong> Please check your credentials and try again.',
-                            'login.messages.error.authentication',
-                            this.noTimeout
+                            'login.messages.error.authentication'
                         );
                     }
                     break;
@@ -111,7 +104,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
 
                 case 504:
                     if (httpErrorResponse.url && httpErrorResponse.url.includes('/api/authenticate')) {
-                        this.addErrorAlert('The backend is not started yet', 'error.backend.notStarted', this.noTimeout);
+                        this.addErrorAlert('The backend is not started yet', 'error.backend.notStarted');
                     }
                     break;
 
@@ -139,7 +132,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
         }
     }
 
-    addErrorAlert(message, key?, t = this.defaultTimeout, data?) {
+    addErrorAlert(message, key?, data?) {
         <%_ if (enableTranslation) { _%>
         const info = (key && key !== null) ? key : message;
         <%_ } else { _%>
@@ -152,7 +145,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
             <%_ if (enableTranslation) { _%>
             params: data,
             <%_ } _%>
-            timeout: t,
+            timeout: this.timeout,
             toast: this.alertService.isToast(),
             scoped: true
         };
