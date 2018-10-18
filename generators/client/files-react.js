@@ -393,7 +393,7 @@ const files = {
             templates: ['spec/app/shared/reducers/locale.spec.ts']
         },
         {
-            condition: generator => generator.skipUserManagement,
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
             path: TEST_SRC_DIR,
             templates: ['spec/app/shared/reducers/user-management.spec.ts']
         },
