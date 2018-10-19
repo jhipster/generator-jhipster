@@ -466,6 +466,7 @@ module.exports = class extends BaseGenerator {
                             this.warning(
                                 'The generated application could not be committed to Git, as a Git repository could not be initialized.'
                             );
+                            done();
                         }
                     });
                 }
