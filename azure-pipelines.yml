@@ -21,6 +21,7 @@ jobs:
 - job: Test
   pool:
     vmImage: 'Ubuntu 16.04'
+  timeoutInMinutes: 40
   variables:
     JHI_PROFILE: dev
     JHI_RUN_APP: 1
@@ -36,7 +37,6 @@ jobs:
     JHI_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
 
   strategy:
-    timeoutInMinutes: 40
     matrix:
       ms-ngx-gateway-eureka:
         JHI_APP: ms-ngx-gateway-eureka
