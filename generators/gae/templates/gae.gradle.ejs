@@ -18,10 +18,17 @@
 -%>
 apply plugin: 'com.google.cloud.tools.appengine'
 
+appengine {
+    deploy {
+        project = '<%=gcpProjectId%>'
+        version = '1'
+    }
+}
+
 bootWar {
-  from("${project.rootDir}/src/main/webapp/WEB-INF/appengine-web.xml") {
-      into('WEB-INF')
-   }
+    from("${project.rootDir}/src/main/webapp/WEB-INF/appengine-web.xml") {
+        into('WEB-INF')
+    }
 }
 
 processResources {
