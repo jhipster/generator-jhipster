@@ -654,11 +654,9 @@ module.exports = class extends BaseGenerator {
                 this.template('appengine-web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/appengine-web.xml`);
                 this.template('logging.properties.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/logging.properties`);
                 this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
-                /*
-               if (this.buildTool === 'gradle') {
+                if (this.buildTool === 'gradle') {
                     this.template('gae.gradle.ejs', 'gradle/gae.gradle');
                 }
-*/
 
                 this.conflicter.resolve(err => {
                     done();
@@ -675,15 +673,14 @@ module.exports = class extends BaseGenerator {
                 }
             },
 
-            /*
             addGradlePlugin() {
-                if (this.buildTool !== 'gradle') return;
-                this.addGradlePlugin('gradle.plugin.com.gcp.sdk', 'gcp-gradle', '0.2.0');
-                this.applyFromGradleScript('gradle/gcp');
+                if (this.buildTool === 'gradle') {
+                    this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '1.3.3');
+                    this.applyFromGradleScript('gradle/gae');
+                }
             },
-*/
 
-            addMaven() {
+            addMavenPlugin() {
                 if (this.buildTool === 'maven') {
                     this.render('pom-plugin.xml.ejs', rendered => {
                         this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.2', rendered.trim());
@@ -701,8 +698,13 @@ module.exports = class extends BaseGenerator {
             productionBuild() {
                 if (this.abort) return;
 
-                this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw appengine:run -DskipTests'));
-                this.log(chalk.bold('\nDeploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod,prod-gae'));
+                if (this.buildTool === 'maven') {
+                    this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw appengine:run -DskipTests'));
+                    this.log(chalk.bold('Deploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod,prod-gae'));
+                } else if (this.buildTool === 'gradle') {
+                    this.log(chalk.bold('\nRun App Engine DevServer Locally: ./gradlew appengineRun'));
+                    this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pprod -Pprod-gae'));
+                }
                 /*
                 if (this.gcpSkipBuild || this.gcpDeployType === 'git') {
                     this.log(chalk.bold('\nSkipping build'));
