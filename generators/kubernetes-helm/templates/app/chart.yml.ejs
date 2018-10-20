@@ -1,0 +1,25 @@
+name: <%= app.baseName.toLowerCase() %>
+version: <%= jhipsterVersion %>
+appVersion: 1.0.0
+<%_ if (composeApplicationType === 'microservice') { _%>
+  <%_ if (app.applicationType === 'gateway') { _%>
+description: <%= app.baseName.toLowerCase() %> is a JHipster based microservice gateway application
+  <%_ } else {_%>
+description: <%= app.baseName.toLowerCase() %> is a JHipster based microservice application
+  <%_ } _%>
+<%_ } else { _%>
+description: <%= app.baseName.toLowerCase() %> is a JHipster based monolithic application
+<%_ } _%>
+icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
+keywords:
+- spring
+- angular
+- react
+- JHipster
+- <%= app.baseName.toLowerCase() %>
+home: https://www.jhipster.tech/
+sources:
+- https://github.com/jhipster/generator-jhipster.git
+maintainers:
+- name: Team JHipster
+  email:
