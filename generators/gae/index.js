@@ -93,7 +93,7 @@ module.exports = class extends BaseGenerator {
                 this.gcpProjectId = this.config.get('gcpProjectId');
                 this.gcpCloudSqlInstanceName = this.config.get('gcpCloudSqlInstanceName');
                 this.gcpCloudSqlUserName = this.config.get('gcpCloudSqlUserName');
-                this.gcpDatabaseName = this.config.get('gcpCloudSqlDatabaseName');
+                this.gcpCloudSqlDatabaseName = this.config.get('gcpCloudSqlDatabaseName');
                 this.gaeServiceName = this.config.get('gaeServiceName');
                 this.gaeLocation = this.config.get('gaeLocation');
                 this.gaeInstanceClass = this.config.get('gaeInstanceClass');
@@ -630,7 +630,7 @@ module.exports = class extends BaseGenerator {
                     gcpProjectId: this.gcpProjectId,
                     gcpCloudSqlInstanceName: this.gcpCloudSqlInstanceName,
                     gcpCloudSqlUserName: this.gcpCloudSqlUserName,
-                    gcpCloudSqlDatabaseName: this.gcpDatabaseName,
+                    gcpCloudSqlDatabaseName: this.gcpCloudSqlDatabaseName,
                     gaeServiceName: this.gaeServiceName,
                     gaeLocation: this.gaeLocation,
                     gaeInstanceClass: this.gaeInstanceClass,
