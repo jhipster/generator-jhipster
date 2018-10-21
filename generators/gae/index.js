@@ -651,6 +651,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
+                this.template('web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/web.xml`);
                 this.template('appengine-web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/appengine-web.xml`);
                 this.template('logging.properties.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/logging.properties`);
                 this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
