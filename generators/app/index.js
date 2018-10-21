@@ -301,6 +301,15 @@ module.exports = class extends BaseGenerator {
             //     this.composeWith(require.resolve('../link-account'));
             // },
 
+            composeCommon() {
+                this.composeWith(require.resolve('../common'), {
+                    'from-cli': this.options['from-cli'],
+                    configOptions: this.configOptions,
+                    force: this.options.force,
+                    debug: this.isDebugEnabled
+                });
+            },
+
             composeServer() {
                 if (this.skipServer) return;
 

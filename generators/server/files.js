@@ -36,27 +36,6 @@ const shouldSkipUserManagement = generator =>
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 const serverFiles = {
-    global: [
-        {
-            templates: [
-                'README.md',
-                {
-                    file: 'gitignore',
-                    renameTo: () => '.gitignore'
-                },
-                {
-                    file: 'gitattributes',
-                    renameTo: () => '.gitattributes',
-                    method: 'copy'
-                },
-                {
-                    file: 'editorconfig',
-                    renameTo: () => '.editorconfig',
-                    method: 'copy'
-                }
-            ]
-        }
-    ],
     jib: [
         {
             path: 'src/main/jib/',
