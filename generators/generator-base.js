@@ -2838,6 +2838,26 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Setup shared level options from context.
+     * all variables should be set to dest,
+     * all variables should be referred from context,
+     * all methods should be called on generator,
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is context
+     */
+    setupSharedOptions(generator, context = generator, dest = context) {
+        dest.skipUserManagement =
+            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        dest.otherModules = context.configOptions.otherModules || [];
+        dest.baseName = context.configOptions.baseName;
+        dest.logo = context.configOptions.logo;
+        dest.clientPackageManager = context.configOptions.clientPackageManager;
+        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+        dest.experimental = context.configOptions.experimental || context.options.experimental;
+    }
+
+    /**
      * Setup client instance level options from context.
      * all variables should be set to dest,
      * all variables should be referred from context,
@@ -2847,9 +2867,8 @@ module.exports = class extends PrivateBase {
      * @param {any} dest - destination context to use default is context
      */
     setupClientOptions(generator, context = generator, dest = context) {
+        this.setupSharedOptions(generator, context, dest);
         dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
-        dest.skipUserManagement =
-            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
         dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         dest.authenticationType =
             context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
@@ -2880,7 +2899,6 @@ module.exports = class extends PrivateBase {
             context.options['hb-cache'] ||
             context.config.get('enableHibernateCache') ||
             (context.config.get('hibernateCache') !== undefined && context.config.get('hibernateCache') !== 'no');
-        dest.otherModules = context.configOptions.otherModules || [];
         dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
         dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
@@ -2888,12 +2906,7 @@ module.exports = class extends PrivateBase {
 
         if (context.options.protractor) dest.testFrameworks.push('protractor');
 
-        dest.baseName = context.configOptions.baseName;
-        dest.logo = context.configOptions.logo;
         dest.useYarn = context.configOptions.useYarn = !context.options.npm;
-        dest.clientPackageManager = context.configOptions.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
     }
 
     /**
@@ -2906,20 +2919,12 @@ module.exports = class extends PrivateBase {
      * @param {any} dest - destination context to use default is context
      */
     setupServerOptions(generator, context = generator, dest = context) {
+        this.setupSharedOptions(generator, context, dest);
         dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
-        dest.skipUserManagement =
-            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
         dest.enableTranslation = context.options.i18n || context.configOptions.enableTranslation || context.config.get('enableTranslation');
         dest.testFrameworks = [];
-        dest.otherModules = context.configOptions.otherModules || [];
         if (context.options.gatling) dest.testFrameworks.push('gatling');
         if (context.options.cucumber) dest.testFrameworks.push('cucumber');
-
-        dest.logo = context.configOptions.logo;
-        dest.baseName = context.configOptions.baseName;
-        dest.clientPackageManager = context.configOptions.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
     }
 
     /**
