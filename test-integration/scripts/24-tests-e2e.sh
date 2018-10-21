@@ -82,6 +82,7 @@ if [ "$JHI_RUN_APP" == 1 ]; then
         --spring.profiles.active="$JHI_PROFILE" \
         --logging.level.ROOT=OFF \
         --logging.level.org.zalando=OFF \
+        --logging.level.org.springframework.web=ERROR \
         --logging.level.io.github.jhipster=OFF \
         --logging.level.io.github.jhipster.sample=OFF \
         --logging.level.io.github.jhipster.travis=OFF &
