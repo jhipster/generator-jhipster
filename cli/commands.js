@@ -85,7 +85,7 @@ Example:
     },
     'kubernetes-helm': {
         alias: 'k8s-helm',
-        desc: 'Deploy the current application to Kubernetes'
+        desc: 'Deploy the current application to Kubernetes using Helm package manager'
     },
     languages: {
         argument: ['languages...'],
