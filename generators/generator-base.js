@@ -2911,7 +2911,7 @@ module.exports = class extends PrivateBase {
             context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
         dest.enableTranslation = context.options.i18n || context.configOptions.enableTranslation || context.config.get('enableTranslation');
         dest.testFrameworks = [];
-
+        dest.otherModules = context.configOptions.otherModules || [];
         if (context.options.gatling) dest.testFrameworks.push('gatling');
         if (context.options.cucumber) dest.testFrameworks.push('cucumber');
 

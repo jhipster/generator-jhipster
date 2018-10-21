@@ -411,18 +411,6 @@ module.exports = class extends BaseGenerator {
                 }
             },
 
-            generatePackageForMS() {
-                if (this.skipClient) {
-                    if (this.otherModules === undefined) {
-                        this.otherModules = [];
-                    }
-                    // Generate a package.json file containing the current version
-                    // of the generator as dependency
-                    this.dasherizedBaseName = _.kebabCase(this.baseName);
-                    this.template('skipClientApp.package.json.ejs', 'package.json');
-                }
-            },
-
             initGitRepo() {
                 if (!this.options['skip-git']) {
                     this.isGitInstalled(code => {

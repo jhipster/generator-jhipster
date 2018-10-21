@@ -38,13 +38,18 @@ describe('JHipster server generator', () => {
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.gatling);
             assert.noFile(
-                getFilesForOptions(angularfiles, {
-                    useSass: false,
-                    enableTranslation: true,
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
-                    testFrameworks: []
-                })
+                getFilesForOptions(
+                    angularfiles,
+                    {
+                        useSass: false,
+                        enableTranslation: true,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        testFrameworks: []
+                    },
+                    null,
+                    ['package.json']
+                )
             );
         });
     });

@@ -63,6 +63,12 @@ const serverFiles = {
             templates: ['entrypoint.sh']
         }
     ],
+    packageJson: [
+        {
+            condition: generator => generator.skipClient,
+            templates: ['package.json']
+        }
+    ],
     docker: [
         {
             path: DOCKER_DIR,
