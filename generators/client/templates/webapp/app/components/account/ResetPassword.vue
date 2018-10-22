@@ -50,7 +50,7 @@
 <script>
     import {email, maxLength, minLength, required} from 'vuelidate/lib/validators'
     import axios from 'axios'
-    import {EMAIL_NOT_FOUND_TYPE, SERVER_API_URL} from "../../constants";
+    import {EMAIL_NOT_FOUND_TYPE} from "../../constants";
 
     export default {
         data() {
@@ -75,7 +75,7 @@
         methods: {
             requestReset: function () {
                 let vm = this;
-                axios.post(SERVER_API_URL + 'api/account/reset-password/init', this.resetAccount.email).then(() => {
+                axios.post('api/account/reset-password/init', this.resetAccount.email).then(() => {
                     vm.success = true;
                 }).catch(error => {
                     this.success = null;

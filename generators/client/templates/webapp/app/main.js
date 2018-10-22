@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
+import setupAxiosInterceptors from './config/axios-interceptor';
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App'
@@ -20,6 +21,8 @@ Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
 Vue.use(VueI18n);
 Vue.config.productionTip = false;
+
+setupAxiosInterceptors(() => console.log('Unauthorized!'));
 
 library.add(fas)
 

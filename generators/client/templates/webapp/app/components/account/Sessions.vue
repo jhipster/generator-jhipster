@@ -39,7 +39,6 @@
 </template>
 <script>
     import axios from 'axios'
-    import {SERVER_API_URL} from "../../constants";
     import Principal from './Principal';
     import { mapGetters } from 'vuex'
 
@@ -58,7 +57,7 @@
         methods: {
             retrieveSessions: function () {
                 let vm = this;
-                axios.get(SERVER_API_URL + 'api/account/sessions/')
+                axios.get('api/account/sessions/')
                     .then(response => {
                         vm.error = null;
                         vm.sessions = response.data;
@@ -66,7 +65,7 @@
             },
             invalidate: function (session) {
                 let vm = this;
-                axios.delete(SERVER_API_URL + 'api/account/sessions/' + session)
+                axios.delete('api/account/sessions/' + session)
                     .then(() => {
                         vm.error = null;
                         vm.success = 'OK';

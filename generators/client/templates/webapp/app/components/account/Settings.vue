@@ -92,7 +92,6 @@
 <script>
     import {email, maxLength, minLength, required} from 'vuelidate/lib/validators'
     import axios from 'axios'
-    import {SERVER_API_URL} from "../../constants";
     import Principal from './Principal';
     import LanguageService from '../../locale/LanguageService';
 
@@ -127,7 +126,7 @@
         methods: {
             save: function () {
                 let vm = this;
-                axios.post(SERVER_API_URL + 'api/account', this.settingsAccount)
+                axios.post('api/account', this.settingsAccount)
                     .then(() => {
                         vm.error = null;
                         vm.success = "OK";

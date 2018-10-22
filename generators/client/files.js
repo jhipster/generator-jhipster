@@ -37,7 +37,7 @@ function writeFiles() {
     this.template('webapp/app/components/JhiNavBar.vue.ejs', 'src/main/webapp/app/components/JhiNavBar.vue');
     this.copy('webapp/app/components/Ribbon.vue', 'src/main/webapp/app/components/Ribbon.vue');
     this.copy('webapp/app/components/account/ChangePassword.vue', 'src/main/webapp/app/components/account/ChangePassword.vue');
-    this.copy('webapp/app/components/account/LoginForm.vue', 'src/main/webapp/app/components/account/LoginForm.vue');
+    this.template('webapp/app/components/account/LoginForm.vue.ejs', 'src/main/webapp/app/components/account/LoginForm.vue');
     this.copy('webapp/app/components/account/LoginModalService.vue', 'src/main/webapp/app/components/account/LoginModalService.vue');
     this.copy('webapp/app/components/account/Principal.vue', 'src/main/webapp/app/components/account/Principal.vue');
     this.copy('webapp/app/components/account/Register.vue', 'src/main/webapp/app/components/account/Register.vue');
@@ -45,4 +45,5 @@ function writeFiles() {
     this.copy('webapp/app/components/account/ResetPassword.vue', 'src/main/webapp/app/components/account/ResetPassword.vue');
     this.copy('webapp/app/components/account/Sessions.vue', 'src/main/webapp/app/components/account/Sessions.vue');
     this.copy('webapp/app/components/account/Settings.vue', 'src/main/webapp/app/components/account/Settings.vue');
+    this.template('webapp/app/config/axios-interceptor.js.ejs', 'src/main/webapp/app/config/axios-interceptor.js');
 }

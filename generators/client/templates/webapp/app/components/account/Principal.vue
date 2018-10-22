@@ -1,6 +1,5 @@
 <script>
     import axios from 'axios'
-    import {SERVER_API_URL} from "../../constants";
     import TranslationService from '../../locale/TranslationService';
 
     export default {
@@ -15,7 +14,7 @@
             retrieveAccount: function() {
                 let vm = this;
                 vm.$store.commit('authenticate');
-                axios.get(SERVER_API_URL + 'api/account').then(function (response) {
+                axios.get('api/account').then(function (response) {
                     const account = response.data;
                     if (account) {
                         vm.$store.commit('authenticated', account);

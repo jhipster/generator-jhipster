@@ -83,7 +83,6 @@
 <script>
     import {maxLength, minLength, required} from 'vuelidate/lib/validators'
     import axios from 'axios'
-    import {SERVER_API_URL} from "../../constants";
     import Principal from './Principal';
     import {mapGetters} from 'vuex'
 
@@ -128,7 +127,7 @@
                 } else {
                     this.doNotMatch = null;
                     let vm = this;
-                    axios.post(SERVER_API_URL + 'api/account/change-password', {
+                    axios.post('api/account/change-password', {
                         currentPassword: this.resetPassword.currentPassword,
                         newPassword: this.resetPassword.newPassword
                     }).then(() => {
