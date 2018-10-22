@@ -2161,6 +2161,7 @@ module.exports = class extends PrivateBase {
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
         context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
+        context.skipClient = context.fileData.skipClient;
         this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
