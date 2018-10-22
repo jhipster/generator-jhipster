@@ -47,7 +47,7 @@ before_script:
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./gradlew yarn_install -PnodeInstall --no-daemon
         <%_ } else if (clientPackageManager === 'npm') { _%>
-    - ./gradlew npmInstall -PnodeInstall --no-daemon
+    - ./gradlew npm_install -PnodeInstall --no-daemon
         <%_ } _%>
     <%_ } _%>
 
