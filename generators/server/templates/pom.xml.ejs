@@ -869,6 +869,36 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>test-resources</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/test-classes</outputDirectory>
+                            <useDefaultDelimiters>false</useDefaultDelimiters>
+                            <delimiters>
+                                <delimiter>#</delimiter>
+                            </delimiters>
+                            <resources>
+                                <resource>
+                                    <directory><%= SERVER_TEST_RES_DIR %></directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>config/*.yml</include>
+                                    </includes>
+                                </resource>
+                                <resource>
+                                    <directory><%= SERVER_TEST_RES_DIR %></directory>
+                                    <filtering>false</filtering>
+                                    <excludes>
+                                        <exclude>config/*.yml</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>docker-resources</id>
                         <phase>verify</phase>
                         <goals>
