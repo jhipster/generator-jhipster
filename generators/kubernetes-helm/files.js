@@ -26,7 +26,7 @@ function writeFiles() {
         writeAppChart() {
             const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
             if (this.kubernetesNamespace !== 'default') {
-                this.template(`${k8s}/namespace.yml.ejs`, 'namespace.yml');
+                this.template(`${k8s}/namespace.yml.ejs`, 'namespace.yaml');
             }
             for (let i = 0; i < this.appConfigs.length; i++) {
                 const appName = this.appConfigs[i].baseName.toLowerCase();
@@ -40,7 +40,10 @@ function writeFiles() {
                 this.template('app/helpers.tpl.ejs', `${appName}/templates/_helpers.tpl`);
 
                 if (this.app.prodDatabaseType === 'couchbase') {
-                    this.template(`${k8s}/db/${this.app.prodDatabaseType}.yml.ejs`, `${appName}/templates/${appName}-${this.app.prodDatabaseType}.yaml`);
+                    this.template(
+                        `${k8s}/db/${this.app.prodDatabaseType}.yml.ejs`,
+                        `${appName}/templates/${appName}-${this.app.prodDatabaseType}.yaml`
+                    );
                 }
 
                 if (this.app.searchEngine === 'elasticsearch') {
@@ -89,13 +92,13 @@ function writeFiles() {
                 }
             }
             if (this.serviceDiscoveryType === 'eureka') {
-                this.template(`${k8s}/registry/jhipster-registry.yml.ejs`, 'csvc/templates/jhipster-registry.yml');
-                this.template(`${k8s}/registry/application-configmap.yml.ejs`, 'csvc/templates/application-configmap.yml');
+                this.template(`${k8s}/registry/jhipster-registry.yml.ejs`, 'csvc/templates/jhipster-registry.yaml');
+                this.template(`${k8s}/registry/application-configmap.yml.ejs`, 'csvc/templates/application-configmap.yaml');
             }
             if (this.serviceDiscoveryType === 'consul') {
-                this.template(`${k8s}/registry/consul.yml.ejs`, 'csvc/templates/consul.yml');
-                this.template(`${k8s}/registry/consul-config-loader.yml.ejs`, 'csvc/templates/consul-config-loader.yml');
-                this.template(`${k8s}/registry/application-configmap.yml.ejs`, 'csvc/templates/application-configmap.yml');
+                this.template(`${k8s}/registry/consul.yml.ejs`, 'csvc/templates/consul.yaml');
+                this.template(`${k8s}/registry/consul-config-loader.yml.ejs`, 'csvc/templates/consul-config-loader.yaml');
+                this.template(`${k8s}/registry/application-configmap.yml.ejs`, 'csvc/templates/application-configmap.yaml');
             }
         },
 

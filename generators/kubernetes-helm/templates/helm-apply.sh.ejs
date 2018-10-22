@@ -20,7 +20,7 @@
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
 <%_ if (kubernetesNamespace !== 'default') { _%>
-kubectl apply -f namespace.yml
+kubectl apply -f namespace.yaml
 <%_ } _%>
 <%_ if (istio !== 'no') { _%>
 kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled

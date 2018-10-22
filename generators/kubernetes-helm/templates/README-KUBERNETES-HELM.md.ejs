@@ -25,7 +25,7 @@ helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.c
 ```  
 These repos should be added to the local cache, because this sub-generator will pull some charts from these repos. 
 
-This repo in tuen uses `kubernets` sub-generator for the microservices manifests and few service like db, elk, prometheus etc. are referred from the above repos. 
+This repo in turn uses `kubernets` sub-generator for the microservices manifests and few service like db, elk, prometheus etc. are referred from the above repos. 
 
 
 ## Deployment
@@ -33,18 +33,18 @@ This repo in tuen uses `kubernets` sub-generator for the microservices manifests
 You can deploy all your apps by running the below bash command:
 
 ```
-bash helm-apply.sh
+bash helm-apply.sh (or) ./helm-apply.sh
 ```
 
 You can upgrade all your apps (if at all if you have made any changes to the generated manifests) by running the below bash command:
 
 ```
-bash helm-upgrade.sh
+bash helm-upgrade.sh (or) ./helm-upgrade.sh
 ```
 
 For kubernetes specific info, refer `kubernetes` sub-generator readme instructions.
 
-### Open Issues
-* Couchbase is yet to be integrated with helm repo, it is still referring the k8s sub generator manifest
+### Backlogs to be covered
+* Couchbase is yet to be integrated with helm repo, it is still referring the k8s sub generator manifest. Not tested.
 * helm upgrade - to be tested
 * Istio - to be tested
