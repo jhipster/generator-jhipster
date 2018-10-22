@@ -27,13 +27,14 @@ env:
     - JHI_LIB_BRANCH=release
     # if JHI_GEN_BRANCH value is release, use the release from NPM
     - JHI_GEN_REPO=https://github.com/jhipster/generator-jhipster.git
-    - JHI_GEN_BRANCH=release
+    - JHI_GEN_BRANCH=master
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
-    - JHI_SCRIPTS=$TRAVIS_BUILD_DIR/test-integration/scripts
+    - JHI_E2E_HEADLESS=true
+    - JHI_SCRIPTS=$HOME/generator-jhipster/test-integration/scripts
   matrix:
-    - JHI_APP=ngx-default JHI_PROFILE=prod JHI_PROTRACTOR=1
+    - JHI_APP=vuejs-ngx-default
 
 #----------------------------------------------------------------------
 # Install all tools and check configuration
@@ -55,12 +56,24 @@ before_install:
 # Install JHipster and generate project+entities
 #----------------------------------------------------------------------
 install:
-  - $JHI_SCRIPTS/10-install-jhipster-vuejs.sh
+  - $TRAVIS_BUILD_DIR/test-integration/scripts/10-install-jhipster-vuejs.sh
+  # copy samples
+  - cp -R $TRAVIS_BUILD_DIR/test-integration/samples-vuejs/* /home/travis/generator-jhipster/test-integration/samples/
+  - ls -al /home/travis/generator-jhipster/test-integration/samples/
+  # copy init-env
+  - cp $TRAVIS_BUILD_DIR/test-integration/scripts/00-init-env.sh /home/travis/generator-jhipster/test-integration/scripts/
+  # generate project and entities
+  - $TRAVIS_BUILD_DIR/test-integration/scripts/12-generate-project-vuejs.sh
+
 #----------------------------------------------------------------------
 # Launch tests
 #----------------------------------------------------------------------
 script:
-  - echo "Nothing for now"
+  - $JHI_SCRIPTS/20-docker-compose.sh
+  - $JHI_SCRIPTS/21-tests-backend.sh
+  - $JHI_SCRIPTS/22-tests-frontend.sh
+  - $JHI_SCRIPTS/23-package.sh
+  - $JHI_SCRIPTS/24-tests-e2e.sh
 
 #----------------------------------------------------------------------
 # Cache

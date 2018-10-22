@@ -70,13 +70,13 @@ else
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
     npm install
-    npm install -g "$HOME"/generator-jhipster
+    npm link
 fi
 
 #-------------------------------------------------------------------------------
 # Install JHipster Vuejs
 #-------------------------------------------------------------------------------
-cd "$JHI_HOME"/
+cd "$TRAVIS_BUILD_DIR"/
 npm install
 npm link
 npm link generator-jhipster
