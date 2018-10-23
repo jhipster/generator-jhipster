@@ -434,6 +434,12 @@ module.exports = class extends BaseGenerator {
                                         this.gitInitialized = true;
                                     });
                                 }
+
+                                // gitInitialized needs to be set if already initialized
+                                // gitDir has a line break to remove (at least on windows)
+                                if(gitDir.trim() === 'true') {
+                                    this.gitInitialized = true;
+                                }
                             });
                         } else {
                             this.warning('Git repository could not be initialized, as Git is not installed on your system');
