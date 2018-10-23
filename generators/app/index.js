@@ -429,7 +429,7 @@ module.exports = class extends BaseGenerator {
                         if (code === 0) {
                             this.gitExec('rev-parse --is-inside-work-tree', { trace: false }, (err, gitDir) => {
                                 // gitDir has a line break to remove (at least on windows)
-                                if(gitDir && gitDir.trim() === 'true') {
+                                if (gitDir && gitDir.trim() === 'true') {
                                     this.gitInitialized = true;
                                 } else {
                                     this.gitExec('init', { trace: false }, () => {
