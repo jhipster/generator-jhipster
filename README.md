@@ -1,4 +1,4 @@
-# JHipster-vuejs
+# JHipster-vuejs [WIP]
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > JHipster-vuejs, A vueJs blueprint for JHipster. It will use VueJS as the frontend library
 
@@ -12,7 +12,7 @@ As this is a [JHipster](http://jhipster.github.io/) blueprint, we expect you hav
 
 - [Installing JHipster](https://jhipster.github.io/installation.html)
 
-# Installation
+# Installation (Only after stable release, for now use the development flow)
 
 
 ## With NPM
