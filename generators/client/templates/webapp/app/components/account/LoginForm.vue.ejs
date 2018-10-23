@@ -56,7 +56,7 @@
             doLogin: function () {
                 let vm = this;
                 <%_ if (authenticationType === 'jwt') { _%>
-                const data = { username: this.username, password: this.password, rememberMe: this.rememberMe };
+                const data = { username: this.login, password: this.password, rememberMe: this.rememberMe };
                 axios.post('api/authenticate', data
                 ).then(function (result) {
                     const bearerToken = result.headers.authorization;
