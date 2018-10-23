@@ -428,17 +428,14 @@ module.exports = class extends BaseGenerator {
                     this.isGitInstalled(code => {
                         if (code === 0) {
                             this.gitExec('rev-parse --is-inside-work-tree', { trace: false }, (err, gitDir) => {
-                                if (!gitDir) {
+                                // gitDir has a line break to remove (at least on windows)
+                                if(gitDir.trim() === 'true') {
+                                    this.gitInitialized = true;
+                                } else {
                                     this.gitExec('init', { trace: false }, () => {
                                         this.log(chalk.green.bold('Git repository initialized.'));
                                         this.gitInitialized = true;
                                     });
-                                }
-
-                                // gitInitialized needs to be set if already initialized
-                                // gitDir has a line break to remove (at least on windows)
-                                if(gitDir.trim() === 'true') {
-                                    this.gitInitialized = true;
                                 }
                             });
                         } else {
