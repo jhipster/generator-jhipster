@@ -85,10 +85,4 @@ processResources {
 processResources.dependsOn webpackBuildDev
 copyIntoStatic.dependsOn processResources
 bootJar.dependsOn copyIntoStatic
-
-<%= clientPackageManager %>_install.onlyIf { shouldWebpackRun() == true }
-
-def shouldWebpackRun() {
-    project.hasProperty('webpack')
-}
 <%_ } _%>
