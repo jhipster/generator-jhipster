@@ -98,7 +98,7 @@ public class <%= entityClass %>Resource {
     private static final String ENTITY_NAME = "<%= entityName %>";
     <%_
     const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
-    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asDomain(entityInstance);
     _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering}); -%>
 
     /**

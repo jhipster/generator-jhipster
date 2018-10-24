@@ -209,11 +209,11 @@ public class <%= asDto(entityClass) %> implements Serializable {
             return false;
         }
 
-        <%= asDto(entityClass) %> <%= entityInstance %>DTO = (<%= asDto(entityClass) %>) o;
-        if (<%= entityInstance %>DTO.getId() == null || getId() == null) {
+        <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = (<%= asDto(entityClass) %>) o;
+        if (<%= asDto(entityInstance) %>.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), <%= entityInstance %>DTO.getId());
+        return Objects.equals(getId(), <%= asDto(entityInstance) %>.getId());
     }
 
     @Override

@@ -20,7 +20,7 @@ package <%=packageName%>.service;
 
 <%_ const serviceClassName = entityClass + 'QueryService';
     const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
-    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asDomain(entityInstance);
     const mapper = entityInstance  + 'Mapper';
     const dtoToEntity = mapper + '.'+ 'toEntity';
     const entityToDto = mapper + '.'+ 'toDto';
