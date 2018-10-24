@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 /* tslint:disable no-unused-expression */
-import { browser<% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>, protractor<% } %> } from 'protractor';
+import { browser, element, by<% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>, protractor<% } %> } from 'protractor';
 
 import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
 import SignInPage from './../../<%= entityParentPathAddition %>page-objects/signin-page';
@@ -159,6 +159,9 @@ describe('<%= entityClass %> e2e test', () => {
         await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
         const nbButtonsBeforeDelete = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
         await <%= entityInstance %>ComponentsPage.clickOnLastDeleteButton();
+
+        const deleteModal = element(by.className('modal'));
+        await waitUntilDisplayed(deleteModal);
 
         <%= entityInstance %>DeleteDialog = new <%= entityClass %>DeleteDialog();
         expect(await <%= entityInstance %>DeleteDialog.getDialogTitle().getAttribute('id')).to.match(/<%= i18nKeyPrefix %>.delete.question/);

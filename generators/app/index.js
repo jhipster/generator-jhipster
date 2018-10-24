@@ -430,7 +430,7 @@ module.exports = class extends BaseGenerator {
                             this.gitExec('rev-parse --is-inside-work-tree', { trace: false }, (err, gitDir) => {
                                 if (!gitDir) {
                                     this.gitExec('init', { trace: false }, () => {
-                                        this.log(chalk.green.bold('Git repo initiated.'));
+                                        this.log(chalk.green.bold('Git repository initialized.'));
                                         this.gitInitialized = true;
                                     });
                                 }
@@ -466,6 +466,7 @@ module.exports = class extends BaseGenerator {
                             this.warning(
                                 'The generated application could not be committed to Git, as a Git repository could not be initialized.'
                             );
+                            done();
                         }
                     });
                 }

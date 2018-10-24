@@ -59,9 +59,16 @@ spec:
         - "/bin/sh"
         - "-c"
         - "chown -R 1000:1000 /es"
-        - sysctl
-        - -w
-        - vm.max_map_count=262144
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: storage
+          mountPath: /es
+      - name: init-sysctl-2
+        image: busybox
+        # This would be needed to give access to 'elasticsearch' user that comes from the base
+        # image where the provisioned volume is host path (in minikube)
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
         volumeMounts:
@@ -197,9 +204,14 @@ spec:
         - "/bin/sh"
         - "-c"
         - "chown -R 1000:1000 /es"
-        - sysctl
-        - -w
-        - vm.max_map_count=262144
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: storage
+          mountPath: /es
+      - name: init-sysctl-2
+        image: busybox
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
         volumeMounts:

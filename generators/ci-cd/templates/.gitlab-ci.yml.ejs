@@ -47,7 +47,7 @@ before_script:
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./gradlew yarn_install -PnodeInstall --no-daemon
         <%_ } else if (clientPackageManager === 'npm') { _%>
-    - ./gradlew npmInstall -PnodeInstall --no-daemon
+    - ./gradlew npm_install -PnodeInstall --no-daemon
         <%_ } _%>
     <%_ } _%>
 
@@ -200,7 +200,8 @@ sonar-analyze:
         - frontend-test
         <%_ } _%>
     script:
-        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=atomfrede-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
     allow_failure: true
 <%_ } _%>
 

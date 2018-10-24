@@ -28,7 +28,7 @@ import applicationProfile, { ApplicationProfileState } from './application-profi
 import administration, { AdministrationState } from 'app/modules/administration/administration.reducer';
 <%_ if (!skipUserManagement) { _%>
 import userManagement, { UserManagementState } from 'app/modules/administration/user-management/user-management.reducer';
-<%_ } else { _%>
+<%_ } else if (authenticationType === 'oauth2') { _%>
 import userManagement, { UserManagementState } from './user-management';
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -50,7 +50,9 @@ export interface IRootState {
   <%_ } _%>
   readonly applicationProfile: ApplicationProfileState;
   readonly administration: AdministrationState;
+  <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
   readonly userManagement: UserManagementState;
+  <%_ } _%>
   <%_ if (authenticationType !== 'oauth2') { _%>
   readonly register: RegisterState;
   readonly activate: ActivateState;
@@ -72,7 +74,9 @@ const rootReducer = combineReducers<IRootState>({
   <%_ } _%>
   applicationProfile,
   administration,
+  <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
   userManagement,
+  <%_ } _%>
   <%_ if (authenticationType !== 'oauth2') { _%>
   register,
   activate,

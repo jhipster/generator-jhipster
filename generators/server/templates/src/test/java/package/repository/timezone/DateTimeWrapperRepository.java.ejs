@@ -16,8 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-module.exports = {
-    plugins: [
-        require('autoprefixer')
-    ]
+package <%= packageName %>.repository.timezone;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ * Spring Data JPA repository for the DateTimeWrapper entity.
+ */
+@Repository
+public interface DateTimeWrapperRepository extends JpaRepository<DateTimeWrapper, Long> {
+
 }
