@@ -8,6 +8,7 @@ function writeFiles() {
     // Dependency management files
     this.template('package.json.ejs', 'package.json');
     this.template('package-lock.json.ejs', 'package-lock.json');
+    this.template('tsconfig.json.ejs', 'tsconfig.json');
 
     this.copy('.babelrc', '.babelrc');
     this.copy('.postcssrc.js', '.postcssrc.js');
@@ -20,6 +21,7 @@ function writeFiles() {
 
     // Webpack config files
     this.copy('webpack/vue.utils.js', 'webpack/vue.utils.js');
+    this.template('webpack/utils.js.ejs', 'webpack/utils.js');
     this.copy('webpack/loader.conf.js', 'webpack/loader.conf.js');
     this.copy('webpack/webpack.common.js', 'webpack/webpack.common.js');
     this.copy('webpack/webpack.dev.js', 'webpack/webpack.dev.js');
@@ -28,8 +30,9 @@ function writeFiles() {
     // App files
     this.copy('webapp/index.html', 'src/main/webapp/index.html');
     this.copy('webapp/app/App.vue', 'src/main/webapp/app/App.vue');
+    this.copy('webapp/app/shims-vue.d.ts', 'src/main/webapp/app/shims-vue.d.ts');
     this.copy('webapp/app/constants.js', 'src/main/webapp/app/constants.js');
-    this.copy('webapp/app/main.js', 'src/main/webapp/app/main.js');
+    this.copy('webapp/app/main.ts', 'src/main/webapp/app/main.ts');
     this.copy('webapp/app/shared/config.js', 'src/main/webapp/app/shared/config.js');
     this.copy('webapp/app/router/index.js', 'src/main/webapp/app/router/index.js');
     this.copy('webapp/app/locale/LanguageService.vue', 'src/main/webapp/app/locale/LanguageService.vue');
@@ -42,7 +45,8 @@ function writeFiles() {
     this.template('webapp/app/components/account/LoginForm.vue.ejs', 'src/main/webapp/app/components/account/LoginForm.vue');
     this.copy('webapp/app/components/account/LoginModalService.vue', 'src/main/webapp/app/components/account/LoginModalService.vue');
     this.template('webapp/app/components/account/Principal.vue.ejs', 'src/main/webapp/app/components/account/Principal.vue');
-    this.copy('webapp/app/components/account/Register.vue', 'src/main/webapp/app/components/account/Register.vue');
+    this.copy('webapp/app/components/account/register/Register.vue', 'src/main/webapp/app/components/account/register/Register.vue');
+    this.copy('webapp/app/components/account/register/Register.component.ts', 'src/main/webapp/app/components/account/register/Register.component.ts');
     this.copy('webapp/app/components/account/RegisterService.vue', 'src/main/webapp/app/components/account/RegisterService.vue');
     this.copy('webapp/app/components/account/ResetPassword.vue', 'src/main/webapp/app/components/account/ResetPassword.vue');
     this.copy('webapp/app/components/account/Sessions.vue', 'src/main/webapp/app/components/account/Sessions.vue');
