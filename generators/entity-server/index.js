@@ -43,6 +43,9 @@ module.exports = class extends BaseBlueprintGenerator {
         } else {
             useBlueprint = false;
         }
+
+        this.asDomain = (name) => { return name + this.domainSuffix};
+        this.asDto = (name) => { return name + this.dtoSuffix};
     }
 
     // Public API method used by the getter and also by Blueprints

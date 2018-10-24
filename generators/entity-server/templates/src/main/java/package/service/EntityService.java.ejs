@@ -17,12 +17,12 @@
  limitations under the License.
 -%>
 package <%=packageName%>.service;
-<%  const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
+<%  const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance; %>
 <%_ if (dto === 'mapstruct') { _%>
-import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
 <%_ } else { _%>
-import <%=packageName%>.domain.<%= entityClass %>;
+import <%=packageName%>.domain.<%= asDomain(entityClass) %>;
 <%_ } _%>
 <%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
 
@@ -63,7 +63,7 @@ public interface <%= entityClass %>Service {
     <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
 <% for (idx in relationships) { if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) { -%>
     /**
-     * Get all the <%= entityClass %>DTO where <%= relationships[idx].relationshipNameCapitalized %> is null.
+     * Get all the <%= asDto(entityClass) %> where <%= relationships[idx].relationshipNameCapitalized %> is null.
      *
      * @return the list of entities
      */

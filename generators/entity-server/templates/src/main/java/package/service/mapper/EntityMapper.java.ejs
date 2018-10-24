@@ -19,21 +19,21 @@
 package <%=packageName%>.service.mapper;
 
 import <%=packageName%>.domain.*;
-import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
 
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity <%= entityClass %> and its DTO <%= entityClass %>DTO.
+ * Mapper for the entity <%= asDomain(entityClass) %> and its DTO <%= asDto(entityClass) %>.
  */
 @Mapper(componentModel = "spring", uses = {<% var existingMappings = [];
   for (idx in relationships) {
     if ((relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true)|| relationships[idx].relationshipType === 'many-to-one' ||(relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)){
       // if the entity is mapped twice, we should implement the mapping once
-      if (!existingMappings.includes(relationships[idx].otherEntityNameCapitalized) && relationships[idx].otherEntityNameCapitalized !== entityClass) {
+      if (!existingMappings.includes(relationships[idx].otherEntityNameCapitalized) && asDomain(relationships[idx].otherEntityNameCapitalized) !== asDomain(entityClass)) {
           existingMappings.push(relationships[idx].otherEntityNameCapitalized);
       } } } %><%= existingMappings.map(otherEntityNameCapitalized => otherEntityNameCapitalized + 'Mapper.class').join(', ') %>})
-public interface <%= entityClass %>Mapper extends EntityMapper<<%= entityClass %>DTO, <%= entityClass %>> {
+public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityClass) %>, <%= asDomain(entityClass) %>> {
 
 <%_
 // entity -> DTO mapping
@@ -52,7 +52,7 @@ _%>
         <%_ } _%>
     <%_ } _%>
     <%_ if (renMapAnotEnt === true) { _%>
-    <%= entityClass %>DTO toDto(<%= entityClass %> <%= entityInstance %>);
+    <%= asDto(entityClass) %> toDto(<%= asDomain(entityClass) %> <%= entityInstance %>);
     <%_ } _%>
 
 <%_
@@ -78,15 +78,15 @@ _%>
             <%_ } _%>
         <%_ } _%>
     <%_ if (renMapAnotDto === true) { _%>
-    <%= entityClass %> toEntity(<%= entityClass%>DTO <%= entityInstance %>DTO);
+    <%= asDomain(entityClass) %> toEntity(<%= asDto(entityClass)%> <%= entityInstance %>DTO);
     <%_ } _%>
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
-    default <%= entityClass %> fromId(<%= pkType %> id) {
+    default <%= asDomain(entityClass) %> fromId(<%= pkType %> id) {
         if (id == null) {
             return null;
         }
-        <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
+        <%= asDomain(entityClass) %> <%= entityInstance %> = new <%= asDomain(entityClass) %>();
         <%= entityInstance %>.setId(id);
         return <%= entityInstance %>;
     }

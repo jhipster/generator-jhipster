@@ -19,7 +19,7 @@
 package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% } %>;
 <%  const serviceClassName = service === 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
     let viaService = false;
-    const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance  + 'Mapper';
     const dtoToEntity = mapper + '.'+ 'toEntity';
@@ -29,7 +29,7 @@ package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% 
     const searchRepository = entityInstance  + 'SearchRepository';
     if (service === 'serviceImpl') { %>
 import <%= packageName %>.service.<%= entityClass %>Service;<% } %>
-import <%= packageName %>.domain.<%= entityClass %>;
+import <%= packageName %>.domain.<%= asDomain(entityClass) %>;
 import <%= packageName %>.repository.<%= entityClass %>Repository;
 <%_ if (reactiveRepositories) { _%>
 import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
@@ -38,7 +38,7 @@ import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveReposito
 import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%= packageName %>.service.dto.<%= entityClass %>DTO;
+import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 import org.slf4j.Logger;
@@ -78,7 +78,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
 
 /**
- * Service Implementation for managing <%= entityClass %>.
+ * Service Implementation for managing <%= asDomain(entityClass) %>.
  */
 @Service<% if (databaseType === 'sql') { %>
 @Transactional<% } %>

@@ -20,7 +20,7 @@ package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
-import <%=packageName%>.domain.<%= entityClass %>;
+import <%=packageName%>.domain.<%= asDomain(entityClass) %>;
 <%_ } _%>
 <%_ if (service !== 'no') { _%>
 import <%=packageName%>.service.<%= entityClass %>Service;
@@ -40,7 +40,7 @@ import <%=packageName%>.web.rest.errors.BadRequestAlertException;
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination !== 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 <%_ if (dto === 'mapstruct') { _%>
-import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
 <%_ if (service === 'no') { _%>
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ } } _%>
@@ -97,7 +97,7 @@ public class <%= entityClass %>Resource {
     } _%>
     private static final String ENTITY_NAME = "<%= entityName %>";
     <%_
-    const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering}); -%>
 
