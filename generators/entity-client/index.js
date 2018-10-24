@@ -7,7 +7,6 @@ module.exports = class extends EntityClientGenerator {
         super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
     }
 
-
     get writing() {
         return {
             writeAdditionalFile() {

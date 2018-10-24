@@ -16,15 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const jhipsterUtils = require('generator-jhipster/generators/utils');
-const constants = require('generator-jhipster/generators/generator-constants');
-
+const utils = require('./utils');
 
 /* Constants use throughout */
 const VUE_DIR = 'src/main/webapp/app/';
-
 const CLIENT_VUE_TEMPLATES_DIR = 'vue';
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 /**
 * The default is to use a file path string. It implies use of the template method.
@@ -55,8 +51,7 @@ const vueFiles = {
 
 
 module.exports = {
-    writeFiles,
-    vueFiles
+    writeFiles
 };
 
 function writeFiles() {
@@ -67,65 +62,9 @@ function writeFiles() {
     // Add entity to menu
     const className = this.entityClass;
     const entityName = this.entityInstance;
-    const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}/app/components/JhipNavBar.vue`;
-    jhipsterUtils.rewriteFile(
-        {
-            file: entityMenuPath,
-            needle: 'jhipster-needle-add-entity-to-menu',
-            splicable: [
-                // prettier-ignore
-                `<router-link to="${entityName}" tag="b-dropdown-item" class="dropdown-item" v-on:click="collapseNavbar()">
-                    <font-awesome-icon icon="asterisk" />
-                    <span v-text="$t('global.menu.entities.${entityName}')">${className}</span>
-              </router-link>`
-            ]
-        },
-        this
-    );
+    utils.addEntityToMenu(this, entityName, className);
 
     // Add entity paths to routing system
-    const routerPath = `${CLIENT_MAIN_SRC_DIR}/app/router/index.js`;
-    jhipsterUtils.rewriteFile(
-        {
-            file: routerPath,
-            needle: 'jhipster-needle-add-entity-to-router-import',
-            splicable: [
-                // prettier-ignore
-                `
-                import ${className} from '../entities/${entityName}/${className}'
-                import ${className}Update from '../entities/${entityName}/${className}-update'
-                import ${className}Details from '../entities/${entityName}/${className}-details'
-                `
-            ]
-        },
-        this
-    );
-    jhipsterUtils.rewriteFile(
-        {
-            file: routerPath,
-            needle: 'jhipster-needle-add-entity-to-router',
-            splicable: [
-                // prettier-ignore
-                `,{
-                    path: '/${entityName}',
-                    name: '${className}',
-                    component: ${className}
-              },{
-                   path: '/${entityName}/new',
-                   name: '${className}Edit',
-                   component: ${className}Update
-             },{
-                   path: '/${entityName}/:${entityName}Id/edit',
-                   name: '${className}Edit',
-                   component: ${className}Update
-             },{
-                   path: '/${entityName}/:${entityName}Id/view',
-                   name: '${className}View',
-                   component: ${className}Details
-             }
-              `
-            ]
-        },
-        this
-    );
+    utils.addEntityToRouterImport(this, entityName, className);
+    utils.addEntityToRouter(this, entityName, className);
 }
