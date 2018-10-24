@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
+<%_ const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
 const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
 const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
@@ -26,7 +26,7 @@ let resultEntity;
 if (!viaService) {
     if (dto === 'mapstruct') {
         resultEntity = entityInstance; %>
-        <%= entityClass %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
+        <%= asDomain(entityClass) %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
         <%= entityInstance %> = <%= entityInstance %>Repository.save(<%= entityInstance %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= entityInstance %>);
     <%_ } else { resultEntity = 'result'; _%>

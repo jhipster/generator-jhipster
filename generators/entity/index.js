@@ -223,6 +223,12 @@ module.exports = class extends BaseGenerator {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
                     context.useConfigurationFile = true;
                 }
+
+                context.domainSuffix = configuration.get('domainSuffix');
+                if (context.domainSuffix === null) context.domainSuffix = '';
+
+                context.dtoSuffix = configuration.get('dtoSuffix');
+                if (context.dtoSuffix === null) context.dtoSuffix = 'DTO';
             },
 
             validateDbExistence() {

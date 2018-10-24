@@ -23,12 +23,12 @@ import <%=packageName%>.<%= mainClass %>;
 <% if (authenticationType === 'uaa') { %>
 import <%=packageName%>.config.SecurityBeanOverrideConfiguration;
 <% } %>
-import <%=packageName%>.domain.<%= entityClass %>;
+import <%=packageName%>.domain.<%= asDomain(entityClass) %>;
 <%_ for (idx in relationships) { // import entities in required relationships
         const relationshipValidate = relationships[idx].relationshipValidate;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering) { _%>
-import <%=packageName%>.domain.<%= otherEntityNameCapitalized %>;
+import <%=packageName%>.domain.<%= asDomain(otherEntityNameCapitalized) %>;
 <%_ } } _%>
 <%_ if (saveUserSnapshot) { _%>
 import <%=packageName%>.repository.UserRepository;
@@ -43,7 +43,7 @@ import <%=packageName%>.service.<%= entityClass %>Service;
 import <%=packageName%>.repository.reactive.<%= entityClass %>ReactiveRepository;
 <%_ } _%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 import <%=packageName%>.web.rest.errors.ExceptionTranslator;
@@ -346,7 +346,7 @@ _%>
 
     private MockMvc rest<%= entityClass %>MockMvc;
 
-    private <%= entityClass %> <%= entityInstance %>;
+    private <%= asDomain(entityClass) %> <%= entityInstance %>;
 
     @Before
     public void setup() {
@@ -369,13 +369,13 @@ _%>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%= entityClass %> createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
+    public static <%= asDomain(entityClass) %> createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
         <%_ if (fluentMethods) { _%>
-        <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>()<% for (idx in fields) { %>
+        <%= asDomain(entityClass) %> <%= entityInstance %> = new <%= asDomain(entityClass) %>()<% for (idx in fields) { %>
             .<%= fields[idx].fieldName %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
             .<%= fields[idx].fieldName %>ContentType(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)<% } %><% } %>;
         <%_ } else { _%>
-        <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
+        <%= asDomain(entityClass) %> <%= entityInstance %> = new <%= asDomain(entityClass) %>();
             <%_ for (idx in fields) { _%>
         <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
                 <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
@@ -395,7 +395,7 @@ _%>
             if (relationshipValidate !== null && relationshipValidate === true) { _%>
         // Add required entity
             <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
-        <%= otherEntityNameCapitalized %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
+        <%= asDomain(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
                 <%_ if (databaseType === 'sql') { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
@@ -432,7 +432,7 @@ _%>
 
         // Create the <%= entityClass %>
         <%_ if (dto === 'mapstruct') { _%>
-        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);
+        <%= asDto(entityClass) %> <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);
         <%_ } _%>
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -440,9 +440,9 @@ _%>
             .andExpect(status().isCreated());
 
         // Validate the <%= entityClass %> in the database
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= asDomain(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate + 1);
-        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
+        <%= asDomain(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
@@ -468,7 +468,7 @@ _%>
         // Create the <%= entityClass %> with an existing ID
         <%= entityInstance %>.setId(<% if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"existing_id"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
         <%_ if (dto === 'mapstruct') { _%>
-        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);
+        <%= asDto(entityClass) %> <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);
         <%_ } _%>
 
         // An entity with an existing ID cannot be created, so this API call must fail
@@ -478,7 +478,7 @@ _%>
             .andExpect(status().isBadRequest());
 
         // Validate the <%= entityClass %> in the database
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= asDomain(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate);
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -500,14 +500,14 @@ _%>
         <%= entityInstance %>.set<%= fields[idx].fieldInJavaBeanMethod %>(null);
 
         // Create the <%= entityClass %>, which fails.<% if (dto === 'mapstruct') { %>
-        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);<% } %>
+        <%= asDto(entityClass) %> <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);<% } %>
 
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto === 'mapstruct') { %>DTO<% } %>)))
             .andExpect(status().isBadRequest());
 
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= asDomain(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeTest);
     }
 <%  } } } %>
@@ -694,7 +694,7 @@ _%>
     @Transactional<% } %>
     public void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() throws Exception {
         // Initialize the database
-        <%= relationship.otherEntityNameCapitalized %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
+        <%= asDomain(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
 <%_ if (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') { _%>
@@ -785,7 +785,7 @@ _%>
 
         assertThat(<%= entityInstance %>List).isNotNull();
         assertThat(<%= entityInstance %>List).hasSize(1);
-        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>List.get(0);
+        <%= asDomain(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(0);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
@@ -827,7 +827,7 @@ _%>
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Update the <%= entityInstance %>
-        <%= entityClass %> updated<%= entityClass %> = <%= entityInstance %>Repository.findById(<%= entityInstance %>.getId()).get();<% if (databaseType === 'sql') { %>
+        <%= asDomain(entityClass) %> updated<%= entityClass %> = <%= entityInstance %>Repository.findById(<%= entityInstance %>.getId()).get();<% if (databaseType === 'sql') { %>
         // Disconnect from session so that the updates on updated<%= entityClass %> are not directly saved in db
         em.detach(updated<%= entityClass %>);<% } %>
         <%_ if (fluentMethods && fields.length > 0) { _%>
@@ -843,7 +843,7 @@ _%>
             <%_ } _%>
         <%_ } _%>
         <%_ if (dto === 'mapstruct') { _%>
-        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(updated<%= entityClass %>);
+        <%= asDto(entityClass) %> <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(updated<%= entityClass %>);
         <%_ } _%>
 
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
@@ -852,9 +852,9 @@ _%>
             .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= asDomain(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
-        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
+        <%= asDomain(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
@@ -878,7 +878,7 @@ _%>
         int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Create the <%= entityClass %><% if (dto === 'mapstruct') { %>
-        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);<% } %>
+        <%= asDto(entityClass) %> <%= entityInstance %>DTO = <%= entityInstance %>Mapper.toDto(<%= entityInstance %>);<% } %>
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
@@ -887,7 +887,7 @@ _%>
             .andExpect(status().isBadRequest());
 
         // Validate the <%= entityClass %> in the database
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= asDomain(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -917,7 +917,7 @@ _%>
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<<%= entityClass %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= asDomain(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeDelete - 1);
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -963,10 +963,10 @@ _%>
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(<%= entityClass %>.class);
-        <%= entityClass %> <%= entityInstance %>1 = new <%= entityClass %>();
+        TestUtil.equalsVerifier(<%= asDomain(entityClass) %>.class);
+        <%= asDomain(entityClass) %> <%= entityInstance %>1 = new <%= asDomain(entityClass) %>();
         <%= entityInstance %>1.setId(<% if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"id1"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
-        <%= entityClass %> <%= entityInstance %>2 = new <%= entityClass %>();
+        <%= asDomain(entityClass) %> <%= entityInstance %>2 = new <%= asDomain(entityClass) %>();
         <%= entityInstance %>2.setId(<%= entityInstance %>1.getId());
         assertThat(<%= entityInstance %>1).isEqualTo(<%= entityInstance %>2);
         <%= entityInstance %>2.setId(<% if (databaseType === 'sql') { %>2L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"id2"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
@@ -979,10 +979,10 @@ _%>
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(<%= entityClass %>DTO.class);
-        <%= entityClass %>DTO <%= entityInstance %>DTO1 = new <%= entityClass %>DTO();
+        TestUtil.equalsVerifier(<%= asDto(entityClass) %>.class);
+        <%= asDto(entityClass) %> <%= entityInstance %>DTO1 = new <%= asDto(entityClass) %>();
         <%= entityInstance %>DTO1.setId(<% if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"id1"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
-        <%= entityClass %>DTO <%= entityInstance %>DTO2 = new <%= entityClass %>DTO();
+        <%= asDto(entityClass) %> <%= entityInstance %>DTO2 = new <%= asDto(entityClass) %>();
         assertThat(<%= entityInstance %>DTO1).isNotEqualTo(<%= entityInstance %>DTO2);
         <%= entityInstance %>DTO2.setId(<%= entityInstance %>DTO1.getId());
         assertThat(<%= entityInstance %>DTO1).isEqualTo(<%= entityInstance %>DTO2);

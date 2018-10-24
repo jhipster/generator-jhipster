@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%  const instanceType = (dto === 'mapstruct') ? 'Optional<' + entityClass + 'DTO>' : 'Optional<' + entityClass + '>';
+<%  const instanceType = (dto === 'mapstruct') ? 'Optional<' + asDto(entityClass) + '>' : 'Optional<' + asDomain(entityClass) + '>';
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     const mapper = entityInstance  + 'Mapper';
     const entityToDtoReference = mapper + '::' + 'toDto';

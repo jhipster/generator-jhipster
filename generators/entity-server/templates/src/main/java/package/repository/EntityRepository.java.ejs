@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.repository;
 
-import <%=packageName%>.domain.<%=entityClass%>;
+import <%=packageName%>.domain.<%=asDomain(entityClass)%>;
 <%_ if (fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,42 +58,42 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Spring Data <% if (databaseType === 'mongodb') { %>MongoDB<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } %> repository for the <%= entityClass %> entity.
+ * Spring Data <% if (databaseType === 'mongodb') { %>MongoDB<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } %> repository for the <%= asDomain(entityClass) %> entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'cassandra') { %>CassandraRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><<%=entityClass%>, <%= pkType %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%=entityClass%>><% } %> {
+public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'cassandra') { %>CassandraRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><<%=asDomain(entityClass)%>, <%= pkType %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%=asDomain(entityClass)%>><% } %> {
     <%_ for (idx in relationships) {
         if (relationships[idx].relationshipType === 'many-to-one' && relationships[idx].otherEntityName === 'user' && databaseType === 'sql') { _%>
 
-    @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %> where <%= entityTableName %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
-    List<<%= entityClass %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();
+    @Query("select <%= entityTableName %> from <%= asDomain(entityClass) %> <%= entityTableName %> where <%= entityTableName %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
+    List<<%= asDomain(entityClass) %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();
     <%_ } } _%>
     <%_ if (fieldsContainOwnerManyToMany === true) {
         if (databaseType === 'sql') { _%>
 
-    @Query(value = "select distinct <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
+    @Query(value = "select distinct <%= entityTableName %> from <%= asDomain(entityClass) %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>",
-        countQuery = "select count(distinct <%= entityTableName %>) from <%= entityClass %> <%= entityTableName %>")
-    Page<<%=entityClass%>> findAllWithEagerRelationships(Pageable pageable);
+        countQuery = "select count(distinct <%= entityTableName %>) from <%= asDomain(entityClass) %> <%= entityTableName %>")
+    Page<<%=asDomain(entityClass)%>> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query(value = "select distinct <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
+    @Query(value = "select distinct <%= entityTableName %> from <%= asDomain(entityClass) %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>")
-    List<<%=entityClass%>> findAllWithEagerRelationships();
+    List<<%=asDomain(entityClass)%>> findAllWithEagerRelationships();
 
-    @Query("select <%= entityTableName %> from <%= entityClass %> <%= entityTableName %><% for (idx in relationships) {
+    @Query("select <%= entityTableName %> from <%= asDomain(entityClass) %> <%= entityTableName %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
-    Optional<<%=entityClass%>> findOneWithEagerRelationships(@Param("id") <%= pkType %> id);
+    Optional<<%=asDomain(entityClass)%>> findOneWithEagerRelationships(@Param("id") <%= pkType %> id);
     <%_
         } else if (databaseType === 'mongodb')  { _%>
     @Query("{}")
-    Page<<%=entityClass%>> findAllWithEagerRelationships(Pageable pageable);
+    Page<<%=asDomain(entityClass)%>> findAllWithEagerRelationships(Pageable pageable);
 
     @Query("{}")
-    List<<%=entityClass%>> findAllWithEagerRelationships();
+    List<<%=asDomain(entityClass)%>> findAllWithEagerRelationships();
 
     @Query("{'id': ?0}")
-    Optional<<%=entityClass%>> findOneWithEagerRelationships(<%= pkType %> id);
+    Optional<<%=asDomain(entityClass)%>> findOneWithEagerRelationships(<%= pkType %> id);
     <%_ }
     } _%>
 
