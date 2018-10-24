@@ -32,7 +32,6 @@ import userManagement, {
   createUser,
   updateUser,
   deleteUser,
-  getMailStatus,
   getResetCode,
   reset
 } from 'app/modules/administration/user-management/user-management.reducer';
@@ -195,6 +194,8 @@ describe('User management reducer tests', () => {
       const initialState = {
         loading: false,
         errorMessage: null,
+        resetCode: '',
+        isGettingResetCode: false,
         users: [],
         authorities: [] as any[],
         user: defaultValue,
