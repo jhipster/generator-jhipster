@@ -52,7 +52,7 @@ _%>
         <%_ } _%>
     <%_ } _%>
     <%_ if (renMapAnotEnt === true) { _%>
-    <%= asDto(entityClass) %> toDto(<%= asDomain(entityClass) %> <%= entityInstance %>);
+    <%= asDto(entityClass) %> toDto(<%= asDomain(entityClass) %> <%= asDomain(entityInstance) %>);
     <%_ } _%>
 
 <%_
@@ -78,7 +78,7 @@ _%>
             <%_ } _%>
         <%_ } _%>
     <%_ if (renMapAnotDto === true) { _%>
-    <%= asDomain(entityClass) %> toEntity(<%= asDto(entityClass)%> <%= entityInstance %>DTO);
+    <%= asDomain(entityClass) %> toEntity(<%= asDto(entityClass)%> <%= asDto(entityInstance) %>);
     <%_ } _%>
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
@@ -86,9 +86,9 @@ _%>
         if (id == null) {
             return null;
         }
-        <%= asDomain(entityClass) %> <%= entityInstance %> = new <%= asDomain(entityClass) %>();
-        <%= entityInstance %>.setId(id);
-        return <%= entityInstance %>;
+        <%= asDomain(entityClass) %> <%= asDomain(entityInstance) %> = new <%= asDomain(entityClass) %>();
+        <%= asDomain(entityInstance) %>.setId(id);
+        return <%= asDomain(entityInstance) %>;
     }
 <%_ } _%>
 }

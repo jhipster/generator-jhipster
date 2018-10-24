@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%  const instanceType = (dto === 'mapstruct') ? 'Optional<' + asDto(entityClass) + '>' : 'Optional<' + asDomain(entityClass) + '>';
-    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asDomain(entityInstance);
     const mapper = entityInstance  + 'Mapper';
     const entityToDtoReference = mapper + '::' + 'toDto';
     const returnPrefix = returnDirectly ? 'return' : instanceType + ' ' + instanceName + ' =';

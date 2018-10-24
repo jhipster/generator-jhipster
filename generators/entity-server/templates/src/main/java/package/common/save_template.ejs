@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
-const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asDomain(entityInstance);
 const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDto = mapper + '.' + 'toDto';
@@ -25,12 +25,12 @@ const returnPrefix = (returnDirectly && searchEngine !== 'elasticsearch') ? 'ret
 let resultEntity;
 if (!viaService) {
     if (dto === 'mapstruct') {
-        resultEntity = entityInstance; %>
-        <%= asDomain(entityClass) %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
-        <%= entityInstance %> = <%= entityInstance %>Repository.save(<%= entityInstance %>);
-        <%= returnPrefix %> <%= entityToDto %>(<%= entityInstance %>);
+        resultEntity = asDomain(entityInstance); %>
+        <%= asDomain(entityClass) %> <%= asDomain(entityInstance) %> = <%= dtoToEntity %>(<%= instanceName %>);
+        <%= asDomain(entityInstance) %> = <%= entityInstance %>Repository.save(<%= asDomain(entityInstance) %>);
+        <%= returnPrefix %> <%= entityToDto %>(<%= asDomain(entityInstance) %>);
     <%_ } else { resultEntity = 'result'; _%>
-        <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= entityInstance %>);
+        <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= asDomain(entityInstance) %>);
         <%_ } if (searchEngine === 'elasticsearch') { _%>
         <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);
             <%_ if (returnDirectly) { _%>

@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.service;
 <%  const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
-    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance; %>
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asDomain(entityInstance); %>
 <%_ if (dto === 'mapstruct') { _%>
 import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
 <%_ } else { _%>
