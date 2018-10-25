@@ -613,9 +613,7 @@ module.exports = class extends BaseGenerator {
 
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 this.log(chalk.bold(`\nCreating Database ${chalk.cyan(this.gcpCloudSqlDatabaseName)}`));
-                const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${
-                    this.gcpProjectId
-                }"`;
+                const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${this.gcpProjectId}"`;
                 this.log(chalk.bold(`... Running: ${cmd}`));
                 exec(cmd, (err, stdout, stderr) => {
                     if (err) {
