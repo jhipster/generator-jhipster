@@ -855,7 +855,7 @@ _%>
 
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asDomain(entityInstance))%>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : 'updated' + asDomain(entityClass))%>)))
             .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
