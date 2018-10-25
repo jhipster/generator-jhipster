@@ -3,7 +3,7 @@
         "node": true,
         "es6": true
     },
-    "extends": ["airbnb-base"],
+    "extends": ["plugin:vue/essential"],
     "parserOptions": {
         "ecmaVersion": 2017
     },

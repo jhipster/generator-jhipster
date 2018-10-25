@@ -1,18 +1,17 @@
-'use strict'
-const utils = require('./vue.utils')
-const webpack = require('webpack')
-const config = require('../config')
-const merge = require('webpack-merge')
-const path = require('path')
-const baseWebpackConfig = require('./webpack.common')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const portfinder = require('portfinder')
-const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
+'use strict';
+const utils = require('./vue.utils');
+const webpack = require('webpack');
+const config = require('../config');
+const merge = require('webpack-merge');
+const path = require('path');
+const baseWebpackConfig = require('./webpack.common');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const portfinder = require('portfinder');
+const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 
-const HOST = process.env.HOST
-const PORT = process.env.PORT && Number(process.env.PORT)
+const HOST = process.env.HOST;
+const PORT = process.env.PORT && Number(process.env.PORT);
 
 const devWebpackConfig = merge(baseWebpackConfig, {
     module: {
@@ -74,25 +73,25 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         new MergeJsonWebpackPlugin({
             output: {
                 groupBy: [
-                    { pattern: "./src/main/webapp/i18n/en/*.json", fileName: "./i18n/en.json" },
-                    { pattern: "./src/main/webapp/i18n/fr/*.json", fileName: "./i18n/fr.json" }
+                    { pattern: './src/main/webapp/i18n/en/*.json', fileName: './i18n/en.json' },
+                    { pattern: './src/main/webapp/i18n/fr/*.json', fileName: './i18n/fr.json' }
                     // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
                 ]
             }
         })
     ]
-})
+});
 
 module.exports = new Promise((resolve, reject) => {
-    portfinder.basePort = process.env.PORT || config.dev.port
+    portfinder.basePort = process.env.PORT || config.dev.port;
     portfinder.getPort((err, port) => {
         if (err) {
-            reject(err)
+            reject(err);
         } else {
             // publish the new Port, necessary for e2e tests
-            process.env.PORT = port
+            process.env.PORT = port;
             // add port to devServer config
-            devWebpackConfig.devServer.port = port
+            devWebpackConfig.devServer.port = port;
 
             // Add FriendlyErrorsPlugin
             devWebpackConfig.plugins.push(new FriendlyErrorsPlugin({
@@ -102,9 +101,9 @@ module.exports = new Promise((resolve, reject) => {
                 onErrors: config.dev.notifyOnErrors
                     ? utils.createNotifierCallback()
                     : undefined
-            }))
+            }));
 
-            resolve(devWebpackConfig)
+            resolve(devWebpackConfig);
         }
-    })
-})
+    });
+});
