@@ -176,8 +176,13 @@ module.exports = class extends BaseGenerator {
         this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier =
             this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
-        this.domainSuffix = this.configOptions.domainSuffix = this.config.get('domainSuffix') || this.options['domain-suffix'];
-        this.dtoSuffix = this.configOptions.dtoSuffix = this.config.get('dtoSuffix') || this.options['dto-suffix'];
+
+        this.domainSuffix = this.configOptions.domainSuffix =
+            this.config.get('domainSuffix') === false ? '' : this.config.get('domainSuffix') || this.options['domain-suffix'];
+
+        this.dtoSuffix = this.configOptions.dtoSuffix =
+            this.config.get('dtoSuffix') === false ? '' : this.config.get('dtoSuffix') || this.options['dto-suffix'];
+
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
         const blueprint = this.normalizeBlueprintName(this.options.blueprint || this.config.get('blueprint'));
