@@ -32,6 +32,41 @@ describe('JHipster generator for entity', () => {
             assert.file(expectedFiles.gatling);
         });
     });
+
+
+    describe('with domain and dto suffixes', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/entity'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, '../test/templates/domain-dto-suffixes'), dir);
+                })
+                .withArguments(['foo'])
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'mapstruct',
+                    service: 'serviceImpl'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with suffix', () => {
+            assert.file([
+                '.jhipster/Foo.json',
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`,
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+            ]);
+
+            assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`, 'public interface FooRepository ');
+            assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`, 'public class FooXXX implements Serializable');
+            assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`, 'public class FooYYY implements Serializable');
+        });
+    });
 });
 
 describe('JHipster generator entity for angularX', () => {
