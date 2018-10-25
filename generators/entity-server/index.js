@@ -44,8 +44,9 @@ module.exports = class extends BaseGenerator {
             useBlueprint = false;
         }
 
-        this.asDomain = (name) => { return name + this.domainSuffix};
-        this.asDto = (name) => { return name + this.dtoSuffix};
+        // Expose 'asDomain' and 'asDto' functions for templating
+        this.asDomain = name => name + this.domainSuffix;
+        this.asDto = name => name + this.dtoSuffix;
     }
 
     // Public API method used by the getter and also by Blueprints
