@@ -492,6 +492,33 @@ describe('JDLImporter', () => {
         expect(fs.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
       });
     });
+    context('when parsing one JDL application and entities with domain and dto suffixes', () => {
+      let returned = null;
+      let content = null;
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'application_with_domain_dto_suffixes.jdl')]);
+        returned = importer.import();
+
+        content = JSON.parse(fs.readFileSync('.yo-rc.json', 'utf-8'));
+      });
+
+      after(() => {
+        fs.unlinkSync(path.join('.jhipster', 'Foo.json'));
+        fs.unlinkSync('.yo-rc.json');
+        fs.rmdirSync('.jhipster');
+      });
+
+      it('returns the import state', () => {
+        expect(returned.exportedEntities).to.have.lengthOf(1);
+        expect(returned.exportedApplications).to.have.lengthOf(1);
+      });
+      it('creates the app config file in the same folder', () => {
+        expect(fs.statSync('.yo-rc.json').isFile()).to.be.true;
+        expect(content['generator-jhipster'].domainSuffix).to.equal('Entity');
+        expect(content['generator-jhipster'].dtoSuffix).to.equal(false);
+      });
+    });
     context('when parsing JDL applications and exporting them', () => {
       const contents = [];
       const expectedContents = [
