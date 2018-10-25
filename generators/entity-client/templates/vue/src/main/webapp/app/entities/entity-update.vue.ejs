@@ -10,7 +10,7 @@
                         <input type="text" class="form-control" id="id" name="id"
                                v-model="<%= entityInstance %>.id" readonly />
                     </div>
-                    
+
                     <%_ for (idx in fields) {
                         const fieldName = fields[idx].fieldName;
                         const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
@@ -224,7 +224,7 @@
                         </div>
                     <%_ } _%>
                 <%_ } _%>
-                    
+
                 </div>
                 <div>
                     <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">
@@ -301,11 +301,11 @@
         },
         beforeRouteEnter (to, from, next) {
             next(vm => {
-                if (to.params.authorId) {
-                    vm.retrieveAuthor(to.params.authorId);
+                if (to.params.<%= entityInstance %>Id) {
+                    vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
                 } else {
-                    for (var key in vm.author) {
-                        vm.author[key] = null;
+                    for (var key in vm.<%= entityInstance %>) {
+                        vm.<%= entityInstance %>[key] = null;
                     }
                 }
                 <%_ if (relationships.length > 0) { _%>

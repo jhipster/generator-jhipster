@@ -75,7 +75,7 @@ function addEntityToRouter(generator, entityName, className) {
                     component: ${className}
               },{
                    path: '/${entityName}/new',
-                   name: '${className}Edit',
+                   name: '${className}Create',
                    component: ${className}Update
              },{
                    path: '/${entityName}/:${entityName}Id/edit',

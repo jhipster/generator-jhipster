@@ -41,7 +41,7 @@ function writeFiles() {
     this.copy('webapp/app/components/account/ChangePassword.vue', 'src/main/webapp/app/components/account/ChangePassword.vue');
     this.template('webapp/app/components/account/LoginForm.vue.ejs', 'src/main/webapp/app/components/account/LoginForm.vue');
     this.copy('webapp/app/components/account/LoginModalService.vue', 'src/main/webapp/app/components/account/LoginModalService.vue');
-    this.copy('webapp/app/components/account/Principal.vue', 'src/main/webapp/app/components/account/Principal.vue');
+    this.template('webapp/app/components/account/Principal.vue.ejs', 'src/main/webapp/app/components/account/Principal.vue');
     this.copy('webapp/app/components/account/Register.vue', 'src/main/webapp/app/components/account/Register.vue');
     this.copy('webapp/app/components/account/RegisterService.vue', 'src/main/webapp/app/components/account/RegisterService.vue');
     this.copy('webapp/app/components/account/ResetPassword.vue', 'src/main/webapp/app/components/account/ResetPassword.vue');

@@ -6,7 +6,8 @@
         name: 'Principal',
         mixins: [TranslationService],
         created: function() {
-            if (!this.$store.getters.account && !this.$store.getters.logon && (this.$cookie.get('JSESSIONID') || this.$cookie.get('XSRF-TOKEN'))) {
+            const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken'); <%_ } else { _%> this.$cookie.get('JSESSIONID') || this.$cookie.get('XSRF-TOKEN'); <%_ } _%>
+            if (!this.$store.getters.account && !this.$store.getters.logon && token) {
                 this.retrieveAccount();
             }
         },
