@@ -532,8 +532,8 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 if (!this.gaeLocationExists) {
-                    this.log(chalk.bold(`Configuring Google App Engine Location "${chalk.cyanthis.gaeLocation}"`));
-                    exec(`gcloud app create --region="${this.gaeLocation}" --project="${this.gaeProjectId}"`, (err, stdout) => {
+                    this.log(chalk.bold(`Configuring Google App Engine Location "${chalk.cyan(this.gaeLocation)}"`));
+                    exec(`gcloud app create --region="${this.gaeLocation}" --project="${this.gcpProjectId}"`, (err, stdout) => {
                         if (err) {
                             this.log.error(err);
                             this.abort = true;
