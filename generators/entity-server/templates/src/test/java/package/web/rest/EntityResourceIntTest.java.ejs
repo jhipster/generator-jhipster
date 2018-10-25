@@ -441,7 +441,7 @@ _%>
         <%_ } _%>
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<% if (dto === 'mapstruct') { %><%=asDto(entityInstance)%><% } else { %><%=asDomain(entityInstance)%><% }%>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asDomain(entityInstance))%>)))
             .andExpect(status().isCreated());
 
         // Validate the <%= entityClass %> in the database
@@ -479,7 +479,7 @@ _%>
         // An entity with an existing ID cannot be created, so this API call must fail
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<% if (dto === 'mapstruct') { %><%=asDto(entityInstance)%><% } else { %><%=asDomain(entityInstance)%><% }%>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asDomain(entityInstance))%>)))
             .andExpect(status().isBadRequest());
 
         // Validate the <%= entityClass %> in the database
@@ -509,7 +509,7 @@ _%>
 
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<% if (dto === 'mapstruct') { %><%=asDto(entityInstance)%><% } else { %><%=asDomain(entityInstance)%><% }%>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asDomain(entityInstance))%>)))
             .andExpect(status().isBadRequest());
 
         List<<%= asDomain(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
@@ -781,7 +781,7 @@ _%>
         List<<%= entityClass %>> <%= entityInstance %>List = client.get().uri("/api/<%= entityApiUrl %>").accept(MediaType.APPLICATION_STREAM_JSON).exchange()
             .expectStatus().isOk()
             .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_STREAM_JSON)
-            .returnResult(<% if (dto !== 'no') { %><%=asDto(entityClass)%><% } else { %><%=asDomain(entityClass)%><%} %>.class)
+            .returnResult(<%=(dto !== 'no' ? asDto(entityInstance) : asDomain(entityInstance))%>.class)
             .getResponseBody()
             <%_ if (dto !== 'no') { _%>
             .map(<%= entityInstance %>Mapper::toEntity)
@@ -855,7 +855,7 @@ _%>
 
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<% if (dto === 'mapstruct') { %><%= asDto(entityInstance) %><% } else { %>updated<%= entityClass %><% } %>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asDomain(entityInstance))%>)))
             .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
@@ -890,7 +890,7 @@ _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<% if (dto === 'mapstruct') { %><%=asDto(entityInstance)%><% } else { %><%=asDomain(entityInstance)%><% }%>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asDomain(entityInstance))%>)))
             .andExpect(status().isBadRequest());
 
         // Validate the <%= entityClass %> in the database
