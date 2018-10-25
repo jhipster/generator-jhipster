@@ -33,7 +33,6 @@ describe('JHipster generator for entity', () => {
         });
     });
 
-
     describe('with domain and dto suffixes', () => {
         beforeEach(done => {
             helpers
@@ -62,9 +61,20 @@ describe('JHipster generator for entity', () => {
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
             ]);
 
-            assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`, 'public interface FooRepository ');
-            assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`, 'public class FooXXX implements Serializable');
-            assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`, 'public class FooYYY implements Serializable');
+            assert.fileContent(
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
+                'public interface FooRepository '
+            );
+
+            assert.fileContent(
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`,
+                'public class FooXXX implements Serializable'
+            );
+
+            assert.fileContent(
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
+                'public class FooYYY implements Serializable'
+            );
         });
     });
 });

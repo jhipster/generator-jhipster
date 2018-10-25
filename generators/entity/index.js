@@ -231,7 +231,7 @@ module.exports = class extends BaseGenerator {
                 if (context.dtoSuffix === undefined || context.dtoSuffix === null) context.dtoSuffix = 'DTO';
 
                 if (context.domainSuffix === context.dtoSuffix) {
-                    this.error(chalk.red(`The entity cannot be generated as the domain suffix and DTO suffix are equals !`));
+                    this.error(chalk.red('The entity cannot be generated as the domain suffix and DTO suffix are equals !'));
                 }
             },
 
