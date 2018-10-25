@@ -6,11 +6,7 @@
         </div>
         <div class="container-fluid">
             <div class="card jh-card">
-                <!--<router-outlet></router-outlet>
-                <router-outlet name="popup"></router-outlet>-->
-                <keep-alive>
-                    <router-view></router-view>
-                </keep-alive>
+                <router-view></router-view>
             </div>
             <b-modal id="loginModal" >
                 <span slot="modal-title" v-text="$t('login.title')"></span>
