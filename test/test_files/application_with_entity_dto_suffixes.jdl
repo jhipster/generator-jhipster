@@ -2,7 +2,7 @@ application {
   config {
     baseName MyApp
     applicationType monolith
-    domainSuffix Entity
+    entitySuffix Entity
     dtoSuffix false
   }
   entities *
