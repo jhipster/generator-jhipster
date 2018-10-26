@@ -33,12 +33,12 @@ describe('JHipster generator for entity', () => {
         });
     });
 
-    describe('with domain and dto suffixes', () => {
+    describe('with entity and dto suffixes', () => {
         beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
-                    fse.copySync(path.join(__dirname, '../test/templates/domain-dto-suffixes'), dir);
+                    fse.copySync(path.join(__dirname, '../test/templates/entity-dto-suffixes'), dir);
                 })
                 .withArguments(['foo'])
                 .withPrompts({

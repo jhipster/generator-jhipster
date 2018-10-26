@@ -44,8 +44,8 @@ module.exports = class extends BaseGenerator {
             useBlueprint = false;
         }
 
-        // Expose 'asDomain' and 'asDto' functions for templating
-        this.asDomain = name => name + this.domainSuffix;
+        // Expose 'asEntity' and 'asDto' functions for templating
+        this.asEntity = name => name + this.entitySuffix;
         this.asDto = name => name + this.dtoSuffix;
     }
 

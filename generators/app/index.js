@@ -105,8 +105,8 @@ module.exports = class extends BaseGenerator {
             defaults: 'jhi'
         });
 
-        // This adds support for a `--domain-suffix` flag
-        this.option('domain-suffix', {
+        // This adds support for a `--entity-suffix` flag
+        this.option('entity-suffix', {
             desc: 'Add suffix after entities name',
             type: String,
             defaults: ''
@@ -160,8 +160,8 @@ module.exports = class extends BaseGenerator {
             this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
 
-        this.domainSuffix = this.configOptions.domainSuffix =
-            this.config.get('domainSuffix') === false ? '' : this.config.get('domainSuffix') || this.options['domain-suffix'];
+        this.entitySuffix = this.configOptions.entitySuffix =
+            this.config.get('entitySuffix') === false ? '' : this.config.get('entitySuffix') || this.options['entity-suffix'];
 
         this.dtoSuffix = this.configOptions.dtoSuffix =
             this.config.get('dtoSuffix') === false ? '' : this.config.get('dtoSuffix') || this.options['dto-suffix'];
@@ -377,7 +377,7 @@ module.exports = class extends BaseGenerator {
                     baseName: this.baseName,
                     testFrameworks: this.testFrameworks,
                     jhiPrefix: this.jhiPrefix,
-                    domainSuffix: this.domainSuffix,
+                    entitySuffix: this.entitySuffix,
                     dtoSuffix: this.dtoSuffix,
                     skipCheckLengthOfIdentifier: this.skipCheckLengthOfIdentifier,
                     otherModules: this.otherModules,

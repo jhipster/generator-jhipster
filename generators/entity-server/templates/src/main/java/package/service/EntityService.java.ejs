@@ -17,12 +17,12 @@
  limitations under the License.
 -%>
 package <%=packageName%>.service;
-<%  const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asDomain(entityInstance); %>
+<%  const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance); %>
 <%_ if (dto === 'mapstruct') { _%>
 import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
 <%_ } else { _%>
-import <%=packageName%>.domain.<%= asDomain(entityClass) %>;
+import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>
 <%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
 

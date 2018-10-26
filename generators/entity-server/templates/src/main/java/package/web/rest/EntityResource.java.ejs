@@ -20,7 +20,7 @@ package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
-import <%=packageName%>.domain.<%= asDomain(entityClass) %>;
+import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>
 <%_ if (service !== 'no') { _%>
 import <%=packageName%>.service.<%= entityClass %>Service;
@@ -97,8 +97,8 @@ public class <%= entityClass %>Resource {
     } _%>
     private static final String ENTITY_NAME = "<%= entityName %>";
     <%_
-    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asDomain(entityInstance);
+    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
     _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering}); -%>
 
     /**
