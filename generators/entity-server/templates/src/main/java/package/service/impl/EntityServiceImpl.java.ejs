@@ -19,8 +19,8 @@
 package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% } %>;
 <%  const serviceClassName = service === 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
     let viaService = false;
-    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asDomain(entityClass);
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asDomain(entityInstance);
+    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
     const mapper = entityInstance  + 'Mapper';
     const dtoToEntity = mapper + '.'+ 'toEntity';
     const entityToDto = 'toDto';
@@ -29,7 +29,7 @@ package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% 
     const searchRepository = entityInstance  + 'SearchRepository';
     if (service === 'serviceImpl') { %>
 import <%= packageName %>.service.<%= entityClass %>Service;<% } %>
-import <%= packageName %>.domain.<%= asDomain(entityClass) %>;
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 import <%= packageName %>.repository.<%= entityClass %>Repository;
 <%_ if (reactiveRepositories) { _%>
 import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
@@ -78,7 +78,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
 
 /**
- * Service Implementation for managing <%= asDomain(entityClass) %>.
+ * Service Implementation for managing <%= asEntity(entityClass) %>.
  */
 @Service<% if (databaseType === 'sql') { %>
 @Transactional<% } %>

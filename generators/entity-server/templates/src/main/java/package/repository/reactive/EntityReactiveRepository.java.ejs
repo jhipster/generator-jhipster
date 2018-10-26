@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.repository.reactive;
 
-import <%= packageName %>.domain.<%= asDomain(entityClass) %>;
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
 <%_ } _%>
@@ -39,15 +39,15 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Spring Data <% if (databaseType === 'mongodb') { %>MongoDB<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } %> reactive repository for the <%= asDomain(entityClass) %> entity.
+ * Spring Data <% if (databaseType === 'mongodb') { %>MongoDB<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } %> reactive repository for the <%= asEntity(entityClass) %> entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>ReactiveRepository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>CouchbaseSorting<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%= asDomain(entityClass) %>, <%= pkType %>> {
+public interface <%= entityClass %>ReactiveRepository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>CouchbaseSorting<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= pkType %>> {
     <%_ if (databaseType === 'couchbase') { _%>
 
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}")
-    Flux<<%= asDomain(entityClass) %>> findAll();
+    Flux<<%= asEntity(entityClass) %>> findAll();
 
     <%_ } _%>
 }

@@ -78,7 +78,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/domain/Entity.java',
-                    renameTo: generator => `${generator.packageFolder}/domain/${generator.asDomain(generator.entityClass)}.java`
+                    renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java`
                 },
                 {
                     file: 'package/repository/EntityRepository.java',
@@ -244,7 +244,7 @@ function writeFiles() {
 
                 if (['ehcache', 'infinispan'].includes(this.cacheProvider) && this.enableHibernateCache) {
                     this.addEntityToCache(
-                        this.asDomain(this.entityClass),
+                        this.asEntity(this.entityClass),
                         this.relationships,
                         this.packageName,
                         this.packageFolder,

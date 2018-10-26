@@ -23,7 +23,7 @@
     "testFrameworks": [
       "gatling"
     ],
-    "domainSuffix": "XXX",
+    "entitySuffix": "XXX",
     "dtoSuffix": "YYY"
   }
 }
