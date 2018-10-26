@@ -31,7 +31,7 @@
     <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>QueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(page.getContent());
     <%_ } _%>
     }
 
@@ -85,7 +85,7 @@
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
         <%_ } _%>
     <%_ } _%>
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(page.getContent());
     <%_ } _%>
     }
 <%_ } _%>
