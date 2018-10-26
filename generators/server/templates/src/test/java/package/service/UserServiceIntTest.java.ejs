@@ -65,7 +65,6 @@ import org.springframework.data.domain.PageRequest;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -101,7 +100,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
+<%_ if (authenticationType !== 'oauth2' && (databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.util.Optional;
 <%_ } _%><%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
@@ -111,7 +110,6 @@ import java.util.UUID;
 import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -416,14 +414,14 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
         UserDTO userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertEquals("User langkey is not corretly set.", userDTO.getLangKey(), "en");
+        assertThat(userDTO.getLangKey()).isEqualTo("en");
 
         userDetails.put("locale", "it-IT");
         authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
 
         userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertEquals("User langkey is not corretly set.", userDTO.getLangKey(), "it");
+        assertThat(userDTO.getLangKey()).isEqualTo("it");
     }
 
     private OAuth2Authentication createMockOAuth2AuthenticationWithDetails(Map<String, Object> userDetails) {
