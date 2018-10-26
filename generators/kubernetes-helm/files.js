@@ -103,7 +103,7 @@ function writeFiles() {
         },
 
         writeReadme() {
-            this.template('README-KUBERNETES-HELM.md.ejs', 'README.md');
+            this.template('README-KUBERNETES-HELM.md.ejs', 'HELM-README.md');
         },
 
         writeConfigRunFile() {

@@ -36,6 +36,9 @@ You can deploy all your apps by running the below bash command:
 bash helm-apply.sh (or) ./helm-apply.sh
 ```
 
+`helm-apply.sh` will always do a clean install. Any of the existing charts with the same identity gets removed first and then it does a clean install.
+
+
 You can upgrade all your apps (if at all if you have made any changes to the generated manifests) by running the below bash command:
 
 ```
