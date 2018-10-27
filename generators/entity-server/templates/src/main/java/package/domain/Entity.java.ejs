@@ -164,7 +164,7 @@ public class <%= entityClass %> implements Serializable {
         }
         if (fieldValidateRules.includes('unique')) {
             unique = true;
-        }
+        } _%>
     <%- include ../common/field_validators -%>
     <%_ } _%>
     <%_ if (typeof fields[idx].javadoc != 'undefined') { _%>
