@@ -159,14 +159,13 @@ public class <%= entityClass %> implements Serializable {
     const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
     const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
     if (fieldValidate === true) {
-        if (fieldValidate === true) {
-            if (fieldValidateRules.includes('required')) {
-                required = true;
-            }
-            if (fieldValidateRules.includes('unique')) {
-                unique = true;
-            }
-        }_%>
+        if (fieldValidateRules.includes('required')) {
+            required = true;
+        }
+        if (fieldValidateRules.includes('unique')) {
+            unique = true;
+        }
+    }_%>
     <%- include ../common/field_validators -%>
     <%_ } _%>
     <%_ if (typeof fields[idx].javadoc != 'undefined') { _%>
