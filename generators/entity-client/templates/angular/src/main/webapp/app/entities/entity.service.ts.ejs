@@ -106,8 +106,8 @@ export class <%= entityAngularName %>Service {
         <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
             res.body.<%= fields[idx].fieldName %> = res.body.<%= fields[idx].fieldName %> != null ? moment(res.body.<%= fields[idx].fieldName %>) : null;
         <%_ } _%>
-        }
     <%_ } _%>
+        }
         return res;
     }
 
