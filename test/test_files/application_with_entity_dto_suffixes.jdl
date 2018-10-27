@@ -1,0 +1,11 @@
+application {
+  config {
+    baseName MyApp
+    applicationType monolith
+    entitySuffix Entity
+    dtoSuffix false
+  }
+  entities *
+}
+
+entity Foo
