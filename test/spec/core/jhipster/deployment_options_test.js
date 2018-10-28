@@ -118,10 +118,7 @@ describe('Options', () => {
           monitoring: 'no',
           serviceDiscoveryType: 'eureka',
           openshiftNamespace: 'default',
-          storageType: {
-            ephemeral: 'ephemeral',
-            persistent: 'persistent'
-          }
+          storageType: 'ephemeral'
         });
       });
     });
