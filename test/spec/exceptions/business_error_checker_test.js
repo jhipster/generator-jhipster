@@ -646,6 +646,81 @@ describe('BusinessErrorChecker', () => {
         });
       });
     });
+    context('with relationships between multiple entities', () => {
+      before(() => {
+        jdlObject.addApplication(
+          new JDLMicroserviceApplication({
+            config: {
+              baseName: 'app1'
+            },
+            entities: ['A', 'B']
+          })
+        );
+        jdlObject.addApplication(
+          new JDLMicroserviceApplication({
+            config: {
+              baseName: 'app2'
+            },
+            entities: ['B', 'C']
+          })
+        );
+        jdlObject.addApplication(
+          new JDLMicroserviceApplication({
+            config: {
+              baseName: 'app3'
+            },
+            entities: ['A', 'B', 'C']
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'A'
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'B'
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'C'
+          })
+        );
+        jdlObject.addRelationship(
+          new JDLRelationship({
+            from: 'A',
+            to: 'B',
+            type: RelationshipTypes.MANY_TO_MANY,
+            injectedFieldInFrom: 'b'
+          })
+        );
+        jdlObject.addRelationship(
+          new JDLRelationship({
+            from: 'B',
+            to: 'C',
+            type: RelationshipTypes.MANY_TO_MANY,
+            injectedFieldInFrom: 'c'
+          })
+        );
+        jdlObject.addRelationship(
+          new JDLRelationship({
+            from: 'A',
+            to: 'C',
+            type: RelationshipTypes.MANY_TO_MANY,
+            injectedFieldInFrom: 'c'
+          })
+        );
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+      it('fails', () => {
+        expect(() => {
+          checker.checkForRelationshipErrors();
+        }).to.throw(
+          "Entities for the ManyToMany relationship from 'B' to 'C'.\nEntities for the ManyToMany relationship from 'A' to 'C'."
+        );
+      });
+    });
   });
   describe('#checkForEnumErrors', () => {
     let checker = null;
