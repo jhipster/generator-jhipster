@@ -50,14 +50,10 @@ describe('BusinessErrorChecker', () => {
     let checker = null;
 
     context('with no passed JDL object', () => {
-      before(() => {
-        checker = new BusinessErrorChecker();
-      });
-
-      it('does not fail', () => {
+      it('fails', () => {
         expect(() => {
-          checker.checkForErrors();
-        }).not.to.throw();
+          new BusinessErrorChecker();
+        }).to.throw('A JDL object must be passed to check for business errors.');
       });
     });
     context('with a complete JDL object', () => {
