@@ -33,6 +33,7 @@ describe('JHipster server generator', () => {
         });
 
         it('creates expected files for default configuration with gatling enabled for server generator', () => {
+            assert.noFile(expectedFiles.common);
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.jwtServer);
             assert.file(expectedFiles.maven);

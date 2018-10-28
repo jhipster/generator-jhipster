@@ -351,11 +351,6 @@ module.exports = class extends BaseGenerator {
                     this.BUILD_DIR = 'build/';
                 }
                 this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
-                // Make documentation URL available in templates
-                this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-                this.DOCUMENTATION_ARCHIVE_URL = `${constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${
-                    this.jhipsterVersion
-                }`;
             }
         };
     }
@@ -464,7 +459,6 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
-                this.protractorTests = this.testFrameworks.includes('protractor');
                 this.gatlingTests = this.testFrameworks.includes('gatling');
                 this.cucumberTests = this.testFrameworks.includes('cucumber');
             },

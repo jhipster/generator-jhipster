@@ -128,10 +128,9 @@ const expectedFiles = {
 
     maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties'],
 
+    common: ['README.md', '.gitignore', '.gitattributes', '.editorconfig'],
+
     server: [
-        'README.md',
-        '.gitignore',
-        '.gitattributes',
         `${SERVER_MAIN_RES_DIR}banner.txt`,
         `${SERVER_MAIN_RES_DIR}.h2.server.properties`,
         `${SERVER_MAIN_RES_DIR}templates/error.html`,
@@ -219,8 +218,7 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/TestUtil.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIntTest.java`,
         `${SERVER_TEST_RES_DIR}config/application.yml`,
-        `${SERVER_TEST_RES_DIR}logback.xml`,
-        '.editorconfig'
+        `${SERVER_TEST_RES_DIR}logback.xml`
     ],
 
     infinispan: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`],

@@ -20,7 +20,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true, jhiPrefix: 'test' })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, jhiPrefix: 'test' })
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: 'angularX',
@@ -47,6 +47,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected default files for angularX', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
@@ -75,6 +76,7 @@ describe('JHipster generator', () => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({
+                        'from-cli': true,
                         skipInstall: true,
                         skipChecks: true,
                         jhiPrefix: 'test',
@@ -106,6 +108,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected default files for react', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
@@ -130,7 +133,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true, npm: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, npm: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -157,6 +160,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected default files', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
@@ -184,7 +188,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -209,6 +213,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected default files for gradle', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gradle);
@@ -232,7 +237,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -259,6 +264,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected default files', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
@@ -281,7 +287,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -317,7 +323,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -353,7 +359,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -394,7 +400,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -430,7 +436,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -465,7 +471,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -504,7 +510,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -537,7 +543,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -571,7 +577,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -605,7 +611,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -629,6 +635,7 @@ describe('JHipster generator', () => {
                     .on('end', done);
             });
             it('creates expected files with "Hazelcast"', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.hazelcast);
             });
@@ -638,7 +645,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -662,6 +669,7 @@ describe('JHipster generator', () => {
                     .on('end', done);
             });
             it('creates expected files with "Infinispan"', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.infinispan);
@@ -672,7 +680,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -696,6 +704,7 @@ describe('JHipster generator', () => {
                     .on('end', done);
             });
             it('creates expected files with "Infinispan and Eureka"', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.eureka);
@@ -707,7 +716,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -731,6 +740,7 @@ describe('JHipster generator', () => {
                     .on('end', done);
             });
             it('creates expected files with "Memcached"', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.memcached);
@@ -741,7 +751,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -772,6 +782,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with Kafka message broker enabled', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
@@ -783,7 +794,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -814,6 +825,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with Swagger API first enabled', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
@@ -825,7 +837,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -856,6 +868,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with Swagger API first enabled', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.jwtServer);
@@ -871,7 +884,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.otherpackage',
@@ -906,7 +919,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: '21Points',
                         packageName: 'com.otherpackage',
@@ -943,7 +956,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'myapplication',
                         packageName: 'com.mycompany.myapp',
@@ -979,7 +992,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1011,7 +1024,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: 'angularX',
@@ -1060,7 +1073,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1102,7 +1115,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1146,7 +1159,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1176,6 +1189,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with Protractor enabled', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(
                     getFilesForOptions(angularFiles, {
@@ -1194,7 +1208,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1224,6 +1238,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with Cucumber enabled', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.cucumber);
                 assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
@@ -1236,7 +1251,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipClient: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipClient: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1259,6 +1274,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files for default configuration with skip client option enabled', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.maven);
                 assert.noFile(
@@ -1282,7 +1298,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipClient: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipClient: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
@@ -1305,6 +1321,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files for default configuration with skip client option enabled', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.gradle);
                 assert.noFile(
@@ -1332,6 +1349,7 @@ describe('JHipster generator', () => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({
+                        'from-cli': true,
                         skipInstall: true,
                         skipClient: true,
                         skipUserManagement: true,
@@ -1370,7 +1388,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
                         baseName: 'jhipster',
@@ -1408,7 +1426,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
@@ -1446,7 +1464,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'monolith',
                         baseName: 'jhipster',
@@ -1471,6 +1489,7 @@ describe('JHipster generator', () => {
             });
 
             it('creates expected files with the monolith application type', () => {
+                assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.eureka);
@@ -1482,7 +1501,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
@@ -1522,7 +1541,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'uaa',
                         baseName: 'jhipster-uaa',
@@ -1558,7 +1577,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/uaaserver/'), dir);
                     })
@@ -1601,7 +1620,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
                         baseName: 'jhipster',
@@ -1638,7 +1657,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
@@ -1677,7 +1696,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'gateway',
                         baseName: 'jhipster',
@@ -1714,7 +1733,7 @@ describe('JHipster generator', () => {
             beforeEach(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
