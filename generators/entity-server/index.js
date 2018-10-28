@@ -43,10 +43,6 @@ module.exports = class extends BaseGenerator {
         } else {
             useBlueprint = false;
         }
-
-        // Expose 'asEntity' and 'asDto' functions for templating
-        this.asEntity = name => name + this.entitySuffix;
-        this.asDto = name => name + this.dtoSuffix;
     }
 
     // Public API method used by the getter and also by Blueprints

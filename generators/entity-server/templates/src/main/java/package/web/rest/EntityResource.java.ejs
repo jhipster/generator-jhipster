@@ -124,7 +124,7 @@ public class <%= entityClass %>Resource {
         <%_ if (databaseType === 'cassandra') { _%>
         <%= instanceName %>.setId(UUID.randomUUID());
         <%_ } _%>
-<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+<%- include('../../common/save_template', {asEntity: asEntity, asDto: asDto, viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -152,7 +152,7 @@ public class <%= entityClass %>Resource {
             userRepository.save(<%= instanceName %>.getUser());
         }
         <%_ } _%>
-<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+<%- include('../../common/save_template', {asEntity: asEntity, asDto: asDto, viaService: viaService, returnDirectly: false}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
@@ -168,7 +168,7 @@ public class <%= entityClass %>Resource {
      * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
      */
     @GetMapping("/<%= entityApiUrl %>")
-    @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
+    @Timed<%- include('../../common/get_all_template', {asEntity: asEntity, asDto: asDto, viaService: viaService}); -%>
 
     <%_ if (reactiveRepositories) { _%>
     /**
@@ -196,7 +196,7 @@ public class <%= entityClass %>Resource {
     @GetMapping("/<%= entityApiUrl %>/{id}")
     @Timed
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:false}); -%>
+        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity: asEntity, asDto: asDto, viaService: viaService, returnDirectly:false}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
     }
 
@@ -223,5 +223,5 @@ public class <%= entityClass %>Resource {
      * @return the result of the search
      */
     @GetMapping("/_search/<%= entityApiUrl %>")
-    @Timed<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>
+    @Timed<%- include('../../common/search_template', {asEntity: asEntity, asDto: asDto, viaService: viaService}); -%><% } %>
 }
