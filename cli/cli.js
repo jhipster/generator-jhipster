@@ -72,6 +72,12 @@ Object.keys(SUB_GENERATORS).forEach(key => {
                 require(`./${key}`)(program.args, options, env);
                 /* eslint-enable */
             } else {
+                if (key === 'server') {
+                    logger.error('Please run "jhipster --skip-client" instead');
+                }
+                if (key === 'client') {
+                    logger.error('Please run "jhipster --skip-server" instead');
+                }
                 runYoCommand(key, program.args, options, opts);
             }
         })

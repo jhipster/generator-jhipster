@@ -168,6 +168,10 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
+                this.testFrameworks = [];
+                if (this.configOptions.testFrameworks) {
+                    this.testFrameworks = this.configOptions.testFrameworks;
+                }
                 this.protractorTests = this.testFrameworks.includes('protractor');
                 this.gatlingTests = this.testFrameworks.includes('gatling');
             }

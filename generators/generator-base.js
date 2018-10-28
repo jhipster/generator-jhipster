@@ -2876,38 +2876,32 @@ module.exports = class extends PrivateBase {
         if (dest.authenticationType === 'oauth2') {
             dest.skipUserManagement = true;
         }
-        const uaaBaseName =
-            context.options.uaaBaseName ||
-            context.configOptions.uaaBaseName ||
-            context.options['uaa-base-name'] ||
-            context.config.get('uaaBaseName');
-        if (context.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
+        const uaaBaseName = context.configOptions.uaaBaseName || context.config.get('uaaBaseName');
+        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
             generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
         }
         dest.uaaBaseName = uaaBaseName;
         dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
 
-        dest.buildTool = context.options.build;
-        dest.websocket = context.options.websocket;
-        dest.devDatabaseType = context.options.db || context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
-        dest.prodDatabaseType = context.options.db || context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
+        dest.buildTool = context.configOptions.buildTool;
+        dest.websocket = context.configOptions.websocket;
+        dest.devDatabaseType = context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
+        dest.prodDatabaseType = context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
         dest.databaseType =
-            generator.getDBTypeFromDBValue(context.options.db) || context.configOptions.databaseType || context.config.get('databaseType');
-        dest.searchEngine = context.options['search-engine'] || context.config.get('searchEngine');
-        dest.cacheProvider =
-            context.options['cache-provider'] || context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
+            generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
+            context.configOptions.databaseType ||
+            context.config.get('databaseType');
+        dest.searchEngine = context.config.get('searchEngine');
+        dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
         dest.enableHibernateCache =
-            context.options['hb-cache'] ||
             context.config.get('enableHibernateCache') ||
             (context.config.get('hibernateCache') !== undefined && context.config.get('hibernateCache') !== 'no');
-        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
+        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
         dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
-        dest.testFrameworks = [];
+        dest.testFrameworks = context.configOptions.testFrameworks || [];
 
-        if (context.options.protractor) dest.testFrameworks.push('protractor');
-
-        dest.useYarn = context.configOptions.useYarn = !context.options.npm;
+        dest.useYarn = context.configOptions.useYarn;
     }
 
     /**
@@ -2922,10 +2916,8 @@ module.exports = class extends PrivateBase {
     setupServerOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
         dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
-        dest.enableTranslation = context.options.i18n || context.configOptions.enableTranslation || context.config.get('enableTranslation');
-        dest.testFrameworks = [];
-        if (context.options.gatling) dest.testFrameworks.push('gatling');
-        if (context.options.cucumber) dest.testFrameworks.push('cucumber');
+        dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
+        dest.testFrameworks = context.configOptions.testFrameworks;
     }
 
     /**

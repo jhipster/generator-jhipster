@@ -14,3 +14,4 @@ test/temp/
 yarn-error.log
 *.sw?
 /test/templates/import-jdl/*.png
+.git

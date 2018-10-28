@@ -10,7 +10,7 @@ describe('JHipster server generator', () => {
         beforeEach(done => {
             helpers
                 .run(path.join(__dirname, '../generators/server'))
-                .withOptions({ skipInstall: true, gatling: true, skipChecks: true })
+                .withOptions({ skipInstall: true, skipChecks: true })
                 .withPrompts({
                     baseName: 'jhipster',
                     packageName: 'com.mycompany.myapp',
@@ -32,12 +32,11 @@ describe('JHipster server generator', () => {
                 .on('end', done);
         });
 
-        it('creates expected files for default configuration with gatling enabled for server generator', () => {
+        it('creates expected files for default configuration for server generator', () => {
             assert.noFile(expectedFiles.common);
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.jwtServer);
             assert.file(expectedFiles.maven);
-            assert.file(expectedFiles.gatling);
             assert.noFile(
                 getFilesForOptions(
                     angularfiles,
