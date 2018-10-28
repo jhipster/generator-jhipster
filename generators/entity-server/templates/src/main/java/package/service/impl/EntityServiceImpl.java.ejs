@@ -85,7 +85,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> implements <%= entityClass %>Service<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../../common/inject_template', {viaService: viaService, constructorName: serviceClassName, queryService: false}); -%>
+<%- include('../../common/inject_template', {asEntity: asEntity, asDto: asDto, viaService: viaService, constructorName: serviceClassName, queryService: false}); -%>
 
     /**
      * Save a <%= entityInstance %>.
@@ -98,7 +98,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ } _%>
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
-<%- include('../../common/save_template', {viaService: viaService, returnDirectly: true}); -%>
+<%- include('../../common/save_template', {asEntity: asEntity, asDto: asDto, viaService: viaService, returnDirectly: true}); -%>
     }
 
     /**
@@ -147,7 +147,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         return <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
     }
     <% } %>
-<%- include('../../common/get_filtered_template'); -%>
+<%- include('../../common/get_filtered_template', {asEntity: asEntity, asDto: asDto}); -%>
     /**
      * Get one <%= entityInstance %> by id.
      *
@@ -161,7 +161,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     @Transactional(readOnly = true)
     <%_ } _%>
     public Optional<<%= instanceType %>> findOne(<%= pkType %> id) {
-        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:true}); -%>
+        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity: asEntity, asDto: asDto, viaService: viaService, returnDirectly:true}); -%>
     }
 
     /**
