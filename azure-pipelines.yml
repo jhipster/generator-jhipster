@@ -21,6 +21,7 @@ jobs:
 - job: Test
   pool:
     vmImage: 'Ubuntu 16.04'
+  timeoutInMinutes: 40
   variables:
     JHI_PROFILE: dev
     JHI_RUN_APP: 1
@@ -36,17 +37,14 @@ jobs:
     JHI_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
 
   strategy:
-    maxParallel: 10
     matrix:
-      ngx-mongodb-kafka-cucumber:
-        JHI_APP: ngx-mongodb-kafka-cucumber
-      ngx-session-cassandra-fr:
-        JHI_APP: ngx-session-cassandra-fr
-      ngx-couchbase:
-        JHI_APP: ngx-couchbase
+      react-default:
+        JHI_APP: react-default
         JHI_PROFILE: prod
-      ms-ngx-gateway-eureka:
-        JHI_APP: ms-ngx-gateway-eureka
+        JHI_PROTRACTOR: 1
+      react-noi18n-es-ws-gradle-session:
+        JHI_APP: react-noi18n-es-ws-gradle-session
+        JHI_PROTRACTOR: 1
       ms-ngx-gateway-eureka-oauth2:
         JHI_APP: ms-ngx-gateway-eureka-oauth2
         JHI_PROTRACTOR: 1
@@ -54,10 +52,13 @@ jobs:
         JHI_APP: ms-ngx-gateway-consul
       ms-ngx-gateway-uaa:
         JHI_APP: ms-ngx-gateway-uaa
-      ms-micro-eureka:
-        JHI_APP: ms-micro-eureka
       ms-micro-consul:
         JHI_APP: ms-micro-consul
+      ngx-session-cassandra-fr:
+        JHI_APP: ngx-session-cassandra-fr
+      ngx-couchbase:
+        JHI_APP: ngx-couchbase
+        JHI_PROFILE: prod
       webflux-mongodb:
         JHI_APP: webflux-mongodb
 
@@ -79,6 +80,8 @@ jobs:
     displayName: 'TOOLS: update NPM'
   - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
     displayName: 'TOOLS: display configuration'
+  # need to be deleted, as soon as JHipster Core 3.4.0+ is released
+  # See https://github.com/jhipster/generator-jhipster/issues/8572
   - bash: $(JHI_SCRIPTS)/02-display-tools.sh
     displayName: 'TOOLS: display installed tools'
   - bash: $(JHI_SCRIPTS)/03-system.sh
@@ -95,6 +98,10 @@ jobs:
     displayName: 'GENERATION: project'
   - bash: $(JHI_SCRIPTS)/13-replace-version-generated-project.sh
     displayName: 'GENERATION: replace version in generated project'
+  # need to be uncommented, as soon as JHipster Core 3.4.0+ is released
+  # See https://github.com/jhipster/generator-jhipster/issues/8572
+  # - bash: $(JHI_SCRIPTS)/14-jhipster-info.sh
+  #   displayName: 'GENERATION: jhipster info'
 
   #----------------------------------------------------------------------
   # Launch tests
