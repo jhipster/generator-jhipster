@@ -176,7 +176,7 @@ public class DatabaseConfiguration {
     @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
     public Object h2TCPServer() throws SQLException {
         String port = String.valueOf(SocketUtils.findAvailableTcpPort());
-        log.debug("H2 database is available on port {}", port);
+        log.info("H2 database is available on port {}", port);
         return H2ConfigurationHelper.createServer(port);
     }
     <%_ } _%>
