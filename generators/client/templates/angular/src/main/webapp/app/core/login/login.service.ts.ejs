@@ -45,7 +45,7 @@ export class LoginService {
         if (port === ':9000') {
             port = ':<%= serverPort %>';
         }
-        location.href = '//' + location.hostname + port + '/login';
+        location.href = '//' + location.hostname + port + location.pathname + 'login';
     }
     <%_ } else { _%>
     login(credentials, callback?) {
