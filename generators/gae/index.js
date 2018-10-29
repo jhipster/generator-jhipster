@@ -585,13 +585,13 @@ module.exports = class extends BaseGenerator {
                 exec(`gcloud sql users list -i jhipster --format='value(name)' --project="${this.gcpProjectId}"`, (err, stdout) => {
                     if (_.includes(stdout, this.gcpCloudSqlUserName)) {
                         this.log(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
-                        const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" "%" --project="${
+                        const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --project="${
                             this.gcpProjectId
                         }" --password="..."`;
                         this.log(chalk.bold(`... To set its password, run: ${cmd}`));
                         done();
                     } else {
-                        const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" "%" --password="${
+                        const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --password="${
                             this.gcpCloudSqlPassword
                         }" --project="${this.gcpProjectId}"`;
                         this.log(chalk.bold(`... Running: ${cmd}`));
