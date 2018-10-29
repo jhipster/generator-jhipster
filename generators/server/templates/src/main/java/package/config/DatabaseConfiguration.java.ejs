@@ -21,6 +21,7 @@ package <%=packageName%>.config;
 import io.github.jhipster.config.JHipsterConstants;
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import io.github.jhipster.config.h2.H2ConfigurationHelper;
+import org.springframework.util.SocketUtils;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import com.github.mongobee.Mongobee;
@@ -175,23 +176,9 @@ public class DatabaseConfiguration {
     @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
     public Object h2TCPServer() throws SQLException {
-        String port = getValidPortForH2();
+        String port = String.valueOf(SocketUtils.findAvailableTcpPort());
         log.debug("H2 database is available on port {}", port);
         return H2ConfigurationHelper.createServer(port);
-    }
-
-    private String getValidPortForH2() throws NumberFormatException {
-        int port = Integer.parseInt(env.getProperty("server.port"));
-        if(port < 10000) {
-            port = 10000 + port;
-        } else {
-            if(port < 65536) {
-                port = port + 1;
-            } else {
-                port = port - 1;
-            }
-        }
-        return String.valueOf(port);
     }
     <%_ } _%>
 <%_ } _%>
