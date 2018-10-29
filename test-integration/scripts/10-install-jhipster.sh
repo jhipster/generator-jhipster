@@ -47,7 +47,7 @@ if [[ "$JHI_REPO" == *"/generator-jhipster" ]]; then
     cd "$JHI_HOME"
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
-    npm install
+    npm ci
     npm install -g "$JHI_HOME"
     if [[ "$JHI_APP" == "" || "$JHI_APP" == "ngx-default" ]]; then
         npm test
@@ -69,6 +69,6 @@ else
     fi
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
-    npm install
+    npm ci
     npm install -g "$HOME"/generator-jhipster
 fi
