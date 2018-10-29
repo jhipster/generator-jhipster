@@ -27,44 +27,62 @@ input {
         type => syslog
         codec => json_lines
     }
+    http {
+        port => "${INPUT_HTTP_PORT}"
+        codec => "json"
+    }
 }
 
 filter {
     if [logger_name] =~ "metrics" {
         kv {
             source => "message"
-            field_split => ", "
+            field_split_pattern => ", "
             prefix => "metric_"
         }
-	mutate {
-          convert => { "metric_value" => "float" }
-          convert => { "metric_count" => "integer" }
-          convert => { "metric_min" => "float" }
-          convert => { "metric_max" => "float" }
-          convert => { "metric_mean" => "float" }
-          convert => { "metric_stddev" => "float" }
-          convert => { "metric_median" => "float" }
-          convert => { "metric_p75" => "float" }
-          convert => { "metric_p95" => "float" }
-          convert => { "metric_p98" => "float" }
-          convert => { "metric_p99" => "float" }
-          convert => { "metric_p999" => "float" }
-          convert => { "metric_mean_rate" => "float" }
-          convert => { "metric_m1" => "float" }
-          convert => { "metric_m5" => "float" }
-          convert => { "metric_m15" => "float" }
+        mutate {
+            convert => { "metric_value" => "float" }
+            convert => { "metric_count" => "integer" }
+            convert => { "metric_min" => "float" }
+            convert => { "metric_max" => "float" }
+            convert => { "metric_mean" => "float" }
+            convert => { "metric_stddev" => "float" }
+            convert => { "metric_median" => "float" }
+            convert => { "metric_p75" => "float" }
+            convert => { "metric_p95" => "float" }
+            convert => { "metric_p98" => "float" }
+            convert => { "metric_p99" => "float" }
+            convert => { "metric_p999" => "float" }
+            convert => { "metric_mean_rate" => "float" }
+            convert => { "metric_m1" => "float" }
+            convert => { "metric_m5" => "float" }
+            convert => { "metric_m15" => "float" }
+            # No need to keep message field after it has been parsed
+            remove_field => ["message"]
+        }
+    }
+    if [type] == "syslog" {
+        mutate {
+            add_field => { "instance_name" => "%{app_name}-%{host}:%{app_port}" }
         }
     }
     mutate {
-    	add_field => { "instance_name" => "%{app_name}-%{host}:%{app_port}" }
         # workaround from https://github.com/elastic/logstash/issues/5115
         add_field => { "[@metadata][LOGSTASH_DEBUG]" => "${LOGSTASH_DEBUG:false}" }
     }
 }
 
 output {
-    elasticsearch {
-        hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+    if [logger_name] =~ "metrics" {
+        elasticsearch {
+            hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+            index => "metrics-%{+YYYY.MM.dd}"
+        }
+    } else {
+        elasticsearch {
+            hosts => ["${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}"]
+            index => "logs-%{+YYYY.MM.dd}"
+        }
     }
     if [@metadata][LOGSTASH_DEBUG] == "true" {
         stdout {

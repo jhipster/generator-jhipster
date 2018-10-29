@@ -75,7 +75,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     @CreatedDate
     <%_ if (databaseType === 'sql') { _%>
-    @Column(name = "created_date", nullable = false, updatable = false)
+    @Column(name = "created_date", updatable = false)
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("created_date")

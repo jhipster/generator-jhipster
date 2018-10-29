@@ -84,6 +84,7 @@ limitations under the License.
     "@types/selenium-webdriver": "3.0.10",
     <%_ } _%>
     "@types/webpack-env": "1.13.6",
+    "autoprefixer": "9.2.0",
     "browser-sync": "2.24.6",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "1.2.2",
@@ -105,7 +106,7 @@ limitations under the License.
     "html-webpack-plugin": "3.2.0",
     "http-proxy-middleware": "0.18.0",
     <%_ if(!skipCommitHook) { _%>
-    "husky": "0.14.3",
+    "husky": "1.1.0",
     <%_ } _%>
     "identity-obj-proxy": "3.0.0",
     "image-webpack-loader": "4.3.1",
@@ -114,7 +115,7 @@ limitations under the License.
     "jest-sonar-reporter": "2.0.0",
     "json-loader": "0.5.7",
     <%_ if(!skipCommitHook) { _%>
-    "lint-staged": "7.2.2",
+    "lint-staged": "7.3.0",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.17",
@@ -186,9 +187,6 @@ limitations under the License.
   },
   <%_ } _%>
   "scripts": {
-    <%_ if(!skipCommitHook) { _%>
-    "precommit": "lint-staged",
-    <%_ } _%>
     "prettier:format": "prettier --write \"src/**/*.{ts,tsx,css,scss}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
@@ -203,7 +201,7 @@ limitations under the License.
     "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
     "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
-    "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --env.stats=normal",
+    "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --env.stats=minimal",
     "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
     "webpack:prod:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.prod.js --profile",
     "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main",

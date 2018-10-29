@@ -77,13 +77,6 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        // This adds support for a `--[no-]i18n` flag
-        this.option('i18n', {
-            desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
-            type: Boolean,
-            defaults: true
-        });
-
         // This adds support for a `--with-entities` flag
         this.option('with-entities', {
             desc: 'Regenerate the existing entities if any',
@@ -114,13 +107,37 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--auth` flag
         this.option('auth', {
-            desc: 'Provide authentication type for the application when skipping server',
+            desc: 'Provide authentication type for the application when skipping server side generation',
             type: String
         });
 
         // This adds support for a `--db` flag
         this.option('db', {
-            desc: 'Provide DB name for the application when skipping server',
+            desc: 'Provide DB name for the application when skipping server side generation',
+            type: String
+        });
+
+        // This adds support for a `--uaa-base-name` flag
+        this.option('uaa-base-name', {
+            desc: 'Provide the name of UAA server, when using --auth uaa and skipping server side generation',
+            type: String
+        });
+
+        // This adds support for a `--build` flag
+        this.option('build', {
+            desc: 'Provide build tool for the application when skipping server side generation',
+            type: String
+        });
+
+        // This adds support for a `--websocket` flag
+        this.option('websocket', {
+            desc: 'Provide websocket option for the application when skipping server side generation',
+            type: String
+        });
+
+        // This adds support for a `--search-engine` flag
+        this.option('search-engine', {
+            desc: 'Provide search engine for the application when skipping server side generation',
             type: String
         });
 
@@ -281,7 +298,6 @@ module.exports = class extends BaseGenerator {
                 if (this.skipClient) {
                     // defaults to use when skipping client
                     this.generatorType = 'server';
-                    this.configOptions.enableTranslation = this.options.i18n;
                 }
                 if (this.skipServer) {
                     // defaults to use when skipping server
@@ -291,6 +307,10 @@ module.exports = class extends BaseGenerator {
                     this.configOptions.prodDatabaseType = this.options.db;
                     this.configOptions.authenticationType = this.options.auth;
                     this.configOptions.uaaBaseName = this.options.uaaBaseName;
+                    this.configOptions.useYarn = this.useYarn;
+                    this.configOptions.searchEngine = this.options['search-engine'];
+                    this.configOptions.buildTool = this.options.build;
+                    this.configOptions.websocket = this.options.websocket;
                 }
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
@@ -300,6 +320,15 @@ module.exports = class extends BaseGenerator {
 
             //     this.composeWith(require.resolve('../link-account'));
             // },
+
+            composeCommon() {
+                this.composeWith(require.resolve('../common'), {
+                    'from-cli': this.options['from-cli'],
+                    configOptions: this.configOptions,
+                    force: this.options.force,
+                    debug: this.isDebugEnabled
+                });
+            },
 
             composeServer() {
                 if (this.skipServer) return;
@@ -411,15 +440,25 @@ module.exports = class extends BaseGenerator {
                 }
             },
 
-            generatePackageForMS() {
-                if (this.skipClient) {
-                    if (this.otherModules === undefined) {
-                        this.otherModules = [];
-                    }
-                    // Generate a package.json file containing the current version
-                    // of the generator as dependency
-                    this.dasherizedBaseName = _.kebabCase(this.baseName);
-                    this.template('skipClientApp.package.json.ejs', 'package.json');
+            initGitRepo() {
+                if (!this.options['skip-git']) {
+                    this.isGitInstalled(code => {
+                        if (code === 0) {
+                            this.gitExec('rev-parse --is-inside-work-tree', { trace: false }, (err, gitDir) => {
+                                // gitDir has a line break to remove (at least on windows)
+                                if (gitDir && gitDir.trim() === 'true') {
+                                    this.gitInitialized = true;
+                                } else {
+                                    this.gitExec('init', { trace: false }, () => {
+                                        this.log(chalk.green.bold('Git repository initialized.'));
+                                        this.gitInitialized = true;
+                                    });
+                                }
+                            });
+                        } else {
+                            this.warning('Git repository could not be initialized, as Git is not installed on your system');
+                        }
+                    });
                 }
             }
         };
@@ -427,37 +466,27 @@ module.exports = class extends BaseGenerator {
 
     get end() {
         return {
-            localInstall() {
-                if (this.skipClient) {
-                    if (!this.options['skip-install']) {
-                        if (this.clientPackageManager === 'yarn') {
-                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
-                            this.yarnInstall();
-                        } else if (this.clientPackageManager === 'npm') {
-                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
-                            this.npmInstall();
-                        }
-                    }
-                }
-
+            gitCommit() {
                 if (!this.options['skip-git']) {
+                    this.debug('Committing files to git');
+                    const done = this.async();
                     this.isGitInstalled(code => {
-                        if (code === 0) {
-                            this.gitExec('rev-parse --is-inside-work-tree', { trace: false }, (err, gitDir) => {
-                                if (!gitDir) {
-                                    this.gitExec('init', { trace: false }, () => {
-                                        this.gitExec('add -A', { trace: false }, () => {
-                                            this.gitExec(
-                                                `commit -am "Initial application generated by JHipster-${this.jhipsterVersion}"`,
-                                                { trace: false },
-                                                () => this.log(chalk.green.bold('Application successfully committed to Git.'))
-                                            );
-                                        });
-                                    });
+                        if (code === 0 && this.gitInitialized) {
+                            this.gitExec('add -A', { trace: false }, () => {
+                                let commitMsg = `Initial application generated by JHipster-${this.jhipsterVersion}`;
+                                if (this.blueprint) {
+                                    commitMsg += ` with blueprint: ${this.blueprint.replace('generator-jhipster-', '')}`;
                                 }
+                                this.gitExec(`commit -am "${commitMsg}"`, { trace: false }, () => {
+                                    this.log(chalk.green.bold('Application successfully committed to Git.'));
+                                    done();
+                                });
                             });
                         } else {
-                            this.warning('The generated application could not be added to Git, as Git is not installed on your system');
+                            this.warning(
+                                'The generated application could not be committed to Git, as a Git repository could not be initialized.'
+                            );
+                            done();
                         }
                     });
                 }

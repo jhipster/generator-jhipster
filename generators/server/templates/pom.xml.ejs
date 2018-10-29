@@ -72,10 +72,10 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.0.22</jhipster-dependencies.version>
+        <jhipster-dependencies.version>2.0.27</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.0.5.RELEASE</spring-boot.version>
+        <spring-boot.version>2.0.6.RELEASE</spring-boot.version>
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
@@ -97,7 +97,7 @@
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.2</maven-war-plugin.version>
         <jib-maven-plugin.version>0.9.11</jib-maven-plugin.version>
         <%_ if (!skipClient) { _%>
@@ -107,7 +107,7 @@
         <scala-maven-plugin.version>3.4.2</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>3.2.3</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>3.3.0</openapi-generator-maven-plugin.version>
         <%_ } _%>
         <git-commit-id-plugin.version>2.2.5</git-commit-id-plugin.version>
 
@@ -190,6 +190,18 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-json</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_dropwizard</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient_servlet</artifactId>
         </dependency>
         <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
         <dependency>
@@ -721,8 +733,8 @@
         </dependency>
         <%_ } _%>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-spring-service-connector</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cloud-connectors</artifactId>
         </dependency>
         <!-- Security -->
         <dependency>
@@ -1021,13 +1033,13 @@
                         <entrypoint>
                             <shell>sh</shell>
                             <option>-c</option>
-                            <arg>chmod +x /entrypoint.sh &amp;&amp; /entrypoint.sh</arg>
+                            <arg>chmod +x /entrypoint.sh &amp;&amp; sync &amp;&amp; /entrypoint.sh</arg>
                         </entrypoint>
                         <ports>
                             <port><%= serverPort %></port>
-                            <% if (cacheProvider === 'hazelcast') { %>
+                            <%_ if (cacheProvider === 'hazelcast') { _%>
                             <port>5701/udp</port>
-                            <% } %>
+                            <%_ } _%>
                         </ports>
                         <environment>
                             <%_ if (cacheProvider === 'infinispan') { _%><JAVA_OPTS>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true</JAVA_OPTS><%_ } _%>
@@ -1058,7 +1070,11 @@
                             <apiPackage><%= packageName %>.web.api</apiPackage>
                             <modelPackage><%= packageName %>.web.api.model</modelPackage>
                             <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+                            <validateSpec>true</validateSpec>
                             <configOptions>
+                                <%_ if (reactive) { _%>
+                                <reactive>true</reactive>
+                                <%_ } _%>
                                 <delegatePattern>true</delegatePattern>
                             </configOptions>
                         </configuration>
@@ -1209,9 +1225,6 @@
                                 <goals>
                                     <goal>yarn</goal>
                                 </goals>
-                                <configuration>
-                                    <arguments>install</arguments>
-                                </configuration>
                             </execution>
                             <%_ } else if (clientPackageManager === 'npm') { _%>
                             <execution>
@@ -1229,9 +1242,6 @@
                                 <goals>
                                     <goal>npm</goal>
                                 </goals>
-                                <configuration>
-                                    <arguments>install</arguments>
-                                </configuration>
                             </execution>
                             <%_ } _%>
                             <execution>

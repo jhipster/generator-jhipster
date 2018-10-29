@@ -49,12 +49,16 @@ const files = {
         {
             condition: generator => generator.protractorTests,
             templates: ['tsconfig.e2e.json']
+        },
+        {
+            condition: generator => !generator.skipCommitHook,
+            templates: ['.huskyrc']
         }
     ],
     sass: [
         {
             condition: generator => generator.useSass,
-            templates: [{ file: 'postcss.config.js', method: 'copy' }]
+            templates: ['postcss.config.js']
         },
         {
             condition: generator => generator.useSass && generator.enableI18nRTL,
@@ -86,7 +90,14 @@ const files = {
     commonWeb: [
         {
             path: MAIN_SRC_DIR,
-            templates: [{ file: 'favicon.ico', method: 'copy' }, 'robots.txt', '404.html', 'index.html', 'manifest.webapp']
+            templates: [
+                { file: 'favicon.ico', method: 'copy' },
+                'robots.txt',
+                '404.html',
+                'index.html',
+                'manifest.webapp',
+                'static/css/loading.css'
+            ]
         }
     ],
     reactApp: [
@@ -382,7 +393,7 @@ const files = {
             templates: ['spec/app/shared/reducers/locale.spec.ts']
         },
         {
-            condition: generator => generator.skipUserManagement,
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
             path: TEST_SRC_DIR,
             templates: ['spec/app/shared/reducers/user-management.spec.ts']
         },

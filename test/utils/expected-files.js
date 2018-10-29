@@ -128,10 +128,9 @@ const expectedFiles = {
 
     maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties'],
 
+    common: ['README.md', '.gitignore', '.gitattributes', '.editorconfig'],
+
     server: [
-        'README.md',
-        '.gitignore',
-        '.gitattributes',
         `${SERVER_MAIN_RES_DIR}banner.txt`,
         `${SERVER_MAIN_RES_DIR}.h2.server.properties`,
         `${SERVER_MAIN_RES_DIR}templates/error.html`,
@@ -219,8 +218,7 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/TestUtil.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIntTest.java`,
         `${SERVER_TEST_RES_DIR}config/application.yml`,
-        `${SERVER_TEST_RES_DIR}logback.xml`,
-        '.editorconfig'
+        `${SERVER_TEST_RES_DIR}logback.xml`
     ],
 
     infinispan: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`],
@@ -285,6 +283,7 @@ const expectedFiles = {
 
     client: [
         'angular.json',
+        '.huskyrc',
         '.prettierignore',
         '.prettierrc',
         'package.json',
@@ -416,6 +415,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/vendor.ts`,
         `${CLIENT_MAIN_SRC_DIR}content/css/documentation.css`,
         `${CLIENT_MAIN_SRC_DIR}content/css/global.css`,
+        `${CLIENT_MAIN_SRC_DIR}content/css/loading.css`,
         `${CLIENT_MAIN_SRC_DIR}content/css/vendor.css`,
         `${CLIENT_MAIN_SRC_DIR}content/images/hipster.png`,
         `${CLIENT_MAIN_SRC_DIR}content/images/hipster2x.png`,
@@ -547,6 +547,11 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.ts`
+    ],
+
+    feignConfig: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/FeignConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/client/UserFeignClientInterceptor.java`
     ],
 
     microservice: [

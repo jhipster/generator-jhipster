@@ -1,0 +1,15 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "zoe",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160806123736",
+    "entityTableName": "entity_with_service_class",
+    "dto": "no",
+    "pagination": "no",
+    "service": "serviceClass"
+}

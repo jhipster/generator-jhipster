@@ -85,7 +85,7 @@ function askForGatewayType() {
                 },
                 {
                     value: 'traefik',
-                    name: '[BETA] Traefik gateway (only works with Consul)'
+                    name: 'Traefik gateway (only works with Consul)'
                 }
             ],
             default: 'zuul'

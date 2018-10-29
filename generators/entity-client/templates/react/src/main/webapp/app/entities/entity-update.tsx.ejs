@@ -148,6 +148,12 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
     };
   }
 
+  componentWillUpdate (nextProps, nextState) {
+    if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
+      this.handleClose();
+    }
+  }
+
   componentDidMount() {
     <%_ if (pagination === 'infinite-scroll') { _%>
     if (!this.state.isNew) {
@@ -201,7 +207,6 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
       } else {
         this.props.updateEntity(entity);
       }
-      this.handleClose();
     }
   }
 
@@ -586,7 +591,8 @@ const mapStateToProps = (storeState: IRootState) => ({
   <%_ }) _%>
   <%= entityInstance %>Entity: storeState.<%= entityInstance %>.entity,
   loading: storeState.<%= entityInstance %>.loading,
-  updating: storeState.<%= entityInstance %>.updating
+  updating: storeState.<%= entityInstance %>.updating,
+  updateSuccess: storeState.<%= entityInstance %>.updateSuccess,
 });
 
 const mapDispatchToProps = {

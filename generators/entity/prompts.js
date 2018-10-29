@@ -718,11 +718,11 @@ function askForField(done) {
                     {
                         name: 'Required',
                         value: 'required'
-                    } /* ,
+                    },
                     {
                         name: 'Unique',
                         value: 'unique'
-                    } */
+                    }
                 ];
                 if (response.fieldType === 'String' || response.fieldTypeBlobContent === 'text') {
                     opts.push(
@@ -751,19 +751,6 @@ function askForField(done) {
                         }
                     );
                 }
-                // Not supported anymore because the server can't check the size of the blob before downloading it completely.
-                //  else if (response.fieldType === 'byte[]' && response.fieldTypeBlobContent !== 'text') {
-                //     opts.push(
-                //         {
-                //             name: 'Minimum byte size',
-                //             value: 'minbytes'
-                //         },
-                //         {
-                //             name: 'Maximum byte size',
-                //             value: 'maxbytes'
-                //         }
-                //     );
-                // }
                 return opts;
             },
             default: 0

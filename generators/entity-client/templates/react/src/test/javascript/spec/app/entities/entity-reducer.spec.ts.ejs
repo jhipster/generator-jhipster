@@ -276,7 +276,7 @@ describe('Entities reducer tests', () => {
         }
         <%_ } _%>
       ];
-      await store.dispatch(createEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(createEntity({ id: <% if (pkType === 'Long') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.UPDATE_<%= entityActionName %> actions', async () => {
@@ -297,7 +297,7 @@ describe('Entities reducer tests', () => {
         }
         <%_ } _%>
       ];
-      await store.dispatch(updateEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(updateEntity({ id: <% if (pkType === 'Long') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.DELETE_<%= entityActionName %> actions', async () => {

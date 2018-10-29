@@ -57,12 +57,14 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 <%_ if (databaseType === 'sql') { _%>
 
 import javax.sql.DataSource;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 
 import java.util.ArrayList;
 import java.util.List;
 <%_ } _%>
+
 
 @Configuration
 <%_ if (databaseType === 'mongodb') { _%>
@@ -75,8 +77,11 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     private final Logger log = LoggerFactory.getLogger(CloudDatabaseConfiguration.class);
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
+    
+    private final String CLOUD_CONFIGURATION_HIKARI_PREFIX = "spring.datasource.hikari";
 
     @Bean
+    @ConfigurationProperties(CLOUD_CONFIGURATION_HIKARI_PREFIX)
     public DataSource dataSource(<% if (cacheProvider === 'hazelcast') { %>CacheManager cacheManager<% } %>) {
         log.info("Configuring JDBC datasource from a cloud provider");
         return connectionFactory().dataSource();

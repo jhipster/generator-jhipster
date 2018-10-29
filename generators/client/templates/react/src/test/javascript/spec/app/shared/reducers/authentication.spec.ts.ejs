@@ -28,7 +28,7 @@ import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 
 import authentication, { ACTION_TYPES, getSession<% if (authenticationType !== 'oauth2') { %>, login<% } %>, clearAuthentication, logout<% if (authenticationType === 'jwt') { %>, clearAuthToken<% } %> } from 'app/shared/reducers/authentication';
-<% if (enableTranslation && authenticationType !== 'oauth2') { %>import { ACTION_TYPES as localeActionTypes } from 'app/shared/reducers/locale';<% } %>
+<% if (enableTranslation) { %>import { ACTION_TYPES as localeActionTypes } from 'app/shared/reducers/locale';<% } %>
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {
@@ -198,7 +198,11 @@ describe('Authentication reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.GET_SESSION),
           payload: resolvedObject
-        }
+        }<% if (enableTranslation) { %>,
+          {
+            type: localeActionTypes.SET_LOCALE,
+            locale: '<%= nativeLanguage %>'
+          }<% } %>
       ];
       await store.dispatch(getSession()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });

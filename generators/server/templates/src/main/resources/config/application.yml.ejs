@@ -154,6 +154,8 @@ spring:
     <%_ if (databaseType === 'sql') { _%>
     jpa:
         open-in-view: false
+        properties:
+            hibernate.jdbc.time_zone: UTC
         hibernate:
             ddl-auto: none
             naming:
@@ -265,9 +267,6 @@ jhipster:
         contact-email:
         license:
         license-url:
-
-logging:
-    file: <%= BUILD_DIR %><%=baseName%>.log
 
 # ===================================================================
 # Application specific properties

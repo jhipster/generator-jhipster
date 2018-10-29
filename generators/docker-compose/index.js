@@ -282,17 +282,14 @@ module.exports = class extends BaseGenerator {
                     this.authenticationType = appConfig.authenticationType;
 
                     // Dump the file
-                    let yamlString = jsyaml.dump(parentConfiguration, { indent: 4 });
+                    let yamlString = jsyaml.dump(parentConfiguration, { indent: 4, lineWidth: -1 });
 
-                    // Fix the output file which is totally broken!!!
+                    // Add extra indentation for each lines
                     const yamlArray = yamlString.split('\n');
                     for (let j = 0; j < yamlArray.length; j++) {
                         yamlArray[j] = `    ${yamlArray[j]}`;
-                        yamlArray[j] = yamlArray[j].replace(/'/g, '');
                     }
                     yamlString = yamlArray.join('\n');
-                    yamlString = yamlString.replace(/>-\n/g, '');
-                    yamlString = yamlString.replace(/-\s\s+/g, '- ');
                     this.appsYaml.push(yamlString);
                 });
             },
@@ -319,8 +316,8 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (this.warning) {
-            this.log('\n');
-            this.log(chalk.red('Docker Compose configuration generated with missing images!'));
+            this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
+            this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(chalk.red(this.warningMessage));
         } else {
             this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);

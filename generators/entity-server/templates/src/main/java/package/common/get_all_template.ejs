@@ -31,7 +31,7 @@
     <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>QueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     <%_ } _%>
     }
 
@@ -43,7 +43,7 @@
     */
     @GetMapping("/<%= entityApiUrl %>/count")
     @Timed
-    public ResponseEntity<Long> count<%= entityClassPlural %> (<%= entityClass %>Criteria criteria) {
+    public ResponseEntity<Long> count<%= entityClassPlural %>(<%= entityClass %>Criteria criteria) {
         log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
         return ResponseEntity.ok().body(<%= entityInstance %>QueryService.countByCriteria(criteria));
     }
@@ -85,7 +85,7 @@
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
         <%_ } _%>
     <%_ } _%>
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     <%_ } _%>
     }
 <%_ } _%>

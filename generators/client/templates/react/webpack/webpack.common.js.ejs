@@ -75,7 +75,7 @@ module.exports = options => ({
         test: /\.tsx?$/,
         use: getTsLoaderRule(options.env),
         include: [utils.root('./src/main/webapp/app')],
-        exclude: ['node_modules']
+        exclude: [utils.root('node_modules')]
       },
       {
         test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
@@ -95,7 +95,7 @@ module.exports = options => ({
         test: /\.tsx?$/,
         enforce: 'pre',
         loader: 'tslint-loader',
-        exclude: ['node_modules']
+        exclude: [utils.root('node_modules')]
       }
     ]
   },

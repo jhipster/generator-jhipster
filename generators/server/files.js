@@ -36,31 +36,16 @@ const shouldSkipUserManagement = generator =>
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 const serverFiles = {
-    global: [
-        {
-            templates: [
-                'README.md',
-                {
-                    file: 'gitignore',
-                    renameTo: () => '.gitignore'
-                },
-                {
-                    file: 'gitattributes',
-                    renameTo: () => '.gitattributes',
-                    method: 'copy'
-                },
-                {
-                    file: 'editorconfig',
-                    renameTo: () => '.editorconfig',
-                    method: 'copy'
-                }
-            ]
-        }
-    ],
     jib: [
         {
             path: 'src/main/jib/',
             templates: ['entrypoint.sh']
+        }
+    ],
+    packageJson: [
+        {
+            condition: generator => generator.skipClient,
+            templates: ['package.json']
         }
     ],
     docker: [
@@ -674,7 +659,9 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive && generator.applicationType === 'microservice' && generator.authenticationType === 'jwt',
+                !generator.reactive &&
+                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway') &&
+                generator.authenticationType === 'jwt',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1202,6 +1189,24 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/util/PaginationUtilUnitTest.java',
                     renameTo: generator => `${generator.testDir}web/rest/util/PaginationUtilUnitTest.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.databaseType === 'sql',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/timezone/HibernateTimeZoneTest.java',
+                    renameTo: generator => `${generator.testDir}config/timezone/HibernateTimeZoneTest.java`
+                },
+                {
+                    file: 'package/repository/timezone/DateTimeWrapper.java',
+                    renameTo: generator => `${generator.testDir}repository/timezone/DateTimeWrapper.java`
+                },
+                {
+                    file: 'package/repository/timezone/DateTimeWrapperRepository.java',
+                    renameTo: generator => `${generator.testDir}repository/timezone/DateTimeWrapperRepository.java`
                 }
             ]
         },

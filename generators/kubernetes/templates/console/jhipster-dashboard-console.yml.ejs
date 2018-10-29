@@ -31,7 +31,7 @@ spec:
     spec:
       initContainers:
         - name: init-dependent-service-check
-          image: busybox
+          image: busybox:latest
           command:
             - '/bin/sh'
             - '-c'
@@ -50,13 +50,4 @@ spec:
       - name: jhipster-import-dashboards
         image: <%= DOCKER_JHIPSTER_IMPORT_DASHBOARDS %>
         imagePullPolicy: IfNotPresent
-        env:
-        - name: ELASTICSEARCH_URL
-          value: http://jhipster-elasticsearch
-        - name: KIBANA_URL
-          value: http://jhipster-console
-        command:
-          - '/bin/sh'
-          - '-c'
-          - 'metricbeat setup --dashboards -E output.elasticsearch.hosts="[$ELASTICSEARCH_URL]" -E setup.kibana.host=$KIBANA_URL -E setup.dashboards.directory=/tmp'
       restartPolicy: OnFailure

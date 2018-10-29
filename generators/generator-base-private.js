@@ -872,6 +872,7 @@ module.exports = class extends Generator {
         relationships.forEach(relationship => {
             let query;
             let variableName;
+            let filter;
             hasManyToMany = hasManyToMany || relationship.relationshipType === 'many-to-many';
             if (
                 relationship.relationshipType === 'one-to-one' &&
@@ -886,8 +887,13 @@ module.exports = class extends Generator {
                 const relationshipFieldNameIdCheck =
                     dto === 'no' ? `!${relationshipFieldName} || !${relationshipFieldName}.id` : `!${relationshipFieldName}Id`;
 
+                filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
+                if (this.jpaMetamodelFiltering) {
+                    filter = `'${relationship.otherEntityRelationshipName}Id.specified': 'false'`;
+                }
+
                 query = `this.${relationship.otherEntityName}Service
-            .query({filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'})
+            .query({${filter}})
             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
                 if (${relationshipFieldNameIdCheck}) {
                     this.${variableName} = res.body;
@@ -1052,7 +1058,7 @@ module.exports = class extends Generator {
                 const importType = `I${otherEntityAngularName}`;
                 let importPath;
                 if (otherEntityAngularName === 'User') {
-                    importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : './user.model';
+                    importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : 'app/shared/model/user.model';
                 } else {
                     importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
                 }

@@ -1,5 +1,3 @@
-/* global describe, context, beforeEach, it */
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -60,6 +58,7 @@ describe('JHipster client generator', () => {
         });
 
         it('creates expected files for default configuration for client generator', () => {
+            assert.noFile(expectedFiles.common);
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);
@@ -99,6 +98,7 @@ describe('JHipster client generator', () => {
         });
 
         it('creates expected files for default configuration for client-2 generator', () => {
+            assert.noFile(expectedFiles.common);
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.maven);
             assert.file(expectedFiles.i18nJson);

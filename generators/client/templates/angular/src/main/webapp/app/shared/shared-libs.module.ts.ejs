@@ -31,6 +31,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
             alertAsToast: false,
+            alertTimeout: 5000,
             <%_ if (enableTranslation) { _%>
             i18nEnabled: true,
             defaultI18nLang: '<%= nativeLanguage %>'

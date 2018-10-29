@@ -1,5 +1,3 @@
-/* global describe, context, before, beforeEach, after, it */
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');

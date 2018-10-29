@@ -1,4 +1,3 @@
-/* global describe, beforeEach, it */
 const path = require('path');
 const os = require('os');
 const shelljs = require('shelljs');

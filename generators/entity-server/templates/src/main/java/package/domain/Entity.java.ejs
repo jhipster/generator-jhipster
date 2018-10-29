@@ -149,6 +149,7 @@ public class <%= entityClass %> implements Serializable {
 <%- formatAsFieldJavadoc(fields[idx].javadoc) %>
     <%_ }
     let required = false;
+    let unique = false;
     const fieldValidate = fields[idx].fieldValidate;
     const fieldValidateRules = fields[idx].fieldValidateRules;
     const fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
@@ -158,8 +159,11 @@ public class <%= entityClass %> implements Serializable {
     const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
     const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
     if (fieldValidate === true) {
-        if (fieldValidate === true && fieldValidateRules.includes('required')) {
+        if (fieldValidateRules.includes('required')) {
             required = true;
+        }
+        if (fieldValidateRules.includes('unique')) {
+            unique = true;
         } _%>
     <%- include ../common/field_validators -%>
     <%_ } _%>
@@ -174,11 +178,11 @@ public class <%= entityClass %> implements Serializable {
     @Lob
         <%_ }
         if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else if (fieldType === 'BigDecimal') { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 10, scale = 2<% if (required) { %>, nullable = false<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 10, scale = 2<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %><% } %>)
         <%_ }
     } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -243,7 +247,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } else if (relationshipType === 'many-to-one') {
             if(databaseType === 'sql') {
     _%>
-    @ManyToOne<%_ if (relationshipRequired) { _%>(optional = false)<%_ } _%>
+    @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
         <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
         <%_ }
@@ -255,8 +259,8 @@ public class <%= entityClass %> implements Serializable {
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType === 'many-to-many') {
-        if(databaseType === 'sql') { _%>
-    @ManyToMany<%_ if (ownerSide === false) { _%>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")<%_ } _%>
+        if (databaseType === 'sql') { _%>
+    @ManyToMany<% if (ownerSide === false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")<% } %>
         <%_ if (enableHibernateCache) {
                 if (cacheProvider === 'infinispan') { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -274,7 +278,9 @@ public class <%= entityClass %> implements Serializable {
         } else if (databaseType === 'mongodb') { _%>
     @DBRef
     @Field("<%= relationshipFieldNamePlural %>")
-    <%_ } if (ownerSide === false) { _%>@JsonIgnore<%_ } _%>
+    <%_ } if (ownerSide === false) { _%>
+    @JsonIgnore
+    <%_ } _%>
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else {

@@ -91,6 +91,9 @@ import org.springframework.data.couchbase.repository.config.EnableReactiveCouchb
 import org.springframework.util.StringUtils;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %>
 <%_ if (databaseType === 'sql') { _%>
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+import org.springframework.core.env.Environment;
+    <%_ } _%>
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -152,9 +155,15 @@ import java.util.List;
 <%_ } _%>
 public class DatabaseConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType === 'sql') { %>
-
+    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+<%_ if (databaseType === 'sql') { _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+
+    private final Environment env;
+
+    public DatabaseConfiguration(Environment env) {
+        this.env = env;
+    }
 
     /**
      * Open the TCP port for the H2 database, so it is available remotely.
@@ -165,8 +174,9 @@ public class DatabaseConfiguration {
     @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
     public Object h2TCPServer() throws SQLException {
-        log.debug("Starting H2 database");
-        return H2ConfigurationHelper.createServer();
+        String port = "1" + env.getProperty("server.port");
+        log.debug("H2 database is available on port {}", port);
+        return H2ConfigurationHelper.createServer(port);
     }
     <%_ } _%>
 <%_ } _%>
@@ -316,5 +326,6 @@ public class DatabaseConfiguration {
         public byte[] convert(String source) {
             return Base64.decodeBase64(source);
         }
-    }<% } %>
+    }
+<%_ } _%>
 }

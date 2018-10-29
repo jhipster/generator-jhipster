@@ -47,6 +47,10 @@ const files = {
                 'postcss.config.js',
                 { file: 'webpack/logo-jhipster.png', method: 'copy' }
             ]
+        },
+        {
+            condition: generator => !generator.skipCommitHook,
+            templates: ['.huskyrc']
         }
     ],
     css: [
@@ -98,7 +102,14 @@ const files = {
     commonWeb: [
         {
             path: MAIN_SRC_DIR,
-            templates: [{ file: 'favicon.ico', method: 'copy' }, 'robots.txt', '404.html', 'index.html', 'manifest.webapp']
+            templates: [
+                { file: 'favicon.ico', method: 'copy' },
+                'robots.txt',
+                '404.html',
+                'index.html',
+                'manifest.webapp',
+                'content/css/loading.css'
+            ]
         }
     ],
     angularApp: [

@@ -48,34 +48,6 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        // This adds support for a `--[no-]i18n` flag
-        this.option('i18n', {
-            desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
-            type: Boolean,
-            defaults: true
-        });
-
-        // This adds support for a `--protractor` flag
-        this.option('protractor', {
-            desc: 'Enable protractor tests',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--cucumber` flag
-        this.option('cucumber', {
-            desc: 'Enable cucumber tests',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--skip-user-management` flag
-        this.option('skip-user-management', {
-            desc: 'Skip the user management module during app generation',
-            type: Boolean,
-            defaults: false
-        });
-
         // This adds support for a `--experimental` flag which can be used to enable experimental features
         this.option('experimental', {
             desc:
@@ -351,11 +323,6 @@ module.exports = class extends BaseGenerator {
                     this.BUILD_DIR = 'build/';
                 }
                 this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
-                // Make documentation URL available in templates
-                this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-                this.DOCUMENTATION_ARCHIVE_URL = `${constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${
-                    this.jhipsterVersion
-                }`;
             }
         };
     }
@@ -458,13 +425,13 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.languages !== undefined) {
                     this.languages = this.configOptions.languages;
                 }
+                this.testFrameworks = [];
                 if (this.configOptions.testFrameworks) {
                     this.testFrameworks = this.configOptions.testFrameworks;
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
-                this.protractorTests = this.testFrameworks.includes('protractor');
                 this.gatlingTests = this.testFrameworks.includes('gatling');
                 this.cucumberTests = this.testFrameworks.includes('cucumber');
             },
@@ -490,6 +457,29 @@ module.exports = class extends BaseGenerator {
     get writing() {
         if (useBlueprint) return;
         return this._writing();
+    }
+
+    _install() {
+        return {
+            installing() {
+                if (this.skipClient) {
+                    if (!this.options['skip-install']) {
+                        if (this.clientPackageManager === 'yarn') {
+                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
+                            this.yarnInstall();
+                        } else if (this.clientPackageManager === 'npm') {
+                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
+                            this.npmInstall();
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    get install() {
+        if (useBlueprint) return;
+        return this._install();
     }
 
     // Public API method used by the getter and also by Blueprints

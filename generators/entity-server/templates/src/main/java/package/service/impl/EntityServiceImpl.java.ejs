@@ -97,7 +97,8 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     @Override
     <%_ } _%>
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
-        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);<%- include('../../common/save_template', {viaService: viaService, returnDirectly: true}); -%>
+        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
+<%- include('../../common/save_template', {viaService: viaService, returnDirectly: true}); -%>
     }
 
     /**
