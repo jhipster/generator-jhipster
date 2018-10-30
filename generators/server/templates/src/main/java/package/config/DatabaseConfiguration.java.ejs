@@ -21,7 +21,6 @@ package <%=packageName%>.config;
 import io.github.jhipster.config.JHipsterConstants;
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import io.github.jhipster.config.h2.H2ConfigurationHelper;
-import org.springframework.util.SocketUtils;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import com.github.mongobee.Mongobee;
@@ -101,6 +100,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import java.sql.SQLException;
+import java.lang.NumberFormatException;
 <%_ } } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import java.util.ArrayList;
@@ -175,9 +175,23 @@ public class DatabaseConfiguration {
     @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
     public Object h2TCPServer() throws SQLException {
-        String port = String.valueOf(SocketUtils.findAvailableTcpPort());
-        log.info("H2 database is available on port {}", port);
+        String port = getValidPortForH2();
+        log.debug("H2 database is available on port {}", port);
         return H2ConfigurationHelper.createServer(port);
+    }
+	
+    private String getValidPortForH2() throws NumberFormatException {
+        int port = Integer.parseInt(env.getProperty("server.port"));
+        if(port < 10000) {
+            port = 10000 + port;
+        } else {
+            if(port < 63536) {
+                port = port + 2000;
+            } else {
+                port = port - 2000;
+            }
+        }
+        return String.valueOf(port);
     }
     <%_ } _%>
 <%_ } _%>
