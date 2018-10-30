@@ -19,12 +19,12 @@
 /* eslint-disable consistent-return */
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 /* constants used throughout */
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
