@@ -19,14 +19,13 @@
 /* eslint-disable consistent-return */
 const _ = require('lodash');
 const chalk = require('chalk');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-let useBlueprint;
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         this.argument('name', { type: String, required: true });
@@ -47,14 +46,12 @@ module.exports = class extends BaseGenerator {
         const blueprint = this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(blueprint, 'spring-service', {
+            this.useBlueprint = this.composeBlueprint(blueprint, 'spring-service', {
                 'from-cli': this.options['from-cli'],
                 force: this.options.force,
                 arguments: [this.name],
                 default: this.options.default
             });
-        } else {
-            useBlueprint = false;
         }
     }
 
@@ -83,8 +80,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get initializing() {
-        if (useBlueprint) return;
-        return this._initializing();
+        return super.initializing();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -113,8 +109,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
-        if (useBlueprint) return;
-        return this._prompting();
+        return super.prompting();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -127,8 +122,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
-        if (useBlueprint) return;
-        return this._default();
+        return super.default();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -156,7 +150,6 @@ module.exports = class extends BaseGenerator {
     }
 
     get writing() {
-        if (useBlueprint) return;
-        return this._writing();
+        return super.writing();
     }
 };

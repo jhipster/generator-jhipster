@@ -38,13 +38,15 @@ const mockBlueprintSubGen = class extends EntityGenerator {
     }
 
     get prompting() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
         return super._prompting();
     }
 
     get configuring() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
         return super._configuring();
+    }
+
+    get default() {
+        return super._default();
     }
 
     get writing() {
@@ -52,8 +54,11 @@ const mockBlueprintSubGen = class extends EntityGenerator {
     }
 
     get install() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
         return super._install();
+    }
+
+    get end() {
+        return super._end();
     }
 };
 

@@ -42,6 +42,10 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
 
+    get install() {
+        return super._install();
+    }
+
     get end() {
         return super._end();
     }

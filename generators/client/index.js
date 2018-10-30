@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
@@ -27,9 +27,7 @@ const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 
-let useBlueprint;
-
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -65,14 +63,12 @@ module.exports = class extends BaseGenerator {
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         // use global variable since getters dont have access to instance property
         if (!opts.fromBlueprint) {
-            useBlueprint = this.composeBlueprint(blueprint, 'client', {
+            this.useBlueprint = this.composeBlueprint(blueprint, 'client', {
                 'skip-install': this.options['skip-install'],
                 'from-cli': this.options['from-cli'],
                 configOptions: this.configOptions,
                 force: this.options.force
             });
-        } else {
-            useBlueprint = false;
         }
     }
 
@@ -180,8 +176,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get initializing() {
-        if (useBlueprint) return;
-        return this._initializing();
+        return super.initializing();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -200,8 +195,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
-        if (useBlueprint) return;
-        return this._prompting();
+        return super.prompting();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -266,8 +260,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get configuring() {
-        if (useBlueprint) return;
-        return this._configuring();
+        return super.configuring();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -352,8 +345,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
-        if (useBlueprint) return;
-        return this._default();
+        return super.default();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -362,17 +354,16 @@ module.exports = class extends BaseGenerator {
             write() {
                 switch (this.clientFramework) {
                     case 'react':
-                        return writeReactFiles.call(this, useBlueprint);
+                        return writeReactFiles.call(this, this.useBlueprint);
                     default:
-                        return writeAngularFiles.call(this, useBlueprint);
+                        return writeAngularFiles.call(this, this.useBlueprint);
                 }
             }
         };
     }
 
     get writing() {
-        if (useBlueprint) return;
-        return this._writing();
+        return super.writing();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -402,8 +393,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get install() {
-        if (useBlueprint) return;
-        return this._install();
+        return super.install();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -423,7 +413,6 @@ module.exports = class extends BaseGenerator {
     }
 
     get end() {
-        if (useBlueprint) return;
-        return this._end();
+        return super.end();
     }
 };
