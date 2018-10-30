@@ -76,6 +76,35 @@ module.exports = class extends BaseGenerator {
         }
     }
 
+    getHipster(baseName = this.baseName) {
+
+        var hash = 0, i, chr;
+
+        for (i = 0; i < baseName.length; i++) {
+            chr   = baseName.charCodeAt(i);
+            hash  = ((hash << 5) - hash) + chr;
+            hash |= 0;
+        }
+        
+        if (hash < 0) {
+            hash = hash * -1;
+        }
+        switch (hash % 5) {
+            case 0:
+                return "hipster";
+            case 1:
+                return "hipster-woman-1";
+            case 2: 
+                return "hipster-man-1";
+            case 3:
+                return "hipster-woman-2";
+            case 4:
+                return "hipster-man-2";
+            default:
+                return "hipster-man-1"
+
+        }
+    }
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
@@ -224,6 +253,7 @@ module.exports = class extends BaseGenerator {
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.angularAppName = this.getAngularAppName();
                 this.angularXAppName = this.getAngularXAppName();
+                this.hipster = this.getHipster();
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
