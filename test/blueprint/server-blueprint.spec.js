@@ -94,4 +94,41 @@ describe('JHipster server generator with blueprint', () => {
             });
         });
     });
+
+    describe('generate server with dummy blueprint overriding everything', () => {
+        before(done => {
+            helpers
+                .run(path.join(__dirname, '../../generators/server'))
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    blueprint: 'myblueprint',
+                    skipChecks: true
+                })
+                .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:server']])
+                .withPrompts({
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    cacheProvider: 'ehcache',
+                    enableHibernateCache: true,
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
+                })
+                .on('end', done);
+        });
+
+        it("doesn't create any expected files from jhipster server generator", () => {
+            assert.noFile(expectedFiles.server);
+        });
+    });
 });
