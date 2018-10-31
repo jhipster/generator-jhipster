@@ -21,7 +21,6 @@ jobs:
 - job: Test
   pool:
     vmImage: 'Ubuntu 16.04'
-  timeoutInMinutes: 40
   variables:
     JHI_PROFILE: dev
     JHI_RUN_APP: 1
