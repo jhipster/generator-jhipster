@@ -165,4 +165,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
             generator.removeFile(`${constants.DOCKER_DIR}keycloak.yml`);
         }
     }
+    if (generator.isJhipsterVersionLessThan('5.5.0')) {
+        generator.removeFolder(`${constants.DOCKER_DIR}Dockerfile`);
+        generator.removeFile(`${constants.DOCKER_DIR}entrypoint.sh`);
+    }
 }

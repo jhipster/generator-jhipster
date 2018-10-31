@@ -564,7 +564,7 @@ const expectedFiles = {
 
     microserviceGradle: ['gradle/docker.gradle'],
 
-    dockerServices: [`${DOCKER_DIR}app.yml`, `${DOCKER_DIR}Dockerfile`, `${DOCKER_DIR}sonar.yml`],
+    dockerServices: [`${DOCKER_DIR}app.yml`, `${DOCKER_DIR}sonar.yml`],
 
     mysql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mysql.yml`],
 
