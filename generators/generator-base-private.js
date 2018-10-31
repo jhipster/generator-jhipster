@@ -741,7 +741,7 @@ module.exports = class extends Generator {
                 return true;
             } catch (e) {
                 this.debug('Error', e);
-                this.warning(`No blueprint found for ${subGen} falling back to default generator`);
+                this.info(`No blueprint found for ${subGen} falling back to default generator`);
                 return false;
             }
         }
