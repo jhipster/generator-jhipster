@@ -51,7 +51,7 @@
                                 <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                             </td>
                         <%_ } else if (fields[idx].fieldIsEnum) { _%>
-                            <td v-text="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</td>
+                            <td v-text="$t('<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</td>
                         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                             <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
                         <%_ } else if (fieldType === 'LocalDate') { _%>
@@ -75,7 +75,7 @@
                         <td>
                             <%_ if (otherEntityName === 'user') { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
-                                    <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+                                    <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                                         {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{last ? '' : ', '}}
                                     </span>
                                 <%_ } else { _%>
@@ -87,7 +87,7 @@
                                 <%_ } _%>
                             <%_ } else { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
-                                    <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+                                    <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                                         <router-link class="form-control-static" :to="'../<%= otherEntityStateName %>/' + <%= relationshipFieldName %>.id}} + '/View'">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</router-link>{{last ? '' : ', '}}
                                     </span>
                                 <%_ } else { _%>
@@ -136,8 +136,8 @@
 </template>
 <script>
     import axios from 'axios'
-    import {SERVER_API_URL} from "../../constants";
-    import Principal from '../../components/account/Principal';
+    import {SERVER_API_URL} from "../../<%_ if (clientRootFolder) { _%>../<%_ } _%>constants";
+    import Principal from '../../<%_ if (clientRootFolder) { _%>../<%_ } _%>components/account/Principal';
 
     export default {
         mixins: [Principal],

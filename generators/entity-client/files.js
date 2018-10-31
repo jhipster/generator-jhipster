@@ -57,7 +57,7 @@ module.exports = {
 function writeFiles() {
     if (this.skipClient) return;
     // write client side files for VueJS
-    this.writeFilesToDisk(vueFiles, this, false, this.fetchFromInstalledJHipster(`../../../../jhipster-vuejs/generators/entity-client/templates/${CLIENT_VUE_TEMPLATES_DIR}`));
+    this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
 
     // Add entity to menu
     const className = this.entityClass;
@@ -65,6 +65,6 @@ function writeFiles() {
     utils.addEntityToMenu(this, entityName, className);
 
     // Add entity paths to routing system
-    utils.addEntityToRouterImport(this, entityName, className);
+    utils.addEntityToRouterImport(this, className, this.entityFileName, this.entityFolderName);
     utils.addEntityToRouter(this, entityName, className);
 }

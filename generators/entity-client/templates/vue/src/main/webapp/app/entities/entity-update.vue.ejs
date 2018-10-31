@@ -241,7 +241,7 @@
 <script>
     import {integer, required, minLength, maxLength, pattern} from 'vuelidate/lib/validators'
     import axios from 'axios'
-    import {SERVER_API_URL} from "../../constants";
+    import {SERVER_API_URL} from "../../<%_ if (clientRootFolder) { _%>../<%_ } _%>constants";
     <%_
         let include = false;
         for (idx in fields) {

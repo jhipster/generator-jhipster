@@ -14,7 +14,7 @@
                         <dt><span v-text="$t('<%= i18nKeyPrefix %>.<%= fieldName %>')"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fields[idx].fieldNameHumanized %></span></dt>
                         <dd>
                             <%_ if (fields[idx].fieldIsEnum) { _%>
-                                <span v-text="$t('="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}')">{{<%= entityInstance %>.<%= fieldName %>}}</span>
+                                <span v-text="$t('<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</span>
                             <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
                                 <div v-if="<%= entityInstance %>.<%= fieldName %>">
                                     <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
@@ -24,7 +24,7 @@
                                 </div>
                             <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
                                 <div v-if="<%= entityInstance %>.<%= fieldName %>">
-                                    <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="$t('="entity.action.open')">open</a>
+                                    <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="$t('entity.action.open')">open</a>
                                     {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                                 </div>
                             <%_ } else { _%>
@@ -47,11 +47,11 @@
                         if (relationshipType === 'many-to-one'
                         || (relationshipType === 'one-to-one' && ownerSide === true)
                         || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
-                        <dt><span v-text="$t('=<%= i18nKeyPrefix %>.<%= relationshipName %>')"><%= relationshipNameHumanized %></span></dt>
+                        <dt><span v-text="$t('<%= i18nKeyPrefix %>.<%= relationshipName %>')"><%= relationshipNameHumanized %></span></dt>
                         <dd>
                             <%_ if (otherEntityName === 'user') { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
-                                    <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+                                    <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                                         {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{last ? '' : ', '}}
                                     </span>
                                 <%_ } else { _%>
@@ -63,7 +63,7 @@
                                 <%_ } _%>
                             <%_ } else { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
-                                    <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
+                                    <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
                                         <router-link :to="'../<%= otherEntityStateName %>/' + <%= relationshipFieldName %>.id + '/View'">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</router-link>{{last ? '' : ', '}}
                                     </span>
                                 <%_ } else { _%>
@@ -97,7 +97,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import {SERVER_API_URL} from "../../constants";
+        import {SERVER_API_URL} from "../../<%_ if (clientRootFolder) { _%>../<%_ } _%>constants";
 
     export default {
         data() {

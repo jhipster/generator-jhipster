@@ -44,7 +44,7 @@ function addEntityToMenu(generator, entityName, className) {
     );
 }
 
-function addEntityToRouterImport(generator, entityName, className) {
+function addEntityToRouterImport(generator, className, fileName, folderName) {
     jhipsterUtils.rewriteFile(
         {
             file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.js`,
@@ -52,9 +52,9 @@ function addEntityToRouterImport(generator, entityName, className) {
             splicable: [
                 // prettier-ignore
                 `
-                import ${className} from '../entities/${entityName}/${className}'
-                import ${className}Update from '../entities/${entityName}/${className}-update'
-                import ${className}Details from '../entities/${entityName}/${className}-details'
+                import ${className} from '../entities/${folderName}/${fileName}'
+                import ${className}Update from '../entities/${folderName}/${fileName}-update'
+                import ${className}Details from '../entities/${folderName}/${fileName}-details'
                 `
             ]
         },
