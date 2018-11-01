@@ -34,7 +34,8 @@ env:
     - JHI_E2E_HEADLESS=true
     - JHI_SCRIPTS=$HOME/generator-jhipster/test-integration/scripts
   matrix:
-    - JHI_APP=vuejs-ngx-default
+    - JHI_APP=vuejs-default
+    - JHI_APP=vuejs-noi18n
 
 #----------------------------------------------------------------------
 # Install all tools and check configuration
@@ -63,6 +64,7 @@ install:
   # copy init-env
   - cp $TRAVIS_BUILD_DIR/test-integration/scripts/00-init-env.sh /home/travis/generator-jhipster/test-integration/scripts/
   # generate project and entities
+  - $JHI_SCRIPTS/11-generate-entities.sh
   - $TRAVIS_BUILD_DIR/test-integration/scripts/12-generate-project-vuejs.sh
 
 #----------------------------------------------------------------------
