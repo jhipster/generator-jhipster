@@ -917,6 +917,9 @@
                 <configuration>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
+                    <!-- Fixes a bug which will be solved in next version after 2.22.1 then this can be removed -->
+                    <!-- see: https://issues.apache.org/jira/browse/SUREFIRE-1588 -->
+                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>
             <plugin>
