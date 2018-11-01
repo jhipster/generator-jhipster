@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.common with an alias.
 import Vue from 'vue';
 import setupAxiosInterceptors from './config/axios-interceptor';
-import App from './App';
+import App from './App.vue';
 import router from './router';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {Modal} from 'bootstrap-vue/es/components';
