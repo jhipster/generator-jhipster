@@ -12,7 +12,7 @@
                 "authentication": "<strong>ログイン失敗!</strong> パスワードをチェックして再度入力してください。"
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Did you forget your password?"
         }
     }

@@ -12,7 +12,7 @@
                 "authentication": "<strong>Erro de autenticação!</strong> Por favor verifique suas credenciais e tente novamente."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Esqueceu sua senha?"
         }
     }
