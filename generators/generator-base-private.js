@@ -1249,7 +1249,7 @@ module.exports = class extends Generator {
     registerClientTransforms(generator = this) {
         if (!generator.skipClient) {
             // Prettier is clever, it uses correct rules and correct parser according to file extension.
-            const prettierFilter = filter(['src/**/*.{ts,tsx,scss,css}'], { restore: true });
+            const prettierFilter = filter(['src/**/*.{json,ts,tsx,scss,css}'], { restore: true });
             // this pipe will pass through (restore) anything that doesn't match typescriptFilter
             generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
         }

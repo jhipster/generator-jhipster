@@ -111,7 +111,7 @@
     "mini-css-extract-plugin": "0.4.2",
     "moment-locales-webpack-plugin": "1.0.5",
     "optimize-css-assets-webpack-plugin": "5.0.1",
-    "prettier": "1.11.1",
+    "prettier": "1.14.3",
     <%_ if (protractorTests) { _%>
     "protractor": "5.4.0",
     <%_ } _%>
@@ -165,7 +165,7 @@
   },
   <%_ } _%>
   "scripts": {
-    "prettier:format": "prettier --write \"src/**/*.{ts,css,scss}\"",
+    "prettier:format": "prettier --write \"src/**/*.{json,ts,css,scss}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "ngc": "ngc -p tsconfig-aot.json",

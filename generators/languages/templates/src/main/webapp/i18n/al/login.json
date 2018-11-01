@@ -12,7 +12,7 @@
                 "authentication": "<strong>S'mund të futeni!</strong> Ju lutem kontrolloni kredencialet dhe provojeni sërisht."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Keni harruar fjalëkalimin?"
         }
     }
