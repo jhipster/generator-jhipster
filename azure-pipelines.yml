@@ -26,9 +26,9 @@ jobs:
     JHI_RUN_APP: 1
     JHI_PROTRACTOR: 0
     JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-    JHI_LIB_BRANCH: release
+    JHI_LIB_BRANCH: spring-boot_2.1.0
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
-    JHI_GEN_BRANCH: release
+    JHI_GEN_BRANCH: spring-boot_2.1.0
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
