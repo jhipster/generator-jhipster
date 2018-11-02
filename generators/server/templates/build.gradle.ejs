@@ -274,10 +274,10 @@ dependencies {
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') { _%>
-    compile "org.hibernate:hibernate-infinispan"
+    compile "org.infinispan:infinispan-hibernate-cache"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') {_%>
-    compile "org.infinispan:infinispan-spring-boot-starter"
+    compile "org.infinispan:infinispan-spring-boot-starter-embedded"
     compile "org.infinispan:infinispan-core"
     compile "org.infinispan:infinispan-jcache"
     compile ("org.infinispan:infinispan-cloud") {
