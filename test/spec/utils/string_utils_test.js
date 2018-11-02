@@ -21,35 +21,73 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const StringUtils = require('../../../lib/utils/string_utils');
+const { lowerFirst, camelCase, upperFirst } = require('../../../lib/utils/string_utils');
 
 describe('StringUtils', () => {
   describe('::camelCase', () => {
     context('when passing a valid string', () => {
       it('camel-cases it', () => {
-        expect(StringUtils.camelCase('e')).to.eq('e');
-        expect(StringUtils.camelCase('entity')).to.eq('entity');
-        expect(StringUtils.camelCase('Entity')).to.eq('entity');
-        expect(StringUtils.camelCase('EntityA')).to.eq('entityA');
-        expect(StringUtils.camelCase('EntityAN')).to.eq('entityAN');
-        expect(StringUtils.camelCase('Entity_AN')).to.eq('entityAN');
-        expect(StringUtils.camelCase('_entity_AN')).to.eq('entityAN');
-        expect(StringUtils.camelCase('_entit--y_AN---')).to.eq('entityAN');
-        expect(StringUtils.camelCase('En tity_AN ')).to.eq('entityAN');
+        expect(camelCase('e')).to.equal('e');
+        expect(camelCase('entity')).to.equal('entity');
+        expect(camelCase('Entity')).to.equal('entity');
+        expect(camelCase('EntityA')).to.equal('entityA');
+        expect(camelCase('EntityAN')).to.equal('entityAN');
+        expect(camelCase('Entity_AN')).to.equal('entityAN');
+        expect(camelCase('_entity_AN')).to.equal('entityAN');
+        expect(camelCase('_entit--y_AN---')).to.equal('entityAN');
+        expect(camelCase('En tity_AN ')).to.equal('entityAN');
       });
     });
     context('when passing an invalid parameter', () => {
       context('as it is nil', () => {
         it('fails', () => {
           expect(() => {
-            StringUtils.camelCase();
+            camelCase();
           }).to.throw('The passed string cannot be nil.');
         });
       });
       context('as it is empty', () => {
         it('returns it', () => {
-          expect(StringUtils.camelCase('')).to.eq('');
+          expect(camelCase('')).to.equal('');
         });
+      });
+    });
+  });
+  describe('::lowerFirst', () => {
+    context('when passing a nil string', () => {
+      it('fails', () => {
+        expect(() => {
+          lowerFirst();
+        }).to.throw('The passed string cannot be nil.');
+      });
+    });
+    context('when passing an empty string', () => {
+      it('returns it', () => {
+        expect(lowerFirst('')).to.equal('');
+      });
+    });
+    context('when passing a valid string', () => {
+      it('lowers the first letter', () => {
+        expect(lowerFirst('Abc')).to.equal('abc');
+      });
+    });
+  });
+  describe('::upperFirst', () => {
+    context('when passing a nil string', () => {
+      it('fails', () => {
+        expect(() => {
+          upperFirst();
+        }).to.throw('The passed string cannot be nil.');
+      });
+    });
+    context('when passing an empty string', () => {
+      it('returns it', () => {
+        expect(upperFirst('')).to.equal('');
+      });
+    });
+    context('when passing a valid string', () => {
+      it('uppers the first letter', () => {
+        expect(upperFirst('abc')).to.equal('Abc');
       });
     });
   });

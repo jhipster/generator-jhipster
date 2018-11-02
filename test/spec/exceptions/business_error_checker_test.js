@@ -50,14 +50,10 @@ describe('BusinessErrorChecker', () => {
     let checker = null;
 
     context('with no passed JDL object', () => {
-      before(() => {
-        checker = new BusinessErrorChecker();
-      });
-
-      it('does not fail', () => {
+      it('fails', () => {
         expect(() => {
-          checker.checkForErrors();
-        }).not.to.throw();
+          new BusinessErrorChecker();
+        }).to.throw('A JDL object must be passed to check for business errors.');
       });
     });
     context('with a complete JDL object', () => {
@@ -644,6 +640,81 @@ describe('BusinessErrorChecker', () => {
             checker.checkForRelationshipErrors();
           }).to.throw("Required relationships to the same entity are not supported, for relationship from 'A' to 'A'.");
         });
+      });
+    });
+    context('with relationships between multiple entities', () => {
+      before(() => {
+        jdlObject.addApplication(
+          new JDLMicroserviceApplication({
+            config: {
+              baseName: 'app1'
+            },
+            entities: ['A', 'B']
+          })
+        );
+        jdlObject.addApplication(
+          new JDLMicroserviceApplication({
+            config: {
+              baseName: 'app2'
+            },
+            entities: ['B', 'C']
+          })
+        );
+        jdlObject.addApplication(
+          new JDLMicroserviceApplication({
+            config: {
+              baseName: 'app3'
+            },
+            entities: ['A', 'B', 'C']
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'A'
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'B'
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'C'
+          })
+        );
+        jdlObject.addRelationship(
+          new JDLRelationship({
+            from: 'A',
+            to: 'B',
+            type: RelationshipTypes.MANY_TO_MANY,
+            injectedFieldInFrom: 'b'
+          })
+        );
+        jdlObject.addRelationship(
+          new JDLRelationship({
+            from: 'B',
+            to: 'C',
+            type: RelationshipTypes.MANY_TO_MANY,
+            injectedFieldInFrom: 'c'
+          })
+        );
+        jdlObject.addRelationship(
+          new JDLRelationship({
+            from: 'A',
+            to: 'C',
+            type: RelationshipTypes.MANY_TO_MANY,
+            injectedFieldInFrom: 'c'
+          })
+        );
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+      it('fails', () => {
+        expect(() => {
+          checker.checkForRelationshipErrors();
+        }).to.throw(
+          "Entities for the ManyToMany relationship from 'B' to 'C'.\nEntities for the ManyToMany relationship from 'A' to 'C'."
+        );
       });
     });
   });

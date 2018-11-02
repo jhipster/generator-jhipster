@@ -25,8 +25,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run test && npm run coverage"
+      "pre-commit": "lint-staged && npm run test && npm run coverage"
     }
   },
   "lint-staged": {
@@ -61,22 +60,22 @@
   },
   "devDependencies": {
     "chai": "4.2.0",
-    "eslint": "5.7.0",
+    "eslint": "5.8.0",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-config-prettier": "3.1.0",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-mocha": "5.2.0",
     "eslint-plugin-prettier": "3.0.0",
     "husky": "1.1.2",
-    "lint-staged": "7.3.0",
+    "lint-staged": "8.0.4",
     "mocha": "5.2.0",
     "mocha-clean": "1.0.0",
     "nyc": "13.1.0",
     "prettier": "1.14.3",
-    "sinon": "7.0.0",
+    "sinon": "7.1.1",
     "sinon-chai": "3.2.0",
     "terser-webpack-plugin": "1.1.0",
-    "webpack": "4.20.2",
+    "webpack": "4.23.1",
     "webpack-cli": "3.1.2"
   },
   "peerDependencies": {},

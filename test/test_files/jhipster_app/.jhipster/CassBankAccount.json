@@ -1,0 +1,65 @@
+{
+    "fluentMethods": true,
+    "fields": [
+        {
+            "fieldName": "userId",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "bankNumber",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "agencyNumber",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "lastOperationDuration",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "meanOperationDuration",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "balance",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "lastOperationDate",
+            "fieldType": "Date"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "picture",
+            "fieldType": "ByteBuffer",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "operationsFile",
+            "fieldType": "ByteBuffer"
+        }
+    ],
+    "changelogDate": "20150805124838",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "angularJSSuffix": "mySuffix",
+    "pagination": "no",
+    "entityTableName": "cassBankAccount"
+}
