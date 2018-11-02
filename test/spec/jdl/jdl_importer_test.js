@@ -516,7 +516,7 @@ describe('JDLImporter', () => {
       it('creates the app config file in the same folder', () => {
         expect(fs.statSync('.yo-rc.json').isFile()).to.be.true;
         expect(content['generator-jhipster'].entitySuffix).to.equal('Entity');
-        expect(content['generator-jhipster'].dtoSuffix).to.equal(false);
+        expect(content['generator-jhipster'].dtoSuffix).to.equal('');
       });
     });
     context('when parsing JDL applications and exporting them', () => {

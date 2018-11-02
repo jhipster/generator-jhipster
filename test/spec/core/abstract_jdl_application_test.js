@@ -62,7 +62,7 @@ describe('AbstractJDLApplication', () => {
         });
       });
     });
-    context("when having as cleint framework 'angular'", () => {
+    context("when having as client framework 'angular'", () => {
       before(() => {
         const jdlApplication = new AbstractJDLApplication({
           config: { clientFramework: 'angular', jhipsterVersion: '4.9.0' }
@@ -72,6 +72,19 @@ describe('AbstractJDLApplication', () => {
 
       it("replaces it by 'angularX'", () => {
         expect(jdlApplicationConfig.clientFramework).to.equal('angularX');
+      });
+    });
+    context('when having booleans for entity and dto suffix options', () => {
+      before(() => {
+        const jdlApplication = new AbstractJDLApplication({
+          config: { dtoSuffix: false, entitySuffix: false }
+        });
+        jdlApplicationConfig = jdlApplication.config;
+      });
+
+      it('casts them as empty strings', () => {
+        expect(jdlApplicationConfig.dtoSuffix).to.equal('');
+        expect(jdlApplicationConfig.entitySuffix).to.equal('');
       });
     });
   });
