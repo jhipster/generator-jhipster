@@ -92,14 +92,14 @@
     "generator-jhipster": "<%= packagejs.version %>",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
-    <%_ if(!skipCommitHook) { _%>
+    <%_ if (!skipCommitHook) { _%>
     "husky": "1.1.0",
     <%_ } _%>
     "jest": "23.6.0",
     "jest-junit": "5.1.0",
     "jest-preset-angular": "6.0.1",
     "jest-sonar-reporter": "2.0.0",
-    <%_ if(!skipCommitHook) { _%>
+    <%_ if (!skipCommitHook) { _%>
     "lint-staged": "7.3.0",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
@@ -156,7 +156,7 @@
     "node": ">=8.9.0"<% if (clientPackageManager === 'yarn') { %>,
     "yarn": ">=1.3.2"<% } %>
   },
-  <%_ if(!skipCommitHook) { _%>
+  <%_ if (!skipCommitHook) { _%>
   "lint-staged": {
     "src/**/*.{ts,css,scss}": [
       "prettier --write",

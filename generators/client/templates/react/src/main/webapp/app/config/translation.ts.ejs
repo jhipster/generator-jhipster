@@ -32,7 +32,7 @@ export const languages: any = {
 
 export const locales = Object.keys(languages).sort();
 
-<%_ if(enableI18nRTL) { _%>
+<%_ if (enableI18nRTL) { _%>
 export const isRTL = (lang: string): boolean => languages[lang] && languages[lang].rtl;
 <%_ } _%>
 
