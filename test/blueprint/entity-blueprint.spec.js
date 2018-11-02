@@ -3,7 +3,11 @@ const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files').entity;
+const createBlueprintMockForSubgen = require('../utils/utils').createBlueprintMockForSubgen;
 const EntityGenerator = require('../../generators/entity');
+const EntityClientGenerator = require('../../generators/entity-client');
+const EntityServerGenerator = require('../../generators/entity-server');
+const EntityI18nGenerator = require('../../generators/entity-i18n');
 const constants = require('../../generators/generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
@@ -79,7 +83,12 @@ describe('JHipster entity generator with blueprint', () => {
                         blueprint: blueprintName,
                         skipChecks: true
                     })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:entity']])
+                    .withGenerators([
+                        [mockBlueprintSubGen, 'jhipster-myblueprint:entity'],
+                        [createBlueprintMockForSubgen(EntityClientGenerator), 'jhipster-myblueprint:entity-client'],
+                        [createBlueprintMockForSubgen(EntityServerGenerator), 'jhipster-myblueprint:entity-server'],
+                        [createBlueprintMockForSubgen(EntityI18nGenerator), 'jhipster-myblueprint:entity-i18n']
+                    ])
                     .withPrompts({
                         fieldAdd: false,
                         relationshipAdd: false,
