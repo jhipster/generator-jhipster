@@ -85,16 +85,16 @@ import javax.annotation.PreDestroy;
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
-import infinispan.autoconfigure.embedded.InfinispanCacheConfigurer;
-import infinispan.autoconfigure.embedded.InfinispanGlobalConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.jhipster.config.JHipsterProperties;
 import java.util.concurrent.TimeUnit;
 import org.infinispan.eviction.EvictionType;
 import org.infinispan.manager.EmbeddedCacheManager;
+import org.infinispan.spring.starter.embedded.InfinispanCacheConfigurer;
+import org.infinispan.spring.starter.embedded.InfinispanEmbeddedCacheManagerAutoConfiguration;
+import org.infinispan.spring.starter.embedded.InfinispanGlobalConfigurer;
 import org.infinispan.transaction.TransactionMode;
-import infinispan.autoconfigure.embedded.InfinispanEmbeddedCacheManagerAutoConfiguration;
 import org.infinispan.jcache.embedded.ConfigurationAdapter;
 import org.infinispan.jcache.embedded.JCache;
 import org.infinispan.jcache.embedded.JCacheManager;
@@ -371,7 +371,7 @@ public class CacheConfiguration {
      * If the service discovery is not enabled, host discovery will be based on
      * the default transport settings defined in the 'config-file' packaged within
      * the Jar. The 'config-file' can be overridden using the application property
-     * <i>jhipster.cache.inifnispan.config-file</i>
+     * <i>jhipster.cache.infinispan.config-file</i>
      *
      * <p>
      * If no service discovery is defined, you have the choice of 'config-file'
@@ -379,6 +379,8 @@ public class CacheConfiguration {
      * supports discovery natively for most of the platforms like Kubernets/OpenShift,
      * AWS, Azure and Google.
      *
+     * @param jHipsterProperties the jhipster properties to configure from
+     * @return the infinispan global configurer
      */
     @Bean
     public InfinispanGlobalConfigurer globalConfiguration(JHipsterProperties jHipsterProperties) {
@@ -441,6 +443,8 @@ public class CacheConfiguration {
      *      </li>
      *  </ol>
      *
+     * @param jHipsterProperties the jhipster properties to configure from
+     * @return the infinispan cache configurer
      */
     @Bean
     public InfinispanCacheConfigurer cacheConfigurer(JHipsterProperties jHipsterProperties) {
@@ -449,19 +453,21 @@ public class CacheConfiguration {
 
         return manager -> {
             // initialize application cache
-            manager.defineConfiguration("local-app-data", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
+            manager.defineConfiguration("local-app-data", new ConfigurationBuilder()
+                .clustering().cacheMode(CacheMode.LOCAL)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
-                .eviction().type(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
+                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
             manager.defineConfiguration("dist-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(cacheInfo.getDistributed().getInstanceCount())
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled()).eviction()
-                .type(EvictionType.COUNT).size(cacheInfo.getDistributed().getMaxEntries()).expiration().lifespan(cacheInfo.getDistributed()
-                .getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
-            manager.defineConfiguration("repl-app-data", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_SYNC)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
-                .eviction().type(EvictionType.COUNT).size(cacheInfo.getReplicated()
-                .getMaxEntries()).expiration().lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
+                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getDistributed().getMaxEntries()).expiration()
+                .lifespan(cacheInfo.getDistributed().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
+            manager.defineConfiguration("repl-app-data", new ConfigurationBuilder()
+                .clustering().cacheMode(CacheMode.REPL_SYNC)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getReplicated().getMaxEntries()).expiration()
+                .lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
 
             // initialize Hibernate L2 cache
             manager.defineConfiguration("entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.INVALIDATION_SYNC)
@@ -495,6 +501,9 @@ public class CacheConfiguration {
      * <p>
      * jCache stats are at instance level. If you need stats at clustering level, then it needs to be retrieved from MBX:org.infinispan
      *
+     * @param cacheManager the embedded cache manager
+     * @param jHipsterProperties the jhipster properties to configure from
+     * @return the jcache manager
      */
     @Bean
     public JCacheManager getJCacheManager(EmbeddedCacheManager cacheManager, JHipsterProperties jHipsterProperties){
