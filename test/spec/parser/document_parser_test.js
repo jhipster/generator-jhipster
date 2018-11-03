@@ -692,6 +692,34 @@ describe('DocumentParser', () => {
           });
         });
       });
+      context('when parsing deployments', () => {
+        let deployment = null;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/deployments.jdl']);
+          const jdlObject = DocumentParser.parseFromConfigurationObject({
+            document: input
+          });
+          deployment = jdlObject.deployments['docker-compose'];
+        });
+
+        it('parses it', () => {
+          expect(deployment.appsFolders.toArray()).to.eql(['tata', 'titi']);
+          delete deployment.appsFolders;
+          delete deployment.clusteredDbApps;
+          delete deployment.consoleOptions;
+
+          expect(deployment).to.deep.equal({
+            deploymentType: 'docker-compose',
+            directoryPath: '../',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            serviceDiscoveryType: 'eureka'
+          });
+        });
+      });
       context('when parsing filtered entities', () => {
         let jdlObject = null;
         let filterOption = null;
