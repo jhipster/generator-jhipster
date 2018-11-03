@@ -1113,7 +1113,6 @@ describe('JDLImporter', () => {
             clusteredDbApps: [],
             consoleOptions: [],
             serviceDiscoveryType: 'eureka',
-            adminPassword: 'admin',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
             monitoring: 'no'
@@ -1166,7 +1165,6 @@ describe('JDLImporter', () => {
             clusteredDbApps: [],
             consoleOptions: [],
             serviceDiscoveryType: 'eureka',
-            adminPassword: 'admin',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
             monitoring: 'no'
@@ -1174,7 +1172,6 @@ describe('JDLImporter', () => {
         },
         {
           'generator-jhipster': {
-            adminPassword: 'admin',
             appsFolders: ['tata', 'titi'],
             clusteredDbApps: [],
             consoleOptions: [],
@@ -1193,7 +1190,6 @@ describe('JDLImporter', () => {
         },
         {
           'generator-jhipster': {
-            adminPassword: 'admin',
             appsFolders: ['tata', 'titi'],
             clusteredDbApps: [],
             consoleOptions: [],
@@ -1209,7 +1205,6 @@ describe('JDLImporter', () => {
         },
         {
           'generator-jhipster': {
-            adminPassword: 'admin',
             appsFolders: ['tata', 'titi'],
             clusteredDbApps: [],
             consoleOptions: [],

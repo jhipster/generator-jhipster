@@ -20,10 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 const JDLDeployment = require('../../../lib/core/jdl_deployment');
-const JDLField = require('../../../lib/core/jdl_field');
-const JDLValidation = require('../../../lib/core/jdl_validation');
 
-describe.skip('JDLDeployment', () => {
+describe('JDLDeployment', () => {
   describe('::new', () => {
     context('when not passing any argument', () => {
       it('fails', () => {
@@ -92,7 +90,7 @@ describe.skip('JDLDeployment', () => {
     });
   });
   describe('#toString', () => {
-    context('without a comment', () => {
+    context('with some default options', () => {
       let deployment = null;
       let args = null;
 
@@ -100,120 +98,45 @@ describe.skip('JDLDeployment', () => {
         args = {
           deploymentType: 'docker-compose',
           appsFolders: ['foo', 'bar'],
+          directoryPath: '../',
+          gatewayType: 'zuul',
           dockerRepositoryName: 'test'
         };
         deployment = new JDLDeployment(args);
       });
 
-      it('stringifies its content', () => {
-        expect(deployment.toString()).to.eql(`
-  {
+      it('stringifies its content without default values', () => {
+        expect(deployment.toString()).to.eql(`  {
     deploymentType docker-compose
-    gatewayType zuul
-    monitoring no
-    directoryPath ../
     appsFolders [foo, bar]
-    clusteredDbApps []
-    consoleOptions []
-    adminPassword admin
-    serviceDiscoveryType eureka
     dockerRepositoryName test
-    dockerPushCommand docker push
   }`);
       });
     });
-    context('with a table equal to the name (snakecase)', () => {
+    context('with some non default options', () => {
       let deployment = null;
       let args = null;
 
       before(() => {
         args = {
-          name: 'MySuperdeployment',
-          tableName: 'my_super_deployment'
+          deploymentType: 'docker-compose',
+          appsFolders: ['foo', 'bar'],
+          directoryPath: '../parent',
+          gatewayType: 'zuul',
+          monitoring: 'elk',
+          dockerRepositoryName: 'test'
         };
         deployment = new JDLDeployment(args);
       });
 
-      it('does not export it', () => {
-        expect(deployment.toString()).to.equal(`deployment ${args.name}`);
-      });
-    });
-    context('with a table name not equal to the name (snakecase)', () => {
-      let deployment = null;
-      let args = null;
-
-      before(() => {
-        args = {
-          name: 'MySuperdeployment',
-          tableName: 'MyTableName'
-        };
-        deployment = new JDLDeployment(args);
-      });
-
-      it('exports it', () => {
-        expect(deployment.toString()).to.equal(`deployment ${args.name} (MyTableName)`);
-      });
-    });
-    context('without fields', () => {
-      let deployment = null;
-      let args = null;
-
-      before(() => {
-        args = {
-          name: 'Abc',
-          tableName: 'String',
-          comment: 'comment'
-        };
-        deployment = new JDLDeployment(args);
-      });
-
-      it('stringifies its content', () => {
-        expect(deployment.toString()).to.eq(
-          `/**
- * ${args.comment}
- */
-deployment ${args.name} (${args.tableName})`
-        );
-      });
-    });
-    context('with fields', () => {
-      let deployment = null;
-      let field1 = null;
-      let field2 = null;
-
-      before(() => {
-        deployment = new JDLDeployment({
-          name: 'Abc',
-          tableName: 'String',
-          comment: 'deployment comment'
-        });
-        field1 = new JDLField({
-          name: 'myField',
-          type: 'Integer',
-          comment: 'Field comment',
-          validations: [new JDLValidation()]
-        });
-        field2 = new JDLField({
-          name: 'myOtherField',
-          type: 'Long'
-        });
-      });
-
-      it('stringifies its content', () => {
-        deployment.addField(field1);
-        deployment.addField(field2);
-        expect(deployment.toString()).to.eq(
-          `/**
- * ${deployment.comment}
- */
-deployment ${deployment.name} (${deployment.tableName}) {
-  /**
-   * ${field1.comment}
-   */
-  ${field1.name} ${field1.type} ${field1.validations[0]},
-  ${field2.name} ${field2.type}
-}`
-        );
+      it('stringifies it', () => {
+        expect(deployment.toString()).to.eql(`  {
+    deploymentType docker-compose
+    monitoring elk
+    directoryPath ../parent
+    appsFolders [foo, bar]
+    dockerRepositoryName test
+  }`);
       });
     });
   });

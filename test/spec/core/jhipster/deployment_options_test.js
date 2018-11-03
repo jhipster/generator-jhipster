@@ -22,6 +22,7 @@
 
 const expect = require('chai').expect;
 const { DeploymentTypes, Options } = require('../../../../lib/core/jhipster/deployment_options');
+const JDLSet = require('../../../../lib/utils/objects/set');
 
 describe('DeploymentTypes', () => {
   describe('::exists', () => {
@@ -50,10 +51,9 @@ describe('Options', () => {
       it('should return docker deployment config', () => {
         expect(Options.defaults()).to.eql({
           deploymentType: 'docker-compose',
-          adminPassword: 'admin',
-          appsFolders: [],
-          clusteredDbApps: [],
-          consoleOptions: [],
+          appsFolders: new JDLSet([]),
+          clusteredDbApps: new JDLSet([]),
+          consoleOptions: new JDLSet([]),
           directoryPath: '../',
           dockerPushCommand: 'docker push',
           dockerRepositoryName: '',
@@ -67,10 +67,9 @@ describe('Options', () => {
       it('should return kubernetes deployment config', () => {
         expect(Options.defaults('kubernetes')).to.eql({
           deploymentType: 'kubernetes',
-          adminPassword: 'admin',
-          appsFolders: [],
-          clusteredDbApps: [],
-          consoleOptions: [],
+          appsFolders: new JDLSet([]),
+          clusteredDbApps: new JDLSet([]),
+          consoleOptions: new JDLSet([]),
           directoryPath: '../',
           dockerPushCommand: 'docker push',
           dockerRepositoryName: '',
@@ -89,10 +88,9 @@ describe('Options', () => {
       it('should return rancher-compose deployment config', () => {
         expect(Options.defaults('rancher-compose')).to.eql({
           deploymentType: 'rancher-compose',
-          adminPassword: 'admin',
-          appsFolders: [],
-          clusteredDbApps: [],
-          consoleOptions: [],
+          appsFolders: new JDLSet([]),
+          clusteredDbApps: new JDLSet([]),
+          consoleOptions: new JDLSet([]),
           directoryPath: '../',
           dockerPushCommand: 'docker push',
           dockerRepositoryName: '',
@@ -107,10 +105,9 @@ describe('Options', () => {
       it('should return openshift deployment config', () => {
         expect(Options.defaults('openshift')).to.eql({
           deploymentType: 'openshift',
-          adminPassword: 'admin',
-          appsFolders: [],
-          clusteredDbApps: [],
-          consoleOptions: [],
+          appsFolders: new JDLSet([]),
+          clusteredDbApps: new JDLSet([]),
+          consoleOptions: new JDLSet([]),
           directoryPath: '../',
           dockerPushCommand: 'docker push',
           dockerRepositoryName: '',
