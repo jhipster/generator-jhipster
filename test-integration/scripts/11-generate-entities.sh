@@ -15,7 +15,7 @@ moveEntity() {
 # Copy entities json
 #-------------------------------------------------------------------------------
 
-rm -Rf "$JHI_FOLDER_APP"
+rm -rf "$JHI_FOLDER_APP"
 mkdir -p "$JHI_FOLDER_APP"/.jhipster/
 
 if [[ ("$JHI_APP" == *"mongodb"*) || ("$JHI_APP" == *"couchbase"*) ]]; then
