@@ -19,26 +19,26 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const Set = require('../../../../lib/utils/objects/set');
+const JDLSet = require('../../../../lib/utils/objects/set');
 
-describe('Set', () => {
+describe('JDLSet', () => {
   let set;
 
   beforeEach(() => {
-    set = new Set();
+    set = new JDLSet();
   });
 
   describe('::new', () => {
     context('with no arg', () => {
-      it('creates a new Set', () => {
-        new Set(); // eslint-disable-line
+      it('creates a new JDLSet', () => {
+        new JDLSet(); // eslint-disable-line
       });
     });
     context('with an array', () => {
       let set = null;
 
       before(() => {
-        set = new Set([1, 2, 3, 4]);
+        set = new JDLSet([1, 2, 3, 4]);
       });
 
       it("creates a Set with the array's elements", () => {
@@ -108,7 +108,7 @@ describe('Set', () => {
     context('when passing an empty Set', () => {
       it("doesn't change the Set and returns false", () => {
         set.addArrayElements([1, 2, 3, 4, 5, 6]);
-        const otherSet = new Set();
+        const otherSet = new JDLSet();
         const result = set.addSetElements(otherSet);
         expect(result).to.be.false;
         expect(set.size()).to.eq(6);
@@ -117,7 +117,7 @@ describe('Set', () => {
     context('when passing a Set containing already present elements', () => {
       it("doesn't change the Set and returns false", () => {
         set.addArrayElements([1, 2, 3, 4, 5, 6]);
-        const otherSet = new Set();
+        const otherSet = new JDLSet();
         otherSet.addArrayElements([1, 2, 3, 4, 5, 6]);
         const result = set.addSetElements(otherSet);
         expect(result).to.be.false;
@@ -127,7 +127,7 @@ describe('Set', () => {
     context('when passing a Set having at least one new element', () => {
       it('changes the Set and returns true', () => {
         set.addArrayElements([1, 2, 3, 4, 5, 6]);
-        const otherSet = new Set();
+        const otherSet = new JDLSet();
         otherSet.addArrayElements([1, 2, 3, 4, 5, 7]);
         const result = set.addSetElements(otherSet);
         expect(result).to.be.true;
@@ -187,7 +187,7 @@ describe('Set', () => {
       });
     });
     context('when passing a valid function', () => {
-      it('executes it for each element and returns the new Set', () => {
+      it('executes it for each element and returns the new JDLSet', () => {
         set.addArrayElements([1, 2, 3, 4, 5, 6]);
         const newSet = set.filter(element => element > 3);
         expect(newSet).not.to.be.null;
@@ -204,7 +204,7 @@ describe('Set', () => {
       });
     });
     context('when passing a valid function', () => {
-      it('executes it for each element and returns the new Set', () => {
+      it('executes it for each element and returns the new JDLSet', () => {
         set.addArrayElements([1, 2, 3, 4, 5, 6]);
         const newSet = set.map(element => element * 7);
         expect(newSet).not.to.be.null;
