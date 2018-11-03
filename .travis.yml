@@ -86,6 +86,8 @@ install:
   - $JHI_SCRIPTS/11-generate-entities.sh
   - $JHI_SCRIPTS/12-generate-project.sh
   - $JHI_SCRIPTS/13-replace-version-generated-project.sh
+  - $JHI_SCRIPTS/14-jhipster-info.sh
+
 #----------------------------------------------------------------------
 # Launch tests
 #----------------------------------------------------------------------
