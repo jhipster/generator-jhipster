@@ -20,10 +20,10 @@ if [ "$JHI_APP" == "ngx-default" ]; then
                 -Dsonar.host.url=https://sonarcloud.io \
                 -Dsonar.login=$SONAR_TOKEN \
                 -Dsonar.pullrequest.provider=github \
-                -Dsonar.pullrequest.github.repository=$TRAVIS_REPO_SLUG
+                -Dsonar.pullrequest.github.repository=$TRAVIS_REPO_SLUG \
                 -Dsonar.pullrequest.base=master \
                 -Dsonar.pullrequest.key=$TRAVIS_PULL_REQUEST \
-                -Dsonar.pullrequest.branch=$TRAVIS_PULL_REQUEST_BRANCH \
+                -Dsonar.pullrequest.branch=$TRAVIS_PULL_REQUEST_BRANCH
         fi
     fi
 fi
