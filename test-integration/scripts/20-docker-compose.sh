@@ -42,5 +42,8 @@ fi
 if [ -a src/main/docker/keycloak.yml ]; then
     docker-compose -f src/main/docker/keycloak.yml up -d
 fi
+if [ $JHI_SONAR = 1 ]; then
+    docker-compose -f src/main/docker/sonar.yml up -d
+fi
 
 docker ps -a

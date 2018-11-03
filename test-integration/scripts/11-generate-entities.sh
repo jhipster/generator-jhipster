@@ -149,5 +149,3 @@ else
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
 fi
-
-ls -l "$JHI_FOLDER_APP"/.jhipster/
