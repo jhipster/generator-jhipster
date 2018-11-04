@@ -125,10 +125,11 @@ describe('JDL DSL API', () => {
       });
 
       it('provides suggestions', () => {
-        expect(result).to.have.lengthOf(18);
+        expect(result).to.have.lengthOf(19);
         expect(result).to.have.members([
           tokens.AT,
           tokens.APPLICATION,
+          tokens.DEPLOYMENT,
           tokens.NAME,
           tokens.ENTITY,
           tokens.RELATIONSHIP,

@@ -12,3 +12,5 @@ sonar-project.properties
 yarn-error.log
 jhipster-core.iml
 .project
+test/**/*.png
+.vscode/*
