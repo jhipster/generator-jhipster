@@ -31,7 +31,17 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+logging:
+    level:
+        ROOT: OFF
+        io.github.jhipster: OFF
+        <%=packageName%>: OFF
+        org.zalando: OFF
+        org.springframework: OFF
+        org.springframework.web: OFF
+        org.springframework.security: OFF
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
+
 eureka:
     client:
         enabled: false
