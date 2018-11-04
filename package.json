@@ -29,8 +29,9 @@
     }
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --write"
+    "{lib,module,scripts,test}/*.js": [
+      "prettier --write",
+      "git add"
     ]
   },
   "homepage": "https://github.com/jhipster/jhipster-core",
