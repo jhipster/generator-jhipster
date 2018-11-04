@@ -972,5 +972,278 @@ describe('JDLImporter', () => {
         expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes("\\'")).to.be.true;
       });
     });
+
+    context('when parsing JDL applications and deployment config', () => {
+      const contents = [];
+      const expectedContents = [
+        {
+          entities: [],
+          'generator-jhipster': {
+            baseName: 'tata',
+            packageName: 'com.mathieu.tata',
+            packageFolder: 'com/mathieu/tata',
+            authenticationType: 'jwt',
+            websocket: false,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            prodDatabaseType: 'mysql',
+            buildTool: 'maven',
+            searchEngine: false,
+            enableTranslation: true,
+            applicationType: 'monolith',
+            cacheProvider: 'ehcache',
+            testFrameworks: [],
+            languages: ['en', 'fr'],
+            serverPort: '8080',
+            enableSwaggerCodegen: false,
+            enableHibernateCache: true,
+            useSass: true,
+            jhiPrefix: 'jhi',
+            messageBroker: false,
+            serviceDiscoveryType: false,
+            clientPackageManager: 'npm',
+            clientFramework: 'angularX',
+            nativeLanguage: 'en',
+            skipUserManagement: false,
+            skipClient: false,
+            skipServer: false
+          }
+        },
+        {
+          entities: [],
+          'generator-jhipster': {
+            baseName: 'titi',
+            packageName: 'com.mathieu.titi',
+            packageFolder: 'com/mathieu/titi',
+            authenticationType: 'jwt',
+            websocket: false,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            prodDatabaseType: 'mysql',
+            buildTool: 'maven',
+            searchEngine: false,
+            enableTranslation: true,
+            applicationType: 'gateway',
+            cacheProvider: 'ehcache',
+            testFrameworks: [],
+            languages: ['en', 'fr'],
+            serverPort: '8080',
+            enableSwaggerCodegen: false,
+            enableHibernateCache: true,
+            useSass: true,
+            jhiPrefix: 'jhi',
+            messageBroker: false,
+            serviceDiscoveryType: 'eureka',
+            clientPackageManager: 'npm',
+            clientFramework: 'angularX',
+            nativeLanguage: 'en',
+            skipUserManagement: false,
+            skipClient: false,
+            skipServer: false
+          }
+        },
+        {
+          entities: [],
+          'generator-jhipster': {
+            baseName: 'toto',
+            packageName: 'com.mathieu.toto',
+            packageFolder: 'com/mathieu/toto',
+            authenticationType: 'jwt',
+            websocket: false,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            prodDatabaseType: 'mysql',
+            buildTool: 'maven',
+            searchEngine: false,
+            enableTranslation: true,
+            applicationType: 'microservice',
+            testFrameworks: [],
+            languages: ['en', 'fr'],
+            serverPort: '8081',
+            enableSwaggerCodegen: false,
+            enableHibernateCache: true,
+            cacheProvider: 'hazelcast',
+            jhiPrefix: 'jhi',
+            messageBroker: false,
+            serviceDiscoveryType: 'eureka',
+            clientPackageManager: 'npm',
+            nativeLanguage: 'en',
+            skipUserManagement: true,
+            skipClient: true
+          }
+        },
+        {
+          entities: [],
+          'generator-jhipster': {
+            baseName: 'tutu',
+            packageName: 'com.mathieu.tutu',
+            packageFolder: 'com/mathieu/tutu',
+            authenticationType: 'jwt',
+            websocket: false,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            prodDatabaseType: 'mysql',
+            buildTool: 'maven',
+            searchEngine: false,
+            enableTranslation: true,
+            applicationType: 'monolith',
+            cacheProvider: 'ehcache',
+            testFrameworks: [],
+            languages: ['en', 'fr'],
+            serverPort: '8080',
+            enableSwaggerCodegen: false,
+            enableHibernateCache: true,
+            useSass: true,
+            jhiPrefix: 'jhi',
+            messageBroker: false,
+            serviceDiscoveryType: false,
+            clientPackageManager: 'npm',
+            clientFramework: 'angularX',
+            nativeLanguage: 'en',
+            skipUserManagement: false,
+            skipClient: false,
+            skipServer: false
+          }
+        },
+        {
+          'generator-jhipster': {
+            appsFolders: ['tata', 'titi'],
+            directoryPath: '../',
+            gatewayType: 'zuul',
+            clusteredDbApps: [],
+            consoleOptions: [],
+            serviceDiscoveryType: 'eureka',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            monitoring: 'no'
+          }
+        }
+      ];
+      const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'applications3.jdl')]);
+        importer.import();
+        APPLICATION_NAMES.forEach(applicationName => {
+          contents.push(JSON.parse(fs.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
+        });
+        contents.push(JSON.parse(fs.readFileSync(path.join('docker-compose', '.yo-rc.json'), 'utf-8')));
+      });
+
+      after(() => {
+        APPLICATION_NAMES.forEach(applicationName => {
+          fs.unlinkSync(path.join(applicationName, '.yo-rc.json'));
+          fs.rmdirSync(applicationName);
+        });
+        fs.unlinkSync(path.join('docker-compose', '.yo-rc.json'));
+        fs.rmdirSync('docker-compose');
+      });
+
+      it('creates the folders and the .yo-rc.json files', () => {
+        APPLICATION_NAMES.forEach(applicationName => {
+          expect(fs.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
+          expect(fs.statSync(applicationName).isDirectory()).to.be.true;
+        });
+      });
+      it('creates the docker-compose folder with .yo-rc.json file', () => {
+        expect(fs.statSync(path.join('docker-compose', '.yo-rc.json')).isFile()).to.be.true;
+        expect(fs.statSync('docker-compose').isDirectory()).to.be.true;
+      });
+      it('exports the application & deployment contents', () => {
+        expect(contents).to.deep.equal(expectedContents);
+      });
+    });
+
+    context('when parsing deployment config', () => {
+      const contents = [];
+      const expectedContents = [
+        {
+          'generator-jhipster': {
+            appsFolders: ['tata', 'titi'],
+            directoryPath: '../',
+            gatewayType: 'zuul',
+            clusteredDbApps: [],
+            consoleOptions: [],
+            serviceDiscoveryType: 'eureka',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            monitoring: 'no'
+          }
+        },
+        {
+          'generator-jhipster': {
+            appsFolders: ['tata', 'titi'],
+            clusteredDbApps: [],
+            consoleOptions: [],
+            directoryPath: '../',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            gatewayType: 'zuul',
+            ingressDomain: '',
+            istio: 'no',
+            istioRoute: false,
+            kubernetesNamespace: 'default',
+            kubernetesServiceType: 'LoadBalancer',
+            monitoring: 'no',
+            serviceDiscoveryType: 'eureka'
+          }
+        },
+        {
+          'generator-jhipster': {
+            appsFolders: ['tata', 'titi'],
+            clusteredDbApps: [],
+            consoleOptions: [],
+            directoryPath: '../',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            openshiftNamespace: 'default',
+            serviceDiscoveryType: 'eureka',
+            storageType: 'ephemeral'
+          }
+        },
+        {
+          'generator-jhipster': {
+            appsFolders: ['tata', 'titi'],
+            clusteredDbApps: [],
+            consoleOptions: [],
+            directoryPath: '../',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            enableRancherLoadBalancing: false,
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            serviceDiscoveryType: 'eureka'
+          }
+        }
+      ];
+      const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes', 'openshift', 'rancher-compose'];
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'deployments.jdl')]);
+        importer.import();
+        DEPLOYMENT_NAMES.forEach(name => {
+          contents.push(JSON.parse(fs.readFileSync(path.join(name, '.yo-rc.json'), 'utf-8')));
+        });
+      });
+
+      after(() => {
+        DEPLOYMENT_NAMES.forEach(name => {
+          fs.unlinkSync(path.join(name, '.yo-rc.json'));
+          fs.rmdirSync(name);
+        });
+      });
+
+      it('creates the folders and the .yo-rc.json files', () => {
+        DEPLOYMENT_NAMES.forEach(name => {
+          expect(fs.statSync(path.join(name, '.yo-rc.json')).isFile()).to.be.true;
+          expect(fs.statSync(name).isDirectory()).to.be.true;
+        });
+      });
+      it('exports the deployment contents', () => {
+        expect(contents).to.deep.equal(expectedContents);
+      });
+    });
   });
 });

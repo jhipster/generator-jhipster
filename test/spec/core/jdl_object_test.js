@@ -25,6 +25,7 @@ const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
+const JDLDeployment = require('../../../lib/core/jdl_deployment');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
@@ -95,6 +96,78 @@ describe('JDLObject', () => {
 
       it('returns the number of applications', () => {
         expect(jdlObject.getApplicationQuantity()).to.equal(1);
+      });
+    });
+  });
+  describe('#addDeployment', () => {
+    context('when adding an invalid deployment', () => {
+      const object = new JDLObject();
+
+      context('such as a nil deployment', () => {
+        it('fails', () => {
+          expect(() => {
+            object.addDeployment(null);
+          }).to.throw('The deployment must be valid in order to be added to the JDL object.\nErrors: No deployment');
+        });
+      });
+      context('such as an incomplete deployment', () => {
+        it('fails', () => {
+          expect(() => {
+            object.addDeployment({
+              directoryPath: '../'
+            });
+          }).to.throw(
+            'The deployment must be valid in order to be added to the JDL object.\n' +
+              'Errors: No deployment type, No applications, No Docker repository'
+          );
+        });
+      });
+    });
+    context('when adding a valid application', () => {
+      let object = null;
+      let application = null;
+
+      before(() => {
+        object = new JDLObject();
+        application = new JDLDeployment({
+          deploymentType: 'docker-compose',
+          appFolders: ['tata'],
+          dockerRepositoryName: 'test'
+        });
+        object.addDeployment(application);
+      });
+
+      it('works', () => {
+        expect(object.deployments[application.deploymentType]).to.deep.eq(application);
+      });
+    });
+  });
+  describe('#getDeploymentQuantity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having no deployment', () => {
+      it('returns 0', () => {
+        expect(jdlObject.getDeploymentQuantity()).to.equal(0);
+      });
+    });
+
+    context('when having one or more deployment', () => {
+      before(() => {
+        jdlObject.addDeployment(
+          new JDLDeployment({
+            deploymentType: 'docker-compose',
+            appFolders: ['tata'],
+            dockerRepositoryName: 'test'
+          })
+        );
+      });
+
+      it('returns the number of applications', () => {
+        expect(jdlObject.getDeploymentQuantity()).to.equal(1);
       });
     });
   });
