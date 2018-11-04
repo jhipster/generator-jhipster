@@ -1,0 +1,19 @@
+@service(serviceClass)
+@dto(mapstruct)
+@skipClient
+entity A
+
+@paginate(pager)
+@dto(mapstruct)
+@service(serviceClass)
+entity B
+
+@skipClient
+@filter
+@paginate(pager)
+entity C
+
+skipServer A
+service A with serviceImpl
+
+paginate B, C with pagination
