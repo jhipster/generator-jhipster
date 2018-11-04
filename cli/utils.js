@@ -22,8 +22,7 @@ const didYouMean = require('didyoumean');
 const meow = require('meow');
 const yeoman = require('yeoman-environment');
 const _ = require('lodash');
-
-const SUB_GENERATORS = require('./commands');
+const path = require('path');
 
 const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
@@ -205,17 +204,8 @@ const done = errorMsg => {
 
 const createYeomanEnv = () => {
     const env = yeoman.createEnv();
-    /* Register yeoman generators */
-    Object.keys(SUB_GENERATORS)
-        .filter(command => !SUB_GENERATORS[command].cliOnly)
-        .forEach(generator => {
-            if (SUB_GENERATORS[generator].blueprint) {
-                /* eslint-disable prettier/prettier */
-                env.register(require.resolve(`${SUB_GENERATORS[generator].blueprint}/generators/${generator}`), `${CLI_NAME}:${generator}`);
-            } else {
-                env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
-            }
-        });
+    // Register jhipster generators.
+    env.lookup({ packagePaths: [path.join(__dirname, '..')] });
     return env;
 };
 

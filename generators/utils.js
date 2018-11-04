@@ -66,6 +66,7 @@ module.exports = {
     loadBlueprintsFromConfiguration,
     parseBluePrints,
     normalizeBlueprintName,
+    packageNameToNamespace,
     stringHashCode,
     RandexpWithFaker
 };
@@ -641,6 +642,15 @@ function parseBlueprintInfo(blueprint) {
         name: bpName,
         version
     };
+}
+
+/**
+ * Remove 'generator-' prefix from generators for compatibility with yeoman namespaces.
+ * @param {string} packageName - name of the blueprint's package name
+ * @returns {string} namespace of the blueprint
+ */
+function packageNameToNamespace(packageName) {
+    return packageName.replace('generator-', '');
 }
 
 /**

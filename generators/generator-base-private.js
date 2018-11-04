@@ -19,7 +19,6 @@
 
 const path = require('path');
 const _ = require('lodash');
-const fs = require('fs');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
@@ -800,7 +799,7 @@ module.exports = class extends Generator {
         if (blueprint) {
             blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
             if (options.skipChecks === undefined || !options.skipChecks) {
-                this.checkBlueprint(blueprint, subGen);
+                this.checkBlueprint(blueprint);
             }
             try {
                 const finalOptions = {
@@ -826,19 +825,15 @@ module.exports = class extends Generator {
      * @return {object} packageJson - retrieved package.json as an object or undefined if not found
      */
     findBlueprintPackageJson(blueprintPkgName) {
-        let packageJsonPath = path.join(process.cwd(), 'node_modules', blueprintPkgName, 'package.json');
-        try {
-            if (!fs.existsSync(packageJsonPath)) {
-                this.debug('using global module as local version could not be found in node_modules');
-                packageJsonPath = path.join(blueprintPkgName, 'package.json');
-            }
-            // eslint-disable-next-line global-require,import/no-dynamic-require
-            return require(packageJsonPath);
-        } catch (err) {
-            this.debug('ERROR:', err);
-            this.warning(`Could not retrieve package.json of blueprint '${blueprintPkgName}'`);
+        const blueprintGeneratorName = jhipsterUtils.packageNameToNamespace(blueprintPkgName);
+        const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
+        if (!blueprintPackagePath) {
+            const msg = `Could not retrieve packagePath of blueprint '${blueprintPkgName}'`;
+            this.warning(msg);
             return undefined;
         }
+        // eslint-disable-next-line global-require,import/no-dynamic-require
+        return require(path.join(blueprintPackagePath, 'package.json'));
     }
 
     /**
@@ -850,7 +845,7 @@ module.exports = class extends Generator {
         const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
         if (!blueprintPackageJson || !blueprintPackageJson.version) {
             this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
-            return '';
+            return undefined;
         }
         return blueprintPackageJson.version;
     }
@@ -859,35 +854,17 @@ module.exports = class extends Generator {
      * Check if the generator specified as blueprint is installed.
      * @param {string} blueprint - generator name
      */
-    checkBlueprint(blueprint, subGen = '') {
+    checkBlueprint(blueprint) {
         if (blueprint === 'generator-jhipster') {
             this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
         }
-        const done = this.async();
-        const localModule = path.join(process.cwd(), 'node_modules', blueprint);
-        if (fs.existsSync(localModule)) {
-            done();
-            return;
+        if (!this.findBlueprintPackageJson(blueprint)) {
+            this.error(
+                `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
+                    `npm i -g ${blueprint}`
+                )}.`
+            );
         }
-        const generatorName = blueprint.replace('generator-', '');
-        if (this.env.get(`${generatorName}:${subGen}`)) {
-            done();
-            return;
-        }
-
-        // Path to the yo cli script in generator-jhipster's node_modules
-        const yoInternalCliPath = require.resolve('yo/lib/cli.js');
-
-        shelljs.exec(`node ${yoInternalCliPath} --generators`, { silent: true }, (err, stdout, stderr) => {
-            if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
-                this.error(
-                    `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
-                        `npm i -g ${blueprint}`
-                    )}.`
-                );
-            }
-            done();
-        });
     }
 
     /**
@@ -897,6 +874,7 @@ module.exports = class extends Generator {
     checkJHipsterBlueprintVersion(blueprintPkgName) {
         const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
         if (!blueprintPackageJson) {
+            this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
             return;
         }
         const mainGeneratorJhipsterVersion = packagejs.version;

@@ -25,6 +25,7 @@ describe('JHipster application generator with blueprint', () => {
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
@@ -90,6 +91,7 @@ describe('JHipster application generator with blueprint', () => {
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
@@ -140,6 +142,7 @@ describe('JHipster application generator with blueprint', () => {
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
@@ -205,6 +208,7 @@ describe('JHipster application generator with blueprint', () => {
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
