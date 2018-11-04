@@ -190,17 +190,8 @@ const done = errorMsg => {
 
 const createYeomanEnv = () => {
     const env = yeoman.createEnv();
-    /* Register yeoman generators */
-    Object.keys(SUB_GENERATORS)
-        .filter(command => !SUB_GENERATORS[command].cliOnly)
-        .forEach(generator => {
-            if (SUB_GENERATORS[generator].blueprint) {
-                /* eslint-disable prettier/prettier */
-                env.register(require.resolve(`${SUB_GENERATORS[generator].blueprint}/generators/${generator}`), `${CLI_NAME}:${generator}`);
-            } else {
-                env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
-            }
-        });
+    // Lookup for all available generators (blueprints, modules, ...)
+    env.lookup();
     return env;
 };
 

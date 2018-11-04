@@ -9,6 +9,7 @@ const angularFiles = require('../../generators/client/files-angular').files;
 describe('JHipster application generator with blueprint', () => {
     describe('generate monolith application with blueprint', () => {
         before(done => {
+            let fakeBlueprintModuleDir;
             helpers
                 .run(path.join(__dirname, '../../generators/app'))
                 .inTmpDir(dir => {
@@ -17,10 +18,17 @@ describe('JHipster application generator with blueprint', () => {
                         name: 'generator-jhipster-myblueprint',
                         version: '9.9.9'
                     };
-                    const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
+                    fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
+                .withGenerators([
+                    [
+                        helpers.createDummyGenerator(), // eslint-disable-line global-require
+                        'jhipster-myblueprint:server',
+                        path.join(fakeBlueprintModuleDir, 'generators/server/index.js')
+                    ]
+                ])
                 .withOptions({
                     'from-cli': true,
                     skipInstall: true,

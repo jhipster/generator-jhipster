@@ -769,7 +769,7 @@ module.exports = class extends Generator {
         if (blueprint) {
             blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
             if (options.skipChecks === undefined || !options.skipChecks) {
-                this.checkBlueprint(blueprint, subGen);
+                this.checkBlueprint(blueprint);
             }
             try {
                 const finalOptions = {
@@ -795,55 +795,47 @@ module.exports = class extends Generator {
      * @return {string} version - retrieved version or empty string if not found
      */
     findBlueprintVersion(blueprintPkgName) {
-        let packageJsonPath = path.join(process.cwd(), 'node_modules', blueprintPkgName, 'package.json');
-        try {
-            if (!fs.existsSync(packageJsonPath)) {
-                this.debug('using global module as local version could not be found in node_modules');
-                packageJsonPath = path.join(blueprintPkgName, 'package.json');
+        const blueprintGeneratorName = blueprintPkgName.replace('generator-', '');
+        // Find any subGenerator that belongs to the blueprint
+        const subGenerator = Object.values(this.env.getGeneratorsMeta()).find(subgen =>
+            subgen.namespace.includes(`${blueprintGeneratorName}:`)
+        );
+
+        if (subGenerator && subGenerator.resolved) {
+            // Try to retrieve package.json from subGenerator resolved path <subGenerator path>:
+            // <subGenerator path>/../package.json for pattern "<package root>/index.js"
+            // <subGenerator path>/../../package.json for pattern "<package root>/generators/<subGenerator path>/index.js"
+            // <subGenerator path>/../../../package.json for pattern "<package root>/lib/generators/<subGenerator path>/index.js"
+            // eslint-disable-next-line no-restricted-syntax
+            for (const i of _.range(1, 4)) {
+                const packageJsonPath = path.join(subGenerator.resolved, '../'.repeat(i), 'package.json');
+                if (fs.existsSync(packageJsonPath)) {
+                    // eslint-disable-next-line global-require,import/no-dynamic-require
+                    const blueprintPackagejs = require(packageJsonPath);
+                    return blueprintPackagejs.version;
+                }
             }
-            // eslint-disable-next-line global-require,import/no-dynamic-require
-            const packagejs = require(packageJsonPath);
-            return packagejs.version;
-        } catch (err) {
-            this.debug('ERROR:', err);
-            this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
-            return '';
         }
+        this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
+        return '';
     }
 
     /**
      * Check if the generator specified as blueprint is installed.
      * @param {string} blueprint - generator name
      */
-    checkBlueprint(blueprint, subGen = '') {
+    checkBlueprint(blueprint) {
         if (blueprint === 'generator-jhipster') {
             this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
         }
-        const done = this.async();
-        const localModule = path.join(process.cwd(), 'node_modules', blueprint);
-        if (fs.existsSync(localModule)) {
-            done();
-            return;
+        const blueprintGeneratorName = blueprint.replace('generator-', '');
+        if (!this.env.getGeneratorNames().includes(blueprintGeneratorName)) {
+            this.error(
+                `The ${chalk.yellow(
+                    blueprintGeneratorName
+                )} blueprint provided is not installed. Please install it using command ${chalk.yellow(`npm i -g ${blueprint}`)}.`
+            );
         }
-        const generatorName = blueprint.replace('generator-', '');
-        if (this.env.get(`${generatorName}:${subGen}`)) {
-            done();
-            return;
-        }
-
-        // Path to the yo cli script in generator-jhipster's node_modules
-        const yoInternalCliPath = require.resolve('yo/lib/cli.js');
-
-        shelljs.exec(`node ${yoInternalCliPath} --generators`, { silent: true }, (err, stdout, stderr) => {
-            if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
-                this.error(
-                    `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
-                        `npm i -g ${blueprint}`
-                    )}.`
-                );
-            }
-            done();
-        });
     }
 
     /**
