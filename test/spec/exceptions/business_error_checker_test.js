@@ -504,31 +504,64 @@ describe('BusinessErrorChecker', () => {
     });
 
     context('when having User as source entity', () => {
-      before(() => {
-        const userEntity = new JDLEntity({
-          name: 'User'
+      context('when skipUserManagement flag is not set', () => {
+        before(() => {
+          const userEntity = new JDLEntity({
+            name: 'User'
+          });
+          const otherEntity = new JDLEntity({
+            name: 'Valid'
+          });
+          const relationship = new JDLRelationship({
+            from: userEntity.name,
+            to: otherEntity.name,
+            type: RelationshipTypes.ONE_TO_ONE,
+            injectedFieldInFrom: 'other'
+          });
+          jdlObject.addEntity(userEntity);
+          jdlObject.addEntity(otherEntity);
+          jdlObject.addRelationship(relationship);
+          checker = new BusinessErrorChecker(jdlObject);
         });
-        const otherEntity = new JDLEntity({
-          name: 'Valid'
-        });
-        const relationship = new JDLRelationship({
-          from: userEntity.name,
-          to: otherEntity.name,
-          type: RelationshipTypes.ONE_TO_ONE,
-          injectedFieldInFrom: 'other'
-        });
-        jdlObject.addEntity(userEntity);
-        jdlObject.addEntity(otherEntity);
-        jdlObject.addRelationship(relationship);
-        checker = new BusinessErrorChecker(jdlObject);
-      });
 
-      it('fails', () => {
-        expect(() => {
-          checker.checkForRelationshipErrors();
-        }).to.throw(
-          "Relationships from the User entity is not supported in the declaration between 'User' and 'Valid'."
-        );
+        it('fails', () => {
+          expect(() => {
+            checker.checkForRelationshipErrors();
+          }).to.throw(
+            "Relationships from the User entity is not supported in the declaration between 'User' and 'Valid'."
+          );
+        });
+      });
+      context('when skipUserManagement flag is set', () => {
+        before(() => {
+          const userEntity = new JDLEntity({
+            name: 'User'
+          });
+          const otherEntity = new JDLEntity({
+            name: 'Valid'
+          });
+          const relationship = new JDLRelationship({
+            from: userEntity.name,
+            to: otherEntity.name,
+            type: RelationshipTypes.ONE_TO_ONE,
+            injectedFieldInFrom: 'other'
+          });
+          jdlObject.addEntity(userEntity);
+          jdlObject.addEntity(otherEntity);
+          jdlObject.addRelationship(relationship);
+          jdlObject.addOption(
+            new JDLUnaryOption({
+              name: UnaryOptions.SKIP_USER_MANAGEMENT
+            })
+          );
+          checker = new BusinessErrorChecker(jdlObject);
+        });
+
+        it('does not fail', () => {
+          expect(() => {
+            checker.checkForRelationshipErrors();
+          }).not.to.throw();
+        });
       });
     });
     context('when the source entity is missing', () => {
@@ -560,30 +593,64 @@ describe('BusinessErrorChecker', () => {
     });
     context('when the destination entity is missing', () => {
       context('if it is the User entity', () => {
-        before(() => {
-          const sourceEntity = new JDLEntity({
-            name: 'Source'
+        context('when skipUserManagement flag is not set', () => {
+          before(() => {
+            const sourceEntity = new JDLEntity({
+              name: 'Source'
+            });
+            const otherEntity = new JDLEntity({
+              name: 'User'
+            });
+            const relationship = new JDLRelationship({
+              from: sourceEntity.name,
+              to: otherEntity.name,
+              type: RelationshipTypes.ONE_TO_ONE,
+              injectedFieldInFrom: 'other'
+            });
+            jdlObject.addEntity(sourceEntity);
+            jdlObject.addEntity(otherEntity);
+            jdlObject.addRelationship(relationship);
+            delete jdlObject.entities.User;
+            checker = new BusinessErrorChecker(jdlObject);
           });
-          const otherEntity = new JDLEntity({
-            name: 'User'
-          });
-          const relationship = new JDLRelationship({
-            from: sourceEntity.name,
-            to: otherEntity.name,
-            type: RelationshipTypes.ONE_TO_ONE,
-            injectedFieldInFrom: 'other'
-          });
-          jdlObject.addEntity(sourceEntity);
-          jdlObject.addEntity(otherEntity);
-          jdlObject.addRelationship(relationship);
-          delete jdlObject.entities.User;
-          checker = new BusinessErrorChecker(jdlObject);
-        });
 
-        it('does not fail', () => {
-          expect(() => {
-            checker.checkForRelationshipErrors();
-          }).not.to.throw();
+          it('does not fail', () => {
+            expect(() => {
+              checker.checkForRelationshipErrors();
+            }).not.to.throw();
+          });
+        });
+        context('when skipUserManagement flag is set', () => {
+          before(() => {
+            const sourceEntity = new JDLEntity({
+              name: 'Source'
+            });
+            const otherEntity = new JDLEntity({
+              name: 'User'
+            });
+            const relationship = new JDLRelationship({
+              from: sourceEntity.name,
+              to: otherEntity.name,
+              type: RelationshipTypes.ONE_TO_ONE,
+              injectedFieldInFrom: 'other'
+            });
+            jdlObject.addEntity(sourceEntity);
+            jdlObject.addEntity(otherEntity);
+            jdlObject.addRelationship(relationship);
+            jdlObject.addOption(
+              new JDLUnaryOption({
+                name: UnaryOptions.SKIP_USER_MANAGEMENT
+              })
+            );
+            delete jdlObject.entities.User;
+            checker = new BusinessErrorChecker(jdlObject);
+          });
+
+          it('fails', () => {
+            expect(() => {
+              checker.checkForRelationshipErrors();
+            }).to.throw('In the relationship between Source and User, User is not declared.');
+          });
         });
       });
       context('if it is not the User entity', () => {
