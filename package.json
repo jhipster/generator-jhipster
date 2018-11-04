@@ -17,9 +17,10 @@
     "posttest": "npm run coverage",
     "prepare": "npm run test && npm run diagrams && npm run bundle",
     "release": "git push && git push --tags && npm publish",
-    "release-patch": "npm version patch -a -m \"Update to %s\" && npm run release",
-    "release-minor": "npm version minor -a -m \"Update to %s\" && npm run release",
-    "release-major": "npm version major -a -m \"Update to %s\" && npm run release",
+    "commit-dist": "git add dist && git add lib/dsl/gen && git commit --allow-empty -m \"Update dist\"",
+    "release-patch": "npm run commit-dist && npm version patch -a -m \"Update to %s\" && npm run release",
+    "release-minor": "npm run commit-dist && npm version minor -a -m \"Update to %s\" && npm run release",
+    "release-major": "npm run commit-dist && npm version major -a -m \"Update to %s\" && npm run release",
     "test": "npm run lint && nyc mocha test",
     "test:watch": "mocha test --watch --reporter min"
   },
