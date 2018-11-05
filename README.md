@@ -14,11 +14,19 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 **Thank you to our sponsors!**
 
+**Gold sponsors!**
+
 [![Okta][okta-image]][okta-url]
+
+
+**Bronze sponsors!**
 
 [![ForsysLab][forsyslab-image]][forsyslab-url]
 
 [![CUBA Platform][cubaplatform-image]][cubaplatform-url]
+
+[![Intesys][intesys-image]][intesys-url]
+
 
 **Thank you to all our backers!**
 
@@ -73,5 +81,7 @@ Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hip
 [forsyslab-url]: https://forsyslab.com/
 [cubaplatform-image]: https://www.jhipster.tech/images/open-collective/cubaplatform.png
 [cubaplatform-url]: https://www.cuba-platform.com/
+[intesys-image]: https://www.jhipster.tech/images/open-collective/intesys.png
+[intesys-url]: https://www.intesys.it/
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md

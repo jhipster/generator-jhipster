@@ -12,7 +12,7 @@
                 "authentication": "<strong>Sisselogimine ebaõnnestus!</strong> Palun kontrollige kasutajanime ja parooli ning proovige uuesti."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Kas unustasite salasõna?"
         }
     }

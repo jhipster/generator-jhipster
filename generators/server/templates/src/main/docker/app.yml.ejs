@@ -206,7 +206,7 @@ services:
         # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
         #    - CONFIG_MODE=git
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2') { _%>
+    <%_ if (authenticationType === 'oauth2' && applicationType !== 'microservice') { _%>
     keycloak:
         extends:
             file: keycloak.yml
