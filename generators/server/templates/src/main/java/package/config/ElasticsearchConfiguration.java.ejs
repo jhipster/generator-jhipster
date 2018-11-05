@@ -102,12 +102,15 @@ public class ElasticsearchConfiguration {
 
 }
 <%_ if (databaseType === 'mongodb') { _%>
+
 class CustomElasticsearchMappingContext extends SimpleElasticsearchMappingContext {
+
     @Override
     protected ElasticsearchPersistentProperty createPersistentProperty(Property property, SimpleElasticsearchPersistentEntity owner, SimpleTypeHolder simpleTypeHolder) {
         return new CustomElasticsearchPersistentProperty(property, owner, simpleTypeHolder);
     }
 }
+
 class CustomElasticsearchPersistentProperty extends SimpleElasticsearchPersistentProperty {
 
     @SuppressWarnings({"unchecked"})
