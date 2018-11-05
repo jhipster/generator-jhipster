@@ -509,8 +509,8 @@ module.exports = class extends BaseGenerator {
                 }
                 this.log(
                     chalk.green(
-                        `\nIf you find JHipster useful consider supporting our collective ${chalk.yellow(
-                            'https://opencollective.com/generator-jhipster'
+                        `\nIf you find JHipster useful consider sponsoring the project ${chalk.yellow(
+                            'https://www.jhipster.tech/sponsors/'
                         )}`
                     )
                 );
