@@ -400,7 +400,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
             : propertyValue;
 
         if (result == null) {
-            throw new IllegalStateException("Exepected to be able to look up an annotation property value but failed!");
+            throw new IllegalStateException("Expected to be able to look up an annotation property value but failed!");
         }
 
         return (T) result;

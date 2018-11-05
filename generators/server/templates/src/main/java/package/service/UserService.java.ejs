@@ -321,7 +321,7 @@ public class UserService {
     <%_ } _%>
     }
     private boolean removeNonActivatedUser(User existingUser){
-        if(existingUser.getActivated()) {
+        if (existingUser.getActivated()) {
              return false;
         }
         userRepository.delete(existingUser);

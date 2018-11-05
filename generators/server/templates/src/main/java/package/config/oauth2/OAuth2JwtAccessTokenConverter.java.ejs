@@ -106,9 +106,9 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
      *  Authentication authentication = securityContext.getAuthentication();
      *  if (authentication != null) {
      *      Object details = authentication.getDetails();
-     *      if(details instanceof OAuth2AuthenticationDetails) {
+     *      if (details instanceof OAuth2AuthenticationDetails) {
      *          Object decodedDetails = ((OAuth2AuthenticationDetails) details).getDecodedDetails();
-     *          if(decodedDetails != null &amp;&amp; decodedDetails instanceof Map) {
+     *          if (decodedDetails != null &amp;&amp; decodedDetails instanceof Map) {
      *             String detailFoo = ((Map) decodedDetails).get("foo");
      *          }
      *      }

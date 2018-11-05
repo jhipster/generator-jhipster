@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 source $(dirname $0)/00-init-env.sh
 
 #-------------------------------------------------------------------------------
@@ -31,10 +31,10 @@ elif [ -f "gradlew" ]; then
     ./gradlew bootWar -P"$JHI_PROFILE" -x test
     mv build/libs/*.war app.war
 else
-    echo "No mvnw or gradlew"
+    echo "*** no mvnw or gradlew"
     exit 0
 fi
 if [ $? -ne 0 ]; then
-    echo "Error when packaging"
+    echo "*** error when packaging"
     exit 1
 fi

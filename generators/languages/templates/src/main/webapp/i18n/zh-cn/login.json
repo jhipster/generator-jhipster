@@ -12,7 +12,7 @@
                 "authentication": "<strong>登录失败!</strong> 请检查您的登录信息, 并重试一次."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "忘记密码?"
         }
     }

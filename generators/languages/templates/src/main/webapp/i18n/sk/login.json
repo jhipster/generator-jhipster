@@ -12,7 +12,7 @@
                 "authentication": "<strong>Prihlásenie zlyhalo!</strong> Prosím skontrolujte vaše prihlasovacie údaje a skúste to znovu."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Zabudli ste heslo?"
         }
     }
