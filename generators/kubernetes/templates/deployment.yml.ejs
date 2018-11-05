@@ -102,7 +102,7 @@ spec:
           <%_ } _%>
         <%_ } _%>
         <%_ if (!app.serviceDiscoveryType && app.authenticationType === 'jwt') { _%>
-        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
+        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
           valueFrom:
             secretKeyRef:
               name: jwt-secret

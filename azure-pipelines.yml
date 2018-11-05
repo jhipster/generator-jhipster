@@ -25,10 +25,13 @@ jobs:
     JHI_PROFILE: dev
     JHI_RUN_APP: 1
     JHI_PROTRACTOR: 0
+    # if JHI_LIB_BRANCH value is release, use the release from Maven
     JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
     JHI_LIB_BRANCH: release
+    # if JHI_GEN_BRANCH value is release, use the release from NPM
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
     JHI_GEN_BRANCH: release
+    # specific config
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
@@ -67,7 +70,7 @@ jobs:
   #----------------------------------------------------------------------
   - task: NodeTool@0
     inputs:
-      versionSpec: '8.12.0'
+      versionSpec: '10.13.0'
     displayName: 'TOOLS: install Node.js'
   - script: |
       wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
@@ -79,10 +82,6 @@ jobs:
     displayName: 'TOOLS: update NPM'
   - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
     displayName: 'TOOLS: display configuration'
-  # need to be deleted, as soon as JHipster Core 3.4.0+ is released
-  # See https://github.com/jhipster/generator-jhipster/issues/8572
-  - bash: $(JHI_SCRIPTS)/02-display-tools.sh
-    displayName: 'TOOLS: display installed tools'
   - bash: $(JHI_SCRIPTS)/03-system.sh
     displayName: 'TOOLS: configure tools installed by the system'
 
@@ -97,10 +96,8 @@ jobs:
     displayName: 'GENERATION: project'
   - bash: $(JHI_SCRIPTS)/13-replace-version-generated-project.sh
     displayName: 'GENERATION: replace version in generated project'
-  # need to be uncommented, as soon as JHipster Core 3.4.0+ is released
-  # See https://github.com/jhipster/generator-jhipster/issues/8572
-  # - bash: $(JHI_SCRIPTS)/14-jhipster-info.sh
-  #   displayName: 'GENERATION: jhipster info'
+  - bash: $(JHI_SCRIPTS)/14-jhipster-info.sh
+    displayName: 'GENERATION: jhipster info'
 
   #----------------------------------------------------------------------
   # Launch tests

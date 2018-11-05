@@ -74,7 +74,7 @@
     "angular-router-loader": "0.8.5",
     "angular2-template-loader": "0.6.2",
     "autoprefixer": "9.2.0",
-    "browser-sync": "2.24.6",
+    "browser-sync": "2.26.3",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "1.2.2",
     <%_ if (protractorTests) { _%>
@@ -85,21 +85,20 @@
     "codelyzer": "4.5.0",
     "copy-webpack-plugin": "4.5.1",
     "css-loader": "0.28.10",
-    "exports-loader": "0.7.0",
     "file-loader": "1.1.11",
     "fork-ts-checker-webpack-plugin": "0.4.10",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
-    <%_ if(!skipCommitHook) { _%>
+    <%_ if (!skipCommitHook) { _%>
     "husky": "1.1.0",
     <%_ } _%>
     "jest": "23.6.0",
     "jest-junit": "5.1.0",
     "jest-preset-angular": "6.0.1",
     "jest-sonar-reporter": "2.0.0",
-    <%_ if(!skipCommitHook) { _%>
+    <%_ if (!skipCommitHook) { _%>
     "lint-staged": "7.3.0",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
@@ -116,11 +115,9 @@
     "protractor": "5.4.0",
     <%_ } _%>
     "proxy-middleware": "0.15.0",
-    "raw-loader": "0.5.1",
     "rimraf": "2.6.1",
     "simple-progress-webpack-plugin": "1.1.2",
     "style-loader": "0.20.3",
-    "tapable": "1.0.0",
     "terser-webpack-plugin": "1.0.0",
     "thread-loader": "1.1.5",
     "to-string-loader": "1.1.5",
@@ -129,7 +126,7 @@
     <%_ } _%>
     "ts-loader": "4.5.0",
     "tslint": "5.11.0",
-    "tslint-config-prettier": "1.9.0",
+    "tslint-config-prettier": "1.15.0",
     "tslint-loader": "3.6.0",
     "typescript": "3.1.3",
     <%_ if (useSass) { _%>
@@ -156,9 +153,9 @@
     "node": ">=8.9.0"<% if (clientPackageManager === 'yarn') { %>,
     "yarn": ">=1.3.2"<% } %>
   },
-  <%_ if(!skipCommitHook) { _%>
+  <%_ if (!skipCommitHook) { _%>
   "lint-staged": {
-    "src/**/*.{ts,css,scss}": [
+    "src/**/*.{json,ts,css,scss}": [
       "prettier --write",
       "git add"
     ]
