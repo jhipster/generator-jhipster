@@ -56,4 +56,5 @@ function writeFiles() {
 
     // Specs tests
     this.copy('webapp/app/components/account/specs/settings.component.test.js', 'src/main/webapp/app/components/account/specs/settings.component.test.js');
+    this.copy('webapp/app/components/account/specs/change-password.component.test.js', 'src/main/webapp/app/components/account/specs/change-password.component.test.js');
 }
