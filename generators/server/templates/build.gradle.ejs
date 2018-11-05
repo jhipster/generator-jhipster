@@ -243,6 +243,7 @@ dependencies {
     compile "io.dropwizard.metrics:metrics-jcache"
     <%_ } _%>
     compile "io.dropwizard.metrics:metrics-json"
+    compile "io.dropwizard.metrics:metrics-jmx"
     compile "io.dropwizard.metrics:metrics-jvm"
     compile "io.dropwizard.metrics:metrics-servlet"
     compile "io.dropwizard.metrics:metrics-servlets"
@@ -274,10 +275,8 @@ dependencies {
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') { _%>
-    compile "org.hibernate:hibernate-infinispan"
-    <%_ } _%>
-    <%_ if (cacheProvider === 'infinispan') {_%>
-    compile "org.infinispan:infinispan-spring-boot-starter"
+    compile "org.infinispan:infinispan-hibernate-cache-v53"
+    compile "org.infinispan:infinispan-spring-boot-starter-embedded"
     compile "org.infinispan:infinispan-core"
     compile "org.infinispan:infinispan-jcache"
     compile ("org.infinispan:infinispan-cloud") {
@@ -316,7 +315,6 @@ dependencies {
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate.validator:hibernate-validator"
     compile "org.liquibase:liquibase-core"
-    compile "com.mattbertolini:liquibase-slf4j"
     liquibaseRuntime "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibase_hibernate5_version}"
     liquibaseRuntime sourceSets.main.compileClasspath
@@ -468,9 +466,6 @@ dependencies {
     testCompile "org.assertj:assertj-core"
     testCompile "junit:junit"
     testCompile "org.mockito:mockito-core"
-    <%_ if (databaseType === 'sql') { _%>
-    testCompile "com.mattbertolini:liquibase-slf4j"
-    <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
     <%_ } _%>
