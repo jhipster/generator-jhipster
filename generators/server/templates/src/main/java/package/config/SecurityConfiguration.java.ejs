@@ -35,6 +35,7 @@ import io.github.jhipster.security.*;
 
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 import org.springframework.beans.factory.BeanInitializationException;
+import org.springframework.beans.factory.InitializingBean;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -89,10 +90,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
-<%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
-
-import javax.annotation.PostConstruct;
-<%_ } _%>
 
 @Configuration
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -106,7 +103,7 @@ import javax.annotation.PostConstruct;
 <%_ } _%>
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
-public class SecurityConfiguration extends <% if (authenticationType === 'oauth2' && applicationType === 'microservice') { %>ResourceServer<% } else { %>WebSecurity<% } %>ConfigurerAdapter {
+public class SecurityConfiguration<% if (authenticationType !== 'oauth2' && !skipUserManagement) { %> implements InitializingBean<% } %> extends <% if (authenticationType === 'oauth2' && applicationType === 'microservice') { %>ResourceServer<% } else { %>WebSecurity<% } %>ConfigurerAdapter {
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -150,8 +147,8 @@ public class SecurityConfiguration extends <% if (authenticationType === 'oauth2
     }
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
-    @PostConstruct
-    public void init() {
+    @Override
+    public void afterPropertiesSet() throws Exception {
         try {
             authenticationManagerBuilder
                 .userDetailsService(userDetailsService)
