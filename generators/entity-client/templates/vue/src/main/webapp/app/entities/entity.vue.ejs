@@ -134,42 +134,6 @@
         </b-modal>
     </div>
 </template>
-<script>
-    import axios from 'axios'
-    import {SERVER_API_URL} from "../../<%_ if (clientRootFolder) { _%>../<%_ } _%>constants";
-    import Principal from '../../<%_ if (clientRootFolder) { _%>../<%_ } _%>components/account/Principal';
 
-    export default {
-        mixins: [Principal],
-        data() {
-          return {
-              removeId: null,
-              <%= entityInstance %>s: []
-          }
-        },
-        beforeRouteEnter (to, from, next) {
-            next(vm => {
-                vm.retrieve<%= entityAngularName %>s();
-            })
-        },
-        methods: {
-            retrieve<%= entityAngularName %>s() {
-                let vm = this;
-                axios.get(SERVER_API_URL + 'api/<%= entityInstance %>s').then(res => {
-                    vm.<%= entityInstance %>s = res.data;
-                });
-            },
-            prepareRemove(instance) {
-                this.removeId = instance.id;
-                this.$refs.removeEntity.show();
-            },
-            remove<%= entityAngularName %>() {
-                let vm = this;
-                axios.delete(SERVER_API_URL + 'api/<%= entityInstance %>s/' + vm.removeId).then(res => {
-                    vm.retrieve<%= entityAngularName %>s();
-                    vm.removeId = null;
-                });
-            }
-        }
-    }
+<script lang="ts" src="./<%= entityFileName %>.component.ts">
 </script>

@@ -95,33 +95,7 @@
         </div>
     </div>
 </template>
-<script>
-    import axios from 'axios'
-        import {SERVER_API_URL} from "../../<%_ if (clientRootFolder) { _%>../<%_ } _%>constants";
 
-    export default {
-        data() {
-            return {
-                <%= entityInstance %>: {}
-            }
-        },
-        beforeRouteEnter (to, from, next) {
-            next(vm => {
-                if (to.params.<%= entityInstance %>Id) {
-                    vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
-                }
-            })
-        },
-        methods: {
-            retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
-                let vm = this;
-                axios.get(SERVER_API_URL + 'api/<%= entityInstance %>s/' + <%= entityInstance %>Id).then(res => {
-                    vm.<%= entityInstance %> = res.data;
-                });
-            },
-            previousState() {
-                this.$router.go(-1);
-            }
-        }
-    }
+<script lang="ts" src="./<%= entityFileName %>-details.component.ts">
 </script>
+)

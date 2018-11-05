@@ -38,12 +38,24 @@ const vueFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-details.vue`
                 },
                 {
+                    file: 'entities/entity-details.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.ts`
+                },
+                {
                     file: 'entities/entity-update.vue',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.vue`
                 },
                 {
+                    file: 'entities/entity-update.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.ts`
+                },
+                {
                     file: 'entities/entity.vue',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.vue`
+                },
+                {
+                    file: 'entities/entity.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`
                 }
             ]
         }

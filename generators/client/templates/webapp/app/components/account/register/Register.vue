@@ -132,7 +132,3 @@
 
 <script lang='ts' src='./Register.component.ts'>
 </script>
-
-<style scoped>
-
-</style>

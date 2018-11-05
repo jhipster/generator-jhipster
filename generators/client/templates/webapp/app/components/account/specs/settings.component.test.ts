@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 
 import * as config from '@/shared/config';
-import Settings from '@/components/account/Settings.vue';
+import Settings from '@/components/account/settings/Settings.vue';
 
 const localVue = createLocalVue();
 
@@ -14,7 +14,7 @@ jest.mock('axios', () => ({
     get: jest.fn(),
     post: jest.fn()
 }));
-jest.mock('@/constants.js', () =>({
+jest.mock('@/constants.ts', () =>({
     SERVER_API_URL: ''
 }));
 

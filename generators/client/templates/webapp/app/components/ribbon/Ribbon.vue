@@ -1,25 +1,8 @@
 <template>
     <div class="ribbon" v-if="ribbonEnv"><a href="" v-text="$t('global.ribbon.' + ribbonEnv)">{{ribbonEnv}}</a></div>
 </template>
-<script>
-    import axios from 'axios'
 
-    export default {
-        name: 'Ribbon',
-        data () {
-            return {
-                ribbonEnv: null
-            }
-        },
-        created() {
-            let vm = this;
-            axios.get('management/info').then(function (res) {
-                if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf(res.data['display-ribbon-on-profiles']) > -1) {
-                    vm.ribbonEnv = res.data['display-ribbon-on-profiles'];
-                }
-            });
-        }
-    }
+<script lang="ts" src="./Ribbon.component.ts">
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

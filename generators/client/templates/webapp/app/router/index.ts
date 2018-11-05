@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '../components/Home';
+import Home from '../components/home/Home.vue';
 import Register from '../components/account/register/Register.vue';
-import ResetPassword from '../components/account/ResetPassword';
-import ChangePassword from '../components/account/ChangePassword';
-import Sessions from '../components/account/Sessions';
-import Settings from '../components/account/Settings';
+import ResetPassword from '../components/account/reset-password/ResetPassword.vue';
+import ChangePassword from '../components/account/change-password/ChangePassword.vue';
+import Sessions from '../components/account/sessions/Sessions.vue';
+import Settings from '../components/account/settings/Settings.vue';
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 Vue.use(Router);

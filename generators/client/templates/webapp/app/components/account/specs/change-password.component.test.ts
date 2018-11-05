@@ -14,7 +14,7 @@ jest.mock('axios', () => ({
     get: jest.fn(),
     post: jest.fn()
 }));
-jest.mock('@/constants.js', () =>({
+jest.mock('@/constants.ts', () =>({
     SERVER_API_URL: ''
 }));
 

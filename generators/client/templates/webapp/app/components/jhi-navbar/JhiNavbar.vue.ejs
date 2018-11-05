@@ -126,45 +126,8 @@
         </div>
     </nav>
 </template>
-<script>
-    import {VERSION} from "../constants";
-    import TranslationService from '../locale/TranslationService';
-    import LoginModalService from '../components/account/LoginModalService';
-    import Principal from './account/Principal';
-    import LanguageService from '../locale/LanguageService';
 
-    export default {
-        name: 'JhiNavBar',
-        mixins: [TranslationService, LoginModalService, Principal, LanguageService],
-        data : function() {
-            return {
-                version : VERSION ? 'v' + VERSION : '',
-                swaggerEnabled: false,
-                inProduction: false,
-                isNavbarCollapsed: true
-            }
-        },
-        methods: {
-            getImageUrl: function() {
-                return false;
-            },
-            collapseNavbar() {
-                this.isNavbarCollapsed = true;
-            },
-            changeLanguage: function (language) {
-                this.currentLanguage = language;
-            },
-            logout: function () {
-                this.$store.commit('logout');
-                this.$router.push('/');
-            }
-        },
-        computed:{
-            authenticated(){
-                return this.$store.getters.authenticated;
-            }
-        }
-    }
+<script lang="ts" src="./JhiNavbar.component.ts">
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -255,7 +218,7 @@
 
     .logo-img {
         height: 100%;
-        background: url('../../content/images/logo-jhipster.png') no-repeat center center;
+        background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
         background-size: contain;
         width: 100%;
     }
