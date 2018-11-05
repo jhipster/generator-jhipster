@@ -306,7 +306,7 @@ _%>
     @Autowired
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
     <%_ } if (service !== 'no') { _%>
-    <% if (fieldsContainOwnerManyToMany === true) { %>
+    <%_ if (fieldsContainOwnerManyToMany === true) { _%>
 
     @Mock
     private <%= entityClass %>Service <%= entityInstance %>ServiceMock;
