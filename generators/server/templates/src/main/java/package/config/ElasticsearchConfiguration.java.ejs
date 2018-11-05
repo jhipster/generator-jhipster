@@ -110,6 +110,7 @@ class CustomElasticsearchMappingContext extends SimpleElasticsearchMappingContex
 }
 class CustomElasticsearchPersistentProperty extends SimpleElasticsearchPersistentProperty {
 
+    @SuppressWarnings({"unchecked"})
     public CustomElasticsearchPersistentProperty(Property property, PersistentEntity owner, SimpleTypeHolder simpleTypeHolder) {
         super(property, owner, simpleTypeHolder);
     }
