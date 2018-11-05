@@ -299,11 +299,10 @@ public class <%= entityClass %> implements Serializable {
             <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
             <%_ }_%>
-            <%_ if (useJPADerivedIdentifier === true) { _%>
-    
+            <%_ if (useJPADerivedIdentifier === true) { %>
     @MapsId
-            <%_ } else { _%>
-    
+    @JoinColumn(name = "id")
+            <%_ } else { %>
     @JoinColumn(unique = true)
             <%_ } _%>
         <%_ } else { _%>
