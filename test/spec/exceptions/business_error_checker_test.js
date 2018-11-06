@@ -171,7 +171,9 @@ describe('BusinessErrorChecker', () => {
             new JDLGatewayApplication({
               config: {
                 authenticationType: 'uaa',
-                databaseType: DatabaseTypes.NO
+                databaseType: DatabaseTypes.NO,
+                devDatabaseType: DatabaseTypes.NO,
+                prodDatabaseType: DatabaseTypes.NO
               }
             })
           );

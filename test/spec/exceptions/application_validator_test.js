@@ -73,6 +73,8 @@ describe('ApplicationValidator', () => {
               checkApplication({
                 config: {
                   databaseType: NO,
+                  devDatabaseType: NO,
+                  prodDatabaseType: NO,
                   applicationType: MICROSERVICE,
                   authenticationType: ApplicationOptions.authenticationType.jwt
                 }
@@ -86,6 +88,8 @@ describe('ApplicationValidator', () => {
               checkApplication({
                 config: {
                   databaseType: NO,
+                  devDatabaseType: NO,
+                  prodDatabaseType: NO,
                   applicationType: GATEWAY,
                   authenticationType: ApplicationOptions.authenticationType.uaa
                 }
@@ -214,6 +218,24 @@ describe('ApplicationValidator', () => {
         });
       });
       context('with an invalid combination for databaseType, devDatabaseType and prodDatabaseType', () => {
+        context("for 'no' as databaseType", () => {
+          context("when devDatabaseType or prodDatabaseType isn't 'no'", () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: NO,
+                    devDatabaseType: ApplicationOptions.devDatabaseType.h2Memory,
+                    prodDatabaseType: MONGODB
+                  }
+                });
+              }).to.throw(
+                'Having no database type is only allowed for microservices without oauth2 authentication type and ' +
+                  'gateways with UAA authentication type.'
+              );
+            });
+          });
+        });
         context("for 'sql' as databaseType", () => {
           context('with an invalid prodDatabaseType', () => {
             it('fails', () => {
