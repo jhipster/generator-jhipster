@@ -20,8 +20,16 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
-const { MICROSERVICE, GATEWAY } = require('../../../lib/core/jhipster/application_types');
-const { NO } = require('../../../lib/core/jhipster/database_types');
+const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../../lib/core/jhipster/application_types');
+const {
+  NO,
+  SQL,
+  MYSQL,
+  POSTGRESQL,
+  MONGODB,
+  CASSANDRA,
+  COUCHBASE
+} = require('../../../lib/core/jhipster/database_types');
 const { checkApplication } = require('../../../lib/exceptions/application_validator');
 
 describe('ApplicationValidator', () => {
@@ -99,6 +107,109 @@ describe('ApplicationValidator', () => {
               'Having no database type is only allowed for microservices without oauth2 authentication type ' +
                 'and gateways with UAA authentication type.'
             );
+          });
+        });
+      });
+      context('with different options for databaseType, devDatabaseType and prodDatabaseType', () => {
+        context('mysql', () => {
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: SQL,
+                  devDatabaseType: 'h2Disk',
+                  prodDatabaseType: MYSQL,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: SQL,
+                  devDatabaseType: MYSQL,
+                  prodDatabaseType: MYSQL,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+        });
+        context('postgresql', () => {
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: SQL,
+                  devDatabaseType: 'h2Disk',
+                  prodDatabaseType: POSTGRESQL,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: SQL,
+                  devDatabaseType: POSTGRESQL,
+                  prodDatabaseType: POSTGRESQL,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+        });
+        context('mongodb', () => {
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: MONGODB,
+                  devDatabaseType: MONGODB,
+                  prodDatabaseType: MONGODB,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+        });
+        context('cassandra', () => {
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: CASSANDRA,
+                  devDatabaseType: CASSANDRA,
+                  prodDatabaseType: CASSANDRA,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+        });
+        context('couchbase', () => {
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: COUCHBASE,
+                  devDatabaseType: COUCHBASE,
+                  prodDatabaseType: COUCHBASE,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
           });
         });
       });
