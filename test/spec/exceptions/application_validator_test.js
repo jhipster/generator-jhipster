@@ -213,6 +213,91 @@ describe('ApplicationValidator', () => {
           });
         });
       });
+      context('with an invalid combination for databaseType, devDatabaseType and prodDatabaseType', () => {
+        context("for 'sql' as databaseType", () => {
+          context('with an invalid prodDatabaseType', () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: SQL,
+                    devDatabaseType: ApplicationOptions.devDatabaseType.h2Memory,
+                    prodDatabaseType: MONGODB
+                  }
+                });
+              }).to.throw(
+                "Only 'mysql', 'postgresql', 'mariadb', 'oracle', 'mssql' are allowed as prodDatabaseType values for " +
+                  "databaseType 'sql'."
+              );
+            });
+          });
+          context('with an invalid devDatabaseType', () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: SQL,
+                    devDatabaseType: MYSQL,
+                    prodDatabaseType: POSTGRESQL
+                  }
+                });
+              }).to.throw(
+                "Only 'h2Memory', 'h2Disk', 'postgresql' are allowed as devDatabaseType values for databaseType 'sql'."
+              );
+            });
+          });
+          context('with both devDatabaseType and prodDatabaseType as invalid values', () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: SQL,
+                    devDatabaseType: MONGODB,
+                    prodDatabaseType: MONGODB
+                  }
+                });
+              }).to.throw(
+                "Only 'mysql', 'postgresql', 'mariadb', 'oracle', 'mssql' are allowed as prodDatabaseType values for " +
+                  "databaseType 'sql'."
+              );
+            });
+          });
+        });
+        context("for either 'mongodb', 'couchbase' or 'cassandra'", () => {
+          context('when the devDatabaseType is not the same as the databaseType', () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: MONGODB,
+                    devDatabaseType: CASSANDRA,
+                    prodDatabaseType: MONGODB
+                  }
+                });
+              }).to.throw(
+                "When the databaseType is either 'mongodb', 'couchbase', 'cassandra', the devDatabaseType and " +
+                  'prodDatabaseType must be the same.'
+              );
+            });
+          });
+          context('when the prodDatabaseType is not the same as the databaseType', () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: MONGODB,
+                    devDatabaseType: MONGODB,
+                    prodDatabaseType: CASSANDRA
+                  }
+                });
+              }).to.throw(
+                "When the databaseType is either 'mongodb', 'couchbase', 'cassandra', the devDatabaseType and " +
+                  'prodDatabaseType must be the same.'
+              );
+            });
+          });
+        });
+      });
     });
   });
 });
