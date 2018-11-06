@@ -103,7 +103,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 <%_ } _%>
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
-public class SecurityConfiguration<% if (authenticationType !== 'oauth2' && !skipUserManagement) { %> implements InitializingBean<% } %> extends <% if (authenticationType === 'oauth2' && applicationType === 'microservice') { %>ResourceServer<% } else { %>WebSecurity<% } %>ConfigurerAdapter {
+public class SecurityConfiguration extends <% if (authenticationType === 'oauth2' && applicationType === 'microservice') { %>ResourceServer<% } else { %>WebSecurity<% } %>ConfigurerAdapter<% if (authenticationType !== 'oauth2' && !skipUserManagement) { %> implements InitializingBean<% } %> {
     <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
