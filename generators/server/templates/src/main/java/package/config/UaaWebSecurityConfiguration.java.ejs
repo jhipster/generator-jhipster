@@ -35,7 +35,7 @@ import org.springframework.security.data.repository.query.SecurityEvaluationCont
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class UaaWebSecurityConfiguration implements InitializingBean extends WebSecurityConfigurerAdapter {
+public class UaaWebSecurityConfiguration extends WebSecurityConfigurerAdapter implements InitializingBean {
 
     private final UserDetailsService userDetailsService;
 
