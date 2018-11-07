@@ -40,6 +40,11 @@ jobs:
 
   strategy:
     matrix:
+      jdl-default:
+        JHI_APP: jdl-default
+        JHI_PROFILE: prod
+        JHI_PROTRACTOR: 1
+        JHI_ENTITY: jdl
       react-default:
         JHI_APP: react-default
         JHI_PROFILE: prod
