@@ -122,7 +122,6 @@ management:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
     metrics:
-        enabled: true
         export:
             prometheus:
                 enabled: true
@@ -135,6 +134,10 @@ management:
             uptime:
                 enabled: true
             logback:
+                enabled: true
+            files:
+                enabled: true
+            integration:
                 enabled: true
         distribution:
             percentiles-histogram:
