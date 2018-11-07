@@ -18,7 +18,7 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     mkdir -p "$JHI_FOLDER_APP"
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/*.jdl "$JHI_FOLDER_APP"/
     cd "$JHI_FOLDER_APP"
-    jhipster import-jdl *.jdl
+    jhipster import-jdl *.jdl --no-insight
     ls -al "$JHI_FOLDER_APP"
 
 else
