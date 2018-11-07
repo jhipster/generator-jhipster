@@ -44,25 +44,34 @@ jobs:
         JHI_APP: react-default
         JHI_PROFILE: prod
         JHI_PROTRACTOR: 1
+        JHI_ENTITY: sql
       react-noi18n-es-ws-gradle-session:
         JHI_APP: react-noi18n-es-ws-gradle-session
         JHI_PROTRACTOR: 1
+        JHI_ENTITY: sqlfull
       ms-ngx-gateway-eureka-oauth2:
         JHI_APP: ms-ngx-gateway-eureka-oauth2
         JHI_PROTRACTOR: 1
+        JHI_ENTITY: sql
       ms-ngx-gateway-consul:
         JHI_APP: ms-ngx-gateway-consul
+        JHI_ENTITY: sql
       ms-ngx-gateway-uaa:
         JHI_APP: ms-ngx-gateway-uaa
+        JHI_ENTITY: uaa
       ms-micro-consul:
         JHI_APP: ms-micro-consul
+        JHI_ENTITY: micro
       ngx-session-cassandra-fr:
         JHI_APP: ngx-session-cassandra-fr
+        JHI_ENTITY: cassandra
       ngx-couchbase:
         JHI_APP: ngx-couchbase
         JHI_PROFILE: prod
+        JHI_ENTITY: couchbase
       webflux-mongodb:
         JHI_APP: webflux-mongodb
+        JHI_ENTITY: mongodb
 
   steps:
   #----------------------------------------------------------------------

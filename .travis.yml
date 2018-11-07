@@ -54,13 +54,13 @@ env:
     - JHI_E2E_HEADLESS=true
     - JHI_SCRIPTS=$TRAVIS_BUILD_DIR/test-integration/scripts
   matrix:
-    - JHI_APP=ngx-default JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_SONAR=1
-    - JHI_APP=ngx-psql-es-noi18n JHI_PROFILE=prod JHI_PROTRACTOR=1
-    - JHI_APP=ngx-gradle-fr JHI_PROFILE=prod JHI_PROTRACTOR=1
-    - JHI_APP=ngx-mariadb-oauth2-sass-infinispan JHI_PROTRACTOR=1
-    - JHI_APP=ms-ngx-gateway-eureka
-    - JHI_APP=ms-micro-eureka
-    - JHI_APP=ngx-mongodb-kafka-cucumber
+    - JHI_APP=ngx-default JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql JHI_SONAR=1
+    - JHI_APP=ngx-psql-es-noi18n JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sqlfull
+    - JHI_APP=ngx-gradle-fr JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql
+    - JHI_APP=ngx-mariadb-oauth2-sass-infinispan JHI_PROTRACTOR=1 JHI_ENTITY=sql
+    - JHI_APP=ms-ngx-gateway-eureka JHI_ENTITY=sql
+    - JHI_APP=ms-micro-eureka JHI_ENTITY=micro
+    - JHI_APP=ngx-mongodb-kafka-cucumber JHI_ENTITY=mongodb
 
 #----------------------------------------------------------------------
 # Install all tools and check configuration

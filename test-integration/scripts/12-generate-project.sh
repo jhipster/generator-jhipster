@@ -11,22 +11,35 @@ if [ "$JHI_FOLDER_APP" == "$HOME/app" ]; then
     cp "$JHI_INTEG"/configstore/*.json "$HOME"/.config/configstore/
 fi
 
-#-------------------------------------------------------------------------------
-# Generate UAA project with jhipster
-#-------------------------------------------------------------------------------
-if [[ "$JHI_APP" == *"uaa"* ]]; then
-    mkdir -p "$JHI_FOLDER_UAA"
-    cp -f "$JHI_SAMPLES"/uaa/.yo-rc.json "$JHI_FOLDER_UAA"/
-    cd "$JHI_FOLDER_UAA"
-    jhipster --force --no-insight --with-entities --skip-checks --skip-git --skip-commit-hook --from-cli
-    ls -al "$JHI_FOLDER_UAA"
-fi
+if [[ "$JHI_ENTITY" == "jdl" ]]; then
+    #-------------------------------------------------------------------------------
+    # Generate with JDL
+    #-------------------------------------------------------------------------------
+    mkdir -p "$JHI_FOLDER_APP"
+    cp -f "$JHI_SAMPLES"/"$JHI_APP"/*.jdl "$JHI_FOLDER_APP"/
+    cd "$JHI_FOLDER_APP"
+    jhipster import-jdl *.jdl
+    ls -al "$JHI_FOLDER_APP"
 
-#-------------------------------------------------------------------------------
-# Generate project with jhipster
-#-------------------------------------------------------------------------------
-mkdir -p "$JHI_FOLDER_APP"
-cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
-cd "$JHI_FOLDER_APP"
-jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook --from-cli
-ls -al "$JHI_FOLDER_APP"
+else
+    #-------------------------------------------------------------------------------
+    # Generate UAA project with jhipster
+    #-------------------------------------------------------------------------------
+    if [[ "$JHI_APP" == *"uaa"* ]]; then
+        mkdir -p "$JHI_FOLDER_UAA"
+        cp -f "$JHI_SAMPLES"/uaa/.yo-rc.json "$JHI_FOLDER_UAA"/
+        cd "$JHI_FOLDER_UAA"
+        jhipster --force --no-insight --with-entities --skip-checks --skip-git --skip-commit-hook --from-cli
+        ls -al "$JHI_FOLDER_UAA"
+    fi
+
+    #-------------------------------------------------------------------------------
+    # Generate project with jhipster
+    #-------------------------------------------------------------------------------
+    mkdir -p "$JHI_FOLDER_APP"
+    cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
+    cd "$JHI_FOLDER_APP"
+    jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook --from-cli
+    ls -al "$JHI_FOLDER_APP"
+
+fi
