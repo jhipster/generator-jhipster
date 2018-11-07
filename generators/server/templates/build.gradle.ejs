@@ -238,14 +238,6 @@ dependencies {
     <%_ if (cacheProvider !== 'no') { _%>
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
-    compile "io.dropwizard.metrics:metrics-core"
-    <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
-    compile "io.dropwizard.metrics:metrics-jcache"
-    <%_ } _%>
-    compile "io.dropwizard.metrics:metrics-json"
-    compile "io.dropwizard.metrics:metrics-jvm"
-    compile "io.dropwizard.metrics:metrics-servlet"
-    compile "io.dropwizard.metrics:metrics-servlets"
     compile "io.prometheus:simpleclient"
     compile "io.prometheus:simpleclient_dropwizard"
     compile "io.prometheus:simpleclient_servlet"
