@@ -97,6 +97,7 @@ spring:
         password: oracle
         <%_ } _%>
         hikari:
+            poolName: Hikari
             auto-commit: false
         <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
             data-source-properties:

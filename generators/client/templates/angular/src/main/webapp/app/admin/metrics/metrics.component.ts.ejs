@@ -28,8 +28,11 @@ import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 })
 export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnInit {
     metrics: any = {};
+    threadStats: any = {};
     cachesStats: any = {};
+    requestsStats: any = [];
     servicesStats: any = {};
+    databaseStats: any = {};
     updatingMetrics = true;
     JCACHE_KEY: string;
 
@@ -46,31 +49,37 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
 
     refresh() {
         this.updatingMetrics = true;
-        this.metricsService.getMetrics().subscribe((metrics) => {
+        this.metricsService.getMetrics().subscribe(metrics => {
             this.metrics = metrics;
             this.updatingMetrics = false;
-            this.servicesStats = {};
-            this.cachesStats = {};
-            Object.keys(metrics.timers).forEach((key) => {
-                const value = metrics.timers[key];
-                if (key.includes('web.rest') || key.includes('service')) {
-                    this.servicesStats[key] = value;
-                }
-            });
-            Object.keys(metrics.gauges).forEach((key) => {
-                if (key.includes('jcache.statistics')) {
-                    const value = metrics.gauges[key].value;
-                    // remove gets or puts
-                    const index = key.lastIndexOf('.');
-                    const newKey = key.substr(0, index);
+        });
 
-                    // Keep the name of the domain
-                    this.cachesStats[newKey] = {
-                        name: this.JCACHE_KEY.length,
-                        value
-                    };
+        this.threadStats = {
+            threadDumpRunnable: 0,
+            threadDumpWaiting: 0,
+            threadDumpTimedWaiting: 0,
+            threadDumpBlocked: 0,
+            threadDumpAll: 0
+        };
+
+        this.metricsService.threadDump().subscribe(data => {
+            data.threads.forEach(value => {
+                if (value.threadState === 'RUNNABLE') {
+                    this.threadStats.threadDumpRunnable += 1;
+                } else if (value.threadState === 'WAITING') {
+                    this.threadStats.threadDumpWaiting += 1;
+                } else if (value.threadState === 'TIMED_WAITING') {
+                    this.threadStats.threadDumpTimedWaiting += 1;
+                } else if (value.threadState === 'BLOCKED') {
+                    this.threadStats.threadDumpBlocked += 1;
                 }
             });
+
+            this.threadStats.threadDumpAll =
+                this.threadStats.threadDumpRunnable +
+                this.threadStats.threadDumpWaiting +
+                this.threadStats.threadDumpTimedWaiting +
+                this.threadStats.threadDumpBlocked;
         });
     }
 

@@ -116,6 +116,7 @@ spring:
         password:
         <%_ } _%>
         hikari:
+            poolName: Hikari
             auto-commit: false
         <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb' || devDatabaseType === 'mssql') { _%>
             data-source-properties:
