@@ -18,7 +18,10 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     mkdir -p "$JHI_FOLDER_APP"
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/*.jdl "$JHI_FOLDER_APP"/
     cd "$JHI_FOLDER_APP"
-    jhipster import-jdl *.jdl --no-insight
+    # Note: --no-insight doesn't work here
+    # there is still the message: May JHipster anonymously report usage statistics to improve the tool over time? (Y/n)
+    # so the CI is stuck with --no-insight
+    jhipster import-jdl *.jdl --force-insight
     ls -al "$JHI_FOLDER_APP"
 
 else
