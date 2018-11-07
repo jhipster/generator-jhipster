@@ -2633,6 +2633,41 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * get a hipster based on the applications name.
+     * @param {string} baseName of application 
+     */
+    getHipster(baseName = this.baseName) {
+
+        let hash = 0, i, chr;
+
+        for (i = 0; i < baseName.length; i++) {
+            chr   = baseName.charCodeAt(i);
+            hash  = ((hash << 5) - hash) + chr;
+            hash |= 0;
+        }
+        
+        if (hash < 0) {
+            hash = hash * -1;
+        }
+        
+        switch (hash % 5) {
+            case 0:
+                return 'hipster';
+            case 1:
+                return 'hipster-woman-1';
+            case 2: 
+                return 'hipster-man-1';
+            case 3:
+                return 'hipster-woman-2';
+            case 4:
+                return 'hipster-man-2';
+            default:
+                return 'hipster-man-1';
+
+        }
+    }
+
+    /**
      * ask a prompt for apps name.
      *
      * @param {object} generator - generator instance to use
