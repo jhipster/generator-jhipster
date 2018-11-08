@@ -236,9 +236,12 @@ module.exports = class extends BaseGenerator {
                 if (this.jhipsterVersion === undefined) {
                     this.jhipsterVersion = this.config.get('jhipsterVersion');
                 }
-                this.otherModules = this.config.get('otherModules');
+                this.otherModules = this.config.get('otherModules') || [];
                 if (this.blueprint) {
                     this.blueprintVersion = this.findBlueprintVersion(this.blueprint);
+                    // Remove potential previous value to avoid duplicates
+                    this.otherModules = this.otherModules.filter(module => module.name !== this.blueprint);
+                    this.otherModules.push({ name: this.blueprint, version: this.blueprintVersion || 'latest' });
                 }
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.enableTranslation = this.config.get('enableTranslation');

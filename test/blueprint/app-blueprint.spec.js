@@ -22,7 +22,7 @@ describe('JHipster application generator with blueprint', () => {
                         version: '9.9.9'
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
-                    fse.ensureDirSync(fakeBlueprintModuleDir)
+                    fse.ensureDirSync(fakeBlueprintModuleDir);
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
@@ -73,6 +73,9 @@ describe('JHipster application generator with blueprint', () => {
 
         it('blueprint version is saved in .yo-rc.json', () => {
             assert.fileContent('.yo-rc.json', /"blueprintVersion": "9.9.9"/);
+        });
+        it('blueprint module and version are in package.json', () => {
+            assert.fileContent('package.json', /"generator-jhipster-myblueprint": "9.9.9"/);
         });
     });
 });
