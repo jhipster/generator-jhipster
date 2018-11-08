@@ -78,6 +78,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
   # Update NPM
   - npm install -g npm
+  - $JHI_SCRIPTS/04-git-config.sh
 
 #----------------------------------------------------------------------
 # Install JHipster and generate project+entities

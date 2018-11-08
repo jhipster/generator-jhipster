@@ -22,7 +22,6 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     # there is still the message: May JHipster anonymously report usage statistics to improve the tool over time? (Y/n)
     # so the CI is stuck with --no-insight
     jhipster import-jdl *.jdl --force-insight
-    ls -al "$JHI_FOLDER_APP"
 
 else
     #-------------------------------------------------------------------------------
@@ -32,7 +31,7 @@ else
         mkdir -p "$JHI_FOLDER_UAA"
         cp -f "$JHI_SAMPLES"/uaa/.yo-rc.json "$JHI_FOLDER_UAA"/
         cd "$JHI_FOLDER_UAA"
-        jhipster --force --no-insight --with-entities --skip-checks --skip-git --skip-commit-hook --from-cli
+        jhipster --force --no-insight --with-entities --skip-checks --from-cli
         ls -al "$JHI_FOLDER_UAA"
     fi
 
@@ -42,7 +41,12 @@ else
     mkdir -p "$JHI_FOLDER_APP"
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
     cd "$JHI_FOLDER_APP"
-    jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook --from-cli
-    ls -al "$JHI_FOLDER_APP"
+    jhipster --force --no-insight --skip-checks --with-entities --from-cli
 
 fi
+
+#-------------------------------------------------------------------------------
+# Check folder where the app is generated
+#-------------------------------------------------------------------------------
+ls -al "$JHI_FOLDER_APP"
+git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit

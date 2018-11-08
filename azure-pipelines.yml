@@ -98,6 +98,8 @@ jobs:
     displayName: 'TOOLS: display configuration'
   - bash: $(JHI_SCRIPTS)/03-system.sh
     displayName: 'TOOLS: configure tools installed by the system'
+  - bash: $(JHI_SCRIPTS)/04-git-config.sh
+    displayName: 'TOOLS: configure git'
 
   #----------------------------------------------------------------------
   # Install JHipster and generate project+entities
