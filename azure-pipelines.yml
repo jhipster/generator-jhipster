@@ -53,7 +53,7 @@ jobs:
       react-noi18n-es-ws-gradle-session:
         JHI_APP: react-noi18n-es-ws-gradle-session
         JHI_PROTRACTOR: 1
-        JHI_ENTITY: sqlfull
+        JHI_ENTITY: sql
       ms-ngx-gateway-eureka-oauth2:
         JHI_APP: ms-ngx-gateway-eureka-oauth2
         JHI_PROTRACTOR: 1
