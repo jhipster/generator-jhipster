@@ -237,6 +237,9 @@ module.exports = class extends BaseGenerator {
                     this.jhipsterVersion = this.config.get('jhipsterVersion');
                 }
                 this.otherModules = this.config.get('otherModules');
+                if (this.blueprint) {
+                    this.blueprintVersion = this.findBlueprintVersion(this.blueprint);
+                }
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.enableTranslation = this.config.get('enableTranslation');
                 this.nativeLanguage = this.config.get('nativeLanguage');
@@ -395,6 +398,7 @@ module.exports = class extends BaseGenerator {
                     config.languages = this.languages;
                 }
                 this.blueprint && (config.blueprint = this.blueprint);
+                this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
                 this.reactive && (config.reactive = this.reactive);
                 this.skipClient && (config.skipClient = true);
                 this.skipServer && (config.skipServer = true);
