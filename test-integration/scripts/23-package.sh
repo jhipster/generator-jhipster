@@ -16,7 +16,7 @@ fi
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ "$JHI_PROTRACTOR" == 1 ] && [ -e "src/main/webapp/app/app.module.ts" ]; then
-    sed -e 's/alertTimeout: 5000/alertTimeout: 1/1;' src/main/webapp/app/app.module.ts > src/main/webapp/app/aap.module.ts.sed
+    sed -e 's/alertTimeout: 5000/alertTimeout: 1/1;' src/main/webapp/app/app.module.ts > src/main/webapp/app/app.module.ts.sed
     mv -f src/main/webapp/app/app.module.ts.sed src/main/webapp/app/app.module.ts
     cat src/main/webapp/app/app.module.ts | grep alertTimeout
 fi
