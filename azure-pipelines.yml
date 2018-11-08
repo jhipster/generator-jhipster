@@ -100,6 +100,12 @@ jobs:
     displayName: 'GENERATION: jhipster info'
 
   #----------------------------------------------------------------------
+  # Bugs fix
+  #----------------------------------------------------------------------
+  - bash: test-integration/scripts/20-no-memory-limit-elasticsearch.sh
+    displayName: 'BUGS-FIX: no memory limit for Elasticsearch'
+
+  #----------------------------------------------------------------------
   # Launch tests
   #----------------------------------------------------------------------
   - bash: $(JHI_SCRIPTS)/20-docker-compose.sh
