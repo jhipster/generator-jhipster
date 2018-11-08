@@ -63,44 +63,7 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
 
   filterNaN = input => isNaN(input) ? 0 : input;
 
-  getStats = metrics => {
-    const stat = {
-      servicesStats: {},
-      cachesStats: {}
-    };
-    if (!this.props.isFetching && metrics && metrics.timers) {
-      Object.keys(metrics.timers).forEach((key, indexNm) => {
-        if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
-          stat.servicesStats[key] = metrics.timers[key];
-        }
-        if (key.indexOf('net.sf.ehcache.Cache') !== -1) {
-          // remove gets or puts
-          const index = key.lastIndexOf('.');
-          const newKey = key.substr(0, index);
-          // Keep the name of the domain
-          stat.cachesStats[newKey] = {
-            name: newKey,
-            value: metrics.timers[key]
-          };
-        }
-      });
-
-    }
-    return stat;
-  }
-
-  gaugeRow = (metrics, label: String, key) => (
-    metrics.gauges[key] ?
-      <Row>
-        <Col md="9">{label}</Col>
-        <Col md="3" className="text-right">
-          {metrics.gauges[key].value}
-        </Col>
-      </Row>
-      : null
-  );
-
-  renderModal = () => <MetricsModal handleClose={this.handleClose} showModal={this.state.showModal} threadDump={this.props.threadDump}/>;
+ renderModal = () => <MetricsModal handleClose={this.handleClose} showModal={this.state.showModal} threadDump={this.props.threadDump}/>;
 
   renderGauges = metrics => (
     <Row>
@@ -143,7 +106,6 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
 
   render() {
     const { metrics, isFetching } = this.props;
-    const data = metrics || {};
     return (
         <div>
           <h2 id="metrics-page-heading">Application Metrics</h2>
@@ -196,7 +158,7 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
                             >
                             <span>
                               <TextFormat
-                                value={metrics['http.server.requests.all'].count}
+                                value={metrics['http.server.requests'][key].count}
                                 type="number"
                                 format={APP_WHOLE_NUMBER_FORMAT}
                               />
@@ -222,7 +184,7 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
                   </tbody>
                 </Table>
               </Col>
-            </Row>
+            </Row>)
           : ''}
         { metrics && metrics.services ? (
           <Row>
@@ -294,7 +256,7 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
                 ))}
               </tbody>
             </Table>
-          </Row>
+          </Row>)
           : ''}
 
           { metrics.cache ? (
@@ -316,7 +278,6 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
                     </tr>
                   </thead>
                   <tbody>
-                    {Object.keys(cachesStats).map((k, v) => (
                       {Object.keys(metrics.cache).map((key, index) => (
                         <tr key={key}>
                           <td>{key}</td>
@@ -340,12 +301,12 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
                               format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}
                             />
                           </td>
-                      </tr>
-                    ))}
+                        </tr>
+                      ))}
                   </tbody>
                 </Table>
               </Col>
-            </Row>
+            </Row>)
           : ''}
 
           { metrics.databases ? (
@@ -404,7 +365,7 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
                   </tbody>
                 </Table>
               </Col>
-            </Row>
+            </Row>)
           : '' }
 
           {this.renderModal()}
