@@ -15,7 +15,9 @@ Vue.config.productionTip = false;
 
 setupAxiosInterceptors(() => console.log('Unauthorized!'));
 
+<%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(Vue);
+<%_ } _%>
 const store = config.initVueXStore(Vue);
 config.initVueApp(Vue);
 config.initBootstrapVue(Vue);
@@ -28,6 +30,6 @@ new Vue({
     components: { App },
     template: '<App/>',
     router,
-    i18n,
+<%_ if (enableTranslation) { _%>    i18n,<%_ } _%>
     store
 });

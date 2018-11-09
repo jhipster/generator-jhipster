@@ -9,7 +9,7 @@
                 <router-view></router-view>
             </div>
             <b-modal id="loginModal" >
-                <span slot="modal-title" v-text="$t('login.title')"></span>
+                <span slot="modal-title" v-text="$t('login.title')">Sign in</span>
                 <login-form></login-form>
             </b-modal>
             <jhi-footer></jhi-footer>

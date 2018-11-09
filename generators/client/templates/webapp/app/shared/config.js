@@ -9,10 +9,13 @@ import {fas} from '@fortawesome/free-solid-svg-icons';
 import VueCookie from 'vue-cookie';
 import Vuelidate from 'vuelidate';
 
+import * as filters from './date/filters';
+
 export function initVueApp(vue) {
     vue.use(VueCookie);
     vue.use(Vuelidate);
     setupAxiosInterceptors(() => console.log('Unauthorized!'));
+    filters.initFilters();
 }
 
 export function initBootstrapVue(vue) {

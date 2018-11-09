@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const utils = require('./utils');
+const clientUtils = require('../client/utils');
 
 /* Constants use throughout */
 const VUE_DIR = 'src/main/webapp/app/';
@@ -67,4 +68,12 @@ function writeFiles() {
     // Add entity paths to routing system
     utils.addEntityToRouterImport(this, className, this.entityFileName, this.entityFolderName);
     utils.addEntityToRouter(this, entityName, className);
+
+    if (!this.enableTranslation) {
+        clientUtils.replaceTranslation(this, [
+            `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
+            `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
+            `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
+        ]);
+    }
 }

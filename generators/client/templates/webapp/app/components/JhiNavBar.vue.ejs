@@ -72,6 +72,7 @@
                         </b-dropdown-item>
                     </b-dropdown>
                 </li>
+                <%_ if (enableTranslation) { _%>
                 <li class="nav-item dropdown pointer" v-if="languages && Object.keys(languages).length > 1">
                     <b-dropdown id="languagesnavBarDropdown" class="nav-link">
                         <template slot="button-content">
@@ -83,6 +84,7 @@
                         </b-dropdown-item>
                     </b-dropdown>
                 </li>
+                <%_ } _%>
                 <li class="nav-item dropdown pointer" placement="bottom-right" >
                     <b-dropdown class="nav-link" href="javascript:void(0);" id="account-menu">
                         <template slot="button-content" v-if="!getImageUrl()">

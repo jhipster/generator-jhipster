@@ -28,6 +28,7 @@ module.exports = {
 };
 
 function addEntityToMenu(generator, entityName, className) {
+    const menuI18nTitle = generator.enableTranslation ? `v-text="$t('global.menu.entities.${entityName}')"` : '';
     jhipsterUtils.rewriteFile(
         {
             file: `${CLIENT_MAIN_SRC_DIR}/app/components/JhiNavBar.vue`,
@@ -36,7 +37,7 @@ function addEntityToMenu(generator, entityName, className) {
                 // prettier-ignore
                 `<router-link to="${entityName}" tag="b-dropdown-item" class="dropdown-item" v-on:click="collapseNavbar()">
                     <font-awesome-icon icon="asterisk" />
-                    <span v-text="$t('global.menu.entities.${entityName}')">${className}</span>
+                    <span ${menuI18nTitle}>${className}</span>
               </router-link>`
             ]
         },
