@@ -25,6 +25,7 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/jest": "^23.1.4",
     "@types/node": "^10.12.2",
     "@vue/test-utils": "^1.0.0-beta.25",
     "autoprefixer": "^7.1.2",
@@ -111,13 +112,15 @@
       "vue"
     ],
     "transform": {
-      "^.+\\.js$": "babel-jest",
       ".*\\.(vue)$": "vue-jest",
       "^.+\\.tsx?$": "ts-jest"
     },
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/main/webapp/app/$1"
     },
+    "testMatch": [
+      "<rootDir>/src/main/webapp/app/components/**/*.test.(js|jsx|ts|tsx)"
+    ],
     "snapshotSerializers": [
       "<rootDir>/node_modules/jest-serializer-vue"
     ]

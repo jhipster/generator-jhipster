@@ -1,10 +1,11 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 
-import * as config from '@/shared/config';
-import ChangePassword from '@/components/account/ChangePassword.vue';
+import * as config from '../../../shared/config';
+import ChangePassword from '../change-password/ChangePassword.vue';
 
 const localVue = createLocalVue();
+const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
 const i18n = config.initI18N(localVue);
@@ -14,7 +15,7 @@ jest.mock('axios', () => ({
     get: jest.fn(),
     post: jest.fn()
 }));
-jest.mock('@/constants.ts', () =>({
+jest.mock('../../../constants.ts', () => ({
     SERVER_API_URL: ''
 }));
 
@@ -23,9 +24,9 @@ describe('ChangePassword Component', () => {
     let comp;
 
     beforeEach(() => {
-        axios.get.mockReset();
-        axios.get.mockReturnValue(Promise.resolve({}));
-        axios.post.mockReset();
+        mockedAxios.get.mockReset();
+        mockedAxios.get.mockReturnValue(Promise.resolve({}));
+        mockedAxios.post.mockReset();
 
         wrapper = shallowMount(ChangePassword, { store, i18n, localVue });
         comp = wrapper.vm;
@@ -37,7 +38,7 @@ describe('ChangePassword Component', () => {
 
     it('should show error if passwords do not match', () => {
         // GIVEN
-        comp.resetPassword = {newPassword: 'password1', confirmPassword:'password2'};
+        comp.resetPassword = { newPassword: 'password1', confirmPassword: 'password2' };
         // WHEN
         comp.changePassword();
         // THEN
@@ -48,15 +49,15 @@ describe('ChangePassword Component', () => {
 
     it('should call Auth.changePassword when passwords match and  set success to OK upon success', async () => {
         // GIVEN
-        comp.resetPassword = {currentPassword: 'password1', newPassword: 'password1', confirmPassword:'password1'};
-        axios.post.mockReturnValue(Promise.resolve({}));
+        comp.resetPassword = { currentPassword: 'password1', newPassword: 'password1', confirmPassword: 'password1' };
+        mockedAxios.post.mockReturnValue(Promise.resolve({}));
 
         // WHEN
         comp.changePassword();
         await comp.$nextTick();
 
         // THEN
-        expect(axios.post).toHaveBeenCalledWith('api/account/change-password', {currentPassword: 'password1', newPassword: 'password1'});
+        expect(mockedAxios.post).toHaveBeenCalledWith('api/account/change-password', { currentPassword: 'password1', newPassword: 'password1' });
 
         expect(comp.doNotMatch).toBeNull();
         expect(comp.error).toBeNull();
@@ -65,8 +66,8 @@ describe('ChangePassword Component', () => {
 
     it('should notify of error if change password fails', async () => {
         // GIVEN
-        comp.resetPassword = {currentPassword: 'password1', newPassword: 'password1', confirmPassword:'password1'};
-        axios.post.mockReturnValue(Promise.reject({}));
+        comp.resetPassword = { currentPassword: 'password1', newPassword: 'password1', confirmPassword: 'password1' };
+        mockedAxios.post.mockReturnValue(Promise.reject({}));
 
         // WHEN
         comp.changePassword();
