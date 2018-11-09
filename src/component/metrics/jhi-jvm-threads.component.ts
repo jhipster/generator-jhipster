@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
     selector: 'jhi-jvm-threads',
@@ -42,10 +42,10 @@ import {Component, Input, OnInit} from '@angular/core';
             <span>{{threadStats.threadDumpBlocked * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
         </ngb-progressbar>`
 })
-export class JhiJvmThreadsComponent implements OnInit {
+export class JhiJvmThreadsComponent {
 
     /**
-     * the boolean input value
+     * object containing thread related metrics
      */
     @Input() threadStats: {
         threadDumpAll: number;
@@ -57,11 +57,4 @@ export class JhiJvmThreadsComponent implements OnInit {
 
     @Input() refreshThreadDumpData: Function;
 
-    constructor() {
-
-    }
-
-    ngOnInit() {
-
-    }
 }

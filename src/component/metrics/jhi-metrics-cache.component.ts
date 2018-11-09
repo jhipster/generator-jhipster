@@ -60,7 +60,7 @@ import {Component, Input} from '@angular/core';
 export class JhiMetricsCacheComponent {
 
     /**
-     * the input value
+     * object containing all cache related metrics
      */
     @Input() cacheMetrics: {};
 

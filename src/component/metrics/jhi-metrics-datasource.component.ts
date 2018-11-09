@@ -52,7 +52,7 @@ import {Component, Input} from '@angular/core';
 export class JhiMetricsDatasourceComponent {
 
     /**
-     * the input value
+     * object containing all datasource related metrics
      */
     @Input() datasourceMetrics: {
         active: any;

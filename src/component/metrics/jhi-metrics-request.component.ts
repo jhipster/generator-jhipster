@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
     selector: 'jhi-metrics-request',
@@ -45,24 +45,19 @@ import {Component, Input, OnInit} from '@angular/core';
             </tbody>
         </table>`
 })
-export class JhiMetricsHttpRequestComponent implements OnInit {
+export class JhiMetricsHttpRequestComponent {
 
     /**
-     * the boolean input value
+     * object containing http request per code related metrics
      */
     @Input() requestMetrics: {};
 
+    /**
+     * object containing aggregated http request related metrics
+     */
     @Input() totalRequestMetrics: {
         count: number;
     };
-
-    constructor() {
-
-    }
-
-    ngOnInit() {
-
-    }
 
     filterNaN(input) {
         if (isNaN(input)) {
