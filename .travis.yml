@@ -1,10 +1,29 @@
+#
+# Copyright 2013-2018 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 os:
   - linux
 services:
   - docker
 language: node_js
 node_js:
-  - "8.12.0"
+  - "10.13.0"
 jdk:
   - oraclejdk8
 addons:
@@ -28,6 +47,7 @@ env:
     # if JHI_GEN_BRANCH value is release, use the release from NPM
     - JHI_GEN_REPO=https://github.com/jhipster/generator-jhipster.git
     - JHI_GEN_BRANCH=master
+    # specific config
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
@@ -58,14 +78,10 @@ before_install:
 #----------------------------------------------------------------------
 install:
   - $TRAVIS_BUILD_DIR/test-integration/scripts/10-install-jhipster-vuejs.sh
-  # copy samples
-  - cp -R $TRAVIS_BUILD_DIR/test-integration/samples-vuejs/* /home/travis/generator-jhipster/test-integration/samples/
-  - ls -al /home/travis/generator-jhipster/test-integration/samples/
-  # copy init-env
-  - cp $TRAVIS_BUILD_DIR/test-integration/scripts/00-init-env.sh /home/travis/generator-jhipster/test-integration/scripts/
-  # generate project and entities
   - $JHI_SCRIPTS/11-generate-entities.sh
   - $TRAVIS_BUILD_DIR/test-integration/scripts/12-generate-project-vuejs.sh
+  - $JHI_SCRIPTS/13-replace-version-generated-project.sh
+  - $JHI_SCRIPTS/14-jhipster-info.sh
 
 #----------------------------------------------------------------------
 # Launch tests

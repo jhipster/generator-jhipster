@@ -14,7 +14,10 @@ init_var() {
 JHI_REPO=$(init_var "$BUILD_REPOSITORY_URI" "$TRAVIS_REPO_SLUG")
 
 # folder where the repo is cloned
-JHI_HOME="/home/travis/generator-jhipster"
+JHI_CLONED=$(init_var "$BUILD_REPOSITORY_LOCALPATH" "$TRAVIS_BUILD_DIR")
+
+# folder where the generator-jhipster is cloned
+JHI_HOME="$HOME"/generator-jhipster
 
 # folder for test-integration
 JHI_INTEG="$JHI_HOME"/test-integration
