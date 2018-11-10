@@ -1,4 +1,3 @@
-/* global describe, it */
 /* eslint-disable no-unused-expressions, no-console */
 
 const expect = require('chai').expect;
