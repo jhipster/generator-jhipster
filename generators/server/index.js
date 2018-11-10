@@ -22,7 +22,7 @@ const _ = require('lodash');
 const crypto = require('crypto');
 const os = require('os');
 const prompts = require('./prompts');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
@@ -30,7 +30,7 @@ const statistics = require('../statistics');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 

@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -132,16 +132,6 @@ module.exports = class extends BaseGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _prompting() {
-        return {};
-    }
-
-    get prompting() {
-        if (useBlueprint) return;
-        return this._prompting();
-    }
-
-    // Public API method used by the getter and also by Blueprints
     _configuring() {
         return {
             setSharedConfigOptions() {
@@ -191,24 +181,5 @@ module.exports = class extends BaseGenerator {
     get writing() {
         if (useBlueprint) return;
         return this._writing();
-    }
-
-    _install() {
-        return {};
-    }
-
-    get install() {
-        if (useBlueprint) return;
-        return this._install();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _end() {
-        return {};
-    }
-
-    get end() {
-        if (useBlueprint) return;
-        return this._end();
     }
 };
