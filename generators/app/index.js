@@ -327,15 +327,6 @@ module.exports = class extends BaseGenerator {
             //     this.composeWith(require.resolve('../link-account'));
             // },
 
-            composeCommon() {
-                this.composeWith(require.resolve('../common'), {
-                    'from-cli': this.options['from-cli'],
-                    configOptions: this.configOptions,
-                    force: this.options.force,
-                    debug: this.isDebugEnabled
-                });
-            },
-
             composeServer() {
                 if (this.skipServer) return;
 
@@ -354,6 +345,16 @@ module.exports = class extends BaseGenerator {
                 this.composeWith(require.resolve('../client'), {
                     'skip-install': this.options['skip-install'],
                     'skip-commit-hook': this.options['skip-commit-hook'],
+                    'from-cli': this.options['from-cli'],
+                    configOptions: this.configOptions,
+                    force: this.options.force,
+                    debug: this.isDebugEnabled
+                });
+            },
+
+            composeCommon() {
+                this.composeWith(require.resolve('../common'), {
+                    'client-hook': !this.skipClient,
                     'from-cli': this.options['from-cli'],
                     configOptions: this.configOptions,
                     force: this.options.force,
