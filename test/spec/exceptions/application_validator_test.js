@@ -20,8 +20,16 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
-const { MICROSERVICE, GATEWAY } = require('../../../lib/core/jhipster/application_types');
-const { NO } = require('../../../lib/core/jhipster/database_types');
+const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../../lib/core/jhipster/application_types');
+const {
+  NO,
+  SQL,
+  MYSQL,
+  POSTGRESQL,
+  MONGODB,
+  CASSANDRA,
+  COUCHBASE
+} = require('../../../lib/core/jhipster/database_types');
 const { checkApplication } = require('../../../lib/exceptions/application_validator');
 
 describe('ApplicationValidator', () => {
@@ -65,6 +73,8 @@ describe('ApplicationValidator', () => {
               checkApplication({
                 config: {
                   databaseType: NO,
+                  devDatabaseType: NO,
+                  prodDatabaseType: NO,
                   applicationType: MICROSERVICE,
                   authenticationType: ApplicationOptions.authenticationType.jwt
                 }
@@ -78,6 +88,8 @@ describe('ApplicationValidator', () => {
               checkApplication({
                 config: {
                   databaseType: NO,
+                  devDatabaseType: NO,
+                  prodDatabaseType: NO,
                   applicationType: GATEWAY,
                   authenticationType: ApplicationOptions.authenticationType.uaa
                 }
@@ -99,6 +111,212 @@ describe('ApplicationValidator', () => {
               'Having no database type is only allowed for microservices without oauth2 authentication type ' +
                 'and gateways with UAA authentication type.'
             );
+          });
+        });
+      });
+      context('with different options for databaseType, devDatabaseType and prodDatabaseType', () => {
+        context('mysql', () => {
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: SQL,
+                  devDatabaseType: 'h2Disk',
+                  prodDatabaseType: MYSQL,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: SQL,
+                  devDatabaseType: MYSQL,
+                  prodDatabaseType: MYSQL,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+        });
+        context('postgresql', () => {
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: SQL,
+                  devDatabaseType: 'h2Disk',
+                  prodDatabaseType: POSTGRESQL,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: SQL,
+                  devDatabaseType: POSTGRESQL,
+                  prodDatabaseType: POSTGRESQL,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+        });
+        context('mongodb', () => {
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: MONGODB,
+                  devDatabaseType: MONGODB,
+                  prodDatabaseType: MONGODB,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+        });
+        context('cassandra', () => {
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: CASSANDRA,
+                  devDatabaseType: CASSANDRA,
+                  prodDatabaseType: CASSANDRA,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+        });
+        context('couchbase', () => {
+          it('does not fail', () => {
+            expect(() => {
+              checkApplication({
+                config: {
+                  databaseType: COUCHBASE,
+                  devDatabaseType: COUCHBASE,
+                  prodDatabaseType: COUCHBASE,
+                  applicationType: MONOLITH,
+                  authenticationType: ApplicationOptions.authenticationType.jwt
+                }
+              });
+            }).not.to.throw();
+          });
+        });
+      });
+      context('with an invalid combination for databaseType, devDatabaseType and prodDatabaseType', () => {
+        context("for 'no' as databaseType", () => {
+          context("when devDatabaseType or prodDatabaseType isn't 'no'", () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: NO,
+                    devDatabaseType: ApplicationOptions.devDatabaseType.h2Memory,
+                    prodDatabaseType: MONGODB
+                  }
+                });
+              }).to.throw(
+                'Having no database type is only allowed for microservices without oauth2 authentication type and ' +
+                  'gateways with UAA authentication type.'
+              );
+            });
+          });
+        });
+        context("for 'sql' as databaseType", () => {
+          context('with an invalid prodDatabaseType', () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: SQL,
+                    devDatabaseType: ApplicationOptions.devDatabaseType.h2Memory,
+                    prodDatabaseType: MONGODB
+                  }
+                });
+              }).to.throw(
+                "Only 'mysql', 'postgresql', 'mariadb', 'oracle', 'mssql' are allowed as prodDatabaseType values for " +
+                  "databaseType 'sql'."
+              );
+            });
+          });
+          context('with an invalid devDatabaseType', () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: SQL,
+                    devDatabaseType: MYSQL,
+                    prodDatabaseType: POSTGRESQL
+                  }
+                });
+              }).to.throw(
+                "Only 'h2Memory', 'h2Disk', 'postgresql' are allowed as devDatabaseType values for databaseType 'sql'."
+              );
+            });
+          });
+          context('with both devDatabaseType and prodDatabaseType as invalid values', () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: SQL,
+                    devDatabaseType: MONGODB,
+                    prodDatabaseType: MONGODB
+                  }
+                });
+              }).to.throw(
+                "Only 'mysql', 'postgresql', 'mariadb', 'oracle', 'mssql' are allowed as prodDatabaseType values for " +
+                  "databaseType 'sql'."
+              );
+            });
+          });
+        });
+        context("for either 'mongodb', 'couchbase' or 'cassandra'", () => {
+          context('when the devDatabaseType is not the same as the databaseType', () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: MONGODB,
+                    devDatabaseType: CASSANDRA,
+                    prodDatabaseType: MONGODB
+                  }
+                });
+              }).to.throw(
+                "When the databaseType is either 'mongodb', 'couchbase', 'cassandra', the devDatabaseType and " +
+                  'prodDatabaseType must be the same.'
+              );
+            });
+          });
+          context('when the prodDatabaseType is not the same as the databaseType', () => {
+            it('fails', () => {
+              expect(() => {
+                checkApplication({
+                  config: {
+                    databaseType: MONGODB,
+                    devDatabaseType: MONGODB,
+                    prodDatabaseType: CASSANDRA
+                  }
+                });
+              }).to.throw(
+                "When the databaseType is either 'mongodb', 'couchbase', 'cassandra', the devDatabaseType and " +
+                  'prodDatabaseType must be the same.'
+              );
+            });
           });
         });
       });

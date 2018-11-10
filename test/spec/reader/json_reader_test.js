@@ -21,19 +21,19 @@
 const { expect } = require('chai');
 
 const JSONReader = require('../../../lib/reader/json_reader');
-const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
+const { SKIP_CLIENT, SKIP_SERVER } = require('../../../lib/core/jhipster/unary_options');
 
 describe('JSONReader', () => {
   describe('::parseFromDir', () => {
-    describe('when passing invalid parameters', () => {
-      describe('such as nil', () => {
+    context('when passing invalid parameters', () => {
+      context('such as nil', () => {
         it('throws an error', () => {
           expect(() => {
             JSONReader.parseFromDir(null);
           }).to.throw('The app directory must be passed to read JSON files.');
         });
       });
-      describe('such as a file', () => {
+      context('such as a file', () => {
         it('throws an error', () => {
           expect(() => {
             JSONReader.parseFromDir('../../test_files/invalid_file.txt');
@@ -42,7 +42,7 @@ describe('JSONReader', () => {
           );
         });
       });
-      describe('such as a dir that does not exist', () => {
+      context('such as a dir that does not exist', () => {
         it('throws an error', () => {
           expect(() => {
             JSONReader.parseFromDir('nodir');
@@ -50,9 +50,14 @@ describe('JSONReader', () => {
         });
       });
     });
-    describe('when passing valid arguments', () => {
-      describe('when reading a jhipster app dir', () => {
-        const content = JSONReader.parseFromDir('./test/test_files/jhipster_app');
+    context('when passing valid arguments', () => {
+      context('when reading a jhipster app dir', () => {
+        let content;
+
+        before(() => {
+          content = JSONReader.parseFromDir('./test/test_files/jhipster_app');
+        });
+
         it('reads it', () => {
           expect(content.entities.Country).not.to.be.undefined;
           expect(content.entities.Department).not.to.be.undefined;
@@ -63,8 +68,8 @@ describe('JSONReader', () => {
           expect(content.entities.Task).not.to.be.undefined;
           expect(content.entities.NoEntity).to.be.undefined;
           expect(content.entities.BadEntity).to.be.undefined;
-          expect(content.getOptions().filter(o => o.name === UnaryOptions.SKIP_CLIENT).length).eq(1);
-          expect(content.getOptions().filter(o => o.name === UnaryOptions.SKIP_SERVER).length).eq(1);
+          expect(content.getOptions().filter(o => o.name === SKIP_CLIENT).length).eq(1);
+          expect(content.getOptions().filter(o => o.name === SKIP_SERVER).length).eq(1);
         });
       });
     });
