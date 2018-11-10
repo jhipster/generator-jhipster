@@ -448,7 +448,8 @@ describe('JDLImporter', () => {
             expectedContent.Region,
             expectedContent.Task
           ],
-          exportedApplications: []
+          exportedApplications: [],
+          exportedDeployments: []
         });
       });
       it('creates the files', () => {
@@ -1112,6 +1113,7 @@ describe('JDLImporter', () => {
             gatewayType: 'zuul',
             clusteredDbApps: [],
             consoleOptions: [],
+            deploymentType: 'docker-compose',
             serviceDiscoveryType: 'eureka',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
@@ -1164,6 +1166,7 @@ describe('JDLImporter', () => {
             gatewayType: 'zuul',
             clusteredDbApps: [],
             consoleOptions: [],
+            deploymentType: 'docker-compose',
             serviceDiscoveryType: 'eureka',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
@@ -1176,6 +1179,7 @@ describe('JDLImporter', () => {
             clusteredDbApps: [],
             consoleOptions: [],
             directoryPath: '../',
+            deploymentType: 'kubernetes',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
             gatewayType: 'zuul',
@@ -1194,6 +1198,7 @@ describe('JDLImporter', () => {
             clusteredDbApps: [],
             consoleOptions: [],
             directoryPath: '../',
+            deploymentType: 'openshift',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
             gatewayType: 'zuul',
@@ -1209,6 +1214,7 @@ describe('JDLImporter', () => {
             clusteredDbApps: [],
             consoleOptions: [],
             directoryPath: '../',
+            deploymentType: 'rancher-compose',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
             enableRancherLoadBalancing: false,
