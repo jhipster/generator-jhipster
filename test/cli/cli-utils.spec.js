@@ -1,5 +1,3 @@
-/* global describe, it */
-
 const expect = require('chai').expect;
 const cliUtil = require('../../cli/utils');
 const packageJson = require('../../package.json');
