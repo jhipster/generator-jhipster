@@ -62,7 +62,8 @@ spring:
         livereload:
             enabled: false # we use Webpack dev server + BrowserSync for livereload
     jackson:
-        serialization.indent_output: true
+        serialization:
+            indent-output: true
     <%_ if (messageBroker === 'kafka' || serviceDiscoveryType === 'consul') { _%>
     cloud:
         <%_ if (serviceDiscoveryType === 'consul') { _%>
