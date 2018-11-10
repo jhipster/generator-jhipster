@@ -31,7 +31,7 @@ function addEntityToMenu(generator, entityName, className) {
     const menuI18nTitle = generator.enableTranslation ? `v-text="$t('global.menu.entities.${entityName}')"` : '';
     jhipsterUtils.rewriteFile(
         {
-            file: `${CLIENT_MAIN_SRC_DIR}/app/components/JhiNavBar.vue`,
+            file: `${CLIENT_MAIN_SRC_DIR}/app/components/jhi-navbar/JhiNavbar.vue`,
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                 // prettier-ignore
@@ -48,14 +48,14 @@ function addEntityToMenu(generator, entityName, className) {
 function addEntityToRouterImport(generator, className, fileName, folderName) {
     jhipsterUtils.rewriteFile(
         {
-            file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.js`,
+            file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
             needle: 'jhipster-needle-add-entity-to-router-import',
             splicable: [
                 // prettier-ignore
                 `
-                import ${className} from '../entities/${folderName}/${fileName}'
-                import ${className}Update from '../entities/${folderName}/${fileName}-update'
-                import ${className}Details from '../entities/${folderName}/${fileName}-details'
+                import ${className} from '../entities/${folderName}/${fileName}.vue'
+                import ${className}Update from '../entities/${folderName}/${fileName}-update.vue'
+                import ${className}Details from '../entities/${folderName}/${fileName}-details.vue'
                 `
             ]
         },
@@ -66,7 +66,7 @@ function addEntityToRouterImport(generator, className, fileName, folderName) {
 function addEntityToRouter(generator, entityName, className) {
     jhipsterUtils.rewriteFile(
         {
-            file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.js`,
+            file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
             needle: 'jhipster-needle-add-entity-to-router',
             splicable: [
                 // prettier-ignore

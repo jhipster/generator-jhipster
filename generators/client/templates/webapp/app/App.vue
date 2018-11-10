@@ -2,7 +2,7 @@
     <div id="app">
         <ribbon></ribbon>
         <div>
-            <jhi-nav-bar></jhi-nav-bar>
+            <jhi-navbar></jhi-navbar>
         </div>
         <div class="container-fluid">
             <div class="card jh-card">
@@ -17,21 +17,7 @@
     </div>
 </template>
 
-<script>
-    import Ribbon from './components/Ribbon'
-    import JhiFooter from './components/JhiFooter'
-    import JhiNavBar from './components/JhiNavBar'
-    import LoginForm from './components/account/LoginForm'
-
-    export default {
-        name: 'App',
-        components: {
-            'ribbon': Ribbon,
-            'jhi-nav-bar': JhiNavBar,
-            'jhi-footer': JhiFooter,
-            'login-form': LoginForm
-        }
-    }
+<script lang="ts" src="./App.component.ts">
 </script>
 
 <style>
