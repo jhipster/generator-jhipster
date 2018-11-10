@@ -230,7 +230,7 @@ module.exports = class extends PrivateBase {
                             // prettier-ignore
                             this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                             |                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
@@ -248,7 +248,7 @@ module.exports = class extends PrivateBase {
                         splicable: [
                             // prettier-ignore
                             this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
-                        |      <FontAwesomeIcon icon="asterisk" />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
+                        |      <FontAwesomeIcon icon="asterisk" fixedWidth />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
                         |    </DropdownItem>`)
                         ]
                     },
