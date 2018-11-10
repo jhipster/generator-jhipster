@@ -16,7 +16,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway'],
                     clusteredDbApps: [],
@@ -41,7 +41,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['02-mysql'],
                     clusteredDbApps: [],
@@ -66,7 +66,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
@@ -92,7 +92,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
@@ -118,7 +118,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
@@ -145,7 +145,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
                 })
                 .withOptions({ force: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '06-uaa'],
                     clusteredDbApps: [],
@@ -177,7 +177,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['02-mysql', '03-psql', '04-mongo', '07-mariadb'],
                     clusteredDbApps: [],
@@ -214,7 +214,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo'],
                     clusteredDbApps: ['04-mongo'],
@@ -251,7 +251,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '05-cassandra'],
                     clusteredDbApps: [],
@@ -281,7 +281,7 @@ describe('JHipster Rancher Compose Sub Generator', () => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withPrompts({
-                    composeApplicationType: 'monolith',
+                    deploymentApplicationType: 'monolith',
                     directoryPath: './',
                     chosenApps: ['08-monolith'],
                     clusteredDbApps: [],

@@ -20,43 +20,14 @@ const chalk = require('chalk');
 const shelljs = require('shelljs');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const BaseGenerator = require('../generator-base');
+const BaseDockerGenerator = require('../generator-docker-base');
 const docker = require('../docker-base');
 const statistics = require('../statistics');
 
-/* Constants used throughout */
-const constants = require('../generator-constants');
-
-module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false
-        });
-        // This adds support for a `--skip-checks` flag
-        this.option('skip-checks', {
-            desc: 'Check the status of the required tools',
-            type: Boolean,
-            defaults: false
-        });
-
-        this.skipChecks = this.options['skip-checks'];
-    }
-
+module.exports = class extends BaseDockerGenerator {
     get initializing() {
         return {
-            validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
-            },
+            ...super.initializing,
 
             sayHello() {
                 this.log(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
@@ -68,8 +39,6 @@ module.exports = class extends BaseGenerator {
                     )
                 );
             },
-
-            checkDocker: docker.checkDocker,
 
             checkOpenShift() {
                 if (this.skipChecks) return;
@@ -87,72 +56,26 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
-            loadConfig() {
-                this.defaultAppsFolders = this.config.get('appsFolders');
-                this.directoryPath = this.config.get('directoryPath');
-                this.clusteredDbApps = this.config.get('clusteredDbApps');
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-                this.monitoring = this.config.get('monitoring');
-                this.adminPassword = this.config.get('adminPassword');
-                this.jwtSecretKey = this.config.get('jwtSecretKey');
-                this.dockerRepositoryName = this.config.get('dockerRepositoryName');
-                this.dockerPushCommand = this.config.get('dockerPushCommand');
+            loadOpenshiftConfig() {
+                // this.defaultAppsFolders = this.config.get('appsFolders');
+                // this.directoryPath = this.config.get('directoryPath');
+                // this.clusteredDbApps = this.config.get('clusteredDbApps');
+                // this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+                // this.monitoring = this.config.get('monitoring');
+                // this.adminPassword = this.config.get('adminPassword');
+                // this.jwtSecretKey = this.config.get('jwtSecretKey');
+                // this.dockerRepositoryName = this.config.get('dockerRepositoryName');
+                // this.dockerPushCommand = this.config.get('dockerPushCommand');
                 this.openshiftNamespace = this.config.get('openshiftNamespace');
                 this.storageType = this.config.get('storageType');
                 this.registryReplicas = this.config.get('registryReplicas');
-                this.useKafka = false;
+                // this.useKafka = false;
 
-                this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
-                this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-                this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-                this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
-                this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-                this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
-                this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
-                this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
-                this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
-                this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
-                this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
-                this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-                this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-                this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-                this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
-                this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
-                this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
-                this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
-                this.DOCKER_JHIPSTER_IMPORT_DASHBOARDS = constants.DOCKER_JHIPSTER_IMPORT_DASHBOARDS;
-                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-                this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
-                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-
-                if (this.defaultAppsFolders !== undefined) {
-                    this.log('\nFound .yo-rc.json config file...');
-                }
+                // if (this.defaultAppsFolders !== undefined) {
+                //     this.log('\nFound .yo-rc.json config file...');
+                // }
             }
         };
-    }
-
-    _getAppFolders(input) {
-        const files = shelljs.ls('-l', this.destinationPath(input));
-        const appsFolders = [];
-
-        files.forEach(file => {
-            if (file.isDirectory()) {
-                if (shelljs.test('-f', `${file.name}/.yo-rc.json`) && shelljs.test('-f', `${file.name}/src/main/docker/app.yml`)) {
-                    try {
-                        const fileData = this.fs.readJSON(`${file.name}/.yo-rc.json`);
-                        if (fileData['generator-jhipster'].baseName !== undefined) {
-                            appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
-                        }
-                    } catch (err) {
-                        this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
-                    }
-                }
-            }
-        });
-
-        return appsFolders;
     }
 
     get prompting() {

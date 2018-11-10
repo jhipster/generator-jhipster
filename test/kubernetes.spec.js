@@ -62,7 +62,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway'],
                     adminPassword: 'meetup',
@@ -98,7 +98,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     dockerRepositoryName: 'jhipster',
@@ -133,7 +133,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['02-mysql'],
                     dockerRepositoryName: 'jhipster',
@@ -172,7 +172,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway'],
                     dockerRepositoryName: 'jhipster',
@@ -207,7 +207,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['02-mysql', '03-psql'],
                     dockerRepositoryName: 'jhipster',
@@ -245,7 +245,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
                     dockerRepositoryName: 'jhipster',
@@ -289,7 +289,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'monolith',
+                    deploymentApplicationType: 'monolith',
                     directoryPath: './',
                     chosenApps: ['08-monolith'],
                     dockerRepositoryName: 'jhipster',
@@ -321,7 +321,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'monolith',
+                    deploymentApplicationType: 'monolith',
                     directoryPath: './',
                     chosenApps: ['09-kafka'],
                     dockerRepositoryName: 'jhipster',
@@ -353,7 +353,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['02-mysql'],
                     dockerRepositoryName: 'jhipster',
@@ -390,7 +390,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway'],
                     dockerRepositoryName: 'jhipster',

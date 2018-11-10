@@ -21,87 +21,22 @@ const jsyaml = require('js-yaml');
 const pathjs = require('path');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const BaseGenerator = require('../generator-base');
+const BaseDockerGenerator = require('../generator-docker-base');
 const docker = require('../docker-base');
 const statistics = require('../statistics');
 
-/* Constants used throughout */
-const constants = require('../generator-constants');
-
-module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false
-        });
-        // This adds support for a `--skip-checks` flag
-        this.option('skip-checks', {
-            desc: 'Check the status of the required tools',
-            type: Boolean,
-            defaults: false
-        });
-
-        this.skipChecks = this.options['skip-checks'];
-    }
-
+module.exports = class extends BaseDockerGenerator {
     get initializing() {
         return {
-            validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
-            },
+            ...super.initializing,
 
             sayHello() {
                 this.log(chalk.white(`${chalk.bold('🐮')} [BETA] Welcome to the JHipster Rancher Compose Generator ${chalk.bold('🐮')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
 
-            setupServerVars() {
-                // Make constants available in templates
-                this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-                this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-                this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-                this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
-                this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
-                this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
-                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
-                this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-                this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-                this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
-                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-                this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
-            },
-
-            checkDocker: docker.checkDockerBase,
-
-            loadConfig() {
-                this.defaultAppsFolders = this.config.get('appsFolders');
-                this.authenticationType = this.config.get('authenticationType');
-                this.directoryPath = this.config.get('directoryPath');
-                this.monitoring = this.config.get('monitoring');
-                this.useKafka = false;
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-                if (this.serviceDiscoveryType === undefined) {
-                    this.serviceDiscoveryType = 'eureka';
-                }
-                this.adminPassword = this.config.get('adminPassword');
-                this.jwtSecretKey = this.config.get('jwtSecretKey');
-                this.dockerRepositoryName = this.config.get('dockerRepositoryName');
-                this.dockerPushCommand = this.config.get('dockerPushCommand');
+            loadRancherConfig() {
                 this.enableRancherLoadBalancing = this.config.get('enableRancherLoadBalancing');
-
-                if (this.defaultAppsFolders !== undefined) {
-                    this.log('\nFound .yo-rc.json config file...');
-                }
             }
         };
     }

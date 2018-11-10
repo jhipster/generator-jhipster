@@ -18,21 +18,17 @@
  */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
-const crypto = require('crypto');
 const dockerUtils = require('./docker-utils');
-/**
- * This is the Generator base class.
- * This provides all the public API methods exposed via the module system.
- * The public API methods can be directly utilized as well using commonJS require.
- *
- * The method signatures in public API should not be changed without a major version change
- */
+const { getBase64Secret } = require('./utils');
+
 module.exports = {
     checkDocker: dockerUtils.checkDocker,
     checkImages,
     generateJwtSecret,
     configureImageNames,
-    setAppsFolderPaths
+    setAppsFolderPaths,
+    loadConfigs,
+    setClusteredApps
 };
 
 /**
@@ -66,7 +62,7 @@ function checkImages() {
  */
 function generateJwtSecret() {
     if (this.jwtSecretKey === undefined) {
-        this.jwtSecretKey = Buffer.from(crypto.randomBytes(50).toString('hex')).toString('base64');
+        this.jwtSecretKey = getBase64Secret();
     }
 }
 
@@ -90,5 +86,50 @@ function setAppsFolderPaths() {
     for (let i = 0; i < this.appsFolders.length; i++) {
         const path = this.destinationPath(this.directoryPath + this.appsFolders[i]);
         this.appsFolderPaths.push(path);
+    }
+}
+
+/**
+ * Load config from this.appFolders
+ */
+function loadConfigs() {
+    this.appConfigs = [];
+    this.gatewayNb = 0;
+    this.monolithicNb = 0;
+    this.microserviceNb = 0;
+    this.uaaNb = 0;
+
+    // Loading configs
+    this.debug(`Apps folders: ${this.appsFolders}`);
+    this.appsFolders.forEach(appFolder => {
+        const path = this.destinationPath(`${this.directoryPath + appFolder}/.yo-rc.json`);
+        const fileData = this.fs.readJSON(path);
+        if (fileData) {
+            const config = fileData['generator-jhipster'];
+
+            if (config.applicationType === 'monolith') {
+                this.monolithicNb++;
+            } else if (config.applicationType === 'gateway') {
+                this.gatewayNb++;
+            } else if (config.applicationType === 'microservice') {
+                this.microserviceNb++;
+            } else if (config.applicationType === 'uaa') {
+                this.uaaNb++;
+            }
+
+            this.portsToBind = this.monolithicNb + this.gatewayNb;
+            config.appFolder = appFolder;
+            this.appConfigs.push(config);
+        } else {
+            this.error(`Application '${appFolder}' is not found in the path '${this.directoryPath}'`);
+        }
+    });
+}
+
+function setClusteredApps() {
+    for (let i = 0; i < this.appsFolders.length; i++) {
+        for (let j = 0; j < this.clusteredDbApps.length; j++) {
+            this.appConfigs[i].clusteredDb = this.appsFolders[i] === this.clusteredDbApps[j];
+        }
     }
 }
