@@ -142,38 +142,6 @@ describe('JHipster generator import jdl', () => {
             });
         });
     });
-    describe('imports JDL apps and entities', () => {
-        beforeEach(done => {
-            testInTempDir(dir => {
-                fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['apps-and-entities.jdl'], { skipInstall: true }, env, mockFork);
-                done();
-            });
-        });
-
-        it('creates the applications', () => {
-            assert.file([
-                path.join('myFirstApp', '.yo-rc.json'),
-                path.join('mySecondApp', '.yo-rc.json'),
-                path.join('myThirdApp', '.yo-rc.json')
-            ]);
-        });
-        it('creates the entities', () => {
-            assert.file([
-                path.join('myFirstApp', '.jhipster', 'A.json'),
-                path.join('myFirstApp', '.jhipster', 'B.json'),
-                path.join('myFirstApp', '.jhipster', 'E.json'),
-                path.join('myFirstApp', '.jhipster', 'F.json'),
-                path.join('mySecondApp', '.jhipster', 'E.json'),
-                path.join('myThirdApp', '.jhipster', 'F.json')
-            ]);
-        });
-        it('calls application generator', () => {
-            expect(subGenCallParams.count).to.equal(3);
-            expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
-            expect(subGenCallParams.options[0]).to.eql(['--skip-install', '--with-entities', '--from-cli']);
-        });
-    });
     describe('imports single app and entities', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -278,6 +246,66 @@ describe('JHipster generator import jdl', () => {
                 'skip-ui-grouping': undefined,
                 'skip-user-management': undefined
             });
+        });
+    });
+    describe('imports JDL apps and entities', () => {
+        beforeEach(done => {
+            testInTempDir(dir => {
+                fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
+                importJdl(['apps-and-entities.jdl'], { skipInstall: true }, env, mockFork);
+                done();
+            });
+        });
+
+        it('creates the applications', () => {
+            assert.file([
+                path.join('myFirstApp', '.yo-rc.json'),
+                path.join('mySecondApp', '.yo-rc.json'),
+                path.join('myThirdApp', '.yo-rc.json')
+            ]);
+        });
+        it('creates the entities', () => {
+            assert.file([
+                path.join('myFirstApp', '.jhipster', 'A.json'),
+                path.join('myFirstApp', '.jhipster', 'B.json'),
+                path.join('myFirstApp', '.jhipster', 'E.json'),
+                path.join('myFirstApp', '.jhipster', 'F.json'),
+                path.join('mySecondApp', '.jhipster', 'E.json'),
+                path.join('myThirdApp', '.jhipster', 'F.json')
+            ]);
+        });
+        it('calls application generator', () => {
+            expect(subGenCallParams.count).to.equal(3);
+            expect(subGenCallParams.commands).to.eql(['jhipster:app', 'jhipster:app', 'jhipster:app']);
+            expect(subGenCallParams.options[0]).to.eql(['--skip-install', '--with-entities', '--from-cli']);
+        });
+    });
+    describe('imports JDL deployments', () => {
+        beforeEach(done => {
+            testInTempDir(dir => {
+                fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
+                importJdl(['deployments.jdl'], { skipInstall: true }, env, mockFork);
+                done();
+            });
+        });
+
+        it('creates the deployments', () => {
+            assert.file([
+                path.join('docker-compose', '.yo-rc.json'),
+                path.join('rancher-compose', '.yo-rc.json'),
+                path.join('kubernetes', '.yo-rc.json'),
+                path.join('openshift', '.yo-rc.json')
+            ]);
+        });
+        it('calls deployment generator', () => {
+            expect(subGenCallParams.count).to.equal(4);
+            expect(subGenCallParams.commands).to.eql([
+                'jhipster:docker-compose',
+                'jhipster:rancher-compose',
+                'jhipster:kubernetes',
+                'jhipster:openshift'
+            ]);
+            expect(subGenCallParams.options[0]).to.eql(['--skip-install', '--with-entities', '--from-cli']);
         });
     });
 });

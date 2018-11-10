@@ -48,12 +48,14 @@ function importJDL() {
     });
     let importState = {
         exportedEntities: [],
-        exportedApplications: []
+        exportedApplications: [],
+        exportedDeployments: []
     };
     try {
         importState = jdlImporter.import();
         logger.debug(`importState exportedEntities: ${importState.exportedEntities.length}`);
         logger.debug(`importState exportedApplications: ${importState.exportedApplications.length}`);
+        logger.debug(`importState exportedDeployments: ${importState.exportedDeployments.length}`);
         if (importState.exportedEntities.length > 0) {
             const entityNames = _.uniq(importState.exportedEntities.map(exportedEntity => exportedEntity.name)).join(', ');
             logger.log(`Found entities: ${chalk.yellow(entityNames)}.`);
@@ -81,16 +83,42 @@ const shouldGenerateApplications = generator =>
     !generator.options['ignore-application'] && generator.importState.exportedApplications.length !== 0;
 
 /**
+ * Check if deployments needs to be generated
+ * @param {any} generator
+ */
+const shouldGenerateDeployments = generator =>
+    !generator.options['ignore-deployments'] && generator.importState.exportedDeployments.length !== 0;
+
+/**
+ * Generate deployment source code for JDL deployments defined.
+ * @param {any} config
+ * @param {function} forkProcess
+ */
+const generateDeploymentFiles = ({ generator, deployment, inFolder }, forkProcess) => {
+    const deploymentType = deployment[GENERATOR_NAME].deploymentType;
+    logger.info(`Generating deployment ${deploymentType} in a new parallel process`);
+    logger.debug(`Generating deployment: ${pretty(deployment[GENERATOR_NAME])}`);
+
+    const cwd = inFolder ? path.join(generator.pwd, deploymentType) : generator.pwd;
+    logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
+
+    const command = `${CLI_NAME}:${deploymentType}`;
+    forkProcess(runYeomanProcess, [command, '--skip-prompts', ...getOptionAsArgs(generator.options)], {
+        cwd
+    });
+};
+
+/**
  * Generate application source code for JDL apps defined.
  * @param {any} config
  * @param {function} forkProcess
  */
-const generateApplicationFiles = ({ generator, application, withEntities, inAppFolder }, forkProcess) => {
+const generateApplicationFiles = ({ generator, application, withEntities, inFolder }, forkProcess) => {
     const baseName = application[GENERATOR_NAME].baseName;
     logger.info(`Generating application ${baseName} in a new parallel process`);
     logger.debug(`Generating application: ${pretty(application[GENERATOR_NAME])}`);
 
-    const cwd = inAppFolder ? path.join(generator.pwd, baseName) : generator.pwd;
+    const cwd = inFolder ? path.join(generator.pwd, baseName) : generator.pwd;
     logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
     const command = `${CLI_NAME}:app`;
@@ -103,12 +131,12 @@ const generateApplicationFiles = ({ generator, application, withEntities, inAppF
  * Generate entities for the applications
  * @param {any} generator
  * @param {any} entity
- * @param {boolean} inAppFolder
+ * @param {boolean} inFolder
  * @param {any} env
  * @param {boolean} shouldTriggerInstall
  * @param {function} forkProcess
  */
-const generateEntityFiles = (generator, entity, inAppFolder, env, shouldTriggerInstall, forkProcess) => {
+const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInstall, forkProcess) => {
     const options = {
         ...generator.options,
         regenerate: true,
@@ -121,7 +149,7 @@ const generateEntityFiles = (generator, entity, inAppFolder, env, shouldTriggerI
         'skip-ui-grouping': generator.options['skip-ui-grouping']
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;
-    if (inAppFolder) {
+    if (inFolder) {
         /* Generating entities inside multiple apps */
         const baseNames = entity.applications;
         baseNames.forEach(baseName => {
@@ -222,7 +250,7 @@ class JDLProcessor {
                         generator: this,
                         application,
                         withEntities: this.importState.exportedEntities.length !== 0,
-                        inAppFolder: this.importState.exportedApplications.length > 1
+                        inFolder: this.importState.exportedApplications.length > 1
                     },
                     forkProcess
                 );
@@ -261,6 +289,32 @@ class JDLProcessor {
             logger.error(`Error while generating entities from the parsed JDL\n${error}`);
         }
     }
+
+    generateDeployments(env, forkProcess) {
+        if (!shouldGenerateDeployments(this)) {
+            logger.debug('Deployments not generated');
+            return;
+        }
+        logger.log(
+            `Generating ${this.importState.exportedDeployments.length} ` +
+                `${pluralize('deployment', this.importState.exportedDeployments.length)}.`
+        );
+
+        this.importState.exportedDeployments.forEach(deployment => {
+            try {
+                generateDeploymentFiles(
+                    {
+                        generator: this,
+                        deployment,
+                        inFolder: this.importState.exportedDeployments.length > 1
+                    },
+                    forkProcess
+                );
+            } catch (error) {
+                logger.error(`Error while generating deployments from the parsed JDL\n${error}`);
+            }
+        });
+    }
 }
 
 /**
@@ -284,6 +338,7 @@ module.exports = (args, options, env, forkProcess = fork) => {
         jdlImporter.sendInsight();
         jdlImporter.generateApplications(forkProcess);
         jdlImporter.generateEntities(env, forkProcess);
+        jdlImporter.generateDeployments(env, forkProcess);
     } catch (e) {
         logger.error(`Error during import-jdl: ${e.message}`, e);
     }
