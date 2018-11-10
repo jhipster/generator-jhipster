@@ -23,7 +23,7 @@ const expectedFiles = {
 
 describe('JHipster OpenShift Sub Generator', () => {
     describe('only gateway', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -56,7 +56,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('gateway and one microservice with mysql', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -89,7 +89,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('gateway and one microservice with mysql and elk', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -125,7 +125,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('two microservices backed by mysql and postgres without gateway', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -161,7 +161,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('gateway with multiple microservices backed by mysql, postgres, mongo, cassandra and mariadb', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -205,7 +205,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('monolith application', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -231,7 +231,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('monolith application with elk', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {

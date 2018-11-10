@@ -54,7 +54,7 @@ const expectedFiles = {
 
 describe('JHipster Kubernetes Sub Generator', () => {
     describe('only gateway', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -90,7 +90,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('gateway and mysql microservice', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -125,7 +125,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('mysql microservice with custom namespace and jhipster-console (with zipkin)', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -164,7 +164,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('gateway and ingress', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -199,7 +199,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('MySQL and PostgreSQL microservices without gateway', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -237,7 +237,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -281,7 +281,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('monolith application', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -313,7 +313,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('Kafka application', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -345,7 +345,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -382,7 +382,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('gateway with istio routing', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {

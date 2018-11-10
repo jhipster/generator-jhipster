@@ -12,7 +12,7 @@ const expectedFiles = {
 
 describe('JHipster Docker Compose Sub Generator', () => {
     describe('only gateway', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -42,7 +42,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('only one microservice', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -72,7 +72,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('one microservice and a directory path without a trailing slash', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -97,7 +97,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -127,7 +127,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with elk', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -167,7 +167,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with zipkin', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -208,7 +208,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with curator', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -249,7 +249,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with zipkin and curator', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -290,7 +290,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with prometheus', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -323,7 +323,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway, uaa server and one microservice, with elk', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -357,7 +357,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and multi microservices, with elk', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -390,7 +390,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and multi microservices, with 1 mongodb cluster', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -423,7 +423,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and 1 microservice, with Cassandra cluster', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -456,7 +456,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('monolith', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -483,7 +483,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and multi microservices, with couchbase', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -516,7 +516,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and 1 microservice, with 1 couchbase cluster', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
