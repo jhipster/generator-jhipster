@@ -21,7 +21,7 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     # Note: --no-insight doesn't work here
     # there is still the message: May JHipster anonymously report usage statistics to improve the tool over time? (Y/n)
     # so the CI is stuck with --no-insight
-    jhipster import-jdl *.jdl --force-insight
+    jhipster import-jdl *.jdl --no-insight
 
 else
     #-------------------------------------------------------------------------------
