@@ -22,7 +22,7 @@ const pathjs = require('path');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-docker-base');
-const docker = require('../docker-base');
+const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseDockerGenerator {
@@ -35,7 +35,8 @@ module.exports = class extends BaseDockerGenerator {
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
 
-            loadRancherConfig() {
+            loadConfig() {
+                loadFromYoRc.call(this);
                 this.enableRancherLoadBalancing = this.config.get('enableRancherLoadBalancing');
             }
         };
@@ -61,10 +62,10 @@ module.exports = class extends BaseDockerGenerator {
                 statistics.sendSubGenEvent('generator', 'rancher-compose');
             },
 
-            checkImages: docker.checkImages,
-            generateJwtSecret: docker.generateJwtSecret,
-            configureImageNames: docker.configureImageNames,
-            setAppsFolderPaths: docker.setAppsFolderPaths,
+            checkImages,
+            generateJwtSecret,
+            configureImageNames,
+            setAppsFolderPaths,
 
             setAppsYaml() {
                 this.appsYaml = [];

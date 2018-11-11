@@ -22,7 +22,7 @@ const fs = require('fs');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-docker-base');
-const docker = require('../docker-base');
+const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseDockerGenerator {
@@ -50,26 +50,13 @@ module.exports = class extends BaseDockerGenerator {
                 });
             },
 
-            loadKubernetesConfig() {
-                // this.defaultAppsFolders = this.config.get('appsFolders');
-                // this.directoryPath = this.config.get('directoryPath');
-                // this.clusteredDbApps = this.config.get('clusteredDbApps');
-                // this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-                // this.adminPassword = this.config.get('adminPassword');
-                // this.jwtSecretKey = this.config.get('jwtSecretKey');
-                // this.dockerRepositoryName = this.config.get('dockerRepositoryName');
-                // this.dockerPushCommand = this.config.get('dockerPushCommand');
-                // this.monitoring = this.config.get('monitoring');
+            loadConfig() {
+                loadFromYoRc.call(this);
                 this.kubernetesNamespace = this.config.get('kubernetesNamespace');
                 this.kubernetesServiceType = this.config.get('kubernetesServiceType');
                 this.ingressDomain = this.config.get('ingressDomain');
-                // this.useKafka = false;
                 this.istio = this.config.get('istio');
                 this.istioRoute = this.config.get('istioRoute');
-
-                // if (this.defaultAppsFolders !== undefined) {
-                //     this.log('\nFound .yo-rc.json config file...');
-                // }
             }
         };
     }
@@ -99,10 +86,10 @@ module.exports = class extends BaseDockerGenerator {
                 statistics.sendSubGenEvent('generator', 'kubernetes');
             },
 
-            checkImages: docker.checkImages,
-            generateJwtSecret: docker.generateJwtSecret,
-            configureImageNames: docker.configureImageNames,
-            setAppsFolderPaths: docker.setAppsFolderPaths,
+            checkImages,
+            generateJwtSecret,
+            configureImageNames,
+            setAppsFolderPaths,
 
             setPostPromptProp() {
                 this.appConfigs.forEach(element => {

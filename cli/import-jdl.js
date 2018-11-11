@@ -356,7 +356,7 @@ class JDLProcessor {
                         {
                             generator: this,
                             deployment,
-                            inFolder: this.importState.exportedDeployments.length > 1
+                            inFolder: true
                         },
                         forkProcess
                     );

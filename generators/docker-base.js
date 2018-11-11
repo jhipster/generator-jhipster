@@ -28,6 +28,7 @@ module.exports = {
     configureImageNames,
     setAppsFolderPaths,
     loadConfigs,
+    loadFromYoRc,
     setClusteredApps
 };
 
@@ -130,6 +131,45 @@ function setClusteredApps() {
     for (let i = 0; i < this.appsFolders.length; i++) {
         for (let j = 0; j < this.clusteredDbApps.length; j++) {
             this.appConfigs[i].clusteredDb = this.appsFolders[i] === this.clusteredDbApps[j];
+        }
+    }
+}
+
+function loadFromYoRc() {
+    this.authenticationType = this.config.get('authenticationType');
+    this.defaultAppsFolders = this.config.get('appsFolders');
+    this.directoryPath = this.config.get('directoryPath');
+    this.gatewayType = this.config.get('gatewayType');
+    this.clusteredDbApps = this.config.get('clusteredDbApps');
+    this.monitoring = this.config.get('monitoring');
+    this.consoleOptions = this.config.get('consoleOptions');
+    this.useKafka = false;
+    this.useMemcached = false;
+    this.dockerRepositoryName = this.config.get('dockerRepositoryName');
+    this.dockerPushCommand = this.config.get('dockerPushCommand');
+    this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+    if (this.serviceDiscoveryType === undefined) {
+        this.serviceDiscoveryType = 'eureka';
+    }
+    this.adminPassword = this.config.get('adminPassword');
+    this.jwtSecretKey = this.config.get('jwtSecretKey');
+
+    if (this.defaultAppsFolders !== undefined) {
+        this.log('\nFound .yo-rc.json config file...');
+    }
+
+    if (this.regenerate) {
+        this.appsFolders = this.defaultAppsFolders;
+        loadConfigs.call(this);
+        if (this.microserviceNb > 0 || this.gatewayNb > 0 || this.uaaNb > 0) {
+            this.deploymentApplicationType = 'microservice';
+        } else {
+            this.deploymentApplicationType = 'monolith';
+        }
+        setClusteredApps.call(this);
+        if (!this.adminPassword) {
+            this.adminPassword = 'admin'; // TODO find a better way to do this
+            this.adminPasswordBase64 = getBase64Secret(this.adminPassword);
         }
     }
 }

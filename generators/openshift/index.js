@@ -21,7 +21,7 @@ const shelljs = require('shelljs');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-docker-base');
-const docker = require('../docker-base');
+const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseDockerGenerator {
@@ -56,24 +56,11 @@ module.exports = class extends BaseDockerGenerator {
                 });
             },
 
-            loadOpenshiftConfig() {
-                // this.defaultAppsFolders = this.config.get('appsFolders');
-                // this.directoryPath = this.config.get('directoryPath');
-                // this.clusteredDbApps = this.config.get('clusteredDbApps');
-                // this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-                // this.monitoring = this.config.get('monitoring');
-                // this.adminPassword = this.config.get('adminPassword');
-                // this.jwtSecretKey = this.config.get('jwtSecretKey');
-                // this.dockerRepositoryName = this.config.get('dockerRepositoryName');
-                // this.dockerPushCommand = this.config.get('dockerPushCommand');
+            loadConfig() {
+                loadFromYoRc.call(this);
                 this.openshiftNamespace = this.config.get('openshiftNamespace');
                 this.storageType = this.config.get('storageType');
                 this.registryReplicas = this.config.get('registryReplicas');
-                // this.useKafka = false;
-
-                // if (this.defaultAppsFolders !== undefined) {
-                //     this.log('\nFound .yo-rc.json config file...');
-                // }
             }
         };
     }
@@ -99,10 +86,10 @@ module.exports = class extends BaseDockerGenerator {
                 statistics.sendSubGenEvent('generator', 'openshift');
             },
 
-            checkImages: docker.checkImages,
-            generateJwtSecret: docker.generateJwtSecret,
-            configureImageNames: docker.configureImageNames,
-            setAppsFolderPaths: docker.setAppsFolderPaths,
+            checkImages,
+            generateJwtSecret,
+            configureImageNames,
+            setAppsFolderPaths,
 
             // place holder for future changes (may be prompt or something else)
             setRegistryReplicas() {
