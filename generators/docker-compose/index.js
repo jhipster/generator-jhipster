@@ -21,7 +21,7 @@ const shelljs = require('shelljs');
 const jsyaml = require('js-yaml');
 const pathjs = require('path');
 const writeFiles = require('./files').writeFiles;
-const BaseDockerGenerator = require('../generator-docker-base');
+const BaseDockerGenerator = require('../generator-base-docker');
 
 module.exports = class extends BaseDockerGenerator {
     get initializing() {

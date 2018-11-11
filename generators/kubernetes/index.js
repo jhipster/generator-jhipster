@@ -21,7 +21,7 @@ const shelljs = require('shelljs');
 const fs = require('fs');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const BaseDockerGenerator = require('../generator-docker-base');
+const BaseDockerGenerator = require('../generator-base-docker');
 const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
 const statistics = require('../statistics');
 
