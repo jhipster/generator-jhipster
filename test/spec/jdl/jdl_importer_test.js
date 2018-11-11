@@ -484,6 +484,7 @@ describe('JDLImporter', () => {
       it('returns the import state', () => {
         expect(returned.exportedEntities).to.have.lengthOf(1);
         expect(returned.exportedApplications).to.have.lengthOf(1);
+        expect(returned.exportedDeployments).to.have.lengthOf(0);
       });
       it('creates the app config file in the same folder', () => {
         expect(fs.statSync('.yo-rc.json').isFile()).to.be.true;
@@ -833,13 +834,13 @@ describe('JDLImporter', () => {
           applications: ['myFirstApp', 'myThirdApp']
         }
       ];
-
+      let importState;
       before(() => {
         const importer = new JDLImporter([
           path.join('test', 'test_files', 'integration', 'file1.jdl'),
           path.join('test', 'test_files', 'integration', 'file2.jdl')
         ]);
-        importer.import();
+        importState = importer.import();
       });
 
       after(() => {
@@ -854,6 +855,11 @@ describe('JDLImporter', () => {
           fs.rmdirSync(path.join(applicationName, '.jhipster'));
           fs.rmdirSync(path.join(applicationName));
         });
+      });
+
+      it('generates correct import state', () => {
+        expect(importState.exportedApplications.length).to.eql(3);
+        expect(importState.exportedEntities.length).to.eql(4);
       });
 
       it('exports the applications', () => {
