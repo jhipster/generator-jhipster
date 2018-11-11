@@ -20,6 +20,7 @@
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 const AbstractJDLApplication = require('../../../lib/core/abstract_jdl_application');
+const { MONGODB, COUCHBASE, CASSANDRA } = require('../../../lib/core/jhipster/database_types');
 
 describe('AbstractJDLApplication', () => {
   describe('::new', () => {
@@ -85,6 +86,23 @@ describe('AbstractJDLApplication', () => {
       it('casts them as empty strings', () => {
         expect(jdlApplicationConfig.dtoSuffix).to.equal('');
         expect(jdlApplicationConfig.entitySuffix).to.equal('');
+      });
+    });
+    [MONGODB, COUCHBASE, CASSANDRA].forEach(databaseType => {
+      context(`when the DB type is either ${databaseType}`, () => {
+        before(() => {
+          const jdlApplication = new AbstractJDLApplication({
+            config: { databaseType }
+          });
+          jdlApplicationConfig = jdlApplication.config;
+        });
+
+        it('sets devDatabaseType to its value', () => {
+          expect(jdlApplicationConfig.devDatabaseType).to.equal(databaseType);
+        });
+        it('sets prodDatabaseType to its value', () => {
+          expect(jdlApplicationConfig.prodDatabaseType).to.equal(databaseType);
+        });
       });
     });
   });
