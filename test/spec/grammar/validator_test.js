@@ -1549,7 +1549,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    const ALPHANUMERIC_NAME = ['kubernetesServiceType', 'ingressDomain', 'istio'];
+    const ALPHANUMERIC_NAME = ['kubernetesServiceType', 'istio'];
 
     ALPHANUMERIC_NAME.forEach(type => {
       context(`and using for ${type}`, () => {
@@ -1656,77 +1656,58 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    /* context(`and using for adminPassword`, () => {
-      context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() =>
-            parse(`
-          deployment {
-            adminPassword "test23@123"
-          }`)
-          ).to.not.throw();
-        });
-      });
-
-      context('an invalid value', () => {
-        context('such as not a name', () => {
-          it('will report a syntax error', () => {
+    const URL_TYPE = ['ingressDomain', 'dockerRepositoryName'];
+    URL_TYPE.forEach(type => {
+      context(`and using for ${type}`, () => {
+        context('a valid value', () => {
+          it('does not report a syntax error', () => {
             expect(() =>
               parse(`
-              deployment {
-                adminPassword "true"
+            deployment {
+              ${type} "gcr.io/test"
+            }
+            deployment {
+              ${type} "gcr.io.192.120.0.0.io"
             }`)
-            ).to.throw('A name is expected, but found: ""true""');
+            ).to.not.throw();
+            expect(() =>
+              parse(`
+            deployment {
+              ${type} "test105"
+            }`)
+            ).to.not.throw();
+            // find a way to support this as well
+            /* expect(() =>
+              parse(`
+            deployment {
+              ${type} test105
+            }`)
+            ).to.not.throw(); */
           });
         });
-      });
-    }); */
-    context(`and using for dockerRepositoryName`, () => {
-      context('a valid value', () => {
-        it('does not report a syntax error', () => {
-          expect(() =>
-            parse(`
-          deployment {
-            dockerRepositoryName "gcr.io/test"
-          }`)
-          ).to.not.throw();
-          expect(() =>
-            parse(`
-          deployment {
-            dockerRepositoryName "test105"
-          }`)
-          ).to.not.throw();
-          // find a way to support this as well
-          /* expect(() =>
-            parse(`
-          deployment {
-            dockerRepositoryName test105
-          }`)
-          ).to.not.throw(); */
-        });
-      });
 
-      context('an invalid value', () => {
-        context('such as having invalid url', () => {
-          it('will report a syntax error', () => {
-            expect(() =>
-              parse(`
-              deployment {
-                dockerRepositoryName "test 123"
-            }`)
-            ).to.throw(
-              'The dockerRepositoryName property name must match: /^"((?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:\\/?#[\\]@!$&\'()*+,;=.]+|[a-zA-Z0-9]+)"$/'
-            );
+        context('an invalid value', () => {
+          context('such as having invalid url', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} "test 123"
+              }`)
+              ).to.throw(
+                `The ${type} property name must match: /^"((?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:\\/?#[\\]@!$&'()*+,;=.]+|[a-zA-Z0-9]+)"$/`
+              );
+            });
           });
-        });
-        context('such as not a name', () => {
-          it('will report a syntax error', () => {
-            expect(() =>
-              parse(`
-              deployment {
-                dockerRepositoryName true
-            }`)
-            ).to.throw('A string literal is expected, but found: "true"');
+          context('such as not a name', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} true
+              }`)
+              ).to.throw('A string literal is expected, but found: "true"');
+            });
           });
         });
       });
