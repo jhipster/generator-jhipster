@@ -84,6 +84,7 @@ describe('JHipsterDeploymentExporter', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
             expect(config).to.deep.equal({
+              deploymentType: 'docker-compose',
               appsFolders: ['tata', 'titi'],
               clusteredDbApps: [],
               consoleOptions: [],
@@ -122,6 +123,7 @@ describe('JHipsterDeploymentExporter', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
             expect(config).to.deep.equal({
+              deploymentType: 'kubernetes',
               appsFolders: ['tata', 'titi'],
               clusteredDbApps: [],
               consoleOptions: [],

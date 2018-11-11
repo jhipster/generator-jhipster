@@ -448,7 +448,8 @@ describe('JDLImporter', () => {
             expectedContent.Region,
             expectedContent.Task
           ],
-          exportedApplications: []
+          exportedApplications: [],
+          exportedDeployments: []
         });
       });
       it('creates the files', () => {
@@ -483,6 +484,7 @@ describe('JDLImporter', () => {
       it('returns the import state', () => {
         expect(returned.exportedEntities).to.have.lengthOf(1);
         expect(returned.exportedApplications).to.have.lengthOf(1);
+        expect(returned.exportedDeployments).to.have.lengthOf(0);
       });
       it('creates the app config file in the same folder', () => {
         expect(fs.statSync('.yo-rc.json').isFile()).to.be.true;
@@ -832,13 +834,13 @@ describe('JDLImporter', () => {
           applications: ['myFirstApp', 'myThirdApp']
         }
       ];
-
+      let importState;
       before(() => {
         const importer = new JDLImporter([
           path.join('test', 'test_files', 'integration', 'file1.jdl'),
           path.join('test', 'test_files', 'integration', 'file2.jdl')
         ]);
-        importer.import();
+        importState = importer.import();
       });
 
       after(() => {
@@ -853,6 +855,11 @@ describe('JDLImporter', () => {
           fs.rmdirSync(path.join(applicationName, '.jhipster'));
           fs.rmdirSync(path.join(applicationName));
         });
+      });
+
+      it('generates correct import state', () => {
+        expect(importState.exportedApplications.length).to.eql(3);
+        expect(importState.exportedEntities.length).to.eql(4);
       });
 
       it('exports the applications', () => {
@@ -1112,6 +1119,7 @@ describe('JDLImporter', () => {
             gatewayType: 'zuul',
             clusteredDbApps: [],
             consoleOptions: [],
+            deploymentType: 'docker-compose',
             serviceDiscoveryType: 'eureka',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
@@ -1164,6 +1172,7 @@ describe('JDLImporter', () => {
             gatewayType: 'zuul',
             clusteredDbApps: [],
             consoleOptions: [],
+            deploymentType: 'docker-compose',
             serviceDiscoveryType: 'eureka',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
@@ -1176,6 +1185,7 @@ describe('JDLImporter', () => {
             clusteredDbApps: [],
             consoleOptions: [],
             directoryPath: '../',
+            deploymentType: 'kubernetes',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
             gatewayType: 'zuul',
@@ -1194,6 +1204,7 @@ describe('JDLImporter', () => {
             clusteredDbApps: [],
             consoleOptions: [],
             directoryPath: '../',
+            deploymentType: 'openshift',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
             gatewayType: 'zuul',
@@ -1209,6 +1220,7 @@ describe('JDLImporter', () => {
             clusteredDbApps: [],
             consoleOptions: [],
             directoryPath: '../',
+            deploymentType: 'rancher-compose',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: 'test',
             enableRancherLoadBalancing: false,
