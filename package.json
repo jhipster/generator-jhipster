@@ -56,15 +56,15 @@
   ],
   "dependencies": {
     "chevrotain": "4.1.0",
-    "fs-extra": "7.0.0",
+    "fs-extra": "7.0.1",
     "lodash": "4.17.11",
     "winston": "3.1.0"
   },
   "devDependencies": {
     "chai": "4.2.0",
-    "eslint": "5.8.0",
+    "eslint": "5.9.0",
     "eslint-config-airbnb-base": "13.1.0",
-    "eslint-config-prettier": "3.1.0",
+    "eslint-config-prettier": "3.2.0",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-mocha": "5.2.0",
     "eslint-plugin-prettier": "3.0.0",
@@ -73,7 +73,7 @@
     "mocha": "5.2.0",
     "mocha-clean": "1.0.0",
     "nyc": "13.1.0",
-    "prettier": "1.14.3",
+    "prettier": "1.15.2",
     "sinon": "7.1.1",
     "sinon-chai": "3.2.0",
     "terser-webpack-plugin": "1.1.0",
