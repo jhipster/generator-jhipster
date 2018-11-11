@@ -1071,18 +1071,6 @@ describe('JDLSyntaxValidatorVisitor', () => {
             ).to.not.throw();
           });
         });
-        context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
-            expect(() =>
-              parse(`
-            application {
-              config {
-                serviceDiscoveryType ehcache42
-              }
-            }`)
-            ).to.not.throw();
-          });
-        });
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
@@ -1095,6 +1083,18 @@ describe('JDLSyntaxValidatorVisitor', () => {
               }
             }`)
             ).to.throw('A name is expected, but found: ""ehcache""');
+          });
+        });
+        context('with both letters and numbers', () => {
+          it('does not report a syntax error', () => {
+            expect(() =>
+              parse(`
+            application {
+              config {
+                serviceDiscoveryType eHcache42
+              }
+            }`)
+            ).to.throw('The serviceDiscoveryType property name must match: /^[a-z]+$/');
           });
         });
         context('such as numbers', () => {
