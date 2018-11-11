@@ -28,12 +28,12 @@ const statistics = require('../statistics');
 module.exports = class extends BaseDockerGenerator {
     get initializing() {
         return {
-            ...super.initializing,
-
             sayHello() {
                 this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
+
+            ...super.initializing,
 
             checkKubernetes() {
                 if (this.skipChecks) return;

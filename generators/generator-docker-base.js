@@ -61,11 +61,6 @@ module.exports = class extends BaseGenerator {
                 }
             },
 
-            sayHello() {
-                this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
-                this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
-            },
-
             setupServerConsts() {
                 // Make constants available in templates
                 this.DOCKER_KAFKA = constants.DOCKER_KAFKA;

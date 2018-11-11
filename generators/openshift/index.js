@@ -27,8 +27,6 @@ const statistics = require('../statistics');
 module.exports = class extends BaseDockerGenerator {
     get initializing() {
         return {
-            ...super.initializing,
-
             sayHello() {
                 this.log(chalk.white(`${chalk.bold('⭕')} [*BETA*] Welcome to the JHipster OpenShift Generator ${chalk.bold('⭕')}`));
                 this.log(
@@ -39,6 +37,8 @@ module.exports = class extends BaseDockerGenerator {
                     )
                 );
             },
+
+            ...super.initializing,
 
             checkOpenShift() {
                 if (this.skipChecks) return;

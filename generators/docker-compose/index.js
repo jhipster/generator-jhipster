@@ -67,6 +67,11 @@ module.exports = class extends BaseDockerGenerator {
 
     get configuring() {
         return {
+            sayHello() {
+                this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
+                this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+            },
+
             ...super.configuring,
 
             setAppsYaml() {
