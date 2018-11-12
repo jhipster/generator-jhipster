@@ -749,6 +749,28 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Try to retrieve the version of the blueprint used.
+     * @param {string} blueprintPkgName - generator name
+     * @return {string} version - retrieved version or empty string if not found
+     */
+    findBlueprintVersion(blueprintPkgName) {
+        let packageJsonPath = path.join(process.cwd(), 'node_modules', blueprintPkgName, 'package.json');
+        try {
+            if (!fs.existsSync(packageJsonPath)) {
+                this.debug('using global module as local version could not be found in node_modules');
+                packageJsonPath = path.join(blueprintPkgName, 'package.json');
+            }
+            // eslint-disable-next-line global-require,import/no-dynamic-require
+            const packagejs = require(packageJsonPath);
+            return packagejs.version;
+        } catch (err) {
+            this.debug('ERROR:', err);
+            this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
+            return '';
+        }
+    }
+
+    /**
      * Check if the generator specified as blueprint is installed.
      * @param {string} blueprint - generator name
      */
