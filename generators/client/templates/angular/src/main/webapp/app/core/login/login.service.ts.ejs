@@ -82,7 +82,7 @@ export class LoginService {
         } else {
             this.principal.authenticate(null);
         }
-        <%_ } else { _%>
+        <%_ } else if (authenticationType === 'oauth2') { _%>
         this.authServerProvider.logout().subscribe(response => {
             this.principal.authenticate(null);
             const data = response.body;
@@ -97,6 +97,9 @@ export class LoginService {
             }
             window.location.href = logoutUrl;
         });
+        <%_ } else { _%>
+            this.authServerProvider.logout().subscribe();
+            this.principal.authenticate(null);
         <%_ } _%>
     }
 }
