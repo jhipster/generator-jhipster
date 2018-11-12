@@ -41,6 +41,8 @@ describe('Administration', () => {
     await signInPage.loginButton.click();
     await signInPage.waitUntilHidden();
 
+    <%_ } else { _%>
+    await signInPage.loginWithOAuth('admin', 'admin');
     <%_ } _%>
     await waitUntilDisplayed(navBarPage.adminMenu);
   });
