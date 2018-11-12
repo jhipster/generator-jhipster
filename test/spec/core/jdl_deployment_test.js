@@ -106,7 +106,7 @@ describe('JDLDeployment', () => {
       });
 
       it('stringifies its content without default values', () => {
-        expect(deployment.toString()).to.eql(`  {
+        expect(deployment.toString()).to.eql(`deployment {
     deploymentType ${args.deploymentType}
     appsFolders [${args.appsFolders.join(', ').replace(/'/g, '')}]
     dockerRepositoryName ${args.dockerRepositoryName}
@@ -130,7 +130,7 @@ describe('JDLDeployment', () => {
       });
 
       it('stringifies it', () => {
-        expect(deployment.toString()).to.eql(`  {
+        expect(deployment.toString()).to.eql(`deployment {
     deploymentType ${args.deploymentType}
     monitoring ${args.monitoring}
     directoryPath ${args.directoryPath}

@@ -878,6 +878,7 @@ describe('JDLObject', () => {
   });
   describe('#toString', () => {
     let application = null;
+    let deployment = null;
     let object = null;
     let entityA = null;
     let entityB = null;
@@ -890,6 +891,12 @@ describe('JDLObject', () => {
       object = new JDLObject();
       application = new JDLMonolithApplication({ jhipsterVersion: '4.9.0' });
       object.addApplication(application);
+      deployment = new JDLDeployment({
+        deploymentType: 'docker-compose',
+        appFolders: ['tata'],
+        dockerRepositoryName: 'test'
+      });
+      object.addDeployment(deployment);
       entityA = new JDLEntity({ name: 'EntityA', tableName: 't_entity_a' });
       const field = new JDLField({ name: 'myField', type: 'String' });
       field.addValidation(new JDLValidation());
@@ -921,6 +928,8 @@ describe('JDLObject', () => {
     it('stringifies the JDL object', () => {
       expect(object.toString()).to.eq(
         `${application.toString()}
+
+${deployment.toString()}
 
 ${entityA.toString()}
 ${entityB.toString()}
