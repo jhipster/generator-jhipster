@@ -75,9 +75,15 @@ describe('jhipster cli utils test', () => {
             });
         });
         describe('when called with valid arguments', () => {
-            const argument = { foo: true, bar: '123', fooo: false };
+            const argument = { foo: true, bar: '123' };
             it('returns an array of truthy string args', () => {
                 expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--from-cli']);
+            });
+        });
+        describe('when called with valid argument having false value', () => {
+            const argument = { foo: true, bar: '123', insight: false };
+            it('returns an array of truthy string args', () => {
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--no-insight','--from-cli']);
             });
         });
         describe('when called with valid arguments and withEntities', () => {
@@ -93,7 +99,7 @@ describe('jhipster cli utils test', () => {
             });
         });
         describe('when called with valid arguments with duplicates in different case', () => {
-            const argument = { fooBar: true, bar: '123', 'foo-bar': true, foo_bar: false };
+            const argument = { fooBar: true, bar: '123', 'foo-bar': true, foo_bar: true };
             it('returns an array of string args', () => {
                 expect(cliUtil.getOptionAsArgs(argument, false, true)).to.eql(['--foo-bar', '--bar', '123', '--force', '--from-cli']);
             });

@@ -134,6 +134,9 @@ const getOptionAsArgs = (options, withEntities, force) => {
         if (value === true) {
             return `${prefix}${_.kebabCase(key)}`;
         }
+        if (value === false) {
+            return `${prefix}no-${_.kebabCase(key)}`;
+        }
         return value ? `${prefix}${_.kebabCase(key)} ${value}` : '';
     });
     if (withEntities) args.push('--with-entities');
