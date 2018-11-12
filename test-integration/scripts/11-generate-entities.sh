@@ -18,7 +18,7 @@ moveEntity() {
 rm -rf "$JHI_FOLDER_APP"
 mkdir -p "$JHI_FOLDER_APP"/.jhipster/
 
-if [[ ("$JHI_APP" == *"mongodb"*) || ("$JHI_APP" == *"couchbase"*) ]]; then
+if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity DocumentBankAccount
 
     moveEntity FieldTestEntity
@@ -29,7 +29,7 @@ if [[ ("$JHI_APP" == *"mongodb"*) || ("$JHI_APP" == *"couchbase"*) ]]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [[ "$JHI_APP" == *"cassandra"* ]]; then
+elif [[ "$JHI_ENTITY" == "cassandra" ]]; then
     moveEntity CassBankAccount
 
     moveEntity CassTestEntity
@@ -37,7 +37,7 @@ elif [[ "$JHI_APP" == *"cassandra"* ]]; then
     moveEntity CassTestServiceClassEntity
     moveEntity CassTestServiceImplEntity
 
-elif [[ "$JHI_APP" == *"micro"* ]]; then
+elif [[ "$JHI_ENTITY" == "micro" ]]; then
     moveEntity MicroserviceBankAccount
     moveEntity MicroserviceOperation
     moveEntity MicroserviceLabel
@@ -50,11 +50,7 @@ elif [[ "$JHI_APP" == *"micro"* ]]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-elif [[ "$JHI_APP" == *"react"* ]]; then
-    moveEntity BankAccount
-    moveEntity Label
-    moveEntity Operation
-
+elif [[ "$JHI_ENTITY" == "uaa" ]]; then
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructEntity
     moveEntity FieldTestServiceClassEntity
@@ -63,28 +59,7 @@ elif [[ "$JHI_APP" == *"react"* ]]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
-    moveEntity EntityWithDTO
-    moveEntity EntityWithPagination
-    moveEntity EntityWithPaginationAndDTO
-    moveEntity EntityWithServiceClass
-    moveEntity EntityWithServiceClassAndDTO
-    moveEntity EntityWithServiceClassAndPagination
-    moveEntity EntityWithServiceClassPaginationAndDTO
-    moveEntity EntityWithServiceImpl
-    moveEntity EntityWithServiceImplAndDTO
-    moveEntity EntityWithServiceImplAndPagination
-    moveEntity EntityWithServiceImplPaginationAndDTO
-
-elif [[ "$JHI_APP" == *"uaa"* ]]; then
-    moveEntity FieldTestEntity
-    moveEntity FieldTestMapstructEntity
-    moveEntity FieldTestServiceClassEntity
-    moveEntity FieldTestServiceImplEntity
-    moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPagerEntity
-    moveEntity FieldTestPaginationEntity
-
-elif [[ ( "$JHI_APP" == *"mysql"* ) || ( "$JHI_APP" == *"psql"* ) ]]; then
+elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation
@@ -124,7 +99,8 @@ elif [[ ( "$JHI_APP" == *"mysql"* ) || ( "$JHI_APP" == *"psql"* ) ]]; then
     moveEntity EntityWithServiceImplAndDTO
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
-else
+
+elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation
