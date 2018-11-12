@@ -28,6 +28,7 @@ export interface ILogoutProps extends StateProps, DispatchProps {
 }
 
 export class Logout extends React.Component<ILogoutProps> {
+
   componentDidMount() {
     this.props.logout();
   }
