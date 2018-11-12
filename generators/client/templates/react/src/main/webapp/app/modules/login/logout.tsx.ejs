@@ -44,9 +44,6 @@ export class Logout extends React.Component<ILogoutProps> {
         logoutUrl = logoutUrl + '?id_token_hint=' +
           this.props.idToken + '&post_logout_redirect_uri=' + window.location.origin;
       }
-    }
-
-    if (logoutUrl) {
       window.location.href = logoutUrl;
     }
 
