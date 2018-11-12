@@ -230,7 +230,7 @@ module.exports = class extends PrivateBase {
                             // prettier-ignore
                             this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                             |                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
@@ -248,7 +248,7 @@ module.exports = class extends PrivateBase {
                         splicable: [
                             // prettier-ignore
                             this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
-                        |      <FontAwesomeIcon icon="asterisk" />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
+                        |      <FontAwesomeIcon icon="asterisk" fixedWidth />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
                         |    </DropdownItem>`)
                         ]
                     },
@@ -2161,7 +2161,7 @@ module.exports = class extends PrivateBase {
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
         context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-        context.skipClient = context.fileData.skipClient;
+        context.skipClient = context.fileData.skipClient || context.skipClient;
         this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);

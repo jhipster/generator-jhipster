@@ -138,7 +138,7 @@ function askTypeOfApplication() {
 
     return this.prompt(prompts).then(props => {
         const applicationType = props.applicationType;
-        this.composeApplicationType = props.applicationType;
+        this.deploymentApplicationType = props.applicationType;
         if (applicationType) {
             this.log(applicationType);
             done();

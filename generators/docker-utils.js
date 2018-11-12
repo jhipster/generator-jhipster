@@ -37,7 +37,7 @@ module.exports = {
  * @param failOver flag
  */
 function checkDocker() {
-    if (this.abort) return;
+    if (this.abort || this.skipChecks) return;
     const done = this.async();
 
     shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {

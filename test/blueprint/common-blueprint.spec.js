@@ -81,4 +81,26 @@ describe('JHipster common generator with blueprint', () => {
             });
         });
     });
+
+    describe('generate common with dummy blueprint overriding everything', () => {
+        before(done => {
+            helpers
+                .run(path.join(__dirname, '../../generators/common'))
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    blueprint: 'myblueprint',
+                    skipChecks: true
+                })
+                .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:common']])
+                .withPrompts({
+                    baseName: 'jhipster'
+                })
+                .on('end', done);
+        });
+
+        it("doesn't create any expected files from jhipster common generator", () => {
+            assert.noFile(expectedFiles.common);
+        });
+    });
 });
