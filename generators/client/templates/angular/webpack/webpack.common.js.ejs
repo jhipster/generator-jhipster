@@ -50,7 +50,7 @@ module.exports = (options) => ({
                     minifyJS:false,
                     minifyCSS:false
                 },
-                exclude: ['./<%= MAIN_SRC_DIR %>index.html']
+                exclude: /(<%= MAIN_SRC_DIR.replace(/\//g, '\\\/') %>index.html)/
             },
             {
                 test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
