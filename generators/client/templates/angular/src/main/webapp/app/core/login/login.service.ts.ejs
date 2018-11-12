@@ -98,8 +98,8 @@ export class LoginService {
             window.location.href = logoutUrl;
         });
         <%_ } else { _%>
-            this.authServerProvider.logout().subscribe();
-            this.principal.authenticate(null);
+        this.authServerProvider.logout().subscribe();
+        this.principal.authenticate(null);
         <%_ } _%>
     }
 }
