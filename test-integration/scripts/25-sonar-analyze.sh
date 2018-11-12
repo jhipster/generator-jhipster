@@ -21,7 +21,7 @@ elif [[ $JHI_SONAR = 1 ]]; then
     sleep 30
     docker-compose -f src/main/docker/sonar.yml logs
     echo "*** Sonar results:"
-    curl http://localhost:9001/api/measures/component\?componentKey\=io.github.jhipster.sample%3Ajhipster-sample-application\&metricKeys\=bugs%2Ccoverage%2Cvulnerabilities%2Cduplicated_lines_density%2Ccode_smells | jq
+    curl http://localhost:9001/api/measures/component\?componentKey\=io.github.jhipster.sample%3Ajhipster-sample-application\&metricKeys\=bugs%2Ccoverage%2Cvulnerabilities%2Cduplicated_lines_density%2Ccode_smells
 
 else
     echo "*** No sonar analyze"
