@@ -219,12 +219,14 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
 
                 context.entitySuffix = configuration.get('entitySuffix');
-                if (context.entitySuffix === undefined || context.entitySuffix === null) context.entitySuffix = '';
-                if (context.entitySuffix === false) context.entitySuffix = '';
+                if (_.isNil(context.entitySuffix)) {
+                    context.entitySuffix = '';
+                }
 
                 context.dtoSuffix = configuration.get('dtoSuffix');
-                if (context.dtoSuffix === undefined || context.dtoSuffix === null) context.dtoSuffix = 'DTO';
-                if (context.dtoSuffix === false) context.dtoSuffix = '';
+                if (_.isNil(context.dtoSuffix)) {
+                    context.dtoSuffix = 'DTO';
+                }
 
                 if (context.entitySuffix === context.dtoSuffix) {
                     this.error(chalk.red('The entity cannot be generated as the entity suffix and DTO suffix are equals !'));

@@ -177,11 +177,13 @@ module.exports = class extends BaseGenerator {
             this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
 
-        this.entitySuffix = this.configOptions.entitySuffix =
-            this.config.get('entitySuffix') === false ? '' : this.config.get('entitySuffix') || this.options['entity-suffix'];
+        this.entitySuffix = this.configOptions.entitySuffix = _.isNil(this.config.get('entitySuffix'))
+            ? this.options['entity-suffix']
+            : this.config.get('entitySuffix');
 
-        this.dtoSuffix = this.configOptions.dtoSuffix =
-            this.config.get('dtoSuffix') === false ? '' : this.config.get('dtoSuffix') || this.options['dto-suffix'];
+        this.dtoSuffix = this.configOptions.dtoSuffix = _.isNil(this.config.get('dtoSuffix'))
+            ? this.options['dto-suffix']
+            : this.config.get('dtoSuffix');
 
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
