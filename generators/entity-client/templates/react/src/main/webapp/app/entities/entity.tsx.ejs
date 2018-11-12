@@ -110,7 +110,17 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ if (searchEngine === 'elasticsearch') { _%>
   search = () => {
     if (this.state.search) {
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      this.props.reset();
+      <%_ } _%>
+      <%_ if (pagination !== 'no') { _%>
+      this.setState({ activePage: 1 }, () => {
+        const { activePage, itemsPerPage, sort, order, search } = this.state;
+        this.props.getSearchEntities(search, activePage - 1, itemsPerPage, `${sort},${order}`);
+      });
+      <%_ } else { _%>
       this.props.getSearchEntities(this.state.search);
+      <%_ } _%>
     }
   };
 
@@ -162,8 +172,17 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ } _%>
 
   getEntities = () => {
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    const { activePage, itemsPerPage, sort, order, search } = this.state;
+    if (search) {
+      this.props.getSearchEntities(search, activePage - 1, itemsPerPage, `${sort},${order}`);
+    } else {
+      this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+    }
+    <%_ } else { _%>
     const { activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+    <%_ } _%>
   };
   <%_ } _%>
 
