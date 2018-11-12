@@ -1299,7 +1299,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/web/rest/LogoutResourceIntTest.java',
-                    renameTo: generator => `${generator.testDir}web/rest/LogoutResourceResourceIntTest.java`
+                    renameTo: generator => `${generator.testDir}web/rest/LogoutResourceIntTest.java`
                 }
             ]
         },
