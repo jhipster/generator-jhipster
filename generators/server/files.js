@@ -1293,6 +1293,17 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.authenticationType === 'oauth2' &&
+                (generator.applicationType === 'monolith' || generator.applicationType === 'gateway'),
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/LogoutResourceIntTest.java',
+                    renameTo: generator => `${generator.testDir}web/rest/LogoutResourceResourceIntTest.java`
+                }
+            ]
+        },
+        {
             condition: generator => {
                 if (generator.gatlingTests) {
                     mkdirp(`${TEST_DIR}gatling/user-files/data`);

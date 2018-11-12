@@ -87,11 +87,11 @@ export class LoginService {
             this.principal.authenticate(null);
             const data = response.body;
             let logoutUrl = data.logoutUrl;
-            // keycloak
-            if (logoutUrl.indexOf('localhost') > -1) {
+            // if Keycloak, uri has protocol/openid-connect/token
+            if (logoutUrl.indexOf('/protocol') > -1) {
                 logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
             } else {
-                // okta
+                // Okta
                 logoutUrl = logoutUrl + '?id_token_hint=' +
                     data.idToken + '&post_logout_redirect_uri=' + window.location.origin;
             }

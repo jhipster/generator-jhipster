@@ -39,12 +39,12 @@ import java.util.Map;
 public class LogoutResource {
     private final Logger log = LoggerFactory.getLogger(LogoutResource.class);
     private final UserInfoRestTemplateFactory templateFactory;
+    private final String accessTokenUri;
 
-    @Value("${security.oauth2.client.access-token-uri}")
-    private String accessTokenUri;
-
-    public LogoutResource(UserInfoRestTemplateFactory templateFactory) {
+    public LogoutResource(UserInfoRestTemplateFactory templateFactory,
+                          @Value("${security.oauth2.client.access-token-uri}") String accessTokenUri) {
         this.templateFactory = templateFactory;
+        this.accessTokenUri = accessTokenUri;
     }
 
     /**
@@ -62,7 +62,7 @@ public class LogoutResource {
         Map<String, String> logoutDetails = new HashMap<>();
         logoutDetails.put("logoutUrl", logoutUrl);
         logoutDetails.put("idToken", idToken);
-        request.getSession(false).invalidate();
+        request.getSession().invalidate();
         return ResponseEntity.ok().body(logoutDetails);
     }
 }
