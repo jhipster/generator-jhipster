@@ -107,9 +107,9 @@ describe('JDLDeployment', () => {
 
       it('stringifies its content without default values', () => {
         expect(deployment.toString()).to.eql(`  {
-    deploymentType docker-compose
-    appsFolders [foo, bar]
-    dockerRepositoryName test
+    deploymentType ${args.deploymentType}
+    appsFolders [${args.appsFolders.join(', ').replace(/'/g, '')}]
+    dockerRepositoryName ${args.dockerRepositoryName}
   }`);
       });
     });
@@ -131,11 +131,11 @@ describe('JDLDeployment', () => {
 
       it('stringifies it', () => {
         expect(deployment.toString()).to.eql(`  {
-    deploymentType docker-compose
-    monitoring elk
-    directoryPath ../parent
-    appsFolders [foo, bar]
-    dockerRepositoryName test
+    deploymentType ${args.deploymentType}
+    monitoring ${args.monitoring}
+    directoryPath ${args.directoryPath}
+    appsFolders [${args.appsFolders.join(', ').replace(/'/g, '')}]
+    dockerRepositoryName ${args.dockerRepositoryName}
   }`);
       });
     });
