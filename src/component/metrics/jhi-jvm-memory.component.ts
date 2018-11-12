@@ -21,10 +21,13 @@ import {Component, Input} from '@angular/core';
 @Component({
     selector: 'jhi-jvm-memory',
     template: `
-        <b jhiTranslate="metrics.jvm.memory.title">Memory</b>
+        <h4 jhiTranslate="metrics.jvm.memory.title">Memory</h4>
         <div *ngFor="let entry of jvmMemoryMetrics | keys">
-            <p><span>{{entry.key}}</span> ({{entry.value.used / 1048576 | number:'1.0-0'}}M / {{entry.value.max / 1048576 | number:'1.0-0'}}M)</p>
-            <ngb-progressbar type="success" [value]="100 * entry.value.used/entry.value.max" [striped]="true" [animated]="false">
+            <span *ngIf="entry.value.max != -1; else other">
+                <span>{{entry.key}}</span> ({{entry.value.used / 1048576 | number:'1.0-0'}}M / {{entry.value.max / 1048576 | number:'1.0-0'}}M)
+            </span>
+            <ng-template #other><span><span>{{entry.key}}</span> {{entry.value.used / 1048576 | number:'1.0-0'}}M</span></ng-template>
+            <ngb-progressbar *ngIf="entry.value.max != -1" type="success" [value]="100 * entry.value.used/entry.value.max" [striped]="true" [animated]="false">
                 <span>{{entry.value.used * 100 / entry.value.max | number:'1.0-0'}}%</span>
             </ngb-progressbar>
         </div>`

@@ -28,6 +28,7 @@ import {Component, Input} from '@angular/core';
                 <th jhiTranslate="metrics.jvm.http.table.code">Code</th>
                 <th jhiTranslate="metrics.jvm.http.table.count">Count</th>
                 <th class="text-right" jhiTranslate="metrics.jvm.http.table.mean">Mean</th>
+                <th class="text-right" jhiTranslate="metrics.jvm.http.table.max">Max</th>
             </tr>
             </thead>
             <tbody>

@@ -16,38 +16,40 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+
+import {JhiThreadModalComponent} from './jhi-metrics-modal-threads.component';
 
 @Component({
     selector: 'jhi-jvm-threads',
     template: `
-        <b jhiTranslate="metrics.jvm.threads.title">Threads</b> (Total: {{threadStats.threadDumpAll}}) <a class="hand" (click)="refreshThreadDumpData()" data-toggle="modal"
-                                                                                                          data-target="#threadDump">
-            <fa-icon [icon]="'eye'"></fa-icon>
-        </a>
-        <p><span jhiTranslate="metrics.jvm.threads.runnable">Runnable</span> {{threadStats.threadDumpRunnable}}</p>
+        <h4 jhiTranslate="metrics.jvm.threads.title">Threads </h4>
+        <span><span jhiTranslate="metrics.jvm.threads.runnable">Runnable</span> {{threadStats.threadDumpRunnable}}</span>
         <ngb-progressbar [value]="threadStats.threadDumpRunnable" [max]="threadStats.threadDumpAll" [striped]="true" [animated]="false" type="success">
             <span>{{threadStats.threadDumpRunnable * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
         </ngb-progressbar>
-        <p><span jhiTranslate="metrics.jvm.threads.timedwaiting">Timed Waiting</span> ({{threadStats.threadDumpTimedWaiting}})</p>
+        <span><span jhiTranslate="metrics.jvm.threads.timedwaiting">Timed Waiting</span> ({{threadStats.threadDumpTimedWaiting}})</span>
         <ngb-progressbar [value]="threadStats.threadDumpTimedWaiting" [max]="threadStats.threadDumpAll" [striped]="true" [animated]="false" type="warning">
             <span>{{threadStats.threadDumpTimedWaiting * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
         </ngb-progressbar>
-        <p><span jhiTranslate="metrics.jvm.threads.waiting">Waiting</span> ({{threadStats.threadDumpWaiting}})</p>
+        <span><span jhiTranslate="metrics.jvm.threads.waiting">Waiting</span> ({{threadStats.threadDumpWaiting}})</span>
         <ngb-progressbar [value]="threadStats.threadDumpWaiting" [max]="threadStats.threadDumpAll" [striped]="true" [animated]="false" type="warning">
             <span>{{threadStats.threadDumpWaiting * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
         </ngb-progressbar>
-        <p><span jhiTranslate="metrics.jvm.threads.blocked">Blocked</span> ({{threadStats.threadDumpBlocked}})</p>
+        <span><span jhiTranslate="metrics.jvm.threads.blocked">Blocked</span> ({{threadStats.threadDumpBlocked}})</span>
         <ngb-progressbar [value]="threadStats.threadDumpBlocked" [max]="threadStats.threadDumpAll" [striped]="true" [animated]="false" type="success">
             <span>{{threadStats.threadDumpBlocked * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
-        </ngb-progressbar>`
+        </ngb-progressbar>
+        <span>Total: {{threadStats.threadDumpAll}}
+            <a class="hand" (click)="open()" data-toggle="modal" data-target="#threadDump">
+                <fa-icon [icon]="'eye'"></fa-icon>
+            </a>
+        </span>`
 })
-export class JhiJvmThreadsComponent {
-
-    /**
-     * object containing thread related metrics
-     */
-    @Input() threadStats: {
+export class JhiJvmThreadsComponent implements OnInit {
+    threadStats: {
         threadDumpAll: number;
         threadDumpRunnable: number;
         threadDumpTimedWaiting: number;
@@ -55,6 +57,44 @@ export class JhiJvmThreadsComponent {
         threadDumpBlocked: number;
     };
 
-    @Input() refreshThreadDumpData: Function;
+    /**
+     * object containing thread related metrics
+     */
+    @Input() threadData: any;
 
+    constructor(private modalService: NgbModal) {
+    }
+
+    ngOnInit() {
+        this.threadStats = {
+            threadDumpRunnable: 0,
+            threadDumpWaiting: 0,
+            threadDumpTimedWaiting: 0,
+            threadDumpBlocked: 0,
+            threadDumpAll: 0
+        };
+
+        this.threadData.forEach((value) => {
+            if (value.threadState === 'RUNNABLE') {
+                this.threadStats.threadDumpRunnable += 1;
+            } else if (value.threadState === 'WAITING') {
+                this.threadStats.threadDumpWaiting += 1;
+            } else if (value.threadState === 'TIMED_WAITING') {
+                this.threadStats.threadDumpTimedWaiting += 1;
+            } else if (value.threadState === 'BLOCKED') {
+                this.threadStats.threadDumpBlocked += 1;
+            }
+        });
+
+        this.threadStats.threadDumpAll =
+            this.threadStats.threadDumpRunnable +
+            this.threadStats.threadDumpWaiting +
+            this.threadStats.threadDumpTimedWaiting +
+            this.threadStats.threadDumpBlocked;
+    }
+
+    open() {
+        const modalRef = this.modalService.open(JhiThreadModalComponent);
+        modalRef.componentInstance.threadDump = this.threadData;
+    }
 }
