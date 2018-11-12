@@ -19,7 +19,6 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const crypto = require('crypto');
 const os = require('os');
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
@@ -27,6 +26,7 @@ const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+const { getBase64Secret, getRandomHex } = require('../utils');
 
 let useBlueprint;
 
@@ -250,12 +250,12 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.baseName !== undefined && serverConfigFound) {
                     // Generate remember me key if key does not already exist in config
                     if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
-                        this.rememberMeKey = crypto.randomBytes(50).toString('hex');
+                        this.rememberMeKey = getRandomHex();
                     }
 
                     // Generate JWT secret key if key does not already exist in config
                     if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
-                        this.jwtSecretKey = Buffer.from(crypto.randomBytes(64).toString('hex')).toString('base64');
+                        this.jwtSecretKey = getBase64Secret(null, 64);
                     }
 
                     // If translation is not defined, it is enabled by default

@@ -25,6 +25,7 @@ module.exports = {
 };
 
 function askForOpenShiftNamespace() {
+    if (this.regenerate) return;
     const done = this.async();
 
     const prompts = [
@@ -43,6 +44,7 @@ function askForOpenShiftNamespace() {
 }
 
 function askForStorageType() {
+    if (this.regenerate) return;
     const done = this.async();
 
     let storageEnabled = false;

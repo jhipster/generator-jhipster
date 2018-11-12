@@ -34,7 +34,7 @@ const debug = function(msg) {
 };
 
 const info = function(msg) {
-    console.info(msg);
+    console.info(`${chalk.green.bold('INFO!')} ${msg}`);
 };
 
 const log = function(msg) {
@@ -77,7 +77,7 @@ const toString = item => {
             .map(k => `${k}: ${typeof item[k] != 'function' && typeof item[k] != 'object' ? toString(item[k]) : 'Object'}`)
             .join(', ');
     }
-    return item;
+    return item ? item.toString() : item;
 };
 
 const initHelp = (program, cliName) => {
@@ -127,18 +127,20 @@ const getOptionsFromArgs = args => {
     return options;
 };
 
-/* Convert option objects to commandline args */
-const getOptionAsArgs = (options, withEntities) => {
+/* Convert option objects to command line args */
+const getOptionAsArgs = (options, withEntities, force) => {
     const args = Object.entries(options).map(([key, value]) => {
+        const prefix = key.length === 1 ? '-' : '--';
         if (value === true) {
-            return `--${_.kebabCase(key)}`;
+            return `${prefix}${_.kebabCase(key)}`;
         }
-        return value ? `--${_.kebabCase(key)} ${value}` : '';
+        return value ? `${prefix}${_.kebabCase(key)} ${value}` : '';
     });
     if (withEntities) args.push('--with-entities');
+    if (force) args.push('--force');
     args.push('--from-cli');
     logger.debug(`converted options: ${args}`);
-    return _.uniq(args.join(' ').split(' '));
+    return _.uniq(args.join(' ').split(' ')).filter(it => it !== '');
 };
 
 /**
