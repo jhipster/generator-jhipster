@@ -1,12 +1,21 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { shallow } from 'enzyme';
+<%_ if (enableTranslation) { _%>
+import { TranslatorContext } from 'react-jhipster';
+<%_ } _%>
 
 import { PrivateRouteComponent, hasAnyAuthority } from 'app/shared/auth/private-route';
 
 const TestComp = () => <div>Test</div>;
 
 describe('private-route component', () => {
+  <%_ if (enableTranslation) { _%>
+  beforeAll(() => {
+    TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
+  });
+
+  <%_ } _%>
   // All tests will go here
   it('Should throw error when no component is provided', () => {
     expect(() => shallow(<PrivateRouteComponent component={null} isAuthenticated sessionHasBeenFetched isAuthorized />)).toThrow(Error);
