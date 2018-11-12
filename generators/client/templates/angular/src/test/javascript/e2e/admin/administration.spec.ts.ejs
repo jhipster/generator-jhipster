@@ -84,6 +84,7 @@ describe('administration', () => {
 
     it('should load configuration', async () => {
         await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-configuration');
+        await browser.sleep(500);
         <%_ if (enableTranslation) { _%>
         const expect1 = 'configuration.title';
         <%_ } else { _%>
@@ -96,6 +97,7 @@ describe('administration', () => {
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
     it('should load audits', async () => {
         await navBarPage.clickOnAdmin('audits');
+        await browser.sleep(500);
         <%_ if (enableTranslation) { _%>
         const expect1 = 'audits.title';
         <%_ } else { _%>
@@ -108,6 +110,7 @@ describe('administration', () => {
 <%_ } _%>
     it('should load logs', async () => {
         await navBarPage.clickOnAdmin('logs');
+        await browser.sleep(500);
         <%_ if (enableTranslation) { _%>
         const expect1 = 'logs.title';
         <%_ } else { _%>
