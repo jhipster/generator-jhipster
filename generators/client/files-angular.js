@@ -424,6 +424,7 @@ const files = {
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
                 'spec/app/admin/metrics/metrics-modal.component.spec.ts',
+                'spec/app/core/user/account.service.spec.ts',
                 'spec/helpers/spyobject.ts',
                 'spec/helpers/mock-account.service.ts',
                 'spec/helpers/mock-route.service.ts',
