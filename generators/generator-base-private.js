@@ -730,7 +730,6 @@ module.exports = class extends Generator {
         if (blueprint) {
             blueprint = this.normalizeBlueprintName(blueprint);
             this.checkBlueprint(blueprint, subGen);
-            this.log(`Trying to use blueprint ${blueprint}`);
             try {
                 const finalOptions = {
                     ...options,
@@ -738,10 +737,11 @@ module.exports = class extends Generator {
                 };
                 this.useBlueprint = true;
                 this.composeExternalModule(blueprint, subGen, finalOptions);
+                this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
                 return true;
             } catch (e) {
+                this.debug(`No blueprint found for ${chalk.yellow(subGen)} subgenerator: falling back to default generator`);
                 this.debug('Error', e);
-                this.info(`No blueprint found for ${subGen} falling back to default generator`);
                 return false;
             }
         }
