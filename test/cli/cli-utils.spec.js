@@ -83,7 +83,7 @@ describe('jhipster cli utils test', () => {
         describe('when called with valid argument having false value', () => {
             const argument = { foo: true, bar: '123', insight: false };
             it('returns an array of truthy string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--no-insight','--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--no-insight', '--from-cli']);
             });
         });
         describe('when called with valid arguments and withEntities', () => {

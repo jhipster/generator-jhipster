@@ -44,11 +44,7 @@ stages:
 before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     <%_ if (!skipClient) { _%>
-        <%_ if (clientPackageManager === 'yarn') { _%>
-    - ./gradlew yarn_install -PnodeInstall --no-daemon
-        <%_ } else if (clientPackageManager === 'npm') { _%>
-    - ./gradlew npm_install -PnodeInstall --no-daemon
-        <%_ } _%>
+    - ./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon
     <%_ } _%>
 
 gradle-compile:
@@ -77,11 +73,10 @@ gradle-test:
 frontend-test:
     stage: test
     script:
-        <%_ if (clientPackageManager === 'yarn') { _%>
-        - ./gradlew yarn_test -PnodeInstall --no-daemon
-        <%_ } else if (clientPackageManager === 'npm') { _%>
-        - ./gradlew npm_test -PnodeInstall --no-daemon
-        <%_ } _%>
+        # You should use default run instead: <%= clientPackageManager %>_test 
+        # See documentation at https://www.jhipster.tech/setting-up-ci/
+        # - ./gradlew <%= clientPackageManager %>_test -PnodeInstall --no-daemon
+        - ./gradlew <%= clientPackageManager %>_run_test-ci -PnodeInstall --no-daemon
     artifacts:
         reports:
             junit: build/test-results/jest/TESTS-*.xml
@@ -151,11 +146,10 @@ before_script:
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
-    - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } else if (clientPackageManager === 'npm') { _%>
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
-    - ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } _%>
+    - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dmaven.repo.local=$MAVEN_USER_HOME
     <%_ } _%>
 
 maven-compile:
@@ -183,6 +177,9 @@ maven-test:
 frontend-test:
     stage: test
     script:
+        # You should use default argument instead: 'test'
+        # See documentation at https://www.jhipster.tech/setting-up-ci/
+        # - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='test' -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='test<%= frontTests%>' -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
