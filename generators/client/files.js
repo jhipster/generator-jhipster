@@ -44,6 +44,15 @@ function writeFiles() {
     this.template('webpack/webpack.dev.js.ejs', 'webpack/webpack.dev.js');
     this.copy('webpack/webpack.prod.js', 'webpack/webpack.prod.js');
 
+    // Images
+    this.copy('webapp/content/images/hipster.png', 'src/main/webapp/content/images/hipster.png');
+    this.copy('webapp/content/images/hipster2x.png', 'src/main/webapp/content/images/hipster2x.png');
+    this.copy('webapp/content/images/hipster192.png', 'src/main/webapp/content/images/hipster192.png');
+    this.copy('webapp/content/images/hipster256.png', 'src/main/webapp/content/images/hipster256.png');
+    this.copy('webapp/content/images/hipster384.png', 'src/main/webapp/content/images/hipster384.png');
+    this.copy('webapp/content/images/hipster512.png', 'src/main/webapp/content/images/hipster512.png');
+    this.copy('webapp/content/images/logo-jhipster.png', 'src/main/webapp/content/images/logo-jhipster.png');
+
     // App files
     this.copy('webapp/index.html', 'src/main/webapp/index.html');
     this.copy('webapp/app/App.vue', 'src/main/webapp/app/App.vue');
