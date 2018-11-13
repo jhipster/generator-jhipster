@@ -2,9 +2,15 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { SERVER_API_URL } from 'app/app.constants';
 import { AccountService } from 'app/core';
-import { JhiDateUtils, JhiLanguageService } from 'ng-jhipster';
+import { JhiDateUtils,
+<%_ if (enableTranslation && authenticationType !== 'oauth2') { _%>
+    JhiLanguageService
+<%_ } _%>
+} from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
+<%_ if (enableTranslation && authenticationType !== 'oauth2') { _%>
 import { MockLanguageService } from '../../../helpers/mock-language.service';
+<%_ } _%>
 
 describe('Service Tests', () => {
     describe('Account Service', () => {
@@ -17,10 +23,12 @@ describe('Service Tests', () => {
                 providers: [
                     JhiDateUtils,
                     SessionStorageService,
+                    <%_ if (enableTranslation && authenticationType !== 'oauth2') { _%>
                     {
                         provide: JhiLanguageService,
                         useClass: MockLanguageService
                     }
+                    <%_ } _%>
                 ]
             });
 
