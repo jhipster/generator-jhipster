@@ -129,10 +129,13 @@ module.exports = class extends BaseGenerator {
                 this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
-                if (this.clientPackageManager === 'yarn') {
-                    this.frontTests = ' -u';
-                } else if (this.clientPackageManager === 'npm') {
-                    this.frontTests = ' -- -u';
+                this.frontTests = '';
+                if (this.clientFramework === 'react') {
+                    if (this.clientPackageManager === 'yarn') {
+                        this.frontTests = ' -u';
+                    } else if (this.clientPackageManager === 'npm') {
+                        this.frontTests = ' -- -u';
+                    }
                 }
             }
         };
