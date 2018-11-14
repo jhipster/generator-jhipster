@@ -2436,6 +2436,19 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * get the field type to be used in java based on the Jhipster field type and other field parameters
+     *
+     * @param {string} fieldType - type of the field
+     * @param {boolean} required - is the field required
+     */
+    getJavaFieldType(field) {
+        if (field.fieldType === 'Boolean' && field.fieldValidate && field.fieldValidateRules.includes('required')) {
+            return 'boolean';
+        }
+        return field.fieldType;
+    }
+
+    /**
      * Print an error message.
      *
      * @param {string} msg - message to print
