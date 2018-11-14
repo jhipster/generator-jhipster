@@ -1273,15 +1273,13 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Register file transforms for client side files
+     * Register prettier as transform stream for prettifying files during generation
      * @param {any} generator
      */
-    registerClientTransforms(generator = this) {
-        if (!generator.skipClient) {
-            // Prettier is clever, it uses correct rules and correct parser according to file extension.
-            const prettierFilter = filter(['{,src/**/}*.{md,json,ts,tsx,scss,css}'], { restore: true });
-            // this pipe will pass through (restore) anything that doesn't match typescriptFilter
-            generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
-        }
+    registerPrettierTransform(generator = this) {
+        // Prettier is clever, it uses correct rules and correct parser according to file extension.
+        const prettierFilter = filter(['{,src/**/}*.{md,json,ts,tsx,scss,css}'], { restore: true });
+        // this pipe will pass through (restore) anything that doesn't match typescriptFilter
+        generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }
 };

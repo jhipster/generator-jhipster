@@ -121,7 +121,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.context = {};
 
         this.setupEntityOptions(this, this, this.context);
-        this.registerClientTransforms();
+        this.registerPrettierTransform();
         const blueprint = this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
