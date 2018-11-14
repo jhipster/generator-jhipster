@@ -16,8 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Component, OnInit} from '@angular/core';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent } from './metrics-modal.component';
 import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
@@ -28,11 +28,7 @@ import { <%=jhiPrefixCapitalized%>MetricsService } from './metrics.service';
 })
 export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnInit {
     metrics: any = {};
-    threadStats: any = {};
-    cachesStats: any = {};
-    requestsStats: any = [];
-    servicesStats: any = {};
-    databaseStats: any = {};
+    threadData: any = {};
     updatingMetrics = true;
     JCACHE_KEY: string;
 
@@ -51,55 +47,11 @@ export class <%=jhiPrefixCapitalized%>MetricsMonitoringComponent implements OnIn
         this.updatingMetrics = true;
         this.metricsService.getMetrics().subscribe(metrics => {
             this.metrics = metrics;
-            this.updatingMetrics = false;
-        });
-
-        this.threadStats = {
-            threadDumpRunnable: 0,
-            threadDumpWaiting: 0,
-            threadDumpTimedWaiting: 0,
-            threadDumpBlocked: 0,
-            threadDumpAll: 0
-        };
-
-        this.metricsService.threadDump().subscribe(data => {
-            data.threads.forEach(value => {
-                if (value.threadState === 'RUNNABLE') {
-                    this.threadStats.threadDumpRunnable += 1;
-                } else if (value.threadState === 'WAITING') {
-                    this.threadStats.threadDumpWaiting += 1;
-                } else if (value.threadState === 'TIMED_WAITING') {
-                    this.threadStats.threadDumpTimedWaiting += 1;
-                } else if (value.threadState === 'BLOCKED') {
-                    this.threadStats.threadDumpBlocked += 1;
-                }
-            });
-
-            this.threadStats.threadDumpAll =
-                this.threadStats.threadDumpRunnable +
-                this.threadStats.threadDumpWaiting +
-                this.threadStats.threadDumpTimedWaiting +
-                this.threadStats.threadDumpBlocked;
-        });
-    }
-
-    refreshThreadDumpData() {
-        this.metricsService.threadDump().subscribe((data) => {
-            const modalRef  = this.modalService.open(<%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent, { size: 'lg'});
-            modalRef.componentInstance.threadDump = data.threads;
-            modalRef.result.then((result) => {
-                // Left blank intentionally, nothing to do here
-            }, (reason) => {
-                // Left blank intentionally, nothing to do here
+            this.metricsService.threadDump().subscribe(data => {
+                this.threadData = data.threads;
+                this.updatingMetrics = false;
             });
         });
-    }
-
-    filterNaN(input) {
-        if (isNaN(input)) {
-            return 0;
-        }
-        return input;
     }
 
 }

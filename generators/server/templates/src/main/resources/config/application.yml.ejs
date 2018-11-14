@@ -111,10 +111,12 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile" ]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhi-metrics" ]
     endpoint:
         health:
             show-details: when_authorized
+        jhi-metrics:
+            enabled: true
     info:
         git:
             mode: full
@@ -123,6 +125,7 @@ management:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
     metrics:
         export:
+            # Prometheus is the default metrics backend
             prometheus:
                 enabled: true
                 step: 60
@@ -144,6 +147,9 @@ management:
                 all: true
             percentiles:
                 all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+        web:
+            server:
+                auto-time-requests: true
 
 spring:
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -176,7 +182,10 @@ spring:
     jpa:
         open-in-view: false
         properties:
-            hibernate.jdbc.time_zone: UTC
+            hibernate:
+                generate_statistics: true
+                jdbc:
+                    time_zone: UTC
         hibernate:
             ddl-auto: none
             naming:
@@ -277,6 +286,12 @@ jhipster:
         #max-age: 1800
     mail:
         from: <%= baseName %>@localhost
+    metrics:
+        endpoint: # Configure the /jhi-metrics endpoint
+            status-codes:
+                - 200
+                - 404
+                - 500
     swagger:
         default-include-pattern: /api/.*
         title: <%=baseName%> API
