@@ -26,23 +26,52 @@ import {Component, Input} from '@angular/core';
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th><span jhiTranslate="metrics.datasource.usage">Usage</span> ({{datasourceMetrics.active.value}} / {{datasourceMetrics.max.value}})</th>
+                    <th><span jhiTranslate="metrics.datasource.usage">Connection Pool Usage</span>
+                        (active: {{datasourceMetrics.active.value}}, min: {{datasourceMetrics.min.value}}, max: {{datasourceMetrics.max.value}},
+                        idle: {{datasourceMetrics.idle.value}})
+                    </th>
                     <th class="text-right" jhiTranslate="metrics.datasource.count">Count</th>
                     <th class="text-right" jhiTranslate="metrics.datasource.mean">Mean</th>
+                    <th class="text-right" jhiTranslate="metrics.servicesstats.table.min">Min</th>
+                    <th class="text-right" jhiTranslate="metrics.servicesstats.table.p50">p50</th>
+                    <th class="text-right" jhiTranslate="metrics.servicesstats.table.p75">p75</th>
+                    <th class="text-right" jhiTranslate="metrics.servicesstats.table.p95">p95</th>
+                    <th class="text-right" jhiTranslate="metrics.servicesstats.table.p99">p99</th>
                     <th class="text-right" jhiTranslate="metrics.datasource.max">Max</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>
-                        <div class="progress progress-striped">
-                            <ngb-progressbar [max]="datasourceMetrics.max.value" [value]="datasourceMetrics.active.value" [striped]="true" [animated]="false" type="success">
-                                <span>{{datasourceMetrics.active.value * 100 / datasourceMetrics.max.value | number:'1.0-0'}}%</span>
-                            </ngb-progressbar>
-                        </div>
-                    </td>
+                    <td>Acquire</td>
+                    <td class="text-right">{{datasourceMetrics.acquire.count}}</td>
+                    <td class="text-right">{{filterNaN(datasourceMetrics.acquire.mean) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{datasourceMetrics.acquire['0.0'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.acquire['0.5'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.acquire['0.75'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.acquire['0.95'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.acquire['0.99'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{filterNaN(datasourceMetrics.acquire.max) | number:'1.0-2'}}</td>
+                </tr>
+                <tr>
+                    <td>Creation</td>
+                    <td class="text-right">{{datasourceMetrics.creation.count}}</td>
+                    <td class="text-right">{{filterNaN(datasourceMetrics.creation.mean) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{datasourceMetrics.creation['0.0'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.creation['0.5'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.creation['0.75'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.creation['0.95'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.creation['0.99'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{filterNaN(datasourceMetrics.creation.max) | number:'1.0-2'}}</td>
+                </tr>
+                <tr>
+                    <td>Usage</td>
                     <td class="text-right">{{datasourceMetrics.usage.count}}</td>
                     <td class="text-right">{{filterNaN(datasourceMetrics.usage.mean) | number:'1.0-2'}}</td>
+                    <td class="text-right">{{datasourceMetrics.usage['0.0'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.usage['0.5'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.usage['0.75'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.usage['0.95'] | number:'1.0-3'}}</td>
+                    <td class="text-right">{{datasourceMetrics.usage['0.99'] | number:'1.0-3'}}</td>
                     <td class="text-right">{{filterNaN(datasourceMetrics.usage.max) | number:'1.0-2'}}</td>
                 </tr>
                 </tbody>
@@ -56,8 +85,12 @@ export class JhiMetricsDatasourceComponent {
      */
     @Input() datasourceMetrics: {
         active: any;
+        min: any;
+        idle: any;
         max: any;
         usage: any;
+        acquire: any;
+        creation: any;
     };
 
     /**

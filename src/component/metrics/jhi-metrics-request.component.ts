@@ -21,8 +21,8 @@ import {Component, Input} from '@angular/core';
 @Component({
     selector: 'jhi-metrics-request',
     template: `
-        <h3 jhiTranslate="metrics.jvm.http.title">HTTP requests (events per second)</h3>
-        <table class="table table-striped">
+        <h3 jhiTranslate="metrics.jvm.http.title">HTTP requests (time in millisecond)</h3>
+        <table class="table table-striped" *ngIf="!updating">
             <thead>
             <tr>
                 <th jhiTranslate="metrics.jvm.http.table.code">Code</th>
@@ -32,10 +32,10 @@ import {Component, Input} from '@angular/core';
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let entry of requestMetrics | keys">
+            <tr *ngFor="let entry of requestMetrics['percode'] | keys">
                 <td>{{entry.key}}</td>
                 <td>
-                    <ngb-progressbar [max]="totalRequestMetrics.count" [value]="entry.value.count" [striped]="true" [animated]="false" type="success">
+                    <ngb-progressbar [max]="requestMetrics['all'].count" [value]="entry.value.count" [striped]="true" [animated]="false" type="success">
                         <span>{{entry.value.count}}</span>
                     </ngb-progressbar>
                 </td>
@@ -49,16 +49,14 @@ import {Component, Input} from '@angular/core';
 export class JhiMetricsHttpRequestComponent {
 
     /**
-     * object containing http request per code related metrics
+     * object containing http request related metrics
      */
     @Input() requestMetrics: {};
 
     /**
-     * object containing aggregated http request related metrics
+     * boolean field saying if the metrics are in the process of being updated
      */
-    @Input() totalRequestMetrics: {
-        count: number;
-    };
+    @Input() updating: boolean;
 
     filterNaN(input) {
         if (isNaN(input)) {

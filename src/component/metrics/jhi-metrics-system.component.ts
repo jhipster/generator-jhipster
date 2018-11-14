@@ -21,7 +21,15 @@ import {Component, Input} from '@angular/core';
 @Component({
     selector: 'jhi-metrics-system',
     template: `
-        <h4>Misc</h4>
+        <h4>System</h4>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-4">Uptime</div>
+            <div class="col-md-8 text-right">{{convertMillisecondsToDuration(systemMetrics["process.uptime"])}}</div>
+        </div>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-4">Start time</div>
+            <div class="col-md-8 text-right">{{systemMetrics["process.start.time"] | date:'full'}}</div>
+        </div>
         <div class="row" *ngIf="!updating">
             <div class="col-md-9">Process CPU usage</div>
             <div class="col-md-3 text-right">{{100 * systemMetrics["process.cpu.usage"] | number:'1.0-2'}} %</div>
@@ -45,8 +53,12 @@ import {Component, Input} from '@angular/core';
             <div class="col-md-3 text-right">{{systemMetrics["system.load.average.1m"] | number:'1.0-2'}}</div>
         </div>
         <div class="row" *ngIf="!updating">
-            <div class="col-md-9">Uptime (in seconds)</div>
-            <div class="col-md-3 text-right">{{1000 * systemMetrics["process.uptime"] | date: 'HH:mm:ss'}} s</div>
+            <div class="col-md-9">Process files max</div>
+            <div class="col-md-3 text-right">{{systemMetrics["process.files.max"] | number:'1.0-0'}}</div>
+        </div>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-9">Process files open</div>
+            <div class="col-md-3 text-right">{{systemMetrics["process.files.open"] | number:'1.0-0'}}</div>
         </div>`
 })
 export class JhiMetricsSystemComponent {
@@ -60,4 +72,29 @@ export class JhiMetricsSystemComponent {
      * boolean field saying if the metrics are in the process of being updated
      */
     @Input() updating: boolean;
+
+    convertMillisecondsToDuration(ms) {
+        const times = {
+            year: 31557600000,
+            month: 2629746000,
+            day: 86400000,
+            hour: 3600000,
+            minute: 60000,
+            second: 1000
+        };
+        let time_string = '';
+        let plural = '';
+        for (const key in times) {
+            if (Math.floor(ms / times[key]) > 0) {
+                if (Math.floor(ms / times[key]) > 1) {
+                    plural = 's';
+                } else {
+                    plural = '';
+                }
+                time_string += Math.floor(ms / times[key]).toString() + ' ' + key.toString() + plural + ' ';
+                ms = ms - times[key] * Math.floor(ms / times[key]);
+            }
+        }
+        return time_string;
+    }
 }
