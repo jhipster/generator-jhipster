@@ -76,6 +76,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databaseType === 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %><% if (fieldsContainBlob === true) { %>
 import org.springframework.util.Base64Utils;<% } %>
+import org.springframework.validation.Validator;
 <% if (databaseType === 'sql') { %>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob === true && databaseType === 'cassandra') { %>
@@ -344,6 +345,9 @@ _%>
     private EntityManager em;
 <%_ } _%>
 
+    @Autowired
+    private Validator validator;
+
     private MockMvc rest<%= entityClass %>MockMvc;
 
     private <%= entityClass %> <%= entityInstance %>;
@@ -360,7 +364,8 @@ _%>
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setValidator(validator).build();
     }
 
     /**
