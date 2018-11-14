@@ -2331,9 +2331,15 @@ module.exports = class extends PrivateBase {
      * @param {string} entityName - name of the entity
      * @param {string} relationshipName - name of the related entity
      * @param {string} prodDatabaseType - database type
+     * @param {boolean} noSnakeCase - do not convert names to snakecase
      */
-    getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-        const joinTableName = `${this.getTableName(entityName)}_${this.getTableName(relationshipName)}`;
+    getJoinTableName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+        let joinTableName;
+        if (noSnakeCase) {
+            joinTableName = `${entityName}_${relationshipName}`;
+        } else {
+            joinTableName = `${this.getTableName(entityName)}_${this.getTableName(relationshipName)}`;
+        }
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
@@ -2350,8 +2356,12 @@ module.exports = class extends PrivateBase {
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
-            const entityTable = this.getTableName(entityName).substring(0, halfLimit);
-            const relationTable = this.getTableName(relationshipName).substring(0, limit - entityTable.length - 1);
+            const entityTable = noSnakeCase
+            ? entityName.substring(0, halfLimit)
+            : this.getTableName(entityName).substring(0, halfLimit);
+        const relationTable =  noSnakeCase
+            ? relationshipName.substring(0, limit - entityTable.length - 1)
+            : this.getTableName(relationshipName).substring(0, limit - entityTable.length - 1);
             return `${entityTable}_${relationTable}`;
         }
         return joinTableName;
