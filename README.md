@@ -18,7 +18,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 [![Okta][okta-image]][okta-url]
 
-
 **Bronze sponsors!**
 
 [![ForsysLab][forsyslab-image]][forsyslab-url]
@@ -26,7 +25,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 [![CUBA Platform][cubaplatform-image]][cubaplatform-url]
 
 [![Intesys][intesys-image]][intesys-url]
-
 
 **Thank you to all our backers!**
 
