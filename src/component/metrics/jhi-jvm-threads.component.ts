@@ -24,29 +24,7 @@ import {JhiThreadModalComponent} from './jhi-metrics-modal-threads.component';
 
 @Component({
     selector: 'jhi-jvm-threads',
-    template: `
-        <h4 jhiTranslate="metrics.jvm.threads.title">Threads </h4>
-        <span><span jhiTranslate="metrics.jvm.threads.runnable">Runnable</span> {{threadStats.threadDumpRunnable}}</span>
-        <ngb-progressbar [value]="threadStats.threadDumpRunnable" [max]="threadStats.threadDumpAll" [striped]="true" [animated]="false" type="success">
-            <span>{{threadStats.threadDumpRunnable * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
-        </ngb-progressbar>
-        <span><span jhiTranslate="metrics.jvm.threads.timedwaiting">Timed Waiting</span> ({{threadStats.threadDumpTimedWaiting}})</span>
-        <ngb-progressbar [value]="threadStats.threadDumpTimedWaiting" [max]="threadStats.threadDumpAll" [striped]="true" [animated]="false" type="warning">
-            <span>{{threadStats.threadDumpTimedWaiting * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
-        </ngb-progressbar>
-        <span><span jhiTranslate="metrics.jvm.threads.waiting">Waiting</span> ({{threadStats.threadDumpWaiting}})</span>
-        <ngb-progressbar [value]="threadStats.threadDumpWaiting" [max]="threadStats.threadDumpAll" [striped]="true" [animated]="false" type="warning">
-            <span>{{threadStats.threadDumpWaiting * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
-        </ngb-progressbar>
-        <span><span jhiTranslate="metrics.jvm.threads.blocked">Blocked</span> ({{threadStats.threadDumpBlocked}})</span>
-        <ngb-progressbar [value]="threadStats.threadDumpBlocked" [max]="threadStats.threadDumpAll" [striped]="true" [animated]="false" type="success">
-            <span>{{threadStats.threadDumpBlocked * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
-        </ngb-progressbar>
-        <span>Total: {{threadStats.threadDumpAll}}
-            <a class="hand" (click)="open()" data-toggle="modal" data-target="#threadDump">
-                <fa-icon [icon]="'eye'"></fa-icon>
-            </a>
-        </span>`
+    templateUrl: './jhi-jvm-threads.component.html'
 })
 export class JhiJvmThreadsComponent implements OnInit {
     threadStats: {
