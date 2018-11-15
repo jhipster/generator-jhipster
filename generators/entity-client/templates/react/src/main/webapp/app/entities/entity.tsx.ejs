@@ -125,9 +125,11 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   };
 
   clear = () => {
-    this.props.getEntities();
-    this.setState({
-      search: ''
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    this.props.reset();
+    <%_ } _%>
+    this.setState({ search: ''<% if (pagination !== 'no') { %>, activePage: 1<% } %> }, () => {
+      this.props.getEntities()
     });
   };
 
