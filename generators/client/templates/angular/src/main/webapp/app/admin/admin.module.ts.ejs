@@ -37,7 +37,6 @@ import {
     UserMgmtDeleteDialogComponent,
     <%_ } _%>
     LogsComponent,
-    <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
     <%=jhiPrefixCapitalized%>HealthModalComponent,
     <%=jhiPrefixCapitalized%>HealthCheckComponent,
@@ -78,15 +77,13 @@ import {
         <%_ if (websocket === 'spring-websocket') { _%>
         <%=jhiPrefixCapitalized%>TrackerComponent,
         <%_ } _%>
-        <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
-        <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
+        <%=jhiPrefixCapitalized%>MetricsMonitoringComponent
     ],
     entryComponents: [
         <%_ if (!skipUserManagement) { _%>
         UserMgmtDeleteDialogComponent,
         <%_ } _%>
-        <%=jhiPrefixCapitalized%>HealthModalComponent,
-        <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
+        <%=jhiPrefixCapitalized%>HealthModalComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
