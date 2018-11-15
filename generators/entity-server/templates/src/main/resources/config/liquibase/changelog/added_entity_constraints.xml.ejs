@@ -25,13 +25,18 @@
         Added the constraints for entity <%= entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>-2" author="jhipster">
-        <% for (idx in relationships) {
+        <% const constraintNames = [];
+           for (idx in relationships) {
             const relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
             otherEntityTableName = relationships[idx].otherEntityTableName;
             if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
-                const constraintName = getFKConstraintName(entityTableName, otherEntityTableName, prodDatabaseType, true);%>
+                let constraintName = getFKConstraintName(entityTableName, otherEntityTableName, prodDatabaseType, true);
+                if (constraintNames.some( e => e === constraintName)) {
+                    constraintName = getFKConstraintName(entityTableName, getTableName(relationshipName), prodDatabaseType, true);
+                }
+                constraintNames.push(constraintName);%>
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
@@ -40,7 +45,11 @@
         <%_ } else if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(entityTableName, getTableName(relationshipName), prodDatabaseType, true);
                 const constraintName = getFKConstraintName(joinTableName, entityTableName, prodDatabaseType, true);
-                const otherEntityConstraintName = getFKConstraintName(joinTableName, otherEntityTableName, prodDatabaseType, true);
+                let otherEntityConstraintName = getFKConstraintName(joinTableName, otherEntityTableName, prodDatabaseType, true);
+                if (constraintNames.some( e => e === otherEntityConstraintName)) {
+                    otherEntityConstraintName = getFKConstraintName(joinTableName, getTableName(relationshipName), prodDatabaseType, true);
+                }
+                constraintNames.push(otherEntityConstraintName);
           _%>
 
         <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(name) %>_id"
