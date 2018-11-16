@@ -24,16 +24,16 @@
     <%_ } _%>
 
     constructor(
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        private jhiAlertService: JhiAlertService,
+        protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
+        protected jhiAlertService: JhiAlertService,
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: JhiDataUtils,
+        protected dataUtils: JhiDataUtils,
         <%_ } _%>
-        private eventManager: JhiEventManager,
+        protected eventManager: JhiEventManager,
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        private activatedRoute: ActivatedRoute,
+        protected activatedRoute: ActivatedRoute,
         <%_ } _%>
-        private principal: Principal
+        protected principal: Principal
     ) {
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.params['search'] ?

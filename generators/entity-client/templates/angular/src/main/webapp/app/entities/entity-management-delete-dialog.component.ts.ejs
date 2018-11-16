@@ -34,9 +34,9 @@ export class <%= entityAngularName %>DeleteDialogComponent {
     <%= entityInstance %>: I<%= entityAngularName %>;
 
     constructor(
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
+        protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
-        private eventManager: JhiEventManager
+        protected eventManager: JhiEventManager
     ) {
     }
 
@@ -61,12 +61,12 @@ export class <%= entityAngularName %>DeleteDialogComponent {
 })
 export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnDestroy {
 
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
     constructor(
-        private activatedRoute: ActivatedRoute,
-        private router: Router,
-        private modalService: NgbModal
+        protected activatedRoute: ActivatedRoute,
+        protected router: Router,
+        protected modalService: NgbModal
     ) {}
 
     ngOnInit() {

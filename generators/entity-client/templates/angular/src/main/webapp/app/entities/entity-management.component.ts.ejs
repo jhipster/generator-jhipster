@@ -93,7 +93,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         <%_ } _%>
         <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 
-    private paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[], headers: HttpHeaders) {
+    protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[], headers: HttpHeaders) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
@@ -103,7 +103,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     }
         <%_ } else if (pagination === 'infinite-scroll') { _%>
 
-    private paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[], headers: HttpHeaders) {
+    protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {
@@ -112,7 +112,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     }
     <%_ }} _%>
 
-    private onError(errorMessage: string) {
+    protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 }
