@@ -73,10 +73,7 @@ gradle-test:
 frontend-test:
     stage: test
     script:
-        # You should use default run instead: <%= clientPackageManager %>_test 
-        # See documentation at https://www.jhipster.tech/setting-up-ci/
-        # - ./gradlew <%= clientPackageManager %>_test -PnodeInstall --no-daemon
-        - ./gradlew <%= clientPackageManager %>_run_test-ci -PnodeInstall --no-daemon
+        - ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
     artifacts:
         reports:
             junit: build/test-results/jest/TESTS-*.xml
@@ -177,9 +174,6 @@ maven-test:
 frontend-test:
     stage: test
     script:
-        # You should use default argument instead: 'test'
-        # See documentation at https://www.jhipster.tech/setting-up-ci/
-        # - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='test' -Dmaven.repo.local=$MAVEN_USER_HOME
         - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='<%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
