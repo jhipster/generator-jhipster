@@ -537,6 +537,9 @@ describe('JHipster generator', () => {
             it('creates expected files with authenticationType "oauth2"', () => {
                 assert.file(expectedFiles.oauth2);
             });
+            it('generates README with instructions for OAuth', () => {
+                assert.fileContent('README.md', 'OAuth 2.0');
+            });
         });
 
         describe('oauth2 + elasticsearch', () => {
@@ -830,6 +833,9 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.swaggerCodegen);
+            });
+            it('generates README with instructions for OpenAPI generator', () => {
+                assert.fileContent('README.md', 'OpenAPI-Generator');
             });
         });
 
@@ -1339,6 +1345,9 @@ describe('JHipster generator', () => {
                     )
                 );
                 assert.noFile(['gradle/yeoman.gradle']);
+            });
+            it('generates README with instructions for Gradle', () => {
+                assert.fileContent('README.md', './gradlew');
             });
         });
     });
