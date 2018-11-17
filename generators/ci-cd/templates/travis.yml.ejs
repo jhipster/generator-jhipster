@@ -70,8 +70,8 @@ script:
   - chmod +x gradlew
   - ./gradlew clean test
 <%_ } _%>
-<%_ if (applicationType !== 'microservice') { _%>
-  - <%= clientPackageManager %> test<%= frontTests%>
+<%_ if (!skipClient) { _%>
+  - <%= clientPackageManager %> run <%= frontTestCommand %>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
   <%_ if (cicdIntegrations.includes('sonar')) { _%>

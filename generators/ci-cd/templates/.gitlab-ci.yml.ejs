@@ -180,7 +180,7 @@ frontend-test:
         # You should use default argument instead: 'test'
         # See documentation at https://www.jhipster.tech/setting-up-ci/
         # - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='test' -Dmaven.repo.local=$MAVEN_USER_HOME
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='test<%= frontTests%>' -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='<%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
             junit: target/test-results/jest/TESTS-*.xml

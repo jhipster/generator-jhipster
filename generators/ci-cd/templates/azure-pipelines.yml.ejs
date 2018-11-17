@@ -60,8 +60,8 @@ jobs:
       ./gradlew clean test
   <%_ } _%>
     displayName: 'TESTS: backend'
-<%_ if (applicationType !== 'microservice') { _%>
-  - script: <%= clientPackageManager %> test<%= frontTests %>
+<%_ if (!skipClient) { _%>
+  - script: <%= clientPackageManager %> run <%= frontTestCommand %>
     displayName: 'TESTS: frontend'
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
