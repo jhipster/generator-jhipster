@@ -154,15 +154,15 @@
           _%>
 
         <createTable tableName="<%= joinTableName %>">
-            <column name="<%= getPluralColumnName(relationshipName) %>_id" type="bigint">
+            <column name="<%= getColumnName(relationshipName) %>_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="<%= getPluralColumnName(name) %>_id" type="bigint">
+            <column name="<%= getColumnName(name) %>_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= getPluralColumnName(name) %>_id, <%= getPluralColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
+        <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
         <% } %><% } %>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
