@@ -61,7 +61,7 @@ function writeFiles() {
     this.copy('webapp/app/constants.ts', 'src/main/webapp/app/constants.ts');
     this.template('webapp/app/main.ts.ejs', 'src/main/webapp/app/main.ts');
     this.copy('webapp/app/shared/config.ts', 'src/main/webapp/app/shared/config.ts');
-    this.copy('webapp/app/router/index.ts', 'src/main/webapp/app/router/index.ts');
+    this.template('webapp/app/router/index.ts.ejs', 'src/main/webapp/app/router/index.ts');
     this.copy('webapp/app/locale/LanguageService.vue', 'src/main/webapp/app/locale/LanguageService.vue');
     this.copy('webapp/app/locale/TranslationService.vue', 'src/main/webapp/app/locale/TranslationService.vue');
     this.copy('webapp/app/components/home/Home.vue', 'src/main/webapp/app/components/home/Home.vue');
@@ -74,6 +74,7 @@ function writeFiles() {
     this.copy('webapp/app/components/ribbon/Ribbon.component.ts', 'src/main/webapp/app/components/ribbon/Ribbon.component.ts');
     this.copy('webapp/app/components/account/change-password/ChangePassword.vue', 'src/main/webapp/app/components/account/change-password/ChangePassword.vue');
     this.copy('webapp/app/components/account/change-password/ChangePassword.component.ts', 'src/main/webapp/app/components/account/change-password/ChangePassword.component.ts');
+    this.copy('webapp/app/components/account/change-password/change-password.component.test.ts', 'src/main/webapp/app/components/account/change-password/change-password.component.test.ts');
     this.copy('webapp/app/components/account/login-form/LoginForm.vue', 'src/main/webapp/app/components/account/login-form/LoginForm.vue');
     this.template('webapp/app/components/account/login-form/LoginForm.component.ts.ejs', 'src/main/webapp/app/components/account/login-form/LoginForm.component.ts');
     this.copy('webapp/app/components/account/LoginModalService.vue', 'src/main/webapp/app/components/account/LoginModalService.vue');
@@ -87,12 +88,57 @@ function writeFiles() {
     this.copy('webapp/app/components/account/sessions/Sessions.component.ts', 'src/main/webapp/app/components/account/sessions/Sessions.component.ts');
     this.copy('webapp/app/components/account/settings/Settings.vue', 'src/main/webapp/app/components/account/settings/Settings.vue');
     this.copy('webapp/app/components/account/settings/Settings.component.ts', 'src/main/webapp/app/components/account/settings/Settings.component.ts');
+    this.copy('webapp/app/components/account/settings/settings.component.test.ts', 'src/main/webapp/app/components/account/settings/settings.component.test.ts');
     this.copy('webapp/app/shared/date/filters.ts', 'src/main/webapp/app/shared/date/filters.ts');
     this.template('webapp/app/config/axios-interceptor.ts.ejs', 'src/main/webapp/app/config/axios-interceptor.ts');
-
-    // Specs tests
-    this.copy('webapp/app/components/account/specs/settings.component.test.ts', 'src/main/webapp/app/components/account/specs/settings.component.test.ts');
-    this.copy('webapp/app/components/account/specs/change-password.component.test.ts', 'src/main/webapp/app/components/account/specs/change-password.component.test.ts');
+    this.template('webapp/app/components/admin/user-management/UserManagement.vue.ejs', 'src/main/webapp/app/components/admin/user-management/UserManagement.vue');
+    this.template('webapp/app/components/admin/user-management/UserManagement.component.ts.ejs', 'src/main/webapp/app/components/admin/user-management/UserManagement.component.ts');
+    this.template('webapp/app/components/admin/user-management/UserManagementView.vue.ejs', 'src/main/webapp/app/components/admin/user-management/UserManagementView.vue');
+    this.template('webapp/app/components/admin/user-management/UserManagementView.component.ts.ejs', 'src/main/webapp/app/components/admin/user-management/UserManagementView.component.ts');
+    this.template('webapp/app/components/admin/user-management/UserManagementEdit.vue.ejs', 'src/main/webapp/app/components/admin/user-management/UserManagementEdit.vue');
+    this.template('webapp/app/components/admin/user-management/UserManagementEdit.component.ts.ejs', 'src/main/webapp/app/components/admin/user-management/UserManagementEdit.component.ts');
+    this.template('webapp/app/components/admin/user-management/UserManagementService.vue.ejs', 'src/main/webapp/app/components/admin/user-management/UserManagementService.vue');
+    this.template('webapp/app/components/admin/user-management/user-management.component.test.ts', 'src/main/webapp/app/components/admin/user-management/user-management.component.test.ts');
+    this.template('webapp/app/components/admin/user-management/user-management-view.component.test.ts', 'src/main/webapp/app/components/admin/user-management/user-management-view.component.test.ts');
+    this.template('webapp/app/components/admin/user-management/user-management-edit.component.test.ts.ejs', 'src/main/webapp/app/components/admin/user-management/user-management-edit.component.test.ts');
+    this.template('webapp/app/components/admin/configuration/Configuration.vue.ejs', 'src/main/webapp/app/components/admin/configuration/Configuration.vue');
+    this.template('webapp/app/components/admin/configuration/Configuration.component.ts.ejs', 'src/main/webapp/app/components/admin/configuration/Configuration.component.ts');
+    this.template('webapp/app/components/admin/configuration/ConfigurationService.vue.ejs', 'src/main/webapp/app/components/admin/configuration/ConfigurationService.vue');
+    this.template('webapp/app/components/admin/configuration/configuration.component.test.ts', 'src/main/webapp/app/components/admin/configuration/configuration.component.test.ts');
+    this.template('webapp/app/components/admin/docs/Docs.vue.ejs', 'src/main/webapp/app/components/admin/docs/Docs.vue');
+    this.template('webapp/app/components/admin/docs/Docs.component.ts.ejs', 'src/main/webapp/app/components/admin/docs/Docs.component.ts');
+    this.template('webapp/app/components/admin/health/Health.vue.ejs', 'src/main/webapp/app/components/admin/health/Health.vue');
+    this.template('webapp/app/components/admin/health/Health.component.ts.ejs', 'src/main/webapp/app/components/admin/health/Health.component.ts');
+    this.template('webapp/app/components/admin/health/HealthModal.vue.ejs', 'src/main/webapp/app/components/admin/health/HealthModal.vue');
+    this.template('webapp/app/components/admin/health/HealthService.vue.ejs', 'src/main/webapp/app/components/admin/health/HealthService.vue');
+    this.template('webapp/app/components/admin/health/health.component.test.ts', 'src/main/webapp/app/components/admin/health/health.component.test.ts');
+    this.template('webapp/app/components/admin/logs/Logs.vue.ejs', 'src/main/webapp/app/components/admin/logs/Logs.vue');
+    this.template('webapp/app/components/admin/logs/Logs.component.ts.ejs', 'src/main/webapp/app/components/admin/logs/Logs.component.ts');
+    this.template('webapp/app/components/admin/logs/LogsService.vue.ejs', 'src/main/webapp/app/components/admin/logs/LogsService.vue');
+    this.template('webapp/app/components/admin/logs/logs.component.test.ts', 'src/main/webapp/app/components/admin/logs/logs.component.test.ts');
+    this.template('webapp/app/components/admin/audits/Audits.vue.ejs', 'src/main/webapp/app/components/admin/audits/Audits.vue');
+    this.template('webapp/app/components/admin/audits/Audits.component.ts.ejs', 'src/main/webapp/app/components/admin/audits/Audits.component.ts');
+    this.template('webapp/app/components/admin/audits/AuditsService.vue.ejs', 'src/main/webapp/app/components/admin/audits/AuditsService.vue');
+    this.template('webapp/app/components/admin/audits/audits.component.test.ts', 'src/main/webapp/app/components/admin/audits/audits.component.test.ts');
+    this.template('webapp/app/components/admin/metrics/Metrics.vue.ejs', 'src/main/webapp/app/components/admin/metrics/Metrics.vue');
+    this.template('webapp/app/components/admin/metrics/Metrics.component.ts.ejs', 'src/main/webapp/app/components/admin/metrics/Metrics.component.ts');
+    this.template('webapp/app/components/admin/metrics/MetricsService.vue.ejs', 'src/main/webapp/app/components/admin/metrics/MetricsService.vue');
+    this.template('webapp/app/components/admin/metrics/metrics.component.test.ts', 'src/main/webapp/app/components/admin/metrics/metrics.component.test.ts');
+    this.template('webapp/app/components/admin/metrics/MetricsModal.vue.ejs', 'src/main/webapp/app/components/admin/metrics/MetricsModal.vue');
+    this.template('webapp/app/components/admin/metrics/Metrics.modal.component.ts.ejs', 'src/main/webapp/app/components/admin/metrics/Metrics.modal.component.ts');
+    this.template('webapp/app/components/admin/metrics/metrics.modal.component.test.ts', 'src/main/webapp/app/components/admin/metrics/metrics.modal.component.test.ts');
+    if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
+        this.template('webapp/app/components/admin/gateway/Gateway.vue.ejs', 'src/main/webapp/app/components/admin/gateway/Gateway.vue');
+        this.template('webapp/app/components/admin/gateway/Gateway.component.ts.ejs', 'src/main/webapp/app/components/admin/gateway/Gateway.component.ts');
+        this.template('webapp/app/components/admin/gateway/GatewayService.vue.ejs', 'src/main/webapp/app/components/admin/gateway/GatewayService.vue');
+        this.template('webapp/app/components/admin/gateway/gateway.component.test.ts', 'src/main/webapp/app/components/admin/gateway/gateway.component.test.ts');
+    }
+    if (this.websocket === 'spring-websocket') {
+        this.template('webapp/app/components/admin/tracker/Tracker.vue.ejs', 'src/main/webapp/app/components/admin/tracker/Tracker.vue');
+        this.template('webapp/app/components/admin/tracker/Tracker.component.ts.ejs', 'src/main/webapp/app/components/admin/tracker/Tracker.component.ts');
+        this.template('webapp/app/components/admin/tracker/TrackerService.vue.ejs', 'src/main/webapp/app/components/admin/tracker/TrackerService.vue');
+    }
+    this.template('webapp/app/shared/ItemCount.vue.ejs', 'src/main/webapp/app/shared/ItemCount.vue');
 
     utils.addLanguagesToApplication(this);
     utils.addLanguagesToWebPackConfiguration(this);
@@ -109,6 +155,21 @@ function writeFiles() {
             'app/components/account/reset-password/ResetPassword.vue',
             'app/components/account/sessions/Sessions.vue',
             'app/components/account/settings/Settings.vue',
+            'app/components/admin/user-management/UserManagement.vue',
+            'app/components/admin/user-management/UserManagementView.vue',
+            'app/components/admin/user-management/UserManagementEdit.vue',
+            'app/components/admin/configuration/Configuration.vue',
+            'app/components/admin/health/Health.vue',
+            'app/components/admin/logs/Logs.vue',
+            'app/components/admin/metrics/Metrics.vue',
+            'app/components/admin/metrics/MetricsModal.vue',
+            'app/components/admin/audits/Audits.vue'
         ]);
+        if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
+            utils.replaceTranslation(this, ['app/components/admin/gateway/Gateway.vue']);
+        }
+        if (this.websocket === 'spring-websocket') {
+            utils.replaceTranslation(this, ['app/components/admin/tracker/Tracker.vue']);
+        }
     }
 }

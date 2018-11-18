@@ -1,10 +1,11 @@
 <script>
     import axios from 'axios'
     import TranslationService from '../../locale/TranslationService';
+    <%_ if (websocket === 'spring-websocket') { _%>import TrackerService from '../admin/tracker/TrackerService.vue';<%_ } _%>
 
     export default {
         name: 'Principal',
-        mixins: [TranslationService],
+        mixins: [TranslationService<%_ if (websocket === 'spring-websocket') { _%>, TrackerService<%_ } _%>],
         created: function() {
             const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken'); <%_ } else { _%> this.$cookie.get('JSESSIONID') || this.$cookie.get('XSRF-TOKEN'); <%_ } _%>
             if (!this.$store.getters.account && !this.$store.getters.logon && token) {
@@ -23,6 +24,9 @@
                             vm.currentLanguage = account.langKey;
                         }
                         vm.$router.push('/');
+                        <%_ if (websocket === 'spring-websocket') { _%>
+                        vm.connect();
+                        <%_ } _%>
                     } else {
                         vm.$store.commit('logout');
                         vm.$router.push('/');
@@ -53,9 +57,9 @@
             userAuthorities(){
                 return this.$store.getters.account.authorities;
             },
-             username() {
-                  return this.$store.getters.account ? this.$store.getters.account.login : ''
-             }
+            username() {
+                return this.$store.getters.account ? this.$store.getters.account.login : ''
+            }
         }
     }
 </script>

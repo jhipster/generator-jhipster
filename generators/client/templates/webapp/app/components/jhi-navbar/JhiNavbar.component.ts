@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {VERSION} from "../../constants";
 import TranslationService from '../../locale/TranslationService.vue';
 import LoginModalService from '../account/LoginModalService.vue';
@@ -12,8 +13,19 @@ const JhiNavbar = {
             version : VERSION ? 'v' + VERSION : '',
             swaggerEnabled: false,
             inProduction: false,
-            isNavbarCollapsed: true,
+            isNavbarCollapsed: true
         }
+    },
+    created: function() {
+        let vm = this;
+        axios.get('management/info').then(function (res) {
+            if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf('swagger') > -1) {
+                vm.swaggerEnabled = true;
+            }
+            if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf('prod') > -1) {
+                vm.inProduction = true;
+            }
+        });
     },
     methods: {
         getImageUrl: function() {

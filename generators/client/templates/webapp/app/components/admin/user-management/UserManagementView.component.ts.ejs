@@ -1,0 +1,28 @@
+import UserManagementService from './UserManagementService.vue';
+
+const <%=jhiPrefixCapitalized%>UserManagementViewComponent = {
+    name: '<%=jhiPrefixCapitalized%>UserManagementViewComponent',
+    mixins: [UserManagementService],
+    beforeRouteEnter (to, from, next) {
+        next(vm => {
+            if (to.params.userId) {
+                vm.init(to.params.userId);
+            }
+        })
+    },
+    data() {
+        return {
+            user: null
+        };
+    },
+    methods: {
+        init: function(userId) {
+            let vm = this;
+            this.get(userId).then(function(res) {
+                vm.user = res.data;
+            });
+        }
+    }
+};
+
+export default <%=jhiPrefixCapitalized%>UserManagementViewComponent;

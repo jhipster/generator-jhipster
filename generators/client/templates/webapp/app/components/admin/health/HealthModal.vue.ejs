@@ -1,0 +1,68 @@
+<template>
+    <div class="modal-body pad">
+        <div v-if="currentHealth && currentHealth.details">
+            <h5 v-text="$t('health.details.properties')">Properties</h5>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th class="text-left" v-text="$t('health.details.name')">Name</th>
+                        <th class="text-left" v-text="$t('health.details.value')">Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(item, index) in currentHealth.details.details">
+                        <td class="text-left">{{index}}</td>
+                        <td class="text-left">{{readableValue(item)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div v-if="currentHealth && currentHealth.error">
+            <h4 v-text="$t('health.details.error')">Error</h4>
+            <pre>{{currentHealth.error}}</pre>
+        </div>
+    </div>
+</template>
+
+<script>
+    import HealthService from './HealthService.vue';
+
+    const <%=jhiPrefixCapitalized%>HealthModal = {
+        name: '<%=jhiPrefixCapitalized%>HealthModal',
+        mixins: [HealthService],
+        props: ['currentHealth'],
+        methods: {
+            baseName(name) {
+                return this.getBaseName(name);
+            },
+            subSystemName(name) {
+                return this.getSubSystemName(name);
+            },
+            readableValue(value) {
+                if (this.currentHealth.name === 'diskSpace') {
+                    // Should display storage space in an human readable unit
+                    const val = value / 1073741824;
+                    if (val > 1) { // Value
+                        return val.toFixed(2) + ' GB';
+                    } else {
+                        return (value / 1048576).toFixed(2) + ' MB';
+                    }
+                }
+
+                if (typeof value === 'object') {
+                    return JSON.stringify(value);
+                } else {
+                    return value.toString();
+                }
+            }
+        }
+    };
+
+    export default <%=jhiPrefixCapitalized%>HealthModal;
+</script>
+
+<style scoped>
+
+</style>

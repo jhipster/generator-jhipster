@@ -1,0 +1,39 @@
+import LogsService from './LogsService.vue';
+
+const <%=jhiPrefixCapitalized%>LogsComponent = {
+    name: '<%=jhiPrefixCapitalized%>LogsComponent',
+    mixins: [LogsService],
+    beforeRouteEnter (to, from, next) {
+        next(vm => {
+            vm.init();
+        })
+    },
+    data() {
+        return {
+            loggers: null,
+            filtered: '',
+            orderProp: 'name',
+            reverse: false
+        };
+    },
+    methods: {
+        init() {
+            let vm = this;
+            this.findAll().then(function(response) {
+                vm.loggers = response.data;
+            });
+        },
+        updateLevel(name, level) {
+            let vm = this;
+            this.changeLevel({name: name, level: level}).then(function() {
+                vm.init();
+            });
+        },
+        changeOrder(orderProp) {
+            this.orderProp = orderProp;
+            this.reverse = !this.reverse;
+        }
+    }
+};
+
+export default <%=jhiPrefixCapitalized%>LogsComponent;

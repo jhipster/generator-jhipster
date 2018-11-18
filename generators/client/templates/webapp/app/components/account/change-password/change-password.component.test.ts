@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 
 import * as config from '../../../shared/config';
-import ChangePassword from '../change-password/ChangePassword.vue';
+import ChangePassword from './ChangePassword.vue';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;

@@ -1,0 +1,57 @@
+<template>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <div v-if="user">
+                <h2>
+                    <span v-text="$t('userManagement.detail.title')">User</span> [<b>{{user.login}}</b>]
+                </h2>
+                <dl class="row-md jh-entity-details">
+                    <dt><span v-text="$t('userManagement.login')">Login</span></dt>
+                    <dd>
+                        <span>{{user.login}}</span>
+                        <span class="badge badge-success" v-if="user.activated" v-text="$t('userManagement.activated')">Activated</span>
+                        <span class="badge badge-danger" v-if="!user.activated" v-text="$t('userManagement.deactivated')">Deactivated</span>
+                    </dd>
+                    <dt><span v-text="$t('userManagement.firstName')">First Name</span></dt>
+                    <dd>{{user.firstName}}</dd>
+                    <dt><span v-text="$t('userManagement.lastName')">Last Name</span></dt>
+                    <dd>{{user.lastName}}</dd>
+                    <dt><span v-text="$t('userManagement.email')">Email</span></dt>
+                    <dd>{{user.email}}</dd>
+                    <%_ if (enableTranslation) { _%>
+                    <dt><span v-text="$t('userManagement.langKey')">Lang Key</span></dt>
+                    <dd>{{user.langKey}}</dd>
+                    <%_ } _%>
+                    <dt><span v-text="$t('userManagement.createdBy')">Created By</span></dt>
+                    <dd>{{user.createdBy}}</dd>
+                    <dt><span v-text="$t('userManagement.createdDate')">Created Date</span></dt>
+                    <dd>{{user.createdDate | formatDate }}</dd>
+                    <dt><span v-text="$t('userManagement.lastModifiedBy')">Last Modified By</span></dt>
+                    <dd>{{user.lastModifiedBy}}</dd>
+                    <dt><span v-text="$t('userManagement.lastModifiedDate')">Last Modified Date</span></dt>
+                    <dd>{{user.lastModifiedDate | formatDate}}</dd>
+                    <dt><span v-text="$t('userManagement.profiles')">Profiles</span></dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            <li v-for="authority of user.authorities">
+                                <span class="badge badge-info">{{authority}}</span>
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+                <router-link tag="button" type="submit"
+                        :to="{name: '<%= jhiPrefixCapitalized %>User'}"
+                        class="btn btn-info">
+                    <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
+                </router-link>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script lang="ts" src="./UserManagementView.component.ts">
+</script>
+
+<style scoped>
+
+</style>

@@ -1,0 +1,59 @@
+<script>
+    import axios from 'axios'
+
+    export default {
+        name: 'ConfigurationService',
+        methods: {
+            loadConfiguration: async function () {
+                let vm = this;
+                return axios.get('management/configprops').then(function (res) {
+                    const properties = [];
+                    const propertiesObject = vm.getConfigPropertiesObjects(res.data);
+                    for (const key in propertiesObject) {
+                        if (propertiesObject.hasOwnProperty(key)) {
+                            properties.push(propertiesObject[key]);
+                        }
+                    }
+
+                    return properties.sort((propertyA, propertyB) => {
+                        return (propertyA.prefix === propertyB.prefix) ? 0 : propertyA.prefix < propertyB.prefix ? -1 : 1;
+                    });
+                });
+            },
+            loadEnvConfiguration: async function () {
+                return axios.get('management/env').then(function (res) {
+                    const properties = {};
+                    const propertySources = res.data['propertySources'];
+
+                    for (const propertyObject of propertySources) {
+                        const name = propertyObject['name'];
+                        const detailProperties = propertyObject['properties'];
+                        const vals = [];
+                        for (const keyDetail in detailProperties) {
+                            if (detailProperties.hasOwnProperty(keyDetail)) {
+                                vals.push({key: keyDetail, val: detailProperties[keyDetail]['value']});
+                            }
+                        }
+                        properties[name] = vals;
+                    }
+                    return properties;
+                });
+            },
+            getConfigPropertiesObjects(res) {
+                // This code is for Spring Boot 2
+                if (res['contexts'] !== undefined) {
+                    for (const key in res['contexts']) {
+                        // If the key is not bootstrap, it will be the ApplicationContext Id
+                        // For default app, it is baseName
+                        // For microservice, it is baseName-1
+                        if (!key.startsWith('bootstrap')) {
+                            return res['contexts'][key]['beans'];
+                        }
+                    }
+                }
+                // by default, use the default ApplicationContext Id
+                return res['contexts']['<%= baseName %>']['beans'];
+            }
+        }
+    }
+</script>

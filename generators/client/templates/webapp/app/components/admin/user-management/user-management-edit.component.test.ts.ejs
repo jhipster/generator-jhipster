@@ -1,0 +1,84 @@
+import { shallowMount, createLocalVue } from '@vue/test-utils';
+import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+import * as config from '../../../shared/config';
+import UserManagementEditComponent from '@/components/admin/user-management/UserManagementEdit.vue';
+import UserManagementService from '@/components/admin/user-management/UserManagementService.vue';
+
+const localVue = createLocalVue();
+const mockedAxios: any = axios;
+
+config.initVueApp(localVue);
+const i18n = config.initI18N(localVue);
+const store = config.initVueXStore(localVue);
+localVue.mixin(UserManagementService);
+localVue.component('font-awesome-icon', FontAwesomeIcon);
+
+jest.mock('axios', () => ({
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn()
+}));
+jest.mock('@/constants.ts', () =>({
+    SERVER_API_URL: ''
+}));
+
+describe('UserManagementEdit Component', () => {
+    let wrapper;
+    let comp;
+
+    beforeEach(() => {
+        wrapper = shallowMount(UserManagementEditComponent, { store, i18n, localVue });
+        comp = wrapper.vm;
+    });
+
+    it('should be a Vue instance', () => {
+        expect(wrapper.isVueInstance()).toBeTruthy();
+    });
+
+    describe('OnInit', () => {
+        it('Should load authorities and language on init', async () => {
+            // GIVEN
+            mockedAxios.get.mockReturnValue(Promise.resolve({}));
+
+            // WHEN
+            comp.init(1);
+            await comp.$nextTick();
+
+            // THEN
+            expect(mockedAxios.get).toHaveBeenCalledWith(`api/users/1`);
+            expect(mockedAxios.get).toHaveBeenCalledWith(`api/users/authorities`);
+        });
+    });
+
+    describe('save', () => {
+        it('Should call update service on save for existing user', async () => {
+            // GIVEN
+            mockedAxios.put.mockReturnValue(Promise.resolve({}));
+            comp.userAccount = {id: 1};
+
+            // WHEN
+            comp.save();
+            await comp.$nextTick();
+
+            // THEN
+            expect(mockedAxios.put).toHaveBeenCalledWith(`api/users`, {id: 1});
+            expect(comp.isSaving).toEqual(false);
+        });
+
+        it('Should call create service on save for new user',async () => {
+            // GIVEN
+            mockedAxios.post.mockReturnValue(Promise.resolve({}));
+            comp.userAccount = {};
+
+            // WHEN
+            comp.save();
+            await comp.$nextTick();
+
+            // THEN
+            expect(mockedAxios.post).toHaveBeenCalledWith(`api/users`, {<% if (!enableTranslation) { %>langKey: 'en'<% } %>});
+            expect(comp.isSaving).toEqual(false);
+        });
+    });
+});

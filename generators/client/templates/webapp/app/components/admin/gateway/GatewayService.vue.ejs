@@ -1,0 +1,12 @@
+<script>
+    import axios from 'axios';
+
+    export default {
+        name: 'GatewayService',
+        methods: {
+            findAll: function() {
+                return axios.get('api/gateway/routes/');
+            }
+        }
+    }
+</script>

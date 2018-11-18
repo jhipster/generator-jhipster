@@ -1,0 +1,93 @@
+import {email, maxLength, minLength, required} from 'vuelidate/lib/validators';
+import LanguageService from '../../../locale/LanguageService.vue';
+
+import UserManagementService from './UserManagementService.vue';
+
+function loginValidator(value) {
+    if (typeof value === 'undefined' || value === null || value === '') {
+        return true;
+    }
+    return /^[_.@A-Za-z0-9-]*$/.test(value);
+}
+
+const <%=jhiPrefixCapitalized%>UserManagementEditComponent = {
+    name: '<%=jhiPrefixCapitalized%>UserManagementEditComponent',
+    mixins: [UserManagementService, LanguageService],
+    beforeRouteEnter (to, from, next) {
+        next(vm => {
+            if (to.params.userId) {
+                vm.init(to.params.userId);
+            }
+        })
+    },
+    data() {
+        return {
+            userAccount: {
+                id: null,
+                login: null,
+                firstName: null,
+                lastName: null,
+                email: null,
+                authorities: [],
+                langKey: null
+            },
+            isSaving: false,
+            authorities: []
+        }
+    },
+    validations: {
+        userAccount: {
+            login: {
+                required,
+                minLength: minLength(1),
+                maxLength: maxLength(254),
+                loginValidator
+            },
+            firstName: {
+                maxLength: maxLength(50)
+            },
+            lastName: {
+                maxLength: maxLength(50)
+            },
+            email: {
+                required,
+                email,
+                minLength: minLength(5),
+                maxLength: maxLength(254)
+            }
+        }
+    },
+    methods: {
+        init: function(userId) {
+            let vm = this;
+            this.get(userId).then(function(res) {
+                vm.userAccount = res.data;
+                vm.retrieveAuthorities().then(function(res) {
+                    vm.authorities = res.data;
+                });
+            });
+        },
+        previousState: function() {
+            this.$router.go(-1);
+        },
+        save: function() {
+            let vm = this;
+            this.isSaving = true;
+            if (this.userAccount.id) {
+                this.update(this.userAccount).then(function() {
+                    vm.isSaving = false;
+                    vm.$router.go(-1);
+                });
+            } else {
+                <% if (!enableTranslation) { %>
+                this.userAccount.langKey = 'en';<% } %>
+                this.create(this.userAccount).then(function() {
+                    vm.isSaving = false;
+                    vm.$router.go(-1);
+                });
+            }
+        }
+    }
+};
+
+export default <%=jhiPrefixCapitalized%>UserManagementEditComponent;

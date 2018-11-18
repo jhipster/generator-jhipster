@@ -1,0 +1,268 @@
+<template>
+    <div>
+        <h2>
+            <span id="metrics-page-heading" v-text="$t('metrics.title')">Application Metrics</span>
+            <button class="btn btn-primary float-right" v-on:click="refresh()">
+                <font-awesome-icon icon="sync"></font-awesome-icon> <span v-text="$t('metrics[\'refresh.button\']')">Refresh</span>
+            </button>
+        </h2>
+
+        <h3 v-text="$t('metrics.jvm.title')">JVM Metrics</h3>
+        <div class="row" v-if="!updatingMetrics && metrics && metrics.gauges['jvm.memory.total.used']">
+            <div class="col-md-4">
+                <b v-text="$t('metrics.jvm.memory.title')">Memory</b>
+                <p><span v-text="$t('metrics.jvm.memory.total')">Total Memory</span> ({{formatNumber1(metrics.gauges['jvm.memory.total.used'].value / 1048576)}}M / {{formatNumber1(metrics.gauges['jvm.memory.total.max'].value / 1048576)}}M)</p>
+                <b-progress variant="success" animated :max="metrics.gauges['jvm.memory.total.max'].value" striped >
+                    <b-progress-bar :value="metrics.gauges['jvm.memory.total.used'].value" :label="formatNumber1(metrics.gauges['jvm.memory.total.used'].value * 100 / metrics.gauges['jvm.memory.total.max'].value) + '%'"></b-progress-bar>
+                </b-progress>
+                <p><span v-text="$t('metrics.jvm.memory.heap')">Heap Memory</span> ({{formatNumber1(metrics.gauges['jvm.memory.heap.used'].value / 1048576)}}M / {{formatNumber1(metrics.gauges['jvm.memory.heap.max'].value / 1048576)}}M)</p>
+                <b-progress variant="success" animated :max="metrics.gauges['jvm.memory.heap.max'].value" striped >
+                    <b-progress-bar :value="metrics.gauges['jvm.memory.heap.used'].value" :label="formatNumber1(metrics.gauges['jvm.memory.heap.used'].value * 100 / metrics.gauges['jvm.memory.heap.max'].value) + '%'"></b-progress-bar>
+                </b-progress>
+                <p><span v-text="$t('metrics.jvm.memory.nonheap')">Non-Heap Memory</span> ({{formatNumber1(metrics.gauges['jvm.memory.non-heap.used'].value / 1048576)}}M / {{formatNumber1(metrics.gauges['jvm.memory.non-heap.committed'].value / 1048576)}}M)</p>
+                <b-progress variant="success" animated :max="metrics.gauges['jvm.memory.non-heap.committed'].value" striped >
+                    <b-progress-bar :value="metrics.gauges['jvm.memory.non-heap.used'].value" :label="formatNumber1(metrics.gauges['jvm.memory.non-heap.used'].value * 100 / metrics.gauges['jvm.memory.non-heap.committed'].value) + '%'"></b-progress-bar>
+                </b-progress>
+            </div>
+            <div class="col-md-4">
+                <b v-text="$t('metrics.jvm.threads.title')">Threads</b> (Total: {{metrics.gauges['jvm.threads.count'].value}}) <a class="hand" v-b-modal.metricsModal v-on:click="refreshThreadDumpData()" data-toggle="modal" data-target="#threadDump"><font-awesome-icon icon="eye"></font-awesome-icon></a>
+                <p><span v-text="$t('metrics.jvm.threads.runnable')">Runnable</span> {{metrics.gauges['jvm.threads.runnable.count'].value}}</p>
+                <b-progress variant="success" animated :max="metrics.gauges['jvm.threads.count'].value" striped >
+                    <b-progress-bar :value="metrics.gauges['jvm.threads.runnable.count'].value" :label="formatNumber1(metrics.gauges['jvm.threads.runnable.count'].value * 100 / metrics.gauges['jvm.threads.count'].value) + '%'"></b-progress-bar>
+                </b-progress>
+                <p><span v-text="$t('metrics.jvm.threads.timedwaiting')">Timed Waiting</span> ({{metrics.gauges['jvm.threads.timed_waiting.count'].value}})</p>
+                <b-progress variant="warning" animated :max="metrics.gauges['jvm.threads.count'].value" striped >
+                    <b-progress-bar :value="metrics.gauges['jvm.threads.timed_waiting.count'].value" :label="formatNumber1(metrics.gauges['jvm.threads.timed_waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value) + '%'"></b-progress-bar>
+                </b-progress>
+                <p><span v-text="$t('metrics.jvm.threads.waiting')">Waiting</span> ({{metrics.gauges['jvm.threads.waiting.count'].value}})</p>
+                <b-progress variant="warning" animated :max="metrics.gauges['jvm.threads.count'].value" striped >
+                    <b-progress-bar :value="metrics.gauges['jvm.threads.waiting.count'].value" :label="formatNumber1(metrics.gauges['jvm.threads.waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value) + '%'"></b-progress-bar>
+                </b-progress>
+                <p><span v-text="$t('metrics.jvm.threads.blocked')">Blocked</span> ({{metrics.gauges['jvm.threads.blocked.count'].value}})</p>
+                <b-progress variant="warning" animated :max="metrics.gauges['jvm.threads.count'].value" striped >
+                    <b-progress-bar :value="metrics.gauges['jvm.threads.blocked.count'].value" :label="formatNumber1(metrics.gauges['jvm.threads.blocked.count'].value * 100 / metrics.gauges['jvm.threads.count'].value) + '%'"></b-progress-bar>
+                </b-progress>
+            </div>
+            <div class="col-md-4">
+                <b v-text="$t('metrics.jvm.gc.title')">Garbage collections</b>
+                <div class="row" v-if="metrics.gauges['jvm.garbage.PS-MarkSweep.count']">
+                    <div class="col-md-9" v-text="$t('metrics.jvm.gc.marksweepcount')">Mark Sweep count</div>
+                    <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
+                </div>
+                <div class="row" v-if="metrics.gauges['jvm.garbage.PS-MarkSweep.time']">
+                    <div class="col-md-9" v-text="$t('metrics.jvm.gc.marksweeptime')">Mark Sweep time</div>
+                    <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
+                </div>
+                <div class="row" v-if="metrics.gauges['jvm.garbage.PS-Scavenge.count']">
+                    <div class="col-md-9" v-text="$t('metrics.jvm.gc.scavengecount')">Scavenge count</div>
+                    <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
+                </div>
+                <div class="row" v-if="metrics.gauges['jvm.garbage.PS-Scavenge.time']">
+                    <div class="col-md-9" v-text="$t('metrics.jvm.gc.scavengetime')">Scavenge time</div>
+                    <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}}ms</div>
+                </div>
+            </div>
+        </div>
+        <div class="well well-lg" v-if="updatingMetrics" v-text="$t('metrics.updating')">Updating...</div>
+
+        <h3 v-text="$t('metrics.jvm.http.title')">HTTP requests (events per second)</h3>
+        <p v-if="metrics.counters">
+            <span v-text="$t('metrics.jvm.http.active')">Active requests</span> <b>{{formatNumber1(metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].count)}}</b> - <span v-text="$t('metrics.jvm.http.total')">Total requests</span> <b>{{formatNumber1(metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count)}}</b>
+        </p>
+        <div class="table-responsive" v-if="!updatingMetrics && metrics.meters">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th v-text="$t('metrics.jvm.http.table.code')">Code</th>
+                    <th v-text="$t('metrics.jvm.http.table.count')">Count</th>
+                    <th class="text-right" v-text="$t('metrics.jvm.http.table.mean')">Mean</th>
+                    <th class="text-right"><span v-text="$t('metrics.jvm.http.table.average')">Average</span> (1 min)</th>
+                    <th class="text-right"><span v-text="$t('metrics.jvm.http.table.average')">Average</span> (5 min)</th>
+                    <th class="text-right"><span v-text="$t('metrics.jvm.http.table.average')">Average</span> (15 min)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td v-text="$t('metrics.jvm.http.code.ok')">OK</td>
+                    <td>
+                        <b-progress variant="success" animated :max="metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count" striped >
+                            <b-progress-bar :value="metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count" :label="formatNumber1(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count) + '%'"></b-progress-bar>
+                        </b-progress>
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].mean_rate))}}
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate))}}
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate))}}
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m15_rate))}}
+                    </td>
+                </tr>
+                <tr>
+                    <td v-text="$t('metrics.jvm.http.code.notfound')">Not Found</td>
+                    <td>
+                        <b-progress variant="success" animated :max="metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count" striped >
+                            <b-progress-bar :value="metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count" :label="formatNumber1(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count) + '%'"></b-progress-bar>
+                        </b-progress>
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].mean_rate))}}
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m1_rate))}}
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m5_rate))}}
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m15_rate))}}
+                    </td>
+                </tr>
+                <tr>
+                    <td v-text="$t('metrics.jvm.http.code.servererror')">Server error</td>
+                    <td>
+                        <b-progress variant="success" animated :max="metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count" striped >
+                            <b-progress-bar :value="metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count" :label="formatNumber1(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count) + '%'"></b-progress-bar>
+                        </b-progress>
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].mean_rate))}}
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m1_rate))}}
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m5_rate))}}
+                    </td>
+                    <td class="text-right">
+                        {{formatNumber2(filterNaN(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m15_rate))}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 v-text="$t('metrics.servicesstats.title')">Services statistics (time in millisecond)</h3>
+        <div class="table-responsive" v-if="!updatingMetrics">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th v-text="$t('metrics.servicesstats.table.name')">Service name</th>
+                    <th class="text-right" v-text="$t('metrics.servicesstats.table.count')">Count</th>
+                    <th class="text-right" v-text="$t('metrics.servicesstats.table.mean')">Mean</th>
+                    <th class="text-right" v-text="$t('metrics.servicesstats.table.min')">Min</th>
+                    <th class="text-right" v-text="$t('metrics.servicesstats.table.p50')">p50</th>
+                    <th class="text-right" v-text="$t('metrics.servicesstats.table.p75')">p75</th>
+                    <th class="text-right" v-text="$t('metrics.servicesstats.table.p95')">p95</th>
+                    <th class="text-right" v-text="$t('metrics.servicesstats.table.p99')">p99</th>
+                    <th class="text-right" v-text="$t('metrics.servicesstats.table.max')">Max</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(entry, key) of servicesStats">
+                    <td>{{key}}</td>
+                    <td class="text-right">{{formatNumber1(entry.count)}}</td>
+                    <td class="text-right">{{formatNumber1(entry.mean * 1024)}}</td>
+                    <td class="text-right">{{formatNumber1(entry.min * 1024)}}</td>
+                    <td class="text-right">{{formatNumber1(entry.p50 * 1024)}}</td>
+                    <td class="text-right">{{formatNumber1(entry.p75 * 1024)}}</td>
+                    <td class="text-right">{{formatNumber1(entry.p95 * 1024)}}</td>
+                    <td class="text-right">{{formatNumber1(entry.p99 * 1024)}}</td>
+                    <td class="text-right">{{formatNumber1(entry.max * 1024)}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <% if (['ehcache', 'infinispan'].includes(cacheProvider)) { %>
+        <h3 v-text="$t('metrics.cache.title')">Cache statistics</h3>
+        <div class="table-responsive" v-if="!updatingMetrics">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th v-text="$t('metrics.cache.cachename')">Cache name</th>
+                    <th class="text-right" data-translate="metrics.cache.hits">Cache Hits</th>
+                    <th class="text-right" data-translate="metrics.cache.misses">Cache Misses</th>
+                    <th class="text-right" data-translate="metrics.cache.gets">Cache Gets</th>
+                    <th class="text-right" data-translate="metrics.cache.puts">Cache Puts</th>
+                    <th class="text-right" data-translate="metrics.cache.removals">Cache Removals</th>
+                    <th class="text-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
+                    <th class="text-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
+                    <th class="text-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
+                    <th class="text-right" data-translate="metrics.cache.averageGetTime">Average get time (µs)</th>
+                    <th class="text-right" data-translate="metrics.cache.averagePutTime">Average put time (µs)</th>
+                    <th class="text-right" data-translate="metrics.cache.averageRemoveTime">Average remove time (µs)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(entry, key) of cachesStats">
+                    <td>{{key}}</td>
+                    <td class="text-right">{{metrics.gauges[key + '.cache-hits'].value}}</td>
+                    <td class="text-right">{{metrics.gauges[key + '.cache-misses'].value}}</td>
+                    <td class="text-right">{{metrics.gauges[key + '.cache-gets'].value}}</td>
+                    <td class="text-right">{{metrics.gauges[key + '.cache-puts'].value}}</td>
+                    <td class="text-right">{{metrics.gauges[key + '.cache-removals'].value}}</td>
+                    <td class="text-right">{{metrics.gauges[key + '.cache-evictions'].value}}</td>
+                    <td class="text-right">{{metrics.gauges[key + '.cache-hit-percentage'].value}}</td>
+                    <td class="text-right">{{metrics.gauges[key + '.cache-miss-percentage'].value }}</td>
+                    <td class="text-right">{{formatNumber2(filterNaN(metrics.gauges[key + '.average-get-time'].value) ) }}</td>
+                    <td class="text-right">{{formatNumber2(filterNaN(metrics.gauges[key + '.average-put-time'].value) )}}</td>
+                    <td class="text-right">{{formatNumber2(filterNaN(metrics.gauges[key + '.average-remove-time'].value)) }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <%_ } _%>
+        <h3 v-text="$t('metrics.datasource.title')" v-if="metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">DataSource statistics (time in millisecond)</h3>
+        <div class="table-responsive" v-if="!updatingMetrics && metrics.gauges && metrics.gauges['HikariPool-1.pool.TotalConnections'] && metrics.gauges['HikariPool-1.pool.TotalConnections'].value > 0">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><span v-text="$t('metrics.datasource.usage')">Usage</span> ({{metrics.gauges['HikariPool-1.pool.ActiveConnections'].value}} / {{metrics.gauges['HikariPool-1.pool.TotalConnections'].value}})</th>
+                    <th class="text-right" v-text="$t('metrics.datasource.count')">Count</th>
+                    <th class="text-right" v-text="$t('metrics.datasource.mean')">Mean</th>
+                    <th class="text-right" v-text="$t('metrics.datasource.min')">Min</th>
+                    <th class="text-right" v-text="$t('metrics.datasource.p50')">p50</th>
+                    <th class="text-right" v-text="$t('metrics.datasource.p75')">p75</th>
+                    <th class="text-right" v-text="$t('metrics.datasource.p95')">p95</th>
+                    <th class="text-right" v-text="$t('metrics.datasource.p99')">p99</th>
+                    <th class="text-right" v-text="$t('metrics.datasource.max')">Max</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <div class="progress progress-striped">
+                            <b-progress variant="success" animated :max="metrics.gauges['HikariPool-1.pool.TotalConnections'].value" striped >
+                                <b-progress-bar :value="metrics.gauges['HikariPool-1.pool.ActiveConnections'].value" :label="formatNumber1(metrics.gauges['HikariPool-1.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-1.pool.TotalConnections'].value) + '%'"></b-progress-bar>
+                            </b-progress>
+                        </div>
+                    </td>
+                    <td class="text-right">{{metrics.histograms['HikariPool-1.pool.Usage'].count}}</td>
+                    <td class="text-right">{{formatNumber2(filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].mean))}}</td>
+                    <td class="text-right">{{formatNumber2(filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].min))}}</td>
+                    <td class="text-right">{{formatNumber2(filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p50))}}</td>
+                    <td class="text-right">{{formatNumber2(filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p75))}}</td>
+                    <td class="text-right">{{formatNumber2(filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p95))}}</td>
+                    <td class="text-right">{{formatNumber2(filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].p99))}}</td>
+                    <td class="text-right">{{formatNumber2(filterNaN(metrics.histograms['HikariPool-1.pool.Usage'].max))}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <b-modal ref="metricsModal" size="lg">
+            <h4 slot="modal-title" class="modal-title" id="showMetricsLabel" v-text="$t('metrics.jvm.threads.dump.title')">Threads dump</h4>
+            <metrics-modal :thread-dump="threads"></metrics-modal>
+        </b-modal>
+    </div>
+</template>
+
+<script lang="ts" src="./Metrics.component.ts">
+</script>
+
+<style scoped>
+
+</style>

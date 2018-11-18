@@ -1,0 +1,88 @@
+import UserManagementService from './UserManagementService.vue';
+import Principal from '../../account/Principal.vue';
+
+const <%=jhiPrefixCapitalized%>UserManagementComponent = {
+    name: '<%=jhiPrefixCapitalized%>UserManagementComponent',
+    mixins: [UserManagementService, Principal],
+    beforeRouteEnter (to, from, next) {
+        next(vm => {
+            vm.loadAll();
+        })
+    },
+    data() {
+        return {
+            error: false,
+            success: false,
+            users: [],
+            itemsPerPage: 20,
+            queryCount: null,
+            page: 1,
+            previousPage: null,
+            propOrder: 'id',
+            reverse: false,
+            totalItems: 0,
+            removeId: null
+        };
+    },
+    methods: {
+        setActive(user, isActivated) {
+            user.activated = isActivated;
+            let vm = this;
+            this.update(user).then(function() {
+                vm.error = null;
+                vm.success = 'OK';
+                vm.loadAll();
+            }).catch(function() {
+                vm.success = null;
+                vm.error = 'ERROR';
+            });
+        },
+        loadAll() {
+            let vm = this;
+            this.query(<% if (databaseType !== 'cassandra') { %>{
+                page: this.page - 1,
+                size: this.itemsPerPage,
+                sort: this.sort()}<% } %>).then(function(res) {
+                    vm.users = res.data;
+                    <%_ if (databaseType !== 'cassandra') { _%>
+                    vm.queryCount = vm.totalItems;
+                    vm.totalItems = Number(res.headers['x-total-count']);
+                    <%_ } _%>
+                });
+        },
+        <%_ if (databaseType !== 'cassandra') { _%>
+        sort() {
+            const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
+            if (this.propOrder !== 'id') {
+                result.push('id');
+            }
+            return result;
+        },
+        loadPage(page: number) {
+            if (page !== this.previousPage) {
+                this.previousPage = page;
+                this.transition();
+            }
+        },
+        transition() {
+            this.loadAll();
+        },
+        changeOrder(propOrder) {
+            this.propOrder = propOrder;
+            this.reverse = !this.reverse;
+        },
+        <%_ } _%>
+        deleteUser() {
+            let vm = this;
+            this.remove(this.removeId).then(function() {
+                vm.removeId = null;
+                vm.loadAll();
+            });
+        },
+        prepareRemove(instance) {
+            this.removeId = instance.login;
+        }
+    }
+};
+
+export default <%=jhiPrefixCapitalized%>UserManagementComponent;

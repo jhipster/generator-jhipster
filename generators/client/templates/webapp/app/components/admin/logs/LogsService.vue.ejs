@@ -1,0 +1,15 @@
+<script>
+    import axios from 'axios';
+
+    export default {
+        name: 'LogsService',
+        methods: {
+            changeLevel: function(log) {
+                return axios.put('management/logs', log);
+            },
+            findAll: function() {
+                return axios.get('management/logs');
+            }
+        }
+    }
+</script>
