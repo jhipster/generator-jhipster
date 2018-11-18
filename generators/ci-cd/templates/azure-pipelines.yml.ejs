@@ -60,8 +60,12 @@ jobs:
       ./gradlew clean test
   <%_ } _%>
     displayName: 'TESTS: backend'
-<%_ if (applicationType !== 'microservice') { _%>
-  - script: <%= clientPackageManager %> test<%= frontTests %>
+<%_ if (!skipClient) { _%>
+  <%_ if (buildTool === 'maven') { _%>
+  - script: ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'
+  <%_ } else if (buildTool === 'gradle') { _%>
+  - script: ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
+  <%_ } _%>
     displayName: 'TESTS: frontend'
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>

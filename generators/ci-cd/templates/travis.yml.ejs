@@ -70,8 +70,12 @@ script:
   - chmod +x gradlew
   - ./gradlew clean test
 <%_ } _%>
-<%_ if (applicationType !== 'microservice') { _%>
-  - <%= clientPackageManager %> test<%= frontTests%>
+<%_ if (!skipClient) { _%>
+  <%_ if (buildTool === 'maven') { _%>
+  - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
+  <%_ } else if (buildTool === 'gradle') { _%>
+  - ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
+  <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
   <%_ if (cicdIntegrations.includes('sonar')) { _%>
