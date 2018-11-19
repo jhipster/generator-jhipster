@@ -8,9 +8,9 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "tsconfig.json" ]; then
-    if [ -f "angular.json" ]; then
-        npm test
-    else # for react
+    if [ -f "src/main/webapp/app/app.tsx" ]; then
         npm run test-ci
+    else
+        npm test
     fi
 fi
