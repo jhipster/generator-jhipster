@@ -122,7 +122,8 @@ management:
         mail:
             enabled: false # When using the MailService, configure an SMTP server and set this to true
     metrics:
-        enabled: false # http://micrometer.io/ is disabled by default, as we use http://metrics.dropwizard.io/ instead
+        enable:
+            all: false # http://micrometer.io/ is disabled by default, as we use http://metrics.dropwizard.io/ instead
 
 spring:
     <%_ if (searchEngine === 'elasticsearch') { _%>
