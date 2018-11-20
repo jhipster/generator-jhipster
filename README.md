@@ -1,16 +1,26 @@
 # JHipster-vuejs [WIP]
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
-> JHipster-vuejs, A vueJs blueprint for JHipster. It will use VueJS as the frontend library
+> ## ⚠️ Status: in development
+> JHipster-vuejs, a Vue.js blueprint for JHipster. It will use [Vue.js](https://vuejs.org/) as the frontend library
+
+<div align="center">
+  <a href="http://www.jhipster.tech/">
+    <img src="https://github.com/jhipster/jhipster-artwork/blob/master/logos/JHipster%20RVB-small100x25px.png?raw=true">
+  </a>
+  <a href="https://vuejs.org/">
+    <img width=100px src="https://avatars3.githubusercontent.com/u/6128107?s=200&v=4">
+  </a>
+</div>
 
 # Introduction
 
-This is a [JHipster](http://jhipster.github.io/) blueprint, that is meant to be used in a JHipster application.
+This is a [JHipster](http://www.jhipster.tech/) blueprint.
 
 # Prerequisites
 
-As this is a [JHipster](http://jhipster.github.io/) blueprint, we expect you have JHipster and its related tools already installed:
+As this is a [JHipster](http://www.jhipster.tech/) blueprint, we expect you have JHipster and its related tools already installed:
 
-- [Installing JHipster](https://jhipster.github.io/installation.html)
+- [Installing JHipster](https://www.jhipster.tech/installation/)
 
 # Installation (Only after stable release, for now use the development flow)
 
@@ -64,7 +74,7 @@ cd jhipster-vuejs
 npm link
 ```
 
-2. optional: Link a development version of JHipster to your blueprint (optional: required only if you want to use a non-released JHipster version, like the master branch or your own custom fork)
+2. Optional: Link a development version of JHipster to your blueprint (optional: required only if you want to use a non-released JHipster version, like the master branch or your own custom fork)
 
 ```bash
 cd generator-jhipster
