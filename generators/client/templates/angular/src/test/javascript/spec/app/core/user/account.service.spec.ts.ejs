@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { SERVER_API_URL } from 'app/app.constants';
-import { AccountService } from 'app/core';
+import { AccountService<% if (websocket === 'spring-websocket') { %>, JhiTrackerService <% } %> } from 'app/core';
 import { JhiDateUtils
 <%_ if (enableTranslation && authenticationType !== 'oauth2') { _%>
     ,JhiLanguageService
@@ -10,6 +10,9 @@ import { JhiDateUtils
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ if (enableTranslation && authenticationType !== 'oauth2') { _%>
 import { MockLanguageService } from '../../../helpers/mock-language.service';
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 <%_ } _%>
 
 describe('Service Tests', () => {
@@ -27,6 +30,12 @@ describe('Service Tests', () => {
                     {
                         provide: JhiLanguageService,
                         useClass: MockLanguageService
+                    },
+                    <%_ } _%>
+                    <%_ if (websocket === 'spring-websocket') { _%>
+                    {
+                        provide: JhiTrackerService,
+                        useClass: MockTrackerService
                     }
                     <%_ } _%>
                 ]
