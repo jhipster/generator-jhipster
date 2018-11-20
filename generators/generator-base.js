@@ -2649,7 +2649,7 @@ module.exports = class extends PrivateBase {
         }
         
         if (hash < 0) {
-            hash *= -1
+            hash *= -1;
         }
         
         switch (hash % 4) {
