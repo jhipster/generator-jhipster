@@ -170,6 +170,17 @@ spring:
     mvc:
         favicon:
             enabled: false
+    task:
+        execution:
+            thread-name-prefix: <%= dasherizedBaseName %>-task-
+            pool:
+                core-size: 2
+                max-size: 50
+                queue-capacity: 10000
+        scheduling:
+            thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
+            pool:
+                size: 2
     thymeleaf:
         mode: HTML
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -241,10 +252,6 @@ info:
 # ===================================================================
 
 jhipster:
-    async:
-        core-pool-size: 2
-        max-pool-size: 50
-        queue-capacity: 10000
     # By default CORS is disabled. Uncomment to enable.
     #cors:
         #allowed-origins: "*"
