@@ -30,32 +30,45 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 [![Backers][backers-image]][backers-url]
 
-## Travis Builds
+## Azure Builds
 
-Additional builds on [hipster-labs/jhipster-travis-build](https://github.com/hipster-labs/jhipster-travis-build)
+Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hipster-labs/jhipster-daily-builds)
 
-| Type          | Status                                             | Description                    |
-| :------------ | :------------------------------------------------- | :----------------------------- |
-| docker        | [![Build Status][image-docker]][travis-url]        | Build for testing Docker image |
-| ngx-maven     | [![Build Status][image-ngx-maven]][travis-url]     | Builds for ngx Maven           |
-| ngx-gradle    | [![Build Status][image-ngx-gradle]][travis-url]    | Builds for ngx Gradle          |
-| microservices | [![Build Status][image-microservices]][travis-url] | Builds for Microservices       |
-| ms-gradle     | [![Build Status][image-ms-gradle]][travis-url]     | Builds for MS+Gradle           |
-| react         | [![Build Status][image-react]][travis-url]         | Builds for React               |
-| node latest   | [![Build Status][image-node-latest]][travis-url]   | Builds for Node Latest         |
+| Type                 | Status                                                 |
+|:---------------------|:-------------------------------------------------------|
+| Docker               | [![Build Status][img-docker]][azure-url]               |
+| Angular.Maven        | [![Build Status][img-angular-maven]][azure-url]        |
+| Angular.Maven.NoSQL  | [![Build Status][img-angular-maven-nosql]][azure-url]  |
+| Angular.Gradle       | [![Build Status][img-angular-gradle]][azure-url]       |
+| Angular.Gradle.NoSQL | [![Build Status][img-angular-gradle-nosql]][azure-url] |
+| React.Maven          | [![Build Status][img-react-maven]][azure-url]          |
+| React.Maven.NoSQL    | [![Build Status][img-react-maven-nosql]][azure-url]    |
+| React.Gradle         | [![Build Status][img-react-gradle]][azure-url]         |
+| React.Gradle.NoSQL   | [![Build Status][img-react-gradle-nosql]][azure-url]   |
+| Elasticsearch        | [![Build Status][img-elasticsearch]][azure-url]        |
+| Microservices.JWT    | [![Build Status][img-ms-jwt]][azure-url]               |
+| Microservices.OAuth2 | [![Build Status][img-ms-oauth2]][azure-url]            |
+| Microservices.UAA    | [![Build Status][img-ms-uaa]][azure-url]               |
 
 ## Analysis of the sample JHipster project
 
 [![sonar-quality-gate][sonar-quality-gate]][sonar-url] [![sonar-coverage][sonar-coverage]][sonar-url] [![sonar-bugs][sonar-bugs]][sonar-url] [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
 
-[travis-url]: https://travis-ci.org/hipster-labs/jhipster-travis-build/branches
-[image-docker]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=docker
-[image-ngx-maven]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=ngx-maven
-[image-ngx-gradle]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=ngx-gradle
-[image-microservices]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=microservices
-[image-ms-gradle]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=microservices-gradle
-[image-react]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=react
-[image-node-latest]: https://travis-ci.org/hipster-labs/jhipster-travis-build.svg?branch=node-latest
+[azure-url]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_build
+[img-docker]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Docker.Image
+[img-angular-maven]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Maven
+[img-angular-maven-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Maven.NoSQL
+[img-angular-gradle]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Gradle
+[img-angular-gradle-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Gradle.NoSQL
+[img-react-maven]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/React.Maven
+[img-react-maven-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/React.Maven.NoSQL
+[img-react-gradle]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/React.Gradle
+[img-react-gradle-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/React.Gradle.NoSQL
+[img-elasticsearch]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Elasticsearch
+[img-ms-jwt]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.JWT
+[img-ms-oauth2]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.OAuth2
+[img-ms-uaa]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.UAA
+
 [sonar-url]: https://sonarcloud.io/dashboard?id=io.github.jhipster.sample%3Ajhipster-sample-application
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=alert_status
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=coverage
