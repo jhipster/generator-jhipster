@@ -18,13 +18,22 @@
 -%>
 import React from 'react';
 import { connect } from 'react-redux';
-import { Table, Progress, Col, Row, Button } from 'reactstrap';
-import { Translate, TextFormat } from 'react-jhipster';
+import { Button, Col, Progress, Row, Table } from 'reactstrap';
+import {
+  CacheMetrics,
+  DatasourceMetrics,
+  GarbageCollectorMetrics,
+  HttpRequestMetrics,
+  JvmMemory,
+  JvmThreads,
+  ServiceMetrics,
+  SystemMetrics,
+  Translate
+} from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_WHOLE_NUMBER_FORMAT, APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT } from 'app/config/constants';
 import { systemMetrics, systemThreadDump } from '../administration.reducer';
-import MetricsModal from './metrics-modal';
 import { IRootState } from 'app/shared/reducers';
 
 export interface IMetricsPageProps extends StateProps, DispatchProps {}
@@ -40,337 +49,87 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
 
   componentDidMount() {
     this.props.systemMetrics();
+    this.props.systemThreadDump();
   }
 
   getMetrics = () => {
     if (!this.props.isFetching) {
       this.props.systemMetrics();
+      this.props.systemThreadDump();
     }
   }
 
-  getThreadDump = () => {
-    this.props.systemThreadDump();
-    this.setState({
-      showModal: true
-    });
-  }
+  render() {
+    const {metrics, threadDump, isFetching} = this.props;
+    return (
+      <div>
+        <h2 id="metrics-page-heading">Application Metrics</h2>
+        <p>
+          <Button onClick={this.getMetrics} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'}
+                  disabled={isFetching}>
+            <FontAwesomeIcon icon="sync"/>
+            &nbsp;
+            <Translate component="span" contentKey="health.refresh.button">
+              Refresh
+            </Translate>
+          </Button>
+        </p>
+        <hr/>
 
-  handleClose = () => {
-    this.setState({
-        showModal: false
-    });
-  }
-
-  filterNaN = input => isNaN(input) ? 0 : input;
-
- renderModal = () => <MetricsModal handleClose={this.handleClose} showModal={this.state.showModal} threadDump={this.props.threadDump}/>;
-
-  renderGauges = metrics => (
-    <Row>
-      <Col sm="12">
-        <h3>JVM Metrics</h3>
         <Row>
-          <Col md="4">
-            <b>Memory</b>
-            {Object.keys(metrics.jvm).map((key, index) => (
-              <div>
-                <p>
-                  <span>{key}</span> (
-                  <TextFormat value={metrics.jvm[key].used / 1048576} type="number" format={APP_WHOLE_NUMBER_FORMAT} />M
-                  / <TextFormat value={metrics.jvm[key].max / 1048576} type="number" format={APP_WHOLE_NUMBER_FORMAT} />
-                  M)
-                </p>
-                <Progress
-                  animated
-                  value={metrics.jvm[key].used}
-                  min="0"
-                  max={metrics.jvm[key].max}
-                  color="success"
-                >
-                  <span>
-                    <TextFormat
-                      value={(metrics.jvm[key].used * 100) / metrics.jvm[key].max}
-                      type="number"
-                      format={APP_WHOLE_NUMBER_FORMAT}
-                    />
-                    %
-                  </span>
-                </Progress>
-              </div>
-            ))}
+          <Col sm="12">
+            <h3>JVM Metrics</h3>
+            <Row>
+              <Col md="4">
+                {metrics && metrics.jvm ?
+                  <JvmMemory jvmMetrics={metrics.jvm} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}/> : ''}
+              </Col>
+              <Col md="4">
+                {threadDump ?
+                  <JvmThreads jvmThreads={threadDump} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}/> : ''}
+              </Col>
+              <Col md="4">
+                {metrics && metrics.processMetrics ?
+                  <SystemMetrics systemMetrics={metrics.processMetrics} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}
+                                 timestampFormat={APP_TIMESTAMP_FORMAT}/> : ''}
+              </Col>
+            </Row>
           </Col>
         </Row>
-      </Col>
-    </Row>
-    )
 
-  render() {
-    const { metrics, isFetching } = this.props;
-    return (
-        <div>
-          <h2 id="metrics-page-heading">Application Metrics</h2>
-          <p>
-            <Button onClick={this.getMetrics} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
-              <FontAwesomeIcon icon="sync" />&nbsp;
-              <Translate component="span" contentKey="health.refresh.button">Refresh</Translate>
-            </Button>
-          </p>
-          <hr />
-          { metrics && metrics.jvm ? this.renderGauges(metrics) : ''}
+        {metrics && metrics.garbageCollector ?
+          <GarbageCollectorMetrics garbageCollectorMetrics={metrics.garbageCollector}
+                                   wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}/> : ''}
+        {metrics && metrics['http.server.requests'] ?
+          <HttpRequestMetrics requestMetrics={metrics['http.server.requests']}
+                              twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}
+                              wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}/> : ''}
+        {metrics && metrics.services ?
+          <ServiceMetrics servicesMetrics={metrics.services} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}/> : ''}
 
-          { metrics && metrics['http.server.requests'] ? (
-            <Row>
-              <Col sm="12">
-                <h3>HTTP requests (events per second)</h3>
-                {/* <p>
-                  <span>Active requests:</span> <b>
-                    <TextFormat
-                      value={metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].count}
-                      type="number"
-                      format={APP_WHOLE_NUMBER_FORMAT} />
-                  </b> - <span>Total requests:</span> <b>
-                    <TextFormat
-                      value={metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}
-                      type="number"
-                      format={APP_WHOLE_NUMBER_FORMAT} />
-                  </b>
-                </p> */}
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>Code</th>
-                      <th>Count</th>
-                      <th className="text-right">Mean</th>
-                      <th className="text-right">Max</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.keys(metrics['http.server.requests']).map((key, index) => (
-                      <tr key={index}>
-                        <td>{key}</td>
-                        <td>
-                          <Progress
-                            min="0"
-                            max={metrics['http.server.requests.all'].count}
-                            value={metrics['http.server.requests'][key].count}
-                            color="success"
-                            animated
-                            >
-                            <span>
-                              <TextFormat
-                                value={metrics['http.server.requests'][key].count}
-                                type="number"
-                                format={APP_WHOLE_NUMBER_FORMAT}
-                              />
-                            </span>
-                          </Progress>
-                        </td>
-                        <td className="text-right">
-                          <TextFormat
-                            value={this.filterNaN(metrics['http.server.requests'][key].mean)}
-                            type="number"
-                            format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}
-                          />
-                        </td>
-                        <td className="text-right">
-                          <TextFormat
-                            value={this.filterNaN(metrics['http.server.requests'][key].max)}
-                            type="number"
-                            format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>)
-          : ''}
-        { metrics && metrics.services ? (
+        {metrics.cache ? (
           <Row>
             <Col sm="12">
-              <h3>Services statistics (time in millisecond)</h3>
+              <CacheMetrics cacheMetrics={metrics.cache}
+                            twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}/>
             </Col>
-            <Table>
-              <thead>
-                <tr>
-                  <th>Service name</th>
-                  <th>Count</th>
-                  <th>Mean</th>
-                  <th>Min</th>
-                  <th>p50</th>
-                  <th>p75</th>
-                  <th>p95</th>
-                  <th>p99</th>
-                  <th>Max</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.keys(metrics.services).map((key, index) => (
-                  <tr key={key}>
-                    <td>{key}</td>
-                    <td>{metrics.services[key].count}</td>
-                    <td>
-                      <TextFormat
-                        value={metrics.services[key].mean}
-                        type="number"
-                        format={APP_WHOLE_NUMBER_FORMAT} />
-                    </td>
-                    <td>
-                      <TextFormat
-                        value={metrics.services[key]['0.0'] / 1000000}
-                        type="number"
-                        format={APP_WHOLE_NUMBER_FORMAT} />
-                    </td>
-                    <td>
-                      <TextFormat
-                        value={metrics.services[key]['0.5'] / 1000000}
-                        type="number"
-                        format={APP_WHOLE_NUMBER_FORMAT} />
-                    </td>
-                    <td>
-                      <TextFormat
-                        value={metrics.services[key]['0.75'] / 1000000}
-                        type="number"
-                        format={APP_WHOLE_NUMBER_FORMAT} />
-                    </td>
-                    <td>
-                      <TextFormat
-                        value={metrics.services[key]['0.95'] / 1000000}
-                        type="number"
-                        format={APP_WHOLE_NUMBER_FORMAT} />
-                    </td>
-                    <td>
-                      <TextFormat
-                        value={metrics.services[key]['0.99'] / 1000000}
-                        type="number"
-                        format={APP_WHOLE_NUMBER_FORMAT} />
-                    </td>
-                    <td>
-                      <TextFormat
-                        value={metrics.services[key].max}
-                        type="number"
-                        format={APP_WHOLE_NUMBER_FORMAT} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          </Row>)
-          : ''}
+          </Row>
+        ) : (
+          ''
+        )}
 
-          { metrics.cache ? (
-            <Row>
-              <Col sm="12">
-                <h3>Ehcache statistics</h3>
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>Cache Name</th>
-                      <th>Cache Hits</th>
-                      <th>Cache Misses</th>
-                      <th>Cache Gets</th>
-                      <th>Cache Puts</th>
-                      <th>Cache Removals</th>
-                      <th>Cache Evictions</th>
-                      <th>Cache Hit %</th>
-                      <th>Cache Miss %</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                      {Object.keys(metrics.cache).map((key, index) => (
-                        <tr key={key}>
-                          <td>{key}</td>
-                          <td>{metrics.cache[key]['cache.gets.hit']}</td>
-                          <td>{metrics.cache[key]['cache.gets.miss']}</td>
-                          <td>{metrics.cache[key]['cache.gets.miss'] + metrics.cache[key]['cache.gets.hit']}</td>
-                          <td>{metrics.cache[key]['cache.gets.puts']}</td>
-                          <td>{metrics.cache[key]['cache.gets.removals']}</td>
-                          <td>{metrics.cache[key]['cache.gets.evictions']}</td>
-                          <td>
-                            <TextFormat
-                              value={this.filterNaN(100 * metrics.cache[key]['cache.gets.hit'] / (metrics.cache[key]['cache.gets.hit'] + metrics.cache[key]['cache.gets.miss']))}
-                              type="number"
-                              format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}
-                            />
-                          </td>
-                          <td>
-                          <TextFormat
-                              value={this.filterNaN(100 * metrics.cache[key]['cache.gets.miss'] / (metrics.cache[key]['cache.gets.hit'] + metrics.cache[key]['cache.gets.miss']))}
-                              type="number"
-                              format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>)
-          : ''}
+        {metrics.databases ? (
+          <Row>
+            <Col sm="12">
+              <DatasourceMetrics datasourceMetrics={metrics.databases}
+                                 twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}/>
+            </Col>
+          </Row>
+        ) : (
+          ''
+        )}
 
-          { metrics.databases ? (
-            <Row>
-              <Col sm="12">
-                <h3>DataSource statistics (time in millisecond)</h3>
-                <Table>
-                  <thead>
-                    <tr>
-                      <th>
-                        <span>Usage</span>({metrics.databases.active.value} /{' '}
-                        {metrics.databases.max.value})
-                      </th>
-                      <th className="text-right">Count</th>
-                      <th className="text-right">Mean</th>
-                      <th className="text-right">Max</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr key="DB">
-                      <td>
-                        <Progress
-                          min="0"
-                          max={metrics.databases.max.value}
-                          value={metrics.databases.active.value}
-                        >
-                          <span>
-                            <TextFormat
-                              value={metrics.databases.active.value * 100 / metrics.databases.max.value}
-                              type="number"
-                              format={APP_WHOLE_NUMBER_FORMAT} />
-                            %
-                          </span>
-                        </Progress>
-                      </td>
-                      <td className="text-right">{metrics.databases.usage.count}</td>
-                      <td className="text-right">
-                        <TextFormat
-                          value={this.filterNaN(metrics.databases.usage.mean)}
-                          type="number"
-                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
-                      </td>
-                      <td className="text-right">
-                        <TextFormat
-                          value={this.filterNaN(metrics.databases.usage.min)}
-                          type="number"
-                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
-                      </td>
-                      <td className="text-right">
-                        <TextFormat
-                          value={this.filterNaN(metrics.databases.usage.max)}
-                          type="number"
-                          format={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>)
-          : '' }
-
-          {this.renderModal()}
-
-        </div>
+      </div>
     );
   }
 }
