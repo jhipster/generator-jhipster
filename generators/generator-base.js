@@ -2638,31 +2638,31 @@ module.exports = class extends PrivateBase {
      */
     getHipster(baseName = this.baseName) {
 
-        let hash = 0, i, chr;
+        let hash = 0;
+        let i;
+        let chr;
 
         for (i = 0; i < baseName.length; i++) {
             chr   = baseName.charCodeAt(i);
-            hash  = ((hash << 5) - hash) + chr;
-            hash |= 0;
+            hash  = ((hash << 5) - hash) + chr; // eslint-disable-line no-bitwise
+            hash |= 0; // eslint-disable-line no-bitwise
         }
         
         if (hash < 0) {
-            hash = hash * -1;
+            hash *= -1
         }
         
-        switch (hash % 5) {
+        switch (hash % 4) {
             case 0:
-                return 'hipster';
+                return 'jhipster_family_member_0';
             case 1:
-                return 'hipster-woman-1';
+                return 'jhipster_family_member_1';
             case 2: 
-                return 'hipster-man-1';
+                return 'jhipster_family_member_2';
             case 3:
-                return 'hipster-woman-2';
-            case 4:
-                return 'hipster-man-2';
+                return 'jhipster_family_member_3';
             default:
-                return 'hipster-man-1';
+                return 'jhipster_family_member_0';
 
         }
     }
