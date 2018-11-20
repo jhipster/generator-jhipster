@@ -1,31 +1,23 @@
 'use strict';
 const path = require('path');
-const utils = require('./vue.utils');
-const config = require('../config');
 const vueLoaderConfig = require('./loader.conf');
+const { VueLoaderPlugin } = require('vue-loader');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir);
 }
 
-
-
 module.exports = {
+    mode: 'development',
     context: path.resolve(__dirname, '../'),
     entry: {
         app: './src/main/webapp/app/main.ts'
     },
-    output: {
-        path: config.build.assetsRoot,
-        filename: '[name].js',
-        publicPath: process.env.NODE_ENV === 'production'
-            ? config.build.assetsPublicPath
-            : config.dev.assetsPublicPath
-    },
     resolve: {
         extensions: ['.ts', '.js', '.vue', '.json'],
         alias: {
-            'vue$': 'vue/dist/vue.esm.js',
+            vue$: 'vue/dist/vue.esm.js',
             '@': resolve('src/main/webapp/app')
         }
     },
@@ -39,7 +31,12 @@ module.exports = {
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client'), resolve("bootstrap-vue")]
+                include: [
+                    resolve('src'),
+                    resolve('test'),
+                    resolve('node_modules/webpack-dev-server/client'),
+                    resolve('bootstrap-vue')
+                ]
             },
             {
                 test: /\.ts$/,
@@ -50,9 +47,7 @@ module.exports = {
                     {
                         loader: 'ts-loader',
                         options: {
-                            appendTsSuffixTo: [
-                                '\\.vue$'
-                            ],
+                            appendTsSuffixTo: ['\\.vue$'],
                             happyPackMode: false
                         }
                     }
@@ -64,7 +59,7 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: utils.assetsPath('img/[name].[hash:7].[ext]')
+                    name: 'content/[hash].[ext]'
                 }
             },
             {
@@ -72,7 +67,7 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: utils.assetsPath('media/[name].[hash:7].[ext]')
+                    name: 'content/[hash].[ext]'
                 }
             },
             {
@@ -80,7 +75,7 @@ module.exports = {
                 loader: 'url-loader',
                 options: {
                     limit: 10000,
-                    name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+                    name: 'content/[hash].[ext]'
                 }
             }
         ]
@@ -96,5 +91,22 @@ module.exports = {
         net: 'empty',
         tls: 'empty',
         child_process: 'empty'
-    }
+    },
+    plugins: [
+        new VueLoaderPlugin(),
+        new CopyWebpackPlugin([
+            // { from: './node_modules/swagger-ui/dist/css', to: 'swagger-ui/dist/css' },
+            // { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
+            // { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
+            // { from: './src/main/webapp/swagger-ui/', to: 'swagger-ui' },
+            // { from: './src/main/webapp/content/', to: 'content' },
+            // { from: './src/main/webapp/favicon.ico', to: 'favicon.ico' },
+            // {
+            //     from: './src/main/webapp/manifest.webapp',
+            //     to: 'manifest.webapp'
+            // },
+            // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
+            // { from: './src/main/webapp/robots.txt', to: 'robots.txt' }
+        ])
+    ]
 };
