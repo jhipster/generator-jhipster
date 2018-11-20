@@ -8,7 +8,7 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 if [[ "$JHI_APP" == *"uaa"* ]]; then
     cd "$JHI_FOLDER_UAA"
-    ./mvnw verify -DskipTests -P"$JHI_PROFILE"
+    ./mvnw verify -DskipTests -Pdev
 fi
 
 #-------------------------------------------------------------------------------

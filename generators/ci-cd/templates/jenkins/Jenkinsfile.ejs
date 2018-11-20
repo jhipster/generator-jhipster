@@ -73,11 +73,7 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-        <%_ if (clientPackageManager === 'yarn') { _%>
-<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments='test<%= frontTests%>'"
-        <%_ } else if (clientPackageManager === 'npm') { _%>
-<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='test<%= frontTests%>'"
-        <%_ } _%>
+<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
@@ -120,9 +116,6 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-<%= indent %>            // You should use default run instead: <%= clientPackageManager %>_test 
-<%= indent %>            // See documentation at https://www.jhipster.tech/setting-up-ci/
-<%= indent %>            // sh "./gradlew <%= clientPackageManager %>_test -PnodeInstall --no-daemon"
 <%= indent %>            sh "./gradlew <%= clientPackageManager %>_run_test-ci -PnodeInstall --no-daemon"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err

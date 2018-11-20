@@ -27,7 +27,7 @@ import { Subscription } from 'rxjs';
 import { JhiEventManager, <% if (pagination !== 'no') { %>JhiParseLinks, <% } %>JhiAlertService<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { Principal } from 'app/core';
+import { AccountService } from 'app/core';
 <%_ if (pagination !== 'no') { %>
 import { ITEMS_PER_PAGE } from 'app/shared';
 <%_ } _%>
@@ -48,7 +48,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then((account) => {
+        this.accountService.identity().then((account) => {
             this.currentAccount = account;
         });
         this.registerChangeIn<%= entityClassPlural %>();

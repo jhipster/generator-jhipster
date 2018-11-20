@@ -33,7 +33,7 @@
         <%_ if (searchEngine === 'elasticsearch') { _%>
         protected activatedRoute: ActivatedRoute,
         <%_ } _%>
-        protected principal: Principal
+        protected accountService: AccountService
     ) {
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.params['search'] ?

@@ -17,16 +17,26 @@ JHI_REPO=$(init_var "$BUILD_REPOSITORY_URI" "$TRAVIS_REPO_SLUG")
 JHI_HOME=$(init_var "$BUILD_REPOSITORY_LOCALPATH" "$TRAVIS_BUILD_DIR")
 
 # folder for test-integration
-JHI_INTEG="$JHI_HOME"/test-integration
+if [[ "$JHI_INTEG" == "" ]]; then
+    JHI_INTEG="$JHI_HOME"/test-integration
+fi
 
 # folder for samples
-JHI_SAMPLES="$JHI_INTEG"/samples
+if [[ "$JHI_SAMPLES" == "" ]]; then
+    JHI_SAMPLES="$JHI_INTEG"/samples
+fi
 
 # folder for scripts
-JHI_SCRIPTS="$JHI_INTEG"/scripts
+if [[ "$JHI_SCRIPTS" == "" ]]; then
+    JHI_SCRIPTS="$JHI_INTEG"/scripts
+fi
 
 # folder for app
-JHI_FOLDER_APP="$HOME"/app
+if [[ "$JHI_FOLDER_APP" == "" ]]; then
+    JHI_FOLDER_APP="$HOME"/app
+fi
 
 # folder for uaa app
-JHI_FOLDER_UAA="$HOME"/uaa
+if [[ "$JHI_FOLDER_UAA" == "" ]]; then
+    JHI_FOLDER_UAA="$HOME"/uaa
+fi
