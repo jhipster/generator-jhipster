@@ -1075,13 +1075,13 @@
                             </configuration>
                         </execution>
                         <execution>
-                            <id>docker-resources</id>
+                            <id>jib-www-resources</id>
                             <phase>verify</phase>
                             <goals>
                                 <goal>copy-resources</goal>
                             </goals>
                             <configuration>
-                                <outputDirectory>target/classes/static/</outputDirectory>
+                                <outputDirectory>target/classes/public/</outputDirectory>
                                 <resources>
                                     <resource>
                                         <directory>target/www</directory>
