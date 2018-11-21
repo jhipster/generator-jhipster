@@ -46,7 +46,7 @@ function checkImages() {
         const appConfig = this.appConfigs[index];
         if (appConfig.buildTool === 'maven') {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/target/jib-cache`);
-            runCommand = './mvnw package -Pprod jib:dockerBuild';
+            runCommand = './mvnw package -Pprod verify jib:dockerBuild';
         } else {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/jib-cache`);
             runCommand = './gradlew bootWar -Pprod jibDockerBuild';
