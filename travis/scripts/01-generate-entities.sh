@@ -110,6 +110,7 @@ elif [[ ( "$JHIPSTER" == *"mysql"* ) || ( "$JHIPSTER" == *"psql"* ) ]]; then
     moveEntity TestOneToOne
     moveEntity TestCustomTableName
     moveEntity TestTwoRelationshipsSameEntity
+    moveEntity SuperMegaLargeTestEntity
 
     moveEntity EntityWithDTO
     moveEntity EntityWithPagination

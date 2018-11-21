@@ -2,47 +2,41 @@
     "fluentMethods": true,
     "relationships": [
         {
-            "relationshipName": "testManyToOne",
+            "relationshipName": "superMegaLargeTestManyToOne",
             "otherEntityName": "testManyToOne",
             "relationshipType": "one-to-many",
-            "otherEntityRelationshipName": "testCustomTableName"
+            "otherEntityRelationshipName": "superMegaLargeTestEntity"
         },
         {
-            "relationshipName": "testManyToMany",
+            "relationshipName": "superMegaLargeTestManyToMany",
             "otherEntityName": "testManyToMany",
             "relationshipType": "many-to-many",
             "ownerSide": false,
-            "otherEntityRelationshipName": "testCustomTableName"
+            "otherEntityRelationshipName": "superMegaLargeTestEntity"
         },
         {
-            "relationshipName": "testOneToOne",
+            "relationshipName": "superMegaLargeTestOneToOne",
             "otherEntityName": "testOneToOne",
             "relationshipType": "one-to-one",
             "ownerSide": false,
-            "otherEntityRelationshipName": "testCustomTableName"
+            "otherEntityRelationshipName": "superMegaLargeTestEntity"
         },
         {
-            "relationshipName": "testEntity",
-            "otherEntityName": "testEntity",
-            "relationshipType": "many-to-one",
-            "relationshipValidateRules": "required",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipName": "userOneToMany",
+            "relationshipName": "superMegaLargeUserOneToMany",
             "otherEntityName": "user",
             "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
             "otherEntityField": "login"
         },
         {
-            "relationshipName": "userManyToMany",
+            "relationshipName": "superMegaLargeUserManyToMany",
             "otherEntityName": "user",
             "relationshipType": "many-to-many",
             "otherEntityField": "login",
             "ownerSide": true
         },
         {
-            "relationshipName": "userOneToOne",
+            "relationshipName": "superMegaLargeUserOneToOne",
             "otherEntityName": "user",
             "relationshipType": "one-to-one",
             "otherEntityField": "login",
@@ -50,17 +44,17 @@
             "otherEntityRelationshipName": "parent"
         },
         {
-            "relationshipName": "superMegaLargeTestEntity",
-            "otherEntityName": "superMegaLargeTestEntity",
-            "relationshipType": "many-to-one",
-            "relationshipValidateRules": "required",
-            "otherEntityField": "id"
+            "relationshipName": "superMegaLargeTestCustomTableName",
+            "otherEntityName": "testCustomTableName",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "superMegaLargeTestEntity"
         }
     ],
     "fields": [],
-    "changelogDate": "20160208210109",
+    "changelogDate": "20181120190609",
     "dto": "no",
     "service": "no",
-    "entityTableName": "test_custom_table_name_entity",
+    "jpaMetamodelFiltering": true,
+    "angularJSSuffix": "mySuffixAlt",
     "pagination": "no"
 }

@@ -2386,6 +2386,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 61;
+        } else if (prodDatabaseType === 'postgresql' && constraintName.length > 60 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 60;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
