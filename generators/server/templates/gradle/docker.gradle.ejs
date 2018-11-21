@@ -27,6 +27,11 @@ buildscript {
 
 apply plugin: com.google.cloud.tools.jib.gradle.JibPlugin
 
+task copyWwwIntoStatic (type: Copy) {
+    from 'build/www/'
+    into 'build/resources/main/static'
+}
+
 jib {
     from {
         image = '<%= DOCKER_JAVA_JRE %>'
@@ -45,3 +50,5 @@ jib {
         useCurrentTimestamp = true
     }
 }
+
+jibDockerBuild.dependsOn copyWwwIntoStatic
