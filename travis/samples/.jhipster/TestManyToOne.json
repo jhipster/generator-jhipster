@@ -48,6 +48,12 @@
             "otherEntityName": "testCustomTableName",
             "relationshipType": "many-to-one",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "superMegaLargeTestEntity",
+            "otherEntityName": "superMegaLargeTestEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
         }
     ],
     "fields": [],
