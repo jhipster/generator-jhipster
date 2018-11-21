@@ -2374,18 +2374,18 @@ module.exports = class extends PrivateBase {
             constraintName = `${constraintNamePrefix}${this.getTableName(entityName)}_${this.getTableName(columnOrRelationName)}`;
         }
         let limit = 0;
-        if (prodDatabaseType === 'oracle' && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
+        if (prodDatabaseType === 'oracle' && constraintName.length > 27 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
                 `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`
             );
 
-            limit = 28;
-        } else if (prodDatabaseType === 'mysql' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+            limit = 27;
+        } else if (prodDatabaseType === 'mysql' && constraintName.length > 61 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
                 `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`
             );
 
-            limit = 62;
+            limit = 61;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
