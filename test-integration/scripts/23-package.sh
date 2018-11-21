@@ -28,7 +28,7 @@ if [ -f "mvnw" ]; then
     ./mvnw verify -DskipTests -P"$JHI_PROFILE"
     mv target/*.war app.war
 elif [ -f "gradlew" ]; then
-    ./gradlew bootWar -P"$JHI_PROFILE" -x test
+    ./gradlew bootWar -P"$JHI_PROFILE" -x test -x war
     mv build/libs/*.war app.war
 else
     echo "*** no mvnw or gradlew"
