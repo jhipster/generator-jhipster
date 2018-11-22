@@ -54,7 +54,7 @@ plugins {
 apply plugin: 'java'
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties['java.specification.version'] == '1.8'
+assert System.properties['java.specification.version'] == '1.8' || '11'
 
 apply plugin: 'maven'
 apply plugin: 'org.springframework.boot'
