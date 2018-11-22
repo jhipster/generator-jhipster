@@ -51,10 +51,6 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task, depend
     args = ["run", "webpack:build"]
 }
 
-war {
-    webAppDirName = '<%= CLIENT_DIST_DIR %>'
-}
-
 task copyIntoStatic (type: Copy) {
     from '<%= CLIENT_DIST_DIR %>'
     into 'build/resources/main/static'
