@@ -147,9 +147,6 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-        <%_ if (enableHibernateCache) { _%>
-        BeanClassLoaderAwareJCacheRegionFactory.setBeanClassLoader(this.getClass().getClassLoader());
-        <%_ } _%>
         JHipsterProperties.Cache.Ehcache ehcache =
             jHipsterProperties.getCache().getEhcache();
 
