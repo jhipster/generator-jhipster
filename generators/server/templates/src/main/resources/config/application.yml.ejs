@@ -157,6 +157,9 @@ spring:
         open-in-view: false
         properties:
             hibernate.jdbc.time_zone: UTC
+        <%_ if (enableHibernateCache && cacheProvider === 'ehcache') { _%>
+            hibernate.javax.cache.uri: urn:X-ehcache:jsr107-default-config
+        <%_ } _%>
         hibernate:
             ddl-auto: none
             naming:
