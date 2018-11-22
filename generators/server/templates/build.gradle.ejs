@@ -54,6 +54,7 @@ plugins {
 apply plugin: 'java'
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
+// Until JHipster supports JDK 9
 assert System.properties['java.specification.version'] == '1.8'
 
 apply plugin: 'maven'
@@ -449,8 +450,6 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen"
-    annotationProcessor "javax.xml.bind:jaxb-api:2.3.1"
-    annotationProcessor "com.sun.xml.bind:jaxb-impl:2.3.1"
     <%_ } _%>
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
