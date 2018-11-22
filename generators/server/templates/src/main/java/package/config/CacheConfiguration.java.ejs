@@ -25,7 +25,10 @@ import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
 
     <%_ if (enableHibernateCache) { _%>
-import io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory;
+import org.hibernate.cache.jcache.ConfigSettings;
+
+import javax.cache.Caching;
+import javax.cache.spi.CachingProvider
     <%_ } _%>
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -46,6 +49,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
 <%_ if (cacheProvider === 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+    <%_ if (enableHibernateCache) { _%>
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProvider === 'hazelcast') { _%>
     <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
@@ -153,6 +159,16 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                 .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
                 .build());
     }
+
+        <%_ if (enableHibernateCache) { _%>
+    @Bean
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer() {
+        return hibernateProperties -> {
+            CachingProvider cachingProvider = Caching.getCachingProvider();
+            hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cachingProvider.getCacheManager(cachingProvider.getDefaultURI(), getClass().getClassLoader()));
+        };
+    }
+        <%_ } _%>
 
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
