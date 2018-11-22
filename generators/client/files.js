@@ -68,10 +68,12 @@ function writeFiles() {
     this.copy('vue/src/main/webapp/app/components/home/Home.component.ts', 'src/main/webapp/app/components/home/Home.component.ts');
     this.copy('vue/src/main/webapp/app/components/jhi-footer/JhiFooter.vue', 'src/main/webapp/app/components/jhi-footer/JhiFooter.vue');
     this.copy('vue/src/main/webapp/app/components/jhi-footer/JhiFooter.component.ts', 'src/main/webapp/app/components/jhi-footer/JhiFooter.component.ts');
+    this.copy('vue/src/main/webapp/app/components/jhi-footer/jhi-footer.component.test.ts', 'src/main/webapp/app/components/jhi-footer/jhi-footer.component.test.ts');
     this.template('vue/src/main/webapp/app/components/jhi-navbar/JhiNavbar.vue.ejs', 'src/main/webapp/app/components/jhi-navbar/JhiNavbar.vue');
     this.template('vue/src/main/webapp/app/components/jhi-navbar/JhiNavbar.component.ts.ejs', 'src/main/webapp/app/components/jhi-navbar/JhiNavbar.component.ts');
     this.copy('vue/src/main/webapp/app/components/ribbon/Ribbon.vue', 'src/main/webapp/app/components/ribbon/Ribbon.vue');
     this.copy('vue/src/main/webapp/app/components/ribbon/Ribbon.component.ts', 'src/main/webapp/app/components/ribbon/Ribbon.component.ts');
+    this.copy('vue/src/main/webapp/app/components/ribbon/ribbon.component.test.ts', 'src/main/webapp/app/components/ribbon/ribbon.component.test.ts');
     this.copy('vue/src/main/webapp/app/components/account/change-password/ChangePassword.vue', 'src/main/webapp/app/components/account/change-password/ChangePassword.vue');
     this.copy('vue/src/main/webapp/app/components/account/change-password/ChangePassword.component.ts', 'src/main/webapp/app/components/account/change-password/ChangePassword.component.ts');
     this.copy('vue/src/main/webapp/app/components/account/change-password/change-password.component.test.ts', 'src/main/webapp/app/components/account/change-password/change-password.component.test.ts');
@@ -108,6 +110,7 @@ function writeFiles() {
     this.template('vue/src/main/webapp/app/components/admin/configuration/configuration.component.test.ts', 'src/main/webapp/app/components/admin/configuration/configuration.component.test.ts');
     this.template('vue/src/main/webapp/app/components/admin/docs/Docs.vue.ejs', 'src/main/webapp/app/components/admin/docs/Docs.vue');
     this.template('vue/src/main/webapp/app/components/admin/docs/Docs.component.ts.ejs', 'src/main/webapp/app/components/admin/docs/Docs.component.ts');
+    this.template('vue/src/main/webapp/app/components/admin/docs/docs.component.test.ts.ejs', 'src/main/webapp/app/components/admin/docs/docs.component.test.ts');
     this.template('vue/src/main/webapp/app/components/admin/health/Health.vue.ejs', 'src/main/webapp/app/components/admin/health/Health.vue');
     this.template('vue/src/main/webapp/app/components/admin/health/Health.component.ts.ejs', 'src/main/webapp/app/components/admin/health/Health.component.ts');
     this.template('vue/src/main/webapp/app/components/admin/health/HealthModal.vue.ejs', 'src/main/webapp/app/components/admin/health/HealthModal.vue');

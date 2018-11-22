@@ -1,5 +1,6 @@
-const JhiFooter = {
-    name: 'JhiFooter'
-};
+import { Component, Vue } from 'vue-property-decorator';
 
-export default JhiFooter;
+@Component
+export default class JhiFooter extends Vue {
+
+}
