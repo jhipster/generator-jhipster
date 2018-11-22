@@ -37,16 +37,16 @@
     <%_ } _%>
 
     constructor(
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        private parseLinks: JhiParseLinks,
-        private jhiAlertService: JhiAlertService,
-        private accountService: AccountService,
-        private activatedRoute: ActivatedRoute,
+        protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
+        protected parseLinks: JhiParseLinks,
+        protected jhiAlertService: JhiAlertService,
+        protected accountService: AccountService,
+        protected activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: JhiDataUtils,
+        protected dataUtils: JhiDataUtils,
         <%_ } _%>
-        private router: Router,
-        private eventManager: JhiEventManager
+        protected router: Router,
+        protected eventManager: JhiEventManager
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;

@@ -40,7 +40,7 @@ export class <%= entityAngularName %>Service {
     public resourceSearchUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
     <%_ } _%>
 
-    constructor(private http: HttpClient) { }
+    constructor(protected http: HttpClient) { }
 
     create(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
         <%_ if (fieldsContainDate) { _%>
