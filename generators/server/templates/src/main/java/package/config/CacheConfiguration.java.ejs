@@ -25,7 +25,7 @@ import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
 
     <%_ if (enableHibernateCache) { _%>
-import io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory;
+import org.hibernate.cache.jcache.ConfigSettings;
     <%_ } _%>
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -46,6 +46,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
 <%_ if (cacheProvider === 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+    <%_ if (enableHibernateCache) { _%>
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProvider === 'hazelcast') { _%>
     <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
@@ -141,9 +145,6 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-        <%_ if (enableHibernateCache) { _%>
-        BeanClassLoaderAwareJCacheRegionFactory.setBeanClassLoader(this.getClass().getClassLoader());
-        <%_ } _%>
         JHipsterProperties.Cache.Ehcache ehcache =
             jHipsterProperties.getCache().getEhcache();
 
@@ -153,6 +154,14 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                 .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
                 .build());
     }
+
+        <%_ if (enableHibernateCache) { _%>
+    @ConditionalOnBean(type = { "javax.cache.CacheManager" })
+    @Bean
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
+        return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
+    }
+        <%_ } _%>
 
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
