@@ -42,7 +42,7 @@ function writeFiles() {
     this.copy('webpack/loader.conf.js', 'webpack/loader.conf.js');
     this.copy('webpack/webpack.common.js', 'webpack/webpack.common.js');
     this.template('webpack/webpack.dev.js.ejs', 'webpack/webpack.dev.js');
-    this.copy('webpack/webpack.prod.js', 'webpack/webpack.prod.js');
+    this.template('webpack/webpack.prod.js.ejs', 'webpack/webpack.prod.js');
 
     // Images
     this.copy('webapp/content/images/hipster.png', 'src/main/webapp/content/images/hipster.png');
