@@ -16,10 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const constants = require('generator-jhipster/generators/generator-constants');
 const utils = require('./utils');
 const clientUtils = require('../client/utils');
 
 /* Constants use throughout */
+const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const VUE_DIR = 'src/main/webapp/app/';
 const CLIENT_VUE_TEMPLATES_DIR = 'vue';
 
@@ -56,6 +58,30 @@ const vueFiles = {
                 {
                     file: 'entities/entity.component.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`
+                },
+                {
+                    file: 'entities/entity.service.vue',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.vue`
+                }
+            ]
+        }
+    ],
+    test: [
+        {
+            condition: generator => generator.protractorTests,
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'e2e/entities/entity-page-object.ts',
+                    renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`
+                },
+                {
+                    file: 'e2e/entities/entity.spec.ts',
+                    renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`
+                },
+                {
+                    file: 'e2e/entities/entity-update-page-object.ts',
+                    renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-update.page-object.ts`
                 }
             ]
         }
@@ -75,11 +101,11 @@ function writeFiles() {
     // Add entity to menu
     const className = this.entityClass;
     const entityName = this.entityInstance;
-    utils.addEntityToMenu(this, entityName, className);
+    utils.addEntityToMenu(this, this.entityFileName, this.entityTranslationKeyMenu, className);
 
     // Add entity paths to routing system
     utils.addEntityToRouterImport(this, className, this.entityFileName, this.entityFolderName);
-    utils.addEntityToRouter(this, entityName, className);
+    utils.addEntityToRouter(this, entityName, this.entityFileName, className);
 
     if (!this.enableTranslation) {
         clientUtils.replaceTranslation(this, [

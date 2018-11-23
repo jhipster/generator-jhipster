@@ -14,9 +14,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",
     "bootstrap-vue": "^2.0.0-rc.11",
-    "i": "^0.3.6",
     "moment": "2.22.2",
-    "npm": "^6.3.0",
     <%_ if (websocket === 'spring-websocket') { _%>
     "sockjs-client": "1.1.4",
     "webstomp-client": "1.2.0",
@@ -30,8 +28,18 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+<%_ if (protractorTests) { _%>
+    "@types/chai": "4.1.4",
+    "@types/chai-string": "1.4.1",
+<%_ } _%>
     "@types/jest": "^23.1.4",
+<%_ if (protractorTests) { _%>
+    "@types/mocha": "5.2.5",
+<%_ } _%>
     "@types/node": "^10.12.2",
+<%_ if (protractorTests) { _%>
+    "@types/selenium-webdriver": "3.0.10",
+<%_ } _%>
     "@vue/test-utils": "^1.0.0-beta.25",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
@@ -46,6 +54,11 @@
     "browser-sync": "^2.26.3",
     "browser-sync-webpack-plugin": "^2.2.2",
     "chalk": "^2.0.1",
+<%_ if (protractorTests) { _%>
+    "chai": "4.1.2",
+    "chai-as-promised": "7.1.1",
+    "chai-string": "1.5.0",
+<%_ } _%>
     "copy-webpack-plugin": "4.6.0",
     "css-loader": "^1.0.0",
     "eslint": "5.0.0",
@@ -60,6 +73,9 @@
     "jest-serializer-vue": "^0.2.0",
     "jest-vue-preprocessor": "^1.4.0",
     "merge-jsons-webpack-plugin": "1.0.18",
+<%_ if (protractorTests) { _%>
+    "mocha": "5.2.0",
+<%_ } _%>
     "mini-css-extract-plugin": "^0.4.4",
     "node-notifier": "^5.1.2",
     "numeral": "^2.0.6",
@@ -69,11 +85,17 @@
     "postcss-import": "^11.0.0",
     "postcss-loader": "^3.0.0",
     "postcss-url": "^7.2.1",
+<%_ if (protractorTests) { _%>
+    "protractor": "5.4.0",
+<%_ } _%>
     "rimraf": "^2.6.0",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "ts-jest": "^23.0.0",
-    "ts-loader": "5.3.0",
+    "ts-loader": "^5.3.0",
+<%_ if (protractorTests) { _%>
+    "ts-node": "7.0.1",
+<%_ } _%>
     "tslib": "^1.9.3",
     "typescript": "^3.1.3",
     "uglifyjs-webpack-plugin": "2.0.1",
@@ -105,12 +127,16 @@
     "start": "npm run webpack:dev",
     "serve": "npm run start",
     "build": "npm run webpack:prod",
-    "webpack:build": "npm run cleanup && npm run webpack:build:main",
-    "webpack:build:main": "npm run webpack -- --config webpack/webpack.dev.js --progress --profile",
-    "webpack:prod:main": "npm run webpack -- --config webpack/webpack.prod.js --profile",
-    "webpack:prod": "npm run cleanup && npm run webpack:prod:main && npm run clean-www",
-    "webpack:test": "npm run test",
-    "webpack:dev": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline",
+<%_ if (protractorTests) { _%>
+    "e2e": "protractor src/test/javascript/protractor.conf.js",
+    "postinstall": "webdriver-manager update --gecko false",
+<%_ } _%>
+    "webpack:build": "<%= clientPackageManager %> run cleanup && npm run webpack:build:main",
+    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
+    "webpack:prod": "<%= clientPackageManager %> run cleanup && npm run webpack:prod:main && npm run clean-www",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline",
+    "webpack:test": "<%= clientPackageManager %> run test",
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
     "lint": "./node_modules/eslint/bin/eslint.js --ext .js,.vue src",

@@ -1,6 +1,4 @@
-import {integer, required, minLength, maxLength, pattern} from 'vuelidate/lib/validators'
-import axios from 'axios'
-import {SERVER_API_URL} from "../../<%_ if (clientRootFolder) { _%>../<%_ } _%>constants";
+import {integer, required, minLength, maxLength, pattern} from 'vuelidate/lib/validators';
 <%_
     let include = false;
     for (idx in fields) {
@@ -10,10 +8,23 @@ import {SERVER_API_URL} from "../../<%_ if (clientRootFolder) { _%>../<%_ } _%>c
         include = true;
         _%>
 import moment from 'moment'
-    <%_ }
-} _%>
+    <%_ } } _%>
+
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service.vue';
+<%_
+    for (idx in relationships) {
+    const otherEntityAngularName = relationships[idx].otherEntityAngularName;
+    const otherEntityFileName = otherEntityAngularName === 'User' ? 'user' : relationships[idx].otherEntityFileName;
+    const otherEntityFolderName = otherEntityAngularName === 'User' ? (clientRootFolder ? '../user' : 'user') : relationships[idx].otherEntityFileName;
+_%>
+import <%= otherEntityAngularName %>Service from '../<%= otherEntityFolderName %>/<%= otherEntityFileName %>.service.vue';
+<%_ } _%>
+<% if (fieldsContainBlob) { %>
+import JhiDataUtils from '../../<% if (clientRootFolder) { %>../<% } %>shared/data/DataUtilsService.vue';
+<% } %>
 
 const <%= entityAngularName %>Update =  {
+    mixins: [<%= entityAngularName %>Service<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %><%_ for (idx in relationships) { const otherEntityAngularName = relationships[idx].otherEntityAngularName;_%> ,<%= otherEntityAngularName %>Service <%_ } _%>],
     data() {
         return {
             <%= entityInstance %>: {
@@ -21,6 +32,11 @@ const <%= entityAngularName %>Update =  {
                     const fieldName = fields[idx].fieldName;
                 _%>
                 <%= fieldName %>: null,
+                <%_ } _%>
+                <%_ for (idx in relationships) {
+                    const otherEntityName = relationships[idx].otherEntityName;
+                _%>
+                <%= otherEntityName %>s: [],
                 <%_ } _%>
             },
             <%_ for (idx in relationships) {
@@ -61,10 +77,6 @@ const <%= entityAngularName %>Update =  {
         next(vm => {
             if (to.params.<%= entityInstance %>Id) {
                 vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
-            } else {
-                for (var key in vm.<%= entityInstance %>) {
-                    vm.<%= entityInstance %>[key] = null;
-                }
             }
             <%_ if (relationships.length > 0) { _%>
             vm.initRelationships();
@@ -83,12 +95,12 @@ const <%= entityAngularName %>Update =  {
                 <%_ }
             } _%>
             if (this.<%= entityInstance %>.id) {
-                axios.put(SERVER_API_URL + 'api/<%= entityInstance %>s', this.<%= entityInstance %>).then(() => {
+                this.update<%= entityAngularName %>(this.<%= entityInstance %>).then(() => {
                     vm.$router.go(-1);
                     vm.isSaving = false;
                 });
             } else {
-                axios.post(SERVER_API_URL + 'api/<%= entityInstance %>s', this.<%= entityInstance %>).then(() => {
+                this.create<%= entityAngularName %>(this.<%= entityInstance %>).then(() => {
                     vm.$router.go(-1);
                     vm.isSaving = false;
                 });
@@ -96,7 +108,7 @@ const <%= entityAngularName %>Update =  {
         },
         retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
             let vm = this;
-            axios.get(SERVER_API_URL + 'api/<%= entityInstance %>s/' + <%= entityInstance %>Id).then(res => {
+            this.find<%= entityAngularName %>(<%= entityInstance %>Id).then(res => {
                 vm.<%= entityInstance %> = res.data;
 
                 <%_ for (idx in fields) {
@@ -111,17 +123,39 @@ const <%= entityAngularName %>Update =  {
         previousState() {
             this.$router.go(-1);
         },
+        <%_ if (fieldsContainBlob && fieldsContainImageBlob) { _%>
+        _clearInputImage(field, fieldContentType, idInput) {
+            this.clearInputImage(this.<%= entityInstance %>, this.elementRef, field, fieldContentType, idInput);
+        },
+        <%_ } _%>
         initRelationships() {
             let vm = this;
-            <%_ for (idx in relationships) {
+            <%_
+                let hasManyToMany = false;
+                for (idx in relationships) {
                 const otherEntityName = relationships[idx].otherEntityName;
+                const otherEntityAngularName = relationships[idx].otherEntityAngularName;
+                if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) {
+                    hasManyToMany = true;
+                }
             _%>
-            axios.get(SERVER_API_URL + 'api/<%= otherEntityName %>s').then(res => {
+            this.retrieve<%= otherEntityAngularName %>s().then(res => {
                 vm.<%= otherEntityName %>s = res.data;
             });
             <%_ } _%>
+        }<%_ if (hasManyToMany) { _%>,
+        getSelected(selectedVals, option) {
+            if (selectedVals) {
+                for (let i = 0; i < selectedVals.length; i++) {
+                    if (option.id === selectedVals[i].id) {
+                        return selectedVals[i];
+                    }
+                }
+            }
+            return option;
         }
+        <%_ } _%>
     }
-}
+};
 
 export default <%= entityAngularName %>Update;

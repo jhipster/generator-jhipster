@@ -104,7 +104,7 @@ function replaceTranslation(generator, files) {
         jhipsterUtils.replaceContent(
             {
                 file: filePath,
-                pattern: /(v-text=".*?")|(v-bind:placeholder=".*?")|(v-html=".*?")|(v-bind:title=".*?")|(v-bind:value=".*?")|(v-bind:html=".*?")/g,
+                pattern: /(v-text=".*?")|(v-bind:placeholder=".*?")|(v-html=".*?")|(v-bind:title=".*?")|(v-bind:label=".*?")|(v-bind:value=".*?")|(v-bind:html=".*?")/g,
                 content: ''
             },
             generator

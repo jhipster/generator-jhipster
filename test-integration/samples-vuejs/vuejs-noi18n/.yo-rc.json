@@ -23,7 +23,7 @@
     "enableSwaggerCodegen": false,
     "jwtSecretKey": "YzQxYjVjZDJiZWM5ODQ1OTFiN2VjZDQwMTM2YjliODc1OWMyNTkyNTVjY2UxZmQ5YjA2YjQ5NDM1YzdiNWY0NzI3NjgzNjJhY2JmMjdjNTljYmQxMTdjNDc2N2ZhZTg2MWRkOThkZWVhZDc4NzA4YmVlOWZlOTIyMjkxZDI2MGU=",
     "enableTranslation": false,
-    "testFrameworks": [],
+    "testFrameworks": ["protractor"],
     "jhiPrefix": "jhi",
     "clientPackageManager": "npm",
     "blueprint": "generator-jhipster-vuejs",

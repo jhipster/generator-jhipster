@@ -1,7 +1,10 @@
-import axios from 'axios'
-import {SERVER_API_URL} from "../../<%_ if (clientRootFolder) { _%>../<%_ } _%>constants";
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service.vue';
+<% if (fieldsContainBlob) { %>
+    import JhiDataUtils from '../../<% if (clientRootFolder) { %>../<% } %>shared/data/DataUtilsService.vue';
+<% } %>
 
 const <%= entityAngularName %>Details =  {
+    mixins: [<%= entityAngularName %>Service<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %>],
     data() {
         return {
             <%= entityInstance %>: {}
@@ -17,7 +20,7 @@ const <%= entityAngularName %>Details =  {
     methods: {
         retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
             let vm = this;
-            axios.get(SERVER_API_URL + 'api/<%= entityInstance %>s/' + <%= entityInstance %>Id).then(res => {
+            this.find<%= entityAngularName %>(<%= entityInstance %>Id).then(res => {
                 vm.<%= entityInstance %> = res.data;
             });
         },
@@ -25,6 +28,6 @@ const <%= entityAngularName %>Details =  {
             this.$router.go(-1);
         }
     }
-}
+};
 
 export default <%= entityAngularName %>Details;

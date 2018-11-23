@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-8">
             <div v-if="<%= entityInstance %>">
-                <h2><span v-text="$t('<%= angularAppName  %>.<%= entityInstance %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.id}}</h2>
+                <h2><span v-text="$t('<%= i18nKeyPrefix %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.id}}</h2>
                 <hr>
                 <!--<jhi-alert-error></jhi-alert-error>-->
                 <dl class="row-md jh-entity-details">
@@ -11,7 +11,7 @@
                         const fieldName = fields[idx].fieldName;
                         const fieldType = fields[idx].fieldType;
                         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
-                        <dt><span v-text="$t('<%= i18nKeyPrefix %>.<%= fieldName %>')"<% if (fields[idx].javadoc) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= fields[idx].javadoc %>"<% } } %>><%= fields[idx].fieldNameHumanized %></span></dt>
+                        <dt><span v-text="$t('<%= i18nKeyPrefix %>.<%= fieldName %>')"><%= fields[idx].fieldNameHumanized %></span></dt>
                         <dd>
                             <%_ if (fields[idx].fieldIsEnum) { _%>
                                 <span v-text="$t('<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</span>
@@ -88,7 +88,7 @@
                     <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
                 </button>
 
-                <router-link :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-primary">
+                <router-link :to="{name: '<%= entityClass %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-primary">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
                 </router-link>
             </div>

@@ -1,0 +1,47 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.mycompany.myapp",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "5.5.0",
+    "applicationType": "gateway",
+    "baseName": "test2",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "Nzc4NjQ3YmM4MDFhODAzZjZhNWJkYzA1ZGI5OTExYzE4MjU3MjcwZmY0MGUwMzA1NzNhZjE2MTJiODNlY2Y0MGJlZDI1NGMxOTAyYTgwMDNiOWJlMDAxZjNkYWQ4OWRhNjNkMmIwNDBkYWJiYTg3OWE2YTBlZjIyOTRmMWNiZWY=",
+    "enableTranslation": true,
+    "languages": [
+      "en"
+    ],
+    "testFrameworks": [
+      "protractor"
+    ],
+    "jhiPrefix": "jhi",
+    "clientPackageManager": "npm",
+    "nativeLanguage": "en",
+    "blueprint": "generator-jhipster-vuejs"
+  },
+  "generator-jhipster-vuejs": {
+    "jhipsterVersion": "5.5.0",
+    "applicationType": "gateway",
+    "baseName": "test2",
+    "clientFramework": "vue",
+    "useSass": false,
+    "clientPackageManager": "npm",
+    "enableTranslation": true
+  }
+}

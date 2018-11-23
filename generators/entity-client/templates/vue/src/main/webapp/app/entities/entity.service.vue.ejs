@@ -1,0 +1,27 @@
+<script>
+import axios from 'axios';
+
+const baseApiUrl = 'api/<%= entityApiUrl %>';
+const <%= entityAngularName %>Service = {
+    methods: {
+        find<%= entityAngularName %>(id) {
+            return axios.get(`${baseApiUrl}/${id}`);
+        },
+        retrieve<%= entityAngularName %>s() {
+            return axios.get(baseApiUrl);
+        },
+        delete<%= entityAngularName %>(id) {
+            return axios.delete(`${baseApiUrl}/${id}`);
+        },
+        create<%= entityAngularName %>(entity) {
+            return axios.post(`${baseApiUrl}`, entity);
+        },
+        update<%= entityAngularName %>(entity) {
+            return axios.put(`${baseApiUrl}`, entity);
+        }
+    }
+};
+
+export default <%= entityAngularName %>Service;
+
+</script>

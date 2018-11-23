@@ -27,18 +27,18 @@ module.exports = {
     addEntityToRouter
 };
 
-function addEntityToMenu(generator, entityName, className) {
-    const menuI18nTitle = generator.enableTranslation ? `v-text="$t('global.menu.entities.${entityName}')"` : '';
+function addEntityToMenu(generator, entityName, translationKey, className) {
+    const menuI18nTitle = generator.enableTranslation ? `v-text="$t('global.menu.entities.${translationKey}')"` : '';
     jhipsterUtils.rewriteFile(
         {
             file: `${CLIENT_MAIN_SRC_DIR}/app/components/jhi-navbar/JhiNavbar.vue`,
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                 // prettier-ignore
-                `<router-link to="${entityName}" tag="b-dropdown-item" class="dropdown-item" v-on:click="collapseNavbar()">
+                `<b-dropdown-item to="/entity/${entityName}" class="dropdown-item" v-on:click="collapseNavbar()">
                     <font-awesome-icon icon="asterisk" />
                     <span ${menuI18nTitle}>${className}</span>
-              </router-link>`
+              </b-dropdown-item>`
             ]
         },
         generator
@@ -50,45 +50,31 @@ function addEntityToRouterImport(generator, className, fileName, folderName) {
         {
             file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
             needle: 'jhipster-needle-add-entity-to-router-import',
-            splicable: [
+            splicable: [generator.stripMargin(
                 // prettier-ignore
-                `
-                import ${className} from '../entities/${folderName}/${fileName}.vue'
-                import ${className}Update from '../entities/${folderName}/${fileName}-update.vue'
-                import ${className}Details from '../entities/${folderName}/${fileName}-details.vue'
-                `
-            ]
+                `|// prettier-ignore
+                |import ${className} from '../entities/${folderName}/${fileName}.vue';
+                |import ${className}Update from '../entities/${folderName}/${fileName}-update.vue';
+                |import ${className}Details from '../entities/${folderName}/${fileName}-details.vue';`
+            )]
         },
         generator
     );
 }
 
-function addEntityToRouter(generator, entityName, className) {
+function addEntityToRouter(generator, entityName, entityFileName, className) {
     jhipsterUtils.rewriteFile(
         {
             file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
             needle: 'jhipster-needle-add-entity-to-router',
-            splicable: [
+            splicable: [generator.stripMargin(
                 // prettier-ignore
-                `,{
-                    path: '/${entityName}',
-                    name: '${className}',
-                    component: ${className}
-              },{
-                   path: '/${entityName}/new',
-                   name: '${className}Create',
-                   component: ${className}Update
-             },{
-                   path: '/${entityName}/:${entityName}Id/edit',
-                   name: '${className}Edit',
-                   component: ${className}Update
-             },{
-                   path: '/${entityName}/:${entityName}Id/view',
-                   name: '${className}View',
-                   component: ${className}Details
-             }
-              `
-            ]
+                `|, // prettier-ignore
+                |    { path: '/entity/${entityFileName}', name: '${className}', component: ${className} },
+                |    { path: '/entity/${entityFileName}/new', name: '${className}Create', component: ${className}Update },
+                |    { path: '/entity/${entityFileName}/:${entityName}Id/edit', name: '${className}Edit', component: ${className}Update },
+                |    { path: '/entity/${entityFileName}/:${entityName}Id/view', name: '${className}View', component: ${className}Details }`
+            )]
         },
         generator
     );
