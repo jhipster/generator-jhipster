@@ -26,9 +26,6 @@ import org.ehcache.jsr107.Eh107Configuration;
 
     <%_ if (enableHibernateCache) { _%>
 import org.hibernate.cache.jcache.ConfigSettings;
-
-import javax.cache.Caching;
-import javax.cache.spi.CachingProvider;
     <%_ } _%>
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -159,11 +156,8 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
 
         <%_ if (enableHibernateCache) { _%>
     @Bean
-    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer() {
-        return hibernateProperties -> {
-            CachingProvider cachingProvider = Caching.getCachingProvider();
-            hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cachingProvider.getCacheManager(cachingProvider.getDefaultURI(), getClass().getClassLoader()));
-        };
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
+        return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
     }
         <%_ } _%>
 
