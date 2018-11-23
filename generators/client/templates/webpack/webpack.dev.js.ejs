@@ -22,12 +22,12 @@ module.exports = merge(baseWebpackConfig, {
     // cheap-module-eval-source-map is faster for development
     devtool: config.dev.devtool,
     output: {
-        path: jhiUtils.root('target/www'),
+        path: jhiUtils.root('<%= BUILD_DIR %>www'),
         filename: 'app/[name].bundle.js',
         chunkFilename: 'app/[id].chunk.js'
     },
     devServer: {
-        contentBase: './target/www',
+        contentBase: './<%= BUILD_DIR %>www',
         port: 9060,
         proxy: [
             {

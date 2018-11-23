@@ -23,7 +23,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     },
     devtool: config.build.productionSourceMap ? config.build.devtool : false,
     output: {
-        path: jhiUtils.root('target/classes/public'),
+        path: jhiUtils.root('<%= BUILD_DIR %>www'),
         filename: 'app/[name].[hash].bundle.js',
         chunkFilename: 'app/[id].[hash].chunk.js'
     },

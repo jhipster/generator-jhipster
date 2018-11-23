@@ -58,6 +58,7 @@ env:
     - JHI_APP=vuejs-default
     - JHI_APP=vuejs-noi18n
     - JHI_APP=vuejs-fulli18n
+    - JHI_APP=vuejs-gradle
 
 #----------------------------------------------------------------------
 # Install all tools and check configuration

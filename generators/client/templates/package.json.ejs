@@ -100,8 +100,8 @@
     ]
   },
   "scripts": {
-    "cleanup": "rimraf build/{aot,www}",
-    "clean-www": "rimraf target//www/app/{src,target/}",
+    "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
+    "clean-www": "rimraf <%= BUILD_DIR %>www/app/{src,<%= BUILD_DIR %>}",
     "start": "npm run webpack:dev",
     "serve": "npm run start",
     "build": "npm run webpack:prod",
