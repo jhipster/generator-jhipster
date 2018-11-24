@@ -38,8 +38,10 @@ const JhiNavbar = {
             this.currentLanguage = language;
         },
         logout: function () {
+            <%_ if (authenticationType === 'jwt') { _%>
             localStorage.removeItem('jhi-authenticationToken');
             sessionStorage.removeItem('jhi-authenticationToken');
+            <%_ } _%>
             this.$store.commit('logout');
             this.$router.push('/');
         }
