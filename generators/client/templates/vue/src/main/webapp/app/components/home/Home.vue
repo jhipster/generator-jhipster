@@ -9,7 +9,7 @@
 
             <div>
                 <div class="alert alert-success" v-if="authenticated">
-                    <span v-if="username" v-bind:value="$t('home.logged.message')"> You are logged in as user {{username}}</span>
+                    <span v-if="username" v-bind:value="$t('home.logged.message')">You are logged in as user "{{username}}"</span>
                 </div>
 
                 <div class="alert alert-warning" v-if="!authenticated">

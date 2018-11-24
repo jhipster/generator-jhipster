@@ -60,7 +60,6 @@ describe('<%= entityClass %> e2e test', () => {
     before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
-        await navBarPage.autoSignOut();//TODO: Remove this when JWT logout issue is fixed
         signInPage = await navBarPage.getSignInPage();
         <%_ if (authenticationType !== 'oauth2') { _%>
         await signInPage.waitUntilDisplayed();

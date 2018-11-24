@@ -38,6 +38,8 @@ const JhiNavbar = {
             this.currentLanguage = language;
         },
         logout: function () {
+            localStorage.removeItem('jhi-authenticationToken');
+            sessionStorage.removeItem('jhi-authenticationToken');
             this.$store.commit('logout');
             this.$router.push('/');
         }

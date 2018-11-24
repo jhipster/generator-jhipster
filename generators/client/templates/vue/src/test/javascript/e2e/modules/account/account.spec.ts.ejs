@@ -118,7 +118,6 @@ describe('Account', () => {
 
   it('should load user management', async () => {
       await browser.get('/');
-      await navBarPage.autoSignOut();//TODO: Remove this when JWT logout issue is fixed
       signInPage = await navBarPage.getSignInPage();
       await signInPage.waitUntilDisplayed();
 
@@ -159,7 +158,6 @@ describe('Account', () => {
 
   it('should not be able to sign up if login already taken', async () => {
       await browser.get('/');
-      await navBarPage.autoSignOut();//TODO: Remove this when JWT logout issue is fixed
 
       await registerPage.get();
     expect(await registerPage.getTitle()).to.eq(registerPageTitle);
@@ -186,7 +184,6 @@ describe('Account', () => {
 
   it('should be able to log in with new registered account', async () => {
       await browser.get('/');
-      await navBarPage.autoSignOut();//TODO: Remove this when JWT logout issue is fixed
       signInPage = await navBarPage.getSignInPage();
       await signInPage.waitUntilDisplayed();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
@@ -203,7 +200,6 @@ describe('Account', () => {
 
   it('should login with admin account', async () => {
       await browser.get('/');
-      await navBarPage.autoSignOut();//TODO: Remove this when JWT logout issue is fixed
       signInPage = await navBarPage.getSignInPage();
       await signInPage.waitUntilDisplayed();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
@@ -246,7 +242,6 @@ describe('Account', () => {
 
   it('should be able to log in with new password', async () => {
       await browser.get('/');
-      await navBarPage.autoSignOut();//TODO: Remove this when JWT logout issue is fixed
       signInPage = await navBarPage.getSignInPage();
       await signInPage.waitUntilDisplayed();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
@@ -268,7 +263,6 @@ describe('Account', () => {
 
   it('should login with user_test account', async () => {
       await browser.get('/');
-      await navBarPage.autoSignOut();//TODO: Remove this when JWT logout issue is fixed
       signInPage = await navBarPage.getSignInPage();
       await signInPage.waitUntilDisplayed();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
@@ -302,7 +296,6 @@ describe('Account', () => {
 
   it('should login with admin account', async () => {
       await browser.get('/');
-      await navBarPage.autoSignOut();//TODO: Remove this when JWT logout issue is fixed
       signInPage = await navBarPage.getSignInPage();
       await signInPage.waitUntilDisplayed();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);

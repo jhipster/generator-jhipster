@@ -2,37 +2,38 @@
     <div class="modal-body">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div class="alert alert-danger" v-if="authenticationError" v-html="$t('login.messages.error.authentication')">
+                <b-alert show variant="danger" v-if="authenticationError" v-html="$t('login.messages.error.authentication')">
                     <strong>Failed to sign in!</strong> Please check your credentials and try again.
-                </div>
+                </b-alert>
             </div>
             <div class="col-md-8">
-                <form class="form" role="form" v-on:submit.prevent="doLogin()">
-                    <div class="form-group">
-                        <label for="username" v-text="$t('global.form.username')">Login</label>
-                        <input type="text" class="form-control" name="username" id="username" v-bind:placeholder="$t('global.form[\'username.placeholder\']')"
-                               v-model="login">
+                <b-form role="form" v-on:submit.prevent="doLogin()">
+                    <b-form-group v-bind:label="$t('global.form.username')" label-for="username">
+                        <b-form-input id="username" type="text" name="username" v-bind:placeholder="$t('global.form[\'username.placeholder\']')" v-model="login">
+                        </b-form-input>
+                    </b-form-group>
+                    <b-form-group v-bind:label="$t('login.form.password')" label-for="password">
+                        <b-form-input id="password" type="password" name="password" v-model.trim="name" v-bind:placeholder="$t('login.form[\'password.placeholder\']')" v-model="password">
+                        </b-form-input>
+                    </b-form-group>
+                    <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked text="$t('login.form.rememberme')">
+                        Remember me
+                    </b-form-checkbox>
+                    <div>
+                        <b-button type="submit" variant="primary" v-text="$t('login.form.button')">Sign in</b-button>
                     </div>
-                    <div class="form-group">
-                        <label for="password" v-text="$t('login.form.password')">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" v-bind:placeholder="$t('login.form[\'password.placeholder\']')"
-                               v-model="password">
-                    </div>
-                    <div class="form-check">
-                        <label class="form-check-label" for="rememberMe">
-                            <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" v-model="rememberMe" checked>
-                            <span v-text="$t('login.form.rememberme')">Remember me</span>
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary" v-text="$t('login.form.button')">Sign in</button>
-                </form>
+                </b-form>
                 <p></p>
-                <div class="alert alert-warning">
-                    <router-link class="alert-link" to="/resetPassword" v-text="$t('login.password.forgot')">Did you forget your password?</router-link>
+                <div>
+                    <b-alert show variant="warning">
+                        <b-link :to="'/resetPassword'" class="alert-link" v-text="$t('login.password.forgot')">Did you forget your password ?</b-link>
+                    </b-alert>
                 </div>
-                <div class="alert alert-warning">
-                    <span v-text="$t('global.messages.info.register.noaccount')">You don't have an account yet?</span>
-                    <router-link class="alert-link" to="/register" v-text="$t('global.messages.info.register.link')">Register a new account</router-link>
+                <div>
+                    <b-alert show variant="warning">
+                        You don't have an account yet ?
+                        <b-link :to="'/register'" class="alert-link" v-text="$t('global.messages.info.register.link')">Register a new account</b-link>
+                    </b-alert>
                 </div>
             </div>
         </div>
