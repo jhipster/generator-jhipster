@@ -12,7 +12,16 @@ const <%= entityAngularName %> = {
           currentSearch: '',
           <%_ } _%>
           removeId: null,
-          <%= entityInstance %>s: []
+        <%_ if (pagination !== 'no') { _%>
+          itemsPerPage: 20,
+          queryCount: null,
+          page: 1,
+          previousPage: null,
+          propOrder: 'id',
+          reverse: false,
+          totalItems: 0,
+        <%_ } _%>
+          <%= entityInstancePlural %>: []
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -36,16 +45,30 @@ const <%= entityAngularName %> = {
         <%_ } _%>
         retrieveAll<%= entityAngularName %>s() {
             let vm = this;
+            <% if (pagination !== 'no') { %>
+            const paginationQuery = {
+                page: this.page - 1,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            };<% } %>
             <%_ if (searchEngine === 'elasticsearch') { _%>
             if (this.currentSearch) {
-                this.search<%= entityAngularName %>s(this.currentSearch).then(res => {
-                    vm.<%= entityInstance %>s = res.data;
+                this.search<%= entityAngularName %>s(this.currentSearch<%_ if (pagination !== 'no') { _%>, paginationQuery<%_ } _%>).then(res => {
+                    vm.<%= entityInstancePlural %> = res.data;
+                    <%_ if (pagination !== 'no') { _%>
+                    vm.queryCount = vm.totalItems;
+                    vm.totalItems = Number(res.headers['x-total-count']);
+                    <%_ } _%>
                 });
                 return;
             }
             <%_ } _%>
-            this.retrieve<%= entityAngularName %>s().then(res => {
-                vm.<%= entityInstance %>s = res.data;
+            this.retrieve<%= entityAngularName %>s(<%_ if (pagination !== 'no') { _%>paginationQuery<%_ } _%>).then(res => {
+                vm.<%= entityInstancePlural %> = res.data;
+                <%_ if (pagination !== 'no') { _%>
+                vm.queryCount = vm.totalItems;
+                vm.totalItems = Number(res.headers['x-total-count']);
+                <%_ } _%>
             });
         },
         prepareRemove(instance) {
@@ -60,6 +83,28 @@ const <%= entityAngularName %> = {
                 vm.closeDialog();
             });
         },
+        <%_ if (pagination !== 'no') { _%>
+        sort() {
+            const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
+            if (this.propOrder !== 'id') {
+                result.push('id');
+            }
+            return result;
+        },
+        loadPage(page: number) {
+            if (page !== this.previousPage) {
+                this.previousPage = page;
+                this.transition();
+            }
+        },
+        transition() {
+            this.retrieveAll<%= entityAngularName %>s();
+        },
+        changeOrder(propOrder) {
+            this.propOrder = propOrder;
+            this.reverse = !this.reverse;
+        },
+        <%_ } _%>
         closeDialog() {
             this.$refs.removeEntity.hide();
         }

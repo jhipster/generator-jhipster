@@ -31,27 +31,27 @@
         </div>
         <%_ } _%>
         <br/>
-        <div class="table-responsive" v-if="<%= entityInstance %>s">
+        <div class="table-responsive" v-if="<%= entityInstancePlural %>">
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th><span v-text="$t('global.field.id')">ID</span></th>
+                    <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (pagination !== 'no') { %> <font-awesome-icon icon="sort"></font-awesome-icon><% } %></th>
                     <%_ for (idx in fields) { _%>
-                        <th<% if (pagination !== 'no') { %> jhiSortBy="<%= fields[idx].fieldName%>"<% } %>><span v-text="$t('<%=`${i18nKeyPrefix}.${fields[idx].fieldName}` %>')"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <font-awesome-icon icon="sort"></font-awesome-icon><% } %></th>
+                        <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%= fields[idx].fieldName%>')"<% } %>><span v-text="$t('<%=`${i18nKeyPrefix}.${fields[idx].fieldName}` %>')"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <font-awesome-icon icon="sort"></font-awesome-icon><% } %></th>
                     <%_ } _%>
                     <%_ for (idx in relationships) { _%>
                         <%_ if (relationships[idx].relationshipType === 'many-to-one'
                         || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                         || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
                             const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                            <th<% if (pagination !== 'no') { %> jhiSortBy="<%=relationships[idx].relationshipName + (fieldName)%>"<% } %>><span v-text="$t('<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>')"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <font-awesome-icon icon="sort"></font-awesome-icon><% } %></th>
+                            <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%=relationships[idx].relationshipName + (fieldName)%>')"<% } %>><span v-text="$t('<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>')"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <font-awesome-icon icon="sort"></font-awesome-icon><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="<%= entityInstance %> in <%= entityInstance %>s">
+                <tr v-for="<% if (pagination !== 'no') { %><%= entityInstance %> of orderBy(<%= entityInstancePlural %>, propOrder, reverse === true ? 1 : -1)<% } else {%><%= entityInstance %> in <%= entityInstancePlural %><% } %>">
                     <td><router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}">{{<%= entityInstance %>.id}}</router-link></td>
                     <%_ for (idx in fields) {
                         const fieldName = fields[idx].fieldName;
@@ -157,6 +157,28 @@
                 <button type="button" class="btn btn-primary" id="<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>" v-text="$t('entity.action.delete')" v-on:click="remove<%= entityAngularName %>()">Delete</button>
             </div>
         </b-modal>
+        <%_ if (databaseType !== 'cassandra') { _%>
+        <%_ if (pagination === 'pager') { _%>
+        <!-- Pager is not implemented yet, so this is normal pagination instead -->
+        <div v-if="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
+            <div class="row justify-content-center">
+                <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
+            </div>
+        </div>
+        <%_ } else if (pagination === 'pagination') { _%>
+        <div v-if="<%=entityInstancePlural %> && <%=entityInstancePlural %>.length">
+            <div class="row justify-content-center">
+                <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
+            </div>
+        </div>
+        <%_ } _%>
+        <%_ } _%>
     </div>
 </template>
 

@@ -69,7 +69,7 @@ function writeFiles() {
     this.copy('vue/src/main/webapp/app/components/jhi-footer/JhiFooter.vue', 'src/main/webapp/app/components/jhi-footer/JhiFooter.vue');
     this.copy('vue/src/main/webapp/app/components/jhi-footer/JhiFooter.component.ts', 'src/main/webapp/app/components/jhi-footer/JhiFooter.component.ts');
     this.template('vue/src/main/webapp/app/components/jhi-navbar/JhiNavbar.vue.ejs', 'src/main/webapp/app/components/jhi-navbar/JhiNavbar.vue');
-    this.copy('vue/src/main/webapp/app/components/jhi-navbar/JhiNavbar.component.ts', 'src/main/webapp/app/components/jhi-navbar/JhiNavbar.component.ts');
+    this.template('vue/src/main/webapp/app/components/jhi-navbar/JhiNavbar.component.ts.ejs', 'src/main/webapp/app/components/jhi-navbar/JhiNavbar.component.ts');
     this.copy('vue/src/main/webapp/app/components/ribbon/Ribbon.vue', 'src/main/webapp/app/components/ribbon/Ribbon.vue');
     this.copy('vue/src/main/webapp/app/components/ribbon/Ribbon.component.ts', 'src/main/webapp/app/components/ribbon/Ribbon.component.ts');
     this.copy('vue/src/main/webapp/app/components/account/change-password/ChangePassword.vue', 'src/main/webapp/app/components/account/change-password/ChangePassword.vue');
