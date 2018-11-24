@@ -47,7 +47,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (cacheProvider === 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
     <%_ if (enableHibernateCache) { _%>
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
     <%_ } _%>
 <%_ } _%>
@@ -156,7 +155,6 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     }
 
         <%_ if (enableHibernateCache) { _%>
-    @ConditionalOnBean(type = { "javax.cache.CacheManager" })
     @Bean
     public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
         return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);

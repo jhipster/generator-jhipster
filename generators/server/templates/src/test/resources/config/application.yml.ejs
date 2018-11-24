@@ -43,10 +43,6 @@ eureka:
 spring:
     application:
         name: <%= baseName %>
-    <%_ if (cacheManagerIsAvailable === true) { _%>
-    cache:
-        type: simple
-    <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     cloud:
         stream:
