@@ -1,147 +1,137 @@
 <template>
-    <nav class="navbar navbar-dark navbar-expand-md jh-navbar">
+    <b-navbar toggleable="md" type="dark" class="jh-navbar">
         <div class="jh-logo-container float-left">
             <!--a class="jh-navbar-toggler d-lg-none float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()"-->
-            <a class="jh-navbar-toggler d-lg-none float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" >
+            <b-link class="jh-navbar-toggler d-lg-none float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" >
                 <font-awesome-icon icon="bars" />
-            </a>
+            </b-link>
             <!--a class="navbar-brand logo float-left" routerLink="/" (click)="collapseNavbar()"-->
-            <router-link class="navbar-brand logo float-left" to="/">
+            <b-navbar-brand class="logo float-left" b-link to="/">
                 <span class="logo-img"></span>
-                <span v-text="$t('global.title')" class="navbar-title"><%= camelizedBaseName  %></span> <span class="navbar-version">{{version}}</span>
-            </router-link>
+                <span v-text="$t('global.title')" class="navbar-title">jhipster</span> <span class="navbar-version">{{version}}</span>
+            </b-navbar-brand>
         </div>
         <!--<div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed">-->
-        <div class="navbar-collapse collapse" id="header-tabs">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item" >
-                    <router-link class="nav-link" to="/">
-                        <span>
-                            <font-awesome-icon icon="home" />
-                            <span v-text="$t('global.menu.home')">Home</span>
-                        </span>
-                    </router-link>
-                </li>
-                <li v-if="authenticated" class="nav-item dropdown pointer" >
-                    <b-dropdown id="entity-menu" class="nav-link">
-                        <template slot="button-content">
-                            <font-awesome-icon icon="th-list" />
-                            <span v-text="$t('global.menu.entities.main')">Entities</span>
-                        </template>
-                        <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
-                    </b-dropdown>
-                </li>
-                <li class="nav-item dropdown pointer" v-if="hasAnyAuthority('ROLE_ADMIN')">
-                    <b-dropdown id="admin-menu" class="nav-link">
-                        <template slot="button-content">
-                            <font-awesome-icon icon="user-plus" />
-                            <span v-text="$t('global.menu.admin.main')">Administration</span>
-                        </template>
-                        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-                        <b-dropdown-item class="dropdown-item" to="/admin/gateway" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="road" />
-                            <span v-text="$t('global.menu.admin.gateway')">Gateway</span>
-                        </b-dropdown-item>
-                        <%_ } _%>
-                        <%_ if (!skipUserManagement) { _%>
-                        <b-dropdown-item class="dropdown-item" to="/admin/user-management" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="user" />
-                            <span v-text="$t('global.menu.admin.userManagement')">User management</span>
-                        </b-dropdown-item>
-                        <%_ } _%>
-                        <%_ if (websocket === 'spring-websocket') { _%>
-                        <b-dropdown-item class="dropdown-item" to="/admin/<%= jhiPrefixDashed %>-tracker" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="eye" />
-                            <span v-text="$t('global.menu.admin.tracker')">User tracker</span>
-                        </b-dropdown-item>
-                        <%_ } _%>
-                        <b-dropdown-item class="dropdown-item" to="/admin/<%= jhiPrefixDashed %>-metrics" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="tachometer-alt" />
-                            <span v-text="$t('global.menu.admin.metrics')">Metrics</span>
-                        </b-dropdown-item>
-                        <b-dropdown-item class="dropdown-item" to="/admin/<%= jhiPrefixDashed %>-health" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="heart" />
-                            <span v-text="$t('global.menu.admin.health')">Health</span>
-                        </b-dropdown-item>
-                        <b-dropdown-item class="dropdown-item" to="/admin/<%= jhiPrefixDashed %>-configuration" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="list" />
-                            <span v-text="$t('global.menu.admin.configuration')">Configuration</span>
-                        </b-dropdown-item>
-                        <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-                        <b-dropdown-item class="dropdown-item" to="/admin/audits" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="bell" />
-                            <span v-text="$t('global.menu.admin.audits')">Audits</span>
-                        </b-dropdown-item>
-                        <%_ } _%>
-                        <b-dropdown-item class="dropdown-item" to="/admin/logs" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="tasks" />
-                            <span v-text="$t('global.menu.admin.logs')">Logs</span>
-                        </b-dropdown-item>
-                        <b-dropdown-item v-if="swaggerEnabled" class="dropdown-item" to="/admin/docs" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="book" />
-                            <span v-text="$t('global.menu.admin.apidocs')">API</span>
-                        </b-dropdown-item>
-                        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory' || devDatabaseType === 'couchbase') { _%>
-                        <b-dropdown-item v-if="!inProduction" class="dropdown-item" href='<% if (devDatabaseType === 'couchbase') { %>http://localhost:8091/<% } else { %>./h2-console<% } %>' target="_tab" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="hdd" />
-                            <span v-text="$t('global.menu.admin.database')">Database</span>
-                        </b-dropdown-item>
-                        <%_ } _%>
-                    </b-dropdown>
-                </li>
+        <b-collapse is-nav id="header-tabs">
+            <b-navbar-nav class="ml-auto">
+                <b-nav-item to="/">
+                    <span>
+                        <font-awesome-icon icon="home" />
+                        <span v-text="$t('global.menu.home')">Home</span>
+                    </span>
+                </b-nav-item>
+                <b-nav-item-dropdown id="entity-menu" v-if="authenticated" class="pointer">
+                    <template slot="button-content">
+                        <font-awesome-icon icon="th-list" />
+                        <span v-text="$t('global.menu.entities.main')">Entities</span>
+                    </template>
+                    <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
+                </b-nav-item-dropdown>
+                <b-nav-item-dropdown id="admin-menu" v-if="hasAnyAuthority('ROLE_ADMIN')">
+                    <template slot="button-content">
+                        <font-awesome-icon icon="user-plus" />
+                        <span v-text="$t('global.menu.admin.main')">Administration</span>
+                    </template>
+                    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+                    <b-dropdown-item to="/admin/gateway" v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="road" />
+                        <span v-text="$t('global.menu.admin.gateway')">Gateway</span>
+                    </b-dropdown-item>
+                    <%_ } _%>
+                    <%_ if (!skipUserManagement) { _%>
+                    <b-dropdown-item to="/admin/user-management" v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="user" />
+                        <span v-text="$t('global.menu.admin.userManagement')">User management</span>
+                    </b-dropdown-item>
+                    <%_ } _%>
+                    <%_ if (websocket === 'spring-websocket') { _%>
+                    <b-dropdown-item to="/admin/<%= jhiPrefixDashed %>-tracker" v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="eye" />
+                        <span v-text="$t('global.menu.admin.tracker')">User tracker</span>
+                    </b-dropdown-item>
+                    <%_ } _%>
+                    <b-dropdown-item  to="/admin/<%= jhiPrefixDashed %>-metrics" v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="tachometer-alt" />
+                        <span v-text="$t('global.menu.admin.metrics')">Metrics</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item to="/admin/<%= jhiPrefixDashed %>-health" v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="heart" />
+                        <span v-text="$t('global.menu.admin.health')">Health</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item  to="/admin/<%= jhiPrefixDashed %>-configuration" v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="list" />
+                        <span v-text="$t('global.menu.admin.configuration')">Configuration</span>
+                    </b-dropdown-item>
+                    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                    <b-dropdown-item  to="/admin/audits" v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="bell" />
+                        <span v-text="$t('global.menu.admin.audits')">Audits</span>
+                    </b-dropdown-item>
+                    <%_ } _%>
+                    <b-dropdown-item  to="/admin/logs" v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="tasks" />
+                        <span v-text="$t('global.menu.admin.logs')">Logs</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item v-if="swaggerEnabled"  to="/admin/docs" v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="book" />
+                        <span v-text="$t('global.menu.admin.apidocs')">API</span>
+                    </b-dropdown-item>
+                    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory' || devDatabaseType === 'couchbase') { _%>
+                    <b-dropdown-item v-if="!inProduction"  href='<% if (devDatabaseType === 'couchbase') { %>http://localhost:8091/<% } else { %>./h2-console<% } %>' target="_tab" v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="hdd" />
+                        <span v-text="$t('global.menu.admin.database')">Database</span>
+                    </b-dropdown-item>
+                    <%_ } _%>
+                </b-nav-item-dropdown>
                 <%_ if (enableTranslation) { _%>
-                <li class="nav-item dropdown pointer" v-if="languages && Object.keys(languages).length > 1">
-                    <b-dropdown id="languagesnavBarDropdown" class="nav-link">
-                        <template slot="button-content">
-                            <font-awesome-icon icon="flag" />
-                            <span v-text="$t('global.menu.language')">Language</span>
-                        </template>
-                        <b-dropdown-item v-for="(value, key) in languages" :key="`lang-${key}`" v-on:click="changeLanguage(key);collapseNavbar();">
-                            {{value.name}}
-                        </b-dropdown-item>
-                    </b-dropdown>
-                </li>
+                <b-nav-item-dropdown id="languagesnavBarDropdown" right v-if="languages && Object.keys(languages).length > 1">
+                    <template slot="button-content">
+                        <font-awesome-icon icon="flag" />
+                        <span v-text="$t('global.menu.language')">Language</span>
+                    </template>
+                    <b-dropdown-item v-for="(value, key) in languages" :key="`lang-${key}`" v-on:click="changeLanguage(key);collapseNavbar();">
+                        {{value.name}}
+                    </b-dropdown-item>
+                </b-nav-item-dropdown>
                 <%_ } _%>
-                <li class="nav-item dropdown pointer" placement="bottom-right" >
-                    <b-dropdown class="nav-link" href="javascript:void(0);" id="account-menu">
-                        <template slot="button-content" v-if="!getImageUrl()">
-                            <font-awesome-icon icon="user" />
-                            <span v-text="$t('global.menu.account.main')">
-                                Account
-                            </span>
-                        </template>
-                        <template slot="button-content" v-if="getImageUrl()">
-                            <img [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
-                        </template>
-                        <b-dropdown-item to="/account/settings" v-if="authenticated" class="dropdown-item" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="wrench" />
-                            <span v-text="$t('global.menu.account.settings')">Settings</span>
-                        </b-dropdown-item>
-                        <b-dropdown-item to="/account/password" v-if="authenticated" class="dropdown-item" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="clock" />
-                            <span v-text="$t('global.menu.account.password')">Password</span>
-                        </b-dropdown-item>
-                        <b-dropdown-item to="/account/sessions" tag="b-dropdown-item" v-if="authenticated" class="dropdown-item" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="cloud" />
-                            <span v-text="$t('global.menu.account.sessions')">Sessions</span>
-                        </b-dropdown-item>
-                        <b-dropdown-item v-if="authenticated" class="dropdown-item" v-on:click="logout()" id="logout">
-                            <font-awesome-icon icon="sign-out-alt" />
-                            <span v-text="$t('global.menu.account.logout')">Sign out</span>
-                        </b-dropdown-item>
-                        <b-dropdown-item v-if="!authenticated" class="dropdown-item" v-on:click="openLogin()" id="login">
-                            <font-awesome-icon icon="sign-in-alt" />
-                            <span v-text="$t('global.menu.account.login')">Sign in</span>
-                        </b-dropdown-item>
-                        <router-link to="/register" tag="b-dropdown-item" id="register" v-if="!authenticated" class="dropdown-item" v-on:click="collapseNavbar()">
-                            <font-awesome-icon icon="user-plus" />
-                            <span v-text="$t('global.menu.account.register')">Register</span>
-                        </router-link>
-                    </b-dropdown>
-                </li>
-            </ul>
-        </div>
-    </nav>
+                <b-nav-item-dropdown  right href="javascript:void(0);" id="account-menu">
+                    <template slot="button-content" v-if="!getImageUrl()">
+                        <font-awesome-icon icon="user" />
+                        <span v-text="$t('global.menu.account.main')">
+                            Account
+                        </span>
+                    </template>
+                    <template slot="button-content" v-if="getImageUrl()">
+                        <img [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
+                    </template>
+                    <b-dropdown-item to="/account/settings" tag="b-dropdown-item" v-if="authenticated"  v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="wrench" />
+                        <span v-text="$t('global.menu.account.settings')">Settings</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item to="/account/password" tag="b-dropdown-item" v-if="authenticated"  v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="clock" />
+                        <span v-text="$t('global.menu.account.password')">Password</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item to="/account/sessions" tag="b-dropdown-item" v-if="authenticated"  v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="cloud" />
+                        <span v-text="$t('global.menu.account.sessions')">Sessions</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item v-if="authenticated"  v-on:click="logout()" id="logout">
+                        <font-awesome-icon icon="sign-out-alt" />
+                        <span v-text="$t('global.menu.account.logout')">Sign out</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item v-if="!authenticated"  v-on:click="openLogin()" id="login">
+                        <font-awesome-icon icon="sign-in-alt" />
+                        <span v-text="$t('global.menu.account.login')">Sign in</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item to="/register" tag="b-dropdown-item" id="register" v-if="!authenticated"  v-on:click="collapseNavbar()">
+                        <font-awesome-icon icon="user-plus" />
+                        <span v-text="$t('global.menu.account.register')">Register</span>
+                    </b-dropdown-item>
+                </b-nav-item-dropdown>
+            </b-navbar-nav>
+        </b-collapse>
+    </b-navbar>
 </template>
 
 <script lang="ts" src="./JhiNavbar.component.ts">
@@ -149,94 +139,95 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    /* ==========================================================================
+/* ==========================================================================
     Navbar
     ========================================================================== */
-    .navbar-version {
-        font-size: 10px;
-        color: #ccc;
-    }
+.navbar-version {
+  font-size: 10px;
+  color: #ccc;
+}
 
-    .jh-navbar {
-        background-color: #353d47;
-        padding: 0.2em 1em;
-    }
+.jh-navbar {
+  background-color: #353d47;
+  padding: 0.2em 1em;
+}
 
-    .jh-navbar .profile-image {
-        margin: -10px 0px;
-        height: 40px;
-        width: 40px;
-        border-radius: 50%;
-    }
+.jh-navbar .profile-image {
+  margin: -10px 0px;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
 
-    .jh-navbar .dropdown-item.active,
-    .jh-navbar .dropdown-item.active:focus,
-    .jh-navbar .dropdown-item.active:hover {
-        background-color: #353d47;
-    }
+.jh-navbar .dropdown-item.active,
+.jh-navbar .dropdown-item.active:focus,
+.jh-navbar .dropdown-item.active:hover {
+  background-color: #353d47;
+}
 
-    .jh-navbar .dropdown-toggle::after {
-        margin-left: 0.15em;
-    }
+.jh-navbar .dropdown-toggle::after {
+  margin-left: 0.15em;
+}
 
-    .jh-navbar ul.navbar-nav {
-        padding: 0.5em;
-    }
+.jh-navbar ul.navbar-nav {
+  padding: 0.5em;
+}
 
-    .jh-navbar .navbar-nav .nav-item {
-        margin-left: 1.5rem;
-    }
+.jh-navbar .navbar-nav .nav-item {
+  margin-left: 1.5rem;
+}
 
-    .jh-navbar a.nav-link {
-        font-weight: 400;
-    }
+.jh-navbar a.nav-link {
+  font-weight: 400;
+}
 
-    .jh-navbar .jh-navbar-toggler {
-        color: #ccc;
-        font-size: 1.5em;
-        padding: 10px;
-    }
+.jh-navbar .jh-navbar-toggler {
+  color: #ccc;
+  font-size: 1.5em;
+  padding: 10px;
+}
 
-    .jh-navbar .jh-navbar-toggler:hover {
-        color: #fff;
-    }
+.jh-navbar .jh-navbar-toggler:hover {
+  color: #fff;
+}
 
-    @media screen and (min-width: 768px) {
-        .jh-navbar-toggler {
-            display: none;
-        }
-    }
+@media screen and (min-width: 768px) {
+  .jh-navbar-toggler {
+    display: none;
+  }
+}
 
-    @media screen and (max-width: 992px) {
-        .jh-logo-container {
-            width: 100%;
-        }
-    }
+@media screen and (max-width: 992px) {
+  .jh-logo-container {
+    width: 100%;
+  }
+}
 
-    .navbar-title {
-        display: inline-block;
-        vertical-align: middle;
-        color: white;
-    }
+.navbar-title {
+  display: inline-block;
+  vertical-align: middle;
+  color: white;
+}
 
-    /* ==========================================================================
+/* ==========================================================================
     Logo styles
     ========================================================================== */
-    .navbar-brand.logo {
-        padding: 5px 15px;
-    }
+.navbar-brand.logo {
+  padding: 5px 15px;
+}
 
-    .logo .logo-img {
-        height: 45px;
-        display: inline-block;
-        vertical-align: middle;
-        width: 70px;
-    }
+.logo .logo-img {
+  height: 45px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 70px;
+}
 
-    .logo-img {
-        height: 100%;
-        background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
-        background-size: contain;
-        width: 100%;
-    }
+.logo-img {
+  height: 100%;
+  background: url("../../../content/images/logo-jhipster.png") no-repeat center
+    center;
+  background-size: contain;
+  width: 100%;
+}
 </style>
