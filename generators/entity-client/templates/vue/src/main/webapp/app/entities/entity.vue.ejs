@@ -10,6 +10,26 @@
             </router-link>
         </h2>
         <!--<jhi-alert></jhi-alert>-->
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="searchForm" class="form-inline" v-on:submit.prevent="search(currentSearch)">
+                    <div class="input-group w-100 mt-3">
+                        <input type="text" class="form-control" name="currentSearch" id="currentSearch"
+                            v-bind:placeholder="$t('<%= i18nKeyPrefix %>.home.search')"
+                            v-model="currentSearch" />
+                        <button type="button" id="launch-search" class="btn btn-primary" v-on:click="search(currentSearch)">
+                            <font-awesome-icon icon="search"></font-awesome-icon>
+                        </button>
+                        <button type="button" id="clear-search" class="btn btn-secondary" v-on:click="clear()"
+                            v-if="currentSearch">
+                            <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <%_ } _%>
         <br/>
         <div class="table-responsive" v-if="<%= entityInstance %>s">
             <table class="table table-striped">

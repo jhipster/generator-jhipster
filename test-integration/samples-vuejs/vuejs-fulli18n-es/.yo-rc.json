@@ -16,7 +16,7 @@
         "databaseType": "sql",
         "devDatabaseType": "h2Disk",
         "prodDatabaseType": "mysql",
-        "searchEngine": false,
+        "searchEngine": "elasticsearch",
         "messageBroker": false,
         "serviceDiscoveryType": false,
         "buildTool": "maven",

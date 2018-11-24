@@ -8,6 +8,9 @@ const <%= entityAngularName %> = {
     mixins: [Principal, <%= entityAngularName %>Service<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %>],
     data() {
       return {
+          <%_ if (searchEngine === 'elasticsearch') { _%>
+          currentSearch: '',
+          <%_ } _%>
           removeId: null,
           <%= entityInstance %>s: []
       }
@@ -18,8 +21,29 @@ const <%= entityAngularName %> = {
         })
     },
     methods: {
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        search(query) {
+            if (!query) {
+              return this.clear();
+            }
+            this.currentSearch = query;
+            this.retrieveAll<%= entityAngularName %>s();
+        },
+        clear() {
+            this.currentSearch = '';
+            this.retrieveAll<%= entityAngularName %>s();
+        },
+        <%_ } _%>
         retrieveAll<%= entityAngularName %>s() {
             let vm = this;
+            <%_ if (searchEngine === 'elasticsearch') { _%>
+            if (this.currentSearch) {
+                this.search<%= entityAngularName %>s(this.currentSearch).then(res => {
+                    vm.<%= entityInstance %>s = res.data;
+                });
+                return;
+            }
+            <%_ } _%>
             this.retrieve<%= entityAngularName %>s().then(res => {
                 vm.<%= entityInstance %>s = res.data;
             });

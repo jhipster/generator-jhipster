@@ -57,7 +57,7 @@ env:
   matrix:
     - JHI_APP=vuejs-default JHI_PROTRACTOR=1
     - JHI_APP=vuejs-noi18n JHI_PROTRACTOR=1
-    - JHI_APP=vuejs-fulli18n
+    - JHI_APP=vuejs-fulli18n-es
     - JHI_APP=vuejs-gateway
     - JHI_APP=vuejs-gradle
 

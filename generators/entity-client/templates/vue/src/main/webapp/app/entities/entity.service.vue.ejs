@@ -2,8 +2,16 @@
 import axios from 'axios';
 
 const baseApiUrl = 'api/<%= entityApiUrl %>';
+<%_ if (searchEngine === 'elasticsearch') { _%>
+const baseSearchApiUrl = 'api/_search/<%= entityApiUrl %>?query=';
+<%_ } _%>
 const <%= entityAngularName %>Service = {
     methods: {
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        search<%= entityAngularName %>s(query) {
+            return axios.get(`${baseSearchApiUrl}${query}`);
+        },
+        <%_ } _%>
         find<%= entityAngularName %>(id) {
             return axios.get(`${baseApiUrl}/${id}`);
         },
