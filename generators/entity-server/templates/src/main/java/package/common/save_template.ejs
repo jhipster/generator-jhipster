@@ -23,6 +23,18 @@ const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDto = mapper + '.' + 'toDto';
 const returnPrefix = (returnDirectly && searchEngine !== 'elasticsearch') ? 'return' : instanceType + ' result =';
 let resultEntity;
+
+if (isUsingMapsId === true) {
+    const mapsIdEntityInstance = mapsIdAssoc.otherEntityNameCapitalized.charAt(0).toLowerCase() + mapsIdAssoc.otherEntityNameCapitalized.slice(1);
+    const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`; 
+    const otherEntityName = mapsIdAssoc.otherEntityName; _%>
+        if (Objects.isNull(<%= entityInstance%>.get<%= mapsIdAssoc.relationshipNameCapitalized %>())) {
+            throw new BadRequestAlertException("Invalid value provided", ENTITY_NAME, "null");
+        }
+        long <%= otherEntityName %>Id = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId();
+        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance%>::<%= otherEntityName %>);
+<%_
+}
 if (!viaService) {
     if (dto === 'mapstruct') {
         resultEntity = entityInstance; %>

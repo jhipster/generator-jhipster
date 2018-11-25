@@ -17,7 +17,16 @@
  limitations under the License.
 -%>
 package <%=packageName%>.web.rest;
-
+<%_ const viaService = service !== 'no';
+    let isUsingMapsId = false;
+    let mapsIdAssoc;
+    for (idx in relationships) {
+        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+        if ( isUsingMapsId === true) {
+            mapsIdAssoc = relationships[idx];
+            break;
+        }
+    } _%>
 import com.codahale.metrics.annotation.Timed;
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
 import <%=packageName%>.domain.<%= entityClass %>;
@@ -26,6 +35,9 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.service.<%= entityClass %>Service;
 <%_ } else { _%>
 import <%=packageName%>.repository.<%= entityClass %>Repository;
+    <%_ if (isUsingMapsId === true) { _%>
+import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+    <%_ } _%>
     <%_ if (reactiveRepositories) { _%>
 import <%=packageName%>.repository.reactive.<%= entityClass %>ReactiveRepository;
     <%_ } _%>
@@ -60,7 +72,8 @@ import org.springframework.http.HttpStatus;
 <%_ if (reactiveRepositories) { _%>
 import org.springframework.http.MediaType;
 <%_ } _%>
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity; <%_ if (isUsingMapsId === true && !viaService) { %>
+import org.springframework.transaction.annotation.Transactional; <% } %>
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactiveRepositories) { _%>
 import reactor.core.publisher.Flux;
@@ -71,10 +84,10 @@ import javax.validation.Valid;
 <%_ } _%>
 import java.net.URI;
 import java.net.URISyntaxException;
-<%_ const viaService = service !== 'no';
-    if (pagination === 'no' && dto === 'mapstruct' && !viaService && fieldsContainNoOwnerOneToOne === true) { _%>
+<%_ if (pagination === 'no' && dto === 'mapstruct' && !viaService && fieldsContainNoOwnerOneToOne === true) { _%>
 import java.util.LinkedList;<% } %>
-import java.util.List;
+import java.util.List;<% if (isUsingMapsId === true && !viaService) { %>
+import java.util.Objects;<% } %>
 import java.util.Optional;<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %><% if (!viaService && (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne === true)) { %>
 import java.util.stream.Collectors;<% } %><% if (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne === true) { %>
@@ -86,7 +99,8 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
  * REST controller for managing <%= entityClass %>.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api")<% if (isUsingMapsId === true && !viaService) { %>
+@Transactional <% } %>
 public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
@@ -99,7 +113,7 @@ public class <%= entityClass %>Resource {
     <%_
     const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
-    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering}); -%>
+    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc}); -%>
 
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
@@ -124,7 +138,7 @@ public class <%= entityClass %>Resource {
         <%_ if (databaseType === 'cassandra') { _%>
         <%= instanceName %>.setId(UUID.randomUUID());
         <%_ } _%>
-<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -152,7 +166,7 @@ public class <%= entityClass %>Resource {
             userRepository.save(<%= instanceName %>.getUser());
         }
         <%_ } _%>
-<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
