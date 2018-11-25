@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
@@ -133,13 +133,19 @@ describe('JDLField', () => {
     });
 
     context('when adding an invalid validation', () => {
-      it('fails', () => {
-        expect(() => {
-          field.addValidation(null);
-        }).to.throw('The passed validation must be valid to be added to the field.\nErrors: No validation');
-        expect(() => {
-          field.addValidation({ name: Validations.MIN });
-        }).to.throw('The passed validation must be valid to be added to the field.\nErrors: No value');
+      context('because it is null', () => {
+        it('fails', () => {
+          expect(() => {
+            field.addValidation(null);
+          }).to.throw('The passed validation must be valid to be added to the field.\nErrors: No validation');
+        });
+      });
+      context('because there is no value where it should', () => {
+        it('fails', () => {
+          expect(() => {
+            field.addValidation({ name: Validations.MIN });
+          }).to.throw("The passed validation 'min' must be valid to be added to the field.\nErrors: No value");
+        });
       });
     });
     context('when adding a valid validation', () => {

@@ -18,7 +18,7 @@
  */
 
 const fs = require('fs');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const FileReader = require('../../../lib/reader/file_reader');
 
 describe('FileReader', () => {

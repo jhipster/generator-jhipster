@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const { tokens } = require('./lib/dsl/lexer');
 
 const allTokenTypeNames = _.mapValues(tokens, tokenType => tokenType.name);
@@ -27,8 +27,8 @@ module.exports = {
   },
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
+      new TerserPlugin({
+        terserOptions: {
           mangle: {
             // Avoid mangling TokenType names, this can break Chevrotain initialization phase
             // due to reliance on Function.protoType.toString.

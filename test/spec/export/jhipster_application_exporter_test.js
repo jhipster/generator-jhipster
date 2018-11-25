@@ -19,11 +19,11 @@
 
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 const JHipsterApplicationExporter = require('../../../lib/export/jhipster_application_exporter');
-const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 
 describe('JHipsterApplicationExporter', () => {
   describe('::exportApplication', () => {
@@ -42,7 +42,7 @@ describe('JHipsterApplicationExporter', () => {
               config: {}
             });
           }).to.throw(
-            'The application must be valid in order to be converted.\n' +
+            'The application must be valid in order to be exported.\n' +
               'Errors: No name, No authentication type, No build tool'
           );
         });
@@ -55,7 +55,7 @@ describe('JHipsterApplicationExporter', () => {
 
         before(done => {
           returned = JHipsterApplicationExporter.exportApplication(
-            new JDLApplication({
+            new JDLMonolithApplication({
               config: {
                 baseName: 'toto',
                 packageName: 'com.mathieu.sample',
@@ -79,8 +79,6 @@ describe('JHipsterApplicationExporter', () => {
         });
 
         it('returns the exported application', () => {
-          expect(returned['generator-jhipster'].jwtSecretKey).not.to.be.undefined;
-          delete returned['generator-jhipster'].jwtSecretKey;
           expect(returned).to.deep.equal({
             entities: [],
             'generator-jhipster': {
@@ -111,7 +109,7 @@ describe('JHipsterApplicationExporter', () => {
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              useSass: false,
+              useSass: true,
               websocket: false
             }
           });
@@ -122,8 +120,6 @@ describe('JHipsterApplicationExporter', () => {
         it('formats it', () => {
           expect(content['generator-jhipster']).not.to.be.undefined;
           const config = content['generator-jhipster'];
-          expect(config.jwtSecretKey).not.to.be.undefined;
-          delete config.jwtSecretKey;
           expect(config).to.deep.equal({
             applicationType: 'monolith',
             authenticationType: 'jwt',
@@ -152,9 +148,81 @@ describe('JHipsterApplicationExporter', () => {
             skipServer: false,
             skipUserManagement: false,
             testFrameworks: [],
-            useSass: false,
+            useSass: true,
             websocket: false
           });
+        });
+      });
+      describe('when exporting an existing application to JSON', () => {
+        after(() => {
+          fs.unlinkSync(path.join('.yo-rc.json'));
+        });
+
+        it('content has the exported application', done => {
+          let content = null;
+          fs.writeFileSync(
+            '.yo-rc.json',
+            JSON.stringify(
+              {
+                'generator-jhipster': {
+                  jwtSecretKey: '1234'
+                },
+                test: 1234
+              },
+              null,
+              2
+            )
+          );
+          JHipsterApplicationExporter.exportApplication(
+            new JDLMonolithApplication({
+              config: {
+                baseName: 'toto',
+                packageName: 'com.mathieu.sample',
+                enableTranslation: false,
+                languages: ['en', 'fr'],
+                jhipsterVersion: '4.9.0'
+              }
+            })
+          );
+          content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
+
+          expect(content).to.deep.equal({
+            entities: [],
+            test: 1234,
+            'generator-jhipster': {
+              applicationType: 'monolith',
+              authenticationType: 'jwt',
+              baseName: 'toto',
+              buildTool: 'maven',
+              cacheProvider: 'ehcache',
+              clientFramework: 'angularX',
+              clientPackageManager: 'npm',
+              databaseType: 'sql',
+              devDatabaseType: 'h2Disk',
+              enableHibernateCache: true,
+              enableSwaggerCodegen: false,
+              enableTranslation: false,
+              jhiPrefix: 'jhi',
+              jhipsterVersion: '4.9.0',
+              languages: ['en', 'fr'],
+              messageBroker: false,
+              nativeLanguage: 'en',
+              packageFolder: 'com/mathieu/sample',
+              packageName: 'com.mathieu.sample',
+              prodDatabaseType: 'mysql',
+              searchEngine: false,
+              serverPort: '8080',
+              serviceDiscoveryType: false,
+              skipClient: false,
+              skipServer: false,
+              skipUserManagement: false,
+              testFrameworks: [],
+              useSass: true,
+              websocket: false,
+              jwtSecretKey: '1234'
+            }
+          });
+          done();
         });
       });
     });
@@ -175,7 +243,7 @@ describe('JHipsterApplicationExporter', () => {
 
         before('common setup for both applications', () => {
           returned = JHipsterApplicationExporter.exportApplications({
-            toto: new JDLApplication({
+            toto: new JDLMonolithApplication({
               config: {
                 baseName: 'toto',
                 packageName: 'com.mathieu.toto',
@@ -184,7 +252,7 @@ describe('JHipsterApplicationExporter', () => {
                 jhipsterVersion: '4.9.0'
               }
             }),
-            titi: new JDLApplication({
+            titi: new JDLMonolithApplication({
               config: {
                 baseName: 'titi',
                 packageName: 'com.mathieu.titi',
@@ -224,8 +292,6 @@ describe('JHipsterApplicationExporter', () => {
           it('formats it', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
-            expect(config.jwtSecretKey).not.to.be.undefined;
-            delete config.jwtSecretKey;
             expect(config).to.deep.equal({
               applicationType: 'monolith',
               authenticationType: 'jwt',
@@ -254,7 +320,7 @@ describe('JHipsterApplicationExporter', () => {
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              useSass: false,
+              useSass: true,
               websocket: false
             });
           });
@@ -284,8 +350,6 @@ describe('JHipsterApplicationExporter', () => {
           it('formats it', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
-            expect(config.jwtSecretKey).not.to.be.undefined;
-            delete config.jwtSecretKey;
             expect(config).to.deep.equal({
               applicationType: 'monolith',
               authenticationType: 'jwt',
@@ -314,7 +378,7 @@ describe('JHipsterApplicationExporter', () => {
               skipServer: false,
               skipUserManagement: false,
               testFrameworks: [],
-              useSass: false,
+              useSass: true,
               websocket: false
             });
           });

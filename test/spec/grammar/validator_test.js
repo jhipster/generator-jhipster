@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const parse = require('../../../lib/dsl/api').parse;
 
 describe('JDLSyntaxValidatorVisitor', () => {
@@ -915,7 +915,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   packageName FOO
                 }
               }`)
-            ).to.throw('The packageName property name must match: /^[a-z]+$/');
+            ).to.throw('The packageName property name must match: /^[a-z_][a-z0-9_]*$/');
           });
         });
       });
@@ -1071,18 +1071,6 @@ describe('JDLSyntaxValidatorVisitor', () => {
             ).to.not.throw();
           });
         });
-        context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
-            expect(() =>
-              parse(`
-            application {
-              config {
-                serviceDiscoveryType ehcache42
-              }
-            }`)
-            ).to.not.throw();
-          });
-        });
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
@@ -1095,6 +1083,18 @@ describe('JDLSyntaxValidatorVisitor', () => {
               }
             }`)
             ).to.throw('A name is expected, but found: ""ehcache""');
+          });
+        });
+        context('with both letters and numbers', () => {
+          it('does not report a syntax error', () => {
+            expect(() =>
+              parse(`
+            application {
+              config {
+                serviceDiscoveryType eHcache42
+              }
+            }`)
+            ).to.throw('The serviceDiscoveryType property name must match: /^[a-z]+$/');
           });
         });
         context('such as numbers', () => {
@@ -1336,6 +1336,413 @@ describe('JDLSyntaxValidatorVisitor', () => {
               }
             }`)
             ).to.throw('A name is expected, but found: "42"');
+          });
+        });
+      });
+    });
+  });
+  context('when declaring a deployment', () => {
+    context('and using for deploymentType', () => {
+      context('a valid value', () => {
+        it('does not report a syntax error for name', () => {
+          expect(() =>
+            parse(`
+            deployment {
+              deploymentType docker-compose
+            }`)
+          ).to.not.throw();
+        });
+      });
+      context('an invalid value', () => {
+        context('such as a number', () => {
+          it('will report a syntax error', () => {
+            expect(() =>
+              parse(`
+              deployment {
+                deploymentType 666
+              }`)
+            ).to.throw('A name is expected, but found: "666"');
+          });
+        });
+        context('such as an invalid character', () => {
+          it('will report a syntax error', () => {
+            expect(() =>
+              parse(`
+            deployment {
+              deploymentType -
+            }`)
+            ).to.throw('unexpected character: ->-<-');
+          });
+        });
+        context('such as a capitalized letters', () => {
+          it('will report a syntax error', () => {
+            expect(() =>
+              parse(`
+              deployment {
+                deploymentType FOO
+              }`)
+            ).to.throw('The deploymentType property name must match: /^[a-z][a-z-]*$/');
+          });
+        });
+
+        context('having illegal characters', () => {
+          it('will report a syntax error', () => {
+            expect(() =>
+              parse(`
+              deployment {
+                deploymentType foo.bar
+              }`)
+            ).to.throw('A single name is expected, but found a fully qualified name');
+          });
+        });
+      });
+    });
+    const ALPHABETIC_LOWER = ['gatewayType', 'monitoring', 'consoleOptions', 'serviceDiscoveryType', 'storageType'];
+    ALPHABETIC_LOWER.forEach(type => {
+      context(`and using for ${type}`, () => {
+        context('a valid value', () => {
+          it('does not report a syntax error for name', () => {
+            expect(() =>
+              parse(`
+              deployment {
+                ${type} valid
+              }`)
+            ).to.not.throw();
+          });
+        });
+        context('an invalid value', () => {
+          context('such as a number', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} 666
+                }`)
+              ).to.throw('A name is expected, but found: "666"');
+            });
+          });
+          context('such as an invalid character', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+              deployment {
+                ${type} -
+              }`)
+              ).to.throw('unexpected character: ->-<-');
+            });
+          });
+          context('such as a capitalized letters', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} FOO
+                }`)
+              ).to.throw(`The ${type} property name must match: /^[a-z]+$/`);
+            });
+          });
+
+          context('having illegal characters', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} foo.bar
+                }`)
+              ).to.throw('A single name is expected, but found a fully qualified name');
+            });
+          });
+        });
+      });
+    });
+    context('and using for directoryPath', () => {
+      context('a valid value', () => {
+        it('does not report a syntax error for name', () => {
+          expect(() =>
+            parse(`
+            deployment {
+              directoryPath "../"
+            }`)
+          ).to.not.throw();
+        });
+      });
+      context('an invalid value', () => {
+        context('such as a number', () => {
+          it('will report a syntax error', () => {
+            expect(() =>
+              parse(`
+              deployment {
+                directoryPath 666
+              }`)
+            ).to.throw('A string literal is expected, but found: "666"');
+          });
+        });
+        context('such as an invalid character', () => {
+          it('will report a syntax error', () => {
+            expect(() =>
+              parse(`
+            deployment {
+              directoryPath -
+            }`)
+            ).to.throw('unexpected character: ->-<-');
+          });
+        });
+        context('such as a invalid pattern', () => {
+          it('will report a syntax error', () => {
+            expect(() =>
+              parse(`
+              deployment {
+                directoryPath "/test"
+              }`)
+            ).to.throw('The directoryPath property name must match: /^"([^\\/]+).*"$/');
+          });
+        });
+
+        context('having illegal characters', () => {
+          it('will report a syntax error', () => {
+            expect(() =>
+              parse(`
+              deployment {
+                directoryPath foo.bar
+              }`)
+            ).to.throw('A string literal is expected, but found: "foo"');
+          });
+        });
+      });
+    });
+    const ALPHANUMERIC_LIST = ['appsFolders', 'clusteredDbApps'];
+
+    ALPHANUMERIC_LIST.forEach(type => {
+      context(`and using for ${type}`, () => {
+        context('a valid value', () => {
+          it('does not report a syntax error', () => {
+            expect(() =>
+              parse(`
+            deployment {
+              ${type} [test, test2,fooBar]
+            }`)
+            ).to.not.throw();
+          });
+        });
+
+        context('an invalid value', () => {
+          context('such as having special charecter inside the list', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} [fr, en, @123]
+              }`)
+              ).to.throw("MismatchedTokenException: Expecting token of type --> NAME <-- but found --> '@' <--");
+            });
+          });
+          context('such as not a list', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} true
+              }`)
+              ).to.throw('An array of names is expected, but found: "true"');
+            });
+          });
+        });
+      });
+    });
+    const ALPHANUMERIC_NAME = ['kubernetesServiceType', 'istio'];
+
+    ALPHANUMERIC_NAME.forEach(type => {
+      context(`and using for ${type}`, () => {
+        context('a valid value', () => {
+          it('does not report a syntax error', () => {
+            expect(() =>
+              parse(`
+            deployment {
+              ${type} test23
+            }`)
+            ).to.not.throw();
+          });
+        });
+
+        context('an invalid value', () => {
+          context('such as having special charecter', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} test-123
+              }`)
+              ).to.throw(`The ${type} property name must match: /^[A-Za-z][A-Za-z0-9]*$/`);
+            });
+          });
+          context('such as not a name', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} "true"
+              }`)
+              ).to.throw('A name is expected, but found: ""true""');
+            });
+          });
+        });
+      });
+    });
+    const ALPHANUMERIC_DASH_NAME = ['kubernetesNamespace', 'openshiftNamespace'];
+
+    ALPHANUMERIC_DASH_NAME.forEach(type => {
+      context(`and using for ${type}`, () => {
+        context('a valid value', () => {
+          it('does not report a syntax error', () => {
+            expect(() =>
+              parse(`
+            deployment {
+              ${type} test-23
+            }`)
+            ).to.not.throw();
+          });
+        });
+
+        context('an invalid value', () => {
+          context('such as having special charecter', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} test_123
+              }`)
+              ).to.throw(`The ${type} property name must match: /^[A-Za-z][A-Za-z0-9-]*$/`);
+            });
+          });
+          context('such as not a name', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} "true"
+              }`)
+              ).to.throw('A name is expected, but found: ""true""');
+            });
+          });
+        });
+      });
+    });
+    const BOOLEAN = ['istioRoute', 'enableRancherLoadBalancing'];
+
+    BOOLEAN.forEach(type => {
+      context(`and using for ${type}`, () => {
+        context('a valid value', () => {
+          it('does not report a syntax error', () => {
+            expect(() =>
+              parse(`
+            deployment {
+              ${type} true
+            }`)
+            ).to.not.throw();
+          });
+        });
+
+        context('an invalid value', () => {
+          context('such as having numbers or chars', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} test_123
+              }`)
+              ).to.throw('A boolean literal is expected, but found: "test_123"');
+            });
+          });
+        });
+      });
+    });
+    const URL_TYPE = ['ingressDomain', 'dockerRepositoryName'];
+    URL_TYPE.forEach(type => {
+      context(`and using for ${type}`, () => {
+        context('a valid value', () => {
+          it('does not report a syntax error', () => {
+            expect(() =>
+              parse(`
+            deployment {
+              ${type} "gcr.io/test"
+            }
+            deployment {
+              ${type} "gcr.io.192.120.0.0.io"
+            }`)
+            ).to.not.throw();
+            expect(() =>
+              parse(`
+            deployment {
+              ${type} "test105"
+            }`)
+            ).to.not.throw();
+            // find a way to support this as well
+            /* expect(() =>
+              parse(`
+            deployment {
+              ${type} test105
+            }`)
+            ).to.not.throw(); */
+          });
+        });
+
+        context('an invalid value', () => {
+          context('such as having invalid url', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} "test 123"
+              }`)
+              ).to.throw(
+                `The ${type} property name must match: /^"((?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:\\/?#[\\]@!$&'()*+,;=.]+|[a-zA-Z0-9]+)"$/`
+              );
+            });
+          });
+          context('such as not a name', () => {
+            it('will report a syntax error', () => {
+              expect(() =>
+                parse(`
+                deployment {
+                  ${type} true
+              }`)
+              ).to.throw('A string literal is expected, but found: "true"');
+            });
+          });
+        });
+      });
+    });
+    context(`and using for dockerPushCommand`, () => {
+      context('a valid value', () => {
+        it('does not report a syntax error', () => {
+          expect(() =>
+            parse(`
+          deployment {
+            dockerPushCommand "docker push"
+          }`)
+          ).to.not.throw();
+        });
+      });
+
+      context('an invalid value', () => {
+        context('such as having special chars', () => {
+          it('will report a syntax error', () => {
+            expect(() =>
+              parse(`
+              deployment {
+                dockerPushCommand "test@123"
+            }`)
+            ).to.throw('The dockerPushCommand property name must match: /^"?[A-Za-z][A-Za-z0-9- ]*"?$/');
+          });
+        });
+        context('such as not a name', () => {
+          it('will report a syntax error', () => {
+            expect(() =>
+              parse(`
+              deployment {
+                dockerPushCommand true
+            }`)
+            ).to.throw('A string literal is expected, but found: "true"');
           });
         });
       });

@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLEntity = require('../../../lib/core/jdl_entity');

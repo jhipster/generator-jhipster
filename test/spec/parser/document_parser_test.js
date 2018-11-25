@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const JDLReader = require('../../../lib/reader/jdl_reader');
 const DocumentParser = require('../../../lib/parser/document_parser');
@@ -59,7 +59,7 @@ describe('DocumentParser', () => {
 
         it('builds a JDLObject', () => {
           expect(jdlObject).not.to.be.null;
-          expect(jdlObject.entities.Department).to.deep.eq(
+          expect(jdlObject.entities.Department).to.deep.equal(
             new JDLEntity({
               name: 'Department',
               tableName: 'Department',
@@ -67,7 +67,10 @@ describe('DocumentParser', () => {
                 name: new JDLField({
                   name: 'name',
                   type: FieldTypes.STRING,
-                  validations: { required: new JDLValidation({ name: Validations.REQUIRED }) }
+                  validations: {
+                    required: new JDLValidation({ name: Validations.REQUIRED }),
+                    unique: new JDLValidation({ name: Validations.UNIQUE })
+                  }
                 }),
                 description: new JDLField({
                   name: 'description',
@@ -655,10 +658,8 @@ describe('DocumentParser', () => {
 
         it('parses it', () => {
           expect(application.languages.has('en') && application.languages.has('fr')).to.be.true;
-          expect(application.jwtSecretKey).not.to.be.undefined;
           expect(application.testFrameworks.size()).to.equal(0);
           delete application.languages;
-          delete application.jwtSecretKey;
           delete application.testFrameworks;
 
           expect(application).to.deep.equal({
@@ -686,8 +687,36 @@ describe('DocumentParser', () => {
             skipClient: false,
             skipServer: false,
             skipUserManagement: false,
-            useSass: false,
+            useSass: true,
             websocket: false
+          });
+        });
+      });
+      context('when parsing deployments', () => {
+        let deployment = null;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/deployments.jdl']);
+          const jdlObject = DocumentParser.parseFromConfigurationObject({
+            document: input
+          });
+          deployment = jdlObject.deployments['docker-compose'];
+        });
+
+        it('parses it', () => {
+          expect(deployment.appsFolders.toArray()).to.eql(['tata', 'titi']);
+          delete deployment.appsFolders;
+          delete deployment.clusteredDbApps;
+          delete deployment.consoleOptions;
+
+          expect(deployment).to.deep.equal({
+            deploymentType: 'docker-compose',
+            directoryPath: '../',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            serviceDiscoveryType: 'eureka'
           });
         });
       });
@@ -829,7 +858,6 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing entities with annotations', () => {
-        let jdlObject = null;
         let dtoOption = null;
         let filterOption = null;
         let paginationOption = null;
@@ -838,7 +866,7 @@ describe('DocumentParser', () => {
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/annotations.jdl']);
-          jdlObject = DocumentParser.parseFromConfigurationObject({
+          const jdlObject = DocumentParser.parseFromConfigurationObject({
             document: input,
             applicationType: ApplicationTypes.MONOLITH
           });
@@ -855,6 +883,82 @@ describe('DocumentParser', () => {
           expect(paginationOption.entityNames.toArray()).to.deep.equal(['B', 'C']);
           expect(serviceOption.entityNames.toArray()).to.deep.equal(['A', 'B']);
           expect(skipClientOption.entityNames.toArray()).to.deep.equal(['A', 'C']);
+        });
+      });
+      context('when parsing a mix between annotations and regular options', () => {
+        let dtoOptions = null;
+        let filterOptions = null;
+        let paginationOptions = null;
+        let serviceOptions = null;
+        let skipClientOptions = null;
+        let skipServerOptions = null;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/annotations_and_options.jdl']);
+          const jdlObject = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            applicationType: ApplicationTypes.MONOLITH
+          });
+          dtoOptions = jdlObject.getOptionsForName(BinaryOptions.DTO);
+          filterOptions = jdlObject.getOptionsForName(UnaryOptions.FILTER);
+          paginationOptions = jdlObject.getOptionsForName(BinaryOptions.PAGINATION);
+          serviceOptions = jdlObject.getOptionsForName(BinaryOptions.SERVICE);
+          skipClientOptions = jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT);
+          skipServerOptions = jdlObject.getOptionsForName(UnaryOptions.SKIP_SERVER);
+        });
+
+        it('correctly sets the options', () => {
+          expect(dtoOptions).to.have.length(1);
+          expect(dtoOptions[0].entityNames.toArray()).to.deep.equal(['A', 'B']);
+
+          expect(filterOptions).to.have.length(1);
+          expect(filterOptions[0].entityNames.toArray()).to.deep.equal(['C']);
+
+          expect(paginationOptions).to.have.length(2);
+          expect(paginationOptions[0].entityNames.toArray()).to.deep.equal(['B', 'C']);
+          expect(paginationOptions[1].entityNames.toArray()).to.deep.equal(['B', 'C']);
+
+          expect(serviceOptions).to.have.length(2);
+          expect(serviceOptions[0].entityNames.toArray()).to.deep.equal(['A', 'B']);
+          expect(serviceOptions[0].entityNames.toArray()).to.deep.equal(['A', 'B']);
+          expect(serviceOptions[1].entityNames.toArray()).to.deep.equal(['A']);
+
+          expect(skipClientOptions).to.have.length(1);
+          expect(skipClientOptions[0].entityNames.toArray()).to.deep.equal(['A', 'C']);
+
+          expect(skipServerOptions).to.have.length(1);
+          expect(skipServerOptions[0].entityNames.toArray()).to.deep.equal(['A']);
+        });
+      });
+      context('when having a pattern validation with a quote in it', () => {
+        let jdlObject = null;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/pattern_validation_with_quote.jdl']);
+          jdlObject = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            applicationType: ApplicationTypes.MONOLITH
+          });
+        });
+
+        it('formats it', () => {
+          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value.includes("\\'")).be.true;
+        });
+      });
+      context('when parsing a JDL with the unique constraint', () => {
+        let jdlObject = null;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/unique.jdl']);
+          jdlObject = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            applicationType: ApplicationTypes.MONOLITH
+          });
+        });
+
+        it('accepts it', () => {
+          expect(jdlObject.entities.A.fields.myString.validations.unique).not.to.be.undefined;
+          expect(jdlObject.entities.A.fields.myInteger.validations.unique).not.to.be.undefined;
         });
       });
     });

@@ -18,11 +18,11 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 
-const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const JHipsterEntityExporter = require('../../../lib/export/jhipster_entity_exporter');
 const FileUtils = require('../../../lib/utils/file_utils');
@@ -652,7 +652,7 @@ describe('JHipsterEntityExporter', () => {
             clientRootFolder: '',
             applications: ['toto']
           };
-          const application = new JDLApplication({
+          const application = new JDLMonolithApplication({
             config: {
               baseName: 'toto'
             },
@@ -726,13 +726,13 @@ describe('JHipsterEntityExporter', () => {
               applications: ['titi']
             }
           };
-          application1 = new JDLApplication({
+          application1 = new JDLMonolithApplication({
             config: {
               baseName: 'toto'
             },
             entities: ['A']
           });
-          application2 = new JDLApplication({
+          application2 = new JDLMonolithApplication({
             config: {
               baseName: 'titi'
             },

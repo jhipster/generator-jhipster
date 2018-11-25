@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const ReservedKeywords = require('../../../../lib/core/jhipster/reserved_keywords');
 
 describe('ReservedKeywords', () => {

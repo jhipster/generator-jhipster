@@ -18,13 +18,14 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 const JDLObject = require('../../../lib/core/jdl_object');
-const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
+const JDLDeployment = require('../../../lib/core/jdl_deployment');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
@@ -66,7 +67,7 @@ describe('JDLObject', () => {
 
       before(() => {
         object = new JDLObject();
-        application = new JDLApplication({ jhipsterVersion: '4.9.0' });
+        application = new JDLMonolithApplication({ jhipsterVersion: '4.9.0' });
         object.addApplication(application);
       });
 
@@ -90,11 +91,83 @@ describe('JDLObject', () => {
 
     context('when having one or more applications', () => {
       before(() => {
-        jdlObject.addApplication(new JDLApplication({}));
+        jdlObject.addApplication(new JDLMonolithApplication({}));
       });
 
       it('returns the number of applications', () => {
         expect(jdlObject.getApplicationQuantity()).to.equal(1);
+      });
+    });
+  });
+  describe('#addDeployment', () => {
+    context('when adding an invalid deployment', () => {
+      const object = new JDLObject();
+
+      context('such as a nil deployment', () => {
+        it('fails', () => {
+          expect(() => {
+            object.addDeployment(null);
+          }).to.throw('The deployment must be valid in order to be added to the JDL object.\nErrors: No deployment');
+        });
+      });
+      context('such as an incomplete deployment', () => {
+        it('fails', () => {
+          expect(() => {
+            object.addDeployment({
+              directoryPath: '../'
+            });
+          }).to.throw(
+            'The deployment must be valid in order to be added to the JDL object.\n' +
+              'Errors: No deployment type, No applications, No Docker repository'
+          );
+        });
+      });
+    });
+    context('when adding a valid application', () => {
+      let object = null;
+      let application = null;
+
+      before(() => {
+        object = new JDLObject();
+        application = new JDLDeployment({
+          deploymentType: 'docker-compose',
+          appFolders: ['tata'],
+          dockerRepositoryName: 'test'
+        });
+        object.addDeployment(application);
+      });
+
+      it('works', () => {
+        expect(object.deployments[application.deploymentType]).to.deep.eq(application);
+      });
+    });
+  });
+  describe('#getDeploymentQuantity', () => {
+    let jdlObject = null;
+
+    before(() => {
+      jdlObject = new JDLObject();
+    });
+
+    context('when having no deployment', () => {
+      it('returns 0', () => {
+        expect(jdlObject.getDeploymentQuantity()).to.equal(0);
+      });
+    });
+
+    context('when having one or more deployment', () => {
+      before(() => {
+        jdlObject.addDeployment(
+          new JDLDeployment({
+            deploymentType: 'docker-compose',
+            appFolders: ['tata'],
+            dockerRepositoryName: 'test'
+          })
+        );
+      });
+
+      it('returns the number of applications', () => {
+        expect(jdlObject.getDeploymentQuantity()).to.equal(1);
       });
     });
   });
@@ -103,8 +176,8 @@ describe('JDLObject', () => {
 
     before(() => {
       jdlObject = new JDLObject();
-      jdlObject.addApplication(new JDLApplication({ config: { baseName: 'A' } }));
-      jdlObject.addApplication(new JDLApplication({ config: { baseName: 'B' } }));
+      jdlObject.addApplication(new JDLMonolithApplication({ config: { baseName: 'A' } }));
+      jdlObject.addApplication(new JDLMonolithApplication({ config: { baseName: 'B' } }));
     });
 
     context('when not passing a function', () => {
@@ -805,6 +878,7 @@ describe('JDLObject', () => {
   });
   describe('#toString', () => {
     let application = null;
+    let deployment = null;
     let object = null;
     let entityA = null;
     let entityB = null;
@@ -815,8 +889,14 @@ describe('JDLObject', () => {
 
     before(() => {
       object = new JDLObject();
-      application = new JDLApplication({ jhipsterVersion: '4.9.0' });
+      application = new JDLMonolithApplication({ jhipsterVersion: '4.9.0' });
       object.addApplication(application);
+      deployment = new JDLDeployment({
+        deploymentType: 'docker-compose',
+        appFolders: ['tata'],
+        dockerRepositoryName: 'test'
+      });
+      object.addDeployment(deployment);
       entityA = new JDLEntity({ name: 'EntityA', tableName: 't_entity_a' });
       const field = new JDLField({ name: 'myField', type: 'String' });
       field.addValidation(new JDLValidation());
@@ -848,6 +928,8 @@ describe('JDLObject', () => {
     it('stringifies the JDL object', () => {
       expect(object.toString()).to.eq(
         `${application.toString()}
+
+${deployment.toString()}
 
 ${entityA.toString()}
 ${entityB.toString()}

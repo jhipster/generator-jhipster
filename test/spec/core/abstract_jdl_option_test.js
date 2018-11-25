@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const AbstractJDLOption = require('../../../lib/core/abstract_jdl_option');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');

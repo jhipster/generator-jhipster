@@ -18,13 +18,13 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const EntityParser = require('../../../lib/parser/entity_parser');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const JDLObject = require('../../../lib/core/jdl_object');
-const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLMicroserviceApplication = require('../../../lib/core/jdl_microservice_application');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLEnum = require('../../../lib/core/jdl_enum');
@@ -701,10 +701,9 @@ describe('EntityParser', () => {
         let content = null;
 
         before(() => {
-          const application = new JDLApplication({
+          const application = new JDLMicroserviceApplication({
             config: {
-              baseName: 'MyApp',
-              applicationType: ApplicationTypes.MICROSERVICE
+              baseName: 'MyApp'
             },
             entities: ['A']
           });

@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const fs = require('fs');
 const JDLReader = require('../../../lib/reader/jdl_reader');
 

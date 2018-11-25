@@ -18,9 +18,9 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const fs = require('fs');
+const fse = require('fs-extra');
 const path = require('path');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
@@ -425,15 +425,12 @@ describe('JDLImporter', () => {
             return exportedEntity;
           });
         filesExist = ENTITY_NAMES.reduce(
-          (result, entityName) => result && fs.statSync(path.join('.jhipster', `${entityName}.json`)).isFile()
+          (result, entityName) => result && fse.statSync(path.join('.jhipster', `${entityName}.json`)).isFile()
         );
       });
 
       after(() => {
-        ENTITY_NAMES.forEach(entityName => {
-          fs.unlinkSync(path.join('.jhipster', `${entityName}.json`));
-        });
-        fs.rmdirSync('.jhipster');
+        fse.removeSync('.jhipster');
       });
 
       it('returns the final state', () => {
@@ -448,7 +445,8 @@ describe('JDLImporter', () => {
             expectedContent.Region,
             expectedContent.Task
           ],
-          exportedApplications: []
+          exportedApplications: [],
+          exportedDeployments: []
         });
       });
       it('creates the files', () => {
@@ -456,7 +454,7 @@ describe('JDLImporter', () => {
       });
       it('exports their content', () => {
         ENTITY_NAMES.forEach(entityName => {
-          const entityContent = JSON.parse(fs.readFileSync(path.join('.jhipster', `${entityName}.json`), 'utf-8'));
+          const entityContent = JSON.parse(fse.readFileSync(path.join('.jhipster', `${entityName}.json`), 'utf-8'));
           expect(entityContent.changelogDate).not.to.be.undefined;
           delete entityContent.changelogDate;
           if (expectedContent[entityName].javadoc === '') {
@@ -475,9 +473,37 @@ describe('JDLImporter', () => {
       });
 
       after(() => {
-        fs.unlinkSync(path.join('.jhipster', 'BankAccount.json'));
-        fs.unlinkSync('.yo-rc.json');
-        fs.rmdirSync('.jhipster');
+        fse.unlinkSync('.yo-rc.json');
+        fse.removeSync('.jhipster');
+      });
+
+      it('returns the import state', () => {
+        expect(returned.exportedEntities).to.have.lengthOf(1);
+        expect(returned.exportedApplications).to.have.lengthOf(1);
+        expect(returned.exportedDeployments).to.have.lengthOf(0);
+      });
+      it('creates the app config file in the same folder', () => {
+        expect(fse.statSync('.yo-rc.json').isFile()).to.be.true;
+      });
+      it('creates the entity folder in the same folder', () => {
+        expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
+        expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
+      });
+    });
+    context('when parsing one JDL application and entities with entity and dto suffixes', () => {
+      let returned = null;
+      let content = null;
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'application_with_entity_dto_suffixes.jdl')]);
+        returned = importer.import();
+
+        content = JSON.parse(fse.readFileSync('.yo-rc.json', 'utf-8'));
+      });
+
+      after(() => {
+        fse.unlinkSync('.yo-rc.json');
+        fse.removeSync('.jhipster');
       });
 
       it('returns the import state', () => {
@@ -485,11 +511,9 @@ describe('JDLImporter', () => {
         expect(returned.exportedApplications).to.have.lengthOf(1);
       });
       it('creates the app config file in the same folder', () => {
-        expect(fs.statSync('.yo-rc.json').isFile()).to.be.true;
-      });
-      it('creates the entity folder in the same folder', () => {
-        expect(fs.statSync('.jhipster').isDirectory()).to.be.true;
-        expect(fs.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
+        expect(fse.statSync('.yo-rc.json').isFile()).to.be.true;
+        expect(content['generator-jhipster'].entitySuffix).to.equal('Entity');
+        expect(content['generator-jhipster'].dtoSuffix).to.equal('');
       });
     });
     context('when parsing JDL applications and exporting them', () => {
@@ -516,7 +540,7 @@ describe('JDLImporter', () => {
             serverPort: '8080',
             enableSwaggerCodegen: false,
             enableHibernateCache: true,
-            useSass: false,
+            useSass: true,
             jhiPrefix: 'jhi',
             messageBroker: false,
             serviceDiscoveryType: false,
@@ -549,10 +573,10 @@ describe('JDLImporter', () => {
             serverPort: '8080',
             enableSwaggerCodegen: false,
             enableHibernateCache: true,
-            useSass: false,
+            useSass: true,
             jhiPrefix: 'jhi',
             messageBroker: false,
-            serviceDiscoveryType: false,
+            serviceDiscoveryType: 'eureka',
             clientPackageManager: 'npm',
             clientFramework: 'angularX',
             nativeLanguage: 'en',
@@ -582,16 +606,13 @@ describe('JDLImporter', () => {
             enableSwaggerCodegen: false,
             enableHibernateCache: true,
             cacheProvider: 'hazelcast',
-            useSass: false,
             jhiPrefix: 'jhi',
             messageBroker: false,
-            serviceDiscoveryType: false,
+            serviceDiscoveryType: 'eureka',
             clientPackageManager: 'npm',
-            clientFramework: 'angularX',
             nativeLanguage: 'en',
-            skipUserManagement: false,
-            skipClient: true,
-            skipServer: false
+            skipUserManagement: true,
+            skipClient: true
           }
         },
         {
@@ -615,7 +636,7 @@ describe('JDLImporter', () => {
             serverPort: '8080',
             enableSwaggerCodegen: false,
             enableHibernateCache: true,
-            useSass: false,
+            useSass: true,
             jhiPrefix: 'jhi',
             messageBroker: false,
             serviceDiscoveryType: false,
@@ -634,28 +655,23 @@ describe('JDLImporter', () => {
         const importer = new JDLImporter([path.join('test', 'test_files', 'applications2.jdl')]);
         importer.import();
         APPLICATION_NAMES.forEach(applicationName => {
-          contents.push(JSON.parse(fs.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
+          contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
         });
       });
 
       after(() => {
         APPLICATION_NAMES.forEach(applicationName => {
-          fs.unlinkSync(path.join(applicationName, '.yo-rc.json'));
-          fs.rmdirSync(applicationName);
+          fse.removeSync(applicationName);
         });
       });
 
       it('creates the folders and the .yo-rc.json files', () => {
         APPLICATION_NAMES.forEach(applicationName => {
-          expect(fs.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
-          expect(fs.statSync(applicationName).isDirectory()).to.be.true;
+          expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
+          expect(fse.statSync(applicationName).isDirectory()).to.be.true;
         });
       });
       it('exports the application contents', () => {
-        contents.forEach(content => {
-          expect(content['generator-jhipster'].jwtSecretKey).not.to.be.undefined;
-          delete content['generator-jhipster'].jwtSecretKey;
-        });
         expect(contents).to.deep.equal(expectedContents);
       });
     });
@@ -684,7 +700,7 @@ describe('JDLImporter', () => {
             languages: ['en', 'fr'],
             serverPort: '8080',
             enableSwaggerCodegen: false,
-            useSass: false,
+            useSass: true,
             jhiPrefix: 'jhi',
             messageBroker: false,
             serviceDiscoveryType: false,
@@ -717,16 +733,13 @@ describe('JDLImporter', () => {
             languages: ['en', 'fr'],
             serverPort: '8091',
             enableSwaggerCodegen: false,
-            useSass: false,
             jhiPrefix: 'jhi',
             messageBroker: false,
-            serviceDiscoveryType: false,
+            serviceDiscoveryType: 'eureka',
             clientPackageManager: 'npm',
-            clientFramework: 'angularX',
             nativeLanguage: 'en',
-            skipUserManagement: false,
-            skipClient: true,
-            skipServer: false
+            skipUserManagement: true,
+            skipClient: true
           }
         },
         {
@@ -750,16 +763,13 @@ describe('JDLImporter', () => {
             languages: ['en', 'fr'],
             serverPort: '8092',
             enableSwaggerCodegen: false,
-            useSass: false,
             jhiPrefix: 'jhi',
             messageBroker: false,
-            serviceDiscoveryType: false,
+            serviceDiscoveryType: 'eureka',
             clientPackageManager: 'npm',
-            clientFramework: 'angularX',
             nativeLanguage: 'en',
-            skipUserManagement: false,
-            skipClient: true,
-            skipServer: false
+            skipUserManagement: true,
+            skipClient: true
           }
         }
       ];
@@ -818,49 +828,44 @@ describe('JDLImporter', () => {
           applications: ['myFirstApp', 'myThirdApp']
         }
       ];
-
+      let importState;
       before(() => {
         const importer = new JDLImporter([
           path.join('test', 'test_files', 'integration', 'file1.jdl'),
           path.join('test', 'test_files', 'integration', 'file2.jdl')
         ]);
-        importer.import();
+        importState = importer.import();
       });
 
       after(() => {
-        fs.unlinkSync(path.join('myFirstApp', '.jhipster', 'A.json'));
-        fs.unlinkSync(path.join('myFirstApp', '.jhipster', 'B.json'));
-        fs.unlinkSync(path.join('myFirstApp', '.jhipster', 'E.json'));
-        fs.unlinkSync(path.join('myFirstApp', '.jhipster', 'F.json'));
-        fs.unlinkSync(path.join('mySecondApp', '.jhipster', 'E.json'));
-        fs.unlinkSync(path.join('myThirdApp', '.jhipster', 'F.json'));
         APPLICATION_NAMES.forEach(applicationName => {
-          fs.unlinkSync(path.join(applicationName, '.yo-rc.json'));
-          fs.rmdirSync(path.join(applicationName, '.jhipster'));
-          fs.rmdirSync(path.join(applicationName));
+          fse.removeSync(path.join(applicationName));
         });
+      });
+
+      it('generates correct import state', () => {
+        expect(importState.exportedApplications.length).to.eql(3);
+        expect(importState.exportedEntities.length).to.eql(4);
       });
 
       it('exports the applications', () => {
         APPLICATION_NAMES.forEach((applicationName, index) => {
-          expect(fs.statSync(path.join(applicationName)).isDirectory()).to.be.true;
+          expect(fse.statSync(path.join(applicationName)).isDirectory()).to.be.true;
           const appConfPath = path.join(applicationName, '.yo-rc.json');
-          expect(fs.statSync(appConfPath).isFile()).to.be.true;
-          const readJSON = JSON.parse(fs.readFileSync(appConfPath, 'utf-8').toString());
-          expect(readJSON['generator-jhipster'].jwtSecretKey).not.to.be.undefined;
-          delete readJSON['generator-jhipster'].jwtSecretKey;
+          expect(fse.statSync(appConfPath).isFile()).to.be.true;
+          const readJSON = JSON.parse(fse.readFileSync(appConfPath, 'utf-8').toString());
           expect(readJSON).to.deep.equal(expectedApplications[index]);
         });
       });
       it('exports the entities for each application', () => {
         APPLICATION_NAMES.forEach(applicationName => {
           let readJSON = null;
-          expect(fs.statSync(path.join(applicationName, '.jhipster')).isDirectory()).to.be.true;
+          expect(fse.statSync(path.join(applicationName, '.jhipster')).isDirectory()).to.be.true;
           switch (applicationName) {
             case 'myFirstApp': // A, B, E, F
               ENTITY_NAMES.forEach((entityName, index) => {
                 readJSON = JSON.parse(
-                  fs.readFileSync(path.join(applicationName, '.jhipster', `${entityName}.json`), 'utf-8').toString()
+                  fse.readFileSync(path.join(applicationName, '.jhipster', `${entityName}.json`), 'utf-8').toString()
                 );
                 expect(readJSON.changelogDate).not.to.be.undefined;
                 delete readJSON.changelogDate;
@@ -869,7 +874,7 @@ describe('JDLImporter', () => {
               break;
             case 'mySecondApp': // only E
               readJSON = JSON.parse(
-                fs.readFileSync(path.join(applicationName, '.jhipster', 'E.json'), 'utf-8').toString()
+                fse.readFileSync(path.join(applicationName, '.jhipster', 'E.json'), 'utf-8').toString()
               );
               expect(readJSON.changelogDate).not.to.be.undefined;
               delete readJSON.changelogDate;
@@ -877,7 +882,7 @@ describe('JDLImporter', () => {
               break;
             case 'myThirdApp': // only F
               readJSON = JSON.parse(
-                fs.readFileSync(path.join(applicationName, '.jhipster', 'F.json'), 'utf-8').toString()
+                fse.readFileSync(path.join(applicationName, '.jhipster', 'F.json'), 'utf-8').toString()
               );
               expect(readJSON.changelogDate).not.to.be.undefined;
               delete readJSON.changelogDate;
@@ -901,9 +906,7 @@ describe('JDLImporter', () => {
       });
 
       after(() => {
-        fs.unlinkSync(path.join('.jhipster', 'A.json'));
-        fs.unlinkSync(path.join('.jhipster', 'B.json'));
-        fs.rmdirSync('.jhipster');
+        fse.removeSync('.jhipster');
       });
 
       it('does not fail', () => {
@@ -921,10 +924,7 @@ describe('JDLImporter', () => {
       });
 
       after(() => {
-        fs.unlinkSync(path.join('.jhipster', 'A.json'));
-        fs.unlinkSync(path.join('.jhipster', 'B.json'));
-        fs.unlinkSync(path.join('.jhipster', 'C.json'));
-        fs.rmdirSync('.jhipster');
+        fse.removeSync('.jhipster');
       });
 
       it('sets the options', () => {
@@ -937,6 +937,497 @@ describe('JDLImporter', () => {
         expect(returned.exportedEntities[2].skipClient).to.equal(true);
         expect(returned.exportedEntities[2].jpaMetamodelFiltering).to.equal(true);
         expect(returned.exportedEntities[2].pagination).to.equal('pager');
+      });
+    });
+    context('when parsing a JDL with a pattern validation containing a quote', () => {
+      let returned = null;
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'pattern_validation_with_quote.jdl')], {
+          applicationName: 'MyApp',
+          applicationType: ApplicationTypes.MONOLITH,
+          databaseType: DatabaseTypes.SQL
+        });
+        returned = importer.import();
+      });
+
+      after(() => {
+        fse.removeSync('.jhipster');
+      });
+
+      it('escapes the quote', () => {
+        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes("\\'")).to.be.true;
+      });
+    });
+
+    context('when parsing JDL applications and deployment config', () => {
+      const contents = [];
+      const expectedContents = [
+        {
+          entities: [],
+          'generator-jhipster': {
+            baseName: 'tata',
+            packageName: 'com.mathieu.tata',
+            packageFolder: 'com/mathieu/tata',
+            authenticationType: 'jwt',
+            websocket: false,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            prodDatabaseType: 'mysql',
+            buildTool: 'maven',
+            searchEngine: false,
+            enableTranslation: true,
+            applicationType: 'monolith',
+            cacheProvider: 'ehcache',
+            testFrameworks: [],
+            languages: ['en', 'fr'],
+            serverPort: '8080',
+            enableSwaggerCodegen: false,
+            enableHibernateCache: true,
+            useSass: true,
+            jhiPrefix: 'jhi',
+            messageBroker: false,
+            serviceDiscoveryType: false,
+            clientPackageManager: 'npm',
+            clientFramework: 'angularX',
+            nativeLanguage: 'en',
+            skipUserManagement: false,
+            skipClient: false,
+            skipServer: false
+          }
+        },
+        {
+          entities: [],
+          'generator-jhipster': {
+            baseName: 'titi',
+            packageName: 'com.mathieu.titi',
+            packageFolder: 'com/mathieu/titi',
+            authenticationType: 'jwt',
+            websocket: false,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            prodDatabaseType: 'mysql',
+            buildTool: 'maven',
+            searchEngine: false,
+            enableTranslation: true,
+            applicationType: 'gateway',
+            cacheProvider: 'ehcache',
+            testFrameworks: [],
+            languages: ['en', 'fr'],
+            serverPort: '8080',
+            enableSwaggerCodegen: false,
+            enableHibernateCache: true,
+            useSass: true,
+            jhiPrefix: 'jhi',
+            messageBroker: false,
+            serviceDiscoveryType: 'eureka',
+            clientPackageManager: 'npm',
+            clientFramework: 'angularX',
+            nativeLanguage: 'en',
+            skipUserManagement: false,
+            skipClient: false,
+            skipServer: false
+          }
+        },
+        {
+          entities: [],
+          'generator-jhipster': {
+            baseName: 'toto',
+            packageName: 'com.mathieu.toto',
+            packageFolder: 'com/mathieu/toto',
+            authenticationType: 'jwt',
+            websocket: false,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            prodDatabaseType: 'mysql',
+            buildTool: 'maven',
+            searchEngine: false,
+            enableTranslation: true,
+            applicationType: 'microservice',
+            testFrameworks: [],
+            languages: ['en', 'fr'],
+            serverPort: '8081',
+            enableSwaggerCodegen: false,
+            enableHibernateCache: true,
+            cacheProvider: 'hazelcast',
+            jhiPrefix: 'jhi',
+            messageBroker: false,
+            serviceDiscoveryType: 'eureka',
+            clientPackageManager: 'npm',
+            nativeLanguage: 'en',
+            skipUserManagement: true,
+            skipClient: true
+          }
+        },
+        {
+          entities: [],
+          'generator-jhipster': {
+            baseName: 'tutu',
+            packageName: 'com.mathieu.tutu',
+            packageFolder: 'com/mathieu/tutu',
+            authenticationType: 'jwt',
+            websocket: false,
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            prodDatabaseType: 'mysql',
+            buildTool: 'maven',
+            searchEngine: false,
+            enableTranslation: true,
+            applicationType: 'monolith',
+            cacheProvider: 'ehcache',
+            testFrameworks: [],
+            languages: ['en', 'fr'],
+            serverPort: '8080',
+            enableSwaggerCodegen: false,
+            enableHibernateCache: true,
+            useSass: true,
+            jhiPrefix: 'jhi',
+            messageBroker: false,
+            serviceDiscoveryType: false,
+            clientPackageManager: 'npm',
+            clientFramework: 'angularX',
+            nativeLanguage: 'en',
+            skipUserManagement: false,
+            skipClient: false,
+            skipServer: false
+          }
+        },
+        {
+          'generator-jhipster': {
+            appsFolders: ['tata', 'titi'],
+            directoryPath: '../',
+            gatewayType: 'zuul',
+            clusteredDbApps: [],
+            consoleOptions: [],
+            deploymentType: 'docker-compose',
+            serviceDiscoveryType: 'eureka',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            monitoring: 'no'
+          }
+        }
+      ];
+      const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'applications3.jdl')]);
+        importer.import();
+        APPLICATION_NAMES.forEach(applicationName => {
+          contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
+        });
+        contents.push(JSON.parse(fse.readFileSync(path.join('docker-compose', '.yo-rc.json'), 'utf-8')));
+      });
+
+      after(() => {
+        APPLICATION_NAMES.forEach(applicationName => {
+          fse.removeSync(applicationName);
+        });
+        fse.removeSync('docker-compose');
+      });
+
+      it('creates the folders and the .yo-rc.json files', () => {
+        APPLICATION_NAMES.forEach(applicationName => {
+          expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
+          expect(fse.statSync(applicationName).isDirectory()).to.be.true;
+        });
+      });
+      it('creates the docker-compose folder with .yo-rc.json file', () => {
+        expect(fse.statSync(path.join('docker-compose', '.yo-rc.json')).isFile()).to.be.true;
+        expect(fse.statSync('docker-compose').isDirectory()).to.be.true;
+      });
+      it('exports the application & deployment contents', () => {
+        expect(contents).to.deep.equal(expectedContents);
+      });
+    });
+
+    context('when parsing deployment config', () => {
+      const contents = [];
+      const expectedContents = [
+        {
+          'generator-jhipster': {
+            appsFolders: ['tata', 'titi'],
+            directoryPath: '../',
+            gatewayType: 'zuul',
+            clusteredDbApps: [],
+            consoleOptions: [],
+            deploymentType: 'docker-compose',
+            serviceDiscoveryType: 'eureka',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            monitoring: 'no'
+          }
+        },
+        {
+          'generator-jhipster': {
+            appsFolders: ['tata', 'titi'],
+            clusteredDbApps: [],
+            consoleOptions: [],
+            directoryPath: '../',
+            deploymentType: 'kubernetes',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            gatewayType: 'zuul',
+            ingressDomain: '',
+            istio: 'no',
+            istioRoute: false,
+            kubernetesNamespace: 'default',
+            kubernetesServiceType: 'LoadBalancer',
+            monitoring: 'no',
+            serviceDiscoveryType: 'eureka'
+          }
+        },
+        {
+          'generator-jhipster': {
+            appsFolders: ['tata', 'titi'],
+            clusteredDbApps: [],
+            consoleOptions: [],
+            directoryPath: '../',
+            deploymentType: 'openshift',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            openshiftNamespace: 'default',
+            serviceDiscoveryType: 'eureka',
+            storageType: 'ephemeral'
+          }
+        },
+        {
+          'generator-jhipster': {
+            appsFolders: ['tata', 'titi'],
+            clusteredDbApps: [],
+            consoleOptions: [],
+            directoryPath: '../',
+            deploymentType: 'rancher-compose',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: 'test',
+            enableRancherLoadBalancing: false,
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            serviceDiscoveryType: 'eureka'
+          }
+        }
+      ];
+      const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes', 'openshift', 'rancher-compose'];
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'deployments.jdl')]);
+        importer.import();
+        DEPLOYMENT_NAMES.forEach(name => {
+          contents.push(JSON.parse(fse.readFileSync(path.join(name, '.yo-rc.json'), 'utf-8')));
+        });
+      });
+
+      after(() => {
+        DEPLOYMENT_NAMES.forEach(name => {
+          fse.removeSync(name);
+        });
+      });
+
+      it('creates the folders and the .yo-rc.json files', () => {
+        DEPLOYMENT_NAMES.forEach(name => {
+          expect(fse.statSync(path.join(name, '.yo-rc.json')).isFile()).to.be.true;
+          expect(fse.statSync(name).isDirectory()).to.be.true;
+        });
+      });
+      it('exports the deployment contents', () => {
+        expect(contents).to.deep.equal(expectedContents);
+      });
+    });
+
+    context('when parsing JDL applications and deployment config with a realistic sample', () => {
+      const contents = [];
+      const expectedContents = [
+        {
+          'generator-jhipster': {
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            enableHibernateCache: true,
+            enableSwaggerCodegen: false,
+            enableTranslation: true,
+            jhiPrefix: 'jhi',
+            languages: ['en', 'fr'],
+            messageBroker: false,
+            nativeLanguage: 'en',
+            packageName: 'com.jhipster.demo.store',
+            packageFolder: 'com/jhipster/demo/store',
+            prodDatabaseType: 'mysql',
+            searchEngine: false,
+            serviceDiscoveryType: false,
+            skipClient: false,
+            skipServer: false,
+            testFrameworks: ['protractor'],
+            websocket: false,
+            baseName: 'store',
+            applicationType: 'gateway',
+            authenticationType: 'jwt',
+            cacheProvider: 'hazelcast',
+            buildTool: 'gradle',
+            clientFramework: 'react',
+            useSass: true,
+            skipUserManagement: false,
+            clientPackageManager: 'npm',
+            serverPort: '8080'
+          },
+          entities: [
+            'Customer',
+            'Product',
+            'ProductCategory',
+            'ProductOrder',
+            'OrderItem',
+            'Invoice',
+            'Shipment',
+            'Notification'
+          ]
+        },
+        {
+          'generator-jhipster': {
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            enableHibernateCache: true,
+            enableSwaggerCodegen: false,
+            enableTranslation: true,
+            jhiPrefix: 'jhi',
+            languages: ['en', 'fr'],
+            messageBroker: false,
+            nativeLanguage: 'en',
+            packageName: 'com.jhipster.demo.product',
+            packageFolder: 'com/jhipster/demo/product',
+            prodDatabaseType: 'mysql',
+            searchEngine: false,
+            serviceDiscoveryType: false,
+            skipClient: true,
+            testFrameworks: [],
+            websocket: false,
+            baseName: 'product',
+            applicationType: 'microservice',
+            authenticationType: 'jwt',
+            cacheProvider: 'hazelcast',
+            buildTool: 'gradle',
+            serverPort: '8081',
+            skipUserManagement: true,
+            clientPackageManager: 'npm'
+          },
+          entities: ['Product', 'ProductCategory', 'ProductOrder', 'OrderItem']
+        },
+        {
+          'generator-jhipster': {
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            enableHibernateCache: true,
+            enableSwaggerCodegen: false,
+            enableTranslation: true,
+            jhiPrefix: 'jhi',
+            languages: ['en', 'fr'],
+            messageBroker: false,
+            nativeLanguage: 'en',
+            packageName: 'com.jhipster.demo.invoice',
+            packageFolder: 'com/jhipster/demo/invoice',
+            prodDatabaseType: 'mysql',
+            searchEngine: false,
+            serviceDiscoveryType: false,
+            skipClient: true,
+            testFrameworks: [],
+            websocket: false,
+            baseName: 'invoice',
+            applicationType: 'microservice',
+            authenticationType: 'jwt',
+            buildTool: 'gradle',
+            serverPort: '8082',
+            skipUserManagement: true,
+            clientPackageManager: 'npm',
+            cacheProvider: 'hazelcast'
+          },
+          entities: ['Invoice', 'Shipment']
+        },
+        {
+          'generator-jhipster': {
+            databaseType: 'mongodb',
+            devDatabaseType: 'mongodb',
+            enableHibernateCache: false,
+            enableSwaggerCodegen: false,
+            enableTranslation: true,
+            jhiPrefix: 'jhi',
+            languages: ['en', 'fr'],
+            messageBroker: false,
+            nativeLanguage: 'en',
+            packageName: 'com.jhipster.demo.notification',
+            packageFolder: 'com/jhipster/demo/notification',
+            prodDatabaseType: 'mongodb',
+            searchEngine: false,
+            serviceDiscoveryType: false,
+            skipClient: true,
+            testFrameworks: [],
+            websocket: false,
+            baseName: 'notification',
+            applicationType: 'microservice',
+            authenticationType: 'jwt',
+            cacheProvider: 'no',
+            buildTool: 'gradle',
+            serverPort: '8083',
+            skipUserManagement: true,
+            clientPackageManager: 'npm'
+          },
+          entities: ['Notification']
+        },
+        {
+          'generator-jhipster': {
+            deploymentType: 'docker-compose',
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            directoryPath: '../',
+            appsFolders: ['store', 'invoice', 'notification', 'product'],
+            clusteredDbApps: [],
+            consoleOptions: [],
+            serviceDiscoveryType: false,
+            dockerRepositoryName: 'deepu105',
+            dockerPushCommand: 'docker push'
+          }
+        },
+        {
+          'generator-jhipster': {
+            deploymentType: 'kubernetes',
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            directoryPath: '../',
+            appsFolders: ['store', 'invoice', 'notification', 'product'],
+            clusteredDbApps: [],
+            consoleOptions: [],
+            serviceDiscoveryType: false,
+            dockerRepositoryName: 'deepu105',
+            dockerPushCommand: 'docker push',
+            kubernetesNamespace: 'default',
+            kubernetesServiceType: 'LoadBalancer',
+            ingressDomain: '',
+            istio: 'no',
+            istioRoute: false
+          }
+        }
+      ];
+      const FOLDER_NAMES = ['store', 'product', 'invoice', 'notification', 'docker-compose', 'kubernetes'];
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'realistic_sample.jdl')]);
+        importer.import();
+        FOLDER_NAMES.forEach(applicationName => {
+          contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
+        });
+      });
+
+      after(() => {
+        FOLDER_NAMES.forEach(applicationName => {
+          fse.removeSync(applicationName);
+        });
+      });
+
+      it('creates the folders and the .yo-rc.json files', () => {
+        FOLDER_NAMES.forEach(applicationName => {
+          expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
+          expect(fse.statSync(applicationName).isDirectory()).to.be.true;
+        });
+      });
+      it('exports the application & deployment contents', () => {
+        expect(contents).to.deep.equal(expectedContents);
       });
     });
   });

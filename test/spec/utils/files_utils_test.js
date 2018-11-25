@@ -21,7 +21,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const FileUtils = require('../../../lib/utils/file_utils');
 
 describe('FileUtils', () => {

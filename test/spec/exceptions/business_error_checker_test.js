@@ -34,7 +34,9 @@ const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const Validations = require('../../../lib/core/jhipster/validations');
 const JDLObject = require('../../../lib/core/jdl_object');
-const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLGatewayApplication = require('../../../lib/core/jdl_gateway_application');
+const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
+const JDLMicroserviceApplication = require('../../../lib/core/jdl_microservice_application');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLEnum = require('../../../lib/core/jdl_enum');
@@ -48,14 +50,10 @@ describe('BusinessErrorChecker', () => {
     let checker = null;
 
     context('with no passed JDL object', () => {
-      before(() => {
-        checker = new BusinessErrorChecker();
-      });
-
-      it('does not fail', () => {
+      it('fails', () => {
         expect(() => {
-          checker.checkForErrors();
-        }).not.to.throw();
+          new BusinessErrorChecker();
+        }).to.throw('A JDL object must be passed to check for business errors.');
       });
     });
     context('with a complete JDL object', () => {
@@ -69,7 +67,7 @@ describe('BusinessErrorChecker', () => {
 
       before(() => {
         const jdlObject = new JDLObject();
-        const application = new JDLApplication({
+        const application = new JDLMonolithApplication({
           entities: ['MyEntity']
         });
         const entity = new JDLEntity({
@@ -147,33 +145,12 @@ describe('BusinessErrorChecker', () => {
       jdlObject = new JDLObject();
     });
 
-    context('when having an UAA application with skipped user management', () => {
-      before(() => {
-        jdlObject.addApplication(
-          new JDLApplication({
-            config: {
-              applicationType: ApplicationTypes.UAA,
-              skipUserManagement: true,
-              uaaBaseName: 'uaa'
-            }
-          })
-        );
-        checker = new BusinessErrorChecker(jdlObject);
-      });
-
-      it('fails', () => {
-        expect(() => {
-          checker.checkForApplicationErrors();
-        }).to.throw('Skipping user management in a UAA app is forbidden.');
-      });
-    });
     context('when having no database type', () => {
       context('for a microservice without oauth2', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLMicroserviceApplication({
               config: {
-                applicationType: ApplicationTypes.MICROSERVICE,
                 authenticationType: 'jwt',
                 databaseType: DatabaseTypes.NO
               }
@@ -191,11 +168,12 @@ describe('BusinessErrorChecker', () => {
       context('for a gateway with uaa', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLGatewayApplication({
               config: {
-                applicationType: ApplicationTypes.GATEWAY,
                 authenticationType: 'uaa',
-                databaseType: DatabaseTypes.NO
+                databaseType: DatabaseTypes.NO,
+                devDatabaseType: DatabaseTypes.NO,
+                prodDatabaseType: DatabaseTypes.NO
               }
             })
           );
@@ -210,9 +188,8 @@ describe('BusinessErrorChecker', () => {
       context('for any other case', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLMonolithApplication({
               config: {
-                applicationType: ApplicationTypes.MONOLITH,
                 authenticationType: 'jwt',
                 databaseType: DatabaseTypes.NO
               }
@@ -306,7 +283,7 @@ describe('BusinessErrorChecker', () => {
       context('with an entity having a reserved table name', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLMonolithApplication({
               config: {
                 databaseType: DatabaseTypes.SQL
               },
@@ -411,7 +388,7 @@ describe('BusinessErrorChecker', () => {
       context('when checking a JDL object with a JDL application', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLMonolithApplication({
               config: {
                 databaseType: DatabaseTypes.SQL
               },
@@ -667,6 +644,81 @@ describe('BusinessErrorChecker', () => {
         });
       });
     });
+    context('with relationships between multiple entities', () => {
+      before(() => {
+        jdlObject.addApplication(
+          new JDLMicroserviceApplication({
+            config: {
+              baseName: 'app1'
+            },
+            entities: ['A', 'B']
+          })
+        );
+        jdlObject.addApplication(
+          new JDLMicroserviceApplication({
+            config: {
+              baseName: 'app2'
+            },
+            entities: ['B', 'C']
+          })
+        );
+        jdlObject.addApplication(
+          new JDLMicroserviceApplication({
+            config: {
+              baseName: 'app3'
+            },
+            entities: ['A', 'B', 'C']
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'A'
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'B'
+          })
+        );
+        jdlObject.addEntity(
+          new JDLEntity({
+            name: 'C'
+          })
+        );
+        jdlObject.addRelationship(
+          new JDLRelationship({
+            from: 'A',
+            to: 'B',
+            type: RelationshipTypes.MANY_TO_MANY,
+            injectedFieldInFrom: 'b'
+          })
+        );
+        jdlObject.addRelationship(
+          new JDLRelationship({
+            from: 'B',
+            to: 'C',
+            type: RelationshipTypes.MANY_TO_MANY,
+            injectedFieldInFrom: 'c'
+          })
+        );
+        jdlObject.addRelationship(
+          new JDLRelationship({
+            from: 'A',
+            to: 'C',
+            type: RelationshipTypes.MANY_TO_MANY,
+            injectedFieldInFrom: 'c'
+          })
+        );
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+      it('fails', () => {
+        expect(() => {
+          checker.checkForRelationshipErrors();
+        }).to.throw(
+          "Entities for the ManyToMany relationship from 'B' to 'C'.\nEntities for the ManyToMany relationship from 'A' to 'C'."
+        );
+      });
+    });
   });
   describe('#checkForEnumErrors', () => {
     let checker = null;
@@ -711,7 +763,7 @@ describe('BusinessErrorChecker', () => {
       context('inside a JDL application', () => {
         before(() => {
           jdlObject.addApplication(
-            new JDLApplication({
+            new JDLMonolithApplication({
               config: {
                 databaseType: DatabaseTypes.CASSANDRA
               },

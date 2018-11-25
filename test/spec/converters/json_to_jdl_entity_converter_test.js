@@ -18,17 +18,26 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const fs = require('fs');
 const path = require('path');
-const JSONParser = require('../../../lib/parser/json_parser');
+const { convertEntitiesToJDL } = require('../../../lib/converters/json_to_jdl_entity_converter');
+const JDLObject = require('../../../lib/core/jdl_object');
+const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
-const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Options;
-const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').Values;
+const {
+  Options: { DTO, SEARCH_ENGINE, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
+  Values: {
+    dto: { MAPSTRUCT },
+    pagination,
+    service: { SERVICE_CLASS },
+    searchEngine: { ELASTIC_SEARCH }
+  }
+} = require('../../../lib/core/jhipster/binary_options');
 
-describe('JSONParser', () => {
-  describe('::parseEntities', () => {
+describe('JSONToJDLEntityConverter', () => {
+  describe('::convertEntitiesToJDL', () => {
     let jdlObject = null;
 
     before(() => {
@@ -43,7 +52,7 @@ describe('JSONParser', () => {
         Task: readJsonEntity('Task')
       };
       entities.Employee.relationships.filter(r => r.relationshipName === 'department')[0].javadoc = undefined;
-      jdlObject = JSONParser.parseEntities(entities);
+      jdlObject = convertEntitiesToJDL(entities);
     });
 
     context('when parsing a JSON entity to JDL', () => {
@@ -79,10 +88,16 @@ describe('JSONParser', () => {
         expect(
           jdlObject
             .getOptions()
+            .filter(option => option.name === DTO && option.value === MAPSTRUCT && option.entityNames.has('Employee'))
+            .length
+        ).to.eq(1);
+        expect(
+          jdlObject
+            .getOptions()
             .filter(
               option =>
-                option.name === BinaryOptions.DTO &&
-                option.value === BinaryOptionValues.dto.MAPSTRUCT &&
+                option.name === PAGINATION &&
+                option.value === pagination['INFINITE-SCROLL'] &&
                 option.entityNames.has('Employee')
             ).length
         ).to.eq(1);
@@ -90,10 +105,7 @@ describe('JSONParser', () => {
           jdlObject
             .getOptions()
             .filter(
-              option =>
-                option.name === BinaryOptions.PAGINATION &&
-                option.value === BinaryOptionValues.pagination['INFINITE-SCROLL'] &&
-                option.entityNames.has('Employee')
+              option => option.name === SERVICE && option.value === SERVICE_CLASS && option.entityNames.has('Employee')
             ).length
         ).to.eq(1);
         expect(
@@ -101,9 +113,7 @@ describe('JSONParser', () => {
             .getOptions()
             .filter(
               option =>
-                option.name === BinaryOptions.SERVICE &&
-                option.value === BinaryOptionValues.service.SERVICE_CLASS &&
-                option.entityNames.has('Employee')
+                option.name === SEARCH_ENGINE && option.value === ELASTIC_SEARCH && option.entityNames.has('Employee')
             ).length
         ).to.eq(1);
         expect(
@@ -111,9 +121,7 @@ describe('JSONParser', () => {
             .getOptions()
             .filter(
               option =>
-                option.name === BinaryOptions.SEARCH_ENGINE &&
-                option.value === BinaryOptionValues.searchEngine.ELASTIC_SEARCH &&
-                option.entityNames.has('Employee')
+                option.name === MICROSERVICE && option.value === 'mymicroservice' && option.entityNames.has('Employee')
             ).length
         ).to.eq(1);
         expect(
@@ -121,19 +129,7 @@ describe('JSONParser', () => {
             .getOptions()
             .filter(
               option =>
-                option.name === BinaryOptions.MICROSERVICE &&
-                option.value === 'mymicroservice' &&
-                option.entityNames.has('Employee')
-            ).length
-        ).to.eq(1);
-        expect(
-          jdlObject
-            .getOptions()
-            .filter(
-              option =>
-                option.name === BinaryOptions.ANGULAR_SUFFIX &&
-                option.value === 'myentities' &&
-                option.entityNames.has('Employee')
+                option.name === ANGULAR_SUFFIX && option.value === 'myentities' && option.entityNames.has('Employee')
             ).length
         ).to.eq(1);
         expect(
@@ -180,7 +176,7 @@ describe('JSONParser', () => {
           Employee: readJsonEntity('Employee')
         };
         entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = undefined;
-        const jdlObject = JSONParser.parseEntities(entities);
+        const jdlObject = convertEntitiesToJDL(entities);
         const relationship = jdlObject.relationships.getOneToMany(
           'OneToMany_Department{employee}_Employee{department(foo)}'
         );
@@ -201,28 +197,6 @@ describe('JSONParser', () => {
       });
     });
 
-    context('when parsing app config file to JDL', () => {
-      let jdlObject = null;
-
-      before(() => {
-        const yoRcJson = readJsonYoFile();
-        jdlObject = JSONParser.parseServerOptions(yoRcJson['generator-jhipster']);
-      });
-
-      it('parses server options', () => {
-        expect(
-          jdlObject
-            .getOptions()
-            .filter(option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
-        ).to.eq(1);
-        expect(
-          jdlObject
-            .getOptions()
-            .filter(option => option.name === UnaryOptions.SKIP_SERVER && option.entityNames.has('*')).length
-        ).to.eq(1);
-      });
-    });
-
     context('when parsing entities with relationships to User', () => {
       context('when skipUserManagement flag is not set', () => {
         context('when there is no User.json entity', () => {
@@ -232,7 +206,7 @@ describe('JSONParser', () => {
             const entities = {
               Country: readJsonEntity('Country')
             };
-            jdlObject = JSONParser.parseEntities(entities);
+            jdlObject = convertEntitiesToJDL(entities);
           });
 
           it('parses relationships to the JHipster managed User entity', () => {
@@ -242,7 +216,7 @@ describe('JSONParser', () => {
         context('when there is a User.json entity', () => {
           it('throws an error ', () => {
             expect(() => {
-              JSONParser.parseEntities({
+              convertEntitiesToJDL({
                 Country: readJsonEntity('Country'),
                 User: readJsonEntity('Region')
               });
@@ -259,9 +233,13 @@ describe('JSONParser', () => {
             User: readJsonEntity('Region')
           };
           entities.User.relationships[0].otherEntityRelationshipName = 'user';
-          const yoRcJson = readJsonYoFile();
-          yoRcJson['generator-jhipster'].skipUserManagement = true;
-          jdlObject = JSONParser.parseEntities(entities, JSONParser.parseServerOptions(yoRcJson['generator-jhipster']));
+          jdlObject = new JDLObject();
+          jdlObject.addOption(
+            new JDLUnaryOption({
+              name: UnaryOptions.SKIP_USER_MANAGEMENT
+            })
+          );
+          jdlObject = convertEntitiesToJDL(entities, jdlObject);
         });
 
         it('parses the User.json entity if skipUserManagement flag is set', () => {
@@ -269,6 +247,20 @@ describe('JSONParser', () => {
           expect(jdlObject.entities.User).not.to.be.undefined;
           expect(jdlObject.entities.User.fields.regionId).not.to.be.undefined;
           expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User{country}')).not.to.be.undefined;
+        });
+      });
+      context('without relationship', () => {
+        let jdlObject = null;
+
+        before(() => {
+          const entities = {
+            CassBankAccount: readJsonEntity('CassBankAccount')
+          };
+          jdlObject = convertEntitiesToJDL(entities);
+        });
+
+        it('parses tableName', () => {
+          expect(jdlObject.entities.CassBankAccount.tableName).eq('cassBankAccount');
         });
       });
     });
@@ -281,8 +273,4 @@ function readJsonEntity(entityName) {
       .readFileSync(path.join('test', 'test_files', 'jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8')
       .toString()
   );
-}
-
-function readJsonYoFile() {
-  return JSON.parse(fs.readFileSync('./test/test_files/jhipster_app/.yo-rc.json'));
 }

@@ -1,0 +1,206 @@
+application {
+  config {
+    baseName store,
+    applicationType gateway,
+    packageName com.jhipster.demo.store,
+    serviceDiscoveryType no,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    cacheProvider hazelcast,
+    buildTool gradle,
+    clientFramework react,
+    useSass true,
+    testFrameworks [protractor]
+  }
+  entities *
+}
+
+
+application {
+  config {
+    baseName product,
+    applicationType microservice,
+    packageName com.jhipster.demo.product,
+    serviceDiscoveryType no,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    cacheProvider hazelcast,
+    buildTool gradle,
+    serverPort 8081
+  }
+  entities Product, ProductCategory, ProductOrder, OrderItem
+}
+
+application {
+  config {
+    baseName invoice,
+    applicationType microservice,
+    packageName com.jhipster.demo.invoice,
+    serviceDiscoveryType no,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    buildTool gradle,
+    serverPort 8082
+  }
+  entities Invoice, Shipment
+}
+
+application {
+  config {
+    baseName notification,
+    applicationType microservice,
+    packageName com.jhipster.demo.notification,
+    serviceDiscoveryType no,
+    authenticationType jwt,
+    databaseType mongodb,
+    devDatabaseType mongodb,
+    prodDatabaseType mongodb,
+    cacheProvider no,
+    enableHibernateCache false,
+    buildTool gradle,
+    serverPort 8083
+  }
+  entities Notification
+}
+
+// Entities for Store Gateway
+
+entity Customer {
+    firstName String required
+    lastName String required
+    gender Gender required
+    email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+    phone String required
+    addressLine1 String required
+    addressLine2 String
+    city String required
+    country String required
+}
+
+enum Gender {
+    MALE, FEMALE, OTHER
+}
+
+relationship OneToOne {
+    Customer{user(login) required} to User
+}
+
+service Customer with serviceClass
+paginate Customer with pagination
+
+// Product sold by the Online store
+entity Product {
+    name String required
+    description String
+    price BigDecimal required min(0)
+    size Size required
+    image ImageBlob
+}
+
+enum Size {
+    S, M, L, XL, XXL
+}
+
+entity ProductCategory {
+    name String required
+    description String
+}
+
+entity ProductOrder {
+    placedDate Instant required
+    status OrderStatus required
+    code String required
+    invoiceId Long
+    customer String required
+}
+
+enum OrderStatus {
+    COMPLETED, PENDING, CANCELLED
+}
+
+entity OrderItem {
+    quantity Integer required min(0)
+    totalPrice BigDecimal required min(0)
+    status OrderItemStatus required
+}
+
+enum OrderItemStatus {
+    AVAILABLE, OUT_OF_STOCK, BACK_ORDER
+}
+
+relationship ManyToOne {
+	OrderItem{product(name) required} to Product
+}
+
+relationship OneToMany {
+   ProductOrder{orderItem} to OrderItem{order(code) required} ,
+   ProductCategory{product} to Product{productCategory(name)}
+}
+
+service Product, ProductCategory, ProductOrder, OrderItem with serviceClass
+paginate Product, ProductOrder, OrderItem with pagination
+microservice Product, ProductOrder, ProductCategory, OrderItem with product
+
+// Entities for Invoice microservice
+entity Invoice {
+    code String required
+    date Instant required
+    details String
+    status InvoiceStatus required
+    paymentMethod PaymentMethod required
+    paymentDate Instant required
+    paymentAmount BigDecimal required
+}
+
+enum InvoiceStatus {
+    PAID, ISSUED, CANCELLED
+}
+
+entity Shipment {
+    trackingCode String
+    date Instant required
+    details String
+}
+
+enum PaymentMethod {
+    CREDIT_CARD, CASH_ON_DELIVERY, PAYPAL
+}
+
+relationship OneToMany {
+    Invoice{shipment} to Shipment{invoice(code) required}
+}
+
+service Invoice, Shipment with serviceClass
+paginate Invoice, Shipment with pagination
+microservice Invoice, Shipment with invoice
+
+// Entities for notification microservice
+
+entity Notification {
+    date Instant required
+    details String
+    sentDate Instant required
+    format NotificationType required
+    userId Long required
+    productId Long required
+}
+
+enum NotificationType {
+    EMAIL, SMS, PARCEL
+}
+
+microservice Notification with notification
+
+deployment {
+  deploymentType docker-compose,
+  appsFolders [store, invoice, notification, product],
+  dockerRepositoryName "deepu105",
+  serviceDiscoveryType no
+}
+
+deployment {
+  deploymentType kubernetes,
+  appsFolders [store, invoice, notification, product],
+  dockerRepositoryName "deepu105",
+  serviceDiscoveryType no
+}

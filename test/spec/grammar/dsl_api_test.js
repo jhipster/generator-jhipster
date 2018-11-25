@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-const expect = require('chai').expect;
-const tokens = require('../../../lib/dsl/lexer').tokens;
+const { expect } = require('chai');
+const { tokens } = require('../../../lib/dsl/lexer');
 
 const { getSyntacticAutoCompleteSuggestions, parse } = require('../../../lib/dsl/api');
 
@@ -125,10 +125,11 @@ describe('JDL DSL API', () => {
       });
 
       it('provides suggestions', () => {
-        expect(result).to.have.lengthOf(18);
+        expect(result).to.have.lengthOf(19);
         expect(result).to.have.members([
           tokens.AT,
           tokens.APPLICATION,
+          tokens.DEPLOYMENT,
           tokens.NAME,
           tokens.ENTITY,
           tokens.RELATIONSHIP,
@@ -157,10 +158,16 @@ describe('JDL DSL API', () => {
       });
 
       it('provides suggestions', () => {
-        expect(result).to.have.lengthOf(4);
+        expect(result).to.have.lengthOf(5);
         // Note that because we are using token Inheritance with the MIN_MAX_KEYWORD an auto-complete provider would have
         // to translate this to concrete tokens (MIN/MAX/MAX_BYTES/MIN_BYTES/...)
-        expect(result).to.have.members([tokens.REQUIRED, tokens.MIN_MAX_KEYWORD, tokens.PATTERN, tokens.COMMENT]);
+        expect(result).to.have.members([
+          tokens.REQUIRED,
+          tokens.UNIQUE,
+          tokens.MIN_MAX_KEYWORD,
+          tokens.PATTERN,
+          tokens.COMMENT
+        ]);
       });
     });
     context('with a default start rule', () => {
@@ -172,9 +179,10 @@ describe('JDL DSL API', () => {
       });
 
       it('provides suggestions', () => {
-        expect(result).to.have.lengthOf(7);
+        expect(result).to.have.lengthOf(8);
         expect(result).to.have.members([
           tokens.REQUIRED,
+          tokens.UNIQUE,
           tokens.MIN_MAX_KEYWORD,
           tokens.PATTERN,
           // Note that this will have more suggestions than the previous spec as there is a deeper rule stack.
