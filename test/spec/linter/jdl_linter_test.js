@@ -83,5 +83,26 @@ describe('JDLLinter', () => {
         expect(issues.getEntityIssuesForEntityName('SuperToto')[0].ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
       });
     });
+    context('when checking for duplicated', () => {
+      context('entities', () => {
+        let linter = null;
+        let issues = null;
+
+        before(() => {
+          linter = new JDLLinter({
+            filePath: path.join('test', 'test_files', 'lint', 'duplicate_entities.jdl')
+          });
+          issues = linter.check();
+        });
+
+        it('reports the issues', () => {
+          expect(issues.getEntityIssuesForEntityName('C')).to.have.lengthOf(0);
+          expect(issues.getEntityIssuesForEntityName('A')).to.have.lengthOf(1);
+          expect(issues.getEntityIssuesForEntityName('A')[0].ruleName).to.equal('ENT_DUPLICATED');
+          expect(issues.getEntityIssuesForEntityName('B')).to.have.lengthOf(1);
+          expect(issues.getEntityIssuesForEntityName('B')[0].ruleName).to.equal('ENT_DUPLICATED');
+        });
+      });
+    });
   });
 });
