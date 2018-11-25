@@ -230,7 +230,7 @@ module.exports = class extends PrivateBase {
                             // prettier-ignore
                             this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                             |                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
@@ -248,7 +248,7 @@ module.exports = class extends PrivateBase {
                         splicable: [
                             // prettier-ignore
                             this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
-                        |      <FontAwesomeIcon icon="asterisk" />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
+                        |      <FontAwesomeIcon icon="asterisk" fixedWidth />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
                         |    </DropdownItem>`)
                         ]
                     },
@@ -2161,7 +2161,7 @@ module.exports = class extends PrivateBase {
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
         context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-        context.skipClient = context.fileData.skipClient;
+        context.skipClient = context.fileData.skipClient || context.skipClient;
         this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
@@ -2848,6 +2848,8 @@ module.exports = class extends PrivateBase {
      * @param {any} dest - destination context to use default is context
      */
     setupSharedOptions(generator, context = generator, dest = context) {
+        dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
+        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         dest.skipUserManagement =
             context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
         dest.otherModules = context.configOptions.otherModules || [];
@@ -2869,7 +2871,6 @@ module.exports = class extends PrivateBase {
      */
     setupClientOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         dest.authenticationType =
             context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
@@ -2877,7 +2878,7 @@ module.exports = class extends PrivateBase {
             dest.skipUserManagement = true;
         }
         const uaaBaseName = context.configOptions.uaaBaseName || context.config.get('uaaBaseName');
-        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
+        if (!dest.skipClient && dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
             generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
         }
         dest.uaaBaseName = uaaBaseName;
@@ -2915,7 +2916,6 @@ module.exports = class extends PrivateBase {
      */
     setupServerOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
         dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
         dest.testFrameworks = context.configOptions.testFrameworks;
     }

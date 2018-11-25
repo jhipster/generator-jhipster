@@ -210,7 +210,6 @@ function askModulesToBeInstalled(done, generator) {
                         })
                         .then(prompt => {
                             // [ {name: [moduleName], version:[version]}, ...]
-                            generator.otherModules = [];
                             prompt.otherModules.forEach(module => {
                                 generator.otherModules.push({ name: module.name, version: module.version });
                             });

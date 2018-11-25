@@ -185,7 +185,7 @@ public class UserResource {
         return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase())
             .hasElement()
             .flatMap(loginExists -> {
-                if(loginExists) {
+                if (loginExists) {
                     throw new LoginAlreadyUsedException();
                 }
                 return userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
@@ -251,7 +251,7 @@ public class UserResource {
             .filter(user -> !user.getId().equals(userDTO.getId()))
             .hasElement()
             .flatMap(loginExists -> {
-                if(loginExists) {
+                if (loginExists) {
                     throw new LoginAlreadyUsedException();
                 }
                 return userService.updateUser(userDTO);

@@ -12,7 +12,7 @@
                 "authentication": "<strong>O inicio de sesión fallou!</strong> Por favor revise as credenciais e tente de novo."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Esqueceu o seu contrasinal?"
         }
     }

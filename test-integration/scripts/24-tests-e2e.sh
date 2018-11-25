@@ -26,7 +26,7 @@ launchCurlOrProtractor() {
     rep=$(curl -v "$httpUrl")
     status=$?
     while [ "$status" -ne 0 ] && [ "$retryCount" -le "$maxRetry" ]; do
-        echo "[$(date)] Application not reachable yet. Sleep and retry - retryCount =" $retryCount "/" $maxRetry
+        echo "*** [$(date)] Application not reachable yet. Sleep and retry - retryCount =" $retryCount "/" $maxRetry
         retryCount=$((retryCount+1))
         sleep 10
         rep=$(curl -v "$httpUrl")
@@ -34,7 +34,7 @@ launchCurlOrProtractor() {
     done
 
     if [ "$status" -ne 0 ]; then
-        echo "[$(date)] Not connected after" $retryCount " retries."
+        echo "*** [$(date)] Not connected after" $retryCount " retries."
         return 1
     fi
 
@@ -53,7 +53,7 @@ launchCurlOrProtractor() {
         result=$?
         [ $result -eq 0 ] && break
         retryCount=$((retryCount+1))
-        echo "e2e tests failed... retryCount =" $retryCount "/" $maxRetry
+        echo "*** e2e tests failed... retryCount =" $retryCount "/" $maxRetry
         sleep 15
     done
     return $result
@@ -67,7 +67,7 @@ if [ "$JHI_RUN_APP" == 1 ]; then
         cd "$JHI_FOLDER_UAA"
         java \
             -jar app.war \
-            --spring.profiles.active="$JHI_PROFILE" \
+            --spring.profiles.active=dev \
             --logging.level.ROOT=OFF \
             --logging.level.org.zalando=OFF \
             --logging.level.io.github.jhipster=OFF \

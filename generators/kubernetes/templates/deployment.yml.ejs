@@ -102,7 +102,7 @@ spec:
           <%_ } _%>
         <%_ } _%>
         <%_ if (!app.serviceDiscoveryType && app.authenticationType === 'jwt') { _%>
-        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
+        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
           valueFrom:
             secretKeyRef:
               name: jwt-secret
@@ -149,7 +149,7 @@ spec:
           value: 'true'
         - name: JHIPSTER_LOGGING_LOGSTASH_HOST
           value: jhipster-logstash
-            <%_ if (composeApplicationType === 'microservice') { _%>
+            <%_ if (deploymentApplicationType === 'microservice') { _%>
         - name: SPRING_ZIPKIN_ENABLED
           value: "true"
         - name: SPRING_ZIPKIN_BASE_URL
@@ -162,7 +162,7 @@ spec:
         - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
           value: /prometheusMetrics
         <%_ } _%>
-        <%_ if (composeApplicationType === 'microservice') { _%>
+        <%_ if (deploymentApplicationType === 'microservice') { _%>
         - name: SPRING_SLEUTH_PROPAGATION_KEYS
           value: "x-request-id,x-ot-span-context"
         <%_ } _%>

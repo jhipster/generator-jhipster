@@ -23,7 +23,7 @@ const expectedFiles = {
 
 describe('JHipster OpenShift Sub Generator', () => {
     describe('only gateway', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -31,7 +31,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway'],
                     adminPassword: 'openshiftpaas',
@@ -56,7 +56,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('gateway and one microservice with mysql', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -64,7 +64,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     dockerRepositoryName: 'ocrepo',
@@ -89,7 +89,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('gateway and one microservice with mysql and elk', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -97,7 +97,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     dockerRepositoryName: 'ocrepo',
@@ -125,7 +125,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('two microservices backed by mysql and postgres without gateway', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -133,7 +133,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['02-mysql', '03-psql'],
                     dockerRepositoryName: 'ocrepo',
@@ -161,7 +161,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('gateway with multiple microservices backed by mysql, postgres, mongo, cassandra and mariadb', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -169,7 +169,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '05-cassandra', '07-mariadb'],
                     dockerRepositoryName: 'ocrepo',
@@ -205,7 +205,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('monolith application', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -213,7 +213,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'monolith',
+                    deploymentApplicationType: 'monolith',
                     directoryPath: './',
                     chosenApps: ['08-monolith'],
                     dockerRepositoryName: 'ocrepo',
@@ -231,7 +231,7 @@ describe('JHipster OpenShift Sub Generator', () => {
     });
 
     describe('monolith application with elk', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/openshift'))
                 .inTmpDir(dir => {
@@ -239,7 +239,7 @@ describe('JHipster OpenShift Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'monolith',
+                    deploymentApplicationType: 'monolith',
                     directoryPath: './',
                     chosenApps: ['08-monolith'],
                     dockerRepositoryName: 'ocrepo',

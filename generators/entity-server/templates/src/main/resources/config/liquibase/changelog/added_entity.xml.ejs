@@ -104,11 +104,7 @@
             } else if (fieldTypeBlobContent === 'text') {
                 columnType="clob";
             } else if (fieldType === 'Boolean') {
-                if (prodDatabaseType === 'postgresql') {
-                    columnType="boolean";
-                } else {
-                    columnType="bit";
-                }
+                columnType="boolean";
             }
             %>
             <%_ if (typeof fields[idx].javadoc == 'undefined') { _%>

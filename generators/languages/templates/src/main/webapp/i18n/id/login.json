@@ -12,7 +12,7 @@
                 "authentication": "<strong>Gagal masuk!</strong> Silakan cek data anda dan coba lagi."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Apakah anda lupa passsword?"
         }
     }

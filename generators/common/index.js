@@ -17,14 +17,13 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
-const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -37,6 +36,7 @@ module.exports = class extends BaseGenerator {
         });
 
         this.setupServerOptions(this);
+        this.setupClientOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
@@ -62,60 +62,11 @@ module.exports = class extends BaseGenerator {
             setupConsts() {
                 // Make constants available in templates
                 this.TEST_DIR = constants.TEST_DIR;
-                this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-
-                this.packagejs = packagejs;
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
-                if (!this.applicationType) {
-                    this.applicationType = 'monolith';
-                }
-                this.serverPort = configuration.get('serverPort');
-                if (this.serverPort === undefined) {
-                    this.serverPort = '8080';
-                }
-
-                this.enableSwaggerCodegen = configuration.get('enableSwaggerCodegen');
-
-                this.serviceDiscoveryType =
-                    configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
-                if (this.serviceDiscoveryType === undefined) {
-                    this.serviceDiscoveryType = false;
-                }
-
-                this.databaseType = configuration.get('databaseType');
-                if (this.databaseType === 'mongodb') {
-                    this.prodDatabaseType = 'mongodb';
-                } else if (this.databaseType === 'couchbase') {
-                    this.prodDatabaseType = 'couchbase';
-                } else if (this.databaseType === 'cassandra') {
-                    this.prodDatabaseType = 'cassandra';
-                } else if (this.databaseType === 'no') {
-                    // no database, only available for microservice applications
-                    this.prodDatabaseType = 'no';
-                } else {
-                    // sql
-                    this.prodDatabaseType = configuration.get('prodDatabaseType');
-                }
-
-                this.buildTool = configuration.get('buildTool');
-                this.jhipsterVersion = packagejs.version;
-                if (this.jhipsterVersion === undefined) {
-                    this.jhipsterVersion = configuration.get('jhipsterVersion');
-                }
-                this.authenticationType = configuration.get('authenticationType');
-                this.clientFramework = configuration.get('clientFramework');
-                const testFrameworks = configuration.get('testFrameworks');
-                if (testFrameworks) {
-                    this.testFrameworks = testFrameworks;
-                }
-
-                const baseName = configuration.get('baseName');
-                if (baseName) {
-                    // to avoid overriding name from configOptions
-                    this.baseName = baseName;
-                }
+                this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+                this.CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
+                this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
 
                 // Make documentation URL available in templates
                 this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
@@ -142,36 +93,15 @@ module.exports = class extends BaseGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _configuring() {
-        return {
-            setSharedConfigOptions() {
-                // Make dist dir available in templates
-                if (this.buildTool === 'maven') {
-                    this.BUILD_DIR = 'target/';
-                } else {
-                    this.BUILD_DIR = 'build/';
-                }
-                this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
-            }
-        };
-    }
-
-    get configuring() {
-        if (useBlueprint) return;
-        return this._configuring();
-    }
-
-    // Public API method used by the getter and also by Blueprints
     _default() {
         return {
             getSharedConfigOptions() {
-                if (this.configOptions.clientFramework) {
-                    this.clientFramework = this.configOptions.clientFramework;
-                }
-                this.testFrameworks = [];
-                if (this.configOptions.testFrameworks) {
-                    this.testFrameworks = this.configOptions.testFrameworks;
-                }
+                this.jhipsterVersion = this.config.get('jhipsterVersion');
+                this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
+                this.enableSwaggerCodegen = this.configOptions.enableSwaggerCodegen;
+                this.serverPort = this.configOptions.serverPort;
+                this.clientFramework = this.configOptions.clientFramework;
+                this.useSass = this.configOptions.useSass;
                 this.protractorTests = this.testFrameworks.includes('protractor');
                 this.gatlingTests = this.testFrameworks.includes('gatling');
             }
@@ -191,24 +121,5 @@ module.exports = class extends BaseGenerator {
     get writing() {
         if (useBlueprint) return;
         return this._writing();
-    }
-
-    _install() {
-        return {};
-    }
-
-    get install() {
-        if (useBlueprint) return;
-        return this._install();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _end() {
-        return {};
-    }
-
-    get end() {
-        if (useBlueprint) return;
-        return this._end();
     }
 };

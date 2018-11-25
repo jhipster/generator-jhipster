@@ -238,7 +238,7 @@ public class <%= entityClass %> implements Serializable {
     @ApiModelProperty(value = "<%- formatAsApiDescription(relationships[idx].javadoc) %>")
     <%_ }
         if (relationshipType === 'one-to-many') {
-            if(databaseType === 'sql') {
+            if (databaseType === 'sql') {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
             <%_ if (enableHibernateCache) {
@@ -254,7 +254,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } _%>
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType === 'many-to-one') {
-            if(databaseType === 'sql') {
+            if (databaseType === 'sql') {
     _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
         <%_ if (relationshipValidate) { _%>
@@ -293,7 +293,7 @@ public class <%= entityClass %> implements Serializable {
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else {
-        if(databaseType === 'sql') {
+        if (databaseType === 'sql') {
             if (ownerSide) { _%>
     @OneToOne<%_ if (relationshipRequired) { _%>(optional = false)<%_ } _%>
             <%_ if (relationshipValidate) { _%>

@@ -32,23 +32,23 @@ import { NavDropdown } from '../header-components';
 const accountMenuItemsAuthenticated = (
   <>
   <%_ if (authenticationType !== 'oauth2') { _%>
-    <DropdownItem tag={Link} to="/account/settings"><FontAwesomeIcon icon="wrench" /> <Translate contentKey="global.menu.account.settings">Settings</Translate></DropdownItem>
-    <DropdownItem tag={Link} to="/account/password"><FontAwesomeIcon icon="clock" /> <Translate contentKey="global.menu.account.password">Password</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/account/settings"><FontAwesomeIcon icon="wrench" fixedWidth /> <Translate contentKey="global.menu.account.settings">Settings</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/account/password"><FontAwesomeIcon icon="clock" fixedWidth /> <Translate contentKey="global.menu.account.password">Password</Translate></DropdownItem>
   <%_ } _%>
   <%_ if (authenticationType === 'session') { _%>
-    <DropdownItem tag={Link} to="/account/sessions"><FontAwesomeIcon icon="cloud" /> <Translate contentKey="global.menu.account.sessions">Sessions</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/account/sessions"><FontAwesomeIcon icon="cloud" fixedWidth /> <Translate contentKey="global.menu.account.sessions">Sessions</Translate></DropdownItem>
   <%_ } _%>
-    <DropdownItem tag={Link} to="/logout"><FontAwesomeIcon icon="sign-out-alt" /> <Translate contentKey="global.menu.account.logout">Sign out</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/logout"><FontAwesomeIcon icon="sign-out-alt" fixedWidth /> <Translate contentKey="global.menu.account.logout">Sign out</Translate></DropdownItem>
   </>
   );
 
 const accountMenuItems = (
   <>
   <%_ if (authenticationType !== 'oauth2') { _%>
-    <DropdownItem id="login-item" tag={Link} to="/login"><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
-    <DropdownItem tag={Link} to="/register"><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.register">Register</Translate></DropdownItem>
+    <DropdownItem id="login-item" tag={Link} to="/login"><FontAwesomeIcon icon="sign-in-alt" fixedWidth /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/register"><FontAwesomeIcon icon="sign-in-alt" fixedWidth /> <Translate contentKey="global.menu.account.register">Register</Translate></DropdownItem>
   <%_ } else { _%>
-    <DropdownItem id="login-item" tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
+    <DropdownItem id="login-item" tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" fixedWidth/> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
   <%_ } _%>
   </>
 );

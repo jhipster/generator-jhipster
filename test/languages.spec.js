@@ -11,7 +11,7 @@ describe('JHipster generator languages', () => {
     context('Cretes default i18n files', () => {
         constants.LANGUAGES.forEach(language => {
             describe(`for ${language.name}`, () => {
-                beforeEach(done => {
+                before(done => {
                     helpers
                         .run(require.resolve('../generators/languages'))
                         .inTmpDir(dir => {

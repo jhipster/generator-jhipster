@@ -12,7 +12,7 @@
                 "authentication": "<strong>Prijava je neuspešna!</strong> Korisničko ime i/ili lozinka nisu ispavni."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Da li ste zaboravili lozinku?"
         }
     }
