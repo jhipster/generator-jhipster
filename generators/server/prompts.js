@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-const crypto = require('crypto');
 const chalk = require('chalk');
 
 const constants = require('../generator-constants');
+const { getBase64Secret, getRandomHex } = require('../utils');
 
 module.exports = {
     askForModuleName,
@@ -295,11 +295,11 @@ function askForServerSideOpts(meta) {
         }
 
         if (this.authenticationType === 'session') {
-            this.rememberMeKey = crypto.randomBytes(50).toString('hex');
+            this.rememberMeKey = getRandomHex();
         }
 
         if (this.authenticationType === 'jwt' || this.applicationType === 'microservice') {
-            this.jwtSecretKey = Buffer.from(crypto.randomBytes(64).toString('hex')).toString('base64');
+            this.jwtSecretKey = getBase64Secret(null, 64);
         }
 
         // user-management will be handled by UAA app, oauth expects users to be managed in IpP

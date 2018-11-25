@@ -17,7 +17,7 @@ const TEST_DIR = constants.TEST_DIR;
 describe('JHipster generator', () => {
     context('Default configuration with', () => {
         describe('AngularX', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, jhiPrefix: 'test' })
@@ -72,7 +72,7 @@ describe('JHipster generator', () => {
         });
 
         describe('React', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({
@@ -130,7 +130,7 @@ describe('JHipster generator', () => {
         });
 
         describe('using npm flag', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, npm: true })
@@ -185,7 +185,7 @@ describe('JHipster generator', () => {
         });
 
         describe('Gradle', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -234,7 +234,7 @@ describe('JHipster generator', () => {
 
     context('Application with DB option', () => {
         describe('mariadb configuration', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -284,7 +284,7 @@ describe('JHipster generator', () => {
         });
 
         describe('mongodb', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -320,7 +320,7 @@ describe('JHipster generator', () => {
         });
 
         describe('couchbase', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -356,7 +356,7 @@ describe('JHipster generator', () => {
         });
 
         describe('mssql', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -397,7 +397,7 @@ describe('JHipster generator', () => {
         });
 
         describe('cassandra', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -433,7 +433,7 @@ describe('JHipster generator', () => {
         });
 
         describe('cassandra no i18n', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -468,7 +468,7 @@ describe('JHipster generator', () => {
         });
 
         describe('postgresql and elasticsearch', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -507,7 +507,7 @@ describe('JHipster generator', () => {
 
     context('Application with other options', () => {
         describe('oauth2', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -537,10 +537,13 @@ describe('JHipster generator', () => {
             it('creates expected files with authenticationType "oauth2"', () => {
                 assert.file(expectedFiles.oauth2);
             });
+            it('generates README with instructions for OAuth', () => {
+                assert.fileContent('README.md', 'OAuth 2.0');
+            });
         });
 
         describe('oauth2 + elasticsearch', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -574,7 +577,7 @@ describe('JHipster generator', () => {
         });
 
         describe('oauth2 + mongodb', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -608,7 +611,7 @@ describe('JHipster generator', () => {
         });
 
         describe('hazelcast', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -642,7 +645,7 @@ describe('JHipster generator', () => {
         });
 
         describe('Infinispan', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -677,7 +680,7 @@ describe('JHipster generator', () => {
         });
 
         describe('Infinispan and Eureka', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -713,7 +716,7 @@ describe('JHipster generator', () => {
         });
 
         describe('Memcached', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -748,7 +751,7 @@ describe('JHipster generator', () => {
         });
 
         describe('Messaging with Kafka configuration', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -791,7 +794,7 @@ describe('JHipster generator', () => {
         });
 
         describe('API first using OpenAPI-generator (maven)', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -831,10 +834,13 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.swaggerCodegen);
             });
+            it('generates README with instructions for OpenAPI generator', () => {
+                assert.fileContent('README.md', 'OpenAPI-Generator');
+            });
         });
 
         describe('API first using OpenAPI-generator (gradle)', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -881,7 +887,7 @@ describe('JHipster generator', () => {
 
     context('Application names', () => {
         describe('package names', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -916,7 +922,7 @@ describe('JHipster generator', () => {
         });
 
         describe('bad application name for java', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -953,7 +959,7 @@ describe('JHipster generator', () => {
         });
 
         describe('application names', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -989,7 +995,7 @@ describe('JHipster generator', () => {
 
     context('i18n', () => {
         describe('no i18n', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1021,7 +1027,7 @@ describe('JHipster generator', () => {
         });
 
         describe('with RTL support', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1070,7 +1076,7 @@ describe('JHipster generator', () => {
 
     context('Auth options', () => {
         describe('JWT authentication', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1112,7 +1118,7 @@ describe('JHipster generator', () => {
         });
 
         describe('HTTP session authentication', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1156,7 +1162,7 @@ describe('JHipster generator', () => {
 
     context('Testing options', () => {
         describe('Protractor tests', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1205,7 +1211,7 @@ describe('JHipster generator', () => {
         });
 
         describe('Cucumber tests', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1248,7 +1254,7 @@ describe('JHipster generator', () => {
 
     context('App with skip client', () => {
         describe('Maven', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipClient: true, skipChecks: true })
@@ -1295,7 +1301,7 @@ describe('JHipster generator', () => {
         });
 
         describe('Gradle', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipClient: true, skipChecks: true })
@@ -1340,12 +1346,15 @@ describe('JHipster generator', () => {
                 );
                 assert.noFile(['gradle/yeoman.gradle']);
             });
+            it('generates README with instructions for Gradle', () => {
+                assert.fileContent('README.md', './gradlew');
+            });
         });
     });
 
     context('App with skip client and skip user management', () => {
         describe('Maven', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({
@@ -1385,7 +1394,7 @@ describe('JHipster generator', () => {
 
     context('Eureka', () => {
         describe('gateway with eureka', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1423,7 +1432,7 @@ describe('JHipster generator', () => {
         });
 
         describe('microservice with eureka', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1461,7 +1470,7 @@ describe('JHipster generator', () => {
         });
 
         describe('monolith with eureka', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1498,7 +1507,7 @@ describe('JHipster generator', () => {
         });
 
         describe('microservice with gradle and eureka', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1538,7 +1547,7 @@ describe('JHipster generator', () => {
         });
 
         describe('UAA server with Eureka', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1574,7 +1583,7 @@ describe('JHipster generator', () => {
         });
 
         describe('UAA gateway with eureka', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1617,7 +1626,7 @@ describe('JHipster generator', () => {
 
     context('Consul', () => {
         describe('gateway with consul', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1654,7 +1663,7 @@ describe('JHipster generator', () => {
         });
 
         describe('microservice with consul', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1693,7 +1702,7 @@ describe('JHipster generator', () => {
 
     context('No Service Discovery', () => {
         describe('gateway with no service discovery', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
@@ -1730,7 +1739,7 @@ describe('JHipster generator', () => {
         });
 
         describe('microservice with no service discovery', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })

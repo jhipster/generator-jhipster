@@ -392,7 +392,6 @@ const files = {
             templates: [
                 'core/auth/csrf.service.ts',
                 'core/auth/state-storage.service.ts',
-                'core/auth/principal.service.ts',
                 'shared/auth/has-any-authority.directive.ts',
                 'core/auth/account.service.ts',
                 'core/auth/user-route-access-service.ts'
@@ -425,9 +424,9 @@ const files = {
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
                 'spec/app/admin/metrics/metrics-modal.component.spec.ts',
+                'spec/app/core/user/account.service.spec.ts',
                 'spec/helpers/spyobject.ts',
                 'spec/helpers/mock-account.service.ts',
-                'spec/helpers/mock-principal.service.ts',
                 'spec/helpers/mock-route.service.ts',
                 'spec/helpers/mock-login.service.ts',
                 'spec/helpers/mock-event-manager.service.ts',

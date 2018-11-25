@@ -7,7 +7,7 @@ const angularfiles = require('../generators/client/files-angular').files;
 
 describe('JHipster server generator', () => {
     describe('generate server', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(path.join(__dirname, '../generators/server'))
                 .withOptions({ skipInstall: true, skipChecks: true })

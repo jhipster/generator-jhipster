@@ -1,0 +1,64 @@
+application {
+  config {
+    applicationType monolith,
+    baseName jhipsterSampleApplication,
+    packageName io.github.jhipster.sample,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    buildTool maven,
+    searchEngine false,
+    testFrameworks [gatling, protractor],
+    clientFramework angularX,
+    useSass true,
+    enableTranslation true,
+    nativeLanguage en,
+    languages [ en, fr ]
+  }
+  entities BankAccount, TheLabel, Operation
+}
+
+entity BankAccount {
+  name String required
+  bankNumber Integer
+  agencyNumber Long
+  lastOperationDuration Float
+  meanOperationDuration Double
+  balance BigDecimal required
+  openingDay LocalDate
+  lastOperationDate Instant
+  active Boolean
+  accountType BankAccountType
+  attachment AnyBlob
+  description TextBlob
+}
+entity TheLabel {
+  labelName String required minlength(3)
+}
+entity Operation {
+  date Instant required
+  description String
+  amount BigDecimal required
+}
+
+enum BankAccountType {
+  CHECKING,
+  SAVINGS,
+  LOAN
+}
+relationship OneToMany {
+  BankAccount{operation} to Operation{bankAccount(name)}
+}
+relationship ManyToOne {
+  BankAccount{user(login)} to User
+}
+relationship ManyToMany {
+  Operation{theLabel(labelName)} to TheLabel{operation}
+}
+dto BankAccount  with mapstruct
+service BankAccount with serviceImpl
+angularSuffix BankAccount with mySuffix
+filter BankAccount
+clientRootFolder BankAccount, TheLabel, Operation with test-root
+paginate TheLabel with pagination
+service TheLabel with serviceClass
+paginate Operation with infinite-scroll

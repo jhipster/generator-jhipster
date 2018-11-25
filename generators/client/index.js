@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
@@ -29,7 +29,7 @@ const statistics = require('../statistics');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -331,11 +331,7 @@ module.exports = class extends BaseGenerator {
                 }
 
                 // Make dist dir available in templates
-                if (this.configOptions.buildTool === 'maven') {
-                    this.BUILD_DIR = 'target/';
-                } else {
-                    this.BUILD_DIR = 'build/';
-                }
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.configOptions.buildTool);
 
                 this.styleSheetExt = this.useSass ? 'scss' : 'css';
                 this.pkType = this.getPkType(this.databaseType);

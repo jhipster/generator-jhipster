@@ -50,7 +50,6 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}shared/auth/auth-jwt.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/auth-session.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/csrf.service.ts`);
-        generator.removeFile(`${ANGULAR_DIR}shared/auth/principal.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/state-storage.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/user-route-access-service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/language/language.constants.ts`);

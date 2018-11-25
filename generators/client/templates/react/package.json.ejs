@@ -41,7 +41,7 @@ limitations under the License.
     "react-addons-transition-group": "16.0.0-alpha.3",
     "react-dom": "16.4.2",
     "react-hot-loader": "3.1.1",
-    "react-jhipster": "0.5.8",
+    "react-jhipster": "0.5.9",
     "react-loadable": "5.5.0",
     "react-redux": "5.0.7",
     "react-redux-loading-bar": "4.0.5",
@@ -84,7 +84,7 @@ limitations under the License.
     <%_ } _%>
     "@types/webpack-env": "1.13.6",
     "autoprefixer": "9.2.0",
-    "browser-sync": "2.24.6",
+    "browser-sync": "2.26.3",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "1.2.2",
     <%_ if (protractorTests) { _%>
@@ -103,17 +103,15 @@ limitations under the License.
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-webpack-plugin": "3.2.0",
-    "http-proxy-middleware": "0.18.0",
-    <%_ if(!skipCommitHook) { _%>
+    <%_ if (!skipCommitHook) { _%>
     "husky": "1.1.0",
     <%_ } _%>
     "identity-obj-proxy": "3.0.0",
-    "image-webpack-loader": "4.3.1",
     "jest": "23.5.0",
     "jest-junit": "5.1.0",
     "jest-sonar-reporter": "2.0.0",
     "json-loader": "0.5.7",
-    <%_ if(!skipCommitHook) { _%>
+    <%_ if (!skipCommitHook) { _%>
     "lint-staged": "7.3.0",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
@@ -125,7 +123,7 @@ limitations under the License.
     <%_ } _%>
     "moment-locales-webpack-plugin": "1.0.7",
     "optimize-css-assets-webpack-plugin": "5.0.0",
-    "prettier": "1.14.2",
+    "prettier": "1.14.3",
     <%_ if (protractorTests) { _%>
     "protractor": "5.4.0",
     <%_ } _%>
@@ -165,7 +163,7 @@ limitations under the License.
     "webpack-cli": "3.1.0",
     "webpack-dev-server": "3.1.6",
     "webpack-merge": "4.1.4",
-    "webpack-notifier": "1.6.0",
+    "webpack-notifier": "1.7.0",
     "workbox-webpack-plugin": "3.4.1",
     "write-file-webpack-plugin": "4.3.2"<% if (buildTool === 'maven') { %>,
     "xml2js": "0.4.19"<% } %>
@@ -177,16 +175,16 @@ limitations under the License.
     "node": ">=8.9.0"<% if (clientPackageManager === 'yarn') { %>,
     "yarn": ">=1.3.2"<% } %>
   },
-  <%_ if(!skipCommitHook) { _%>
+  <%_ if (!skipCommitHook) { _%>
   "lint-staged": {
-    "src/**/*.{ts,tsx,css,scss}": [
+    "{,src/**/}*.{md,json,ts,tsx,css,scss}": [
       "prettier --write",
       "git add"
     ]
   },
   <%_ } _%>
   "scripts": {
-    "prettier:format": "prettier --write \"src/**/*.{ts,tsx,css,scss}\"",
+    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= BUILD_DIR %>www",
@@ -196,7 +194,10 @@ limitations under the License.
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",
-    "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config src/test/javascript/jest.conf.js",
+    "jest:update": "<%= clientPackageManager %> run jest <%= optionsForwarder %>--updateSnapshot",
+    "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
+    "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
     "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
     "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
