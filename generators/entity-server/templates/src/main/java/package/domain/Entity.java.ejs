@@ -23,6 +23,14 @@ let importJsonIgnoreProperties = false;
 let importSet = false;
 const uniqueEnums = {}; %><%- include imports -%>
 
+<% let isUsingJPADerivedIdentifier = false;
+    for (idx in relationships) {
+        isUsingJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
+        if ( isUsingJPADerivedIdentifier === true) {
+            break;
+}
+} %>
+
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.annotation.Id;
     <%_ if (fieldsContainBlob) { _%>
@@ -131,7 +139,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } _%>
 
     @Id
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && isUsingJPADerivedIdentifier === false) { _%>
         <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
         <%_ }  else { _%>
@@ -221,6 +229,7 @@ public class <%= entityClass %> implements Serializable {
         const relationshipRequired = relationships[idx].relationshipRequired;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const ownerSide = relationships[idx].ownerSide;
+        const useJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
         if (otherEntityRelationshipName) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
@@ -290,7 +299,12 @@ public class <%= entityClass %> implements Serializable {
             <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
             <%_ }_%>
+            <%_ if (useJPADerivedIdentifier === true) { %>
+    @MapsId
+    @JoinColumn(name = "id")
+            <%_ } else { %>
     @JoinColumn(unique = true)
+            <%_ } _%>
         <%_ } else { _%>
     @OneToOne(mappedBy = "<%= otherEntityRelationshipName %>")
     @JsonIgnore
