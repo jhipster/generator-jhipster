@@ -43,8 +43,8 @@ public class LiquibaseConfiguration {
     private final Logger log = LoggerFactory.getLogger(LiquibaseConfiguration.class);
 
     private final Environment env;
-
     <%_ if (enableHibernateCache) { _%>
+
     private final CacheManager cacheManager;
     <%_ } _%>
 
