@@ -5,7 +5,7 @@
 
 <div align="center">
   <a href="http://www.jhipster.tech/">
-    <img src="https://github.com/jhipster/jhipster-artwork/blob/master/logos/JHipster%20RVB-small100x25px.png?raw=true">
+    <img src="https://github.com/jhipster/jhipster-artwork/blob/master/logos/JHipster%20RGB-small100x25px.png?raw=true">
   </a>
   <a href="https://vuejs.org/">
     <img width=100px src="https://avatars3.githubusercontent.com/u/6128107?s=200&v=4">
