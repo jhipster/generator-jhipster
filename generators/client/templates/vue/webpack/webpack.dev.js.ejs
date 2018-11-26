@@ -8,7 +8,6 @@ const baseWebpackConfig = require('./webpack.common');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder');
-const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const jhiUtils = require('./utils.js');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const HOST = process.env.HOST;
@@ -77,14 +76,6 @@ module.exports = merge(baseWebpackConfig, {
         new HtmlWebpackPlugin({
             template: 'src/main/webapp/index.html',
             inject: true
-        })<%_ if (enableTranslation) { _%>,
-        new MergeJsonWebpackPlugin({
-            output: {
-                groupBy: [
-                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
-                ]
-            }
         })
-        <%_ } _%>
     ]
 });
