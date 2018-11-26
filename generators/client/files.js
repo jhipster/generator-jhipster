@@ -40,7 +40,7 @@ function writeFiles() {
     this.copy('vue/webpack/vue.utils.js', 'webpack/vue.utils.js');
     this.template('vue/webpack/utils.js.ejs', 'webpack/utils.js');
     this.copy('vue/webpack/loader.conf.js', 'webpack/loader.conf.js');
-    this.copy('vue/webpack/webpack.common.js', 'webpack/webpack.common.js');
+    this.template('vue/webpack/webpack.common.js.ejs', 'webpack/webpack.common.js');
     this.template('vue/webpack/webpack.dev.js.ejs', 'webpack/webpack.dev.js');
     this.template('vue/webpack/webpack.prod.js.ejs', 'webpack/webpack.prod.js');
 
