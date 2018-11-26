@@ -3,9 +3,8 @@
         <div class="col-8">
             <div v-if="<%= entityInstance %>">
                 <h2><span v-text="$t('<%= i18nKeyPrefix %>.detail.title')"><%= entityAngularName %></span> {{<%= entityInstance %>.id}}</h2>
-                <hr>
                 <!--<jhi-alert-error></jhi-alert-error>-->
-                <dl class="row-md jh-entity-details">
+                <dl class="row jh-entity-details">
 
                     <%_ for (idx in fields) {
                         const fieldName = fields[idx].fieldName;
