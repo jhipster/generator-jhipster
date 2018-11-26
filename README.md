@@ -74,7 +74,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=coverage
 [sonar-bugs]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=bugs
 [sonar-vulnerabilities]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=vulnerabilities
-[jhipster-image]: https://raw.githubusercontent.com/jhipster/jhipster.github.io/master/images/logo/logo-jhipster2x.png
+[jhipster-image]: https://raw.githubusercontent.com/jhipster/jhipster-artwork/master/logos/JHipster%20RVB.png
 [jhipster-url]: https://www.jhipster.tech/
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster

@@ -224,6 +224,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.angularAppName = this.getAngularAppName();
                 this.angularXAppName = this.getAngularXAppName();
+                this.hipster = this.getHipster(this.baseName);
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
