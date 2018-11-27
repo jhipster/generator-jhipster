@@ -27,10 +27,23 @@ package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% 
     const entityToDtoReference = mapper + '::'+ 'toDto';
     const repository = entityInstance  + 'Repository';
     const searchRepository = entityInstance  + 'SearchRepository';
+    let isUsingMapsId = false;
+    let mapsIdAssoc;
+    for (idx in relationships) {
+        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+        if ( isUsingMapsId === true) {
+            mapsIdAssoc = relationships[idx];
+            break;
+        }
+        isUsingMapsId = false;
+    }
     if (service === 'serviceImpl') { %>
 import <%= packageName %>.service.<%= entityClass %>Service;<% } %>
 import <%= packageName %>.domain.<%= entityClass %>;
 import <%= packageName %>.repository.<%= entityClass %>Repository;
+<%_ if (isUsingMapsId === true) { _%>
+import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+<%_ } _%>
 <%_ if (reactiveRepositories) { _%>
 import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
 <%_ } _%>
@@ -85,7 +98,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> implements <%= entityClass %>Service<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../../common/inject_template', {viaService: viaService, constructorName: serviceClassName, queryService: false}); -%>
+<%- include('../../common/inject_template', {viaService: viaService, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
 
     /**
      * Save a <%= entityInstance %>.
@@ -98,7 +111,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ } _%>
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
-<%- include('../../common/save_template', {viaService: viaService, returnDirectly: true}); -%>
+<%- include('../../common/save_template', {viaService: viaService, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
     }
 
     /**

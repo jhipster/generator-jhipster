@@ -63,7 +63,7 @@ import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../common/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: false, mapsIdAssoc: null}); -%>
+<%- include('../common/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: false, mapsIdAssoc: null, isController: false}); -%>
 
     /**
      * Return a {@link List} of {@link <%= instanceType %>} which matches the criteria from the database

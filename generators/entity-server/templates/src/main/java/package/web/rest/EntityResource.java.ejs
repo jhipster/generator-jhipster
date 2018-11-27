@@ -26,6 +26,7 @@ package <%=packageName%>.web.rest;
             mapsIdAssoc = relationships[idx];
             break;
         }
+        isUsingMapsId = false;
     } _%>
 import com.codahale.metrics.annotation.Timed;
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
@@ -86,7 +87,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 <%_ if (pagination === 'no' && dto === 'mapstruct' && !viaService && fieldsContainNoOwnerOneToOne === true) { _%>
 import java.util.LinkedList;<% } %>
-import java.util.List;<% if (isUsingMapsId === true && !viaService) { %>
+import java.util.List;<% if (isUsingMapsId === true) { %>
 import java.util.Objects;<% } %>
 import java.util.Optional;<% if (databaseType === 'cassandra') { %>
 import java.util.UUID;<% } %><% if (!viaService && (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne === true)) { %>
@@ -113,7 +114,7 @@ public class <%= entityClass %>Resource {
     <%_
     const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
     const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
-    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc}); -%>
+    _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
 
     /**
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
@@ -138,7 +139,7 @@ public class <%= entityClass %>Resource {
         <%_ if (databaseType === 'cassandra') { _%>
         <%= instanceName %>.setId(UUID.randomUUID());
         <%_ } _%>
-<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc}); -%>
+<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

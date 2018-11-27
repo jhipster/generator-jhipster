@@ -21,15 +21,16 @@ let importApiModelProperty = false;
 let importJsonIgnore = false;
 let importJsonIgnoreProperties = false;
 let importSet = false;
+let isUsingMapsId = false;
 const uniqueEnums = {}; %><%- include imports -%>
 
-<% let isUsingJPADerivedIdentifier = false;
-    for (idx in relationships) {
-        isUsingJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
-        if ( isUsingJPADerivedIdentifier === true) {
+<%_ for (idx in relationships) {
+        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+        if ( isUsingMapsId === true) {
             break;
-}
-} %>
+        }
+        isUsingMapsId = false;
+    } _%>
 
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.annotation.Id;
@@ -137,9 +138,9 @@ public class <%= entityClass %> implements Serializable {
     @IdPrefix
     private String prefix = PREFIX;
     <%_ } _%>
-
+    
     @Id
-    <%_ if (databaseType === 'sql' && isUsingJPADerivedIdentifier === false) { _%>
+    <%_ if (databaseType === 'sql' && isUsingMapsId === false) { _%>
         <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
         <%_ }  else { _%>
