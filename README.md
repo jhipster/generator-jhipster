@@ -30,13 +30,13 @@ As this is a [JHipster](http://www.jhipster.tech/) blueprint, we expect you have
 To install this blueprint:
 
 ```bash
-npm install -g jhipster-vuejs
+npm install -g generator-jhipster-vuejs
 ```
 
 To update this blueprint:
 
 ```bash
-npm update -g jhipster-vuejs
+npm update -g generator-jhipster-vuejs
 ```
 
 ## With Yarn
@@ -44,13 +44,13 @@ npm update -g jhipster-vuejs
 To install this blueprint:
 
 ```bash
-yarn global add jhipster-vuejs
+yarn global add generator-jhipster-vuejs
 ```
 
 To update this blueprint:
 
 ```bash
-yarn global upgrade jhipster-vuejs
+yarn global upgrade generator-jhipster-vuejs
 ```
 
 # Usage
@@ -89,7 +89,7 @@ npm link generator-jhipster
 ```bash
 mkdir my-app && cd my-app
 
-npm link jhipster-vuejs
+npm link generator-jhipster-vuejs
 npm link generator-jhipster (Optional: Needed only if you are using a non-released JHipster version)
 
 jhipster -d --blueprint vuejs
@@ -101,8 +101,8 @@ jhipster -d --blueprint vuejs
 Apache-2.0 © [Deepu K Sasidharan](https://deepu.js.org)
 
 
-[npm-image]: https://img.shields.io/npm/v/jhipster-vuejs.svg
-[npm-url]: https://npmjs.org/package/jhipster-vuejs
+[npm-image]: https://img.shields.io/npm/v/generator-jhipster-vuejs.svg
+[npm-url]: https://npmjs.org/package/generator-jhipster-vuejs
 [travis-image]: https://travis-ci.com/jhipster/jhipster-vuejs.svg?branch=master
 [travis-url]: https://travis-ci.com/jhipster/jhipster-vuejs
 [daviddm-image]: https://david-dm.org/jhipster/jhipster-vuejs.svg?theme=shields.io

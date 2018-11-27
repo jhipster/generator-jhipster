@@ -30,11 +30,11 @@
     "jhiPrefix": "jhi",
     "clientPackageManager": "npm",
     "nativeLanguage": "en",
-    "blueprint": "jhipster-vuejs",
+    "blueprint": "generator-jhipster-vuejs",
     "clientFramework": "vue",
     "useSass": false
   },
-  "jhipster-vuejs": {
+  "generator-jhipster-vuejs": {
     "applicationType": "monolith",
     "baseName": "jhipster",
     "clientFramework": "vue",
