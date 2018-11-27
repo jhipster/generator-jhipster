@@ -20,7 +20,7 @@
 // version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v4.0.6';
 const DOCKER_JAVA_JRE = 'openjdk:8-jre-alpine';
-const DOCKER_MYSQL = 'mysql:5.7.20';
+const DOCKER_MYSQL = 'mysql:8.0.13';
 const DOCKER_MARIADB = 'mariadb:10.3.7';
 const DOCKER_POSTGRESQL = 'postgres:10.4';
 const DOCKER_MONGODB = 'mongo:4.0.2';
@@ -28,11 +28,11 @@ const DOCKER_COUCHBASE = 'couchbase/server:5.5.1';
 const DOCKER_CASSANDRA = 'cassandra:3.9';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
-const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.9.3';
+const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.11';
 const DOCKER_MEMCACHED = 'memcached:1.5.8-alpine';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:4.5.0.Final';
-const DOCKER_ELASTICSEARCH = 'elasticsearch:5.6.5'; // docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1
-const DOCKER_KAFKA = 'wurstmeister/kafka:1.0.0';
+const DOCKER_ELASTICSEARCH = 'elasticsearch:6.4.2'; // docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.1
+const DOCKER_KAFKA = 'wurstmeister/kafka:2.11-2.0.0';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
 const DOCKER_SONAR = 'sonarqube:7.1';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v4.0.0';
