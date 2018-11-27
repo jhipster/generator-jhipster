@@ -1,5 +1,5 @@
 {
-  "name": "generator-jhipster-vuejs",
+  "name": "jhipster-vuejs",
   "version": "0.0.0",
   "description": "A vueJs blueprint for JHipster. It will use VueJS as the frontend library",
   "keywords": [
