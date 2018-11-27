@@ -5,12 +5,12 @@
                 <h2>
                     <span v-text="$t('userManagement.detail.title')">User</span> [<b>{{user.login}}</b>]
                 </h2>
-                <dl class="row-md jh-entity-details">
+                <dl class="row jh-entity-details">
                     <dt><span v-text="$t('userManagement.login')">Login</span></dt>
                     <dd>
                         <span>{{user.login}}</span>
-                        <span class="badge badge-success" v-if="user.activated" v-text="$t('userManagement.activated')">Activated</span>
-                        <span class="badge badge-danger" v-if="!user.activated" v-text="$t('userManagement.deactivated')">Deactivated</span>
+                        <b-badge variant="success" v-if="user.activated" v-text="$t('userManagement.activated')">Activated</b-badge>
+                        <b-badge variant="danger" v-if="!user.activated" v-text="$t('userManagement.deactivated')">Deactivated</b-badge>
                     </dd>
                     <dt><span v-text="$t('userManagement.firstName')">First Name</span></dt>
                     <dd>{{user.firstName}}</dd>
@@ -34,7 +34,7 @@
                     <dd>
                         <ul class="list-unstyled">
                             <li v-for="authority of user.authorities">
-                                <span class="badge badge-info">{{authority}}</span>
+                                <b-badge variant="info">{{authority}}</b-badge>
                             </li>
                         </ul>
                     </dd>
