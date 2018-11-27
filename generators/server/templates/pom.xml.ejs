@@ -99,7 +99,7 @@
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.2</maven-war-plugin.version>
-        <jib-maven-plugin.version>0.9.11</jib-maven-plugin.version>
+        <jib-maven-plugin.version>0.10.0</jib-maven-plugin.version>
         <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <%_ } _%>
@@ -937,9 +937,7 @@
                       </to>
                       <container>
                           <entrypoint>
-                              <shell>sh</shell>
-                              <option>-c</option>
-                              <arg>chmod +x /entrypoint.sh &amp;&amp; sync &amp;&amp; /entrypoint.sh</arg>
+                              <script>/entrypoint.sh</script>
                           </entrypoint>
                           <ports>
                               <port><%= serverPort %></port>
@@ -954,6 +952,14 @@
                           </environment>
                           <useCurrentTimestamp>true</useCurrentTimestamp>
                       </container>
+                      <extraDirectory>
+                        <permissions>
+                            <permission>
+                              <file>/entrypoint.sh</file>
+                              <mode>700</mode>
+                            </permission>
+                        </permissions>
+                      </extraDirectory>
                   </configuration>
                 </plugin>
 <%_ if (databaseType === 'sql') { _%>

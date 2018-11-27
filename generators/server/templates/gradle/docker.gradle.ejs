@@ -21,21 +21,18 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:0.9.11"
+        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:0.10.0"
     }
 }
 
 apply plugin: com.google.cloud.tools.jib.gradle.JibPlugin
 
 jib {
-    from {
-        image = '<%= DOCKER_JAVA_JRE %>'
-    }
     to {
         image = '<%= baseName.toLowerCase() %>:latest'
     }
     container {
-        entrypoint = ['sh', '-c', 'chmod +x /entrypoint.sh && sync && /entrypoint.sh']
+        entrypoint = ['/entrypoint.sh']
         ports = ['<%= serverPort %>'<% if (cacheProvider === 'hazelcast') { %>, '5701/udp' <% } %>]
         environment = [
             <%_ if (cacheProvider === 'infinispan') { _%>JAVA_OPTS: '-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true',<%_ } _%>
@@ -43,6 +40,9 @@ jib {
             JHIPSTER_SLEEP: '0'
         ]
         useCurrentTimestamp = true
+    }
+    extraDirectory {
+        permissions = ['/entrypoint.sh': '700']
     }
 }
 
