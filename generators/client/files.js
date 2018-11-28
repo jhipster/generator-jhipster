@@ -118,7 +118,7 @@ function writeFiles() {
     this.template('vue/src/main/webapp/app/components/admin/health/health.component.test.ts', 'src/main/webapp/app/components/admin/health/health.component.test.ts');
     this.template('vue/src/main/webapp/app/components/admin/logs/Logs.vue.ejs', 'src/main/webapp/app/components/admin/logs/Logs.vue');
     this.template('vue/src/main/webapp/app/components/admin/logs/Logs.component.ts.ejs', 'src/main/webapp/app/components/admin/logs/Logs.component.ts');
-    this.template('vue/src/main/webapp/app/components/admin/logs/LogsService.vue.ejs', 'src/main/webapp/app/components/admin/logs/LogsService.vue');
+    this.template('vue/src/main/webapp/app/components/admin/logs/LogsService.ts', 'src/main/webapp/app/components/admin/logs/LogsService.ts');
     this.template('vue/src/main/webapp/app/components/admin/logs/logs.component.test.ts', 'src/main/webapp/app/components/admin/logs/logs.component.test.ts');
     this.template('vue/src/main/webapp/app/components/admin/audits/Audits.vue.ejs', 'src/main/webapp/app/components/admin/audits/Audits.vue');
     this.template('vue/src/main/webapp/app/components/admin/audits/Audits.component.ts.ejs', 'src/main/webapp/app/components/admin/audits/Audits.component.ts');

@@ -1,39 +1,42 @@
-import LogsService from './LogsService.vue';
+import { Component, Vue } from 'vue-property-decorator';
+import { mixins } from 'vue-class-component';
 
-const <%=jhiPrefixCapitalized%>LogsComponent = {
-    name: '<%=jhiPrefixCapitalized%>LogsComponent',
-    mixins: [LogsService],
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            vm.init();
-        })
-    },
-    data() {
-        return {
-            loggers: null,
-            filtered: '',
-            orderProp: 'name',
-            reverse: false
-        };
-    },
-    methods: {
-        init() {
-            let vm = this;
-            this.findAll().then(function(response) {
-                vm.loggers = response.data;
-            });
-        },
-        updateLevel(name, level) {
-            let vm = this;
-            this.changeLevel({name: name, level: level}).then(function() {
-                vm.init();
-            });
-        },
-        changeOrder(orderProp) {
-            this.orderProp = orderProp;
-            this.reverse = !this.reverse;
-        }
-    }
-};
+import LogsService from './LogsService';
 
-export default <%=jhiPrefixCapitalized%>LogsComponent;
+@Component
+export default class <%=jhiPrefixCapitalized%>Logs extends mixins(LogsService) {
+
+  private loggers: any[];
+  public filtered: string;
+  public orderProp: string;
+  public reverse: boolean;
+
+  public constructor () {
+    super();
+    this.loggers = [];
+    this.filtered = '';
+    this.orderProp = 'name';
+    this.reverse = false;
+  }
+
+  public mounted(): void {
+    this.init();
+  }
+
+  public init(): void {
+    this.findAll().then((response) => {
+      this.loggers = response.data;
+    });
+  }
+
+  public updateLevel(name, level): void {
+    this.changeLevel({ name: name, level: level }).then(() => {
+      this.init();
+    });
+  }
+
+  public changeOrder(orderProp): void {
+    this.orderProp = orderProp;
+    this.reverse = !this.reverse;
+  }
+}
