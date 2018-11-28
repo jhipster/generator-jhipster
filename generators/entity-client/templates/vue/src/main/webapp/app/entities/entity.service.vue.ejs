@@ -21,7 +21,7 @@ const <%= entityAngularName %>Service = {
     methods: {
         <%_ if (searchEngine === 'elasticsearch') { _%>
         search<%= entityAngularName %>s(query<% if (pagination !== 'no') { %>, paginationQuery<% } %>) {
-            return axios.get(`${baseSearchApiUrl}${query}&${buildPaginationQueryOpts(paginationQuery)}`);
+            return axios.get(`${baseSearchApiUrl}${query}<% if (pagination !== 'no') { %>&${buildPaginationQueryOpts(paginationQuery)}<% } %>`);
         },
         <%_ } _%>
         find<%= entityAngularName %>(id) {
