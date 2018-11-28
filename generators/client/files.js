@@ -55,6 +55,12 @@ function writeFiles() {
 
     // App files
     this.copy('vue/src/main/webapp/index.html', 'src/main/webapp/index.html');
+    this.copy('vue/src/main/webapp/favicon.ico', 'src/main/webapp/favicon.ico');
+    this.template('vue/src/main/webapp/404.html.ejs', 'src/main/webapp/404.html');
+    this.template('vue/src/main/webapp/manifest.webapp.ejs', 'src/main/webapp/manifest.webapp');
+    this.template('vue/src/main/webapp/robots.txt.ejs', 'src/main/webapp/robots.txt');
+    this.template('vue/src/main/webapp/swagger-ui/index.html.ejs', 'src/main/webapp/swagger-ui/index.html');
+    this.copy('vue/src/main/webapp/swagger-ui/dist/images/throbber.gif', 'src/main/webapp/swagger-ui/dist/images/throbber.gif');
     this.copy('vue/src/main/webapp/app/App.vue', 'src/main/webapp/app/App.vue');
     this.copy('vue/src/main/webapp/app/App.component.ts', 'src/main/webapp/app/App.component.ts');
     this.copy('vue/src/main/webapp/app/shims-vue.d.ts', 'src/main/webapp/app/shims-vue.d.ts');
