@@ -26,6 +26,8 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 [![Intesys][intesys-image]][intesys-url]
 
+[![CodeFirst][codefirst-image]][codefirst-url]
+
 **Thank you to all our backers!**
 
 [![Backers][backers-image]][backers-url]
@@ -94,5 +96,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [cubaplatform-url]: https://www.cuba-platform.com/
 [intesys-image]: https://www.jhipster.tech/images/open-collective/intesys.png
 [intesys-url]: https://www.intesys.it/
+[codefirst-image]: https://www.jhipster.tech/images/open-collective/codefirst.png
+[codefirst-url]: https://www.codefirst.co.uk
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
