@@ -14,11 +14,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 **Thank you to our sponsors!**
 
-**Gold sponsors!**
+**Gold sponsors**
 
 [![Okta][okta-image]][okta-url]
 
-**Bronze sponsors!**
+**Bronze sponsors**
 
 [![ForsysLab][forsyslab-image]][forsyslab-url]
 
