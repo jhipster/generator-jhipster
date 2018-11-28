@@ -2347,6 +2347,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 64;
+        } else if (prodDatabaseType === 'postgresql' && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 63;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -2386,6 +2392,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 62;
+        } else if (prodDatabaseType === 'postgresql' && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 61;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
