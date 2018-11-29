@@ -83,14 +83,6 @@ public class UserMapper {
         }
     }
 
-    public User userFromId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
-        if (id == null) {
-            return null;
-        }
-        User user = new User();
-        user.setId(id);
-        return user;
-    }
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 
     private Set<Authority> authoritiesFromStrings(Set<String> authoritiesAsString) {
@@ -121,4 +113,13 @@ public class UserMapper {
         return authorities;
     }
     <%_ } _%>
+
+    public User userFromId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
+        if (id == null) {
+            return null;
+        }
+        User user = new User();
+        user.setId(id);
+        return user;
+    }
 }
