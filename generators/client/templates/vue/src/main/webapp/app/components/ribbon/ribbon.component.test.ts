@@ -17,7 +17,6 @@ jest.mock('axios', () => ({
 }));
 
 describe('Ribbon', () => {
-
   let ribbon: RibbonClass;
   let wrapper: Wrapper<RibbonClass>;
 

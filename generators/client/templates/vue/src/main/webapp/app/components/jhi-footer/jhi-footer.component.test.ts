@@ -10,7 +10,6 @@ config.initVueApp(localVue);
 const i18n = config.initI18N(localVue);
 
 describe('JhiFooter', () => {
-
   let jhiFooter: JhiFooterClass;
   let wrapper: Wrapper<JhiFooterClass>;
 
