@@ -1,0 +1,28 @@
+import { shallowMount, createLocalVue, Wrapper } from "@vue/test-utils";
+import <%=jhiPrefixCapitalized%>Docs from './Docs.vue';
+import <%=jhiPrefixCapitalized%>DocsClass from './Docs.component';
+
+import * as config from '../../../shared/config';
+
+const localVue = createLocalVue();
+
+config.initVueApp(localVue);
+const i18n = config.initI18N(localVue);
+
+describe('<%=jhiPrefixCapitalized%>Docs', () => {
+
+  let <%=jhiPrefix%>Docs: <%=jhiPrefixCapitalized%>DocsClass;
+  let wrapper: Wrapper<<%=jhiPrefixCapitalized%>DocsClass>;
+
+  beforeEach(() => {
+    wrapper = shallowMount<<%=jhiPrefixCapitalized%>DocsClass>(<%=jhiPrefixCapitalized%>Docs, {
+      i18n,
+      localVue,
+    });
+    <%=jhiPrefix%>Docs = wrapper.vm;
+  });
+
+  it('should be a Vue instance', async () => {
+    expect(wrapper.isVueInstance()).toBeTruthy();
+  });
+});

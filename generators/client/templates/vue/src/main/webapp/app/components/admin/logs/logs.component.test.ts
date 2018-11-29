@@ -1,9 +1,9 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
+import Logs from '@/components/admin/logs/Logs.vue';
+import LogsClass from './Logs.component';
 
 import * as config from '../../../shared/config';
-import LogsComponent from '@/components/admin/logs/Logs.vue';
-import LogsService from '@/components/admin/logs/LogsService.vue';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -11,59 +11,73 @@ const mockedAxios: any = axios;
 config.initVueApp(localVue);
 const i18n = config.initI18N(localVue);
 const store = config.initVueXStore(localVue);
-localVue.mixin(LogsService);
 
 jest.mock('axios', () => ({
-    get: jest.fn(),
-    put: jest.fn()
+  get: jest.fn(),
+  put: jest.fn()
 }));
-jest.mock('@/constants.ts', () =>({
-    SERVER_API_URL: ''
+jest.mock('@/constants.ts', () => ({
+  SERVER_API_URL: ''
 }));
 
 describe('Logs Component', () => {
-    let wrapper;
-    let comp;
+  let wrapper: Wrapper<LogsClass>;
+  let logs: LogsClass;
 
-    beforeEach(() => {
-        wrapper = shallowMount(LogsComponent, { store, i18n, localVue });
-        comp = wrapper.vm;
+  beforeEach(() => {
+    mockedAxios.get.mockReturnValue(Promise.resolve({}));
+    wrapper = shallowMount<LogsClass>(Logs, { store, i18n, localVue });
+    logs = wrapper.vm;
+  });
+
+  it('should be a Vue instance', () => {
+    expect(wrapper.isVueInstance()).toBeTruthy();
+  });
+
+  describe('OnInit', () => {
+
+    it('should set all default values correctly', () => {
+      expect(logs.filtered).toBe('');
+      expect(logs.orderProp).toBe('name');
+      expect(logs.reverse).toBe(false);
     });
 
-    it('should be a Vue instance', () => {
-        expect(wrapper.isVueInstance()).toBeTruthy();
+    it('Should call load all on init', async () => {
+      // WHEN
+      logs.init();
+      await logs.$nextTick();
+
+      // THEN
+      expect(mockedAxios.get).toHaveBeenCalledWith('management/logs');
+    });
+  });
+
+  describe('change log level', () => {
+
+    it('should change log level correctly', async () => {
+      mockedAxios.put.mockReturnValue(Promise.resolve({}));
+
+      // WHEN
+      logs.updateLevel('main', 'ERROR');
+      await logs.$nextTick();
+
+      // THEN
+      expect(mockedAxios.put).toHaveBeenCalledWith('management/logs', { level: 'ERROR', name: 'main' });
+      expect(mockedAxios.get).toHaveBeenCalledWith('management/logs');
     });
 
-    describe('OnInit', () => {
-        it('should set all default values correctly', () => {
-            expect(comp.filtered).toBe('');
-            expect(comp.orderProp).toBe('name');
-            expect(comp.reverse).toBe(false);
-        });
-        it('Should call load all on init', async () => {
-            // GIVEN
-            mockedAxios.get.mockReturnValue(Promise.resolve({}));
+  });
 
-            // WHEN
-            comp.init();
-            await comp.$nextTick();
+  describe('change order', () => {
 
-            // THEN
-            expect(mockedAxios.get).toHaveBeenCalledWith('management/logs');
-        });
+    it('should change order and invert reverse', () => {
+      // WHEN
+      logs.changeOrder('dummy-order');
+
+      // THEN
+      expect(logs.orderProp).toEqual('dummy-order');
+      expect(logs.reverse).toBe(true);
     });
-    describe('change log level', () => {
-        it('should change log level correctly', async () => {
-            mockedAxios.get.mockReturnValue(Promise.resolve({}));
-            mockedAxios.put.mockReturnValue(Promise.resolve({}));
 
-            // WHEN
-            comp.updateLevel('main', 'ERROR');
-            await comp.$nextTick();
-
-            // THEN
-            expect(mockedAxios.put).toHaveBeenCalledWith('management/logs', {"level": "ERROR", "name": "main"});
-            expect(mockedAxios.get).toHaveBeenCalledWith('management/logs');
-        });
-    });
+  });
 });
