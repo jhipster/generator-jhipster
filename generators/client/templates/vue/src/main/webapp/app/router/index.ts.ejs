@@ -15,109 +15,112 @@ import <%= jhiPrefixCapitalized %>MetricsComponent from '../components/admin/met
 import <%= jhiPrefixCapitalized %>UserManagementComponent from '../components/admin/user-management/UserManagement.vue';
 import <%= jhiPrefixCapitalized %>UserManagementViewComponent from '../components/admin/user-management/UserManagementView.vue';
 import <%= jhiPrefixCapitalized %>UserManagementEditComponent from '../components/admin/user-management/UserManagementEdit.vue';
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>import <%= jhiPrefixCapitalized %>GatewayComponent from '../components/admin/gateway/Gateway.vue';<%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>import <%= jhiPrefixCapitalized %>TrackerComponent from '../components/admin/tracker/Tracker.vue';<%_ } _%>
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+import <%= jhiPrefixCapitalized %>GatewayComponent from '../components/admin/gateway/Gateway.vue';
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+import <%= jhiPrefixCapitalized %>TrackerComponent from '../components/admin/tracker/Tracker.vue';
+<%_ } _%>
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 Vue.use(Router);
 
 export default new Router({
-    routes: [
-        {
-            path: '/',
-            name: 'Home',
-            component: Home
-        },
-        {
-            path: '/register',
-            name: 'Register',
-            component: Register
-        },
-        {
-            path: '/resetPassword',
-            name: 'ResetPassword',
-            component: ResetPassword
-        },
-        {
-            path: '/account/password',
-            name: 'ChangePassword',
-            component: ChangePassword
-        },
-        {
-            path: '/account/sessions',
-            name: 'Sessions',
-            component: Sessions
-        },
-        {
-            path: '/account/settings',
-            name: 'Settings',
-            component: Settings
-        },
-        {
-            path: '/admin/user-management',
-            name: '<%= jhiPrefixCapitalized %>User',
-            component: <%= jhiPrefixCapitalized %>UserManagementComponent
-        },
-        {
-            path: '/admin/user-management/new',
-            name: '<%= jhiPrefixCapitalized %>UserCreate',
-            component: <%= jhiPrefixCapitalized %>UserManagementEditComponent
-        },
-        {
-            path: '/admin/user-management/:userId/edit',
-            name: '<%= jhiPrefixCapitalized %>UserEdit',
-            component: <%= jhiPrefixCapitalized %>UserManagementEditComponent
-        },
-        {
-            path: '/admin/user-management/:userId/view',
-            name: '<%= jhiPrefixCapitalized %>UserView',
-            component: <%= jhiPrefixCapitalized %>UserManagementViewComponent
-        },
-        {
-            path: '/admin/docs',
-            name: '<%= jhiPrefixCapitalized %>DocsComponent',
-            component: <%= jhiPrefixCapitalized %>DocsComponent
-        },
-        {
-            path: '/admin/audits',
-            name: '<%= jhiPrefixCapitalized %>AuditsComponent',
-            component: <%= jhiPrefixCapitalized %>AuditsComponent
-        },
-        {
-            path: '/admin/<%= jhiPrefixDashed %>-health',
-            name: '<%= jhiPrefixCapitalized %>HealthComponent',
-            component: <%= jhiPrefixCapitalized %>HealthComponent
-        },
-        {
-            path: '/admin/logs',
-            name: '<%= jhiPrefixCapitalized %>LogsComponent',
-            component: <%= jhiPrefixCapitalized %>LogsComponent
-        },
-        {
-            path: '/admin/<%= jhiPrefixDashed %>-metrics',
-            name: '<%= jhiPrefixCapitalized %>MetricsComponent',
-            component: <%= jhiPrefixCapitalized %>MetricsComponent
-        },
-        {
-            path: '/admin/<%= jhiPrefixDashed %>-configuration',
-            name: '<%= jhiPrefixCapitalized %>ConfigurationComponent',
-            component: <%= jhiPrefixCapitalized %>ConfigurationComponent
-        }
-        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>,
-        {
-            path: '/admin/gateway',
-            name: '<%= jhiPrefixCapitalized %>GatewayComponent',
-            component: <%= jhiPrefixCapitalized %>GatewayComponent
-        }
-        <%_ } _%>
-        <%_ if (websocket === 'spring-websocket') { _%>,
-        {
-            path: '/admin/<%= jhiPrefixDashed %>-tracker',
-            name: '<%= jhiPrefixCapitalized %>TrackerComponent',
-            component: <%= jhiPrefixCapitalized %>TrackerComponent
-        }
-        <%_ } _%>
-        // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
-
-    ]
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: Home
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
+    {
+      path: '/resetPassword',
+      name: 'ResetPassword',
+      component: ResetPassword
+    },
+    {
+      path: '/account/password',
+      name: 'ChangePassword',
+      component: ChangePassword
+    },
+    {
+      path: '/account/sessions',
+      name: 'Sessions',
+      component: Sessions
+    },
+    {
+      path: '/account/settings',
+      name: 'Settings',
+      component: Settings
+    },
+    {
+      path: '/admin/user-management',
+      name: '<%= jhiPrefixCapitalized %>User',
+      component: <%= jhiPrefixCapitalized %>UserManagementComponent
+    },
+    {
+      path: '/admin/user-management/new',
+      name: '<%= jhiPrefixCapitalized %>UserCreate',
+      component: <%= jhiPrefixCapitalized %>UserManagementEditComponent
+    },
+    {
+      path: '/admin/user-management/:userId/edit',
+      name: '<%= jhiPrefixCapitalized %>UserEdit',
+      component: <%= jhiPrefixCapitalized %>UserManagementEditComponent
+    },
+    {
+      path: '/admin/user-management/:userId/view',
+      name: '<%= jhiPrefixCapitalized %>UserView',
+      component: <%= jhiPrefixCapitalized %>UserManagementViewComponent
+    },
+    {
+      path: '/admin/docs',
+      name: '<%= jhiPrefixCapitalized %>DocsComponent',
+      component: <%= jhiPrefixCapitalized %>DocsComponent
+    },
+    {
+      path: '/admin/audits',
+      name: '<%= jhiPrefixCapitalized %>AuditsComponent',
+      component: <%= jhiPrefixCapitalized %>AuditsComponent
+    },
+    {
+      path: '/admin/<%= jhiPrefixDashed %>-health',
+      name: '<%= jhiPrefixCapitalized %>HealthComponent',
+      component: <%= jhiPrefixCapitalized %>HealthComponent
+    },
+    {
+      path: '/admin/logs',
+      name: '<%= jhiPrefixCapitalized %>LogsComponent',
+      component: <%= jhiPrefixCapitalized %>LogsComponent
+    },
+    {
+      path: '/admin/<%= jhiPrefixDashed %>-metrics',
+      name: '<%= jhiPrefixCapitalized %>MetricsComponent',
+      component: <%= jhiPrefixCapitalized %>MetricsComponent
+    },
+    {
+      path: '/admin/<%= jhiPrefixDashed %>-configuration',
+      name: '<%= jhiPrefixCapitalized %>ConfigurationComponent',
+      component: <%= jhiPrefixCapitalized %>ConfigurationComponent
+    }
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>,
+    {
+      path: '/admin/gateway',
+      name: '<%= jhiPrefixCapitalized %>GatewayComponent',
+      component: <%= jhiPrefixCapitalized %>GatewayComponent
+    }
+    <%_ } _%>
+    <%_ if (websocket === 'spring-websocket') { _%>,
+    {
+      path: '/admin/<%= jhiPrefixDashed %>-tracker',
+      name: '<%= jhiPrefixCapitalized %>TrackerComponent',
+      component: <%= jhiPrefixCapitalized %>TrackerComponent
+    }
+    <%_ } _%>
+    // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
+  ]
 });
