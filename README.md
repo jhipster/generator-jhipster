@@ -4,11 +4,13 @@
 
 Greetings, Java Hipster!
 
-Full documentation and information is available on our website at [https://www.jhipster.tech/][jhipster-url]
+本项目 fork 自 generate-jhipster ，用于个性化jhipster 满足一些自定义的需求
 
-Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here](issue-template). For feature requests and queries you can use [this template][feature-template].
+完整文档请参考 [https://www.jhipster.tech/][jhipster-url]
 
-## Sponsors
+在你提交issue之前，请阅读用户指南 [guidelines](/CONTRIBUTING.md#submitting-an-issue)。 如果你提交的issue是一个bug， 在发布之前请使用bug模板。 功能issue或其他issue你可以使用此模板[this template][feature-template].
+
+##  赞助商
 
 Support this project by becoming a sponsor! [Become a sponsor](https://opencollective.com/generator-jhipster) or [learn more about sponsoring the project](https://www.jhipster.tech/sponsors/).
 
