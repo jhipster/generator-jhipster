@@ -76,7 +76,8 @@ public class UserMapper {
             user.setAuthorities(authorities);
             <%_ } _%>
             <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
-            user.setAuthorities(userDTO.getAuthorities());
+            Set<String> authorities = this.cleanNullStringAuthorities(userDTO.getAuthorities());
+            user.setAuthorities(authorities);
             <%_ } _%>
             return user;
         }
@@ -101,6 +102,20 @@ public class UserMapper {
                 auth.setName(string);
                 return auth;
             }).collect(Collectors.toSet());
+        }
+
+        return authorities;
+    }
+    <%_ } _%>
+    <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+
+    private Set<String> cleanNullStringAuthorities(Set<String> authoritiesAsString) {
+        Set<String> authorities = new HashSet<>();
+
+        if(authoritiesAsString != null) {
+            authorities = authoritiesAsString.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
         }
 
         return authorities;
