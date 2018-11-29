@@ -6,8 +6,7 @@ const path = require('path');
 
 module.exports = {
     dev: {
-
-    // Paths
+        // Paths
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {},
@@ -20,10 +19,9 @@ module.exports = {
         notifyOnErrors: true,
         poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-
         /**
-     * Source Maps
-     */
+         * Source Maps
+         */
 
         // https://webpack.js.org/configuration/devtool/#development
         devtool: 'cheap-module-eval-source-map',
@@ -37,7 +35,7 @@ module.exports = {
     },
 
     build: {
-    // Template for index.html
+        // Template for index.html
         index: path.resolve(__dirname, '../target/www/index.html'),
 
         // Paths
@@ -46,8 +44,8 @@ module.exports = {
         assetsPublicPath: '/',
 
         /**
-     * Source Maps
-     */
+         * Source Maps
+         */
 
         productionSourceMap: true,
         // https://webpack.js.org/configuration/devtool/#production
