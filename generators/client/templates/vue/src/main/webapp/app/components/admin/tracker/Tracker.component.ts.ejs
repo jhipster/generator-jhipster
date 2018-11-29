@@ -1,46 +1,46 @@
 import TrackerService from './TrackerService.vue';
 
 const <%=jhiPrefixCapitalized%>TrackerComponent = {
-    name: '<%=jhiPrefixCapitalized%>TrackerComponent',
-    mixins: [TrackerService],
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            vm.init();
-        })
+  name: '<%=jhiPrefixCapitalized%>TrackerComponent',
+  mixins: [TrackerService],
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.init();
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    this.unsubscribe();
+  },
+  data() {
+    return {
+      activities: []
+    };
+  },
+  methods: {
+    init() {
+      this.subscribe();
+      let vm = this;
+      this.receive().then(function(res) {
+        vm.showActivity(res.data);
+      });
     },
-    beforeRouteLeave (to, from, next) {
-        this.unsubscribe();
-    },
-    data() {
-        return {
-            activities: []
-        };
-    },
-    methods: {
-        init() {
-            this.subscribe();
-            let vm = this;
-            this.receive().then(function(res) {
-                vm.showActivity(res.data);
-            });
-        },
-        showActivity(activity: any) {
-            let existingActivity = false;
-            for (let index = 0; index < this.activities.length; index++) {
-                if (this.activities[index].sessionId === activity.sessionId) {
-                    existingActivity = true;
-                    if ( activity.page === 'logout' ) {
-                        this.activities.splice(index, 1);
-                    } else {
-                        this.activities[index] = activity;
-                    }
-                }
-            }
-            if (!existingActivity && (activity.page !== 'logout')) {
-                this.activities.push(activity);
-            }
+    showActivity(activity: any) {
+      let existingActivity = false;
+      for (let index = 0; index < this.activities.length; index++) {
+        if (this.activities[index].sessionId === activity.sessionId) {
+          existingActivity = true;
+          if ( activity.page === 'logout' ) {
+            this.activities.splice(index, 1);
+          } else {
+            this.activities[index] = activity;
+          }
         }
+      }
+      if (!existingActivity && (activity.page !== 'logout')) {
+        this.activities.push(activity);
+      }
     }
+  }
 };
 
 export default <%=jhiPrefixCapitalized%>TrackerComponent;

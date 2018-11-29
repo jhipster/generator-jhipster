@@ -35,7 +35,6 @@ describe('Logs Component', () => {
   });
 
   describe('OnInit', () => {
-
     it('should set all default values correctly', () => {
       expect(logs.filtered).toBe('');
       expect(logs.orderProp).toBe('name');
@@ -53,7 +52,6 @@ describe('Logs Component', () => {
   });
 
   describe('change log level', () => {
-
     it('should change log level correctly', async () => {
       mockedAxios.put.mockReturnValue(Promise.resolve({}));
 
@@ -69,7 +67,6 @@ describe('Logs Component', () => {
   });
 
   describe('change order', () => {
-
     it('should change order and invert reverse', () => {
       // WHEN
       logs.changeOrder('dummy-order');
@@ -78,6 +75,5 @@ describe('Logs Component', () => {
       expect(logs.orderProp).toEqual('dummy-order');
       expect(logs.reverse).toBe(true);
     });
-
   });
 });

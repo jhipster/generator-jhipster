@@ -1,48 +1,48 @@
 import ConfigurationService from './ConfigurationService.vue';
 
 const <%=jhiPrefixCapitalized%>ConfigurationComponent = {
-    name: '<%=jhiPrefixCapitalized%>ConfigurationComponent',
-    mixins: [ConfigurationService],
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            vm.init();
-        })
-    },
-    data() {
-        return {
-            orderProp: 'prefix',
-            reverse: false,
-            allConfiguration: null,
-            configuration: null,
-            configKeys: [],
-            filtered: ''
-        };
-    },
-    methods: {
-        init: function() {
-            let _vm = this;
-            this.loadConfiguration().then(function(res) {
-                _vm.configuration = res;
+  name: '<%=jhiPrefixCapitalized%>ConfigurationComponent',
+  mixins: [ConfigurationService],
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.init();
+    });
+  },
+  data() {
+    return {
+      orderProp: 'prefix',
+      reverse: false,
+      allConfiguration: null,
+      configuration: null,
+      configKeys: [],
+      filtered: ''
+    };
+  },
+  methods: {
+    init: function() {
+      let _vm = this;
+      this.loadConfiguration().then(function(res) {
+        _vm.configuration = res;
 
-                for (const config of _vm.configuration) {
-                    if (config.properties !== undefined) {
-                        _vm.configKeys.push(Object.keys(config.properties));
-                    }
-                }
-            });
-
-            this.loadEnvConfiguration().then(function(res) {
-                _vm.allConfiguration = res;
-            });
-        },
-        changeOrder: function(prop) {
-            this.orderProp = prop;
-            this.reverse = !this.reverse;
-        },
-        keys: function(dict) {
-            return (dict === undefined) ? [] : Object.keys(dict);
+        for (const config of _vm.configuration) {
+          if (config.properties !== undefined) {
+            _vm.configKeys.push(Object.keys(config.properties));
+          }
         }
+      });
+
+      this.loadEnvConfiguration().then(function(res) {
+        _vm.allConfiguration = res;
+      });
+    },
+    changeOrder: function(prop) {
+      this.orderProp = prop;
+      this.reverse = !this.reverse;
+    },
+    keys: function(dict) {
+      return dict === undefined ? [] : Object.keys(dict);
     }
+  }
 };
 
 export default <%=jhiPrefixCapitalized%>ConfigurationComponent;

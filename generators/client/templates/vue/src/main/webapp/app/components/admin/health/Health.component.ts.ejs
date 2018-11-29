@@ -2,55 +2,57 @@ import <%=jhiPrefixCapitalized%>HealthModal from './HealthModal.vue';
 import HealthService from './HealthService.vue';
 
 const <%=jhiPrefixCapitalized%>HealthComponent = {
-    name: '<%=jhiPrefixCapitalized%>HealthComponent',
-    mixins: [HealthService],
-    components: {
-      'health-modal': <%=jhiPrefixCapitalized%>HealthModal
+  name: '<%=jhiPrefixCapitalized%>HealthComponent',
+  mixins: [HealthService],
+  components: {
+    'health-modal': <%=jhiPrefixCapitalized%>HealthModal
+  },
+beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.refresh();
+    });
+  },
+  data() {
+    return {
+      healthData: null,
+      currentHealth: null,
+      updatingHealth: false
+    };
+  },
+  methods: {
+    baseName(name) {
+      return this.getBaseName(name);
     },
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            vm.refresh();
+    getBadgeClass(statusState) {
+      if (statusState === 'UP') {
+        return 'badge-success';
+      } else {
+        return 'badge-danger';
+      }
+    },
+    refresh() {
+      this.updatingHealth = true;
+      let vm = this;
+      this.checkHealth()
+        .then(function(res) {
+          vm.healthData = vm.transformHealthData(res.data);
+          vm.updatingHealth = false;
         })
+        .catch(function(error) {
+          if (error.status === 503) {
+            vm.healthData = vm.transformHealthData(error.error);
+          }
+          vm.updatingHealth = false;
+        });
     },
-    data() {
-        return {
-            healthData: null,
-            currentHealth: null,
-            updatingHealth: false
-        };
+    showHealth(health) {
+      this.currentHealth = health;
+      this.$refs.healthModal.show();
     },
-    methods: {
-        baseName(name) {
-            return this.getBaseName(name);
-        },
-        getBadgeClass(statusState) {
-            if (statusState === 'UP') {
-                return 'badge-success';
-            } else {
-                return 'badge-danger';
-            }
-        },
-        refresh() {
-            this.updatingHealth = true;
-            let vm = this;
-            this.checkHealth().then(function(res) {
-                vm.healthData = vm.transformHealthData(res.data);
-                vm.updatingHealth = false;
-            }).catch(function(error) {
-                if (error.status === 503) {
-                    vm.healthData = vm.transformHealthData(error.error);
-                }
-                vm.updatingHealth = false;
-            });
-        },
-        showHealth(health) {
-            this.currentHealth = health;
-            this.$refs.healthModal.show();
-        },
-        subSystemName(name) {
-            return this.getSubSystemName(name);
-        }
+    subSystemName(name) {
+      return this.getSubSystemName(name);
     }
+  }
 };
 
 export default <%=jhiPrefixCapitalized%>HealthComponent;

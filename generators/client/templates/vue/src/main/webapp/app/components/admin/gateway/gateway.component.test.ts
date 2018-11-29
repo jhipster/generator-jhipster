@@ -15,24 +15,23 @@ localVue.mixin(GatewayService);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 jest.mock('axios', () => ({
-    get: jest.fn(),
-    put: jest.fn()
+  get: jest.fn(),
+  put: jest.fn()
 }));
 jest.mock('@/constants.ts', () =>({
-    SERVER_API_URL: ''
+  SERVER_API_URL: ''
 }));
 
 describe('Gateway Component', () => {
-    let wrapper;
-    let comp;
+  let wrapper;
+  let comp;
 
-    beforeEach(() => {
-        wrapper = shallowMount(GatewayComponent, { store, i18n, localVue });
-        comp = wrapper.vm;
-    });
+  beforeEach(() => {
+    wrapper = shallowMount(GatewayComponent, { store, i18n, localVue });
+    comp = wrapper.vm;
+  });
 
-    it('should be a Vue instance', () => {
-        expect(wrapper.isVueInstance()).toBeTruthy();
-    });
-
+  it('should be a Vue instance', () => {
+    expect(wrapper.isVueInstance()).toBeTruthy();
+  });
 });

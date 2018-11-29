@@ -1,32 +1,32 @@
 import GatewayService from './GatewayService.vue';
 
 const <%=jhiPrefixCapitalized%>GatewayComponent = {
-    name: '<%=jhiPrefixCapitalized%>GatewayComponent',
-    mixins: [GatewayService],
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            vm.init();
-        })
+  name: '<%=jhiPrefixCapitalized%>GatewayComponent',
+  mixins: [GatewayService],
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.init();
+    })
+  },
+  data() {
+    return {
+      gatewayRoutes: [],
+      updatingRoutes: false
+    };
+  },
+  methods: {
+    init() {
+      this.refresh();
     },
-    data() {
-        return {
-            gatewayRoutes: [],
-            updatingRoutes: false
-        };
-    },
-    methods: {
-        init() {
-            this.refresh();
-        },
-        refresh() {
-            this.updatingRoutes = true;
-            let vm = this;
-            this.findAll().then(function(res) {
-                vm.gatewayRoutes = res.data;
-                vm.updatingRoutes = false;
-            });
-        }
+    refresh() {
+      this.updatingRoutes = true;
+      let vm = this;
+      this.findAll().then(function(res) {
+        vm.gatewayRoutes = res.data;
+        vm.updatingRoutes = false;
+      });
     }
+  }
 };
 
 export default <%=jhiPrefixCapitalized%>GatewayComponent;
