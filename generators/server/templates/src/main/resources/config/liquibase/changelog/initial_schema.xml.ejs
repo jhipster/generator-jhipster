@@ -147,6 +147,9 @@
                   identityInsertEnabled="true"
                   <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_user">
+            <%_ if (prodDatabaseType === 'postgresql') { _%>
+            <column name="id" type="numeric"/>
+            <%_ } _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
