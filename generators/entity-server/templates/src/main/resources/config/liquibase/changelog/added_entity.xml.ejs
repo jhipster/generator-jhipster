@@ -85,6 +85,8 @@
                 columnType="decimal(10,2)";
             } else if (fieldType === 'LocalDate') {
                 columnType="date";
+            } else if (fieldType === 'LocalDateTime') {
+                columnType="datetime";
             } else if (fieldType === 'Instant') {
                 columnType="datetime";
             } else if (fieldType === 'ZonedDateTime') {
