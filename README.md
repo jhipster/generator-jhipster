@@ -10,31 +10,38 @@ Greetings, Java Hipster!
 
 在你提交issue之前，请阅读用户指南 [guidelines](/CONTRIBUTING.md#submitting-an-issue)。 如果你提交的issue是一个bug， 在发布之前请使用bug模板。 功能issue或其他issue你可以使用此模板[this template][feature-template].
 
+## 开发使用指南
+```bash
+git clone https://github.com/XIAOMIOPPO/generator-jhipster.git
+npm install
+npm link //npm link 会在全局注册软链接链接到 package.json 中的 bin 属性指定的二进制文件的路径
+```
+
 ##  赞助商
-
-Support this project by becoming a sponsor! [Become a sponsor](https://opencollective.com/generator-jhipster) or [learn more about sponsoring the project](https://www.jhipster.tech/sponsors/).
-
-**Thank you to our sponsors!**
-
-**Gold sponsors**
-
-[![Okta][okta-image]][okta-url]
-
-**Bronze sponsors**
-
-[![ForsysLab][forsyslab-image]][forsyslab-url]
-
-[![CUBA Platform][cubaplatform-image]][cubaplatform-url]
-
-[![Intesys][intesys-image]][intesys-url]
-
-[![CodeFirst][codefirst-image]][codefirst-url]
-
-**Thank you to all our backers!**
-
-[![Backers][backers-image]][backers-url]
-
-## Azure Builds
+               
+               Support this project by becoming a sponsor! [Become a sponsor](https://opencollective.com/generator-jhipster) or [learn more about sponsoring the project](https://www.jhipster.tech/sponsors/).
+               
+               **Thank you to our sponsors!**
+               
+               **Gold sponsors**
+               
+               [![Okta][okta-image]][okta-url]
+               
+               **Bronze sponsors**
+               
+               [![ForsysLab][forsyslab-image]][forsyslab-url]
+               
+               [![CUBA Platform][cubaplatform-image]][cubaplatform-url]
+               
+               [![Intesys][intesys-image]][intesys-url]
+               
+               [![CodeFirst][codefirst-image]][codefirst-url]
+               
+               **Thank you to all our backers!**
+               
+               [![Backers][backers-image]][backers-url]
+               
+               ## Azure Builds
 
 Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hipster-labs/jhipster-daily-builds)
 

@@ -29,7 +29,7 @@
     },
     "main": "cli/index.js",
     "bin": {
-        "jhipster": "./cli/jhipster.js"
+        "jhipster-test": "./cli/jhipster.js"
     },
     "repository": {
         "type": "git",

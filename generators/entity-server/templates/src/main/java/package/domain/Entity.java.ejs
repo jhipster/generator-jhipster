@@ -54,6 +54,8 @@ import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 <%_ } if (databaseType === 'sql') { _%>
 
 import javax.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 <%_ } if (validation) { _%>
 import javax.validation.constraints.*;
 <%_ } _%>
@@ -325,9 +327,6 @@ public class <%= entityClass %> implements Serializable {
     _%>
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
 
-    public Set<<%= otherEntityNameCapitalized %>> get<%= relationshipNameCapitalizedPlural %>() {
-        return <%= relationshipFieldNamePlural %>;
-    }
         <%_ if (fluentMethods) { _%>
 
     public <%= entityClass %> <%= relationshipFieldNamePlural %>(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityNamePlural %>) {
@@ -363,9 +362,6 @@ public class <%= entityClass %> implements Serializable {
     }
     <%_ } else { _%>
 
-    public <%= otherEntityNameCapitalized %> get<%= relationshipNameCapitalized %>() {
-        return <%= relationshipFieldName %>;
-    }
         <%_ if (fluentMethods) { _%>
 
     public <%= entityClass %> <%= relationshipFieldName %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
@@ -374,11 +370,7 @@ public class <%= entityClass %> implements Serializable {
     }
         <%_ } _%>
 
-    public void set<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
-        this.<%= relationshipFieldName %> = <%= otherEntityName %>;
-    }
     <%_ } _%>
 <%_ } _%>
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
 }
