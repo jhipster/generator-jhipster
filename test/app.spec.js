@@ -1402,6 +1402,10 @@ describe('JHipster generator', () => {
                     .on('end', done);
             });
 
+            it('creates expected server files', () => {
+                assert.file(expectedFiles.server);
+                assert.noFile(expectedFiles.userManagementServer);
+            });
             it('creates SecurityConfiguration for default configuration with skip client and skip user management option enabled', () => {
                 assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`);
             });
@@ -1560,6 +1564,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.microserviceGradle);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
+                assert.noFile(expectedFiles.userManagementServer);
             });
         });
 
