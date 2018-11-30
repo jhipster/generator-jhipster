@@ -49,6 +49,7 @@ describe('JHipster generator', () => {
             it('creates expected default files for angularX', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
@@ -110,6 +111,7 @@ describe('JHipster generator', () => {
             it('creates expected default files for react', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
@@ -162,6 +164,7 @@ describe('JHipster generator', () => {
             it('creates expected default files', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
@@ -215,6 +218,7 @@ describe('JHipster generator', () => {
             it('creates expected default files for gradle', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.dockerServices);
@@ -266,6 +270,7 @@ describe('JHipster generator', () => {
             it('creates expected default files', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
@@ -640,6 +645,7 @@ describe('JHipster generator', () => {
             it('creates expected files with "Hazelcast"', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.hazelcast);
             });
         });
@@ -674,6 +680,7 @@ describe('JHipster generator', () => {
             it('creates expected files with "Infinispan"', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.infinispan);
             });
@@ -709,6 +716,7 @@ describe('JHipster generator', () => {
             it('creates expected files with "Infinispan and Eureka"', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.eureka);
                 assert.file(expectedFiles.infinispan);
@@ -745,6 +753,7 @@ describe('JHipster generator', () => {
             it('creates expected files with "Memcached"', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.memcached);
             });
@@ -787,6 +796,7 @@ describe('JHipster generator', () => {
             it('creates expected files with Kafka message broker enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.messageBroker);
@@ -830,6 +840,7 @@ describe('JHipster generator', () => {
             it('creates expected files with Swagger API first enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.swaggerCodegen);
@@ -876,6 +887,7 @@ describe('JHipster generator', () => {
             it('creates expected files with Swagger API first enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
@@ -1197,6 +1209,7 @@ describe('JHipster generator', () => {
             it('creates expected files with Protractor enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(
                     getFilesForOptions(angularFiles, {
                         useSass: false,
@@ -1246,6 +1259,7 @@ describe('JHipster generator', () => {
             it('creates expected files with Cucumber enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.cucumber);
                 assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
             });
@@ -1282,6 +1296,7 @@ describe('JHipster generator', () => {
             it('creates expected files for default configuration with skip client option enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.maven);
                 assert.noFile(
                     getFilesForOptions(
@@ -1329,6 +1344,7 @@ describe('JHipster generator', () => {
             it('creates expected files for default configuration with skip client option enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.gradle);
                 assert.noFile(
                     getFilesForOptions(
@@ -1500,6 +1516,7 @@ describe('JHipster generator', () => {
             it('creates expected files with the monolith application type', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
