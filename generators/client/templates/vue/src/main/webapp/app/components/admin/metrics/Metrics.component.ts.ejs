@@ -26,28 +26,27 @@ const <%=jhiPrefixCapitalized%>MetricsComponent = {
   methods: {
     refresh() {
       this.updatingMetrics = true;
-      let vm = this;
-      this.getMetrics().then(function(res) {
-        vm.metrics = res.data;
-        vm.updatingMetrics = false;
-        vm.servicesStats = {};
-        vm.cachesStats = {};
-        Object.keys(vm.metrics.timers).forEach(key => {
-          const value = vm.metrics.timers[key];
+      this.getMetrics().then((res) => {
+        this.metrics = res.data;
+        this.updatingMetrics = false;
+        this.servicesStats = {};
+        this.cachesStats = {};
+        Object.keys(this.metrics.timers).forEach(key => {
+          const value = this.metrics.timers[key];
           if (key.includes('web.rest') || key.includes('service')) {
-            vm.servicesStats[key] = value;
+            this.servicesStats[key] = value;
           }
         });
-        Object.keys(vm.metrics.gauges).forEach(key => {
+        Object.keys(this.metrics.gauges).forEach(key => {
           if (key.includes('jcache.statistics')) {
-            const value = vm.metrics.gauges[key].value;
+            const value = this.metrics.gauges[key].value;
             // remove gets or puts
             const index = key.lastIndexOf('.');
             const newKey = key.substr(0, index);
 
             // Keep the name of the domain
-            vm.cachesStats[newKey] = {
-              name: vm.JCACHE_KEY.length,
+            this.cachesStats[newKey] = {
+              name: this.JCACHE_KEY.length,
               value
             };
           }
@@ -55,12 +54,11 @@ const <%=jhiPrefixCapitalized%>MetricsComponent = {
       });
     },
     refreshThreadDumpData() {
-      let vm = this;
       if (this.$refs.metricsModal.show) {
         this.$refs.metricsModal.show();
       }
-      this.retrieveThreadDump().then(function(res) {
-        vm.threads = res.data.threads;
+      this.retrieveThreadDump().then((res) => {
+        this.threads = res.data.threads;
       });
     },
     filterNaN(input) {

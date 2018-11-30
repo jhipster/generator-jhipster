@@ -42,19 +42,18 @@ const ChangePassword = {
         this.doNotMatch = 'ERROR';
       } else {
         this.doNotMatch = null;
-        let vm = this;
         axios
           .post('api/account/change-password', {
             currentPassword: this.resetPassword.currentPassword,
             newPassword: this.resetPassword.newPassword
           })
           .then(() => {
-            vm.success = 'OK';
-            vm.error = null;
+            this.success = 'OK';
+            this.error = null;
           })
           .catch(() => {
-            vm.success = null;
-            vm.error = 'ERROR';
+            this.success = null;
+            this.error = 'ERROR';
           });
       }
     }

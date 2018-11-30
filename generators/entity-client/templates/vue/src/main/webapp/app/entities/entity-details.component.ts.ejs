@@ -19,9 +19,8 @@ const <%= entityAngularName %>Details =  {
     },
     methods: {
         retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
-            let vm = this;
-            this.find<%= entityAngularName %>(<%= entityInstance %>Id).then(res => {
-                vm.<%= entityInstance %> = res.data;
+            this.find<%= entityAngularName %>(<%= entityInstance %>Id).then((res) => {
+                this.<%= entityInstance %> = res.data;
             });
         },
         previousState() {

@@ -59,11 +59,10 @@ const <%=jhiPrefixCapitalized%>UserManagementEditComponent = {
     },
     methods: {
         init: function(userId) {
-            let vm = this;
-            this.get(userId).then(function(res) {
-                vm.userAccount = res.data;
-                vm.retrieveAuthorities().then(function(res) {
-                    vm.authorities = res.data;
+            this.get(userId).then((res) => {
+                this.userAccount = res.data;
+                this.retrieveAuthorities().then((res) => {
+                    this.authorities = res.data;
                 });
             });
         },
@@ -71,19 +70,18 @@ const <%=jhiPrefixCapitalized%>UserManagementEditComponent = {
             this.$router.go(-1);
         },
         save: function() {
-            let vm = this;
             this.isSaving = true;
             if (this.userAccount.id) {
-                this.update(this.userAccount).then(function() {
-                    vm.isSaving = false;
-                    vm.$router.go(-1);
+                this.update(this.userAccount).then(() => {
+                    this.isSaving = false;
+                    this.$router.go(-1);
                 });
             } else {
                 <% if (!enableTranslation) { %>
                 this.userAccount.langKey = 'en';<% } %>
-                this.create(this.userAccount).then(function() {
-                    vm.isSaving = false;
-                    vm.$router.go(-1);
+                this.create(this.userAccount).then(() => {
+                    this.isSaving = false;
+                    this.$router.go(-1);
                 });
             }
         }

@@ -20,10 +20,9 @@ const <%=jhiPrefixCapitalized%>GatewayComponent = {
     },
     refresh() {
       this.updatingRoutes = true;
-      let vm = this;
-      this.findAll().then(function(res) {
-        vm.gatewayRoutes = res.data;
-        vm.updatingRoutes = false;
+      this.findAll().then((res) => {
+        this.gatewayRoutes = res.data;
+        this.updatingRoutes = false;
       });
     }
   }

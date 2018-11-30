@@ -52,17 +52,16 @@ methods: {
   },
   loadAll() {
       if (this.fromDate && this.toDate) {
-        let vm = this;
         this.query({
           page: this.page - 1,
           size: this.itemsPerPage,
           sort: this.sort(),
           fromDate: this.fromDate,
           toDate: this.toDate
-        }).then(function(res) {
-          vm.audits = res.data;
-          vm.totalItems = Number(res.headers['x-total-count']);
-          vm.queryCount = vm.totalItems;
+        }).then((res) => {
+          this.audits = res.data;
+          this.totalItems = Number(res.headers['x-total-count']);
+          this.queryCount = this.totalItems;
         });
       }
     },

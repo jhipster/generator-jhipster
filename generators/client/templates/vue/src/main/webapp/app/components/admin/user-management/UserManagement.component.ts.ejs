@@ -27,27 +27,25 @@ const <%=jhiPrefixCapitalized%>UserManagementComponent = {
     methods: {
         setActive(user, isActivated) {
             user.activated = isActivated;
-            let vm = this;
-            this.update(user).then(function() {
-                vm.error = null;
-                vm.success = 'OK';
-                vm.loadAll();
-            }).catch(function() {
-                vm.success = null;
-                vm.error = 'ERROR';
+            this.update(user).then(() => {
+                this.error = null;
+                this.success = 'OK';
+                this.loadAll();
+            }).catch(() => {
+                this.success = null;
+                this.error = 'ERROR';
                 user.activated = false;
             });
         },
         loadAll() {
-            let vm = this;
             this.query(<% if (databaseType !== 'cassandra') { %>{
                 page: this.page - 1,
                 size: this.itemsPerPage,
-                sort: this.sort()}<% } %>).then(function(res) {
-                    vm.users = res.data;
+                sort: this.sort()}<% } %>).then((res) => {
+                    this.users = res.data;
                     <%_ if (databaseType !== 'cassandra') { _%>
-                    vm.queryCount = vm.totalItems;
-                    vm.totalItems = Number(res.headers['x-total-count']);
+                    this.totalItems = Number(res.headers['x-total-count']);
+                    this.queryCount = this.totalItems;
                     <%_ } _%>
                 });
         },
@@ -74,10 +72,9 @@ const <%=jhiPrefixCapitalized%>UserManagementComponent = {
         },
         <%_ } _%>
         deleteUser() {
-            let vm = this;
-            this.remove(this.removeId).then(function() {
-                vm.removeId = null;
-                vm.loadAll();
+            this.remove(this.removeId).then(() => {
+                this.removeId = null;
+                this.loadAll();
             });
         },
         prepareRemove(instance) {

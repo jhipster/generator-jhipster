@@ -14,25 +14,24 @@
         },
         methods: {
             retrieveAccount: function() {
-                let vm = this;
-                vm.$store.commit('authenticate');
-                axios.get('api/account').then(function (response) {
+                this.$store.commit('authenticate');
+                axios.get('api/account').then((response) => {
                     const account = response.data;
                     if (account) {
-                        vm.$store.commit('authenticated', account);
-                        if (vm.currentLanguage !== account.langKey) {
-                            vm.currentLanguage = account.langKey;
+                        this.$store.commit('authenticated', account);
+                        if (this.currentLanguage !== account.langKey) {
+                            this.currentLanguage = account.langKey;
                         }
                         <%_ if (websocket === 'spring-websocket') { _%>
-                        vm.connect();
+                        this.connect();
                         <%_ } _%>
                     } else {
-                        vm.$store.commit('logout');
-                        vm.$router.push('/');
+                        this.$store.commit('logout');
+                        this.$router.push('/');
                     }
-                }).catch(function () {
-                    vm.$store.commit('logout');
-                    vm.$router.push('/');
+                }).catch(() => {
+                    this.$store.commit('logout');
+                    this.$router.push('/');
                 });
             },
             hasAnyAuthority: function(authorities) {

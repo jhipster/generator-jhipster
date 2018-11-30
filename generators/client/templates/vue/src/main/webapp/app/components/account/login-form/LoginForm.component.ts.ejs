@@ -13,16 +13,15 @@ const LoginForm = {
   },
   methods: {
     doLogin: function () {
-      let vm = this;
       <%_ if (authenticationType === 'jwt') { _%>
       const data = { username: this.login, password: this.password, rememberMe: this.rememberMe };
       axios
         .post('api/authenticate', data)
-        .then(function (result) {
+        .then((result) => {
           const bearerToken = result.headers.authorization;
           if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
             const jwt = bearerToken.slice(7, bearerToken.length);
-            if (vm.rememberMe) {
+            if (this.rememberMe) {
               localStorage.setItem('jhi-authenticationToken', jwt);
             } else {
               sessionStorage.setItem('jhi-authenticationToken', jwt);
@@ -42,11 +41,11 @@ const LoginForm = {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
-        }).then(function () {
+        }).then(() => {
         <%_ } _%>
-          vm.authenticationError = false;
-          vm.$root.$emit('bv::hide::modal','login-page');
-          vm.retrieveAccount();
+          this.authenticationError = false;
+          this.$root.$emit('bv::hide::modal','login-page');
+          this.retrieveAccount();
         }).catch(()=> {
           this.authenticationError = true;
         });

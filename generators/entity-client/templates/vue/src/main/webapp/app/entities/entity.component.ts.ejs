@@ -44,7 +44,6 @@ const <%= entityAngularName %> = {
         },
         <%_ } _%>
         retrieveAll<%= entityAngularName %>s() {
-            let vm = this;
             <% if (pagination !== 'no') { %>
             const paginationQuery = {
                 page: this.page - 1,
@@ -53,34 +52,33 @@ const <%= entityAngularName %> = {
             };<% } %>
             <%_ if (searchEngine === 'elasticsearch') { _%>
             if (this.currentSearch) {
-                this.search<%= entityAngularName %>s(this.currentSearch<%_ if (pagination !== 'no') { _%>, paginationQuery<%_ } _%>).then(res => {
-                    vm.<%= entityInstancePlural %> = res.data;
+                this.search<%= entityAngularName %>s(this.currentSearch<%_ if (pagination !== 'no') { _%>, paginationQuery<%_ } _%>).then((res) => {
+                    this.<%= entityInstancePlural %> = res.data;
                     <%_ if (pagination !== 'no') { _%>
-                    vm.queryCount = vm.totalItems;
-                    vm.totalItems = Number(res.headers['x-total-count']);
+                    this.totalItems = Number(res.headers['x-total-count']);
+                    this.queryCount = this.totalItems;
                     <%_ } _%>
                 });
                 return;
             }
             <%_ } _%>
-            this.retrieve<%= entityAngularName %>s(<%_ if (pagination !== 'no') { _%>paginationQuery<%_ } _%>).then(res => {
-                vm.<%= entityInstancePlural %> = res.data;
+            this.retrieve<%= entityAngularName %>s(<%_ if (pagination !== 'no') { _%>paginationQuery<%_ } _%>).then((res) => {
+                this.<%= entityInstancePlural %> = res.data;
                 <%_ if (pagination !== 'no') { _%>
-                vm.queryCount = vm.totalItems;
-                vm.totalItems = Number(res.headers['x-total-count']);
+                this.totalItems = Number(res.headers['x-total-count']);
+                this.queryCount = this.totalItems;
                 <%_ } _%>
             });
         },
         prepareRemove(instance) {
             this.removeId = instance.id;
-            this.$refs.removeEntisetFileDataSETDSty.show();
+            this.$refs.removeEntity.show();
         },
         remove<%= entityAngularName %>() {
-            let vm = this;
             this.delete<%= entityAngularName %>(this.removeId).then(() => {
-                vm.removeId = null;
-                vm.retrieveAll<%= entityAngularName %>s();
-                vm.closeDialog();
+                this.removeId = null;
+                this.retrieveAll<%= entityAngularName %>s();
+                this.closeDialog();
             });
         },
         <%_ if (pagination !== 'no') { _%>

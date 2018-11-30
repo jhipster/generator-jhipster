@@ -19,9 +19,8 @@ const <%=jhiPrefixCapitalized%>TrackerComponent = {
   methods: {
     init() {
       this.subscribe();
-      let vm = this;
-      this.receive().then(function(res) {
-        vm.showActivity(res.data);
+      this.receive().then((res) => {
+        this.showActivity(res.data);
       });
     },
     showActivity(activity: any) {

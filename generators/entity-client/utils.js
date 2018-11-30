@@ -53,9 +53,9 @@ function addEntityToRouterImport(generator, className, fileName, folderName) {
             splicable: [generator.stripMargin(
                 // prettier-ignore
                 `|// prettier-ignore
-                |import ${className} from '../entities/${folderName}/${fileName}.vue';
-                |import ${className}Update from '../entities/${folderName}/${fileName}-update.vue';
-                |import ${className}Details from '../entities/${folderName}/${fileName}-details.vue';`
+                |const ${className} = () => import('../entities/${folderName}/${fileName}.vue');
+                |const ${className}Update = () => import('../entities/${folderName}/${fileName}-update.vue');
+                |const ${className}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
             )]
         },
         generator

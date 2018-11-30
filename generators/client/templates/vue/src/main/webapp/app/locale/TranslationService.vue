@@ -19,12 +19,11 @@
         methods: {
             refreshTranslations: function () {
                 if (this.$i18n && !this.$i18n.messages[this.currentLanguage]) {
-                    let vm = this;
                     this.$i18n.setLocaleMessage(this.currentLanguage, {});
-                    axios.get('i18n/' + this.currentLanguage + '.json').then(function (res) {
+                    axios.get('i18n/' + this.currentLanguage + '.json').then((res) => {
                         if (res.data) {
-                            vm.$i18n.setLocaleMessage(vm.currentLanguage, res.data);
-                            vm.$i18n.locale = vm.currentLanguage;
+                            this.$i18n.setLocaleMessage(this.currentLanguage, res.data);
+                            this.$i18n.locale = this.currentLanguage;
                         }
                     });
                 } else if (this.$i18n) {

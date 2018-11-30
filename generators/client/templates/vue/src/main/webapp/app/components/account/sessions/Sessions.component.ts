@@ -16,24 +16,22 @@ const Sessions = {
   },
   methods: {
     retrieveSessions: function() {
-      let vm = this;
-      axios.get('api/account/sessions/').then(response => {
-        vm.error = null;
-        vm.sessions = response.data;
+      axios.get('api/account/sessions/').then((response) => {
+        this.error = null;
+        this.sessions = response.data;
       });
     },
     invalidate: function(session) {
-      let vm = this;
       axios
         .delete('api/account/sessions/' + session)
         .then(() => {
-          vm.error = null;
-          vm.success = 'OK';
-          vm.retrieveSessions();
+          this.error = null;
+          this.success = 'OK';
+          this.retrieveSessions();
         })
-        .catch(error => {
-          vm.success = null;
-          vm.error = 'ERROR';
+        .catch(() => {
+          this.success = null;
+          this.error = 'ERROR';
         });
     }
   },

@@ -5,10 +5,9 @@
         name: 'ConfigurationService',
         methods: {
             loadConfiguration: async function () {
-                let vm = this;
-                return axios.get('management/configprops').then(function (res) {
+                return axios.get('management/configprops').then((res) => {
                     const properties = [];
-                    const propertiesObject = vm.getConfigPropertiesObjects(res.data);
+                    const propertiesObject = this.getConfigPropertiesObjects(res.data);
                     for (const key in propertiesObject) {
                         if (propertiesObject.hasOwnProperty(key)) {
                             properties.push(propertiesObject[key]);
@@ -21,7 +20,7 @@
                 });
             },
             loadEnvConfiguration: async function () {
-                return axios.get('management/env').then(function (res) {
+                return axios.get('management/env').then((res) => {
                     const properties = {};
                     const propertySources = res.data['propertySources'];
 

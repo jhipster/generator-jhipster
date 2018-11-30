@@ -32,17 +32,16 @@ beforeRouteEnter(to, from, next) {
     },
     refresh() {
       this.updatingHealth = true;
-      let vm = this;
       this.checkHealth()
-        .then(function(res) {
-          vm.healthData = vm.transformHealthData(res.data);
-          vm.updatingHealth = false;
+        .then((res) => {
+          this.healthData = this.transformHealthData(res.data);
+          this.updatingHealth = false;
         })
-        .catch(function(error) {
+        .catch((error) => {
           if (error.status === 503) {
-            vm.healthData = vm.transformHealthData(error.error);
+            this.healthData = this.transformHealthData(error.error);
           }
-          vm.updatingHealth = false;
+          this.updatingHealth = false;
         });
     },
     showHealth(health) {

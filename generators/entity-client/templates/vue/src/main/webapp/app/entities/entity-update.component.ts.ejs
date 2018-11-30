@@ -85,7 +85,6 @@ const <%= entityAngularName %>Update =  {
     },
     methods: {
         save() {
-            let vm = this;
             this.isSaving = true;
             <%_ for (idx in fields) {
                 const fieldName = fields[ idx ].fieldName;
@@ -96,26 +95,25 @@ const <%= entityAngularName %>Update =  {
             } _%>
             if (this.<%= entityInstance %>.id) {
                 this.update<%= entityAngularName %>(this.<%= entityInstance %>).then(() => {
-                    vm.$router.go(-1);
-                    vm.isSaving = false;
+                    this.$router.go(-1);
+                    this.isSaving = false;
                 });
             } else {
                 this.create<%= entityAngularName %>(this.<%= entityInstance %>).then(() => {
-                    vm.$router.go(-1);
-                    vm.isSaving = false;
+                    this.$router.go(-1);
+                    this.isSaving = false;
                 });
             }
         },
         retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
-            let vm = this;
-            this.find<%= entityAngularName %>(<%= entityInstance %>Id).then(res => {
-                vm.<%= entityInstance %> = res.data;
+            this.find<%= entityAngularName %>(<%= entityInstance %>Id).then((res) => {
+                this.<%= entityInstance %> = res.data;
 
                 <%_ for (idx in fields) {
                     const fieldName = fields[ idx ].fieldName;
                     const fieldType = fields[idx].fieldType;
                     if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) { _%>
-                        vm.<%= entityInstance %>.<%= fieldName %> = moment(vm.<%= entityInstance %>.<%= fieldName %>, 'YYYY-MM-DDTHH:mm:ssZ').format('YYYY-MM-DDTHH:mm');
+                        this.<%= entityInstance %>.<%= fieldName %> = moment(this.<%= entityInstance %>.<%= fieldName %>, 'YYYY-MM-DDTHH:mm:ssZ').format('YYYY-MM-DDTHH:mm');
                     <%_ }
                 } _%>
             });
@@ -129,7 +127,6 @@ const <%= entityAngularName %>Update =  {
         },
         <%_ } _%>
         initRelationships() {
-            let vm = this;
             <%_
                 let hasManyToMany = false;
                 for (idx in relationships) {
@@ -139,8 +136,8 @@ const <%= entityAngularName %>Update =  {
                     hasManyToMany = true;
                 }
             _%>
-            this.retrieve<%= otherEntityAngularName %>s().then(res => {
-                vm.<%= otherEntityName %>s = res.data;
+            this.retrieve<%= otherEntityAngularName %>s().then((res) => {
+                this.<%= otherEntityName %>s = res.data;
             });
             <%_ } _%>
         }<%_ if (hasManyToMany) { _%>,

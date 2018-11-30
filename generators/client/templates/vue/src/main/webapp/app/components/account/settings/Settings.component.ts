@@ -35,22 +35,21 @@ const Settings = {
   },
   methods: {
     save: function() {
-      let vm = this;
       this.error = null;
       this.errorEmailExists = null;
       axios
         .post('api/account', this.settingsAccount)
         .then(() => {
-          vm.error = null;
-          vm.success = 'OK';
-          vm.errorEmailExists = null;
+          this.error = null;
+          this.success = 'OK';
+          this.errorEmailExists = null;
         })
-        .catch(error => {
-          vm.success = null;
-          vm.error = 'ERROR';
+        .catch((error) => {
+          this.success = null;
+          this.error = 'ERROR';
           if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
-            vm.errorEmailExists = 'ERROR';
-            vm.error = null;
+            this.errorEmailExists = 'ERROR';
+            this.error = null;
           }
         });
     }

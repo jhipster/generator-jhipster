@@ -17,9 +17,8 @@ const <%=jhiPrefixCapitalized%>UserManagementViewComponent = {
     },
     methods: {
         init: function(userId) {
-            let vm = this;
-            this.get(userId).then(function(res) {
-                vm.user = res.data;
+            this.get(userId).then((res) => {
+                this.user = res.data;
             });
         }
     }

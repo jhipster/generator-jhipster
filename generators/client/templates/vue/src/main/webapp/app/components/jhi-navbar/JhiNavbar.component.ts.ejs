@@ -17,13 +17,12 @@ const JhiNavbar = {
     }
   },
   created: function() {
-    let vm = this;
-    axios.get('management/info').then(function (res) {
+    axios.get('management/info').then((res) => {
       if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf('swagger') > -1) {
-        vm.swaggerEnabled = true;
+        this.swaggerEnabled = true;
       }
       if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf('prod') > -1) {
-        vm.inProduction = true;
+        this.inProduction = true;
       }
     });
   },

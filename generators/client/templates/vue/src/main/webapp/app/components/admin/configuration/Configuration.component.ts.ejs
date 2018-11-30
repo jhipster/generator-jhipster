@@ -20,19 +20,18 @@ const <%=jhiPrefixCapitalized%>ConfigurationComponent = {
   },
   methods: {
     init: function() {
-      let _vm = this;
-      this.loadConfiguration().then(function(res) {
-        _vm.configuration = res;
+      this.loadConfiguration().then((res) => {
+        this.configuration = res;
 
-        for (const config of _vm.configuration) {
+        for (const config of this.configuration) {
           if (config.properties !== undefined) {
-            _vm.configKeys.push(Object.keys(config.properties));
+            this.configKeys.push(Object.keys(config.properties));
           }
         }
       });
 
-      this.loadEnvConfiguration().then(function(res) {
-        _vm.allConfiguration = res;
+      this.loadEnvConfiguration().then((res) => {
+        this.allConfiguration = res;
       });
     },
     changeOrder: function(prop) {

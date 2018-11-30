@@ -24,13 +24,12 @@ const ResetPassword = {
   },
   methods: {
     requestReset: function() {
-      let vm = this;
       axios
         .post('api/account/reset-password/init', this.resetAccount.email)
         .then(() => {
-          vm.success = true;
+          this.success = true;
         })
-        .catch(error => {
+        .catch((error) => {
           this.success = null;
           if (error.response.status === 400 && error.response.data.type === EMAIL_NOT_FOUND_TYPE) {
             this.errorEmailNotExists = 'ERROR';

@@ -76,19 +76,22 @@ describe('<%= entityClass %> e2e test', () => {
     it('should load <%= entityClassPlural %>', async () => {
         await navBarPage.getEntityPage('<%= entityStateName %>');
         <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
-        expect(await <%= entityInstance %>ComponentsPage.getTitle().getText())
-            .to.match(/<%= entityClassPluralHumanized %>/);
+        const heading = <%= entityInstance %>ComponentsPage.getTitle();
+        await waitUntilDisplayed(heading);
+        expect(await heading.getText()).to.match(/<%= entityClassPluralHumanized %>/);
         nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
     });
 
     it('should load create <%= entityClass %> page', async () => {
         await <%= entityInstance %>ComponentsPage.clickOnCreateButton();
         <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
+        const heading = <%= entityInstance %>UpdatePage.getPageTitle();
+        await waitUntilDisplayed(heading);
         <%_ if (enableTranslation) { _%>
-        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getAttribute('id'))
+        expect(await heading.getAttribute('id'))
             .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
         <%_ } else { _%>
-        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getText())
+        expect(await heading.getText())
             .to.match(/Create or edit a <%= entityClass %>/);
         <%_ } _%>
     });
