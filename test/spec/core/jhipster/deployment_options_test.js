@@ -20,102 +20,104 @@
 /* eslint-disable no-new */
 /* eslint-disable no-unused-expressions */
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const { DeploymentTypes, Options } = require('../../../../lib/core/jhipster/deployment_options');
-const JDLSet = require('../../../../lib/utils/objects/set');
+const CustomSet = require('../../../../lib/utils/objects/custom_set');
 
-describe('DeploymentTypes', () => {
-  describe('::exists', () => {
-    context('when passing a nil arg', () => {
-      it('returns false', () => {
-        expect(DeploymentTypes.exists()).to.be.false;
+describe('DeploymentOptions', () => {
+  describe('DeploymentTypes', () => {
+    describe('::exists', () => {
+      context('when passing a nil arg', () => {
+        it('returns false', () => {
+          expect(DeploymentTypes.exists()).to.be.false;
+        });
       });
-    });
-    context('when passing an invalid type', () => {
-      it('returns false', () => {
-        expect(DeploymentTypes.exists('NotAType')).to.be.false;
+      context('when passing an invalid type', () => {
+        it('returns false', () => {
+          expect(DeploymentTypes.exists('NotAType')).to.be.false;
+        });
       });
-    });
-    context('when passing a valid type', () => {
-      it('returns true', () => {
-        expect(DeploymentTypes.exists(DeploymentTypes.DOCKERCOMPOSE)).to.be.true;
-        expect(DeploymentTypes.exists(DeploymentTypes.KUBERNETES)).to.be.true;
+      context('when passing a valid type', () => {
+        it('returns true', () => {
+          expect(DeploymentTypes.exists(DeploymentTypes.DOCKERCOMPOSE)).to.be.true;
+          expect(DeploymentTypes.exists(DeploymentTypes.KUBERNETES)).to.be.true;
+        });
       });
     });
   });
-});
 
-describe('Options', () => {
-  describe('::defaults', () => {
-    context('when passing no args', () => {
-      it('should return docker deployment config', () => {
-        expect(Options.defaults()).to.eql({
-          deploymentType: 'docker-compose',
-          appsFolders: new JDLSet([]),
-          clusteredDbApps: new JDLSet([]),
-          consoleOptions: new JDLSet([]),
-          directoryPath: '../',
-          dockerPushCommand: 'docker push',
-          dockerRepositoryName: '',
-          gatewayType: 'zuul',
-          monitoring: 'no',
-          serviceDiscoveryType: 'eureka'
+  describe('Options', () => {
+    describe('::defaults', () => {
+      context('when passing no args', () => {
+        it('should return docker deployment config', () => {
+          expect(Options.defaults()).to.eql({
+            deploymentType: 'docker-compose',
+            appsFolders: new CustomSet(),
+            clusteredDbApps: new CustomSet(),
+            consoleOptions: new CustomSet(),
+            directoryPath: '../',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: '',
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            serviceDiscoveryType: 'eureka'
+          });
         });
       });
-    });
-    context('when passing kubernetes as arg', () => {
-      it('should return kubernetes deployment config', () => {
-        expect(Options.defaults('kubernetes')).to.eql({
-          deploymentType: 'kubernetes',
-          appsFolders: new JDLSet([]),
-          clusteredDbApps: new JDLSet([]),
-          consoleOptions: new JDLSet([]),
-          directoryPath: '../',
-          dockerPushCommand: 'docker push',
-          dockerRepositoryName: '',
-          gatewayType: 'zuul',
-          monitoring: 'no',
-          serviceDiscoveryType: 'eureka',
-          ingressDomain: '',
-          istio: 'no',
-          istioRoute: false,
-          kubernetesNamespace: 'default',
-          kubernetesServiceType: 'LoadBalancer'
+      context('when passing kubernetes as arg', () => {
+        it('should return kubernetes deployment config', () => {
+          expect(Options.defaults('kubernetes')).to.eql({
+            deploymentType: 'kubernetes',
+            appsFolders: new CustomSet(),
+            clusteredDbApps: new CustomSet(),
+            consoleOptions: new CustomSet(),
+            directoryPath: '../',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: '',
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            serviceDiscoveryType: 'eureka',
+            ingressDomain: '',
+            istio: 'no',
+            istioRoute: false,
+            kubernetesNamespace: 'default',
+            kubernetesServiceType: 'LoadBalancer'
+          });
         });
       });
-    });
-    context('when passing rancher-compose as arg', () => {
-      it('should return rancher-compose deployment config', () => {
-        expect(Options.defaults('rancher-compose')).to.eql({
-          deploymentType: 'rancher-compose',
-          appsFolders: new JDLSet([]),
-          clusteredDbApps: new JDLSet([]),
-          consoleOptions: new JDLSet([]),
-          directoryPath: '../',
-          dockerPushCommand: 'docker push',
-          dockerRepositoryName: '',
-          gatewayType: 'zuul',
-          monitoring: 'no',
-          serviceDiscoveryType: 'eureka',
-          enableRancherLoadBalancing: false
+      context('when passing rancher-compose as arg', () => {
+        it('should return rancher-compose deployment config', () => {
+          expect(Options.defaults('rancher-compose')).to.eql({
+            deploymentType: 'rancher-compose',
+            appsFolders: new CustomSet(),
+            clusteredDbApps: new CustomSet(),
+            consoleOptions: new CustomSet(),
+            directoryPath: '../',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: '',
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            serviceDiscoveryType: 'eureka',
+            enableRancherLoadBalancing: false
+          });
         });
       });
-    });
-    context('when passing openshift as arg', () => {
-      it('should return openshift deployment config', () => {
-        expect(Options.defaults('openshift')).to.eql({
-          deploymentType: 'openshift',
-          appsFolders: new JDLSet([]),
-          clusteredDbApps: new JDLSet([]),
-          consoleOptions: new JDLSet([]),
-          directoryPath: '../',
-          dockerPushCommand: 'docker push',
-          dockerRepositoryName: '',
-          gatewayType: 'zuul',
-          monitoring: 'no',
-          serviceDiscoveryType: 'eureka',
-          openshiftNamespace: 'default',
-          storageType: 'ephemeral'
+      context('when passing openshift as arg', () => {
+        it('should return openshift deployment config', () => {
+          expect(Options.defaults('openshift')).to.eql({
+            deploymentType: 'openshift',
+            appsFolders: new CustomSet(),
+            clusteredDbApps: new CustomSet(),
+            consoleOptions: new CustomSet(),
+            directoryPath: '../',
+            dockerPushCommand: 'docker push',
+            dockerRepositoryName: '',
+            gatewayType: 'zuul',
+            monitoring: 'no',
+            serviceDiscoveryType: 'eureka',
+            openshiftNamespace: 'default',
+            storageType: 'ephemeral'
+          });
         });
       });
     });

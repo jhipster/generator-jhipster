@@ -116,7 +116,7 @@ describe('AbstractJDLApplication', () => {
       });
 
       it('returns an empty list', () => {
-        expect(result).to.deep.equal([]);
+        expect(result.size).to.equal(0);
       });
     });
     context('when there are entities', () => {
@@ -131,7 +131,7 @@ describe('AbstractJDLApplication', () => {
       });
 
       it('returns the entity list', () => {
-        expect(result).to.deep.equal(['A', 'B']);
+        expect(result.toString()).to.equal('[A,B]');
       });
     });
   });

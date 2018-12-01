@@ -45,17 +45,20 @@ describe('AbstractJDLOption', () => {
       });
     });
     context('when passing valid values', () => {
+      let result;
+
+      before(() => {
+        const option = new JDLBinaryOption({
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_CLASS,
+          excludedNames: ['C']
+        });
+        const entityNames = AbstractJDLOption.resolveEntityNames(option, ['A', 'B', 'C']);
+        result = entityNames.toString();
+      });
+
       it("resolves the option's entity names", () => {
-        expect(
-          AbstractJDLOption.resolveEntityNames(
-            new JDLBinaryOption({
-              name: BinaryOptions.Options.SERVICE,
-              value: BinaryOptions.Values.service.SERVICE_CLASS,
-              excludedNames: ['C']
-            }),
-            ['A', 'B', 'C']
-          ).toArray()
-        ).to.deep.equal(['A', 'B']);
+        expect(result).to.equal('[A,B]');
       });
     });
   });

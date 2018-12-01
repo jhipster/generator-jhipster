@@ -658,7 +658,7 @@ describe('DocumentParser', () => {
 
         it('parses it', () => {
           expect(application.languages.has('en') && application.languages.has('fr')).to.be.true;
-          expect(application.testFrameworks.size()).to.equal(0);
+          expect(application.testFrameworks.size).to.equal(0);
           delete application.languages;
           delete application.testFrameworks;
 
@@ -704,7 +704,7 @@ describe('DocumentParser', () => {
         });
 
         it('parses it', () => {
-          expect(deployment.appsFolders.toArray()).to.eql(['tata', 'titi']);
+          expect(deployment.appsFolders.toString()).to.eql('[tata,titi]');
           delete deployment.appsFolders;
           delete deployment.clusteredDbApps;
           delete deployment.consoleOptions;
@@ -828,7 +828,7 @@ describe('DocumentParser', () => {
 
         it('adds the application entities in the application object', () => {
           expect(jdlObject.applications.MyApp.entityNames.has('BankAccount')).to.be.true;
-          expect(jdlObject.applications.MyApp.entityNames.size()).to.equal(1);
+          expect(jdlObject.applications.MyApp.entityNames.size).to.equal(1);
         });
       });
       context('when parsing a relationship with no injected field', () => {
@@ -878,11 +878,11 @@ describe('DocumentParser', () => {
         });
 
         it('sets the annotations as options', () => {
-          expect(dtoOption.entityNames.toArray()).to.deep.equal(['A', 'B']);
-          expect(filterOption.entityNames.toArray()).to.deep.equal(['C']);
-          expect(paginationOption.entityNames.toArray()).to.deep.equal(['B', 'C']);
-          expect(serviceOption.entityNames.toArray()).to.deep.equal(['A', 'B']);
-          expect(skipClientOption.entityNames.toArray()).to.deep.equal(['A', 'C']);
+          expect(dtoOption.entityNames.toString()).to.equal('[A,B]');
+          expect(filterOption.entityNames.toString()).to.equal('[C]');
+          expect(paginationOption.entityNames.toString()).to.equal('[B,C]');
+          expect(serviceOption.entityNames.toString()).to.equal('[A,B]');
+          expect(skipClientOption.entityNames.toString()).to.equal('[A,C]');
         });
       });
       context('when parsing a mix between annotations and regular options', () => {
@@ -909,25 +909,24 @@ describe('DocumentParser', () => {
 
         it('correctly sets the options', () => {
           expect(dtoOptions).to.have.length(1);
-          expect(dtoOptions[0].entityNames.toArray()).to.deep.equal(['A', 'B']);
+          expect(dtoOptions[0].entityNames.toString()).to.equal('[A,B]');
 
           expect(filterOptions).to.have.length(1);
-          expect(filterOptions[0].entityNames.toArray()).to.deep.equal(['C']);
+          expect(filterOptions[0].entityNames.toString()).to.equal('[C]');
 
           expect(paginationOptions).to.have.length(2);
-          expect(paginationOptions[0].entityNames.toArray()).to.deep.equal(['B', 'C']);
-          expect(paginationOptions[1].entityNames.toArray()).to.deep.equal(['B', 'C']);
+          expect(paginationOptions[0].entityNames.toString()).to.equal('[B,C]');
+          expect(paginationOptions[1].entityNames.toString()).to.equal('[B,C]');
 
           expect(serviceOptions).to.have.length(2);
-          expect(serviceOptions[0].entityNames.toArray()).to.deep.equal(['A', 'B']);
-          expect(serviceOptions[0].entityNames.toArray()).to.deep.equal(['A', 'B']);
-          expect(serviceOptions[1].entityNames.toArray()).to.deep.equal(['A']);
+          expect(serviceOptions[0].entityNames.toString()).to.equal('[A,B]');
+          expect(serviceOptions[1].entityNames.toString()).to.equal('[A]');
 
           expect(skipClientOptions).to.have.length(1);
-          expect(skipClientOptions[0].entityNames.toArray()).to.deep.equal(['A', 'C']);
+          expect(skipClientOptions[0].entityNames.toString()).to.equal('[A,C]');
 
           expect(skipServerOptions).to.have.length(1);
-          expect(skipServerOptions[0].entityNames.toArray()).to.deep.equal(['A']);
+          expect(skipServerOptions[0].entityNames.toString()).to.equal('[A]');
         });
       });
       context('when having a pattern validation with a quote in it', () => {
