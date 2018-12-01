@@ -237,7 +237,7 @@ describe('JHipster generator', () => {
     });
 
     context('Application with DB option', () => {
-        describe('mariadb configuration', () => {
+        describe('mariadb', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
@@ -321,6 +321,10 @@ describe('JHipster generator', () => {
             it('creates expected files with "MongoDB"', () => {
                 assert.file(expectedFiles.mongodb);
             });
+            it("doesn't setup liquibase", () => {
+                assert.noFileContent('pom.xml', 'liquibase');
+                assert.noFile(expectedFiles.liquibase);
+            });
             shouldBeV3DockerfileCompatible('mongodb');
         });
 
@@ -356,6 +360,10 @@ describe('JHipster generator', () => {
 
             it('creates expected files with "Couchbase"', () => {
                 assert.file(expectedFiles.couchbase);
+            });
+            it("doesn't setup liquibase", () => {
+                assert.noFileContent('pom.xml', 'liquibase');
+                assert.noFile(expectedFiles.liquibase);
             });
             shouldBeV3DockerfileCompatible('couchbase');
         });
@@ -434,6 +442,10 @@ describe('JHipster generator', () => {
             it('creates expected files with "Cassandra"', () => {
                 assert.file(expectedFiles.cassandra);
             });
+            it("doesn't setup liquibase", () => {
+                assert.noFileContent('pom.xml', 'liquibase');
+                assert.noFile(expectedFiles.liquibase);
+            });
             shouldBeV3DockerfileCompatible('cassandra');
         });
 
@@ -507,6 +519,47 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.elasticsearch);
             });
             shouldBeV3DockerfileCompatible('postgresql');
+        });
+
+        describe('no database', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        applicationType: 'microservice',
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        cacheProvider: 'hazelcast',
+                        enableHibernateCache: true,
+                        databaseType: 'no',
+                        devDatabaseType: 'no',
+                        prodDatabaseType: 'no',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with the microservice application type', () => {
+                assert.file(expectedFiles.jwtServer);
+                assert.file(expectedFiles.microservice);
+                assert.file(expectedFiles.feignConfig);
+                assert.file(expectedFiles.dockerServices);
+                assert.noFile(expectedFiles.userManagementServer);
+            });
+            it("doesn't setup liquibase", () => {
+                assert.noFileContent('pom.xml', 'liquibase');
+                assert.noFile(expectedFiles.liquibase);
+            });
         });
     });
 

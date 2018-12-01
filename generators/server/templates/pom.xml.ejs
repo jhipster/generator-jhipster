@@ -67,7 +67,9 @@
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
+        <%_ if (databaseType === 'sql') { _%>
         <profile.no-liquibase />
+        <%_ } _%>
         <profile.swagger />
         <profile.tls />
 
@@ -83,10 +85,12 @@
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
         <javassist.version>3.22.0-GA</javassist.version>
+        <%_ if (databaseType === 'sql') { _%>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>3.5.5</liquibase.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
+        <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <%_ } _%>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
@@ -982,11 +986,13 @@
                             <artifactId>javassist</artifactId>
                             <version>${javassist.version}</version>
                         </dependency>
+                        <%_ if (databaseType === 'sql') { _%>
                         <dependency>
                             <groupId>org.liquibase.ext</groupId>
                             <artifactId>liquibase-hibernate5</artifactId>
                             <version>${liquibase-hibernate5.version}</version>
                         </dependency>
+                        <%_ } _%>
                         <dependency>
                             <groupId>org.springframework.boot</groupId>
                             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -1207,12 +1213,14 @@
         </pluginManagement>
     </build>
     <profiles>
+        <%_ if (databaseType === 'sql') { _%>
         <profile>
             <id>no-liquibase</id>
             <properties>
                 <profile.no-liquibase>,no-liquibase</profile.no-liquibase>
             </properties>
         </profile>
+        <%_ } _%>
         <profile>
             <id>swagger</id>
             <properties>
@@ -1328,7 +1336,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
         <%_ } _%>
@@ -1378,7 +1386,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.tls}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -1521,7 +1529,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>prod${profile.swagger}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
         <profile>

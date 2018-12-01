@@ -591,6 +591,12 @@ const expectedFiles = {
 
     postgresql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}postgresql.yml`],
 
+    liquibase: [
+        `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`
+    ],
+
     hazelcast: [`${DOCKER_DIR}hazelcast-management-center.yml`],
 
     mongodb: [
