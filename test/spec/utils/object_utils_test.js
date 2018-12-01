@@ -63,35 +63,6 @@ describe('ObjectUtils', () => {
       });
     });
   });
-  describe('::values', () => {
-    context('when passing a nil object', () => {
-      it('fails', () => {
-        expect(() => {
-          ObjectUtils.values(null);
-        }).to.throw('The passed object must not be nil.');
-      });
-    });
-    context('when passing a valid object', () => {
-      it("returns its keys' values", () => {
-        expect(
-          ObjectUtils.values({
-            a: 42,
-            b: 'A string',
-            c: [1, 2, 3, 4, 5],
-            d: { d1: '', d2: 'something' }
-          })
-        ).to.deep.eq([
-          42,
-          'A string',
-          [1, 2, 3, 4, 5],
-          {
-            d1: '',
-            d2: 'something'
-          }
-        ]);
-      });
-    });
-  });
   describe('::areEntitiesEqual', () => {
     context('when comparing two equal objects', () => {
       context('as they are empty', () => {
