@@ -335,6 +335,15 @@ const serverFiles = {
             ]
         },
         {
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/SecurityUtilsUnitTest.java',
+                    renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`
+                }
+            ]
+        },
+        {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -1396,10 +1405,6 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/security/SecurityUtilsUnitTest.java',
-                    renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`
-                },
-                {
                     file: 'package/service/UserServiceIntTest.java',
                     renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java`
                 },
@@ -1665,10 +1670,6 @@ const serverFiles = {
                 {
                     file: 'package/service/UserServiceIntTest.java',
                     renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java`
-                },
-                {
-                    file: 'package/security/SecurityUtilsUnitTest.java',
-                    renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`
                 },
                 {
                     file: 'package/web/rest/AccountResourceIntTest.java',
