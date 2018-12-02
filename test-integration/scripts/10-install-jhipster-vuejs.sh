@@ -49,7 +49,7 @@ if [[ "$JHI_REPO" == *"/generator-jhipster" ]]; then
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
     npm ci
-    npm install -g "$JHI_HOME"
+    npm link
     if [[ "$JHI_APP" == "" || "$JHI_APP" == "ngx-default" ]]; then
         npm test
     fi
@@ -85,12 +85,20 @@ cp "$JHI_CLONED"/test-integration/scripts/00-init-env.sh "$JHI_HOME"/test-integr
 cp -R "$JHI_CLONED"/test-integration/samples-vuejs/* "$JHI_HOME"/test-integration/samples/
 
 #-------------------------------------------------------------------------------
+# Install yeoman
+#-------------------------------------------------------------------------------
+npm install -g yo
+
+#-------------------------------------------------------------------------------
 # Install JHipster Vuejs
 #-------------------------------------------------------------------------------
 cd "$JHI_CLONED"/
 npm ci
 npm link
 npm link generator-jhipster
+ls -al /home/travis/.nvm/versions/node/v10.13.0/lib/node_modules/
 
 npm run lint
-# npm test
+if [[ "$JHI_APP" == "" || "$JHI_APP" == "vuejs-default" ]]; then
+    npm test
+fi
