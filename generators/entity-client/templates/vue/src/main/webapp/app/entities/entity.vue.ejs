@@ -108,7 +108,7 @@
                             <%_ } else { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
                                     <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
-                                        <router-link class="form-control-static" :to="'../<%= otherEntityStateName %>/' + <%= relationshipFieldName %>.id}} + '/View'">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</router-link>{{last ? '' : ', '}}
+                                        <router-link class="form-control-static" :to="'../<%= otherEntityStateName %>/' + <%= relationshipFieldName %>.id + '/View'">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</router-link>{{last ? '' : ', '}}
                                     </span>
                                 <%_ } else { _%>
                                     <%_ if (dto === 'no') { _%>
