@@ -1,9 +1,9 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
-import Logs from '@/components/admin/logs/Logs.vue';
-import LogsClass from './Logs.component';
+import Logs from '../../../../../../main/webapp/app/components/admin/logs/Logs.vue';
+import LogsClass from '../../../../../../main/webapp/app/components/admin/logs/Logs.component';
 
-import * as config from '../../../shared/config';
+import * as config from '../../../../../../main/webapp/app/shared/config';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
