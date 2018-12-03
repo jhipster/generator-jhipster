@@ -299,7 +299,6 @@ function writeFiles() {
             'app/components/account/login-form/login-form.vue',
             'app/components/account/register/register.vue',
             'app/components/account/reset-password/reset-password.vue',
-            'app/components/account/sessions/sessions.vue',
             'app/components/account/settings/settings.vue',
             'app/components/admin/user-management/user-management.vue',
             'app/components/admin/user-management/user-management-view.vue',
@@ -312,6 +311,9 @@ function writeFiles() {
             'app/components/admin/metrics/metrics-modal.vue',
             'app/components/admin/audits/audits.vue'
         ]);
+        if (this.authenticationType === 'session') {
+            utils.replaceTranslation(this, ['app/components/account/sessions/sessions.vue']);
+        }
         if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
             utils.replaceTranslation(this, ['app/components/admin/gateway/gateway.vue']);
         }

@@ -1,17 +1,13 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 
-import * as config from '../../../../../../main/webapp/app/shared/config';
-import MetricsModal from '../../../../../../main/webapp/app/components/admin/metrics/metrics-modal.vue';
+import * as config from '@/shared/config';
+import MetricsModal from '@/components/admin/metrics/metrics-modal.vue';
 
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);
 const i18n = config.initI18N(localVue);
 const store = config.initVueXStore(localVue);
-
-jest.mock('@/constants.ts', () => ({
-  SERVER_API_URL: ''
-}));
 
 describe('Metrics Component', () => {
   let wrapper;

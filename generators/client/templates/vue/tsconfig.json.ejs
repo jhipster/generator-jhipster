@@ -19,13 +19,14 @@
         ],
         "baseUrl": "./",
         "paths": {
-            "app/*": ["src/main/webapp/app/*"]
+            "@/*": ["src/main/webapp/app/*"]
         },
         "importHelpers": true,
         "allowJs": true
     },
     "include": [
-        "src/main/webapp/app"
+        "src/main/webapp/app",
+        "src/test/javascript/spec"
     ],
     "exclude": [
         "node_modules"

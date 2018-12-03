@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import * as config from '../../../../../../main/webapp/app/shared/config';
+import * as config from '@/shared/config';
 import UserManagementViewComponent from '@/components/admin/user-management/user-management-view.vue';
 import UserManagementService from '@/components/admin/user-management/UserManagementService.vue';
 
@@ -19,9 +19,6 @@ localVue.component('router-link', {});
 jest.mock('axios', () => ({
     get: jest.fn(),
     put: jest.fn()
-}));
-jest.mock('@/constants.ts', () =>({
-    SERVER_API_URL: ''
 }));
 
 describe('UserManagementView Component', () => {

@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import * as config from '../../../../../../main/webapp/app/shared/config';
+import * as config from '@/shared/config';
 import AuditsComponent from '@/components/admin/audits/audits.vue';
 import AuditsService from '@/components/admin/audits/AuditsService.vue';
 
@@ -18,9 +18,6 @@ localVue.component('font-awesome-icon', FontAwesomeIcon);
 jest.mock('axios', () => ({
   get: jest.fn(),
   put: jest.fn()
-}));
-jest.mock('@/constants.ts', () => ({
-  SERVER_API_URL: ''
 }));
 
 describe('Audits Component', () => {

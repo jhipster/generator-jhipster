@@ -2,9 +2,9 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import * as config from '../../../../../../main/webapp/app/shared/config';
-import GatewayComponent from '../../../../../../main/webapp/app/components/admin/gateway/gateway.vue';
-import GatewayService from '../../../../../../main/webapp/app/components/admin/gateway/GatewayService.vue';
+import * as config from '@/shared/config';
+import GatewayComponent from '@/components/admin/gateway/gateway.vue';
+import GatewayService from '@/components/admin/gateway/GatewayService.vue';
 
 const localVue = createLocalVue();
 
@@ -17,9 +17,6 @@ localVue.component('font-awesome-icon', FontAwesomeIcon);
 jest.mock('axios', () => ({
   get: jest.fn(),
   put: jest.fn()
-}));
-jest.mock('@/constants.ts', () =>({
-  SERVER_API_URL: ''
 }));
 
 describe('Gateway Component', () => {
