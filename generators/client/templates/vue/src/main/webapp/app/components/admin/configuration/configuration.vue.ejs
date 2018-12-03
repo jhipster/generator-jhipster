@@ -49,7 +49,7 @@
     </div>
 </template>
 
-<script lang="ts" src="./Configuration.component.ts">
+<script lang="ts" src="./configuration.component.ts">
 </script>
 
 <style scoped>

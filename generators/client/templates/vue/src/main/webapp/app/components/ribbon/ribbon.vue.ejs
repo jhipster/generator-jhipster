@@ -2,7 +2,7 @@
     <div class="ribbon" v-if="ribbonEnv"><a href="" v-text="$t('global.ribbon.' + ribbonEnv)">{{ribbonEnv}}</a></div>
 </template>
 
-<script lang="ts" src="./Ribbon.component.ts">
+<script lang="ts" src="./ribbon.component.ts">
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

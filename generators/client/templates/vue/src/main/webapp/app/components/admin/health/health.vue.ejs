@@ -42,7 +42,7 @@
     </div>
 </template>
 
-<script lang="ts" src="./Health.component.ts">
+<script lang="ts" src="./health.component.ts">
 </script>
 
 <style scoped>

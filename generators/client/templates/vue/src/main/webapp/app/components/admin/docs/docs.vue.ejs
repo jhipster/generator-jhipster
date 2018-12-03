@@ -3,7 +3,7 @@
             target="_top" title="Swagger UI" class="border-0"></iframe>
 </template>
 
-<script lang="ts" src="./Docs.component.ts">
+<script lang="ts" src="./docs.component.ts">
 </script>
 
 <style scoped>

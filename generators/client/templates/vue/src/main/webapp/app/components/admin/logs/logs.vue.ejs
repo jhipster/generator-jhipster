@@ -31,7 +31,7 @@
     </div>
 </template>
 
-<script lang="ts" src="./Logs.component.ts">
+<script lang="ts" src="./logs.component.ts">
 </script>
 
 <style scoped>

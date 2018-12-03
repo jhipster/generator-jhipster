@@ -94,5 +94,5 @@
     </div>
 </template>
 
-<script lang="ts" src="./Settings.component.ts">
+<script lang="ts" src="./settings.component.ts">
 </script>

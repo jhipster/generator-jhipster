@@ -53,7 +53,7 @@
     </div>
 </template>
 
-<script lang="ts" src="./Audits.component.ts">
+<script lang="ts" src="./audits.component.ts">
 </script>
 
 <style scoped>

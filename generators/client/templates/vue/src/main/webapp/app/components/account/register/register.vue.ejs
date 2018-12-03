@@ -130,5 +130,5 @@
     </div>
 </template>
 
-<script lang='ts' src='./Register.component.ts'>
+<script lang='ts' src='./register.component.ts'>
 </script>

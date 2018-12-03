@@ -112,10 +112,12 @@
                         <font-awesome-icon icon="clock" />
                         <span v-text="$t('global.menu.account.password')">Password</span>
                     </b-dropdown-item>
+                    <%_ if (authenticationType === 'session') { _%>
                     <b-dropdown-item to="/account/sessions" tag="b-dropdown-item" v-if="authenticated"  v-on:click="collapseNavbar()">
                         <font-awesome-icon icon="cloud" />
                         <span v-text="$t('global.menu.account.sessions')">Sessions</span>
                     </b-dropdown-item>
+                    <%_ } _%>
                     <b-dropdown-item v-if="authenticated"  v-on:click="logout()" id="logout">
                         <font-awesome-icon icon="sign-out-alt" />
                         <span v-text="$t('global.menu.account.logout')">Sign out</span>
@@ -134,7 +136,7 @@
     </b-navbar>
 </template>
 
-<script lang="ts" src="./JhiNavbar.component.ts">
+<script lang="ts" src="./jhi-navbar.component.ts">
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
