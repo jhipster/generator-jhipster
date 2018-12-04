@@ -306,7 +306,7 @@ module.exports = class extends PrivateBase {
                             this.stripMargin(`|           {
                             |               path: '${entityFolderName}',
                             |               loadChildren: '${modulePath}#${moduleName}'
-                            |           }`)
+                            |           },`)
                         ]
                     },
                     this
