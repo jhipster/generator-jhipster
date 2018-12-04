@@ -303,10 +303,10 @@ module.exports = class extends PrivateBase {
                         file: entityModulePath,
                         needle: 'jhipster-needle-add-entity-route',
                         splicable: [
-                            this.stripMargin(`|           {
-                            |               path: '${entityFolderName}',
-                            |               loadChildren: '${modulePath}#${moduleName}'
-                            |           },`)
+                            this.stripMargin(`|{
+                            |                path: '${entityFolderName}',
+                            |                loadChildren: '${modulePath}#${moduleName}'
+                            |            },`)
                         ]
                     },
                     this
