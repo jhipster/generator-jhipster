@@ -291,37 +291,22 @@ module.exports = class extends PrivateBase {
         try {
             if (clientFramework === 'angularX') {
                 const appName = this.getAngularXAppName();
-                let importName = `${appName}${entityAngularName}Module`;
-                if (microServiceName) {
-                    importName = `${importName} as ${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`;
-                }
-                let importStatement = `|import { ${importName} } from './${entityFolderName}/${entityFileName}.module';`;
-                if (importStatement.length > constants.LINE_LENGTH) {
-                    // prettier-ignore
-                    importStatement = `|// prettier-ignore
-                         |import {
-                         |    ${importName}
-                         |} from './${entityFolderName}/${entityFileName}.module';`;
-                }
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: entityModulePath,
-                        needle: 'jhipster-needle-add-entity-module-import',
-                        splicable: [this.stripMargin(importStatement)]
-                    },
-                    this
-                );
+
+                const modulePath = `./${entityFolderName}/${entityFileName}.module`;
+
+                const moduleName = microServiceName
+                    ? `${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
+                    : `${appName}${entityAngularName}Module`;
 
                 jhipsterUtils.rewriteFile(
                     {
                         file: entityModulePath,
-                        needle: 'jhipster-needle-add-entity-module',
+                        needle: 'jhipster-needle-add-entity-route',
                         splicable: [
-                            this.stripMargin(
-                                microServiceName
-                                    ? `|${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module,`
-                                    : `|${appName}${entityAngularName}Module,`
-                            )
+                            this.stripMargin(`|           {
+                            |               path: '${entityFolderName}',
+                            |               loadChildren: '${modulePath}#${moduleName}'
+                            |           }`)
                         ]
                     },
                     this

@@ -18,6 +18,10 @@
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
+<%_ if (enableTranslation) { _%>
+import { JhiLanguageService } from 'ng-jhipster';
+import { JhiLanguageHelper } from 'app/core';
+<%_ } _%>
 
 import { <%= angularXAppName %>SharedModule } from 'app/shared';
 <%_ Object.keys(differentRelationships).forEach(key => {
@@ -61,6 +65,19 @@ const ENTITY_STATES = [
         <%= entityAngularName %>DeleteDialogComponent,
         <%= entityAngularName %>DeletePopupComponent,
     ],
+    <%_ if (enableTranslation) { _%>
+    providers: [ { provide: JhiLanguageService, useClass: JhiLanguageService } ],
+    <%_ } _%>
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class <%= angularXAppName %><%= entityAngularName %>Module {}
+export class <%= angularXAppName %><%= entityAngularName %>Module {
+    <%_ if (enableTranslation) { _%>
+    constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
+        this.languageHelper.language.subscribe((languageKey: string) => {
+            if (languageKey !== undefined) {
+                this.languageService.changeLanguage(languageKey);
+            }
+        });
+    }
+    <%_ } _%>
+}
