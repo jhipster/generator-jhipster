@@ -1,0 +1,178 @@
+{
+  "name": "<%= dasherizedBaseName %>",
+  "version": "0.0.0",
+  "description": "Description for <%= camelizedBaseName  %>",
+  "private": true,
+  "license": "UNLICENSED",
+  "cacheDirectories": [
+    "node_modules"
+  ],
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.2",
+    "@fortawesome/free-solid-svg-icons": "^5.2.0",
+    "@fortawesome/vue-fontawesome": "^0.1.1",
+    "axios": "^0.18.0",
+    "bootstrap": "^4.1.3",
+    "bootstrap-vue": "^2.0.0-rc.11",
+    "moment": "2.22.2",
+    "swagger-ui": "2.2.10",
+    <%_ if (websocket === 'spring-websocket') { _%>
+    "sockjs-client": "1.1.4",
+    "webstomp-client": "1.2.0",
+    <%_ } _%>
+    "vue": "^2.5.2",
+    "vue-class-component": "^6.3.2",
+    "vue-cookie": "^1.1.4",
+    "vue-i18n": "^8.0.0",
+    "vue-property-decorator": "^7.2.0",
+    "vue-router": "^3.0.1",
+    "vue2-filters": "^0.3.0",
+    "vuelidate": "^0.7.4",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+<%_ if (protractorTests) { _%>
+    "@types/chai": "4.1.4",
+    "@types/chai-string": "1.4.1",
+<%_ } _%>
+    "@types/jest": "^23.1.4",
+<%_ if (protractorTests) { _%>
+    "@types/mocha": "5.2.5",
+<%_ } _%>
+    "@types/node": "^10.12.2",
+<%_ if (protractorTests) { _%>
+    "@types/selenium-webdriver": "3.0.10",
+<%_ } _%>
+    "@vue/test-utils": "^1.0.0-beta.25",
+    "autoprefixer": "^7.1.2",
+    "babel-core": "^6.22.1",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-transform-runtime": "^6.22.0",
+    "babel-plugin-transform-vue-jsx": "^3.5.0",
+    "babel-preset-env": "^1.3.2",
+    "babel-preset-stage-2": "^6.22.0",
+    "browser-sync": "^2.26.3",
+    "browser-sync-webpack-plugin": "^2.2.2",
+    "chalk": "^2.0.1",
+<%_ if (protractorTests) { _%>
+    "chai": "4.1.2",
+    "chai-as-promised": "7.1.1",
+    "chai-string": "1.5.0",
+<%_ } _%>
+    "copy-webpack-plugin": "4.6.0",
+    "css-loader": "^1.0.0",
+    "eslint": "5.0.0",
+    "eslint-plugin-import": "2.12.0",
+    "eslint-plugin-vue": "^4.7.1",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^1.1.4",
+    "friendly-errors-webpack-plugin": "1.7.0",
+    "html-webpack-plugin": "3.2.0",
+    "jest": "^23.6.0",
+    "jest-junit": "^5.2.0",
+    "jest-serializer-vue": "^0.2.0",
+    "jest-vue-preprocessor": "^1.4.0",
+    "merge-jsons-webpack-plugin": "1.0.18",
+<%_ if (protractorTests) { _%>
+    "mocha": "5.2.0",
+<%_ } _%>
+    "mini-css-extract-plugin": "^0.4.4",
+    "node-notifier": "^5.1.2",
+    "numeral": "^2.0.6",
+    "optimize-css-assets-webpack-plugin": "5.0.1",
+    "ora": "^1.2.0",
+    "portfinder": "^1.0.13",
+    "postcss-import": "^11.0.0",
+    "postcss-loader": "^3.0.0",
+    "postcss-url": "^7.2.1",
+<%_ if (protractorTests) { _%>
+    "protractor": "5.4.0",
+<%_ } _%>
+    "rimraf": "^2.6.0",
+    "semver": "^5.3.0",
+    "shelljs": "^0.7.6",
+    "ts-jest": "^23.0.0",
+    "ts-loader": "^5.3.0",
+<%_ if (protractorTests) { _%>
+    "ts-node": "7.0.1",
+<%_ } _%>
+    "tslib": "^1.9.3",
+    "typescript": "^3.1.3",
+    "uglifyjs-webpack-plugin": "2.0.1",
+    "url-loader": "^0.5.8",
+    "vue-jest": "^3.0.0",
+    "vue-loader": "^15.4.2",
+    "vue-style-loader": "4.1.2",
+    "vue-template-compiler": "2.5.17",
+    "webpack": "4.25.1",
+    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "3.1.10",
+    "webpack-merge": "4.1.4",
+    "xml2js": "^0.4.17"
+  },
+  "engines": {
+    "node": ">= 6.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,css,scss}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "scripts": {
+    "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
+    "clean-www": "rimraf <%= BUILD_DIR %>www/app/{src,<%= BUILD_DIR %>}",
+    "start": "npm run webpack:dev",
+    "serve": "npm run start",
+    "build": "npm run webpack:prod",
+<%_ if (protractorTests) { _%>
+    "e2e": "protractor src/test/javascript/protractor.conf.js",
+    "postinstall": "webdriver-manager update --gecko false",
+<%_ } _%>
+    "webpack:build": "<%= clientPackageManager %> run cleanup && npm run webpack:build:main",
+    "webpack:build:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.dev.js --progress --profile",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack -- --config webpack/webpack.prod.js --profile",
+    "webpack:prod": "<%= clientPackageManager %> run cleanup && npm run webpack:prod:main && npm run clean-www",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server -- --config webpack/webpack.dev.js --progress --inline",
+    "webpack:test": "<%= clientPackageManager %> run test",
+    "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
+    "lint": "./node_modules/eslint/bin/eslint.js --ext .js,.vue src",
+    "test": "./node_modules/jest/bin/jest.js --coverage"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts",
+      "vue"
+    ],
+    "transform": {
+      ".*\\.(vue)$": "vue-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/main/webapp/app/$1"
+    },
+    "testMatch": [
+      "<rootDir>/src/test/javascript/spec/app/**/*.spec.(js|jsx|ts|tsx)"
+    ],
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/jest-serializer-vue"
+    ]
+  },
+  "jestSonar": {
+    "reportPath": "build/test-results/jest",
+    "reportFile": "TESTS-results.xml"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}
