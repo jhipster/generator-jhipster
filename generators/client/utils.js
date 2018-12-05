@@ -35,10 +35,10 @@ function addLanguagesToApplication(generator) {
         let content = '{\n';
         if (generator.enableTranslation) {
             generator.generateLanguageOptions(generator.languages, generator.clientFramework).forEach((ln, i) => {
-                content += `        ${ln}${i !== generator.languages.length - 1 ? ',' : ''}\n`;
+                content += `                        ${ln}${i !== generator.languages.length - 1 ? ',' : ''}\n`;
             });
         }
-        content += '        }';
+        content += '                    }';
 
         jhipsterUtils.rewriteFile(
             {
