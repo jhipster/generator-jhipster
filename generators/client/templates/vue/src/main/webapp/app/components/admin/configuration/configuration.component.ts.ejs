@@ -1,47 +1,52 @@
-import ConfigurationService from './ConfigurationService.vue';
+import ConfigurationService from './configuration.service';
+import { Component, Vue } from 'vue-property-decorator';
+import { mixins } from 'vue-class-component';
 
-const <%=jhiPrefixCapitalized%>ConfigurationComponent = {
-  name: '<%=jhiPrefixCapitalized%>ConfigurationComponent',
-  mixins: [ConfigurationService],
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.init();
-    });
-  },
-  data() {
-    return {
-      orderProp: 'prefix',
-      reverse: false,
-      allConfiguration: null,
-      configuration: null,
-      configKeys: [],
-      filtered: ''
-    };
-  },
-  methods: {
-    init: function() {
-      this.loadConfiguration().then((res) => {
-        this.configuration = res;
+@Component
+export default class <%=jhiPrefixCapitalized%>Configuration extends mixins(ConfigurationService) {
+  public orderProp: string;
+  public reverse: boolean;
+  public allConfiguration: any;
+  public configuration: any;
+  public configKeys: any[];
+  public filtered: string;
 
-        for (const config of this.configuration) {
-          if (config.properties !== undefined) {
-            this.configKeys.push(Object.keys(config.properties));
-          }
-        }
-      });
-
-      this.loadEnvConfiguration().then((res) => {
-        this.allConfiguration = res;
-      });
-    },
-    changeOrder: function(prop) {
-      this.orderProp = prop;
-      this.reverse = !this.reverse;
-    },
-    keys: function(dict) {
-      return dict === undefined ? [] : Object.keys(dict);
-    }
+  constructor() {
+    super();
+    this.orderProp = 'prefix';
+    this.reverse = false;
+    this.allConfiguration = null;
+    this.configuration = null;
+    this.configKeys = [];
+    this.filtered = '';
   }
-};
 
-export default <%=jhiPrefixCapitalized%>ConfigurationComponent;
+  public mounted(): void {
+    this.init();
+  }
+
+  public init(): void {
+    this.loadConfiguration().then(res => {
+      this.configuration = res;
+
+      for (const config of this.configuration) {
+        if (config.properties !== undefined) {
+          this.configKeys.push(Object.keys(config.properties));
+        }
+      }
+    });
+
+    this.loadEnvConfiguration().then(res => {
+      this.allConfiguration = res;
+    });
+  }
+
+  public changeOrder(prop): void {
+    this.orderProp = prop;
+    this.reverse = !this.reverse;
+  }
+
+  public keys(dict: any): string[] {
+    return dict === undefined ? [] : Object.keys(dict);
+  }
+}

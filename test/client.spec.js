@@ -62,7 +62,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/audits/AuditsService.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/configuration/configuration.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/configuration/configuration.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/admin/configuration/ConfigurationService.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/admin/configuration/configuration.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/docs/docs.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/docs/docs.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/health/health.component.ts`,

@@ -157,7 +157,7 @@ const vueFiles = {
                 // admin modules
                 'components/admin/configuration/configuration.vue',
                 'components/admin/configuration/configuration.component.ts',
-                'components/admin/configuration/ConfigurationService.vue',
+                'components/admin/configuration/configuration.service.ts',
                 'components/admin/docs/docs.vue',
                 'components/admin/docs/docs.component.ts',
                 'components/admin/health/health.vue',
