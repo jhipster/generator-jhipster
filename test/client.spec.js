@@ -80,7 +80,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management-edit.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management-edit.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/UserManagementService.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/UserManagementService.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management-view.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management-view.vue`,
 

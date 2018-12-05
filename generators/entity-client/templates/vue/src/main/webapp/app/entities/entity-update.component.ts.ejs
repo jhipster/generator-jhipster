@@ -1,4 +1,4 @@
-import {integer, required, minLength, maxLength, pattern} from 'vuelidate/lib/validators';
+import { numeric, required, minLength, maxLength } from 'vuelidate/lib/validators';
 <%_
     let include = false;
     for (idx in fields) {
@@ -65,7 +65,7 @@ const <%= entityAngularName %>Update =  {
                             maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
                         <%_ } _%>
                         <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
-                            integer
+                            numeric
                         <%_ } _%>
 
                     <%_ } _%>

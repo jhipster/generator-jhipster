@@ -196,7 +196,7 @@ const vueFiles = {
                 'components/admin/user-management/user-management-view.component.ts',
                 'components/admin/user-management/user-management-edit.vue',
                 'components/admin/user-management/user-management-edit.component.ts',
-                'components/admin/user-management/UserManagementService.vue'
+                'components/admin/user-management/UserManagementService.ts'
             ]
         },
         {

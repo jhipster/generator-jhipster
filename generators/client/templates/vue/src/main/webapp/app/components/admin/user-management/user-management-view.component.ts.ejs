@@ -1,27 +1,30 @@
-import UserManagementService from './UserManagementService.vue';
+import Component, { mixins } from 'vue-class-component';
 
-const <%=jhiPrefixCapitalized%>UserManagementViewComponent = {
-    name: '<%=jhiPrefixCapitalized%>UserManagementViewComponent',
-    mixins: [UserManagementService],
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            if (to.params.userId) {
-                vm.init(to.params.userId);
-            }
-        })
-    },
-    data() {
-        return {
-            user: null
-        };
-    },
-    methods: {
-        init: function(userId) {
-            this.get(userId).then((res) => {
-                this.user = res.data;
-            });
-        }
+import UserManagementService from './UserManagementService';
+
+const beforeRouteEnter = (to, from, next) => {
+  next(vm => {
+    if (to.params.userId) {
+      vm.init(to.params.userId);
     }
+  });
 };
 
-export default <%=jhiPrefixCapitalized%>UserManagementViewComponent;
+@Component({
+  beforeRouteEnter
+})
+export default class <%=jhiPrefixCapitalized%>UserManagementView extends mixins(UserManagementService) {
+
+  public user: any;
+
+  constructor() {
+    super();
+    this.user = null;
+  }
+
+  public init(userId: number): void {
+    this.get(userId).then(res => {
+      this.user = res.data;
+    });
+  }
+}

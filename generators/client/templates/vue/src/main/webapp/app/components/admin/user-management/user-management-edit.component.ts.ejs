@@ -1,91 +1,98 @@
-import {email, maxLength, minLength, required} from 'vuelidate/lib/validators';
+import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
 import LanguageService from '../../../locale/LanguageService.vue';
 
-import UserManagementService from './UserManagementService.vue';
+import UserManagementService from './UserManagementService';
+import Component, { mixins } from 'vue-class-component';
 
 function loginValidator(value) {
-    if (typeof value === 'undefined' || value === null || value === '') {
-        return true;
-    }
-    return /^[_.@A-Za-z0-9-]*$/.test(value);
+  if (typeof value === 'undefined' || value === null || value === '') {
+    return true;
+  }
+  return /^[_.@A-Za-z0-9-]*$/.test(value);
 }
 
-const <%=jhiPrefixCapitalized%>UserManagementEditComponent = {
-    name: '<%=jhiPrefixCapitalized%>UserManagementEditComponent',
-    mixins: [UserManagementService, LanguageService],
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            if (to.params.userId) {
-                vm.init(to.params.userId);
-            }
-        })
+const validations: any = {
+  userAccount: {
+    login: {
+      required,
+      minLength: minLength(1),
+      maxLength: maxLength(254),
+      loginValidator
     },
-    data() {
-        return {
-            userAccount: {
-                id: null,
-                login: null,
-                firstName: null,
-                lastName: null,
-                email: null,
-                authorities: [],
-                langKey: null
-            },
-            isSaving: false,
-            authorities: []
-        }
+    firstName: {
+      maxLength: maxLength(50)
     },
-    validations: {
-        userAccount: {
-            login: {
-                required,
-                minLength: minLength(1),
-                maxLength: maxLength(254),
-                loginValidator
-            },
-            firstName: {
-                maxLength: maxLength(50)
-            },
-            lastName: {
-                maxLength: maxLength(50)
-            },
-            email: {
-                required,
-                email,
-                minLength: minLength(5),
-                maxLength: maxLength(254)
-            }
-        }
+    lastName: {
+      maxLength: maxLength(50)
     },
-    methods: {
-        init: function(userId) {
-            this.get(userId).then((res) => {
-                this.userAccount = res.data;
-                this.retrieveAuthorities().then((res) => {
-                    this.authorities = res.data;
-                });
-            });
-        },
-        previousState: function() {
-            this.$router.go(-1);
-        },
-        save: function() {
-            this.isSaving = true;
-            if (this.userAccount.id) {
-                this.update(this.userAccount).then(() => {
-                    this.isSaving = false;
-                    this.$router.go(-1);
-                });
-            } else {
-                <% if (!enableTranslation) { %>
-                this.userAccount.langKey = 'en';<% } %>
-                this.create(this.userAccount).then(() => {
-                    this.isSaving = false;
-                    this.$router.go(-1);
-                });
-            }
-        }
+    email: {
+      required,
+      email,
+      minLength: minLength(5),
+      maxLength: maxLength(254)
     }
+  }
 };
 
-export default <%=jhiPrefixCapitalized%>UserManagementEditComponent;
+const beforeRouteEnter = (to, from, next) => {
+  next(vm => {
+    if (to.params.userId) {
+      vm.init(to.params.userId);
+    }
+  });
+};
+
+@Component({
+  validations,
+  beforeRouteEnter
+})
+export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends mixins(UserManagementService, LanguageService) {
+  public userAccount: any;
+  public isSaving: boolean;
+  private authorities: any[];
+
+  public constructor() {
+    super();
+    this.userAccount = {
+      id: null,
+      login: null,
+      firstName: null,
+      lastName: null,
+      email: null,
+      authorities: [],
+      langKey: null
+    };
+    this.isSaving = false;
+    this.authorities = [];
+  }
+
+  public init(userId: number): void {
+    this.get(userId).then(res => {
+      this.userAccount = res.data;
+      this.retrieveAuthorities().then(res => {
+        this.authorities = res.data;
+      });
+    });
+  }
+
+  public previousState(): void {
+    this.$router.go(-1);
+  }
+
+  public save(): void {
+    this.isSaving = true;
+    if (this.userAccount.id) {
+      this.update(this.userAccount).then(() => this.returnToList());
+    } else {
+
+      <% if (!enableTranslation) { %>
+      this.userAccount.langKey = 'en';<% } %>
+      this.create(this.userAccount).then(() => this.returnToList());
+    }
+  }
+
+  private returnToList(): void {
+    this.isSaving = false;
+    this.$router.go(-1);
+  }
+}

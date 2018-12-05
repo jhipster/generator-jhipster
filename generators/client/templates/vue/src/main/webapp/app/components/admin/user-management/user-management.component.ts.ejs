@@ -1,86 +1,104 @@
-import UserManagementService from './UserManagementService.vue';
+import Component, { mixins } from 'vue-class-component';
+
+import UserManagementService from './UserManagementService';
 import Principal from '../../account/Principal.vue';
 
-const <%=jhiPrefixCapitalized%>UserManagementComponent = {
-    name: '<%=jhiPrefixCapitalized%>UserManagementComponent',
-    mixins: [UserManagementService, Principal],
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            vm.loadAll();
-        })
-    },
-    data() {
-        return {
-            error: false,
-            success: false,
-            users: [],
-            itemsPerPage: 20,
-            queryCount: null,
-            page: 1,
-            previousPage: null,
-            propOrder: 'id',
-            reverse: false,
-            totalItems: 0,
-            removeId: null
-        };
-    },
-    methods: {
-        setActive(user, isActivated) {
-            user.activated = isActivated;
-            this.update(user).then(() => {
-                this.error = null;
-                this.success = 'OK';
-                this.loadAll();
-            }).catch(() => {
-                this.success = null;
-                this.error = 'ERROR';
-                user.activated = false;
-            });
-        },
-        loadAll() {
-            this.query(<% if (databaseType !== 'cassandra') { %>{
-                page: this.page - 1,
-                size: this.itemsPerPage,
-                sort: this.sort()}<% } %>).then((res) => {
-                    this.users = res.data;
-                    <%_ if (databaseType !== 'cassandra') { _%>
-                    this.totalItems = Number(res.headers['x-total-count']);
-                    this.queryCount = this.totalItems;
-                    <%_ } _%>
-                });
-        },
-        <%_ if (databaseType !== 'cassandra') { _%>
-        sort() {
-            const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
-            if (this.propOrder !== 'id') {
-                result.push('id');
-            }
-            return result;
-        },
-        loadPage(page: number) {
-            if (page !== this.previousPage) {
-                this.previousPage = page;
-                this.transition();
-            }
-        },
-        transition() {
-            this.loadAll();
-        },
-        changeOrder(propOrder) {
-            this.propOrder = propOrder;
-            this.reverse = !this.reverse;
-        },
-        <%_ } _%>
-        deleteUser() {
-            this.remove(this.removeId).then(() => {
-                this.removeId = null;
-                this.loadAll();
-            });
-        },
-        prepareRemove(instance) {
-            this.removeId = instance.login;
-        }
-    }
-};
+@Component
+export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mixins(UserManagementService, Principal) {
 
-export default <%=jhiPrefixCapitalized%>UserManagementComponent;
+  public error: string;
+  public success: string;
+  public users: any[];
+  public itemsPerPage: number;
+  public queryCount: number;
+  public page: number;
+  public previousPage: number;
+  public propOrder: string;
+  public reverse: boolean;
+  public totalItems: number;
+  public removeId: number;
+
+  constructor() {
+    super();
+    this.error = '';
+    this.success = '';
+    this.users = [];
+    this.itemsPerPage = 20;
+    this.queryCount = null;
+    this.page = 1;
+    this.previousPage = null;
+    this.propOrder = 'id';
+    this.reverse = false;
+    this.totalItems = 0;
+    this.removeId = null;
+  }
+
+  public mounted(): void {
+    this.loadAll();
+  }
+
+  public setActive(user, isActivated): void {
+    user.activated = isActivated;
+    this.update(user)
+      .then(() => {
+        this.error = null;
+        this.success = 'OK';
+        this.loadAll();
+      })
+      .catch(() => {
+        this.success = null;
+        this.error = 'ERROR';
+        user.activated = false;
+      });
+  }
+
+  public loadAll(): void {
+    this.query(<% if (databaseType !== 'cassandra') { %>{
+        page: this.page - 1,
+        size: this.itemsPerPage,
+        sort: this.sort()}<% } %>).then(res => {
+      this.users = res.data;
+      <%_ if (databaseType !== 'cassandra') { _%>
+      this.totalItems = Number(res.headers['x-total-count']);
+      this.queryCount = this.totalItems;
+      <%_ } _%>
+    });
+  }
+
+  <%_ if (databaseType !== 'cassandra') { _%>
+  public sort(): any {
+    const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
+    if (this.propOrder !== 'id') {
+      result.push('id');
+    }
+    return result;
+  }
+
+  public loadPage(page: number): void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.transition();
+    }
+  }
+
+  public transition(): void {
+    this.loadAll();
+  }
+
+  public changeOrder(propOrder: string): void {
+    this.propOrder = propOrder;
+    this.reverse = !this.reverse;
+  }
+  <%_ } _%>
+
+  public deleteUser(): void {
+    this.remove(this.removeId).then(() => {
+      this.removeId = null;
+      this.loadAll();
+    });
+  }
+
+  public prepareRemove(instance): void {
+    this.removeId = instance.login;
+  }
+}
