@@ -68,6 +68,27 @@ const vueFiles = {
     ],
     test: [
         {
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'spec/app/entities/entity-management.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`
+                },
+                {
+                    file: 'spec/app/entities/entity-management-detail.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.spec.ts`
+                },
+                {
+                    file: 'spec/app/entities/entity-management-update.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`
+                },
+                {
+                    file: 'spec/app/entities/entity-management.service.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`
+                }
+            ]
+        },
+        {
             condition: generator => generator.protractorTests,
             path: CLIENT_TEST_SRC_DIR,
             templates: [

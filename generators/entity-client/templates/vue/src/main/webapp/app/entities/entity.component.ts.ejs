@@ -18,7 +18,11 @@ const <%= entityAngularName %> = {
           page: 1,
           previousPage: null,
           propOrder: 'id',
+        <%_ if (pagination === 'infinite-scroll') { _%>
+          reverse: true,
+        <%_ } else { _%>
           reverse: false,
+        <%_ } _%>
           totalItems: 0,
         <%_ } _%>
           <%= entityInstancePlural %>: []
@@ -38,11 +42,14 @@ const <%= entityAngularName %> = {
             this.currentSearch = query;
             this.retrieveAll<%= entityAngularName %>s();
         },
+        <%_ } _%>
         clear() {
+            <%_ if (searchEngine === 'elasticsearch') { _%>
             this.currentSearch = '';
+            <%_ } _%>
+            this.page = 1;
             this.retrieveAll<%= entityAngularName %>s();
         },
-        <%_ } _%>
         retrieveAll<%= entityAngularName %>s() {
             <% if (pagination !== 'no') { %>
             const paginationQuery = {
@@ -72,7 +79,6 @@ const <%= entityAngularName %> = {
         },
         prepareRemove(instance) {
             this.removeId = instance.id;
-            this.$refs.removeEntity.show();
         },
         remove<%= entityAngularName %>() {
             this.delete<%= entityAngularName %>(this.removeId).then(() => {

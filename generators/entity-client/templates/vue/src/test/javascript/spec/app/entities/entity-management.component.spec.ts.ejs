@@ -1,0 +1,176 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
+_%>
+/* tslint:disable max-line-length */
+import { shallowMount, createLocalVue } from '@vue/test-utils';
+import axios from 'axios';
+
+import * as config from '@/shared/config';
+import <%= entityAngularName %>Component from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
+
+const localVue = createLocalVue();
+const mockedAxios: any = axios;
+
+config.initVueApp(localVue);
+const i18n = config.initI18N(localVue);
+const store = config.initVueXStore(localVue);
+localVue.component('font-awesome-icon', {});
+localVue.component('b-badge', {});
+localVue.directive('b-modal', {});
+localVue.component('b-btn', {});
+localVue.component('router-link', {});
+
+
+jest.mock('axios', () => ({
+    get: jest.fn(),
+    delete: jest.fn()
+}));
+
+describe('Component Tests', () => {
+    describe('<%= entityAngularName %> Management Component', () => {
+        let wrapper;
+        let comp;
+
+        beforeEach(() => {
+            mockedAxios.get.mockReset();
+            mockedAxios.get.mockReturnValue(Promise.resolve({}));
+
+            wrapper = shallowMount(<%= entityAngularName %>Component, { store, i18n, localVue, stubs: {<%_ if (pagination !== 'no') { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal:true}  });
+            comp = wrapper.vm;
+        });
+
+        it('should be a Vue instance', () => {
+            expect(wrapper.isVueInstance()).toBeTruthy();
+        });
+
+        it('Should call load all on init', async () => {
+            // GIVEN
+            mockedAxios.get.mockReturnValue(Promise.resolve({data: [{id: <%- tsKeyId %>}]}));
+
+            // WHEN
+            comp.retrieveAll<%= entityAngularName %>s();
+            await comp.$nextTick();
+
+            // THEN
+            expect(mockedAxios.get).toHaveBeenCalled();
+            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+        });
+    <%_ if (pagination !== 'no') { _%>
+
+        it('should load a page', async () => {
+            // GIVEN
+            mockedAxios.get.mockReturnValue(Promise.resolve({data: [{id: <%- tsKeyId %>}]}));
+
+            // WHEN
+            comp.loadPage(1);
+            await comp.$nextTick();
+
+            // THEN
+            expect(mockedAxios.get).toHaveBeenCalled();
+            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+        });
+        <%_ if (pagination !== 'infinite-scroll') { _%>
+
+        it('should not load a page if the page is the same as the previous page', () => {
+            //GIVEN
+            comp.previousPage = 1;
+
+            // WHEN
+            comp.loadPage(1);
+
+            // THEN
+            expect(mockedAxios.get).toHaveBeenCalledTimes(0);
+        });
+        <%_ } _%>
+
+        it('should re-initialize the page', async () => {
+            // GIVEN
+            mockedAxios.get.mockReturnValue(Promise.resolve({data: [{id: <%- tsKeyId %>}]}));
+
+            // WHEN
+            comp.loadPage(2);
+            comp.clear();
+
+            // THEN
+            expect(mockedAxios.get).toHaveBeenCalledTimes(2);
+            await comp.$nextTick();
+            expect(comp.page).toEqual(1);
+            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+        });
+        <%_ if (pagination === 'infinite-scroll') { _%>
+
+        it('should calculate the sort attribute for an id', () => {
+            // WHEN
+            const result = comp.sort();
+
+            // THEN
+            expect(result).toEqual(['id,asc']);
+        });
+
+        it('should calculate the sort attribute for a non-id attribute', () => {
+            // GIVEN
+            comp.propOrder = 'name';
+
+            // WHEN
+            const result = comp.sort();
+
+            // THEN
+            expect(result).toEqual(['name,asc', 'id']);
+        });
+        <%_ } else { _%>
+
+        it('should calculate the sort attribute for an id', () => {
+            // WHEN
+            const result = comp.sort();
+
+            // THEN
+            expect(result).toEqual(['id,desc']);
+        });
+
+        it('should calculate the sort attribute for a non-id attribute', () => {
+            // GIVEN
+            comp.propOrder = 'name';
+
+            // WHEN
+            const result = comp.sort();
+
+            // THEN
+            expect(result).toEqual(['name,desc', 'id']);
+        });
+        <%_ } _%>
+    <%_ } _%>
+
+        it('Should call delete service on confirmDelete', async () => {
+            // GIVEN
+            mockedAxios.delete.mockReturnValue(Promise.resolve({}));
+            mockedAxios.get.mockReturnValue(Promise.resolve({}));
+
+            // WHEN
+            comp.prepareRemove({id:'test'});
+            comp.remove<%= entityAngularName %>();
+            await comp.$nextTick();
+
+            // THEN
+            expect(mockedAxios.delete).toHaveBeenCalled();
+            expect(mockedAxios.get).toHaveBeenCalled();
+        });
+    });
+});
