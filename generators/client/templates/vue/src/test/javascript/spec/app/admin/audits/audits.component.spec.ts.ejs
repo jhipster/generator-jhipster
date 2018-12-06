@@ -1,10 +1,10 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import * as config from '@/shared/config';
-import AuditsComponent from '@/components/admin/audits/audits.vue';
-import AuditsService from '@/components/admin/audits/AuditsService.vue';
+import Audits from '@/components/admin/audits/audits.vue';
+import AuditsClass from '@/components/admin/audits/audits.component';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -12,7 +12,6 @@ const mockedAxios: any = axios;
 config.initVueApp(localVue);
 const i18n = config.initI18N(localVue);
 const store = config.initVueXStore(localVue);
-localVue.mixin(AuditsService);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
 jest.mock('axios', () => ({
@@ -21,11 +20,11 @@ jest.mock('axios', () => ({
 }));
 
 describe('Audits Component', () => {
-  let wrapper;
-  let comp;
+  let wrapper: Wrapper<AuditsClass>;
+  let audits: AuditsClass;
 
   beforeEach(() => {
-    wrapper = shallowMount(AuditsComponent, {
+    wrapper = shallowMount<AuditsClass>(Audits, {
       store,
       i18n,
       localVue,
@@ -34,7 +33,7 @@ describe('Audits Component', () => {
         jhiItemCount: true
       }
     });
-    comp = wrapper.vm;
+    audits = wrapper.vm;
   });
 
   it('should be a Vue instance', () => {
@@ -43,15 +42,15 @@ describe('Audits Component', () => {
 
   describe('today function ', () => {
     it('should set toDate to current date', () => {
-      comp.today();
-      expect(comp.toDate).toBe(getDate());
+      audits.today();
+      expect(audits.toDate).toBe(getDate());
     });
   });
 
   describe('previousMonth function ', () => {
     it('should set fromDate to current date', () => {
-      comp.previousMonth();
-      expect(comp.fromDate).toBe(getDate(false));
+      audits.previousMonth();
+      expect(audits.fromDate).toBe(getDate(false));
     });
   });
 
@@ -59,15 +58,15 @@ describe('Audits Component', () => {
     it('should set all default values correctly', async () => {
       mockedAxios.get.mockReturnValue(Promise.resolve({}));
 
-      comp.init();
-      await comp.$nextTick();
+      audits.init();
+      await audits.$nextTick();
 
-      expect(comp.predicate).toBe('timestamp');
-      expect(comp.toDate).toBe(getDate());
-      expect(comp.fromDate).toBe(getDate(false));
-      expect(comp.itemsPerPage).toBe(20);
-      expect(comp.page).toBe(1);
-      expect(comp.reverse).toBeFalsy();
+      expect(audits.predicate).toBe('timestamp');
+      expect(audits.toDate).toBe(getDate());
+      expect(audits.fromDate).toBe(getDate(false));
+      expect(audits.itemsPerPage).toBe(20);
+      expect(audits.page).toBe(1);
+      expect(audits.reverse).toBeFalsy();
     });
   });
 
@@ -78,14 +77,14 @@ describe('Audits Component', () => {
       const today = getDate();
       const fromDate = getDate(false);
       // WHEN
-      comp.init();
-      await comp.$nextTick();
+      audits.init();
+      await audits.$nextTick();
 
       // THEN
       expect(mockedAxios.get).toHaveBeenCalledWith(
         `management/audits?fromDate=${fromDate}&toDate=${today}&sort=auditEventDate,desc&sort=id&page=0&size=20`
       );
-      expect(comp.audits.length).toEqual(1);
+      expect(audits.audits.length).toEqual(1);
     });
   });
 });

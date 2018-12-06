@@ -1,0 +1,20 @@
+import axios from 'axios';
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component
+export default class AuditsService extends Vue{
+  public query(req: any): Promise<any> {
+    let sorts = '';
+    for (let idx in req.sort) {
+      if (sorts.length > 0) {
+        sorts += '&';
+      }
+      sorts += 'sort=' + req.sort[idx];
+    }
+    return new Promise(resolve => {
+        axios.get(`management/audits?fromDate=${req.fromDate}&toDate=${req.toDate}&${sorts}&page=${req.page}&size=${req.size}`)
+            .then(res => resolve(res));
+
+    })
+  }
+}

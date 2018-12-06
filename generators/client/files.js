@@ -169,7 +169,7 @@ const vueFiles = {
                 'components/admin/logs/LogsService.ts',
                 'components/admin/audits/audits.vue',
                 'components/admin/audits/audits.component.ts',
-                'components/admin/audits/AuditsService.vue',
+                'components/admin/audits/audits.service.ts',
                 'components/admin/metrics/metrics.vue',
                 'components/admin/metrics/metrics.component.ts',
                 'components/admin/metrics/MetricsService.vue',
