@@ -124,7 +124,7 @@ module.exports = class extends BaseGenerator {
                     : shelljs.exec('npm bin', { silent: this.silent }).stdout;
             generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
-        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --no-insight`;
+        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight`;
         this.info(regenerateCmd);
         shelljs.exec(regenerateCmd, { silent: this.silent }, (code, msg, err) => {
             if (code === 0) this.success(`Successfully regenerated application with JHipster ${version}`);
