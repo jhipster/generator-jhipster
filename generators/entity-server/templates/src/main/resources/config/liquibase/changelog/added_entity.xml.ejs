@@ -138,7 +138,7 @@
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
             <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true 
-                            && (relationships[idx].useJPADerivedIdentifier !== null && relationships[idx].useJPADerivedIdentifier === false)) { 
+                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) { 
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
