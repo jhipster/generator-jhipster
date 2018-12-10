@@ -138,7 +138,7 @@ describe('JDL DSL API', () => {
           tokens.SERVICE,
           tokens.SEARCH,
           tokens.MICROSERVICE,
-          tokens.COMMENT,
+          tokens.JAVADOC,
           tokens.PAGINATE,
           tokens.SKIP_CLIENT,
           tokens.SKIP_SERVER,
@@ -166,7 +166,7 @@ describe('JDL DSL API', () => {
           tokens.UNIQUE,
           tokens.MIN_MAX_KEYWORD,
           tokens.PATTERN,
-          tokens.COMMENT
+          tokens.JAVADOC
         ]);
       });
     });
@@ -188,7 +188,7 @@ describe('JDL DSL API', () => {
           // Note that this will have more suggestions than the previous spec as there is a deeper rule stack.
           tokens.COMMA,
           tokens.RCURLY,
-          tokens.COMMENT,
+          tokens.JAVADOC,
           tokens.NAME
         ]);
       });
