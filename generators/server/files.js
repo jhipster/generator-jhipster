@@ -1409,6 +1409,10 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java`
                 },
                 {
+                    file: 'package/service/mapper/UserMapperTest.java',
+                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
+                },
+                {
                     file: 'package/web/rest/UserResourceIntTest.java',
                     renameTo: generator => `${generator.testDir}web/rest/UserResourceIntTest.java`
                 }
@@ -1670,6 +1674,10 @@ const serverFiles = {
                 {
                     file: 'package/service/UserServiceIntTest.java',
                     renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java`
+                },
+                {
+                    file: 'package/service/mapper/UserMapperTest.java',
+                        renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
                 },
                 {
                     file: 'package/web/rest/AccountResourceIntTest.java',
