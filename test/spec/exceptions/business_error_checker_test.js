@@ -357,18 +357,23 @@ describe('BusinessErrorChecker', () => {
       });
     });
     context('if the field name is reserved', () => {
+      let loggerStub;
       before(() => {
         jdlObject.getEntity('Valid').fields.validField.name = 'catch';
         checker = new BusinessErrorChecker(jdlObject);
+        loggerStub = sinon.spy(logger, 'warn');
+        checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
       });
       after(() => {
         jdlObject.getEntity('Valid').fields.validField.name = 'validField';
+        loggerStub.restore();
       });
 
-      it('fails', () => {
-        expect(() => {
-          checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
-        }).to.throw("The name 'catch' is a reserved keyword and can not be used as an entity field name.");
+      it('warns', () => {
+        expect(loggerStub).to.have.been.calledOnce;
+        expect(loggerStub.getCall(0).args[0]).to.equal(
+          "The name 'catch' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'."
+        );
       });
     });
     context('when passing gateway as application type', () => {
