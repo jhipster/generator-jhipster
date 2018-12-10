@@ -326,7 +326,7 @@ describe('DocumentParser', () => {
         it('accepts them', () => {
           expect(jdlObject.entities.A.fields.name.comment).to.eq('abc');
           expect(jdlObject.entities.A.fields.thing.comment).to.eq('def');
-          expect(jdlObject.entities.A.fields.another.comment).to.eq('ghi');
+          expect(jdlObject.entities.A.fields.another.comment).to.eq(undefined);
         });
         context('when having both forms of comments', () => {
           it('only accepts the one defined first', () => {
@@ -542,7 +542,7 @@ describe('DocumentParser', () => {
             },
             fourth: {
               name: 'fourth',
-              comment: 'another',
+              comment: undefined,
               type: 'String',
               validations: {}
             }
