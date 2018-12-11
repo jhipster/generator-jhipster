@@ -172,6 +172,32 @@ module.exports = class extends BaseGenerator {
         });
     }
 
+    _retrieveLatestVersion(npmPackage, callback) {
+        this.log(`Looking for latest ${npmPackage} version...`);
+        const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn info' : 'npm show';
+        shelljs.exec(`${commandPrefix} ${npmPackage} version`, { silent: this.silent }, (code, msg, err) => {
+            if (err) {
+                this.warning(`Something went wrong fetching the latest ${npmPackage} version number...\n${err}`);
+                this.error('Exiting process');
+            }
+            const latestVersion = this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n', '');
+            callback(latestVersion);
+        });
+    }
+
+    _installNpmPackageLocally(npmPackage, version, callback) {
+        this.log(`Installing ${npmPackage} ${version} locally`);
+        const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
+        const devDependencyParam = this.clientPackageManager === 'yarn' ? '--dev' : '--save-dev';
+        const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} --no-lockfile --ignore-scripts`;
+        this.info(generatorCommand);
+        shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
+            if (code === 0) this.success(`Installed ${npmPackage}@${version}`);
+            else this.error(`Something went wrong while installing ${npmPackage}! ${msg} ${err}`);
+            callback();
+        });
+    }
+
     get configuring() {
         return {
             assertJHipsterProject() {
@@ -203,15 +229,9 @@ module.exports = class extends BaseGenerator {
                     this.latestBlueprintVersion = this.targetBlueprintVersion;
                     return;
                 }
-                this.log(`Looking for latest ${this.blueprint} blueprint version...`);
                 const done = this.async();
-                const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn info' : 'npm show';
-                shelljs.exec(`${commandPrefix} ${this.blueprint} version`, { silent: this.silent }, (code, msg, err) => {
-                    if (err) {
-                        this.warning(`Something went wrong fetching the latest blueprint version number...\n${err}`);
-                        this.error('Exiting process');
-                    }
-                    this.latestBlueprintVersion = this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n', '');
+                this._retrieveLatestVersion(this.blueprint, latestVersion => {
+                    this.latestBlueprintVersion = latestVersion;
                     if (semver.lt(this.currentBlueprintVersion, this.latestBlueprintVersion)) {
                         this.newBlueprintVersionFound = true;
                         this.success(`New ${this.blueprint} version found: ${this.latestBlueprintVersion}`);
@@ -236,13 +256,8 @@ module.exports = class extends BaseGenerator {
                 }
                 this.log(`Looking for latest ${GENERATOR_JHIPSTER} version...`);
                 const done = this.async();
-                const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn info' : 'npm show';
-                shelljs.exec(`${commandPrefix} ${GENERATOR_JHIPSTER} version`, { silent: this.silent }, (code, msg, err) => {
-                    if (err) {
-                        this.warning(`Something went wrong fetching the latest JHipster version number...\n${err}`);
-                        this.error('Exiting process');
-                    }
-                    this.latestJhipsterVersion = this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n', '');
+                this._retrieveLatestVersion(GENERATOR_JHIPSTER, latestVersion => {
+                    this.latestJhipsterVersion = latestVersion;
                     if (semver.lt(this.currentJhipsterVersion, this.latestJhipsterVersion)) {
                         this.success(`New ${GENERATOR_JHIPSTER} version found: ${this.latestJhipsterVersion}`);
                     } else if (this.force) {
@@ -314,7 +329,9 @@ module.exports = class extends BaseGenerator {
                         this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
                             if (code !== 0) {
                                 this.error(
-                                    `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${msg} ${err}`
+                                    `Unable to record current code has been generated with version ${
+                                        this.currentJhipsterVersion
+                                    }:\n${msg} ${err}`
                                 );
                             }
                             this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);
@@ -324,16 +341,7 @@ module.exports = class extends BaseGenerator {
                 };
 
                 const installJhipsterLocally = (version, callback) => {
-                    this.log(`Installing JHipster ${version} locally`);
-                    const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-                    const devDependencyParam = this.clientPackageManager === 'yarn' ? '--dev' : '--save-dev';
-                    const generatorCommand = `${commandPrefix} ${GENERATOR_JHIPSTER}@${version} ${devDependencyParam} --no-lockfile --ignore-scripts`;
-                    this.info(generatorCommand);
-                    shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
-                        if (code === 0) this.success(`Installed ${GENERATOR_JHIPSTER}@${version}`);
-                        else this.error(`Something went wrong while installing the JHipster generator! ${msg} ${err}`);
-                        callback();
-                    });
+                    this._installNpmPackageLocally(GENERATOR_JHIPSTER, version, callback);
                 };
 
                 const installBlueprintLocally = (version, callback) => {
@@ -342,18 +350,7 @@ module.exports = class extends BaseGenerator {
                         callback();
                         return;
                     }
-                    this.log(`Installing blueprint ${version} locally`);
-                    const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-                    const devDependencyParam = this.clientPackageManager === 'yarn' ? '--dev' : '--save-dev';
-                    const generatorCommand = `${commandPrefix} ${
-                        this.blueprint
-                    }@${version} ${devDependencyParam} --no-lockfile --ignore-scripts`;
-                    this.info(generatorCommand);
-                    shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
-                        if (code === 0) this.success(`Installed ${this.blueprint}@${version}`);
-                        else this.error(`Something went wrong while installing the blueprint generator! ${msg} ${err}`);
-                        callback();
-                    });
+                    this._installNpmPackageLocally(this.blueprint, version, callback);
                 };
 
                 const regenerate = () => {
@@ -398,19 +395,8 @@ module.exports = class extends BaseGenerator {
             },
 
             updateJhipster() {
-                this.log(chalk.yellow(`Updating ${GENERATOR_JHIPSTER} to ${this.latestJhipsterVersion} . This might take some time...`));
                 const done = this.async();
-                const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-                const devDependencyParam = this.clientPackageManager === 'yarn' ? '--dev' : '--save-dev';
-                const generatorCommand = `${commandPrefix} ${GENERATOR_JHIPSTER}@${
-                    this.latestJhipsterVersion
-                } ${devDependencyParam} --no-lockfile --ignore-scripts`;
-                this.info(generatorCommand);
-                shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
-                    if (code === 0) this.success(`Updated ${GENERATOR_JHIPSTER} to version ${this.latestJhipsterVersion}`);
-                    else this.error(`Something went wrong while updating JHipster! ${msg} ${err}`);
-                    done();
-                });
+                this._installNpmPackageLocally(GENERATOR_JHIPSTER, this.latestJhipsterVersion, done);
             },
 
             updateBlueprint() {
@@ -418,19 +404,8 @@ module.exports = class extends BaseGenerator {
                     this.log('Skipping blueprint update since no blueprint has been detected');
                     return;
                 }
-                this.log(chalk.yellow(`Updating ${this.blueprint} to ${this.latestBlueprintVersion} . This might take some time...`));
                 const done = this.async();
-                const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-                const devDependencyParam = this.clientPackageManager === 'yarn' ? '--dev' : '--save-dev';
-                const generatorCommand = `${commandPrefix} ${this.blueprint}@${
-                    this.latestBlueprintVersion
-                } ${devDependencyParam} --no-lockfile --ignore-scripts`;
-                this.info(generatorCommand);
-                shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
-                    if (code === 0) this.success(`Updated ${this.blueprint} to version ${this.latestBlueprintVersion}`);
-                    else this.error(`Something went wrong while updating blueprint! ${msg} ${err}`);
-                    done();
-                });
+                this._installNpmPackageLocally(this.blueprint, this.latestBlueprintVersion, done);
             },
 
             generateWithLatestVersion() {
