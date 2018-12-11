@@ -28,7 +28,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-
 <%_ for(let idx in mockRequestImports) { _%>
 import <%= mockRequestImports[idx] %>;
 <%_ } _%>
@@ -53,16 +52,15 @@ public class <%= controllerClass %>IntTest {
             .standaloneSetup(<%= controllerInstance %>)
             .build();
     }
-
     <%_ for(let idx in controllerActions) { _%>
+
     /**
-    * Test <%= controllerActions[idx].actionName %>
-    */
+     * Test <%= controllerActions[idx].actionName %>
+     */
     @Test
     public void test<%= controllerActions[idx].actionNameUF %>() throws Exception {
         restMockMvc.perform(<%= controllerActions[idx].actionMethod.toLowerCase() %>("/api/<%= apiPrefix %>/<%= controllerActions[idx].actionPath %>"))
             .andExpect(status().isOk());
     }
     <%_ } _%>
-
 }

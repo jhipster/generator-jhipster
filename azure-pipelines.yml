@@ -25,10 +25,13 @@ jobs:
     JHI_PROFILE: dev
     JHI_RUN_APP: 1
     JHI_PROTRACTOR: 0
+    # if JHI_LIB_BRANCH value is release, use the release from Maven
     JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
     JHI_LIB_BRANCH: release
+    # if JHI_GEN_BRANCH value is release, use the release from NPM
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
     JHI_GEN_BRANCH: release
+    # specific config
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
@@ -36,30 +39,42 @@ jobs:
     JHI_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
 
   strategy:
-    maxParallel: 10
     matrix:
-      ngx-mongodb-kafka-cucumber:
-        JHI_APP: ngx-mongodb-kafka-cucumber
-      ngx-session-cassandra-fr:
-        JHI_APP: ngx-session-cassandra-fr
-      ngx-couchbase:
-        JHI_APP: ngx-couchbase
+      react-default:
+        JHI_APP: react-default
         JHI_PROFILE: prod
-      ms-ngx-gateway-eureka:
-        JHI_APP: ms-ngx-gateway-eureka
+        JHI_PROTRACTOR: 1
+        JHI_ENTITY: sql
+      react-noi18n-es-ws-gradle-session:
+        JHI_APP: react-noi18n-es-ws-gradle-session
+        JHI_PROTRACTOR: 1
+        JHI_ENTITY: sql
       ms-ngx-gateway-eureka-oauth2:
         JHI_APP: ms-ngx-gateway-eureka-oauth2
         JHI_PROTRACTOR: 1
+        JHI_ENTITY: sql
       ms-ngx-gateway-consul:
         JHI_APP: ms-ngx-gateway-consul
+        JHI_ENTITY: sql
       ms-ngx-gateway-uaa:
         JHI_APP: ms-ngx-gateway-uaa
-      ms-micro-eureka:
-        JHI_APP: ms-micro-eureka
+        JHI_ENTITY: uaa
       ms-micro-consul:
         JHI_APP: ms-micro-consul
+        JHI_ENTITY: micro
+      ngx-h2mem-ws-nol2:
+        JHI_APP: ngx-h2mem-ws-nol2
+        JHI_ENTITY: sql
+      ngx-session-cassandra-fr:
+        JHI_APP: ngx-session-cassandra-fr
+        JHI_ENTITY: cassandra
+      ngx-couchbase:
+        JHI_APP: ngx-couchbase
+        JHI_PROFILE: prod
+        JHI_ENTITY: couchbase
       webflux-mongodb:
         JHI_APP: webflux-mongodb
+        JHI_ENTITY: mongodb
 
   steps:
   #----------------------------------------------------------------------
@@ -67,7 +82,7 @@ jobs:
   #----------------------------------------------------------------------
   - task: NodeTool@0
     inputs:
-      versionSpec: '8.12.0'
+      versionSpec: '10.14.1'
     displayName: 'TOOLS: install Node.js'
   - script: |
       wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
@@ -79,10 +94,10 @@ jobs:
     displayName: 'TOOLS: update NPM'
   - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
     displayName: 'TOOLS: display configuration'
-  - bash: $(JHI_SCRIPTS)/02-display-tools.sh
-    displayName: 'TOOLS: display installed tools'
   - bash: $(JHI_SCRIPTS)/03-system.sh
     displayName: 'TOOLS: configure tools installed by the system'
+  - bash: $(JHI_SCRIPTS)/04-git-config.sh
+    displayName: 'TOOLS: configure git'
 
   #----------------------------------------------------------------------
   # Install JHipster and generate project+entities
@@ -95,6 +110,14 @@ jobs:
     displayName: 'GENERATION: project'
   - bash: $(JHI_SCRIPTS)/13-replace-version-generated-project.sh
     displayName: 'GENERATION: replace version in generated project'
+  - bash: $(JHI_SCRIPTS)/14-jhipster-info.sh
+    displayName: 'GENERATION: jhipster info'
+
+  #----------------------------------------------------------------------
+  # Bugs fix
+  #----------------------------------------------------------------------
+  - bash: test-integration/scripts/20-no-memory-limit-elasticsearch.sh
+    displayName: 'BUGS-FIX: no memory limit for Elasticsearch'
 
   #----------------------------------------------------------------------
   # Launch tests

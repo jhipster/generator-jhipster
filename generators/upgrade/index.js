@@ -124,7 +124,7 @@ module.exports = class extends BaseGenerator {
                     : shelljs.exec('npm bin', { silent: this.silent }).stdout;
             generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
-        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --no-insight`;
+        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight`;
         this.info(regenerateCmd);
         shelljs.exec(regenerateCmd, { silent: this.silent }, (code, msg, err) => {
             if (code === 0) this.success(`Successfully regenerated application with JHipster ${version}`);
@@ -278,7 +278,8 @@ module.exports = class extends BaseGenerator {
                 const installJhipsterLocally = (version, callback) => {
                     this.log(`Installing JHipster ${version} locally`);
                     const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
-                    const generatorCommand = `${commandPrefix} ${GENERATOR_JHIPSTER}@${version} --dev --no-lockfile --ignore-scripts`;
+                    const devDependencyParam = this.clientPackageManager === 'yarn' ? '--dev' : '--save-dev';
+                    const generatorCommand = `${commandPrefix} ${GENERATOR_JHIPSTER}@${version} ${devDependencyParam} --no-lockfile --ignore-scripts`;
                     this.info(generatorCommand);
                     shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
                         if (code === 0) this.success(`Installed ${GENERATOR_JHIPSTER}@${version}`);
@@ -330,9 +331,10 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.yellow(`Updating ${GENERATOR_JHIPSTER} to ${this.latestVersion} . This might take some time...`));
                 const done = this.async();
                 const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
+                const devDependencyParam = this.clientPackageManager === 'yarn' ? '--dev' : '--save-dev';
                 const generatorCommand = `${commandPrefix} ${GENERATOR_JHIPSTER}@${
                     this.latestVersion
-                } --dev --no-lockfile --ignore-scripts`;
+                } ${devDependencyParam} --no-lockfile --ignore-scripts`;
                 this.info(generatorCommand);
                 shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
                     if (code === 0) this.success(`Updated ${GENERATOR_JHIPSTER} to version ${this.latestVersion}`);

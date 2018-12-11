@@ -34,9 +34,9 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
 
     constructor(
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: JhiDataUtils,
+        protected dataUtils: JhiDataUtils,
         <%_ } _%>
-        private activatedRoute: ActivatedRoute
+        protected activatedRoute: ActivatedRoute
     ) {
     }
 

@@ -38,7 +38,7 @@ function writeFiles() {
                     if (!this.skipClient && this.enableTranslation) {
                         const languages = this.languages || this.getAllInstalledLanguages();
                         languages.forEach(language => {
-                            this.copyEnumI18n(language, enumInfo);
+                            this.copyEnumI18n(language, enumInfo, this.fetchFromInstalledJHipster('entity-i18n/templates'));
                         });
                     }
                 }
@@ -52,7 +52,7 @@ function writeFiles() {
             if (this.enableTranslation) {
                 const languages = this.languages || this.getAllInstalledLanguages();
                 languages.forEach(language => {
-                    this.copyI18n(language);
+                    this.copyI18n(language, this.fetchFromInstalledJHipster('entity-i18n/templates'));
                 });
             }
         }

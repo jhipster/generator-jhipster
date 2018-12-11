@@ -10,7 +10,7 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 describe('JHipster generator for entity', () => {
     describe('search, no dto, no service, no pagination', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -81,7 +81,7 @@ describe('JHipster generator for entity', () => {
 
 describe('JHipster generator entity for angularX', () => {
     describe('no dto, no service, no pagination', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -106,7 +106,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('no dto, no service, with pagination', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -131,7 +131,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('no dto, no service, with infinite-scroll', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -156,7 +156,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('no dto, with serviceImpl, no pagination', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -185,7 +185,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with dto, service, no pagination', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -215,7 +215,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with dto, serviceImpl, with hazelcast, elasticsearch and no i18n', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -241,7 +241,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with angular suffix', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -269,7 +269,7 @@ describe('JHipster generator entity for angularX', () => {
 
     describe('JHipster generator entity with all languages', () => {
         describe('no dto, no service, no pagination', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(require.resolve('../generators/entity'))
                     .inTmpDir(dir => {
@@ -295,7 +295,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with client-root-folder', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -322,7 +322,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with client-root-folder and angular-suffix', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -350,7 +350,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with client-root-folder microservice', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -376,7 +376,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with default microservice', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -404,7 +404,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with default gateway entity from microservice', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -431,7 +431,7 @@ describe('JHipster generator entity for angularX', () => {
     });
 
     describe('with default gateway entity from microservice with custom client-root-folder', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/entity'))
                 .inTmpDir(dir => {
@@ -458,7 +458,7 @@ describe('JHipster generator entity for angularX', () => {
 
     describe('with all languages and client-root-folder', () => {
         describe('no dto, no service, no pagination', () => {
-            beforeEach(done => {
+            before(done => {
                 helpers
                     .run(require.resolve('../generators/entity'))
                     .inTmpDir(dir => {

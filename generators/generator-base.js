@@ -230,7 +230,7 @@ module.exports = class extends PrivateBase {
                             // prettier-ignore
                             this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                             |                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
@@ -248,7 +248,7 @@ module.exports = class extends PrivateBase {
                         splicable: [
                             // prettier-ignore
                             this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
-                        |      <FontAwesomeIcon icon="asterisk" />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
+                        |      <FontAwesomeIcon icon="asterisk" fixedWidth />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
                         |    </DropdownItem>`)
                         ]
                     },
@@ -2161,6 +2161,7 @@ module.exports = class extends PrivateBase {
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
         context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
+        context.skipClient = context.fileData.skipClient || context.skipClient;
         this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
@@ -2346,6 +2347,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 64;
+        } else if (prodDatabaseType === 'postgresql' && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 63;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -2385,6 +2392,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 62;
+        } else if (prodDatabaseType === 'postgresql' && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 61;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -2632,6 +2645,39 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * get a hipster based on the applications name.
+     * @param {string} baseName of application
+     */
+    getHipster(baseName = this.baseName) {
+        let hash = 0;
+        let i;
+        let chr;
+
+        for (i = 0; i < baseName.length; i++) {
+            chr = baseName.charCodeAt(i);
+            hash = (hash << 5) - hash + chr; // eslint-disable-line no-bitwise
+            hash |= 0; // eslint-disable-line no-bitwise
+        }
+
+        if (hash < 0) {
+            hash *= -1;
+        }
+
+        switch (hash % 4) {
+            case 0:
+                return 'jhipster_family_member_0';
+            case 1:
+                return 'jhipster_family_member_1';
+            case 2:
+                return 'jhipster_family_member_2';
+            case 3:
+                return 'jhipster_family_member_3';
+            default:
+                return 'jhipster_family_member_0';
+        }
+    }
+
+    /**
      * ask a prompt for apps name.
      *
      * @param {object} generator - generator instance to use
@@ -2838,6 +2884,28 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Setup shared level options from context.
+     * all variables should be set to dest,
+     * all variables should be referred from context,
+     * all methods should be called on generator,
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is context
+     */
+    setupSharedOptions(generator, context = generator, dest = context) {
+        dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
+        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
+        dest.skipUserManagement =
+            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        dest.otherModules = context.configOptions.otherModules || [];
+        dest.baseName = context.configOptions.baseName;
+        dest.logo = context.configOptions.logo;
+        dest.clientPackageManager = context.configOptions.clientPackageManager;
+        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+        dest.experimental = context.configOptions.experimental || context.options.experimental;
+    }
+
+    /**
      * Setup client instance level options from context.
      * all variables should be set to dest,
      * all variables should be referred from context,
@@ -2847,53 +2915,39 @@ module.exports = class extends PrivateBase {
      * @param {any} dest - destination context to use default is context
      */
     setupClientOptions(generator, context = generator, dest = context) {
-        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
-        dest.skipUserManagement =
-            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        this.setupSharedOptions(generator, context, dest);
         dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         dest.authenticationType =
             context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
         if (dest.authenticationType === 'oauth2') {
             dest.skipUserManagement = true;
         }
-        const uaaBaseName =
-            context.options.uaaBaseName ||
-            context.configOptions.uaaBaseName ||
-            context.options['uaa-base-name'] ||
-            context.config.get('uaaBaseName');
-        if (context.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
+        const uaaBaseName = context.configOptions.uaaBaseName || context.config.get('uaaBaseName');
+        if (!dest.skipClient && dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
             generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
         }
         dest.uaaBaseName = uaaBaseName;
         dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
 
-        dest.buildTool = context.options.build;
-        dest.websocket = context.options.websocket;
-        dest.devDatabaseType = context.options.db || context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
-        dest.prodDatabaseType = context.options.db || context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
+        dest.buildTool = context.configOptions.buildTool;
+        dest.websocket = context.configOptions.websocket;
+        dest.devDatabaseType = context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
+        dest.prodDatabaseType = context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
         dest.databaseType =
-            generator.getDBTypeFromDBValue(context.options.db) || context.configOptions.databaseType || context.config.get('databaseType');
-        dest.searchEngine = context.options['search-engine'] || context.config.get('searchEngine');
-        dest.cacheProvider =
-            context.options['cache-provider'] || context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
+            generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
+            context.configOptions.databaseType ||
+            context.config.get('databaseType');
+        dest.searchEngine = context.config.get('searchEngine');
+        dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
         dest.enableHibernateCache =
-            context.options['hb-cache'] ||
             context.config.get('enableHibernateCache') ||
             (context.config.get('hibernateCache') !== undefined && context.config.get('hibernateCache') !== 'no');
-        dest.otherModules = context.configOptions.otherModules || [];
-        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
+        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
         dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
-        dest.testFrameworks = [];
+        dest.testFrameworks = context.configOptions.testFrameworks || [];
 
-        if (context.options.protractor) dest.testFrameworks.push('protractor');
-
-        dest.baseName = context.configOptions.baseName;
-        dest.logo = context.configOptions.logo;
-        dest.useYarn = context.configOptions.useYarn = !context.options.npm;
-        dest.clientPackageManager = context.configOptions.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
+        dest.useYarn = context.configOptions.useYarn;
     }
 
     /**
@@ -2906,20 +2960,9 @@ module.exports = class extends PrivateBase {
      * @param {any} dest - destination context to use default is context
      */
     setupServerOptions(generator, context = generator, dest = context) {
-        dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
-        dest.skipUserManagement =
-            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
-        dest.enableTranslation = context.options.i18n || context.configOptions.enableTranslation || context.config.get('enableTranslation');
-        dest.testFrameworks = [];
-
-        if (context.options.gatling) dest.testFrameworks.push('gatling');
-        if (context.options.cucumber) dest.testFrameworks.push('cucumber');
-
-        dest.logo = context.configOptions.logo;
-        dest.baseName = context.configOptions.baseName;
-        dest.clientPackageManager = context.configOptions.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
+        this.setupSharedOptions(generator, context, dest);
+        dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
+        dest.testFrameworks = context.configOptions.testFrameworks;
     }
 
     /**

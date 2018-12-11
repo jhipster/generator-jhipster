@@ -84,9 +84,6 @@ public class <%= entityClass %>Criteria implements Serializable {
     private <%- filterVariable.filterType %> <%= filterVariable.name %>;
 <%_ }); _%>
 
-    public <%= entityClass %>Criteria() {
-    }
-
 <%_ filterVariables.forEach((filterVariable) => { _%>
     public <%- filterVariable.filterType %> get<%= filterVariable.fieldInJavaBeanMethod %>() {
         return <%= filterVariable.name %>;

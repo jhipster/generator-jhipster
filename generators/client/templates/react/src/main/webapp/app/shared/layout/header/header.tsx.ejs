@@ -61,7 +61,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
   };
   <%_ if (enableI18nRTL) { _%>
   componentDidMount () {
-    document.querySelector('html').setAttribute('dir', isRTL(Storage.local.get('locale')) ? 'rtl' : 'ltr');
+    document.querySelector('html').setAttribute('dir', isRTL(Storage.session.get('locale')) ? 'rtl' : 'ltr');
   };
   <%_ } _%>
 

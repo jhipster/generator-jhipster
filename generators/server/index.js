@@ -19,18 +19,18 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const crypto = require('crypto');
 const os = require('os');
 const prompts = require('./prompts');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+const { getBase64Secret, getRandomHex } = require('../utils');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -44,34 +44,6 @@ module.exports = class extends BaseGenerator {
         // This adds support for a `--[no-]client-hook` flag
         this.option('client-hook', {
             desc: 'Enable Webpack hook from maven/gradle build',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--[no-]i18n` flag
-        this.option('i18n', {
-            desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
-            type: Boolean,
-            defaults: true
-        });
-
-        // This adds support for a `--protractor` flag
-        this.option('protractor', {
-            desc: 'Enable protractor tests',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--cucumber` flag
-        this.option('cucumber', {
-            desc: 'Enable cucumber tests',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--skip-user-management` flag
-        this.option('skip-user-management', {
-            desc: 'Skip the user management module during app generation',
             type: Boolean,
             defaults: false
         });
@@ -278,12 +250,12 @@ module.exports = class extends BaseGenerator {
                 if (this.baseName !== undefined && serverConfigFound) {
                     // Generate remember me key if key does not already exist in config
                     if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
-                        this.rememberMeKey = crypto.randomBytes(50).toString('hex');
+                        this.rememberMeKey = getRandomHex();
                     }
 
                     // Generate JWT secret key if key does not already exist in config
                     if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
-                        this.jwtSecretKey = Buffer.from(crypto.randomBytes(64).toString('hex')).toString('base64');
+                        this.jwtSecretKey = getBase64Secret(null, 64);
                     }
 
                     // If translation is not defined, it is enabled by default
@@ -345,17 +317,8 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.serverPort = this.serverPort;
 
                 // Make dist dir available in templates
-                if (this.buildTool === 'maven') {
-                    this.BUILD_DIR = 'target/';
-                } else {
-                    this.BUILD_DIR = 'build/';
-                }
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
                 this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
-                // Make documentation URL available in templates
-                this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-                this.DOCUMENTATION_ARCHIVE_URL = `${constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${
-                    this.jhipsterVersion
-                }`;
             }
         };
     }
@@ -458,13 +421,13 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.languages !== undefined) {
                     this.languages = this.configOptions.languages;
                 }
+                this.testFrameworks = [];
                 if (this.configOptions.testFrameworks) {
                     this.testFrameworks = this.configOptions.testFrameworks;
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
-                this.protractorTests = this.testFrameworks.includes('protractor');
                 this.gatlingTests = this.testFrameworks.includes('gatling');
                 this.cucumberTests = this.testFrameworks.includes('cucumber');
             },

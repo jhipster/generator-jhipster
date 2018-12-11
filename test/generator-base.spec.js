@@ -325,7 +325,7 @@ describe('Generator Base', () => {
                 };
                 let filesToAssert = expectedFiles.client;
                 filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
-                filesToAssert = filesToAssert.concat(expectedFiles.userManagement).sort();
+                filesToAssert = filesToAssert.concat(expectedFiles.userManagementClient).sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
                 expect(out).to.eql(filesToAssert);
             });

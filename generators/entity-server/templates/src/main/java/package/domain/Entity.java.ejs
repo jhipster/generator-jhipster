@@ -149,6 +149,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 <%- formatAsFieldJavadoc(fields[idx].javadoc) %>
     <%_ }
     let required = false;
+    let unique = false;
     const fieldValidate = fields[idx].fieldValidate;
     const fieldValidateRules = fields[idx].fieldValidateRules;
     const fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
@@ -158,8 +159,11 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
     const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
     if (fieldValidate === true) {
-        if (fieldValidate === true && fieldValidateRules.includes('required')) {
+        if (fieldValidateRules.includes('required')) {
             required = true;
+        }
+        if (fieldValidateRules.includes('unique')) {
+            unique = true;
         } _%>
     <%- include ../common/field_validators -%>
     <%_ } _%>
@@ -174,11 +178,11 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @Lob
         <%_ }
         if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else if (fieldType === 'BigDecimal') { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 10, scale = 2<% if (required) { %>, nullable = false<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 10, scale = 2<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %><% } %>)
         <%_ }
     } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -225,7 +229,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @ApiModelProperty(value = "<%- formatAsApiDescription(relationships[idx].javadoc) %>")
     <%_ }
         if (relationshipType === 'one-to-many') {
-            if(databaseType === 'sql') {
+            if (databaseType === 'sql') {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
             <%_ if (enableHibernateCache) {
@@ -241,7 +245,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } _%>
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType === 'many-to-one') {
-            if(databaseType === 'sql') {
+            if (databaseType === 'sql') {
     _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
         <%_ if (relationshipValidate) { _%>
@@ -280,7 +284,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else {
-        if(databaseType === 'sql') {
+        if (databaseType === 'sql') {
             if (ownerSide) { _%>
     @OneToOne<%_ if (relationshipRequired) { _%>(optional = false)<%_ } _%>
             <%_ if (relationshipValidate) { _%>

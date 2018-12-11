@@ -31,7 +31,8 @@ module.exports = {
         desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools'
     },
     client: {
-        desc: 'Create a new JHipster client-side application based on the selected options'
+        desc:
+            'DEPRECATED: Create a new JHipster client-side application based on the selected options -  Use jhipster --skip-server instead'
     },
     cloudfoundry: {
         desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry'
@@ -56,19 +57,23 @@ module.exports = {
     'import-jdl': {
         argument: ['jdlFiles...'],
         cliOnly: true,
-        desc: 'Create entities from the JDL file passed in argument',
+        desc: `Create entities from the JDL file passed in argument.
+  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
         help: `
     --skip-install        # Do not automatically install dependencies                              Default: false
+    --interactive         # Run generation in series so that questions can be interacted with      Default: false
     --db                  # Provide DB option for the application when using skip-server flag
     --json-only           # Generate only the JSON files and skip entity regeneration              Default: false
     --ignore-application  # Ignores application generation                                         Default: false
-    --skip-ui-grouping    # Disable the UI grouping behaviour for entity client side code          Default: false
+    --ignore-deployments  # Ignores deployments generation                                         Default: false
+    --skip-ui-grouping    # Disable the UI grouping behavior for entity client side code           Default: false
 
 Arguments:
     jdlFiles  # The JDL file names  Type: String[]  Required: true
 
 Example:
     jhipster import-jdl myfile.jdl
+    jhipster import-jdl myfile.jdl --interactive
     jhipster import-jdl myfile1.jdl myfile2.jdl
         `
     },
@@ -95,7 +100,7 @@ Example:
         desc: 'Deploy the current application to Rancher'
     },
     server: {
-        desc: 'Create a new JHipster server-side application'
+        desc: 'DEPRECATED: Create a new JHipster server-side application - Use jhipster --skip-client instead'
     },
     'spring-service': {
         alias: 'service',

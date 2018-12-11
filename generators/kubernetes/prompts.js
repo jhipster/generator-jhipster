@@ -28,6 +28,7 @@ module.exports = {
 };
 
 function askForKubernetesNamespace() {
+    if (this.regenerate) return;
     const done = this.async();
 
     const prompts = [
@@ -46,6 +47,7 @@ function askForKubernetesNamespace() {
 }
 
 function askForKubernetesServiceType() {
+    if (this.regenerate) return;
     const done = this.async();
 
     const prompts = [
@@ -78,6 +80,7 @@ function askForKubernetesServiceType() {
 }
 
 function askForIngressDomain() {
+    if (this.regenerate) return;
     const done = this.async();
     const kubernetesServiceType = this.kubernetesServiceType;
 
@@ -113,7 +116,8 @@ function askForIngressDomain() {
 }
 
 function askForIstioSupport() {
-    if (this.composeApplicationType === 'monolith') {
+    if (this.regenerate) return;
+    if (this.deploymentApplicationType === 'monolith') {
         this.istio = 'no';
         return;
     }
@@ -149,6 +153,7 @@ function askForIstioSupport() {
 }
 
 function askForIstioRouteFiles() {
+    if (this.regenerate) return;
     if (this.istio === 'no') {
         this.istioRoute = false;
         return;

@@ -22,10 +22,9 @@ RUN \
     g++ \
     libpng-dev \
     build-essential && \
-
   # install node.js
-  curl -sL https://deb.nodesource.com/setup_8.x | bash && \
-  apt-get install -y nodejs && \
+  wget https://nodejs.org/dist/v10.14.1/node-v10.14.1-linux-x64.tar.gz -O /tmp/node.tar.gz && \
+  tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \
   # install yarn
@@ -54,7 +53,7 @@ RUN \
   # fix jhipster user permissions
   chown -R jhipster:jhipster \
     /home/jhipster \
-    /usr/lib/node_modules && \
+    /usr/local/lib/node_modules && \
   # cleanup
   rm -rf \
     /home/jhipster/.cache/ \

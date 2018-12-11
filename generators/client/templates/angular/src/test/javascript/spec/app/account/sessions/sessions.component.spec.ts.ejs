@@ -23,8 +23,8 @@ import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { Session } from 'app/account/sessions/session.model';
 import { SessionsComponent } from 'app/account/sessions/sessions.component';
 import { SessionsService } from 'app/account/sessions/sessions.service';
-import { MockPrincipal } from '../../../helpers/mock-principal.service';
-import { Principal } from 'app/core/auth/principal.service';
+import { MockAccountService } from '../../../helpers/mock-account.service';
+import { AccountService } from 'app/core/auth/account.service';
 
 describe('Component Tests', () => {
 
@@ -47,9 +47,9 @@ describe('Component Tests', () => {
         });
 
         it('should define its initial state',
-            inject([Principal, SessionsService],
-                fakeAsync((mockPrincipal: MockPrincipal, service: SessionsService) => {
-                    mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
+            inject([AccountService, SessionsService],
+                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
+                    mockAccountService.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
                     spyOn(service, 'findAll').and.returnValue(of(sessions));
@@ -57,7 +57,7 @@ describe('Component Tests', () => {
                     comp.ngOnInit();
                     tick();
 
-                    expect(mockPrincipal.identitySpy).toHaveBeenCalled();
+                    expect(mockAccountService.identitySpy).toHaveBeenCalled();
                     expect(service.findAll).toHaveBeenCalled();
                     expect(comp.success).toBeUndefined();
                     expect(comp.error).toBeUndefined();
@@ -70,9 +70,9 @@ describe('Component Tests', () => {
         );
 
         it('should call delete on Sessions to invalidate a session',
-            inject([Principal, SessionsService],
-                fakeAsync((mockPrincipal: MockPrincipal, service: SessionsService) => {
-                    mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
+            inject([AccountService, SessionsService],
+                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
+                    mockAccountService.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
                     spyOn(service, 'findAll').and.returnValue(of(sessions));
@@ -88,9 +88,9 @@ describe('Component Tests', () => {
         );
 
         it('should call delete on Sessions and notify of error',
-            inject([Principal, SessionsService],
-                fakeAsync((mockPrincipal: MockPrincipal, service: SessionsService) => {
-                    mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
+            inject([AccountService, SessionsService],
+                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
+                    mockAccountService.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
                     spyOn(service, 'findAll').and.returnValue(of(sessions));
@@ -109,9 +109,9 @@ describe('Component Tests', () => {
         );
 
         it('should call notify of success upon session invalidation',
-            inject([Principal, SessionsService],
-                fakeAsync((mockPrincipal: MockPrincipal, service: SessionsService) => {
-                    mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
+            inject([AccountService, SessionsService],
+                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
+                    mockAccountService.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
                     spyOn(service, 'findAll').and.returnValue(of(sessions));

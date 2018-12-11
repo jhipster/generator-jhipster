@@ -1,10 +1,35 @@
-/* global describe, it */
-
 const expect = require('chai').expect;
 const cliUtil = require('../../cli/utils');
 const packageJson = require('../../package.json');
 
 describe('jhipster cli utils test', () => {
+    describe('toString', () => {
+        describe('should convert primitives to string', () => {
+            it('returns a string', () => {
+                expect(cliUtil.toString('test')).to.equal('test');
+                expect(cliUtil.toString(10)).to.equal('10');
+                expect(cliUtil.toString(true)).to.equal('true');
+            });
+        });
+        describe('should convert array to string', () => {
+            it('returns a string', () => {
+                expect(cliUtil.toString(['test', 'foo'])).to.equal('test, foo');
+                expect(cliUtil.toString([10, true, 'test'])).to.equal('10, true, test');
+            });
+        });
+        describe('should convert simple objects to string', () => {
+            it('returns a string', () => {
+                expect(cliUtil.toString({ string: 'test', bool: true, int: 10 })).to.equal('string: test, bool: true, int: 10');
+            });
+        });
+        describe('should convert complex objects to string', () => {
+            it('returns a string', () => {
+                expect(cliUtil.toString({ string: 'test', bool: true, int: 10, array: [1, 2], obj: { test: 1 } })).to.equal(
+                    'string: test, bool: true, int: 10, array: Object, obj: Object'
+                );
+            });
+        });
+    });
     describe('getArgs', () => {
         describe('when called without argument', () => {
             it('returns an empty string', () => {
@@ -40,6 +65,49 @@ describe('jhipster cli utils test', () => {
             const argument = [['bar'], { foo: 'foo' }];
             it('returns an array with valid strings', () => {
                 expect(cliUtil.getOptionsFromArgs(argument)).to.eql(['bar']);
+            });
+        });
+    });
+    describe('getOptionAsArgs', () => {
+        describe('when called with empty args', () => {
+            it('returns a default string array', () => {
+                expect(cliUtil.getOptionAsArgs({})).to.eql(['--from-cli']);
+            });
+        });
+        describe('when called with valid arguments', () => {
+            const argument = { foo: true, bar: '123' };
+            it('returns an array of truthy string args', () => {
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--from-cli']);
+            });
+        });
+        describe('when called with valid argument having false value', () => {
+            const argument = { foo: true, bar: '123', insight: false };
+            it('returns an array of truthy string args', () => {
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--no-insight', '--from-cli']);
+            });
+        });
+        describe('when called with valid arguments and withEntities', () => {
+            const argument = { foo: true, bar: '123' };
+            it('returns an array of string args', () => {
+                expect(cliUtil.getOptionAsArgs(argument, true)).to.eql(['--foo', '--bar', '123', '--with-entities', '--from-cli']);
+            });
+        });
+        describe('when called with valid arguments and force', () => {
+            const argument = { foo: true, bar: '123' };
+            it('returns an array of string args', () => {
+                expect(cliUtil.getOptionAsArgs(argument, false, true)).to.eql(['--foo', '--bar', '123', '--force', '--from-cli']);
+            });
+        });
+        describe('when called with valid arguments with duplicates in different case', () => {
+            const argument = { fooBar: true, bar: '123', 'foo-bar': true, foo_bar: true };
+            it('returns an array of string args', () => {
+                expect(cliUtil.getOptionAsArgs(argument, false, true)).to.eql(['--foo-bar', '--bar', '123', '--force', '--from-cli']);
+            });
+        });
+        describe('when called with valid arguments with single char keys', () => {
+            const argument = { foo: true, bar: '123', d: true };
+            it('returns an array of string args', () => {
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '-d', '--from-cli']);
             });
         });
     });

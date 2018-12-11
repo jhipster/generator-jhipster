@@ -12,7 +12,7 @@
                 "authentication": "<strong>Autentificarea nu a reușit!</strong>. Va rugăm să vă verificați credențialele și să încercați din nou."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "V-ați uitat parola?"
         }
     }

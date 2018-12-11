@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
@@ -29,7 +29,7 @@ const statistics = require('../statistics');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -40,87 +40,15 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
-        // This adds support for a `--protractor` flag
-        this.option('protractor', {
-            desc: 'Enable protractor tests',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--uaa-base-name` flag
-        this.option('uaa-base-name', {
-            desc: 'Provide the name of UAA server, when using --auth uaa',
-            type: String
-        });
-
-        // This adds support for a `--build` flag
-        this.option('build', {
-            desc: 'Provide build tool for the application',
-            type: String
-        });
-
-        // This adds support for a `--websocket` flag
-        this.option('websocket', {
-            desc: 'Provide websocket option for the application',
-            type: String
-        });
-
         // This adds support for a `--auth` flag
         this.option('auth', {
             desc: 'Provide authentication type for the application',
             type: String
         });
 
-        // This adds support for a `--db` flag
-        this.option('db', {
-            desc: 'Provide DB name for the application',
-            type: String
-        });
-
-        // This adds support for a `--search-engine` flag
-        this.option('search-engine', {
-            desc: 'Provide development DB option for the application',
-            type: String
-        });
-
-        // This adds support for a `--cache-provider` flag
-        this.option('cache-provider', {
-            desc: 'Provide a cache provider option for the application',
-            type: String,
-            defaults: 'no'
-        });
-
-        // This adds support for a `--hb-cache` flag
-        this.option('hb-cache', {
-            desc: 'Provide hibernate cache option for the application',
-            type: Boolean,
-            default: false
-        });
-
-        // This adds support for a `--jhi-prefix` flag
-        this.option('jhi-prefix', {
-            desc: 'Add prefix before services, controllers and states name',
-            type: String,
-            defaults: 'jhi'
-        });
-
-        // This adds support for a `--skip-user-management` flag
-        this.option('skip-user-management', {
-            desc: 'Skip the user management module during app generation',
-            type: Boolean,
-            defaults: false
-        });
-
         // This adds support for a `--skip-commit-hook` flag
         this.option('skip-commit-hook', {
             desc: 'Skip adding husky commit hooks',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--yarn` flag
-        this.option('yarn', {
-            desc: 'Use yarn instead of npm',
             type: Boolean,
             defaults: false
         });
@@ -296,6 +224,7 @@ module.exports = class extends BaseGenerator {
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.angularAppName = this.getAngularAppName();
                 this.angularXAppName = this.getAngularXAppName();
+                this.hipster = this.getHipster(this.baseName);
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
@@ -403,11 +332,7 @@ module.exports = class extends BaseGenerator {
                 }
 
                 // Make dist dir available in templates
-                if (this.configOptions.buildTool === 'maven') {
-                    this.BUILD_DIR = 'target/';
-                } else {
-                    this.BUILD_DIR = 'build/';
-                }
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.configOptions.buildTool);
 
                 this.styleSheetExt = this.useSass ? 'scss' : 'css';
                 this.pkType = this.getPkType(this.databaseType);

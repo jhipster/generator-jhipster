@@ -11,6 +11,7 @@ module.exports = {
     getFilesForOptions,
     shouldBeV3DockerfileCompatible,
     getJHipsterCli,
+    createBlueprintMockForSubgen,
     testInTempDir
 };
 
@@ -59,4 +60,45 @@ function testInTempDir(cb) {
     process.chdir(cwd);
     /* eslint-disable-next-line no-console */
     console.log(`current cwd: ${process.cwd()}`);
+}
+
+function createBlueprintMockForSubgen(parentSubGenerator) {
+    return class extends parentSubGenerator {
+        constructor(args, opts) {
+            super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+            const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
+            if (!jhContext) {
+                this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprint ...')}");
+            }
+            this.configOptions = jhContext.configOptions || {};
+        }
+
+        get initializing() {
+            return super._initializing();
+        }
+
+        get prompting() {
+            return super._prompting();
+        }
+
+        get configuring() {
+            return super._configuring();
+        }
+
+        get default() {
+            return super._default();
+        }
+
+        get writing() {
+            return super._writing();
+        }
+
+        get install() {
+            return super._install();
+        }
+
+        get end() {
+            return super._end();
+        }
+    };
 }
