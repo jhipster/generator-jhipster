@@ -44,6 +44,7 @@ const JDLField = require('../../../lib/core/jdl_field');
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLValidation = require('../../../lib/core/jdl_validation');
+const logger = require('../../../lib/utils/objects/logger');
 
 describe('BusinessErrorChecker', () => {
   describe('#checkForErrors', () => {
@@ -260,6 +261,7 @@ describe('BusinessErrorChecker', () => {
     });
     context('when not having applications but only entities', () => {
       context('with an entity having a reserved table name', () => {
+        let loggerStub;
         before(() => {
           jdlObject.addEntity(
             new JDLEntity({
@@ -270,17 +272,24 @@ describe('BusinessErrorChecker', () => {
           checker = new BusinessErrorChecker(jdlObject, {
             databaseType: DatabaseTypes.SQL
           });
+          loggerStub = sinon.spy(logger, 'warn');
+          checker.checkForEntityErrors();
+        });
+        after(() => {
+          loggerStub.restore();
         });
 
-        it('fails', () => {
-          expect(() => {
-            checker.checkForEntityErrors();
-          }).to.throw("The name 'continue' is a reserved keyword and can not be used as an entity table name.");
+        it('warns', () => {
+          expect(loggerStub).to.have.been.calledOnce;
+          expect(loggerStub.getCall(0).args[0]).to.equal(
+            "The table name 'continue' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'."
+          );
         });
       });
     });
     context('when having entities in applications', () => {
       context('with an entity having a reserved table name', () => {
+        let loggerStub;
         before(() => {
           jdlObject.addApplication(
             new JDLMonolithApplication({
@@ -297,14 +306,18 @@ describe('BusinessErrorChecker', () => {
             })
           );
           checker = new BusinessErrorChecker(jdlObject);
+          loggerStub = sinon.spy(logger, 'warn');
+          checker.checkForEntityErrors();
+        });
+        after(() => {
+          loggerStub.restore();
         });
 
-        it('fails', () => {
-          expect(() => {
-            checker.checkForEntityErrors();
-          }).to.throw(
-            "The name 'continue' is a reserved keyword and can not be used as an entity table name for " +
-              'at least one of these applications: jhipster.'
+        it('warns', () => {
+          expect(loggerStub).to.have.been.calledOnce;
+          expect(loggerStub.getCall(0).args[0]).to.equal(
+            "The table name 'continue' is a reserved keyword for at least one of these applications: jhipster, " +
+              "so it will be prefixed with the value of 'jhiPrefix'."
           );
         });
       });
@@ -344,18 +357,23 @@ describe('BusinessErrorChecker', () => {
       });
     });
     context('if the field name is reserved', () => {
+      let loggerStub;
       before(() => {
         jdlObject.getEntity('Valid').fields.validField.name = 'catch';
         checker = new BusinessErrorChecker(jdlObject);
+        loggerStub = sinon.spy(logger, 'warn');
+        checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
       });
       after(() => {
         jdlObject.getEntity('Valid').fields.validField.name = 'validField';
+        loggerStub.restore();
       });
 
-      it('fails', () => {
-        expect(() => {
-          checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
-        }).to.throw("The name 'catch' is a reserved keyword and can not be used as an entity field name.");
+      it('warns', () => {
+        expect(loggerStub).to.have.been.calledOnce;
+        expect(loggerStub.getCall(0).args[0]).to.equal(
+          "The name 'catch' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'."
+        );
       });
     });
     context('when passing gateway as application type', () => {
