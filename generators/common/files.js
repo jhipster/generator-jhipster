@@ -25,6 +25,8 @@ const commonFiles = {
     global: [
         {
             templates: [
+                '.prettierrc', // this needs to be the first file for prettier transform to work
+                '.prettierignore',
                 'README.md',
                 {
                     file: 'gitignore',
