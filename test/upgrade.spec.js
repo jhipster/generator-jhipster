@@ -82,6 +82,7 @@ describe('JHipster upgrade generator', function() {
                 .run(path.join(__dirname, '../generators/app'))
                 .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true, blueprint: blueprintName })
                 .inTmpDir(dir => {
+                    /* eslint-disable-next-line no-console */
                     console.log(`Generating JHipster application in directory: ${dir}`);
                     // Save directory, in order to run the upgrade generator in the same directory
                     workingDirectory = dir;
@@ -121,6 +122,7 @@ describe('JHipster upgrade generator', function() {
                         .run(path.join(__dirname, '../generators/upgrade'))
                         .withOptions({ 'from-cli': true, force: true, silent: false })
                         .inTmpDir(() => {
+                            /* eslint-disable-next-line no-console */
                             console.log('Upgrading the JHipster application');
                             process.chdir(workingDirectory);
                         })
