@@ -20,11 +20,13 @@
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 
 import * as config from '@/shared/config';
 import <%= entityAngularName %>DetailComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.vue';
+import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-details.component';
+import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -36,36 +38,36 @@ localVue.component('font-awesome-icon', {});
 localVue.component('router-link', {});
 
 jest.mock('axios', () => ({
-    get: jest.fn()
+  get: jest.fn()
 }));
 
 describe('Component Tests', () => {
 
-    describe('<%= entityAngularName %> Management Detail Component', () => {
-        let wrapper;
-        let comp;
+  describe('<%= entityAngularName %> Management Detail Component', () => {
+    let wrapper: Wrapper<<%= entityAngularName %>Class>;
+    let comp: <%= entityAngularName %>Class;
 
-        beforeEach(() => {
-            mockedAxios.get.mockReset();
-            mockedAxios.get.mockReturnValue(Promise.resolve({}));
+    beforeEach(() => {
+      mockedAxios.get.mockReset();
+      mockedAxios.get.mockReturnValue(Promise.resolve({}));
 
-            wrapper = shallowMount(<%= entityAngularName %>DetailComponent, { store, i18n, localVue });
-            comp = wrapper.vm;
-        });
-
-        describe('OnInit', async () => {
-            it('Should call load all on init', async () => {
-                // GIVEN
-                mockedAxios.get.mockReturnValue(Promise.resolve({data: {id: <%- tsKeyId %>}}));
-
-                // WHEN
-                comp.retrieve<%= entityAngularName %>(<%- tsKeyId %>);
-                await comp.$nextTick();
-
-                // THEN
-                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
-            });
-        });
+      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>DetailComponent, { store, i18n, localVue, provide: { <%= entityInstance %>Service: () => new <%= entityAngularName %>Service() } });
+      comp = wrapper.vm;
     });
+
+    describe('OnInit', async () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        mockedAxios.get.mockReturnValue(Promise.resolve({data: {id: <%- tsKeyId %>}}));
+
+        // WHEN
+        comp.retrieve<%= entityAngularName %>(<%- tsKeyId %>);
+        await comp.$nextTick();
+
+        // THEN
+        expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+      });
+    });
+  });
 
 });

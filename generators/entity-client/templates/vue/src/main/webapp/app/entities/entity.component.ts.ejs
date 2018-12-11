@@ -1,118 +1,143 @@
-import Principal from '../../<%_ if (clientRootFolder) { _%>../<%_ } _%>components/account/Principal.vue';
-import <%= entityAngularName %>Service from './<%= entityFileName %>.service.vue';
+import { mixins } from 'vue-class-component';
+import { Component, Inject } from 'vue-property-decorator';
+import Principal from '@/components/account/Principal.vue';
+import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 <% if (fieldsContainBlob) { %>
-    import JhiDataUtils from '../../<% if (clientRootFolder) { %>../<% } %>shared/data/DataUtilsService.vue';
+import JhiDataUtils from '@/shared/data/DataUtilsService.vue';
 <% } %>
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
-const <%= entityAngularName %> = {
-    mixins: [Principal, <%= entityAngularName %>Service<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %>],
-    data() {
-      return {
-          <%_ if (searchEngine === 'elasticsearch') { _%>
-          currentSearch: '',
-          <%_ } _%>
-          removeId: null,
-        <%_ if (pagination !== 'no') { _%>
-          itemsPerPage: 20,
-          queryCount: null,
-          page: 1,
-          previousPage: null,
-          propOrder: 'id',
-        <%_ if (pagination === 'infinite-scroll') { _%>
-          reverse: true,
-        <%_ } else { _%>
-          reverse: false,
-        <%_ } _%>
-          totalItems: 0,
-        <%_ } _%>
-          <%= entityInstancePlural %>: []
-      }
-    },
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            vm.retrieveAll<%= entityAngularName %>s();
-        })
-    },
-    methods: {
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        search(query) {
-            if (!query) {
-              return this.clear();
-            }
-            this.currentSearch = query;
-            this.retrieveAll<%= entityAngularName %>s();
-        },
-        <%_ } _%>
-        clear() {
-            <%_ if (searchEngine === 'elasticsearch') { _%>
-            this.currentSearch = '';
-            <%_ } _%>
-            this.page = 1;
-            this.retrieveAll<%= entityAngularName %>s();
-        },
-        retrieveAll<%= entityAngularName %>s() {
-            <% if (pagination !== 'no') { %>
-            const paginationQuery = {
-                page: this.page - 1,
-                size: this.itemsPerPage,
-                sort: this.sort()
-            };<% } %>
-            <%_ if (searchEngine === 'elasticsearch') { _%>
-            if (this.currentSearch) {
-                this.search<%= entityAngularName %>s(this.currentSearch<%_ if (pagination !== 'no') { _%>, paginationQuery<%_ } _%>).then((res) => {
-                    this.<%= entityInstancePlural %> = res.data;
-                    <%_ if (pagination !== 'no') { _%>
-                    this.totalItems = Number(res.headers['x-total-count']);
-                    this.queryCount = this.totalItems;
-                    <%_ } _%>
-                });
-                return;
-            }
-            <%_ } _%>
-            this.retrieve<%= entityAngularName %>s(<%_ if (pagination !== 'no') { _%>paginationQuery<%_ } _%>).then((res) => {
-                this.<%= entityInstancePlural %> = res.data;
-                <%_ if (pagination !== 'no') { _%>
-                this.totalItems = Number(res.headers['x-total-count']);
-                this.queryCount = this.totalItems;
-                <%_ } _%>
-            });
-        },
-        prepareRemove(instance) {
-            this.removeId = instance.id;
-        },
-        remove<%= entityAngularName %>() {
-            this.delete<%= entityAngularName %>(this.removeId).then(() => {
-                this.removeId = null;
-                this.retrieveAll<%= entityAngularName %>s();
-                this.closeDialog();
-            });
-        },
-        <%_ if (pagination !== 'no') { _%>
-        sort() {
-            const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
-            if (this.propOrder !== 'id') {
-                result.push('id');
-            }
-            return result;
-        },
-        loadPage(page: number) {
-            if (page !== this.previousPage) {
-                this.previousPage = page;
-                this.transition();
-            }
-        },
-        transition() {
-            this.retrieveAll<%= entityAngularName %>s();
-        },
-        changeOrder(propOrder) {
-            this.propOrder = propOrder;
-            this.reverse = !this.reverse;
-        },
-        <%_ } _%>
-        closeDialog() {
-            this.$refs.removeEntity.hide();
-        }
+@Component
+export default class <%= entityAngularName %> extends mixins(Principal<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %>) {
+  @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  public currentSearch: string;
+  <%_ } _%>
+  private removeId: string;
+  <%_ if (pagination !== 'no') { _%>
+  public itemsPerPage: number;
+  public queryCount: number;
+  public page: number;
+  public previousPage: number;
+  public propOrder: string;
+  public reverse: boolean;
+  public totalItems: number;
+  <%_ } _%>
+  public <%= entityInstancePlural %>: I<%= entityAngularName %>[];
+
+  constructor() {
+    super();
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    this.currentSearch = '';
+    <%_ } _%>
+    this.<%= entityInstancePlural %> = [];
+    <%_ if (pagination !== 'no') { _%>
+    this.itemsPerPage = 20;
+    this.queryCount = null;
+    this.page = 1;
+    this.previousPage = null;
+    this.propOrder = 'id';
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    this.reverse = true;
+    <%_ } else { _%>
+    this.reverse = false;
+    <%_ } _%>
+    this.totalItems = 0;
+    <%_ } _%>
+    this.removeId = null;
+  }
+
+  public mounted(): void {
+    this.retrieveAll<%= entityAngularName %>s();
+  }
+
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  public search(query) : void {
+    if (!query) {
+      return this.clear();
     }
-};
+    this.currentSearch = query;
+    this.retrieveAll<%= entityAngularName %>s();
+  }
 
-export default <%= entityAngularName %>;
+  <%_ } _%>
+  public clear() : void {
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    this.currentSearch = '';
+    <%_ } _%>
+    <%_ if (pagination !== 'no') { _%>
+    this.page = 1;
+    <%_ } _%>
+    this.retrieveAll<%= entityAngularName %>s();
+  }
+
+  public retrieveAll<%= entityAngularName %>s() :void {
+    <% if (pagination !== 'no') { %>
+    const paginationQuery = {
+      page: this.page - 1,
+      size: this.itemsPerPage,
+      sort: this.sort()
+    };<% } %>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    if (this.currentSearch) {
+      this.<%= entityInstance %>Service().search(this.currentSearch<%_ if (pagination !== 'no') { _%>, paginationQuery<%_ } _%>).then((res) => {
+        this.<%= entityInstancePlural %> = <%_ if (pagination !== 'no') { _%>res.data<%_ } else { _%>res<%_ } _%>;
+        <%_ if (pagination !== 'no') { _%>
+        this.totalItems = Number(res.headers['x-total-count']);
+        this.queryCount = this.totalItems;
+        <%_ } _%>
+      });
+      return;
+    }
+    <%_ } _%>
+    this.<%= entityInstance %>Service().retrieve(<%_ if (pagination !== 'no') { _%>paginationQuery<%_ } _%>).then((res) => {
+      this.<%= entityInstancePlural %> = res.data;
+      <%_ if (pagination !== 'no') { _%>
+      this.totalItems = Number(res.headers['x-total-count']);
+      this.queryCount = this.totalItems;
+      <%_ } _%>
+    });
+  }
+
+  public prepareRemove(instance) : void {
+    this.removeId = instance.id;
+  }
+
+  public remove<%= entityAngularName %>() : void {
+    this.<%= entityInstance %>Service().delete(this.removeId).then(() => {
+      this.removeId = null;
+      this.retrieveAll<%= entityAngularName %>s();
+      this.closeDialog();
+    });
+  }
+
+  <%_ if (pagination !== 'no') { _%>
+  public sort() : Array<any> {
+    const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
+    if (this.propOrder !== 'id') {
+      result.push('id');
+    }
+    return result;
+  }
+
+  public loadPage(page: number) : void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.transition();
+    }
+  }
+
+  public transition() : void {
+    this.retrieveAll<%= entityAngularName %>s();
+  }
+
+  public changeOrder(propOrder) : void {
+    this.propOrder = propOrder;
+    this.reverse = !this.reverse;
+  }
+
+  <%_ } _%>
+  public closeDialog() : void {
+    (<any>this.$refs.removeEntity).hide();
+  }
+}

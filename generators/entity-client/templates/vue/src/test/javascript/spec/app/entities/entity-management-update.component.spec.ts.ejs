@@ -20,12 +20,14 @@
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import Router from 'vue-router';
 
 import * as config from '@/shared/config';
 import <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
+import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
+import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -44,47 +46,49 @@ jest.mock('axios', () => ({
 
 describe('Component Tests', () => {
 
-    describe('<%= entityAngularName %> Management Update Component', () => {
-        let wrapper;
-        let comp;
+  describe('<%= entityAngularName %> Management Update Component', () => {
+    let wrapper: Wrapper<<%= entityAngularName %>Class>;
+    let comp: <%= entityAngularName %>Class;
 
-        beforeEach(() => {
-            mockedAxios.post.mockReturnValue(Promise.resolve());
-            mockedAxios.put.mockReturnValue(Promise.resolve());
+    beforeEach(() => {
+      mockedAxios.post.mockReturnValue(Promise.resolve());
+      mockedAxios.put.mockReturnValue(Promise.resolve());
 
-            wrapper = shallowMount(<%= entityAngularName %>UpdateComponent, { store, i18n, localVue, router });
-            comp = wrapper.vm;
-        });
-
-        describe('save', () => {
-            it('Should call update service on save for existing entity', async () => {
-                // GIVEN
-                const entity = {id:<%- tsKeyId %>};
-                comp.<%= entityInstance %> = entity;
-
-                // WHEN
-                comp.save();
-                await comp.$nextTick();
-
-                // THEN
-                expect(mockedAxios.put).toHaveBeenCalledWith('api/<%= entityApiUrl %>', entity);
-                expect(comp.isSaving).toEqual(false);
-            });
-
-            it('Should call create service on save for new entity', async () => {
-                // GIVEN
-                const entity = {};
-                comp.<%= entityInstance %> = entity;
-
-                // WHEN
-                comp.save();
-                await comp.$nextTick();
-
-                // THEN
-                expect(mockedAxios.post).toHaveBeenCalledWith('api/<%= entityApiUrl %>', entity);
-                expect(comp.isSaving).toEqual(false);
-            });
-        });
+      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>UpdateComponent, { store, i18n, localVue, router, provide: { <%= entityInstance %>Service: () => new <%= entityAngularName %>Service() } });
+      comp = wrapper.vm;
     });
+
+    describe('save', () => {
+      it('Should call update service on save for existing entity', async () => {
+        // GIVEN
+        const entity = {id:<%- tsKeyId %>};
+        comp.<%= entityInstance %> = entity;
+        mockedAxios.put.mockReturnValue(Promise.resolve({data: {}}));
+
+        // WHEN
+        comp.save();
+        await comp.$nextTick();
+
+        // THEN
+        expect(mockedAxios.put).toHaveBeenCalledWith('api/<%= entityApiUrl %>', entity);
+        expect(comp.isSaving).toEqual(false);
+      });
+
+      it('Should call create service on save for new entity', async () => {
+        // GIVEN
+        const entity = {};
+        comp.<%= entityInstance %> = entity;
+        mockedAxios.post.mockReturnValue(Promise.resolve({data: {}}));
+
+        // WHEN
+        comp.save();
+        await comp.$nextTick();
+
+        // THEN
+        expect(mockedAxios.post).toHaveBeenCalledWith('api/<%= entityApiUrl %>', entity);
+        expect(comp.isSaving).toEqual(false);
+      });
+    });
+  });
 
 });

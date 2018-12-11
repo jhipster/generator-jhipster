@@ -60,8 +60,13 @@ const vueFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`
                 },
                 {
-                    file: 'entities/entity.service.vue',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.vue`
+                    file: 'entities/entity.service.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.ts`
+                },
+                {
+                    file: 'entities/entity.model.ts',
+                    // using entityModelFileName so that there is no conflict when generating microservice entities
+                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
                 }
             ]
         }
@@ -127,6 +132,10 @@ function writeFiles() {
     // Add entity paths to routing system
     utils.addEntityToRouterImport(this, className, this.entityFileName, this.entityFolderName);
     utils.addEntityToRouter(this, entityName, this.entityFileName, className);
+
+    // Add entity services to main
+    utils.addEntityServiceToMainImport(this, className, this.entityFileName, this.entityFolderName);
+    utils.addEntityServiceToMain(this, entityName, className);
 
     if (!this.enableTranslation) {
         clientUtils.replaceTranslation(this, [

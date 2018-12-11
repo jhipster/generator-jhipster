@@ -1,6 +1,6 @@
-import Component, { mixins } from 'vue-class-component';
-
-import UserManagementService from './UserManagementService';
+import Vue from 'vue';
+import { Component, Inject } from 'vue-property-decorator';
+import UserManagementService from './user-management.service';
 
 const beforeRouteEnter = (to, from, next) => {
   next(vm => {
@@ -13,8 +13,8 @@ const beforeRouteEnter = (to, from, next) => {
 @Component({
   beforeRouteEnter
 })
-export default class <%=jhiPrefixCapitalized%>UserManagementView extends mixins(UserManagementService) {
-
+export default class <%=jhiPrefixCapitalized%>UserManagementView extends Vue {
+  @Inject('userService') private userManagementService: () => UserManagementService;
   public user: any;
 
   constructor() {
@@ -23,7 +23,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementView extends mixins(
   }
 
   public init(userId: number): void {
-    this.get(userId).then(res => {
+    this.userManagementService().get(userId).then(res => {
       this.user = res.data;
     });
   }

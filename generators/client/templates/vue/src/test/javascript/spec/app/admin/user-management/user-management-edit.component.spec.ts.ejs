@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as config from '@/shared/config';
 import UserManagementEdit from '@/components/admin/user-management/user-management-edit.vue';
 import UserManagementEditClass from '@/components/admin/user-management/user-management-edit.component';
+import UserManagementService from '@/components/admin/user-management/user-management.service';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -25,7 +26,7 @@ describe('UserManagementEdit Component', () => {
   let userManagementEdit: UserManagementEditClass;
 
   beforeEach(() => {
-    wrapper = shallowMount<UserManagementEditClass>(UserManagementEdit, { store, i18n, localVue });
+    wrapper = shallowMount<UserManagementEditClass>(UserManagementEdit, { store, i18n, localVue, provide: { userService: () => new UserManagementService() } });
     userManagementEdit = wrapper.vm;
   });
 

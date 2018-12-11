@@ -116,6 +116,7 @@ const vueFiles = {
                 'components/ribbon/ribbon.vue',
                 'components/ribbon/ribbon.component.ts',
                 'shared/date/filters.ts',
+                'shared/sort/sorts.ts',
                 'shared/data/DataUtilsService.vue',
                 'shared/jhi-item-count.vue'
             ]
@@ -196,7 +197,7 @@ const vueFiles = {
                 'components/admin/user-management/user-management-view.component.ts',
                 'components/admin/user-management/user-management-edit.vue',
                 'components/admin/user-management/user-management-edit.component.ts',
-                'components/admin/user-management/UserManagementService.ts'
+                'components/admin/user-management/user-management.service.ts'
             ]
         },
         {
@@ -282,8 +283,6 @@ function writeFiles() {
     mkdirp(MAIN_SRC_DIR);
     // write React files
     this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
-    const entityFolderName = this.getEntityFolderName(this.clientRootFolder, 'user');
-    this.copy('vue/src/main/webapp/app/entities/UserService.vue', `src/main/webapp/app/entities/${entityFolderName}/user.service.vue`);
 
     utils.addLanguagesToApplication(this);
     utils.addLanguagesToWebPackConfiguration(this);

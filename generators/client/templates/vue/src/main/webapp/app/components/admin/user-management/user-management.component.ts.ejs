@@ -1,11 +1,11 @@
-import Component, { mixins } from 'vue-class-component';
-
-import UserManagementService from './UserManagementService';
+import { mixins } from 'vue-class-component';
+import { Component, Inject } from 'vue-property-decorator';
+import UserManagementService from './user-management.service';
 import Principal from '../../account/Principal.vue';
 
 @Component
-export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mixins(UserManagementService, Principal) {
-
+export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mixins(Principal) {
+  @Inject('userService') private userManagementService: () => UserManagementService;
   public error: string;
   public success: string;
   public users: any[];
@@ -39,7 +39,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
 
   public setActive(user, isActivated): void {
     user.activated = isActivated;
-    this.update(user)
+    this.userManagementService().update(user)
       .then(() => {
         this.error = null;
         this.success = 'OK';
@@ -53,7 +53,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
   }
 
   public loadAll(): void {
-    this.query(<% if (databaseType !== 'cassandra') { %>{
+    this.userManagementService().retrieve(<% if (databaseType !== 'cassandra') { %>{
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort()}<% } %>).then(res => {
@@ -92,7 +92,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
   <%_ } _%>
 
   public deleteUser(): void {
-    this.remove(this.removeId).then(() => {
+    this.userManagementService().remove(this.removeId).then(() => {
       this.removeId = null;
       this.loadAll();
     });
