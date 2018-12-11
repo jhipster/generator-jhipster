@@ -1677,7 +1677,7 @@ const serverFiles = {
                 },
                 {
                     file: 'package/service/mapper/UserMapperTest.java',
-                        renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
+                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
                 },
                 {
                     file: 'package/web/rest/AccountResourceIntTest.java',
