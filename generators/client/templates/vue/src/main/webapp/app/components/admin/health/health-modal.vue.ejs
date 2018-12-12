@@ -26,41 +26,7 @@
     </div>
 </template>
 
-<script>
-    import HealthService from './HealthService.vue';
-
-    const <%=jhiPrefixCapitalized%>HealthModal = {
-        name: '<%=jhiPrefixCapitalized%>HealthModal',
-        mixins: [HealthService],
-        props: ['currentHealth'],
-        methods: {
-            baseName(name) {
-                return this.getBaseName(name);
-            },
-            subSystemName(name) {
-                return this.getSubSystemName(name);
-            },
-            readableValue(value) {
-                if (this.currentHealth.name === 'diskSpace') {
-                    // Should display storage space in an human readable unit
-                    const val = value / 1073741824;
-                    if (val > 1) { // Value
-                        return val.toFixed(2) + ' GB';
-                    } else {
-                        return (value / 1048576).toFixed(2) + ' MB';
-                    }
-                }
-
-                if (typeof value === 'object') {
-                    return JSON.stringify(value);
-                } else {
-                    return value.toString();
-                }
-            }
-        }
-    };
-
-    export default <%=jhiPrefixCapitalized%>HealthModal;
+<script lang="ts" src="./health-modal.component.ts">
 </script>
 
 <style scoped>

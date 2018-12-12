@@ -1,11 +1,11 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import * as config from '@/shared/config';
-import HealthComponent from '@/components/admin/health/health.vue';
+import Health from '@/components/admin/health/health.vue';
 import HealthModal from '@/components/admin/health/health-modal.vue';
-import HealthService from '@/components/admin/health/HealthService.vue';
+import HealthClass from '@/components/admin/health/health.component';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -13,7 +13,6 @@ const mockedAxios: any = axios;
 config.initVueApp(localVue);
 const i18n = config.initI18N(localVue);
 const store = config.initVueXStore(localVue);
-localVue.mixin(HealthService);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 localVue.component('health-modal', HealthModal);
 localVue.directive('b-modal', {});
@@ -23,12 +22,13 @@ jest.mock('axios', () => ({
 }));
 
 describe('Health Component', () => {
-  let wrapper;
-  let comp;
+  let wrapper: Wrapper<HealthClass>;
+  let health: HealthClass;
 
   beforeEach(() => {
-    wrapper = shallowMount(HealthComponent, { store, i18n, localVue, stubs: { bModal: true } });
-    comp = wrapper.vm;
+    mockedAxios.get.mockReturnValue(Promise.resolve({}));
+    wrapper = shallowMount<HealthClass>(Health, { store, i18n, localVue, stubs: { bModal: true } });
+    health = wrapper.vm;
   });
 
   it('should be a Vue instance', () => {
@@ -37,19 +37,19 @@ describe('Health Component', () => {
 
   describe('baseName and subSystemName', () => {
     it('should return the basename when it has no sub system', () => {
-      expect(comp.baseName('base')).toBe('base');
+      expect(health.baseName('base')).toBe('base');
     });
 
     it('should return the basename when it has sub systems', () => {
-      expect(comp.baseName('base.subsystem.system')).toBe('base');
+      expect(health.baseName('base.subsystem.system')).toBe('base');
     });
 
     it('should return the sub system name', () => {
-      expect(comp.subSystemName('subsystem')).toBe('');
+      expect(health.subSystemName('subsystem')).toBe('');
     });
 
     it('should return the subsystem when it has multiple keys', () => {
-      expect(comp.subSystemName('subsystem.subsystem.system')).toBe(' - subsystem.system');
+      expect(health.subSystemName('subsystem.subsystem.system')).toBe(' - subsystem.system');
     });
   });
 
@@ -57,7 +57,7 @@ describe('Health Component', () => {
     it('should flatten empty health data', () => {
       const data = {};
       const expected = [];
-      expect(comp.transformHealthData(data)).toEqual(expected);
+      expect(health.transformHealthData(data)).toEqual(expected);
     });
 
     it('should flatten health data with no subsystems', () => {
@@ -90,7 +90,7 @@ describe('Health Component', () => {
           status: 'UP'
         }
       ];
-      expect(comp.transformHealthData(data)).toEqual(expected);
+      expect(health.transformHealthData(data)).toEqual(expected);
     });
 
     it('should flatten health data with subsystems at level 1, main system has no additional information', () => {
@@ -150,7 +150,7 @@ describe('Health Component', () => {
           }
         }
       ];
-      expect(comp.transformHealthData(data)).toEqual(expected);
+      expect(health.transformHealthData(data)).toEqual(expected);
     });
 
     it('should flatten health data with subsystems at level 1, main system has additional information', () => {
@@ -218,7 +218,7 @@ describe('Health Component', () => {
           }
         }
       ];
-      expect(comp.transformHealthData(data)).toEqual(expected);
+      expect(health.transformHealthData(data)).toEqual(expected);
     });
 
     it('should flatten health data with subsystems at level 1, main system has additional error', () => {
@@ -284,14 +284,14 @@ describe('Health Component', () => {
           }
         }
       ];
-      expect(comp.transformHealthData(data)).toEqual(expected);
+      expect(health.transformHealthData(data)).toEqual(expected);
     });
   });
 
   describe('getBadgeClass', () => {
     it('should get badge class', () => {
-      const upBadgeClass = comp.getBadgeClass('UP');
-      const downBadgeClass = comp.getBadgeClass('DOWN');
+      const upBadgeClass = health.getBadgeClass('UP');
+      const downBadgeClass = health.getBadgeClass('DOWN');
       expect(upBadgeClass).toEqual('badge-success');
       expect(downBadgeClass).toEqual('badge-danger');
     });
@@ -303,24 +303,24 @@ describe('Health Component', () => {
       mockedAxios.get.mockReturnValue(Promise.resolve({}));
 
       // WHEN
-      comp.refresh();
-      await comp.$nextTick();
+      health.refresh();
+      await health.$nextTick();
 
       // THEN
       expect(mockedAxios.get).toHaveBeenCalledWith('management/health');
-      expect(comp.updatingHealth).toEqual(false);
+      expect(health.updatingHealth).toEqual(false);
     });
     it('should handle a 503 on refreshing health data', async () => {
       // GIVEN
       mockedAxios.get.mockReturnValue(Promise.reject({}));
 
       // WHEN
-      comp.refresh();
-      await comp.$nextTick();
+      health.refresh();
+      await health.$nextTick().then();
 
       // THEN
       expect(mockedAxios.get).toHaveBeenCalledWith('management/health');
-      expect(comp.updatingHealth).toEqual(false);
+      expect(health.updatingHealth).toEqual(false);
     });
   });
 });
