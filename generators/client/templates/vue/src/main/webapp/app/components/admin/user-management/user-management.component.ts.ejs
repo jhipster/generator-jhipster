@@ -1,7 +1,7 @@
 import { mixins } from 'vue-class-component';
 import { Component, Inject } from 'vue-property-decorator';
 import UserManagementService from './user-management.service';
-import Principal from '../../account/Principal.vue';
+import Principal from '../../account/principal';
 
 @Component
 export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mixins(Principal) {

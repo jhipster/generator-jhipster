@@ -99,7 +99,7 @@ const vueFiles = {
                 'shared/config.ts',
                 'router/index.ts',
                 'locale/LanguageService.vue',
-                'locale/TranslationService.vue'
+                'locale/translation.service.ts'
             ]
         }
     ],
@@ -132,7 +132,7 @@ const vueFiles = {
                 'components/account/login-form/login-form.vue',
                 'components/account/login-form/login-form.component.ts',
                 'components/account/LoginModalService.vue',
-                'components/account/Principal.vue',
+                'components/account/principal.ts',
                 'components/account/register/register.vue',
                 'components/account/register/register.component.ts',
                 'components/account/RegisterService.vue',
@@ -230,6 +230,7 @@ const vueFiles = {
             path: TEST_SRC_DIR,
             templates: [
                 'spec/app/account/change-password/change-password.component.spec.ts',
+                'spec/app/account/login-form/login-form.component.spec.ts',
                 'spec/app/account/settings/settings.component.spec.ts'
             ]
         },

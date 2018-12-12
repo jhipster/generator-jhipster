@@ -1,64 +1,67 @@
 import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
 import axios from 'axios';
-import Principal from '../Principal.vue';
+import Principal from '../principal';
 import LanguageService from '../../../locale/LanguageService.vue';
 import { EMAIL_ALREADY_USED_TYPE } from '../../../constants';
+import Component, { mixins } from 'vue-class-component';
 
-const Settings = {
-  mixins: [Principal, LanguageService],
-  data() {
-    return {
-      success: null,
-      error: null,
-      errorEmailExists: null
-    };
-  },
-  validations: {
-    settingsAccount: {
-      firstName: {
-        required,
-        minLength: minLength(1),
-        maxLength: maxLength(50)
-      },
-      lastName: {
-        required,
-        minLength: minLength(1),
-        maxLength: maxLength(50)
-      },
-      email: {
-        required,
-        email,
-        minLength: minLength(5),
-        maxLength: maxLength(254)
-      }
-    }
-  },
-  methods: {
-    save: function() {
-      this.error = null;
-      this.errorEmailExists = null;
-      axios
-        .post('api/account', this.settingsAccount)
-        .then(() => {
-          this.error = null;
-          this.success = 'OK';
-          this.errorEmailExists = null;
-        })
-        .catch((error) => {
-          this.success = null;
-          this.error = 'ERROR';
-          if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
-            this.errorEmailExists = 'ERROR';
-            this.error = null;
-          }
-        });
-    }
-  },
-  computed: {
-    settingsAccount() {
-      return this.$store.getters.account;
+const validations = {
+  settingsAccount: {
+    firstName: {
+      required,
+      minLength: minLength(1),
+      maxLength: maxLength(50)
+    },
+    lastName: {
+      required,
+      minLength: minLength(1),
+      maxLength: maxLength(50)
+    },
+    email: {
+      required,
+      email,
+      minLength: minLength(5),
+      maxLength: maxLength(254)
     }
   }
 };
 
-export default Settings;
+@Component({
+  validations
+})
+export default class Settings extends mixins(Principal, LanguageService) {
+  public success: string;
+  public error: string;
+  public errorEmailExists: string;
+
+  constructor() {
+    super();
+    this.success = null;
+    this.error = null;
+    this.errorEmailExists = null;
+  }
+
+  public save(): void {
+    this.error = null;
+    this.errorEmailExists = null;
+    axios
+      .post('api/account', this.settingsAccount)
+      .then(() => {
+        this.error = null;
+        this.success = 'OK';
+        this.errorEmailExists = null;
+      })
+      .catch(error => {
+        this.success = null;
+        this.error = 'ERROR';
+        if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+          this.errorEmailExists = 'ERROR';
+          this.error = null;
+        }
+      });
+  }
+
+  public get settingsAccount(): any {
+    return this.$store.getters.account;
+  }
+}

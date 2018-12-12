@@ -1,0 +1,38 @@
+import axios from 'axios';
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component({
+  watch: {
+    currentLanguage: function() {
+      this.refreshTranslations();
+    }
+  }
+})
+export default class TranslationService extends Vue {
+
+  public currentLanguage: string;
+
+  constructor() {
+    super();
+    this.currentLanguage = '<%= nativeLanguage %>';
+  }
+
+  public mounted() {
+    this.refreshTranslations();
+  }
+
+  public refreshTranslations() {
+    if (this.$i18n && !this.$i18n.messages[this.currentLanguage]) {
+      this.$i18n.setLocaleMessage(this.currentLanguage, {});
+      axios.get('i18n/' + this.currentLanguage + '.json').then(res => {
+        if (res.data) {
+          this.$i18n.setLocaleMessage(this.currentLanguage, res.data);
+          this.$i18n.locale = this.currentLanguage;
+        }
+      });
+    } else if (this.$i18n) {
+      this.$i18n.locale = this.currentLanguage;
+    }
+  }
+
+}

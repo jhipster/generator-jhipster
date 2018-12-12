@@ -1,8 +1,10 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 
 import * as config from '@/shared/config';
 import Settings from '@/components/account/settings/settings.vue';
+import SettingsClass from '@/components/account/settings/settings.component';
+import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -17,8 +19,8 @@ jest.mock('axios', () => ({
 }));
 
 describe('Settings Component', () => {
-  let wrapper;
-  let comp;
+  let wrapper: Wrapper<SettingsClass>;
+  let settings: SettingsClass;
   let account = {
     firstName: 'John',
     lastName: 'Doe',
@@ -31,8 +33,8 @@ describe('Settings Component', () => {
     mockedAxios.post.mockReset();
 
     store.commit('authenticated', account);
-    wrapper = shallowMount(Settings, { store, i18n, localVue });
-    comp = wrapper.vm;
+    wrapper = shallowMount<SettingsClass>(Settings, { store, i18n, localVue });
+    settings = wrapper.vm;
   });
 
   it('should be a Vue instance', () => {
@@ -44,8 +46,8 @@ describe('Settings Component', () => {
     mockedAxios.post.mockReturnValue(Promise.resolve({}));
 
     //WHEN
-    comp.save();
-    await comp.$nextTick();
+    settings.save();
+    await settings.$nextTick();
 
     //THEN
     expect(mockedAxios.post).toHaveBeenCalledWith('api/account', account);
@@ -56,24 +58,56 @@ describe('Settings Component', () => {
     mockedAxios.post.mockReturnValue(Promise.resolve(account));
 
     // WHEN
-    comp.save();
-    await comp.$nextTick();
+    settings.save();
+    await settings.$nextTick();
 
     // THEN
-    expect(comp.error).toBeNull();
-    expect(comp.success).toBe('OK');
+    expect(settings.error).toBeNull();
+    expect(settings.success).toBe('OK');
   });
 
   it('should notify of error upon failed save', async () => {
     // GIVEN
-    mockedAxios.post.mockReturnValue(Promise.reject({}));
+    const error = { response: { status: 417 } };
+    mockedAxios.post.mockReturnValue(Promise.reject(error));
 
     // WHEN
-    comp.save();
-    await comp.$nextTick();
+    settings.save();
+    await settings.$nextTick();
 
     // THEN
-    expect(comp.error).toEqual('ERROR');
-    expect(comp.success).toBeNull();
+    expect(settings.error).toEqual('ERROR');
+    expect(settings.errorEmailExists).toBeNull();
+    expect(settings.success).toBeNull();
+  });
+
+  it('should notify of error upon error 400', async () => {
+    // GIVEN
+    const error = { response: { status: 400 } };
+    mockedAxios.post.mockReturnValue(Promise.reject(error));
+
+    // WHEN
+    settings.save();
+    await settings.$nextTick();
+
+    // THEN
+    expect(settings.error).toEqual('ERROR');
+    expect(settings.errorEmailExists).toBeNull();
+    expect(settings.success).toBeNull();
+  });
+
+  it('should notify of error upon email already used', async () => {
+    // GIVEN
+    const error = { response: { status: 400, data: { type: EMAIL_ALREADY_USED_TYPE } } };
+    mockedAxios.post.mockReturnValue(Promise.reject(error));
+
+    // WHEN
+    settings.save();
+    await settings.$nextTick();
+
+    // THEN
+    expect(settings.errorEmailExists).toEqual('ERROR');
+    expect(settings.error).toBeNull();
+    expect(settings.success).toBeNull();
   });
 });

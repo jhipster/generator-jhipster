@@ -1,0 +1,67 @@
+import axios from 'axios';
+import Component, { mixins } from 'vue-class-component';
+
+import TranslationService from '../../locale/translation.service';
+<%_ if (websocket === 'spring-websocket') { _%>import TrackerService from '../admin/tracker/TrackerService.vue';<%_ } _%>
+
+@Component
+export default class Principal extends mixins(TranslationService<%_ if (websocket === 'spring-websocket') { _%>, TrackerService<%_ } _%>) {
+
+  public created(): void {
+    const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken'); <%_ } else { _%> this.$cookie.get('JSESSIONID') || this.$cookie.get('XSRF-TOKEN'); <%_ } _%>
+    if (!this.$store.getters.account && !this.$store.getters.logon && token) {
+      this.retrieveAccount();
+    }
+  }
+
+  public retrieveAccount(): any {
+    this.$store.commit('authenticate');
+    axios.get('api/account').then((response) => {
+      const account = response.data;
+      if (account) {
+        this.$store.commit('authenticated', account);
+        if (this.currentLanguage !== account.langKey) {
+          this.currentLanguage = account.langKey;
+        }
+        <%_ if (websocket === 'spring-websocket') { _%>
+        this.connect();
+        <%_ } _%>
+      } else {
+        this.$store.commit('logout');
+        (<any> this).$router.push('/');
+      }
+    }).catch(() => {
+      this.$store.commit('logout');
+      (<any> this).$router.push('/');
+    });
+  }
+
+  public hasAnyAuthority(authorities: any): any {
+    if (typeof authorities === "string") {
+      authorities = [authorities];
+    }
+    if (!this.authenticated || !this.userAuthorities) {
+      return false;
+    }
+
+    for (let i = 0; i < authorities.length; i++) {
+      if (this.userAuthorities.includes(authorities[i])) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public get authenticated() {
+    return this.$store.getters.authenticated;
+  }
+
+  public get userAuthorities(): any {
+    return this.$store.getters.account.authorities;
+  }
+
+  public get username(): string {
+    return this.$store.getters.account ? this.$store.getters.account.login : ''
+  }
+}

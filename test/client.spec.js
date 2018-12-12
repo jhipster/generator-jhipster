@@ -55,7 +55,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/components/account/settings/settings.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/account/settings/settings.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/components/account/LoginModalService.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/account/Principal.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/account/principal.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/account/RegisterService.vue`,
 
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/audits/audits.component.ts`,
@@ -97,7 +97,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/config/axios-interceptor.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/locale/LanguageService.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/locale/TranslationService.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/locale/translation.service.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/router/index.ts`,
 
