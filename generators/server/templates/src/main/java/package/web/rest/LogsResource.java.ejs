@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
 public class LogsResource {
 
     @GetMapping("/logs")
-    @Timed(value = "<%=packageName%>.web.rest.LogsResource.getList", extraTags = {"service", "service"})
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><LoggerVM> getList() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         <%_ if (reactive) { _%>
@@ -58,7 +57,6 @@ public class LogsResource {
 
     @PutMapping("/logs")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Timed(value = "<%=packageName%>.web.rest.LogsResource.changeLevel", extraTags = {"service", "service"})
     public void changeLevel(@RequestBody LoggerVM jsonLogger) {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         context.getLogger(jsonLogger.getName()).setLevel(Level.valueOf(jsonLogger.getLevel()));

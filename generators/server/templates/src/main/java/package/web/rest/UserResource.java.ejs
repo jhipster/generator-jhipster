@@ -160,7 +160,6 @@ public class UserResource {
      * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
      */
     @PostMapping("/users")
-    @Timed(value = "<%=packageName%>.web.rest.UserResource.createUser", extraTags = {"service", "service"})
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public <% if (reactive) { %>Mono<ResponseEntity<User>><% } else { %>ResponseEntity<User><% } %> createUser(@Valid @RequestBody UserDTO userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
         log.debug("REST request to save User : {}", userDTO);
@@ -219,7 +218,6 @@ public class UserResource {
      * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already in use
      */
     @PutMapping("/users")
-    @Timed(value = "<%=packageName%>.web.rest.UserResource.updateUser", extraTags = {"service", "service"})
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
@@ -272,7 +270,6 @@ public class UserResource {
      * @return the ResponseEntity with status 200 (OK) and with body all users
      */
     @GetMapping("/users")
-    @Timed(value = "<%=packageName%>.web.rest.UserResource.getAllUsers", extraTags = {"service", "service"})
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
@@ -292,7 +289,6 @@ public class UserResource {
      * @return a string list of the all of the roles
      */
     @GetMapping("/users/authorities")
-    @Timed(value = "<%=packageName%>.web.rest.UserResource.getAllUsers", extraTags = {"service", "service"})
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public <% if (reactive) { %>Mono<List<String>><% } else { %>List<String><% } %> getAuthorities() {
         return userService.getAuthorities()<% if (reactive) { %>.collectList()<% } %>;
@@ -311,7 +307,6 @@ public class UserResource {
      * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
      */
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
-    @Timed(value = "<%=packageName%>.web.rest.UserResource.getUser", extraTags = {"service", "service"})
     <%_ if (!reactive) { _%>
     public ResponseEntity<UserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
@@ -335,7 +330,6 @@ public class UserResource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
-    @Timed(value = "<%=packageName%>.web.rest.UserResource.deleteUser", extraTags = {"service", "service"})
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
@@ -360,7 +354,6 @@ public class UserResource {
      * @return the result of the search
      */
     @GetMapping("/_search/users/{query}")
-    @Timed(value = "<%=packageName%>.web.rest.UserResource.search", extraTags = {"service", "service"})
     public List<User> search(@PathVariable String query) {
         return StreamSupport
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)

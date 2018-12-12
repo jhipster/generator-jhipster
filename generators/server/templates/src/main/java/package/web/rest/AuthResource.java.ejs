@@ -63,7 +63,6 @@ public class AuthResource {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType
         .APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed(value = "<%=packageName%>.web.rest.AuthResource.authenticate", extraTags = {"service", "service"})
     public ResponseEntity<OAuth2AccessToken> authenticate(HttpServletRequest request, HttpServletResponse response, @RequestBody
         Map<String, String> params) {
         return authenticationService.authenticate(request, response, params);
@@ -77,7 +76,6 @@ public class AuthResource {
      * @return an empty response entity.
      */
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    @Timed(value = "<%=packageName%>.web.rest.AuthResource.logout", extraTags = {"service", "service"})
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         log.info("logging out user {}", SecurityContextHolder.getContext().getAuthentication().getName());
         authenticationService.logout(request, response);

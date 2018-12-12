@@ -61,7 +61,6 @@ public class UserJWTController {
     }
 
     @PostMapping("/authenticate")
-    @Timed(value = "<%=packageName%>.web.rest.UserJWTController.authorize", extraTags = {"service", "service"})
     <%_ if (!reactive) { _%>
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
 
