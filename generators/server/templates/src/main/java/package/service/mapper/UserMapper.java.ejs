@@ -21,8 +21,8 @@ package <%=packageName%>.service.mapper;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import <%=packageName%>.domain.Authority;
 <%_ } _%>
-import <%=packageName%>.domain.User;
-import <%=packageName%>.service.dto.UserDTO;
+import <%=packageName%>.domain.<%= asEntity('User') %>;
+import <%=packageName%>.service.dto.<%= asDto('User') %>;
 
 import org.springframework.stereotype.Service;
 
@@ -38,29 +38,29 @@ import java.util.stream.Collectors;
 @Service
 public class UserMapper {
 
-    public List<UserDTO> usersToUserDTOs(List<User> users) {
+    public List<<%= asDto('User') %>> usersToUserDTOs(List<<%= asEntity('User') %>> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToUserDTO)
             .collect(Collectors.toList());
     }
 
-    public UserDTO userToUserDTO(User user) {
-        return new UserDTO(user);
+    public <%= asDto('User') %> userToUserDTO(<%= asEntity('User') %> user) {
+        return new <%= asDto('User') %>(user);
     }
 
-    public List<User> userDTOsToUsers(List<UserDTO> userDTOs) {
+    public List<<%= asEntity('User') %>> userDTOsToUsers(List<<%= asDto('User') %>> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
             .collect(Collectors.toList());
     }
 
-    public User userDTOToUser(UserDTO userDTO) {
+    public <%= asEntity('User') %> userDTOToUser(<%= asDto('User') %> userDTO) {
         if (userDTO == null) {
             return null;
         } else {
-            User user = new User();
+            <%= asEntity('User') %> user = new <%= asEntity('User') %>();
             user.setId(userDTO.getId());
             user.setLogin(userDTO.getLogin());
             user.setFirstName(userDTO.getFirstName());
@@ -114,11 +114,11 @@ public class UserMapper {
     }
     <%_ } _%>
 
-    public User userFromId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
+    public <%= asEntity('User') %> userFromId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
         if (id == null) {
             return null;
         }
-        User user = new User();
+        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         user.setId(id);
         return user;
     }

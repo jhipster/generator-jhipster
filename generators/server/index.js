@@ -235,6 +235,20 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.websocket = false;
                 }
 
+                this.entitySuffix = configuration.get('entitySuffix');
+                if (_.isNil(this.entitySuffix)) {
+                    this.entitySuffix = '';
+                }
+
+                this.dtoSuffix = configuration.get('dtoSuffix');
+                if (_.isNil(this.dtoSuffix)) {
+                    this.dtoSuffix = 'DTO';
+                }
+
+                if (this.entitySuffix === this.dtoSuffix) {
+                    this.error(chalk.red('Entities cannot be generated as the entity suffix and DTO suffix are equals !'));
+                }
+
                 const serverConfigFound =
                     this.packageName !== undefined &&
                     this.authenticationType !== undefined &&

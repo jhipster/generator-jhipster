@@ -19,7 +19,7 @@
 package <%=packageName%>.config.dbmigrations;
 
 import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.<%= asEntity('User') %>;
 import <%=packageName%>.security.AuthoritiesConstants;
 
 import com.github.mongobee.changeset.ChangeLog;
@@ -52,7 +52,7 @@ public class InitialSetupMigration {
         Authority userAuthority = new Authority();
         userAuthority.setName(AuthoritiesConstants.USER);
 
-        User systemUser = new User();
+        <%= asEntity('User') %> systemUser = new <%= asEntity('User') %>();
         systemUser.setId("user-0");
         systemUser.setLogin("system");
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -69,7 +69,7 @@ public class InitialSetupMigration {
         systemUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(systemUser);
 
-        User anonymousUser = new User();
+        <%= asEntity('User') %> anonymousUser = new <%= asEntity('User') %>();
         anonymousUser.setId("user-1");
         anonymousUser.setLogin("anonymoususer");
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -84,7 +84,7 @@ public class InitialSetupMigration {
         anonymousUser.setCreatedDate(Instant.now());
         mongoTemplate.save(anonymousUser);
 
-        User adminUser = new User();
+        <%= asEntity('User') %> adminUser = new <%= asEntity('User') %>();
         adminUser.setId("user-2");
         adminUser.setLogin("admin");
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -101,7 +101,7 @@ public class InitialSetupMigration {
         adminUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(adminUser);
 
-        User userUser = new User();
+        <%= asEntity('User') %> userUser = new <%= asEntity('User') %>();
         userUser.setId("user-3");
         userUser.setLogin("user");
         <%_ if (authenticationType !== 'oauth2') { _%>

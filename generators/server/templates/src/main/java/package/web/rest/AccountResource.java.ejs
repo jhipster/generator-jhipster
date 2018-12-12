@@ -20,7 +20,7 @@ package <%=packageName%>.web.rest;
 
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%=packageName%>.service.UserService;
-import <%=packageName%>.service.dto.UserDTO;
+import <%=packageName%>.service.dto.<%= asDto('User') %>;
 import <%=packageName%>.web.rest.errors.InternalServerErrorException;
 
 import com.codahale.metrics.annotation.Timed;
@@ -72,14 +72,14 @@ public class AccountResource {
     @GetMapping("/account")
     @Timed
     @SuppressWarnings("unchecked")
-    public UserDTO getAccount(Principal principal) {
+    public <%= asDto('User') %> getAccount(Principal principal) {
         if (principal != null) {
             if (principal instanceof OAuth2Authentication) {
                 return userService.getUserFromAuthentication((OAuth2Authentication) principal);
             } else {
                 // Allow Spring Security Test to be used to mock users in the database
                 return userService.getUserWithAuthorities()
-                    .map(UserDTO::new)
+                    .map(<%= asDto('User') %>::new)
                     .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
             }
         } else {
@@ -95,14 +95,14 @@ import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 <%_ } _%>
 <%_ if (!reactive) { _%>
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.PasswordChangeDTO;
-import <%=packageName%>.service.dto.UserDTO;
+import <%=packageName%>.service.dto.<%= asDto('User') %>;
 import <%=packageName%>.web.rest.errors.*;
 import <%=packageName%>.web.rest.vm.KeyAndPasswordVM;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
@@ -177,7 +177,7 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         <%_ if (!reactive) { _%>
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+        <%= asEntity('User') %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
         <%_ } else { _%>
         return userService.registerUser(managedUserVM, managedUserVM.getPassword())
@@ -196,7 +196,7 @@ public class AccountResource {
     @Timed
     public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> activateAccount(@RequestParam(value = "key") String key) {
         <%_ if (!reactive) { _%>
-        Optional<User> user = userService.activateRegistration(key);
+        Optional<<%= asEntity('User') %>> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new InternalServerErrorException("No user was found for this activation key");
         }
@@ -234,9 +234,9 @@ public class AccountResource {
      */
     @GetMapping("/account")
     @Timed
-    public <% if (reactive) { %>Mono<UserDTO><% } else { %>UserDTO<% } %> getAccount() {
+    public <% if (reactive) { %>Mono<<%= asDto('User') %>><% } else { %><%= asDto('User') %><% } %> getAccount() {
         return userService.getUserWithAuthorities()
-            .map(UserDTO::new)
+            .map(<%= asDto('User') %>::new)
             <%_ if (!reactive) { _%>
             .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
             <%_ } else { _%>
@@ -254,20 +254,20 @@ public class AccountResource {
     @PostMapping("/account")
     @Timed
     <%_ if (!reactive) { _%>
-    public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
+    public void saveAccount(@Valid @RequestBody <%= asDto('User') %> userDTO) {
         final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<<%= asEntity('User') %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
-        Optional<User> user = userRepository.findOneByLogin(userLogin);
+        Optional<<%= asEntity('User') %>> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
             throw new InternalServerErrorException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
             userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
     <%_ } else { _%>
-    public Mono<Void> saveAccount(@Valid @RequestBody UserDTO userDTO) {
+    public Mono<Void> saveAccount(@Valid @RequestBody <%= asDto('User') %> userDTO) {
         return SecurityUtils.getCurrentUserLogin()
             .switchIfEmpty(Mono.error(new InternalServerErrorException("Current user login not found")))
             .flatMap(userLogin -> userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
@@ -384,7 +384,7 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         <%_ if (!reactive) { _%>
-        Optional<User> user =
+        Optional<<%= asEntity('User') %>> user =
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {

@@ -21,7 +21,7 @@ import <%=packageName%>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.<%= asEntity('User') %>;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.Before;
 import org.junit.Test;
@@ -138,7 +138,7 @@ public class MailServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void testSendEmailFromTemplate() throws Exception {
-        User user = new User();
+        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         user.setLangKey("en");
@@ -155,7 +155,7 @@ public class MailServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void testSendActivationEmail() throws Exception {
-        User user = new User();
+        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -170,7 +170,7 @@ public class MailServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void testCreationEmail() throws Exception {
-        User user = new User();
+        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -185,7 +185,7 @@ public class MailServiceIntTest <% if (databaseType === 'cassandra') { %>extends
 
     @Test
     public void testSendPasswordResetMail() throws Exception {
-        User user = new User();
+        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
