@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as config from '@/shared/config';
 import UserManagementView from '@/components/admin/user-management/user-management-view.vue';
 import UserManagementViewClass from '@/components/admin/user-management/user-management-view.component';
+import UserManagementService from '@/components/admin/user-management/user-management.service';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -13,6 +14,7 @@ config.initVueApp(localVue);
 const i18n = config.initI18N(localVue);
 const store = config.initVueXStore(localVue);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
+localVue.component('b-badge', {});
 localVue.component('router-link', {});
 
 jest.mock('axios', () => ({
@@ -25,7 +27,7 @@ describe('UserManagementView Component', () => {
   let userManagementView: UserManagementViewClass;
 
   beforeEach(() => {
-    wrapper = shallowMount<UserManagementViewClass>(UserManagementView, { store, i18n, localVue });
+    wrapper = shallowMount<UserManagementViewClass>(UserManagementView, { store, i18n, localVue, provide: { userService: () => new UserManagementService() } });
     userManagementView = wrapper.vm;
   });
 

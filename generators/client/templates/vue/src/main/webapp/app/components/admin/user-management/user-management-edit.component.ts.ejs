@@ -1,8 +1,8 @@
 import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
-import LanguageService from '../../../locale/LanguageService.vue';
-
-import UserManagementService from './UserManagementService';
-import Component, { mixins } from 'vue-class-component';
+import { mixins } from 'vue-class-component';
+import { Component, Inject } from 'vue-property-decorator';
+import LanguageService from '@/locale/LanguageService.vue';
+import UserManagementService from './user-management.service';
 
 function loginValidator(value) {
   if (typeof value === 'undefined' || value === null || value === '') {
@@ -46,7 +46,8 @@ const beforeRouteEnter = (to, from, next) => {
   validations,
   beforeRouteEnter
 })
-export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends mixins(UserManagementService, LanguageService) {
+export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends mixins(LanguageService) {
+  @Inject('userService') private userManagementService: () => UserManagementService;
   public userAccount: any;
   public isSaving: boolean;
   private authorities: any[];
@@ -67,9 +68,9 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends mixins(
   }
 
   public init(userId: number): void {
-    this.get(userId).then(res => {
+    this.userManagementService().get(userId).then(res => {
       this.userAccount = res.data;
-      this.retrieveAuthorities().then(res => {
+      this.userManagementService().retrieveAuthorities().then(res => {
         this.authorities = res.data;
       });
     });
@@ -82,12 +83,12 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends mixins(
   public save(): void {
     this.isSaving = true;
     if (this.userAccount.id) {
-      this.update(this.userAccount).then(() => this.returnToList());
+      this.userManagementService().update(this.userAccount).then(() => this.returnToList());
     } else {
 
       <% if (!enableTranslation) { %>
       this.userAccount.langKey = 'en';<% } %>
-      this.create(this.userAccount).then(() => this.returnToList());
+      this.userManagementService().create(this.userAccount).then(() => this.returnToList());
     }
   }
 

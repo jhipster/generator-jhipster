@@ -1,7 +1,7 @@
 import axios from 'axios';
-
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import buildPaginationQueryOpts from '@/shared/sort/sorts';
 
 @Component
 export default class UserManagementService extends Vue {
@@ -22,15 +22,8 @@ export default class UserManagementService extends Vue {
     return axios.delete(`api/users/${userId}`);
   }
 
-  public query(req): Promise<any> {
-    let sorts = '';
-    for (let idx in req.sort) {
-      if (sorts.length > 0) {
-        sorts += '&';
-      }
-      sorts += 'sort=' + req.sort[idx];
-    }
-    return axios.get(`api/users?${sorts}&page=${req.page}&size=${req.size}`);
+  public retrieve(req?: any): Promise<any> {
+    return axios.get(`api/users?${buildPaginationQueryOpts(req)}`);
   }
 
   public retrieveAuthorities(): Promise<any> {

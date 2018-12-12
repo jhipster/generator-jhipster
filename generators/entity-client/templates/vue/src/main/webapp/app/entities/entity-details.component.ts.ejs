@@ -1,32 +1,38 @@
-import <%= entityAngularName %>Service from './<%= entityFileName %>.service.vue';
+import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vue-property-decorator';
 <% if (fieldsContainBlob) { %>
-    import JhiDataUtils from '../../<% if (clientRootFolder) { %>../<% } %>shared/data/DataUtilsService.vue';
+import { mixins } from 'vue-class-component';
+import JhiDataUtils from '@/shared/data/DataUtilsService.vue';
 <% } %>
+import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
-const <%= entityAngularName %>Details =  {
-    mixins: [<%= entityAngularName %>Service<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %>],
-    data() {
-        return {
-            <%= entityInstance %>: {}
-        }
-    },
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            if (to.params.<%= entityInstance %>Id) {
-                vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
-            }
-        })
-    },
-    methods: {
-        retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
-            this.find<%= entityAngularName %>(<%= entityInstance %>Id).then((res) => {
-                this.<%= entityInstance %> = res.data;
-            });
-        },
-        previousState() {
-            this.$router.go(-1);
-        }
+const beforeRouteEnter = (to, from, next) => {
+  next(vm => {
+    if (to.params.<%= entityInstance %>Id) {
+      vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
     }
+  });
 };
 
-export default <%= entityAngularName %>Details;
+@Component({
+  beforeRouteEnter
+})
+export default class <%= entityAngularName %>Details extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
+  @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
+  public <%= entityInstance %>: I<%= entityAngularName %>;
+
+  constructor() {
+    super();
+    this.<%= entityInstance %> = {};
+  }
+
+  public retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
+    this.<%= entityInstance %>Service().find(<%= entityInstance %>Id).then((res) => {
+      this.<%= entityInstance %> = res;
+    });
+  }
+
+  public previousState() {
+    this.$router.go(-1);
+  }
+}

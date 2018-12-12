@@ -11,10 +11,11 @@ import JhiItemCountComponent from './shared/jhi-item-count.vue';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import UserManagementService from '@/components/admin/user-management/user-management.service';
+
+// jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 Vue.config.productionTip = false;
-
-setupAxiosInterceptors(() => console.log('Unauthorized!'));
 
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(Vue);
@@ -34,6 +35,10 @@ new Vue({
   components: { App },
   template: '<App/>',
   router,
+  provide: {
+    userService: () => new UserManagementService()
+    // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
+  },
 <%_ if (enableTranslation) { _%>    i18n,<%_ } _%>
   store
 });

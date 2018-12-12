@@ -57,7 +57,7 @@
                                 <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                                 <%_ } _%>
                                 <%_ if (fieldTypeBlobContent === 'image') { _%>
-                                <button type="button" v-on:click="_clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                                <button type="button" v-on:click="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-right">
                                 <%_ } else { _%>
                                 <button type="button" v-on:click="<%= entityInstance %>.<%= fieldName %>=null;<%= entityInstance %>.<%= fieldName %>ContentType=null;"
                                         class="btn btn-secondary btn-xs pull-right">
@@ -65,7 +65,7 @@
                                     <font-awesome-icon icon="times"></font-awesome-icon>
                                 </button>
                             </div>
-                            <input type="file" id="file_<%= fieldName %>" v-on:change="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" v-text="$t('entity.action.addimage')"<% } else { %>false)" v-text="$t('entity.action.addblob')"<% } %>/>
+                            <input type="file" ref="file_<%= fieldName %>" id="file_<%= fieldName %>" v-on:change="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" v-text="$t('entity.action.addimage')"<% } else { %>false)" v-text="$t('entity.action.addblob')"<% } %>/>
                         </div>
                         <%_ } _%>
                         <%_ if (fieldType === 'LocalDate') { _%>

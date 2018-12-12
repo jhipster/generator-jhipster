@@ -24,7 +24,9 @@ const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 module.exports = {
     addEntityToMenu,
     addEntityToRouterImport,
-    addEntityToRouter
+    addEntityToRouter,
+    addEntityServiceToMainImport,
+    addEntityServiceToMain
 };
 
 function addEntityToMenu(generator, entityName, translationKey, className) {
@@ -74,6 +76,35 @@ function addEntityToRouter(generator, entityName, entityFileName, className) {
                 |    { path: '/entity/${entityFileName}/new', name: '${className}Create', component: ${className}Update },
                 |    { path: '/entity/${entityFileName}/:${entityName}Id/edit', name: '${className}Edit', component: ${className}Update },
                 |    { path: '/entity/${entityFileName}/:${entityName}Id/view', name: '${className}View', component: ${className}Details }`
+            )]
+        },
+        generator
+    );
+}
+
+function addEntityServiceToMainImport(generator, className, fileName, folderName) {
+    jhipsterUtils.rewriteFile(
+        {
+            file: `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main-import',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|import ${className}Service from '@/entities/${folderName}/${fileName}.service';`
+            )]
+        },
+        generator
+    );
+}
+
+function addEntityServiceToMain(generator, entityName, className) {
+    jhipsterUtils.rewriteFile(
+        {
+            file: `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|,
+                |    ${entityName}Service: () => new ${className}Service()`
             )]
         },
         generator

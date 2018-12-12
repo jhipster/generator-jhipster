@@ -61,8 +61,6 @@
              * Method to clear the input
              */
             clearInputImage(entity, elementRef, field, fieldContentType, idInput) {
-                console.log(elementRef);
-                console.log(entity);
                 if (entity && field && fieldContentType) {
                     if (entity.hasOwnProperty(field)) {
                         entity[field] = null;

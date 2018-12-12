@@ -81,7 +81,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management-edit.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management-edit.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/UserManagementService.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management-view.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management-view.vue`,
 
@@ -95,8 +95,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/components/ribbon/ribbon.vue`,
 
         `${CLIENT_MAIN_SRC_DIR}app/config/axios-interceptor.ts`,
-
-        `${CLIENT_MAIN_SRC_DIR}app/entities/user/user.service.vue`,
 
         `${CLIENT_MAIN_SRC_DIR}app/locale/LanguageService.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/locale/TranslationService.vue`,
