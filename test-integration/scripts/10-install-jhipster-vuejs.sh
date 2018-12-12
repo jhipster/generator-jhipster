@@ -96,7 +96,7 @@ cd "$JHI_CLONED"/
 npm ci
 npm link
 npm link generator-jhipster
-ls -al /home/travis/.nvm/versions/node/v10.13.0/lib/node_modules/
+ls -al /home/travis/.nvm/versions/node/v10.14.1/lib/node_modules/
 
 npm run lint
 if [[ "$JHI_APP" == "" || "$JHI_APP" == "vuejs-default" ]]; then
