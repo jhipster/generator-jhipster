@@ -164,12 +164,12 @@ public class CacheConfiguration {
             cm.createCache(<%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             cm.createCache(<%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
                 <%_ if (enableHibernateCache) { _%>
-            cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
+            cm.createCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
-            cm.createCache(<%=packageName%>.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", jcacheConfiguration);
                     <%_ if (authenticationType === 'session') { _%>
             cm.createCache(<%=packageName%>.domain.PersistentToken.class.getName(), jcacheConfiguration);
-            cm.createCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens", jcacheConfiguration);
+            cm.createCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", jcacheConfiguration);
                     <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
@@ -521,21 +521,21 @@ public class CacheConfiguration {
                 cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
                 <%_ if (enableHibernateCache) { _%>
-            registerPredefinedCache(<%=packageName%>.domain.User.class.getName(), new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.User.class.getName()).getAdvancedCache(), this,
+            registerPredefinedCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName(), new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
             registerPredefinedCache(<%=packageName%>.domain.Authority.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.Authority.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
-            registerPredefinedCache(<%=packageName%>.domain.User.class.getName() + ".authorities", new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.User.class.getName() + ".authorities").getAdvancedCache(), this,
+            registerPredefinedCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
                     <%_ if (authenticationType === 'session') { _%>
             registerPredefinedCache(<%=packageName%>.domain.PersistentToken.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.PersistentToken.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
-            registerPredefinedCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens", new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens").getAdvancedCache(), this,
+            registerPredefinedCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
                     <%_ } _%>
                 <%_ } _%>

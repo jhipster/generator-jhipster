@@ -20,7 +20,7 @@ package <%=packageName%>.web.rest;
 
 import <%=packageName%>.config.Constants;
 <%_ if (authenticationType !== 'oauth2' || searchEngine === 'elasticsearch') { _%>
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
@@ -33,7 +33,7 @@ import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 <%_ } _%>
 import <%=packageName%>.service.UserService;
-import <%=packageName%>.service.dto.UserDTO;
+import <%=packageName%>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.web.rest.errors.BadRequestAlertException;
 import <%=packageName%>.web.rest.errors.EmailAlreadyUsedException;
@@ -162,7 +162,7 @@ public class UserResource {
     @PostMapping("/users")
     @Timed
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public <% if (reactive) { %>Mono<ResponseEntity<User>><% } else { %>ResponseEntity<User><% } %> createUser(@Valid @RequestBody UserDTO userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%= asEntity('User') %>>><% } else { %>ResponseEntity<<%= asEntity('User') %>><% } %> createUser(@Valid @RequestBody <%= asDto('User') %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
         log.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
@@ -174,7 +174,7 @@ public class UserResource {
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            User newUser = userService.createUser(userDTO);
+            <%= asEntity('User') %> newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(<% if (enableTranslation) {%> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
@@ -222,9 +222,9 @@ public class UserResource {
     @Timed
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (!reactive) { _%>
-    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<<%= asDto('User') %>> updateUser(@Valid @RequestBody <%= asDto('User') %> userDTO) {
         log.debug("REST request to update User : {}", userDTO);
-        Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<<%= asEntity('User') %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }
@@ -232,12 +232,12 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
-        Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
+        Optional<<%= asDto('User') %>> updatedUser = userService.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
             HeaderUtil.createAlert(<% if (enableTranslation) { %>"userManagement.updated"<% } else { %>"A user is updated with identifier " + userDTO.getLogin()<% } %>, userDTO.getLogin()));
     <%_ } else { _%>
-    public Mono<ResponseEntity<UserDTO>> updateUser(@Valid @RequestBody UserDTO userDTO) {
+    public Mono<ResponseEntity<<%= asDto('User') %>>> updateUser(@Valid @RequestBody <%= asDto('User') %> userDTO) {
         log.debug("REST request to update User : {}", userDTO);
         return userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
             .filter(user -> !user.getId().equals(userDTO.getId()))
@@ -275,12 +275,12 @@ public class UserResource {
     @Timed
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
-    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+    public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(Pageable pageable) {
+        final Page<<%= asDto('User') %>> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         <%_ } else { _%>
-    public Mono<ResponseEntity<Flux<UserDTO>>> getAllUsers(Pageable pageable) {
+    public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllUsers(Pageable pageable) {
         return userService.countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(page, "/api/users"))
@@ -298,8 +298,8 @@ public class UserResource {
         return userService.getAuthorities()<% if (reactive) { %>.collectList()<% } %>;
     }
     <%_ } else { // Cassandra _%>
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        final List<UserDTO> userDTOs = userService.getAllManagedUsers();
+    public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers() {
+        final List<<%= asDto('User') %>> userDTOs = userService.getAllManagedUsers();
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
     <%_ } _%>
@@ -313,16 +313,16 @@ public class UserResource {
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     @Timed
     <%_ if (!reactive) { _%>
-    public ResponseEntity<UserDTO> getUser(@PathVariable String login) {
+    public ResponseEntity<<%= asDto('User') %>> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(
             userService.getUserWithAuthoritiesByLogin(login)
-                .map(UserDTO::new));
+                .map(<%= asDto('User') %>::new));
     <%_ } else { _%>
-    public Mono<UserDTO> getUser(@PathVariable String login) {
+    public Mono<<%= asDto('User') %>> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
-            .map(UserDTO::new)
+            .map(<%= asDto('User') %>::new)
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
     <%_ } _%>
     }
@@ -361,7 +361,7 @@ public class UserResource {
      */
     @GetMapping("/_search/users/{query}")
     @Timed
-    public List<User> search(@PathVariable String query) {
+    public List<<%= asEntity('User') %>> search(@PathVariable String query) {
         return StreamSupport
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
