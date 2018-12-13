@@ -55,7 +55,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/components/account/reset-password/reset-password.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/components/account/settings/settings.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/account/settings/settings.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/account/LoginModalService.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/account/login-modal.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/account/principal.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/audits/audits.component.ts`,

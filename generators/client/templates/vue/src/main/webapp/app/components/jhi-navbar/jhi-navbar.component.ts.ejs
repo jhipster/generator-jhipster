@@ -1,22 +1,32 @@
+import { mixins } from 'vue-class-component';
+import { Component, Inject } from 'vue-property-decorator';
+import { mapGetters } from 'vuex';
 import axios from 'axios';
-import {VERSION} from "../../constants";
-import TranslationService from '../../locale/translation.service';
-import LoginModalService from '../account/LoginModalService.vue';
-import Principal from '../account/principal';
-import LanguageService from '../../locale/LanguageService.vue';
+import {VERSION} from "@/constants";
+import TranslationService from '@/locale/translation.service';
+import LoginModalService from '@/components/account/login-modal.service';
+import Principal from '@/components/account/principal';
+import LanguageService from '@/locale/LanguageService.vue';
 
-const JhiNavbar = {
-  name: 'JhiNavbar',
-  mixins: [TranslationService, LoginModalService, Principal, LanguageService],
-  data : function() {
-    return {
-      version : VERSION ? 'v' + VERSION : '',
-      swaggerEnabled: false,
-      inProduction: false,
-      isNavbarCollapsed: true
-    }
-  },
-  created: function() {
+@Component({
+  computed: mapGetters(['authenticated'])
+})
+export default class JhiNavbar extends mixins(TranslationService, Principal, LanguageService) {
+  @Inject('loginModalService') private loginModalService: () => LoginModalService;
+  public version: string;
+  public swaggerEnabled: boolean;
+  public inProduction: boolean;
+  public isNavbarCollapsed: boolean;
+
+  constructor() {
+    super();
+    this.version = VERSION ? 'v' + VERSION : '';
+    this.swaggerEnabled = false;
+    this.inProduction = false;
+    this.isNavbarCollapsed = true;
+  }
+
+  created() {
     axios.get('management/info').then((res) => {
       if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf('swagger') > -1) {
         this.swaggerEnabled = true;
@@ -25,31 +35,30 @@ const JhiNavbar = {
         this.inProduction = true;
       }
     });
-  },
-  methods: {
-    getImageUrl: function() {
-      return false;
-    },
-    collapseNavbar() {
-      this.isNavbarCollapsed = true;
-    },
-    changeLanguage: function(language) {
-      this.currentLanguage = language;
-    },
-    logout: function () {
-      <%_ if (authenticationType === 'jwt') { _%>
-      localStorage.removeItem('jhi-authenticationToken');
-      sessionStorage.removeItem('jhi-authenticationToken');
-      <%_ } _%>
-      this.$store.commit('logout');
-      this.$router.push('/');
-    }
-  },
-  computed: {
-    authenticated(){
-      return this.$store.getters.authenticated;
-    }
   }
-};
 
-export default JhiNavbar;
+  public getImageUrl() : boolean {
+    return false;
+  }
+
+  public collapseNavbar() : void {
+    this.isNavbarCollapsed = true;
+  }
+
+  public changeLanguage(language) : void {
+    this.currentLanguage = language;
+  }
+
+  public logout() : void {
+    <%_ if (authenticationType === 'jwt') { _%>
+    localStorage.removeItem('jhi-authenticationToken');
+    sessionStorage.removeItem('jhi-authenticationToken');
+    <%_ } _%>
+    this.$store.commit('logout');
+    this.$router.push('/');
+  }
+
+  public openLogin() : void {
+    this.loginModalService().openLogin((<any>this).$root);
+  }
+}
