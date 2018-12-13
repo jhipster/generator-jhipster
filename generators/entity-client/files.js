@@ -135,7 +135,8 @@ function writeFiles() {
 
     // Add entity services to main
     utils.addEntityServiceToMainImport(this, className, this.entityFileName, this.entityFolderName);
-    utils.addEntityServiceToMain(this, entityName, className);
+    utils.addEntityServiceToMainConst(this, entityName, className);
+    utils.addEntityServiceToMain(this, entityName);
 
     if (!this.enableTranslation) {
         clientUtils.replaceTranslation(this, [
