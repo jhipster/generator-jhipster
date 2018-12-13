@@ -8,7 +8,7 @@
         </h2>
 
         <h3 v-text="$t('metrics.jvm.title')">JVM Metrics</h3>
-        <div class="row" v-if="!updatingMetrics && metrics && metrics.gauges['jvm.memory.total.used']">
+        <div class="row" v-if="!updatingMetrics && metrics && metrics.gauges && metrics.gauges['jvm.memory.total.used']">
             <div class="col-md-4">
                 <b v-text="$t('metrics.jvm.memory.title')">Memory</b>
                 <p><span v-text="$t('metrics.jvm.memory.total')">Total Memory</span> ({{formatNumber1(metrics.gauges['jvm.memory.total.used'].value / 1048576)}}M / {{formatNumber1(metrics.gauges['jvm.memory.total.max'].value / 1048576)}}M)</p>

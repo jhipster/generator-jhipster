@@ -77,7 +77,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/metrics/metrics-modal.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/metrics/metrics.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/metrics/metrics-modal.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/admin/metrics/MetricsService.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/admin/metrics/metrics.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/user-management/user-management-edit.component.ts`,

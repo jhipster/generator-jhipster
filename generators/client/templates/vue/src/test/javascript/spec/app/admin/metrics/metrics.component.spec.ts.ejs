@@ -1,11 +1,12 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import * as config from '@/shared/config';
-import MetricsComponent from '@/components/admin/metrics/metrics.vue';
+import Metrics from '@/components/admin/metrics/metrics.vue';
 import MetricsModal from '@/components/admin/metrics/metrics-modal.vue';
-import MetricsService from '@/components/admin/metrics/MetricsService.vue';
+import MetricsClass from '@/components/admin/metrics/metrics.component';
+import MetricsService from '@/components/admin/metrics/metrics.service';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -13,7 +14,6 @@ const mockedAxios: any = axios;
 config.initVueApp(localVue);
 const i18n = config.initI18N(localVue);
 const store = config.initVueXStore(localVue);
-localVue.mixin(MetricsService);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 localVue.component('metrics-modal', MetricsModal);
 localVue.directive('b-modal', {});
@@ -23,12 +23,23 @@ jest.mock('axios', () => ({
 }));
 
 describe('Metrics Component', () => {
-  let wrapper;
-  let comp;
+  let wrapper: Wrapper<MetricsClass>;
+  let metrics: MetricsClass;
 
   beforeEach(() => {
-    wrapper = shallowMount(MetricsComponent, { store, i18n, localVue, stubs: { bModal: true } });
-    comp = wrapper.vm;
+    mockedAxios.get.mockReturnValue(Promise.resolve({data:{}}));
+    wrapper = shallowMount<MetricsClass>(Metrics, {
+      store,
+      i18n,
+      localVue,
+      stubs: {
+        bModal: true
+      },
+      provide: {
+        metricsService: () => new MetricsService()
+      }
+    });
+    metrics = wrapper.vm;
   });
 
   it('should be a Vue instance', () => {
@@ -53,20 +64,20 @@ describe('Metrics Component', () => {
       mockedAxios.get.mockReturnValue(Promise.resolve({ data: response }));
 
       // WHEN
-      comp.refresh();
-      await comp.$nextTick();
+      metrics.refresh();
+      await metrics.$nextTick();
 
       // THEN
       expect(mockedAxios.get).toHaveBeenCalledWith('management/metrics');
-      expect(comp.servicesStats).toEqual({ service: 'test' });
-      expect(comp.cachesStats).toEqual({ jcache: { name: 17, value: 2 } });
+      expect(metrics.servicesStats).toEqual({ service: 'test' });
+      expect(metrics.cachesStats).toEqual({ jcache: { name: 17, value: 2 } });
     });
   });
 
   describe('isNan', () => {
     it('should return if a variable is NaN', () => {
-      expect(comp.filterNaN(1)).toBe(1);
-      expect(comp.filterNaN('test')).toBe(0);
+      expect(metrics.filterNaN(1)).toBe(1);
+      expect(metrics.filterNaN('test')).toBe(0);
     });
   });
 
@@ -75,11 +86,11 @@ describe('Metrics Component', () => {
       const dump = [{ name: 'test1', threadState: 'RUNNABLE' }];
       mockedAxios.get.mockReturnValue(Promise.resolve({ data: { threads: dump } }));
 
-      comp.refreshThreadDumpData();
-      await comp.$nextTick();
+      metrics.refreshThreadDumpData();
+      await metrics.$nextTick();
 
       expect(mockedAxios.get).toHaveBeenCalledWith('management/threaddump');
-      expect(comp.threads).toEqual(dump);
+      expect(metrics.threads).toEqual(dump);
     });
   });
 });

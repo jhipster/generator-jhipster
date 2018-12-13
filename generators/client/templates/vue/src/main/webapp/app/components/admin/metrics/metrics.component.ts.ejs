@@ -1,79 +1,87 @@
 import numeral from 'numeral';
 import <%=jhiPrefixCapitalized%>MetricsModal from './metrics-modal.vue';
-import MetricsService from './MetricsService.vue';
+import MetricsService from './metrics.service';
+import { Component, Vue, Inject } from 'vue-property-decorator';
 
-const <%=jhiPrefixCapitalized%>MetricsComponent = {
-  name: '<%=jhiPrefixCapitalized%>MetricsComponent',
-  mixins: [MetricsService],
+@Component({
   components: {
     'metrics-modal': <%=jhiPrefixCapitalized%>MetricsModal
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.refresh();
-    });
-  },
-  data() {
-    return {
-      metrics: {},
-      cachesStats: {},
-      servicesStats: {},
-      updatingMetrics: true,
-      JCACHE_KEY: 'jcache.statistics',
-      threads: null
-    };
-  },
-  methods: {
-    refresh() {
-      this.updatingMetrics = true;
-      this.getMetrics().then((res) => {
-        this.metrics = res.data;
-        this.updatingMetrics = false;
-        this.servicesStats = {};
-        this.cachesStats = {};
-        Object.keys(this.metrics.timers).forEach(key => {
-          const value = this.metrics.timers[key];
-          if (key.includes('web.rest') || key.includes('service')) {
-            this.servicesStats[key] = value;
-          }
-        });
-        Object.keys(this.metrics.gauges).forEach(key => {
-          if (key.includes('jcache.statistics')) {
-            const value = this.metrics.gauges[key].value;
-            // remove gets or puts
-            const index = key.lastIndexOf('.');
-            const newKey = key.substr(0, index);
-
-            // Keep the name of the domain
-            this.cachesStats[newKey] = {
-              name: this.JCACHE_KEY.length,
-              value
-            };
-          }
-        });
-      });
-    },
-    refreshThreadDumpData() {
-      if (this.$refs.metricsModal.show) {
-        this.$refs.metricsModal.show();
-      }
-      this.retrieveThreadDump().then((res) => {
-        this.threads = res.data.threads;
-      });
-    },
-    filterNaN(input) {
-      if (isNaN(input)) {
-        return 0;
-      }
-      return input;
-    },
-    formatNumber1(value) {
-      return numeral(value).format('0,0');
-    },
-    formatNumber2(value) {
-      return numeral(value).format('0,00');
-    }
   }
-};
+})
+export default class <%=jhiPrefixCapitalized%>Metrics extends Vue {
+  public metrics: any;
+  public cachesStats: any;
+  public servicesStats: any;
+  public updatingMetrics: boolean;
+  public JCACHE_KEY: string;
+  public threads: any;
+  @Inject('metricsService') private metricsService: () => MetricsService;
 
-export default <%=jhiPrefixCapitalized%>MetricsComponent;
+  constructor() {
+    super();
+    this.metrics = {};
+    this.cachesStats = {};
+    this.servicesStats = {};
+    this.updatingMetrics = true;
+    this.JCACHE_KEY = 'jcache.statistics';
+    this.threads = null;
+  }
+
+  public mounted(): void {
+    this.refresh();
+  }
+
+  public refresh(): void {
+    this.updatingMetrics = true;
+    this.metricsService().getMetrics().then(res => {
+      this.metrics = res.data;
+      this.updatingMetrics = false;
+      this.servicesStats = {};
+      this.cachesStats = {};
+      Object.keys(this.metrics.timers).forEach(key => {
+        const value = this.metrics.timers[key];
+        if (key.includes('web.rest') || key.includes('service')) {
+          this.servicesStats[key] = value;
+        }
+      });
+      Object.keys(this.metrics.gauges).forEach(key => {
+        if (key.includes('jcache.statistics')) {
+          const value = this.metrics.gauges[key].value;
+          // remove gets or puts
+          const index = key.lastIndexOf('.');
+          const newKey = key.substr(0, index);
+
+          // Keep the name of the domain
+          this.cachesStats[newKey] = {
+            name: this.JCACHE_KEY.length,
+            value
+          };
+        }
+      });
+    });
+  }
+
+  public refreshThreadDumpData(): void {
+    if ((<any>this.$refs.metricsModal).show) {
+      (<any>this.$refs.metricsModal).show();
+    }
+    this.metricsService().retrieveThreadDump().then(res => {
+      this.threads = res.data.threads;
+    });
+  }
+
+  filterNaN(input: any): any {
+    if (isNaN(input)) {
+      return 0;
+    }
+    return input;
+  }
+
+  formatNumber1(value: any): any {
+    return numeral(value).format('0,0');
+  }
+
+  formatNumber2(value: any): any {
+    return numeral(value).format('0,00');
+  }
+}

@@ -12,9 +12,11 @@ import RegisterService from './components/account/register/register.service';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import UserManagementService from '@/components/admin/user-management/user-management.service';
+import MetricsService from './components/admin/metrics/metrics.service';
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
+const metricsService = new MetricsService();
 const registerService = new RegisterService();
 const userManagementService = new UserManagementService();
 // jhipster-needle-add-entity-service-to-main-declaration - JHipster will declare entities services here
@@ -40,6 +42,7 @@ new Vue({
   template: '<App/>',
   router,
   provide: {
+    metricsService: () => metricsService,
     registerService: () => registerService,
     userService: () => userManagementService
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
