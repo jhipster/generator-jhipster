@@ -1,13 +1,9 @@
-import LoginModalService from '../account/LoginModalService.vue';
-import Principal from '../account/principal';
+import Component, { mixins } from 'vue-class-component';
 import { mapGetters } from 'vuex';
+import LoginModalService from '@/components/account/LoginModalService.vue';
+import Principal from '@/components/account/principal';
 
-const Home = {
-  name: 'Home',
-  mixins: [LoginModalService, Principal],
-  computed: {
-    ...mapGetters(['authenticated', 'account'])
-  }
-};
-
-export default Home;
+@Component({
+  computed: mapGetters(['authenticated', 'account'])
+})
+export default class Home extends mixins(LoginModalService, Principal) {}
