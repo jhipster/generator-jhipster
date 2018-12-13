@@ -9,7 +9,7 @@
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "serverPort": "8080",
-    "authenticationType": "jwt",
+    "authenticationType": "session",
     "cacheProvider": "ehcache",
     "enableHibernateCache": true,
     "websocket": false,
@@ -21,7 +21,7 @@
     "serviceDiscoveryType": false,
     "buildTool": "gradle",
     "enableSwaggerCodegen": false,
-    "jwtSecretKey": "YzQxYjVjZDJiZWM5ODQ1OTFiN2VjZDQwMTM2YjliODc1OWMyNTkyNTVjY2UxZmQ5YjA2YjQ5NDM1YzdiNWY0NzI3NjgzNjJhY2JmMjdjNTljYmQxMTdjNDc2N2ZhZTg2MWRkOThkZWVhZDc4NzA4YmVlOWZlOTIyMjkxZDI2MGU=",
+    "rememberMeKey": "067bff90ca98ebf571aa4f656d3aa909f273bd9ab473648fa8d79881baf753d6c6f684eeb931a2ee7274bf9b7cea94862a1d",
     "enableTranslation": true,
     "languages": [
       "en"
