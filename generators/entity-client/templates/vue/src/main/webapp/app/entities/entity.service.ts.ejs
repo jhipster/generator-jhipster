@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { Component, Vue } from 'vue-property-decorator';
 <% if (pagination !== 'no') { %>
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 <% } %>
@@ -10,8 +9,7 @@ const baseApiUrl = 'api/<%= entityApiUrl %>';
 const baseSearchApiUrl = 'api/_search/<%= entityApiUrl %>?query=';
 <%_ } _%>
 
-@Component
-export default class <%= entityAngularName %>Service extends Vue {
+export default class <%= entityAngularName %>Service {
   <%_ if (searchEngine === 'elasticsearch') { _%>
   public search(query<% if (pagination !== 'no') { %>, paginationQuery<% } %>) : Promise<any> {
     return new Promise<any>(resolve => {
