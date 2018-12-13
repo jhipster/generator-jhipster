@@ -8,16 +8,18 @@ import router from './router';
 import * as config from './shared/config';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
 import RegisterService from './components/account/register/register.service';
+import LoginModalService from './components/account/login-modal.service';
+import MetricsService from './components/admin/metrics/metrics.service';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import UserManagementService from '@/components/admin/user-management/user-management.service';
-import MetricsService from './components/admin/metrics/metrics.service';
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 const metricsService = new MetricsService();
 const registerService = new RegisterService();
+const loginModalService = new LoginModalService();
 const userManagementService = new UserManagementService();
 // jhipster-needle-add-entity-service-to-main-declaration - JHipster will declare entities services here
 
@@ -42,6 +44,7 @@ new Vue({
   template: '<App/>',
   router,
   provide: {
+    loginModalService: () => loginModalService,
     metricsService: () => metricsService,
     registerService: () => registerService,
     userService: () => userManagementService

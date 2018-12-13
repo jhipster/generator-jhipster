@@ -1,16 +1,18 @@
-import Component, { mixins } from 'vue-class-component';
+import { mixins } from 'vue-class-component';
+import { Component, Inject } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import axios from 'axios';
-import {VERSION} from "../../constants";
-import TranslationService from '../../locale/translation.service';
-import LoginModalService from '../account/LoginModalService.vue';
-import Principal from '../account/principal';
-import LanguageService from '../../locale/LanguageService.vue';
+import {VERSION} from "@/constants";
+import TranslationService from '@/locale/translation.service';
+import LoginModalService from '@/components/account/login-modal.service';
+import Principal from '@/components/account/principal';
+import LanguageService from '@/locale/LanguageService.vue';
 
 @Component({
   computed: mapGetters(['authenticated'])
 })
-export default class JhiNavbar extends mixins(TranslationService, LoginModalService, Principal, LanguageService) {
+export default class JhiNavbar extends mixins(TranslationService, Principal, LanguageService) {
+  @Inject('loginModalService') private loginModalService: () => LoginModalService;
   public version: string;
   public swaggerEnabled: boolean;
   public inProduction: boolean;
@@ -54,5 +56,9 @@ export default class JhiNavbar extends mixins(TranslationService, LoginModalServ
     <%_ } _%>
     this.$store.commit('logout');
     this.$router.push('/');
+  }
+
+  public openLogin() : void {
+    this.loginModalService().openLogin((<any>this).$root);
   }
 }
