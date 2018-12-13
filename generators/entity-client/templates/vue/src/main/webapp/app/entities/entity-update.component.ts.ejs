@@ -16,6 +16,7 @@ import moment from 'moment'
     <%_ } } _%>
 
 <%_
+    const importEntitiesSeen = [entityAngularName];
     for (idx in relationships) {
     const otherEntityAngularName = relationships[idx].otherEntityAngularName;
     const otherEntityFileName = relationships[idx].otherEntityFileName;
@@ -24,11 +25,11 @@ import moment from 'moment'
 _%>
   <% if (otherEntityAngularName === 'User') { %>
 import UserService from '@/components/admin/user-management/user-management.service';
-  <% } else { %>
+  <% } else if (!importEntitiesSeen.includes(otherEntityAngularName)) { %>
 import <%= otherEntityAngularName %>Service from '../<%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
 import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';
   <% } %>
-<%_ } _%>
+<%_ importEntitiesSeen.push(otherEntityAngularName); } _%>
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
@@ -76,13 +77,18 @@ const beforeRouteEnter = (to, from, next) => {
 export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
   public <%= entityInstance %>: I<%= entityAngularName %>;
-  <%_ for (idx in relationships) {
+  <%_
+    const entitiesSeen = [entityAngularName];
+    for (idx in relationships) {
     const otherEntityName = relationships[idx].otherEntityName;
+    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
     const otherEntityAngularName = relationships[idx].otherEntityAngularName;
   _%>
+  <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
   @Inject('<%= otherEntityName %>Service') private <%= otherEntityName %>Service : () => <%= otherEntityAngularName %>Service;
-  public <%= otherEntityName %>s : <% if (otherEntityAngularName === 'User') { %>Array<any><%_ } else { _%>I<%= otherEntityAngularName %>[]<%_ } _%>;
   <%_ } _%>
+  public <%= otherEntityNamePlural %> : <% if (otherEntityAngularName === 'User') { %>Array<any><%_ } else { _%>I<%= otherEntityAngularName %>[]<%_ } _%>;
+  <%_ entitiesSeen.push(otherEntityAngularName); } _%>
   public isSaving: boolean;
 
   constructor() {
@@ -94,16 +100,16 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
       <%= fieldName %>: null,
       <%_ } _%>
       <%_ for (idx in relationships) {
-          const otherEntityName = relationships[idx].otherEntityName;
+          const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
           if (relationships[idx].relationshipType !== 'many-to-one') {
       _%>
-      <%= otherEntityName %>s: [],
+      <%= otherEntityNamePlural %>: [],
       <%_ } } _%>
     };
     <%_ for (idx in relationships) {
-      const otherEntityName = relationships[idx].otherEntityName;
+      const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
     _%>
-    this.<%= otherEntityName %>s = [];
+    this.<%= otherEntityNamePlural %> = [];
     <%_ } _%>
     this.isSaving = false;
   }
@@ -169,13 +175,14 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         let hasManyToMany = false;
         for (idx in relationships) {
         const otherEntityName = relationships[idx].otherEntityName;
+        const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
         const otherEntityAngularName = relationships[idx].otherEntityAngularName;
         if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) {
             hasManyToMany = true;
         }
     _%>
     this.<%= otherEntityName %>Service().retrieve().then((res) => {
-      this.<%= otherEntityName %>s = res.data;
+      this.<%= otherEntityNamePlural %> = res.data;
     });
     <%_ } _%>
   }
