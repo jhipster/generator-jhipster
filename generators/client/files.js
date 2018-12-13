@@ -135,7 +135,7 @@ const vueFiles = {
                 'components/account/principal.ts',
                 'components/account/register/register.vue',
                 'components/account/register/register.component.ts',
-                'components/account/RegisterService.vue',
+                'components/account/register/register.service.ts',
                 'components/account/reset-password/reset-password.vue',
                 'components/account/reset-password/reset-password.component.ts',
                 'components/account/settings/settings.vue',

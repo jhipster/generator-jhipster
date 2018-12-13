@@ -1,4 +1,3 @@
-import RegisterService from '../RegisterService.vue';
 import LoginModalService from '../LoginModalService.vue';
 import TranslationService from '../../../locale/translation.service';
 import { required, minLength, maxLength, helpers, email } from 'vuelidate/lib/validators';
@@ -8,7 +7,8 @@ const loginPattern = helpers.regex('alpha', /^[_.@A-Za-z0-9-]*$/);
 
 const Register = {
   name: 'Register',
-  mixins: [RegisterService, LoginModalService, TranslationService],
+  inject: ['registerService'],
+  mixins: [LoginModalService, TranslationService],
   data() {
     return {
       confirmPassword: undefined,
@@ -60,7 +60,7 @@ const Register = {
         this.errorUserExists = null;
         this.errorEmailExists = null;
         this.registerAccount.langKey = this.currentLanguage;
-        this.processRegistration(this.registerAccount)
+        this.registerService().processRegistration(this.registerAccount)
           .then(response => {
             this.success = true;
           })

@@ -8,6 +8,7 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {Modal, Pagination, Progress} from 'bootstrap-vue/es/components';
 import * as config from './shared/config';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
+import RegisterService from './components/account/register/register.service';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -29,6 +30,9 @@ Vue.use(Modal);
 Vue.use(Pagination);
 Vue.use(Progress);
 
+const registerService = new RegisterService();
+const userManagementService = new UserManagementService();
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -36,7 +40,8 @@ new Vue({
   template: '<App/>',
   router,
   provide: {
-    userService: () => new UserManagementService()
+    registerService: () => registerService,
+    userService: () => userManagementService
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
   },
 <%_ if (enableTranslation) { _%>    i18n,<%_ } _%>
