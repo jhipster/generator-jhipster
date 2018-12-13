@@ -8,7 +8,7 @@ import TranslationService from '../../locale/translation.service';
 export default class Principal extends mixins(TranslationService<%_ if (websocket === 'spring-websocket') { _%>, TrackerService<%_ } _%>) {
 
   public created(): void {
-    const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken'); <%_ } else { _%> this.$cookie.get('JSESSIONID') || this.$cookie.get('XSRF-TOKEN'); <%_ } _%>
+    const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken'); <%_ } else { _%> (<any>this).$cookie.get('JSESSIONID') || (<any>this).$cookie.get('XSRF-TOKEN'); <%_ } _%>
     if (!this.$store.getters.account && !this.$store.getters.logon && token) {
       this.retrieveAccount();
     }

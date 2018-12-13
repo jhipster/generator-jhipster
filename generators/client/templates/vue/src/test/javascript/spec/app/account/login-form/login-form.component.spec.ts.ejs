@@ -85,6 +85,44 @@ describe('LoginForm Component', () => {
     expect(loginForm.authenticationError).toBeFalsy();
     expect(localStorage.getItem('jhi-authenticationToken')).toEqual(jwtSecret);
   });
+  <%_ } else { _%>
+  it('should authentication be KO', async () => {
+    // GIVEN
+    loginForm.login = 'login';
+    loginForm.password = 'pwd';
+    loginForm.rememberMe = true;
+    mockedAxios.post.mockReturnValue(Promise.reject());
+
+    // WHEN
+    loginForm.doLogin();
+    await loginForm.$nextTick();
+
+    // THEN
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/authentication',
+      'j_username=login&j_password=pwd&remember-me=true&submit=Login',
+      { "headers": { "Content-Type": "application/x-www-form-urlencoded" } });
+
+    expect(loginForm.authenticationError).toBeTruthy();
+  });
+
+  it('should authentication be OK', async () => {
+    // GIVEN
+    loginForm.login = 'login';
+    loginForm.password = 'pwd';
+    loginForm.rememberMe = true;
+    mockedAxios.post.mockReturnValue(Promise.resolve({}));
+
+    // WHEN
+    loginForm.doLogin();
+    await loginForm.$nextTick();
+
+    // THEN
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/authentication',
+      'j_username=login&j_password=pwd&remember-me=true&submit=Login',
+      { "headers": { "Content-Type": "application/x-www-form-urlencoded" } });
+
+    expect(loginForm.authenticationError).toBeFalsy();
+  });
   <%_ } _%>
 
 });

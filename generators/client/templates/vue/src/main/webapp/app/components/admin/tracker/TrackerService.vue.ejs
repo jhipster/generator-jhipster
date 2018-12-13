@@ -35,7 +35,7 @@
                 this.stompClient = Stomp.over(socket);
                 const headers = {};
                 <%_ if (authenticationType === 'session') { _%>
-                headers['X-XSRF-TOKEN'] = this.$cookie.get('JSESSIONID') || this.$cookie.get('XSRF-TOKEN');
+                headers['X-XSRF-TOKEN'] = (<any>this).$cookie.get('JSESSIONID') || (<any>this).$cookie.get('XSRF-TOKEN');
                 <%_ } _%>
                 this.stompClient.connect(headers, () => {
                     this.connectedPromise('success');
