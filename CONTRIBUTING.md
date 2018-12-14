@@ -27,7 +27,7 @@ If you find a bug in the source code or a mistake in the documentation, you can 
 
 ## <a name="bounties"></a> Bug bounties
 
-If you submitted a Pull Request that fixes a ticket with the "$100" tag, then you are eligible to our bug bounty program! Go to our [bug bounties documentation] for more information, and claim your money.
+If you submitted a Pull Request that fixes a ticket with the "$100" tag, then you are eligible to our bug bounty program! Go to our [bug bounties documentation](https://www.jhipster.tech/bug-bounties/) for more information, and claim your money.
 
 ## <a name="feature"></a> Feature Requests
 
