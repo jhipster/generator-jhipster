@@ -1,11 +1,9 @@
 import moment from 'moment';
 import AuditsService from './audits.service';
-import { Component } from 'vue-property-decorator';
-import { mixins } from 'vue-class-component';
-
+import { Component, Inject, Vue } from 'vue-property-decorator';
 
 @Component
-export default class <%=jhiPrefixCapitalized%>Audits extends mixins(AuditsService){
+export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
   public audits: any;
   public fromDate: any;
   public itemsPerPage: number;
@@ -17,6 +15,7 @@ export default class <%=jhiPrefixCapitalized%>Audits extends mixins(AuditsServic
   public reverse: boolean;
   public toDate: any;
   public totalItems: number;
+  @Inject('auditsService') private auditsService: () => AuditsService;
 
   constructor() {
     super();
@@ -67,7 +66,7 @@ export default class <%=jhiPrefixCapitalized%>Audits extends mixins(AuditsServic
 
   public loadAll(): void {
     if (this.fromDate && this.toDate) {
-      this.query({
+      this.auditsService().query({
         page: this.page - 1,
         size: this.itemsPerPage,
         sort: this.sort(),

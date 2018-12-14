@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as config from '@/shared/config';
 import Audits from '@/components/admin/audits/audits.vue';
 import AuditsClass from '@/components/admin/audits/audits.component';
+import AuditsService from '@/components/admin/audits/audits.service';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -35,6 +36,9 @@ describe('Audits Component', () => {
       stubs: {
         bPagination: true,
         jhiItemCount: true
+      },
+      provide: {
+        auditsService: () => new AuditsService()
       }
     });
     audits = wrapper.vm;
