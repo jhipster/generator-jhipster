@@ -64,6 +64,9 @@ describe('JHipster generator', () => {
                     })
                 );
             });
+            it("doesn't contain undefined", () => {
+                assert.noFileContent('README.md', 'undefined');
+            });
             it('contains clientFramework with angularX value', () => {
                 assert.fileContent('.yo-rc.json', /"clientFramework": "angularX"/);
             });
