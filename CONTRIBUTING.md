@@ -4,6 +4,7 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
 
 -   [Questions and help](#question)
 -   [Issues and Bugs](#issue)
+-   [Bug bounties](#bounties)
 -   [Feature Requests](#feature)
 -   [Submission Guidelines](#submit)
 -   [Generator development setup](#setup)
@@ -23,6 +24,10 @@ If you have a question on using JHipster, or if you need help with your JHipster
 If you find a bug in the source code or a mistake in the documentation, you can help us by [submitting a ticket](https://opensource.guide/how-to-contribute/#opening-an-issue) to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). Even better, you can submit a Pull Request to our [JHipster generator project](https://github.com/jhipster/generator-jhipster) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
 
 **Please see the Submission Guidelines below**.
+
+## <a name="bounties"></a> Bug bounties
+
+If you submitted a Pull Request that fixes a ticket with the "$100" tag, then you are eligible to our bug bounty program! Go to our [bug bounties documentation] for more information, and claim your money.
 
 ## <a name="feature"></a> Feature Requests
 
