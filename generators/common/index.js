@@ -70,9 +70,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 // Make documentation URL available in templates
                 this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-                this.DOCUMENTATION_ARCHIVE_URL = `${constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${
-                    this.jhipsterVersion
-                }`;
+                this.DOCUMENTATION_ARCHIVE_PATH = constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
             }
         };
     }
