@@ -1,13 +1,12 @@
-import axios, { AxiosPromise } from 'axios';
-import { Component, Vue } from 'vue-property-decorator';
+import axios, { AxiosInstance, AxiosPromise } from 'axios';
 
-@Component
-export default class HealthService extends Vue {
+export default class HealthService {
   public separator: string;
+  private axios: AxiosInstance;
 
   constructor() {
-    super();
     this.separator = '.';
+    this.axios = axios;
   }
 
   public checkHealth(): AxiosPromise<any> {
@@ -75,28 +74,13 @@ export default class HealthService extends Vue {
   public flattenHealthData(result: any, path: any, data: any): any {
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
-
         const value = data[key];
         if (this.isHealthObject(value)) {
           if (this.hasSubSystem(value)) {
-            this.addHealthObject(
-              result,
-              false,
-              value,
-              this.getModuleName(path, key)
-            );
-            this.flattenHealthData(
-              result,
-              this.getModuleName(path, key),
-              value
-            );
+            this.addHealthObject(result, false, value, this.getModuleName(path, key));
+            this.flattenHealthData(result, this.getModuleName(path, key), value);
           } else {
-            this.addHealthObject(
-              result,
-              true,
-              value,
-              this.getModuleName(path, key)
-            );
+            this.addHealthObject(result, true, value, this.getModuleName(path, key));
           }
         }
       }

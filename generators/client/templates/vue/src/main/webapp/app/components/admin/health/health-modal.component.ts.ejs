@@ -1,18 +1,17 @@
 import HealthService from './health.service';
-import { Component, Prop } from 'vue-property-decorator';
-import { mixins } from 'vue-class-component';
+import { Component, Inject, Prop, Vue } from 'vue-property-decorator';
 
 @Component
-export default class <%=jhiPrefixCapitalized%>HealthModal extends mixins(HealthService) {
-  @Prop()
-  currentHealth!: any;
+export default class <%=jhiPrefixCapitalized%>HealthModal extends Vue {
+  @Prop() currentHealth!: any;
+  @Inject('healthService') private healthService: () => HealthService;
 
   public baseName(name: String): any {
-    return this.getBaseName(name);
+    return this.healthService().getBaseName(name);
   }
 
   public subSystemName(name: String): any {
-    return this.getSubSystemName(name);
+    return this.healthService().getSubSystemName(name);
   }
 
   public readableValue(value: any): String {

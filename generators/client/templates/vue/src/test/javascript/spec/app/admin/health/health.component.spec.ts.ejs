@@ -6,6 +6,7 @@ import * as config from '@/shared/config';
 import Health from '@/components/admin/health/health.vue';
 import HealthModal from '@/components/admin/health/health-modal.vue';
 import HealthClass from '@/components/admin/health/health.component';
+import HealthService from '@/components/admin/health/health.service';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -29,7 +30,17 @@ describe('Health Component', () => {
 
   beforeEach(() => {
     mockedAxios.get.mockReturnValue(Promise.resolve({}));
-    wrapper = shallowMount<HealthClass>(Health, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, stubs: { bModal: true } });
+    wrapper = shallowMount<HealthClass>(Health, {
+      store,
+      <% if (enableTranslation) { %>i18n, <% } %>
+      localVue,
+      stubs: {
+        bModal: true
+      },
+      provide: {
+        healthService: () => new HealthService()
+      }
+    });
     health = wrapper.vm;
   });
 
@@ -52,241 +63,6 @@ describe('Health Component', () => {
 
     it('should return the subsystem when it has multiple keys', () => {
       expect(health.subSystemName('subsystem.subsystem.system')).toBe(' - subsystem.system');
-    });
-  });
-
-  describe('transformHealthData', () => {
-    it('should flatten empty health data', () => {
-      const data = {};
-      const expected = [];
-      expect(health.transformHealthData(data)).toEqual(expected);
-    });
-
-    it('should flatten health data with no subsystems', () => {
-      const data = {
-        details: {
-          status: 'UP',
-          db: {
-            status: 'UP',
-            database: 'H2',
-            hello: '1'
-          },
-          mail: {
-            status: 'UP',
-            error: 'mail.a.b.c'
-          }
-        }
-      };
-      const expected = [
-        {
-          name: 'db',
-          status: 'UP',
-          details: {
-            database: 'H2',
-            hello: '1'
-          }
-        },
-        {
-          name: 'mail',
-          error: 'mail.a.b.c',
-          status: 'UP'
-        }
-      ];
-      expect(health.transformHealthData(data)).toEqual(expected);
-    });
-
-    it('should flatten health data with subsystems at level 1, main system has no additional information', () => {
-      const data = {
-        details: {
-          status: 'UP',
-          db: {
-            status: 'UP',
-            database: 'H2',
-            hello: '1'
-          },
-          mail: {
-            status: 'UP',
-            error: 'mail.a.b.c'
-          },
-          system: {
-            status: 'DOWN',
-            subsystem1: {
-              status: 'UP',
-              property1: 'system.subsystem1.property1'
-            },
-            subsystem2: {
-              status: 'DOWN',
-              error: 'system.subsystem1.error',
-              property2: 'system.subsystem2.property2'
-            }
-          }
-        }
-      };
-      const expected = [
-        {
-          name: 'db',
-          status: 'UP',
-          details: {
-            database: 'H2',
-            hello: '1'
-          }
-        },
-        {
-          name: 'mail',
-          error: 'mail.a.b.c',
-          status: 'UP'
-        },
-        {
-          name: 'system.subsystem1',
-          status: 'UP',
-          details: {
-            property1: 'system.subsystem1.property1'
-          }
-        },
-        {
-          name: 'system.subsystem2',
-          error: 'system.subsystem1.error',
-          status: 'DOWN',
-          details: {
-            property2: 'system.subsystem2.property2'
-          }
-        }
-      ];
-      expect(health.transformHealthData(data)).toEqual(expected);
-    });
-
-    it('should flatten health data with subsystems at level 1, main system has additional information', () => {
-      const data = {
-        details: {
-          status: 'UP',
-          db: {
-            status: 'UP',
-            database: 'H2',
-            hello: '1'
-          },
-          mail: {
-            status: 'UP',
-            error: 'mail.a.b.c'
-          },
-          system: {
-            status: 'DOWN',
-            property1: 'system.property1',
-            subsystem1: {
-              status: 'UP',
-              property1: 'system.subsystem1.property1'
-            },
-            subsystem2: {
-              status: 'DOWN',
-              error: 'system.subsystem1.error',
-              property2: 'system.subsystem2.property2'
-            }
-          }
-        }
-      };
-      const expected = [
-        {
-          name: 'db',
-          status: 'UP',
-          details: {
-            database: 'H2',
-            hello: '1'
-          }
-        },
-        {
-          name: 'mail',
-          error: 'mail.a.b.c',
-          status: 'UP'
-        },
-        {
-          name: 'system',
-          status: 'DOWN',
-          details: {
-            property1: 'system.property1'
-          }
-        },
-        {
-          name: 'system.subsystem1',
-          status: 'UP',
-          details: {
-            property1: 'system.subsystem1.property1'
-          }
-        },
-        {
-          name: 'system.subsystem2',
-          error: 'system.subsystem1.error',
-          status: 'DOWN',
-          details: {
-            property2: 'system.subsystem2.property2'
-          }
-        }
-      ];
-      expect(health.transformHealthData(data)).toEqual(expected);
-    });
-
-    it('should flatten health data with subsystems at level 1, main system has additional error', () => {
-      const data = {
-        details: {
-          status: 'UP',
-          db: {
-            status: 'UP',
-            database: 'H2',
-            hello: '1'
-          },
-          mail: {
-            status: 'UP',
-            error: 'mail.a.b.c'
-          },
-          system: {
-            status: 'DOWN',
-            error: 'show me',
-            subsystem1: {
-              status: 'UP',
-              property1: 'system.subsystem1.property1'
-            },
-            subsystem2: {
-              status: 'DOWN',
-              error: 'system.subsystem1.error',
-              property2: 'system.subsystem2.property2'
-            }
-          }
-        }
-      };
-      const expected = [
-        {
-          name: 'db',
-          status: 'UP',
-          details: {
-            database: 'H2',
-            hello: '1'
-          }
-        },
-        {
-          name: 'mail',
-          error: 'mail.a.b.c',
-          status: 'UP'
-        },
-        {
-          name: 'system',
-          error: 'show me',
-          status: 'DOWN'
-        },
-        {
-          name: 'system.subsystem1',
-          status: 'UP',
-          details: {
-            property1: 'system.subsystem1.property1'
-          }
-        },
-        {
-          name: 'system.subsystem2',
-          error: 'system.subsystem1.error',
-          status: 'DOWN',
-          details: {
-            property2: 'system.subsystem2.property2'
-          }
-        }
-      ];
-      expect(health.transformHealthData(data)).toEqual(expected);
     });
   });
 

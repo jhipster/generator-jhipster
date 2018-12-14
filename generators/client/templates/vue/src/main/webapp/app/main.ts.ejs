@@ -8,6 +8,7 @@ import router from './router';
 import * as config from './shared/config';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
 import AuditsService from './components/admin/audits/audits.service';
+import HealthService from './components/admin/health/health.service';
 import LoginModalService from './components/account/login-modal.service';
 import MetricsService from './components/admin/metrics/metrics.service';
 import RegisterService from './components/account/register/register.service';
@@ -22,6 +23,7 @@ import UserManagementService from '@/components/admin/user-management/user-manag
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 const auditsService = new AuditsService();
+const healthService = new HealthService();
 const loginModalService = new LoginModalService();
 const metricsService = new MetricsService();
 <%_ if (enableTranslation) { _%>
@@ -53,6 +55,7 @@ new Vue({
   router,
   provide: {
     auditsService: () => auditsService,
+    healthService: () => healthService,
     loginModalService: () => loginModalService,
     metricsService: () => metricsService,
     registerService: () => registerService,
