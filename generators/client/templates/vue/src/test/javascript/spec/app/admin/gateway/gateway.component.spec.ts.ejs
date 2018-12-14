@@ -9,7 +9,9 @@ import GatewayService from '@/components/admin/gateway/GatewayService.vue';
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
+<%_ } _%>
 const store = config.initVueXStore(localVue);
 localVue.mixin(GatewayService);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
@@ -24,7 +26,7 @@ describe('Gateway Component', () => {
   let comp;
 
   beforeEach(() => {
-    wrapper = shallowMount(GatewayComponent, { store, i18n, localVue });
+    wrapper = shallowMount(GatewayComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue });
     comp = wrapper.vm;
   });
 

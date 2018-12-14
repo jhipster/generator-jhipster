@@ -13,11 +13,17 @@ import MetricsService from './components/admin/metrics/metrics.service';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+<%_ if (enableTranslation) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } _%>
 import UserManagementService from '@/components/admin/user-management/user-management.service';
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 const metricsService = new MetricsService();
+<%_ if (enableTranslation) { _%>
+const translationService = new TranslationService();
+<%_ } _%>
 const registerService = new RegisterService();
 const loginModalService = new LoginModalService();
 const userManagementService = new UserManagementService();
@@ -47,7 +53,11 @@ new Vue({
     loginModalService: () => loginModalService,
     metricsService: () => metricsService,
     registerService: () => registerService,
+    <%_ if (enableTranslation) { _%>
+    translationService: () => translationService,
+    <%_ } _%>
     userService: () => userManagementService
+
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
   },
 <%_ if (enableTranslation) { _%>    i18n,<%_ } _%>

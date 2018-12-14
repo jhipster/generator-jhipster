@@ -9,7 +9,9 @@ const localVue = createLocalVue();
 const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
+<%_ } _%>
 
 jest.mock('axios', () => ({
   get: jest.fn(),
@@ -23,7 +25,9 @@ describe('Ribbon', () => {
   const wrap = async (managementInfo?: any) => {
     mockGet(managementInfo);
     wrapper = shallowMount<RibbonClass>(Ribbon, {
+      <%_ if (enableTranslation) { _%>
       i18n,
+      <%_ } _%>
       localVue,
     });
     ribbon = wrapper.vm;

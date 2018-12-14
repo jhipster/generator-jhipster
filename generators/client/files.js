@@ -97,8 +97,15 @@ const vueFiles = {
                 'main.ts',
                 'config/axios-interceptor.ts',
                 'shared/config.ts',
-                'router/index.ts',
-                'locale/LanguageService.vue',
+                'router/index.ts'
+            ]
+        }
+    ],
+    i18n: [
+        {
+            condition: generator => generator.enableTranslation,
+            path: VUE_DIR,
+            templates: [
                 'locale/translation.service.ts'
             ]
         }

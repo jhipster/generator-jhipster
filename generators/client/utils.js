@@ -30,15 +30,15 @@ module.exports = {
 };
 
 function addLanguagesToApplication(generator) {
-    const fullPath = `${CLIENT_MAIN_SRC_DIR}app/locale/LanguageService.vue`;
+    const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/config.ts`;
     try {
         let content = '{\n';
         if (generator.enableTranslation) {
             generator.generateLanguageOptions(generator.languages, generator.clientFramework).forEach((ln, i) => {
-                content += `                        ${ln}${i !== generator.languages.length - 1 ? ',' : ''}\n`;
+                content += `      ${ln}${i !== generator.languages.length - 1 ? ',' : ''}\n`;
             });
         }
-        content += '                    }';
+        content += '    }';
 
         jhipsterUtils.rewriteFile(
             {

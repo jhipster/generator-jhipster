@@ -7,7 +7,9 @@ import * as config from '@/shared/config';
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
+<%_ } _%>
 
 describe('<%=jhiPrefixCapitalized%>Docs', () => {
   let <%=jhiPrefix%>Docs: <%=jhiPrefixCapitalized%>DocsClass;
@@ -15,7 +17,9 @@ describe('<%=jhiPrefixCapitalized%>Docs', () => {
 
   beforeEach(() => {
     wrapper = shallowMount<<%=jhiPrefixCapitalized%>DocsClass>(<%=jhiPrefixCapitalized%>Docs, {
+      <%_ if (enableTranslation) { _%>
       i18n,
+      <%_ } _%>
       localVue,
     });
     <%=jhiPrefix%>Docs = wrapper.vm;

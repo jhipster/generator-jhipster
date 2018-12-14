@@ -1,38 +1,20 @@
 import axios from 'axios';
-import { Component, Vue } from 'vue-property-decorator';
+import VueI18n from 'vue-i18n';
 
-@Component({
-  watch: {
-    currentLanguage: function() {
-      this.refreshTranslations();
-    }
-  }
-})
-export default class TranslationService extends Vue {
+export default class TranslationService {
 
-  public currentLanguage: string;
-
-  constructor() {
-    super();
-    this.currentLanguage = '<%= nativeLanguage %>';
-  }
-
-  public mounted() {
-    this.refreshTranslations();
-  }
-
-  public refreshTranslations() {
-    if (this.$i18n && !this.$i18n.messages[this.currentLanguage]) {
-      this.$i18n.setLocaleMessage(this.currentLanguage, {});
-      axios.get('i18n/' + this.currentLanguage + '.json').then(res => {
+  public refreshTranslation(i18n: VueI18n, currentLanguage: string, newLanguage: string) {
+    currentLanguage = newLanguage ? newLanguage : '<%= nativeLanguage %>';
+    if (i18n && !i18n.messages[currentLanguage]) {
+      i18n.setLocaleMessage(currentLanguage, {});
+      axios.get('i18n/' + currentLanguage + '.json').then((res) => {
         if (res.data) {
-          this.$i18n.setLocaleMessage(this.currentLanguage, res.data);
-          this.$i18n.locale = this.currentLanguage;
+          i18n.setLocaleMessage(currentLanguage, res.data);
+          i18n.locale = currentLanguage;
         }
       });
-    } else if (this.$i18n) {
-      this.$i18n.locale = this.currentLanguage;
+    } else if (i18n) {
+      i18n.locale = currentLanguage;
     }
   }
-
 }

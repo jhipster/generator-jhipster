@@ -9,7 +9,9 @@ const localVue = createLocalVue();
 const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
+<%_ } _%>
 const store = config.initVueXStore(localVue);
 
 jest.mock('axios', () => ({
@@ -23,7 +25,7 @@ describe('Logs Component', () => {
 
   beforeEach(() => {
     mockedAxios.get.mockReturnValue(Promise.resolve({}));
-    wrapper = shallowMount<LogsClass>(Logs, { store, i18n, localVue });
+    wrapper = shallowMount<LogsClass>(Logs, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue });
     logs = wrapper.vm;
   });
 

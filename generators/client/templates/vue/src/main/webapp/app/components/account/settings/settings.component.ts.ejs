@@ -1,7 +1,6 @@
 import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
 import axios from 'axios';
 import Principal from '../principal';
-import LanguageService from '../../../locale/LanguageService.vue';
 import { EMAIL_ALREADY_USED_TYPE } from '../../../constants';
 import Component, { mixins } from 'vue-class-component';
 
@@ -29,16 +28,18 @@ const validations = {
 @Component({
   validations
 })
-export default class Settings extends mixins(Principal, LanguageService) {
+export default class Settings extends mixins(Principal) {
   public success: string;
   public error: string;
   public errorEmailExists: string;
+  public languages: any;
 
   constructor() {
     super();
     this.success = null;
     this.error = null;
     this.errorEmailExists = null;
+    this.languages = this.$store.getters.languages;
   }
 
   public save(): void {

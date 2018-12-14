@@ -8,12 +8,12 @@
             </div>
             <div class="col-md-8">
                 <b-form role="form" v-on:submit.prevent="doLogin()">
-                    <b-form-group v-bind:label="$t('global.form.username')" label-for="username">
-                        <b-form-input id="username" type="text" name="username" autofocus v-bind:placeholder="$t('global.form[\'username.placeholder\']')" v-model="login">
+                    <b-form-group <% if (!enableTranslation) { %>label="Username" <% } %>v-bind:label="$t('global.form.username')" label-for="username">
+                        <b-form-input id="username" type="text" name="username" autofocus v-bind:placeholder="$t('global.form[\'username.placeholder\']')" <% if (!enableTranslation) { %>placeholder="Your username" <% } %>v-model="login">
                         </b-form-input>
                     </b-form-group>
-                    <b-form-group v-bind:label="$t('login.form.password')" label-for="password">
-                        <b-form-input id="password" type="password" name="password" v-model.trim="name" v-bind:placeholder="$t('login.form[\'password.placeholder\']')" v-model="password">
+                    <b-form-group <% if (!enableTranslation) { %>label="Password" <% } %>v-bind:label="$t('login.form.password')" label-for="password">
+                        <b-form-input id="password" type="password" name="password" v-model.trim="name" v-bind:placeholder="$t('login.form[\'password.placeholder\']')" <% if (!enableTranslation) { %>placeholder="Your password" <% } %>v-model="password">
                         </b-form-input>
                     </b-form-group>
                     <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked text="$t('login.form.rememberme')">

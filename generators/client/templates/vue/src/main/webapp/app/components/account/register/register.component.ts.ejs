@@ -1,9 +1,8 @@
-import { mixins } from 'vue-class-component';
+import Vue from 'vue';
 import { Component, Inject } from 'vue-property-decorator';
 import { required, minLength, maxLength, helpers, email } from 'vuelidate/lib/validators';
 import LoginModalService from '@/components/account/login-modal.service';
 import RegisterService from '@/components/account/register/register.service';
-import TranslationService from '@/locale/translation.service';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
 
 const loginPattern = helpers.regex('alpha', /^[_.@A-Za-z0-9-]*$/);
@@ -36,7 +35,7 @@ const validations: any = {
 @Component({
   validations
 })
-export default class Register extends mixins(TranslationService) {
+export default class Register extends Vue {
   @Inject('registerService') private registerService : () => RegisterService;
   @Inject('loginModalService') private loginModalService : () => LoginModalService;
   public registerAccount: any;
@@ -70,7 +69,7 @@ export default class Register extends mixins(TranslationService) {
       this.error = null;
       this.errorUserExists = null;
       this.errorEmailExists = null;
-      this.registerAccount.langKey = this.currentLanguage;
+      this.registerAccount.langKey = this.$store.getters.currentLanguage;
       this.registerService().processRegistration(this.registerAccount)
         .then(() => {
           this.success = true;

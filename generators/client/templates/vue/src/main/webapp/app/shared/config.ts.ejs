@@ -26,6 +26,7 @@ export function initBootstrapVue(vue) {
   library.add(fas);
 }
 
+<%_ if (enableTranslation) { _%>
 export function initI18N(vue) {
   vue.use(VueI18n);
   return new VueI18n({
@@ -33,13 +34,19 @@ export function initI18N(vue) {
   });
 }
 
+<%_ } _%>
 export function initVueXStore(vue) {
   vue.use(Vuex);
   return new Vuex.Store({
     state: {
       logon: false,
       userIdentity: null,
-      authenticated: false
+      authenticated: false,
+      <%_ if (enableTranslation) { _%>
+      currentLanguage: '<%= nativeLanguage %>',
+      languages: 
+        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
+      <%_ } _%>
     },
     mutations: {
       authenticate(state) {
@@ -57,6 +64,10 @@ export function initVueXStore(vue) {
       }
     },
     getters: {
+      <%_ if (enableTranslation) { _%>
+      currentLanguage: state => state.currentLanguage,
+      languages: state => state.languages,
+      <%_ } _%>
       logon: state => state.logon,
       account: state => state.userIdentity,
       authenticated: state => state.authenticated

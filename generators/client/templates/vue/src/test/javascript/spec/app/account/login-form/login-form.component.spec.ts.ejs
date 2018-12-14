@@ -16,7 +16,9 @@ localVue.component('b-link', {});
 const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
+<%_ } _%>
 const store = config.initVueXStore(localVue);
 
 jest.mock('axios', () => ({
@@ -33,7 +35,7 @@ describe('LoginForm Component', () => {
     mockedAxios.get.mockReturnValue(Promise.resolve({}));
     mockedAxios.post.mockReset();
 
-    wrapper = shallowMount<LoginFormClass>(LoginForm, { store, i18n, localVue });
+    wrapper = shallowMount<LoginFormClass>(LoginForm, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue });
     loginForm = wrapper.vm;
   });
 

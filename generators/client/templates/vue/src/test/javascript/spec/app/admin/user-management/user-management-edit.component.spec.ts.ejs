@@ -11,7 +11,9 @@ const localVue = createLocalVue();
 const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
+<%_ } _%>
 const store = config.initVueXStore(localVue);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
@@ -26,7 +28,7 @@ describe('UserManagementEdit Component', () => {
   let userManagementEdit: UserManagementEditClass;
 
   beforeEach(() => {
-    wrapper = shallowMount<UserManagementEditClass>(UserManagementEdit, { store, i18n, localVue, provide: { userService: () => new UserManagementService() } });
+    wrapper = shallowMount<UserManagementEditClass>(UserManagementEdit, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: { userService: () => new UserManagementService() } });
     userManagementEdit = wrapper.vm;
   });
 

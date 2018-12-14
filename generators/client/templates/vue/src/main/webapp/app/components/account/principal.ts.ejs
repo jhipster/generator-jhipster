@@ -1,11 +1,16 @@
 import axios from 'axios';
-import Component, { mixins } from 'vue-class-component';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 
-import TranslationService from '../../locale/translation.service';
-<%_ if (websocket === 'spring-websocket') { _%>import TrackerService from '../admin/tracker/TrackerService.vue';<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+import TrackerService from '../admin/tracker/TrackerService.vue';
+<%_ } _%>
 
 @Component
-export default class Principal extends mixins(TranslationService<%_ if (websocket === 'spring-websocket') { _%>, TrackerService<%_ } _%>) {
+export default class Principal extends Vue {
+
+  <%_ if (websocket === 'spring-websocket') { _%>
+  @Inject('trackerService') private trackerService: () => TrackerService;
+  <%_ } _%>
 
   public created(): void {
     const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken'); <%_ } else { _%> (<any>this).$cookie.get('JSESSIONID') || (<any>this).$cookie.get('XSRF-TOKEN'); <%_ } _%>
@@ -20,11 +25,11 @@ export default class Principal extends mixins(TranslationService<%_ if (websocke
       const account = response.data;
       if (account) {
         this.$store.commit('authenticated', account);
-        if (this.currentLanguage !== account.langKey) {
-          this.currentLanguage = account.langKey;
+        if (this.$store.getters.currentLanguage !== account.langKey) {
+          this.$store.getters.currentLanguage = account.langKey;
         }
         <%_ if (websocket === 'spring-websocket') { _%>
-        this.connect();
+        this.trackerService.connect();
         <%_ } _%>
       } else {
         this.$store.commit('logout');

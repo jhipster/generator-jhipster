@@ -8,7 +8,8 @@ const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 
 const expectedFiles = {
-    i18nJson: [
+    i18n: [
+        `${CLIENT_MAIN_SRC_DIR}app/locale/translation.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/activate.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/audits.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/configuration.json`,
@@ -97,9 +98,6 @@ const expectedFiles = {
 
         `${CLIENT_MAIN_SRC_DIR}app/config/axios-interceptor.ts`,
 
-        `${CLIENT_MAIN_SRC_DIR}app/locale/LanguageService.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/locale/translation.service.ts`,
-
         `${CLIENT_MAIN_SRC_DIR}app/router/index.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/shared/data/DataUtilsService.vue`,
@@ -177,7 +175,7 @@ describe('VueJS JHipster blueprint', () => {
                 .on('end', done);
         });
         it('creates expected files from jhipster client generator', () => {
-            assert.file(expectedFiles.i18nJson);
+            assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
@@ -224,7 +222,7 @@ describe('VueJS JHipster blueprint', () => {
                 .on('end', done);
         });
         it('creates expected files from jhipster client generator', () => {
-            assert.file(expectedFiles.i18nJson);
+            assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
@@ -270,7 +268,7 @@ describe('VueJS JHipster blueprint', () => {
                 .on('end', done);
         });
         it('creates expected files from jhipster client generator', () => {
-            assert.noFile(expectedFiles.i18nJson);
+            assert.noFile(expectedFiles.i18n);
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
@@ -319,7 +317,7 @@ describe('VueJS JHipster blueprint', () => {
                 .on('end', done);
         });
         it('creates expected files from jhipster client generator', () => {
-            assert.file(expectedFiles.i18nJson);
+            assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.test);
             assert.file(expectedFiles.protractor);

@@ -10,7 +10,9 @@ const localVue = createLocalVue();
 const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
+<%_ } _%>
 const store = config.initVueXStore(localVue);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
 
@@ -26,7 +28,9 @@ describe('Audits Component', () => {
   beforeEach(() => {
     wrapper = shallowMount<AuditsClass>(Audits, {
       store,
+      <%_ if (enableTranslation) { _%>
       i18n,
+      <%_ } _%>
       localVue,
       stubs: {
         bPagination: true,

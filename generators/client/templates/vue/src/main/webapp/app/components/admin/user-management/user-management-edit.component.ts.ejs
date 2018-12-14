@@ -1,7 +1,5 @@
 import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
-import { mixins } from 'vue-class-component';
-import { Component, Inject } from 'vue-property-decorator';
-import LanguageService from '@/locale/LanguageService.vue';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import UserManagementService from './user-management.service';
 
 function loginValidator(value) {
@@ -46,11 +44,12 @@ const beforeRouteEnter = (to, from, next) => {
   validations,
   beforeRouteEnter
 })
-export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends mixins(LanguageService) {
+export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
   public userAccount: any;
   public isSaving: boolean;
   private authorities: any[];
+  public languages: any;
 
   public constructor() {
     super();
@@ -65,6 +64,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends mixins(
     };
     this.isSaving = false;
     this.authorities = [];
+    this.languages = this.$store.getters.languages;
   }
 
   public init(userId: number): void {
