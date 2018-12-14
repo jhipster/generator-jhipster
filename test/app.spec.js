@@ -70,6 +70,9 @@ describe('JHipster generator', () => {
             it('contains correct custom prefix when specified', () => {
                 assert.fileContent('angular.json', /"prefix": "test"/);
             });
+            it('generates a README with no undefined value', () => {
+                assert.noFileContent('README.md', /undefined/);
+            });
         });
 
         describe('React', () => {
@@ -1319,6 +1322,47 @@ describe('JHipster generator', () => {
         });
     });
 
+    context('App with skip server', () => {
+        before(done => {
+            helpers
+                .run(path.join(__dirname, '../generators/app'))
+                .withOptions({ 'from-cli': true, skipInstall: true, skipServer: true, db: 'mysql', auth: 'jwt', skipChecks: true })
+                .withPrompts({
+                    baseName: 'jhipster',
+                    clientFramework: 'angularX',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files for default configuration with skip server option enabled', () => {
+            assert.file(expectedFiles.common);
+            assert.noFile(expectedFiles.server);
+            assert.noFile(expectedFiles.userManagementServer);
+            assert.noFile(expectedFiles.maven);
+            assert.file(
+                getFilesForOptions(angularFiles, {
+                    useSass: false,
+                    enableTranslation: true,
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    testFrameworks: []
+                })
+            );
+        });
+        it('generates a README with no undefined value', () => {
+            assert.noFileContent('README.md', /undefined/);
+        });
+    });
+
     context('App with skip client', () => {
         describe('Maven', () => {
             before(done => {
@@ -1365,6 +1409,9 @@ describe('JHipster generator', () => {
                         ['package.json']
                     )
                 );
+            });
+            it('generates a README with no undefined value', () => {
+                assert.noFileContent('README.md', /undefined/);
             });
         });
 
