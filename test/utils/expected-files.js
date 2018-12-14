@@ -128,7 +128,7 @@ const expectedFiles = {
 
     maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties'],
 
-    common: ['README.md', '.gitignore', '.gitattributes', '.editorconfig'],
+    common: ['.prettierignore', '.prettierrc', 'README.md', '.gitignore', '.gitattributes', '.editorconfig'],
 
     server: [
         `${SERVER_MAIN_RES_DIR}banner.txt`,
@@ -286,8 +286,6 @@ const expectedFiles = {
     client: [
         'angular.json',
         '.huskyrc',
-        '.prettierignore',
-        '.prettierrc',
         'package.json',
         'postcss.config.js',
         'proxy.conf.json',

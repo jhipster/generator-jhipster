@@ -171,7 +171,7 @@ module.exports = class extends BaseGenerator {
 
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
         this.experimental = this.configOptions.experimental = this.options.experimental;
-        this.registerClientTransforms();
+        this.registerPrettierTransform();
     }
 
     get initializing() {
