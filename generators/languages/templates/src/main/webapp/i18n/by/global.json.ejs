@@ -1,0 +1,158 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Dаш браўзэр <strong>састарэў</strong>. Калі ласка <a href=\"http://browsehappy.com/?locale=ru\">абновіце ваш браўзэр</a>.",
+        "menu": {
+            "home": "Галоўная",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Cутнасці",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Профіль",
+                "settings": "Налады",
+                "password": "Пароль",
+                "sessions": "Сесіі",
+                "login": "Увайсці",
+                "logout": "Выйсці",
+                "register": "Зарэгістравацца"
+            },
+            "admin": {
+                "main": "Адміністраванне",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "Шлюз",
+                <%_ } _%>
+                "userManagement": "Кіраванне карыстальнікамі",
+                "tracker": "Трэкер карыст.",
+                "metrics": "Метрыкі",
+                "health": "Стан",
+                "configuration": "Налады",
+                "logs": "Логі",
+                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                "audits": "Аўдыт",
+                <%_ } _%>
+                "apidocs": "API",
+                "database": "База дадзеных",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Мова"
+        },
+        "form": {
+            "username": "Лагін",
+            "username.placeholder": "Ваш лагін",
+            "currentpassword": "Цяперашні пароль",
+            "currentpassword.placeholder": "Цяперашнія пароль",
+            "newpassword": "Новы пароль",
+            "newpassword.placeholder": "Новы пароль",
+            "confirmpassword": "Пацвярджэнне новага паролю",
+            "confirmpassword.placeholder": "Пацвердзіце новы пароль",
+            "email": "Email",
+            "email.placeholder": "Ваш email"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Калі вы хочаце ",
+                    "link": "аўтарызавацца",
+                    "suffix": ", вы можаце паспрабаваць акаўнты па змаўчанні:<br/>- Адміністратар (лагін=\"admin\" і пароль=\"admin\") <br/>- Карыстальнік (лагін=\"user\" і пароль=\"user\")."
+                },
+                "register": {
+                    "noaccount": "У вас няма акаўнта?",
+                    "link": "Стварыць новы акаўнт"
+                }
+            },
+            "error": {
+                "dontmatch": "Пароль і яго пацвярджэнне не супадаюць!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Пароль павінен быць паказаны.",
+                    "minlength": "Даўжыня пароля павінна быць хаця-б 5 знакаў",
+                    "maxlength": "Пароль не можа быць даўжэй чым 50 сімвалаў",
+                    "strength": "Складанасць пароля:"
+                },
+                "confirmpassword": {
+                    "required": "Пацвярджэнне пароля павінна быць паказана.",
+                    "minlength": "Даўжыня пацвярджэнне пароля павінна быць хаця-б 5 знакаў",
+                    "maxlength": "Пацвярджэнне пароля не можа быць даўжэй чым 50 сімвалаў"
+                },
+                "email": {
+                    "required": "Email павінен быць паказаны.",
+                    "invalid": "Email не верны.",
+                    "minlength": "Даўжыня email павінна быць хаця-б 5 знакаў",
+                    "maxlength": "Email не можа быць даўжэй чым 50 сімвалаў"
+                }
+            }
+        },
+        "field": {
+            "id" : "ID"
+        },
+        "ribbon": {
+            "dev": "Распрацоўка"
+        },
+        "item-count": "{{first}} - {{second}} з {{total}}"
+    },
+    "entity": {
+        "action": {
+            "addblob": "Дадаць двайковы аб'ект",
+            "addimage": "Дадаць малюнак",
+            "back": "Назад",
+            "cancel": "Адмена",
+            "delete": "Выдаліць",
+            "edit": "Змяніць",
+            "open": "Адкрыць",
+            "save": "Захаваць",
+            "view": "Прагляд"
+        },
+        "detail": {
+            "field": "Поле",
+            "value": "Значэнне"
+        },
+        "delete": {
+            "title": "Пацвердзіце аперацыю выдалення"
+        },
+        "validation": {
+            "required": "Гэта поле абавязкова да запаўнення.",
+            "minlength": "Гэта поле з'яўляецца абавязковым, па меншай меры {{min}} сімвалаў.",
+            "maxlength": "Гэта поле не можа быць даўжэй, чым {{max}} сімвалаў.",
+            "min": "Гэта поле павінна быць больш, чым {{min}}.",
+            "max": "Гэта поле не можа быць больш, чым {{max}}.",
+            "minbytes": "Гэта поле павінна быць больш, чым {{min}} байтаў.",
+            "maxbytes": "Гэта поле не можа быць больш, чым {{max}} байтаў.",
+            "pattern": "Гэта поле павінна прытрымлівацца мадэлі {{pattern}}.",
+            "number": "Гэта поле не можа быць лікам.",
+            "datetimelocal": "Гэта поле павінна быць дата і час."
+        }
+    },
+    "error": {
+        "internalServerError": "Унутраная памылка сервера",
+        "server.not.reachable": "Сервер недаступнын",
+        "url.not.found": "Не знойдзена",
+        "NotNull": "Поле {{fieldName}} не можа быць пустым!",
+        "Size": "Поле {{fieldName}} не отвечает требованиям мин/макс.го размера!",
+        "userexists": "Імя карыстальніка ўжо выкарыстоўваецца!",
+        "emailexists": "Эл. пошта ўжо выкарыстоўваецца !!",
+        "idexists": "Новы {{entityName}} ня можа мець дадзены ID",
+        "idnull": "Няправільны ID"
+    },
+    "footer": "Гэта ваш футэр"
+}

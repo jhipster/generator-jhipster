@@ -27,59 +27,75 @@ const REACT_DIR = constants.ANGULAR_DIR;
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
-*/
+ */
 const files = {
     common: [
         {
             templates: [
-                '.prettierrc', // this needs to be the first file for prettier transform to work
-                '.prettierignore',
                 'package.json',
                 'tslint.json',
                 'tsconfig.json',
+                'tsconfig.test.json',
                 { file: '.editorconfig', method: 'copy', noEjs: true },
                 'webpack/logo-jhipster.png',
                 'webpack/webpack.common.js',
                 'webpack/webpack.dev.js',
                 'webpack/webpack.prod.js',
-                'webpack/webpack.test.js',
                 'webpack/utils.js'
             ]
+        },
+        {
+            condition: generator => generator.protractorTests,
+            templates: ['tsconfig.e2e.json']
+        },
+        {
+            condition: generator => !generator.skipCommitHook,
+            templates: ['.huskyrc']
         }
     ],
     sass: [
         {
             condition: generator => generator.useSass,
-            templates: [
-                { file: 'postcss.config.js', method: 'copy' }
-            ]
+            templates: ['postcss.config.js']
         },
         {
             condition: generator => generator.useSass && generator.enableI18nRTL,
             path: MAIN_SRC_DIR,
-            templates: [
-                'app/rtl.scss',
-            ]
+            templates: ['app/rtl.scss']
         }
     ],
     image: [
         {
             path: MAIN_SRC_DIR,
             templates: [
-                { file: 'static/images/hipster.png', method: 'copy' },
-                { file: 'static/images/hipster2x.png', method: 'copy' },
-                { file: 'static/images/logo-jhipster.png', method: 'copy' },
-                { file: 'static/images/logo-jhipster-react.svg', method: 'copy' }
+                { file: 'static/images/jhipster_family_member_0.svg', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_1.svg', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_2.svg', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_3.svg', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_0_head-192.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_1_head-192.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_2_head-192.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_3_head-192.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_0_head-256.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_1_head-256.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_2_head-256.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_3_head-256.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_0_head-384.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_1_head-384.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_2_head-384.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_3_head-384.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_0_head-512.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_1_head-512.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_2_head-512.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_3_head-512.png', method: 'copy' },
+                { file: 'static/images/logo-jhipster.png', method: 'copy' }
             ]
         }
     ],
     swagger: [
         {
             path: MAIN_SRC_DIR,
-            templates: [
-                'swagger-ui/index.html',
-                { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }
-            ]
+            templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }]
         }
     ],
     commonWeb: [
@@ -90,7 +106,8 @@ const files = {
                 'robots.txt',
                 '404.html',
                 'index.html',
-                'manifest.webapp'
+                'manifest.webapp',
+                'static/css/loading.css'
             ]
         }
     ],
@@ -115,69 +132,53 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: REACT_DIR,
-            templates: [
-                'config/translation.ts'
-            ]
+            templates: ['config/translation.ts']
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: REACT_DIR,
-            templates: [
-                'config/websocket-middleware.ts'
-            ]
+            templates: ['config/websocket-middleware.ts']
         },
         {
             condition: generator => generator.useSass,
             path: REACT_DIR,
-            templates: [
-                'app.scss',
-                '_bootstrap-variables.scss',
-            ]
+            templates: ['app.scss', '_bootstrap-variables.scss']
         },
         {
             condition: generator => !generator.useSass,
             path: REACT_DIR,
-            templates: [
-                'app.css'
-            ]
+            templates: ['app.css']
         },
         {
             condition: generator => !generator.useSass && generator.enableI18nRTL,
             path: MAIN_SRC_DIR,
-            templates: [
-                'app/rtl.css'
-            ]
+            templates: ['app/rtl.css']
         }
-    // {
-    //   condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
-    //   path: REACT_DIR,
-    //   templates: [
-    //     'blocks/interceptor/_auth.interceptor.js'
-    //   ]
-    // },
-    // {
-    //   condition: generator => !generator.skipServer,
-    //   path: REACT_DIR,
-    //   templates: [
-    //     'blocks/interceptor/_auth-expired.interceptor.js'
-    //   ]
-    // }
+        // {
+        //   condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
+        //   path: REACT_DIR,
+        //   templates: [
+        //     'blocks/interceptor/_auth.interceptor.js'
+        //   ]
+        // },
+        // {
+        //   condition: generator => !generator.skipServer,
+        //   path: REACT_DIR,
+        //   templates: [
+        //     'blocks/interceptor/_auth-expired.interceptor.js'
+        //   ]
+        // }
     ],
     reactEntities: [
         {
             path: REACT_DIR,
-            templates: [
-                { file: 'entities/index.tsx', method: 'processJsx' }
-            ]
+            templates: [{ file: 'entities/index.tsx', method: 'processJsx' }]
         }
     ],
     reactMain: [
         {
             path: REACT_DIR,
-            templates: [
-                { file: 'modules/home/home.tsx', method: 'processJsx' },
-                { file: 'modules/login/logout.tsx', method: 'processJsx' },
-            ]
+            templates: [{ file: 'modules/home/home.tsx', method: 'processJsx' }, { file: 'modules/login/logout.tsx', method: 'processJsx' }]
         },
         {
             condition: generator => generator.authenticationType !== 'oauth2',
@@ -190,16 +191,12 @@ const files = {
         {
             condition: generator => generator.useSass,
             path: REACT_DIR,
-            templates: [
-                'modules/home/home.scss',
-            ]
+            templates: ['modules/home/home.scss']
         },
         {
             condition: generator => !generator.useSass,
             path: REACT_DIR,
-            templates: [
-                'modules/home/home.css',
-            ]
+            templates: ['modules/home/home.css']
         }
     ],
     reducers: [
@@ -215,20 +212,17 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: REACT_DIR,
-            templates: [
-                'shared/reducers/locale.ts'
-            ]
+            templates: ['shared/reducers/locale.ts']
         },
         {
             condition: generator => generator.authenticationType === 'oauth2',
             path: REACT_DIR,
-            templates: [
-                'shared/reducers/user-management.ts'
-            ]
+            templates: ['shared/reducers/user-management.ts']
         }
     ],
     accountModule: [
         {
+            condition: generator => generator.authenticationType !== 'oauth2',
             path: REACT_DIR,
             templates: [
                 { file: 'modules/account/index.tsx', method: 'processJsx' },
@@ -238,11 +232,11 @@ const files = {
                 { file: 'modules/account/password-reset/init/password-reset-init.tsx', method: 'processJsx' },
                 { file: 'modules/account/password-reset/finish/password-reset-finish.tsx', method: 'processJsx' },
                 { file: 'modules/account/settings/settings.tsx', method: 'processJsx' },
-                'modules/account/register/register.reducer.ts',
-                'modules/account/activate/activate.reducer.ts',
-                'modules/account/password-reset/password-reset.reducer.ts',
+                { file: 'modules/account/register/register.reducer.ts', method: 'processJsx' },
+                { file: 'modules/account/activate/activate.reducer.ts', method: 'processJsx' },
+                { file: 'modules/account/password-reset/password-reset.reducer.ts', method: 'processJsx' },
                 { file: 'modules/account/password/password.reducer.ts', method: 'processJsx' },
-                'modules/account/settings/settings.reducer.ts'
+                { file: 'modules/account/settings/settings.reducer.ts', method: 'processJsx' }
             ]
         },
         {
@@ -250,7 +244,7 @@ const files = {
             path: REACT_DIR,
             templates: [
                 { file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' },
-                'modules/account/sessions/sessions.reducer.ts',
+                'modules/account/sessions/sessions.reducer.ts'
             ]
         }
     ],
@@ -275,9 +269,7 @@ const files = {
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: REACT_DIR,
-            templates: [
-                { file: 'modules/administration/tracker/tracker.tsx', method: 'processJsx' }
-            ]
+            templates: [{ file: 'modules/administration/tracker/tracker.tsx', method: 'processJsx' }]
         },
         {
             condition: generator => !generator.skipUserManagement,
@@ -292,11 +284,9 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway',
+            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: REACT_DIR,
-            templates: [
-                { file: 'modules/administration/gateway/gateway.tsx', method: 'processJsx' }
-            ]
+            templates: [{ file: 'modules/administration/gateway/gateway.tsx', method: 'processJsx' }]
         }
     ],
     reactShared: [
@@ -319,6 +309,8 @@ const files = {
                 'shared/util/entity-utils.ts',
                 // components
                 { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
+                { file: 'shared/error/error-boundary.tsx', method: 'processJsx' },
+                { file: 'shared/error/error-boundary-route.tsx', method: 'processJsx' },
                 // model
                 'shared/model/user.model.ts'
             ]
@@ -326,16 +318,17 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: REACT_DIR,
-            templates: [
-                { file: 'shared/layout/header/menus/locale.tsx', method: 'processJsx' },
-            ]
+            templates: [{ file: 'shared/layout/header/menus/locale.tsx', method: 'processJsx' }]
         },
         {
             condition: generator => generator.authenticationType === 'oauth2',
             path: REACT_DIR,
-            templates: [
-                'shared/util/url-utils.ts'
-            ]
+            templates: ['shared/util/url-utils.ts']
+        },
+        {
+            condition: generator => generator.authenticationType === 'session' && generator.websocket === 'spring-websocket',
+            path: REACT_DIR,
+            templates: ['shared/util/cookie-utils.ts']
         },
         {
             condition: generator => generator.useSass,
@@ -360,22 +353,21 @@ const files = {
         {
             path: TEST_SRC_DIR,
             templates: [
-                'karma.conf.js',
-                'spec/entry.ts',
+                'jest.conf.js',
+                'spec/enzyme-setup.ts',
+                'spec/storage-mock.ts',
                 'spec/app/utils.ts',
+                'spec/app/config/axios-interceptor.spec.ts',
                 'spec/app/config/notification-middleware.spec.ts',
                 'spec/app/shared/reducers/application-profile.spec.ts',
                 'spec/app/shared/reducers/authentication.spec.ts',
                 'spec/app/shared/util/entity-utils.spec.ts',
                 'spec/app/shared/auth/private-route.spec.tsx',
+                'spec/app/shared/error/error-boundary.spec.tsx',
+                'spec/app/shared/error/error-boundary-route.spec.tsx',
                 'spec/app/shared/layout/header/header.spec.tsx',
                 'spec/app/shared/layout/header/menus/account.spec.tsx',
-                'spec/app/modules/account/register/register.spec.tsx',
-                'spec/app/modules/account/register/register.reducer.spec.ts',
-                'spec/app/modules/account/activate/activate.reducer.spec.ts',
-                'spec/app/modules/account/password/password.reducer.spec.ts',
-                'spec/app/modules/account/settings/settings.reducer.spec.ts',
-                'spec/app/modules/administration/administration.reducer.spec.ts',
+                'spec/app/modules/administration/administration.reducer.spec.ts'
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
                 // 'spec/app/account/password/_password-strength-bar.component.spec.js',
@@ -391,25 +383,55 @@ const files = {
             ]
         },
         {
+            condition: generator => generator.authenticationType !== 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: [
+                // 'spec/app/modules/account/register/register.spec.tsx',
+                'spec/app/modules/account/register/register.reducer.spec.ts',
+                'spec/app/modules/account/activate/activate.reducer.spec.ts',
+                'spec/app/modules/account/password/password.reducer.spec.ts',
+                'spec/app/modules/account/settings/settings.reducer.spec.ts'
+            ]
+        },
+        {
             condition: generator => !generator.skipUserManagement,
             path: TEST_SRC_DIR,
+            templates: ['spec/app/modules/administration/user-management/user-management.reducer.spec.ts']
+        },
+        {
+            condition: generator => generator.enableTranslation,
+            path: TEST_SRC_DIR,
+            templates: ['spec/app/shared/reducers/locale.spec.ts']
+        },
+        {
+            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: ['spec/app/shared/reducers/user-management.spec.ts']
+        },
+        // {
+        //     condition: generator => generator.authenticationType === 'session',
+        //     path: TEST_SRC_DIR,
+        //     templates: [
+        //         'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
+        //     ]
+        // },
+        {
+            condition: generator => generator.protractorTests,
+            path: TEST_SRC_DIR,
             templates: [
-                'spec/app/modules/administration/user-management/user-management.reducer.spec.ts'
+                'e2e/modules/account/account.spec.ts',
+                'e2e/modules/administration/administration.spec.ts',
+                'e2e/util/utils.ts',
+                'e2e/page-objects/base-component.ts',
+                'e2e/page-objects/navbar-page.ts',
+                'e2e/page-objects/signin-page.ts',
+                'protractor.conf.js'
             ]
         },
         {
-            condition: generator => generator.skipUserManagement,
+            condition: generator => generator.protractorTests && generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/shared/reducers/user-management.spec.ts'
-            ]
-        },
-        {
-            condition: generator => generator.authenticationType === 'session',
-            path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/modules/account/sessions/sessions.reducer.spec.ts',
-            ]
+            templates: ['e2e/page-objects/password-page.ts', 'e2e/page-objects/settings-page.ts', 'e2e/page-objects/register-page.ts']
         }
     ]
 };
@@ -422,5 +444,5 @@ module.exports = {
 function writeFiles() {
     mkdirp(MAIN_SRC_DIR);
     // write React files
-    this.writeFilesToDisk(files, this, false, 'react');
+    this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/react'));
 }

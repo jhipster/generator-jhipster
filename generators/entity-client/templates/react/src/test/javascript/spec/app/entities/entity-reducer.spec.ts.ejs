@@ -21,19 +21,20 @@
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
-import { expect } from 'chai';
+
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 <%_ if (pagination === 'infinite-scroll') { _%>
 import { parseHeaderForLinks } from 'react-jhipster';
 <%_ } _%>
 
 import reducer, {
-  ACTION_TYPES, createEntity, deleteEntity, getEntities, getEntity, updateEntity<% if (pagination === 'infinite-scroll') { %>, reset<% } %>
+  ACTION_TYPES, createEntity, deleteEntity, getEntities,<% if (searchEngine === 'elasticsearch') { %> getSearchEntities, <% } %>getEntity, updateEntity, reset
 } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 // tslint:disable no-invalid-template-strings
 describe('Entities reducer tests', () => {
@@ -49,11 +50,11 @@ describe('Entities reducer tests', () => {
   const initialState = {
     loading: false,
     errorMessage: null,
-    entities: [],
-    entity: {},
+    entities: [] as ReadonlyArray<I<%= entityReactName %>>,
+    entity: defaultValue,
     <%_ if (pagination === 'infinite-scroll') { _%>
     links: {
-      last: 0
+      next: 0
     },
     <%_ } _%>
     <%_ if (pagination !== 'no') { _%>
@@ -64,7 +65,7 @@ describe('Entities reducer tests', () => {
   };
 
   function testInitialState(state) {
-    expect(state).to.contain({
+    expect(state).toMatchObject({
       loading: false,
       errorMessage: null,
       updating: false,
@@ -91,11 +92,14 @@ describe('Entities reducer tests', () => {
       testMultipleTypes(
         [
           REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          <%_ if (searchEngine === 'elasticsearch') { _%>
+          REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+          <%_ } _%>
           REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>)
         ],
         {},
         state => {
-          expect(state).to.contain({
+          expect(state).toMatchObject({
             errorMessage: null,
             updateSuccess: false,
             loading: true
@@ -113,13 +117,23 @@ describe('Entities reducer tests', () => {
         ],
         {},
         state => {
-          expect(state).to.contain({
+          expect(state).toMatchObject({
             errorMessage: null,
             updateSuccess: false,
             updating: true
           });
         }
       );
+    });
+
+    it('should reset the state', () => {
+      expect(
+        reducer({ ...initialState, loading: true }, {
+          type: ACTION_TYPES.RESET
+        })
+        ).toEqual({
+          ...initialState
+      });
     });
   });
 
@@ -128,6 +142,9 @@ describe('Entities reducer tests', () => {
       testMultipleTypes(
         [
           FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          <%_ if (searchEngine === 'elasticsearch') { _%>
+          FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+          <%_ } _%>
           FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>),
@@ -135,7 +152,7 @@ describe('Entities reducer tests', () => {
         ],
         'error message',
         state => {
-          expect(state).to.contain({
+          expect(state).toMatchObject({
             errorMessage: 'error message',
             updateSuccess: false,
             updating: false
@@ -147,23 +164,59 @@ describe('Entities reducer tests', () => {
 
   describe('Successes', () => {
     it('should fetch all entities', () => {
-      const payload = { data: { 1: 'fake1', 2: 'fake2' }<% if (pagination !== 'no') { %>, headers: { 'x-total-count': 123<% if (pagination === 'infinite-scroll') { %>, link: ';'<% } %> }<% } %> };
+      const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (pagination !== 'no') { %>, headers: { 'x-total-count': 123<% if (pagination === 'infinite-scroll') { %>, link: ';'<% } %> }<% } %> };
       <%_ if (pagination === 'infinite-scroll') { _%>
-      const link = parseHeaderForLinks(payload.headers.link);
+      const links = parseHeaderForLinks(payload.headers.link);
       <%_ } _%>
       expect(reducer(undefined, {
         type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
         payload
-      })).to.eql({
+      })).toEqual({
       ...initialState,
       <%_ if (pagination === 'infinite-scroll') { _%>
-      links: { last: link.last },
+      links,
       <%_ } _%>
       loading: false,
       <%_ if (pagination !== 'no') { _%>
       totalItems: payload.headers['x-total-count'],
       <%_ } _%>
-      entities: <% if (pagination === 'infinite-scroll') { %>[payload.data]<% } else { %>payload.data<% } %>
+      entities: payload.data
+      });
+    });
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    it('should search all entities', () => {
+      const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (pagination !== 'no') { %>, headers: { 'x-total-count': 123<% if (pagination === 'infinite-scroll') { %>, link: ';'<% } %> }<% } %> };
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      const links = parseHeaderForLinks(payload.headers.link);
+      <%_ } _%>
+      expect(reducer(undefined, {
+        type: SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+        payload
+      })).toEqual({
+      ...initialState,
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      links,
+      <%_ } _%>
+      loading: false,
+      <%_ if (pagination !== 'no') { _%>
+      totalItems: payload.headers['x-total-count'],
+      <%_ } _%>
+      entities: payload.data
+      });
+    });
+    <%_ } _%>
+
+    it('should fetch a single entity', () => {
+      const payload = { data: { 1: 'fake1' } };
+      expect(
+        reducer(undefined, {
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>),
+          payload
+        })
+      ).toEqual({
+        ...initialState,
+        loading: false,
+        entity: payload.data
       });
     });
 
@@ -172,7 +225,7 @@ describe('Entities reducer tests', () => {
       expect(reducer(undefined, {
         type: SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>),
         payload
-      })).to.eql({
+      })).toEqual({
         ...initialState,
         updating: false,
         updateSuccess: true,
@@ -187,7 +240,7 @@ describe('Entities reducer tests', () => {
           type: SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>),
           payload
         });
-      expect(toTest).to.contain({
+      expect(toTest).toMatchObject({
         updating: false,
         updateSuccess: true
       });
@@ -217,8 +270,22 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getEntities()).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(getEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    it('dispatches ACTION_TYPES.SEARCH_<%= entityActionNamePlural %> actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getSearchEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    <%_ } _%>
 
     it('dispatches ACTION_TYPES.FETCH_<%= entityActionName %> actions', async () => {
       const expectedActions = [
@@ -230,7 +297,7 @@ describe('Entities reducer tests', () => {
           payload: resolvedObject
         }
       ];
-      await store.dispatch(getEntity(42666)).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(getEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.CREATE_<%= entityActionName %> actions', async () => {
@@ -241,7 +308,7 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>),
           payload: resolvedObject
-        },
+        }<%_ if (pagination !== 'infinite-scroll') { _%>,
         {
           type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -249,8 +316,9 @@ describe('Entities reducer tests', () => {
           type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
+        <%_ } _%>
       ];
-      await store.dispatch(createEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(createEntity({ id: <% if (pkType === 'Long') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.UPDATE_<%= entityActionName %> actions', async () => {
@@ -261,7 +329,7 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>),
           payload: resolvedObject
-        },
+        }<%_ if (pagination !== 'infinite-scroll') { _%>,
         {
           type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -269,8 +337,9 @@ describe('Entities reducer tests', () => {
           type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
+        <%_ } _%>
       ];
-      await store.dispatch(updateEntity({ id: <% if (databaseType === 'sql') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(updateEntity({ id: <% if (pkType === 'Long') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.DELETE_<%= entityActionName %> actions', async () => {
@@ -281,7 +350,7 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>),
           payload: resolvedObject
-        },
+        }<%_ if (pagination !== 'infinite-scroll') { _%>,
         {
           type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -289,8 +358,19 @@ describe('Entities reducer tests', () => {
           type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
+        <%_ } _%>
       ];
-      await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+
+    it('dispatches ACTION_TYPES.RESET actions', async () => {
+      const expectedActions = [
+        {
+          type: ACTION_TYPES.RESET
+        }
+      ];
+      await store.dispatch(reset());
+      expect(store.getActions()).toEqual(expectedActions);
     });
   });
 
@@ -301,9 +381,10 @@ describe('Entities reducer tests', () => {
       expect(reducer(undefined, {
         type: ACTION_TYPES.SET_BLOB,
         payload
-      })).to.eql({
+      })).toEqual({
         ...initialState,
         entity: {
+          ...initialState.entity,
           fancyBlobName: payload.data,
           fancyBlobNameContentType: payload.contentType
         }

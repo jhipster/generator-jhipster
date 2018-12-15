@@ -1,0 +1,354 @@
+<%#
+Copyright 2013-2018 the original author or authors from the JHipster project.
+
+This file is part of the JHipster project, see https://www.jhipster.tech/
+for more information.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-%>
+/* tslint:disable no-unused-expression */
+import { browser, element, by } from 'protractor';
+
+import SignInPage from '../../page-objects/signin-page';
+import NavBarPage from '../../page-objects/navbar-page';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import RegisterPage from '../../page-objects/register-page';
+import PasswordPage from '../../page-objects/password-page';
+import SettingsPage from '../../page-objects/settings-page';
+import {
+  getToastByInnerText,
+  getUserDeactivatedButtonByLogin,
+<%_ if (databaseType !== 'cassandra') { _%>
+  getModifiedDateSortButton,
+<%_ } _%>
+  waitUntilDisplayed,
+  waitUntilHidden
+} from '../../util/utils';
+<%_ } else { _%>
+import { waitUntilDisplayed } from '../../util/utils';
+<%_ } _%>
+
+const expect = chai.expect;
+
+describe('Account', () => {
+  let navBarPage: NavBarPage;
+  let signInPage: SignInPage;
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  let passwordPage: PasswordPage;
+  let settingsPage: SettingsPage;
+  let registerPage: RegisterPage;
+
+  const registerPageTitle = 'register-title';
+  const passwordPageTitle = 'password-title';
+  const settingsPageTitle = 'settings-title';
+  <%_ } _%>
+  const loginPageTitle = 'login-title';
+
+  before(async () => {
+    await browser.get('/');
+    navBarPage = new NavBarPage();
+    signInPage = await navBarPage.getSignInPage();
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    await signInPage.waitUntilDisplayed();
+    <%_ } _%>
+  });
+
+  it('should fail to login with bad password', async () => {
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    // Login page should appear
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.username.sendKeys('admin');
+    await signInPage.password.sendKeys('foo');
+    await signInPage.loginButton.click();
+
+    // Login page should stay open when login fails
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+    <%_ } else { _%>
+    await signInPage.loginWithOAuth('admin', 'foo');
+    const alert = element(by.css('.alert-error'));
+    if (await alert.isPresent()) {
+      // Keycloak
+      expect(await alert.getText()).to.eq('Invalid username or password.');
+    } else {
+      // Okta
+      const error = element(by.css('.infobox-error'));
+      await waitUntilDisplayed(error);
+      expect(await error.getText()).to.eq('Sign in failed!');
+    }
+    await signInPage.clearUserName();
+    await signInPage.clearPassword();
+    <%_ } _%>
+  });
+
+  it('should login with admin account', async () => {
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    await browser.get('/');
+    await signInPage.get();
+
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.username.sendKeys('admin');
+    await signInPage.password.sendKeys('admin');
+    await signInPage.loginButton.click();
+    await signInPage.waitUntilHidden();
+
+    // Login page should close when login success
+    expect(await signInPage.isHidden()()).to.be.true;
+    await navBarPage.autoSignOut();
+    <%_ } else { _%>
+    // Keycloak credentials by default, change them to be able to use oauth2 with Okta
+    await signInPage.loginWithOAuth('admin', 'admin');
+    const success = element(by.className('alert-success'));
+    await waitUntilDisplayed(success);
+
+    // Success alert should appear in home page
+    expect(await success.isPresent()).to.be.true;
+    <%_ } _%>
+  });
+
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  it('should be able to sign up', async () => {
+    await waitUntilDisplayed(navBarPage.accountMenu);
+
+    registerPage = await navBarPage.getRegisterPage();
+    await registerPage.waitUntilDisplayed();
+    expect(await registerPage.getTitle()).to.eq(registerPageTitle);
+
+    await registerPage.autoSignUpUsing('user_test', 'admin@localhost.jh', 'user_test');
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByInnerText('Registration saved! Please check your email for confirmation.');
+    <% } else { %>
+    const toast = getToastByInnerText('<strong>Registration saved!</strong> Please check your email for confirmation.');
+    <%_ } _%>
+    await waitUntilDisplayed(toast);
+
+    // Success toast should appear
+    expect(await toast.isPresent()).to.be.true;
+  });
+
+  it('should load user management', async () => {
+    await signInPage.get();
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.username.sendKeys('admin');
+    await signInPage.password.sendKeys('admin');
+    await signInPage.loginButton.click();
+    await signInPage.waitUntilHidden();
+
+    const title = element(by.id('user-management-page-heading'));
+    await waitUntilDisplayed(navBarPage.adminMenu);
+
+    await navBarPage.clickOnAdminMenuItem('user-management');
+    await waitUntilDisplayed(title);
+
+    expect(await title.isPresent()).to.be.true;
+  });
+
+  it('should activate the new registered user', async () => {
+    expect(await element(by.id('user-management-page-heading')).isPresent()).to.be.true;
+<%_ if (databaseType !== 'cassandra') { _%>
+
+    const modifiedDateSortButton = getModifiedDateSortButton();
+    await waitUntilDisplayed(modifiedDateSortButton);
+    await modifiedDateSortButton.click();
+<%_ } _%>
+
+    const deactivatedButton = getUserDeactivatedButtonByLogin('user_test');
+    await waitUntilDisplayed(deactivatedButton);
+    await deactivatedButton.click();
+    await waitUntilHidden(deactivatedButton);
+
+    // Deactivated button should disappear
+    expect(await deactivatedButton.isPresent()).to.be.false;
+    await navBarPage.autoSignOut();
+  });
+
+  it('should not be able to sign up if login already taken', async () => {
+    await registerPage.get();
+    expect(await registerPage.getTitle()).to.eq(registerPageTitle);
+
+    await registerPage.autoSignUpUsing('user_test', 'admin@localhost.jh', 'user_test');
+    const toast = getToastByInnerText('Login name already used!');
+    await waitUntilDisplayed(toast);
+
+    // Error toast should appear
+    expect(await toast.isPresent()).to.be.true;
+  });
+
+  it('should not be able to sign up if email already taken', async () => {
+    expect(await registerPage.getTitle()).to.eq(registerPageTitle);
+
+    await registerPage.username.sendKeys('_jhi');
+    await registerPage.saveButton.click();
+    const toast = getToastByInnerText('Email is already in use!');
+    await waitUntilDisplayed(toast);
+
+    // Error toast should appear
+    expect(await toast.isPresent()).to.be.true;
+  });
+
+  it('should be able to log in with new registered account', async () => {
+    await signInPage.get();
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.username.sendKeys('user_test');
+    await signInPage.password.sendKeys('user_test');
+    await signInPage.loginButton.click();
+    await signInPage.waitUntilHidden();
+
+    // Login page should close when login success
+    expect(await signInPage.isHidden()()).to.be.true;
+    await navBarPage.autoSignOut();
+  });
+
+  it('should login with admin account', async () => {
+    await signInPage.get();
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.username.sendKeys('admin');
+    await signInPage.password.sendKeys('admin');
+    await signInPage.loginButton.click();
+    await signInPage.waitUntilHidden();
+
+    expect(await signInPage.isHidden()()).to.be.true;
+  });
+
+  it('should fail to update password when using incorrect current password', async () => {
+    passwordPage = await navBarPage.getPasswordPage();
+    await passwordPage.waitUntilDisplayed();
+    expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
+
+    await passwordPage.autoChangePassword('bad_password', 'new_password', 'new_password');
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByInnerText('An error has occurred! The password could not be changed.');
+    <% } else { %>
+    const toast = getToastByInnerText('<strong>An error has occurred!</strong> The password could not be changed.');
+    <%_ } _%>
+    await waitUntilDisplayed(toast);
+
+    // Error toast should appear
+    expect(await toast.isPresent()).to.be.true;
+  });
+
+  it('should be able to update password', async () => {
+    await browser.refresh();
+    await passwordPage.waitUntilDisplayed();
+    expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
+
+    await passwordPage.autoChangePassword('admin', 'new_password', 'new_password');
+    <%_ if (enableTranslation) { _%>
+    const toast = getToastByInnerText('Password changed!');
+    <% } else { %>
+    const toast = getToastByInnerText('<strong>Password changed!</strong>');
+    <%_ } _%>
+    await waitUntilDisplayed(toast);
+
+    // Success toast should appear
+    expect(await toast.isPresent()).to.be.true;
+    await navBarPage.autoSignOut();
+  });
+
+  it('should be able to log in with new password', async () => {
+    await signInPage.get();
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.username.sendKeys('admin');
+    await signInPage.password.sendKeys('new_password');
+    await signInPage.loginButton.click();
+    await signInPage.waitUntilHidden();
+    expect(await signInPage.isHidden()()).to.be.true;
+
+    // change back to default
+    await passwordPage.get();
+    expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
+
+    await passwordPage.autoChangePassword('new_password', 'admin', 'admin');
+
+    await navBarPage.autoSignOut();
+  });
+
+  it('should login with user_test account', async () => {
+    await signInPage.get();
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.username.sendKeys('user_test');
+    await signInPage.password.sendKeys('user_test');
+    await signInPage.loginButton.click();
+    await signInPage.waitUntilHidden();
+
+    expect(await signInPage.isHidden()()).to.be.true;
+  });
+
+  it('should be able to change user_test settings', async () => {
+    await waitUntilDisplayed(navBarPage.accountMenu);
+
+    settingsPage = await navBarPage.getSettingsPage();
+    expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
+
+    await settingsPage.firstName.sendKeys('jhipster');
+    await settingsPage.lastName.sendKeys('retspihj');
+    await settingsPage.saveButton.click();
+
+    const toast = getToastByInnerText('Settings saved!');
+    await waitUntilDisplayed(toast);
+
+    // Success toast should appear
+    expect(await toast.isPresent()).to.be.true;
+    await navBarPage.autoSignOut();
+  });
+
+  it('should login with admin account', async () => {
+    await signInPage.get();
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.username.sendKeys('admin');
+    await signInPage.password.sendKeys('admin');
+    await signInPage.loginButton.click();
+    await signInPage.waitUntilHidden();
+
+    expect(await signInPage.isHidden()()).to.be.true;
+  });
+
+  it('should not be able to change admin settings if email already exists', async () => {
+    await settingsPage.get();
+    expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
+
+    await settingsPage.setEmail('.jh');
+    await settingsPage.save();
+
+    const toast = getToastByInnerText('Email is already in use!');
+    await waitUntilDisplayed(toast);
+
+    // Error toast should appear
+    expect(await toast.isPresent()).to.be.true;
+  });
+
+  it('should delete previously created fake user', async () => {
+    await browser.get('#/admin/user-management/user_test/delete');
+    const deleteModal = element(by.className('modal'));
+    await waitUntilDisplayed(deleteModal);
+
+    await element(by.buttonText('Delete')).click();
+    await waitUntilHidden(deleteModal);
+
+    // Delete modal should disappear
+    expect(await deleteModal.isPresent()).to.be.false;
+  });
+  -%>
+  <%_ } _%>
+
+  after(async () => {
+    await navBarPage.autoSignOut()
+  });
+});

@@ -1,0 +1,41 @@
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+    <service><%=gaeServiceName%></service>
+    <threadsafe>true</threadsafe>
+    <runtime>java8</runtime>
+    <!-- See https://cloud.google.com/appengine/docs/standard/java/config/appref#syntax
+         for more scaling tuning parameters -->
+    <%_ if (gaeScalingType === 'manual') { _%>
+    <manual-scaling>
+        <instances><%= gaeInstances %></instances>
+    </manual-scaling>
+    <%_ } else if (gaeScalingType === 'basic') { _%>
+    <basic-scaling>
+        <%_ if (gaeMaxInstances > 0) { _%>
+        <max-instances><%= gaeMaxInstances %></max-instances>
+        <%_ } _%>
+    </basic-scaling>
+    <%_ } else if (gaeScalingType === 'automatic') { _%>
+    <automatic-scaling>
+        <%_ if (gaeMinInstances > 0) { _%>
+        <min-instances><%= gaeMinInstances %></min-instances>
+        <%_ } _%>
+        <%_ if (gaeMaxInstances > 0) { _%>
+        <max-instances><%= gaeMaxInstances %></max-instances>
+        <%_ } _%>
+    </automatic-scaling>
+    <%_ } _%>
+    <sessions-enabled>true</sessions-enabled>
+    <instance-class><%= gaeInstanceClass %></instance-class>
+    <precompilation-enabled>false</precompilation-enabled>
+    <system-properties>
+        <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+    </system-properties>
+    <class-loader-config>
+        <!-- temporary workaround to make sure the app uses it's memcache/mail jars.!-->
+        <priority-specifier filename="cache-api-1.1.0.jar"/>
+        <priority-specifier filename="javax.mail-1.6.2.jar"/>
+    </class-loader-config>
+    <env-variables>
+        <env-var name="SERVER_PORT" value="8080"/>
+    </env-variables>
+</appengine-web-app>

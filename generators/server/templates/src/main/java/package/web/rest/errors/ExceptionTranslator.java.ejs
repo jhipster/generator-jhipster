@@ -25,22 +25,37 @@ import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+<%_ if (!reactive) { _%>
 import org.springframework.web.bind.MethodArgumentNotValidException;
+<%_ } _%>
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+<%_ if (reactive) { _%>
+import org.springframework.web.bind.support.WebExchangeBindException;
+import org.springframework.web.server.ServerWebExchange;
+<%_ } _%>
+<%_ if (!reactive) { _%>
 import org.springframework.web.context.request.NativeWebRequest;
+<%_ } _%>
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.Status;
-import org.zalando.problem.spring.web.advice.ProblemHandling;
-import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProblem;
+import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.ProblemHandling;
+import org.zalando.problem.violations.ConstraintViolationProblem;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+<%_ if (!reactive) { _%>
 import javax.servlet.http.HttpServletRequest;
+<%_ } _%>
 import java.util.List;
+<%_ if (!reactive) { _%>
 import java.util.NoSuchElementException;
+<%_ } _%>
 import java.util.stream.Collectors;
 
 /**
@@ -50,44 +65,71 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ExceptionTranslator implements ProblemHandling {
 
+<%_
+let returnType;
+let requestClass;
+if (reactive) {
+    returnType = 'Mono<ResponseEntity<Problem>>';
+    requestClass = 'ServerWebExchange';
+} else {
+    returnType = 'ResponseEntity<Problem>';
+    requestClass = 'NativeWebRequest';
+}
+_%>
+    private static final String FIELD_ERRORS_KEY = "fieldErrors";
+    private static final String MESSAGE_KEY = "message";
+    private static final String PATH_KEY = "path";
+    private static final String VIOLATIONS_KEY = "violations";
+
     /**
-     * Post-process Problem payload to add the message key for front-end if needed
+     * Post-process the Problem payload to add the message key for the front-end if needed
      */
     @Override
-    public ResponseEntity<Problem> process(@Nullable ResponseEntity<Problem> entity, NativeWebRequest request) {
-        if (entity == null || entity.getBody() == null) {
+    public <%- returnType %> process(@Nullable ResponseEntity<Problem> entity, <%= requestClass %> request) {
+        if (entity == null) {
+            <%_ if (!reactive) { _%>
             return entity;
+            <%_ } else { _%>
+            return Mono.empty();
+            <%_ } _%>
         }
         Problem problem = entity.getBody();
         if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {
+            <%_ if (!reactive) { _%>
             return entity;
+            <%_ } else { _%>
+            return Mono.just(entity);
+            <%_ } _%>
         }
         ProblemBuilder builder = Problem.builder()
             .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
             .withStatus(problem.getStatus())
             .withTitle(problem.getTitle())
-            .with("path", request.getNativeRequest(HttpServletRequest.class).getRequestURI());
+            <%_ if (!reactive) { _%>
+            .with(PATH_KEY, request.getNativeRequest(HttpServletRequest.class).getRequestURI());
+            <%_ } else { _%>
+            .with(PATH_KEY, request.getRequest().getPath().value());
+            <%_ } _%>
 
         if (problem instanceof ConstraintViolationProblem) {
             builder
-                .with("violations", ((ConstraintViolationProblem) problem).getViolations())
-                .with("message", ErrorConstants.ERR_VALIDATION);
-            return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
+                .with(VIOLATIONS_KEY, ((ConstraintViolationProblem) problem).getViolations())
+                .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION);
         } else {
             builder
                 .withCause(((DefaultProblem) problem).getCause())
                 .withDetail(problem.getDetail())
                 .withInstance(problem.getInstance());
             problem.getParameters().forEach(builder::with);
-            if (!problem.getParameters().containsKey("message") && problem.getStatus() != null) {
-                builder.with("message", "error.http." + problem.getStatus().getStatusCode());
+            if (!problem.getParameters().containsKey(MESSAGE_KEY) && problem.getStatus() != null) {
+                builder.with(MESSAGE_KEY, "error.http." + problem.getStatus().getStatusCode());
             }
-            return new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode());
         }
+        return <% if (reactive) { %>Mono.just(<% } %>new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode())<% if (reactive) { %>)<% } %>;
     }
 
     @Override
-    public ResponseEntity<Problem> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @Nonnull NativeWebRequest request) {
+    public <%- returnType %> handle<%_ if (!reactive) { _%>MethodArgumentNotValid(MethodArgumentNotValidException<% } else { %>BindingResult(WebExchangeBindException<% } %> ex, @Nonnull <%= requestClass %> request) {
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
             .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode()))
@@ -95,34 +137,36 @@ public class ExceptionTranslator implements ProblemHandling {
 
         Problem problem = Problem.builder()
             .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
-            .withTitle("Method argument not valid")
-            .withStatus(defaultConstraintViolationStatus())
-            .with("message", ErrorConstants.ERR_VALIDATION)
-            .with("fieldErrors", fieldErrors)
+            .withTitle("<%_ if (!reactive) { _%>Method argument not valid<% } else { %>Data binding and validation failure<% } %>")
+            .withStatus(<% if (!reactive) { %>defaultConstraintViolationStatus()<% } else { %>Status.BAD_REQUEST<% } %>)
+            .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION)
+            .with(FIELD_ERRORS_KEY, fieldErrors)
             .build();
         return create(ex, problem, request);
     }
+    <%_ if (!reactive) { _%>
 
-    @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler
     public ResponseEntity<Problem> handleNoSuchElementException(NoSuchElementException ex, NativeWebRequest request) {
         Problem problem = Problem.builder()
             .withStatus(Status.NOT_FOUND)
-            .with("message", ErrorConstants.ENTITY_NOT_FOUND_TYPE)
+            .with(MESSAGE_KEY, ErrorConstants.ENTITY_NOT_FOUND_TYPE)
             .build();
         return create(ex, problem, request);
     }
+    <%_ } _%>
 
-    @ExceptionHandler(BadRequestAlertException.class)
-    public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
+    @ExceptionHandler
+    public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
         return create(ex, request, HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 
-    @ExceptionHandler(ConcurrencyFailureException.class)
-    public ResponseEntity<Problem> handleConcurrencyFailure(ConcurrencyFailureException ex, NativeWebRequest request) {
+    @ExceptionHandler
+    public <%- returnType %> handleConcurrencyFailure(ConcurrencyFailureException ex, <%= requestClass %> request) {
         Problem problem = Problem.builder()
             .withStatus(Status.CONFLICT)
-            .with("message", ErrorConstants.ERR_CONCURRENCY_FAILURE)
+            .with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
             .build();
         return create(ex, problem, request);
     }

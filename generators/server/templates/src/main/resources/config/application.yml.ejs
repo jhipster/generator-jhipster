@@ -43,8 +43,8 @@ eureka:
         instance-info-replication-interval-seconds: 10
         registry-fetch-interval-seconds: 10
     instance:
-        appname: <%= baseName %>
-        instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
+        appname: <%= baseName.toLowerCase() %>
+        instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
         lease-renewal-interval-in-seconds: 5
         lease-expiration-duration-in-seconds: 10
         status-page-url-path: ${management.endpoints.web.base-path}/info
@@ -60,9 +60,10 @@ ribbon:
     eureka:
         enabled: true
 <%_ } _%>
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
 # See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
 zuul: # those values must be configured depending on the application specific needs
+    sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
     host:
         max-total-connections: 1000
         max-per-route-connections: 100
@@ -110,10 +111,10 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "health", "info", "threaddump"]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile" ]
     endpoint:
         health:
-            show-details: when_authorized
+            show-details: when-authorized
     info:
         git:
             mode: full
@@ -124,6 +125,13 @@ management:
         enabled: false # http://micrometer.io/ is disabled by default, as we use http://metrics.dropwizard.io/ instead
 
 spring:
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    autoconfigure:
+        exclude: <% if (databaseType === 'sql' && messageBroker === 'kafka') { %>org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration,<% } %>org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration,org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
+    <%_ } else if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
+    autoconfigure:
+        exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
+    <%_ } _%>
     application:
         name: <%= baseName %>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
@@ -146,6 +154,8 @@ spring:
     <%_ if (databaseType === 'sql') { _%>
     jpa:
         open-in-view: false
+        properties:
+            hibernate.jdbc.time_zone: UTC
         hibernate:
             ddl-auto: none
             naming:
@@ -192,32 +202,26 @@ security:
     <%_ if (authenticationType === 'oauth2') {  _%>
     oauth2:
         client:
+            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
             access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
             user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
-            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
             client-id: web_app
             client-secret: web_app
-            client-authentication-scheme: form
             scope: openid profile email
             <%_ } _%>
             <%_ if (applicationType === 'microservice') { _%>
             client-id: internal
             client-secret: internal
-            authentication-scheme: header
-            client-authentication-scheme: header
             <%_ } _%>
         resource:
             user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
-            token-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
-            prefer-token-info: false
-            <%_ if (applicationType === 'gateway' || applicationType === 'microservice') {  _%>
-            jwk:
-                key-set-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/certs
-            <%_ } _%>
     <%_ } _%>
 
 server:
     servlet:
+        <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { _%>
+        context-path: /${spring.application.name}
+        <%_ } _%>
         session:
             cookie:
                 http-only: true

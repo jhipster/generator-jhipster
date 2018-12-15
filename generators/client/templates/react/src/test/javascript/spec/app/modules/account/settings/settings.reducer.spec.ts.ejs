@@ -16,22 +16,32 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { expect } from 'chai';
+
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import configureStore from 'redux-mock-store';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import axios from 'axios';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
+<%_ if (enableTranslation) { _%>
+import { TranslatorContext } from 'react-jhipster';
+<%_ } _%>
 
-import account, { ACTION_TYPES, saveAccountSettings } from 'app/modules/account/settings/settings.reducer';
+import account, { ACTION_TYPES, saveAccountSettings, reset } from 'app/modules/account/settings/settings.reducer';
 import { ACTION_TYPES as authActionTypes } from 'app/shared/reducers/authentication';
+<% if (enableTranslation) { %>import { ACTION_TYPES as localeActionTypes } from 'app/shared/reducers/locale';<% } %>
 
 describe('Settings reducer tests', () => {
+  <%_ if (enableTranslation) { _%>
+  beforeAll(() => {
+    TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
+  });
+
+  <%_ } _%>
   describe('Common tests', () => {
     it('should return the initial state', () => {
       const toTest = account(undefined, {});
-      expect(toTest).to.contain({
+      expect(toTest).toMatchObject({
         loading: false,
         errorMessage: null,
         updateSuccess: false,
@@ -43,7 +53,7 @@ describe('Settings reducer tests', () => {
   describe('Settings update', () => {
     it('should detect a request', () => {
       const toTest = account(undefined, { type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT) });
-      expect(toTest).to.contain({
+      expect(toTest).toMatchObject({
         updateSuccess: false,
         updateFailure: false,
         loading: true
@@ -51,7 +61,7 @@ describe('Settings reducer tests', () => {
     });
     it('should detect a success', () => {
       const toTest = account(undefined, { type: SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT) });
-      expect(toTest).to.contain({
+      expect(toTest).toMatchObject({
         updateSuccess: true,
         updateFailure: false,
         loading: false
@@ -59,10 +69,26 @@ describe('Settings reducer tests', () => {
     });
     it('should detect a failure', () => {
       const toTest = account(undefined, { type: FAILURE(ACTION_TYPES.UPDATE_ACCOUNT) });
-      expect(toTest).to.contain({
+      expect(toTest).toMatchObject({
         updateSuccess: false,
         updateFailure: true,
         loading: false
+      });
+    });
+
+    it('should reset the state', () => {
+      const initialState = {
+        loading: false,
+        errorMessage: null,
+        updateSuccess: false,
+        updateFailure: false
+      };
+      expect(
+        account({ ...initialState, loading: true }, {
+          type: ACTION_TYPES.RESET
+        })
+        ).toEqual({
+          ...initialState
       });
     });
   });
@@ -73,19 +99,33 @@ describe('Settings reducer tests', () => {
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
       const mockStore = configureStore([thunk, promiseMiddleware()]);
+      <%_ if (enableTranslation) { _%>
+      store = mockStore({ authentication: { account: { langKey: '<%= nativeLanguage %>' } } });
+      <%_ } else { _%>
       store = mockStore({});
+      <%_ } _%>
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
 
     it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {
+      const meta = {
+        <%_ if (enableTranslation) { _%>
+        successMessage: 'translation-not-found[settings.messages.success]'
+        <%_ } else { _%>
+        successMessage: '<strong>Settings saved!</strong>'
+        <%_ } _%>
+      };
+
       const expectedActions = [
         {
-          type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT)
+          type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT),
+          meta
         },
         {
           type: SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT),
-          payload: resolvedObject
+          payload: resolvedObject,
+          meta
         },
         {
           type: REQUEST(authActionTypes.GET_SESSION)
@@ -93,9 +133,22 @@ describe('Settings reducer tests', () => {
         {
           type: SUCCESS(authActionTypes.GET_SESSION),
           payload: resolvedObject
+        }<% if (enableTranslation) { %>,
+        {
+          type: localeActionTypes.SET_LOCALE,
+          locale: '<%= nativeLanguage %>'
+        }<% } %>
+      ];
+      await store.dispatch(saveAccountSettings({})).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches ACTION_TYPES.RESET actions', async () => {
+      const expectedActions = [
+        {
+          type: ACTION_TYPES.RESET
         }
       ];
-      await store.dispatch(saveAccountSettings({})).then(() => expect(store.getActions()).to.eql(expectedActions));
+      await store.dispatch(reset());
+      expect(store.getActions()).toEqual(expectedActions);
     });
   });
 });

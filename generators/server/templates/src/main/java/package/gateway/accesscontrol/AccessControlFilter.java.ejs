@@ -64,10 +64,11 @@ public class AccessControlFilter extends ZuulFilter {
     @Override
     public boolean shouldFilter() {
         String requestUri = RequestContext.getCurrentContext().getRequest().getRequestURI();
+        String contextPath = RequestContext.getCurrentContext().getRequest().getContextPath();
 
         // If the request Uri does not start with the path of the authorized endpoints, we block the request
         for (Route route : routeLocator.getRoutes()) {
-            String serviceUrl = route.getFullPath();
+            String serviceUrl = contextPath + route.getFullPath();
             String serviceName = route.getId();
 
             // If this route correspond to the current request URI

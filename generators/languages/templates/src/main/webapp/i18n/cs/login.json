@@ -12,7 +12,7 @@
                 "authentication": "<strong>Přihlášení selhalo!</strong> Prosím zkontrolujte vaše přihlašovací údaje a zkuste to znovu."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Zapoměli jste heslo?"
         }
     }

@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
-import { Route } from 'react-router-dom';
+import React from 'react';
+
+import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import Settings from './settings/settings';
 import Password from './password/password';
@@ -27,10 +28,10 @@ import Sessions from './sessions/sessions';
 
 const Routes = ({ match }) => (
   <div>
-    <Route path={`${match.url}/settings`} component={Settings} />
-    <Route path={`${match.url}/password`} component={Password} />
+    <ErrorBoundaryRoute path={`${match.url}/settings`} component={Settings} />
+    <ErrorBoundaryRoute path={`${match.url}/password`} component={Password} />
     <%_ if (authenticationType === 'session') { _%>
-    <Route path={`${match.url}/sessions`} component={Sessions} />
+    <ErrorBoundaryRoute path={`${match.url}/sessions`} component={Sessions} />
     <%_ } _%>
   </div>
 );

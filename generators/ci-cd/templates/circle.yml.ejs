@@ -58,16 +58,12 @@ test:
         - chmod +x gradlew
         - ./gradlew clean test --no-daemon
 <%_ } _%>
-<%_ if (applicationType !== 'microservice') { _%>
-    <%_ if (clientPackageManager === 'yarn') { _%>
-        - yarn test
-    <%_ } else if (clientPackageManager === 'npm') { _%>
-        - npm test
-    <%_ } _%>
+<%_ if (!skipClient) { _%>
+        - <%= clientPackageManager %> run <%= frontTestCommand %>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
-    <%_ if (heroku.includes('circle')) { _%>
-        - ./mvnw com.heroku.sdk:heroku-maven-plugin:1.1.1:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+    <%_ if (cicdIntegrations.includes('circle')) { _%>
+        - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
     <%_ } else { _%>
         - ./mvnw verify -Pprod -DskipTests
     <%_ } _%>

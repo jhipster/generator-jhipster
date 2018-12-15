@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* import * as React from 'react';
+/* import React from 'react';
 import { shallow } from 'enzyme';
 import axios from 'axios';
-import { expect } from 'chai';
+
 import configureStore from 'redux-mock-store';
 import { spy, sandbox } from 'sinon';
 
@@ -83,7 +83,7 @@ describe.only('RegisterComponent', () => {
       register.find('#register-submit').simulate('click');
 
       // Both should be false since you can't submit an invalid form.
-      expect(handleRegisterSpy.called).to.equals(false);
+      expect(handleRegisterSpy.called).toEquals(false);
     });
 
     it('should update registration success to true after creating an account', async () => {
@@ -94,9 +94,9 @@ describe.only('RegisterComponent', () => {
 
       register.find('#register-submit').simulate('click');
 
-      expect(handleRegisterSpy.called).to.equals(true);
-      // expect(register.props().registrationSuccess).to.equal(true);
-      // expect(register.props().registrationFailure).to.equal(false);
+      expect(handleRegisterSpy.called).toEquals(true);
+      // expect(register.props().registrationSuccess).toEqual(true);
+      // expect(register.props().registrationFailure).toEqual(false);
     });
 
     it('should notify of user existence upon 400/login already in use', () => {
@@ -106,7 +106,7 @@ describe.only('RegisterComponent', () => {
           'entityName' : 'userManagement',
           'errorKey' : 'userexists',
           'type' : 'https://www.jhipster.tech/problem/login-already-used',
-          'title' : 'Login already in use',
+          'title' : 'Login name already used!',
           'status' : 400,
           'message' : 'error.userexists',
           'params' : 'userManagement'
@@ -128,7 +128,7 @@ describe.only('RegisterComponent', () => {
           'entityName' : 'userManagement',
           'errorKey' : 'emailexists',
           'type' : 'https://www.jhipster.tech/problem/email-already-used',
-          'title' : 'Email address already in use',
+          'title' : 'Email is already in use!',
           'status' : 400,
           'message' : 'error.emailexists',
           'params' : 'userManagement'

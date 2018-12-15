@@ -18,8 +18,8 @@
 -%>
 {
     "health": {
-        "title": "Pengecekan kesehatan aplikasi",
-        "refresh.button": "Refresh",
+        "title": "Pengecekan Kesehatan Aplikasi",
+        "refresh.button": "Muat ulang",
         "stacktrace": "Stacktrace",
         "details": {
             "details": "Detail",
@@ -32,7 +32,7 @@
             <%_ if (messageBroker === 'kafka') { _%>
             "binders": "Message broker",
             <%_ } _%>
-            <%_ if (applicationType === 'gateway') { _%>
+            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
             "configServer": "Microservice Config Server",
@@ -52,6 +52,7 @@
             "status": "Status"
         },
         "status": {
+            "UNKNOWN": "UNKNOWN",
             "UP": "BAIK",
             "DOWN": "BERMASALAH"
         }

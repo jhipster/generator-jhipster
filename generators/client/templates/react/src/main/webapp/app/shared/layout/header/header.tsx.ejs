@@ -18,8 +18,8 @@
 -%>
 import './header.<%= styleSheetExt %>';
 
-import * as React from 'react';
-import { Translate<% if (enableI18nRTL) { %>, Storage<% } %> } from 'react-jhipster';
+import React from 'react';
+import { Translate<% if (enableTranslation) { %>, Storage<% } %> } from 'react-jhipster';
 import {
   Navbar,
   Nav,
@@ -27,7 +27,7 @@ import {
   NavbarBrand,
   Collapse
 } from 'reactstrap';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { NavLink as Link } from 'react-router-dom';
 import LoadingBar from 'react-redux-loading-bar';
@@ -61,15 +61,17 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
   };
   <%_ if (enableI18nRTL) { _%>
   componentDidMount () {
-    document.querySelector('html').setAttribute('dir', isRTL(Storage.local.get('locale')) ? 'rtl' : 'ltr');
+    document.querySelector('html').setAttribute('dir', isRTL(Storage.session.get('locale')) ? 'rtl' : 'ltr');
   };
   <%_ } _%>
 
   <%_ if (enableTranslation) { _%>
   handleLocaleChange = event => {
-    this.props.onLocaleChange(event.target.value);
+    const langKey = event.target.value;
+    Storage.session.set('locale', langKey);
+    this.props.onLocaleChange(langKey);
     <%_ if (enableI18nRTL) { _%>
-    document.querySelector('html').setAttribute('dir', isRTL(event.target.value) ? 'rtl' : 'ltr');
+    document.querySelector('html').setAttribute('dir', isRTL(langKey) ? 'rtl' : 'ltr');
     <%_ } _%>
   }
   <%_ } _%>
@@ -94,7 +96,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     const {<%_ if (enableTranslation) { _%>currentLocale,<%_ } _%> isAuthenticated, isAdmin, isSwaggerEnabled, isInProduction } = this.props;
 
     /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
-  
+
     return (
       <div id="app-header">
         {this.renderDevRibbon()}
@@ -103,7 +105,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
           <NavbarToggler aria-label="Menu" onClick={this.toggleMenu} />
           <Brand />
           <Collapse isOpen={this.state.menuOpen} navbar>
-            <Nav className="ml-auto" navbar>
+            <Nav id="header-tabs" className="ml-auto" navbar>
               <Home />
               {isAuthenticated && <EntitiesMenu />}
               {isAuthenticated && isAdmin &&

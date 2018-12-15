@@ -16,18 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-jhipster';
 
 import { getLoggers, changeLogLevel } from '../administration.reducer';
+import { IRootState } from 'app/shared/reducers';
 
-export interface ILogsPageProps {
-  isFetching?: boolean;
-  getLoggers: Function;
-  changeLogLevel: Function;
-  logs: any;
-}
+export interface ILogsPageProps extends StateProps, DispatchProps {}
 
 export interface ILogsPageState {
   filter: string
@@ -66,11 +62,11 @@ export class LogsPage extends React.Component<ILogsPageProps, ILogsPageState> {
   render() {
     const { logs, isFetching } = this.props;
     const { filter } = this.state;
-    const loggers = logs ? logs.loggers : {};
+    const loggers = logs ? logs.loggers : [];
     return (
         <div>
-          <h2><Translate contentKey="logs.title">Logs</Translate></h2>
-          <p><Translate contentKey="logs.nbloggers" interpolate={{ total: loggers.length }}>There are {loggers.length} loggers.</Translate></p>
+          <h2 id="logs-page-heading"><Translate contentKey="logs.title">Logs</Translate></h2>
+          <p><Translate contentKey="logs.nbloggers" interpolate={{ total: loggers.length }}>There are {loggers.length.toString()} loggers.</Translate></p>
 
           <span><Translate contentKey="logs.filter">Filter</Translate></span>
           <input type="text" value={filter} onChange={this.setFilter} className="form-control" disabled={isFetching} />
@@ -105,11 +101,14 @@ export class LogsPage extends React.Component<ILogsPageProps, ILogsPageState> {
   }
 }
 
-const mapStateToProps = ({ administration }) => ({
+const mapStateToProps = ({ administration }: IRootState) => ({
   logs: administration.logs,
-  isFetching: administration.isFetching
+  isFetching: administration.loading
 });
 
 const mapDispatchToProps = { getLoggers, changeLogLevel };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(LogsPage);

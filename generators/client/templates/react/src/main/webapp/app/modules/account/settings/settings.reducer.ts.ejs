@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import axios from 'axios';
+<% if (enableTranslation) { %>import { translate, Storage } from 'react-jhipster';<% } %>
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { getSession } from 'app/shared/reducers/authentication';
@@ -33,8 +34,10 @@ const initialState = {
   updateFailure: false
 };
 
+export type SettingsState =  Readonly<typeof initialState>;
+
 // Reducer
-export default (state = initialState, action) => {
+export default (state: SettingsState = initialState, action): SettingsState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.UPDATE_ACCOUNT):
       return {
@@ -67,14 +70,22 @@ export default (state = initialState, action) => {
 };
 
 // Actions
-const apiUrl = '/api/account';
+const apiUrl = '<%= apiUaaPath %>api/account';
 
-export const saveAccountSettings = account => async dispatch => {
+export const saveAccountSettings = account => async <% if (enableTranslation) { %>(dispatch, getState)<% } else { %>dispatch<% } %> => {
   await dispatch({
     type: ACTION_TYPES.UPDATE_ACCOUNT,
-    payload: axios.post(apiUrl, account)
-  })
-  dispatch(getSession())
+    payload: axios.post(apiUrl, account),
+    meta: {
+      successMessage: translate('settings.messages.success')
+    }
+  });
+  <% if (enableTranslation) { %>
+    if (Storage.session.get(`locale`)) {
+      Storage.session.remove(`locale`);
+    }
+    <% } %>  
+  await dispatch(getSession());
 };
 
 export const reset = () => ({

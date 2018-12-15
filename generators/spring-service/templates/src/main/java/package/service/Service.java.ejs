@@ -25,10 +25,10 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 
 @Service<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
-public class <%= serviceClass %>Service {
+public class <%= serviceClass %> {
 
-    private final Logger log = LoggerFactory.getLogger(<%= serviceClass %>Service.class);
+    private final Logger log = LoggerFactory.getLogger(<%= serviceClass %>.class);
 
-}<% } else  { %>public interface <%= serviceClass %>Service {
+}<% } else  { %>public interface <%= serviceClass %> {
 
 }<% } %>

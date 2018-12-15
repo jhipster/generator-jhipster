@@ -17,15 +17,22 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const _ = require('lodash');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
-
+const statistics = require('../statistics');
+const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
         // Automatically configure Travis
         this.argument('autoconfigure-travis', {
             type: Boolean,
@@ -39,24 +46,53 @@ module.exports = class extends BaseGenerator {
             defaults: false,
             description: 'Automatically configure Jenkins'
         });
+
+        // Automatically configure Gitlab
+        this.argument('autoconfigure-gitlab', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure Gitlab'
+        });
+
+        // Automatically configure Azure
+        this.argument('autoconfigure-azure', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure Azure'
+        });
     }
 
     get initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
+                }
+            },
             sayHello() {
-                this.log(chalk.white('Welcome to the JHipster CI/CD Sub-Generator'));
+                this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
             },
             getConfig() {
+                this.jhipsterVersion = packagejs.version;
                 this.baseName = this.config.get('baseName');
                 this.applicationType = this.config.get('applicationType');
                 this.skipClient = this.config.get('skipClient');
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 this.buildTool = this.config.get('buildTool');
                 this.herokuAppName = this.config.get('herokuAppName');
+                if (this.herokuAppName === undefined) {
+                    this.herokuAppName = _.kebabCase(this.baseName);
+                }
                 this.clientFramework = this.config.get('clientFramework');
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
                 this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
+                this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
+                this.autoconfigureAzure = this.options['autoconfigure-azure'];
                 this.abort = false;
             },
             initConstants() {
@@ -74,7 +110,7 @@ module.exports = class extends BaseGenerator {
 
     get prompting() {
         return {
-            askPipelines: prompts.askPipelines,
+            askPipeline: prompts.askPipeline,
             askIntegrations: prompts.askIntegrations
         };
     }
@@ -83,35 +119,61 @@ module.exports = class extends BaseGenerator {
         return {
             insight() {
                 if (this.abort) return;
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'ci-cd');
+                statistics.sendSubGenEvent('generator', 'ci-cd');
             },
             setTemplateConstants() {
-                if (this.abort || this.jenkinsIntegrations === undefined) return;
-                this.gitLabIndent = this.jenkinsIntegrations.includes('gitlab') ? '    ' : '';
-                this.indent = this.jenkinsIntegrations.includes('docker') ? '    ' : '';
+                if (this.abort) return;
+                if (this.cicdIntegrations === undefined) {
+                    this.cicdIntegrations = [];
+                }
+                this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
+                this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
+                if (this.clientFramework === 'react') {
+                    this.frontTestCommand = 'test-ci';
+                } else {
+                    this.frontTestCommand = 'test';
+                }
             }
         };
     }
 
     writing() {
-        if (this.pipelines.includes('jenkins')) {
+        if (this.pipeline === 'jenkins') {
             this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
             this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
             this.template('jenkins/idea.gdsl', `${this.SERVER_MAIN_RES_DIR}idea.gdsl`);
-            if (this.jenkinsIntegrations.includes('publishDocker')) {
-                this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
-            }
         }
-        if (this.pipelines.includes('gitlab')) {
+        if (this.pipeline === 'gitlab') {
             this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
         }
-        if (this.pipelines.includes('circle')) {
+        if (this.pipeline === 'circle') {
             this.template('circle.yml.ejs', 'circle.yml');
         }
-        if (this.pipelines.includes('travis')) {
+        if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');
+        }
+        if (this.pipeline === 'azure') {
+            this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
+        }
+
+        if (this.cicdIntegrations.includes('deploy')) {
+            if (this.buildTool === 'maven') {
+                this.addMavenDistributionManagement(
+                    this.artifactorySnapshotsId,
+                    this.artifactorySnapshotsUrl,
+                    this.artifactoryReleasesId,
+                    this.artifactoryReleasesUrl
+                );
+            } else if (this.buildTool === 'gradle') {
+                // TODO: add support here
+                // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
+                this.warning('No support for Artifactory yet, when using Gradle.\n');
+            }
+        }
+
+        if (this.cicdIntegrations.includes('publishDocker')) {
+            this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
         }
     }
 };

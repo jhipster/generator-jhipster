@@ -33,11 +33,6 @@ a {
   font-weight: bold;
 }
 
-a:hover {
-  color: #533f03;
-  font-weight: bold;
-}
-
 * {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -113,7 +108,7 @@ Custom button styles
 Generic styles
 ========================================================================== */
 
-/* Temperory workaround for availity-reactstrap-validation */
+/* Temporary workaround for availity-reactstrap-validation */
 .invalid-feedback {
   display: inline;
 }
@@ -148,6 +143,10 @@ Generic styles
 .break-word {
   white-space: normal;
   word-break: keep-all;
+}
+
+.preserve-space {
+  white-space: pre-wrap;
 }
 
 /* padding helpers */
@@ -325,37 +324,16 @@ Metrics and Health styles
   min-width: 400px;
 }
 
-/* ==========================================================================
-start Password strength bar style
-========================================================================== */
-
-ul#strengthBar {
-  display: inline;
-  list-style: none;
-  margin: 0;
-  margin-left: 15px;
-  padding: 0;
-  vertical-align: 2px;
-}
-
-.point:last {
-  margin: 0 !important;
-}
-
-.point {
-  background: #ddd;
-  border-radius: 2px;
-  display: inline-block;
-  height: 5px;
-  margin-right: 1px;
-  width: 20px;
-}
-
 /* bootstrap 3 input-group 100% width
 http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
 
 .width-min {
   width: 1% !important;
+}
+
+// Fix checkbox alignment https://github.com/jhipster/generator-jhipster/issues/8463
+.form-check-input {
+  margin-top: -0.5rem;
 }
 
 /* jhipster-needle-css-add-main JHipster will add new css style */

@@ -16,12 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Alert } from 'reactstrap';
-import { Translate } from 'react-jhipster';
+import { Translate, getUrlParameter } from 'react-jhipster';
 
+import { IRootState } from 'app/shared/reducers';
 import { activateAction, reset } from './activate.reducer';
 
 const successAlert = (
@@ -43,13 +44,7 @@ const failureAlert = (
   </Alert>
 );
 
-export interface IActivateProps {
-  activateAction: Function;
-  reset: Function;
-  activationSuccess: boolean;
-  activationFailure: boolean;
-  match: any;
-}
+export interface IActivateProps extends StateProps, DispatchProps, RouteComponentProps<{key: any}>  {}
 
 export class ActivatePage extends React.Component<IActivateProps> {
   componentWillUnmount() {
@@ -57,7 +52,7 @@ export class ActivatePage extends React.Component<IActivateProps> {
   }
 
   componentDidMount() {
-    const { key } = this.props.match.params;
+    const key = getUrlParameter('key', this.props.location.search);
     this.props.activateAction(key);
   }
 
@@ -80,11 +75,14 @@ export class ActivatePage extends React.Component<IActivateProps> {
   }
 }
 
-const mapStateToProps = ({ activate }) => ({
+const mapStateToProps = ({ activate }: IRootState) => ({
   activationSuccess: activate.activationSuccess,
   activationFailure: activate.activationFailure
 });
 
 const mapDispatchToProps = { activateAction, reset };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActivatePage);

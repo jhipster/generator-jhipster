@@ -34,15 +34,15 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
 
     constructor(
         <%_ if (fieldsContainBlob) { _%>
-        private dataUtils: JhiDataUtils,
+        protected dataUtils: JhiDataUtils,
         <%_ } _%>
-        private route: ActivatedRoute
+        protected activatedRoute: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
-        this.route.data.subscribe(({<%= entityInstance %>}) => {
-            this.<%= entityInstance %> = <%= entityInstance %>.body ? <%= entityInstance %>.body : <%= entityInstance %>;
+        this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
+            this.<%= entityInstance %> = <%= entityInstance %>;
         });
     }
 

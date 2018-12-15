@@ -18,9 +18,9 @@
 -%>
 <div>
     <h2>
-        <span jhiTranslate="health.title">Health Checks</span>
+        <span id="health-page-heading" jhiTranslate="health.title">Health Checks</span>
         <button class="btn btn-primary float-right" (click)="refresh()">
-            <span class="fas fa-sync"></span> <span jhiTranslate="health.refresh.button">Refresh</span>
+            <fa-icon [icon]="'sync'"></fa-icon> <span jhiTranslate="health.refresh.button">Refresh</span>
         </button>
     </h2>
     <div class="table-responsive">
@@ -42,7 +42,7 @@
                     </td>
                     <td class="text-center">
                         <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
-                            <i class="fas fa-eye"></i>
+                            <fa-icon [icon]="'eye'"></fa-icon>
                         </a>
                     </td>
                 </tr>

@@ -18,15 +18,15 @@
 -%>
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable<% if (databaseType !== 'sql' && databaseType !== 'mongodb' && databaseType !== 'couchbase') { %>, of<% } %> } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IUser } from './user.model';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UserService {
-    private resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/users';
+    public resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/users';
 
     constructor(private http: HttpClient) { }
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -57,7 +57,7 @@ export class UserService {
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         return this.http.get<string[]>(SERVER_API_URL + '<%- apiUaaPath %>api/users/authorities');
 <%_ } else { _%>
-        return Observable.of(['ROLE_USER', 'ROLE_ADMIN']);
+        return of(['ROLE_USER', 'ROLE_ADMIN']);
 <%_ } _%>
     }
 <% } %>

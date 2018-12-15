@@ -21,7 +21,7 @@ services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
         environment:
-            # - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            - _JAVA_OPTIONS=-Xmx512m -Xms256m
             - SPRING_PROFILES_ACTIVE=prod,swagger
             <%_ if (serviceDiscoveryType === 'consul') { _%>
             - SPRING_CLOUD_CONSUL_HOST=consul
@@ -41,7 +41,7 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:postgresql://<%= baseName.toLowerCase() %>-postgresql:5432/<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mssql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:sqlserver://<%= baseName.toLowerCase() %>-mssql:1433;database=tempdb
+            - SPRING_DATASOURCE_URL=jdbc:sqlserver://<%= baseName.toLowerCase() %>-mssql:1433;database=<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'oracle') { _%>
             - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@<%= baseName.toLowerCase() %>-oracle:1521:<%= baseName %>
@@ -54,17 +54,22 @@ services:
             - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=<%= baseName.toLowerCase() %>-couchbase
             - SPRING_COUCHBASE_BUCKET_NAME=<%= baseName %>
             <%_ } _%>
+            <%_ if (cacheProvider === 'memcached') { _%>
+            - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
+            <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
-            # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
+            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
             - SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/token
             - SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/auth
-            - SECURITY_OAUTH2_CLIENT_CLIENT_ID=<% if (applicationType === 'microservice') { %>internal<% } else { %>web_app<% } %>
-            - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=<% if (applicationType === 'microservice') { %>internal<% } else { %>web_app<% } %>
+            - SECURITY_OAUTH2_CLIENT_CLIENT_ID=web_app
+            - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=web_app
+            - SECURITY_OAUTH2_CLIENT_SCOPE=openid profile email
+            <%_ } _%>
+            <%_ if (applicationType === 'microservice') { _%>
+            - SECURITY_OAUTH2_CLIENT_CLIENT_ID=internal
+            - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=internal
+            <%_ } _%>
             - SECURITY_OAUTH2_RESOURCE_USER_INFO_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
-            - SECURITY_OAUTH2_RESOURCE_TOKEN_INFO_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/token/introspect
-                <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
-            - SECURITY_OAUTH2_RESOURCE_JWK_KEY_SET_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/certs
-                <%_ } _%>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'cassandra') { _%>
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
@@ -81,7 +86,7 @@ services:
                 <%_ } _%>
             <%_ } _%>
             <%_ if (searchEngine === 'elasticsearch') { _%>
-            - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=<%= baseName.toLowerCase() %>-elasticsearch:9300
+            - SPRING_DATA_JEST_URI=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
             - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
@@ -146,6 +151,12 @@ services:
         environment:
             - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
     <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <%= baseName.toLowerCase() %>-memcached:
+        extends:
+            file: memcached.yml
+            service: <%= baseName.toLowerCase() %>-memcached
+    <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     <%= baseName.toLowerCase() %>-elasticsearch:
         extends:
@@ -170,8 +181,9 @@ services:
             file: jhipster-registry.yml
             service: jhipster-registry
         environment:
-            - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=file:./central-config/docker-config/
-     <%_ } _%>
+            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config/docker-config/
+    <%_ } _%>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     consul:
         image: <%= DOCKER_CONSUL %>
@@ -194,7 +206,7 @@ services:
         # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
         #    - CONFIG_MODE=git
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2') { _%>
+    <%_ if (authenticationType === 'oauth2' && applicationType !== 'microservice') { _%>
     keycloak:
         extends:
             file: keycloak.yml

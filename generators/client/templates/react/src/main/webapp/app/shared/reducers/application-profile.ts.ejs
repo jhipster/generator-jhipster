@@ -30,7 +30,9 @@ const initialState = {
   isSwaggerEnabled: false
 };
 
-export default (state = initialState, action) => {
+export type ApplicationProfileState =  Readonly<typeof initialState>;
+
+export default (state: ApplicationProfileState = initialState, action): ApplicationProfileState => {
   switch (action.type) {
     case SUCCESS(ACTION_TYPES.GET_PROFILE):
       const { data } = action.payload;
@@ -47,5 +49,5 @@ export default (state = initialState, action) => {
 
 export const getProfile = () => ({
   type: ACTION_TYPES.GET_PROFILE,
-  payload: axios.get('/management/info')
+  payload: axios.get('management/info')
 });

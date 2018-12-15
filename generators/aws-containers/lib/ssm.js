@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 const AWS = require('aws-sdk'); // eslint-disable-line
-const spinner = require('./utils').spinner;
 const _ = require('lodash');
+const spinner = require('./utils').spinner;
 
 module.exports = class AwSSM {
     constructor(region) {
@@ -30,11 +30,15 @@ module.exports = class AwSSM {
      * @param parameterName Name of the parameter to retrieve
      */
     getSSMParameter(parameterName) {
-        return spinner(this.ssm.getParameters({
-            Names: [parameterName],
-            WithDecryption: true
-        }).promise()
-            .then(resultParams => _.get(resultParams, 'Parameters[0].Value')));
+        return spinner(
+            this.ssm
+                .getParameters({
+                    Names: [parameterName],
+                    WithDecryption: true
+                })
+                .promise()
+                .then(resultParams => _.get(resultParams, 'Parameters[0].Value'))
+        );
     }
 
     /**
@@ -49,12 +53,16 @@ module.exports = class AwSSM {
      *  The type of parameter, either "String", "StringList" or "SecureString"
      */
     setSSMParameter(parameterName, parameterValue, description = '', parameterType = 'SecureString') {
-        return spinner(this.ssm.putParameter({
-            Name: parameterName,
-            Type: parameterType,
-            Description: description,
-            Value: parameterValue,
-            Overwrite: true
-        }).promise());
+        return spinner(
+            this.ssm
+                .putParameter({
+                    Name: parameterName,
+                    Type: parameterType,
+                    Description: description,
+                    Value: parameterValue,
+                    Overwrite: true
+                })
+                .promise()
+        );
     }
 };

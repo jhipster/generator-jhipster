@@ -37,6 +37,10 @@
     <%_ if (databaseType === 'cassandra') { _%>
     <logger name="com.datastax" level="WARN"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <logger name="com.google.code.ssm" level="WARN"/>
+    <logger name="com.google.code.yanf4j" level="WARN"/>
+    <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.discovery" level="INFO"/>
@@ -44,8 +48,14 @@
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <logger name="io.searchbox" level="WARN"/>
+    <%_ } _%>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <logger name="net.rubyeye.xmemcached" level="INFO"/>
+    <%_ } _%>
     <%_ if (cacheProvider === 'ehcache') { _%>
     <logger name="org.ehcache" level="WARN"/>
     <%_ } _%>
@@ -72,6 +82,12 @@
     <%_ if (cacheProvider === 'infinispan') { _%>
     <logger name="org.infinispan" level="WARN"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <logger name="net.rubyeye.xmemcached" level="INFO"/>
+    <%_ } _%>
+    <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
+    <logger name="org.postgresql.jdbc" level="WARN"/>
+    <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
@@ -82,7 +98,7 @@
     <logger name="kafka" level="WARN"/>
     <logger name="org.I0Itec" level="WARN"/>
     <%_ } _%>
-    <%_ if (devDatabaseType === 'mssql') { _%>
+    <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
     <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
     <%_ } _%>
     <logger name="springfox" level="WARN"/>

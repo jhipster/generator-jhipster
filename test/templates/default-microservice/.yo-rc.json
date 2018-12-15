@@ -20,12 +20,12 @@
     "serviceDiscoveryType": "eureka",
     "buildTool": "maven",
     "enableSwaggerCodegen": false,
-    "jwtSecretKey": "6eb1d1054c4f0fd1e5a3abdd7a7a3d6f7a4ca6ef",
+    "jwtSecretKey": "fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8",
     "enableTranslation": false,
     "applicationType": "microservice",
     "testFrameworks": [],
     "jhiPrefix": "jhi",
-    "clientPackageManager": "yarn",
+    "clientPackageManager": "npm",
     "skipClient": true,
     "skipUserManagement": true
   }

@@ -1,98 +1,70 @@
-/* global describe, beforeEach, it */
-
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    eurekaregistry: [
-        './k8s/registry/jhipster-registry.yml',
-        './k8s/registry/application-configmap.yml'
-    ],
-    consulregistry: [
-        './k8s/registry/consul.yml',
-        './k8s/registry/consul-config-loader.yml',
-        './k8s/registry/application-configmap.yml'
-    ],
-    jhgate: [
-        './k8s/jhgate/jhgate-deployment.yml',
-        './k8s/jhgate/jhgate-mysql.yml',
-        './k8s/jhgate/jhgate-service.yml'
-    ],
+    eurekaregistry: ['./registry/jhipster-registry.yml', './registry/application-configmap.yml'],
+    consulregistry: ['./registry/consul.yml', './registry/consul-config-loader.yml', './registry/application-configmap.yml'],
+    jhgate: ['./jhgate/jhgate-deployment.yml', './jhgate/jhgate-mysql.yml', './jhgate/jhgate-service.yml'],
     jhgateingress: [
-        './k8s/jhgate/jhgate-deployment.yml',
-        './k8s/jhgate/jhgate-mysql.yml',
-        './k8s/jhgate/jhgate-service.yml',
-        './k8s/jhgate/jhgate-ingress.yml'
+        './jhgate/jhgate-deployment.yml',
+        './jhgate/jhgate-mysql.yml',
+        './jhgate/jhgate-service.yml',
+        './jhgate/jhgate-ingress.yml'
     ],
-    customnamespace: [
-        './k8s/namespace.yml'
-    ],
+    customnamespace: ['./namespace.yml'],
     jhconsole: [
-        './k8s/console/jhipster-console.yml',
-        './k8s/console/jhipster-elasticsearch.yml',
-        './k8s/console/jhipster-logstash.yml',
-        './k8s/console/jhipster-dashboard-console.yml',
-        './k8s/console/jhipster-zipkin.yml'
+        './console/jhipster-console.yml',
+        './console/jhipster-elasticsearch.yml',
+        './console/jhipster-logstash.yml',
+        './console/jhipster-dashboard-console.yml',
+        './console/jhipster-zipkin.yml'
     ],
-    msmysql: [
-        './k8s/msmysql/msmysql-deployment.yml',
-        './k8s/msmysql/msmysql-mysql.yml',
-        './k8s/msmysql/msmysql-service.yml'
-    ],
+    msmysql: ['./msmysql/msmysql-deployment.yml', './msmysql/msmysql-mysql.yml', './msmysql/msmysql-service.yml'],
     mspsql: [
-        './k8s/mspsql/mspsql-deployment.yml',
-        './k8s/mspsql/mspsql-postgresql.yml',
-        './k8s/mspsql/mspsql-service.yml',
-        './k8s/mspsql/mspsql-elasticsearch.yml'
+        './mspsql/mspsql-deployment.yml',
+        './mspsql/mspsql-postgresql.yml',
+        './mspsql/mspsql-service.yml',
+        './mspsql/mspsql-elasticsearch.yml'
     ],
-    msmongodb: [
-        './k8s/msmongodb/msmongodb-deployment.yml',
-        './k8s/msmongodb/msmongodb-mongodb.yml',
-        './k8s/msmongodb/msmongodb-service.yml'
-    ],
-    msmariadb: [
-        './k8s/msmariadb/msmariadb-deployment.yml',
-        './k8s/msmariadb/msmariadb-mariadb.yml',
-        './k8s/msmariadb/msmariadb-service.yml'
-    ],
+    msmongodb: ['./msmongodb/msmongodb-deployment.yml', './msmongodb/msmongodb-mongodb.yml', './msmongodb/msmongodb-service.yml'],
+    msmariadb: ['./msmariadb/msmariadb-deployment.yml', './msmariadb/msmariadb-mariadb.yml', './msmariadb/msmariadb-service.yml'],
     monolith: [
-        './k8s/samplemysql/samplemysql-deployment.yml',
-        './k8s/samplemysql/samplemysql-mysql.yml',
-        './k8s/samplemysql/samplemysql-service.yml',
-        './k8s/samplemysql/samplemysql-elasticsearch.yml'
+        './samplemysql/samplemysql-deployment.yml',
+        './samplemysql/samplemysql-mysql.yml',
+        './samplemysql/samplemysql-service.yml',
+        './samplemysql/samplemysql-elasticsearch.yml'
     ],
     kafka: [
-        './k8s/samplekafka/samplekafka-deployment.yml',
-        './k8s/samplekafka/samplekafka-mysql.yml',
-        './k8s/samplekafka/samplekafka-service.yml',
-        './k8s/messagebroker/kafka.yml'
+        './samplekafka/samplekafka-deployment.yml',
+        './samplekafka/samplekafka-mysql.yml',
+        './samplekafka/samplekafka-service.yml',
+        './messagebroker/kafka.yml'
     ],
     prometheusmonit: [
-        './k8s/monitoring/jhipster-prometheus-crd.yml',
-        './k8s/monitoring/jhipster-prometheus-cr.yml',
-        './k8s/monitoring/jhipster-grafana.yml',
-        './k8s/monitoring/jhipster-grafana-dashboard.yml'
-    ]
+        './monitoring/jhipster-prometheus-crd.yml',
+        './monitoring/jhipster-prometheus-cr.yml',
+        './monitoring/jhipster-grafana.yml',
+        './monitoring/jhipster-grafana-dashboard.yml'
+    ],
+    jhgategateway: ['./jhgate/jhgate-gateway.yml', './jhgate/jhgate-destination-rule.yml', './jhgate/jhgate-virtual-service.yml'],
+    applyScript: ['./kubectl-apply.sh']
 };
 
 describe('JHipster Kubernetes Sub Generator', () => {
     describe('only gateway', () => {
-        beforeEach((done) => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway'
-                    ],
+                    chosenApps: ['01-gateway'],
                     adminPassword: 'meetup',
                     dockerRepositoryName: 'jhipsterrepository',
                     dockerPushCommand: 'docker push',
@@ -105,30 +77,30 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected registry files and content', () => {
             assert.file(expectedFiles.eurekaregistry);
-            assert.fileContent('./k8s/registry/jhipster-registry.yml', /# base64 encoded "meetup"/);
+            assert.fileContent('./registry/jhipster-registry.yml', /# base64 encoded "meetup"/);
         });
         it('creates expected gateway files and content', () => {
             assert.file(expectedFiles.jhgate);
-            assert.fileContent('./k8s/jhgate/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
-            assert.fileContent('./k8s/jhgate/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+            assert.fileContent('./jhgate/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
+            assert.fileContent('./jhgate/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
+        });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
         });
     });
 
     describe('gateway and mysql microservice', () => {
-        beforeEach((done) => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '02-mysql'
-                    ],
+                    chosenApps: ['01-gateway', '02-mysql'],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
@@ -147,22 +119,23 @@ describe('JHipster Kubernetes Sub Generator', () => {
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
         });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
+        });
     });
 
     describe('mysql microservice with custom namespace and jhipster-console (with zipkin)', () => {
-        beforeEach((done) => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '02-mysql'
-                    ],
+                    chosenApps: ['02-mysql'],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'mynamespace',
@@ -185,22 +158,23 @@ describe('JHipster Kubernetes Sub Generator', () => {
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);
         });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
+        });
     });
 
     describe('gateway and ingress', () => {
-        beforeEach((done) => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway'
-                    ],
+                    chosenApps: ['01-gateway'],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
@@ -219,23 +193,23 @@ describe('JHipster Kubernetes Sub Generator', () => {
         it('creates expected ingress files', () => {
             assert.file(expectedFiles.jhgateingress);
         });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
+        });
     });
 
     describe('MySQL and PostgreSQL microservices without gateway', () => {
-        beforeEach((done) => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '02-mysql',
-                        '03-psql'
-                    ],
+                    chosenApps: ['02-mysql', '03-psql'],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
@@ -248,7 +222,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
         it('creates expected registry files', () => {
             assert.file(expectedFiles.eurekaregistry);
         });
-        it('doesn\'t creates gateway files', () => {
+        it("doesn't creates gateway files", () => {
             assert.noFile(expectedFiles.jhgate);
         });
         it('creates expected mysql files', () => {
@@ -257,26 +231,23 @@ describe('JHipster Kubernetes Sub Generator', () => {
         it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
         });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
+        });
     });
 
     describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
-        beforeEach((done) => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '01-gateway',
-                        '02-mysql',
-                        '03-psql',
-                        '04-mongo',
-                        '07-mariadb'
-                    ],
+                    chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
@@ -304,22 +275,23 @@ describe('JHipster Kubernetes Sub Generator', () => {
         it('creates expected mariadb files', () => {
             assert.file(expectedFiles.msmariadb);
         });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
+        });
     });
 
     describe('monolith application', () => {
-        beforeEach((done) => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'monolith',
+                    deploymentApplicationType: 'monolith',
                     directoryPath: './',
-                    chosenApps: [
-                        '08-monolith'
-                    ],
+                    chosenApps: ['08-monolith'],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
@@ -329,28 +301,29 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .on('end', done);
         });
-        it('doesn\'t creates registry files', () => {
+        it("doesn't creates registry files", () => {
             assert.noFile(expectedFiles.eurekaregistry);
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.monolith);
         });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
+        });
     });
 
     describe('Kafka application', () => {
-        beforeEach((done) => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'monolith',
+                    deploymentApplicationType: 'monolith',
                     directoryPath: './',
-                    chosenApps: [
-                        '09-kafka'
-                    ],
+                    chosenApps: ['09-kafka'],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
@@ -360,34 +333,34 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .on('end', done);
         });
-        it('doesn\'t creates registry files', () => {
+        it("doesn't creates registry files", () => {
             assert.noFile(expectedFiles.eurekaregistry);
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.kafka);
         });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
+        });
     });
 
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-        beforeEach((done) => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: [
-                        '02-mysql'
-                    ],
+                    chosenApps: ['02-mysql'],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'mynamespace',
                     monitoring: 'prometheus',
                     kubernetesServiceType: 'LoadBalancer'
-
                 })
                 .on('end', done);
         });
@@ -402,6 +375,46 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);
+        });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
+        });
+    });
+
+    describe('gateway with istio routing', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/kubernetes'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    deploymentApplicationType: 'microservice',
+                    directoryPath: './',
+                    chosenApps: ['01-gateway'],
+                    dockerRepositoryName: 'jhipster',
+                    dockerPushCommand: 'docker push',
+                    kubernetesNamespace: 'default',
+                    kubernetesServiceType: 'Ingress',
+                    ingressDomain: 'example.com',
+                    clusteredDbApps: [],
+                    istio: 'manualInjection',
+                    istioRoute: true
+                })
+                .on('end', done);
+        });
+        it('creates expected registry files', () => {
+            assert.file(expectedFiles.eurekaregistry);
+        });
+        it('creates expected service gateway files', () => {
+            assert.file(expectedFiles.jhgate);
+        });
+        it('creates expected routing gateway and istio files', () => {
+            assert.file(expectedFiles.jhgategateway);
+        });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
         });
     });
 });

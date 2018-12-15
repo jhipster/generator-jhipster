@@ -16,91 +16,171 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/* eslint-disable consistent-return */
 const _ = require('lodash');
 const chalk = require('chalk');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const prompts = require('./prompts');
+const statistics = require('../statistics');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
-module.exports = class extends BaseGenerator {
+let useBlueprint;
+
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
-    }
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
+        this.option('default', {
+            type: Boolean,
+            default: false,
+            description: 'default option'
+        });
+        this.defaultOption = this.options.default;
 
-    initializing() {
-        this.log(`The spring-controller ${this.name} is being created.`);
-        this.baseName = this.config.get('baseName');
-        this.packageName = this.config.get('packageName');
-        this.packageFolder = this.config.get('packageFolder');
-        this.databaseType = this.config.get('databaseType');
-        this.reactiveController = false;
-        this.applicationType = this.config.get('applicationType');
-        if (this.applicationType === 'reactive') {
-            this.reactiveController = true;
+        const blueprint = this.config.get('blueprint');
+        if (!opts.fromBlueprint) {
+            // use global variable since getters dont have access to instance property
+            useBlueprint = this.composeBlueprint(blueprint, 'spring-controller', {
+                'from-cli': this.options['from-cli'],
+                force: this.options.force,
+                arguments: [this.name],
+                default: this.options.default
+            });
+        } else {
+            useBlueprint = false;
         }
-        this.controllerActions = [];
     }
 
-    get prompting() {
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
+        return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
+                }
+            },
+
+            initializing() {
+                this.log(`The spring-controller ${this.name} is being created.`);
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.baseName = configuration.get('baseName');
+                this.packageName = configuration.get('packageName');
+                this.packageFolder = configuration.get('packageFolder');
+                this.databaseType = configuration.get('databaseType');
+                this.reactiveController = false;
+                this.applicationType = configuration.get('applicationType');
+                this.reactive = configuration.get('reactive');
+                this.reactiveController = this.reactive;
+                this.controllerActions = [];
+            }
+        };
+    }
+
+    get initializing() {
+        if (useBlueprint) return;
+        return this._initializing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _prompting() {
         return {
             askForControllerActions: prompts.askForControllerActions
         };
     }
 
-    get default() {
+    get prompting() {
+        if (useBlueprint) return;
+        return this._prompting();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'spring-controller');
+                statistics.sendSubGenEvent('generator', 'spring-controller');
             }
         };
     }
 
-    writing() {
-        this.controllerClass = _.upperFirst(this.name);
-        this.controllerInstance = _.lowerFirst(this.name);
-        this.apiPrefix = _.kebabCase(this.name);
+    get default() {
+        if (useBlueprint) return;
+        return this._default();
+    }
 
-        if (this.controllerActions.length === 0) {
-            this.log(chalk.green('No controller actions found, addin a default action'));
-            this.controllerActions.push({
-                actionName: 'defaultAction',
-                actionMethod: 'Get'
-            });
-        }
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
+        return {
+            writing() {
+                this.controllerClass = _.upperFirst(this.name) + (this.name.endsWith('Resource') ? '' : 'Resource');
+                this.controllerInstance = _.lowerFirst(this.controllerClass);
+                this.apiPrefix = _.kebabCase(this.name);
 
-        // helper for Java imports
-        this.usedMethods = _.uniq(this.controllerActions.map(action => action.actionMethod));
-        this.usedMethods = this.usedMethods.sort();
+                if (this.controllerActions.length === 0) {
+                    this.log(chalk.green('No controller actions found, adding a default action'));
+                    this.controllerActions.push({
+                        actionName: 'defaultAction',
+                        actionMethod: 'Get'
+                    });
+                }
 
-        this.mappingImports = this.usedMethods.map(method => `org.springframework.web.bind.annotation.${method}Mapping`);
-        this.mockRequestImports = this.usedMethods.map(method => `static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.${method.toLowerCase()}`);
+                // helper for Java imports
+                this.usedMethods = _.uniq(this.controllerActions.map(action => action.actionMethod));
+                this.usedMethods = this.usedMethods.sort();
 
-        // IntelliJ optimizes imports after a certain count
-        this.mockRequestImports = this.mockRequestImports.length > 3 ? ['static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*'] : this.mockRequestImports;
+                this.mappingImports = this.usedMethods.map(method => `org.springframework.web.bind.annotation.${method}Mapping`);
+                this.mockRequestImports = this.usedMethods.map(
+                    method => `static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.${method.toLowerCase()}`
+                );
 
-        this.mainClass = this.getMainClassName();
+                this.mockRequestImports =
+                    this.mockRequestImports.length > 3
+                        ? ['static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*']
+                        : this.mockRequestImports;
 
-        this.controllerActions.forEach((action) => {
-            action.actionPath = _.kebabCase(action.actionName);
-            action.actionNameUF = _.upperFirst(action.actionName);
-            this.log(chalk.green(`adding ${action.actionMethod} action '${action.actionName}' for /api/${this.apiPrefix}/${action.actionPath}`));
-        });
+                this.mainClass = this.getMainClassName();
 
-        this.template(
-            `${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
-            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}Resource.java`
-        );
+                this.controllerActions.forEach(action => {
+                    action.actionPath = _.kebabCase(action.actionName);
+                    action.actionNameUF = _.upperFirst(action.actionName);
+                    this.log(
+                        chalk.green(
+                            `adding ${action.actionMethod} action '${action.actionName}' for /api/${this.apiPrefix}/${action.actionPath}`
+                        )
+                    );
+                });
 
-        this.template(
-            `${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIntTest.java.ejs`,
-            `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}ResourceIntTest.java`
-        );
+                this.template(
+                    `${this.fetchFromInstalledJHipster(
+                        'spring-controller/templates'
+                    )}/${SERVER_MAIN_SRC_DIR}package/web/rest/Resource.java.ejs`,
+                    `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}.java`
+                );
+                this.template(
+                    `${this.fetchFromInstalledJHipster(
+                        'spring-controller/templates'
+                    )}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIntTest.java.ejs`,
+                    `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IntTest.java`
+                );
+            }
+        };
+    }
+
+    get writing() {
+        if (useBlueprint) return;
+        return this._writing();
     }
 };

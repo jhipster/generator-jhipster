@@ -18,10 +18,13 @@
  */
 
 const path = require('path');
-const html = require('html-wiring');
 const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
+const jhiCore = require('jhipster-core');
+const fs = require('fs');
+const crypto = require('crypto');
+
 const constants = require('./generator-constants');
 
 const LANGUAGES_MAIN_SRC_DIR = `../../languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
@@ -38,7 +41,11 @@ module.exports = {
     getJavadoc,
     buildEnumInfo,
     copyObjectProps,
-    decodeBase64
+    decodeBase64,
+    getAllJhipsterConfig,
+    getDBTypeFromDBValue,
+    getBase64Secret,
+    getRandomHex
 };
 
 /**
@@ -111,7 +118,8 @@ function rewrite(args) {
 
     let spaceStr = '';
 
-    while ((spaces -= 1) >= 0) { // eslint-disable-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
+    while ((spaces -= 1) >= 0) {
         spaceStr += ' ';
     }
 
@@ -161,20 +169,20 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
     if (generator.enableTranslation) {
         generator.template(source, dest, generator, opt);
     } else {
-        renderContent(source, generator, generator, opt, (body) => {
+        renderContent(source, generator, generator, opt, body => {
             body = body.replace(regex, '');
             switch (type) {
-            case 'html':
-                body = replacePlaceholders(body, generator);
-                break;
-            case 'js':
-                body = replaceTitle(body, generator);
-                break;
-            case 'jsx':
-                body = replaceTranslation(body, generator);
-                break;
-            default:
-                break;
+                case 'html':
+                    body = replacePlaceholders(body, generator);
+                    break;
+                case 'js':
+                    body = replaceTitle(body, generator);
+                    break;
+                case 'jsx':
+                    body = replaceTranslation(body, generator);
+                    break;
+                default:
+                    break;
             }
             generator.fs.write(dest, body);
         });
@@ -210,7 +218,8 @@ function replaceTitle(body, generator) {
     const re = /pageTitle[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
     let match;
 
-    while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
+    while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
         const key = match[1];
         const target = key;
@@ -233,7 +242,8 @@ function replacePlaceholders(body, generator) {
     const re = /placeholder=['|"]([{]{2}['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)[}]{2})['|"]/g;
     let match;
 
-    while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
+    while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
         const key = match[2];
         const target = match[1];
@@ -255,14 +265,20 @@ function replacePlaceholders(body, generator) {
 function replaceTranslation(body, generator) {
     const replaceRegex = (re, defultReplaceText) => {
         let match;
-        while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
+        // eslint-disable-next-line no-cond-assign
+        while ((match = re.exec(body)) !== null) {
             // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
             const key = match[2];
             const target = match[1];
+            const limit = match[4]; // string indicating validation limit (e.g. "{ max: 4 }")
             const jsonData = geti18nJson(key, generator);
             let keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
             if (!keyValue) {
                 keyValue = deepFind(jsonData, key, true); // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
+            }
+            if (limit) {
+                // Replace "{{ placeholder }}" with numeric limit
+                keyValue = keyValue.replace(/{{.+}}/, /{.+:\s(.+)\s}/.exec(limit)[1]);
             }
 
             body = body.replace(target, keyValue !== undefined ? `"${keyValue}"` : defultReplaceText);
@@ -270,7 +286,7 @@ function replaceTranslation(body, generator) {
     };
 
     replaceRegex(/(\{translate\('([a-zA-Z0-9.\-_]+)'(, ?null, ?'.*')?\)\})/g, '""');
-    replaceRegex(/(translate\(\s*'([a-zA-Z0-9.\-_]+)'(,\s*(null|\{.*\}),?\s*('.*')?\s*)?\))/g, '\'\'');
+    replaceRegex(/(translate\(\s*'([a-zA-Z0-9.\-_]+)'(,\s*(null|\{.*\}),?\s*('.*')?\s*)?\))/g, "''");
 
     return body;
 }
@@ -294,8 +310,7 @@ function geti18nJson(key, generator) {
         render = true;
     }
     try {
-        let file = html.readFileAsString(path.join(generator.sourceRoot(), filename));
-
+        let file = generator.fs.read(path.join(generator.sourceRoot(), filename));
         file = render ? ejs.render(file, generator, {}) : file;
         file = JSON.parse(file);
         return file;
@@ -316,7 +331,8 @@ function geti18nJson(key, generator) {
 function deepFind(obj, path, placeholder) {
     const paths = path.split('.');
     let current = obj;
-    if (placeholder) { // dirty fix for placeholders, the json files needs to be corrected
+    if (placeholder) {
+        // dirty fix for placeholders, the json files needs to be corrected
         paths[paths.length - 2] = `${paths[paths.length - 2]}.${paths[paths.length - 1]}`;
         paths.pop();
     }
@@ -368,7 +384,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         enums: field.fieldValues.replace(/\s/g, '').split(','),
         angularAppName,
         packageName,
-        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
+        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
     };
     return enumInfo;
 }
@@ -379,6 +395,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
  * @param {*} fromObj
  */
 function copyObjectProps(toObj, fromObj) {
+    // we use Object.assign instead of spread as we want to mutilate the object.
     Object.assign(toObj, fromObj);
 }
 
@@ -389,4 +406,59 @@ function copyObjectProps(toObj, fromObj) {
  */
 function decodeBase64(string, encoding = 'utf-8') {
     return Buffer.from(string, 'base64').toString(encoding);
+}
+
+/**
+ * Get all the generator configuration from the .yo-rc.json file
+ * @param {Generator} generator the generator instance to use
+ * @param {boolean} force force getting direct from file
+ */
+function getAllJhipsterConfig(generator, force) {
+    let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
+    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
+        const yoRc = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
+        configuration = yoRc['generator-jhipster'];
+        // merge the blueprint config if available
+        if (configuration.blueprint) {
+            configuration = { ...configuration, ...yoRc[configuration.blueprint] };
+        }
+    }
+    if (!configuration.get || typeof configuration.get !== 'function') {
+        configuration = {
+            ...configuration,
+            getAll: () => configuration,
+            get: key => configuration[key],
+            set: (key, value) => {
+                configuration[key] = value;
+            }
+        };
+    }
+    return configuration;
+}
+
+/**
+ * Get DB type from DB value
+ * @param {string} db - db
+ */
+function getDBTypeFromDBValue(db) {
+    if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
+        return 'sql';
+    }
+    return db;
+}
+
+/**
+ * Get a random hex string
+ * @param {int} len the length to use, defaults to 50
+ */
+function getRandomHex(len = 50) {
+    return crypto.randomBytes(len).toString('hex');
+}
+/**
+ * Generates a base64 secret from given string or random hex
+ * @param {string} value the value used to get base64 secret
+ * @param {int} len the length to use for random hex, defaults to 50
+ */
+function getBase64Secret(value, len = 50) {
+    return Buffer.from(value || getRandomHex(len)).toString('base64');
 }

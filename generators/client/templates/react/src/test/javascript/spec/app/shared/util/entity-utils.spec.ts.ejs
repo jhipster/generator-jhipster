@@ -1,7 +1,7 @@
 <%#
  Copyright 2013-2018 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see http://www.jhipster.tech/
+ This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { expect } from 'chai';
 
-import { cleanEntity } from 'app/shared/util/entity-utils';
+
+import { cleanEntity, mapIdList } from 'app/shared/util/entity-utils';
 
 describe('Entity utils', () => {
   describe('cleanEntity', () => {
@@ -34,8 +34,8 @@ describe('Entity utils', () => {
         }
       };
 
-      expect(cleanEntity({ ...entityA })).to.eql(entityA);
-      expect(cleanEntity({ ...entityB })).to.eql(entityB);
+      expect(cleanEntity({ ...entityA })).toEqual(entityA);
+      expect(cleanEntity({ ...entityB })).toEqual(entityB);
     });
 
     it('should remove fields with an empty id', () => {
@@ -45,7 +45,7 @@ describe('Entity utils', () => {
         }
       };
 
-      expect(cleanEntity({ ...entity })).to.eql({});
+      expect(cleanEntity({ ...entity })).toEqual({});
     });
 
     it('should not remove fields that are not objects', () => {
@@ -56,7 +56,21 @@ describe('Entity utils', () => {
         d: '5'
       };
 
-      expect(cleanEntity({ ...entity })).to.eql(entity);
+      expect(cleanEntity({ ...entity })).toEqual(entity);
+    });
+  });
+
+  describe('mapIdList', () => {
+    it('should map ids no matter the element\'s type', () => {
+      const ids = ['jhipster', '', 1, { key: 'value'}];
+
+      expect(mapIdList(ids)).toEqual([{ id: 'jhipster' }, { id: 1 }, { id: { key: 'value' } }]);
+    });
+
+    it('should return an empty array', () => {
+      const ids = [];
+
+      expect(mapIdList(ids)).toEqual([]);
     });
   });
 });

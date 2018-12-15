@@ -4,7 +4,7 @@
 
 Launch all your infrastructure by running: `docker-compose up -d`.
 
-## Configured docker services
+## Configured Docker services
 <%_ if (serviceDiscoveryType) { _%>
 
 ### Service registry and configuration server:
@@ -27,7 +27,10 @@ Launch all your infrastructure by running: `docker-compose up -d`.
 
 ### Additional Services:
 
-<%_ if (monitoring === 'useKafka') { _%>
+<%_ if (useMemcached === true) { _%>
+- [Memcached](http://localhost:11211)
+<%_ } _%>
+<%_ if (useKafka === true) { _%>
 - Kafka
 - Zookeeper
 <%_ } _%>

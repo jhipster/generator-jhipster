@@ -1,10 +1,29 @@
+#
+# Copyright 2013-2018 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 os:
   - linux
 services:
   - docker
 language: node_js
 node_js:
-  - "8.11.1"
+  - "10.14.1"
 jdk:
   - oraclejdk8
 addons:
@@ -19,42 +38,34 @@ cache:
     - $HOME/.gradle
 env:
   global:
-    - PROFILE=dev
-    - RUN_APP=1
-    - PROTRACTOR=0
-    - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
-    - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
-    - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
-    - APP_FOLDER=$HOME/app
-    - UAA_APP_FOLDER=$HOME/uaa
-    # environment properties
+    - JHI_PROFILE=dev
+    - JHI_RUN_APP=1
+    - JHI_PROTRACTOR=0
+    # if JHI_LIB_BRANCH value is release, use the release from Maven
+    - JHI_LIB_REPO=https://github.com/jhipster/jhipster.git
+    - JHI_LIB_BRANCH=release
+    # if JHI_GEN_BRANCH value is release, use the release from NPM
+    - JHI_GEN_REPO=https://github.com/jhipster/generator-jhipster.git
+    - JHI_GEN_BRANCH=release
+    # specific config
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
-
-    # if JHIPSTER_LIB_BRANCH value is release, use the release from Maven
-    - JHIPSTER_LIB_REPO=https://github.com/jhipster/jhipster.git
-    - JHIPSTER_LIB_BRANCH=master
-    # if JHIPSTER_BRANCH value is release, use the release from NPM
-    - JHIPSTER_REPO=https://github.com/jhipster/generator-jhipster.git
-    - JHIPSTER_BRANCH=release
-
+    - JHI_DISABLE_WEBPACK_LOGS=true
+    - JHI_E2E_HEADLESS=true
+    - JHI_SCRIPTS=$TRAVIS_BUILD_DIR/test-integration/scripts
   matrix:
-    - JHIPSTER=ngx-default PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=ngx-psql-es-noi18n PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=ngx-gradle-fr PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=ngx-mariadb-oauth2-sass-infinispan PROTRACTOR=1
-    - JHIPSTER=ngx-h2mem-ws-nol2
-    - JHIPSTER=ngx-mongodb-kafka-cucumber
-    - JHIPSTER=ngx-session-cassandra-fr
-    - JHIPSTER=ngx-couchbase
-    - JHIPSTER=ms-ngx-gateway-eureka
-    - JHIPSTER=ms-ngx-gateway-consul
-    - JHIPSTER=ms-ngx-gateway-uaa
-    - JHIPSTER=ms-micro-eureka
-    - JHIPSTER=ms-micro-consul
-    - JHIPSTER=react-default
-    - JHIPSTER=react-noi18n-es-ws-gradle-session
+    - JHI_APP=jdl-default JHI_ENTITY=jdl JHI_PROFILE=prod JHI_PROTRACTOR=1
+    - JHI_APP=ngx-default JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql JHI_SONAR=1
+    - JHI_APP=ngx-psql-es-noi18n JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sqlfull
+    - JHI_APP=ngx-gradle-fr JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql
+    - JHI_APP=ngx-mariadb-oauth2-sass-infinispan JHI_PROTRACTOR=1 JHI_ENTITY=sql
+    - JHI_APP=ms-ngx-gateway-eureka JHI_ENTITY=sql
+    - JHI_APP=ms-micro-eureka JHI_ENTITY=micro
+    - JHI_APP=ngx-mongodb-kafka-cucumber JHI_ENTITY=mongodb
 
+#----------------------------------------------------------------------
+# Install all tools and check configuration
+#----------------------------------------------------------------------
 before_install:
   - jdk_switcher use oraclejdk8
   - java -version
@@ -65,21 +76,34 @@ before_install:
   # Use this for Protractor
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  # Install Yarn
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-  - export PATH=$HOME/.yarn/bin:$PATH
-  - yarn -v
+  # Update NPM
+  - npm install -g npm
+  - $JHI_SCRIPTS/04-git-config.sh
+
+#----------------------------------------------------------------------
+# Install JHipster and generate project+entities
+#----------------------------------------------------------------------
 install:
-  - $JHIPSTER_SCRIPTS/00-install-jhipster.sh
-  # generate project and entities
-  - $JHIPSTER_SCRIPTS/01-generate-entities.sh
-  - $JHIPSTER_SCRIPTS/02-generate-project.sh
-  - $JHIPSTER_SCRIPTS/03-replace-version-generated-project.sh
+  - $JHI_SCRIPTS/10-install-jhipster.sh
+  - $JHI_SCRIPTS/11-generate-entities.sh
+  - $JHI_SCRIPTS/12-generate-project.sh
+  - $JHI_SCRIPTS/13-replace-version-generated-project.sh
+  - $JHI_SCRIPTS/14-jhipster-info.sh
+
+#----------------------------------------------------------------------
+# Launch tests
+#----------------------------------------------------------------------
 script:
-  - $JHIPSTER_SCRIPTS/03-docker-compose.sh
-  - travis_wait $JHIPSTER_SCRIPTS/04-tests.sh
-  - $JHIPSTER_SCRIPTS/05-run.sh
-  - $JHIPSTER_SCRIPTS/06-sonar.sh
+  - $JHI_SCRIPTS/20-docker-compose.sh
+  - $JHI_SCRIPTS/21-tests-backend.sh
+  - $JHI_SCRIPTS/22-tests-frontend.sh
+  - $JHI_SCRIPTS/23-package.sh
+  - $JHI_SCRIPTS/24-tests-e2e.sh
+  - $JHI_SCRIPTS/25-sonar-analyze.sh
+
+#----------------------------------------------------------------------
+# Cache
+#----------------------------------------------------------------------
 before_cache:
   - rm -rf $HOME/.m2/repository/io/github/jhipster/jhipster-framework/
   - rm -rf $HOME/.m2/repository/io/github/jhipster/jhipster-dependencies/

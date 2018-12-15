@@ -29,11 +29,13 @@ export const ACTION_TYPES = {
 
 const initialState = {
   errorMessage: null,
-  users: [],
+  users: [] as ReadonlyArray<IUser>,
 };
 
+export type UserManagementState =  Readonly<typeof initialState>;
+
 // Reducer
-export default (state = initialState, action) => {
+export default (state: UserManagementState = initialState, action): UserManagementState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FETCH_USERS):
       return {
@@ -52,20 +54,20 @@ export default (state = initialState, action) => {
     case ACTION_TYPES.RESET:
       return {
         ...state,
-        user: {}
+        users: []
       };
     default:
       return state;
   }
 };
 
-const apiUrl = '/api/users';
+const apiUrl = '<%= apiUaaPath %>api/users';
 // Actions
 export const getUsers: ICrudGetAllAction<IUser> = (page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_USERS,
-    payload: axios.get(requestUrl) as Promise<IUser>
+    payload: axios.get<IUser>(requestUrl)
   };
 };
 

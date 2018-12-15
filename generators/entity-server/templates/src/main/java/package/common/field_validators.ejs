@@ -25,8 +25,9 @@ if (field.fieldValidate === true) {
     const rules = field.fieldValidateRules;
     const validators = [];
     const MAX_VALUE = 2147483647;
+    const isBlob = field.fieldType === 'byte[]';
 
-    if (rules.includes('required')) {
+    if (rules.includes('required') && !isBlob) {
         validators.push('@NotNull');
     }
     if (rules.includes('minlength') && !rules.includes('maxlength')) {
@@ -38,15 +39,16 @@ if (field.fieldValidate === true) {
     if (rules.includes('minlength') && rules.includes('maxlength')) {
         validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ', max = ' + field.fieldValidateRulesMaxlength + ')');
     }
-    if (rules.includes('minbytes') && !rules.includes('maxbytes')) {
-        validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ')');
-    }
-    if (rules.includes('maxbytes') && !rules.includes('minbytes')) {
-        validators.push('@Size(max = ' + field.fieldValidateRulesMaxbytes + ')');
-    }
-    if (rules.includes('minbytes') && rules.includes('maxbytes')) {
-        validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ', max = ' + field.fieldValidateRulesMaxbytes + ')');
-    }
+    // Not supported anymore because the server can't check the size of the blob before downloading it completely.
+    // if (rules.includes('minbytes') && !rules.includes('maxbytes')) {
+    //     validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ')');
+    // }
+    // if (rules.includes('maxbytes') && !rules.includes('minbytes')) {
+    //     validators.push('@Size(max = ' + field.fieldValidateRulesMaxbytes + ')');
+    // }
+    // if (rules.includes('minbytes') && rules.includes('maxbytes')) {
+    //     validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ', max = ' + field.fieldValidateRulesMaxbytes + ')');
+    // }
     if (rules.includes('min')) {
         if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
             validators.push('@DecimalMin(value = "' + field.fieldValidateRulesMin + '")');

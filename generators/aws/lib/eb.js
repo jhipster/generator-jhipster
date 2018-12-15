@@ -1,14 +1,32 @@
+/**
+ * Copyright 2013-2018 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 let aws;
 let uuidV4;
 
-const Eb = module.exports = function Eb(Aws, generator) {
+const Eb = (module.exports = function Eb(Aws, generator) {
     aws = Aws;
     try {
         uuidV4 = require('uuid/v4'); // eslint-disable-line
     } catch (e) {
         generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
     }
-};
+});
 
 Eb.prototype.createApplication = function createApplication(params, callback) {
     const applicationName = params.applicationName;
@@ -28,7 +46,7 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
         warKey
     };
 
-    createApplicationVersion(applicationParams, (err) => {
+    createApplicationVersion(applicationParams, err => {
         if (err) {
             callback({ message: err.message }, null);
         } else {
@@ -85,7 +103,7 @@ function createApplicationVersion(params, callback) {
         }
     };
 
-    elasticbeanstalk.createApplicationVersion(applicationParams, (err) => {
+    elasticbeanstalk.createApplicationVersion(applicationParams, err => {
         if (err) {
             callback(err, null);
         } else {
@@ -174,7 +192,7 @@ function createEnvironment(params, callback) {
             }
         };
 
-        elasticbeanstalk.createEnvironment(environmentParams, (err) => {
+        elasticbeanstalk.createEnvironment(environmentParams, err => {
             if (err) callback(err, null);
             else callback(null, { message: `Environment ${environmentName} created successfully` });
         });
@@ -218,7 +236,7 @@ function updateEnvironment(params, callback) {
         VersionLabel: versionLabel
     };
 
-    elasticbeanstalk.updateEnvironment(environmentParams, (err) => {
+    elasticbeanstalk.updateEnvironment(environmentParams, err => {
         if (err) {
             callback(err, null);
         } else {

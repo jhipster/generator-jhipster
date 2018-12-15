@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Konfigurimi",
+        "filter": "Filtro (me prefiks)",
+        "table": {
+            "prefix": "Prefiksi",
+            "properties": "Tipare"
+        }
+    }
+}

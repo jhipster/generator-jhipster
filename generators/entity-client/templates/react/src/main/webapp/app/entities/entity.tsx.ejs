@@ -16,12 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 <%_ if (pagination === 'infinite-scroll') { _%>
-import * as InfiniteScroll from 'react-infinite-scroller';
+import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table } from 'reactstrap';
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
@@ -29,7 +29,7 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
 import {
   <%_ if (blobFields.length > 0) { _%>
-    <%_ if(fieldsContainBlobOrImage) { _%>
+    <%_ if (fieldsContainBlobOrImage) { _%>
   openFile,
     <%_ } _%>
   byteSize,
@@ -42,8 +42,9 @@ import {
   , getPaginationItemsNumber, JhiPagination
   <%_ }} _%>
 } from 'react-jhipster';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { IRootState } from 'app/shared/reducers';
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
   getSearchEntities,
@@ -60,29 +61,7 @@ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 <%_ } _%>
 
-export interface I<%= entityReactName %>Props {
-  getEntities: ICrudGetAllAction<I<%= entityReactName %>>;
-  <%_ if (pagination === 'infinite-scroll') { _%>
-  reset: Function;
-  <%_ } _%>
-  <%_ if (searchEngine === 'elasticsearch') { _%>
-  getSearchEntities: ICrudSearchAction<I<%= entityReactName %>>;
-  <%_ } _%>
-  <%= entityInstance %>List: I<%= entityReactName %>[];
-  <%_ if (pagination === 'infinite-scroll') { _%>
-  links: {
-    last: 0
-  };
-  <%_ } _%>
-  <%_ if (pagination !== 'no') { _%>
-  totalItems: 0;
-  location: any;
-  <%_ } _%>
-  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-  history: any;
-  <%_ } _%>
-  match: any;
-}
+export interface I<%= entityReactName %>Props extends StateProps, DispatchProps, RouteComponentProps<{url: string}> {}
 
 <% if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
 export interface I<%= entityReactName %>State extends IPaginationBaseState {
@@ -111,26 +90,46 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   componentDidMount() {
     <%_ if (pagination !== 'no') { _%>
       <%_ if (pagination === 'infinite-scroll') { _%>
-    this.reset();
+      this.reset();
       <%_ } else { _%>
-    this.getEntities();
+      this.getEntities();
       <%_ } _%>
     <%_ } else { _%>
     this.props.getEntities();
     <%_ } _%>
   }
 
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  componentDidUpdate() {
+    if (this.props.updateSuccess) {
+      this.reset();
+    }
+  }
+  <%_ } _%>
+
   <%_ if (searchEngine === 'elasticsearch') { _%>
   search = () => {
     if (this.state.search) {
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      this.props.reset();
+      <%_ } _%>
+      <%_ if (pagination !== 'no') { _%>
+      this.setState({ activePage: 1 }, () => {
+        const { activePage, itemsPerPage, sort, order, search } = this.state;
+        this.props.getSearchEntities(search, activePage - 1, itemsPerPage, `${sort},${order}`);
+      });
+      <%_ } else { _%>
       this.props.getSearchEntities(this.state.search);
+      <%_ } _%>
     }
   };
 
   clear = () => {
-    this.props.getEntities();
-    this.setState({
-      search: ''
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    this.props.reset();
+    <%_ } _%>
+    this.setState({ search: ''<% if (pagination !== 'no') { %>, activePage: 1<% } %> }, () => {
+      this.props.getEntities()
     });
   };
 
@@ -140,11 +139,15 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ if (pagination === 'infinite-scroll') { _%>
   reset = () => {
     this.props.reset();
-    this.setState({ activePage: 1 }, () => this.getEntities());
+    this.setState({ activePage: 1 }, () => {
+      this.getEntities();
+    });
   };
 
-  handleLoadMore = page => {
-    this.setState({ activePage: this.state.activePage + 1 }, () => this.getEntities());
+  handleLoadMore = () => {
+    if (window.pageYOffset > 0) {
+      this.setState({ activePage: this.state.activePage + 1 }, () => this.getEntities());
+    }
   };
   <%_ } _%>
 
@@ -155,7 +158,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
         order: this.state.order === 'asc' ? 'desc' : 'asc',
         sort: prop
       },
-      () => <% if (pagination === 'infinite-scroll') { %>this.reset()<% } else { %>this.sortEntities()<% } %>
+      () => <% if (pagination === 'infinite-scroll') { %>{ this.reset(); }<% } else { %>this.sortEntities()<% } %>
     );
   };
 
@@ -171,8 +174,17 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ } _%>
 
   getEntities = () => {
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    const { activePage, itemsPerPage, sort, order, search } = this.state;
+    if (search) {
+      this.props.getSearchEntities(search, activePage - 1, itemsPerPage, `${sort},${order}`);
+    } else {
+      this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+    }
+    <%_ } else { _%>
     const { activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+    <%_ } _%>
   };
   <%_ } _%>
 
@@ -180,7 +192,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
     const { <%=entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = this.props;
     return (
       <div>
-        <h2 id="page-heading">
+        <h2 id="<%= entityFileName %>-heading">
           <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
             <FontAwesomeIcon icon="plus" />&nbsp;
@@ -213,7 +225,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <%_ if (pagination === 'infinite-scroll') { _%>
           <InfiniteScroll pageStart={this.state.activePage}
                           loadMore={this.handleLoadMore}
-                          hasMore={this.state.activePage <= this.props.links.last}
+                          hasMore={this.state.activePage - 1 < this.props.links.next}
                           loader={<div className="loader">Loading ...</div>}
                           threshold={0}
                           initialLoad={false}>
@@ -248,6 +260,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                   <%_ for (idx in fields) {
                     const fieldType = fields[idx].fieldType;
                     const fieldName = fields[idx].fieldName;
+                    const fieldIsEnum = fields[idx].fieldIsEnum;
                   _%>
                   <td>
                   <%_ if (fieldType === 'Boolean') { _%>
@@ -256,6 +269,8 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                     <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_DATE_FORMAT} />
                   <%_ } else if (fieldType === 'LocalDate') { _%>
                     <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
+                  <%_ } else if (fieldIsEnum && enableTranslation) { _%>
+                    <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
                   <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
                     <%_
                       // blobFields
@@ -317,19 +332,19 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                       {
                         (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
                             (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, j) =>
-                                <span key={j}><Link to={`<%= otherEntityName %>/${val.id}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+                                <span key={j}><Link to={`<%= otherEntityStateName %>/${val.id}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
                             )
                         ) : null
                       }
                         <%_ } else { _%>
                             <%_ if (dto === 'no') { _%>
                       {<%= entityInstance + "." + relationshipFieldName %> ?
-                      <Link to={`<%= otherEntityName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
+                      <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
                         {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
                       </Link> : ''}
                             <%_ } else { _%>
                       {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %> ?
-                      <Link to={`<%= otherEntityName %>/${<%= entityInstance + "." + relationshipFieldName + "Id}" %>`}>
+                      <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + "Id}" %>`}>
                         {<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}
                       </Link> : ''}
                             <%_ } _%>
@@ -375,13 +390,15 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   }
 }
 
-const mapStateToProps = ({ <%= entityInstance %> }) => ({
+const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
   <%= entityInstance %>List: <%= entityInstance %>.entities,
   <%_ if (pagination !== 'no') { _%>
   totalItems: <%= entityInstance %>.totalItems,
   <%_ } _%>
   <%_ if (pagination === 'infinite-scroll') { _%>
-  links: <%= entityInstance %>.links
+  links: <%= entityInstance %>.links,
+  entity: <%= entityInstance %>.entity,
+  updateSuccess: <%= entityInstance %>.updateSuccess,
   <%_ } _%>
 });
 
@@ -394,5 +411,8 @@ const mapDispatchToProps = {
  reset
  <%_ } _%>
 };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>);

@@ -19,90 +19,31 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
+const statistics = require('../statistics');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
         this.configOptions = this.options.configOptions || {};
-
-        // This adds support for a `--protractor` flag
-        this.option('protractor', {
-            desc: 'Enable protractor tests',
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
             defaults: false
         });
-
-        // This adds support for a `--uaa-base-name` flag
-        this.option('uaa-base-name', {
-            desc: 'Provide the name of UAA server, when using --auth uaa',
-            type: String
-        });
-
-        // This adds support for a `--build` flag
-        this.option('build', {
-            desc: 'Provide build tool for the application',
-            type: String
-        });
-
-        // This adds support for a `--websocket` flag
-        this.option('websocket', {
-            desc: 'Provide websocket option for the application',
-            type: String
-        });
-
         // This adds support for a `--auth` flag
         this.option('auth', {
             desc: 'Provide authentication type for the application',
             type: String
-        });
-
-        // This adds support for a `--db` flag
-        this.option('db', {
-            desc: 'Provide DB name for the application',
-            type: String
-        });
-
-        // This adds support for a `--search-engine` flag
-        this.option('search-engine', {
-            desc: 'Provide development DB option for the application',
-            type: String
-        });
-
-        // This adds support for a `--cache-provider` flag
-        this.option('cache-provider', {
-            desc: 'Provide a cache provider option for the application',
-            type: String,
-            defaults: 'no'
-        });
-
-        // This adds support for a `--hb-cache` flag
-        this.option('hb-cache', {
-            desc: 'Provide hibernate cache option for the application',
-            type: Boolean,
-            default: false
-        });
-
-        // This adds support for a `--jhi-prefix` flag
-        this.option('jhi-prefix', {
-            desc: 'Add prefix before services, controllers and states name',
-            type: String,
-            defaults: 'jhi'
-        });
-
-        // This adds support for a `--skip-user-management` flag
-        this.option('skip-user-management', {
-            desc: 'Skip the user management module during app generation',
-            type: Boolean,
-            defaults: false
         });
 
         // This adds support for a `--skip-commit-hook` flag
@@ -112,16 +53,10 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        // This adds support for a `--npm` flag
-        this.option('npm', {
-            desc: 'Use npm instead of yarn',
-            type: Boolean,
-            defaults: false
-        });
-
         // This adds support for a `--experimental` flag which can be used to enable experimental features
         this.option('experimental', {
-            desc: 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
+            desc:
+                'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
             defaults: false
         });
@@ -129,20 +64,31 @@ module.exports = class extends BaseGenerator {
         this.setupClientOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         // use global variable since getters dont have access to instance property
-        useBlueprint = this.composeBlueprint(
-            blueprint,
-            'client',
-            {
+        if (!opts.fromBlueprint) {
+            useBlueprint = this.composeBlueprint(blueprint, 'client', {
                 'skip-install': this.options['skip-install'],
+                'from-cli': this.options['from-cli'],
                 configOptions: this.configOptions,
                 force: this.options.force
-            }
-        );
+            });
+        } else {
+            useBlueprint = false;
+        }
     }
 
-    get initializing() {
-        if (useBlueprint) return;
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
         return {
+            validateFromCli() {
+                if (!this.options['from-cli']) {
+                    this.warning(
+                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                            'jhipster <command>'
+                        )} instead of ${chalk.red('yo jhipster:<command>')}`
+                    );
+                }
+            },
+
             displayLogo() {
                 if (this.logo) {
                     this.printJHipsterLogo();
@@ -153,34 +99,37 @@ module.exports = class extends BaseGenerator {
                 // Make constants available in templates
                 this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-
-                this.serverPort = this.config.get('serverPort') || this.configOptions.serverPort || 8080;
-                this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
+                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
-                this.clientFramework = this.config.get('clientFramework');
+                this.clientFramework = configuration.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
                 }
-                if (this.clientFramework === 'angular2') {
+                if (this.clientFramework === 'angular' || this.clientFramework === 'angular2') {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
                 }
-                this.useSass = this.config.get('useSass');
-                this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
-                this.nativeLanguage = this.config.get('nativeLanguage');
-                this.languages = this.config.get('languages');
+                this.useSass = configuration.get('useSass');
+                this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+                this.nativeLanguage = configuration.get('nativeLanguage');
+                this.languages = configuration.get('languages');
                 this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
-                this.messageBroker = this.config.get('messageBroker');
+                this.messageBroker = configuration.get('messageBroker');
                 this.packagejs = packagejs;
-                const baseName = this.config.get('baseName');
+                const baseName = configuration.get('baseName');
                 if (baseName) {
                     this.baseName = baseName;
                 }
 
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
+                this.serviceDiscoveryType =
+                    configuration.get('serviceDiscoveryType') === 'no'
+                        ? false
+                        : configuration.get('serviceDiscoveryType') || this.configOptions.serviceDiscoveryType;
                 if (this.serviceDiscoveryType === undefined) {
                     this.serviceDiscoveryType = false;
                 }
@@ -200,25 +149,43 @@ module.exports = class extends BaseGenerator {
 
                     this.existingProject = true;
                 }
+                this.useNpm = this.configOptions.useNpm = !this.options.yarn;
+                this.useYarn = !this.useNpm;
                 if (!this.clientPackageManager) {
-                    if (this.useYarn) {
-                        this.clientPackageManager = 'yarn';
-                    } else {
+                    if (this.useNpm) {
                         this.clientPackageManager = 'npm';
+                    } else {
+                        this.clientPackageManager = 'yarn';
                     }
                 }
             },
 
             validateSkipServer() {
                 if (this.skipServer && !(this.databaseType && this.devDatabaseType && this.prodDatabaseType && this.authenticationType)) {
-                    this.error(`When using skip-server flag, you must pass a database option and authentication type using ${chalk.yellow('--db')} and ${chalk.yellow('--auth')} flags`);
+                    this.error(
+                        `When using skip-server flag, you must pass a database option and authentication type using ${chalk.yellow(
+                            '--db'
+                        )} and ${chalk.yellow('--auth')} flags`
+                    );
+                }
+                if (this.skipServer && this.authenticationType === 'uaa' && !this.uaaBaseName) {
+                    this.error(
+                        `When using skip-server flag and UAA as authentication method, you must pass a UAA base name using ${chalk.yellow(
+                            '--uaa-base-name'
+                        )} flag`
+                    );
                 }
             }
         };
     }
 
-    get prompting() {
+    get initializing() {
         if (useBlueprint) return;
+        return this._initializing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _prompting() {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
@@ -232,17 +199,24 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get configuring() {
+    get prompting() {
         if (useBlueprint) return;
+        return this._prompting();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'client');
-                insight.track('app/clientFramework', this.clientFramework);
-                insight.track('app/useSass', this.useSass);
-                insight.track('app/enableTranslation', this.enableTranslation);
-                insight.track('app/nativeLanguage', this.nativeLanguage);
-                insight.track('app/languages', this.languages);
+                statistics.sendSubGenEvent('generator', 'client', {
+                    app: {
+                        clientFramework: this.clientFramework,
+                        useSass: this.useSass,
+                        enableTranslation: this.enableTranslation,
+                        nativeLanguage: this.nativeLanguage,
+                        languages: this.languages
+                    }
+                });
             },
 
             configureGlobal() {
@@ -250,6 +224,7 @@ module.exports = class extends BaseGenerator {
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.angularAppName = this.getAngularAppName();
                 this.angularXAppName = this.getAngularXAppName();
+                this.hipster = this.getHipster(this.baseName);
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
@@ -260,35 +235,44 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('jhipsterVersion', packagejs.version);
-                this.config.set('baseName', this.baseName);
-                this.config.set('clientFramework', this.clientFramework);
-                this.config.set('useSass', this.useSass);
-                this.config.set('enableTranslation', this.enableTranslation);
-                this.config.set('skipCommitHook', this.skipCommitHook);
+                const config = {
+                    jhipsterVersion: packagejs.version,
+                    applicationType: this.applicationType,
+                    baseName: this.baseName,
+                    clientFramework: this.clientFramework,
+                    useSass: this.useSass,
+                    enableTranslation: this.enableTranslation,
+                    skipCommitHook: this.skipCommitHook,
+                    clientPackageManager: this.clientPackageManager
+                };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
-                    this.config.set('nativeLanguage', this.nativeLanguage);
-                    this.config.set('languages', this.languages);
+                    config.nativeLanguage = this.nativeLanguage;
+                    config.languages = this.languages;
                 }
-                this.config.set('clientPackageManager', this.clientPackageManager);
                 if (this.skipServer) {
-                    this.authenticationType && this.config.set('authenticationType', this.authenticationType);
-                    this.uaaBaseName && this.config.set('uaaBaseName', this.uaaBaseName);
-                    this.cacheProvider && this.config.set('cacheProvider', this.cacheProvider);
-                    this.enableHibernateCache && this.config.set('enableHibernateCache', this.enableHibernateCache);
-                    this.websocket && this.config.set('websocket', this.websocket);
-                    this.databaseType && this.config.set('databaseType', this.databaseType);
-                    this.devDatabaseType && this.config.set('devDatabaseType', this.devDatabaseType);
-                    this.prodDatabaseType && this.config.set('prodDatabaseType', this.prodDatabaseType);
-                    this.searchEngine && this.config.set('searchEngine', this.searchEngine);
-                    this.buildTool && this.config.set('buildTool', this.buildTool);
+                    this.authenticationType && (config.authenticationType = this.authenticationType);
+                    this.uaaBaseName && (config.uaaBaseName = this.uaaBaseName);
+                    this.cacheProvider && (config.cacheProvider = this.cacheProvider);
+                    this.enableHibernateCache && (config.enableHibernateCache = this.enableHibernateCache);
+                    this.websocket && (config.websocket = this.websocket);
+                    this.databaseType && (config.databaseType = this.databaseType);
+                    this.devDatabaseType && (config.devDatabaseType = this.devDatabaseType);
+                    this.prodDatabaseType && (config.prodDatabaseType = this.prodDatabaseType);
+                    this.searchEngine && (config.searchEngine = this.searchEngine);
+                    this.buildTool && (config.buildTool = this.buildTool);
                 }
+                this.config.set(config);
             }
         };
     }
 
-    get default() {
+    get configuring() {
         if (useBlueprint) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
         return {
             getSharedConfigOptions() {
                 if (this.configOptions.cacheProvider) {
@@ -348,11 +332,7 @@ module.exports = class extends BaseGenerator {
                 }
 
                 // Make dist dir available in templates
-                if (this.configOptions.buildTool === 'maven') {
-                    this.BUILD_DIR = 'target/';
-                } else {
-                    this.BUILD_DIR = 'build/';
-                }
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.configOptions.buildTool);
 
                 this.styleSheetExt = this.useSass ? 'scss' : 'css';
                 this.pkType = this.getPkType(this.databaseType);
@@ -368,52 +348,79 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    writing() {
+    get default() {
         if (useBlueprint) return;
-        switch (this.clientFramework) {
-        case 'react':
-            return writeReactFiles.call(this);
-        default:
-            return writeAngularFiles.call(this);
-        }
+        return this._default();
     }
 
-    install() {
-        if (useBlueprint) return;
-        const logMsg =
-            `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
-
-        const installConfig = {
-            bower: false,
-            npm: this.clientPackageManager !== 'yarn',
-            yarn: this.clientPackageManager === 'yarn'
-        };
-
-        if (this.options['skip-install']) {
-            this.log(logMsg);
-        } else {
-            this.installDependencies(installConfig).then(
-                () => {
-                    this.buildResult = this.spawnCommandSync(this.clientPackageManager, ['run', 'webpack:build']);
-                },
-                (err) => {
-                    this.warning('Install of dependencies failed!');
-                    this.log(logMsg);
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
+        return {
+            write() {
+                switch (this.clientFramework) {
+                    case 'react':
+                        return writeReactFiles.call(this, useBlueprint);
+                    default:
+                        return writeAngularFiles.call(this, useBlueprint);
                 }
-            );
-        }
+            }
+        };
     }
 
-    end() {
+    get writing() {
         if (useBlueprint) return;
-        if (this.buildResult !== undefined && this.buildResult.status !== 0) {
-            this.error('webpack:build failed.');
-        }
-        this.log(chalk.green.bold('\nClient application generated successfully.\n'));
+        return this._writing();
+    }
 
-        const logMsg =
-            `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
+    // Public API method used by the getter and also by Blueprints
+    _install() {
+        return {
+            installing() {
+                const logMsg = `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
-        this.log(chalk.green(logMsg));
+                const installConfig = {
+                    bower: false,
+                    npm: this.clientPackageManager !== 'yarn',
+                    yarn: this.clientPackageManager === 'yarn'
+                };
+
+                if (this.options['skip-install']) {
+                    this.log(logMsg);
+                } else {
+                    try {
+                        this.installDependencies(installConfig);
+                    } catch (e) {
+                        this.warning('Install of dependencies failed!');
+                        this.log(logMsg);
+                    }
+                }
+            }
+        };
+    }
+
+    get install() {
+        if (useBlueprint) return;
+        return this._install();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _end() {
+        return {
+            end() {
+                this.log(chalk.green.bold('\nClient application generated successfully.\n'));
+
+                const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
+
+                this.log(chalk.green(logMsg));
+                if (!this.options['skip-install']) {
+                    this.spawnCommandSync(this.clientPackageManager, ['run', 'cleanup']);
+                }
+            }
+        };
+    }
+
+    get end() {
+        if (useBlueprint) return;
+        return this._end();
     }
 };

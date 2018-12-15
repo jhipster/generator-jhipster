@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "module": "commonjs",
+    "types": [
+      "chai",
+      "mocha"
+    ]
+  },
+  "include": [
+    "<%= MAIN_SRC_DIR %>app/**/*",
+    "<%= TEST_SRC_DIR %>e2e/**/*"
+  ]
+}

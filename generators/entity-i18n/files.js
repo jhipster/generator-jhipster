@@ -19,9 +19,9 @@
 const utils = require('../utils');
 
 /**
-* The default is to use a file path string. It implies use of the template method.
-* For any other config an object { file:.., method:.., template:.. } can be used
-*/
+ * The default is to use a file path string. It implies use of the template method.
+ * For any other config an object { file:.., method:.., template:.. } can be used
+ */
 
 module.exports = {
     writeFiles
@@ -30,15 +30,15 @@ module.exports = {
 function writeFiles() {
     return {
         writeEnumFiles() {
-            this.fields.forEach((field) => {
+            this.fields.forEach(field => {
                 if (field.fieldIsEnum === true) {
                     const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
 
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {
                         const languages = this.languages || this.getAllInstalledLanguages();
-                        languages.forEach((language) => {
-                            this.copyEnumI18n(language, enumInfo);
+                        languages.forEach(language => {
+                            this.copyEnumI18n(language, enumInfo, this.fetchFromInstalledJHipster('entity-i18n/templates'));
                         });
                     }
                 }
@@ -51,8 +51,8 @@ function writeFiles() {
             // Copy for each
             if (this.enableTranslation) {
                 const languages = this.languages || this.getAllInstalledLanguages();
-                languages.forEach((language) => {
-                    this.copyI18n(language);
+                languages.forEach(language => {
+                    this.copyI18n(language, this.fetchFromInstalledJHipster('entity-i18n/templates'));
                 });
             }
         }

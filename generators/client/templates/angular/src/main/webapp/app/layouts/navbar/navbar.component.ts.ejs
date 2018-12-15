@@ -22,9 +22,12 @@ import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 import { JhiLanguageService } from 'ng-jhipster';
+<%_ if (enableTranslation) { _%>
+import { SessionStorageService } from 'ngx-webstorage';
+<%_ } _%>
 
 import { VERSION } from 'app/app.constants';
-import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from 'app/core';
+import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>AccountService, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from 'app/core';
 import { ProfileService } from '../profiles/profile.service';
 
 @Component({
@@ -53,8 +56,9 @@ export class NavbarComponent implements OnInit {
         <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         private languageHelper: JhiLanguageHelper,
+        private sessionStorage: SessionStorageService,
         <%_ } _%>
-        private principal: Principal,
+        private accountService: AccountService,
         <%_ if (authenticationType !== 'oauth2') { _%>
         private loginModalService: LoginModalService,
         <%_ } _%>
@@ -80,7 +84,8 @@ export class NavbarComponent implements OnInit {
 
     <%_ if (enableTranslation) { _%>
     changeLanguage(languageKey: string) {
-      this.languageService.changeLanguage(languageKey);
+        this.sessionStorage.store('locale', languageKey);
+        this.languageService.changeLanguage(languageKey);
     }
 
     <%_ } _%>
@@ -89,7 +94,7 @@ export class NavbarComponent implements OnInit {
     }
 
     isAuthenticated() {
-        return this.principal.isAuthenticated();
+        return this.accountService.isAuthenticated();
     }
 
     login() {
@@ -111,6 +116,6 @@ export class NavbarComponent implements OnInit {
     }
 
     getImageUrl() {
-        return this.isAuthenticated() ? this.principal.getImageUrl() : null;
+        return this.isAuthenticated() ? this.accountService.getImageUrl() : null;
     }
 }

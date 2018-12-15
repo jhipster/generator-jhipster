@@ -1,0 +1,50 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import axios from 'axios';
+import sinon from 'sinon';
+
+import setupAxiosInterceptors from 'app/config/axios-interceptor';
+
+describe('Axios Interceptor', () => {
+  describe('setupAxiosInterceptors', () => {
+    const client = axios;
+    const onUnauthenticated = sinon.spy();
+    setupAxiosInterceptors(onUnauthenticated);
+
+    it('onRequestSuccess is called on fulfilled request', () => {
+      expect((client.interceptors.request as any).handlers[0].fulfilled({ data: 'foo', url: '/test' })).toMatchObject({
+        data: 'foo'
+      });
+    });
+    it('onResponseSuccess is called on fulfilled response', () => {
+      expect((client.interceptors.response as any).handlers[0].fulfilled({ data: 'foo' })).toEqual({ data: 'foo' });
+    });
+    it('onResponseError is called on rejected response', () => {
+      (client.interceptors.response as any).handlers[0].rejected({
+        response: {
+          statusText: 'NotFound',
+          status: 403,
+          data: { message: 'Page not found' }
+        }
+      });
+      expect(onUnauthenticated.calledOnce).toBe(true);
+    });
+  });
+});
+

@@ -18,21 +18,17 @@
 -%>
 import { JhiAlertService } from 'ng-jhipster';
 import { HttpInterceptor, HttpRequest, HttpResponse, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Injector } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
+@Injectable()
 export class NotificationInterceptor implements HttpInterceptor {
 
-    private alertService: JhiAlertService;
-
-    // tslint:disable-next-line: no-unused-variable
-    constructor(private injector: Injector) {
-        setTimeout(() => this.alertService = injector.get(JhiAlertService));
-    }
+    constructor(private alertService: JhiAlertService) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).do((event: HttpEvent<any>) => {
+        return next.handle(request).pipe(tap((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
                 const arr = event.headers.keys();
                 let alert = null;
@@ -40,24 +36,22 @@ export class NotificationInterceptor implements HttpInterceptor {
                 let alertParams = null;
                 <%_ } _%>
                 arr.forEach((entry) => {
-                    if (entry.endsWith('app-alert')) {
+                    if (entry.toLowerCase().endsWith('app-alert')) {
                         alert = event.headers.get(entry);
-                    }<% if (enableTranslation) { %> else if (entry.endsWith('app-params')) {
+                    }<% if (enableTranslation) { %> else if (entry.toLowerCase().endsWith('app-params')) {
                         alertParams = event.headers.get(entry);
                     }<% } %>
                 });
                 if (alert) {
                     if (typeof alert === 'string') {
-                        if (this.alertService) {
-                            <%_ if (enableTranslation) { _%>
-                            this.alertService.success(alert, { param : alertParams }, null);
-                            <%_ } else { _%>
-                            this.alertService.success(alert, null, null);
-                            <%_ } _%>
-                        }
+                        <%_ if (enableTranslation) { _%>
+                        this.alertService.success(alert, { param : alertParams }, null);
+                        <%_ } else { _%>
+                        this.alertService.success(alert, null, null);
+                        <%_ } _%>
                     }
                 }
             }
-        }, (err: any) => {});
+        }, (err: any) => {}));
     }
 }

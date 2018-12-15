@@ -59,10 +59,13 @@ function prompting() {
             name: 'cloudfoundryDatabaseServicePlan',
             message: 'What is the name of your database plan?',
             default: 'turtle'
-        }];
+        }
+    ];
 
-    this.prompt(prompts).then((props) => {
-        this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
+    this.prompt(prompts).then(props => {
+        this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName)
+            .split('-')
+            .join('');
         this.cloudfoundryProfile = props.cloudfoundryProfile;
         this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
         this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;

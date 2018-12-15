@@ -3,17 +3,17 @@
         "title": "Selamat Datang, Java Hipster!",
         "subtitle": "Ini adalah halaman utama anda",
         "logged": {
-            "message": "Anda login sebagai \"{{username}}\"."
+            "message": "Anda masuk sebagai \"{{username}}\"."
         },
         "question": "Jika anda punya pertanyaan tentang JHipster:",
         "link": {
             "homepage": "JHipster homepage",
-            "stackoverflow": "JHipster on Stack Overflow",
+            "stackoverflow": "JHipster di Stack Overflow",
             "bugtracker": "JHipster bug tracker",
-            "chat": "JHipster public chat room",
-            "follow": "follow @java_hipster on Twitter"
+            "chat": "JHipster chat publik",
+            "follow": "ikuti @java_hipster di Twitter"
         },
-        "like": "Jika anda menyukai JHipster, jangan lupa beri kami rating",
+        "like": "Jika anda menyukai JHipster, jangan lupa beri kami bintang di",
         "github": "GitHub"
     }
 }

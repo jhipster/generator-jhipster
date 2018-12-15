@@ -19,3 +19,17 @@
 *.gz binary
 *.ai binary
 *.eps binary
+*.ico binary
+
+# Used by GitHub to determine which language is used
+# See https://github.com/github/linguist
+*.ts.ejs linguist-language=TypeScript
+*.tsx.ejs linguist-language=TypeScript
+*.js.ejs linguist-language=JavaScript
+*.java.ejs linguist-language=Java
+*.css.ejs linguist-language=CSS
+*.scss.ejs linguist-language=SCSS
+*.yaml.ejs linguist-language=YAML
+*.yml.ejs linguist-language=YAML
+*.json.ejs linguist-language=JSON
+*.xml.ejs linguist-language=XML

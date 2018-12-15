@@ -1,0 +1,88 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+/* tslint:disable no-unused-expression */
+import { element, by, browser } from 'protractor';
+
+import NavBarPage from '../../page-objects/navbar-page';
+import SignInPage from '../../page-objects/signin-page';
+import { waitUntilDisplayed } from '../../util/utils';
+
+const expect = chai.expect;
+
+describe('Administration', () => {
+  let navBarPage: NavBarPage;
+  let signInPage: SignInPage;
+
+  before(async () => {
+    await browser.get('/');
+    navBarPage = new NavBarPage();
+    signInPage = await navBarPage.getSignInPage();
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    await signInPage.waitUntilDisplayed();
+
+    await signInPage.username.sendKeys('admin');
+    await signInPage.password.sendKeys('admin');
+    await signInPage.loginButton.click();
+    await signInPage.waitUntilHidden();
+
+    <%_ } _%>
+    await waitUntilDisplayed(navBarPage.adminMenu);
+  });
+
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  it('should load user management', async () => {
+    await navBarPage.clickOnAdminMenuItem('user-management');
+    const heading = element(by.id('user-management-page-heading'));
+    await waitUntilDisplayed(heading);
+    // Title should be equal to 'Users'
+    expect(await heading.isPresent()).to.be.true;
+  });
+  <%_ } _%>
+
+  it('should load metrics', async () => {
+    await navBarPage.clickOnAdminMenuItem('metrics');
+    expect(await element(by.id('metrics-page-heading')).getText()).to.eq('Application Metrics');
+  });
+
+  it('should load health', async () => {
+    await navBarPage.clickOnAdminMenuItem('health');
+    expect(await element(by.id('health-page-heading')).getText()).to.eq('Health Checks');
+  });
+
+  it('should load configuration', async () => {
+    await navBarPage.clickOnAdminMenuItem('configuration');
+    expect(await element(by.id('configuration-page-heading')).getText()).to.eq('Configuration');
+  });
+
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+  it('should load audits', async () => {
+    await navBarPage.clickOnAdminMenuItem('audits');
+    expect(await element(by.id('audits-page-heading')).getText()).to.eq('Audits');
+  });
+
+<%_ } _%>
+  it('should load logs', async () => {
+    await navBarPage.clickOnAdminMenuItem('logs');
+    expect(await element(by.id('logs-page-heading')).getText()).to.eq('Logs');
+  });
+
+  after(async () => {
+    await navBarPage.autoSignOut()
+  });
+});

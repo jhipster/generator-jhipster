@@ -43,6 +43,7 @@ public class InitialSetupMigration {
         mongoTemplate.save(adminAuthority);
         mongoTemplate.save(userAuthority);
     }
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     @ChangeSet(order = "02", author = "initiator", id = "02-addUsers")
     public void addUsers(MongoTemplate mongoTemplate) {
@@ -61,7 +62,7 @@ public class InitialSetupMigration {
         systemUser.setLastName("System");
         systemUser.setEmail("system@localhost");
         systemUser.setActivated(true);
-        systemUser.setLangKey("en");
+        systemUser.setLangKey("<%= nativeLanguage %>");
         systemUser.setCreatedBy(systemUser.getLogin());
         systemUser.setCreatedDate(Instant.now());
         systemUser.getAuthorities().add(adminAuthority);
@@ -78,7 +79,7 @@ public class InitialSetupMigration {
         anonymousUser.setLastName("User");
         anonymousUser.setEmail("anonymous@localhost");
         anonymousUser.setActivated(true);
-        anonymousUser.setLangKey("en");
+        anonymousUser.setLangKey("<%= nativeLanguage %>");
         anonymousUser.setCreatedBy(systemUser.getLogin());
         anonymousUser.setCreatedDate(Instant.now());
         mongoTemplate.save(anonymousUser);
@@ -93,7 +94,7 @@ public class InitialSetupMigration {
         adminUser.setLastName("Administrator");
         adminUser.setEmail("admin@localhost");
         adminUser.setActivated(true);
-        adminUser.setLangKey("en");
+        adminUser.setLangKey("<%= nativeLanguage %>");
         adminUser.setCreatedBy(systemUser.getLogin());
         adminUser.setCreatedDate(Instant.now());
         adminUser.getAuthorities().add(adminAuthority);
@@ -110,10 +111,11 @@ public class InitialSetupMigration {
         userUser.setLastName("User");
         userUser.setEmail("user@localhost");
         userUser.setActivated(true);
-        userUser.setLangKey("en");
+        userUser.setLangKey("<%= nativeLanguage %>");
         userUser.setCreatedBy(systemUser.getLogin());
         userUser.setCreatedDate(Instant.now());
         userUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(userUser);
     }
+    <%_ } _%>
 }

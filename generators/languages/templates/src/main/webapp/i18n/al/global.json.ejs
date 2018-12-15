@@ -1,0 +1,159 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Ju po përdorni një browser të <strong>vjetëruar</strong>. Ju lutem <a href=\"http://browsehappy.com/?locale=en\">përditësoni browserin tuan</a> për të përmirësuar eksperiencën tuaj.",
+        "menu": {
+            "home": "Kreu",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entitete",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Konto",
+                "settings": "Mjedisi",
+                "password": "Fjalëkalimi",
+                "sessions": "Seancat",
+                "login": "Hyrje",
+                "logout": "Dalje",
+                "register": "Regjistrim"
+            },
+            "admin": {
+                "main": "Administrim",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "Menaxhimi i përdoruesëve",
+                "tracker": "Gjurmimi i përdoruesëve",
+                "metrics": "Metrikat",
+                "health": "Shëndeti",
+                "configuration": "Konfigurimi",
+                "logs": "Logs",
+                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                "audits": "Auditet",
+                <%_ } _%>
+                "apidocs": "API",
+                "database": "Database",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Gjuha"
+        },
+        "form": {
+            "username": "Përdoruesi",
+            "username.placeholder": "Përdoruesi juaj",
+            "currentpassword": "Fjalëkalimi aktual",
+            "currentpassword.placeholder": "Fjalëkalimi aktual",
+            "newpassword": "Fjalëkalimi i ri",
+            "newpassword.placeholder": "Fjalëkalimi i ri",
+            "confirmpassword": "Konfirmoni fjalëkalimin e ri",
+            "confirmpassword.placeholder": "Konfirmoni fjalëkalimin e ri",
+            "email": "E-mail",
+            "email.placeholder": "E-maili juaj"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Në qoftë se dëshironi ",
+                    "link": "futuni",
+                    "suffix": ", ju mund të përdorni konton standarde:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+                },
+                "register": {
+                    "noaccount": "A keni një ende konto?",
+                    "link": "Regjistroni një konto të re"
+                }
+            },
+            "error": {
+                "dontmatch": "Fjalëkalimi dhe konfirmimi nuk përputhen!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Kërkohet fjalëkalimi juaj.",
+                    "minlength": "Fjalëkalimi juaj duhet të jetë të paktën 4 gërma.",
+                    "maxlength": "Fjalëkalimi jauj nuk mund të jetë më i gjatë se 50 gërma.",
+                    "strength": "Fuqia e fjalëkalimit:"
+                },
+                "confirmpassword": {
+                    "required": "Kërkohet konfirmimi i fjalëkalimit tuaj.",
+                    "minlength": "Konfirmimi i fjalëkalimit tuaj duhet të jetë të paktën 4 gërma.",
+                    "maxlength": "Konfirmimi i fjalëkalimit tuaj nuk mund të jetë më i gjatë se 50 gërma."
+                },
+                "email": {
+                    "required": "Kërkohet emaili juaj.",
+                    "invalid": "Emali juaj nuk është i vlefshëm.",
+                    "minlength": "Emaili juaj duhet të jetë të paktën 4 gërma.",
+                    "maxlength": "Emaili jauj nuk mund të jetë më i gjatë se 50 gërma."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev": "Zhvillim"
+        },
+        "item-count": "Duke treguar {{first}} - {{second}} nga {{total}} artikuj."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Shto blob",
+            "addimage": "Shto foto",
+            "back": "Mbrapsht",
+            "cancel": "Anullo",
+            "delete": "Fshi",
+            "edit": "Përpuno",
+            "open": "Hap",
+            "save": "Ruaj",
+            "view": "Trego"
+        },
+        "detail": {
+            "field": "Fusha",
+            "value": "Vlera"
+        },
+        "delete": {
+            "title": "Konfirmoni veprimin e fshirjes"
+        },
+        "validation": {
+            "required": "Fusha është e domosdoshme.",
+            "minlength": "Kjo fushë duhet të jetë të paktën {{ min }} gërma.",
+            "maxlength": "Kjo fushë nuk mund të jetë më e gjatë se {{ max }} gërma.",
+            "min": "Kjo fushë duhet të jetë të paktën {{ min }}.",
+            "max": "Kjo fushë nuk mund të jetë më shumë se {{ max }}.",
+            "minbytes": "Kjo fushë duhet të jetë të paktën {{ min }} bytes.",
+            "maxbytes": "Kjo fushë nuk mund të jetë më shumë se {{ max }} bytes.",
+            "pattern": "Kjo fushë duhet të ndjeki modelin {{ pattern }}.",
+            "number": "Kjo fushë duhet të jetë një numër.",
+            "datetimelocal": "Kjo fushë duhet të jetë një datë dhe kohë.",
+            "patternLogin": "Kjo fushë mund të ketë vetëm gërma, numra dhe adresa e-mali."
+        }
+    },
+    "error": {
+        "internalServerError": "Gabim i brëndshëm në server",
+        "server.not.reachable": "Serveri nuk është i arritshëm",
+        "url.not.found": "Nuk u gjet",
+        "NotNull": "Fusha {{ fieldName }} nuk mund të jetë bosh!",
+        "Size": "Fusha {{ fieldName }} nuk i përmbush kërkesat për min/maks!",
+        "userexists": "Përdoruesi është marrë nga dikush tjetër!",
+        "emailexists": "Emaili është marrë nga dikush tjetër!",
+        "idexists": "Një {{ entityName }} i ri nuk mund të ketë të njëjtën ID",
+        "idnull": "ID e pavlefshme"
+    },
+    "footer": "Ky është rrjeshti fundit"
+}

@@ -28,7 +28,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-
 <%_ for(let idx in mockRequestImports) { _%>
 import <%= mockRequestImports[idx] %>;
 <%_ } _%>
@@ -36,11 +35,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test class for the <%= controllerClass %> REST controller.
  *
- * @see <%= controllerClass %>Resource
+ * @see <%= controllerClass %>
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class <%= controllerClass %>ResourceIntTest {
+public class <%= controllerClass %>IntTest {
 
     private MockMvc restMockMvc;
 
@@ -48,21 +47,20 @@ public class <%= controllerClass %>ResourceIntTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        <%= controllerClass %>Resource <%= controllerInstance %>Resource = new <%= controllerClass %>Resource();
+        <%= controllerClass %> <%= controllerInstance %> = new <%= controllerClass %>();
         restMockMvc = MockMvcBuilders
-            .standaloneSetup(<%= controllerInstance %>Resource)
+            .standaloneSetup(<%= controllerInstance %>)
             .build();
     }
-
     <%_ for(let idx in controllerActions) { _%>
+
     /**
-    * Test <%= controllerActions[idx].actionName %>
-    */
+     * Test <%= controllerActions[idx].actionName %>
+     */
     @Test
     public void test<%= controllerActions[idx].actionNameUF %>() throws Exception {
         restMockMvc.perform(<%= controllerActions[idx].actionMethod.toLowerCase() %>("/api/<%= apiPrefix %>/<%= controllerActions[idx].actionPath %>"))
             .andExpect(status().isOk());
     }
     <%_ } _%>
-
 }

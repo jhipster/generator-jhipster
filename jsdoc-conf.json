@@ -13,8 +13,7 @@
             "generators/utils.js"
         ]
     },
-    "plugins": [
-    ],
+    "plugins": [],
     "templates": {
         "cleverLinks": true,
         "monospaceLinks": true,

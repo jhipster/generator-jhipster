@@ -22,13 +22,7 @@ import { RouterModule } from '@angular/router';
 import { <%=angularXAppName%>SharedModule } from 'app/shared';
 
 import {
-    Register,
-    ActivateService,
-    PasswordService,
-    PasswordResetInitService,
-    PasswordResetFinishService,
     <%_ if (authenticationType === 'session') { _%>
-    SessionsService,
     SessionsComponent,
     <%_ } _%>
     PasswordStrengthBarComponent,
@@ -57,16 +51,6 @@ import {
         SessionsComponent,
         <%_ } _%>
         SettingsComponent
-    ],
-    providers: [
-        <%_ if (authenticationType === 'session') { _%>
-        SessionsService,
-        <%_ } _%>
-        Register,
-        ActivateService,
-        PasswordService,
-        PasswordResetInitService,
-        PasswordResetFinishService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

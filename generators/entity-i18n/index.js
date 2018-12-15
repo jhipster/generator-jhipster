@@ -19,27 +19,37 @@
 /* eslint-disable consistent-return */
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 /* constants used throughout */
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         utils.copyObjectProps(this, this.options.context);
         const blueprint = this.config.get('blueprint');
-        // use global variable since getters dont have access to instance property
-        useBlueprint = this.composeBlueprint(blueprint, 'entity-i18n', {
-            context: opts.context,
-            force: opts.force,
-            debug: opts.context.isDebugEnabled,
-            'skip-install': opts.context.options['skip-install']
-        });
+        if (!opts.fromBlueprint) {
+            // use global variable since getters dont have access to instance property
+            useBlueprint = this.composeBlueprint(blueprint, 'entity-i18n', {
+                context: opts.context,
+                force: opts.force,
+                debug: opts.context.isDebugEnabled,
+                'skip-install': opts.context.options['skip-install'],
+                'from-cli': opts.context.options['from-cli']
+            });
+        } else {
+            useBlueprint = false;
+        }
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
+        return writeFiles();
     }
 
     get writing() {
         if (useBlueprint) return;
-        return writeFiles();
+        return this._writing();
     }
 };

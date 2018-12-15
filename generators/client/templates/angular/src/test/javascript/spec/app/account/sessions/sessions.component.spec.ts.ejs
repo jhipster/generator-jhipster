@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, inject, tick, fakeAsync } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { Session } from 'app/account/sessions/session.model';
 import { SessionsComponent } from 'app/account/sessions/sessions.component';
 import { SessionsService } from 'app/account/sessions/sessions.service';
-import { MockPrincipal } from '../../../helpers/mock-principal.service';
-import { Principal } from 'app/core/auth/principal.service';
+import { MockAccountService } from '../../../helpers/mock-account.service';
+import { AccountService } from 'app/core/auth/account.service';
 
 describe('Component Tests', () => {
 
@@ -39,10 +39,7 @@ describe('Component Tests', () => {
 
             fixture = TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [SessionsComponent],
-                providers: [
-                    SessionsService
-                ]
+                declarations: [SessionsComponent]
             })
             .overrideTemplate(SessionsComponent, '')
             .createComponent(SessionsComponent);
@@ -50,17 +47,17 @@ describe('Component Tests', () => {
         });
 
         it('should define its initial state',
-            inject([Principal, SessionsService],
-                fakeAsync((mockPrincipal: MockPrincipal, service: SessionsService) => {
-                    mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
+            inject([AccountService, SessionsService],
+                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
+                    mockAccountService.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
-                    spyOn(service, 'findAll').and.returnValue(Observable.of(sessions));
+                    spyOn(service, 'findAll').and.returnValue(of(sessions));
 
                     comp.ngOnInit();
                     tick();
 
-                    expect(mockPrincipal.identitySpy).toHaveBeenCalled();
+                    expect(mockAccountService.identitySpy).toHaveBeenCalled();
                     expect(service.findAll).toHaveBeenCalled();
                     expect(comp.success).toBeUndefined();
                     expect(comp.error).toBeUndefined();
@@ -73,13 +70,13 @@ describe('Component Tests', () => {
         );
 
         it('should call delete on Sessions to invalidate a session',
-            inject([Principal, SessionsService],
-                fakeAsync((mockPrincipal: MockPrincipal, service: SessionsService) => {
-                    mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
+            inject([AccountService, SessionsService],
+                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
+                    mockAccountService.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
-                    spyOn(service, 'findAll').and.returnValue(Observable.of(sessions));
-                    spyOn(service, 'delete').and.returnValue(Observable.of({}));
+                    spyOn(service, 'findAll').and.returnValue(of(sessions));
+                    spyOn(service, 'delete').and.returnValue(of({}));
 
                     comp.ngOnInit();
                     comp.invalidate('xyz');
@@ -91,13 +88,13 @@ describe('Component Tests', () => {
         );
 
         it('should call delete on Sessions and notify of error',
-            inject([Principal, SessionsService],
-                fakeAsync((mockPrincipal: MockPrincipal, service: SessionsService) => {
-                    mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
+            inject([AccountService, SessionsService],
+                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
+                    mockAccountService.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
-                    spyOn(service, 'findAll').and.returnValue(Observable.of(sessions));
-                    spyOn(service, 'delete').and.returnValue(Observable.of({
+                    spyOn(service, 'findAll').and.returnValue(of(sessions));
+                    spyOn(service, 'delete').and.returnValue(of({
                         status: 400
                     }));
 
@@ -112,13 +109,13 @@ describe('Component Tests', () => {
         );
 
         it('should call notify of success upon session invalidation',
-            inject([Principal, SessionsService],
-                fakeAsync((mockPrincipal: MockPrincipal, service: SessionsService) => {
-                    mockPrincipal.spy('identity').and.returnValue(Promise.resolve({
+            inject([AccountService, SessionsService],
+                fakeAsync((mockAccountService: MockAccountService, service: SessionsService) => {
+                    mockAccountService.spy('identity').and.returnValue(Promise.resolve({
                         id: 'fuzzer'
                     }));
-                    spyOn(service, 'findAll').and.returnValue(Observable.of(sessions));
-                    spyOn(service, 'delete').and.returnValue(Observable.of({
+                    spyOn(service, 'findAll').and.returnValue(of(sessions));
+                    spyOn(service, 'delete').and.returnValue(of({
                         status: 200
                     }));
 

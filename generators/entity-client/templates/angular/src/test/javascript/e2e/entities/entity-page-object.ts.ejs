@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { element, by } from 'protractor';
+import { element, by, ElementFinder } from 'protractor';
 
 <%_
 let elementGetter = `getText()`;
@@ -33,22 +33,31 @@ for (let relationship of relationships) {
     }
 } _%>
 export class <%= entityClass %>ComponentsPage {
-    createButton = element(by.css('#jh-create-entity'));
+    createButton = element(by.id('jh-create-entity'));
+    deleteButtons = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div table .btn-danger'));
     title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
 
-    clickOnCreateButton() {
-        return this.createButton.click();
+    async clickOnCreateButton() {
+        await this.createButton.click();
     }
 
-    getTitle() {
+    async clickOnLastDeleteButton() {
+        await this.deleteButtons.last().click();
+    }
+
+    async countDeleteButtons() {
+        return this.deleteButtons.count();
+    }
+
+    async getTitle() {
         return this.title.<%- elementGetter %>;
     }
 }
 
 export class <%= entityClass %>UpdatePage {
-    PageTitle = element(by.css('h2#<%= jhiPrefixDashed %>-<%= entityFileName %>-heading'));
-    saveButton = element(by.css('#save-entity'));
-    cancelButton = element(by.css('#cancel-save'));
+    pageTitle = element(by.id('<%= jhiPrefixDashed %>-<%= entityFileName %>-heading'));
+    saveButton = element(by.id('save-entity'));
+    cancelButton = element(by.id('cancel-save'));
     <%_ fields.forEach((field) => {
             const fieldName = field.fieldName;
             const fieldType = field.fieldType;
@@ -56,13 +65,13 @@ export class <%= entityClass %>UpdatePage {
             const fieldTypeBlobContent = field.fieldTypeBlobContent;
     _%>
     <%_ if (fieldIsEnum) { _%>
-    <%= fieldName %>Select = element(by.css('select#field_<%= fieldName %>'));
+    <%= fieldName %>Select = element(by.id('field_<%= fieldName %>'));
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    <%= fieldName %>Input = element(by.css('textarea#field_<%= fieldName %>'));
+    <%= fieldName %>Input = element(by.id('field_<%= fieldName %>'));
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-    <%= fieldName %>Input = element(by.css('input#file_<%= fieldName %>'));
+    <%= fieldName %>Input = element(by.id('file_<%= fieldName %>'));
     <%_ } else { _%>
-    <%= fieldName %>Input = element(by.css('input#field_<%= fieldName %>'));
+    <%= fieldName %>Input = element(by.id('field_<%= fieldName %>'));
     <%_ } _%>
     <%_ }); _%>
     <%_ relationships.forEach((relationship) => {
@@ -71,12 +80,12 @@ export class <%= entityClass %>UpdatePage {
         const relationshipName = relationship.relationshipName;
         const relationshipFieldName = relationship.relationshipFieldName; _%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    <%=relationshipName %>Select = element(by.css('select#field_<%= relationshipName %>'));
+    <%=relationshipName %>Select = element(by.id('field_<%= relationshipName %>'));
     <%_ } _%>
     <%_ }); _%>
 
-    getPageTitle() {
-        return this.PageTitle.<%- elementGetter %>;
+    async getPageTitle() {
+        return this.pageTitle.<%- elementGetter %>;
     }
 
     <%_ fields.forEach((field) => {
@@ -94,32 +103,33 @@ export class <%= entityClass %>UpdatePage {
         return this.<%= fieldName %>Input;
     }
             <%_ } else if (fieldIsEnum) { _%>
-    set<%= fieldNameCapitalized %>Select(<%= fieldName %>) {
-        this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
+    async set<%= fieldNameCapitalized %>Select(<%= fieldName %>) {
+        await this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Select() {
+    async get<%= fieldNameCapitalized %>Select() {
         return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
     }
 
-    <%=fieldName %>SelectLastOption() {
-        this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
-    }
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
-        this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    async <%=fieldName %>SelectLastOption() {
+        await this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
     }
 
-    get<%= fieldNameCapitalized %>Input() {
+    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
+        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    }
+
+    async get<%= fieldNameCapitalized %>Input() {
         return this.<%= fieldName %>Input.getAttribute('value');
     }
 
     <%_ } else { _%>
-    set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
-        this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
+        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
     }
 
-    get<%= fieldNameCapitalized %>Input() {
+    async get<%= fieldNameCapitalized %>Input() {
         return this.<%= fieldName %>Input.getAttribute('value');
     }
 
@@ -131,34 +141,48 @@ export class <%= entityClass %>UpdatePage {
         const relationshipName = relationship.relationshipName;
         const relationshipFieldName = relationship.relationshipFieldName;
         const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
+
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    <%=relationshipName %>SelectLastOption() {
-        this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
+    async <%=relationshipName %>SelectLastOption() {
+        await this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
     }
 
-    <%=relationshipName %>SelectOption(option) {
-        this.<%=relationshipName %>Select.sendKeys(option);
+    async <%=relationshipName %>SelectOption(option) {
+        await this.<%=relationshipName %>Select.sendKeys(option);
     }
 
-    get<%=relationshipNameCapitalized %>Select() {
+    get<%=relationshipNameCapitalized %>Select(): ElementFinder {
         return this.<%=relationshipName %>Select;
     }
 
-    get<%=relationshipNameCapitalized %>SelectedOption() {
+    async get<%=relationshipNameCapitalized %>SelectedOption() {
         return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
     }
 
     <%_ } _%>
     <%_ }); _%>
-    save() {
-        this.saveButton.click();
+    async save() {
+        await this.saveButton.click();
     }
 
-    cancel() {
-        this.cancelButton.click();
+    async cancel() {
+        await this.cancelButton.click();
     }
 
-    getSaveButton() {
+    getSaveButton(): ElementFinder {
         return this.saveButton;
+    }
+}
+
+export class <%= entityClass %>DeleteDialog {
+    private dialogTitle = element(by.id('<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading'));
+    private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
+
+    async getDialogTitle() {
+        return this.dialogTitle.<%- elementGetter %>;
+    }
+
+    async clickOnConfirmButton() {
+        await this.confirmButton.click();
     }
 }

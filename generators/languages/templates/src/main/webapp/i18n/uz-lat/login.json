@@ -12,7 +12,7 @@
                 "authentication": "<strong>Kira olmadiz!</strong> Iltimoz, ma`lumotlaringizni tekshirib qayta urunib ko`ring."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Parolingizni unutdingizmi?"
         }
     }

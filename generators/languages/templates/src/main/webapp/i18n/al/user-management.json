@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Përdorues",
+            "createLabel": "Krijo përdorues të ri",
+            "createOrEditLabel": "Krijo ose përpuno një përdorues"
+        },
+        "created": "Një përdorues me identifikimin {{ param }} u krijua",
+        "updated": "Një përdorues me identifikimin {{ param }} u përditësua",
+        "deleted": "Një përdorues me identifikimin {{ param }} u fshi",
+        "delete": {
+            "question": "Jeni i sigurtë që doni të fshini përdoruesin {{ login }}?"
+        },
+        "detail": {
+            "title": "Përdorues"
+        },
+        "login": "Futu",
+        "firstName": "Emri",
+        "lastName": "Mbiemri",
+        "email": "Email",
+        "activated": "Aktivizuar",
+        "deactivated": "Çaktivizuar",
+        "profiles": "Profilet",
+        "langKey": "Gjuha",
+        "createdBy": "Krijuar nga",
+        "createdDate": "Data krijimit",
+        "lastModifiedBy": "Ndryshuar nga",
+        "lastModifiedDate": "Ndryshuar më"
+    }
+}

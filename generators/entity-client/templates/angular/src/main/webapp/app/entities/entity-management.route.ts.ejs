@@ -17,12 +17,14 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
 <%_ } _%>
-
 import { UserRouteAccessService } from 'app/core';
+import { Observable, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
@@ -35,19 +37,23 @@ import {
     <%= entityAngularName %>DeletePopupComponent
 } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
+import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
-@Injectable()
-export class <%= entityAngularName %>Resolve implements Resolve<any> {
+@Injectable({providedIn: 'root'})
+export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngularName %>> {
 
     constructor(private service: <%= entityAngularName %>Service) {
     }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<<%= entityAngularName %>> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
-            return this.service.find(id);
+            return this.service.find(id).pipe(
+                filter((response: HttpResponse<<%= entityAngularName %>>) => response.ok),
+                map((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => <%= entityInstance %>.body)
+            );
         }
-        return new <%= entityAngularName %>();
+        return of(new <%= entityAngularName %>());
     }
 }
 
@@ -65,7 +71,7 @@ export const <%= entityInstance %>Route: Routes = [
             authorities: ['ROLE_USER'],
             <%_ if (pagination === 'pagination' || pagination === 'pager'){ _%>
             defaultSort: 'id,asc',
-            <%_ } _%> 
+            <%_ } _%>
             pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]

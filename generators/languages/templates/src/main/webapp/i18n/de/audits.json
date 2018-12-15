@@ -17,7 +17,7 @@
                 "principal": "Benutzer",
                 "date": "Datum",
                 "status": "Stand",
-                "data": "Extrainformationen"
+                "data": "Extra Informationen"
             },
             "data": {
                 "remoteAddress": "Remote-Adresse:"

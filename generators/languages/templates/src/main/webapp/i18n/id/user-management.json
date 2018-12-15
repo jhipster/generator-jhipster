@@ -3,7 +3,7 @@
         "home": {
             "title": "Pengguna",
             "createLabel": "Buat pengguna baru",
-            "createOrEditLabel": "Buat atau edit pengguna"
+            "createOrEditLabel": "Buat atau ubah pengguna"
         },
         "created": "Pengguna baru dibuat dengan ID {{ param }}",
         "updated": "Pengguna dengan ID {{ param }} sudah diubah",
@@ -18,11 +18,11 @@
         "firstName": "Nama Depan",
         "lastName": "Nama Belakang",
         "email": "Email",
-        "activated": "Aktif",
-        "deactivated": "Tidak aktif",
+        "activated": "Aktifkan",
+        "deactivated": "Nonaktifkan",
         "profiles": "Profil",
         "langKey": "Bahasa",
-        "createdBy": "Dibuat oleha",
+        "createdBy": "Dibuat oleh",
         "createdDate": "Dibuat tanggal",
         "lastModifiedBy": "Diubah oleh",
         "lastModifiedDate": "Diubah tanggal"

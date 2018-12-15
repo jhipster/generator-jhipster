@@ -16,19 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Table, Input, Row, Col, Badge } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 
 import { getConfigurations, getEnv } from '../administration.reducer';
+import { IRootState } from 'app/shared/reducers';
 
-export interface IConfigurationPageProps {
-  isFetching?: boolean;
-  getConfigurations: Function;
-  getEnv: Function;
-  configuration: any;
-}
+export interface IConfigurationPageProps extends StateProps, DispatchProps {}
 
 export interface IConfigurationPageState {
   filter: string;
@@ -79,7 +75,7 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
     const env = configuration && configuration.env ? configuration.env : {};
     return (
       <div>
-        <h2>
+        <h2 id="configuration-page-heading">
           <Translate contentKey="configuration.title">Configuration</Translate>
         </h2>
         <span>
@@ -150,11 +146,14 @@ export class ConfigurationPage extends React.Component<IConfigurationPageProps, 
   }
 }
 
-const mapStateToProps = ({ administration }) => ({
+const mapStateToProps = ({ administration }: IRootState) => ({
   configuration: administration.configuration,
-  isFetching: administration.isFetching
+  isFetching: administration.loading
 });
 
 const mapDispatchToProps = { getConfigurations, getEnv };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfigurationPage);

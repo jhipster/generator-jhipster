@@ -16,22 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Alert, Table, Button } from 'reactstrap';
 import { Translate } from 'react-jhipster';
 import { getSession } from 'app/shared/reducers/authentication';
+import { IRootState } from 'app/shared/reducers';
 import { findAll, invalidateSession } from './sessions.reducer';
 
-export interface ISessionsProps {
-  getSession: Function;
-  findAll: Function;
-  invalidateSession: Function;
-  account: any;
-  sessions: any;
-  updateSuccess: boolean;
-  updateFailure: boolean;
-}
+export interface ISessionsProps extends StateProps, DispatchProps {}
 
 export class SessionsPage extends React.Component<ISessionsProps> {
   componentDidMount() {
@@ -69,7 +62,7 @@ export class SessionsPage extends React.Component<ISessionsProps> {
         {(updateFailure) ? (
         <Alert color="danger">
           <Translate contentKey="sessions.messages.error">
-            <span><strong>An error has occured!</strong> The session could not be invalidated.</span>
+            <span><strong>An error has occurred!</strong> The session could not be invalidated.</span>
           </Translate>
         </Alert>
         ) : null}
@@ -108,7 +101,7 @@ export class SessionsPage extends React.Component<ISessionsProps> {
   }
 }
 
-const mapStateToProps = ({ authentication, sessions }) => ({
+const mapStateToProps = ({ authentication, sessions }: IRootState) => ({
   account: authentication.account,
   sessions: sessions.sessions,
   updateSuccess: sessions.updateSuccess,
@@ -116,5 +109,8 @@ const mapStateToProps = ({ authentication, sessions }) => ({
 });
 
 const mapDispatchToProps = { getSession, findAll, invalidateSession };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(SessionsPage);

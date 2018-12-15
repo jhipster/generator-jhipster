@@ -17,37 +17,30 @@
  limitations under the License.
 -%>
 /*
- * Plugin that provides API-first development using swagger-codegen to
- * generate Spring-MVC endpoint stubs at compile time from a swagger definition file
+ * Plugin that provides API-first development using OpenAPI-generator to
+ * generate Spring-MVC endpoint stubs at compile time from an OpenAPI definition file
  */
+apply plugin: 'org.openapi.generator'
 
-apply plugin: "org.detoeuf.swagger-codegen"
-
-swagger {
-    inputSpec = file('<%= SERVER_MAIN_RES_DIR %>swagger/api.yml').absolutePath
-    outputDir = file('build/swagger')
-    lang = 'spring'
-
-    addDynamicProperty 'interfaceOnly', true
-    addDynamicProperty 'java8', true
-
-    additionalProperties = [
-        'modelPackage' : '<%= packageName %>.web.api.model',
-        'apiPackage'   : '<%= packageName %>.web.api'
-    ]
-
-    systemProperties = [
-        'models' : '',
-        'apis'   : ''
-    ]
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "$rootDir/src/main/resources/swagger/api.yml".toString()
+    outputDir = "$buildDir/openapi".toString()
+    apiPackage = "<%= packageName %>.web.api"
+    modelPackage = "<%= packageName %>.web.api.model"
+    apiFilesConstrainedTo = [""]
+    modelFilesConstrainedTo = [""]
+    supportingFilesConstrainedTo = ["ApiUtil.java"]
+    configOptions = [delegatePattern: "true"]
+    validateSpec = true
 }
 
 sourceSets {
     main {
         java {
-            srcDir file("${project.buildDir.path}/swagger/src/main/java")
+            srcDir file("${project.buildDir.path}/openapi/src/main/java")
         }
     }
 }
 
-compileJava.dependsOn('swagger')
+compileJava.dependsOn("openApiGenerate")

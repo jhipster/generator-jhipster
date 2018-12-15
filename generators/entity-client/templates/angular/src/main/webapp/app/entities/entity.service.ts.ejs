@@ -18,10 +18,11 @@
 -%>
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 <%_ if (fieldsContainDate) { _%>
 import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { map } from 'rxjs/operators';
 <%_ } _%>
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -31,15 +32,15 @@ import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileN
 type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
 type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class <%= entityAngularName %>Service {
 
-    private resourceUrl =  SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
+    public resourceUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
     <%_ if (searchEngine === 'elasticsearch') { _%>
-    private resourceSearchUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
+    public resourceSearchUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
     <%_ } _%>
 
-    constructor(private http: HttpClient) { }
+    constructor(protected http: HttpClient) { }
 
     create(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
         <%_ if (fieldsContainDate) { _%>
@@ -48,7 +49,7 @@ export class <%= entityAngularName %>Service {
             return this.http.post<I<%= entityAngularName %>>(this.resourceUrl,
                     <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                     { observe: 'response' })
-            <% if (fieldsContainDate) { %>.map((res: EntityResponseType) => this.convertDateFromServer(res))<% } %>;
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
 
     update(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
@@ -58,18 +59,18 @@ export class <%= entityAngularName %>Service {
             return this.http.put<I<%= entityAngularName %>>(this.resourceUrl,
                     <% if (fieldsContainDate) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                     { observe: 'response' })
-            <% if (fieldsContainDate) { %>.map((res: EntityResponseType) => this.convertDateFromServer(res))<% } %>;
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
 
     find(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<EntityResponseType> {
         return this.http.get<I<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            <% if (fieldsContainDate) { %>.map((res: EntityResponseType) => this.convertDateFromServer(res))<% } %>;
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<I<%= entityAngularName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
-            <% if (fieldsContainDate) { %>.map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res))<% } %>;
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
     }
 
     delete(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>): Observable<HttpResponse<any>> {
@@ -80,42 +81,46 @@ export class <%= entityAngularName %>Service {
     search(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<I<%= entityAngularName %>[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-            <% if (fieldsContainDate) { %>.map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res))<% } %>;
+            <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
     }
     <%_ } _%>
 
-    <%_ if (fieldsContainDate) { _%>
-    private convertDateFromClient(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
+<%_ if (fieldsContainDate) { _%>
+    protected convertDateFromClient(<%= entityInstance %>: I<%= entityAngularName %>): I<%= entityAngularName %> {
         const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
-        <%_ for (idx in fields) { _%>
+    <%_ for (idx in fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType) ) { _%>
         <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : null,
         <%_ } _%>
         <%_ if ( fields[idx].fieldType === 'LocalDate' ) { _%>
         <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.format(DATE_FORMAT) : null,
         <%_ } _%>
-        <%_ } _%>
+    <%_ } _%>
         });
         return copy;
     }
 
-    private convertDateFromServer(res: EntityResponseType): EntityResponseType {
-        <%_ for (idx in fields) { _%>
+    protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+        if (res.body) {
+    <%_ for (idx in fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
             res.body.<%= fields[idx].fieldName %> = res.body.<%= fields[idx].fieldName %> != null ? moment(res.body.<%= fields[idx].fieldName %>) : null;
         <%_ } _%>
-        <%_ } _%>
+    <%_ } _%>
+        }
         return res;
     }
 
-    private convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-        res.body.forEach ((<%= entityInstance %>: I<%= entityAngularName %>) => {
-            <%_ for (idx in fields) { _%>
-            <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
-            <%= entityInstance %>.<%= fields[idx].fieldName %> = <%= entityInstance %>.<%= fields[idx].fieldName %> != null ? moment(<%= entityInstance %>.<%= fields[idx].fieldName %>) : null;
-            <%_ } _%>
-            <%_ } _%>
-        });
+    protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+        if (res.body) {
+            res.body.forEach ((<%= entityInstance %>: I<%= entityAngularName %>) => {
+    <%_ for (idx in fields) { _%>
+        <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
+                <%= entityInstance %>.<%= fields[idx].fieldName %> = <%= entityInstance %>.<%= fields[idx].fieldName %> != null ? moment(<%= entityInstance %>.<%= fields[idx].fieldName %>) : null;
+        <%_ } _%>
+    <%_ } _%>
+            });
+        }
         return res;
     }
     <%_ } _%>

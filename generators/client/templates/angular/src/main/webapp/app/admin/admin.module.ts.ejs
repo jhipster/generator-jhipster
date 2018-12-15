@@ -43,23 +43,11 @@ import {
     <%=jhiPrefixCapitalized%>HealthCheckComponent,
     <%=jhiPrefixCapitalized%>ConfigurationComponent,
     <%=jhiPrefixCapitalized%>DocsComponent,
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-    AuditsService,
-    <%_ } _%>
-    <%=jhiPrefixCapitalized%>ConfigurationService,
-    <%=jhiPrefixCapitalized%>HealthService,
-    <%=jhiPrefixCapitalized%>MetricsService,
-    <%_ if (applicationType === 'gateway') { _%>
-    GatewayRoutesService,
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     <%=jhiPrefixCapitalized%>GatewayComponent,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     <%=jhiPrefixCapitalized%>TrackerComponent,
-    <%_ } _%>
-    LogsService,
-    <%_ if (!skipUserManagement) { _%>
-    UserMgmtResolve,
-    UserResolve
     <%_ } _%>
 } from './';
 
@@ -84,7 +72,7 @@ import {
         <%=jhiPrefixCapitalized%>HealthCheckComponent,
         <%=jhiPrefixCapitalized%>HealthModalComponent,
         <%=jhiPrefixCapitalized%>DocsComponent,
-        <%_ if (applicationType === 'gateway') { _%>
+        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
         <%=jhiPrefixCapitalized%>GatewayComponent,
         <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
@@ -93,6 +81,9 @@ import {
         <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
     ],
+    <%_ if (enableTranslation) { _%>
+    providers: [ { provide: JhiLanguageService, useClass: JhiLanguageService } ],
+    <%_ } _%>
     entryComponents: [
         <%_ if (!skipUserManagement) { _%>
         UserMgmtDeleteDialogComponent,
@@ -100,28 +91,16 @@ import {
         <%=jhiPrefixCapitalized%>HealthModalComponent,
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent,
     ],
-    providers: [
-        <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-        AuditsService,
-        <%_ } _%>
-        <%=jhiPrefixCapitalized%>ConfigurationService,
-        <%=jhiPrefixCapitalized%>HealthService,
-        <%=jhiPrefixCapitalized%>MetricsService,
-        <%_ if (applicationType === 'gateway') { _%>
-        GatewayRoutesService,
-        <%_ } _%>
-        LogsService,
-        <%_ if (!skipUserManagement) { _%>
-        UserResolve,
-        UserMgmtResolve
-        <%_ } _%>
-    ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class <%=angularXAppName%>AdminModule {
     <%_ if (enableTranslation) { _%>
     constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-        this.languageHelper.language.subscribe((languageKey: string) => this.languageService.changeLanguage(languageKey));
+        this.languageHelper.language.subscribe((languageKey: string) => {
+            if (languageKey !== undefined) {
+                this.languageService.changeLanguage(languageKey);
+            }
+        });
     }
     <%_ } _%>
 }

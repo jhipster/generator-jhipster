@@ -23,49 +23,82 @@ import '../content/scss/vendor.scss';
 <%_} else { _%>
 import '../content/css/vendor.css';
 <%_ } _%>
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/throw';
 
 // Imports all fontawesome core and solid icons
 
-import fontawesome from '@fortawesome/fontawesome';
-import solid from '@fortawesome/fontawesome-free-solid';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+    faUser,
+    faSort,
+    faSortUp,
+    faSortDown,
+    faSync,
+    faEye,
+    faBan,
+    faTimes,
+    faArrowLeft,
+    faSave,
+    faPlus,
+    faPencilAlt,
+    faBars,
+    faThList,
+    faUserPlus,
+    faRoad,
+    faTachometerAlt,
+    faHeart,
+    faList,
+    faBell,
+    faBook,
+    faHdd,
+    faFlag,
+    faWrench,
+    faClock,
+    faCloud,
+    faSignOutAlt,
+    faSignInAlt,
+    faCalendarAlt,
+    faSearch,
+    faTrashAlt,
+    faAsterisk,
+    faTasks,
+    faHome
+} from '@fortawesome/free-solid-svg-icons';
 
 // Adds the SVG icon to the library so you can use it in your page
-fontawesome.library.add(solid.faUser);
-fontawesome.library.add(solid.faSort);
-fontawesome.library.add(solid.faSync);
-fontawesome.library.add(solid.faEye);
-fontawesome.library.add(solid.faBan);
-fontawesome.library.add(solid.faTimes);
-fontawesome.library.add(solid.faArrowLeft);
-fontawesome.library.add(solid.faSave);
-fontawesome.library.add(solid.faPlus);
-fontawesome.library.add(solid.faPencilAlt);
-fontawesome.library.add(solid.faBars);
-fontawesome.library.add(solid.faHome);
-fontawesome.library.add(solid.faThList);
-fontawesome.library.add(solid.faUserPlus);
-fontawesome.library.add(solid.faRoad);
-fontawesome.library.add(solid.faTachometerAlt);
-fontawesome.library.add(solid.faHeart);
-fontawesome.library.add(solid.faList);
-fontawesome.library.add(solid.faBell);
-fontawesome.library.add(solid.faTasks);
-fontawesome.library.add(solid.faBook);
-fontawesome.library.add(solid.faHdd);
-fontawesome.library.add(solid.faFlag);
-fontawesome.library.add(solid.faWrench);
-fontawesome.library.add(solid.faClock);
-fontawesome.library.add(solid.faCloud);
-fontawesome.library.add(solid.faSignOutAlt);
-fontawesome.library.add(solid.faSignInAlt);
-fontawesome.library.add(solid.faCalendarAlt);
-fontawesome.library.add(solid.faSearch);
-fontawesome.library.add(solid.faTrashAlt);
-fontawesome.library.add(solid.faAsterisk);
+library.add(faUser);
+library.add(faSort);
+library.add(faSortUp);
+library.add(faSortDown);
+library.add(faSync);
+library.add(faEye);
+library.add(faBan);
+library.add(faTimes);
+library.add(faArrowLeft);
+library.add(faSave);
+library.add(faPlus);
+library.add(faPencilAlt);
+library.add(faBars);
+library.add(faHome);
+library.add(faThList);
+library.add(faUserPlus);
+library.add(faRoad);
+library.add(faTachometerAlt);
+library.add(faHeart);
+library.add(faList);
+library.add(faBell);
+library.add(faTasks);
+library.add(faBook);
+library.add(faHdd);
+library.add(faFlag);
+library.add(faWrench);
+library.add(faClock);
+library.add(faCloud);
+library.add(faSignOutAlt);
+library.add(faSignInAlt);
+library.add(faCalendarAlt);
+library.add(faSearch);
+library.add(faTrashAlt);
+library.add(faAsterisk);
 
 // jhipster-needle-add-element-to-vendor - JHipster will add new menu items here
 

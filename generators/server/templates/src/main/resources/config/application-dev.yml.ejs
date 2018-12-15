@@ -52,14 +52,21 @@ eureka:
 spring:
     profiles:
         active: dev
-        include: swagger
+        include:
+            - swagger
+            # Uncomment to activate TLS for the dev profile
+            #- tls
     devtools:
         restart:
             enabled: true
+            <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+            additional-exclude: .h2.server.properties
+            <%_ } _%>
         livereload:
             enabled: false # we use Webpack dev server + BrowserSync for livereload
     jackson:
-        serialization.indent_output: true
+        serialization:
+            indent-output: true
     <%_ if (messageBroker === 'kafka' || serviceDiscoveryType === 'consul') { _%>
     cloud:
         <%_ if (serviceDiscoveryType === 'consul') { _%>
@@ -84,11 +91,11 @@ spring:
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         <%_ if (devDatabaseType === 'mysql') { _%>
-        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password:
         <%_ } else if (devDatabaseType === 'mariadb') { _%>
-        url: jdbc:mariadb://localhost:3306/<%= baseName %>
+        url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password:
         <%_ } else if (devDatabaseType === 'postgresql') { _%>
@@ -100,8 +107,6 @@ spring:
         username: system
         password: oracle
         <%_ } else if (devDatabaseType === 'mssql') { _%>
-        # If you use the Docker Compose configuration provided by JHipster, the database name is "tempdb"
-        # So you should use url: jdbc:sqlserver://localhost:1433;database=tempdb
         url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
         username: SA
         password: yourStrong(!)Password
@@ -110,12 +115,13 @@ spring:
         username: <%= baseName %>
         password:
         <%_ } else if (devDatabaseType === 'h2Memory') { _%>
-        url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
         username: <%= baseName %>
         password:
         <%_ } _%>
-        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb' || devDatabaseType === 'mssql') { _%>
         hikari:
+            auto-commit: false
+        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb' || devDatabaseType === 'mssql') { _%>
             data-source-properties:
                 cachePrepStmts: true
                 prepStmtCacheSize: 250
@@ -153,12 +159,13 @@ spring:
         show-sql: true
         properties:
             hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
             <%_ if (enableHibernateCache) { _%>
                 <%_ if (cacheProvider === 'ehcache') { _%>
-            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.NoDefaultJCacheRegionFactory
+            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory
                 <%_ } else if (cacheProvider === 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
@@ -193,12 +200,9 @@ spring:
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
         elasticsearch:
-            cluster-name:
-            cluster-nodes: localhost:9300
             properties:
                 path:
-                    logs: <%= BUILD_DIR %>elasticsearch/log
-                    data: <%= BUILD_DIR %>elasticsearch/data
+                    home: <%= BUILD_DIR %>elasticsearch
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -221,6 +225,9 @@ spring:
     thymeleaf:
         cache: false
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+    sleuth:
+        sampler:
+            probability: 1 # report 100% of traces
     zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
         base-url: http://localhost:9411
         enabled: false
@@ -229,23 +236,6 @@ spring:
                 enabled: true
 <%_ } _%>
 
-# ===================================================================
-# To enable SSL, generate a certificate using:
-# keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
-#
-# You can also use Let's Encrypt:
-# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
-#
-# Then, modify the server.ssl properties so your "server" configuration looks like:
-#
-# server:
-#    port: 8443
-#    ssl:
-#        key-store: keystore.p12
-#        key-store-password: <your-password>
-#        key-store-type: PKCS12
-#        key-alias: <%= baseName.toLowerCase() %>
-# ===================================================================
 server:
     port: <%= serverPort %>
 
@@ -266,7 +256,7 @@ jhipster:
             app1: /api,/v2/api-docs # recommended dev configuration
     <%_ } _%>
     http:
-        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
+        version: V_1_1 # To use HTTP/2 you will need to activate TLS (see application-tls.yml)
     <%_ if (cacheProvider !== 'no') { _%>
     cache: # Cache configuration
         <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -301,6 +291,12 @@ jhipster:
                 time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
                 max-entries: 100 # Number of objects in each cache entry
         <%_ } _%>
+        <%_ if (cacheProvider === 'memcached') { _%>
+        memcached: # Memcached configuration
+            # Disabled by default in dev mode as Memcached does not work with Spring Boot Devtools
+            # If you want to use Memcached, you must also enable it in CacheConfiguration
+            enabled: false
+        <%_ } _%>
     <%_ } _%>
     <%_ if (applicationType !== 'microservice') { _%>
     # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
@@ -330,7 +326,8 @@ jhipster:
     security:
         authentication:
             jwt:
-                secret: my-secret-token-to-change-in-production
+                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+                base64-secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
@@ -353,10 +350,12 @@ jhipster:
 <%_ } _%>
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: <%= baseName %>@localhost
-        base-url: http://127.0.0.1:<%= serverPort %>
+        base-url: http://127.0.0.1:<%= applicationType !== 'uaa' ? serverPort : 8080 %>
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx:
             enabled: true
+        prometheus:
+            enabled: false #expose metrics via prometheus
         logs: # Reports Dropwizard metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
@@ -369,7 +368,7 @@ jhipster:
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     key-store:
-        name: keystore.jks
+        name: config/tls/keystore.p12
         password: password
         alias: selfsigned
     web-client-configuration:

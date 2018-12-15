@@ -34,9 +34,9 @@ export class <%= entityAngularName %>DeleteDialogComponent {
     <%= entityInstance %>: I<%= entityAngularName %>;
 
     constructor(
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
+        protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
-        private eventManager: JhiEventManager
+        protected eventManager: JhiEventManager
     ) {
     }
 
@@ -61,19 +61,19 @@ export class <%= entityAngularName %>DeleteDialogComponent {
 })
 export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnDestroy {
 
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
     constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private modalService: NgbModal
+        protected activatedRoute: ActivatedRoute,
+        protected router: Router,
+        protected modalService: NgbModal
     ) {}
 
     ngOnInit() {
-        this.route.data.subscribe(({<%= entityInstance %>}) => {
+        this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent as Component, { size: 'lg', backdrop: 'static'});
-                this.ngbModalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>.body;
+                this.ngbModalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
                 this.ngbModalRef.result.then((result) => {
                     this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
                     this.ngbModalRef = null;

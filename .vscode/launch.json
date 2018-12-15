@@ -7,7 +7,24 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "jhipster",
+            "name": "jhipster generate sample-dev blueprint",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "timeout": 100000,
+            "args": [
+                "-d",
+                "--skip-checks",
+                "--skip-git",
+                "--skip-cache",
+                "--blueprint",
+                "sample-blueprint"
+                ],
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster generate sample-dev",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "timeout": 100000,
             "args": [
@@ -16,8 +33,83 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-             // change `app-sample-dev` to another sample name like `app-ng2-default` to test another configuration
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster generate sample-ngx-default (protractor)",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "timeout": 100000,
+            "args": [
+                "-d",
+                "--skip-checks",
+                "--skip-git",
+                "--skip-cache"
+                ],
+            "cwd": "${workspaceFolder}/travis/samples/ngx-default/",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster generate sample-ngx-default",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "timeout": 100000,
+            "args": [
+                "-d",
+                "--skip-checks",
+                "--skip-git",
+                "--skip-cache"
+                ],
+            "cwd": "${workspaceFolder}/travis/samples/ngx-default/",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster generate sample-gateway-ngx-eureka",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "timeout": 100000,
+            "args": [
+                "-d",
+                "--skip-checks",
+                "--skip-git",
+                "--skip-cache"
+                ],
+            "cwd": "${workspaceFolder}/travis/samples/ms-ngx-gateway-eureka/",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster generate sample-microservice-eureka",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "timeout": 100000,
+            "args": [
+                "-d",
+                "--skip-checks",
+                "--skip-git",
+                "--skip-cache"
+                ],
+            "cwd": "${workspaceFolder}/travis/samples/ms-micro-eureka/",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster generate sample-ngx-gradle-fr",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "timeout": 100000,
+            "args": [
+                "-d",
+                "--skip-checks",
+                "--skip-git",
+                "--skip-cache"
+                ],
+            "cwd": "${workspaceFolder}/travis/samples/ngx-gradle-fr/",
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -29,7 +121,8 @@
                 "BankAccount",
                 "--force"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -39,7 +132,8 @@
             "args": [
                 "ci-cd"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -49,7 +143,8 @@
             "args": [
                 "import-jdl"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -59,7 +154,8 @@
             "args": [
                 "info"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -69,7 +165,8 @@
             "args": [
                 "language"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -89,7 +186,8 @@
             "args": [
                 "docker-compose"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -99,7 +197,8 @@
             "args": [
                 "kubernetes"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -109,7 +208,8 @@
             "args": [
                 "rancher-compose"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -119,7 +219,8 @@
             "args": [
                 "openshift"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -129,7 +230,36 @@
             "args": [
                 "heroku"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster login",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "args": [
+                "login"
+            ],
+            "env": {
+                "JHIPSTER_ONLINE_URL": "http://localhost:8080"
+            },
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster logout",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "args": [
+                "logout"
+            ],
+            "env": {
+                "JHIPSTER_ONLINE_URL": "http://localhost:8080"
+            },
+            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "console": "integratedTerminal"
         }
     ]
 }

@@ -25,15 +25,13 @@ import { <%= angularXAppName %>SharedModule } from 'app/shared';
 import { <%= angularXAppName %>AdminModule } from 'app/admin/admin.module';
 <%_ }}); _%>
 import {
-    <%= entityAngularName %>Service,
     <%= entityAngularName %>Component,
     <%= entityAngularName %>DetailComponent,
     <%= entityAngularName %>UpdateComponent,
     <%= entityAngularName %>DeletePopupComponent,
     <%= entityAngularName %>DeleteDialogComponent,
     <%= entityInstance %>Route,
-    <%= entityInstance %>PopupRoute,
-    <%= entityAngularName %>Resolve
+    <%= entityInstance %>PopupRoute
 } from './';
 
 const ENTITY_STATES = [
@@ -62,10 +60,6 @@ const ENTITY_STATES = [
         <%= entityAngularName %>UpdateComponent,
         <%= entityAngularName %>DeleteDialogComponent,
         <%= entityAngularName %>DeletePopupComponent,
-    ],
-    providers: [
-        <%= entityAngularName %>Service,
-        <%= entityAngularName %>Resolve
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

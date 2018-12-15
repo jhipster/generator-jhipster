@@ -20,7 +20,7 @@ import axios from 'axios';
 import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction, ICrudDeleteAction } from 'react-jhipster';
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { IUser } from 'app/shared/model/user.model';
+import { IUser, defaultValue } from 'app/shared/model/user.model';
 
 export const ACTION_TYPES = {
   FETCH_ROLES: 'userManagement/FETCH_ROLES',
@@ -35,16 +35,18 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   errorMessage: null,
-  users: [],
-  authorities: [],
-  user: {},
+  users: [] as ReadonlyArray<IUser>,
+  authorities: [] as any[],
+  user: defaultValue,
   updating: false,
   updateSuccess: false,
   totalItems: 0
 };
 
+export type UserManagementState =  Readonly<typeof initialState>;
+
 // Reducer
-export default (state = initialState, action) => {
+export default (state: UserManagementState = initialState, action): UserManagementState => {
   switch (action.type) {
     case REQUEST(ACTION_TYPES.FETCH_ROLES):
       return {
@@ -83,7 +85,6 @@ export default (state = initialState, action) => {
     case SUCCESS(ACTION_TYPES.FETCH_ROLES):
       return {
         ...state,
-        loading: false,
         authorities: action.payload.data
       };
     case SUCCESS(ACTION_TYPES.FETCH_USERS):
@@ -112,38 +113,37 @@ export default (state = initialState, action) => {
         ...state,
         updating: false,
         updateSuccess: true,
-        user: {}
+        user: defaultValue
       };
     case ACTION_TYPES.RESET:
       return {
-        ...state,
-        user: {}
+        ...initialState
       };
     default:
       return state;
   }
 };
 
-const apiUrl = '/<%= apiUaaPath %>api/users';
+const apiUrl = '<%= apiUaaPath %>api/users';
 // Actions
 export const getUsers: ICrudGetAllAction<IUser> = (page, size, sort) => {
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_USERS,
-    payload: axios.get(requestUrl) as Promise<IUser>
+    payload: axios.get<IUser>(requestUrl)
   };
 };
 
-export const getRoles: ICrudGetAction<any> = () => ({
+export const getRoles = () => ({
   type: ACTION_TYPES.FETCH_ROLES,
-  payload: axios.get(`${apiUrl}/authorities`) as Promise<any>
+  payload: axios.get(`${apiUrl}/authorities`)
 });
 
 export const getUser: ICrudGetAction<IUser> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {
     type: ACTION_TYPES.FETCH_USER,
-    payload: axios.get(requestUrl) as Promise<IUser>
+    payload: axios.get<IUser>(requestUrl)
   };
 };
 

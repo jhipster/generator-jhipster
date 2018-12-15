@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "Аўдыт",
+        "filter": {
+            "title": "Фільтр па даце",
+            "from": "ад",
+            "to": "па",
+            "button": {
+                "weeks": "Нядзель",
+                "today": "сягодня",
+                "clear": "ачысціць",
+                "close": "закрыць"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Карыстальнік",
+                "date": "Дата",
+                "status": "Cтан",
+                "data": "Дад. інф."
+            },
+            "data": {
+                "remoteAddress": "Аддалены адрас:"
+            }
+        }
+    }
+}

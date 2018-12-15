@@ -1,0 +1,159 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "သင် browser version အသစ် အသုံးပြုရန်လိုအပ်ပါသည်။ ကျေးဇူးပြု၍ <a href=\"http://browsehappy.com/?locale=en\">အဆင့်မြှင့်တင်ပါ။</a>",
+        "menu": {
+            "home": "မူလစာမျက်နှာ",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entities များ",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "အကောင့်",
+                "settings": "Setting များ",
+                "password": "လျှို့ဝှက်ကုဒ်",
+                "sessions": "Session များ",
+                "login": "ဆိုင်းအင်",
+                "logout": "ဆိုင်းအောက်",
+                "register": "မှတ်ပုံတင်မည်"
+            },
+            "admin": {
+                "main": "စီမံခန့်ခွဲမှု",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "အသုံးပြုသူများအား စီမံခန့်ခွဲမှု",
+                "tracker": "အသုံးပြုသူများအား ခြေရာခံခြင်း",
+                "metrics": "Metrics များ",
+                "health": "စနစ်အခြေအနေ",
+                "configuration": "Configuration များ",
+                "logs": "Log များ",
+                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                "audits": "စာရင်းစစ်ဆေးခြင်း",
+                <%_ } _%>
+                "apidocs": "API",
+                "database": "ဒေတာဘေ့စ",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "ဘာသာစကား"
+        },
+        "form": {
+            "username": "အသုံးပြုသူအိုင်ဒီ",
+            "username.placeholder": "သင်၏ အသုံးပြုသူအိုင်ဒီ",
+            "currentpassword": "လက်ရှိအသုံးပြုနေသော လျှို့ဝှက်ကုဒ်",
+            "currentpassword.placeholder": "လက်ရှိအသုံးပြုနေသော လျှို့ဝှက်ကုဒ်",
+            "newpassword": "လျှို့ဝှက်ကုဒ်အသစ်",
+            "newpassword.placeholder": "လျှို့ဝှက်ကုဒ်အသစ်",
+            "confirmpassword": "လျှို့ဝှက်ကုဒ်အသစ် အတည်ပြုခြင်း",
+            "confirmpassword.placeholder": "လျှို့ဝှက်ကုဒ်အသစ် အတည်ပြုခြင်း",
+            "email": "အီးမေးလ်လိပ်စာ",
+            "email.placeholder": "သင်၏ အီးမေးလ်လိပ်စာ"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "သင် ",
+                    "link": "ဆိုင်းအင်",
+                    "suffix": " လုပ်လိုလျှင်, အောက်ပါအကောင့်များဖြင့် ကြိုးစားကြည့်နိုင်ပါသည်။<br/>- စီမံခန့်ခွဲသူ (အသုံးပြုသူအိုင်ဒီ=\"admin\" နှင့် လျှို့ဝှက်ကုဒ်=\"admin\") <br/>- သာမန်အသုံးပြုသူ (အသုံးပြုသူအိုင်ဒီ=\"user\" နှင့် လျှို့ဝှက်ကုဒ်=\"user\")"
+                },
+                "register": {
+                    "noaccount": "သင့်မှာ အကောင့်မရှိဘူးလား။",
+                    "link": "အကောင့်အသစ် မှတ်ပုံတင်မည်။"
+                }
+            },
+            "error": {
+                "dontmatch": "လျှို့ဝှက်ကုဒ်နှင့် ၎င်း၏အတည်ပြုချက်သည် မကိုက်ညီပါ။"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "သင်၏ လျှို့ဝှက်ကုဒ် လိုအပ်ပါသည်။",
+                    "minlength": "သင်၏ လျှို့ဝှက်ကုဒ်သည်  အနည်းဆုံးအက္ခရာ ၄ လုံးပါရှိရမည်။ ",
+                    "maxlength":  "သင်၏ လျှို့ဝှက်ကုဒ်သည် အက္ခရာအလုံး ၅၀ ထက်မပိုရပါ။",
+                    "strength": "Password strength:"
+                },
+                "confirmpassword": {
+                    "required": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ် လိုအပ်ပါသည်။",
+                    "minlength": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ်သည် အနည်းဆုံးအက္ခရာ ၅ လုံးပါရှိရမည်။ ",
+                    "maxlength": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ်သည် အက္ခရာအလုံး ၅၀ ထက်မပိုရပါ။"
+                },
+                "email": {
+                    "required": "သင်၏ အီးမေးလ်လိပ်စာ လိုအပ်ပါသည်။",
+                    "invalid": "သင်၏ အီးမေးလ်လိပ်စာ မှားနေပါသည်။",
+                    "minlength":  "သင်၏ အီးမေးလ်လိပ်စာသည် အနည်းဆုံးအက္ခရာ ၅ လုံးပါရှိရမည်။ ",
+                    "maxlength":  "သင်၏ အီးမေးလ်လိပ်စာသည် အက္ခရာအလုံး ၅၀ ထက်မပိုရပါ။"
+                }
+            }
+        },
+        "field": {
+            "id": "အိုင်ဒီ"
+        },
+        "ribbon": {
+            "dev": "Development"
+        },
+        "item-count": "စုစုပေါင်း {{total}} ခု၏ {{first}} မှ {{second}} ထိ ဖေါ်ပြနေသည်။"
+    },
+    "entity": {
+        "action": {
+            "addblob": "Add blob",
+            "addimage": "ပုံတင်မည်",
+            "back": "နောက်သို့",
+            "cancel": "မလုပ်ဆောင်ပါ",
+            "delete": "ဖျက်မည်",
+            "edit": "ပြုပြင်မည်",
+            "open": "ဖွင့်မည်",
+            "save": "သိမ်းမည်",
+            "view": "ကြည့်မည်"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "ဖျက်ပါမည်။ သေချာပါသလား?"
+        },
+        "validation": {
+            "required": "ဖြည့်စွက်ရန်လိုအပ်ပါသည်။",
+            "minlength": "အနည်းဆုံးအက္ခရာ {{ min }} လုံးပါရှိရမည်။",
+            "maxlength": "အက္ခရာအလုံး {{ max }} ထက်မပိုရပါ။",
+            "min": "အနည်းဆုံး {{ min }} ဖြစ်ရပါမည်။",
+            "max": "အများဆုံး {{ max }} ဖြစ်ရပါမည်။",
+            "minbytes":  "အနည်းဆုံး {{ min }} bytes ရှိရမည်။",
+            "maxbytes": "အများဆုံး {{ max }} bytes ရှိရမည်။",
+            "pattern": "ဤ {{ pattern }} ပုံစံကို လိုက်နာရပါမည်။",
+            "number": "ဂဏန်းဖြစ်ရပါမည်။",
+            "datetimelocal": "နေ့စွဲနှင့်အချိန် ဖြစ်ရပါမည်။",
+            "patternLogin": "အက္ခရာများ၊ ဂဏန်းနှင့်အီးမေးလ်လိပ်စာများသာပါဝင်ရပါမည်။"
+        }
+    },
+    "error": {
+        "internalServerError": "ဆာဗာအမှားတစ်ခုခု ဖြစ်ပေါ်နေပါသည်။",
+        "server.not.reachable": "ဆာဗာနှင့်အဆက်အသွယ်မရနိုင်ပါ။",
+        "url.not.found": "မတွေ့ရှိပါ။",
+        "NotNull": "{{ fieldName }} ဖြည့်စွက်ရန်လိုအပ်ပါသည်။",
+        "Size": "{{ fieldName }} သည် သတ်မှတ်ထားသော အနည်းဆုံး/အများဆုံး ကန့်သတ်ချက်များနှင့် မကိုက်ညီပါ။",
+        "userexists": "အသုံးပြုသူအိုင်ဒီသည် မှတ်ပုံတင်ပြီးသားဖြစ်နေပါသည်။",
+        "emailexists": "အီးမေးလ်လိပ်စာသည်အသုံးပြုပြီးသားဖြစ်နေပါသည်။",
+        "idexists": "{{ entityName }} အသစ်တွင် အိုင်ဒီ မပါရှိရပါ။",
+        "idnull": "အိုင်ဒီမှားနေပါသည်။"
+    },
+    "footer": "စာမျက်နှာသည် အောက်ခြေဖြစ်ပါသည်။"
+}

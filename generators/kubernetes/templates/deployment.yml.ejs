@@ -16,17 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>
+      version: "v1"
   template:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>
+        version: "v1"
     spec:
       initContainers:
         - name: init-ds
@@ -62,7 +67,6 @@ spec:
       containers:
       - name: <%= app.baseName.toLowerCase() %>-app
         image: <%= app.targetImageName %>
-        imagePullPolicy: IfNotPresent
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: prod
@@ -76,12 +80,33 @@ spec:
               key: registry-admin-password
         - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
           value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
+          <%_ if (istio !== 'no') { _%>
+        - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+          value: "false"
+        - name: EUREKA_INSTANCE_HOSTNAME
+          value: <%= app.baseName.toLowerCase() %>
+          <%_ } _%>
         <%_ } _%>
         <%_ if (app.serviceDiscoveryType === 'consul') { _%>
         - name: SPRING_CLOUD_CONSUL_HOST
           value: consul.<%= kubernetesNamespace %>.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
+          <%_ if (istio !== 'no') { _%>
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
+          value: "false"
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
+          value: <%= app.baseName.toLowerCase() %>
+        - name: SPRING_CLOUD_CONSUL_DISCOVERY_SERVICE_NAME
+          value: <%= app.baseName.toLowerCase() %>
+          <%_ } _%>
+        <%_ } _%>
+        <%_ if (!app.serviceDiscoveryType && app.authenticationType === 'jwt') { _%>
+        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: secret
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mysql') { _%>
         - name: SPRING_DATASOURCE_URL
@@ -108,8 +133,8 @@ spec:
           value: <%= app.baseName.toLowerCase() %>
         <%_ } _%>
         <%_ if (app.searchEngine === 'elasticsearch') { _%>
-        - name: SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES
-          value: <%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9300
+        - name: SPRING_DATA_JEST_URI
+          value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
         <%_ } _%>
         <%_ if (app.messageBroker === 'kafka') { _%>
         - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
@@ -124,7 +149,7 @@ spec:
           value: 'true'
         - name: JHIPSTER_LOGGING_LOGSTASH_HOST
           value: jhipster-logstash
-            <%_ if (composeApplicationType === 'microservice') { _%>
+            <%_ if (deploymentApplicationType === 'microservice') { _%>
         - name: SPRING_ZIPKIN_ENABLED
           value: "true"
         - name: SPRING_ZIPKIN_BASE_URL
@@ -137,6 +162,10 @@ spec:
         - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
           value: /prometheusMetrics
         <%_ } _%>
+        <%_ if (deploymentApplicationType === 'microservice') { _%>
+        - name: SPRING_SLEUTH_PROPAGATION_KEYS
+          value: "x-request-id,x-ot-span-context"
+        <%_ } _%>
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
         resources:
@@ -147,17 +176,17 @@ spec:
             memory: "512Mi"
             cpu: "1"
         ports:
-        - name: web
+        - name: http
           containerPort: <%= app.serverPort %>
         readinessProbe:
           httpGet:
-            path: /management/health
-            port: web
+            path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? "/" + app.baseName.toLowerCase() : "" %>/management/health
+            port: http
           initialDelaySeconds: 20
           periodSeconds: 15
           failureThreshold: 6
         livenessProbe:
           httpGet:
-            path: /management/health
-            port: web
+            path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? "/" + app.baseName.toLowerCase() : "" %>/management/health
+            port: http
           initialDelaySeconds: 120

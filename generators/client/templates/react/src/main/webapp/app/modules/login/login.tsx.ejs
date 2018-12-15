@@ -16,38 +16,30 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
 
+import { IRootState } from 'app/shared/reducers';
 import { login } from 'app/shared/reducers/authentication';
 import LoginModal from './login-modal';
 
-export interface ILoginProps {
-  isAuthenticated: boolean;
-  showModal: boolean;
-  loginError?: boolean;
-  location: any;
-  login: Function;
-}
+export interface ILoginProps extends StateProps, DispatchProps, RouteComponentProps<{}> {}
 
 export interface ILoginState {
   showModal: boolean;
-  redirectToReferrer: boolean;
 }
 
 export class Login extends React.Component<ILoginProps, ILoginState> {
 
   state: ILoginState = {
     showModal: this.props.showModal,
-    redirectToReferrer: this.props.isAuthenticated
   };
 
-  componentWillReceiveProps(nextProps: ILoginProps) {
-    this.setState({
-      showModal: nextProps.showModal,
-      redirectToReferrer: nextProps.isAuthenticated
-    });
+  componentDidUpdate(prevProps: ILoginProps, prevState) {
+    if (this.props !== prevProps) {
+      this.setState({ showModal: this.props.showModal });
+    }
   }
 
   handleLogin = (username, password, rememberMe = false) => {
@@ -59,9 +51,10 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: '/', search: this.props.location.search } };
-    const { showModal, redirectToReferrer } = this.state;
-    if (redirectToReferrer) {
+    const { location, isAuthenticated } = this.props;
+    const { from } = location.state || { from: { pathname: '/', search: location.search } };
+    const { showModal } = this.state;
+    if (isAuthenticated) {
       return <Redirect to={from} />;
     }
     return (
@@ -75,12 +68,15 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
   }
 }
 
-const mapStateToProps = ({ authentication }) => ({
+const mapStateToProps = ({ authentication }: IRootState) => ({
   isAuthenticated: authentication.isAuthenticated,
   loginError: authentication.loginError,
   showModal: authentication.showModalLogin
 });
 
 const mapDispatchToProps = { login };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

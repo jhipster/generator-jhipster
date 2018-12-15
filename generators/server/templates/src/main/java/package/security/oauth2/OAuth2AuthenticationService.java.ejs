@@ -18,18 +18,18 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import <%=packageName%>.web.rest.errors.InvalidPasswordException;
+import io.github.jhipster.security.PersistentTokenCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Manages authentication cases for OAuth2 updating the cookies holding access and refresh tokens accordingly.
@@ -41,14 +41,15 @@ public class OAuth2AuthenticationService {
     private final Logger log = LoggerFactory.getLogger(OAuth2AuthenticationService.class);
 
     /**
-     * Number of seconds to cache refresh token grants so we don't have to repeat them in case of parallel requests.
+     * Number of milliseconds to cache refresh token grants so we don't have to repeat them in case of parallel requests.
      */
-    private static final long REFRESH_TOKEN_CACHE_SECS = 10l;
+    private static final long REFRESH_TOKEN_VALIDITY_MILLIS = 10000l;
 
     /**
      * Used to contact the OAuth2 token endpoint.
      */
     private final OAuth2TokenEndpointClient authorizationClient;
+
     /**
      * Helps us with cookie handling.
      */
@@ -58,14 +59,12 @@ public class OAuth2AuthenticationService {
      * Caches Refresh grant results for a refresh token value so we can reuse them.
      * This avoids hammering UAA in case of several multi-threaded requests arriving in parallel.
      */
-    private final Cache<String, OAuth2Cookies> recentlyRefreshed;
+    private final PersistentTokenCache<OAuth2Cookies> recentlyRefreshed;
 
     public OAuth2AuthenticationService(OAuth2TokenEndpointClient authorizationClient, OAuth2CookieHelper cookieHelper) {
         this.authorizationClient = authorizationClient;
         this.cookieHelper = cookieHelper;
-        recentlyRefreshed = CacheBuilder.newBuilder()
-            .expireAfterWrite(REFRESH_TOKEN_CACHE_SECS, TimeUnit.SECONDS)
-            .build();
+        recentlyRefreshed = new PersistentTokenCache<>(REFRESH_TOKEN_VALIDITY_MILLIS);
     }
 
     /**
@@ -91,9 +90,9 @@ public class OAuth2AuthenticationService {
                 log.debug("successfully authenticated user {}", params.get("username"));
             }
             return ResponseEntity.ok(accessToken);
-        } catch (Exception ex) {
+        } catch (HttpClientErrorException ex) {
             log.error("failed to get OAuth2 tokens from UAA", ex);
-            throw ex;
+            throw new InvalidPasswordException();
         }
     }
 
@@ -149,7 +148,7 @@ public class OAuth2AuthenticationService {
      */
     private OAuth2Cookies getCachedCookies(String refreshTokenValue) {
         synchronized (recentlyRefreshed) {
-            OAuth2Cookies ctx = recentlyRefreshed.getIfPresent(refreshTokenValue);
+            OAuth2Cookies ctx = recentlyRefreshed.get(refreshTokenValue);
             if (ctx == null) {
                 ctx = new OAuth2Cookies();
                 recentlyRefreshed.put(refreshTokenValue, ctx);

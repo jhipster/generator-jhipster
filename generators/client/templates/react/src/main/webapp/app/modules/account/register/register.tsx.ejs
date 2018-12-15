@@ -16,43 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { Translate, translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import { Row, Col, Alert, Button } from 'reactstrap';
 
 import PasswordStrengthBar from 'app/shared/layout/password/password-strength-bar';
+import { IRootState } from 'app/shared/reducers';
 import { handleRegister, reset } from './register.reducer';
 
-export const mainErrorMessages = {
-  failed: (
-    <Translate contentKey="register.messages.error.fail">
-      <span><strong>Registration failed!</strong> Please try again later.</span>
-    </Translate>
-  ),
-  userexists: (
-    <Translate contentKey="register.messages.error.userexists">
-      <span><strong>Login name already registered!</strong> Please choose another one.</span>
-    </Translate>
-  ),
-  emailexists: (
-    <Translate contentKey="register.messages.error.emailexists">
-      <span><strong>Email is already in use!</strong> Please choose another one.</span>
-    </Translate>
-  )
-};
-
-export interface IRegisterProps {
-  handleRegister: Function;
-  reset: Function;
-  registrationSuccess: boolean;
-  registrationFailure: boolean;
-  errorMessage: string;
 <%_ if (enableTranslation) { _%>
-  currentLocale: string;
+export interface IRegisterProps extends StateProps, DispatchProps  {}
+<%_ } else { _%>
+export type IRegisterProps = DispatchProps;
 <%_ } _%>
-}
 
 export interface IRegisterState {
   password: string;
@@ -81,35 +59,13 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
   };
 
   render() {
-    const { registrationSuccess, registrationFailure, errorMessage } = this.props;
-    let alertMessage = null;
-
-    if (registrationFailure) {
-      alertMessage = (
-        <Alert color="danger">{mainErrorMessages[errorMessage] ? mainErrorMessages[errorMessage] : mainErrorMessages.failed}</Alert>
-      );
-    } else {
-      if (registrationSuccess) {
-        alertMessage = (
-          <Alert color="success">
-            <Translate contentKey="register.messages.success">
-              <span><strong>Registration saved!</strong> Please check your email for confirmation.</span>
-            </Translate>
-          </Alert>
-        );
-      } else {
-        alertMessage = null;
-      }
-    }
-
     return (
       <div>
         <Row className="justify-content-center">
           <Col md="8">
-            <h1>
+            <h1 id="register-title">
               <Translate contentKey="register.title">Registration</Translate>
             </h1>
-            {alertMessage}
           </Col>
         </Row>
         <Row className="justify-content-center">
@@ -171,9 +127,7 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
               <span>
                 <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
               </span>
-              <a className="alert-link">
-                <Translate contentKey="global.messages.info.authenticated.link">sign in </Translate>
-              </a>
+              <a className="alert-link"><Translate contentKey="global.messages.info.authenticated.link"> sign in</Translate></a>
               <span>
                 <Translate contentKey="global.messages.info.authenticated.suffix">
                   , you can try the default accounts:
@@ -189,15 +143,16 @@ export class RegisterPage extends React.Component<IRegisterProps, IRegisterState
   }
 }
 
-const mapStateToProps = ({ register<%_ if (enableTranslation) { _%>, locale <%_ } _%>}) => ({
-  registrationSuccess: register.registrationSuccess,
-  registrationFailure: register.registrationFailure,
-  errorMessage: register.errorMessage,
 <%_ if (enableTranslation) { _%>
+const mapStateToProps = ({ locale }: IRootState) => ({
   currentLocale: locale.currentLocale
-<%_ } _%>
 });
+<%_ } _%>
 
 const mapDispatchToProps = { handleRegister, reset };
+<%_ if (enableTranslation) { _%>
+type StateProps = ReturnType<typeof mapStateToProps>;
+<%_ } _%>
+type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);
+export default connect(<% if (enableTranslation) { %>mapStateToProps<% } else { %>null<% } %>, mapDispatchToProps)(RegisterPage);

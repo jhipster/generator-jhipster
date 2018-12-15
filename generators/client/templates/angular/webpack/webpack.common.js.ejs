@@ -40,7 +40,6 @@ module.exports = (options) => ({
     },
     module: {
         rules: [
-            { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports-loader?jQuery=jquery' },
             {
                 test: /\.html$/,
                 loader: 'html-loader',
@@ -51,15 +50,23 @@ module.exports = (options) => ({
                     minifyJS:false,
                     minifyCSS:false
                 },
-                exclude: ['./<%= MAIN_SRC_DIR %>index.html']
+                exclude: /(<%= MAIN_SRC_DIR.replace(/\//g, '\\\/') %>index.html)/
             },
             {
                 test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
-                loaders: ['file-loader?hash=sha512&digest=hex&name=content/[hash].[ext]']
+                loader: 'file-loader',
+                options: {
+                    digest: 'hex',
+                    hash: 'sha512',
+                    name: 'content/[hash].[ext]'
+                }
             },
             {
                 test: /manifest.webapp$/,
-                loader: 'file-loader?name=manifest.webapp'
+                loader: 'file-loader',
+                options: {
+                    name: 'manifest.webapp'
+                }
             },
             // Ignore warnings about System.import in Angular
             { test: /[\/\\]@angular[\/\\].+\.js$/, parser: { system: true } },
@@ -84,15 +91,12 @@ module.exports = (options) => ({
             { from: './node_modules/swagger-ui/dist/lib', to: 'swagger-ui/dist/lib' },
             { from: './node_modules/swagger-ui/dist/swagger-ui.min.js', to: 'swagger-ui/dist/swagger-ui.min.js' },
             { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },
+            { from: './<%= MAIN_SRC_DIR %>content/', to: 'content' },
             { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
             { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
             // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
             { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
         ]),
-        new webpack.ProvidePlugin({
-            $: "jquery",
-            jQuery: "jquery"
-        }),
         <%_ if (enableTranslation) { _%>
         new MergeJsonWebpackPlugin({
             output: {
@@ -104,7 +108,8 @@ module.exports = (options) => ({
         <%_ } _%>
         new HtmlWebpackPlugin({
             template: './<%= MAIN_SRC_DIR %>index.html',
-            chunksSortMode: 'dependency',
+            chunks: ['vendors', 'polyfills', 'main', 'global'],
+            chunksSortMode: 'manual',
             inject: 'body'
         })
     ]

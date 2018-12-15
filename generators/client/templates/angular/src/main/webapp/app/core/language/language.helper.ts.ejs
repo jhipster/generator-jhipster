@@ -27,20 +27,19 @@ import { LANGUAGES } from 'app/core/language/language.constants';
 import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class JhiLanguageHelper {
     renderer: Renderer2 = null;
     private _language: BehaviorSubject<string>;
 
     constructor(
         private translateService: TranslateService,
-        // tslint:disable-next-line: no-unused-variable
-        private rootRenderer: RendererFactory2,
         <%_ if (enableI18nRTL) { _%>
         private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,
         <%_ } _%>
         private titleService: Title,
-        private router: Router
+        private router: Router,
+        rootRenderer: RendererFactory2
     ) {
         this._language = new BehaviorSubject<string>(this.translateService.currentLang);
         this.renderer = rootRenderer.createRenderer(document.querySelector('html'), null);

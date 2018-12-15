@@ -18,9 +18,9 @@
 -%>
 <div>
     <h2>
-        <span jhiTranslate="metrics.title">Application Metrics</span>
+        <span id="metrics-page-heading" jhiTranslate="metrics.title">Application Metrics</span>
         <button class="btn btn-primary float-right" (click)="refresh()">
-            <span class="fas fa-sync"></span> <span jhiTranslate="metrics.refresh.button">Refresh</span>
+            <fa-icon [icon]="'sync'"></fa-icon> <span jhiTranslate="metrics.refresh.button">Refresh</span>
         </button>
     </h2>
 
@@ -42,7 +42,7 @@
             </ngb-progressbar>
         </div>
         <div class="col-md-4">
-            <b jhiTranslate="metrics.jvm.threads.title">Threads</b> (Total: {{metrics.gauges['jvm.threads.count'].value}}) <a class="hand" (click)="refreshThreadDumpData()" data-toggle="modal" data-target="#threadDump"><i class="fas fa-eye"></i></a>
+            <b jhiTranslate="metrics.jvm.threads.title">Threads</b> (Total: {{metrics.gauges['jvm.threads.count'].value}}) <a class="hand" (click)="refreshThreadDumpData()" data-toggle="modal" data-target="#threadDump"><fa-icon [icon]="'eye'"></fa-icon></a>
             <p><span jhiTranslate="metrics.jvm.threads.runnable">Runnable</span> {{metrics.gauges['jvm.threads.runnable.count'].value}}</p>
             <ngb-progressbar [value]="metrics.gauges['jvm.threads.runnable.count'].value" [max]="metrics.gauges['jvm.threads.count'].value" [striped]="true" [animated]="false" type="success">
                 <span>{{metrics.gauges['jvm.threads.runnable.count'].value * 100 / metrics.gauges['jvm.threads.count'].value  | number:'1.0-0'}}%</span>

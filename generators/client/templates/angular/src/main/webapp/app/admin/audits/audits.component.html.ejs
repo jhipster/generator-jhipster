@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <div *ngIf="audits">
-    <h2 jhiTranslate="audits.title">Audits</h2>
+    <h2 id="audits-page-heading" jhiTranslate="audits.title">Audits</h2>
 
     <div class="row">
         <div class="col-md-5">
@@ -40,9 +40,9 @@
         <table class="table table-sm table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-                <th jhiSortBy="auditEventDate"><span jhiTranslate="audits.table.header.date">Date</span> <span class="fas fa-sort"></span></th>
-                <th jhiSortBy="principal"><span jhiTranslate="audits.table.header.principal">User</span> <span class="fas fa-sort"></span></th>
-                <th jhiSortBy="auditEventType"><span jhiTranslate="audits.table.header.status">State</span> <span class="fas fa-sort"></span></th>
+                <th jhiSortBy="auditEventDate"><span jhiTranslate="audits.table.header.date">Date</span><fa-icon [icon]="'sort'"></fa-icon></th>
+                <th jhiSortBy="principal"><span jhiTranslate="audits.table.header.principal">User</span><fa-icon [icon]="'sort'"></fa-icon></th>
+                <th jhiSortBy="auditEventType"><span jhiTranslate="audits.table.header.status">State</span><fa-icon [icon]="'sort'"></fa-icon></th>
                 <th><span jhiTranslate="audits.table.header.data">Extra data</span></th>
             </tr>
             </thead>

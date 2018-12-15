@@ -15,16 +15,20 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%>import * as SockJS from 'sockjs-client';
+-%>
+import SockJS from 'sockjs-client';
 
-import * as Stomp from 'webstomp-client';
-import { Observable } from 'rxjs/Observable'; // tslint:disable-line
+import Stomp from 'webstomp-client';
+import { Observable } from 'rxjs'; // tslint:disable-line
 import { Observer } from 'rxjs/Observer'; // tslint:disable-line
 import { Storage } from 'react-jhipster';
 
 import { ACTION_TYPES as ADMIN_ACTIONS } from 'app/modules/administration/administration.reducer';
 import { ACTION_TYPES as AUTH_ACTIONS } from 'app/shared/reducers/authentication';
 import { SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+<%_ if (authenticationType === 'session') { _%>
+import cookie from 'app/shared/util/cookie-utils';
+<%_ } _%>
 
 let stompClient = null;
 
@@ -70,14 +74,21 @@ const connect = () => {
 
   // building absolute path so that websocket doesn't fail when deploying with a context path
   const loc = window.location;
+
+  const headers = {};
+<%_ if (authenticationType === 'session') { _%>
+  const url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+  headers['X-XSRF-TOKEN'] = cookie.read('XSRF-TOKEN');
+<%_ } else { _%>
   let url = '//' + loc.host + loc.pathname + 'websocket/tracker';
   const authToken = Storage.local.get('jhi-authenticationToken') || Storage.session.get('jhi-authenticationToken');
   if (authToken) {
     url += '?access_token=' + authToken;
   }
+<%_ } _%>
   const socket = new SockJS(url);
   stompClient = Stomp.over(socket);
-  const headers = {};
+
   stompClient.connect(headers, () => {
     connectedPromise('success');
     connectedPromise = null;

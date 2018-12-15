@@ -1,0 +1,151 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { element, by, ElementFinder } from 'protractor';
+
+<%_
+let elementGetter = `getText()`;
+let openBlockComment = ``;
+let closeBlockComment = ``;
+if (enableTranslation) {
+    elementGetter = `getAttribute('jhiTranslate')`;
+}
+for (let relationship of relationships) {
+    if (relationship.relationshipRequired) {
+        openBlockComment = `/*`;
+        closeBlockComment = `*/`;
+        break;
+    }
+} _%>
+export default class <%= entityClass %>UpdatePage {
+    pageTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.home.createOrEditLabel'));
+    saveButton: ElementFinder = element(by.id('save-entity'));
+    cancelButton: ElementFinder = element(by.id('cancel-save'));
+    <%_ fields.forEach((field) => {
+            const fieldName = field.fieldName;
+            const fieldType = field.fieldType;
+            const fieldIsEnum = field.fieldIsEnum;
+            const fieldTypeBlobContent = field.fieldTypeBlobContent;
+    _%>
+    <%_ if (fieldIsEnum) { _%>
+    <%= fieldName %>Select: ElementFinder = element(by.css('select#<%= entityFileName %>-<%= fieldName %>'));
+    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+    <%= fieldName %>Input: ElementFinder = element(by.css('textarea#<%= entityFileName %>-<%= fieldName %>'));
+    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+    <%= fieldName %>Input: ElementFinder = element(by.css('input#file_<%= fieldName %>'));
+    <%_ } else { _%>
+    <%= fieldName %>Input: ElementFinder = element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
+    <%_ } _%>
+    <%_ }); _%>
+    <%_ relationships.forEach((relationship) => {
+        const relationshipType = relationship.relationshipType;
+        const ownerSide = relationship.ownerSide;
+        const relationshipName = relationship.relationshipName;
+        const relationshipFieldName = relationship.relationshipFieldName; _%>
+    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+    <%=relationshipName %>Select: ElementFinder = element(by.css('select#<%= entityFileName %>-<%= relationshipName %>'));
+    <%_ } _%>
+    <%_ }); _%>
+
+    getPageTitle() {
+        return this.pageTitle;
+    }
+
+    <%_ fields.forEach((field) => {
+            const fieldName = field.fieldName;
+            const fieldNameCapitalized = field.fieldNameCapitalized;
+            const fieldNameHumanized = field.fieldNameHumanized;
+            const fieldType = field.fieldType;
+            const fieldTypeBlobContent = field.fieldTypeBlobContent;
+            const fieldIsEnum = field.fieldIsEnum;
+            let fieldInputType = 'text';
+            let ngModelOption = '';
+    _%>
+            <%_ if (fieldType === 'Boolean') { _%>
+    get<%= fieldNameCapitalized %>Input() {
+        return this.<%= fieldName %>Input;
+    }
+            <%_ } else if (fieldIsEnum) { _%>
+    async set<%= fieldNameCapitalized %>Select(<%= fieldName %>) {
+        await this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
+    }
+
+    async get<%= fieldNameCapitalized %>Select() {
+        return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
+    }
+
+    async <%=fieldName %>SelectLastOption() {
+        await this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
+    }
+    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
+        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    }
+
+    async get<%= fieldNameCapitalized %>Input() {
+        return this.<%= fieldName %>Input.getAttribute('value');
+    }
+
+    <%_ } else { _%>
+    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
+        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    }
+
+    async get<%= fieldNameCapitalized %>Input() {
+        return this.<%= fieldName %>Input.getAttribute('value');
+    }
+
+    <%_ } _%>
+    <%_ }); _%>
+    <%_ relationships.forEach((relationship) => {
+        const relationshipType = relationship.relationshipType;
+        const ownerSide = relationship.ownerSide;
+        const relationshipName = relationship.relationshipName;
+        const relationshipFieldName = relationship.relationshipFieldName;
+        const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
+    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+    async <%=relationshipName %>SelectLastOption() {
+        await this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
+    }
+
+    async <%=relationshipName %>SelectOption(option) {
+        await this.<%=relationshipName %>Select.sendKeys(option);
+    }
+
+    get<%=relationshipNameCapitalized %>Select() {
+        return this.<%=relationshipName %>Select;
+    }
+
+    async get<%=relationshipNameCapitalized %>SelectedOption() {
+        return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
+    }
+
+    <%_ } _%>
+    <%_ }); _%>
+    async save() {
+        await this.saveButton.click();
+    }
+
+    async cancel() {
+        await this.cancelButton.click();
+    }
+
+    getSaveButton() {
+        return this.saveButton;
+    }
+}

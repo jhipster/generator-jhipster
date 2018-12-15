@@ -16,19 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
+import { IRootState } from 'app/shared/reducers';
 import { logout } from 'app/shared/reducers/authentication';
 
-export interface ILogoutProps {
-  logout: Function;
-}
+export interface ILogoutProps extends StateProps, DispatchProps {}
 
 export class Logout extends React.Component<ILogoutProps> {
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.logout();
   }
 
@@ -44,8 +43,11 @@ export class Logout extends React.Component<ILogoutProps> {
   }
 }
 
-const mapStateToProps = storeState => ({});
+const mapStateToProps = (storeState: IRootState) => ({});
 
 const mapDispatchToProps = { logout };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Logout);

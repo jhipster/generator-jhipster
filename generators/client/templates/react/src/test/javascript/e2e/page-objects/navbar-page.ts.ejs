@@ -2,45 +2,101 @@ import { $, ElementFinder } from 'protractor';
 
 import BasePage from './base-component';
 import SignInPage from './signin-page';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import RegisterPage from './register-page';
+import PasswordPage from './password-page';
+import SettingsPage from './settings-page';
+<%_ } _%>
 
-const selector = $('#app-header');
+const selector: ElementFinder = $('#app-header');
 export default class NavBarPage extends BasePage {
   selector: ElementFinder;
   signInPage: SignInPage;
-  adminMenu: ElementFinder;
+  adminMenu: ElementFinder = this.selector.$('#admin-menu');
+  accountMenu: ElementFinder = this.selector.$('#account-menu');
+  entityMenu: ElementFinder = this.selector.$('#entity-menu');
+  <%_ if (authenticationType === 'oauth2') { _%>
+  loginItem: ElementFinder = this.selector.$('#login-item');
+  <%_ } _%>
 
-  constructor(asAdmin?: Boolean) {
+  constructor() {
     super(selector);
     this.selector = selector;
-    if (asAdmin) {
-      this.adminMenu = this.selector.$('#admin-menu');
-    }
     this.signInPage = new SignInPage();
   }
 
-  clickOnTabMenu(item: string) {
-    return this.selector
-      .$('.header-tabs')
-      .$(`.nav-link[href="#/${item}"]`)
-      .click();
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  async getPasswordPage() {
+    await this.clickOnAccountMenuItem('password');
+    return new PasswordPage();
   }
 
-  clickOnAdminMenu() {
-    return this.adminMenu.click();
+  async getSettingsPage() {
+    await this.clickOnAccountMenuItem('settings');
+    return new SettingsPage();
   }
 
-  clickOnAdminMenuItem(item: string) {
-    this.adminMenu.click();
-    return this.selector.$(`.dropdown-item[href="#/admin/${item}"]`).click();
+  async getRegisterPage() {
+    await this.clickOnAccountMenu();
+    await this.clickOnTabMenu('#/register');
+    return new RegisterPage();
+  }
+  <%_ } _%>
+
+  async getSignInPage() {
+    await this.clickOnAccountMenu();
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    await this.clickOnTabMenu('#/login');
+    <%_ } else { _%>
+    await this.loginItem.click();
+    <%_ } _%>
+    return this.signInPage;
   }
 
-  autoSignIn() {
-    this.signInPage.get();
-    this.signInPage.autoSignInUsing('admin', 'admin');
-    return this.signInPage.waitUntilHidden();
+  async getEntityPage(entityName: string) {
+    await this.clickOnEntityMenu();
+    await this.clickOnEntity(entityName);
   }
 
-  autoSignOut() {
-    this.signInPage.autoSignOut();
+  async clickOnTabMenu(item: string) {
+    await this.selector
+    .$('#header-tabs')
+    .$(`.dropdown-item[href="${item}"]`)
+    .click();
+  }
+
+  async clickOnAccountMenu() {
+    await this.accountMenu.click();
+  }
+
+  async clickOnAccountMenuItem(item: string) {
+    await this.accountMenu.click();
+    await this.selector.$(`.dropdown-item[href="#/account/${item}"`).click();
+  }
+
+  async clickOnAdminMenuItem(item: string) {
+    await this.adminMenu.click();
+    await this.selector.$(`.dropdown-item[href="#/admin/${item}"]`).click();
+  }
+
+  async clickOnEntityMenu() {
+    await this.entityMenu.click();
+  }
+
+  async clickOnEntity(entityName: string) {
+    await this.selector.$(`.dropdown-item[href="#/entity/${entityName}"]`).click();
+  }
+
+  async autoSignIn() {
+    await this.signInPage.get();
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    await this.signInPage.autoSignInUsing('admin', 'admin');
+    <%_ } else { _%>
+    this.signInPage.loginWithOAuth('admin', 'admin');
+    <%_ } _%>
+  }
+
+  async autoSignOut() {
+    await this.signInPage.autoSignOut();
   }
 }

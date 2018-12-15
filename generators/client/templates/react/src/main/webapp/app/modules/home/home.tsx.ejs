@@ -18,53 +18,37 @@
 -%>
 import './home.<%= styleSheetExt %>';
 
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
 import { connect } from 'react-redux';
 import { Row, Col, Alert } from 'reactstrap';
 
+import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
 
-export interface IHomeProp {
-  account: any;
-  getSession: Function;
-}
+export interface IHomeProp extends StateProps, DispatchProps {}
 
-export interface IHomeState {
-  currentUser: any;
-}
-
-export class Home extends React.Component<IHomeProp, IHomeState> {
-  state: IHomeState = {
-    currentUser: this.props.account
-  };
-
-  componentWillMount() {
+export class Home extends React.Component<IHomeProp> {
+  componentDidMount() {
     this.props.getSession();
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      currentUser: nextProps.account
-    });
-  }
-
   render() {
-    const { currentUser } = this.state;
+    const { account } = this.props;
     return (
       <Row>
         <Col md="9">
           <h2><Translate contentKey="home.title">Welcome, Java Hipster!</Translate></h2>
           <p className="lead"><Translate contentKey="home.subtitle">This is your homepage</Translate></p>
           {
-            (currentUser && currentUser.login) ? (
+            (account && account.login) ? (
               <div>
                 <Alert color="success">
-                  <Translate contentKey="home.logged.message" interpolate={{ username: currentUser.login }}>You are logged in as user {currentUser.login}.</Translate>
+                  <Translate contentKey="home.logged.message" interpolate={{ username: account.login }}>You are logged in as user {account.login}.</Translate>
                 </Alert>
               </div>
             ) : (
@@ -76,7 +60,7 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
                     <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
                   </a>
                   <%_ } else { _%>
-                  <Link to="/login" className="alert-link"><Translate contentKey="global.messages.info.authenticated.link">sign in</Translate></Link>
+                  <Link to="/login" className="alert-link"><Translate contentKey="global.messages.info.authenticated.link"> sign in</Translate></Link>
                   <%_ } _%>
                   <Translate contentKey="global.messages.info.authenticated.suffix">, you can try the default accounts:
                     <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
@@ -84,10 +68,12 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
                   </Translate>
                 </Alert>
 
+                <%_ if (authenticationType !== 'oauth2') { _%>
                 <Alert color="warning">
                   <Translate contentKey="global.messages.info.register.noaccount">You do not have an account yet?</Translate>&nbsp;
                   <Link to="/register" className="alert-link"><Translate contentKey="global.messages.info.register.link">Register a new account</Translate></Link>
                 </Alert>
+                <%_ } _%>
               </div>
             )
           }
@@ -97,7 +83,7 @@ export class Home extends React.Component<IHomeProp, IHomeState> {
 
           <ul>
             <li>
-              <a href="http://jhipster.github.io/" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer">
                 <Translate contentKey="home.link.homepage">JHipster homepage</Translate>
               </a>
             </li>
@@ -143,5 +129,8 @@ const mapStateToProps = storeState => ({
 });
 
 const mapDispatchToProps = { getSession };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

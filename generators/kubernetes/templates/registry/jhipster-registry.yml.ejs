@@ -51,11 +51,12 @@ metadata:
 spec:
   ports:
   - port: 8761
+    name: http
   clusterIP: None
   selector:
     app: jhipster-registry
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: jhipster-registry
@@ -63,10 +64,19 @@ metadata:
 spec:
   serviceName: jhipster-registry
   replicas: 2
+  selector:
+    matchLabels:
+      app: jhipster-registry
+      version: "1.0"
   template:
     metadata:
       labels:
         app: jhipster-registry
+        version: "1.0"
+     <%_ if (istio !== 'no') { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       terminationGracePeriodSeconds: 10
       containers:
@@ -78,14 +88,22 @@ spec:
         # StatefulSet specific configuration
         # Registry configuration
         - name: SPRING_PROFILES_ACTIVE
-          value: prod,native,k8s
+          value: prod,k8s
         - name: SPRING_SECURITY_USER_PASSWORD
           valueFrom:
             secretKeyRef:
               name: registry-secret
               key: registry-admin-password
-        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
-          value: my-secret-token-to-change-in-production
+        <%_ if (istio !== 'no') { _%>
+        - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
+          value: "false"
+        <%_ } _%>
+        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+          value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
+        - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
+          value: native
+        - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS
+          value: file:./central-config
         - name: EUREKA_INSTANCE_LEASE_RENEWAL_INTERVAL_IN_SECONDS
           value: '15'
         - name: EUREKA_INSTANCE_LEASE_EXPIRATION_DURATION_IN_SECONDS

@@ -67,7 +67,7 @@ parameters:
     description: Name of the preloaded kibana application dashboard
     required: true
     displayName: Kibana Preloaded Application Dashboard Name
-<%_ if (composeApplicationType === 'microservice') { _%>
+<%_ if (deploymentApplicationType === 'microservice') { _%>
   -
     name: ZK_APP_NAME
     value: jhipster-zipkin
@@ -360,7 +360,7 @@ objects:
             image: <%= DOCKER_JHIPSTER_IMPORT_DASHBOARDS %>
             imagePullPolicy: IfNotPresent
           restartPolicy: OnFailure
-<%_ if (composeApplicationType === 'microservice') { _%>
+<%_ if (deploymentApplicationType === 'microservice') { _%>
   -
     apiVersion: v1
     kind: DeploymentConfig

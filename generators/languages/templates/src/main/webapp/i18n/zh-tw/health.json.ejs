@@ -32,7 +32,7 @@
             <%_ if (messageBroker === 'kafka') { _%>
             "binders": "Message Broker",
             <%_ } _%>
-            <%_ if (applicationType === 'gateway') { _%>
+            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
             "refreshScope": "Microservice Refresh Scope",
             "configServer": "Microservice 設定伺服器",
@@ -52,6 +52,7 @@
             "status": "狀態"
         },
         "status": {
+            "UNKNOWN": "UNKNOWN",
             "UP": "正常",
             "DOWN": "異常"
         }

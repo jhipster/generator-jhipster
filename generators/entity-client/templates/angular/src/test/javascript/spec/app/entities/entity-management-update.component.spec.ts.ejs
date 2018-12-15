@@ -22,34 +22,12 @@ _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>UpdateComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-
-<%_
-let hasRelationshipQuery = false;
-Object.keys(differentRelationships).forEach(key => {
-    const hasAnyRelationshipQuery = differentRelationships[key].some(rel =>
-        (rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName !== 'user')
-            || rel.relationshipType !== 'one-to-many'
-    );
-    if (hasAnyRelationshipQuery) {
-        hasRelationshipQuery = true;
-    }
-    if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
-        const uniqueRel = differentRelationships[key][0];
-        if (uniqueRel.otherEntityAngularName !== entityAngularName) {
-            const modulePath = uniqueRel.otherEntityAngularName === 'User' ?
-                `app/core`
-                : `app/entities/${uniqueRel.otherEntityClientRootFolder ? `${uniqueRel.otherEntityClientRootFolder}/` : ''}${uniqueRel.otherEntityFileName}`
-_%>
-import { <%= uniqueRel.otherEntityAngularName%>Service } from '<%= modulePath %>';
-<%_     }
-    }
-}); _%>
 
 describe('Component Tests', () => {
 
@@ -61,19 +39,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [<%= entityAngularName %>UpdateComponent],
-                providers: [
-    <%_ Object.keys(differentRelationships).forEach(key => {
-        if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
-            const uniqueRel = differentRelationships[key][0];
-            if (uniqueRel.otherEntityAngularName !== entityAngularName) { _%>
-                    <%= uniqueRel.otherEntityAngularName %>Service,
-    <%_
-            }
-        }
-    }); _%>
-                    <%= entityAngularName %>Service
-                ]
+                declarations: [<%= entityAngularName %>UpdateComponent]
             })
             .overrideTemplate(<%= entityAngularName %>UpdateComponent, '')
             .compileComponents();
@@ -88,7 +54,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new <%= entityAngularName %>(<%- tsKeyId %>);
-                    spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({body: entity})));
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({body: entity})));
                     comp.<%= entityInstance %> = entity;
                     // WHEN
                     comp.save();
@@ -104,7 +70,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new <%= entityAngularName %>();
-                    spyOn(service, 'create').and.returnValue(Observable.of(new HttpResponse({body: entity})));
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({body: entity})));
                     comp.<%= entityInstance %> = entity;
                     // WHEN
                     comp.save();

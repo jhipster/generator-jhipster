@@ -32,7 +32,7 @@
             <%_ if (messageBroker === 'kafka') { _%>
             "binders": "Truyền tải tin nhắn",
             <%_ } _%>
-            <%_ if (applicationType === 'gateway') { _%>
+            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
             "discoveryComposite": "Thành phần tìm kiếm dịch vụ",
             "refreshScope": "Phạm vị làm mới Microservice",
             "configServer": "Trung tâm cấu hình Microservice",
@@ -52,6 +52,7 @@
             "status": "Trạng thái"
         },
         "status": {
+            "UNKNOWN": "UNKNOWN",
             "UP": "Đang hoạt động",
             "DOWN": "Đã tắt"
         }

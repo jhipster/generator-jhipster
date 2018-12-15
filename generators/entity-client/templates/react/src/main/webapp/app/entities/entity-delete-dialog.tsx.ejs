@@ -16,22 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Translate, ICrudGetAction, ICrudDeleteAction } from 'react-jhipster';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { IRootState } from 'app/shared/reducers';
 import { getEntity, deleteEntity } from './<%= entityFileName %>.reducer';
 
-export interface I<%= entityReactName %>DeleteDialogProps {
-  getEntity: ICrudGetAction<I<%= entityReactName %>>;
-  deleteEntity: ICrudDeleteAction<I<%= entityReactName %>>;
-  <%= entityInstance %>: I<%= entityReactName %>;
-  match: any;
-  history: any;
-}
+export interface I<%= entityReactName %>DeleteDialogProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}
 
 export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= entityReactName %>DeleteDialogProps> {
   componentDidMount() {
@@ -39,7 +35,7 @@ export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= ent
   }
 
   confirmDelete = event => {
-    this.props.deleteEntity(this.props.<%= entityInstance %>.id);
+    this.props.deleteEntity(this.props.<%= entityInstance %>Entity.id);
     this.handleClose(event);
   }
 
@@ -49,12 +45,12 @@ export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= ent
   };
 
   render() {
-    const { <%= entityInstance %> } = this.props;
+    const { <%= entityInstance %>Entity } = this.props;
     return (
       <Modal isOpen toggle={this.handleClose}>
       <ModalHeader toggle={this.handleClose}><Translate contentKey="entity.delete.title">Confirm delete operation</Translate></ModalHeader>
-      <ModalBody>
-        <Translate contentKey="<%= i18nKeyPrefix %>.delete.question" interpolate={{ id: <%= entityInstance %>.id }}>
+      <ModalBody id="<%= i18nKeyPrefix %>.delete.question">
+        <Translate contentKey="<%= i18nKeyPrefix %>.delete.question" interpolate={{ id: <%= entityInstance %>Entity.id }}>
             Are you sure you want to delete this <%= entityClass %>?
         </Translate>
       </ModalBody>
@@ -63,7 +59,7 @@ export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= ent
           <FontAwesomeIcon icon="ban" />&nbsp;
           <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
-        <Button color="danger" onClick={this.confirmDelete}>
+        <Button id="<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>" color="danger" onClick={this.confirmDelete}>
           <FontAwesomeIcon icon="trash" />&nbsp;
           <Translate contentKey="entity.action.delete">Delete</Translate>
         </Button>
@@ -73,10 +69,13 @@ export class <%= entityReactName %>DeleteDialog extends React.Component<I<%= ent
   }
 }
 
-const mapStateToProps = ({ <%= entityInstance %> }) => ({
-    <%= entityInstance %>: <%= entityInstance %>.entity
+const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
+    <%= entityInstance %>Entity: <%= entityInstance %>.entity
 });
 
 const mapDispatchToProps = { getEntity, deleteEntity };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>DeleteDialog);

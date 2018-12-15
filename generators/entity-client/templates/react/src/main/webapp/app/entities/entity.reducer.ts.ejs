@@ -20,9 +20,6 @@
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
-<%_ if (pagination === 'infinite-scroll') { _%>
-import { isEqual } from 'lodash';
-<%_ } _%>
 import axios from 'axios';
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -36,14 +33,13 @@ import {
 
 import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
-import { SERVER_API_URL } from 'app/config/constants';
 <%_ if (!(applicationType === 'gateway' && locals.microserviceName) && authenticationType !== 'uaa') { _%>
 
 <%_ } _%>
 <%_ if (fieldsContainDate) { _%>
 
 <%_ } _%>
-import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -63,12 +59,10 @@ export const ACTION_TYPES = {
 const initialState = {
   loading: false,
   errorMessage: null,
-  entities: [],
-  entity: {},
+  entities: [] as ReadonlyArray<I<%= entityReactName %>>,
+  entity: defaultValue,
   <%_ if (pagination === 'infinite-scroll') { _%>
-  links: {
-    last: 0
-  },
+  links: { next: 0 },
   <%_ } _%>
   updating: false,
   <%_ if (pagination !== 'no') { _%>
@@ -77,9 +71,11 @@ const initialState = {
   updateSuccess: false
 };
 
+export type <%= entityReactName %>State =  Readonly<typeof initialState>;
+
 // Reducer
 
-export default (state = initialState, action) => {
+export default (state: <%= entityReactName %>State = initialState, action): <%= entityReactName %>State => {
   switch (action.type) {
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
@@ -118,11 +114,6 @@ export default (state = initialState, action) => {
       };
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
-      return {
-        ...state,
-        loading: false,
-        entities: action.payload.data
-      };
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
       <%_ if (pagination === 'infinite-scroll') { _%>
@@ -131,7 +122,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         <%_ if (pagination === 'infinite-scroll') { _%>
-        links: { last: links.last },
+        links,
         <%_ } _%>
         loading: false,
         <%_ if (pagination !== 'no') { _%>
@@ -185,17 +176,21 @@ export default (state = initialState, action) => {
   }
 };
 
-const apiUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %><% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/<%= entityApiUrl %>';
+const apiUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
 <%_ if (searchEngine === 'elasticsearch') { _%>
-const apiSearchUrl = <% if (applicationType === 'gateway' && locals.microserviceName) { %>'/<%= microserviceName.toLowerCase() %>/<% } else if (authenticationType === 'uaa') { %>'<% } else { %>SERVER_API_URL + '<% } %>/api/_search/<%= entityApiUrl %>';
+const apiSearchUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
 <%_ } _%>
 
 // Actions
 
 <%_ if (searchEngine === 'elasticsearch') { _%>
-export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = query => ({
+export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = (query, page, size, sort) => ({
   type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
-  payload: axios.get(`${apiSearchUrl}?query=` + query) as Promise<I<%= entityReactName %>>
+<%_ if (pagination !== 'no') { _%>
+  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`)
+<%_ } else { _%>
+  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=${query}`)
+<%_ } _%>
 });
 
 <%_ } _%>
@@ -205,13 +200,13 @@ export const getEntities: ICrudGetAllAction<I<%= entityReactName %>> = (page, si
   const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
   return {
     type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
-    payload: axios.get(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`) as Promise<I<%= entityReactName %>>
+    payload: axios.get<I<%= entityReactName %>>(`${requestUrl}${sort ? '&' : '?'}cacheBuster=${new Date().getTime()}`)
   }
 }
 <%_ } else { _%>
 ({
   type: ACTION_TYPES.FETCH_<%= entityActionName %>_LIST,
-  payload: axios.get(`${apiUrl}?cacheBuster=${new Date().getTime()}`) as Promise<I<%= entityReactName %>>
+  payload: axios.get<I<%= entityReactName %>>(`${apiUrl}?cacheBuster=${new Date().getTime()}`)
 });
 <%_ } _%>
 
@@ -219,7 +214,7 @@ export const getEntity: ICrudGetAction<I<%= entityReactName %>> = id => {
   const requestUrl = `${apiUrl}/${id}`;
   return {
     type: ACTION_TYPES.FETCH_<%= entityActionName %>,
-    payload: axios.get(requestUrl) as Promise<I<%= entityReactName %>>
+    payload: axios.get<I<%= entityReactName %>>(requestUrl)
   };
 };
 
@@ -228,7 +223,9 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 
@@ -237,7 +234,9 @@ export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 
@@ -247,7 +246,9 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     payload: axios.delete(requestUrl)
   });
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 

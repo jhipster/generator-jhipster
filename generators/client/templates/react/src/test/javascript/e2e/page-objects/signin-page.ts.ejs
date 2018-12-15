@@ -1,63 +1,72 @@
-import { $, browser } from 'protractor';
+import { $, browser, ElementFinder<% if (authenticationType === 'oauth2') { _%>, element, by<% } %> } from 'protractor';
 
 import BasePage from './base-component';
+
+const selector: ElementFinder = $('#login-page');
 export default class SignInPage extends BasePage {
-  selector = $('#login-page');
-  username = this.selector.$('#username');
-  password = this.selector.$('#password');
-  loginButton = this.selector.$('button[type=submit]');
-  title = this.selector.$('#login-title').$('.modal-title');
+  selector: ElementFinder;
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  username: ElementFinder = this.selector.$('#username');
+  password: ElementFinder = this.selector.$('#password');
+  loginButton: ElementFinder = this.selector.$('button[type=submit]');
+  <%_ } else { _%>
+  username: ElementFinder = element(by.name('username'));
+  password: ElementFinder = element(by.name('password'));
+  loginButton: ElementFinder = element(by.css('input[type=submit]'));
+  <%_ } _%>
+  title: ElementFinder = this.selector.$('#login-title');
 
-  get() {
-    browser.get('#/login');
-    this.waitUntilDisplayed();
+  constructor() {
+    super(selector);
+    this.selector = selector;
   }
 
-  setUserName(username) {
-    this.username.sendKeys(username);
+  async get() {
+    await browser.get('#/login');
+    await this.waitUntilDisplayed();
   }
 
-  getUserName() {
-    return this.username.getAttribute('value');
+  async getTitle() {
+    return this.title.getAttribute('id');
   }
 
-  clearUserName() {
-    this.username.clear();
+  async setUserName(username: string) {
+    await this.username.sendKeys(username);
   }
 
-  setPassword(password) {
-    this.password.sendKeys(password);
+  async clearUserName() {
+    await this.username.clear();
   }
 
-  getPassword() {
-    return this.password.getAttribute('value');
+  async setPassword(password: string) {
+    await this.password.sendKeys(password);
   }
 
-  clearPassword() {
-    this.password.clear();
+  async clearPassword() {
+    await this.password.clear();
   }
 
-  getTitle() {
-    return this.title.getText();
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  async autoSignInUsing(username: string, password: string) {
+    await this.setUserName(username);
+    await this.setPassword(password);
+    await this.login();
   }
-  autoSignInUsing(username: string, password: string) {
-    this.clearUserName();
-    this.setUserName(username);
-    this.clearPassword();
-    this.setPassword(password);
-    return this.login();
+  <%_ } else { _%>
+  async loginWithOAuth(username: string, password: string) {
+    if (await this.username.isPresent()) {
+      await this.setUserName(username);
+      await this.setPassword(password);
+      await this.login();
+    }
+  }
+  <%_ } _%>
+
+  async autoSignOut() {
+    await browser.get('#/logout');
   }
 
-  autoSignOut() {
-    browser.get('#/logout');
-  }
-
-  clearForm() {
-    this.clearUserName();
-    this.clearPassword();
-  }
-
-  login() {
-    return this.loginButton.click();
+  async login() {
+    await this.loginButton.click();
   }
 }

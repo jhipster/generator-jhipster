@@ -12,3 +12,11 @@ test/temp/
 .DS_Store
 /.jhipster
 yarn-error.log
+*.sw?
+/test/templates/import-jdl/*.png
+.git
+.classpath
+.factorypath
+.project
+.settings
+test/**/*.png

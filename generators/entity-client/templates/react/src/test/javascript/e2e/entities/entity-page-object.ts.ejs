@@ -1,0 +1,64 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { element, by, ElementFinder } from 'protractor';
+
+import { waitUntilCount, waitUntilDisplayed } from '<% if (clientRootFolder && !skipUiGrouping) { %>../<% } %>../../util/utils';
+
+export default class <%= entityClass %>ComponentsPage {
+    createButton: ElementFinder = element(by.id('jh-create-entity'));
+    deleteButtons = element.all(by.css('div table .btn-danger'));
+    title: ElementFinder = element(by.id('<%= entityFileName %>-heading'));
+
+    async clickOnCreateButton() {
+        await this.createButton.click();
+    }
+
+    async clickOnLastDeleteButton() {
+        await this.deleteButtons.last().click();
+    }
+
+    async countDeleteButtons() {
+        return this.deleteButtons.count();
+    }
+
+    getTitle() {
+        return this.title;
+    }
+
+    async waitUntilLoaded() {
+        await waitUntilDisplayed(this.deleteButtons.first());
+    }
+
+    async waitUntilDeleteButtonsLength(length) {
+        await waitUntilCount(this.deleteButtons, length);
+    }
+}
+
+export class <%= entityClass %>DeleteDialog {
+    private dialogTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.delete.question'));
+    private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
+
+    getDialogTitle() {
+        return this.dialogTitle;
+    }
+
+    async clickOnConfirmButton() {
+        await this.confirmButton.click();
+    }
+}

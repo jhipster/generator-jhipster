@@ -20,7 +20,7 @@
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
@@ -37,10 +37,7 @@ describe('Component Tests', () => {
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [UserMgmtComponent],
-                providers: [
-                    UserService
-                ]
+                declarations: [UserMgmtComponent]
             })
             .overrideTemplate(UserMgmtComponent, '')
             .compileComponents();
@@ -58,7 +55,7 @@ describe('Component Tests', () => {
                     fakeAsync(() => {
                         // GIVEN
                         const headers = new HttpHeaders().append('link', 'link;link');
-                        spyOn(service, 'query').and.returnValue(Observable.of(new HttpResponse({
+                        spyOn(service, 'query').and.returnValue(of(new HttpResponse({
                             body: [new User(<%- tsKeyId %>)],
                             headers
                         })));
@@ -82,11 +79,11 @@ describe('Component Tests', () => {
                         // GIVEN
                         const headers = new HttpHeaders().append('link', 'link;link');
                         const user = new User(<%- tsKeyId %>);
-                        spyOn(service, 'query').and.returnValue(Observable.of(new HttpResponse({
+                        spyOn(service, 'query').and.returnValue(of(new HttpResponse({
                             body: [user],
                             headers
                         })));
-                        spyOn(service, 'update').and.returnValue(Observable.of(new HttpResponse({ status: 200 })));
+                        spyOn(service, 'update').and.returnValue(of(new HttpResponse({ status: 200 })));
 
                         // WHEN
                         comp.setActive(user, true);

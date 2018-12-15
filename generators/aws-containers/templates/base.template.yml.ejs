@@ -47,6 +47,6 @@ Resources:
 <%} %>
 Outputs:
 <% for (app of appConfigs) { %>  LoadBalancerOutput<%= app.baseName %>:
-    Description: The external DNS address of the load-balanancers
+    Description: The external DNS address of the load-balancers
     Value: !GetAtt <%= app.baseName %>.Outputs.LoadBalancerOutput
 <%} %>

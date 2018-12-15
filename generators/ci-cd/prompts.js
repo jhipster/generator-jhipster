@@ -16,139 +16,247 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const chalk = require('chalk');
+
 module.exports = {
-    askPipelines,
+    askPipeline,
     askIntegrations
 };
 
-function askPipelines() {
+function askPipeline() {
     if (this.abort) return;
     if (this.autoconfigureTravis) {
         this.log('Auto-configuring Travis CI');
-        this.pipelines = ['travis'];
+        this.pipeline = 'travis';
         return;
     }
     if (this.autoconfigureJenkins) {
         this.log('Auto-configuring Jenkins');
-        this.pipelines = ['jenkins'];
+        this.pipeline = 'jenkins';
+        this.sendBuildToGitlab = false;
+        this.insideDocker = false;
         return;
     }
+
+    if (this.autoconfigureGitlab) {
+        this.log('Auto-configuring Gitlab');
+        this.pipeline = 'gitlab';
+        this.sendBuildToGitlab = true;
+        this.insideDocker = true;
+        return;
+    }
+
+    if (this.autoconfigureAzure) {
+        this.log('Auto-configuring Azure');
+        this.pipeline = 'azure';
+        return;
+    }
+
     const done = this.async();
     const prompts = [
         {
-            type: 'checkbox',
-            name: 'pipelines',
+            type: 'list',
+            name: 'pipeline',
             message: 'What CI/CD pipeline do you want to generate?',
-            default: [],
+            default: 'jenkins',
             choices: [
                 { name: 'Jenkins pipeline', value: 'jenkins' },
-                { name: 'Travis CI', value: 'travis' },
+                { name: 'Azure Pipelines', value: 'azure' },
                 { name: 'GitLab CI', value: 'gitlab' },
-                { name: 'CircleCI', value: 'circle' }
+                { name: 'Travis CI', value: 'travis' }
             ]
         }
     ];
-    this.prompt(prompts).then((props) => {
-        if (props.pipelines.length === 0) {
-            this.abort = true;
-        }
-        this.pipelines = props.pipelines;
+    this.prompt(prompts).then(props => {
+        this.pipeline = props.pipeline;
         done();
     });
 }
 
 function askIntegrations() {
-    if (this.abort || this.pipelines.length === 0) return;
+    if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
     if (this.autoconfigureTravis) {
-        this.heroku = [];
+        this.cicdIntegrations = [];
         return;
     }
     if (this.autoconfigureJenkins) {
-        this.heroku = [];
-        this.jenkinsIntegrations = [];
+        this.cicdIntegrations = [];
+        this.sendBuildToGitlab = false;
+        this.insideDocker = false;
         return;
     }
-    const done = this.async();
-    const herokuChoices = [];
-    if (this.pipelines.includes('jenkins')) {
-        herokuChoices.push({ name: 'In Jenkins pipeline', value: 'jenkins' });
-    }
-    if (this.pipelines.includes('gitlab')) {
-        herokuChoices.push({ name: 'In GitLab CI', value: 'gitlab' });
-    }
-    if (this.pipelines.includes('circle')) {
-        herokuChoices.push({ name: 'In CircleCI', value: 'circle' });
-    }
-    if (this.pipelines.includes('travis')) {
-        herokuChoices.push({ name: 'In Travis CI', value: 'travis' });
+
+    if (this.autoconfigureGitlab) {
+        this.cicdIntegrations = [];
+        this.sendBuildToGitlab = true;
+        this.insideDocker = true;
+        return;
     }
 
+    if (this.autoconfigureAzure) {
+        this.log('Auto-configuring Azure');
+        this.pipeline = 'azure';
+        return;
+    }
+
+    const done = this.async();
     const prompts = [
         {
-            when: this.pipelines.includes('jenkins'),
-            type: 'checkbox',
-            name: 'jenkinsIntegrations',
-            message: 'Jenkins pipeline: what tasks/integrations do you want to include?',
-            default: [],
-            choices: [
-                { name: 'Perform the build in a Docker container', value: 'docker' },
-                { name: 'Analyze code with Sonar', value: 'sonar' },
-                { name: 'Send build status to GitLab', value: 'gitlab' },
-                { name: 'Build and publish a Docker image', value: 'publishDocker' }
-            ]
-        },
-        {
-            when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('sonar'),
-            type: 'input',
-            name: 'jenkinsSonarName',
-            message: 'What is the name of the Sonar server?',
-            default: 'Sonar'
-        },
-        {
-            when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('publishDocker'),
-            type: 'input',
-            name: 'dockerRegistryURL',
-            message: 'What is the URL of the Docker registry?',
-            default: 'https://registry.hub.docker.com'
-        },
-        {
-            when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('publishDocker'),
-            type: 'input',
-            name: 'dockerRegistryCredentialsId',
-            message: 'What is the Jenkins Credentials ID for the Docker registry?',
-            default: 'docker-login'
-        },
-        {
-            when: response => this.pipelines.includes('jenkins') && response.jenkinsIntegrations.includes('publishDocker'),
-            type: 'input',
-            name: 'dockerRegistryOrganizationName',
-            message: 'What is the Organization Name for the Docker registry?',
-            default: 'docker-login'
-        },
-        {
-            when: this.pipelines.includes('gitlab'),
+            when: this.pipeline === 'jenkins',
             type: 'confirm',
-            name: 'gitlabUseDocker',
-            message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container)?',
+            name: 'insideDocker',
+            message: 'Would you like to perform the build in a Docker container ?',
             default: false
         },
         {
-            when: (this.pipelines.includes('jenkins') || this.pipelines.includes('gitlab') || this.pipelines.includes('circle') || this.pipelines.includes('travis')) && this.herokuAppName,
+            when: this.pipeline === 'gitlab',
+            type: 'confirm',
+            name: 'insideDocker',
+            message: 'In GitLab CI, perform the build in a docker container (hint: GitLab.com uses Docker container) ?',
+            default: false
+        },
+        {
+            when: this.pipeline === 'jenkins',
+            type: 'confirm',
+            name: 'sendBuildToGitlab',
+            message: 'Would you like to send build status to GitLab ?',
+            default: false
+        },
+        {
+            when: this.pipeline === 'jenkins',
             type: 'checkbox',
-            name: 'heroku',
-            message: 'Deploy to heroku?',
+            name: 'cicdIntegrations',
+            message: 'What tasks/integrations do you want to include ?',
             default: [],
-            choices: herokuChoices
+            choices: [
+                { name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' },
+                { name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' },
+                { name: `Build and publish a ${chalk.yellow('*Docker*')} image`, value: 'publishDocker' },
+                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`, value: 'heroku' }
+            ]
+        },
+        {
+            when: this.pipeline === 'gitlab',
+            type: 'checkbox',
+            name: 'cicdIntegrations',
+            message: 'What tasks/integrations do you want to include ?',
+            default: [],
+            choices: [
+                { name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' },
+                { name: `Analyze your code with ${chalk.yellow('*Sonar*')} (requires SONAR_TOKEN set on CI service)`, value: 'sonar' },
+                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`, value: 'heroku' }
+            ]
+        },
+        {
+            when: this.pipeline === 'travis',
+            type: 'checkbox',
+            name: 'cicdIntegrations',
+            message: 'What tasks/integrations do you want to include?',
+            default: [],
+            choices: [
+                { name: `Analyze your code with ${chalk.yellow('*Sonar*')} (requires SONAR_TOKEN set on CI service)`, value: 'sonar' },
+                { name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`, value: 'heroku' }
+            ]
+        },
+        {
+            when: response => response.cicdIntegrations.includes('deploy'),
+            type: 'input',
+            name: 'artifactorySnapshotsId',
+            message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for snapshots ?`,
+            default: 'snapshots'
+        },
+        {
+            when: response => response.cicdIntegrations.includes('deploy'),
+            type: 'input',
+            name: 'artifactorySnapshotsUrl',
+            message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for snapshots ?`,
+            default: 'http://artifactory:8081/artifactory/libs-snapshot'
+        },
+        {
+            when: response => response.cicdIntegrations.includes('deploy'),
+            type: 'input',
+            name: 'artifactoryReleasesId',
+            message: `${chalk.yellow('*Artifactory*')}: what is the ID of distributionManagement for releases ?`,
+            default: 'releases'
+        },
+        {
+            when: response => response.cicdIntegrations.includes('deploy'),
+            type: 'input',
+            name: 'artifactoryReleasesUrl',
+            message: `${chalk.yellow('*Artifactory*')}: what is the URL of distributionManagement for releases ?`,
+            default: 'http://artifactory:8081/artifactory/libs-release'
+        },
+        {
+            when: response => this.pipeline === 'jenkins' && response.cicdIntegrations.includes('sonar'),
+            type: 'input',
+            name: 'sonarName',
+            message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
+            default: 'sonar'
+        },
+        {
+            when: response => this.pipeline !== 'jenkins' && response.cicdIntegrations.includes('sonar'),
+            type: 'input',
+            name: 'sonarUrl',
+            message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server ?`,
+            default: 'https://sonarcloud.io'
+        },
+        {
+            when: response => this.pipeline !== 'jenkins' && response.cicdIntegrations.includes('sonar'),
+            type: 'input',
+            name: 'sonarOrga',
+            message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server ?`,
+            default: ''
+        },
+        {
+            when: response => response.cicdIntegrations.includes('publishDocker'),
+            type: 'input',
+            name: 'dockerRegistryURL',
+            message: `${chalk.yellow('*Docker*')}: what is the URL of the Docker registry ?`,
+            default: 'https://registry.hub.docker.com'
+        },
+        {
+            when: response => response.cicdIntegrations.includes('publishDocker'),
+            type: 'input',
+            name: 'dockerRegistryCredentialsId',
+            message: `${chalk.yellow('*Docker*')}: what is the Jenkins Credentials ID for the Docker registry ?`,
+            default: 'docker-login'
+        },
+        {
+            when: response => response.cicdIntegrations.includes('publishDocker'),
+            type: 'input',
+            name: 'dockerRegistryOrganizationName',
+            message: `${chalk.yellow('*Docker*')}: what is the Organization Name for the Docker registry ?`,
+            default: 'docker-login'
+        },
+        {
+            when: response => response.cicdIntegrations.includes('heroku'),
+            type: 'input',
+            name: 'herokuAppName',
+            message: `${chalk.yellow('*Heroku*')}: name of your Heroku Application ?`,
+            default: `${this.herokuAppName}`
         }
     ];
-    this.prompt(prompts).then((props) => {
-        this.jenkinsIntegrations = props.jenkinsIntegrations;
-        this.jenkinsSonarName = props.jenkinsSonarName;
+    this.prompt(prompts).then(props => {
+        this.cicdIntegrations = props.cicdIntegrations;
+
+        this.artifactorySnapshotsId = props.artifactorySnapshotsId;
+        this.artifactorySnapshotsUrl = props.artifactorySnapshotsUrl;
+        this.artifactoryReleasesId = props.artifactoryReleasesId;
+        this.artifactoryReleasesUrl = props.artifactoryReleasesUrl;
+
+        this.sonarName = props.sonarName;
+        this.sonarUrl = props.sonarUrl;
+        this.sonarOrga = props.sonarOrga;
+
+        this.publishDocker = props.publishDocker;
         this.dockerRegistryURL = props.dockerRegistryURL;
         this.dockerRegistryCredentialsId = props.dockerRegistryCredentialsId;
         this.dockerRegistryOrganizationName = props.dockerRegistryOrganizationName;
-        this.gitlabUseDocker = props.gitlabUseDocker;
-        this.heroku = props.heroku;
+
+        this.insideDocker = props.insideDocker;
+
+        this.sendBuildToGitlab = props.sendBuildToGitlab;
+
         done();
     });
 }

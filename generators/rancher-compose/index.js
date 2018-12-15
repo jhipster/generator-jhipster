@@ -21,26 +21,11 @@ const jsyaml = require('js-yaml');
 const pathjs = require('path');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const BaseGenerator = require('../generator-base');
-const docker = require('../docker-base');
+const BaseDockerGenerator = require('../generator-base-docker');
+const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const statistics = require('../statistics');
 
-/* Constants used throughout */
-const constants = require('../generator-constants');
-
-module.exports = class extends BaseGenerator {
-    constructor(args, opts) {
-        super(args, opts);
-
-        // This adds support for a `--skip-checks` flag
-        this.option('skip-checks', {
-            desc: 'Check the status of the required tools',
-            type: Boolean,
-            defaults: false
-        });
-
-        this.skipChecks = this.options['skip-checks'];
-    }
-
+module.exports = class extends BaseDockerGenerator {
     get initializing() {
         return {
             sayHello() {
@@ -48,43 +33,11 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
 
-            setupServerVars() {
-                // Make constants available in templates
-                this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-                this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-                this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-                this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
-                this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
-                this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
-                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
-                this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-                this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-                this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
-                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-                this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
-            },
-
-            checkDocker: docker.checkDockerBase,
+            ...super.initializing,
 
             loadConfig() {
-                this.defaultAppsFolders = this.config.get('appsFolders');
-                this.directoryPath = this.config.get('directoryPath');
-                this.monitoring = this.config.get('monitoring');
-                this.useKafka = false;
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-                if (this.serviceDiscoveryType === undefined) {
-                    this.serviceDiscoveryType = 'eureka';
-                }
-                this.adminPassword = this.config.get('adminPassword');
-                this.jwtSecretKey = this.config.get('jwtSecretKey');
-                this.dockerRepositoryName = this.config.get('dockerRepositoryName');
-                this.dockerPushCommand = this.config.get('dockerPushCommand');
+                loadFromYoRc.call(this);
                 this.enableRancherLoadBalancing = this.config.get('enableRancherLoadBalancing');
-
-                if (this.defaultAppsFolders !== undefined) {
-                    this.log('\nFound .yo-rc.json config file...');
-                }
             }
         };
     }
@@ -106,14 +59,13 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'rancher-compose');
+                statistics.sendSubGenEvent('generator', 'rancher-compose');
             },
 
-            checkImages: docker.checkImages,
-            generateJwtSecret: docker.generateJwtSecret,
-            configureImageNames: docker.configureImageNames,
-            setAppsFolderPaths: docker.setAppsFolderPaths,
+            checkImages,
+            generateJwtSecret,
+            configureImageNames,
+            setAppsFolderPaths,
 
             setAppsYaml() {
                 this.appsYaml = [];
@@ -121,7 +73,7 @@ module.exports = class extends BaseGenerator {
                 this.hasFrontApp = false;
 
                 let portIndex = 8080;
-                this.appsFolders.forEach(function (appsFolder, index) {
+                this.appsFolders.forEach(function(appsFolder, index) {
                     const appConfig = this.appConfigs[index];
                     const lowercaseBaseName = appConfig.baseName.toLowerCase();
                     const parentConfiguration = {};
@@ -197,6 +149,10 @@ module.exports = class extends BaseGenerator {
 
                         parentConfiguration[databaseServiceName] = databaseYamlConfig;
                     }
+
+                    // Expose authenticationType
+                    this.authenticationType = appConfig.authenticationType;
+
                     // Add search engine configuration
                     const searchEngine = appConfig.searchEngine;
                     if (searchEngine === 'elasticsearch') {
@@ -225,11 +181,10 @@ module.exports = class extends BaseGenerator {
                 }, this);
             },
 
-
             setAppsRancherYaml() {
                 this.appsRancherYaml = [];
 
-                this.appsYaml.forEach(function (appYaml, index) {
+                this.appsYaml.forEach(function(appYaml, index) {
                     // Add application configuration
                     const yaml = jsyaml.load(appYaml);
                     const rancherConfiguration = {};
@@ -256,15 +211,17 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
-                this.config.set('appsFolders', this.appsFolders);
-                this.config.set('directoryPath', this.directoryPath);
-                this.config.set('monitoring', this.monitoring);
-                this.config.set('serviceDiscoveryType', this.serviceDiscoveryType);
-                this.config.set('adminPassword', this.adminPassword);
-                this.config.set('jwtSecretKey', this.jwtSecretKey);
-                this.config.set('dockerRepositoryName', this.dockerRepositoryName);
-                this.config.set('dockerPushCommand', this.dockerPushCommand);
-                this.config.set('enableRancherLoadBalancing', this.enableRancherLoadBalancing);
+                this.config.set({
+                    appsFolders: this.appsFolders,
+                    directoryPath: this.directoryPath,
+                    monitoring: this.monitoring,
+                    serviceDiscoveryType: this.serviceDiscoveryType,
+                    adminPassword: this.adminPassword,
+                    jwtSecretKey: this.jwtSecretKey,
+                    dockerRepositoryName: this.dockerRepositoryName,
+                    dockerPushCommand: this.dockerPushCommand,
+                    enableRancherLoadBalancing: this.enableRancherLoadBalancing
+                });
             }
         };
     }
@@ -275,14 +232,18 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (this.warning) {
-            this.log('\n');
-            this.log(chalk.red('Rancher Compose configuration generated with missing images!'));
+            this.log(`\n${chalk.yellow.bold('WARNING!')} Rancher Compose configuration generated, but no Jib cache found`);
+            this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(chalk.red(this.warningMessage));
         } else {
             this.log(`\n${chalk.bold.green('Rancher Compose configuration successfully generated!')}`);
         }
 
-        this.log(`${chalk.yellow.bold('WARNING!')} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`);
+        this.log(
+            `${chalk.yellow.bold(
+                'WARNING!'
+            )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
+        );
         for (let i = 0; i < this.appsFolders.length; i++) {
             const originalImageName = this.appConfigs[i].baseName.toLowerCase();
             const targetImageName = this.appConfigs[i].targetImageName;

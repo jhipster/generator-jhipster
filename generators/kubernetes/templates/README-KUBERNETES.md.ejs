@@ -15,29 +15,10 @@ $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 
 ## Deployment
 
-You can deploy your apps by running:
+You can deploy all your apps by running the below bash command:
 
 ```
-<%_ if (kubernetesNamespace !== 'default') { _%>
-kubectl apply -f <%-directoryPath%>k8s/namespace.yml
-<%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-kubectl apply -f <%-directoryPath%>k8s/registry/
-<%_ } _%> <%_ if (useKafka === true) { _%>
-kubectl apply -f <%-directoryPath%>k8s/messagebroker/
-<%_ } _%> <%_ if (monitoring === 'elk') { _%>
-kubectl apply -f <%-directoryPath%>k8s/console/
-<%_ } _%> <%_ if (monitoring === 'prometheus') { _%>
-kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-prometheus-crd.yml
-until [ $(kubectl get crd prometheuses.monitoring.coreos.com | wc -l) -ge 2 ]; do
-    echo "Waiting for the custom resource prometheus operator to get initialised";
-    sleep 5;
-done
-kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-prometheus-cr.yml
-kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-grafana.yml
-kubectl apply -f <%-directoryPath%>k8s/monitoring/jhipster-grafana-dashboard.yml
-<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
-kubectl apply -f <%-directoryPath%>k8s/<%- appConfig.baseName.toLowerCase() %>/
-<%_ }) _%>
+./kubectl-apply.sh
 ```
 
 ## Exploring your services

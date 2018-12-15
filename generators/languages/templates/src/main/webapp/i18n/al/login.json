@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Futuni",
+        "form": {
+            "password": "Fjalëkalimi",
+            "password.placeholder": "Fjalëkalimi juaj",
+            "rememberme": "Më kujtoni",
+            "button": "Futu"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>S'mund të futeni!</strong> Ju lutem kontrolloni kredencialet dhe provojeni sërisht."
+            }
+        },
+        "password": {
+            "forgot": "Keni harruar fjalëkalimin?"
+        }
+    }
+}

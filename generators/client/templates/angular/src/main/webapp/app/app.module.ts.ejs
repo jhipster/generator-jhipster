@@ -18,11 +18,12 @@
 -%>
 import './vendor.ts';
 
-import { NgModule, Injector } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { Ng2Webstorage<% if (authenticationType === 'jwt') { %>, LocalStorageService, SessionStorageService <% } %> } from 'ngx-webstorage';
-import { JhiEventManager } from 'ng-jhipster';
+import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import { Ng2Webstorage } from 'ngx-webstorage';
+import { NgJhipsterModule } from 'ng-jhipster';
 
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
@@ -38,16 +39,12 @@ import { <%=angularXAppName%>HomeModule } from './home/home.module';
 import { <%=angularXAppName%>AccountModule } from './account/account.module';
 <%_ } _%>
 import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
-import { PaginationConfig } from './blocks/config/uib-pagination.config';
-<%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
-import { StateStorageService } from 'app/core/auth/state-storage.service';
-<%_ } _%>
+import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import {
     <%=jhiPrefixCapitalized%>MainComponent,
     NavbarComponent,
     FooterComponent,
-    ProfileService,
     PageRibbonComponent,
     <%_ if (enableTranslation) { _%>
     ActiveMenuDirective,
@@ -60,14 +57,23 @@ import {
         BrowserModule,
         <%=angularXAppName%>AppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: '<%=jhiPrefixDashed %>', separator: '-'}),
-        <%=angularXAppName%>SharedModule,
+        NgJhipsterModule.forRoot({
+            // set below to true to make alerts look like toast
+            alertAsToast: false,
+            alertTimeout: 5000,
+            <%_ if (enableTranslation) { _%>
+            i18nEnabled: true,
+            defaultI18nLang: '<%= nativeLanguage %>'
+            <%_ } _%>
+        }),
+        <%=angularXAppName%>SharedModule.forRoot(),
         <%=angularXAppName%>CoreModule,
         <%=angularXAppName%>HomeModule,
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=angularXAppName%>AccountModule,
         <%_ } _%>
-        <%=angularXAppName%>EntityModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
+        <%=angularXAppName%>EntityModule
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,
@@ -80,47 +86,33 @@ import {
         FooterComponent
     ],
     providers: [
-        ProfileService,
-        PaginationConfig,
         <%_ if (authenticationType === 'jwt') { _%>
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
-            multi: true,
-            deps: [
-                LocalStorageService,
-                SessionStorageService
-            ]
+            multi: true
         },
         <%_ } _%>
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthExpiredInterceptor,
-            multi: true,
-            deps: [
-                <%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
-                StateStorageService,
-                <%_ } _%>
-                Injector
-            ]
+            multi: true
         },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: ErrorHandlerInterceptor,
-            multi: true,
-            deps: [
-                JhiEventManager
-            ]
+            multi: true
         },
         {
             provide: HTTP_INTERCEPTORS,
             useClass: NotificationInterceptor,
-            multi: true,
-            deps: [
-                Injector
-            ]
+            multi: true
         }
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })
-export class <%=angularXAppName%>AppModule {}
+export class <%=angularXAppName%>AppModule {
+    constructor(private dpConfig: NgbDatepickerConfig) {
+        this.dpConfig.minDate = {year: moment().year() - 100, month: 1, day: 1};
+    }
+}

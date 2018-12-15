@@ -33,8 +33,11 @@ import <%= packageName %>.repository.PersistentTokenRepository;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
-import <%= packageName %>.repository.UserRepository;
+import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
 import <%= packageName %>.service.dto.UserDTO;
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%= packageName %>.security.AuthoritiesConstants;
+<%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import <%= packageName %>.service.util.RandomUtil;
 <%_ } _%>
@@ -45,12 +48,29 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+<%_ if (databaseType === 'sql') { _%>
+import org.mockito.Mock;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.data.auditing.AuditingHandler;
+import org.springframework.data.auditing.DateTimeProvider;
+<%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
+    <%_ } _%>
 import org.springframework.data.domain.PageRequest;
-<%_ } _%><%_ if (databaseType === 'couchbase') { _%>
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.OAuth2Request;
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.security.test.context.support.WithAnonymousUser;
 <%_ } _%>
 import org.springframework.test.context.junit4.SpringRunner;
@@ -65,10 +85,22 @@ import java.time.temporal.ChronoUnit;
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 import java.time.LocalDate;
 <%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+import java.time.LocalDateTime;
+import java.util.Optional;
+<%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import java.util.List;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+<%_ } _%>
+<%_ if (authenticationType !== 'oauth2' && (databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.util.Optional;
 <%_ } _%><%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
@@ -81,6 +113,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+import static org.mockito.Mockito.when;
 <%_ } _%>
 
 /**
@@ -113,6 +148,14 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Autowired
     private UserSearchRepository mockUserSearchRepository;
     <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+
+    @Autowired
+    private AuditingHandler auditingHandler;
+
+    @Mock
+    DateTimeProvider dateTimeProvider;
+    <%_ } _%>
 
     private User user;
 
@@ -125,7 +168,7 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         persistentTokenRepository.deleteAll();
         <%_ } _%>
         <%_ if (databaseType !== 'sql') { _%>
-        userRepository.deleteAll();
+        userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         <%_ } _%>
         user = new User();
         <%_ if (databaseType === 'cassandra') { _%>
@@ -143,6 +186,11 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         user.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         user.setLangKey("en");
+        <%_ if (databaseType === 'sql') { _%>
+
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(LocalDateTime.now()));
+        auditingHandler.setDateTimeProvider(dateTimeProvider);
+        <%_ } _%>
     }
     <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
 
@@ -168,11 +216,11 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Transactional
     <%_ } _%>
     public void assertThatUserMustExistToResetPassword() {
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
-        Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@localhost");
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@localhost")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isNotPresent();
 
-        maybeUser = userService.requestPasswordReset(user.getEmail());
+        maybeUser = userService.requestPasswordReset(user.getEmail())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isPresent();
         assertThat(maybeUser.orElse(null).getEmail()).isEqualTo(user.getEmail());
         assertThat(maybeUser.orElse(null).getResetDate()).isNotNull();
@@ -185,11 +233,11 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     <%_ } _%>
     public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
         user.setActivated(false);
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        Optional<User> maybeUser = userService.requestPasswordReset(user.getLogin());
+        Optional<User> maybeUser = userService.requestPasswordReset(user.getLogin())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isNotPresent();
-        userRepository.delete(user);
+        userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
     }
 
     @Test
@@ -202,11 +250,11 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey(resetKey);
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isNotPresent();
-        userRepository.delete(user);
+        userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
     }
 
     @Test
@@ -218,11 +266,11 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey("1234");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isNotPresent();
-        userRepository.delete(user);
+        userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
     }
 
     @Test
@@ -236,15 +284,15 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey(resetKey);
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(maybeUser).isPresent();
         assertThat(maybeUser.orElse(null).getResetDate()).isNull();
         assertThat(maybeUser.orElse(null).getResetKey()).isNull();
         assertThat(maybeUser.orElse(null).getPassword()).isNotEqualTo(oldPassword);
 
-        userRepository.delete(user);
+        userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
     }
 
     @Test
@@ -253,14 +301,19 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     <%_ } _%>
     public void testFindNotActivatedUsersByCreationDateBefore() {
         Instant now = Instant.now();
+        <%_ if (databaseType === 'sql') { _%>
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
+        <%_ } _%>
         user.setActivated(false);
-        User dbUser = userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        User dbUser = userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
-        List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
+            .collectList().block()<% } %>;
         assertThat(users).isNotEmpty();
         userService.removeNotActivatedUsers();
-        users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
+        users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
+            .collectList().block()<% } %>;
         assertThat(users).isEmpty();
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -295,17 +348,19 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
         user.setId(Constants.ANONYMOUS_USER);
         <%_ } _%>
         user.setLogin(Constants.ANONYMOUS_USER);
-        if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER).isPresent()) {
-            userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER)<% if (reactive) { %>.blockOptional()<% } %>.isPresent()) {
+            userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         }<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-        final PageRequest pageable = PageRequest.of(0, (int) userRepository.count());
-        final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
-        assertThat(allManagedUsers.getContent().stream()<% } %><% if (databaseType === 'cassandra') { %>
+        final PageRequest pageable = PageRequest.of(0, (int) userRepository.count()<% if (reactive) { %>.block().intValue()<% } %>);
+        final <% if (reactive) { %>List<% } else { %>Page<% } %><UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable)<% if (reactive) { %>
+            .collectList().block()<% } %>;
+        assertThat(allManagedUsers<% if (!reactive) { %>.getContent()<% } %>.stream()<% } %><% if (databaseType === 'cassandra') { %>
         final List<UserDTO> allManagedUsers = userService.getAllManagedUsers();
         assertThat(allManagedUsers.stream()<% } %>
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
+
     <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 
     @Test
@@ -313,15 +368,22 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     @Transactional
     <%_ } _%>
     public void testRemoveNotActivatedUsers() {
+        <%_ if (databaseType === 'sql') { _%>
+        // custom "now" for audit to use as creation date
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(Instant.now().minus(30, ChronoUnit.DAYS)));
+        <%_ } _%>
+
         user.setActivated(false);
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType !== 'sql') { _%>
         // Let the audit first set the creation date but then update it
         user.setCreatedDate(Instant.now().minus(30, ChronoUnit.DAYS));
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ } _%>
 
-        assertThat(userRepository.findOneByLogin("johndoe")).isPresent();
+        assertThat(userRepository.findOneByLogin("johndoe")<% if (reactive) { %>.blockOptional()<% } %>).isPresent();
         userService.removeNotActivatedUsers();
-        assertThat(userRepository.findOneByLogin("johndoe")).isNotPresent();
+        assertThat(userRepository.findOneByLogin("johndoe")<% if (reactive) { %>.blockOptional()<% } %>).isNotPresent();
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Verify Elasticsearch mock
@@ -330,4 +392,49 @@ public class UserServiceIntTest <% if (databaseType === 'cassandra') { %>extends
     }
     <%_ } _%>
 
+    <%_ if (authenticationType === 'oauth2') { _%>
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void assertThatUserLocaleIsCorrectlySetFromAuthenticationDetails() {
+        user.setId(Constants.ANONYMOUS_USER);
+        user.setLogin(Constants.ANONYMOUS_USER);
+
+        Map<String, Object> userDetails = new HashMap<>();
+        userDetails.put("sub", user.getId());
+        userDetails.put("preferred_username", user.getLogin());
+        userDetails.put("given_name", user.getFirstName());
+        userDetails.put("family_name", user.getLastName());
+        userDetails.put("email", user.getEmail());
+        userDetails.put("picture", user.getImageUrl());
+        userDetails.put("locale", "en_US");
+
+        OAuth2Authentication authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
+
+        UserDTO userDTO = userService.getUserFromAuthentication(authentication);
+
+        assertThat(userDTO.getLangKey()).isEqualTo("en");
+
+        userDetails.put("locale", "it-IT");
+        authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
+
+        userDTO = userService.getUserFromAuthentication(authentication);
+
+        assertThat(userDTO.getLangKey()).isEqualTo("it");
+    }
+
+    private OAuth2Authentication createMockOAuth2AuthenticationWithDetails(Map<String, Object> userDetails) {
+        Set<String> scopes = new HashSet<String>();
+
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(Constants.ANONYMOUS_USER, Constants.ANONYMOUS_USER, authorities);
+        usernamePasswordAuthenticationToken.setDetails(userDetails);
+
+        OAuth2Request authRequest = new OAuth2Request(null, "testClient", null, true, scopes, null, null, null, null);
+
+        return new OAuth2Authentication(authRequest, usernamePasswordAuthenticationToken);
+    }
+    <%_ } _%>
 }
