@@ -1,17 +1,17 @@
 import HealthService from './health.service';
 import <%=jhiPrefixCapitalized%>HealthModal from './health-modal.vue';
-import { Component } from 'vue-property-decorator';
-import { mixins } from 'vue-class-component';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 
 @Component({
   components: {
     'health-modal': <%=jhiPrefixCapitalized%>HealthModal
   }
 })
-export default class <%=jhiPrefixCapitalized%>Health extends mixins(HealthService) {
+export default class <%=jhiPrefixCapitalized%>Health extends Vue {
   public healthData: any;
   public currentHealth: any;
   public updatingHealth: boolean;
+  @Inject('healthService') private healthService: () => HealthService;
 
   constructor() {
     super();
@@ -25,7 +25,7 @@ export default class <%=jhiPrefixCapitalized%>Health extends mixins(HealthServic
   }
 
   public baseName(name: any): any {
-    return this.getBaseName(name);
+    return this.healthService().getBaseName(name);
   }
 
   public getBadgeClass(statusState: any): String {
@@ -38,18 +38,18 @@ export default class <%=jhiPrefixCapitalized%>Health extends mixins(HealthServic
 
   public refresh(): void {
     this.updatingHealth = true;
-    this.checkHealth().then(res => {
-      this.healthData = this.transformHealthData(res.data);
-      this.updatingHealth = false;
-    })
+    this.healthService().checkHealth()
+      .then(res => {
+        this.healthData = this.healthService().transformHealthData(res.data);
+        this.updatingHealth = false;
+      })
       .catch(error => {
         if (error.status === 503) {
-          this.healthData = this.transformHealthData(error.error);
+          this.healthData = this.healthService().transformHealthData(error.error);
         }
         this.updatingHealth = false;
       });
   }
-
 
   public showHealth(health: any): void {
     this.currentHealth = health;
@@ -57,6 +57,6 @@ export default class <%=jhiPrefixCapitalized%>Health extends mixins(HealthServic
   }
 
   public subSystemName(name: String): String {
-    return this.getSubSystemName(name);
+    return this.healthService().getSubSystemName(name);
   }
 }
