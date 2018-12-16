@@ -41,8 +41,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.cassandraunit.utils.EmbeddedCassandraServerHelper.getNativeTransportPort;
-
 /**
  * Base class for starting/stopping Cassandra during tests.
  */
@@ -58,7 +56,7 @@ public class AbstractCassandraTest {
     public static void startServer() throws TTransportException, ConfigurationException, IOException, URISyntaxException  {
         if (! started) {
             EmbeddedCassandraServerHelper.startEmbeddedCassandra(CASSANDRA_UNIT_RANDOM_PORT_YAML, CASSANDRA_TIMEOUT);
-            Cluster cluster = new Cluster.Builder().addContactPoints("127.0.0.1").withPort(getNativeTransportPort()).build();
+            Cluster cluster = EmbeddedCassandraServerHelper.getCluster();
             Session session = cluster.connect();
             String createQuery = "CREATE KEYSPACE " + CASSANDRA_UNIT_KEYSPACE + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}";
             session.execute(createQuery);
