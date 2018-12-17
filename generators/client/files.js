@@ -68,6 +68,14 @@ const vueFiles = {
             ]
         }
     ],
+    css: [
+        {
+            path: MAIN_SRC_DIR,
+            templates: [
+                'content/css/loading.css'
+            ]
+        }
+    ],
     swagger: [
         {
             path: MAIN_SRC_DIR,
