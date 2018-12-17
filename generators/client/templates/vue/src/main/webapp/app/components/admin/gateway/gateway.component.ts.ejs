@@ -1,31 +1,28 @@
-import GatewayService from './GatewayService.vue';
+import Vue from 'vue';
+import { Component, Inject } from 'vue-property-decorator';
+import GatewayService from './gateway.service';
 
-const <%=jhiPrefixCapitalized%>GatewayComponent = {
-  name: '<%=jhiPrefixCapitalized%>GatewayComponent',
-  mixins: [GatewayService],
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.init();
-    })
-  },
-  data() {
-    return {
-      gatewayRoutes: [],
-      updatingRoutes: false
-    };
-  },
-  methods: {
-    init() {
-      this.refresh();
-    },
-    refresh() {
-      this.updatingRoutes = true;
-      this.findAll().then((res) => {
-        this.gatewayRoutes = res.data;
-        this.updatingRoutes = false;
-      });
-    }
+@Component
+export default class <%=jhiPrefixCapitalized%>GatewayComponent extends Vue {
+  public gatewayRoutes: any[];
+  public updatingRoutes: boolean;
+  @Inject('gatewayService') private gatewayService: () => GatewayService;
+
+  constructor() {
+    super();
+    this.gatewayRoutes = [];
+    this.updatingRoutes = false;
   }
-};
 
-export default <%=jhiPrefixCapitalized%>GatewayComponent;
+  public mounted() : void {
+    this.refresh();
+  }
+
+  public refresh() : void {
+    this.updatingRoutes = true;
+    this.gatewayService().findAll().then((res) => {
+      this.gatewayRoutes = res.data;
+      this.updatingRoutes = false;
+    });
+  }
+}

@@ -1,15 +1,16 @@
+import Vue from 'vue';
+import { Component, Inject } from 'vue-property-decorator';
 import ConfigurationService from './configuration.service';
-import { Component, Vue } from 'vue-property-decorator';
-import { mixins } from 'vue-class-component';
 
 @Component
-export default class <%=jhiPrefixCapitalized%>Configuration extends mixins(ConfigurationService) {
+export default class <%=jhiPrefixCapitalized%>Configuration extends Vue {
   public orderProp: string;
   public reverse: boolean;
   public allConfiguration: any;
   public configuration: any;
   public configKeys: any[];
   public filtered: string;
+  @Inject('configurationService') private configurationService : () => ConfigurationService;
 
   constructor() {
     super();
@@ -26,7 +27,7 @@ export default class <%=jhiPrefixCapitalized%>Configuration extends mixins(Confi
   }
 
   public init(): void {
-    this.loadConfiguration().then(res => {
+    this.configurationService().loadConfiguration().then(res => {
       this.configuration = res;
 
       for (const config of this.configuration) {
@@ -36,7 +37,7 @@ export default class <%=jhiPrefixCapitalized%>Configuration extends mixins(Confi
       }
     });
 
-    this.loadEnvConfiguration().then(res => {
+    this.configurationService().loadEnvConfiguration().then(res => {
       this.allConfiguration = res;
     });
   }

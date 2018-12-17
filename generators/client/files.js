@@ -214,7 +214,7 @@ const vueFiles = {
             templates: [
                 'components/admin/gateway/gateway.vue',
                 'components/admin/gateway/gateway.component.ts',
-                'components/admin/gateway/GatewayService.vue'
+                'components/admin/gateway/gateway.service.ts'
             ]
         }
     ],

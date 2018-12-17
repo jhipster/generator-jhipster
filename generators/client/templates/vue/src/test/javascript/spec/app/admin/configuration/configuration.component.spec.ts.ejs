@@ -4,6 +4,7 @@ import axios from 'axios';
 import * as config from '@/shared/config';
 import Configuration from '@/components/admin/configuration/configuration.vue';
 import ConfigurationClass from '@/components/admin/configuration/configuration.component';
+import ConfigurationService from '@/components/admin/configuration/configuration.service';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -23,7 +24,7 @@ describe('Configuration Component', () => {
   let configuration: ConfigurationClass;
 
   beforeEach(() => {
-    wrapper = shallowMount<ConfigurationClass>(Configuration, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue });
+    wrapper = shallowMount<ConfigurationClass>(Configuration, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: {configurationService : () => new ConfigurationService() } });
     configuration = wrapper.vm;
   });
 

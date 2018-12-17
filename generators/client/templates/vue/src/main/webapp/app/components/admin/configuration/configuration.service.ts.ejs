@@ -1,8 +1,6 @@
 import axios from 'axios';
-import { Component, Vue } from 'vue-property-decorator';
 
-@Component
-export default class ConfigurationService extends Vue {
+export default class ConfigurationService {
   public loadConfiguration(): Promise<any> {
     return new Promise(resolve => {
       axios.get('management/configprops').then(res => {
@@ -45,7 +43,7 @@ export default class ConfigurationService extends Vue {
     });
   }
 
-  public getConfigPropertiesObjects(res): any {
+  private getConfigPropertiesObjects(res): any {
     // This code is for Spring Boot 2
     if (res['contexts'] !== undefined) {
       for (const key in res['contexts']) {
