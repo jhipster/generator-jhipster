@@ -112,6 +112,12 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shims-vue.d.ts`
     ],
 
+    websocket: [
+        `${CLIENT_MAIN_SRC_DIR}app/components/admin/tracker/tracker.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/admin/tracker/tracker.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/admin/tracker/tracker.vue`
+    ],
+
     test: [
         // `${CLIENT_TEST_SRC_DIR}jest.conf.js`,
     ],
@@ -306,13 +312,13 @@ describe('VueJS JHipster blueprint', () => {
                     prodDatabaseType: 'mysql',
                     cacheProvider: 'ehcache',
                     authenticationType: 'jwt',
-                    searchEngine: 'elasticsearch',
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     testFrameworks: ['protractor'],
                     buildTool: 'maven',
-                    clientFramework: 'VueJS'
+                    clientFramework: 'VueJS',
+                    serverSideOptions: ['searchEngine:elasticsearch']
                 })
                 .on('end', done);
         });
@@ -321,6 +327,56 @@ describe('VueJS JHipster blueprint', () => {
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.test);
             assert.file(expectedFiles.protractor);
+            assert.file(expectedFiles.webpack);
+        });
+        it('contains the specific change added by the blueprint', () => {
+            assert.fileContent('package.json', '"vue"');
+            assert.fileContent('package.json', '"vuex"');
+            assert.fileContent('package.json', '"vuelidate"');
+        });
+    });
+    describe('Websocket', () => {
+        before((done) => {
+            helpers
+                .run('generator-jhipster/generators/app')
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    blueprint: 'vuejs',
+                    skipChecks: true
+                })
+                .withGenerators([
+                    [
+                        require('../generators/client/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:client',
+                        path.join(__dirname, '../generators/client/index.js')
+                    ]
+                ])
+                .withPrompts({
+                    baseName: 'sampleWebsocket',
+                    packageName: 'io.github.jhipster',
+                    applicationType: 'monolith',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Disk',
+                    prodDatabaseType: 'mysql',
+                    cacheProvider: 'ehcache',
+                    authenticationType: 'jwt',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['en', 'fr'],
+                    testFrameworks: ['protractor'],
+                    buildTool: 'maven',
+                    clientFramework: 'VueJS',
+                    serverSideOptions: ['websocket:spring-websocket']
+                })
+                .on('end', done);
+        });
+        it('creates expected files from jhipster client generator', () => {
+            assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.app);
+            assert.file(expectedFiles.test);
+            assert.file(expectedFiles.protractor);
+            assert.file(expectedFiles.websocket);
             assert.file(expectedFiles.webpack);
         });
         it('contains the specific change added by the blueprint', () => {

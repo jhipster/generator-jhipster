@@ -192,7 +192,7 @@ const vueFiles = {
             templates: [
                 'components/admin/tracker/tracker.vue',
                 'components/admin/tracker/tracker.component.ts',
-                'components/admin/tracker/trackerService.vue'
+                'components/admin/tracker/tracker.service.ts'
             ]
         },
         {
