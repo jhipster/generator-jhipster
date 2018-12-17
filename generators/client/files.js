@@ -58,12 +58,26 @@ const vueFiles = {
         {
             path: MAIN_SRC_DIR,
             templates: [
-                { file: 'content/images/hipster.png', method: 'copy' },
-                { file: 'content/images/hipster2x.png', method: 'copy' },
-                { file: 'content/images/hipster192.png', method: 'copy' },
-                { file: 'content/images/hipster256.png', method: 'copy' },
-                { file: 'content/images/hipster384.png', method: 'copy' },
-                { file: 'content/images/hipster512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-512.png', method: 'copy' },
                 { file: 'content/images/logo-jhipster.png', method: 'copy' }
             ]
         }
