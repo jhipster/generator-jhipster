@@ -12,6 +12,7 @@ import HealthService from './components/admin/health/health.service';
 import LoginModalService from './components/account/login-modal.service';
 import MetricsService from './components/admin/metrics/metrics.service';
 import RegisterService from './components/account/register/register.service';
+import LogsService from './components/admin/logs/logs.service';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -35,6 +36,7 @@ const translationService = new TranslationService();
 const registerService = new RegisterService();
 const userManagementService = new UserManagementService();
 const configurationService = new ConfigurationService();
+const logsService = new LogsService();
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
 const gatewayService = new GatewayService();
 <%_ } %>
@@ -68,6 +70,7 @@ new Vue({
     gatewayService: () => gatewayService,
     <%_ } %>
     configurationService: () => configurationService,
+    logsService: () => logsService,
     metricsService: () => metricsService,
     registerService: () => registerService,
     <%_ if (enableTranslation) { _%>

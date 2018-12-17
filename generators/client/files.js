@@ -175,7 +175,7 @@ const vueFiles = {
                 'components/admin/health/health.service.ts',
                 'components/admin/logs/logs.vue',
                 'components/admin/logs/logs.component.ts',
-                'components/admin/logs/LogsService.ts',
+                'components/admin/logs/logs.service.ts',
                 'components/admin/audits/audits.vue',
                 'components/admin/audits/audits.component.ts',
                 'components/admin/audits/audits.service.ts',

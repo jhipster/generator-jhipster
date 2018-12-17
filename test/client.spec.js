@@ -73,7 +73,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/health/health-modal.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/health/health.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/logs/logs.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/components/admin/logs/LogsService.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/components/admin/logs/logs.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/metrics/metrics.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/metrics/metrics-modal.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/components/admin/metrics/metrics.vue`,

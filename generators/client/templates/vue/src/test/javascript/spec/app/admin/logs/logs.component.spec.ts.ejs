@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import Logs from '@/components/admin/logs/logs.vue';
 import LogsClass from '@/components/admin/logs/logs.component';
+import LogsService from '@/components/admin/logs/logs.service';
 
 import * as config from '@/shared/config';
 
@@ -25,7 +26,7 @@ describe('Logs Component', () => {
 
   beforeEach(() => {
     mockedAxios.get.mockReturnValue(Promise.resolve({}));
-    wrapper = shallowMount<LogsClass>(Logs, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue });
+    wrapper = shallowMount<LogsClass>(Logs, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: {logsService: () => new LogsService() } });
     logs = wrapper.vm;
   });
 
