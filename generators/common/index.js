@@ -54,9 +54,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.error('This JHipster subgenerator is not intented for standalone use.');
-                }
+                this.checkInvocationFromCLI();
             },
 
             setupConsts() {
