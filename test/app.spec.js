@@ -73,6 +73,11 @@ describe('JHipster generator', () => {
             it('generates a README with no undefined value', () => {
                 assert.noFileContent('README.md', /undefined/);
             });
+            it('uses correct prettier formatting', () => {
+                // tabWidth = 4 (see generators/common/templates/.prettierrc.ejs)
+                assert.fileContent('webpack/webpack.dev.js', / {4}devtool:/);
+                assert.fileContent('tsconfig.json', / {4}"compilerOptions":/);
+            });
         });
 
         describe('React', () => {
@@ -131,6 +136,11 @@ describe('JHipster generator', () => {
             });
             it('contains clientFramework with react value', () => {
                 assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
+            });
+            it('uses correct prettier formatting', () => {
+                // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+                assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+                assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
             });
         });
 
