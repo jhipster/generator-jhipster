@@ -45,3 +45,12 @@ jib {
         useCurrentTimestamp = true
     }
 }
+
+<%_ if (!skipClient) { _%>
+task copyWwwIntoStatic (type: Copy) {
+    from '<%= CLIENT_DIST_DIR %>'
+    into 'build/resources/main/static'
+}
+
+jibDockerBuild.dependsOn copyWwwIntoStatic
+<%_ } _%>

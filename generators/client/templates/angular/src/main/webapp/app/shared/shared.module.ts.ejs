@@ -56,4 +56,10 @@ import {
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
 })
-export class <%=angularXAppName%>SharedModule {}
+export class <%=angularXAppName%>SharedModule {
+    static forRoot() {
+        return {
+            ngModule: <%=angularXAppName%>SharedModule
+        };
+    }
+}

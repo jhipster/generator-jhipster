@@ -30,7 +30,7 @@ else
     fi
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
-    travis/scripts/00-replace-version-jhipster.sh
+    test-integration/scripts/10-replace-version-jhipster.sh
 
     ./mvnw clean install -Dgpg.skip=true
     ls -al ~/.m2/repository/io/github/jhipster/jhipster-framework/

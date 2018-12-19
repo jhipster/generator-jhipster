@@ -64,6 +64,14 @@
             "otherEntityField": "id",
             "ownerSide": true,
             "otherEntityRelationshipName": "testOneToOne"
+        },
+        {
+            "relationshipName": "superMegaLargeTestEntity",
+            "otherEntityName": "superMegaLargeTestEntity",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "superMegaLargeTestOneToOne"
         }
     ],
     "fields": [],

@@ -9,7 +9,7 @@ const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 describe('JHipster generator spring-controller', () => {
     describe('creates spring controller', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/spring-controller'))
                 .inTmpDir(dir => {
@@ -30,7 +30,7 @@ describe('JHipster generator spring-controller', () => {
     });
 
     describe('creates spring controller with --default flag', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/spring-controller'))
                 .inTmpDir(dir => {

@@ -335,6 +335,15 @@ const serverFiles = {
             ]
         },
         {
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/SecurityUtilsUnitTest.java',
+                    renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`
+                }
+            ]
+        },
+        {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -1392,12 +1401,12 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/security/SecurityUtilsUnitTest.java',
-                    renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`
-                },
-                {
                     file: 'package/service/UserServiceIntTest.java',
                     renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java`
+                },
+                {
+                    file: 'package/service/mapper/UserMapperTest.java',
+                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
                 },
                 {
                     file: 'package/web/rest/UserResourceIntTest.java',
@@ -1585,7 +1594,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.skipUserManagement && generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -1595,7 +1604,13 @@ const serverFiles = {
                 {
                     file: 'package/security/jwt/JWTFilterTest.java',
                     renameTo: generator => `${generator.testDir}security/jwt/JWTFilterTest.java`
-                },
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement && generator.authenticationType === 'jwt',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
                 {
                     file: 'package/web/rest/UserJWTControllerIntTest.java',
                     renameTo: generator => `${generator.testDir}web/rest/UserJWTControllerIntTest.java`
@@ -1657,8 +1672,8 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java`
                 },
                 {
-                    file: 'package/security/SecurityUtilsUnitTest.java',
-                    renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`
+                    file: 'package/service/mapper/UserMapperTest.java',
+                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
                 },
                 {
                     file: 'package/web/rest/AccountResourceIntTest.java',

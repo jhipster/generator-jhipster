@@ -230,7 +230,7 @@ module.exports = class extends PrivateBase {
                             // prettier-ignore
                             this.stripMargin(`|<li>
                              |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
+                             |                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
                              |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                              |                        </a>
                              |                    </li>`)
@@ -248,7 +248,7 @@ module.exports = class extends PrivateBase {
                         splicable: [
                             // prettier-ignore
                             this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
-                        |      <FontAwesomeIcon icon="asterisk" />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
+                        |      <FontAwesomeIcon icon="asterisk" fixedWidth />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
                         |    </DropdownItem>`)
                         ]
                     },
@@ -658,108 +658,6 @@ module.exports = class extends PrivateBase {
      */
     getAllSupportedLanguageOptions() {
         return constants.LANGUAGES;
-    }
-
-    /**
-     * Add a new dependency in the "bower.json".
-     *
-     * @param {string} name - dependency name
-     * @param {string} version - dependency version
-     */
-    addBowerDependency(name, version) {
-        const fullPath = 'bower.json';
-        try {
-            jhipsterUtils.rewriteJSONFile(
-                fullPath,
-                jsonObj => {
-                    if (jsonObj.dependencies === undefined) {
-                        jsonObj.dependencies = {};
-                    }
-                    jsonObj.dependencies[name] = version;
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow('. Reference to ')}bower dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new override configuration in the "bower.json".
-     *
-     * @param {string} bowerPackageName - Bower package name use in dependencies
-     * @param {array} main - You can specify which files should be selected
-     * @param {boolean} isIgnored - Default: false, Set to true if you want to ignore this package.
-     * @param {object} dependencies - You can override the dependencies of a package. Set to null to ignore the dependencies.
-     *
-     */
-    addBowerOverride(bowerPackageName, main, isIgnored, dependencies) {
-        const fullPath = 'bower.json';
-        try {
-            jhipsterUtils.rewriteJSONFile(
-                fullPath,
-                jsonObj => {
-                    const override = {};
-                    if (main !== undefined && main.length > 0) {
-                        override.main = main;
-                    }
-                    if (isIgnored) {
-                        override.ignore = true;
-                    }
-                    if (dependencies) {
-                        override.dependencies = dependencies;
-                    }
-                    if (jsonObj.overrides === undefined) {
-                        jsonObj.overrides = {};
-                    }
-                    jsonObj.overrides[bowerPackageName] = override;
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(
-                        '. Reference to '
-                    )}bower override configuration (bowerPackageName: ${bowerPackageName}, main:${JSON.stringify(
-                    main
-                )}, ignore:${isIgnored})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new parameter in the ".bowerrc".
-     *
-     * @param {string} key - name of the parameter
-     * @param {string | boolean | any} value - value of the parameter
-     */
-    addBowerrcParameter(key, value) {
-        const fullPath = '.bowerrc';
-        try {
-            this.log(chalk.yellow('   update ') + fullPath);
-            jhipsterUtils.rewriteJSONFile(
-                fullPath,
-                jsonObj => {
-                    jsonObj[key] = value;
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow('. Reference to ')}bowerrc parameter (key: ${key}, value:${value})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
     }
 
     /**
@@ -2161,7 +2059,7 @@ module.exports = class extends PrivateBase {
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
         context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-        context.skipClient = context.fileData.skipClient;
+        context.skipClient = context.fileData.skipClient || context.skipClient;
         this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
@@ -2347,6 +2245,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 64;
+        } else if (prodDatabaseType === 'postgresql' && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 63;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -2386,6 +2290,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 62;
+        } else if (prodDatabaseType === 'postgresql' && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 61;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -2633,6 +2543,39 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * get a hipster based on the applications name.
+     * @param {string} baseName of application
+     */
+    getHipster(baseName = this.baseName) {
+        let hash = 0;
+        let i;
+        let chr;
+
+        for (i = 0; i < baseName.length; i++) {
+            chr = baseName.charCodeAt(i);
+            hash = (hash << 5) - hash + chr; // eslint-disable-line no-bitwise
+            hash |= 0; // eslint-disable-line no-bitwise
+        }
+
+        if (hash < 0) {
+            hash *= -1;
+        }
+
+        switch (hash % 4) {
+            case 0:
+                return 'jhipster_family_member_0';
+            case 1:
+                return 'jhipster_family_member_1';
+            case 2:
+                return 'jhipster_family_member_2';
+            case 3:
+                return 'jhipster_family_member_3';
+            default:
+                return 'jhipster_family_member_0';
+        }
+    }
+
+    /**
      * ask a prompt for apps name.
      *
      * @param {object} generator - generator instance to use
@@ -2848,6 +2791,8 @@ module.exports = class extends PrivateBase {
      * @param {any} dest - destination context to use default is context
      */
     setupSharedOptions(generator, context = generator, dest = context) {
+        dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
+        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         dest.skipUserManagement =
             context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
         dest.otherModules = context.configOptions.otherModules || [];
@@ -2869,7 +2814,6 @@ module.exports = class extends PrivateBase {
      */
     setupClientOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         dest.authenticationType =
             context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
@@ -2877,7 +2821,7 @@ module.exports = class extends PrivateBase {
             dest.skipUserManagement = true;
         }
         const uaaBaseName = context.configOptions.uaaBaseName || context.config.get('uaaBaseName');
-        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
+        if (!dest.skipClient && dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
             generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
         }
         dest.uaaBaseName = uaaBaseName;
@@ -2915,7 +2859,6 @@ module.exports = class extends PrivateBase {
      */
     setupServerOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
         dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
         dest.testFrameworks = context.configOptions.testFrameworks;
     }

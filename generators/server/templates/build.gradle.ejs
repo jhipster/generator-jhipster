@@ -86,7 +86,11 @@ bootWar {
 }
 
 war {
-
+    <%_ if (!skipClient) { _%>
+    webAppDirName = '<%= CLIENT_DIST_DIR %>'
+    <%_ } _%>
+    enabled = true
+    classifier = 'original'
 }
 
 springBoot {
@@ -506,6 +510,7 @@ if (project.hasProperty('nodeInstall')) {
 }
 <%_ } _%>
 
+bootWar.dependsOn war
 compileJava.dependsOn processResources
 processResources.dependsOn cleanResources,bootBuildInfo
 bootBuildInfo.mustRunAfter cleanResources

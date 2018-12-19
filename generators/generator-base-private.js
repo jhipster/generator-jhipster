@@ -730,7 +730,6 @@ module.exports = class extends Generator {
         if (blueprint) {
             blueprint = this.normalizeBlueprintName(blueprint);
             this.checkBlueprint(blueprint, subGen);
-            this.log(`Trying to use blueprint ${blueprint}`);
             try {
                 const finalOptions = {
                     ...options,
@@ -738,14 +737,37 @@ module.exports = class extends Generator {
                 };
                 this.useBlueprint = true;
                 this.composeExternalModule(blueprint, subGen, finalOptions);
+                this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
                 return true;
             } catch (e) {
+                this.debug(`No blueprint found for ${chalk.yellow(subGen)} subgenerator: falling back to default generator`);
                 this.debug('Error', e);
-                this.info(`No blueprint found for ${subGen} falling back to default generator`);
                 return false;
             }
         }
         return false;
+    }
+
+    /**
+     * Try to retrieve the version of the blueprint used.
+     * @param {string} blueprintPkgName - generator name
+     * @return {string} version - retrieved version or empty string if not found
+     */
+    findBlueprintVersion(blueprintPkgName) {
+        let packageJsonPath = path.join(process.cwd(), 'node_modules', blueprintPkgName, 'package.json');
+        try {
+            if (!fs.existsSync(packageJsonPath)) {
+                this.debug('using global module as local version could not be found in node_modules');
+                packageJsonPath = path.join(blueprintPkgName, 'package.json');
+            }
+            // eslint-disable-next-line global-require,import/no-dynamic-require
+            const packagejs = require(packageJsonPath);
+            return packagejs.version;
+        } catch (err) {
+            this.debug('ERROR:', err);
+            this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
+            return '';
+        }
     }
 
     /**
@@ -1077,6 +1099,14 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Get build directory used by buildTool
+     * @param {string} buildTool - buildTool
+     */
+    getBuildDirectoryForBuildTool(buildTool) {
+        return buildTool === 'maven' ? 'target/' : 'build/';
+    }
+
+    /**
      * @returns generated JDL from entities
      */
     generateJDLFromEntities() {
@@ -1243,15 +1273,26 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Register file transforms for client side files
+     * Register prettier as transform stream for prettifying files during generation
      * @param {any} generator
      */
-    registerClientTransforms(generator = this) {
-        if (!generator.skipClient) {
-            // Prettier is clever, it uses correct rules and correct parser according to file extension.
-            const prettierFilter = filter(['src/**/*.{json,ts,tsx,scss,css}'], { restore: true });
-            // this pipe will pass through (restore) anything that doesn't match typescriptFilter
-            generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+    registerPrettierTransform(generator = this) {
+        // Prettier is clever, it uses correct rules and correct parser according to file extension.
+        const prettierFilter = filter(['{,src/**/}*.{md,json,ts,tsx,scss,css}'], { restore: true });
+        // this pipe will pass through (restore) anything that doesn't match typescriptFilter
+        generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+    }
+
+    /**
+     * Check if the subgenerator has been invoked from JHipster CLI or from Yeoman (yo jhipster:subgenerator)
+     */
+    checkInvocationFromCLI() {
+        if (!this.options['from-cli']) {
+            this.warning(
+                `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                    'jhipster <command>'
+                )} instead of ${chalk.red('yo jhipster:<command>')}`
+            );
         }
     }
 };
