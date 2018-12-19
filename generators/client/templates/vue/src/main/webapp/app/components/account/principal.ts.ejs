@@ -1,5 +1,8 @@
 import axios from 'axios';
 import { Component, Inject, Vue } from 'vue-property-decorator';
+<%_ if (enableTranslation) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } _%>
 
 <%_ if (websocket === 'spring-websocket') { _%>
 import TrackerService from '../admin/tracker/TrackerService.vue';
@@ -10,6 +13,9 @@ export default class Principal extends Vue {
 
   <%_ if (websocket === 'spring-websocket') { _%>
   @Inject('trackerService') private trackerService: () => TrackerService;
+  <%_ } _%>
+  <%_ if (enableTranslation) { _%>
+  @Inject('translationService') private translationService: () => TranslationService;
   <%_ } _%>
 
   public created(): void {
@@ -25,9 +31,11 @@ export default class Principal extends Vue {
       const account = response.data;
       if (account) {
         this.$store.commit('authenticated', account);
+        <%_ if (enableTranslation) { _%>
         if (this.$store.getters.currentLanguage !== account.langKey) {
-          this.$store.getters.currentLanguage = account.langKey;
+          this.$store.commit('currentLanguage', account.langKey);
         }
+        <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
         this.trackerService.connect();
         <%_ } _%>
@@ -35,6 +43,9 @@ export default class Principal extends Vue {
         this.$store.commit('logout');
         (<any> this).$router.push('/');
       }
+      <%_ if (enableTranslation) { _%>
+      this.refreshTranslation(this.$store.getters.currentLanguage);
+      <%_ } _%>
     }).catch(() => {
       this.$store.commit('logout');
       (<any> this).$router.push('/');
@@ -69,4 +80,11 @@ export default class Principal extends Vue {
   public get username(): string {
     return this.$store.getters.account ? this.$store.getters.account.login : ''
   }
+  <%_ if (enableTranslation) { _%>
+
+  public refreshTranslation(newLanguage) {
+    this.translationService().refreshTranslation(this.$i18n,
+      this.$store.getters.currentLanguage, newLanguage);
+  }
+  <%_ } _%>
 }

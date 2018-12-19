@@ -4,9 +4,6 @@ import { mapGetters } from 'vuex';
 import axios from 'axios';
 import {VERSION} from "@/constants";
 import LoginModalService from '@/components/account/login-modal.service';
-<%_ if (enableTranslation) { _%>
-import TranslationService from '@/locale/translation.service';
-<%_ } _%>
 import Principal from '@/components/account/principal';
 
 @Component({
@@ -14,9 +11,6 @@ import Principal from '@/components/account/principal';
 })
 export default class JhiNavbar extends mixins(Principal) {
   @Inject('loginModalService') private loginModalService: () => LoginModalService;
-  <%_ if (enableTranslation) { _%>
-  @Inject('translationService') private translationService: () => TranslationService;
-  <%_ } _%>
   public version: string;
   public swaggerEnabled: boolean;
   public inProduction: boolean;
@@ -36,7 +30,7 @@ export default class JhiNavbar extends mixins(Principal) {
 
   created() {
     <%_ if (enableTranslation) { _%>
-    this.translationService().refreshTranslation(this.$i18n, this.currentLanguage, this.currentLanguage);
+    this.refreshTranslation(this.currentLanguage);
     <%_ } _%>
     axios.get('management/info').then((res) => {
       if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf('swagger') > -1) {
@@ -58,7 +52,7 @@ export default class JhiNavbar extends mixins(Principal) {
 
   <%_ if (enableTranslation) { _%>
   public changeLanguage(newLanguage) : void {
-    this.translationService().refreshTranslation(this.$i18n, this.currentLanguage, newLanguage);
+    this.refreshTranslation(newLanguage);
   }
   <%_ } _%>
 
