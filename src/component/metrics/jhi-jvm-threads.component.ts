@@ -45,11 +45,10 @@ import {JhiThreadModalComponent} from './jhi-metrics-modal-threads.component';
                      [animated]="false" type="success">
         <span>{{threadStats.threadDumpBlocked * 100 / threadStats.threadDumpAll | number:'1.0-0'}}%</span>
     </ngb-progressbar>
-    <span>Total: {{threadStats.threadDumpAll}}
-        <a class="hand" (click)="open()" data-toggle="modal" data-target="#threadDump">
-            <fa-icon [icon]="'eye'"></fa-icon>
-        </a>
-    </span>`
+    <div>Total: {{threadStats.threadDumpAll}}</div>
+    <button class="hand btn btn-primary btn-sm" (click)="open()" data-toggle="modal" data-target="#threadDump">
+        <span>Expand</span>
+    </button>`
 })
 export class JhiJvmThreadsComponent implements OnInit {
     threadStats: {
