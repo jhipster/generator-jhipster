@@ -22,7 +22,7 @@ module.exports = merge(baseWebpackConfig, {
     devtool: config.dev.devtool,
     output: {
         path: jhiUtils.root('<%= BUILD_DIR %>www'),
-        filename: 'app/[name].bundle.js',
+        filename: 'app/main.bundle.js',
         chunkFilename: 'app/[id].chunk.js'
     },
     devServer: {
