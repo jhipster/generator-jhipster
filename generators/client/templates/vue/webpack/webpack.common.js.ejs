@@ -32,21 +32,8 @@ module.exports = {
                 options: vueLoaderConfig
             },
             {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                include: [
-                    resolve('src'),
-                    resolve('test'),
-                    resolve('node_modules/webpack-dev-server/client'),
-                    resolve('bootstrap-vue')
-                ]
-            },
-            {
                 test: /\.ts$/,
                 use: [
-                    {
-                        loader: 'babel-loader'
-                    },
                     {
                         loader: 'ts-loader',
                         options: {

@@ -3,7 +3,7 @@ import { Component, Inject } from 'vue-property-decorator';
 import Principal from '@/components/account/principal';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 <% if (fieldsContainBlob) { %>
-import JhiDataUtils from '@/shared/data/DataUtilsService.vue';
+import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
