@@ -26,7 +26,7 @@ import {
   HttpRequestMetrics,
   JvmMemory,
   JvmThreads,
-  ServiceMetrics,
+  EndpointsRequestsMetrics,
   SystemMetrics,
   Translate
 } from 'react-jhipster';
@@ -104,8 +104,8 @@ export class MetricsPage extends React.Component<IMetricsPageProps, IMetricsPage
           <HttpRequestMetrics requestMetrics={metrics['http.server.requests']}
                               twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}
                               wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}/> : ''}
-        {metrics && metrics.services ?
-          <ServiceMetrics servicesMetrics={metrics.services} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}/> : ''}
+        {metrics && metrics.endpointsRequests ?
+          <EndpointsRequestsMetrics endpointsRequestsMetrics={metrics.endpointsRequests} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}/> : ''}
 
         {metrics.cache ? (
           <Row>
