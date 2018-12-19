@@ -35,7 +35,6 @@ const vueFiles = {
             templates: [
                 'package.json',
                 'tsconfig.json',
-                '.babelrc',
                 '.postcssrc.js',
                 '.eslintrc.json',
                 'config/index.js',
@@ -146,7 +145,8 @@ const vueFiles = {
                 'components/ribbon/ribbon.component.ts',
                 'shared/date/filters.ts',
                 'shared/sort/sorts.ts',
-                'shared/data/DataUtilsService.vue',
+                'shared/data/data-utils.service.ts',
+                'shared/jhi-item-count.component.ts',
                 'shared/jhi-item-count.vue'
             ]
         }
