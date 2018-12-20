@@ -534,13 +534,6 @@ describe('JHipster generator for entity', () => {
                 assert.noFile(expectedFiles.gatling);
                 assert.noFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`);
             });
-
-            it('creates expected languages files', () => {
-                constants.LANGUAGES.forEach(language => {
-                    assert.file(`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/testRootFoo.json`);
-                });
-                assert.file(expectedFiles.clientNg2WithRootFolder);
-            });
         });
     });
 });
