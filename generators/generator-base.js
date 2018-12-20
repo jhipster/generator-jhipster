@@ -274,7 +274,7 @@ module.exports = class extends PrivateBase {
      * @param {string} entityAngularName - Entity Angular Name
      * @param {string} entityFolderName - Entity Folder Name
      * @param {string} entityFileName - Entity File Name
-     * @param {boolean} enableTranslation - If translations are enabled or not
+     * @param {boolean} entityUrl - Entity router URL
      * @param {string} clientFramework - The name of the client framework
      */
     addEntityToModule(
@@ -283,7 +283,7 @@ module.exports = class extends PrivateBase {
         entityAngularName,
         entityFolderName,
         entityFileName,
-        enableTranslation,
+        entityUrl,
         clientFramework,
         microServiceName
     ) {
@@ -304,7 +304,7 @@ module.exports = class extends PrivateBase {
                         needle: 'jhipster-needle-add-entity-route',
                         splicable: [
                             this.stripMargin(`|{
-                            |                path: '${entityFolderName}',
+                            |                path: '${entityUrl}',
                             |                loadChildren: '${modulePath}#${moduleName}'
                             |            },`)
                         ]
