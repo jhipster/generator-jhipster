@@ -69,7 +69,7 @@ describe('<%= entityClass %> e2e test', () => {
     it('should load <%= entityClassPlural %>', async () => {
         await navBarPage.goToEntity('<%= entityStateName %>');
         <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
-        await browser.wait(ec.visibilityOf(<%= entityInstance %>Page.title), 5000);
+        await browser.wait(ec.visibilityOf(<%= entityInstance %>ComponentsPage.title), 5000);
         <%_ if (enableTranslation) { _%>
         expect(await <%= entityInstance %>ComponentsPage.getTitle())
             .to.eq('<%= angularAppName %>.<%= entityTranslationKey %>.home.title');
