@@ -34,7 +34,7 @@ function addEntityToMenu(generator, entityName, translationKey, className) {
     const menuI18nTitle = generator.enableTranslation ? `v-text="$t('global.menu.entities.${translationKey}')"` : '';
     jhipsterUtils.rewriteFile(
         {
-            file: `${CLIENT_MAIN_SRC_DIR}/app/components/jhi-navbar/jhi-navbar.vue`,
+            file: `${CLIENT_MAIN_SRC_DIR}/app/core/jhi-navbar/jhi-navbar.vue`,
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                 // prettier-ignore

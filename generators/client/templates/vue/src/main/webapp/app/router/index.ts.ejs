@@ -1,27 +1,27 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-const Home = () => import('../components/home/home.vue');
-const Register = () => import('../components/account/register/register.vue');
-const ResetPassword = () => import('../components/account/reset-password/reset-password.vue');
-const ChangePassword = () => import('../components/account/change-password/change-password.vue');
+const Home = () => import('../core/home/home.vue');
+const Register = () => import('../account/register/register.vue');
+const ResetPassword = () => import('../account/reset-password/reset-password.vue');
+const ChangePassword = () => import('../account/change-password/change-password.vue');
 <%_ if (authenticationType === 'session') { _%>
-const Sessions = () => import('../components/account/sessions/sessions.vue');
+const Sessions = () => import('../account/sessions/sessions.vue');
 <%_ } _%>
-const Settings = () => import('../components/account/settings/settings.vue');
-const <%= jhiPrefixCapitalized %>ConfigurationComponent = () => import('../components/admin/configuration/configuration.vue');
-const <%= jhiPrefixCapitalized %>DocsComponent = () => import('../components/admin/docs/docs.vue');
-const <%= jhiPrefixCapitalized %>HealthComponent = () => import('../components/admin/health/health.vue');
-const <%= jhiPrefixCapitalized %>LogsComponent = () => import('../components/admin/logs/logs.vue');
-const <%= jhiPrefixCapitalized %>AuditsComponent = () => import('../components/admin/audits/audits.vue');
-const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('../components/admin/metrics/metrics.vue');
-const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('../components/admin/user-management/user-management.vue');
-const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('../components/admin/user-management/user-management-view.vue');
-const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('../components/admin/user-management/user-management-edit.vue');
+const Settings = () => import('../account/settings/settings.vue');
+const <%= jhiPrefixCapitalized %>ConfigurationComponent = () => import('../admin/configuration/configuration.vue');
+const <%= jhiPrefixCapitalized %>DocsComponent = () => import('../admin/docs/docs.vue');
+const <%= jhiPrefixCapitalized %>HealthComponent = () => import('../admin/health/health.vue');
+const <%= jhiPrefixCapitalized %>LogsComponent = () => import('../admin/logs/logs.vue');
+const <%= jhiPrefixCapitalized %>AuditsComponent = () => import('../admin/audits/audits.vue');
+const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('../admin/metrics/metrics.vue');
+const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('../admin/user-management/user-management.vue');
+const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('../admin/user-management/user-management-view.vue');
+const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('../admin/user-management/user-management-edit.vue');
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('../components/admin/gateway/gateway.vue');
+const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('../admin/gateway/gateway.vue');
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
-const <%= jhiPrefixCapitalized %>TrackerComponent = () => import('../components/admin/tracker/tracker.vue');
+const <%= jhiPrefixCapitalized %>TrackerComponent = () => import('../admin/tracker/tracker.vue');
 <%_ } _%>
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 

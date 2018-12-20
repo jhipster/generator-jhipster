@@ -24,7 +24,7 @@ import moment from 'moment'
     const otherEntityModelName = relationships[idx].otherEntityModelName;
 _%>
   <% if (otherEntityAngularName === 'User') { %>
-import UserService from '@/components/admin/user-management/user-management.service';
+import UserService from '@/admin/user-management/user-management.service';
   <% } else if (!importEntitiesSeen.includes(otherEntityAngularName)) { %>
 import <%= otherEntityAngularName %>Service from '../<%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
 import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';

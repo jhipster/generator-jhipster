@@ -3,8 +3,8 @@ import { Component, Inject } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import axios from 'axios';
 import {VERSION} from "@/constants";
-import LoginModalService from '@/components/account/login-modal.service';
-import Principal from '@/components/account/principal';
+import LoginModalService from '@/account/login-modal.service';
+import Principal from '@/account/principal';
 
 @Component({
   computed: mapGetters(['authenticated'])

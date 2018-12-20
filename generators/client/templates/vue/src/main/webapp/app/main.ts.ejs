@@ -7,22 +7,22 @@ import App from './app.vue';
 import router from './router';
 import * as config from './shared/config';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
-import AuditsService from './components/admin/audits/audits.service';
-import HealthService from './components/admin/health/health.service';
-import LoginModalService from './components/account/login-modal.service';
-import MetricsService from './components/admin/metrics/metrics.service';
-import RegisterService from './components/account/register/register.service';
-import LogsService from './components/admin/logs/logs.service';
+import AuditsService from './admin/audits/audits.service';
+import HealthService from './admin/health/health.service';
+import LoginModalService from './account/login-modal.service';
+import MetricsService from './admin/metrics/metrics.service';
+import RegisterService from './account/register/register.service';
+import LogsService from './admin/logs/logs.service';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
-import UserManagementService from '@/components/admin/user-management/user-management.service';
-import ConfigurationService from '@/components/admin/configuration/configuration.service';
+import UserManagementService from '@/admin/user-management/user-management.service';
+import ConfigurationService from '@/admin/configuration/configuration.service';
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
-import GatewayService from '@/components/admin/gateway/gateway.service';
+import GatewayService from '@/admin/gateway/gateway.service';
 <%_ } %>
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 

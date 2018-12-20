@@ -1,8 +1,8 @@
 import Component, { mixins } from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import LoginModalService from '@/components/account/login-modal.service';
-import Principal from '@/components/account/principal';
+import LoginModalService from '@/account/login-modal.service';
+import Principal from '@/account/principal';
 
 @Component({
   computed: mapGetters(['authenticated', 'account'])

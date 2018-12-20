@@ -135,14 +135,14 @@ const vueFiles = {
         {
             path: VUE_DIR,
             templates: [
-                'components/home/home.vue',
-                'components/home/home.component.ts',
-                'components/jhi-footer/jhi-footer.vue',
-                'components/jhi-footer/jhi-footer.component.ts',
-                'components/jhi-navbar/jhi-navbar.vue',
-                'components/jhi-navbar/jhi-navbar.component.ts',
-                'components/ribbon/ribbon.vue',
-                'components/ribbon/ribbon.component.ts',
+                'core/home/home.vue',
+                'core/home/home.component.ts',
+                'core/jhi-footer/jhi-footer.vue',
+                'core/jhi-footer/jhi-footer.component.ts',
+                'core/jhi-navbar/jhi-navbar.vue',
+                'core/jhi-navbar/jhi-navbar.component.ts',
+                'core/ribbon/ribbon.vue',
+                'core/ribbon/ribbon.component.ts',
                 'shared/date/filters.ts',
                 'shared/sort/sorts.ts',
                 'shared/data/data-utils.service.ts',
@@ -156,27 +156,27 @@ const vueFiles = {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: VUE_DIR,
             templates: [
-                'components/account/change-password/change-password.vue',
-                'components/account/change-password/change-password.component.ts',
-                'components/account/login-form/login-form.vue',
-                'components/account/login-form/login-form.component.ts',
-                'components/account/login-modal.service.ts',
-                'components/account/principal.ts',
-                'components/account/register/register.vue',
-                'components/account/register/register.component.ts',
-                'components/account/register/register.service.ts',
-                'components/account/reset-password/reset-password.vue',
-                'components/account/reset-password/reset-password.component.ts',
-                'components/account/settings/settings.vue',
-                'components/account/settings/settings.component.ts'
+                'account/change-password/change-password.vue',
+                'account/change-password/change-password.component.ts',
+                'account/login-form/login-form.vue',
+                'account/login-form/login-form.component.ts',
+                'account/login-modal.service.ts',
+                'account/principal.ts',
+                'account/register/register.vue',
+                'account/register/register.component.ts',
+                'account/register/register.service.ts',
+                'account/reset-password/reset-password.vue',
+                'account/reset-password/reset-password.component.ts',
+                'account/settings/settings.vue',
+                'account/settings/settings.component.ts'
             ]
         },
         {
             condition: generator => generator.authenticationType === 'session',
             path: VUE_DIR,
             templates: [
-                'components/account/sessions/sessions.vue',
-                'components/account/sessions/sessions.component.ts'
+                'account/sessions/sessions.vue',
+                'account/sessions/sessions.component.ts'
             ]
         }
     ],
@@ -185,58 +185,58 @@ const vueFiles = {
             path: VUE_DIR,
             templates: [
                 // admin modules
-                'components/admin/configuration/configuration.vue',
-                'components/admin/configuration/configuration.component.ts',
-                'components/admin/configuration/configuration.service.ts',
-                'components/admin/docs/docs.vue',
-                'components/admin/docs/docs.component.ts',
-                'components/admin/health/health.vue',
-                'components/admin/health/health.component.ts',
-                'components/admin/health/health-modal.vue',
-                'components/admin/health/health-modal.component.ts',
-                'components/admin/health/health.service.ts',
-                'components/admin/logs/logs.vue',
-                'components/admin/logs/logs.component.ts',
-                'components/admin/logs/logs.service.ts',
-                'components/admin/audits/audits.vue',
-                'components/admin/audits/audits.component.ts',
-                'components/admin/audits/audits.service.ts',
-                'components/admin/metrics/metrics.vue',
-                'components/admin/metrics/metrics.component.ts',
-                'components/admin/metrics/metrics.service.ts',
-                'components/admin/metrics/metrics-modal.vue',
-                'components/admin/metrics/metrics-modal.component.ts'
+                'admin/configuration/configuration.vue',
+                'admin/configuration/configuration.component.ts',
+                'admin/configuration/configuration.service.ts',
+                'admin/docs/docs.vue',
+                'admin/docs/docs.component.ts',
+                'admin/health/health.vue',
+                'admin/health/health.component.ts',
+                'admin/health/health-modal.vue',
+                'admin/health/health-modal.component.ts',
+                'admin/health/health.service.ts',
+                'admin/logs/logs.vue',
+                'admin/logs/logs.component.ts',
+                'admin/logs/logs.service.ts',
+                'admin/audits/audits.vue',
+                'admin/audits/audits.component.ts',
+                'admin/audits/audits.service.ts',
+                'admin/metrics/metrics.vue',
+                'admin/metrics/metrics.component.ts',
+                'admin/metrics/metrics.service.ts',
+                'admin/metrics/metrics-modal.vue',
+                'admin/metrics/metrics-modal.component.ts'
             ]
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: VUE_DIR,
             templates: [
-                'components/admin/tracker/tracker.vue',
-                'components/admin/tracker/tracker.component.ts',
-                'components/admin/tracker/tracker.service.ts'
+                'admin/tracker/tracker.vue',
+                'admin/tracker/tracker.component.ts',
+                'admin/tracker/tracker.service.ts'
             ]
         },
         {
             condition: generator => !generator.skipUserManagement,
             path: VUE_DIR,
             templates: [
-                'components/admin/user-management/user-management.vue',
-                'components/admin/user-management/user-management.component.ts',
-                'components/admin/user-management/user-management-view.vue',
-                'components/admin/user-management/user-management-view.component.ts',
-                'components/admin/user-management/user-management-edit.vue',
-                'components/admin/user-management/user-management-edit.component.ts',
-                'components/admin/user-management/user-management.service.ts'
+                'admin/user-management/user-management.vue',
+                'admin/user-management/user-management.component.ts',
+                'admin/user-management/user-management-view.vue',
+                'admin/user-management/user-management-view.component.ts',
+                'admin/user-management/user-management-edit.vue',
+                'admin/user-management/user-management-edit.component.ts',
+                'admin/user-management/user-management.service.ts'
             ]
         },
         {
             condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: VUE_DIR,
             templates: [
-                'components/admin/gateway/gateway.vue',
-                'components/admin/gateway/gateway.component.ts',
-                'components/admin/gateway/gateway.service.ts'
+                'admin/gateway/gateway.vue',
+                'admin/gateway/gateway.component.ts',
+                'admin/gateway/gateway.service.ts'
             ]
         }
     ],
@@ -321,35 +321,35 @@ function writeFiles() {
 
     if (!this.enableTranslation) {
         utils.replaceTranslation(this, ['app/app.vue',
-            'app/components/home/home.vue',
-            'app/components/jhi-footer/jhi-footer.vue',
-            'app/components/jhi-navbar/jhi-navbar.vue',
-            'app/components/ribbon/ribbon.vue',
+            'app/core/home/home.vue',
+            'app/core/jhi-footer/jhi-footer.vue',
+            'app/core/jhi-navbar/jhi-navbar.vue',
+            'app/core/ribbon/ribbon.vue',
             'app/shared/jhi-item-count.vue',
-            'app/components/account/change-password/change-password.vue',
-            'app/components/account/login-form/login-form.vue',
-            'app/components/account/register/register.vue',
-            'app/components/account/reset-password/reset-password.vue',
-            'app/components/account/settings/settings.vue',
-            'app/components/admin/user-management/user-management.vue',
-            'app/components/admin/user-management/user-management-view.vue',
-            'app/components/admin/user-management/user-management-edit.vue',
-            'app/components/admin/configuration/configuration.vue',
-            'app/components/admin/health/health.vue',
-            'app/components/admin/health/health-modal.vue',
-            'app/components/admin/logs/logs.vue',
-            'app/components/admin/metrics/metrics.vue',
-            'app/components/admin/metrics/metrics-modal.vue',
-            'app/components/admin/audits/audits.vue'
+            'app/account/change-password/change-password.vue',
+            'app/account/login-form/login-form.vue',
+            'app/account/register/register.vue',
+            'app/account/reset-password/reset-password.vue',
+            'app/account/settings/settings.vue',
+            'app/admin/user-management/user-management.vue',
+            'app/admin/user-management/user-management-view.vue',
+            'app/admin/user-management/user-management-edit.vue',
+            'app/admin/configuration/configuration.vue',
+            'app/admin/health/health.vue',
+            'app/admin/health/health-modal.vue',
+            'app/admin/logs/logs.vue',
+            'app/admin/metrics/metrics.vue',
+            'app/admin/metrics/metrics-modal.vue',
+            'app/admin/audits/audits.vue'
         ]);
         if (this.authenticationType === 'session') {
-            utils.replaceTranslation(this, ['app/components/account/sessions/sessions.vue']);
+            utils.replaceTranslation(this, ['app/account/sessions/sessions.vue']);
         }
         if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
-            utils.replaceTranslation(this, ['app/components/admin/gateway/gateway.vue']);
+            utils.replaceTranslation(this, ['app/admin/gateway/gateway.vue']);
         }
         if (this.websocket === 'spring-websocket') {
-            utils.replaceTranslation(this, ['app/components/admin/tracker/tracker.vue']);
+            utils.replaceTranslation(this, ['app/admin/tracker/tracker.vue']);
         }
     }
 }
