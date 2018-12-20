@@ -82,9 +82,8 @@ export default class Principal extends Vue {
   }
   <%_ if (enableTranslation) { _%>
 
-  public refreshTranslation(newLanguage) {
-    this.translationService().refreshTranslation(this.$i18n,
-      this.$store.getters.currentLanguage, newLanguage);
+  public refreshTranslation(newLanguage: string) : void {
+    this.translationService().refreshTranslation(this.$i18n, newLanguage);
   }
   <%_ } _%>
 }

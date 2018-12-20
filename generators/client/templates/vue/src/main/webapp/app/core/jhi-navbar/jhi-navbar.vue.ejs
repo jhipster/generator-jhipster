@@ -89,7 +89,8 @@
                         <font-awesome-icon icon="flag" />
                         <span v-text="$t('global.menu.language')">Language</span>
                     </template>
-                    <b-dropdown-item v-for="(value, key) in languages" :key="`lang-${key}`" v-on:click="changeLanguage(key);collapseNavbar();">
+                    <b-dropdown-item v-for="(value, key) in languages" :key="`lang-${key}`" v-on:click="changeLanguage(key);collapseNavbar();"
+                        :class="{ active: isActiveLanguage(key)}">
                         {{value.name}}
                     </b-dropdown-item>
                 </b-nav-item-dropdown>

@@ -51,8 +51,12 @@ export default class JhiNavbar extends mixins(Principal) {
   }
 
   <%_ if (enableTranslation) { _%>
-  public changeLanguage(newLanguage) : void {
+  public changeLanguage(newLanguage: string) : void {
     this.refreshTranslation(newLanguage);
+  }
+
+  public isActiveLanguage(key: string) : boolean {
+    return key === this.$store.getters.currentLanguage;
   }
   <%_ } _%>
 
