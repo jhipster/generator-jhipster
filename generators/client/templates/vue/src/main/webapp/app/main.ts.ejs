@@ -28,6 +28,9 @@ import ConfigurationService from '@/admin/configuration/configuration.service';
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
 import GatewayService from '@/admin/gateway/gateway.service';
 <%_ } %>
+<%_ if (websocket === 'spring-websocket') { _%>
+import TrackerService from './admin/tracker/tracker.service';
+<%_ } _%>
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 const auditsService = new AuditsService();
@@ -35,6 +38,9 @@ const healthService = new HealthService();
 const loginModalService = new LoginModalService();
 const metricsService = new MetricsService();
 const registerService = new RegisterService();
+<%_ if (websocket === 'spring-websocket') { _%>
+const trackerService = new TrackerService();
+<%_ } _%>
 const userManagementService = new UserManagementService();
 const configurationService = new ConfigurationService();
 const logsService = new LogsService();
@@ -77,6 +83,9 @@ new Vue({
     metricsService: () => metricsService,
     principal: () => principal,
     registerService: () => registerService,
+    <%_ if (websocket === 'spring-websocket') { _%>
+    trackerService: () => trackerService,
+    <%_ } _%>
     <%_ if (enableTranslation) { _%>
     translationService: () => translationService,
     <%_ } _%>

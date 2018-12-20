@@ -1,45 +1,48 @@
+import { Component, Inject, Vue } from 'vue-property-decorator';
+
 import TrackerService from './tracker.service';
 
-const <%=jhiPrefixCapitalized%>TrackerComponent = {
-  name: '<%=jhiPrefixCapitalized%>TrackerComponent',
-  mixins: [TrackerService],
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.init();
-    })
-  },
-  beforeRouteLeave (to, from, next) {
-    this.unsubscribe();
-  },
-  data() {
-    return {
-      activities: []
-    };
-  },
-  methods: {
-    init() {
-      this.subscribe();
-      this.receive().then((res) => {
-        this.showActivity(res.data);
-      });
-    },
-    showActivity(activity: any) {
-      let existingActivity = false;
-      for (let index = 0; index < this.activities.length; index++) {
-        if (this.activities[index].sessionId === activity.sessionId) {
-          existingActivity = true;
-          if ( activity.page === 'logout' ) {
-            this.activities.splice(index, 1);
-          } else {
-            this.activities[index] = activity;
-          }
+@Component
+export default class <%=jhiPrefixCapitalized%>TrackerComponent extends Vue {
+  private activities: any[];
+
+  @Inject('trackerService') private trackerService: () => TrackerService;
+
+  constructor() {
+    super();
+    this.activities = [];
+  }
+
+  public mounted(): void {
+    this.init();
+  }
+
+  public destroyed(): void {
+    this.trackerService().unsubscribe();
+  }
+
+  public init(): void {
+    this.trackerService().subscribe();
+    console.log(this.trackerService().receive());
+    this.trackerService().receive().subscribe(activity => {
+      this.showActivity(activity);
+    });
+  }
+
+  public showActivity(activity: any): void {
+    let existingActivity = false;
+    for (let index = 0; index < this.activities.length; index++) {
+      if (this.activities[index].sessionId === activity.sessionId) {
+        existingActivity = true;
+        if (activity.page === 'logout') {
+          this.activities.splice(index, 1);
+        } else {
+          this.activities[index] = activity;
         }
       }
-      if (!existingActivity && (activity.page !== 'logout')) {
-        this.activities.push(activity);
-      }
+    }
+    if (!existingActivity && activity.page !== 'logout') {
+      this.activities.push(activity);
     }
   }
-};
-
-export default <%=jhiPrefixCapitalized%>TrackerComponent;
+}

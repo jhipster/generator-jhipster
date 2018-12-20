@@ -7,7 +7,7 @@ import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 
 <%_ if (websocket === 'spring-websocket') { _%>
-import TrackerService from '../admin/tracker/TrackerService.vue';
+import TrackerService from '../admin/tracker/tracker.service';
 <%_ } _%>
 
 export default class Principal {
@@ -49,7 +49,7 @@ export default class Principal {
         }
         <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
-        this.trackerService.connect();
+        this.trackerService().connect();
         <%_ } _%>
       } else {
         this.store.commit('logout');
