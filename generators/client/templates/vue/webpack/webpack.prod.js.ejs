@@ -22,6 +22,14 @@ const webpackConfig = merge(baseWebpackConfig, {
         })
     },
     devtool: config.build.productionSourceMap ? config.build.devtool : false,
+    entry: {
+    <%_ if (useSass) { _%>
+      global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
+    <%_ } else { _%>
+      global: './<%= MAIN_SRC_DIR %>content/css/global.css',
+    <%_ } _%>
+    main: './<%= MAIN_SRC_DIR %>app/main'
+    },
     output: {
         path: jhiUtils.root('<%= BUILD_DIR %>www'),
         filename: 'app/[name].[hash].bundle.js',
@@ -65,6 +73,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         // see https://github.com/ampedandwired/html-webpack-plugin
         new HtmlWebpackPlugin({
             template: 'src/main/webapp/index.html',
+            chunks: ['vendors', 'main', 'global'],
+            chunksSortMode: 'manual',
             inject: true,
             minify: {
                 removeComments: true,

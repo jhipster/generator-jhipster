@@ -87,6 +87,30 @@ const vueFiles = {
             templates: [
                 'content/css/loading.css'
             ]
+        },
+        // this css file will be overwritten by the sass generated css if sass is enabled
+        // but this will avoid errors when running app without running sass task first
+        {
+            condition: generator => !generator.useSass,
+            path: MAIN_SRC_DIR,
+            templates: ['content/css/global.css', 'content/css/vendor.css']
+        },
+        {
+            condition: generator => !generator.useSass && generator.enableI18nRTL,
+            path: MAIN_SRC_DIR,
+            templates: ['content/css/rtl.css']
+        }
+    ],
+    sass: [
+        {
+            condition: generator => generator.useSass,
+            path: MAIN_SRC_DIR,
+            templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss']
+        },
+        {
+            condition: generator => generator.useSass && generator.enableI18nRTL,
+            path: MAIN_SRC_DIR,
+            templates: ['content/scss/rtl.scss']
         }
     ],
     swagger: [

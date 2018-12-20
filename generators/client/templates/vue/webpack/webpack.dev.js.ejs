@@ -20,9 +20,17 @@ module.exports = merge(baseWebpackConfig, {
     },
     // cheap-module-eval-source-map is faster for development
     devtool: config.dev.devtool,
+    entry: {
+      <%_ if (useSass) { _%>
+        global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
+      <%_ } else { _%>
+        global: './<%= MAIN_SRC_DIR %>content/css/global.css',
+      <%_ } _%>
+      main: './<%= MAIN_SRC_DIR %>app/main'
+    },
     output: {
         path: jhiUtils.root('<%= BUILD_DIR %>www'),
-        filename: 'app/main.bundle.js',
+        filename: 'app/[name].bundle.js',
         chunkFilename: 'app/[id].chunk.js'
     },
     devServer: {
@@ -75,6 +83,8 @@ module.exports = merge(baseWebpackConfig, {
         // https://github.com/ampedandwired/html-webpack-plugin
         new HtmlWebpackPlugin({
             template: 'src/main/webapp/index.html',
+            chunks: ['vendors', 'main', 'global'],
+            chunksSortMode: 'manual',
             inject: true
         })
     ]

@@ -41,17 +41,5 @@ function askForClient(meta) {
 function askForClientSideOpts() {
     if (this.existingProject) return;
 
-    const done = this.async();
-    const prompts = [
-        {
-            type: 'confirm',
-            name: 'useSass',
-            message: response => this.getNumberedQuestion('Would you like to use the LibSass stylesheet preprocessor for your CSS?', true),
-            default: false
-        }
-    ];
-    this.prompt(prompts).then((props) => {
-        this.useSass = props.useSass;
-        done();
-    });
+    this.useSass = true;
 }

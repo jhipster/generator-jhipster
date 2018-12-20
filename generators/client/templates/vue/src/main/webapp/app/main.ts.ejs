@@ -14,8 +14,11 @@ import MetricsService from './admin/metrics/metrics.service';
 import RegisterService from './account/register/register.service';
 import LogsService from './admin/logs/logs.service';
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+<%_ if (useSass) { _%>
+import '../content/scss/vendor.scss';
+<%_} else { _%>
+import '../content/css/vendor.css';
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
