@@ -147,7 +147,8 @@ const vueFiles = {
                 'shared/sort/sorts.ts',
                 'shared/data/data-utils.service.ts',
                 'shared/jhi-item-count.component.ts',
-                'shared/jhi-item-count.vue'
+                'shared/jhi-item-count.vue',
+                'shared/model/user.model.ts'
             ]
         }
     ],

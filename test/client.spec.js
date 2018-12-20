@@ -105,6 +105,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/model/user.model.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/app.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/app.vue`,
