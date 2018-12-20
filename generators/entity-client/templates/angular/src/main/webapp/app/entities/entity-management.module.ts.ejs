@@ -24,10 +24,6 @@ import { JhiLanguageHelper } from 'app/core';
 <%_ } _%>
 
 import { <%= angularXAppName %>SharedModule } from 'app/shared';
-<%_ Object.keys(differentRelationships).forEach(key => {
-       if (key === 'User') { _%>
-import { <%= angularXAppName %>AdminModule } from 'app/admin/admin.module';
-<%_ }}); _%>
 import {
     <%= entityAngularName %>Component,
     <%= entityAngularName %>DetailComponent,
@@ -46,10 +42,6 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         <%= angularXAppName %>SharedModule,
-        <%_ Object.keys(differentRelationships).forEach(key => {
-              if (key === 'User') { _%>
-        <%= angularXAppName %>AdminModule,
-        <%_ }}); _%>
         RouterModule.forChild(ENTITY_STATES)
     ],
     declarations: [
