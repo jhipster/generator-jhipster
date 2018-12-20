@@ -96,7 +96,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/core/ribbon/ribbon.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/ribbon/ribbon.vue`,
 
-        `${CLIENT_MAIN_SRC_DIR}app/config/axios-interceptor.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/axios-interceptor.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/router/index.ts`,
 

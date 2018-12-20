@@ -140,7 +140,7 @@ const vueFiles = {
                 'shims-vue.d.ts',
                 'constants.ts',
                 'main.ts',
-                'config/axios-interceptor.ts',
+                'shared/axios-interceptor.ts',
                 'shared/config.ts',
                 'router/index.ts'
             ]

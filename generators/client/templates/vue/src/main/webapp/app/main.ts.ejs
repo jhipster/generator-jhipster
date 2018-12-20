@@ -2,7 +2,6 @@
 // (runtime-only or standalone) has been set in webpack.common with an alias.
 import Vue from 'vue';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {Modal, Pagination, Progress} from 'bootstrap-vue/es/components';
 import App from './app.vue';
 import router from './router';
 import * as config from './shared/config';
@@ -55,9 +54,6 @@ config.initVueApp(Vue);
 config.initBootstrapVue(Vue);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('jhi-item-count', JhiItemCountComponent);
-Vue.use(Modal);
-Vue.use(Pagination);
-Vue.use(Progress);
 
 /* eslint-disable no-new */
 new Vue({
