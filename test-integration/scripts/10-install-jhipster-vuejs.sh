@@ -90,7 +90,7 @@ cp -R "$JHI_CLONED"/test-integration/samples-vuejs/* "$JHI_HOME"/test-integratio
 npm install -g yo
 
 #-------------------------------------------------------------------------------
-# Install JHipster Vuejs
+# Install JHipster Vue.js
 #-------------------------------------------------------------------------------
 cd "$JHI_CLONED"/
 npm ci

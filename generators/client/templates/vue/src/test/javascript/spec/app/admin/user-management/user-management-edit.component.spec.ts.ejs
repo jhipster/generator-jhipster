@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import * as config from '@/shared/config';
+import * as config from '@/shared/config/config';
 import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
 import UserManagementEditClass from '@/admin/user-management/user-management-edit.component';
 import UserManagementService from '@/admin/user-management/user-management.service';

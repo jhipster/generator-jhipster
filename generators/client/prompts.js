@@ -12,7 +12,7 @@ function askForClient(meta) {
     const choices = [
         {
             value: 'vue',
-            name: 'VueJS'
+            name: 'Vue.js'
         }
     ];
 

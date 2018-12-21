@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 
-import * as config from '@/shared/config';
+import * as config from '@/shared/config/config';
 import MetricsModal from '@/admin/metrics/metrics-modal.vue';
 import MetricsModalClass from '@/admin/metrics/metrics-modal.component';
 

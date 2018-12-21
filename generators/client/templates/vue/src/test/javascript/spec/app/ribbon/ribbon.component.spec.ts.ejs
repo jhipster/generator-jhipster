@@ -3,7 +3,7 @@ import Ribbon from '@/core/ribbon/ribbon.vue';
 import RibbonClass from '@/core/ribbon/ribbon.component';
 import axios from 'axios';
 
-import * as config from '@/shared/config';
+import * as config from '@/shared/config/config';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
