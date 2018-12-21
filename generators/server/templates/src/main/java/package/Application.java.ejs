@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 <%_ } _%>
@@ -58,7 +59,7 @@ import java.util.Collection;
     excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = OAuth2InterceptedFeignConfiguration.class)
 )
 <%_ } _%>
-@SpringBootApplication
+@SpringBootApplication(exclude = JmxAutoConfiguration.class)
 @EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
 <%_ if (serviceDiscoveryType) { _%>
 @EnableDiscoveryClient
