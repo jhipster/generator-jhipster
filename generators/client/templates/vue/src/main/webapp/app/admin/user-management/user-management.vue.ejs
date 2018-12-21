@@ -27,7 +27,7 @@
                 </tr>
                 </thead>
                 <tbody v-if ="users">
-                    <tr v-for="user of orderBy(users, propOrder, reverse === true ? 1 : -1)" :id="user.login">
+                    <tr v-for="user of orderBy(users, propOrder, reverse === true ? 1 : -1)" :key="user.id" :id="user.login">
                         <td><router-link tag="a" :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}">{{user.id}}</router-link></td>
                         <td>{{user.login}}</td>
                         <td>{{user.email}}</td>
@@ -39,7 +39,7 @@
                         </td>
                         <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                         <td>
-                            <div v-for="authority of user.authorities">
+                            <div v-for="authority of user.authorities" :key="authority">
                                 <span class="badge badge-info">{{ authority }}</span>
                             </div>
                         </td>
