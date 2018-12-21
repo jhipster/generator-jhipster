@@ -615,6 +615,11 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-indexer</artifactId>
+            <optional>true</optional>
+        </dependency>
         <%_ if (messageBroker === 'kafka') { _%>
         <!-- Kafka support -->
         <dependency>
