@@ -448,7 +448,7 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen"
     annotationProcessor "javax.xml.bind:jaxb-api:${jaxb-api_version}"
-    annotationProcessor "com.sun.xml.bind:jaxb-impl:2.3.1"
+    annotationProcessor "com.sun.xml.bind:jaxb-impl:${jaxb-impl_version}"
     <%_ } _%>
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
