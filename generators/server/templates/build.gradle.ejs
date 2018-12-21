@@ -447,7 +447,7 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen"
-    annotationProcessor "javax.xml.bind:jaxb-api:2.3.1"
+    annotationProcessor "javax.xml.bind:jaxb-api:${jaxb-api_version}"
     annotationProcessor "com.sun.xml.bind:jaxb-impl:2.3.1"
     <%_ } _%>
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor") {
