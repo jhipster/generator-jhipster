@@ -12,18 +12,10 @@ import Principal from '../principal';
 })
 export default class LoginForm extends mixins(Principal) {
 
-  public authenticationError: boolean;
-  public login: string;
-  public password: string;
-  public rememberMe: boolean;
-
-  constructor() {
-    super();
-    this.authenticationError = null;
-    this.login = null;
-    this.password = null;
-    this.rememberMe = null;
-  }
+  public authenticationError: boolean = null;
+  public login: string = null;
+  public password: string = null;
+  public rememberMe: boolean = null;
 
   public doLogin(): void {
     <%_ if (authenticationType === 'jwt') { _%>

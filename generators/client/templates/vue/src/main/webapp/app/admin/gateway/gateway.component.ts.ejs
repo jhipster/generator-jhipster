@@ -4,15 +4,9 @@ import GatewayService from './gateway.service';
 
 @Component
 export default class <%=jhiPrefixCapitalized%>GatewayComponent extends Vue {
-  public gatewayRoutes: any[];
-  public updatingRoutes: boolean;
+  public gatewayRoutes: any[] = [];
+  public updatingRoutes: boolean = false;
   @Inject('gatewayService') private gatewayService: () => GatewayService;
-
-  constructor() {
-    super();
-    this.gatewayRoutes = [];
-    this.updatingRoutes = false;
-  }
 
   public mounted() : void {
     this.refresh();

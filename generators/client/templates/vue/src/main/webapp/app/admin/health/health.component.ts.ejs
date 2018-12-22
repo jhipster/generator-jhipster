@@ -8,17 +8,10 @@ import { Component, Inject, Vue } from 'vue-property-decorator';
   }
 })
 export default class <%=jhiPrefixCapitalized%>Health extends Vue {
-  public healthData: any;
-  public currentHealth: any;
-  public updatingHealth: boolean;
+  public healthData: any = null;
+  public currentHealth: any = null;
+  public updatingHealth: boolean = false;
   @Inject('healthService') private healthService: () => HealthService;
-
-  constructor() {
-    super();
-    this.healthData = null;
-    this.currentHealth = null;
-    this.updatingHealth = false;
-  }
 
   public mounted(): void {
     this.refresh();

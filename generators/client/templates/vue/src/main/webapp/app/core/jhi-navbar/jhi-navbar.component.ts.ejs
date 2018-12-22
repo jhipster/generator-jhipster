@@ -11,22 +11,12 @@ import Principal from '@/account/principal';
 })
 export default class JhiNavbar extends mixins(Principal) {
   @Inject('loginModalService') private loginModalService: () => LoginModalService;
-  public version: string;
-  public swaggerEnabled: boolean;
-  public inProduction: boolean;
-  public isNavbarCollapsed: boolean;
-  private currentLanguage: string;
-  private languages: any;
-
-  constructor() {
-    super();
-    this.version = VERSION ? 'v' + VERSION : '';
-    this.swaggerEnabled = false;
-    this.inProduction = false;
-    this.isNavbarCollapsed = true;
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.languages = this.$store.getters.languages;
-  }
+  public version: string = VERSION ? 'v' + VERSION : '';
+  public swaggerEnabled: boolean = false;
+  public inProduction: boolean = false;
+  public isNavbarCollapsed: boolean = true;
+  private currentLanguage: string = this.$store.getters.currentLanguage;
+  private languages: any = this.$store.getters.languages;
 
   created() {
     <%_ if (enableTranslation) { _%>

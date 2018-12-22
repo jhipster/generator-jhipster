@@ -37,26 +37,10 @@ const validations: any = {
 })
 export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
-  public userAccount: any;
-  public isSaving: boolean;
-  private authorities: any[];
-  public languages: any;
-
-  public constructor() {
-    super();
-    this.userAccount = {
-      id: null,
-      login: null,
-      firstName: null,
-      lastName: null,
-      email: null,
-      authorities: [],
-      langKey: null
-    };
-    this.isSaving = false;
-    this.authorities = [];
-    this.languages = this.$store.getters.languages;
-  }
+  public userAccount: any = {authorities: []};
+  public isSaving: boolean = false;
+  private authorities: any[] = [];
+  public languages: any = this.$store.getters.languages;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {

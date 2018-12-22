@@ -6,12 +6,7 @@ export default class JhiItemCountComponent extends Vue {
   @Prop() page: number;
   @Prop() total: number;
   @Prop() itemsPerPage: number;
-  i18nEnabled: boolean;
-
-  constructor() {
-    super();
-    this.i18nEnabled = <%_ if (enableTranslation) { _%> true <%_ } else { _%> false <%_ } _%>;
-  }
+  i18nEnabled: boolean = <%_ if (enableTranslation) { _%> true <%_ } else { _%> false <%_ } _%>;
 
   get first() {
     return ((this.page - 1) * this.itemsPerPage) === 0 ? 1 : ((this.page - 1) * this.itemsPerPage + 1);

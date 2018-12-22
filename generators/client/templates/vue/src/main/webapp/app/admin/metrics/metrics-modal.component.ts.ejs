@@ -5,12 +5,7 @@ export default class <%=jhiPrefixCapitalized%>MetricsModal extends Vue {
   @Prop()
   threadDump!: any
 
-  public threadDumpFilter: any;
-
-  constructor() {
-    super();
-    this.threadDumpFilter = null;
-  }
+  public threadDumpFilter: any = null;
 
   get threadDumpData(): any {
     const data = {

@@ -11,41 +11,19 @@ import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 export default class <%= entityAngularName %> extends mixins(Principal<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %>) {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
   <%_ if (searchEngine === 'elasticsearch') { _%>
-  public currentSearch: string;
+  public currentSearch: string = '';
   <%_ } _%>
-  private removeId: string;
+  private removeId: string = null;
   <%_ if (pagination !== 'no') { _%>
-  public itemsPerPage: number;
-  public queryCount: number;
-  public page: number;
-  public previousPage: number;
-  public propOrder: string;
-  public reverse: boolean;
-  public totalItems: number;
+  public itemsPerPage: number = 20;
+  public queryCount: number = null;
+  public page: number = 1;
+  public previousPage: number = null;
+  public propOrder: string = 'id';
+  public reverse: boolean = <%_ if (pagination === 'infinite-scroll') { _%>true<%_ } else { _%>false<%_ } _%>;
+  public totalItems: number = 0;
   <%_ } _%>
-  public <%= entityInstancePlural %>: I<%= entityAngularName %>[];
-
-  constructor() {
-    super();
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-    this.currentSearch = '';
-    <%_ } _%>
-    this.<%= entityInstancePlural %> = [];
-    <%_ if (pagination !== 'no') { _%>
-    this.itemsPerPage = 20;
-    this.queryCount = null;
-    this.page = 1;
-    this.previousPage = null;
-    this.propOrder = 'id';
-    <%_ if (pagination === 'infinite-scroll') { _%>
-    this.reverse = true;
-    <%_ } else { _%>
-    this.reverse = false;
-    <%_ } _%>
-    this.totalItems = 0;
-    <%_ } _%>
-    this.removeId = null;
-  }
+  public <%= entityInstancePlural %>: I<%= entityAngularName %>[] = [];
 
   public mounted(): void {
     this.retrieveAll<%= entityAngularName %>s();

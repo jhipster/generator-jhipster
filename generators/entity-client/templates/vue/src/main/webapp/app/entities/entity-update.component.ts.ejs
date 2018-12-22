@@ -30,7 +30,7 @@ import <%= otherEntityAngularName %>Service from '../<%= otherEntityFolderName %
 import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';
   <% } %>
 <%_ importEntitiesSeen.push(otherEntityAngularName); } _%>
-import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
 const validations: any = {
@@ -65,7 +65,7 @@ const validations: any = {
 })
 export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
-  public <%= entityInstance %>: I<%= entityAngularName %>;
+  public <%= entityInstance %>: I<%= entityAngularName %> = new <%= entityAngularName %>();
   <%_
     const entitiesSeen = [entityAngularName];
     for (idx in relationships) {
@@ -76,32 +76,9 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
   @Inject('<%= otherEntityName %>Service') private <%= otherEntityName %>Service : () => <%= otherEntityAngularName %>Service;
   <%_ } _%>
-  public <%= otherEntityNamePlural %> : <% if (otherEntityAngularName === 'User') { %>Array<any><%_ } else { _%>I<%= otherEntityAngularName %>[]<%_ } _%>;
+  public <%= otherEntityNamePlural %> : <% if (otherEntityAngularName === 'User') { %>Array<any><%_ } else { _%>I<%= otherEntityAngularName %>[]<%_ } _%> = [];
   <%_ entitiesSeen.push(otherEntityAngularName); } _%>
-  public isSaving: boolean;
-
-  constructor() {
-    super();
-    this.<%= entityInstance %> = {
-      <%_ for (idx in fields) {
-          const fieldName = fields[idx].fieldName;
-      _%>
-      <%= fieldName %>: null,
-      <%_ } _%>
-      <%_ for (idx in relationships) {
-          const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-          if (relationships[idx].relationshipType !== 'many-to-one') {
-      _%>
-      <%= otherEntityNamePlural %>: [],
-      <%_ } } _%>
-    };
-    <%_ for (idx in relationships) {
-      const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
-    _%>
-    this.<%= otherEntityNamePlural %> = [];
-    <%_ } _%>
-    this.isSaving = false;
-  }
+  public isSaving: boolean = false;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {

@@ -38,28 +38,17 @@ const validations: any = {
 export default class Register extends Vue {
   @Inject('registerService') private registerService : () => RegisterService;
   @Inject('loginModalService') private loginModalService : () => LoginModalService;
-  public registerAccount: any;
-  public confirmPassword: any;
-  public doNotMatch: string;
-  public error: string;
-  public errorEmailExists: string;
-  public errorUserExists: string;
-  public success: boolean;
-
-  constructor() {
-    super();
-    this.confirmPassword = null;
-    this.doNotMatch = '';
-    this.error = '';
-    this.errorEmailExists = '';
-    this.errorUserExists = '';
-    this.registerAccount = {
-      login: undefined,
-      email: undefined,
-      password: undefined
-    };
-    this.success = false;
-  }
+  public registerAccount: any = {
+    login: undefined,
+    email: undefined,
+    password: undefined
+  };
+  public confirmPassword: any = null;
+  public doNotMatch: string = '';
+  public error: string = '';
+  public errorEmailExists: string = '';
+  public errorUserExists: string = '';
+  public success: boolean = false;
 
   public register() : void {
     if (this.registerAccount.password !== this.confirmPassword) {

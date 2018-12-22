@@ -4,33 +4,18 @@ import { Component, Inject, Vue } from 'vue-property-decorator';
 
 @Component
 export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
-  public audits: any;
-  public fromDate: any;
-  public itemsPerPage: number;
-  public queryCount: any;
-  public page: number;
-  public previousPage: number;
-  public propOrder: String;
-  public predicate: String;
-  public reverse: boolean;
-  public toDate: any;
-  public totalItems: number;
+  public audits: any = [];
+  public fromDate: any = null;
+  public itemsPerPage: number = 20;
+  public queryCount: any = null;
+  public page: number = 1;
+  public previousPage: number = null;
+  public propOrder: String = 'auditEventDate';
+  public predicate: String = 'timestamp';
+  public reverse: boolean = false;
+  public toDate: any = null;
+  public totalItems: number = 0;
   @Inject('auditsService') private auditsService: () => AuditsService;
-
-  constructor() {
-    super();
-    this.audits = [];
-    this.fromDate = null;
-    this.itemsPerPage = 20;
-    this.queryCount = null;
-    this.page = 1;
-    this.previousPage = null;
-    this.propOrder = 'auditEventDate';
-    this.predicate = 'timestamp';
-    this.reverse = false;
-    this.toDate = null;
-    this.totalItems = 0;
-  }
 
   public mounted(): void {
     this.init();

@@ -4,23 +4,13 @@ import ConfigurationService from './configuration.service';
 
 @Component
 export default class <%=jhiPrefixCapitalized%>Configuration extends Vue {
-  public orderProp: string;
-  public reverse: boolean;
-  public allConfiguration: any;
-  public configuration: any;
-  public configKeys: any[];
-  public filtered: string;
+  public orderProp: string = 'prefix';
+  public reverse: boolean = false;
+  public allConfiguration: any = false;
+  public configuration: any = false;
+  public configKeys: any[] = [];
+  public filtered: string = '';
   @Inject('configurationService') private configurationService : () => ConfigurationService;
-
-  constructor() {
-    super();
-    this.orderProp = 'prefix';
-    this.reverse = false;
-    this.allConfiguration = null;
-    this.configuration = null;
-    this.configKeys = [];
-    this.filtered = '';
-  }
 
   public mounted(): void {
     this.init();

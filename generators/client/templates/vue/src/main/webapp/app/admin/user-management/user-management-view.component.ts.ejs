@@ -15,12 +15,7 @@ const beforeRouteEnter = (to, from, next) => {
 })
 export default class <%=jhiPrefixCapitalized%>UserManagementView extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
-  public user: any;
-
-  constructor() {
-    super();
-    this.user = null;
-  }
+  public user: any = null;
 
   public init(userId: number): void {
     this.userManagementService().get(userId).then(res => {
