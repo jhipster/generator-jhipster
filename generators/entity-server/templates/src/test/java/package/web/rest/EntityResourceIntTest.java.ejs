@@ -50,7 +50,7 @@ import <%=packageName%>.domain.<%= otherEntityNameCapitalized %>;
 import <%=packageName%>.repository.UserRepository;
 <%_ } _%>
 import <%=packageName%>.repository.<%= entityClass %>Repository;
-<%_ if (isUsingMapsId === true) { _%>
+<%_ if (isUsingMapsId === true && dto !== 'mapstruct') { _%>
 import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -307,7 +307,7 @@ _%>
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 
-    <%_ if (isUsingMapsId === true) { _%>
+    <%_ if (isUsingMapsId === true && dto !== 'mapstruct') { _%>
     @Autowired
     private <%=mapsIdEntity%>Repository <%= mapsIdRepoInstance %>;
 
@@ -383,7 +383,7 @@ _%>
         <%_ if (service !== 'no') { _%>
         final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
         <%_ } else { _%>
-        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityInstance %>ReactiveRepository<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %><% if (isUsingMapsId === true) { %>, <%= mapsIdRepoInstance _%> <% } %>);
+        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityInstance %>ReactiveRepository<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %><% if (isUsingMapsId === true && dto !== 'mapstruct') { %>, <%= mapsIdRepoInstance _%> <% } %>);
         <%_ } _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

@@ -32,21 +32,25 @@ if (isUsingMapsId === true) {
     mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`; 
     otherEntityName = mapsIdAssoc.otherEntityName;
     if (isController === true) { _%>
-        if (Objects.isNull(<%= entityInstance%>.get<%= mapsIdAssoc.relationshipNameCapitalized %>())) {
+        if (Objects.isNull(<%= instanceName%>.get<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ if (dto === 'mapstruct') { _%> Id <%_ } _%>())) {
             throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
         }
     <%_ } _%>
 <%_ }
 if (!viaService) {
     if (dto === 'mapstruct') {
-        resultEntity = entityInstance; %>
+        resultEntity = entityInstance; _%>
         <%= entityClass %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
+        <%_ if (isUsingMapsId === true) { _%>
+        long <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>Id();
+        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance%>::<%= otherEntityName %>);
+        <%_ } _%>
         <%= entityInstance %> = <%= entityInstance %>Repository.save(<%= entityInstance %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= entityInstance %>);
     <%_ } else { resultEntity = 'result'; _%>
         <%_ if (isUsingMapsId === true) { _%>
-        long <%= otherEntityName %>Id = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance%>::<%= otherEntityName %>);
+        long <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId();
+        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= instanceName%>::<%= otherEntityName %>);
         <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= entityInstance %>);
         <%_ } if (searchEngine === 'elasticsearch') { _%>
