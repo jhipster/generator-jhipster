@@ -59,20 +59,9 @@ const validations: any = {
     <%_ } _%>
   }
 };
-const beforeRouteEnter = (to, from, next) => {
-  next(vm => {
-    if (to.params.<%= entityInstance %>Id) {
-      vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
-    }
-    <%_ if (relationships.length > 0) { _%>
-    vm.initRelationships();
-    <%_ } _%>
-  });
-};
 
 @Component({
-  validations,
-  beforeRouteEnter
+  validations
 })
 export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
@@ -112,6 +101,17 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
     this.<%= otherEntityNamePlural %> = [];
     <%_ } _%>
     this.isSaving = false;
+  }
+
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (to.params.<%= entityInstance %>Id) {
+        vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
+      }
+      <%_ if (relationships.length > 0) { _%>
+      vm.initRelationships();
+      <%_ } _%>
+    });
   }
 
   public save() : void {

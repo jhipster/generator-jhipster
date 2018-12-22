@@ -1,4 +1,10 @@
 import Vue from 'vue';
+import Component from 'vue-class-component';
+Component.registerHooks([
+  'beforeRouteEnter',
+  'beforeRouteLeave',
+  'beforeRouteUpdate' // for vue-router 2.2+
+])
 import Router from 'vue-router';
 const Home = () => import('../core/home/home.vue');
 const Register = () => import('../account/register/register.vue');

@@ -32,17 +32,8 @@ const validations: any = {
   }
 };
 
-const beforeRouteEnter = (to, from, next) => {
-  next(vm => {
-    if (to.params.userId) {
-      vm.init(to.params.userId);
-    }
-  });
-};
-
 @Component({
-  validations,
-  beforeRouteEnter
+  validations
 })
 export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
@@ -65,6 +56,14 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
     this.isSaving = false;
     this.authorities = [];
     this.languages = this.$store.getters.languages;
+  }
+
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (to.params.userId) {
+        vm.init(to.params.userId);
+      }
+    });
   }
 
   public init(userId: number): void {
