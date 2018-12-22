@@ -661,108 +661,6 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add a new dependency in the "bower.json".
-     *
-     * @param {string} name - dependency name
-     * @param {string} version - dependency version
-     */
-    addBowerDependency(name, version) {
-        const fullPath = 'bower.json';
-        try {
-            jhipsterUtils.rewriteJSONFile(
-                fullPath,
-                jsonObj => {
-                    if (jsonObj.dependencies === undefined) {
-                        jsonObj.dependencies = {};
-                    }
-                    jsonObj.dependencies[name] = version;
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow('. Reference to ')}bower dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new override configuration in the "bower.json".
-     *
-     * @param {string} bowerPackageName - Bower package name use in dependencies
-     * @param {array} main - You can specify which files should be selected
-     * @param {boolean} isIgnored - Default: false, Set to true if you want to ignore this package.
-     * @param {object} dependencies - You can override the dependencies of a package. Set to null to ignore the dependencies.
-     *
-     */
-    addBowerOverride(bowerPackageName, main, isIgnored, dependencies) {
-        const fullPath = 'bower.json';
-        try {
-            jhipsterUtils.rewriteJSONFile(
-                fullPath,
-                jsonObj => {
-                    const override = {};
-                    if (main !== undefined && main.length > 0) {
-                        override.main = main;
-                    }
-                    if (isIgnored) {
-                        override.ignore = true;
-                    }
-                    if (dependencies) {
-                        override.dependencies = dependencies;
-                    }
-                    if (jsonObj.overrides === undefined) {
-                        jsonObj.overrides = {};
-                    }
-                    jsonObj.overrides[bowerPackageName] = override;
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(
-                        '. Reference to '
-                    )}bower override configuration (bowerPackageName: ${bowerPackageName}, main:${JSON.stringify(
-                    main
-                )}, ignore:${isIgnored})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new parameter in the ".bowerrc".
-     *
-     * @param {string} key - name of the parameter
-     * @param {string | boolean | any} value - value of the parameter
-     */
-    addBowerrcParameter(key, value) {
-        const fullPath = '.bowerrc';
-        try {
-            this.log(chalk.yellow('   update ') + fullPath);
-            jhipsterUtils.rewriteJSONFile(
-                fullPath,
-                jsonObj => {
-                    jsonObj[key] = value;
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow('. Reference to ')}bowerrc parameter (key: ${key}, value:${value})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
      * Add a new dependency in the "package.json".
      *
      * @param {string} name - dependency name
@@ -2347,6 +2245,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 64;
+        } else if (prodDatabaseType === 'postgresql' && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 63;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -2386,6 +2290,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 62;
+        } else if (prodDatabaseType === 'postgresql' && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 61;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -2630,6 +2540,39 @@ module.exports = class extends PrivateBase {
         const acceptableForJava = new RegExp('^[A-Z][a-zA-Z0-9_]*$');
 
         return acceptableForJava.test(main) ? main : 'Application';
+    }
+
+    /**
+     * get a hipster based on the applications name.
+     * @param {string} baseName of application
+     */
+    getHipster(baseName = this.baseName) {
+        let hash = 0;
+        let i;
+        let chr;
+
+        for (i = 0; i < baseName.length; i++) {
+            chr = baseName.charCodeAt(i);
+            hash = (hash << 5) - hash + chr; // eslint-disable-line no-bitwise
+            hash |= 0; // eslint-disable-line no-bitwise
+        }
+
+        if (hash < 0) {
+            hash *= -1;
+        }
+
+        switch (hash % 4) {
+            case 0:
+                return 'jhipster_family_member_0';
+            case 1:
+                return 'jhipster_family_member_1';
+            case 2:
+                return 'jhipster_family_member_2';
+            case 3:
+                return 'jhipster_family_member_3';
+            default:
+                return 'jhipster_family_member_0';
+        }
     }
 
     /**

@@ -68,6 +68,11 @@ elif [[ "$JHI_ENTITY" == "uaa" ]]; then
     moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
+elif [[ "$JHI_ENTITY" == "sqllight" ]]; then
+    moveEntity BankAccount
+    moveEntity Label
+    moveEntity Operation
+
 elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity BankAccount
     moveEntity Label
@@ -96,6 +101,7 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity TestOneToOne
     moveEntity TestCustomTableName
     moveEntity TestTwoRelationshipsSameEntity
+    moveEntity SuperMegaLargeTestEntity
 
     moveEntity EntityWithDTO
     moveEntity EntityWithPagination

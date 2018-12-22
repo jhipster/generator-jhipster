@@ -14,17 +14,19 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 **Thank you to our sponsors!**
 
-**Gold sponsors!**
+**Gold sponsors**
 
 [![Okta][okta-image]][okta-url]
 
-**Bronze sponsors!**
+**Bronze sponsors**
 
 [![ForsysLab][forsyslab-image]][forsyslab-url]
 
 [![CUBA Platform][cubaplatform-image]][cubaplatform-url]
 
 [![Intesys][intesys-image]][intesys-url]
+
+[![CodeFirst][codefirst-image]][codefirst-url]
 
 **Thank you to all our backers!**
 
@@ -74,7 +76,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=coverage
 [sonar-bugs]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=bugs
 [sonar-vulnerabilities]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=vulnerabilities
-[jhipster-image]: https://raw.githubusercontent.com/jhipster/jhipster.github.io/master/images/logo/logo-jhipster2x.png
+[jhipster-image]: https://raw.githubusercontent.com/jhipster/jhipster-artwork/master/logos/JHipster%20RGB-small100x25px.png
 [jhipster-url]: https://www.jhipster.tech/
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster
@@ -94,5 +96,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [cubaplatform-url]: https://www.cuba-platform.com/
 [intesys-image]: https://www.jhipster.tech/images/open-collective/intesys.png
 [intesys-url]: https://www.intesys.it/
+[codefirst-image]: https://www.jhipster.tech/images/open-collective/codefirst.png
+[codefirst-url]: https://www.codefirst.co.uk
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md

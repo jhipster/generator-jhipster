@@ -49,6 +49,7 @@ describe('JHipster generator', () => {
             it('creates expected default files for angularX', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
@@ -68,6 +69,14 @@ describe('JHipster generator', () => {
             });
             it('contains correct custom prefix when specified', () => {
                 assert.fileContent('angular.json', /"prefix": "test"/);
+            });
+            it('generates a README with no undefined value', () => {
+                assert.noFileContent('README.md', /undefined/);
+            });
+            it('uses correct prettier formatting', () => {
+                // tabWidth = 4 (see generators/common/templates/.prettierrc.ejs)
+                assert.fileContent('webpack/webpack.dev.js', / {4}devtool:/);
+                assert.fileContent('tsconfig.json', / {4}"compilerOptions":/);
             });
         });
 
@@ -110,6 +119,7 @@ describe('JHipster generator', () => {
             it('creates expected default files for react', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
@@ -126,6 +136,11 @@ describe('JHipster generator', () => {
             });
             it('contains clientFramework with react value', () => {
                 assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
+            });
+            it('uses correct prettier formatting', () => {
+                // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+                assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+                assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
             });
         });
 
@@ -162,6 +177,7 @@ describe('JHipster generator', () => {
             it('creates expected default files', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
@@ -215,6 +231,7 @@ describe('JHipster generator', () => {
             it('creates expected default files for gradle', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.dockerServices);
@@ -233,7 +250,7 @@ describe('JHipster generator', () => {
     });
 
     context('Application with DB option', () => {
-        describe('mariadb configuration', () => {
+        describe('mariadb', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
@@ -266,6 +283,7 @@ describe('JHipster generator', () => {
             it('creates expected default files', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
@@ -316,6 +334,10 @@ describe('JHipster generator', () => {
             it('creates expected files with "MongoDB"', () => {
                 assert.file(expectedFiles.mongodb);
             });
+            it("doesn't setup liquibase", () => {
+                assert.noFileContent('pom.xml', 'liquibase');
+                assert.noFile(expectedFiles.liquibase);
+            });
             shouldBeV3DockerfileCompatible('mongodb');
         });
 
@@ -351,6 +373,10 @@ describe('JHipster generator', () => {
 
             it('creates expected files with "Couchbase"', () => {
                 assert.file(expectedFiles.couchbase);
+            });
+            it("doesn't setup liquibase", () => {
+                assert.noFileContent('pom.xml', 'liquibase');
+                assert.noFile(expectedFiles.liquibase);
             });
             shouldBeV3DockerfileCompatible('couchbase');
         });
@@ -429,6 +455,10 @@ describe('JHipster generator', () => {
             it('creates expected files with "Cassandra"', () => {
                 assert.file(expectedFiles.cassandra);
             });
+            it("doesn't setup liquibase", () => {
+                assert.noFileContent('pom.xml', 'liquibase');
+                assert.noFile(expectedFiles.liquibase);
+            });
             shouldBeV3DockerfileCompatible('cassandra');
         });
 
@@ -502,6 +532,47 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.elasticsearch);
             });
             shouldBeV3DockerfileCompatible('postgresql');
+        });
+
+        describe('no database', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        applicationType: 'microservice',
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        cacheProvider: 'hazelcast',
+                        enableHibernateCache: true,
+                        databaseType: 'no',
+                        devDatabaseType: 'no',
+                        prodDatabaseType: 'no',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with the microservice application type', () => {
+                assert.file(expectedFiles.jwtServer);
+                assert.file(expectedFiles.microservice);
+                assert.file(expectedFiles.feignConfig);
+                assert.file(expectedFiles.dockerServices);
+                assert.noFile(expectedFiles.userManagementServer);
+            });
+            it("doesn't setup liquibase", () => {
+                assert.noFileContent('pom.xml', 'liquibase');
+                assert.noFile(expectedFiles.liquibase);
+            });
         });
     });
 
@@ -640,6 +711,7 @@ describe('JHipster generator', () => {
             it('creates expected files with "Hazelcast"', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.hazelcast);
             });
         });
@@ -674,6 +746,7 @@ describe('JHipster generator', () => {
             it('creates expected files with "Infinispan"', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.infinispan);
             });
@@ -709,6 +782,7 @@ describe('JHipster generator', () => {
             it('creates expected files with "Infinispan and Eureka"', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.eureka);
                 assert.file(expectedFiles.infinispan);
@@ -745,6 +819,7 @@ describe('JHipster generator', () => {
             it('creates expected files with "Memcached"', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.memcached);
             });
@@ -787,6 +862,7 @@ describe('JHipster generator', () => {
             it('creates expected files with Kafka message broker enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.messageBroker);
@@ -830,6 +906,7 @@ describe('JHipster generator', () => {
             it('creates expected files with Swagger API first enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.swaggerCodegen);
@@ -876,6 +953,7 @@ describe('JHipster generator', () => {
             it('creates expected files with Swagger API first enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
@@ -1197,6 +1275,7 @@ describe('JHipster generator', () => {
             it('creates expected files with Protractor enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(
                     getFilesForOptions(angularFiles, {
                         useSass: false,
@@ -1246,9 +1325,51 @@ describe('JHipster generator', () => {
             it('creates expected files with Cucumber enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.cucumber);
                 assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
             });
+        });
+    });
+
+    context('App with skip server', () => {
+        before(done => {
+            helpers
+                .run(path.join(__dirname, '../generators/app'))
+                .withOptions({ 'from-cli': true, skipInstall: true, skipServer: true, db: 'mysql', auth: 'jwt', skipChecks: true })
+                .withPrompts({
+                    baseName: 'jhipster',
+                    clientFramework: 'angularX',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files for default configuration with skip server option enabled', () => {
+            assert.file(expectedFiles.common);
+            assert.noFile(expectedFiles.server);
+            assert.noFile(expectedFiles.userManagementServer);
+            assert.noFile(expectedFiles.maven);
+            assert.file(
+                getFilesForOptions(angularFiles, {
+                    useSass: false,
+                    enableTranslation: true,
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    testFrameworks: []
+                })
+            );
+        });
+        it('generates a README with no undefined value', () => {
+            assert.noFileContent('README.md', /undefined/);
         });
     });
 
@@ -1282,6 +1403,7 @@ describe('JHipster generator', () => {
             it('creates expected files for default configuration with skip client option enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.maven);
                 assert.noFile(
                     getFilesForOptions(
@@ -1297,6 +1419,9 @@ describe('JHipster generator', () => {
                         ['package.json']
                     )
                 );
+            });
+            it('generates a README with no undefined value', () => {
+                assert.noFileContent('README.md', /undefined/);
             });
         });
 
@@ -1329,6 +1454,7 @@ describe('JHipster generator', () => {
             it('creates expected files for default configuration with skip client option enabled', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.gradle);
                 assert.noFile(
                     getFilesForOptions(
@@ -1386,6 +1512,10 @@ describe('JHipster generator', () => {
                     .on('end', done);
             });
 
+            it('creates expected server files', () => {
+                assert.file(expectedFiles.server);
+                assert.noFile(expectedFiles.userManagementServer);
+            });
             it('creates SecurityConfiguration for default configuration with skip client and skip user management option enabled', () => {
                 assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`);
             });
@@ -1500,6 +1630,7 @@ describe('JHipster generator', () => {
             it('creates expected files with the monolith application type', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
@@ -1543,6 +1674,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.microserviceGradle);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
+                assert.noFile(expectedFiles.userManagementServer);
             });
         });
 

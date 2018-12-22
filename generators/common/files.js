@@ -21,6 +21,14 @@
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
+const prettierConfigFiles = {
+    global: [
+        {
+            templates: ['.prettierrc', '.prettierignore']
+        }
+    ]
+};
+
 const commonFiles = {
     global: [
         {
@@ -55,5 +63,6 @@ function writeFiles() {
 
 module.exports = {
     writeFiles,
+    prettierConfigFiles,
     commonFiles
 };

@@ -18,6 +18,11 @@
 -%>
 import { Injectable } from '@angular/core';
 
+<%_ if (enableTranslation && authenticationType === 'uaa') { _%>
+import { JhiLanguageService } from 'ng-jhipster';
+import { SessionStorageService } from 'ngx-webstorage';
+import { IUser } from '../user/user.model';
+<%_ } _%>
 import { AccountService } from '../auth/account.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from '../auth/auth-jwt.service';
@@ -35,6 +40,10 @@ export class LoginService {
         private accountService: AccountService,
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
+        <%_ } _%>
+        <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
+        private languageService: JhiLanguageService,
+        private sessionStorage: SessionStorageService,
         <%_ } _%>
         private authServerProvider: AuthServerProvider
     ) {}
@@ -57,6 +66,9 @@ export class LoginService {
                     <%_ if (websocket === 'spring-websocket') { _%>
                     this.trackerService.sendActivity();
                     <%_ } _%>
+                    <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
+                    this.setPreferredLanguage(account);
+                    <%_ } _%>
                     resolve(data);
                 });
                 return cb();
@@ -72,6 +84,13 @@ export class LoginService {
 
     loginWithToken(jwt, rememberMe) {
         return this.authServerProvider.loginWithToken(jwt, rememberMe);
+    }
+    <%_ } _%>
+    <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
+    
+    setPreferredLanguage(account: IUser) {
+        const langKey = account.langKey || this.sessionStorage.retrieve('locale');
+        this.languageService.changeLanguage(langKey);
     }
     <%_ } _%>
 

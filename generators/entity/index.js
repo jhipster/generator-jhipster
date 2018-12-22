@@ -121,7 +121,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.context = {};
 
         this.setupEntityOptions(this, this, this.context);
-        this.registerClientTransforms();
+        this.registerPrettierTransform();
         const blueprint = this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
@@ -140,13 +140,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
+                this.checkInvocationFromCLI();
             },
 
             getConfig() {

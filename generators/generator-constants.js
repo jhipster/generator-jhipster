@@ -31,7 +31,7 @@ const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.9.3';
 const DOCKER_MEMCACHED = 'memcached:1.5.8-alpine';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:4.5.0.Final';
-const DOCKER_ELASTICSEARCH = 'elasticsearch:5.6.5'; // docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1
+const DOCKER_ELASTICSEARCH = 'elasticsearch:5.6.13'; // docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1
 const DOCKER_KAFKA = 'wurstmeister/kafka:1.0.0';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
 const DOCKER_SONAR = 'sonarqube:7.1';
@@ -58,8 +58,8 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '10.13.0';
-const YARN_VERSION = '1.12.1';
+const NODE_VERSION = '10.14.1';
+const YARN_VERSION = '1.12.3';
 const NPM_VERSION = '6.4.1';
 
 // all constants used throughout all generators

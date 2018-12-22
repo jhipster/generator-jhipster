@@ -19,6 +19,7 @@
 /* eslint-disable consistent-return */
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
+const prettierConfigFiles = require('./files').prettierConfigFiles;
 const constants = require('../generator-constants');
 
 let useBlueprint;
@@ -41,6 +42,7 @@ module.exports = class extends BaseBlueprintGenerator {
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'common', {
+                'client-hook': !this.skipClient,
                 'from-cli': this.options['from-cli'],
                 configOptions: this.configOptions,
                 force: this.options.force
@@ -54,9 +56,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.error('This JHipster subgenerator is not intented for standalone use.');
-                }
+                this.checkInvocationFromCLI();
             },
 
             setupConsts() {
@@ -70,9 +70,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 // Make documentation URL available in templates
                 this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-                this.DOCUMENTATION_ARCHIVE_URL = `${constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${
-                    this.jhipsterVersion
-                }`;
+                this.DOCUMENTATION_ARCHIVE_PATH = constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
             }
         };
     }
@@ -80,16 +78,6 @@ module.exports = class extends BaseBlueprintGenerator {
     get initializing() {
         if (useBlueprint) return;
         return this._initializing();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _prompting() {
-        return {};
-    }
-
-    get prompting() {
-        if (useBlueprint) return;
-        return this._prompting();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -104,6 +92,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.useSass = this.configOptions.useSass;
                 this.protractorTests = this.testFrameworks.includes('protractor');
                 this.gatlingTests = this.testFrameworks.includes('gatling');
+            },
+            writePrettierConfig() {
+                // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
+                this.writeFilesToDisk(prettierConfigFiles, this, false, this.fetchFromInstalledJHipster('common/templates'));
             }
         };
     }

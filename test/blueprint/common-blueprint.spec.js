@@ -26,7 +26,7 @@ const mockBlueprintSubGen = class extends CommonGenerator {
         const phaseFromJHipster = super._configuring();
         const customPhaseSteps = {
             overridesDocumentationUrl() {
-                this.DOCUMENTATION_ARCHIVE_URL = 'https://myenterprise.intranet';
+                this.DOCUMENTATION_URL = 'https://myenterprise.intranet';
             }
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
