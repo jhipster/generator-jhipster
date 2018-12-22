@@ -1,4 +1,4 @@
-import moment from 'moment';
+import format from 'date-fns/format';
 import AuditsService from './audits.service';
 import { Component, Inject, Vue } from 'vue-property-decorator';
 
@@ -28,7 +28,7 @@ export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
   }
 
   public previousMonth(): void {
-    const dateFormat = 'YYYY-MM-DD';
+    const dateFormat = 'yyyy-MM-dd';
     let fromDate = new Date();
 
     if (fromDate.getMonth() === 0) {
@@ -37,16 +37,17 @@ export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
       fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth() - 1, fromDate.getDate());
     }
 
-    this.fromDate = moment(fromDate).format(dateFormat);
+    this.fromDate = format(fromDate, dateFormat);
   }
 
   public today(): void {
-    const dateFormat = 'YYYY-MM-DD';
+    const dateFormat = 'yyyy-MM-dd';
     // Today + 1 day - needed if the current day must be included
     const today = new Date();
     today.setDate(today.getDate() + 1);
     const date = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    this.toDate = moment(date).format(dateFormat);
+
+    this.toDate = format(date, dateFormat);
   }
 
   public loadAll(): void {

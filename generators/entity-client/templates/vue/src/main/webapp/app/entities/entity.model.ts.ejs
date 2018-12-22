@@ -17,13 +17,10 @@
  limitations under the License.
 -%>
 <%
-const variablesWithTypes = generateEntityClientFields(pkType, fields, relationships, dto);
+const variablesWithTypes = generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Date');
 const typeImports = generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
 %>
-<%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
-import { Moment } from 'moment';
-<%_ } _%>
 <%_ typeImports.forEach( (importedPath, importedType) => {
   importedPath = importedPath.replace('app/', '@/');
 _%>

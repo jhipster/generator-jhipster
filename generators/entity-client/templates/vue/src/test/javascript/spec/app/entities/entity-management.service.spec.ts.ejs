@@ -22,7 +22,7 @@ _%>
 /* tslint:disable max-line-length */
 import axios from 'axios';
 <%_ if (fieldsContainDate) { _%>
-import moment from 'moment';
+import format from 'date-fns/format';
 <%_ } _%>
 
 import * as config from '@/shared/config/config';
@@ -51,12 +51,12 @@ describe('Service Tests', () => {
     let service: <%= entityAngularName %>Service;
     let elemDefault;
     <%_ if (fieldsContainDate) { _%>
-    let currentDate: moment.Moment;
+    let currentDate: Date;
     <%_ } _%>
     beforeEach(() => {
       service = new <%= entityAngularName %>Service();
       <%_ if (fieldsContainDate) { _%>
-      currentDate = moment();
+      currentDate = new Date();
       <%_ } _%>
 
       elemDefault = new <%= entityAngularName %>(
@@ -93,9 +93,9 @@ describe('Service Tests', () => {
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
     <%_ if (['LocalDate'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: currentDate.format(DATE_FORMAT),
+          <%= field.fieldName%>: format(currentDate, DATE_FORMAT),
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: currentDate.format(DATE_TIME_FORMAT),
+          <%= field.fieldName%>: format(currentDate, DATE_TIME_FORMAT),
     <%_ } _%>
 <%_ }) _%>
         }, elemDefault);
@@ -117,9 +117,9 @@ describe('Service Tests', () => {
   <%_ fields.forEach((field) => {
       const fieldType = field.fieldType; _%>
       <%_ if (['LocalDate'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: currentDate.format(DATE_FORMAT),
+          <%= field.fieldName%>: format(currentDate, DATE_FORMAT),
       <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: currentDate.format(DATE_TIME_FORMAT),
+          <%= field.fieldName%>: format(currentDate, DATE_TIME_FORMAT),
       <%_ } _%>
   <%_ }) _%>
         }, elemDefault);
@@ -151,9 +151,9 @@ describe('Service Tests', () => {
       <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
           <%= field.fieldName%>: 'BBBBBB',
       <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: currentDate.format(DATE_FORMAT),
+          <%= field.fieldName%>: format(currentDate, DATE_FORMAT),
       <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: currentDate.format(DATE_TIME_FORMAT),
+          <%= field.fieldName%>: format(currentDate, DATE_TIME_FORMAT),
       <%_ } else { _%>
           <%= field.fieldName%>: 'BBBBBB',
       <%_ } _%>
@@ -188,9 +188,9 @@ describe('Service Tests', () => {
         <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
           <%= field.fieldName%>: 'BBBBBB',
         <%_ } else if (['LocalDate'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: currentDate.format(DATE_FORMAT),
+          <%= field.fieldName%>: format(currentDate, DATE_FORMAT),
         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-          <%= field.fieldName%>: currentDate.format(DATE_TIME_FORMAT),
+          <%= field.fieldName%>: format(currentDate, DATE_TIME_FORMAT),
         <%_ } else { // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' _%>
           <%= field.fieldName%>: 'BBBBBB',
         <%_ } _%>
