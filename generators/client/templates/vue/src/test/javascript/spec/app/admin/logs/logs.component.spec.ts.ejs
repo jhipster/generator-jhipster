@@ -4,7 +4,7 @@ import Logs from '@/admin/logs/logs.vue';
 import LogsClass from '@/admin/logs/logs.component';
 import LogsService from '@/admin/logs/logs.service';
 
-import * as config from '@/shared/config';
+import * as config from '@/shared/config/config';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;

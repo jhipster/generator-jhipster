@@ -121,7 +121,7 @@ module.exports = {
 
 function writeFiles() {
     if (this.skipClient) return;
-    // write client side files for VueJS
+    // write client side files for Vue.js
     this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
 
     // Add entity to menu

@@ -25,7 +25,7 @@ import axios from 'axios';
 import moment from 'moment';
 <%_ } _%>
 
-import * as config from '@/shared/config';
+import * as config from '@/shared/config/config';
 import { <%_ if (fieldsContainLocalDate) { _%>DATE_FORMAT,<%_ } if (fieldsContainInstant || fieldsContainZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/date/filters';
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 import { <%= entityAngularName %>, <%_ const enumsAlreadyDeclared = [];

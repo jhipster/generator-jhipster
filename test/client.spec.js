@@ -96,13 +96,14 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/core/ribbon/ribbon.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/ribbon/ribbon.vue`,
 
-        `${CLIENT_MAIN_SRC_DIR}app/config/axios-interceptor.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/config/axios-interceptor.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/router/index.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/shared/data/data-utils.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/date/filters.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/config.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/config/config-bootstrap-vue.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/model/user.model.ts`,
@@ -147,7 +148,7 @@ const expectedFiles = {
     ]
 };
 
-describe('VueJS JHipster blueprint', () => {
+describe('Vue.js JHipster blueprint', () => {
     describe('Default with Maven', () => {
         before((done) => {
             helpers
@@ -178,7 +179,7 @@ describe('VueJS JHipster blueprint', () => {
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     buildTool: 'maven',
-                    clientFramework: 'VueJS'
+                    clientFramework: 'Vue.js'
                 })
                 .on('end', done);
         });
@@ -225,7 +226,7 @@ describe('VueJS JHipster blueprint', () => {
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     buildTool: 'gradle',
-                    clientFramework: 'VueJS'
+                    clientFramework: 'Vue.js'
                 })
                 .on('end', done);
         });
@@ -271,7 +272,7 @@ describe('VueJS JHipster blueprint', () => {
                     enableTranslation: false,
                     nativeLanguage: 'en',
                     buildTool: 'maven',
-                    clientFramework: 'VueJS'
+                    clientFramework: 'Vue.js'
                 })
                 .on('end', done);
         });
@@ -319,7 +320,7 @@ describe('VueJS JHipster blueprint', () => {
                     languages: ['en', 'fr'],
                     testFrameworks: ['protractor'],
                     buildTool: 'maven',
-                    clientFramework: 'VueJS',
+                    clientFramework: 'Vue.js',
                     serverSideOptions: ['searchEngine:elasticsearch']
                 })
                 .on('end', done);
@@ -368,7 +369,7 @@ describe('VueJS JHipster blueprint', () => {
                     languages: ['en', 'fr'],
                     testFrameworks: ['protractor'],
                     buildTool: 'maven',
-                    clientFramework: 'VueJS',
+                    clientFramework: 'Vue.js',
                     serverSideOptions: ['websocket:spring-websocket']
                 })
                 .on('end', done);
