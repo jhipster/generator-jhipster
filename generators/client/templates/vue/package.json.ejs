@@ -43,6 +43,9 @@
 <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "3.0.10",
 <%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+    "@types/sinon": "7.0.2",
+<%_ } _%>
     "@types/vuelidate": "0.7.3",
     "@vue/test-utils": "1.0.0-beta.27",
     "autoprefixer": "7.2.6",
@@ -80,6 +83,9 @@
     "protractor": "5.4.0",
 <%_ } _%>
     "rimraf": "2.6.2",
+<%_ if (websocket === 'spring-websocket') { _%>
+    "sinon": "7.2.2",
+<%_ } _%>
     "sass": "1.15.1",
     "sass-loader": "7.1.0",
     "ts-jest": "23.10.5",

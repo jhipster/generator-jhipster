@@ -299,7 +299,10 @@ const vueFiles = {
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: TEST_SRC_DIR,
-            templates: ['spec/app/admin/tracker/tracker.component.spec.ts']
+            templates: [
+                'spec/app/admin/tracker/tracker.component.spec.ts',
+                'spec/app/admin/tracker/tracker.service.spec.ts'
+            ]
         },
         {
             condition: generator => !generator.skipUserManagement,

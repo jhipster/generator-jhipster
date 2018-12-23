@@ -1,17 +1,14 @@
 import { Component, Inject, Vue } from 'vue-property-decorator';
+import { Observable } from 'rxjs';
 
 import TrackerService from './tracker.service';
 
 @Component
 export default class <%=jhiPrefixCapitalized%>TrackerComponent extends Vue {
-  private activities: any[];
+
+  public activities: any[] = [];
 
   @Inject('trackerService') private trackerService: () => TrackerService;
-
-  constructor() {
-    super();
-    this.activities = [];
-  }
 
   public mounted(): void {
     this.init();
@@ -23,10 +20,11 @@ export default class <%=jhiPrefixCapitalized%>TrackerComponent extends Vue {
 
   public init(): void {
     this.trackerService().subscribe();
-    console.log(this.trackerService().receive());
-    this.trackerService().receive().subscribe(activity => {
-      this.showActivity(activity);
-    });
+    this.trackerService()
+      .receive()
+      .subscribe(activity => {
+        this.showActivity(activity);
+      });
   }
 
   public showActivity(activity: any): void {
