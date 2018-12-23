@@ -973,9 +973,8 @@ function askForRelationship(done) {
             when: response =>
                 context.databaseType === 'sql' &&
                 response.relationshipAdd === true &&
-                response.otherEntityName.toLowerCase() !== 'user' &&
                 response.relationshipType === 'one-to-one' &&
-                response.ownerSide === true,
+                ( response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'),
             type: 'confirm',
             name: 'useJPADerivedIdentifier',
             message: 'Do you want to use JPA Derived Identifier - @MapsId?',
