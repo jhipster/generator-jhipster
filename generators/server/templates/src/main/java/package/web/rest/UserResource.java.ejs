@@ -273,6 +273,7 @@ public class UserResource {
      */
     @GetMapping("/users")
     @Timed
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
