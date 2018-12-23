@@ -50,7 +50,7 @@ import <%=packageName%>.domain.<%= otherEntityNameCapitalized %>;
 import <%=packageName%>.repository.UserRepository;
 <%_ } _%>
 import <%=packageName%>.repository.<%= entityClass %>Repository;
-<%_ if (isUsingMapsId === true && dto !== 'mapstruct') { _%>
+<%_ if (isUsingMapsId === true && ( dto !== 'mapstruct' && service === 'no')) { _%>
 import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -306,11 +306,9 @@ _%>
 
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
-
-    <%_ if (isUsingMapsId === true && dto !== 'mapstruct') { _%>
+    <%_ if (isUsingMapsId === true && ( dto !== 'mapstruct' && service === 'no')) { _%>
     @Autowired
     private <%=mapsIdEntity%>Repository <%= mapsIdRepoInstance %>;
-
     <%_ } _%>
     <%_ if (saveUserSnapshot) { _%>
 
@@ -484,6 +482,11 @@ _%>
         <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ }} _%>
+        <%_ if (isUsingMapsId === true) { _%>
+
+        // Validate the id for MapsId, the ids must be same
+        assertThat(test<%= entityClass %>.getId()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().getId());
+        <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
