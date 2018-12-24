@@ -523,7 +523,7 @@ if (project.hasProperty('nodeInstall')) {
 task renameWarFile (type: Copy) {
     from ("$buildDir/libs/")
     include "$project.name-$version-original.war"
-    destinationDir file("$buildDir/libs/"")
+    destinationDir file("$buildDir/libs/")
     rename "$project.name-$version-original.war", "$project.name-{$version}.war.original"
 }
 
