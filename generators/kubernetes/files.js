@@ -108,6 +108,15 @@ function writeFiles() {
 
         writeConfigRunFile() {
             this.template('kubectl-apply.sh.ejs', 'kubectl-apply.sh');
+        },
+
+        writeObservabilityGatewayFiles() {
+            if (this.istio === 'no') return;
+            if (this.kubernetesServiceType === 'Ingress') {
+                this.template('istio/gateway/grafana-gateway.yml.ejs', 'istio/grafana-gateway.yml');
+                this.template('istio/gateway/jaeger-gateway.yml.ejs', 'istio/jaeger-gateway.yml');
+                this.template('istio/gateway/kiali-gateway.yml.ejs', 'istio/kiali-gateway.yml');
+            }
         }
     };
 }

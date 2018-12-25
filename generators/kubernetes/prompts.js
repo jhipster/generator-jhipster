@@ -83,6 +83,7 @@ function askForIngressDomain() {
     if (this.regenerate) return;
     const done = this.async();
     const kubernetesServiceType = this.kubernetesServiceType;
+    this.ingressDomain = this.ingressDomain && this.ingressDomain.startsWith('.') ? this.ingressDomain.substring(1) : this.ingressDomain;
 
     const prompts = [
         {
@@ -110,7 +111,7 @@ function askForIngressDomain() {
     ];
 
     this.prompt(prompts).then(props => {
-        this.ingressDomain = props.ingressDomain;
+        this.ingressDomain = props.ingressDomain ? '.'.concat(props.ingressDomain) : '';
         done();
     });
 }
