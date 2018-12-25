@@ -28,7 +28,7 @@ import { SessionStorageService } from 'ngx-webstorage';
 
 import { VERSION } from 'app/app.constants';
 import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>AccountService, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from 'app/core';
-import { ProfileService } from '../profiles/profile.service';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-navbar',

@@ -59,11 +59,8 @@ sonarqube {
 
         property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/test.exec"
         property "sonar.java.codeCoveragePlugin", "jacoco"
-        <%_ if (!skipClient) { _%>
-        property "sonar.testExecutionReportPaths", "${project.buildDir}/test-results/jest/TESTS-results-sonar.xml"
-        <%_ } _%>
         property "sonar.typescript.lcov.reportPaths", "${project.buildDir}/test-results/lcov.info"
-        property "sonar.junit.reportPaths", "${project.buildDir}/test-results/test"
+        property "sonar.junit.reportPaths", "${project.buildDir}/surefire-reports"
         property "sonar.sources", "${project.projectDir}/<%= MAIN_DIR %>"
         property "sonar.tests", "${project.projectDir}/<%= TEST_DIR %>"
     }

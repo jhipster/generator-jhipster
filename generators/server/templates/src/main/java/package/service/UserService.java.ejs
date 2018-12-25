@@ -821,10 +821,10 @@ public class UserService {
         } else if (details.get("locale") != null) {
             String locale = (String) details.get("locale");
             if (locale.contains("-")) {
-              String langKey = locale.substring(0, locale.indexOf("-"));
+              String langKey = locale.substring(0, locale.indexOf('-'));
               user.setLangKey(langKey);
             } else if (locale.contains("_")) {
-              String langKey = locale.substring(0, locale.indexOf("_"));
+              String langKey = locale.substring(0, locale.indexOf('_'));
               user.setLangKey(langKey);
             }
         }

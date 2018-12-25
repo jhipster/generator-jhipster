@@ -26,6 +26,7 @@ import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %>
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 <%_ if ( fieldsContainDate ) { _%>
 import * as moment from 'moment';
     <%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>
@@ -35,7 +36,6 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 <%_ if (queries && queries.length > 0 || fieldsContainBlob) { _%>
 import { <% if (queries && queries.length > 0) { %>JhiAlertService, <% } %><% if (fieldsContainBlob) { %>JhiDataUtils<% } %> } from 'ng-jhipster';
 <%_ } _%>
-
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 <%_
