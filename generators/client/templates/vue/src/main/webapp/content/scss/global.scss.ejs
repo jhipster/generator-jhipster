@@ -204,20 +204,27 @@ http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
 /* ==========================================================================
 entity detail page css
 ========================================================================== */
-.row.jh-entity-details > {
-    dd {
-        margin-bottom: 15px;
-    }
+.row.jh-entity-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    line-height: 1.5;
 }
 
 @media screen and (min-width: 768px) {
     .row.jh-entity-details > {
         dt {
-            margin-bottom: 15px;
+            float: left;
+            overflow: hidden;
+            clear: left;
+            text-align: right;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 0.5em 0;
         }
         dd {
             border-bottom: 1px solid #eee;
-            padding-left: 180px;
+            padding: 0.5em 0;
             margin-left: 0;
         }
     }
