@@ -282,6 +282,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                 type="datetime-local"
                 className="form-control"
                 name="<%= fieldName %>"
+                placeholder={"YYYY-MM-DD HH:mm"}
                 value={isNew ? null : convertDateTimeFromServer(this.props.<%= entityInstance %>Entity.<%= fieldName %>)}
                 <%- include react_validators %>
               />
