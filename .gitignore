@@ -20,4 +20,3 @@ yarn-error.log
 .project
 .settings
 test/**/*.png
-travis/
