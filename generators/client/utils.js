@@ -30,16 +30,14 @@ module.exports = {
 };
 
 function addLanguagesToApplication(generator) {
-    const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/config.ts`;
+    const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`;
     try {
-        let content = '{\n';
+        let content = '';
         if (generator.enableTranslation) {
             generator.generateLanguageOptions(generator.languages, generator.clientFramework).forEach((ln, i) => {
-                content += `      ${ln}${i !== generator.languages.length - 1 ? ',' : ''}\n`;
+                content += `      ${ln}${i !== generator.languages.length - 1 ? ',\n' : ''}`;
             });
         }
-        content += '    }';
-
         jhipsterUtils.rewriteFile(
             {
                 file: fullPath,
