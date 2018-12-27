@@ -152,7 +152,8 @@ const vueFiles = {
             condition: generator => generator.enableTranslation,
             path: VUE_DIR,
             templates: [
-                'locale/translation.service.ts'
+                'locale/translation.service.ts',
+                'shared/config/formatter.ts'
             ]
         }
     ],
