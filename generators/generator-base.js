@@ -2039,7 +2039,9 @@ module.exports = class extends PrivateBase {
             this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
         }
-        context.databaseType = context.fileData.databaseType || "no";
+        if (context.fileData.databaseType) {
+            context.databaseType = context.fileData.databaseType;
+        }
         context.relationships = context.fileData.relationships || [];
         context.fields = context.fileData.fields || [];
         context.haveFieldWithJavadoc = false;
