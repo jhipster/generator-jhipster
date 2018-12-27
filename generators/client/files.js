@@ -270,8 +270,8 @@ const vueFiles = {
         {
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/jhi-footer/jhi-footer.component.spec.ts',
-                'spec/app/ribbon/ribbon.component.spec.ts',
+                'spec/app/core/jhi-footer/jhi-footer.component.spec.ts',
+                'spec/app/core/ribbon/ribbon.component.spec.ts',
                 'spec/app/admin/configuration/configuration.component.spec.ts',
                 'spec/app/admin/docs/docs.component.spec.ts',
                 'spec/app/admin/health/health.component.spec.ts',

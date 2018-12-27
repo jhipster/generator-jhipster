@@ -5,6 +5,7 @@ const constants = require('generator-jhipster/generators/generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+const CLIENT_SPEC_SRC_DIR = `${CLIENT_TEST_SRC_DIR}/spec/`;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 
 const expectedFiles = {
@@ -59,6 +60,15 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/login-modal.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/principal.ts`,
 
+        `${CLIENT_SPEC_SRC_DIR}app/account/change-password/change-password.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/account/login-form/login-form.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/account/register/register.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/account/register/register.service.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/account/reset-password/reset-password.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/account/settings/settings.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/account/login-modal.service.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/account/principal.spec.ts`,
+
         `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.service.ts`,
@@ -87,6 +97,24 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-view.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-view.vue`,
 
+        `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.service.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/configuration/configuration.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/admin/configuration/configuration.service.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/docs/docs.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/health/health.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/admin/health/health-modal.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/health/health.service.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/logs/logs.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/admin/logs/logs.service.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/metrics/metrics.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/metrics/metrics-modal.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/admin/metrics/metrics.service.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management-edit.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.service.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management-view.component.spec.ts`,
+
         `${CLIENT_MAIN_SRC_DIR}app/core/home/home.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/home/home.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/core/jhi-footer/jhi-footer.component.ts`,
@@ -95,6 +123,11 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/core/jhi-navbar/jhi-navbar.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/core/ribbon/ribbon.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/ribbon/ribbon.vue`,
+
+        // `${CLIENT_SPEC_SRC_DIR}app/core/home/home.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/core/jhi-footer/jhi-footer.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/core/jhi-navbar/jhi-navbar.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/core/ribbon/ribbon.component.spec.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/axios-interceptor.ts`,
 
@@ -118,7 +151,10 @@ const expectedFiles = {
     websocket: [
         `${CLIENT_MAIN_SRC_DIR}app/admin/tracker/tracker.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/tracker/tracker.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/tracker/tracker.vue`
+        `${CLIENT_MAIN_SRC_DIR}app/admin/tracker/tracker.vue`,
+
+        // `${CLIENT_SPEC_SRC_DIR}app/admin/tracker/tracker.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/admin/tracker/tracker.service.spec.ts`
     ],
 
     test: [
