@@ -291,6 +291,7 @@ module.exports = class extends PrivateBase {
         try {
             if (clientFramework === 'angularX') {
                 const appName = this.getAngularXAppName();
+                const entities = this.getExistingEntities();
 
                 const modulePath = `./${entityFolderName}/${entityFileName}.module`;
 
@@ -298,16 +299,22 @@ module.exports = class extends PrivateBase {
                     ? `${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
                     : `${appName}${entityAngularName}Module`;
 
+                const splicable =
+                    entities.length > 0
+                        ? `|,{
+                        |                path: '${entityUrl}',
+                        |                loadChildren: '${modulePath}#${moduleName}'
+                        |            },`
+                        : `|{
+                            |                path: '${entityUrl}',
+                            |                loadChildren: '${modulePath}#${moduleName}'
+                            |            },`;
+
                 jhipsterUtils.rewriteFile(
                     {
                         file: entityModulePath,
                         needle: 'jhipster-needle-add-entity-route',
-                        splicable: [
-                            this.stripMargin(`|{
-                            |                path: '${entityUrl}',
-                            |                loadChildren: '${modulePath}#${moduleName}'
-                            |            },`)
-                        ]
+                        splicable: [this.stripMargin(splicable)]
                     },
                     this
                 );
