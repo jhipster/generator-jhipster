@@ -399,8 +399,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'Ingress',
                     ingressDomain: 'example.com',
                     clusteredDbApps: [],
-                    istio: 'manualInjection',
-                    istioRoute: true
+                    istio: true
                 })
                 .on('end', done);
         });

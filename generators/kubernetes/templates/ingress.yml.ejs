@@ -23,7 +23,7 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   rules:
-  - host: <%= app.baseName.toLowerCase() %><%= ingressDomain %>
+  - host: <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %><%= ingressDomain %>
     http:
       paths:
       - path: /.*

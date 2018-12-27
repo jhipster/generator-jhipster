@@ -27,6 +27,10 @@ spec:
     metadata:
       labels:
         app: jhipster-console
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       containers:
       - image: <%= DOCKER_JHIPSTER_CONSOLE %>
@@ -55,7 +59,7 @@ spec:
   selector:
     app: jhipster-console
 ---
-<%_ if (kubernetesServiceType === 'Ingress') { _%>
+<%_ if (kubernetesServiceType === 'Ingress' && !istio) { _%>
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -63,7 +67,7 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   rules:
-  - host: jhipster-console<%= ingressDomain %>
+  - host: jhipster-console.<%= kubernetesNamespace %><%= ingressDomain %>
     http:
       paths:
       - path: /

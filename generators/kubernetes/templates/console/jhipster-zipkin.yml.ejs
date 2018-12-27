@@ -27,6 +27,10 @@ spec:
     metadata:
       labels:
         app: jhipster-zipkin
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       containers:
       - name: jhipster-zipkin

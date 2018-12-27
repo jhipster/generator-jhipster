@@ -38,6 +38,10 @@ spec:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>-postgresql
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       volumes:
       - name: data
