@@ -13,6 +13,7 @@ import LoginModalService from './account/login-modal.service';
 import MetricsService from './admin/metrics/metrics.service';
 import RegisterService from './account/register/register.service';
 import LogsService from './admin/logs/logs.service';
+import Principal from './account/principal';
 
 <%_ if (useSass) { _%>
 import '../content/scss/vendor.scss';
@@ -52,6 +53,7 @@ const store = config.initVueXStore(Vue);
 const translationService = new TranslationService(store);
 <%_ } _%>
 config.initVueApp(Vue);
+const principal = new Principal(store, <%_ if (enableTranslation) { _%>translationService, i18n, <%_ } _%> <%_ if (authenticationType === 'session') { _%>(<any>Vue).cookie, <%_ } _%>router);
 config.initFortAwesome(Vue);
 bootstrapVueConfig.initBootstrapVue(Vue);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -73,6 +75,7 @@ new Vue({
     configurationService: () => configurationService,
     logsService: () => logsService,
     metricsService: () => metricsService,
+    principal: () => principal,
     registerService: () => registerService,
     <%_ if (enableTranslation) { _%>
     translationService: () => translationService,

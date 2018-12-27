@@ -6,6 +6,11 @@ import * as config from '@/shared/config/config';
 import UserManagement from '@/admin/user-management/user-management.vue';
 import UserManagementClass from '@/admin/user-management/user-management.component';
 import UserManagementService from '@/admin/user-management/user-management.service';
+import Principal from '@/account/principal';
+import router from '@/router';
+<%_ if (enableTranslation) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } _%>
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -53,6 +58,7 @@ describe('UserManagement Component', () => {
         bModal: true
       },
       provide: {
+        principal: () => new Principal(store, <% if (enableTranslation) { %>new TranslationService(store), i18n, <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %>router),
         userService: () => new UserManagementService()
       }
     });

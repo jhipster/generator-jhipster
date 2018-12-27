@@ -1,6 +1,8 @@
 import axios from 'axios';
-import { Component, Inject, Vue } from 'vue-property-decorator';
+import { Store } from 'vuex';
+import VueRouter from 'vue-router';
 <%_ if (enableTranslation) { _%>
+import VueI18n from 'vue-i18n';
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 
@@ -8,51 +10,61 @@ import TranslationService from '@/locale/translation.service';
 import TrackerService from '../admin/tracker/TrackerService.vue';
 <%_ } _%>
 
-@Component
-export default class Principal extends Vue {
+export default class Principal {
 
   <%_ if (websocket === 'spring-websocket') { _%>
   @Inject('trackerService') private trackerService: () => TrackerService;
   <%_ } _%>
-  <%_ if (enableTranslation) { _%>
-  @Inject('translationService') private translationService: () => TranslationService;
-  <%_ } _%>
 
-  public created(): void {
-    const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken'); <%_ } else { _%> (<any>this).$cookie.get('JSESSIONID') || (<any>this).$cookie.get('XSRF-TOKEN'); <%_ } _%>
-    if (!this.$store.getters.account && !this.$store.getters.logon && token) {
+  constructor(
+    private store: Store<any>,
+    <%_ if (enableTranslation) { _%>
+    private translationService: TranslationService,
+    private i18n: VueI18n,
+    <%_ } _%>
+    <%_ if (authenticationType === 'session') { _%>
+    private cookie: any,
+    <%_ } _%>
+    private router: VueRouter
+  ) {
+    this.init();
+  }
+
+  public init(): void {
+    const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
+    if (!this.store.getters.account && !this.store.getters.logon && token) {
       this.retrieveAccount();
     }
   }
 
   public retrieveAccount(): any {
-    this.$store.commit('authenticate');
+    this.store.commit('authenticate');
     axios.get('api/account').then((response) => {
       const account = response.data;
       if (account) {
-        this.$store.commit('authenticated', account);
+        this.store.commit('authenticated', account);
         <%_ if (enableTranslation) { _%>
-        if (this.$store.getters.currentLanguage !== account.langKey) {
-          this.$store.commit('currentLanguage', account.langKey);
+        if (this.store.getters.currentLanguage !== account.langKey) {
+          this.store.commit('currentLanguage', account.langKey);
         }
         <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
         this.trackerService.connect();
         <%_ } _%>
       } else {
-        this.$store.commit('logout');
-        (<any> this).$router.push('/');
+        this.store.commit('logout');
+        this.router.push('/');
       }
       <%_ if (enableTranslation) { _%>
-      this.refreshTranslation(this.$store.getters.currentLanguage);
+      this.refreshTranslation(this.store.getters.currentLanguage);
       <%_ } _%>
     }).catch(() => {
-      this.$store.commit('logout');
-      (<any> this).$router.push('/');
+      this.store.commit('logout');
+      this.router.push('/');
     });
   }
 
-  public hasAnyAuthority(authorities: any): any {
+  public hasAnyAuthority(authorities: any): boolean {
     if (typeof authorities === "string") {
       authorities = [authorities];
     }
@@ -69,21 +81,21 @@ export default class Principal extends Vue {
     return false;
   }
 
-  public get authenticated() {
-    return this.$store.getters.authenticated;
+  public get authenticated(): boolean {
+    return this.store.getters.authenticated;
   }
 
   public get userAuthorities(): any {
-    return this.$store.getters.account.authorities;
+    return this.store.getters.account.authorities;
   }
 
   public get username(): string {
-    return this.$store.getters.account ? this.$store.getters.account.login : ''
+    return this.store.getters.account ? this.store.getters.account.login : ''
   }
   <%_ if (enableTranslation) { _%>
 
   public refreshTranslation(newLanguage: string) : void {
-    this.translationService().refreshTranslation(this.$i18n, newLanguage);
+    this.translationService.refreshTranslation(this.i18n, newLanguage);
   }
   <%_ } _%>
 }

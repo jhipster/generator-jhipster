@@ -1,6 +1,5 @@
 import { mixins } from 'vue-class-component';
-import { Component, Inject } from 'vue-property-decorator';
-import Principal from '@/account/principal';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 <% if (fieldsContainBlob) { %>
 import JhiDataUtils from '@/shared/data/data-utils.service';
@@ -8,7 +7,7 @@ import JhiDataUtils from '@/shared/data/data-utils.service';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
 @Component
-export default class <%= entityAngularName %> extends mixins(Principal<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %>) {
+export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %> Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
   <%_ if (searchEngine === 'elasticsearch') { _%>
   public currentSearch: string = '';

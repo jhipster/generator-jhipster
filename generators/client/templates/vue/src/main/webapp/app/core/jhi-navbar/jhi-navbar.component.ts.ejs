@@ -1,16 +1,13 @@
-import { mixins } from 'vue-class-component';
-import { Component, Inject } from 'vue-property-decorator';
-import { mapGetters } from 'vuex';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import axios from 'axios';
-import {VERSION} from "@/constants";
+import { VERSION } from '@/constants';
 import LoginModalService from '@/account/login-modal.service';
 import Principal from '@/account/principal';
 
-@Component({
-  computed: mapGetters(['authenticated'])
-})
-export default class JhiNavbar extends mixins(Principal) {
+@Component
+export default class JhiNavbar extends Vue {
   @Inject('loginModalService') private loginModalService: () => LoginModalService;
+  @Inject('principal') private principal: () => Principal;
   public version: string = VERSION ? 'v' + VERSION : '';
   public swaggerEnabled: boolean = false;
   public inProduction: boolean = false;
@@ -20,7 +17,7 @@ export default class JhiNavbar extends mixins(Principal) {
 
   created() {
     <%_ if (enableTranslation) { _%>
-    this.refreshTranslation(this.currentLanguage);
+    this.principal().refreshTranslation(this.currentLanguage);
     <%_ } _%>
     axios.get('management/info').then((res) => {
       if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf('swagger') > -1) {
@@ -42,7 +39,7 @@ export default class JhiNavbar extends mixins(Principal) {
 
   <%_ if (enableTranslation) { _%>
   public changeLanguage(newLanguage: string) : void {
-    this.refreshTranslation(newLanguage);
+    this.principal().refreshTranslation(newLanguage);
   }
 
   public isActiveLanguage(key: string) : boolean {
@@ -61,5 +58,13 @@ export default class JhiNavbar extends mixins(Principal) {
 
   public openLogin() : void {
     this.loginModalService().openLogin((<any>this).$root);
+  }
+
+  public get authenticated(): boolean {
+    return this.principal().authenticated;
+  }
+
+  public hasAnyAuthority(authorities: any): boolean {
+    return this.principal().hasAnyAuthority(authorities);
   }
 }

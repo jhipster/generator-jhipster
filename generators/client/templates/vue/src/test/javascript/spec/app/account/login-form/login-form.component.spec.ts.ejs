@@ -1,5 +1,10 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
+import Principal from '@/account/principal';
+import router from '@/router';
+<%_ if (enableTranslation) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } _%>
 
 import * as config from '@/shared/config/config';
 import LoginForm from '@/account/login-form/login-form.vue';
@@ -35,7 +40,17 @@ describe('LoginForm Component', () => {
     mockedAxios.get.mockReturnValue(Promise.resolve({}));
     mockedAxios.post.mockReset();
 
-    wrapper = shallowMount<LoginFormClass>(LoginForm, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue });
+    wrapper = shallowMount<LoginFormClass>(LoginForm,
+      {
+        store,
+        <%_ if (enableTranslation) { _%>
+        i18n,
+        <%_ } _%>
+        localVue,
+        provide: {
+          principal: () => new Principal(store, <% if (enableTranslation) { %>new TranslationService(store), i18n, <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %>router)
+        }
+      });
     loginForm = wrapper.vm;
   });
 

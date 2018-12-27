@@ -5,6 +5,11 @@ import * as config from '@/shared/config/config';
 import Settings from '@/account/settings/settings.vue';
 import SettingsClass from '@/account/settings/settings.component';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
+import Principal from '@/account/principal';
+import router from '@/router';
+<%_ if (enableTranslation) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } _%>
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -35,7 +40,17 @@ describe('Settings Component', () => {
     mockedAxios.post.mockReset();
 
     store.commit('authenticated', account);
-    wrapper = shallowMount<SettingsClass>(Settings, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue });
+    wrapper = shallowMount<SettingsClass>(Settings,
+      {
+        store,
+        <%_ if (enableTranslation) { _%>
+        i18n,
+        <%_ } _%>
+        localVue,
+        provide: {
+          principal: () => new Principal(store, <% if (enableTranslation) { %>new TranslationService(store), i18n, <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %>router)
+        }
+      });
     settings = wrapper.vm;
   });
 

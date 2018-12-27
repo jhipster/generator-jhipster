@@ -1,11 +1,11 @@
-import { mixins } from 'vue-class-component';
-import { Component, Inject } from 'vue-property-decorator';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import UserManagementService from './user-management.service';
-import Principal from '../../account/principal';
+import Principal from '@/account/principal';
 
 @Component
-export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mixins(Principal) {
+export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
+  @Inject('principal') private principal: () => Principal;
   public error: string = '';
   public success: string = '';
   public users: any[] = [];
@@ -85,5 +85,9 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
 
   public prepareRemove(instance): void {
     this.removeId = instance.login;
+  }
+
+  public get username(): string {
+    return this.principal().username;
   }
 }

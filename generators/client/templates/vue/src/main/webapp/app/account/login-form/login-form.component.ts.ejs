@@ -1,5 +1,6 @@
 import axios from 'axios';
-import Component, { mixins } from 'vue-class-component';
+import Component from 'vue-class-component';
+import { Vue, Inject } from 'vue-property-decorator';
 
 import Principal from '../principal';
 
@@ -10,12 +11,14 @@ import Principal from '../principal';
     }
   }
 })
-export default class LoginForm extends mixins(Principal) {
+export default class LoginForm extends Vue {
 
   public authenticationError: boolean = null;
   public login: string = null;
   public password: string = null;
   public rememberMe: boolean = null;
+
+  @Inject('principal') private principal: () => Principal;
 
   public doLogin(): void {
     <%_ if (authenticationType === 'jwt') { _%>
@@ -50,7 +53,7 @@ export default class LoginForm extends mixins(Principal) {
       <%_ } _%>
         this.authenticationError = false;
         this.$root.$emit('bv::hide::modal','login-page');
-        this.retrieveAccount();
+        this.principal().retrieveAccount();
       }).catch(()=> {
         this.authenticationError = true;
       });
