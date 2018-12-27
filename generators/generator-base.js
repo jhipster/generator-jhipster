@@ -291,24 +291,22 @@ module.exports = class extends PrivateBase {
         try {
             if (clientFramework === 'angularX') {
                 const appName = this.getAngularXAppName();
-                const entities = this.getExistingEntities();
-
+                const isEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, 'loadChildren', this);
                 const modulePath = `./${entityFolderName}/${entityFileName}.module`;
 
                 const moduleName = microServiceName
                     ? `${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
                     : `${appName}${entityAngularName}Module`;
 
-                const splicable =
-                    entities.length > 0
-                        ? `|,{
+                const splicable = isEntityAlreadyGenerated
+                    ? `|,{
                         |                path: '${entityUrl}',
                         |                loadChildren: '${modulePath}#${moduleName}'
-                        |            },`
-                        : `|{
+                        |            }`
+                    : `|{
                             |                path: '${entityUrl}',
                             |                loadChildren: '${modulePath}#${moduleName}'
-                            |            },`;
+                            |            }`;
 
                 jhipsterUtils.rewriteFile(
                     {
