@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 <%_ if (enableTranslation) { _%>
 import VueI18n from 'vue-i18n';
-import JhiFormatter from './formatter';
+import <%=jhiPrefixCapitalized%>Formatter from './formatter';
 <%_ } _%>
 import setupAxiosInterceptors from '@/shared/config/axios-interceptor';
 
@@ -95,7 +95,7 @@ export function initI18N(vue) {
   vue.use(VueI18n);
   return new VueI18n({
     silentTranslationWarn: true,
-    formatter: new JhiFormatter()
+    formatter: new <%=jhiPrefixCapitalized%>Formatter()
   });
 }
 
