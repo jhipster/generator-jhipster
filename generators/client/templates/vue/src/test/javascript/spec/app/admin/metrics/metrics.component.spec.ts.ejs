@@ -29,7 +29,7 @@ describe('Metrics Component', () => {
   let metrics: MetricsClass;
 
   beforeEach(() => {
-    mockedAxios.get.mockReturnValue(Promise.resolve({data:{}}));
+    mockedAxios.get.mockReturnValue(Promise.resolve({ data: { timers: [], gauges: []} }));
     wrapper = shallowMount<MetricsClass>(Metrics, {
       store,
       <%_ if (enableTranslation) { _%>
