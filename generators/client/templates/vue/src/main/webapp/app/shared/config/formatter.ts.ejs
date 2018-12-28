@@ -70,7 +70,7 @@ function parse(format: string): Array<Token> {
       }
       const isClosed = char === '}';
 
-      var type = RE_TOKEN_LIST_VALUE.test(sub) ? 'list' : isClosed && RE_TOKEN_NAMED_VALUE.test(sub) ? 'named' : 'unknown';
+      let type = RE_TOKEN_LIST_VALUE.test(sub) ? 'list' : isClosed && RE_TOKEN_NAMED_VALUE.test(sub) ? 'named' : 'unknown';
       tokens.push({ value: sub, type: type });
     } else if (char === '%') {
       // when found rails i18n syntax, skip text capture
