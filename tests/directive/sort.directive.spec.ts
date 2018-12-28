@@ -1,7 +1,8 @@
 import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { JhiSortDirective } from '../../src/directive/sort.directive';
 import { By } from '@angular/platform-browser';
+
+import { JhiSortDirective } from '../../src/directive/sort.directive';
 
 @Component({
     template: `
