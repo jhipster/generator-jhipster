@@ -1,14 +1,13 @@
 import TrackerService from '@/admin/tracker/tracker.service';
 import sinon from 'sinon';
-import VueRouter from 'vue-router';
 
 describe('Tracker Service', () => {
   let trackerService: TrackerService;
-  let routerStub: any;
+  let windowStub: any;
 
   beforeEach(() => {
-    routerStub = sinon.createStubInstance<VueRouter>(VueRouter);
-    trackerService = new TrackerService(routerStub);
+    windowStub = sinon.createStubInstance<Window>(Window);
+    trackerService = new TrackerService(windowStub);
   });
 
   it('Should connetion and listener be initialized', () => {
@@ -43,6 +42,7 @@ describe('Tracker Service', () => {
     stompClientStub.connected = true;
     stompClientStub.send = sinon.spy();
     trackerService.stompClient = stompClientStub;
+    windowStub.location = { hash: '/admin' };
 
     // WHEN
     trackerService.sendActivity();
@@ -50,7 +50,7 @@ describe('Tracker Service', () => {
     // THEN
     expect(stompClientStub.send.calledOnce).toBeTruthy();
     expect(stompClientStub.send.calledOnceWithExactly('/topic/activity',
-      JSON.stringify({ page: 'this.router.routerState.snapshot.url' }), {})).toBeTruthy();
+      JSON.stringify({ page: '/admin' }), {})).toBeTruthy();
   });
 
   it('Should connected for the first time', () => {

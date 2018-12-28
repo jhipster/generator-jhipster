@@ -1,7 +1,6 @@
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'webstomp-client';
 import { Observable, Observer, Subscription } from 'rxjs';
-import VueRouter from 'vue-router';
 
 export default class TrackerService {
 
@@ -14,10 +13,10 @@ export default class TrackerService {
   public alreadyConnectedOnce: boolean = false;
   public subscription: Subscription = null;
 
-  private router: VueRouter;
+  private window: Window;
 
-  constructor(router: VueRouter) {
-    this.router = router;
+  constructor(window: Window) {
+    this.window = window;
     this.connection = this.createConnection();
     this.listener = this.createListener();
   }
@@ -42,7 +41,7 @@ export default class TrackerService {
     <%_ if (authenticationType === 'session') { _%>
     headers['X-XSRF-TOKEN'] = (<any>this).$cookie.get('JSESSIONID') || (<any>this).$cookie.get('XSRF-TOKEN');
     <%_ } _%>
-    this.stompClient.connect(headers, this.afterConnect);
+    this.stompClient.connect(headers, () => this.afterConnect());
   }
 
   public afterConnect() {
@@ -74,7 +73,7 @@ export default class TrackerService {
     if (this.stompClient !== null && this.stompClient.connected) {
       this.stompClient.send(
         '/topic/activity', // destination
-        JSON.stringify({ page: 'this.router.routerState.snapshot.url' }), // body
+        JSON.stringify({ page: this.window.location.hash }), // body
         {} // header
       );
     }
