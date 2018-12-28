@@ -11,6 +11,9 @@ import router from '@/router';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+import TrackerService from '@/admin/tracker/tracker.service';
+<%_ } _%>
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -58,7 +61,7 @@ describe('UserManagement Component', () => {
         bModal: true
       },
       provide: {
-        principal: () => new Principal(store, <% if (enableTranslation) { %>new TranslationService(store), i18n, <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %>router),
+        principal: () => new Principal(store, <% if (enableTranslation) { %>new TranslationService(store), i18n, <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %><% if (websocket === 'spring-websocket') { %>new TrackerService(router), <% } %>router),
         userService: () => new UserManagementService()
       }
     });
