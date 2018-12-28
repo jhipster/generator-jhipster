@@ -136,28 +136,8 @@
     "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
     "lint": "./node_modules/eslint/bin/eslint.js --ext .js,.vue src",
-    "test": "./node_modules/jest/bin/jest.js --coverage"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts",
-      "vue"
-    ],
-    "transform": {
-      ".*\\.(vue)$": "vue-jest",
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/main/webapp/app/$1"
-    },
-    "testMatch": [
-      "<rootDir>/src/test/javascript/spec/app/**/*.spec.ts"
-    ],
-    "snapshotSerializers": [
-      "<rootDir>/node_modules/jest-serializer-vue"
-    ]
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config src/test/javascript/jest.conf.js",
+    "test": "<%= clientPackageManager %> run jest"
   },
   "jestSonar": {
     "reportPath": "build/test-results/jest",
