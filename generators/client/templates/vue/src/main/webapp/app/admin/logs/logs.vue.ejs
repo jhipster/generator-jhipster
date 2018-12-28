@@ -3,7 +3,7 @@
         <h2 id="logs-page-heading" v-text="$t('logs.title')">Logs</h2>
 
         <div v-if="loggers">
-            <p v-bind:value="$t('logs.nbloggers')" >There are {{ loggers.length }} loggers.</p>
+            <p v-text="$t('logs.nbloggers', { 'total': loggers.length})">There are {{ loggers.length }} loggers.</p>
 
             <span v-text="$t('logs.filter')">Filter</span> <input type="text" v-model="filtered" class="form-control">
 
@@ -15,7 +15,7 @@
                 </tr>
                 </thead>
 
-                <tr v-for="logger in orderBy(filterBy(loggers, filtered), orderProp, reverse === true ? 1 : -1)">
+                <tr v-for="logger in orderBy(filterBy(loggers, filtered), orderProp, reverse === true ? 1 : -1)" :key="logger.name">
                     <td><small>{{logger.name}}</small></td>
                     <td>
                         <button v-on:click="updateLevel(logger.name, 'TRACE')" :class="(logger.level==='TRACE') ? 'btn-primary' : 'btn-light'" class="btn btn-sm">TRACE</button>

@@ -1,5 +1,8 @@
 import Vuex from 'vuex';
+<%_ if (enableTranslation) { _%>
 import VueI18n from 'vue-i18n';
+import <%=jhiPrefixCapitalized%>Formatter from './formatter';
+<%_ } _%>
 import setupAxiosInterceptors from '@/shared/config/axios-interceptor';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -91,7 +94,8 @@ export function initFortAwesome(vue) {
 export function initI18N(vue) {
   vue.use(VueI18n);
   return new VueI18n({
-    silentTranslationWarn: true
+    silentTranslationWarn: true,
+    formatter: new <%=jhiPrefixCapitalized%>Formatter()
   });
 }
 
