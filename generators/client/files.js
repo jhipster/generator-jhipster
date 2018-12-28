@@ -267,6 +267,14 @@ const vueFiles = {
             ]
         }
     ],
+    clientTestConfig: [
+        {
+            path: TEST_SRC_DIR,
+            templates: [
+                'jest.conf.js',
+            ]
+        }
+    ],
     clientTestFw: [
         {
             path: TEST_SRC_DIR,
