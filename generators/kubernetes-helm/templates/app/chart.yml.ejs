@@ -1,15 +1,7 @@
 name: <%= app.baseName.toLowerCase() %>
 version: <%= jhipsterVersion %>
 appVersion: 1.0.0
-<%_ if (composeApplicationType === 'microservice') { _%>
-  <%_ if (app.applicationType === 'gateway') { _%>
-description: <%= app.baseName.toLowerCase() %> is a JHipster based microservice gateway application
-  <%_ } else {_%>
-description: <%= app.baseName.toLowerCase() %> is a JHipster based microservice application
-  <%_ } _%>
-<%_ } else { _%>
-description: <%= app.baseName.toLowerCase() %> is a JHipster based monolithic application
-<%_ } _%>
+description: <%= app.baseName.toLowerCase() %> is a JHipster based <%= app.applicationType %> application
 icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
 keywords:
 - spring
