@@ -7,14 +7,10 @@ import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 
 <%_ if (websocket === 'spring-websocket') { _%>
-import TrackerService from '../admin/tracker/tracker.service';
+import TrackerService from '@/admin/tracker/tracker.service';
 <%_ } _%>
 
 export default class Principal {
-
-  <%_ if (websocket === 'spring-websocket') { _%>
-  @Inject('trackerService') private trackerService: () => TrackerService;
-  <%_ } _%>
 
   constructor(
     private store: Store<any>,
@@ -24,6 +20,9 @@ export default class Principal {
     <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
     private cookie: any,
+    <%_ } _%>
+    <%_ if (websocket === 'spring-websocket') { _%>
+    private private trackerService: TrackerService,
     <%_ } _%>
     private router: VueRouter
   ) {
@@ -49,7 +48,7 @@ export default class Principal {
         }
         <%_ } _%>
         <%_ if (websocket === 'spring-websocket') { _%>
-        this.trackerService().connect();
+        this.trackerService.connect();
         <%_ } _%>
       } else {
         this.store.commit('logout');
