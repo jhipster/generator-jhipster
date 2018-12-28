@@ -99,7 +99,7 @@ describe('Service Tests', () => {
     <%_ } _%>
 <%_ }) _%>
         }, elemDefault);
-        mockedAxios.get.mockReturnValue(Promise.resolve(returnedFromService));
+        mockedAxios.get.mockReturnValue(Promise.resolve({ data: returnedFromService }));
 
         service
           .find(<%- tsKeyId %>).then((res) => {
@@ -134,7 +134,7 @@ describe('Service Tests', () => {
   <%_ }) _%>
           }, returnedFromService);
 
-          mockedAxios.post.mockReturnValue(Promise.resolve(returnedFromService));
+          mockedAxios.post.mockReturnValue(Promise.resolve({ data: returnedFromService }));
           service.create({}).then((res) => {
             expect(res).toMatchObject(expected);
         });
@@ -170,7 +170,7 @@ describe('Service Tests', () => {
       <%_ } _%>
   <%_ }) _%>
           }, returnedFromService);
-          mockedAxios.put.mockReturnValue(Promise.resolve(returnedFromService));
+          mockedAxios.put.mockReturnValue(Promise.resolve({ data: returnedFromService }));
 
           service.update(expected).then((res) => {
             expect(res).toMatchObject(expected);
@@ -213,7 +213,7 @@ describe('Service Tests', () => {
       });
 
       it('should delete a <%= entityAngularName %>', async () => {
-          mockedAxios.delete.mockReturnValue(Promise.resolve());
+          mockedAxios.delete.mockReturnValue(Promise.resolve({ok: true}));
           service.delete(<%- tsKeyId %>).then((res) => {
               expect(res.ok);
           });

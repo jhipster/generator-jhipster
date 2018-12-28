@@ -46,7 +46,7 @@ describe('UserManagement Component', () => {
   beforeEach(() => {
     mockedAxios.put.mockReset();
     mockedAxios.get.mockReset();
-    mockedAxios.get.mockReturnValue(Promise.resolve({}));
+    mockedAxios.get.mockReturnValue(Promise.resolve({ headers: {} }));
 
     store.commit('authenticated', account);
     wrapper = shallowMount<UserManagementClass>(UserManagement, {
@@ -74,9 +74,6 @@ describe('UserManagement Component', () => {
 
   describe('OnInit', () => {
     it('Should call load all on init', async () => {
-      // GIVEN
-      mockedAxios.get.mockReturnValue(Promise.resolve({}));
-
       // WHEN
       userManagement.loadAll();
       await userManagement.$nextTick();
@@ -90,7 +87,6 @@ describe('UserManagement Component', () => {
     it('Should update user and call load all', async () => {
       // GIVEN
       mockedAxios.put.mockReturnValue(Promise.resolve({}));
-      mockedAxios.get.mockReturnValue(Promise.resolve({}));
 
       // WHEN
       userManagement.setActive({ id: 'test' }, true);
@@ -106,7 +102,6 @@ describe('UserManagement Component', () => {
     it('Should call delete service on confirmDelete', async () => {
       // GIVEN
       mockedAxios.delete.mockReturnValue(Promise.resolve({}));
-      mockedAxios.get.mockReturnValue(Promise.resolve({}));
 
       // WHEN
       userManagement.prepareRemove({ login: 'test' });
