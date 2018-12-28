@@ -9,7 +9,13 @@
                 </span>
             </router-link>
         </h2>
-        <!--<jhi-alert></jhi-alert>-->
+        <b-alert :show="dismissCountDown"
+            dismissible
+            :variant="alertType"
+            @dismissed="dismissCountDown=0"
+            @dismiss-count-down="countDownChanged">
+            {{alertMessage}}
+        </b-alert>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <div class="row">
             <div class="col-sm-12">

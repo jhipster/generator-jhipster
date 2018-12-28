@@ -133,6 +133,7 @@ const expectedFiles = {
 
         `${CLIENT_MAIN_SRC_DIR}app/router/index.ts`,
 
+        `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/data/data-utils.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/date/filters.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`,

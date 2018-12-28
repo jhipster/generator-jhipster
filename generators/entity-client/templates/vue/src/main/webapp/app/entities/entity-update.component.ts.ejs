@@ -32,6 +32,7 @@ import <%= otherEntityAngularName %>Service from '../<%= otherEntityFolderName %
 import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';
   <% } %>
 <%_ importEntitiesSeen.push(otherEntityAngularName); } _%>
+import AlertService from '@/shared/alert/alert.service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
@@ -66,6 +67,7 @@ const validations: any = {
   validations
 })
 export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
+  @Inject('alertService') private alertService: () => AlertService;
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
   public <%= entityInstance %>: I<%= entityAngularName %> = new <%= entityAngularName %>();
   <%_
@@ -100,14 +102,26 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
         const fieldType = fields[idx].fieldType;
     } _%>
     if (this.<%= entityInstance %>.id) {
-      this.<%= entityInstance %>Service().update(this.<%= entityInstance %>).then(() => {
+      this.<%= entityInstance %>Service().update(this.<%= entityInstance %>).then((param) => {
         this.isSaving = false;
         this.$router.go(-1);
+        <%_ if (enableTranslation) { _%>
+        const message = this.$t('<%= i18nKeyPrefix %>.updated', { 'param' : param.id });
+        <%_ } else {_%>
+        const message = 'A <%= entityAngularName %> is updated with identifier ' + param.id;
+        <%_ } _%>
+        this.alertService().showAlert(message, 'info');
       });
     } else {
-      this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then(() => {
+      this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then((param) => {
         this.isSaving = false;
         this.$router.go(-1);
+        <%_ if (enableTranslation) { _%>
+        const message = this.$t('<%= i18nKeyPrefix %>.created', { 'param' : param.id });
+        <%_ } else {_%>
+        const message = 'A <%= entityAngularName %> is created with identifier ' + param.id;
+        <%_ } _%>
+        this.alertService().showAlert(message, 'success');
       });
     }
   }

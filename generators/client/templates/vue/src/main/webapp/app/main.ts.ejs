@@ -20,6 +20,7 @@ import '../content/scss/vendor.scss';
 <%_} else { _%>
 import '../content/css/vendor.css';
 <%_ } _%>
+import AlertService from '@/shared/alert/alert.service';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
@@ -32,6 +33,22 @@ import GatewayService from '@/admin/gateway/gateway.service';
 import TrackerService from './admin/tracker/tracker.service';
 <%_ } _%>
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
+
+Vue.config.productionTip = false;
+
+<%_ if (enableTranslation) { _%>
+const i18n = config.initI18N(Vue);
+<%_ } _%>
+const store = config.initVueXStore(Vue);
+const alertService = new AlertService(store);
+<%_ if (enableTranslation) { _%>
+const translationService = new TranslationService(store);
+<%_ } _%>
+config.initVueApp(Vue);
+config.initFortAwesome(Vue);
+bootstrapVueConfig.initBootstrapVue(Vue);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component('jhi-item-count', JhiItemCountComponent);
 
 const auditsService = new AuditsService();
 const healthService = new HealthService();
@@ -47,23 +64,9 @@ const logsService = new LogsService();
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
 const gatewayService = new GatewayService();
 <%_ } %>
-// jhipster-needle-add-entity-service-to-main-declaration - JHipster will declare entities services here
-
-Vue.config.productionTip = false;
-
-<%_ if (enableTranslation) { _%>
-const i18n = config.initI18N(Vue);
-<%_ } _%>
-const store = config.initVueXStore(Vue);
-<%_ if (enableTranslation) { _%>
-const translationService = new TranslationService(store);
-<%_ } _%>
-config.initVueApp(Vue);
 const principal = new Principal(store, <%_ if (enableTranslation) { _%>translationService, i18n, <%_ } _%><%_ if (authenticationType === 'session') { _%>(<any>Vue).cookie, <%_ } _%><%_ if (websocket === 'spring-websocket') { _%>trackerService, <%_ } _%>router);
-config.initFortAwesome(Vue);
-bootstrapVueConfig.initBootstrapVue(Vue);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
-Vue.component('jhi-item-count', JhiItemCountComponent);
+
+// jhipster-needle-add-entity-service-to-main-declaration - JHipster will declare entities services here
 
 /* eslint-disable no-new */
 new Vue({
@@ -86,6 +89,7 @@ new Vue({
     <%_ if (websocket === 'spring-websocket') { _%>
     trackerService: () => trackerService,
     <%_ } _%>
+    alertService: () => alertService,
     <%_ if (enableTranslation) { _%>
     translationService: () => translationService,
     <%_ } _%>
