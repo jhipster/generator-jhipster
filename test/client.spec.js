@@ -153,8 +153,8 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/tracker/tracker.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/tracker/tracker.vue`,
 
-        // `${CLIENT_SPEC_SRC_DIR}app/admin/tracker/tracker.component.spec.ts`,
-        // `${CLIENT_SPEC_SRC_DIR}app/admin/tracker/tracker.service.spec.ts`
+        `${CLIENT_SPEC_SRC_DIR}app/admin/tracker/tracker.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/tracker/tracker.service.spec.ts`
     ],
 
     test: [
