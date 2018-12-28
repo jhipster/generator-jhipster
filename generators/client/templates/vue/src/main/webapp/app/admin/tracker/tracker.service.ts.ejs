@@ -1,6 +1,7 @@
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'webstomp-client';
-import { Observable, Observer, Subscription } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
+import VueRouter from 'vue-router';
 
 export default class TrackerService {
 
@@ -11,12 +12,11 @@ export default class TrackerService {
   public listener: Observable<any>;
   public listenerObserver: Observer<any> = null;
   public alreadyConnectedOnce: boolean = false;
-  public subscription: Subscription = null;
 
-  private window: Window;
+  private router: VueRouter;
 
-  constructor(window: Window) {
-    this.window = window;
+  constructor(router: VueRouter) {
+    this.router = router;
     this.connection = this.createConnection();
     this.listener = this.createListener();
   }
@@ -49,6 +49,7 @@ export default class TrackerService {
     this.connectedPromise = null;
     this.sendActivity();
     if (!this.alreadyConnectedOnce) {
+      this.router.afterEach(() => this.sendActivity());
       this.alreadyConnectedOnce = true;
     }
   }
@@ -58,10 +59,7 @@ export default class TrackerService {
       this.stompClient.disconnect();
       this.stompClient = null;
     }
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-      this.subscription = null;
-    }
+    this.router.afterEach(() => {});
     this.alreadyConnectedOnce = false;
   }
 
@@ -73,7 +71,7 @@ export default class TrackerService {
     if (this.stompClient !== null && this.stompClient.connected) {
       this.stompClient.send(
         '/topic/activity', // destination
-        JSON.stringify({ page: this.window.location.hash }), // body
+        JSON.stringify({ page: this.router.currentRoute.fullPath }), // body
         {} // header
       );
     }

@@ -61,7 +61,7 @@ describe('UserManagement Component', () => {
         bModal: true
       },
       provide: {
-        principal: () => new Principal(store, <% if (enableTranslation) { %>new TranslationService(store), i18n, <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %><% if (websocket === 'spring-websocket') { %>new TrackerService(window), <% } %>router),
+        principal: () => new Principal(store, <% if (enableTranslation) { %>new TranslationService(store), i18n, <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %><% if (websocket === 'spring-websocket') { %>new TrackerService(router), <% } %>router),
         userService: () => new UserManagementService()
       }
     });

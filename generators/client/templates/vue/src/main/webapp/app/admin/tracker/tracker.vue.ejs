@@ -14,7 +14,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="activity of activities">
+                <tr v-for="activity of activities" :key="activity.sessionId">
                     <td>{{activity.userLogin}}</td>
                     <td>{{activity.ipAddress}}</td>
                     <td>{{activity.page}}</td>

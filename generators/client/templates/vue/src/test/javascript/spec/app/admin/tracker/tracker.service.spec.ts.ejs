@@ -1,13 +1,15 @@
 import TrackerService from '@/admin/tracker/tracker.service';
 import sinon from 'sinon';
+import VueRouter from 'vue-router';
 
 describe('Tracker Service', () => {
   let trackerService: TrackerService;
-  let windowStub: any;
+  let routerStub: any;
 
   beforeEach(() => {
-    windowStub = sinon.createStubInstance<Window>(Window);
-    trackerService = new TrackerService(windowStub);
+    routerStub = sinon.createStubInstance<VueRouter>(VueRouter);
+    routerStub.afterEach = sinon.spy();
+    trackerService = new TrackerService(routerStub);
   });
 
   it('Should connetion and listener be initialized', () => {
@@ -42,7 +44,7 @@ describe('Tracker Service', () => {
     stompClientStub.connected = true;
     stompClientStub.send = sinon.spy();
     trackerService.stompClient = stompClientStub;
-    windowStub.location = { hash: '/admin' };
+    sinon.stub(routerStub, 'currentRoute').get(() => ({ fullPath: '/admin' }));
 
     // WHEN
     trackerService.sendActivity();
@@ -65,6 +67,7 @@ describe('Tracker Service', () => {
     expect(connectedPromise.calledOnceWith('success'));
     expect(trackerService.alreadyConnectedOnce).toBeTruthy();
     expect(trackerService.connectedPromise).toBeNull();
+    expect(routerStub.afterEach.calledOnce).toBeTruthy();
   });
 
   it('Should connected for the second time', () => {
@@ -80,6 +83,7 @@ describe('Tracker Service', () => {
     expect(connectedPromise.calledOnceWith('success'));
     expect(trackerService.alreadyConnectedOnce).toBeTruthy();
     expect(trackerService.connectedPromise).toBeNull();
+    expect(routerStub.afterEach.calledOnce).toBeFalsy();
   });
 
   it('Should unsubscribe', () => {
@@ -103,16 +107,11 @@ describe('Tracker Service', () => {
     stompClientStub.disconnect = sinon.spy();
     trackerService.stompClient = stompClientStub;
 
-    const subscriptionStub: any = sinon.stub();
-    subscriptionStub.unsubscribe = sinon.spy();
-    trackerService.subscription = subscriptionStub;
-
     // WHEN
     trackerService.disconnect();
 
     // THEN
-    expect(subscriptionStub.unsubscribe.calledOnce).toBeTruthy();
-    expect(trackerService.subscription).toBeNull();
+    expect(routerStub.afterEach.calledOnce).toBeTruthy();
     expect(stompClientStub.disconnect.calledOnce).toBeTruthy();
     expect(trackerService.stompClient).toBeNull();
     expect(trackerService.alreadyConnectedOnce).toBeFalsy();

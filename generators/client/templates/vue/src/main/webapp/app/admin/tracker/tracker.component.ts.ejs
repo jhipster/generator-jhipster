@@ -34,7 +34,8 @@ export default class <%=jhiPrefixCapitalized%>TrackerComponent extends Vue {
         if (activity.page === 'logout') {
           this.activities.splice(index, 1);
         } else {
-          this.activities[index] = activity;
+          this.activities.splice(index, 1);
+          this.activities.push(activity);
         }
       }
     }

@@ -39,7 +39,7 @@ const loginModalService = new LoginModalService();
 const metricsService = new MetricsService();
 const registerService = new RegisterService();
 <%_ if (websocket === 'spring-websocket') { _%>
-const trackerService = new TrackerService(window);
+const trackerService = new TrackerService(router);
 <%_ } _%>
 const userManagementService = new UserManagementService();
 const configurationService = new ConfigurationService();
