@@ -60,7 +60,9 @@ export class JhiSortByDirective implements AfterContentInit {
     }
 
     private updateIconDefinition(iconComponent: FaIconComponent, icon: IconDefinition) {
-        iconComponent.iconProp = icon;
-        iconComponent.ngOnChanges({});
+        if (iconComponent) {
+            iconComponent.iconProp = icon;
+            iconComponent.ngOnChanges({});
+        }
     }
 }
