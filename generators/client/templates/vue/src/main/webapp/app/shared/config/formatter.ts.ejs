@@ -37,7 +37,7 @@ export default class <%=jhiPrefixCapitalized%>Formatter {
     }
     // this is custom jhipster logic such that we can reuse the i18n json files for vue-i18n
     // replace '{{' with '{' and '{{ ' with '{' and same for '}}'
-    message = message.replace(this._leftBraces, "{").replace(this._rightBraces, "}");
+    message = message.replace(this.leftBraces, "{").replace(this.rightBraces, "}");
 
     let tokens: Array<Token> = this.caches[message];
     if (!tokens) {
