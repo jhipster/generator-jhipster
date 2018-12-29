@@ -8,6 +8,7 @@ Component.registerHooks([
 import Router from 'vue-router';
 const Home = () => import('../core/home/home.vue');
 const Register = () => import('../account/register/register.vue');
+const Activate = () => import('../account/activate/activate.vue');
 const ResetPassword = () => import('../account/reset-password/reset-password.vue');
 const ChangePassword = () => import('../account/change-password/change-password.vue');
 <%_ if (authenticationType === 'session') { _%>
@@ -44,6 +45,11 @@ export default new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/activate',
+      name: 'Activate',
+      component: Activate
     },
     {
       path: '/resetPassword',

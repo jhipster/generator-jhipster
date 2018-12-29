@@ -196,7 +196,10 @@ const vueFiles = {
                 'account/reset-password/reset-password.vue',
                 'account/reset-password/reset-password.component.ts',
                 'account/settings/settings.vue',
-                'account/settings/settings.component.ts'
+                'account/settings/settings.component.ts',
+                'account/activate/activate.component.ts',
+                'account/activate/activate.service.ts',
+                'account/activate/activate.vue'
             ]
         },
         {
@@ -299,7 +302,8 @@ const vueFiles = {
                 'spec/app/account/change-password/change-password.component.spec.ts',
                 'spec/app/account/login-form/login-form.component.spec.ts',
                 'spec/app/account/reset-password/reset-password.component.spec.ts',
-                'spec/app/account/settings/settings.component.spec.ts'
+                'spec/app/account/settings/settings.component.spec.ts',
+                'spec/app/account/activate/activate.component.spec.ts'
             ]
         },
         {
@@ -372,6 +376,7 @@ function writeFiles() {
             'app/core/ribbon/ribbon.vue',
             'app/shared/jhi-item-count.vue',
             'app/account/change-password/change-password.vue',
+            'app/account/activate/activate.vue',
             'app/account/login-form/login-form.vue',
             'app/account/register/register.vue',
             'app/account/reset-password/reset-password.vue',

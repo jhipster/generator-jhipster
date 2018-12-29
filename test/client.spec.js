@@ -50,6 +50,9 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/change-password/change-password.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/account/login-form/login-form.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/login-form/login-form.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/activate/activate.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/activate/activate.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/activate/activate.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/register/register.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/register/register.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/account/register/register.service.ts`,
@@ -62,6 +65,7 @@ const expectedFiles = {
 
         `${CLIENT_SPEC_SRC_DIR}app/account/change-password/change-password.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/account/login-form/login-form.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/account/activate/activate.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/account/register/register.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/account/register/register.service.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/account/reset-password/reset-password.component.spec.ts`,

@@ -7,6 +7,7 @@ import router from './router';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
+import ActivateService from './account/activate/activate.service';
 import AuditsService from './admin/audits/audits.service';
 import HealthService from './admin/health/health.service';
 import LoginModalService from './account/login-modal.service';
@@ -40,6 +41,7 @@ Vue.config.productionTip = false;
 const i18n = config.initI18N(Vue);
 <%_ } _%>
 const store = config.initVueXStore(Vue);
+
 const alertService = new AlertService(store);
 <%_ if (enableTranslation) { _%>
 const translationService = new TranslationService(store);
@@ -50,6 +52,7 @@ bootstrapVueConfig.initBootstrapVue(Vue);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('jhi-item-count', JhiItemCountComponent);
 
+const activateService = new ActivateService();
 const auditsService = new AuditsService();
 const healthService = new HealthService();
 const loginModalService = new LoginModalService();
@@ -75,6 +78,7 @@ new Vue({
   template: '<App/>',
   router,
   provide: {
+    activateService: () => activateService,
     auditsService: () => auditsService,
     healthService: () => healthService,
     loginModalService: () => loginModalService,
