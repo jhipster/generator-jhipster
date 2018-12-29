@@ -298,6 +298,7 @@ const vueFiles = {
             templates: [
                 'spec/app/account/change-password/change-password.component.spec.ts',
                 'spec/app/account/login-form/login-form.component.spec.ts',
+                'spec/app/account/reset-password/reset-password.component.spec.ts',
                 'spec/app/account/settings/settings.component.spec.ts'
             ]
         },
