@@ -396,20 +396,21 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
             if (this.registration == null) { // if registry is not defined, use native discovery
                 log.warn("No discovery service is set up, Infinispan will use default discovery for cluster formation");
                 return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().transport().defaultTransport()
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
             }
             return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().transport().transport(new JGroupsTransport(getTransportChannel()))
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport()
+                    .transport(new JGroupsTransport(getTransportChannel()))
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
         <%_ } else { _%>
             return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().transport().defaultTransport()
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
@@ -529,7 +530,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                 cacheManager.getCache("oAuth2Authentication").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
             <%_ } _%>
-            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
+            <%_ if (!skipUserManagement || (authenticationType === 'oauth2')) { _%>
             registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
@@ -573,8 +574,8 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
      * MPING multicast is replaced with TCPPING with the host details discovered
      * from registry and sends only unicast messages to the host list.
      */
-    private Channel getTransportChannel() {
-        JChannel channel = new JChannel(false);
+    private JChannel getTransportChannel() {
+        JChannel channel = null;
         List<PhysicalAddress> initialHosts = new ArrayList<>();
         try {
             for (ServiceInstance instance : discoveryClient.getInstances(registration.getServiceId())) {
@@ -587,12 +588,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
             tcp.setBindPort(7800);
             tcp.setThreadPoolMinThreads(2);
             tcp.setThreadPoolMaxThreads(30);
-            tcp.setThreadPoolQueueEnabled(false);
             tcp.setThreadPoolKeepAliveTime(60000);
-            tcp.setOOBThreadPoolMinThreads(2);
-            tcp.setOOBThreadPoolMaxThreads(200);
-            tcp.setOOBThreadPoolKeepAliveTime(60000);
-            tcp.setOOBThreadPoolQueueEnabled(false);
 
             TCPPING tcpping = new TCPPING();
             initialHosts.add(new IpAddress(InetAddress.getLocalHost(), 7800));
@@ -629,7 +625,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                 .addProtocol(new GMS())
                 .addProtocol(new MFC())
                 .addProtocol(new FRAG2());
-            channel.setProtocolStack(stack);
+            channel = new JChannel(stack);
             stack.init();
         } catch (Exception e) {
             throw new BeanInitializationException("Cache (Infinispan protocol stack) configuration failed", e);
