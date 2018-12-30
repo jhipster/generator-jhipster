@@ -143,7 +143,7 @@
         <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/lcov.info</sonar.typescript.lcov.reportPaths>
         <%_ } _%>
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
-        <sonar.junit.reportsPath>${project.build.directory}/surefire-reports</sonar.junit.reportsPath>
+        <sonar.junit.reportsPath>${project.testresult.directory}</sonar.junit.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
 
         <!-- jhipster-needle-maven-property -->
@@ -1131,6 +1131,7 @@
                         <!-- Fixes a bug which will be solved in next version after 2.22.1 then this can be removed -->
                         <!-- see: https://issues.apache.org/jira/browse/SUREFIRE-1588 -->
                         <useSystemClassLoader>false</useSystemClassLoader>
+                        <outputDirectory>${sonar.junit.reportsPath}</outputDirectory>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -1237,7 +1238,7 @@
             <id>webpack</id>
             <activation>
                 <file>
-                    <missing>${basedir}/target/www/app/main.bundle.js</missing>
+                    <missing>${project.build.directory}/www/app/main.bundle.js</missing>
                 </file>
             </activation>
             <dependencies>

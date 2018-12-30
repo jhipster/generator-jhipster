@@ -60,7 +60,7 @@ sonarqube {
         property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/test.exec"
         property "sonar.java.codeCoveragePlugin", "jacoco"
         property "sonar.typescript.lcov.reportPaths", "${project.buildDir}/test-results/lcov.info"
-        property "sonar.junit.reportPaths", "${project.buildDir}/surefire-reports"
+        property "sonar.junit.reportPaths", "${project.buildDir}/test-results
         property "sonar.sources", "${project.projectDir}/<%= MAIN_DIR %>"
         property "sonar.tests", "${project.projectDir}/<%= TEST_DIR %>"
     }
