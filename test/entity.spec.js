@@ -390,6 +390,29 @@ describe('JHipster generator for entity', () => {
                 assert.noFile(expectedFiles.clientNg2WithRootFolder);
             });
         });
+
+        describe('with mongodb microservice', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/mongodb-with-relations'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withPrompts({
+                        fieldAdd: false,
+                        relationshipAdd: false,
+                        dto: 'yes',
+                        service: 'serviceImpl',
+                        pagination: 'pagination'
+                    })
+                    .on('end', done);
+            });
+
+            it('sets expected custom databaseType', () => {
+                assert.jsonFileContent('.jhipster/Foo.json', { databaseType: 'mongodb' });
+            });
+        });
     });
 
     context('gateway', () => {
@@ -443,6 +466,35 @@ describe('JHipster generator for entity', () => {
                 assert.file(expectedFiles.clientNg2WithRootFolder);
                 assert.noFile(expectedFiles.gatling);
                 assert.noFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`);
+            });
+        });
+
+        describe('with entity from mongodb microservice', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-gateway'), dir);
+                    })
+                    .withArguments(['baz'])
+                    .withPrompts({
+                        useMicroserviceJson: true,
+                        microservicePath: '../'
+                    })
+                    .on('end', done);
+            });
+
+            it('sets expected custom databaseType from the microservice', () => {
+                assert.jsonFileContent('.jhipster/Baz.json', { databaseType: 'mongodb' });
+            });
+            it('generates expected files', () => {
+                assert.file(expectedFiles.clientBazGatewayMicroserviceEntity);
+            });
+            it('generates a string id for the mongodb entity', () => {
+                assert.fileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/shared/model/sampleMicroservice/baz.model.ts`,
+                    'id?: string'
+                );
             });
         });
     });

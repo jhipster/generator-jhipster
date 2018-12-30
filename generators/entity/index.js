@@ -615,6 +615,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.data.searchEngine = context.searchEngine;
                 this.data.service = context.service;
                 this.data.entityTableName = context.entityTableName;
+                this.data.databaseType = context.databaseType;
                 this.copyFilteringFlag(context, this.data, context);
                 if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
                     this.data.pagination = context.pagination;
