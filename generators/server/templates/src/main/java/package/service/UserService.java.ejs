@@ -313,12 +313,18 @@ public class UserService {
                 newUser.setActivated(false);
                 // new user gets registration key
                 newUser.setActivationKey(RandomUtil.generateActivationKey());
-                Set<Authority> authorities = new HashSet<>();
+                Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> authorities = new HashSet<>();
+                <%_ if (databaseType === 'couchbase') { _%>
+                authorities.add(AuthoritiesConstants.USER);
+                newUser.setAuthorities(authorities);
+                return createUser(newUser)
+                <%_ } else { _%>
                 return authorityRepository.findById(AuthoritiesConstants.USER)
                     .map(authorities::add)
                     .thenReturn(newUser)
                     .doOnNext(user -> user.setAuthorities(authorities))
                     .flatMap(this::createUser)
+                <%_ } _%>
                     <%_ if (cacheManagerIsAvailable === true) { _%>
                     .doOnNext(this::clearUserCaches)
                     <%_ } _%>
@@ -384,6 +390,9 @@ public class UserService {
     <%_ } else { _%>
         return Flux.fromIterable(Optional.ofNullable(userDTO.getAuthorities()).orElse(new HashSet<>()))
             .flatMap(authorityRepository::findById)
+            <%_ if (databaseType === 'couchbase') { _%>
+            .map(Authority::getName)
+            <%_ } _%>
             .doOnNext(authority -> user.getAuthorities().add(authority))
             .then(createUser(user))
             <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -500,10 +509,14 @@ public class UserService {
                 return user;
             })
         <%_ } else { _%>
+                <%_ if (databaseType === 'couchbase') { _%>
+                return Mono.just(user);
+                <%_ } else { _%>
                 return Flux.fromIterable(userDTO.getAuthorities())
                     .flatMap(authorityRepository::findById)
                     .map(managedAuthorities::add)
                     .then(Mono.just(user));
+                <%_ } _%>
             })
             .flatMap(this::updateUser)
             <%_ if (cacheManagerIsAvailable === true) { _%>
