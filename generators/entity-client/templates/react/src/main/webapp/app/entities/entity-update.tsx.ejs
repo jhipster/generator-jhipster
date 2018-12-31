@@ -116,7 +116,7 @@ import {
 } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 // tslint:disable-next-line:no-unused-variable
-import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
+import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 <%_ if (relationships.filter(e => e.relationshipType === 'many-to-many') !== undefined) { _%>
 import { mapIdList } from 'app/shared/util/entity-utils';
 <%_ } _%>
@@ -188,7 +188,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
         const fieldName = fields[idx].fieldName;
     _%>
     <%_ if (fieldType === 'Instant' || fieldType === 'ZonedDateTime')  { _%>
-    values.<%=fieldName%> = new Date(values.<%= fieldName %>);
+    values.<%=fieldName%> = convertDateTimeToServer(values.<%= fieldName %>);
     <%_ } _%>
     <%_ } _%>
 
@@ -282,6 +282,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                 type="datetime-local"
                 className="form-control"
                 name="<%= fieldName %>"
+                placeholder={"YYYY-MM-DD HH:mm"}
                 value={isNew ? null : convertDateTimeFromServer(this.props.<%= entityInstance %>Entity.<%= fieldName %>)}
                 <%- include react_validators %>
               />
