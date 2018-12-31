@@ -255,7 +255,7 @@ public class <%= entityClass %> implements Serializable {
     @DBRef
     @Field("<%= relationshipFieldName %>")
     <%_ } _%>
-    <%_ if (otherEntityRelationshipNamePlural !==undefined && otherEntityRelationshipNamePlural !== '') { _%>
+    <%_ if (otherEntityRelationshipNamePlural !== undefined && otherEntityRelationshipNamePlural !== '') { _%>
     @JsonIgnoreProperties("<%= otherEntityRelationshipNamePlural %>")
     <%_ } _%>
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
