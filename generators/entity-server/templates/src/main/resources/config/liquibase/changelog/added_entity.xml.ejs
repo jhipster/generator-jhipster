@@ -150,7 +150,7 @@
             ownerSide = relationships[idx].ownerSide,
             otherEntityName = relationships[idx].otherEntityName;
             if (relationshipType === 'many-to-many' && ownerSide) {
-                const joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
+                const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
           _%>
 
         <createTable tableName="<%= joinTableName %>">
