@@ -918,7 +918,7 @@ _%>
 
         int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
 
-        // Get the <%= entityInstance %>
+        // Delete the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());

@@ -520,7 +520,20 @@ if (project.hasProperty('nodeInstall')) {
 }
 <%_ } _%>
 
-bootWar.dependsOn war
+task renameWarFile (type: Copy) {
+    from ("$buildDir/libs/")
+    include "$project.name-$version-original.war"
+    destinationDir file("$buildDir/libs/")
+    rename "$project.name-$version-original.war", "$project.name-{$version}.war.original"
+}
+
+task deleteWarFile(type: Delete) {
+  delete "$buildDir/libs/$project.name-$version-original.war"
+}
+
+renameWarFile.dependsOn war
+bootWar.dependsOn war,renameWarFile,deleteWarFile
 compileJava.dependsOn processResources
 processResources.dependsOn cleanResources,bootBuildInfo
 bootBuildInfo.mustRunAfter cleanResources
+deleteWarFile.mustRunAfter renameWarFile
