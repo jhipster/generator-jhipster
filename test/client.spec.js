@@ -121,6 +121,8 @@ const expectedFiles = {
 
         `${CLIENT_MAIN_SRC_DIR}app/core/home/home.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/home/home.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/error/error.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/error/error.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/core/jhi-footer/jhi-footer.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/jhi-footer/jhi-footer.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/core/jhi-navbar/jhi-navbar.component.ts`,

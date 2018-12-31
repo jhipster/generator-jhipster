@@ -43,32 +43,3 @@
 
 <script lang="ts" src="./home.component.ts">
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-    /* ==========================================================================
-Main page styles
-========================================================================== */
-
-    .hipster {
-        display: inline-block;
-        width: 347px;
-        height: 497px;
-        background: url("../../../content/images/<%=hipster%>.svg") no-repeat center top;
-        background-size: contain;
-    }
-
-    /* wait autoprefixer update to allow simple generation of high pixel density media query */
-    @media only screen and (-webkit-min-device-pixel-ratio: 2),
-    only screen and (min--moz-device-pixel-ratio: 2),
-    only screen and (-o-min-device-pixel-ratio: 2/1),
-    only screen and (min-device-pixel-ratio: 2),
-    only screen and (min-resolution: 192dpi),
-    only screen and (min-resolution: 2dppx) {
-        .hipster {
-            background: url("../../../content/images/<%=hipster%>.svg") no-repeat center top;
-            background-size: contain;
-        }
-    }
-
-</style>

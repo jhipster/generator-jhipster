@@ -163,6 +163,8 @@ const vueFiles = {
             templates: [
                 'core/home/home.vue',
                 'core/home/home.component.ts',
+                'core/error/error.vue',
+                'core/error/error.component.ts',
                 'core/jhi-footer/jhi-footer.vue',
                 'core/jhi-footer/jhi-footer.component.ts',
                 'core/jhi-navbar/jhi-navbar.vue',
@@ -371,6 +373,7 @@ function writeFiles() {
     if (!this.enableTranslation) {
         utils.replaceTranslation(this, ['app/app.vue',
             'app/core/home/home.vue',
+            'app/core/error/error.vue',
             'app/core/jhi-footer/jhi-footer.vue',
             'app/core/jhi-navbar/jhi-navbar.vue',
             'app/core/ribbon/ribbon.vue',
