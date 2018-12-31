@@ -504,22 +504,21 @@ module.exports = class extends BaseBlueprintGenerator {
                             )
                         );
                     }
-
-                    if (_.isUndefined(relationship.otherEntityRelationshipName)) {
-                        if (
-                            relationship.relationshipType === 'one-to-many' ||
-                            (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) ||
-                            relationship.relationshipType === 'one-to-one'
-                        ) {
-                            relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
-                            this.warning(
-                                `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                    relationship,
-                                    null,
-                                    4
-                                )}, using ${_.lowerFirst(entityName)} as fallback`
-                            );
-                        }
+                    relationship.otherEntityRelationshipNameUndefined = _.isUndefined(relationship.otherEntityRelationshipName);
+                    if (
+                        relationship.otherEntityRelationshipNameUndefined &&
+                        (relationship.relationshipType === 'one-to-many' ||
+                            relationship.relationshipType === 'many-to-many' ||
+                            relationship.relationshipType === 'one-to-one')
+                    ) {
+                        relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
+                        this.warning(
+                            `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
+                                relationship,
+                                null,
+                                4
+                            )}, using ${_.lowerFirst(entityName)} as fallback`
+                        );
                     }
 
                     if (
@@ -843,9 +842,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                     if (
                         _.isUndefined(relationship.otherEntityRelationshipNamePlural) &&
-                        (relationship.relationshipType === 'one-to-many' ||
-                            (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) ||
-                            (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))
+                        !relationship.otherEntityRelationshipNameUndefined
                     ) {
                         relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                     }
@@ -908,17 +905,29 @@ module.exports = class extends BaseBlueprintGenerator {
                         relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                     }
 
-                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
-                        if (relationship.relationshipType === 'many-to-one') {
+                    if (
+                        _.isUndefined(relationship.otherEntityRelationshipNamePlural) ||
+                        relationship.otherEntityRelationshipNameUndefined
+                    ) {
+                        if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
                             if (otherEntityData && otherEntityData.relationships) {
                                 otherEntityData.relationships.forEach(otherRelationship => {
                                     if (
                                         _.upperFirst(otherRelationship.otherEntityName) === entityName &&
                                         otherRelationship.otherEntityRelationshipName === relationship.relationshipName &&
-                                        otherRelationship.relationshipType === 'one-to-many'
+                                        ((relationship.relationshipType === 'many-to-one' &&
+                                            otherRelationship.relationshipType === 'one-to-many') ||
+                                            (relationship.relationshipType === 'many-to-many' &&
+                                                otherRelationship.relationshipType === 'many-to-many'))
                                     ) {
                                         relationship.otherEntityRelationshipName = otherRelationship.relationshipName;
                                         relationship.otherEntityRelationshipNamePlural = pluralize(otherRelationship.relationshipName);
+                                        relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(
+                                            otherRelationship.relationshipName
+                                        );
+                                        relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
+                                            _.upperFirst(otherRelationship.relationshipName)
+                                        );
                                     }
                                 });
                             }
