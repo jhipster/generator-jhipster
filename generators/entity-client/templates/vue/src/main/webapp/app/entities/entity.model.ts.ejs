@@ -22,6 +22,7 @@ const typeImports = generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
 %>
 <%_ typeImports.forEach( (importedPath, importedType) => {
+  importedPath = importedPath.replace('core/user/user.model', 'shared/model/user.model');
   importedPath = importedPath.replace('app/', '@/');
 _%>
 import { <%- importedType %> } from '<%- importedPath %>';
