@@ -90,4 +90,31 @@ describe('JHipster client generator with blueprint', () => {
             });
         });
     });
+
+    describe('generate client with dummy blueprint overriding everything', () => {
+        before(done => {
+            helpers
+                .run(path.join(__dirname, '../../generators/client'))
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    blueprint: 'myblueprint',
+                    skipChecks: true
+                })
+                .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:client']])
+                .withPrompts({
+                    baseName: 'jhipster',
+                    clientFramework: 'angularX',
+                    useSass: false,
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr']
+                })
+                .on('end', done);
+        });
+
+        it("doesn't create any expected files from jhipster client generator", () => {
+            assert.noFile(expectedFiles.client);
+        });
+    });
 });

@@ -58,12 +58,8 @@ test:
         - chmod +x gradlew
         - ./gradlew clean test --no-daemon
 <%_ } _%>
-<%_ if (applicationType !== 'microservice') { _%>
-    <%_ if (clientPackageManager === 'yarn') { _%>
-        - yarn test
-    <%_ } else if (clientPackageManager === 'npm') { _%>
-        - npm test
-    <%_ } _%>
+<%_ if (!skipClient) { _%>
+        - <%= clientPackageManager %> run <%= frontTestCommand %>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
     <%_ if (cicdIntegrations.includes('circle')) { _%>

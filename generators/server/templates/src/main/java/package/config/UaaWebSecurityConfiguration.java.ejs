@@ -56,8 +56,8 @@ public class UaaWebSecurityConfiguration extends WebSecurityConfigurerAdapter im
             throw new BeanInitializationException("Security configuration failed", e);
         }
     }
-    
- 
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -74,7 +74,6 @@ public class UaaWebSecurityConfiguration extends WebSecurityConfigurerAdapter im
         web.ignoring()
             .antMatchers(HttpMethod.OPTIONS, "/**")
             .antMatchers("/app/**/*.{js,html}")
-            .antMatchers("/bower_components/**")
             .antMatchers("/i18n/**")
             .antMatchers("/content/**")
             .antMatchers("/swagger-ui/index.html")

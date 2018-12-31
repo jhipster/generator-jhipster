@@ -8,7 +8,7 @@ const reactFiles = require('../generators/client/files-react').files;
 
 describe('JHipster client generator', () => {
     describe('generate client with React', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'jwt', experimental: true })
@@ -41,7 +41,7 @@ describe('JHipster client generator', () => {
     });
 
     describe('generate client with Angular', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'jwt' })
@@ -81,7 +81,7 @@ describe('JHipster client generator', () => {
     });
 
     describe('generate client with Angular using yarn flag', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(path.join(__dirname, '../generators/client'))
                 .withOptions({ skipInstall: true, auth: 'jwt', yarn: true })

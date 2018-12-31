@@ -23,7 +23,7 @@ const shelljs = require('shelljs');
 const pluralize = require('pluralize');
 const jhiCore = require('jhipster-core');
 const prompts = require('./prompts');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 
@@ -31,7 +31,7 @@ const statistics = require('../statistics');
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -121,7 +121,7 @@ module.exports = class extends BaseGenerator {
         this.context = {};
 
         this.setupEntityOptions(this, this, this.context);
-        this.registerClientTransforms();
+        this.registerPrettierTransform();
         const blueprint = this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
@@ -140,13 +140,7 @@ module.exports = class extends BaseGenerator {
     _initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
+                this.checkInvocationFromCLI();
             },
 
             getConfig() {
@@ -510,22 +504,21 @@ module.exports = class extends BaseGenerator {
                             )
                         );
                     }
-
-                    if (_.isUndefined(relationship.otherEntityRelationshipName)) {
-                        if (
-                            relationship.relationshipType === 'one-to-many' ||
-                            (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) ||
-                            relationship.relationshipType === 'one-to-one'
-                        ) {
-                            relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
-                            this.warning(
-                                `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                    relationship,
-                                    null,
-                                    4
-                                )}, using ${_.lowerFirst(entityName)} as fallback`
-                            );
-                        }
+                    relationship.otherEntityRelationshipNameUndefined = _.isUndefined(relationship.otherEntityRelationshipName);
+                    if (
+                        relationship.otherEntityRelationshipNameUndefined &&
+                        (relationship.relationshipType === 'one-to-many' ||
+                            relationship.relationshipType === 'many-to-many' ||
+                            relationship.relationshipType === 'one-to-one')
+                    ) {
+                        relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
+                        this.warning(
+                            `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
+                                relationship,
+                                null,
+                                4
+                            )}, using ${_.lowerFirst(entityName)} as fallback`
+                        );
                     }
 
                     if (
@@ -621,6 +614,7 @@ module.exports = class extends BaseGenerator {
                 this.data.searchEngine = context.searchEngine;
                 this.data.service = context.service;
                 this.data.entityTableName = context.entityTableName;
+                this.data.databaseType = context.databaseType;
                 this.copyFilteringFlag(context, this.data, context);
                 if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
                     this.data.pagination = context.pagination;
@@ -848,9 +842,7 @@ module.exports = class extends BaseGenerator {
 
                     if (
                         _.isUndefined(relationship.otherEntityRelationshipNamePlural) &&
-                        (relationship.relationshipType === 'one-to-many' ||
-                            (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) ||
-                            (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))
+                        !relationship.otherEntityRelationshipNameUndefined
                     ) {
                         relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                     }
@@ -913,17 +905,29 @@ module.exports = class extends BaseGenerator {
                         relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                     }
 
-                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
-                        if (relationship.relationshipType === 'many-to-one') {
+                    if (
+                        _.isUndefined(relationship.otherEntityRelationshipNamePlural) ||
+                        relationship.otherEntityRelationshipNameUndefined
+                    ) {
+                        if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
                             if (otherEntityData && otherEntityData.relationships) {
                                 otherEntityData.relationships.forEach(otherRelationship => {
                                     if (
                                         _.upperFirst(otherRelationship.otherEntityName) === entityName &&
                                         otherRelationship.otherEntityRelationshipName === relationship.relationshipName &&
-                                        otherRelationship.relationshipType === 'one-to-many'
+                                        ((relationship.relationshipType === 'many-to-one' &&
+                                            otherRelationship.relationshipType === 'one-to-many') ||
+                                            (relationship.relationshipType === 'many-to-many' &&
+                                                otherRelationship.relationshipType === 'many-to-many'))
                                     ) {
                                         relationship.otherEntityRelationshipName = otherRelationship.relationshipName;
                                         relationship.otherEntityRelationshipNamePlural = pluralize(otherRelationship.relationshipName);
+                                        relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(
+                                            otherRelationship.relationshipName
+                                        );
+                                        relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
+                                            _.upperFirst(otherRelationship.relationshipName)
+                                        );
                                     }
                                 });
                             }

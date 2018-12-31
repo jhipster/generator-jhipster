@@ -24,6 +24,7 @@ module.exports = {
 };
 
 function askForRancherLoadBalancing() {
+    if (this.regenerate) return;
     const done = this.async();
 
     const prompts = [

@@ -8,7 +8,7 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 describe('JHipster generator service', () => {
     describe('creates service without interface', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/spring-service'))
                 .inTmpDir(dir => {
@@ -31,7 +31,7 @@ describe('JHipster generator service', () => {
     });
 
     describe('creates service with interface', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/spring-service'))
                 .inTmpDir(dir => {
@@ -53,7 +53,7 @@ describe('JHipster generator service', () => {
     });
 
     describe('creates service with --default flag', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/spring-service'))
                 .inTmpDir(dir => {

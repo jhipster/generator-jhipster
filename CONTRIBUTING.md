@@ -4,6 +4,7 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
 
 -   [Questions and help](#question)
 -   [Issues and Bugs](#issue)
+-   [Bug bounties](#bounties)
 -   [Feature Requests](#feature)
 -   [Submission Guidelines](#submit)
 -   [Generator development setup](#setup)
@@ -23,6 +24,10 @@ If you have a question on using JHipster, or if you need help with your JHipster
 If you find a bug in the source code or a mistake in the documentation, you can help us by [submitting a ticket](https://opensource.guide/how-to-contribute/#opening-an-issue) to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). Even better, you can submit a Pull Request to our [JHipster generator project](https://github.com/jhipster/generator-jhipster) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
 
 **Please see the Submission Guidelines below**.
+
+## <a name="bounties"></a> Bug bounties
+
+If you submitted a Pull Request that fixes a ticket with the "$100" tag, then you are eligible to our bug bounty program! Go to our [bug bounties documentation](https://www.jhipster.tech/bug-bounties/) for more information, and claim your money.
 
 ## <a name="feature"></a> Feature Requests
 
@@ -90,7 +95,7 @@ Before you submit your pull request consider the following guidelines:
     mvn spring-boot:run
     ```
 
--   You can also run our travis build locally by following [this](#local-travis-build)
+-   You can generate our Continuous Integration (with Travis CI and Azure Pipelines) by following [this](#local-build)
 
 -   Commit your changes using a descriptive commit message that follows our
     [commit message conventions](#commit-message-format).
@@ -243,24 +248,20 @@ To start debugging JHipster with **VSCode**, open the generator code in your wor
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
-## Local Travis Build
+## Local Build
 
-You can run the travis builds locally by following below commands
+You can run the builds locally by following below commands
 
-CD into the travis folder `cd travis` from the generator source code root folder
+Go into the `test-integration` folder with `cd test-integration` from the generator source code root folder
 
-Run `./build-samples.sh [command_name] [sample_name:optional]`
+Run `./generate-sample.sh <command_name> [folder] [sample_name:optional] [type of entity]`
 
-This will create the travis sample project under the `travis/samples` folder with folder name `[sample_name]-sample`. You can open this application in your editor or IDE to check it further. You can also run tests locally on the project to verify
-
-Sample name is optional and can be any of the folder name in the `travis/samples` folder. If not specified the it will mean all samples
+This will create a folder with configuration and entities. Then, you can generate manually a JHipster project and test it.
 
 Command name can be as below
 
     `list`: List all sample names
-    `generate`: Generate the sample if specified else generate all samples
-    `build` : Generate and test the sample if specified else generate and test all samples
-    `clean` : Clean the generated code for the sample if specified else clean all samples
+    `generate`: Generate the sample
 
 ## <a name="rules"></a> Coding Rules
 

@@ -81,6 +81,9 @@ import {
         <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
         <%=jhiPrefixCapitalized%>MetricsMonitoringModalComponent
     ],
+    <%_ if (enableTranslation) { _%>
+    providers: [ { provide: JhiLanguageService, useClass: JhiLanguageService } ],
+    <%_ } _%>
     entryComponents: [
         <%_ if (!skipUserManagement) { _%>
         UserMgmtDeleteDialogComponent,

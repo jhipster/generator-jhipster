@@ -19,3 +19,4 @@ yarn-error.log
 .factorypath
 .project
 .settings
+test/**/*.png

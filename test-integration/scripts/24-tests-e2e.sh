@@ -67,7 +67,7 @@ if [ "$JHI_RUN_APP" == 1 ]; then
         cd "$JHI_FOLDER_UAA"
         java \
             -jar app.war \
-            --spring.profiles.active="$JHI_PROFILE" \
+            --spring.profiles.active=dev \
             --logging.level.ROOT=OFF \
             --logging.level.org.zalando=OFF \
             --logging.level.io.github.jhipster=OFF \

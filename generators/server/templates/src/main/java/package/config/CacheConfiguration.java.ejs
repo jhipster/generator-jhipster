@@ -457,7 +457,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     @Bean
     public InfinispanCacheConfigurer cacheConfigurer(JHipsterProperties jHipsterProperties) {
         log.info("Defining {} configuration", "app-data for local, replicated and distributed modes");
-        final JHipsterProperties.Cache.Infinispan cacheInfo = jHipsterProperties.getCache().getInfinispan();
+        JHipsterProperties.Cache.Infinispan cacheInfo = jHipsterProperties.getCache().getInfinispan();
 
         return manager -> {
             // initialize application cache
