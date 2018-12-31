@@ -153,6 +153,10 @@ spring:
         active: #spring.profiles.active#
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
+    data:
+        jpa:
+            repositories:
+                bootstrap-mode: deferred
     jpa:
         open-in-view: false
         properties:
