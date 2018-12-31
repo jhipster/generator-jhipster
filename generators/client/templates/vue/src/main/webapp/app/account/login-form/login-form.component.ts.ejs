@@ -13,9 +13,9 @@ import Principal from '../principal';
 })
 export default class LoginForm extends Vue {
 
-  public authenticationError: boolean = null;
-  public login: string = null;
-  public password: string = null;
+  public authenticationError = null;
+  public login = null;
+  public password = null;
   public rememberMe: boolean = null;
 
   @Inject('principal') private principal: () => Principal;

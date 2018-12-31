@@ -44,11 +44,11 @@ export default class Register extends Vue {
     password: undefined
   };
   public confirmPassword: any = null;
-  public doNotMatch: string = '';
-  public error: string = '';
-  public errorEmailExists: string = '';
-  public errorUserExists: string = '';
-  public success: boolean = false;
+  public doNotMatch = '';
+  public error = '';
+  public errorEmailExists = '';
+  public errorUserExists = '';
+  public success = false;
 
   public register() : void {
     if (this.registerAccount.password !== this.confirmPassword) {

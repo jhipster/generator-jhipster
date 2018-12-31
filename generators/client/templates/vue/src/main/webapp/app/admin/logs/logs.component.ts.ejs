@@ -6,9 +6,9 @@ import LogsService from './logs.service';
 export default class <%=jhiPrefixCapitalized%>Logs extends Vue {
   @Inject('logsService') private logsService : () => LogsService;
   private loggers: any[] = [];
-  public filtered: string = '';
-  public orderProp: string = 'name';
-  public reverse: boolean = false;
+  public filtered = '';
+  public orderProp = 'name';
+  public reverse = false;
 
   public mounted(): void {
     this.init();
@@ -20,8 +20,8 @@ export default class <%=jhiPrefixCapitalized%>Logs extends Vue {
     });
   }
 
-  public updateLevel(name, level): void {
-    this.logsService().changeLevel({ name: name, level: level }).then(() => {
+  public updateLevel(_name, _level): void {
+    this.logsService().changeLevel({ name: _name, level: _level }).then(() => {
       this.init();
     });
   }

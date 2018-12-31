@@ -22,7 +22,7 @@ _%>
 /* tslint:disable max-line-length */
 import axios from 'axios';
 <%_ if (fieldsContainDate) { _%>
-import format from 'date-fns/format';
+import { format } from 'date-fns';
 <%_ } _%>
 
 import * as config from '@/shared/config/config';

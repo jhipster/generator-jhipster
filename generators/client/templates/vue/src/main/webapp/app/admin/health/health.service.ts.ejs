@@ -19,14 +19,14 @@ export default class HealthService {
     return response;
   }
 
-  public getBaseName(name: String): String {
+  public getBaseName(name: string): string {
     if (name) {
       const split = name.split('.');
       return split[0];
     }
   }
 
-  public getSubSystemName(name: String): String {
+  public getSubSystemName(name: string): string {
     if (name) {
       const split = name.split('.');
       split.splice(0, 1);
@@ -88,7 +88,7 @@ export default class HealthService {
     return result;
   }
 
-  public getModuleName(path: any, name: String) {
+  public getModuleName(path: any, name: string) {
     let result;
     if (path && name) {
       result = path + this.separator + name;

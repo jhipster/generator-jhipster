@@ -31,10 +31,11 @@ const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('../admin/gatew
 <%_ if (websocket === 'spring-websocket') { _%>
 const <%= jhiPrefixCapitalized %>TrackerComponent = () => import('../admin/tracker/tracker.vue');
 <%_ } _%>
+/* tslint:disable */
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 Vue.use(Router);
-
+// prettier-ignore
 export default new Router({
   routes: [
     {

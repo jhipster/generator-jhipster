@@ -8,11 +8,11 @@ import Principal from '@/account/principal';
 export default class JhiNavbar extends Vue {
   @Inject('loginModalService') private loginModalService: () => LoginModalService;
   @Inject('principal') private principal: () => Principal;
-  public version: string = VERSION ? 'v' + VERSION : '';
-  public swaggerEnabled: boolean = false;
-  public inProduction: boolean = false;
-  public isNavbarCollapsed: boolean = true;
-  private currentLanguage: string = this.$store.getters.currentLanguage;
+  public version = VERSION ? 'v' + VERSION : '';
+  public swaggerEnabled = false;
+  public inProduction = false;
+  public isNavbarCollapsed = true;
+  private currentLanguage = this.$store.getters.currentLanguage;
   private languages: any = this.$store.getters.languages;
 
   created() {

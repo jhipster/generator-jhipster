@@ -36,7 +36,9 @@ const vueFiles = {
                 'package.json',
                 'tsconfig.json',
                 '.postcssrc.js',
-                '.eslintrc.json',
+                { file: '.editorconfig', method: 'copy', noEjs: true },
+                'tsconfig.test.json',
+                'tslint.json',
                 'config/index.js',
                 'config/dev.env.js',
                 'config/prod.env.js',
@@ -285,6 +287,7 @@ const vueFiles = {
         {
             path: TEST_SRC_DIR,
             templates: [
+                'jest.conf.js',
                 'spec/app/core/jhi-footer/jhi-footer.component.spec.ts',
                 'spec/app/core/ribbon/ribbon.component.spec.ts',
                 'spec/app/admin/configuration/configuration.component.spec.ts',

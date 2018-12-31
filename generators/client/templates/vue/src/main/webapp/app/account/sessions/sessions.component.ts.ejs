@@ -15,13 +15,13 @@ const Sessions = {
     this.retrieveSessions();
   },
   methods: {
-    retrieveSessions: function() {
+    retrieveSessions() {
       axios.get('api/account/sessions/').then((response) => {
         this.error = null;
         this.sessions = response.data;
       });
     },
-    invalidate: function(session) {
+    invalidate(session) {
       axios
         .delete('api/account/sessions/' + session)
         .then(() => {

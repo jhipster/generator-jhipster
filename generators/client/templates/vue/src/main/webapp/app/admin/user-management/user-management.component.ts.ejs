@@ -6,16 +6,16 @@ import Principal from '@/account/principal';
 export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
   @Inject('principal') private principal: () => Principal;
-  public error: string = '';
-  public success: string = '';
+  public error = '';
+  public success = '';
   public users: any[] = [];
-  public itemsPerPage: number = 20;
+  public itemsPerPage = 20;
   public queryCount: number = null;
-  public page: number = 1;
+  public page = 1;
   public previousPage: number = null;
-  public propOrder: string = 'id';
-  public reverse: boolean = false;
-  public totalItems: number = 0;
+  public propOrder = 'id';
+  public reverse = false;
+  public totalItems = 0;
   public removeId: number = null;
 
   public mounted(): void {

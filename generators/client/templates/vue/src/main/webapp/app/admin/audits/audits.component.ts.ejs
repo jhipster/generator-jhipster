@@ -6,15 +6,15 @@ import { Component, Inject, Vue } from 'vue-property-decorator';
 export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
   public audits: any = [];
   public fromDate: any = null;
-  public itemsPerPage: number = 20;
+  public itemsPerPage = 20;
   public queryCount: any = null;
-  public page: number = 1;
+  public page = 1;
   public previousPage: number = null;
-  public propOrder: String = 'auditEventDate';
-  public predicate: String = 'timestamp';
-  public reverse: boolean = false;
+  public propOrder = 'auditEventDate';
+  public predicate = 'timestamp';
+  public reverse = false;
   public toDate: any = null;
-  public totalItems: number = 0;
+  public totalItems = 0;
   @Inject('auditsService') private auditsService: () => AuditsService;
 
   public mounted(): void {
@@ -83,7 +83,7 @@ export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
     this.loadAll();
   }
 
-  public changeOrder(propOrder: String, predicate: String): void {
+  public changeOrder(propOrder: string, predicate: string): void {
     this.propOrder = propOrder;
     this.predicate = predicate;
     this.reverse = !this.reverse;

@@ -57,7 +57,9 @@ function addEntityToRouterImport(generator, className, fileName, folderName) {
                 // prettier-ignore
                 `|// prettier-ignore
                 |const ${className} = () => import('../entities/${folderName}/${fileName}.vue');
+                |// prettier-ignore
                 |const ${className}Update = () => import('../entities/${folderName}/${fileName}-update.vue');
+                |// prettier-ignore
                 |const ${className}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
             )]
         },
@@ -72,11 +74,11 @@ function addEntityToRouter(generator, entityName, entityFileName, className) {
             needle: 'jhipster-needle-add-entity-to-router',
             splicable: [generator.stripMargin(
                 // prettier-ignore
-                `|, // prettier-ignore
-                |    { path: '/entity/${entityFileName}', name: '${className}', component: ${className} },
-                |    { path: '/entity/${entityFileName}/new', name: '${className}Create', component: ${className}Update },
-                |    { path: '/entity/${entityFileName}/:${entityName}Id/edit', name: '${className}Edit', component: ${className}Update },
-                |    { path: '/entity/${entityFileName}/:${entityName}Id/view', name: '${className}View', component: ${className}Details }`
+                `|,
+                |  { path: '/entity/${entityFileName}', name: '${className}', component: ${className} },
+                |  { path: '/entity/${entityFileName}/new', name: '${className}Create', component: ${className}Update },
+                |  { path: '/entity/${entityFileName}/:${entityName}Id/edit', name: '${className}Edit', component: ${className}Update },
+                |  { path: '/entity/${entityFileName}/:${entityName}Id/view', name: '${className}View', component: ${className}Details }`
             )]
         },
         generator

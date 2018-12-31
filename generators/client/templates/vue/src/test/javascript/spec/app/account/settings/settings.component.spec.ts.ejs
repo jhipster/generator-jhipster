@@ -31,7 +31,7 @@ jest.mock('axios', () => ({
 describe('Settings Component', () => {
   let wrapper: Wrapper<SettingsClass>;
   let settings: SettingsClass;
-  let account = {
+  const account = {
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@jhipster.org'
@@ -65,11 +65,11 @@ describe('Settings Component', () => {
     // GIVEN
     mockedAxios.post.mockReturnValue(Promise.resolve({}));
 
-    //WHEN
+    // WHEN
     settings.save();
     await settings.$nextTick();
 
-    //THEN
+    // THEN
     expect(mockedAxios.post).toHaveBeenCalledWith('api/account', account);
   });
 

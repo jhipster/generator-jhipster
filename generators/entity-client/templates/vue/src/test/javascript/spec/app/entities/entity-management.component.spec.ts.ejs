@@ -94,7 +94,7 @@ describe('Component Tests', () => {
     <%_ if (pagination !== 'infinite-scroll') { _%>
 
     it('should not load a page if the page is the same as the previous page', () => {
-      //GIVEN
+      // GIVEN
       mockedAxios.get.mockReset();
       comp.previousPage = 1;
 

@@ -7,8 +7,8 @@ import ActivateService from './activate.service';
 export default class Activate extends Vue {
   @Inject('activateService') private activateService: () => ActivateService;
   @Inject('loginModalService') private loginModalService: () => LoginModalService;
-  success: boolean = false;
-  error: boolean = false;
+  success = false;
+  error = false;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {

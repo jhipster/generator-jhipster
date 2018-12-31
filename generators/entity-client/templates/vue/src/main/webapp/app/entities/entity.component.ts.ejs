@@ -12,17 +12,17 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
   <%_ if (searchEngine === 'elasticsearch') { _%>
-  public currentSearch: string = '';
+  public currentSearch = '';
   <%_ } _%>
   private removeId: string = null;
   <%_ if (pagination !== 'no') { _%>
-  public itemsPerPage: number = 20;
+  public itemsPerPage = 20;
   public queryCount: number = null;
-  public page: number = 1;
+  public page = 1;
   public previousPage: number = null;
-  public propOrder: string = 'id';
-  public reverse: boolean = <%_ if (pagination === 'infinite-scroll') { _%>true<%_ } else { _%>false<%_ } _%>;
-  public totalItems: number = 0;
+  public propOrder = 'id';
+  public reverse = <%_ if (pagination === 'infinite-scroll') { _%>true<%_ } else { _%>false<%_ } _%>;
+  public totalItems = 0;
   <%_ } _%>
   public <%= entityInstancePlural %>: I<%= entityAngularName %>[] = [];
 

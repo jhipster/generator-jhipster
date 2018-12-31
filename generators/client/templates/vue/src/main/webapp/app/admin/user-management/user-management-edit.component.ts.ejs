@@ -38,7 +38,7 @@ const validations: any = {
 export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
   public userAccount: any = {authorities: []};
-  public isSaving: boolean = false;
+  public isSaving = false;
   private authorities: any[] = [];
   public languages: any = this.$store.getters.languages;
 
@@ -53,8 +53,8 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
   public init(userId: number): void {
     this.userManagementService().get(userId).then(res => {
       this.userAccount = res.data;
-      this.userManagementService().retrieveAuthorities().then(res => {
-        this.authorities = res.data;
+      this.userManagementService().retrieveAuthorities().then(_res => {
+        this.authorities = _res.data;
       });
     });
   }

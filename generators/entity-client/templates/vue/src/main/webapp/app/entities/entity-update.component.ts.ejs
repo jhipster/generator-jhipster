@@ -82,7 +82,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   <%_ } _%>
   public <%= otherEntityNamePlural %> : <% if (otherEntityAngularName === 'User') { %>Array<any><%_ } else { _%>I<%= otherEntityAngularName %>[]<%_ } _%> = [];
   <%_ entitiesSeen.push(otherEntityAngularName); } _%>
-  public isSaving: boolean = false;
+  public isSaving = false;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -166,7 +166,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
           const fieldName = fields[idx].fieldName;
           const fieldType = fields[idx].fieldType;
           if ([ 'Instant' ].includes(fieldType)) { _%>
-            if (this.<%= entityInstance %>.<%= fieldName %>) {      
+            if (this.<%= entityInstance %>.<%= fieldName %>) {
               this.<%= entityInstance %>.<%= fieldName %> = parse(this.<%= entityInstance %>.<%= fieldName %>.toString(), INSTANT_FORMAT, new Date());
             }
           <%_ }

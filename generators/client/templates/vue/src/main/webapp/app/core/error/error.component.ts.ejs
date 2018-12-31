@@ -5,7 +5,7 @@ import { Vue } from 'vue-property-decorator';
 export default class Error extends Vue {
 
   errorMessage: string = null;
-  error403: boolean = false;
+  error403 = false;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -24,7 +24,7 @@ export default class Error extends Vue {
      });
   }
 
-  public init(errorMessage: string = null, error403: boolean = false) {
+  public init(errorMessage: string = null, error403 = false) {
 
     this.errorMessage = errorMessage;
     this.error403 = error403;

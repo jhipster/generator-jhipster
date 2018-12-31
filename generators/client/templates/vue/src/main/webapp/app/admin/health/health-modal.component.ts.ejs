@@ -6,15 +6,15 @@ export default class <%=jhiPrefixCapitalized%>HealthModal extends Vue {
   @Prop() currentHealth!: any;
   @Inject('healthService') private healthService: () => HealthService;
 
-  public baseName(name: String): any {
+  public baseName(name: string): any {
     return this.healthService().getBaseName(name);
   }
 
-  public subSystemName(name: String): any {
+  public subSystemName(name: string): any {
     return this.healthService().getSubSystemName(name);
   }
 
-  public readableValue(value: any): String {
+  public readableValue(value: any): string {
     if (this.currentHealth.name === 'diskSpace') {
       // Should display storage space in an human readable unit
       const val = value / 1073741824;

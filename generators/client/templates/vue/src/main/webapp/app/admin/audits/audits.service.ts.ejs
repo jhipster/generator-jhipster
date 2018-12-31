@@ -9,7 +9,7 @@ export default class AuditsService {
 
   public query(req: any): Promise<any> {
     let sorts = '';
-    for (let idx in req.sort) {
+    for (const idx of Object.keys(req.sort)) {
       if (sorts.length > 0) {
         sorts += '&';
       }

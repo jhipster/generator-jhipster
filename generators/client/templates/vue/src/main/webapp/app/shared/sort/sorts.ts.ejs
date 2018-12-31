@@ -1,7 +1,7 @@
 export default function buildPaginationQueryOpts(paginationQuery) {
   if (paginationQuery) {
     let sorts = '';
-    for (let idx in paginationQuery.sort) {
+    for (const idx of Object.keys(paginationQuery.sort)) {
       if (sorts.length > 0) {
         sorts += '&';
       }

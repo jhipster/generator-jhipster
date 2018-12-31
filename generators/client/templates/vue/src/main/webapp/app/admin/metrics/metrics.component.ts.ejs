@@ -12,8 +12,8 @@ export default class <%=jhiPrefixCapitalized%>Metrics extends Vue {
   public metrics: any = {};
   public cachesStats: any = {};
   public servicesStats: any = {};
-  public updatingMetrics: boolean = true;
-  public JCACHE_KEY: string = 'jcache.statistics';
+  public updatingMetrics = true;
+  public JCACHE_KEY = 'jcache.statistics';
   public threads: any = null;
   @Inject('metricsService') private metricsService: () => MetricsService;
 
