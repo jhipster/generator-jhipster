@@ -1,4 +1,9 @@
-import {integer, required, minLength, maxLength, pattern} from 'vuelidate/lib/validators';
+import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vue-property-decorator';
+<% if (fieldsContainBlob) { %>
+  import { mixins } from 'vue-class-component';
+  import JhiDataUtils from '@/shared/data/data-utils.service';
+<% } %>
+import { numeric, required, minLength, maxLength } from 'vuelidate/lib/validators';
 <%_
     let include = false;
     for (idx in fields) {
@@ -7,155 +12,220 @@ import {integer, required, minLength, maxLength, pattern} from 'vuelidate/lib/va
     if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !include) {
         include = true;
         _%>
-import moment from 'moment'
+import format from 'date-fns/format';
+import parse from 'date-fns/parse'
+import { DATE_TIME_LONG_FORMAT, INSTANT_FORMAT, ZONED_DATE_TIME_FORMAT } from '@/shared/date/filters';
     <%_ } } _%>
 
-import <%= entityAngularName %>Service from './<%= entityFileName %>.service.vue';
 <%_
+    const importEntitiesSeen = [entityAngularName];
     for (idx in relationships) {
     const otherEntityAngularName = relationships[idx].otherEntityAngularName;
-    const otherEntityFileName = otherEntityAngularName === 'User' ? 'user' : relationships[idx].otherEntityFileName;
-    const otherEntityFolderName = otherEntityAngularName === 'User' ? (clientRootFolder ? '../user' : 'user') : relationships[idx].otherEntityFileName;
+    const otherEntityFileName = relationships[idx].otherEntityFileName;
+    const otherEntityFolderName = relationships[idx].otherEntityFileName;
+    const otherEntityModelName = relationships[idx].otherEntityModelName;
 _%>
-import <%= otherEntityAngularName %>Service from '../<%= otherEntityFolderName %>/<%= otherEntityFileName %>.service.vue';
-<%_ } _%>
-<% if (fieldsContainBlob) { %>
-import JhiDataUtils from '../../<% if (clientRootFolder) { %>../<% } %>shared/data/DataUtilsService.vue';
-<% } %>
+  <% if (otherEntityAngularName === 'User') { %>
+import UserService from '@/admin/user-management/user-management.service';
+  <% } else if (!importEntitiesSeen.includes(otherEntityAngularName)) { %>
+import <%= otherEntityAngularName %>Service from '../<%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
+import { I<%= otherEntityAngularName %> } from '@/shared/model/<%= otherEntityModelName %>.model';
+  <% } %>
+<%_ importEntitiesSeen.push(otherEntityAngularName); } _%>
+import AlertService from '@/shared/alert/alert.service';
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
-const <%= entityAngularName %>Update =  {
-    mixins: [<%= entityAngularName %>Service<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %><%_ for (idx in relationships) { const otherEntityAngularName = relationships[idx].otherEntityAngularName;_%> ,<%= otherEntityAngularName %>Service <%_ } _%>],
-    data() {
-        return {
-            <%= entityInstance %>: {
-                <%_ for (idx in fields) {
-                    const fieldName = fields[idx].fieldName;
-                _%>
-                <%= fieldName %>: null,
-                <%_ } _%>
-                <%_ for (idx in relationships) {
-                    const otherEntityName = relationships[idx].otherEntityName;
-                _%>
-                <%= otherEntityName %>s: [],
-                <%_ } _%>
-            },
-            <%_ for (idx in relationships) {
-                const otherEntityName = relationships[idx].otherEntityName;
-            _%>
-                    <%= otherEntityName %>s: [],
-            <%_ } _%>
-            isSaving: false
-        }
-    },
-    validations: {
-        <%= entityInstance %>: {
-            <%_ for (idx in fields) {
-                const fieldName = fields[idx].fieldName;
-                const fieldType = fields[idx].fieldType;
-                _%>
-                <%= fieldName %>:  {
-                    <%_ if (fields[idx].fieldValidate === true) { _%>
-                        <%_ if (fields[idx].fieldValidateRules.includes('required')) { _%>
-                            required,
-                        <%_ } _%>
-                        <%_ if (fields[idx].fieldValidateRules.includes('minlength')) { _%>
-                            minLength: minLength(<%= fields[idx].fieldValidateRulesMinlength %>),
-                        <%_ } _%>
-                        <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
-                            maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
-                        <%_ } _%>
-                        <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
-                            integer
-                        <%_ } _%>
+const validations: any = {
+  <%= entityInstance %>: {
+    <%_ for (idx in fields) {
+      const fieldName = fields[idx].fieldName;
+      const fieldType = fields[idx].fieldType;
+    _%>
+    <%= fieldName %>:  {
+    <%_ if (fields[idx].fieldValidate === true) { _%>
+    <%_ if (fields[idx].fieldValidateRules.includes('required')) { _%>
+    required,
+    <%_ } _%>
+    <%_ if (fields[idx].fieldValidateRules.includes('minlength')) { _%>
+      minLength: minLength(<%= fields[idx].fieldValidateRulesMinlength %>),
+    <%_ } _%>
+    <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
+      maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
+    <%_ } _%>
+    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+    numeric
+    <%_ } _%>
 
-                    <%_ } _%>
-                },
-            <%_ } _%>
-        }
+    <%_ } _%>
     },
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            if (to.params.<%= entityInstance %>Id) {
-                vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
-            }
-            <%_ if (relationships.length > 0) { _%>
-            vm.initRelationships();
-            <%_ } _%>
-        });
-    },
-    methods: {
-        save() {
-            let vm = this;
-            this.isSaving = true;
-            <%_ for (idx in fields) {
-                const fieldName = fields[ idx ].fieldName;
-                const fieldType = fields[idx].fieldType;
-                if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) { _%>
-                    this.<%= entityInstance %>.<%= fieldName %> = moment(this.<%= entityInstance %>.<%= fieldName %>, 'YYYY-MM-DDTHH:mm');
-                <%_ }
-            } _%>
-            if (this.<%= entityInstance %>.id) {
-                this.update<%= entityAngularName %>(this.<%= entityInstance %>).then(() => {
-                    vm.$router.go(-1);
-                    vm.isSaving = false;
-                });
-            } else {
-                this.create<%= entityAngularName %>(this.<%= entityInstance %>).then(() => {
-                    vm.$router.go(-1);
-                    vm.isSaving = false;
-                });
-            }
-        },
-        retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
-            let vm = this;
-            this.find<%= entityAngularName %>(<%= entityInstance %>Id).then(res => {
-                vm.<%= entityInstance %> = res.data;
-
-                <%_ for (idx in fields) {
-                    const fieldName = fields[ idx ].fieldName;
-                    const fieldType = fields[idx].fieldType;
-                    if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) { _%>
-                        vm.<%= entityInstance %>.<%= fieldName %> = moment(vm.<%= entityInstance %>.<%= fieldName %>, 'YYYY-MM-DDTHH:mm:ssZ').format('YYYY-MM-DDTHH:mm');
-                    <%_ }
-                } _%>
-            });
-        },
-        previousState() {
-            this.$router.go(-1);
-        },
-        <%_ if (fieldsContainBlob && fieldsContainImageBlob) { _%>
-        _clearInputImage(field, fieldContentType, idInput) {
-            this.clearInputImage(this.<%= entityInstance %>, this.elementRef, field, fieldContentType, idInput);
-        },
-        <%_ } _%>
-        initRelationships() {
-            let vm = this;
-            <%_
-                let hasManyToMany = false;
-                for (idx in relationships) {
-                const otherEntityName = relationships[idx].otherEntityName;
-                const otherEntityAngularName = relationships[idx].otherEntityAngularName;
-                if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) {
-                    hasManyToMany = true;
-                }
-            _%>
-            this.retrieve<%= otherEntityAngularName %>s().then(res => {
-                vm.<%= otherEntityName %>s = res.data;
-            });
-            <%_ } _%>
-        }<%_ if (hasManyToMany) { _%>,
-        getSelected(selectedVals, option) {
-            if (selectedVals) {
-                for (let i = 0; i < selectedVals.length; i++) {
-                    if (option.id === selectedVals[i].id) {
-                        return selectedVals[i];
-                    }
-                }
-            }
-            return option;
-        }
-        <%_ } _%>
-    }
+    <%_ } _%>
+  }
 };
 
-export default <%= entityAngularName %>Update;
+@Component({
+  validations
+})
+export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
+  @Inject('alertService') private alertService: () => AlertService;
+  @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
+  public <%= entityInstance %>: I<%= entityAngularName %> = new <%= entityAngularName %>();
+  <%_
+    const entitiesSeen = [entityAngularName];
+    for (idx in relationships) {
+    const otherEntityName = relationships[idx].otherEntityName;
+    const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+    const otherEntityAngularName = relationships[idx].otherEntityAngularName;
+  _%>
+  <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
+  @Inject('<%= otherEntityName %>Service') private <%= otherEntityName %>Service : () => <%= otherEntityAngularName %>Service;
+  <%_ } _%>
+  public <%= otherEntityNamePlural %> : <% if (otherEntityAngularName === 'User') { %>Array<any><%_ } else { _%>I<%= otherEntityAngularName %>[]<%_ } _%> = [];
+  <%_ entitiesSeen.push(otherEntityAngularName); } _%>
+  public isSaving = false;
+
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (to.params.<%= entityInstance %>Id) {
+        vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
+      }
+      <%_ if (relationships.length > 0) { _%>
+      vm.initRelationships();
+      <%_ } _%>
+    });
+  }
+
+  public save() : void {
+    this.isSaving = true;
+    <%_ for (idx in fields) {
+        const fieldName = fields[ idx ].fieldName;
+        const fieldType = fields[idx].fieldType;
+    } _%>
+    if (this.<%= entityInstance %>.id) {
+      this.<%= entityInstance %>Service().update(this.<%= entityInstance %>).then((param) => {
+        this.isSaving = false;
+        this.$router.go(-1);
+        <%_ if (enableTranslation) { _%>
+        const message = this.$t('<%= i18nKeyPrefix %>.updated', { 'param' : param.id });
+        <%_ } else {_%>
+        const message = 'A <%= entityAngularName %> is updated with identifier ' + param.id;
+        <%_ } _%>
+        this.alertService().showAlert(message, 'info');
+      });
+    } else {
+      this.<%= entityInstance %>Service().create(this.<%= entityInstance %>).then((param) => {
+        this.isSaving = false;
+        this.$router.go(-1);
+        <%_ if (enableTranslation) { _%>
+        const message = this.$t('<%= i18nKeyPrefix %>.created', { 'param' : param.id });
+        <%_ } else {_%>
+        const message = 'A <%= entityAngularName %> is created with identifier ' + param.id;
+        <%_ } _%>
+        this.alertService().showAlert(message, 'success');
+      });
+    }
+  }
+
+  <%_
+    let included = false;
+    for (idx in fields) {
+    const fieldName = fields[ idx ].fieldName;
+    const fieldType = fields[idx].fieldType;
+    if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType) && !included) {
+        included = true;
+        _%>
+    public convertDateTimeFromServer(date: Date): string {
+      if (date) {
+        return format(date, DATE_TIME_LONG_FORMAT);
+      }
+      return null;
+    }
+
+    public updateInstantField(field, event) {
+      if (event.target.value) {
+        this.<%= entityInstance %>[field] = parse(event.target.value, DATE_TIME_LONG_FORMAT, new Date());
+      } else {
+        this.<%= entityInstance %>[field] = null;
+      }
+    }
+
+    public updateZonedDateTimeField(field, event) {
+      if (event.target.value) {
+        this.<%= entityInstance %>[field] = parse(event.target.value, DATE_TIME_LONG_FORMAT, new Date())
+      } else {
+        this.<%= entityInstance %>[field] = null;
+      }
+    }
+    <%_ } } _%>
+
+  public retrieve<%= entityAngularName %>(<%= entityInstance %>Id) : void {
+    this.<%= entityInstance %>Service().find(<%= entityInstance %>Id).then((res) => {
+      this.<%= entityInstance %> = res;
+
+      <%_ for (idx in fields) {
+          const fieldName = fields[idx].fieldName;
+          const fieldType = fields[idx].fieldType;
+          if ([ 'Instant' ].includes(fieldType)) { _%>
+            if (this.<%= entityInstance %>.<%= fieldName %>) {
+              this.<%= entityInstance %>.<%= fieldName %> = parse(this.<%= entityInstance %>.<%= fieldName %>.toString(), INSTANT_FORMAT, new Date());
+            }
+          <%_ }
+          if ([ 'ZonedDateTime' ].includes(fieldType)) { _%>
+            if (this.<%= entityInstance %>.<%= fieldName %>) {
+              this.<%= entityInstance %>.<%= fieldName %> = parse(this.<%= entityInstance %>.<%= fieldName %>.toString(), ZONED_DATE_TIME_FORMAT, new Date());
+            }
+          <%_ }
+      } _%>
+    });
+  }
+
+  public previousState() : void {
+    this.$router.go(-1);
+  }
+
+  <%_ if (fieldsContainBlob && fieldsContainImageBlob) { _%>
+  public clearInputImage(field, fieldContentType, idInput) : void {
+    if (this.<%= entityInstance %> && field && fieldContentType) {
+      if (this.<%= entityInstance %>.hasOwnProperty(field)) {
+        this.<%= entityInstance %>[field] = null;
+      }
+      if (this.<%= entityInstance %>.hasOwnProperty(fieldContentType)) {
+        this.<%= entityInstance %>[fieldContentType] = null;
+      }
+      if (idInput) {
+        (<any>this).$refs[idInput] = null;
+      }
+    }
+  }
+
+  <%_ } _%>
+  public initRelationships() : void {
+    <%_
+        let hasManyToMany = false;
+        for (idx in relationships) {
+        const otherEntityName = relationships[idx].otherEntityName;
+        const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+        const otherEntityAngularName = relationships[idx].otherEntityAngularName;
+        if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) {
+            hasManyToMany = true;
+        }
+    _%>
+    this.<%= otherEntityName %>Service().retrieve().then((res) => {
+      this.<%= otherEntityNamePlural %> = res.data;
+    });
+    <%_ } _%>
+  }
+
+  <%_ if (hasManyToMany) { _%>
+  public getSelected(selectedVals, option) : any {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
+  }
+  <%_ } _%>
+}

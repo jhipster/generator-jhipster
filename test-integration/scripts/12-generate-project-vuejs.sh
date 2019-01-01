@@ -28,6 +28,6 @@ fi
 mkdir -p "$JHI_FOLDER_APP"
 cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
 cd "$JHI_FOLDER_APP"
-npm link jhipster-vuejs
+npm link generator-jhipster-vuejs
 jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook --from-cli --blueprint vuejs
 ls -al "$JHI_FOLDER_APP"

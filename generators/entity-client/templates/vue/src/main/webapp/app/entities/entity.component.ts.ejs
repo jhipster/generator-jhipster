@@ -1,114 +1,147 @@
-import Principal from '../../<%_ if (clientRootFolder) { _%>../<%_ } _%>components/account/Principal.vue';
-import <%= entityAngularName %>Service from './<%= entityFileName %>.service.vue';
+import { mixins } from 'vue-class-component';
+import { Component, Inject, Vue } from 'vue-property-decorator';
+import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import AlertService from '@/shared/alert/alert.service';
 <% if (fieldsContainBlob) { %>
-    import JhiDataUtils from '../../<% if (clientRootFolder) { %>../<% } %>shared/data/DataUtilsService.vue';
+import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
-const <%= entityAngularName %> = {
-    mixins: [Principal, <%= entityAngularName %>Service<% if (fieldsContainBlob) { %>, JhiDataUtils<% } %>],
-    data() {
-      return {
-          <%_ if (searchEngine === 'elasticsearch') { _%>
-          currentSearch: '',
-          <%_ } _%>
-          removeId: null,
-        <%_ if (pagination !== 'no') { _%>
-          itemsPerPage: 20,
-          queryCount: null,
-          page: 1,
-          previousPage: null,
-          propOrder: 'id',
-          reverse: false,
-          totalItems: 0,
-        <%_ } _%>
-          <%= entityInstancePlural %>: []
-      }
-    },
-    beforeRouteEnter (to, from, next) {
-        next(vm => {
-            vm.retrieveAll<%= entityAngularName %>s();
-        })
-    },
-    methods: {
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        search(query) {
-            if (!query) {
-              return this.clear();
-            }
-            this.currentSearch = query;
-            this.retrieveAll<%= entityAngularName %>s();
-        },
-        clear() {
-            this.currentSearch = '';
-            this.retrieveAll<%= entityAngularName %>s();
-        },
-        <%_ } _%>
-        retrieveAll<%= entityAngularName %>s() {
-            let vm = this;
-            <% if (pagination !== 'no') { %>
-            const paginationQuery = {
-                page: this.page - 1,
-                size: this.itemsPerPage,
-                sort: this.sort()
-            };<% } %>
-            <%_ if (searchEngine === 'elasticsearch') { _%>
-            if (this.currentSearch) {
-                this.search<%= entityAngularName %>s(this.currentSearch<%_ if (pagination !== 'no') { _%>, paginationQuery<%_ } _%>).then(res => {
-                    vm.<%= entityInstancePlural %> = res.data;
-                    <%_ if (pagination !== 'no') { _%>
-                    vm.queryCount = vm.totalItems;
-                    vm.totalItems = Number(res.headers['x-total-count']);
-                    <%_ } _%>
-                });
-                return;
-            }
-            <%_ } _%>
-            this.retrieve<%= entityAngularName %>s(<%_ if (pagination !== 'no') { _%>paginationQuery<%_ } _%>).then(res => {
-                vm.<%= entityInstancePlural %> = res.data;
-                <%_ if (pagination !== 'no') { _%>
-                vm.queryCount = vm.totalItems;
-                vm.totalItems = Number(res.headers['x-total-count']);
-                <%_ } _%>
-            });
-        },
-        prepareRemove(instance) {
-            this.removeId = instance.id;
-            this.$refs.removeEntisetFileDataSETDSty.show();
-        },
-        remove<%= entityAngularName %>() {
-            let vm = this;
-            this.delete<%= entityAngularName %>(this.removeId).then(() => {
-                vm.removeId = null;
-                vm.retrieveAll<%= entityAngularName %>s();
-                vm.closeDialog();
-            });
-        },
-        <%_ if (pagination !== 'no') { _%>
-        sort() {
-            const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
-            if (this.propOrder !== 'id') {
-                result.push('id');
-            }
-            return result;
-        },
-        loadPage(page: number) {
-            if (page !== this.previousPage) {
-                this.previousPage = page;
-                this.transition();
-            }
-        },
-        transition() {
-            this.retrieveAll<%= entityAngularName %>s();
-        },
-        changeOrder(propOrder) {
-            this.propOrder = propOrder;
-            this.reverse = !this.reverse;
-        },
-        <%_ } _%>
-        closeDialog() {
-            this.$refs.removeEntity.hide();
-        }
+@Component
+export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %> Vue<% } %> {
+  @Inject('alertService') private alertService: () => AlertService;
+  @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  public currentSearch = '';
+  <%_ } _%>
+  private removeId: string = null;
+  <%_ if (pagination !== 'no') { _%>
+  public itemsPerPage = 20;
+  public queryCount: number = null;
+  public page = 1;
+  public previousPage: number = null;
+  public propOrder = 'id';
+  public reverse = <%_ if (pagination === 'infinite-scroll') { _%>true<%_ } else { _%>false<%_ } _%>;
+  public totalItems = 0;
+  <%_ } _%>
+  public <%= entityInstancePlural %>: I<%= entityAngularName %>[] = [];
+
+  public dismissCountDown: number = this.$store.getters.dismissCountDown;
+  public dismissSecs: number = this.$store.getters.dismissSecs;
+  public alertType: string = this.$store.getters.alertType;
+  public alertMessage: any = this.$store.getters.alertMessage;
+
+  public getAlertFromStore() {
+    this.dismissCountDown = this.$store.getters.dismissCountDown;
+    this.dismissSecs = this.$store.getters.dismissSecs;
+    this.alertType = this.$store.getters.alertType;
+    this.alertMessage = this.$store.getters.alertMessage;
+  }
+
+  public countDownChanged(dismissCountDown: number) {
+    this.alertService().countDownChanged(dismissCountDown);
+    this.getAlertFromStore();
+  }
+
+  public mounted(): void {
+    this.retrieveAll<%= entityAngularName %>s();
+  }
+
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  public search(query) : void {
+    if (!query) {
+      return this.clear();
     }
-};
+    this.currentSearch = query;
+    this.retrieveAll<%= entityAngularName %>s();
+  }
 
-export default <%= entityAngularName %>;
+  <%_ } _%>
+  public clear() : void {
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    this.currentSearch = '';
+    <%_ } _%>
+    <%_ if (pagination !== 'no') { _%>
+    this.page = 1;
+    <%_ } _%>
+    this.retrieveAll<%= entityAngularName %>s();
+  }
+
+  public retrieveAll<%= entityAngularName %>s() :void {
+    <% if (pagination !== 'no') { %>
+    const paginationQuery = {
+      page: this.page - 1,
+      size: this.itemsPerPage,
+      sort: this.sort()
+    };<% } %>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    if (this.currentSearch) {
+      this.<%= entityInstance %>Service().search(this.currentSearch<%_ if (pagination !== 'no') { _%>, paginationQuery<%_ } _%>).then((res) => {
+        this.<%= entityInstancePlural %> = <%_ if (pagination !== 'no') { _%>res.data<%_ } else { _%>res<%_ } _%>;
+        <%_ if (pagination !== 'no') { _%>
+        this.totalItems = Number(res.headers['x-total-count']);
+        this.queryCount = this.totalItems;
+        <%_ } _%>
+      });
+      return;
+    }
+    <%_ } _%>
+    this.<%= entityInstance %>Service().retrieve(<%_ if (pagination !== 'no') { _%>paginationQuery<%_ } _%>).then((res) => {
+      this.<%= entityInstancePlural %> = res.data;
+      <%_ if (pagination !== 'no') { _%>
+      this.totalItems = Number(res.headers['x-total-count']);
+      this.queryCount = this.totalItems;
+      <%_ } _%>
+    });
+  }
+
+  public prepareRemove(instance) : void {
+    this.removeId = instance.id;
+  }
+
+  public remove<%= entityAngularName %>() : void {
+    this.<%= entityInstance %>Service().delete(this.removeId).then(() => {
+      <%_ if (enableTranslation) { _%>
+      const message = this.$t('<%= i18nKeyPrefix %>.deleted', { 'param' : this.removeId });
+      <%_ } else {_%>
+      const message = 'A <%= entityAngularName %> is deleted with identifier ' + this.removeId;
+      <%_ } _%>
+      this.alertService().showAlert(message, 'danger');
+      this.getAlertFromStore();
+
+      this.removeId = null;
+      this.retrieveAll<%= entityAngularName %>s();
+      this.closeDialog();
+    });
+  }
+
+  <%_ if (pagination !== 'no') { _%>
+  public sort() : Array<any> {
+    const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
+    if (this.propOrder !== 'id') {
+      result.push('id');
+    }
+    return result;
+  }
+
+  public loadPage(page: number) : void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.transition();
+    }
+  }
+
+  public transition() : void {
+    this.retrieveAll<%= entityAngularName %>s();
+  }
+
+  public changeOrder(propOrder) : void {
+    this.propOrder = propOrder;
+    this.reverse = !this.reverse;
+  }
+
+  <%_ } _%>
+  public closeDialog() : void {
+    (<any>this.$refs.removeEntity).hide();
+  }
+}

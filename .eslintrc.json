@@ -1,7 +1,9 @@
 {
     "env": {
         "node": true,
-        "es6": true
+        "es6": true,
+        "jasmine": true,
+        "mocha": true
     },
     "extends": ["airbnb-base"],
     "parserOptions": {

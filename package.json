@@ -1,7 +1,7 @@
 {
-  "name": "jhipster-vuejs",
+  "name": "generator-jhipster-vuejs",
   "version": "0.0.0",
-  "description": "A vueJs blueprint for JHipster. It will use VueJS as the frontend library",
+  "description": "A Vue.js blueprint for JHipster. It will use Vue.js as the frontend library",
   "keywords": [
     "yeoman-generator",
     "jhipster-blueprint",
@@ -25,7 +25,7 @@
     "chalk": "2.4.1",
     "ejs": "2.6.1",
     "eslint-config-airbnb": "^17.1.0",
-    "generator-jhipster": ">=5.5.0",
+    "generator-jhipster": ">=5.7.1",
     "glob": "7.1.2",
     "gulp-filter": "5.1.0",
     "insight": "0.10.1",

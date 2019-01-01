@@ -1,0 +1,148 @@
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import axios from 'axios';
+import Principal from '@/account/principal';
+import router from '@/router';
+<%_ if (enableTranslation) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+import TrackerService from '@/admin/tracker/tracker.service';
+<%_ } _%>
+
+import * as config from '@/shared/config/config';
+import LoginForm from '@/account/login-form/login-form.vue';
+import LoginFormClass from '@/account/login-form/login-form.component';
+
+const localVue = createLocalVue();
+localVue.component('b-alert', {});
+localVue.component('b-button', {});
+localVue.component('b-form', {});
+localVue.component('b-form-input', {});
+localVue.component('b-form-group', {});
+localVue.component('b-form-checkbox', {});
+localVue.component('b-link', {});
+const mockedAxios: any = axios;
+
+config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
+const i18n = config.initI18N(localVue);
+<%_ } _%>
+const store = config.initVueXStore(localVue);
+
+jest.mock('axios', () => ({
+  get: jest.fn(),
+  post: jest.fn()
+}));
+
+describe('LoginForm Component', () => {
+  let wrapper: Wrapper<LoginFormClass>;
+  let loginForm: LoginFormClass;
+
+  beforeEach(() => {
+    mockedAxios.get.mockReset();
+    mockedAxios.get.mockReturnValue(Promise.resolve({}));
+    mockedAxios.post.mockReset();
+
+    wrapper = shallowMount<LoginFormClass>(LoginForm,
+      {
+        store,
+        <%_ if (enableTranslation) { _%>
+        i18n,
+        <%_ } _%>
+        localVue,
+        provide: {
+          principal: () => new Principal(store, <% if (enableTranslation) { %>new TranslationService(store), i18n, <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %><% if (websocket === 'spring-websocket') { %>new TrackerService(router), <% } %>router)
+        }
+      });
+    loginForm = wrapper.vm;
+  });
+
+  it('should be a Vue instance', () => {
+    expect(wrapper.isVueInstance()).toBeTruthy();
+  });
+
+  <%_ if (authenticationType === 'jwt') { _%>
+  it('should not store token if authentication is KO', async () => {
+    // GIVEN
+    loginForm.login = 'login';
+    loginForm.password = 'pwd';
+    loginForm.rememberMe = true;
+    mockedAxios.post.mockReturnValue(Promise.reject());
+
+    // WHEN
+    loginForm.doLogin();
+    await loginForm.$nextTick();
+
+    // THEN
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/authenticate', {
+      username: 'login',
+      password: 'pwd',
+      rememberMe: true
+    });
+
+    expect(loginForm.authenticationError).toBeTruthy();
+  });
+
+  it('should store token if authentication is OK', async () => {
+    // GIVEN
+    loginForm.login = 'login';
+    loginForm.password = 'pwd';
+    loginForm.rememberMe = true;
+    const jwtSecret = 'jwt-secret';
+    mockedAxios.post.mockReturnValue(Promise.resolve({ headers: { authorization: 'Bearer ' + jwtSecret } }));
+
+    // WHEN
+    loginForm.doLogin();
+    await loginForm.$nextTick();
+
+    // THEN
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/authenticate', {
+      username: 'login',
+      password: 'pwd',
+      rememberMe: true
+    });
+
+    expect(loginForm.authenticationError).toBeFalsy();
+    expect(localStorage.getItem('jhi-authenticationToken')).toEqual(jwtSecret);
+  });
+  <%_ } else { _%>
+  it('should authentication be KO', async () => {
+    // GIVEN
+    loginForm.login = 'login';
+    loginForm.password = 'pwd';
+    loginForm.rememberMe = true;
+    mockedAxios.post.mockReturnValue(Promise.reject());
+
+    // WHEN
+    loginForm.doLogin();
+    await loginForm.$nextTick();
+
+    // THEN
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/authentication',
+      'j_username=login&j_password=pwd&remember-me=true&submit=Login',
+      { "headers": { "Content-Type": "application/x-www-form-urlencoded" } });
+
+    expect(loginForm.authenticationError).toBeTruthy();
+  });
+
+  it('should authentication be OK', async () => {
+    // GIVEN
+    loginForm.login = 'login';
+    loginForm.password = 'pwd';
+    loginForm.rememberMe = true;
+    mockedAxios.post.mockReturnValue(Promise.resolve({}));
+
+    // WHEN
+    loginForm.doLogin();
+    await loginForm.$nextTick();
+
+    // THEN
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/authentication',
+      'j_username=login&j_password=pwd&remember-me=true&submit=Login',
+      { "headers": { "Content-Type": "application/x-www-form-urlencoded" } });
+
+    expect(loginForm.authenticationError).toBeFalsy();
+  });
+  <%_ } _%>
+
+});

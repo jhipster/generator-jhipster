@@ -9,7 +9,13 @@
                 </span>
             </router-link>
         </h2>
-        <!--<jhi-alert></jhi-alert>-->
+        <b-alert :show="dismissCountDown"
+            dismissible
+            :variant="alertType"
+            @dismissed="dismissCountDown=0"
+            @dismiss-count-down="countDownChanged">
+            {{alertMessage}}
+        </b-alert>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <div class="row">
             <div class="col-sm-12">
@@ -23,7 +29,7 @@
                         </button>
                         <button type="button" id="clear-search" class="btn btn-secondary" v-on:click="clear()"
                             v-if="currentSearch">
-                            <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+                            <font-awesome-icon icon="trash"></font-awesome-icon>
                         </button>
                     </div>
                 </form>
@@ -51,7 +57,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="<% if (pagination !== 'no') { %><%= entityInstance %> of orderBy(<%= entityInstancePlural %>, propOrder, reverse === true ? 1 : -1)<% } else {%><%= entityInstance %> in <%= entityInstancePlural %><% } %>">
+                <tr v-for="<% if (pagination !== 'no') { %><%= entityInstance %> of orderBy(<%= entityInstancePlural %>, propOrder, reverse === true ? 1 : -1)<% } else {%><%= entityInstance %> in <%= entityInstancePlural %><% } %>"
+                    :key="<%= entityInstance %>.id">
                     <td><router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}">{{<%= entityInstance %>.id}}</router-link></td>
                     <%_ for (idx in fields) {
                         const fieldName = fields[idx].fieldName;
@@ -95,8 +102,8 @@
                         <td>
                             <%_ if (otherEntityName === 'user') { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
-                                    <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
-                                        {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{last ? '' : ', '}}
+                                    <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">{{i > 0 ? ', ' : ''}}
+                                        {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
                                     </span>
                                 <%_ } else { _%>
                                     <%_ if (dto === 'no') { _%>
@@ -107,17 +114,17 @@
                                 <%_ } _%>
                             <%_ } else { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
-                                    <span v-for="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">
-                                        <router-link class="form-control-static" :to="'../<%= otherEntityStateName %>/' + <%= relationshipFieldName %>.id}} + '/View'">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</router-link>{{last ? '' : ', '}}
+                                    <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">{{i > 0 ? ', ' : ''}}
+                                        <router-link class="form-control-static" :to="'../entity/<%= otherEntityStateName %>/' + <%= relationshipFieldName %>.id + '/view'">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</router-link>
                                     </span>
                                 <%_ } else { _%>
                                     <%_ if (dto === 'no') { _%>
                                         <div v-if="<%= entityInstance + "." + relationshipFieldName %>">
-                                            <router-link :to="'../<%= otherEntityStateName %>/' + <%= entityInstance + "." + relationshipFieldName + ".id" %> + '/View'" >{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
+                                            <router-link :to="'../entity/<%= otherEntityStateName %>/' + <%= entityInstance + "." + relationshipFieldName + ".id" %> + '/view'" >{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
                                         </div>
                                     <%_ } else { _%>
                                         <div v-if="<%= entityInstance + "." + relationshipFieldName + "Id" %>">
-                                            <router-link :to="'../<%= otherEntityStateName %>/' + <%= entityInstance + "." + relationshipFieldName + "Id" %> + '/View'" >{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</router-link>
+                                            <router-link :to="'../entity/<%= otherEntityStateName %>/' + <%= entityInstance + "." + relationshipFieldName + "Id" %> + '/view'" >{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</router-link>
                                         </div>
                                     <%_ } _%>
                                 <%_ } _%>
@@ -135,12 +142,12 @@
                                 <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
                             </router-link>
-                            <b-btn v-on:click="prepareRemove(<%= entityInstance %>)"
+                            <b-button v-on:click="prepareRemove(<%= entityInstance %>)"
                                    class="btn btn-danger btn-sm"
                                    v-b-modal.removeEntity>
                                 <font-awesome-icon icon="times"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.delete')">Delete</span>
-                            </b-btn>
+                            </b-button>
                         </div>
                     </td>
                 </tr>

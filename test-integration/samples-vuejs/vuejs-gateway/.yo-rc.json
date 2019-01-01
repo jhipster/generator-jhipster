@@ -33,9 +33,9 @@
     "jhiPrefix": "jhi",
     "clientPackageManager": "npm",
     "nativeLanguage": "en",
-    "blueprint": "jhipster-vuejs"
+    "blueprint": "generator-jhipster-vuejs"
   },
-  "jhipster-vuejs": {
+  "generator-jhipster-vuejs": {
     "jhipsterVersion": "5.5.0",
     "applicationType": "gateway",
     "baseName": "test2",

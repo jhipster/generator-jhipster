@@ -1,39 +1,106 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
 import Vue from 'vue';
-import setupAxiosInterceptors from './config/axios-interceptor';
-import App from './App.vue';
-import router from './router';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {Modal, Pagination, Progress} from 'bootstrap-vue/es/components';
-import * as config from './shared/config';
-import JhiItemCountComponent from './shared/ItemCount.vue';
+import App from './app.vue';
+import router from './router';
+import * as config from './shared/config/config';
+import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
+import JhiItemCountComponent from './shared/jhi-item-count.vue';
+import ActivateService from './account/activate/activate.service';
+import AuditsService from './admin/audits/audits.service';
+import HealthService from './admin/health/health.service';
+import LoginModalService from './account/login-modal.service';
+import MetricsService from './admin/metrics/metrics.service';
+import RegisterService from './account/register/register.service';
+import LogsService from './admin/logs/logs.service';
+import Principal from './account/principal';
 
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+<%_ if (useSass) { _%>
+import '../content/scss/vendor.scss';
+<%_} else { _%>
+import '../content/css/vendor.css';
+<%_ } _%>
+import AlertService from '@/shared/alert/alert.service';
+<%_ if (enableTranslation) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } _%>
+import UserManagementService from '@/admin/user-management/user-management.service';
+import ConfigurationService from '@/admin/configuration/configuration.service';
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
+import GatewayService from '@/admin/gateway/gateway.service';
+<%_ } %>
+<%_ if (websocket === 'spring-websocket') { _%>
+import TrackerService from './admin/tracker/tracker.service';
+<%_ } _%>
+// jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 Vue.config.productionTip = false;
-
-setupAxiosInterceptors(() => console.log('Unauthorized!'));
 
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(Vue);
 <%_ } _%>
 const store = config.initVueXStore(Vue);
+
+const alertService = new AlertService(store);
+<%_ if (enableTranslation) { _%>
+const translationService = new TranslationService(store);
+<%_ } _%>
 config.initVueApp(Vue);
-config.initBootstrapVue(Vue);
+config.initFortAwesome(Vue);
+bootstrapVueConfig.initBootstrapVue(Vue);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('jhi-item-count', JhiItemCountComponent);
-Vue.use(Modal);
-Vue.use(Pagination);
-Vue.use(Progress);
 
-/* eslint-disable no-new */
+const activateService = new ActivateService();
+const auditsService = new AuditsService();
+const healthService = new HealthService();
+const loginModalService = new LoginModalService();
+const metricsService = new MetricsService();
+const registerService = new RegisterService();
+<%_ if (websocket === 'spring-websocket') { _%>
+const trackerService = new TrackerService(router);
+<%_ } _%>
+const userManagementService = new UserManagementService();
+const configurationService = new ConfigurationService();
+const logsService = new LogsService();
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
+const gatewayService = new GatewayService();
+<%_ } %>
+const principal = new Principal(store, <%_ if (enableTranslation) { _%>translationService, i18n, <%_ } _%><%_ if (authenticationType === 'session') { _%>(<any>Vue).cookie, <%_ } _%><%_ if (websocket === 'spring-websocket') { _%>trackerService, <%_ } _%>router);
+
+// jhipster-needle-add-entity-service-to-main-declaration - JHipster will declare entities services here
+
+/* tslint:disable */
 new Vue({
-    el: '#app',
-    components: { App },
-    template: '<App/>',
-    router,
+  el: '#app',
+  components: { App },
+  template: '<App/>',
+  router,
+  provide: {
+    activateService: () => activateService,
+    auditsService: () => auditsService,
+    healthService: () => healthService,
+    loginModalService: () => loginModalService,
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
+    gatewayService: () => gatewayService,
+    <%_ } %>
+    configurationService: () => configurationService,
+    logsService: () => logsService,
+    metricsService: () => metricsService,
+    principal: () => principal,
+    registerService: () => registerService,
+    <%_ if (websocket === 'spring-websocket') { _%>
+    trackerService: () => trackerService,
+    <%_ } _%>
+    alertService: () => alertService,
+    <%_ if (enableTranslation) { _%>
+    translationService: () => translationService,
+    <%_ } _%>
+    userService: () => userManagementService
+
+    // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
+  },
 <%_ if (enableTranslation) { _%>    i18n,<%_ } _%>
-    store
+  store
 });

@@ -329,6 +329,7 @@ describe('Account', () => {
 
     await browser.get('#/admin/user-management');
     const deleteBtn = getUserDeleteButtonByLogin('user_test');
+    await waitUntilDisplayed(deleteBtn);
     await deleteBtn.click();
 
     const deleteModal = element(by.className('modal'));

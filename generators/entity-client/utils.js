@@ -24,14 +24,17 @@ const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 module.exports = {
     addEntityToMenu,
     addEntityToRouterImport,
-    addEntityToRouter
+    addEntityToRouter,
+    addEntityServiceToMainImport,
+    addEntityServiceToMainConst,
+    addEntityServiceToMain
 };
 
 function addEntityToMenu(generator, entityName, translationKey, className) {
     const menuI18nTitle = generator.enableTranslation ? `v-text="$t('global.menu.entities.${translationKey}')"` : '';
     jhipsterUtils.rewriteFile(
         {
-            file: `${CLIENT_MAIN_SRC_DIR}/app/components/jhi-navbar/JhiNavbar.vue`,
+            file: `${CLIENT_MAIN_SRC_DIR}/app/core/jhi-navbar/jhi-navbar.vue`,
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                 // prettier-ignore
@@ -53,9 +56,11 @@ function addEntityToRouterImport(generator, className, fileName, folderName) {
             splicable: [generator.stripMargin(
                 // prettier-ignore
                 `|// prettier-ignore
-                |import ${className} from '../entities/${folderName}/${fileName}.vue';
-                |import ${className}Update from '../entities/${folderName}/${fileName}-update.vue';
-                |import ${className}Details from '../entities/${folderName}/${fileName}-details.vue';`
+                |const ${className} = () => import('../entities/${folderName}/${fileName}.vue');
+                |// prettier-ignore
+                |const ${className}Update = () => import('../entities/${folderName}/${fileName}-update.vue');
+                |// prettier-ignore
+                |const ${className}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
             )]
         },
         generator
@@ -69,11 +74,54 @@ function addEntityToRouter(generator, entityName, entityFileName, className) {
             needle: 'jhipster-needle-add-entity-to-router',
             splicable: [generator.stripMargin(
                 // prettier-ignore
-                `|, // prettier-ignore
-                |    { path: '/entity/${entityFileName}', name: '${className}', component: ${className} },
-                |    { path: '/entity/${entityFileName}/new', name: '${className}Create', component: ${className}Update },
-                |    { path: '/entity/${entityFileName}/:${entityName}Id/edit', name: '${className}Edit', component: ${className}Update },
-                |    { path: '/entity/${entityFileName}/:${entityName}Id/view', name: '${className}View', component: ${className}Details }`
+                `|,
+                |  { path: '/entity/${entityFileName}', name: '${className}', component: ${className} },
+                |  { path: '/entity/${entityFileName}/new', name: '${className}Create', component: ${className}Update },
+                |  { path: '/entity/${entityFileName}/:${entityName}Id/edit', name: '${className}Edit', component: ${className}Update },
+                |  { path: '/entity/${entityFileName}/:${entityName}Id/view', name: '${className}View', component: ${className}Details }`
+            )]
+        },
+        generator
+    );
+}
+
+function addEntityServiceToMainImport(generator, className, fileName, folderName) {
+    jhipsterUtils.rewriteFile(
+        {
+            file: `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main-import',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|import ${className}Service from '@/entities/${folderName}/${fileName}.service';`
+            )]
+        },
+        generator
+    );
+}
+
+function addEntityServiceToMainConst(generator, entityName, className) {
+    jhipsterUtils.rewriteFile(
+        {
+            file: `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main-declaration',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|const ${entityName}Service = new ${className}Service();`
+            )]
+        },
+        generator
+    );
+}
+
+function addEntityServiceToMain(generator, entityName) {
+    jhipsterUtils.rewriteFile(
+        {
+            file: `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|,
+                |    ${entityName}Service: () => ${entityName}Service`
             )]
         },
         generator

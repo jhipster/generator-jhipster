@@ -38,37 +38,49 @@ describe('Administration', () => {
 <%_ } _%>
 
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-    it('should load gateway', async () => {
-        await navBarPage.clickOnAdminMenuItem('gateway');
-        expect(await element(by.id('gateway-page-heading')).getText()).to.eq('Gateway');
-    });
+  it('should load gateway', async () => {
+    await navBarPage.clickOnAdminMenuItem('gateway');
+    const heading = element(by.id('gateway-page-heading'));
+    await waitUntilDisplayed(heading);
+    expect(await heading.getText()).to.eq('Gateway');
+  });
 <%_ } _%>
 
   it('should load metrics', async () => {
     await navBarPage.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-metrics');
-    expect(await element(by.id('metrics-page-heading')).getText()).to.eq('Application Metrics');
+    const heading = element(by.id('metrics-page-heading'));
+    await waitUntilDisplayed(heading);
+    expect(await heading.getText()).to.eq('Application Metrics');
   });
 
   it('should load health', async () => {
     await navBarPage.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-health');
-    expect(await element(by.id('health-page-heading')).getText()).to.eq('Health Checks');
+    const heading = element(by.id('health-page-heading'));
+    await waitUntilDisplayed(heading);
+    expect(await heading.getText()).to.eq('Health Checks');
   });
 
   it('should load configuration', async () => {
     await navBarPage.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-configuration');
-    expect(await element(by.id('configuration-page-heading')).getText()).to.eq('Configuration');
+    const heading = element(by.id('configuration-page-heading'));
+    await waitUntilDisplayed(heading);
+    expect(await heading.getText()).to.eq('Configuration');
   });
 
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
   it('should load audits', async () => {
     await navBarPage.clickOnAdminMenuItem('audits');
-    expect(await element(by.id('audits-page-heading')).getText()).to.eq('Audits');
+    const heading = element(by.id('audits-page-heading'));
+    await waitUntilDisplayed(heading);
+    expect(await heading.getText()).to.eq('Audits');
   });
 
 <%_ } _%>
   it('should load logs', async () => {
     await navBarPage.clickOnAdminMenuItem('logs');
-    expect(await element(by.id('logs-page-heading')).getText()).to.eq('Logs');
+    const heading = element(by.id('logs-page-heading'));
+    await waitUntilDisplayed(heading);
+    expect(await heading.getText()).to.eq('Logs');
   });
 
   after(async () => {

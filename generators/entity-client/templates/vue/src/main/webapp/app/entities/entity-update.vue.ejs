@@ -57,7 +57,7 @@
                                 <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                                 <%_ } _%>
                                 <%_ if (fieldTypeBlobContent === 'image') { _%>
-                                <button type="button" v-on:click="_clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                                <button type="button" v-on:click="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-right">
                                 <%_ } else { _%>
                                 <button type="button" v-on:click="<%= entityInstance %>.<%= fieldName %>=null;<%= entityInstance %>.<%= fieldName %>ContentType=null;"
                                         class="btn btn-secondary btn-xs pull-right">
@@ -65,16 +65,27 @@
                                     <font-awesome-icon icon="times"></font-awesome-icon>
                                 </button>
                             </div>
-                            <input type="file" id="file_<%= fieldName %>" v-on:change="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" v-text="$t('entity.action.addimage')"<% } else { %>false)" v-text="$t('entity.action.addblob')"<% } %>/>
+                            <input type="file" ref="file_<%= fieldName %>" id="file_<%= fieldName %>" v-on:change="setFileData($event, <%= entityInstance %>, '<%= fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*" v-text="$t('entity.action.addimage')"<% } else { %>false)" v-text="$t('entity.action.addblob')"<% } %>/>
                         </div>
                         <%_ } _%>
                         <%_ if (fieldType === 'LocalDate') { _%>
                         <div class="input-group">
-                            <input id="<%= entityFileName %>-<%= fieldName %>" type="date" class="form-control" name="<%= fieldName %>"  :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %> />
+                            <input id="<%= entityFileName %>-<%= fieldName %>" type="date" class="form-control" name="<%= fieldName %>"  :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" 
+                            v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %> />
                         </div>
-                        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                        <%_ } else if (['Instant'].includes(fieldType)) { _%>
                         <div class="d-flex">
-                            <input id="<%= entityFileName %>-<%= fieldName %>" type="datetime-local" class="form-control" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>/>
+                            <input id="<%= entityFileName %>-<%= fieldName %>" type="datetime-local" class="form-control" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" 
+                            <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>
+                            :value="convertDateTimeFromServer($v.<%= entityInstance %>.<%= fieldName %>.$model)"
+                            @change="updateInstantField('<%= fieldName %>', $event)"/>
+                        </div>
+                        <%_ } else if (['ZonedDateTime'].includes(fieldType)) { _%>
+                        <div class="d-flex">
+                            <input id="<%= entityFileName %>-<%= fieldName %>" type="datetime-local" class="form-control" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" 
+                            <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>
+                            :value="convertDateTimeFromServer($v.<%= entityInstance %>.<%= fieldName %>.$model)"
+                            @change="updateZonedDateTimeField('<%= fieldName %>', $event)"/>
                         </div>
                         <%_ } else if (fieldTypeBlobContent === 'text') { _%>
                         <textarea class="form-control" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"

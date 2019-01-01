@@ -1,0 +1,62 @@
+import axios from 'axios';
+<% if (pagination !== 'no') { %>
+import buildPaginationQueryOpts from '@/shared/sort/sorts';
+<% } %>
+import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+
+const baseApiUrl = 'api/<%= entityApiUrl %>';
+<%_ if (searchEngine === 'elasticsearch') { _%>
+const baseSearchApiUrl = 'api/_search/<%= entityApiUrl %>?query=';
+<%_ } _%>
+
+export default class <%= entityAngularName %>Service {
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  public search(query<% if (pagination !== 'no') { %>, paginationQuery<% } %>) : Promise<any> {
+    return new Promise<any>(resolve => {
+      axios.get(`${baseSearchApiUrl}${query}<% if (pagination !== 'no') { %>&${buildPaginationQueryOpts(paginationQuery)}<% } %>`).then(function (res) {
+        resolve(<% if (pagination !== 'no') { %>res<% } else { %>res.data<% } %>);
+      });
+    });
+  }
+  <%_ } _%>
+
+  public find(id) : Promise<I<%= entityAngularName %>> {
+    return new Promise<I<%= entityAngularName %>>(resolve => {
+      axios.get(`${baseApiUrl}/${id}`).then(function (res) {
+        resolve(res.data);
+      });
+    });
+  }
+
+  public retrieve(paginationQuery?: any) : Promise<any> {
+    return new Promise<any>(resolve => {
+      axios.get(baseApiUrl<% if (pagination !== 'no') { %> + `?${buildPaginationQueryOpts(paginationQuery)}` <% } %>).then(function (res) {
+        resolve(res);
+      });
+    });
+  }
+
+  public delete(id) : Promise<any> {
+    return new Promise<any>(resolve => {
+      axios.delete(`${baseApiUrl}/${id}`).then(function (res) {
+        resolve(res);
+      });
+    });
+  }
+
+  public create(entity) : Promise<I<%= entityAngularName %>> {
+    return new Promise<I<%= entityAngularName %>>(resolve => {
+      axios.post(`${baseApiUrl}`, entity).then(function (res) {
+        resolve(res.data);
+      });
+    });
+  }
+
+  public update(entity) : Promise<I<%= entityAngularName %>> {
+    return new Promise<I<%= entityAngularName %>>(resolve => {
+      axios.put(`${baseApiUrl}`, entity).then(function (res) {
+        resolve(res.data);
+      });
+    });
+  }
+}
