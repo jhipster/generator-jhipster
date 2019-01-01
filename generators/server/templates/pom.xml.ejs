@@ -777,6 +777,7 @@
         </testResources>
         <%_ } _%>
         <plugins>
+<%_ if(serverLanguage === undefined || serverLanguage === 'java') { _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -798,6 +799,7 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+<% } %>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>

@@ -133,6 +133,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
+                this.serverLanguage = 'java';
                 this.reactive = configuration.get('reactive') || this.configOptions.reactive;
                 this.reactiveRepository = this.reactive ? 'reactive/' : '';
                 this.packageName = configuration.get('packageName');
