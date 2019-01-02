@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -445,7 +445,7 @@ public class CacheConfiguration {
     @Bean
     public InfinispanCacheConfigurer cacheConfigurer(JHipsterProperties jHipsterProperties) {
         log.info("Defining {} configuration", "app-data for local, replicated and distributed modes");
-        final JHipsterProperties.Cache.Infinispan cacheInfo = jHipsterProperties.getCache().getInfinispan();
+        JHipsterProperties.Cache.Infinispan cacheInfo = jHipsterProperties.getCache().getInfinispan();
 
         return manager -> {
             // initialize application cache

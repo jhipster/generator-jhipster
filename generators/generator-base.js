@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -2038,6 +2038,9 @@ module.exports = class extends PrivateBase {
         } catch (err) {
             this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
+        }
+        if (context.fileData.databaseType) {
+            context.databaseType = context.fileData.databaseType;
         }
         context.relationships = context.fileData.relationships || [];
         context.fields = context.fileData.fields || [];

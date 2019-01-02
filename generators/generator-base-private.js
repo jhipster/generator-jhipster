@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -980,7 +980,7 @@ module.exports = class extends Generator {
      * @param {string} dto - dto
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto) {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
         const variablesWithTypes = [];
         let tsKeyType;
         if (pkType === 'String') {
@@ -1002,7 +1002,7 @@ module.exports = class extends Generator {
             } else if (fieldType === 'String' || fieldType === 'UUID') {
                 tsType = 'string';
             } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
-                tsType = 'Moment';
+                tsType = customDateType;
             } else {
                 // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
                 tsType = 'any';
