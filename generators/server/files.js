@@ -1169,11 +1169,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.databaseType === 'cassandra',
-            path: SERVER_TEST_RES_DIR,
-            templates: ['cassandra-random-port.yml']
-        },
-        {
             condition: generator => generator.databaseType === 'couchbase',
             path: SERVER_TEST_SRC_DIR,
             templates: [

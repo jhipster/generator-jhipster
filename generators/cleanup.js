@@ -164,4 +164,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
             generator.removeFile(`${constants.DOCKER_DIR}keycloak.yml`);
         }
     }
+    if (generator.isJhipsterVersionLessThan('5.8.0')) {
+        if (generator.databaseType === 'cassandra') {
+            generator.removeFile(`${testResourceDir}cassandra-random-port.yml`);
+        }
+    }
 }

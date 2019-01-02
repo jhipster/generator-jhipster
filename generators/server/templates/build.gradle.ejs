@@ -462,6 +462,7 @@ dependencies {
     testCompile ("org.cassandraunit:cassandra-unit-spring") {
         exclude(group: 'org.slf4j')
     }
+    testCompile "org.testcontainers:database-commons"
     <%_ } _%>
     <%_ if (cucumberTests) { _%>
     testCompile "io.cucumber:cucumber-junit"
