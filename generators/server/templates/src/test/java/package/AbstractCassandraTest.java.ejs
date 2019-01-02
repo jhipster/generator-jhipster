@@ -18,17 +18,18 @@
 -%>
 package <%=packageName%>;
 
-import io.github.jhipster.config.JHipsterConstants;
-
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
+import io.github.jhipster.config.JHipsterConstants;
 import org.apache.cassandra.exceptions.ConfigurationException;
 import org.apache.thrift.transport.TTransportException;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.junit.BeforeClass;
 import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.containers.BindMode;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -37,6 +38,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,24 +50,43 @@ import java.util.List;
 public class AbstractCassandraTest {
 
     public static final String CASSANDRA_UNIT_KEYSPACE = "cassandra_unit_keyspace";
-    private static final String CASSANDRA_UNIT_RANDOM_PORT_YAML = "cassandra-random-port.yml";
-    private static final long CASSANDRA_TIMEOUT = 30000L;
+    public static GenericContainer CASSANDRA_CONTAINER = null;
+    public static final int CASSANDRA_TEST_PORT = 9042;
     private static boolean started = false;
 
     @BeforeClass
-    public static void startServer() throws TTransportException, ConfigurationException, IOException, URISyntaxException  {
-        if (! started) {
-            EmbeddedCassandraServerHelper.startEmbeddedCassandra(CASSANDRA_UNIT_RANDOM_PORT_YAML, CASSANDRA_TIMEOUT);
-            Cluster cluster = EmbeddedCassandraServerHelper.getCluster();
+    public static void startServer() throws TTransportException, ConfigurationException, IOException, URISyntaxException {
+        if (!started) {
+            startTestcontainer();
+            Cluster cluster = new Cluster.Builder()
+                .addContactPoint("127.0.0.1")
+                .withPort(CASSANDRA_CONTAINER.getMappedPort(CASSANDRA_TEST_PORT))
+                .withoutMetrics()
+                .withoutJMXReporting()
+                .build();
+
             Session session = cluster.connect();
-            String createQuery = "CREATE KEYSPACE " + CASSANDRA_UNIT_KEYSPACE + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}";
-            session.execute(createQuery);
-            String useKeyspaceQuery = "USE " + CASSANDRA_UNIT_KEYSPACE;
-            session.execute(useKeyspaceQuery);
+            createTestKeyspace(session);
             CQLDataLoader dataLoader = new CQLDataLoader(session);
             applyScripts(dataLoader, "config/cql/changelog/", "*.cql");
             started = true;
         }
+    }
+
+    private static void startTestcontainer() throws TTransportException, IOException {
+        CASSANDRA_CONTAINER =
+            new GenericContainer("<%= DOCKER_CASSANDRA %>")
+                .waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(30)))
+                .withExposedPorts(CASSANDRA_TEST_PORT);
+
+        CASSANDRA_CONTAINER.start();
+    }
+
+    private static void createTestKeyspace(Session session) {
+        String createQuery = "CREATE KEYSPACE " + CASSANDRA_UNIT_KEYSPACE + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}";
+        session.execute(createQuery);
+        String useKeyspaceQuery = "USE " + CASSANDRA_UNIT_KEYSPACE;
+        session.execute(useKeyspaceQuery);
     }
 
     private static void applyScripts(CQLDataLoader dataLoader, String cqlDir, String pattern) throws IOException, URISyntaxException {

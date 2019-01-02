@@ -459,6 +459,11 @@
             <artifactId>cassandra-unit-spring</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>database-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
         <%_ } _%>
         <%_ if (cacheProvider === 'ehcache') { _%>
         <dependency>
