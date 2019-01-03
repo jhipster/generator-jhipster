@@ -70,6 +70,11 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/entry.ts`);
         generator.removeFile(`${CLIENT_TEST_SRC_DIR}karma.conf.js`);
     }
+    if (generator.isJhipsterVersionLessThan('5.8.0')) {
+        generator.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.html`);
+        generator.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.ts`);
+        generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics-modal.component.spec.ts`);
+    }
 }
 
 /**
@@ -165,6 +170,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         }
     }
     if (generator.isJhipsterVersionLessThan('5.8.0')) {
+        generator.removeFile(`${javaDir}config/MetricsConfiguration.java`);
         if (generator.databaseType === 'cassandra') {
             generator.removeFile(`${testResourceDir}cassandra-random-port.yml`);
         }

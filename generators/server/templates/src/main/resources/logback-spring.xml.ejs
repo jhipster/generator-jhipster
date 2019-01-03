@@ -53,7 +53,7 @@
     <logger name="javax.management.remote" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
-    <logger name="com.codahale.metrics" level="WARN"/><% if (databaseType === 'cassandra') { %>
+    <% if (databaseType === 'cassandra') { %>
     <logger name="com.datastax" level="WARN"/><% } %>
     <%_ if (cacheProvider === 'hazelcast') { _%>
     <logger name="com.hazelcast" level="INFO"/>

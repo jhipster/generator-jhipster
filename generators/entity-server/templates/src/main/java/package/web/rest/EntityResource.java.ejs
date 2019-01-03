@@ -18,7 +18,6 @@
 -%>
 package <%=packageName%>.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
 import <%=packageName%>.domain.<%= entityClass %>;
 <%_ } _%>
@@ -109,7 +108,6 @@ public class <%= entityClass %>Resource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/<%= entityApiUrl %>")
-    @Timed
     public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
@@ -140,7 +138,6 @@ public class <%= entityClass %>Resource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/<%= entityApiUrl %>")
-    @Timed
     public ResponseEntity<<%= instanceType %>> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
@@ -167,8 +164,7 @@ public class <%= entityClass %>Resource {
      * @param filter the filter of the request<% } %>
      * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
      */
-    @GetMapping("/<%= entityApiUrl %>")
-    @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
+    @GetMapping("/<%= entityApiUrl %>")<%- include('../../common/get_all_template', {viaService: viaService}); -%>
 
     <%_ if (reactiveRepositories) { _%>
     /**
@@ -176,7 +172,6 @@ public class <%= entityClass %>Resource {
      * @return the Flux of <%= entityInstancePlural %>
      */
     @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
-    @Timed
     public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
         log.debug("REST request to get all <%= entityClassPlural %> as a stream");
         <%_ if (viaService) { _%>
@@ -194,7 +189,6 @@ public class <%= entityClass %>Resource {
      * @return the ResponseEntity with status 200 (OK) and with body the <%= instanceName %>, or with status 404 (Not Found)
      */
     @GetMapping("/<%= entityApiUrl %>/{id}")
-    @Timed
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:false}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
@@ -207,7 +201,6 @@ public class <%= entityClass %>Resource {
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/<%= entityApiUrl %>/{id}")
-    @Timed
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: viaService}); -%>
@@ -222,6 +215,5 @@ public class <%= entityClass %>Resource {
      * @param pageable the pagination information<% } %>
      * @return the result of the search
      */
-    @GetMapping("/_search/<%= entityApiUrl %>")
-    @Timed<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>
+    @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>
 }

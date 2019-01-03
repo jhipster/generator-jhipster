@@ -842,10 +842,6 @@ const serverFiles = {
                     file: 'package/config/LoggingAspectConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/LoggingAspectConfiguration.java`
                 },
-                {
-                    file: 'package/config/MetricsConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/MetricsConfiguration.java`
-                },
                 { file: 'package/config/WebConfigurer.java', renameTo: generator => `${generator.javaDir}config/WebConfigurer.java` }
             ]
         },

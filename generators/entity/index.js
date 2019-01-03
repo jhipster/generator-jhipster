@@ -951,7 +951,12 @@ module.exports = class extends BaseBlueprintGenerator {
                             relationship.otherEntityModuleName = `${context.angularXAppName +
                                 relationship.otherEntityNameCapitalized}Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
-                            if (context.skipUiGrouping || otherEntityData === undefined || otherEntityData.clientRootFolder === '' || otherEntityData.clientRootFolder === undefined) {
+                            if (
+                                context.skipUiGrouping ||
+                                otherEntityData === undefined ||
+                                otherEntityData.clientRootFolder === '' ||
+                                otherEntityData.clientRootFolder === undefined
+                            ) {
                                 relationship.otherEntityClientRootFolder = '';
                             } else {
                                 relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
