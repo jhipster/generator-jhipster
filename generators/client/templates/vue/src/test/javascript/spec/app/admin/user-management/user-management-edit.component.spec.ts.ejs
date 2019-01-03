@@ -36,8 +36,8 @@ describe('UserManagementEdit Component', () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
   });
 
-  describe('OnInit', () => {
-    it('Should load authorities and language on init', async () => {
+  describe('init', () => {
+    it('Should load user', async () => {
       // GIVEN
       mockedAxios.get.mockReturnValue(Promise.resolve({}));
 
@@ -47,6 +47,19 @@ describe('UserManagementEdit Component', () => {
 
       // THEN
       expect(mockedAxios.get).toHaveBeenCalledWith(`api/users/1`);
+    });
+  });
+
+  describe('initAuthorities', () => {
+    it('Should load authorities', async () => {
+      // GIVEN
+      mockedAxios.get.mockReturnValue(Promise.resolve({}));
+
+      // WHEN
+      userManagementEdit.initAuthorities();
+      await userManagementEdit.$nextTick();
+
+      // THEN
       expect(mockedAxios.get).toHaveBeenCalledWith(`api/users/authorities`);
     });
   });
@@ -55,28 +68,28 @@ describe('UserManagementEdit Component', () => {
     it('Should call update service on save for existing user', async () => {
       // GIVEN
       mockedAxios.put.mockReturnValue(Promise.resolve({}));
-      userManagementEdit.userAccount = { id: 1 };
+      userManagementEdit.userAccount = { id: 1, authorities: [] };
 
       // WHEN
       userManagementEdit.save();
       await userManagementEdit.$nextTick();
 
       // THEN
-      expect(mockedAxios.put).toHaveBeenCalledWith(`api/users`, { id: 1 });
+      expect(mockedAxios.put).toHaveBeenCalledWith(`api/users`, { id: 1, authorities: [] });
       expect(userManagementEdit.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new user', async () => {
       // GIVEN
       mockedAxios.post.mockReturnValue(Promise.resolve({}));
-      userManagementEdit.userAccount = {};
+      userManagementEdit.userAccount = { authorities: [] };
 
       // WHEN
       userManagementEdit.save();
       await userManagementEdit.$nextTick();
 
       // THEN
-      expect(mockedAxios.post).toHaveBeenCalledWith(`api/users`, {<% if (!enableTranslation) { %>langKey: 'en'<% } %>});
+      expect(mockedAxios.post).toHaveBeenCalledWith(`api/users`, { authorities: []<% if (!enableTranslation) { %>, langKey: 'en'<% } %>});
       expect(userManagementEdit.isSaving).toEqual(false);
     });
   });

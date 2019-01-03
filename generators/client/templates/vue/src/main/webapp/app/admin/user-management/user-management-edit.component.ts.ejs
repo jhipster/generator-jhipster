@@ -1,6 +1,7 @@
 import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import UserManagementService from './user-management.service';
+import { IUser, User } from '@/shared/model/user.model';
 
 function loginValidator(value) {
   if (typeof value === 'undefined' || value === null || value === '') {
@@ -37,25 +38,37 @@ const validations: any = {
 })
 export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
-  public userAccount: any = {authorities: []};
+  public userAccount: IUser;
   public isSaving = false;
-  private authorities: any[] = [];
+  public authorities: any[] = [];
   public languages: any = this.$store.getters.languages;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
+      vm.initAuthorities();
       if (to.params.userId) {
         vm.init(to.params.userId);
       }
     });
   }
 
+  public constructor() {
+    super();
+    this.userAccount = new User();
+    this.userAccount.authorities = [];
+  }
+
+  public initAuthorities() {
+    this.userManagementService()
+      .retrieveAuthorities()
+      .then(_res => {
+        this.authorities = _res.data;
+      });
+  }
+
   public init(userId: number): void {
     this.userManagementService().get(userId).then(res => {
       this.userAccount = res.data;
-      this.userManagementService().retrieveAuthorities().then(_res => {
-        this.authorities = _res.data;
-      });
     });
   }
 
