@@ -23,6 +23,7 @@ _%>
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 
+import AlertService from '@/shared/alert/alert.service';
 import * as config from '@/shared/config/config';
 import <%= entityAngularName %>Component from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.vue';
 import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.component';
@@ -37,11 +38,11 @@ const i18n = config.initI18N(localVue);
 <%_ } _%>
 const store = config.initVueXStore(localVue);
 localVue.component('font-awesome-icon', {});
+localVue.component('b-alert', {});
 localVue.component('b-badge', {});
 localVue.directive('b-modal', {});
 localVue.component('b-button', {});
 localVue.component('router-link', {});
-
 
 jest.mock('axios', () => ({
   get: jest.fn(),
@@ -57,7 +58,18 @@ describe('Component Tests', () => {
       mockedAxios.get.mockReset();
       mockedAxios.get.mockReturnValue(Promise.resolve({}));
 
-      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>Component, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, stubs: {<%_ if (pagination !== 'no') { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal:true}, provide: { <%= entityInstance %>Service: () => new <%= entityAngularName %>Service() }  });
+      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>Component, {
+        store,
+        <%_ if (enableTranslation) { _%>
+        i18n,
+        <%_ } _%>
+        localVue,
+        stubs: {<%_ if (pagination !== 'no') { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal:true},
+        provide: {
+          alertService: () => new AlertService(store),
+          <%= entityInstance %>Service: () => new <%= entityAngularName %>Service()
+        }
+      });
       comp = wrapper.vm;
     });
 

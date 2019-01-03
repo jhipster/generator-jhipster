@@ -24,6 +24,7 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import Router from 'vue-router';
 
+import AlertService from '@/shared/alert/alert.service';
 import * as config from '@/shared/config/config';
 import <%= entityAngularName %>UpdateComponent from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.vue';
 import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
@@ -56,7 +57,18 @@ describe('Component Tests', () => {
       mockedAxios.post.mockReturnValue(Promise.resolve());
       mockedAxios.put.mockReturnValue(Promise.resolve());
 
-      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>UpdateComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, router, provide: { <%= entityInstance %>Service: () => new <%= entityAngularName %>Service() } });
+      wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>UpdateComponent, {
+        store,
+        <%_ if (enableTranslation) { _%>
+        i18n,
+        <%_ } _%>
+        localVue,
+        router,
+        provide: {
+          alertService: () => new AlertService(store),
+          <%= entityInstance %>Service: () => new <%= entityAngularName %>Service()
+        }
+      });
       comp = wrapper.vm;
     });
 
