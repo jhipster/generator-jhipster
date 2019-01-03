@@ -400,7 +400,7 @@ public class UserService {
      * @param imageUrl image URL of user
      <%_ } _%>
      */
-    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, String imageUrl<% } %>) {
+    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, String imageUrl, Set<Authority> authorities<% } %>) {
         <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
@@ -408,6 +408,9 @@ public class UserService {
                 user.setLastName(lastName);
                 user.setEmail(email.toLowerCase());
                 user.setLangKey(langKey);
+                Set<Authority> dbAuthorities = user.getAuthorities();
+                dbAuthorities.clear();
+                dbAuthorities.addAll(authorities);
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
                 user.setImageUrl(imageUrl);
                 <%_ } _%>
@@ -752,13 +755,13 @@ public class UserService {
                 if (idpModifiedDate.isAfter(dbModifiedDate)) {
                     log.debug("Updating user '{}' in local database", user.getLogin());
                     updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                        user.getLangKey(), user.getImageUrl());
+                        user.getLangKey(), user.getImageUrl(), user.getAuthorities());
                 }
                 // no last updated info, blindly update
             } else {
                 log.debug("Updating user '{}' in local database", user.getLogin());
                 updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
-                    user.getLangKey(), user.getImageUrl());
+                    user.getLangKey(), user.getImageUrl(), user.getAuthorities());
             }
         } else {
             log.debug("Saving user '{}' in local database", user.getLogin());
