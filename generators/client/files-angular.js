@@ -278,8 +278,6 @@ const files = {
                 { file: 'admin/metrics/metrics.route.ts', method: 'processJs' },
                 { file: 'admin/metrics/metrics.component.ts', method: 'processJs' },
                 { file: 'admin/metrics/metrics.component.html', method: 'processHtml', template: true },
-                'admin/metrics/metrics-modal.component.ts',
-                { file: 'admin/metrics/metrics-modal.component.html', method: 'processHtml', template: true },
                 'admin/metrics/metrics.service.ts'
             ]
         },
@@ -435,7 +433,6 @@ const files = {
                 'spec/app/admin/logs/logs.service.spec.ts',
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
-                'spec/app/admin/metrics/metrics-modal.component.spec.ts',
                 'spec/app/core/user/account.service.spec.ts',
                 'spec/helpers/spyobject.ts',
                 'spec/helpers/mock-account.service.ts',

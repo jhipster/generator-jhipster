@@ -94,7 +94,7 @@
                     </div>
                     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <div class="d-flex">
-                        <input id="field_<%= fieldName %>" type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= fieldName %>"
+                        <input id="field_<%= fieldName %>" type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= fieldName %>" placeholder="YYYY-MM-DD HH:mm"
                         <%- include ng_validators %>/>
                     </div>
                     <%_ } else if (fieldTypeBlobContent === 'text') { _%>

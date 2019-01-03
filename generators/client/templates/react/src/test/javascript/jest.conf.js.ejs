@@ -7,6 +7,9 @@ module.exports = {
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
   testMatch: ['<rootDir>/src/test/javascript/spec/**/+(*.)+(spec.ts?(x))'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/test/javascript'
+  ],
   moduleNameMapper: {
     'app/(.*)': '<rootDir>/src/main/webapp/app/$1',
     '\\.(css|scss)$': 'identity-obj-proxy'
