@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -215,7 +215,7 @@ public class <%= entityClass %> implements Serializable {
         const relationshipName = relationships[idx].relationshipName;
         const relationshipFieldName = relationships[idx].relationshipFieldName;
         const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-        const joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
+        const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
         const relationshipType = relationships[idx].relationshipType;
         const relationshipValidate = relationships[idx].relationshipValidate;
         const relationshipRequired = relationships[idx].relationshipRequired;

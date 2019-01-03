@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -243,16 +243,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
     compile "io.dropwizard.metrics:metrics-core"
-    <%_ if (['ehcache', 'infinispan'].includes(cacheProvider)) { _%>
-    compile "io.dropwizard.metrics:metrics-jcache"
-    <%_ } _%>
-    compile "io.dropwizard.metrics:metrics-json"
-    compile "io.dropwizard.metrics:metrics-jvm"
-    compile "io.dropwizard.metrics:metrics-servlet"
-    compile "io.dropwizard.metrics:metrics-servlets"
-    compile "io.prometheus:simpleclient"
-    compile "io.prometheus:simpleclient_dropwizard"
-    compile "io.prometheus:simpleclient_servlet"
+    compile 'io.micrometer:micrometer-registry-prometheus'
     compile "net.logstash.logback:logstash-logback-encoder"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
@@ -262,7 +253,6 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-annotations"
     compile "com.fasterxml.jackson.core:jackson-databind"
     compile "com.fasterxml.jackson.module:jackson-module-afterburner"
-    compile "com.ryantenney.metrics:metrics-spring"
     <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
     compile "org.apache.httpcomponents:httpclient"
     <%_ } _%>

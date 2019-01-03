@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -94,7 +94,7 @@
                     </div>
                     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <div class="d-flex">
-                        <input id="field_<%= fieldName %>" type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= fieldName %>"
+                        <input id="field_<%= fieldName %>" type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= fieldName %>" placeholder="YYYY-MM-DD HH:mm"
                         <%- include ng_validators %>/>
                     </div>
                     <%_ } else if (fieldTypeBlobContent === 'text') { _%>
