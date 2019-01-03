@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -80,7 +80,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
             });
 
             // previousState was set in the authExpiredInterceptor before being redirected to login modal.
-            // since login is succesful, go to stored previousState and clear previousState
+            // since login is successful, go to stored previousState and clear previousState
             const redirect = this.stateStorageService.getUrl();
             if (redirect) {
                 this.stateStorageService.storeUrl(null);

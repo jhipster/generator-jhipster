@@ -1,0 +1,60 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "superMegaLargeTestManyToOne",
+            "otherEntityName": "testManyToOne",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "superMegaLargeTestEntity"
+        },
+        {
+            "relationshipName": "superMegaLargeTestManyToMany",
+            "otherEntityName": "testManyToMany",
+            "relationshipType": "many-to-many",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "superMegaLargeTestEntity"
+        },
+        {
+            "relationshipName": "superMegaLargeTestOneToOne",
+            "otherEntityName": "testOneToOne",
+            "relationshipType": "one-to-one",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "superMegaLargeTestEntity"
+        },
+        {
+            "relationshipName": "superMegaLargeUserOneToMany",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipName": "superMegaLargeUserManyToMany",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "login",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "superMegaLargeUserOneToOne",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "parent"
+        },
+        {
+            "relationshipName": "superMegaLargeTestCustomTableName",
+            "otherEntityName": "testCustomTableName",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "superMegaLargeTestEntity"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20181120190609",
+    "dto": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": true,
+    "angularJSSuffix": "mySuffixAlt",
+    "pagination": "no"
+}

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -31,7 +31,7 @@ import { parseHeaderForLinks } from 'react-jhipster';
 <%_ } _%>
 
 import reducer, {
-  ACTION_TYPES, createEntity, deleteEntity, getEntities, getEntity, updateEntity, reset
+  ACTION_TYPES, createEntity, deleteEntity, getEntities,<% if (searchEngine === 'elasticsearch') { %> getSearchEntities, <% } %>getEntity, updateEntity, reset
 } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -92,6 +92,9 @@ describe('Entities reducer tests', () => {
       testMultipleTypes(
         [
           REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          <%_ if (searchEngine === 'elasticsearch') { _%>
+          REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+          <%_ } _%>
           REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>)
         ],
         {},
@@ -139,6 +142,9 @@ describe('Entities reducer tests', () => {
       testMultipleTypes(
         [
           FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          <%_ if (searchEngine === 'elasticsearch') { _%>
+          FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+          <%_ } _%>
           FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>),
@@ -177,6 +183,28 @@ describe('Entities reducer tests', () => {
       entities: payload.data
       });
     });
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    it('should search all entities', () => {
+      const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (pagination !== 'no') { %>, headers: { 'x-total-count': 123<% if (pagination === 'infinite-scroll') { %>, link: ';'<% } %> }<% } %> };
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      const links = parseHeaderForLinks(payload.headers.link);
+      <%_ } _%>
+      expect(reducer(undefined, {
+        type: SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+        payload
+      })).toEqual({
+      ...initialState,
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      links,
+      <%_ } _%>
+      loading: false,
+      <%_ if (pagination !== 'no') { _%>
+      totalItems: payload.headers['x-total-count'],
+      <%_ } _%>
+      entities: payload.data
+      });
+    });
+    <%_ } _%>
 
     it('should fetch a single entity', () => {
       const payload = { data: { 1: 'fake1' } };
@@ -244,6 +272,20 @@ describe('Entities reducer tests', () => {
       ];
       await store.dispatch(getEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    it('dispatches ACTION_TYPES.SEARCH_<%= entityActionNamePlural %> actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getSearchEntities()).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    <%_ } _%>
 
     it('dispatches ACTION_TYPES.FETCH_<%= entityActionName %> actions', async () => {
       const expectedActions = [

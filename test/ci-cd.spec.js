@@ -17,7 +17,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Jenkins tests
     //--------------------------------------------------
     describe('Jenkins: maven AngularX Yarn', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -42,7 +42,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Jenkins: maven AngularX NPM', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -67,7 +67,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Jenkins: Gradle AngularX Yarn', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -92,7 +92,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Jenkins: Gradle AngularX NPM', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -117,7 +117,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Jenkins: maven AngularX Yarn with full options', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -153,7 +153,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Jenkins: maven AngularX Yarn inside Docker', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -190,7 +190,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // GitLab CI tests
     //--------------------------------------------------
     describe('GitLab: maven AngularX Yarn', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -215,7 +215,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: maven AngularX NPM', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -240,7 +240,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: Gradle AngularX Yarn', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -264,7 +264,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: Gradle AngularX NPM', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -288,7 +288,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: maven AngularX Yarn with full options', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -321,7 +321,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: maven AngularX Yarn inside Docker', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -357,7 +357,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('GitLab: maven AngularX Yarn inside Docker Autoconfigure', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -380,7 +380,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Travis CI tests
     //--------------------------------------------------
     describe('Travis CI: maven AngularX Yarn', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -403,7 +403,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Travis CI: maven AngularX NPM', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -426,7 +426,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Travis CI: Gradle AngularX Yarn', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -449,7 +449,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Travis CI: Gradle AngularX NPM', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -472,7 +472,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Travis CI: maven AngularX Yarn with full options', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -506,7 +506,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     // Azure Pipelines tests
     //--------------------------------------------------
     describe('Azure Pipelines: maven AngularX Yarn', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -525,7 +525,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Azure Pipelines: maven AngularX NPM', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -544,7 +544,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Azure Pipelines: Gradle AngularX Yarn', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -563,7 +563,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Azure Pipelines: Gradle AngularX NPM', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {
@@ -582,7 +582,7 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     describe('Azure Pipelines: Autoconfigure', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
                 .inTmpDir(dir => {

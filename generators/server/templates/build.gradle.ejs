@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,7 +29,7 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "io.spring.gradle:propdeps-plugin:0.0.10.RELEASE"
         <%_ if (enableSwaggerCodegen) { _%>
-        classpath "org.openapitools:openapi-generator-gradle-plugin:3.3.0"
+        classpath "org.openapitools:openapi-generator-gradle-plugin:3.3.4"
         <%_ } _%>
         classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.5.2"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -85,7 +85,11 @@ bootWar {
 }
 
 war {
-
+    <%_ if (!skipClient) { _%>
+    webAppDirName = '<%= CLIENT_DIST_DIR %>'
+    <%_ } _%>
+    enabled = true
+    classifier = 'original'
 }
 
 springBoot {
@@ -269,7 +273,7 @@ dependencies {
     <%_ if (cacheProvider === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     <%_ if (enableHibernateCache) { _%>
-    compile "com.hazelcast:hazelcast-hibernate52"
+    compile "com.hazelcast:hazelcast-hibernate53"
     <%_ } _%>
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
@@ -358,7 +362,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    compile "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>:0.24.0-RC.0"
+    compile "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
@@ -447,8 +451,8 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen"
-    annotationProcessor "javax.xml.bind:jaxb-api:2.3.1"
-    annotationProcessor "com.sun.xml.bind:jaxb-impl:2.3.1"
+    annotationProcessor "javax.xml.bind:jaxb-api:${jaxb_api_version}"
+    annotationProcessor "com.sun.xml.bind:jaxb-impl:${jaxb_impl_version}"
     <%_ } _%>
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
@@ -458,6 +462,7 @@ dependencies {
     testCompile ("org.cassandraunit:cassandra-unit-spring") {
         exclude(group: 'org.slf4j')
     }
+    testCompile "org.testcontainers:database-commons"
     <%_ } _%>
     <%_ if (cucumberTests) { _%>
     testCompile "io.cucumber:cucumber-junit"
@@ -516,6 +521,20 @@ if (project.hasProperty('nodeInstall')) {
 }
 <%_ } _%>
 
+task renameWarFile (type: Copy) {
+    from ("$buildDir/libs/")
+    include "$project.name-$version-original.war"
+    destinationDir file("$buildDir/libs/")
+    rename "$project.name-$version-original.war", "$project.name-{$version}.war.original"
+}
+
+task deleteWarFile(type: Delete) {
+  delete "$buildDir/libs/$project.name-$version-original.war"
+}
+
+renameWarFile.dependsOn war
+bootWar.dependsOn war,renameWarFile,deleteWarFile
 compileJava.dependsOn processResources
 processResources.dependsOn cleanResources,bootBuildInfo
 bootBuildInfo.mustRunAfter cleanResources
+deleteWarFile.mustRunAfter renameWarFile

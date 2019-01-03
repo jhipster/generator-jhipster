@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -149,7 +149,7 @@ spec:
           value: 'true'
         - name: JHIPSTER_LOGGING_LOGSTASH_HOST
           value: jhipster-logstash
-            <%_ if (composeApplicationType === 'microservice') { _%>
+            <%_ if (deploymentApplicationType === 'microservice') { _%>
         - name: SPRING_ZIPKIN_ENABLED
           value: "true"
         - name: SPRING_ZIPKIN_BASE_URL
@@ -162,7 +162,7 @@ spec:
         - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
           value: /prometheusMetrics
         <%_ } _%>
-        <%_ if (composeApplicationType === 'microservice') { _%>
+        <%_ if (deploymentApplicationType === 'microservice') { _%>
         - name: SPRING_SLEUTH_PROPAGATION_KEYS
           value: "x-request-id,x-ot-span-context"
         <%_ } _%>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 
-import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/core';
+import { AccountService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/core';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-settings',
@@ -32,15 +32,14 @@ export class SettingsComponent implements OnInit {
     languages: any[];
 
     constructor(
-        private account: AccountService,
-        private principal: Principal<% if (enableTranslation) { %>,
+        private accountService: AccountService<% if (enableTranslation) { %>,
         private languageService: JhiLanguageService,
         private languageHelper: JhiLanguageHelper<% } %>
     ) {
     }
 
     ngOnInit() {
-        this.principal.identity().then((account) => {
+        this.accountService.identity().then((account) => {
             this.settingsAccount = this.copyAccount(account);
         });
         <%_ if (enableTranslation) { _%>
@@ -51,10 +50,10 @@ export class SettingsComponent implements OnInit {
     }
 
     save() {
-        this.account.save(this.settingsAccount).subscribe(() => {
+        this.accountService.save(this.settingsAccount).subscribe(() => {
             this.error = null;
             this.success = 'OK';
-            this.principal.identity(true).then((account) => {
+            this.accountService.identity(true).then((account) => {
                 this.settingsAccount = this.copyAccount(account);
             });
             <%_ if (enableTranslation) { _%>

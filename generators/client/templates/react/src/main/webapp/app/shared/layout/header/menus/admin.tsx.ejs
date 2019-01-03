@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,35 +28,35 @@ import { Translate, translate } from 'react-jhipster';
 const adminMenuItems = (
   <>
   <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-    <DropdownItem tag={Link} to="/admin/gateway"><FontAwesomeIcon icon="road" /> <Translate contentKey="global.menu.admin.gateway">Gateway</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/gateway"><FontAwesomeIcon icon="road" fixedWidth /> <Translate contentKey="global.menu.admin.gateway">Gateway</Translate></DropdownItem>
   <%_ } _%>
   <%_ if (!skipUserManagement) { _%>
-    <DropdownItem tag={Link} to="/admin/user-management"><FontAwesomeIcon icon="user" /> <Translate contentKey="global.menu.admin.userManagement">User management</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/user-management"><FontAwesomeIcon icon="user" fixedWidth /> <Translate contentKey="global.menu.admin.userManagement">User management</Translate></DropdownItem>
   <%_ } _%>
   <%_ if (websocket === 'spring-websocket') { _%>
-    <DropdownItem tag={Link} to="/admin/tracker"><FontAwesomeIcon icon="eye" /> <Translate contentKey="global.menu.admin.tracker">User tracker</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/tracker"><FontAwesomeIcon icon="eye" fixedWidth /> <Translate contentKey="global.menu.admin.tracker">User tracker</Translate></DropdownItem>
   <%_ } _%>
-    <DropdownItem tag={Link} to="/admin/metrics"><FontAwesomeIcon icon="tachometer-alt" /> <Translate contentKey="global.menu.admin.metrics">Metrics</Translate></DropdownItem>
-    <DropdownItem tag={Link} to="/admin/health"><FontAwesomeIcon icon="heart" /> <Translate contentKey="global.menu.admin.health">Health</Translate></DropdownItem>
-    <DropdownItem tag={Link} to="/admin/configuration"><FontAwesomeIcon icon="list" /> <Translate contentKey="global.menu.admin.configuration">Configuration</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/metrics"><FontAwesomeIcon icon="tachometer-alt" fixedWidth/> <Translate contentKey="global.menu.admin.metrics">Metrics</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/health"><FontAwesomeIcon icon="heart" fixedWidth /> <Translate contentKey="global.menu.admin.health">Health</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/configuration"><FontAwesomeIcon icon="list" fixedWidth /> <Translate contentKey="global.menu.admin.configuration">Configuration</Translate></DropdownItem>
     <%_ if (databaseType !== 'cassandra') { _%>
-    <DropdownItem tag={Link} to="/admin/audits"><FontAwesomeIcon icon="bell" /> <Translate contentKey="global.menu.admin.audits">Audits</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/audits"><FontAwesomeIcon icon="bell" fixedWidth /> <Translate contentKey="global.menu.admin.audits">Audits</Translate></DropdownItem>
     <%_ } _%>
   {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
-    <DropdownItem tag={Link} to="/admin/logs"><FontAwesomeIcon icon="tasks" /> <Translate contentKey="global.menu.admin.logs">Logs</Translate></DropdownItem>
+    <DropdownItem tag={Link} to="/admin/logs"><FontAwesomeIcon icon="tasks" fixedWidth /> <Translate contentKey="global.menu.admin.logs">Logs</Translate></DropdownItem>
   </>
 );
 
 const swaggerItem = (
   <DropdownItem tag={Link} to="/admin/docs">
-    <FontAwesomeIcon icon="book" /> <Translate contentKey="global.menu.admin.apidocs">API</Translate>
+    <FontAwesomeIcon icon="book" fixedWidth /> <Translate contentKey="global.menu.admin.apidocs">API</Translate>
   </DropdownItem>
 );
 
 <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>
 const databaseItem = (
   <DropdownItem tag="a" href="./h2-console" target="_tab">
-    <FontAwesomeIcon icon="hdd" /> <Translate contentKey="global.menu.admin.database">Database</Translate>
+    <FontAwesomeIcon icon="hdd" fixedWidth /> <Translate contentKey="global.menu.admin.database">Database</Translate>
   </DropdownItem>
 );
 <%_ } _%>

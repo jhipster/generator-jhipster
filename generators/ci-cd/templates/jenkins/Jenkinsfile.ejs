@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -73,11 +73,7 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-        <%_ if (clientPackageManager === 'yarn') { _%>
-<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dfrontend.yarn.arguments='test<%= frontTests%>'"
-        <%_ } else if (clientPackageManager === 'npm') { _%>
-<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='test<%= frontTests%>'"
-        <%_ } _%>
+<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
@@ -102,15 +98,9 @@ node {
 <%= indent %>    }
 
     <%_ if (!skipClient) { _%>
-        <%_ if (clientPackageManager === 'yarn') { _%>
-<%= indent %>    stage('install tools') {
-<%= indent %>        sh "./gradlew yarn_install -PnodeInstall --no-daemon"
-<%= indent %>    }
-        <%_ } else if (clientPackageManager === 'npm') { _%>
 <%= indent %>    stage('npm install') {
-<%= indent %>        sh "./gradlew npmInstall -PnodeInstall --no-daemon"
+<%= indent %>        sh "./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon"
 <%= indent %>    }
-        <%_ } _%>
     <%_ } _%>
 
 <%= indent %>    stage('backend tests') {
@@ -126,11 +116,7 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-        <%_ if (clientPackageManager === 'yarn') { _%>
-<%= indent %>            sh "./gradlew yarn_test -PnodeInstall --no-daemon"
-        <%_ } else if (clientPackageManager === 'npm') { _%>
-<%= indent %>            sh "./gradlew npm_test -PnodeInstall --no-daemon"
-        <%_ } _%>
+<%= indent %>            sh "./gradlew <%= clientPackageManager %>_run_test-ci -PnodeInstall --no-daemon"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://jhipster.github.io/
  * for more information.
@@ -32,8 +32,6 @@ const files = {
     common: [
         {
             templates: [
-                '.prettierrc', // this needs to be the first file for prettier transform to work
-                '.prettierignore',
                 'package.json',
                 'tslint.json',
                 'tsconfig.json',
@@ -70,14 +68,27 @@ const files = {
         {
             path: MAIN_SRC_DIR,
             templates: [
-                { file: 'static/images/hipster.png', method: 'copy' },
-                { file: 'static/images/hipster2x.png', method: 'copy' },
-                { file: 'static/images/hipster192.png', method: 'copy' },
-                { file: 'static/images/hipster256.png', method: 'copy' },
-                { file: 'static/images/hipster384.png', method: 'copy' },
-                { file: 'static/images/hipster512.png', method: 'copy' },
-                { file: 'static/images/logo-jhipster.png', method: 'copy' },
-                { file: 'static/images/logo-jhipster-react.svg', method: 'copy' }
+                { file: 'static/images/jhipster_family_member_0.svg', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_1.svg', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_2.svg', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_3.svg', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_0_head-192.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_1_head-192.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_2_head-192.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_3_head-192.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_0_head-256.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_1_head-256.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_2_head-256.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_3_head-256.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_0_head-384.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_1_head-384.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_2_head-384.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_3_head-384.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_0_head-512.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_1_head-512.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_2_head-512.png', method: 'copy' },
+                { file: 'static/images/jhipster_family_member_3_head-512.png', method: 'copy' },
+                { file: 'static/images/logo-jhipster.png', method: 'copy' }
             ]
         }
     ],

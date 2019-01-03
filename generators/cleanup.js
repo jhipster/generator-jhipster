@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -50,7 +50,6 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}shared/auth/auth-jwt.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/auth-session.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/csrf.service.ts`);
-        generator.removeFile(`${ANGULAR_DIR}shared/auth/principal.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/state-storage.service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/auth/user-route-access-service.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/language/language.constants.ts`);
@@ -163,6 +162,11 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         if (generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice') {
             generator.removeFolder(`${constants.DOCKER_DIR}realm-config`);
             generator.removeFile(`${constants.DOCKER_DIR}keycloak.yml`);
+        }
+    }
+    if (generator.isJhipsterVersionLessThan('5.8.0')) {
+        if (generator.databaseType === 'cassandra') {
+            generator.removeFile(`${testResourceDir}cassandra-random-port.yml`);
         }
     }
 }

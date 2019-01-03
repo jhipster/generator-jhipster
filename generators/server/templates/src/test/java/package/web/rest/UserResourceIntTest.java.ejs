@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -900,12 +900,6 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         assertThat(user1).isNotEqualTo(user2);
         user1.setId(null);
         assertThat(user1).isNotEqualTo(user2);
-    }
-
-    @Test
-    public void testUserFromId() {
-        assertThat(userMapper.userFromId(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);
-        assertThat(userMapper.userFromId(null)).isNull();
     }
 
     @Test

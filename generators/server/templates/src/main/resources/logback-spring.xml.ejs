@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -122,6 +122,7 @@
     <logger name="sun.rmi" level="WARN"/><% if (databaseType === 'sql') { %>
     <logger name="liquibase" level="WARN"/>
     <logger name="LiquibaseSchemaResolver" level="INFO"/><% } %>
+    <logger name="springfox.documentation.schema.property" level="ERROR"/>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || cacheProvider === 'hazelcast') { _%>
     <logger name="sun.net.www" level="INFO"/>
     <%_ } _%>

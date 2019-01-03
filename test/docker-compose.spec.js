@@ -12,7 +12,7 @@ const expectedFiles = {
 
 describe('JHipster Docker Compose Sub Generator', () => {
     describe('only gateway', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -20,7 +20,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway'],
                     clusteredDbApps: [],
@@ -42,7 +42,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('only one microservice', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -50,7 +50,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['02-mysql'],
                     clusteredDbApps: [],
@@ -72,7 +72,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('one microservice and a directory path without a trailing slash', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -80,7 +80,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: '.',
                     chosenApps: ['02-mysql'],
                     clusteredDbApps: [],
@@ -97,7 +97,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -105,7 +105,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
@@ -127,7 +127,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with elk', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -135,7 +135,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
@@ -167,7 +167,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with zipkin', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -175,7 +175,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
@@ -208,7 +208,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with curator', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -216,7 +216,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
@@ -249,7 +249,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with zipkin and curator', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -257,7 +257,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
@@ -290,7 +290,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and one microservice, with prometheus', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -298,7 +298,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
@@ -323,7 +323,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway, uaa server and one microservice, with elk', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -332,7 +332,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withOptions({ force: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '06-uaa'],
                     clusteredDbApps: [],
@@ -357,7 +357,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and multi microservices, with elk', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -365,7 +365,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
                     clusteredDbApps: [],
@@ -390,7 +390,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and multi microservices, with 1 mongodb cluster', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -398,7 +398,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo'],
                     clusteredDbApps: ['04-mongo'],
@@ -423,7 +423,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and 1 microservice, with Cassandra cluster', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -431,7 +431,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '05-cassandra'],
                     clusteredDbApps: [],
@@ -456,7 +456,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('monolith', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -464,7 +464,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'monolith',
+                    deploymentApplicationType: 'monolith',
                     directoryPath: './',
                     chosenApps: ['08-monolith'],
                     clusteredDbApps: [],
@@ -483,7 +483,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and multi microservices, with couchbase', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -491,7 +491,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'],
                     clusteredDbApps: [],
@@ -516,7 +516,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
     });
 
     describe('gateway and 1 microservice, with 1 couchbase cluster', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/docker-compose'))
                 .inTmpDir(dir => {
@@ -524,7 +524,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '10-couchbase'],
                     clusteredDbApps: ['10-couchbase'],

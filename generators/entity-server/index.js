@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,12 +19,12 @@
 /* eslint-disable consistent-return */
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 /* constants used throughout */
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);

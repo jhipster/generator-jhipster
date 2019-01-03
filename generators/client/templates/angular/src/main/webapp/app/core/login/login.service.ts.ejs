@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,12 @@
 -%>
 import { Injectable } from '@angular/core';
 
-import { Principal } from '../auth/principal.service';
+<%_ if (enableTranslation && authenticationType === 'uaa') { _%>
+import { JhiLanguageService } from 'ng-jhipster';
+import { SessionStorageService } from 'ngx-webstorage';
+import { IUser } from '../user/user.model';
+<%_ } _%>
+import { AccountService } from '../auth/account.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
@@ -32,9 +37,13 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 export class LoginService {
 
     constructor(
-        private principal: Principal,
+        private accountService: AccountService,
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
+        <%_ } _%>
+        <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
+        private languageService: JhiLanguageService,
+        private sessionStorage: SessionStorageService,
         <%_ } _%>
         private authServerProvider: AuthServerProvider
     ) {}
@@ -53,9 +62,12 @@ export class LoginService {
 
         return new Promise((resolve, reject) => {
             this.authServerProvider.login(credentials).subscribe((data) => {
-                this.principal.identity(true).then((account) => {
+                this.accountService.identity(true).then((account) => {
                     <%_ if (websocket === 'spring-websocket') { _%>
                     this.trackerService.sendActivity();
+                    <%_ } _%>
+                    <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
+                    this.setPreferredLanguage(account);
                     <%_ } _%>
                     resolve(data);
                 });
@@ -74,17 +86,24 @@ export class LoginService {
         return this.authServerProvider.loginWithToken(jwt, rememberMe);
     }
     <%_ } _%>
+    <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
+    
+    setPreferredLanguage(account: IUser) {
+        const langKey = account.langKey || this.sessionStorage.retrieve('locale');
+        this.languageService.changeLanguage(langKey);
+    }
+    <%_ } _%>
 
     logout() {
         <%_ if (authenticationType === 'uaa') { _%>
-        if (this.principal.isAuthenticated()) {
-            this.authServerProvider.logout().subscribe(() => this.principal.authenticate(null));
+        if (this.accountService.isAuthenticated()) {
+            this.authServerProvider.logout().subscribe(() => this.accountService.authenticate(null));
         } else {
-            this.principal.authenticate(null);
+            this.accountService.authenticate(null);
         }
         <%_ } else { _%>
         this.authServerProvider.logout().subscribe();
-        this.principal.authenticate(null);
+        this.accountService.authenticate(null);
         <%_ } _%>
     }
 }

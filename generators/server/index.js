@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,18 +19,18 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const crypto = require('crypto');
 const os = require('os');
 const prompts = require('./prompts');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+const { getBase64Secret, getRandomHex } = require('../utils');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -75,13 +75,7 @@ module.exports = class extends BaseGenerator {
     _initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
+                this.checkInvocationFromCLI();
             },
 
             displayLogo() {
@@ -250,12 +244,12 @@ module.exports = class extends BaseGenerator {
                 if (this.baseName !== undefined && serverConfigFound) {
                     // Generate remember me key if key does not already exist in config
                     if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
-                        this.rememberMeKey = crypto.randomBytes(50).toString('hex');
+                        this.rememberMeKey = getRandomHex();
                     }
 
                     // Generate JWT secret key if key does not already exist in config
                     if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
-                        this.jwtSecretKey = Buffer.from(crypto.randomBytes(64).toString('hex')).toString('base64');
+                        this.jwtSecretKey = getBase64Secret(null, 64);
                     }
 
                     // If translation is not defined, it is enabled by default
@@ -317,11 +311,7 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.serverPort = this.serverPort;
 
                 // Make dist dir available in templates
-                if (this.buildTool === 'maven') {
-                    this.BUILD_DIR = 'target/';
-                } else {
-                    this.BUILD_DIR = 'build/';
-                }
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
                 this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
             }
         };

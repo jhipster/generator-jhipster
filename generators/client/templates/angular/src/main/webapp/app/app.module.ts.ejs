@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,6 +23,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2Webstorage } from 'ngx-webstorage';
+import { NgJhipsterModule } from 'ng-jhipster';
 
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
@@ -56,7 +57,16 @@ import {
         BrowserModule,
         <%=angularXAppName%>AppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: '<%=jhiPrefixDashed %>', separator: '-'}),
-        <%=angularXAppName%>SharedModule,
+        NgJhipsterModule.forRoot({
+            // set below to true to make alerts look like toast
+            alertAsToast: false,
+            alertTimeout: 5000,
+            <%_ if (enableTranslation) { _%>
+            i18nEnabled: true,
+            defaultI18nLang: '<%= nativeLanguage %>'
+            <%_ } _%>
+        }),
+        <%=angularXAppName%>SharedModule.forRoot(),
         <%=angularXAppName%>CoreModule,
         <%=angularXAppName%>HomeModule,
         <%_ if (authenticationType !== 'oauth2') { _%>

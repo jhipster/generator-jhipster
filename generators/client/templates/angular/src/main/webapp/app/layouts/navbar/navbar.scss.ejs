@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,82 +17,57 @@
  limitations under the License.
 -%>
 
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
 /* ==========================================================================
 Navbar
 ========================================================================== */
 
 .navbar-version {
-    font-size: 10px;
-    color: #ccc;
+    font-size: 0.65em;
+    color: $navbar-dark-color;
 }
 
-.jh-navbar {
-    background-color: #353d47;
-    padding: 0.2em 1em;
-    .profile-image {
-        margin: -10px 0px;
-        height: 40px;
-        width: 40px;
-        border-radius: 50%;
-    }
+.profile-image {
+    height: 1.75em;
+    width: 1.75em;
+}
+
+.navbar {
+    padding: 0.2rem 1rem;
     .dropdown-item.active,
     .dropdown-item.active:focus,
     .dropdown-item.active:hover {
-        background-color: #353d47;
+        background-color: $dark;
     }
-    .dropdown-toggle::after {
-        margin-left: 0.15em;
-    }
+
     ul.navbar-nav {
-        padding: 0.5em;
         .nav-item {
-            margin-left: 1.5rem;
+            margin-left: 0.5em;
         }
     }
+    
     a.nav-link {
         font-weight: 400;
     }
-    .jh-navbar-toggler {
-        color: #ccc;
-        font-size: 1.5em;
-        padding: 10px;
+    
+    .navbar-toggler {
         &:hover {
-            color: #fff;
+            color: $navbar-dark-hover-color;
         }
-    }
-}
-
-@media screen and (min-width: 768px) {
-    .jh-navbar-toggler {
-        display: none;
-    }
-}
-
-@media screen and (max-width: 992px) {
-    .jh-logo-container {
-        width: 100%;
-    }
-}
-
-.navbar-title {
-    display: inline-block;
-    vertical-align: middle;
+    }    
 }
 
 /* ==========================================================================
 Logo styles
 ========================================================================== */
-.navbar-brand {
-    &.logo {
-        padding: 5px 15px;
-        .logo-img {
-            height: 45px;
-            width: 70px;
-            display: inline-block;
-            vertical-align: middle;
-            background: url("../../../content/images/logo-jhipster.png")
-                no-repeat center center;
-            background-size: contain;
-        }
-    }
+.logo-img {
+    height: 45px;
+    width: 45px;
+    display: inline-block;
+    vertical-align: middle;
+    background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
+    background-size: contain;
 }
+

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -99,7 +99,9 @@
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
         <!-- These remain empty unless the corresponding profile is active -->
+        <%_ if (databaseType === 'sql') { _%>
         <profile.no-liquibase />
+        <%_ } _%>
         <profile.swagger />
         <profile.tls />
 
@@ -107,7 +109,7 @@
         <jhipster-dependencies.version>2.1.0-SNAPSHOT</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.1.0.RELEASE</spring-boot.version>
+        <spring-boot.version>2.1.1.RELEASE</spring-boot.version>
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
@@ -115,10 +117,12 @@
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
         <javassist.version>3.23.1-GA</javassist.version>
+        <%_ if (databaseType === 'sql') { _%>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>3.6.2</liquibase.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
+        <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <%_ } _%>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
@@ -129,7 +133,7 @@
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M2</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.2</maven-war-plugin.version>
         <jib-maven-plugin.version>0.9.11</jib-maven-plugin.version>
         <%_ if (!skipClient) { _%>
@@ -137,10 +141,10 @@
         <%_ } _%>
         <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <scala-maven-plugin.version>3.4.2</scala-maven-plugin.version>
+        <scala-maven-plugin.version>3.4.4</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>3.3.0</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>3.3.4</openapi-generator-maven-plugin.version>
         <%_ } _%>
         <git-commit-id-plugin.version>2.2.5</git-commit-id-plugin.version>
 
@@ -296,7 +300,7 @@
         <%_ if (cacheProvider === 'hazelcast' && enableHibernateCache) { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate52</artifactId>
+            <artifactId>hazelcast-hibernate53</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -453,6 +457,11 @@
         <dependency>
             <groupId>org.cassandraunit</groupId>
             <artifactId>cassandra-unit-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>database-commons</artifactId>
             <scope>test</scope>
         </dependency>
         <%_ } _%>
@@ -998,75 +1007,6 @@
                       </container>
                   </configuration>
                 </plugin>
-                <!--
-                    This plugin's configuration is used to store Eclipse m2e settings only.
-                    It has no influence on the Maven build itself.
-                    Remove when the m2e plugin can correctly bind to Maven lifecycle
-                -->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>${lifecycle-mapping.version}</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.jacoco</groupId>
-                                        <artifactId>
-                                            jacoco-maven-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            ${jacoco-maven-plugin.version}
-                                        </versionRange>
-                                        <goals>
-                                            <goal>prepare-agent</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore/>
-                                    </action>
-                                </pluginExecution>
-                                <%_ if (!skipClient) { _%>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>com.github.eirslett</groupId>
-                                        <artifactId>frontend-maven-plugin</artifactId>
-                                        <versionRange>${frontend-maven-plugin.version}</versionRange>
-                                        <goals>
-                                            <%_ if (clientPackageManager === 'yarn') { _%>
-                                            <goal>install-node-and-yarn</goal>
-                                            <goal>yarn</goal>
-                                            <%_ } else if (clientPackageManager === 'npm') { _%>
-                                            <goal>install-node-and-npm</goal>
-                                            <goal>npm</goal>
-                                            <%_ } _%>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore/>
-                                    </action>
-                                </pluginExecution>
-                                <%_ } _%>
-                                <%_ if (enableSwaggerCodegen) { _%>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.openapitools</groupId>
-                                        <artifactId>openapi-generator-maven-plugin</artifactId>
-                                        <versionRange>${openapi-generator-maven-plugin.version}</versionRange>
-                                        <goals>
-                                            <goal>generate</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                                <%_ } _%>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
 <%_ if (databaseType === 'sql') { _%>
                 <plugin>
                     <groupId>org.liquibase</groupId>
@@ -1093,11 +1033,13 @@
                             <artifactId>javassist</artifactId>
                             <version>${javassist.version}</version>
                         </dependency>
+                        <%_ if (databaseType === 'sql') { _%>
                         <dependency>
                             <groupId>org.liquibase.ext</groupId>
                             <artifactId>liquibase-hibernate5</artifactId>
                             <version>${liquibase-hibernate5.version}</version>
                         </dependency>
+                        <%_ } _%>
                         <dependency>
                             <groupId>org.springframework.boot</groupId>
                             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -1185,7 +1127,7 @@
                             </configuration>
                         </execution>
                         <execution>
-                            <id>docker-resources</id>
+                            <id>jib-www-resources</id>
                             <phase>verify</phase>
                             <goals>
                                 <goal>copy-resources</goal>
@@ -1317,12 +1259,14 @@
         </pluginManagement>
     </build>
     <profiles>
+        <%_ if (databaseType === 'sql') { _%>
         <profile>
             <id>no-liquibase</id>
             <properties>
                 <profile.no-liquibase>,no-liquibase</profile.no-liquibase>
             </properties>
         </profile>
+        <%_ } _%>
         <profile>
             <id>swagger</id>
             <properties>
@@ -1438,7 +1382,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
         <%_ } _%>
@@ -1488,7 +1432,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.tls}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -1631,7 +1575,7 @@
             </build>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.swagger}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>prod${profile.swagger}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
             </properties>
         </profile>
         <profile>
@@ -1738,6 +1682,90 @@
                 </dependency>
 <%_ } _%>
             </dependencies>
+        </profile>
+        <profile>
+            <!-- This is automatically activated when working in Eclipse -->
+            <id>eclipse</id>
+            <activation>
+                <property>
+                    <name>m2e.version</name>
+                </property>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <!--
+                            This plugin's configuration is used to store Eclipse m2e settings only.
+                            It has no influence on the Maven build itself.
+                            Remove when the m2e plugin can correctly bind to Maven lifecycle
+                        -->
+                        <plugin>
+                            <groupId>org.eclipse.m2e</groupId>
+                            <artifactId>lifecycle-mapping</artifactId>
+                            <version>${lifecycle-mapping.version}</version>
+                            <configuration>
+                                <lifecycleMappingMetadata>
+                                    <pluginExecutions>
+                                        <pluginExecution>
+                                            <pluginExecutionFilter>
+                                                <groupId>org.jacoco</groupId>
+                                                <artifactId>
+                                                    jacoco-maven-plugin
+                                                </artifactId>
+                                                <versionRange>
+                                                    ${jacoco-maven-plugin.version}
+                                                </versionRange>
+                                                <goals>
+                                                    <goal>prepare-agent</goal>
+                                                </goals>
+                                            </pluginExecutionFilter>
+                                            <action>
+                                                <ignore/>
+                                            </action>
+                                        </pluginExecution>
+                                        <%_ if (!skipClient) { _%>
+                                        <pluginExecution>
+                                            <pluginExecutionFilter>
+                                                <groupId>com.github.eirslett</groupId>
+                                        <artifactId>frontend-maven-plugin</artifactId>
+                                                <versionRange>${frontend-maven-plugin.version}</versionRange>
+                                                <goals>
+                                                    <%_ if (clientPackageManager === 'yarn') { _%>
+                                                    <goal>install-node-and-yarn</goal>
+                                                    <goal>yarn</goal>
+                                                    <%_ } else if (clientPackageManager === 'npm') { _%>
+                                                    <goal>install-node-and-npm</goal>
+                                                    <goal>npm</goal>
+                                                    <%_ } _%>
+                                                </goals>
+                                            </pluginExecutionFilter>
+                                            <action>
+                                                <ignore/>
+                                            </action>
+                                        </pluginExecution>
+                                        <%_ } _%>
+                                        <%_ if (enableSwaggerCodegen) { _%>
+                                        <pluginExecution>
+                                            <pluginExecutionFilter>
+                                                <groupId>org.openapitools</groupId>
+                                                <artifactId>openapi-generator-maven-plugin</artifactId>
+                                                <versionRange>${openapi-generator-maven-plugin.version}</versionRange>
+                                                <goals>
+                                                    <goal>generate</goal>
+                                                </goals>
+                                            </pluginExecutionFilter>
+                                            <action>
+                                                <ignore />
+                                            </action>
+                                        </pluginExecution>
+                                        <%_ } _%>
+                                    </pluginExecutions>
+                                </lifecycleMappingMetadata>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
         </profile>
         <!-- jhipster-needle-maven-add-profile -->
     </profiles>

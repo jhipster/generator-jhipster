@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -114,7 +114,7 @@ management:
                 include: ["configprops", "env", "health", "info", "threaddump", "logfile" ]
     endpoint:
         health:
-            show-details: when_authorized
+            show-details: when-authorized
     info:
         git:
             mode: full
@@ -152,7 +152,13 @@ spring:
         # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
         active: #spring.profiles.active#
     <%_ } _%>
+    jmx:
+        enabled: false
     <%_ if (databaseType === 'sql') { _%>
+    data:
+        jpa:
+            repositories:
+                bootstrap-mode: deferred
     jpa:
         open-in-view: false
         properties:

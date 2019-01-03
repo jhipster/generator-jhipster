@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,6 +21,9 @@ import { createStore, applyMiddleware } from 'redux';
 import promiseMiddleware from 'redux-promise-middleware';
 import * as toastify from 'react-toastify'; // synthetic default import doesn't work here due to mocking.
 import sinon from 'sinon';
+<%_ if (enableTranslation) { _%>
+import { TranslatorContext } from 'react-jhipster';
+<%_ } _%>
 
 import notificationMiddleware from 'app/config/notification-middleware';
 
@@ -123,6 +126,12 @@ describe('Notification Middleware', () => {
 
   const makeStore = () => applyMiddleware(notificationMiddleware, promiseMiddleware())(createStore)(() => null);
 
+<%_ if (enableTranslation) { _%>
+  beforeAll(() => {
+    TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
+  });
+
+<%_ } _%>
   beforeEach(() => {
     store = makeStore();
     sinon.spy(toastify.toast, 'error');

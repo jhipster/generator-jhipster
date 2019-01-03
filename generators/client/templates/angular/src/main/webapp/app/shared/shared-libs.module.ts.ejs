@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,15 +28,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @NgModule({
     imports: [
         NgbModule.forRoot(),
-        NgJhipsterModule.forRoot({
-            // set below to true to make alerts look like toast
-            alertAsToast: false,
-            alertTimeout: 5000,
-            <%_ if (enableTranslation) { _%>
-            i18nEnabled: true,
-            defaultI18nLang: '<%= nativeLanguage %>'
-            <%_ } _%>
-        }),
         InfiniteScrollModule,
         CookieModule.forRoot(),
         FontAwesomeModule
@@ -50,4 +41,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         FontAwesomeModule
     ]
 })
-export class <%=angularXAppName%>SharedLibsModule {}
+export class <%=angularXAppName%>SharedLibsModule {
+    static forRoot() {
+        return {
+            ngModule: <%=angularXAppName%>SharedLibsModule
+        };
+    }
+}

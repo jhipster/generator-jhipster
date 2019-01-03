@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -332,7 +332,7 @@ public class ExceptionTranslatorIntTest {
             .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
             .jsonPath("$.message").isEqualTo("error.http.405")
-            .jsonPath("$.detail").isEqualTo("Response status 405 with reason \"Request method 'POST' not supported\"");
+            .jsonPath("$.detail").isEqualTo("405 METHOD_NOT_ALLOWED \"Request method 'POST' not supported\"");
     }
 
     @Test

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,7 +20,7 @@ import { Component, OnDestroy } from '@angular/core';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlert, JhiAlertService } from 'ng-jhipster';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -118,33 +118,21 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
 
     addErrorAlert(message, key?, data?) {
         <%_ if (enableTranslation) { _%>
-        key = (key && key !== null) ? key : message;
-        this.alerts.push(
-            this.alertService.addAlert(
-                {
-                    type: 'danger',
-                    msg: key,
-                    params: data,
-                    timeout: 5000,
-                    toast: this.alertService.isToast(),
-                    scoped: true
-                },
-                this.alerts
-            )
-        );
-        <%_ } else { _%>
-        this.alerts.push(
-            this.alertService.addAlert(
-                {
-                    type: 'danger',
-                    msg: message,
-                    timeout: 5000,
-                    toast: this.alertService.isToast(),
-                    scoped: true
-                },
-                this.alerts
-            )
-        );
+        message = (key && key !== null) ? key : message;
         <%_ } _%>
+
+        const newAlert: JhiAlert = {
+            type: 'danger',
+            msg: message,
+            <%_ if (enableTranslation) { _%>
+            params: data,
+            <%_ } _%>
+            timeout: 5000,
+            toast: this.alertService.isToast(),
+            scoped: true
+        };
+
+        this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
+
     }
 }

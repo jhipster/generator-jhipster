@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,7 +23,7 @@ const shelljs = require('shelljs');
 const pluralize = require('pluralize');
 const jhiCore = require('jhipster-core');
 const prompts = require('./prompts');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 
@@ -31,7 +31,7 @@ const statistics = require('../statistics');
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -121,7 +121,7 @@ module.exports = class extends BaseGenerator {
         this.context = {};
 
         this.setupEntityOptions(this, this, this.context);
-        this.registerClientTransforms();
+        this.registerPrettierTransform();
         const blueprint = this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
@@ -140,13 +140,7 @@ module.exports = class extends BaseGenerator {
     _initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
+                this.checkInvocationFromCLI();
             },
 
             getConfig() {
@@ -621,6 +615,7 @@ module.exports = class extends BaseGenerator {
                 this.data.searchEngine = context.searchEngine;
                 this.data.service = context.service;
                 this.data.entityTableName = context.entityTableName;
+                this.data.databaseType = context.databaseType;
                 this.copyFilteringFlag(context, this.data, context);
                 if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
                     this.data.pagination = context.pagination;
@@ -956,7 +951,7 @@ module.exports = class extends BaseGenerator {
                             relationship.otherEntityModuleName = `${context.angularXAppName +
                                 relationship.otherEntityNameCapitalized}Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
-                            if (context.skipUiGrouping || otherEntityData === undefined || otherEntityData.clientRootFolder === undefined) {
+                            if (context.skipUiGrouping || otherEntityData === undefined || otherEntityData.clientRootFolder === '' || otherEntityData.clientRootFolder === undefined) {
                                 relationship.otherEntityClientRootFolder = '';
                             } else {
                                 relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;

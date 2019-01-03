@@ -48,6 +48,13 @@
             "otherEntityField": "login",
             "ownerSide": true,
             "otherEntityRelationshipName": "parent"
+        },
+        {
+            "relationshipName": "superMegaLargeTestEntity",
+            "otherEntityName": "superMegaLargeTestEntity",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "otherEntityField": "id"
         }
     ],
     "fields": [],

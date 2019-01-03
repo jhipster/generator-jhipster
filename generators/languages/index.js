@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -114,11 +114,7 @@ module.exports = class extends BaseGenerator {
         this.clientFramework = this.config.get('clientFramework');
         this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
         // Make dist dir available in templates
-        if (this.config.get('buildTool') === 'maven') {
-            this.BUILD_DIR = 'target/';
-        } else {
-            this.BUILD_DIR = 'build/';
-        }
+        this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.config.get('buildTool'));
     }
 
     prompting() {
