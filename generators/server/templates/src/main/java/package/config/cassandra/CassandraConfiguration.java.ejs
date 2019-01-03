@@ -77,10 +77,7 @@ public class CassandraConfiguration {
             .register(InstantCodec.instance)
             .register(new ZonedDateTimeCodec(tupleType));
 
-        if (metricRegistry != null) {
-            cluster.init();
-            metricRegistry.registerAll(cluster.getMetrics().getRegistry());
-        }
+        cluster.init();
     }
 
     @Bean
