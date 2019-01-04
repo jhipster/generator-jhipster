@@ -2175,7 +2175,8 @@ module.exports = class extends PrivateBase {
      */
     copyI18nFilesByName(generator, webappDir, fileToCopy, lang) {
         const _this = generator || this;
-        _this.copy(`${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
+        _this.copy(`${prefix}/${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
     }
 
     /**
