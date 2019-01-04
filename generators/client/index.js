@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const ClientGenerator = require('generator-jhipster/generators/client');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
+const blueprintPackagejs = require('../../package.json');
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
@@ -19,6 +20,7 @@ module.exports = class extends ClientGenerator {
         }
 
         this.configOptions = jhContext.configOptions || {};
+        this.blueprintjs = blueprintPackagejs;
         // This sets up options for this sub generator and is being reused from JHipster
         jhContext.setupClientOptions(this, jhContext);
     }
@@ -91,13 +93,11 @@ module.exports = class extends ClientGenerator {
 
     get writing() {
         // The writing phase is being overriden so that we can write our own templates as well.
-        // If the templates doesnt need to be overrriden then just return `super._writing()` here
-        const customPhaseSteps = {
+        return {
             writeAdditionalFile() {
                 writeFiles.call(this);
             }
         };
-        return customPhaseSteps;
     }
 
     get install() {
