@@ -21,16 +21,16 @@ import { Injectable } from '@angular/core';
 <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
-import { IUser } from '../user/user.model';
+import { IUser } from 'app/core/user/user.model';
 <%_ } _%>
-import { AccountService } from '../auth/account.service';
+import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthServerProvider } from '../auth/auth-jwt.service';
+import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from '../auth/auth-session.service';
+import { AuthServerProvider } from 'app/core/auth/auth-session.service';
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/core/tracker/tracker.service';
 <%_ } _%>
 
 @Injectable({providedIn: 'root'})

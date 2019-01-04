@@ -78,7 +78,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     
-    private final String CLOUD_CONFIGURATION_HIKARI_PREFIX = "spring.datasource.hikari";
+    private static final String CLOUD_CONFIGURATION_HIKARI_PREFIX = "spring.datasource.hikari";
 
     @Bean
     @ConfigurationProperties(CLOUD_CONFIGURATION_HIKARI_PREFIX)
