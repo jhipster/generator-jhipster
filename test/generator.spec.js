@@ -2,6 +2,7 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const constants = require('generator-jhipster/generators/generator-constants');
+const blueprintPackagejs = require('../package.json');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -249,6 +250,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.webpack);
         });
         it('contains the specific change added by the blueprint', () => {
+            assert.fileContent('package.json', `"generator-jhipster-vuejs": "${blueprintPackagejs.version}"`);
             assert.fileContent('package.json', '"vue"');
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
@@ -311,6 +313,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.webpack);
         });
         it('contains the specific change added by the blueprint', () => {
+            assert.fileContent('package.json', `"generator-jhipster-vuejs": "${blueprintPackagejs.version}"`);
             assert.fileContent('package.json', '"vue"');
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
@@ -372,6 +375,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.webpack);
         });
         it('contains the specific change added by the blueprint', () => {
+            assert.fileContent('package.json', `"generator-jhipster-vuejs": "${blueprintPackagejs.version}"`);
             assert.fileContent('package.json', '"vue"');
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
@@ -436,6 +440,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.webpack);
         });
         it('contains the specific change added by the blueprint', () => {
+            assert.fileContent('package.json', `"generator-jhipster-vuejs": "${blueprintPackagejs.version}"`);
             assert.fileContent('package.json', '"vue"');
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
@@ -501,6 +506,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.webpack);
         });
         it('contains the specific change added by the blueprint', () => {
+            assert.fileContent('package.json', `"generator-jhipster-vuejs": "${blueprintPackagejs.version}"`);
             assert.fileContent('package.json', '"vue"');
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
