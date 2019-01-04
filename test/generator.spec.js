@@ -45,6 +45,15 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/user-management.json`
     ],
 
+    common: [
+        '.editorconfig',
+        '.gitattributes',
+        '.gitignore',
+        '.prettierrc',
+        '.prettierignore',
+        'README.md',
+    ],
+
     app: [
         `${CLIENT_MAIN_SRC_DIR}app/account/change-password/change-password.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/change-password/change-password.vue`,
@@ -207,6 +216,11 @@ describe('Vue.js JHipster blueprint', () => {
                         require('../generators/client/index.js'), // eslint-disable-line global-require
                         'jhipster-vuejs:client',
                         path.join(__dirname, '../generators/client/index.js')
+                    ],
+                    [
+                        require('../generators/common/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:common',
+                        path.join(__dirname, '../generators/common/index.js')
                     ]
                 ])
                 .withPrompts({
@@ -226,8 +240,9 @@ describe('Vue.js JHipster blueprint', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster client generator', () => {
+        it('creates expected files from jhipster vue.js generator', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
@@ -237,6 +252,15 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vue"');
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
+            assert.fileContent('.prettierrc', 'tabWidth: 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n'
+                + 'indent_style = space\n'
+                + 'indent_size = 2');
+        });
+        it('uses correct prettier formatting', () => {
+            // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+            assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+            assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
         });
     });
     describe('Default with Gradle', () => {
@@ -254,6 +278,11 @@ describe('Vue.js JHipster blueprint', () => {
                         require('../generators/client/index.js'), // eslint-disable-line global-require
                         'jhipster-vuejs:client',
                         path.join(__dirname, '../generators/client/index.js')
+                    ],
+                    [
+                        require('../generators/common/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:common',
+                        path.join(__dirname, '../generators/common/index.js')
                     ]
                 ])
                 .withPrompts({
@@ -273,8 +302,9 @@ describe('Vue.js JHipster blueprint', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster client generator', () => {
+        it('creates expected files from jhipster vue.js generator', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
@@ -284,6 +314,15 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vue"');
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
+            assert.fileContent('.prettierrc', 'tabWidth: 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n'
+                + 'indent_style = space\n'
+                + 'indent_size = 2');
+        });
+        it('uses correct prettier formatting', () => {
+            // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+            assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+            assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
         });
     });
     describe('noi18n with Maven', () => {
@@ -301,6 +340,11 @@ describe('Vue.js JHipster blueprint', () => {
                         require('../generators/client/index.js'), // eslint-disable-line global-require
                         'jhipster-vuejs:client',
                         path.join(__dirname, '../generators/client/index.js')
+                    ],
+                    [
+                        require('../generators/common/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:common',
+                        path.join(__dirname, '../generators/common/index.js')
                     ]
                 ])
                 .withPrompts({
@@ -319,8 +363,9 @@ describe('Vue.js JHipster blueprint', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster client generator', () => {
+        it('creates expected files from jhipster vue.js generator', () => {
             assert.noFile(expectedFiles.i18n);
+            assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
@@ -330,6 +375,15 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vue"');
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
+            assert.fileContent('.prettierrc', 'tabWidth: 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n'
+                + 'indent_style = space\n'
+                + 'indent_size = 2');
+        });
+        it('uses correct prettier formatting', () => {
+            // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+            assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+            assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
         });
     });
     describe('Elasticsearch and Protractor', () => {
@@ -347,6 +401,11 @@ describe('Vue.js JHipster blueprint', () => {
                         require('../generators/client/index.js'), // eslint-disable-line global-require
                         'jhipster-vuejs:client',
                         path.join(__dirname, '../generators/client/index.js')
+                    ],
+                    [
+                        require('../generators/common/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:common',
+                        path.join(__dirname, '../generators/common/index.js')
                     ]
                 ])
                 .withPrompts({
@@ -368,8 +427,9 @@ describe('Vue.js JHipster blueprint', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster client generator', () => {
+        it('creates expected files from jhipster vue.js generator', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.test);
             assert.file(expectedFiles.protractor);
@@ -379,6 +439,15 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vue"');
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
+            assert.fileContent('.prettierrc', 'tabWidth: 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n'
+                + 'indent_style = space\n'
+                + 'indent_size = 2');
+        });
+        it('uses correct prettier formatting', () => {
+            // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+            assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+            assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
         });
     });
     describe('Websocket', () => {
@@ -396,6 +465,11 @@ describe('Vue.js JHipster blueprint', () => {
                         require('../generators/client/index.js'), // eslint-disable-line global-require
                         'jhipster-vuejs:client',
                         path.join(__dirname, '../generators/client/index.js')
+                    ],
+                    [
+                        require('../generators/common/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:common',
+                        path.join(__dirname, '../generators/common/index.js')
                     ]
                 ])
                 .withPrompts({
@@ -417,8 +491,9 @@ describe('Vue.js JHipster blueprint', () => {
                 })
                 .on('end', done);
         });
-        it('creates expected files from jhipster client generator', () => {
+        it('creates expected files from jhipster vue.js generator', () => {
             assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.test);
             assert.file(expectedFiles.protractor);
@@ -429,6 +504,15 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vue"');
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
+            assert.fileContent('.prettierrc', 'tabWidth: 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n'
+                + 'indent_style = space\n'
+                + 'indent_size = 2');
+        });
+        it('uses correct prettier formatting', () => {
+            // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+            assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+            assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
         });
     });
 });

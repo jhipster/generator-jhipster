@@ -82,10 +82,16 @@ limitations under the License.
     "file-loader": "1.1.11",
     "friendly-errors-webpack-plugin": "1.7.0",
     "html-webpack-plugin": "3.2.0",
+    <%_ if (!skipCommitHook) { _%>
+    "husky": "1.2.0",
+    <%_ } _%>
     "jest": "23.6.0",
     "jest-junit": "5.2.0",
     "jest-serializer-vue": "0.2.0",
     "jest-vue-preprocessor": "1.4.0",
+    <%_ if (!skipCommitHook) { _%>
+    "lint-staged": "8.1.0",
+    <%_ } _%>
     "merge-jsons-webpack-plugin": "1.0.18",
 <%_ if (protractorTests) { _%>
     "mocha": "5.2.0",
@@ -137,14 +143,14 @@ limitations under the License.
   },
   <%_ if (!skipCommitHook) { _%>
   "lint-staged": {
-    "{,src/**/}*.{md,json,ts,css,scss}": [
+    "{,src/**/,webpack/}*.{md,json,js,ts,css,scss}": [
       "prettier --write",
       "git add"
     ]
   },
   <%_ } _%>
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{md,json,js,ts,tsx,css,scss}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= BUILD_DIR %>{aot,www}",
