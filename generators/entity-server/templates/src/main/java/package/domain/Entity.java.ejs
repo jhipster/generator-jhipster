@@ -58,8 +58,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 <%_ } _%>
 
-<%_ if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
-import org.springframework.data.elasticsearch.annotations.Document;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.data.elasticsearch.annotations.FieldType;
 <%_ } _%>
 import java.io.Serializable;
 <%_ if (fieldsContainBigDecimal === true) { _%>
@@ -114,10 +114,8 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @Document
 <%_ } if (databaseType === 'cassandra') { _%>
 @Table("<%= entityInstance %>")
-<%_ } if (searchEngine === 'elasticsearch' && databaseType === 'mongodb') { _%>
+<%_ } if (searchEngine === 'elasticsearch') { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
-<%_ } if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
-@Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } _%>
 public class <%= entityClass %> implements Serializable {
 
@@ -141,6 +139,9 @@ public class <%= entityClass %> implements Serializable {
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
+    <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     <%_ } _%>
     private <%= pkType %> id;
 
