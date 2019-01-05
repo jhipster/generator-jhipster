@@ -19,7 +19,7 @@
 package <%=packageName%>.web.rest;
 
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
-import <%=packageName%>.domain.<%= entityClass %>;
+import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>
 <%_ if (service !== 'no') { _%>
 import <%=packageName%>.service.<%= entityClass %>Service;
@@ -39,7 +39,7 @@ import <%=packageName%>.web.rest.errors.BadRequestAlertException;
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination !== 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 <%_ if (dto === 'mapstruct') { _%>
-import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
 <%_ if (service === 'no') { _%>
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ } } _%>
@@ -96,8 +96,8 @@ public class <%= entityClass %>Resource {
     } _%>
     private static final String ENTITY_NAME = "<%= entityName %>";
     <%_
-    const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
     _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering}); -%>
 
     /**
@@ -122,7 +122,7 @@ public class <%= entityClass %>Resource {
         <%_ if (databaseType === 'cassandra') { _%>
         <%= instanceName %>.setId(UUID.randomUUID());
         <%_ } _%>
-<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+<%- include('../../common/save_template', {asEntity, asDto, viaService, returnDirectly: false}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -149,7 +149,7 @@ public class <%= entityClass %>Resource {
             userRepository.save(<%= instanceName %>.getUser());
         }
         <%_ } _%>
-<%- include('../../common/save_template', {viaService: viaService, returnDirectly: false}); -%>
+<%- include('../../common/save_template', {asEntity, asDto, viaService, returnDirectly: false}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
@@ -164,7 +164,7 @@ public class <%= entityClass %>Resource {
      * @param filter the filter of the request<% } %>
      * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
      */
-    @GetMapping("/<%= entityApiUrl %>")<%- include('../../common/get_all_template', {viaService: viaService}); -%>
+    @GetMapping("/<%= entityApiUrl %>")<%- include('../../common/get_all_template', {asEntity, asDto, viaService}); -%>
 
     <%_ if (reactiveRepositories) { _%>
     /**
@@ -190,7 +190,7 @@ public class <%= entityClass %>Resource {
      */
     @GetMapping("/<%= entityApiUrl %>/{id}")
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:false}); -%>
+        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
     }
 
@@ -215,5 +215,5 @@ public class <%= entityClass %>Resource {
      * @param pageable the pagination information<% } %>
      * @return the result of the search
      */
-    @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>
+    @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {asEntity, asDto, viaService}); -%><% } %>
 }

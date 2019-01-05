@@ -2923,4 +2923,20 @@ module.exports = class extends PrivateBase {
     fetchFromInstalledJHipster(subpath) {
         return path.join(__dirname, subpath);
     }
+
+    /**
+     * Construct the entity name by appending the entity suffix.
+     * @param {String} name entity name
+     */
+    asEntity(name) {
+        return name + this.entitySuffix;
+    }
+
+    /**
+     * Construct the entity's dto name by appending the dto suffix.
+     * @param {String} name entity name
+     */
+    asDto(name) {
+        return name + this.dtoSuffix;
+    }
 };

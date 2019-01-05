@@ -217,6 +217,20 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
                     context.useConfigurationFile = true;
                 }
+
+                context.entitySuffix = configuration.get('entitySuffix');
+                if (_.isNil(context.entitySuffix)) {
+                    context.entitySuffix = '';
+                }
+
+                context.dtoSuffix = configuration.get('dtoSuffix');
+                if (_.isNil(context.dtoSuffix)) {
+                    context.dtoSuffix = 'DTO';
+                }
+
+                if (context.entitySuffix === context.dtoSuffix) {
+                    this.error(chalk.red('The entity cannot be generated as the entity suffix and DTO suffix are equals !'));
+                }
             },
 
             validateDbExistence() {

@@ -1352,14 +1352,20 @@ const serverFiles = {
             condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                { file: 'package/domain/User.java', renameTo: generator => `${generator.javaDir}domain/User.java` },
+                {
+                    file: 'package/domain/User.java',
+                    renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`
+                },
                 { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
                 { file: 'package/service/UserService.java', renameTo: generator => `${generator.javaDir}service/UserService.java` },
                 {
                     file: 'package/service/dto/package-info.java',
                     renameTo: generator => `${generator.javaDir}service/dto/package-info.java`
                 },
-                { file: 'package/service/dto/UserDTO.java', renameTo: generator => `${generator.javaDir}service/dto/UserDTO.java` },
+                {
+                    file: 'package/service/dto/UserDTO.java',
+                    renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`
+                },
                 {
                     file: 'package/service/mapper/package-info.java',
                     renameTo: generator => `${generator.javaDir}service/mapper/package-info.java`
@@ -1530,7 +1536,10 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 /* User management java domain files */
-                { file: 'package/domain/User.java', renameTo: generator => `${generator.javaDir}domain/User.java` },
+                {
+                    file: 'package/domain/User.java',
+                    renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`
+                },
                 {
                     file: 'package/repository/UserRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}UserRepository.java`
@@ -1545,7 +1554,10 @@ const serverFiles = {
                     file: 'package/service/dto/package-info.java',
                     renameTo: generator => `${generator.javaDir}service/dto/package-info.java`
                 },
-                { file: 'package/service/dto/UserDTO.java', renameTo: generator => `${generator.javaDir}service/dto/UserDTO.java` },
+                {
+                    file: 'package/service/dto/UserDTO.java',
+                    renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`
+                },
                 {
                     file: 'package/service/dto/PasswordChangeDTO.java',
                     renameTo: generator => `${generator.javaDir}service/dto/PasswordChangeDTO.java`

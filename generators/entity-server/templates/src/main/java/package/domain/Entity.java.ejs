@@ -92,7 +92,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } _%>
 <%_ if (typeof javadoc == 'undefined') { _%>
 /**
- * A <%= entityClass %>.
+ * A <%= asEntity(entityClass) %>.
  */
 <%_ } else { _%>
 <%- formatAsClassJavadoc(javadoc) %>
@@ -119,7 +119,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
 @Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } _%>
-public class <%= entityClass %> implements Serializable {
+public class <%= asEntity(entityClass) %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
     <%_ if (databaseType === 'couchbase') { _%>
@@ -243,7 +243,7 @@ public class <%= entityClass %> implements Serializable {
     @DBRef
     @Field("<%= relationshipFieldName %>")
     <%_ } _%>
-    private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
+    private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType === 'many-to-one') {
             if (databaseType === 'sql') {
     _%>
@@ -256,7 +256,7 @@ public class <%= entityClass %> implements Serializable {
     @Field("<%= relationshipFieldName %>")
     <%_ } _%>
     @JsonIgnoreProperties("<%= otherEntityRelationshipNamePlural %>")
-    private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
+    private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType === 'many-to-many') {
         if (databaseType === 'sql') { _%>
@@ -281,7 +281,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } if (ownerSide === false) { _%>
     @JsonIgnore
     <%_ } _%>
-    private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
+    private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else {
         if (databaseType === 'sql') {
@@ -302,7 +302,7 @@ public class <%= entityClass %> implements Serializable {
     @com.fasterxml.jackson.annotation.JsonBackReference
     <%_     }
         } _%>
-    private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
+    private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
 
     <%_ }
     } _%>
@@ -330,9 +330,9 @@ public class <%= entityClass %> implements Serializable {
     <%_ if (fluentMethods) { _%>
 
         <%_ if (fieldTypeBlobContent !== 'text') { _%>
-    public <%= entityClass %> <%= fieldName %>(<%= fieldType %> <%= fieldName %>) {
+    public <%= asEntity(entityClass) %> <%= fieldName %>(<%= fieldType %> <%= fieldName %>) {
         <%_ } else { _%>
-    public <%= entityClass %> <%= fieldName %>(String <%= fieldName %>) {
+    public <%= asEntity(entityClass) %> <%= fieldName %>(String <%= fieldName %>) {
         <%_ } _%>
         this.<%= fieldName %> = <%= fieldName %>;
         return this;
@@ -353,7 +353,7 @@ public class <%= entityClass %> implements Serializable {
     }
     <%_ if (fluentMethods) { _%>
 
-    public <%= entityClass %> <%= fieldName %>ContentType(String <%= fieldName %>ContentType) {
+    public <%= asEntity(entityClass) %> <%= fieldName %>ContentType(String <%= fieldName %>ContentType) {
         this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
         return this;
     }
@@ -379,17 +379,17 @@ public class <%= entityClass %> implements Serializable {
     _%>
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
 
-    public Set<<%= otherEntityNameCapitalized %>> get<%= relationshipNameCapitalizedPlural %>() {
+    public Set<<%= asEntity(otherEntityNameCapitalized) %>> get<%= relationshipNameCapitalizedPlural %>() {
         return <%= relationshipFieldNamePlural %>;
     }
         <%_ if (fluentMethods) { _%>
 
-    public <%= entityClass %> <%= relationshipFieldNamePlural %>(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityNamePlural %>) {
+    public <%= asEntity(entityClass) %> <%= relationshipFieldNamePlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
         this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
         return this;
     }
 
-    public <%= entityClass %> add<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
+    public <%= asEntity(entityClass) %> add<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldNamePlural %>.add(<%= otherEntityName %>);
             <%_ if (relationshipType === 'one-to-many') { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
@@ -400,7 +400,7 @@ public class <%= entityClass %> implements Serializable {
         return this;
     }
 
-    public <%= entityClass %> remove<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
+    public <%= asEntity(entityClass) %> remove<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldNamePlural %>.remove(<%= otherEntityName %>);
             <%_ if (relationshipType === 'one-to-many') { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
@@ -412,23 +412,23 @@ public class <%= entityClass %> implements Serializable {
     }
         <%_ } _%>
 
-    public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityNamePlural %>) {
+    public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
         this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
     }
     <%_ } else { _%>
 
-    public <%= otherEntityNameCapitalized %> get<%= relationshipNameCapitalized %>() {
+    public <%= asEntity(otherEntityNameCapitalized) %> get<%= relationshipNameCapitalized %>() {
         return <%= relationshipFieldName %>;
     }
         <%_ if (fluentMethods) { _%>
 
-    public <%= entityClass %> <%= relationshipFieldName %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
+    public <%= asEntity(entityClass) %> <%= relationshipFieldName %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
         return this;
     }
         <%_ } _%>
 
-    public void set<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
+    public void set<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
     }
     <%_ } _%>
@@ -443,7 +443,7 @@ public class <%= entityClass %> implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
+        <%= asEntity(entityClass) %> <%= entityInstance %> = (<%= asEntity(entityClass) %>) o;
         if (<%= entityInstance %>.getId() == null || getId() == null) {
             return false;
         }
@@ -457,7 +457,7 @@ public class <%= entityClass %> implements Serializable {
 
     @Override
     public String toString() {
-        return "<%= entityClass %>{" +
+        return "<%= asEntity(entityClass) %>{" +
             "id=" + getId() +
             <%_ for (idx in fields) {
                 const fieldType = fields[idx].fieldType;
