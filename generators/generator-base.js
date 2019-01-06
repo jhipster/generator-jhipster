@@ -1479,6 +1479,35 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * A new Gradle property.
+     *
+     * @param {string} name - property name
+     * @param {string} value - property value
+     */
+    addGradleProperty(name, value) {
+        const fullPath = 'gradle.properties';
+        try {
+            jhipsterUtils.rewriteFile(
+                {
+                    file: fullPath,
+                    needle: 'jhipster-needle-gradle-property',
+                    splicable: [`${name}=${value}`]
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                `${chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(
+                        ' or missing required jhipster-needle. Reference to '
+                    )}gradle property (name: ${name}, value:${value})${chalk.yellow(' not added.\n')}`
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * A new Gradle plugin.
      *
      * @param {string} group - plugin GroupId
