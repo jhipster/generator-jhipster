@@ -1521,7 +1521,7 @@ module.exports = class extends PrivateBase {
                 {
                     file: fullPath,
                     needle: 'jhipster-needle-gradle-buildscript-dependency',
-                    splicable: [`classpath '${group}:${name}:${version}'`]
+                    splicable: [`classpath "${group}:${name}:${version}"`]
                 },
                 this
             );
