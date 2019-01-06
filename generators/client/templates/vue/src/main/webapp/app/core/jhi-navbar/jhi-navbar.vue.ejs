@@ -14,24 +14,35 @@
         <!--<div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed">-->
         <b-collapse is-nav id="header-tabs">
             <b-navbar-nav class="ml-auto">
-                <b-nav-item to="/">
+                <b-nav-item to="/" exact>
                     <span>
                         <font-awesome-icon icon="home" />
                         <span v-text="$t('global.menu.home')">Home</span>
                     </span>
                 </b-nav-item>
-                <b-nav-item-dropdown id="entity-menu" v-if="authenticated" class="pointer">
-                    <template slot="button-content">
+                <b-nav-item-dropdown 
+                    id="entity-menu" 
+                    v-if="authenticated" 
+                    :class="{'router-link-active': subIsActive('/entity')}"
+                    active-class="active"class="pointer"
+                >
+                    <span slot="button-content" class="navbar-dropdown-menu">
                         <font-awesome-icon icon="th-list" />
                         <span v-text="$t('global.menu.entities.main')">Entities</span>
-                    </template>
+                    </span>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </b-nav-item-dropdown>
-                <b-nav-item-dropdown id="admin-menu" v-if="hasAnyAuthority('ROLE_ADMIN')">
-                    <template slot="button-content">
+                <b-nav-item-dropdown 
+                    id="admin-menu" 
+                    v-if="hasAnyAuthority('ROLE_ADMIN')"  
+                    :class="{'router-link-active': subIsActive('/admin')}" 
+                    active-class="active" 
+                    class="pointer"
+                >
+                    <span slot="button-content" class="navbar-dropdown-menu">
                         <font-awesome-icon icon="user-plus" />
                         <span v-text="$t('global.menu.admin.main')">Administration</span>
-                    </template>
+                    </span>
                     <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
                     <b-dropdown-item to="/admin/gateway" v-on:click="collapseNavbar()">
                         <font-awesome-icon icon="road" />
@@ -85,23 +96,30 @@
                 </b-nav-item-dropdown>
                 <%_ if (enableTranslation) { _%>
                 <b-nav-item-dropdown id="languagesnavBarDropdown" right v-if="languages && Object.keys(languages).length > 1">
-                    <template slot="button-content">
+                    <span slot="button-content">
                         <font-awesome-icon icon="flag" />
                         <span v-text="$t('global.menu.language')">Language</span>
-                    </template>
+                    </span>
                     <b-dropdown-item v-for="(value, key) in languages" :key="`lang-${key}`" v-on:click="changeLanguage(key);collapseNavbar();"
                         :class="{ active: isActiveLanguage(key)}">
                         {{value.name}}
                     </b-dropdown-item>
                 </b-nav-item-dropdown>
                 <%_ } _%>
-                <b-nav-item-dropdown  right href="javascript:void(0);" id="account-menu">
-                    <template slot="button-content" v-if="!getImageUrl()">
+                <b-nav-item-dropdown  
+                    right 
+                    href="javascript:void(0);" 
+                    id="account-menu" 
+                    :class="{'router-link-active': subIsActive('/account')}"
+                    active-class="active"
+                    class="pointer"
+                >
+                    <span slot="button-content" class="navbar-dropdown-menu" v-if="!getImageUrl()">
                         <font-awesome-icon icon="user" />
                         <span v-text="$t('global.menu.account.main')">
                             Account
                         </span>
-                    </template>
+                    </span>
                     <template slot="button-content" v-if="getImageUrl()">
                         <img [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
                     </template>
@@ -210,6 +228,13 @@
   display: inline-block;
   vertical-align: middle;
   color: white;
+}
+/* waiting for bootstrap fix bug on nav-item-dropdown a:active
+https://github.com/bootstrap-vue/bootstrap-vue/issues/2219
+*/
+nav li.router-link-active .navbar-dropdown-menu {
+    cursor: pointer;
+    color: #fff;
 }
 
 /* ==========================================================================
