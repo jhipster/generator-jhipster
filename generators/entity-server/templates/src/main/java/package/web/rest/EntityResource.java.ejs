@@ -28,7 +28,6 @@ package <%=packageName%>.web.rest;
         }
         isUsingMapsId = false;
     } _%>
-import com.codahale.metrics.annotation.Timed;
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
 import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>
@@ -100,7 +99,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
  * REST controller for managing <%= entityClass %>.
  */
 @RestController
-@RequestMapping("/api")<% if (isUsingMapsId === true && !viaService) { %>
+@RequestMapping("/api")<% if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { %>
 @Transactional <% } %>
 public class <%= entityClass %>Resource {
 
@@ -180,7 +179,10 @@ public class <%= entityClass %>Resource {
      * @param filter the filter of the request<% } %>
      * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
      */
-    @GetMapping("/<%= entityApiUrl %>")<%- include('../../common/get_all_template', {asEntity, asDto, viaService}); -%>
+    @GetMapping("/<%= entityApiUrl %>")
+    <%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
+    @Transactional(readOnly = true) <%_ } _%>
+    <%- include('../../common/get_all_template', {asEntity, asDto, viaService}); -%>
 
     <%_ if (reactiveRepositories) { _%>
     /**
@@ -188,6 +190,8 @@ public class <%= entityClass %>Resource {
      * @return the Flux of <%= entityInstancePlural %>
      */
     @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    <%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
+    @Transactional(readOnly = true) <%_ } _%>
     public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
         log.debug("REST request to get all <%= entityClassPlural %> as a stream");
         <%_ if (viaService) { _%>
@@ -205,6 +209,8 @@ public class <%= entityClass %>Resource {
      * @return the ResponseEntity with status 200 (OK) and with body the <%= instanceName %>, or with status 404 (Not Found)
      */
     @GetMapping("/<%= entityApiUrl %>/{id}")
+    <%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
+    @Transactional(readOnly = true) <% } %>
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
