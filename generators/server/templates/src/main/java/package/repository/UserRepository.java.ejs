@@ -30,7 +30,9 @@ import <%=packageName%>.domain.User;
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
+<%_ } %>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
@@ -116,7 +118,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
-    default Optional<User> findOneByLogin(String login) {
+    default <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> findOneByLogin(String login) {
         return findById(User.PREFIX + ID_DELIMITER + login);
     }
     <%_ } else if (databaseType === 'mongodb') { _%>
