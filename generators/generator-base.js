@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -1479,6 +1479,35 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * A new Gradle property.
+     *
+     * @param {string} name - property name
+     * @param {string} value - property value
+     */
+    addGradleProperty(name, value) {
+        const fullPath = 'gradle.properties';
+        try {
+            jhipsterUtils.rewriteFile(
+                {
+                    file: fullPath,
+                    needle: 'jhipster-needle-gradle-property',
+                    splicable: [`${name}=${value}`]
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                `${chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(
+                        ' or missing required jhipster-needle. Reference to '
+                    )}gradle property (name: ${name}, value:${value})${chalk.yellow(' not added.\n')}`
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * A new Gradle plugin.
      *
      * @param {string} group - plugin GroupId
@@ -1492,7 +1521,7 @@ module.exports = class extends PrivateBase {
                 {
                     file: fullPath,
                     needle: 'jhipster-needle-gradle-buildscript-dependency',
-                    splicable: [`classpath '${group}:${name}:${version}'`]
+                    splicable: [`classpath "${group}:${name}:${version}"`]
                 },
                 this
             );
@@ -2038,6 +2067,9 @@ module.exports = class extends PrivateBase {
         } catch (err) {
             this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
+        }
+        if (context.fileData.databaseType) {
+            context.databaseType = context.fileData.databaseType;
         }
         context.relationships = context.fileData.relationships || [];
         context.fields = context.fileData.fields || [];
@@ -2919,5 +2951,21 @@ module.exports = class extends PrivateBase {
      */
     fetchFromInstalledJHipster(subpath) {
         return path.join(__dirname, subpath);
+    }
+
+    /**
+     * Construct the entity name by appending the entity suffix.
+     * @param {String} name entity name
+     */
+    asEntity(name) {
+        return name + this.entitySuffix;
+    }
+
+    /**
+     * Construct the entity's dto name by appending the dto suffix.
+     * @param {String} name entity name
+     */
+    asDto(name) {
+        return name + this.dtoSuffix;
     }
 };

@@ -36,6 +36,96 @@ describe('JHipster generator for entity', () => {
         });
     });
 
+    context('monolith with entity and dto suffixes', () => {
+        describe('with entity and dto suffixes', () => {
+            beforeEach(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/entity-dto-suffixes'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withPrompts({
+                        fieldAdd: false,
+                        relationshipAdd: false,
+                        dto: 'mapstruct',
+                        service: 'serviceImpl'
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with suffix', () => {
+                assert.file([
+                    '.jhipster/Foo.json',
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+                ]);
+
+                assert.fileContent(
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
+                    'public interface FooRepository '
+                );
+
+                assert.fileContent(
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`,
+                    'public class FooXXX implements Serializable'
+                );
+
+                assert.fileContent(
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
+                    'public class FooYYY implements Serializable'
+                );
+            });
+        });
+
+        describe('with entity suffix and no dto', () => {
+            beforeEach(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/entity-dto-suffixes'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withPrompts({
+                        fieldAdd: false,
+                        relationshipAdd: false,
+                        dto: 'no',
+                        service: 'serviceImpl'
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with suffix', () => {
+                assert.file([
+                    '.jhipster/Foo.json',
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+                ]);
+
+                assert.noFile([
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`
+                ]);
+
+                assert.fileContent(
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
+                    'public interface FooRepository '
+                );
+
+                assert.fileContent(
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`,
+                    'public class FooXXX implements Serializable'
+                );
+            });
+        });
+    });
+
     context('monolith with angularX', () => {
         describe('no dto, no service, no pagination', () => {
             before(done => {
@@ -390,6 +480,29 @@ describe('JHipster generator for entity', () => {
                 assert.noFile(expectedFiles.clientNg2WithRootFolder);
             });
         });
+
+        describe('with mongodb microservice', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/mongodb-with-relations'), dir);
+                    })
+                    .withArguments(['foo'])
+                    .withPrompts({
+                        fieldAdd: false,
+                        relationshipAdd: false,
+                        dto: 'yes',
+                        service: 'serviceImpl',
+                        pagination: 'pagination'
+                    })
+                    .on('end', done);
+            });
+
+            it('sets expected custom databaseType', () => {
+                assert.jsonFileContent('.jhipster/Foo.json', { databaseType: 'mongodb' });
+            });
+        });
     });
 
     context('gateway', () => {
@@ -443,6 +556,32 @@ describe('JHipster generator for entity', () => {
                 assert.file(expectedFiles.clientNg2WithRootFolder);
                 assert.noFile(expectedFiles.gatling);
                 assert.noFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`);
+            });
+        });
+
+        describe('with entity from mongodb microservice', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-gateway'), dir);
+                    })
+                    .withArguments(['baz'])
+                    .withPrompts({
+                        useMicroserviceJson: true,
+                        microservicePath: '../'
+                    })
+                    .on('end', done);
+            });
+
+            it('sets expected custom databaseType from the microservice', () => {
+                assert.jsonFileContent('.jhipster/Baz.json', { databaseType: 'mongodb' });
+            });
+            it('generates expected files', () => {
+                assert.file(expectedFiles.clientBazGatewayMicroserviceEntity);
+            });
+            it('generates a string id for the mongodb entity', () => {
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/shared/model/sampleMicroservice/baz.model.ts`, 'id?: string');
             });
         });
     });

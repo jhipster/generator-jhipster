@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -216,6 +216,20 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (shelljs.test('-f', context.filename)) {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
                     context.useConfigurationFile = true;
+                }
+
+                context.entitySuffix = configuration.get('entitySuffix');
+                if (_.isNil(context.entitySuffix)) {
+                    context.entitySuffix = '';
+                }
+
+                context.dtoSuffix = configuration.get('dtoSuffix');
+                if (_.isNil(context.dtoSuffix)) {
+                    context.dtoSuffix = 'DTO';
+                }
+
+                if (context.entitySuffix === context.dtoSuffix) {
+                    this.error(chalk.red('The entity cannot be generated as the entity suffix and DTO suffix are equals !'));
                 }
             },
 
@@ -615,6 +629,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.data.searchEngine = context.searchEngine;
                 this.data.service = context.service;
                 this.data.entityTableName = context.entityTableName;
+                this.data.databaseType = context.databaseType;
                 this.copyFilteringFlag(context, this.data, context);
                 if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
                     this.data.pagination = context.pagination;
@@ -950,7 +965,12 @@ module.exports = class extends BaseBlueprintGenerator {
                             relationship.otherEntityModuleName = `${context.angularXAppName +
                                 relationship.otherEntityNameCapitalized}Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
-                            if (context.skipUiGrouping || otherEntityData === undefined || otherEntityData.clientRootFolder === undefined) {
+                            if (
+                                context.skipUiGrouping ||
+                                otherEntityData === undefined ||
+                                otherEntityData.clientRootFolder === '' ||
+                                otherEntityData.clientRootFolder === undefined
+                            ) {
                                 relationship.otherEntityClientRootFolder = '';
                             } else {
                                 relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;

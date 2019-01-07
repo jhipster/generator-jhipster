@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -227,6 +227,20 @@ module.exports = class extends BaseBlueprintGenerator {
                 // force variables unused by microservice applications
                 if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
                     this.websocket = false;
+                }
+
+                this.entitySuffix = configuration.get('entitySuffix');
+                if (_.isNil(this.entitySuffix)) {
+                    this.entitySuffix = '';
+                }
+
+                this.dtoSuffix = configuration.get('dtoSuffix');
+                if (_.isNil(this.dtoSuffix)) {
+                    this.dtoSuffix = 'DTO';
+                }
+
+                if (this.entitySuffix === this.dtoSuffix) {
+                    this.error(chalk.red('Entities cannot be generated as the entity suffix and DTO suffix are equals !'));
                 }
 
                 const serverConfigFound =

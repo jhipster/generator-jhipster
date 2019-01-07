@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -164,12 +164,12 @@ public class CacheConfiguration {
             cm.createCache(<%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             cm.createCache(<%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
                 <%_ if (enableHibernateCache) { _%>
-            cm.createCache(<%=packageName%>.domain.User.class.getName(), jcacheConfiguration);
+            cm.createCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
             cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
-            cm.createCache(<%=packageName%>.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", jcacheConfiguration);
                     <%_ if (authenticationType === 'session') { _%>
             cm.createCache(<%=packageName%>.domain.PersistentToken.class.getName(), jcacheConfiguration);
-            cm.createCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens", jcacheConfiguration);
+            cm.createCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", jcacheConfiguration);
                     <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
@@ -215,8 +215,7 @@ public class CacheConfiguration {
     @Bean
     public CacheManager cacheManager(HazelcastInstance hazelcastInstance) {
         log.debug("Starting HazelcastCacheManager");
-        CacheManager cacheManager = new com.hazelcast.spring.cache.HazelcastCacheManager(hazelcastInstance);
-        return cacheManager;
+        return new com.hazelcast.spring.cache.HazelcastCacheManager(hazelcastInstance);
     }
 
     @Bean
@@ -248,7 +247,7 @@ public class CacheConfiguration {
                 config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
                 for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
                     String clusterMember = "127.0.0.1:" + (instance.getPort() + 5701);
-                    log.debug("Adding Hazelcast (dev) cluster member " + clusterMember);
+                    log.debug("Adding Hazelcast (dev) cluster member {}", clusterMember);
                     config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
                 }
             } else { // Production configuration, one host per instance all using port 5701
@@ -256,7 +255,7 @@ public class CacheConfiguration {
                 config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
                 for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
                     String clusterMember = instance.getHost() + ":5701";
-                    log.debug("Adding Hazelcast (prod) cluster member " + clusterMember);
+                    log.debug("Adding Hazelcast (prod) cluster member {}", clusterMember);
                     config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
                 }
             }
@@ -521,21 +520,21 @@ public class CacheConfiguration {
                 cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
                 <%_ if (enableHibernateCache) { _%>
-            registerPredefinedCache(<%=packageName%>.domain.User.class.getName(), new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.User.class.getName()).getAdvancedCache(), this,
+            registerPredefinedCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName(), new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
             registerPredefinedCache(<%=packageName%>.domain.Authority.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.Authority.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
-            registerPredefinedCache(<%=packageName%>.domain.User.class.getName() + ".authorities", new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.User.class.getName() + ".authorities").getAdvancedCache(), this,
+            registerPredefinedCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
                     <%_ if (authenticationType === 'session') { _%>
             registerPredefinedCache(<%=packageName%>.domain.PersistentToken.class.getName(), new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.domain.PersistentToken.class.getName()).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
-            registerPredefinedCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens", new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.User.class.getName() + ".persistentTokens").getAdvancedCache(), this,
+            registerPredefinedCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", new JCache<Object, Object>(
+                cacheManager.getCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
                     <%_ } _%>
                 <%_ } _%>
@@ -563,7 +562,7 @@ public class CacheConfiguration {
         try {
             for (ServiceInstance instance : discoveryClient.getInstances(registration.getServiceId())) {
                 String clusterMember = instance.getHost() + ":7800";
-                log.debug("Adding Infinispan cluster member " + clusterMember);
+                log.debug("Adding Infinispan cluster member {}", clusterMember);
                 initialHosts.add(new IpAddress(clusterMember));
             }
             TCP tcp = new TCP();

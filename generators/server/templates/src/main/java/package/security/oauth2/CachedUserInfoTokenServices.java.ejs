@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -22,8 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 public class CachedUserInfoTokenServices extends UserInfoTokenServices {
@@ -36,7 +34,7 @@ public class CachedUserInfoTokenServices extends UserInfoTokenServices {
 
     @Override
     @Cacheable("oAuth2Authentication")
-    public OAuth2Authentication loadAuthentication(String accessToken) throws AuthenticationException, InvalidTokenException {
+    public OAuth2Authentication loadAuthentication(String accessToken) {
         log.debug("Getting user information from OpenID Connect server");
         return super.loadAuthentication(accessToken);
     }

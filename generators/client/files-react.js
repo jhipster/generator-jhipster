@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://jhipster.github.io/
  * for more information.
@@ -261,8 +261,6 @@ const files = {
                 { file: 'modules/administration/health/health-modal.tsx', method: 'processJsx' },
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
-                { file: 'modules/administration/metrics/metrics-modal.tsx', method: 'processJsx' },
-                { file: 'modules/administration/metrics/thread-item.tsx', method: 'processJsx' },
                 'modules/administration/administration.reducer.ts'
             ]
         },
