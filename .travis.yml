@@ -25,7 +25,7 @@ language: node_js
 node_js:
   - "10.14.1"
 jdk:
-  - oraclejdk8
+  - openjdk11
 addons:
   apt:
     sources:
