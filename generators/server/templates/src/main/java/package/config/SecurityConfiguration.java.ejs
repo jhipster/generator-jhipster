@@ -273,9 +273,7 @@ public class SecurityConfiguration extends <% if (authenticationType === 'oauth2
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()
             <%_ } _%>
-            .antMatchers("/management/health").permitAll()
-            .antMatchers("/management/info").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)<% if (authenticationType === 'jwt') { %>
+            <% if (authenticationType === 'jwt') { %>
         .and()
             .apply(securityConfigurerAdapter())<% } %>;
 
@@ -362,10 +360,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
-            .antMatchers("/api/**").authenticated()
-            .antMatchers("/management/health").permitAll()
-            .antMatchers("/management/info").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
+            .antMatchers("/api/**").authenticated();
     }
 
     @Bean

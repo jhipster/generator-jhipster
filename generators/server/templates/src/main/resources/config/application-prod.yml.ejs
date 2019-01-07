@@ -291,9 +291,11 @@ jhipster:
             use-binary-protocol: true
         <%_ } _%>
     <%_ } _%>
-    <%_ if (authenticationType === 'jwt') { _%>
     security:
         authentication:
+            # Set this property to enable access to /management/** endpoints with a fixed API key
+            #management-api-key: secret-management-api-key
+            <%_ if (authenticationType === 'jwt') { _%>
             jwt:
                 # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
                 # As this is the PRODUCTION configuration, you MUST change the default key, and store it securely:
@@ -304,9 +306,8 @@ jhipster:
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
-    <%_ } _%>
-    <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-    security:
+            <%_ } _%>
+        <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
         client-authorization:
             <%_ if (applicationType !== 'uaa') { _%>
             access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token

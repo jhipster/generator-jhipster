@@ -323,18 +323,18 @@ jhipster:
         # allow-credentials: true
         # max-age: 1800
     <%_ } _%>
-    <%_ if (authenticationType === 'jwt') { _%>
     security:
         authentication:
+            management-api-key: secret-management-api-key
+            <%_ if (authenticationType === 'jwt') { _%>
             jwt:
                 # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
                 base64-secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
-    <%_ } _%>
-    <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
-    security:
+            <%_ } _%>
+        <%_ if ((applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') && authenticationType === 'uaa') { _%>
         client-authorization:
             <%_ if (applicationType !== 'uaa') { _%>
             access-token-uri: http://<%= uaaBaseName.toLowerCase() %>/oauth/token
@@ -342,13 +342,12 @@ jhipster:
             <%_ } _%>
             client-id: internal
             client-secret: internal
-    <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
-    security:
+        <%_ } _%>
+        <%_ if (authenticationType === 'session') { _%>
         remember-me:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
-<%_ } _%>
+        <%_ } _%>
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: <%= baseName %>@localhost
         base-url: http://127.0.0.1:<%= applicationType !== 'uaa' ? serverPort : 8080 %>
