@@ -316,17 +316,15 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof <%= asEntity('User') %>)) {
             return false;
         }
-
-        <%= asEntity('User') %> user = (<%= asEntity('User') %>) o;
-        return !(user.getId() == null || getId() == null) && Objects.equals(getId(), user.getId());
+        return id != null && id.equals(((<%= asEntity('User') %>) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override
