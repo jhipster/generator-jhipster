@@ -70,10 +70,10 @@ import {
         <%=angularXAppName%>HomeModule,
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=angularXAppName%>AccountModule,
-        <%=angularXAppName%>AppRoutingModule,
         <%_ } _%>
         // jhipster-needle-angular-add-module JHipster will add new module here
-        <%=angularXAppName%>EntityModule
+        <%=angularXAppName%>EntityModule,
+        <%=angularXAppName%>AppRoutingModule
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,
