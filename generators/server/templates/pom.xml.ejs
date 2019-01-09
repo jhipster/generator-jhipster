@@ -23,7 +23,7 @@
     <groupId><%= packageName %></groupId>
     <artifactId><%= dasherizedBaseName %></artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name><%= humanizedBaseName %></name>
 
     <repositories>
@@ -1123,11 +1123,6 @@
                         <outputDirectory>${sonar.junit.reportsPath}</outputDirectory>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>${maven-war-plugin.version}</version>
-                </plugin>
                 <%_ if (enableSwaggerCodegen) { _%>
                 <plugin>
                     <!--
@@ -1305,13 +1300,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
             <properties>
@@ -1342,17 +1330,6 @@
                 </dependency>
                 <%_ } _%>
             </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.tls}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
@@ -1376,13 +1353,6 @@
                                     <directory><%= CLIENT_DIST_DIR %></directory>
                                 </fileset>
                             </filesets>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -1491,6 +1461,29 @@
             </properties>
         </profile>
         <profile>
+            <id>war</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>war</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <!--
                 Profile for doing "continuous compilation" with the Scala Maven plugin.
                 It allows automatic compilation of Java classes as soon as they are saved.
@@ -1514,13 +1507,6 @@
             </dependencies>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
-                        </configuration>
-                    </plugin>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
