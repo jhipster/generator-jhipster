@@ -1,5 +1,8 @@
 module.exports = {
-  moduleFileExtensions: ['js', 'json', 'ts', 'vue'],
+  coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/test/javascript'
+  ],
   transform: {
     '.*\\.(vue)$': 'vue-jest',
     '^.+\\.tsx?$': 'ts-jest'
@@ -7,7 +10,12 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/main/webapp/app/$1'
   },
-  testMatch: ['<rootDir>/src/test/javascript/spec/app/**/*.spec.ts'],
+  reporters: [
+    'default',
+    [ 'jest-junit', { output: './<%= BUILD_DIR %>test-results/TESTS-results-jest.xml' } ]
+  ],
+  testResultsProcessor: 'jest-sonar-reporter',
+  testMatch: ['<rootDir>/src/test/javascript/spec/**/+(*.)+(spec.ts)'],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
   rootDir: '../../../',
   globals: {
