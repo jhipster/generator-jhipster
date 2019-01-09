@@ -12,11 +12,10 @@ export default class ConfigurationService {
           }
         }
 
-        resolve(
-          properties.sort((propertyA, propertyB) => {
-            return propertyA.prefix === propertyB.prefix ? 0 : propertyA.prefix < propertyB.prefix ? -1 : 1;
-          })
-        );
+        properties.sort((propertyA, propertyB) => {
+          return propertyA.prefix === propertyB.prefix ? 0 : propertyA.prefix < propertyB.prefix ? -1 : 1;
+        });
+        resolve(properties);
       });
     });
   }
