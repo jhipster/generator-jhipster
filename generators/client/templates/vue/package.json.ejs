@@ -89,6 +89,7 @@ limitations under the License.
     "jest": "23.6.0",
     "jest-junit": "5.2.0",
     "jest-serializer-vue": "0.2.0",
+    "jest-sonar-reporter": "2.0.0",
     "jest-vue-preprocessor": "1.4.0",
     <%_ if (!skipCommitHook) { _%>
     "lint-staged": "8.1.0",
@@ -178,8 +179,8 @@ limitations under the License.
     "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch"
   },
   "jestSonar": {
-    "reportPath": "build/test-results/jest",
-    "reportFile": "TESTS-results.xml"
+    "reportPath": "<%= BUILD_DIR %>test-results/jest",
+    "reportFile": "TESTS-results-sonar.xml"
   },
   "browserslist": [
     "> 1%",
