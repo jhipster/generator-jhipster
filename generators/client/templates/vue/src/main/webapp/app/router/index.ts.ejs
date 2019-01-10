@@ -51,6 +51,12 @@ export default new Router({
       meta: { error403: true }
     },
     {
+      path: '/not-found',
+      name: 'NotFound',
+      component: Error,
+      meta: { error404: true }
+    },
+    {
       path: '/register',
       name: 'Register',
       component: Register

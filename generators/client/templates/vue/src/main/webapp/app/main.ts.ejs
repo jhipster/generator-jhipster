@@ -69,6 +69,14 @@ const gatewayService = new GatewayService();
 <%_ } %>
 const principal = new Principal(store, <%_ if (enableTranslation) { _%>translationService, i18n, <%_ } _%><%_ if (authenticationType === 'session') { _%>(<any>Vue).cookie, <%_ } _%><%_ if (websocket === 'spring-websocket') { _%>trackerService, <%_ } _%>router);
 
+router.beforeEach((to, from, next) => {
+
+  if (!to.matched.length) {
+    next('/not-found');
+  }
+  next();
+});
+
 // jhipster-needle-add-entity-service-to-main-declaration - JHipster will declare entities services here
 
 /* tslint:disable */
