@@ -4,6 +4,7 @@
         "http": {
             "400": "Bad request.",
             "403": "You are not authorized to access this page.",
+            "404": "The page does not exist.",
             "405": "The HTTP verb you used is not supported for this URL.",
             "500": "Internal server error."
         },

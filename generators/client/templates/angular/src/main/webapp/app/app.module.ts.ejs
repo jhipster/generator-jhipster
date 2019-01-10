@@ -55,7 +55,6 @@ import {
 @NgModule({
     imports: [
         BrowserModule,
-        <%=angularXAppName%>AppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: '<%=jhiPrefixDashed %>', separator: '-'}),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
@@ -73,7 +72,8 @@ import {
         <%=angularXAppName%>AccountModule,
         <%_ } _%>
         // jhipster-needle-angular-add-module JHipster will add new module here
-        <%=angularXAppName%>EntityModule
+        <%=angularXAppName%>EntityModule,
+        <%=angularXAppName%>AppRoutingModule
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,
