@@ -12,7 +12,9 @@ const localVue = createLocalVue();
 const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
+<%_ } _%>
 const store = config.initVueXStore(localVue);
 
 jest.mock('axios', () => ({
@@ -32,7 +34,9 @@ describe('Register Component', () => {
 
     wrapper = shallowMount<RegisterClass>(Register, {
       store,
+    <%_ if (enableTranslation) { _%>
       i18n,
+    <%_ } _%>
       localVue,
       provide: {
         registerService: () => new RegisterService(),
