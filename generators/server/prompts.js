@@ -171,11 +171,11 @@ function askForServerSideOpts(meta) {
                     value: 'mongodb',
                     name: 'MongoDB'
                 });
+                opts.push({
+                    value: 'couchbase',
+                    name: 'Couchbase'
+                });
                 if (!reactive) {
-                    opts.push({
-                        value: 'couchbase',
-                        name: 'Couchbase'
-                    });
                     if (
                         (response.authenticationType !== 'oauth2' && applicationType === 'microservice') ||
                         (response.authenticationType === 'uaa' && applicationType === 'gateway')
