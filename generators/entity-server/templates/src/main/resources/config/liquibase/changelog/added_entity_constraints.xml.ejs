@@ -31,8 +31,12 @@
             ownerSide = relationships[idx].ownerSide,
             otherEntityTableName = relationships[idx].otherEntityTableName;
             if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
-                const constraintName = getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);%>
-        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
+                const constraintName = getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);
+                let baseColumnName = getColumnName(relationshipName) + '_id';
+                if (relationshipType === 'one-to-one' && ownerSide && relationships[idx].useJPADerivedIdentifier === true) {
+                    baseColumnName = 'id';
+                }%>
+        <addForeignKeyConstraint baseColumnNames="<%= baseColumnName %>"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"

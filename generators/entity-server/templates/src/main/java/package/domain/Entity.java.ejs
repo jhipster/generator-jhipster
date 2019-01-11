@@ -21,7 +21,16 @@ let importApiModelProperty = false;
 let importJsonIgnore = false;
 let importJsonIgnoreProperties = false;
 let importSet = false;
+let isUsingMapsId = false;
 const uniqueEnums = {}; %><%- include imports -%>
+
+<%_ for (idx in relationships) {
+        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+        if ( isUsingMapsId === true) {
+            break;
+        }
+        isUsingMapsId = false;
+    } _%>
 
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.annotation.Id;
@@ -129,9 +138,9 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @IdPrefix
     private String prefix = PREFIX;
     <%_ } _%>
-
+    
     @Id
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && isUsingMapsId === false) { _%>
         <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
         <%_ }  else { _%>
@@ -221,6 +230,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const relationshipRequired = relationships[idx].relationshipRequired;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const ownerSide = relationships[idx].ownerSide;
+        const useJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
         if (otherEntityRelationshipName) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
@@ -290,7 +300,12 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
             <%_ }_%>
+            <%_ if (useJPADerivedIdentifier === true) { %>
+    @MapsId
+    @JoinColumn(name = "id")
+            <%_ } else { %>
     @JoinColumn(unique = true)
+            <%_ } _%>
         <%_ } else { _%>
     @OneToOne(mappedBy = "<%= otherEntityRelationshipName %>")
     @JsonIgnore

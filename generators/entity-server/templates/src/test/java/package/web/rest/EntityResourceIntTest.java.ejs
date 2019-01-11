@@ -17,6 +17,21 @@
  limitations under the License.
 -%>
 package <%=packageName%>.web.rest;
+<%_ let isUsingMapsId = false;
+    let mapsIdAssoc;
+    let mapsIdEntity;
+    let mapsIdEntityInstance;
+    let mapsIdRepoInstance
+    for (idx in relationships) {
+        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+        if ( isUsingMapsId === true) {
+            mapsIdAssoc = relationships[idx];
+            mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+            mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+            mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+            break;
+        }
+    } _%>
 <% if (databaseType === 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
@@ -27,13 +42,17 @@ import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
 <%_ for (idx in relationships) { // import entities in required relationships
         const relationshipValidate = relationships[idx].relationshipValidate;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering) { _%>
+        const isUsingMapsIdL1 = relationships[idx].useJPADerivedIdentifier;
+        if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
 import <%=packageName%>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
 <%_ } } _%>
 <%_ if (saveUserSnapshot) { _%>
 import <%=packageName%>.repository.UserRepository;
 <%_ } _%>
 import <%=packageName%>.repository.<%= entityClass %>Repository;
+<%_ if (isUsingMapsId === true && ( dto !== 'mapstruct' && service === 'no')) { _%>
+import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
@@ -287,6 +306,10 @@ _%>
 
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
+    <%_ if (isUsingMapsId === true && ( dto !== 'mapstruct' && service === 'no')) { _%>
+    @Autowired
+    private <%=mapsIdEntity%>Repository <%= mapsIdRepoInstance %>;
+    <%_ } _%>
     <%_ if (saveUserSnapshot) { _%>
 
     @Autowired
@@ -358,7 +381,7 @@ _%>
         <%_ if (service !== 'no') { _%>
         final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
         <%_ } else { _%>
-        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityInstance %>ReactiveRepository<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
+        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityInstance %>ReactiveRepository<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %><% if (isUsingMapsId === true && dto !== 'mapstruct') { %>, <%= mapsIdRepoInstance _%> <% } %>);
         <%_ } _%>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -397,7 +420,8 @@ _%>
             const relationshipType = relationships[idx].relationshipType;
             const relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
             const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
-            if (relationshipValidate !== null && relationshipValidate === true) { _%>
+            const mapsIdUse = relationships[idx].useJPADerivedIdentifier;
+            if ((relationshipValidate !== null && relationshipValidate === true) || mapsIdUse === true) { _%>
         // Add required entity
             <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
         <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
@@ -458,6 +482,11 @@ _%>
         <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
         <%_ }} _%>
+        <%_ if (isUsingMapsId === true) { _%>
+
+        // Validate the id for MapsId, the ids must be same
+        assertThat(test<%= entityClass %>.getId()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().getId());
+        <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch

@@ -22,6 +22,12 @@
         if (queryService) {
             beans.push({class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService`});
         }
+        if (isUsingMapsId === true && isController === false) {
+            const mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+            const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+            const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+            beans.push({class: `${mapsIdEntity}Repository`, instance: mapsIdRepoInstance});
+        }
     } else {
         beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
         if (dto === 'mapstruct') {
@@ -32,6 +38,12 @@
         }
         if (reactiveRepositories) {
             beans.push({class: `${entityClass}ReactiveRepository`, instance: `${entityInstance}ReactiveRepository`});
+        }
+        if (isUsingMapsId === true) {
+            const mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+            const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+            const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+            beans.push({class: `${mapsIdEntity}Repository`, instance: mapsIdRepoInstance});
         }
     }
     if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) {
