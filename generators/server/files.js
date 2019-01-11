@@ -1313,6 +1313,10 @@ const serverFiles = {
                     file: 'package/cucumber/stepdefs/StepDefs.java',
                     renameTo: generator => `${generator.testDir}cucumber/stepdefs/StepDefs.java`
                 },
+                {
+                    file: 'package/cucumber/stepdefs/CucumberContextConfiguration.java',
+                    renameTo: generator => `${generator.testDir}cucumber/stepdefs/CucumberContextConfiguration.java`
+                },
                 { file: '../features/gitkeep', noEjs: true }
             ]
         },

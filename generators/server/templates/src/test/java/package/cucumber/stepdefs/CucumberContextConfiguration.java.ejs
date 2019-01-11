@@ -18,10 +18,21 @@
 -%>
 package <%=packageName%>.cucumber.stepdefs;
 
-import org.springframework.test.web.servlet.ResultActions;
+import <%=packageName%>.<%= mainClass %>;
+import cucumber.api.java.Before;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
-public abstract class StepDefs {
+@SpringBootTest
+@AutoConfigureMockMvc
+@ContextConfiguration(classes = <%= mainClass %>.class)
+public class CucumberContextConfiguration {
 
-    protected ResultActions actions;
+    @Before
+    public void setup_cucumber_spring_context(){
+        // Dummy method so cucumber will recognize this class as glue
+        // and use its context configuration.
+    }
 
 }
