@@ -84,7 +84,6 @@ export class LoginService {
         }
         <%_ } else if (authenticationType === 'oauth2') { _%>
         this.authServerProvider.logout().subscribe(response => {
-            this.principal.authenticate(null);
             const data = response.body;
             let logoutUrl = data.logoutUrl;
             // if Keycloak, uri has protocol/openid-connect/token
