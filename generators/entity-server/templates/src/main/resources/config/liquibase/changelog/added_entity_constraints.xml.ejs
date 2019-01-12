@@ -42,19 +42,19 @@
                                  referencedColumnNames="id"
                                  referencedTableName="<%= otherEntityTableName %>"/>
         <%_ } else if (relationshipType === 'many-to-many' && ownerSide) {
-                const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
-                const constraintName = getFKConstraintName(joinTableName, getPluralColumnName(entityTableName), prodDatabaseType, true);
-                const otherEntityConstraintName = getFKConstraintName(joinTableName, getPluralColumnName(relationshipName), prodDatabaseType, true);
+                const joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
+                const constraintName = getFKConstraintName(joinTableName, getColumnName(name), prodDatabaseType, true);
+                const otherEntityConstraintName = getFKConstraintName(joinTableName, getColumnName(relationshipName), prodDatabaseType, true);
           _%>
 
-        <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(name) %>_id"
+        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(name) %>_id"
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= entityTableName %>"/>
-        <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(relationshipName) %>_id"
+        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= joinTableName %>"
-                                 constraintName="<%= otherEntityConstraintName %>"
+                                 constraintName="<%= getColumnName(otherEntityConstraintName) %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= otherEntityTableName %>"/>
         <%  } %><% } %>

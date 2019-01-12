@@ -282,8 +282,8 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%- include relationship_validators -%>
         <%_ } _%>
     @JoinTable(name = "<%= joinTableName %>",
-               joinColumns = @JoinColumn(name = "<%= getPluralColumnName(name) %>_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "<%= getPluralColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName = "id"))
+               joinColumns = @JoinColumn(name = "<%= getColumnName(name) %>_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "<%= getColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName = "id"))
         <%_ }
         } else if (databaseType === 'mongodb') { _%>
     @DBRef
