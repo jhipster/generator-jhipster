@@ -66,34 +66,37 @@ jhipster --blueprint vuejs
 
 During development of blueprint, please note the below steps. They are very important.
 
-1. Clone this repo locally and cd into it, then link your blueprint globally 
+1. Clone the projects
+
+You'll probably need the current master of **generator-jhipster** :
+
+- fork generator-jhipster: `https://github.com/jhipster/generator-jhipster/fork`
+- clone locally your fork: `git clone https://github.com/<your_username>/generator-jhipster`
+- `cd generator-jhipster`
+- `git remote add upstream https://github.com/jhipster/generator-jhipster`
+- so you'll be able to update regularly your fork, using `git fetch upstream && git checkout master && git rebase upstream/master`
+- `npm ci`
+- `npm link`
+
+Then, about **jhipster-vuejs** :
+
+- fork jhipster-vuejs: `https://github.com/jhipster/jhipster-vuejs/fork`
+- clone locally your fork: `git clone https://github.com/<your_username>/jhipster-vuejs`
+- `cd jhipster-vuejs`
+- `git remote add upstream https://github.com/jhipster/jhipster-vuejs`
+- so you'll be able to update regularly your fork, using `git fetch upstream && git checkout master && git rebase upstream/master`
+- `npm ci`
+- `npm link`
+- `npm link generator-jhipster`
+
+
+2. Create a new folder for the app to be generated and link JHipster and your blueprint there
 
 ```bash
-git clone https://github.com/jhipster/jhipster-vuejs.git
-cd jhipster-vuejs
-npm link
-```
-
-2. Optional: Link a development version of JHipster to your blueprint (optional: required only if you want to use a non-released JHipster version, like the master branch or your own custom fork)
-
-```bash
-cd generator-jhipster
-npm link
-
-cd jhipster-vuejs
-npm link generator-jhipster
-```
-
-3. Create a new folder for the app to be generated and link JHipster and your blueprint there
-
-```bash
-mkdir my-app && cd my-app
-
+mkdir my-app
+cd my-app
 npm link generator-jhipster-vuejs
-npm link generator-jhipster (Optional: Needed only if you are using a non-released JHipster version)
-
 jhipster -d --blueprint vuejs
-
 ```
 
 # License
