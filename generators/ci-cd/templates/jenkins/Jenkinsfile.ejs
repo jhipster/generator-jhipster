@@ -116,7 +116,7 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./gradlew <%= clientPackageManager %>_run_test-ci -PnodeInstall --no-daemon"
+<%= indent %>            sh "./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
