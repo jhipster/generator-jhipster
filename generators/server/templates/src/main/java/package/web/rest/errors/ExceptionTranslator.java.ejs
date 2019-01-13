@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -76,6 +76,11 @@ if (reactive) {
     requestClass = 'NativeWebRequest';
 }
 _%>
+    private static final String FIELD_ERRORS_KEY = "fieldErrors";
+    private static final String MESSAGE_KEY = "message";
+    private static final String PATH_KEY = "path";
+    private static final String VIOLATIONS_KEY = "violations";
+
     /**
      * Post-process the Problem payload to add the message key for the front-end if needed
      */
@@ -101,23 +106,23 @@ _%>
             .withStatus(problem.getStatus())
             .withTitle(problem.getTitle())
             <%_ if (!reactive) { _%>
-            .with("path", request.getNativeRequest(HttpServletRequest.class).getRequestURI());
+            .with(PATH_KEY, request.getNativeRequest(HttpServletRequest.class).getRequestURI());
             <%_ } else { _%>
-            .with("path", request.getRequest().getPath().value());
+            .with(PATH_KEY, request.getRequest().getPath().value());
             <%_ } _%>
 
         if (problem instanceof ConstraintViolationProblem) {
             builder
-                .with("violations", ((ConstraintViolationProblem) problem).getViolations())
-                .with("message", ErrorConstants.ERR_VALIDATION);
+                .with(VIOLATIONS_KEY, ((ConstraintViolationProblem) problem).getViolations())
+                .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION);
         } else {
             builder
                 .withCause(((DefaultProblem) problem).getCause())
                 .withDetail(problem.getDetail())
                 .withInstance(problem.getInstance());
             problem.getParameters().forEach(builder::with);
-            if (!problem.getParameters().containsKey("message") && problem.getStatus() != null) {
-                builder.with("message", "error.http." + problem.getStatus().getStatusCode());
+            if (!problem.getParameters().containsKey(MESSAGE_KEY) && problem.getStatus() != null) {
+                builder.with(MESSAGE_KEY, "error.http." + problem.getStatus().getStatusCode());
             }
         }
         return <% if (reactive) { %>Mono.just(<% } %>new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode())<% if (reactive) { %>)<% } %>;
@@ -134,8 +139,8 @@ _%>
             .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
             .withTitle("<%_ if (!reactive) { _%>Method argument not valid<% } else { %>Data binding and validation failure<% } %>")
             .withStatus(<% if (!reactive) { %>defaultConstraintViolationStatus()<% } else { %>Status.BAD_REQUEST<% } %>)
-            .with("message", ErrorConstants.ERR_VALIDATION)
-            .with("fieldErrors", fieldErrors)
+            .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION)
+            .with(FIELD_ERRORS_KEY, fieldErrors)
             .build();
         return create(ex, problem, request);
     }
@@ -145,7 +150,7 @@ _%>
     public ResponseEntity<Problem> handleNoSuchElementException(NoSuchElementException ex, NativeWebRequest request) {
         Problem problem = Problem.builder()
             .withStatus(Status.NOT_FOUND)
-            .with("message", ErrorConstants.ENTITY_NOT_FOUND_TYPE)
+            .with(MESSAGE_KEY, ErrorConstants.ENTITY_NOT_FOUND_TYPE)
             .build();
         return create(ex, problem, request);
     }
@@ -161,7 +166,7 @@ _%>
     public <%- returnType %> handleConcurrencyFailure(ConcurrencyFailureException ex, <%= requestClass %> request) {
         Problem problem = Problem.builder()
             .withStatus(Status.CONFLICT)
-            .with("message", ErrorConstants.ERR_CONCURRENCY_FAILURE)
+            .with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
             .build();
         return create(ex, problem, request);
     }

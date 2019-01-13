@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -45,7 +45,8 @@ module.exports = {
     getAllJhipsterConfig,
     getDBTypeFromDBValue,
     getBase64Secret,
-    getRandomHex
+    getRandomHex,
+    checkStringInFile
 };
 
 /**
@@ -461,4 +462,9 @@ function getRandomHex(len = 50) {
  */
 function getBase64Secret(value, len = 50) {
     return Buffer.from(value || getRandomHex(len)).toString('base64');
+}
+
+function checkStringInFile(path, search, generator) {
+    const fileContent = generator.fs.read(path);
+    return fileContent.includes(search);
 }

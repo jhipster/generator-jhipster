@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -45,7 +45,7 @@ export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngul
     constructor(private service: <%= entityAngularName %>Service) {
     }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<<%= entityAngularName %>> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<I<%= entityAngularName %>> {
         const id = route.params['id'] ? route.params['id'] : null;
         if (id) {
             return this.service.find(id).pipe(
@@ -60,7 +60,7 @@ export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngul
 
 export const <%= entityInstance %>Route: Routes = [
     {
-        path: '<%= entityUrl %>',
+        path: '',
         component: <%= entityAngularName %>Component,
         <%_ if (pagination === 'pagination' || pagination === 'pager'){ _%>
         resolve: {
@@ -76,7 +76,7 @@ export const <%= entityInstance %>Route: Routes = [
         },
         canActivate: [UserRouteAccessService]
     }, {
-        path: '<%= entityUrl %>/:id/view',
+        path: ':id/view',
         component: <%= entityAngularName %>DetailComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>Resolve
@@ -88,7 +88,7 @@ export const <%= entityInstance %>Route: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: '<%= entityUrl %>/new',
+        path: 'new',
         component: <%= entityAngularName %>UpdateComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>Resolve
@@ -100,7 +100,7 @@ export const <%= entityInstance %>Route: Routes = [
         canActivate: [UserRouteAccessService]
     },
     {
-        path: '<%= entityUrl %>/:id/edit',
+        path: ':id/edit',
         component: <%= entityAngularName %>UpdateComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>Resolve
@@ -115,7 +115,7 @@ export const <%= entityInstance %>Route: Routes = [
 
 export const <%= entityInstance %>PopupRoute: Routes = [
     {
-        path: '<%= entityUrl %>/:id/delete',
+        path: ':id/delete',
         component: <%= entityAngularName %>DeletePopupComponent,
         resolve: {
             <%= entityInstance %>: <%= entityAngularName %>Resolve

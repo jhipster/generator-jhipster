@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -971,6 +971,17 @@ function askForRelationship(done) {
         },
         {
             when: response =>
+                context.databaseType === 'sql' &&
+                response.relationshipAdd === true &&
+                response.relationshipType === 'one-to-one' &&
+                ( response.ownerSide === true || response.otherEntityName.toLowerCase() === 'user'),
+            type: 'confirm',
+            name: 'useJPADerivedIdentifier',
+            message: 'Do you want to use JPA Derived Identifier - @MapsId?',
+            default: false
+        },
+        {
+            when: response =>
                 response.relationshipAdd === true &&
                 (response.relationshipType === 'one-to-many' ||
                     ((response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one') &&
@@ -1031,6 +1042,7 @@ function askForRelationship(done) {
                 relationshipValidateRules: props.relationshipValidateRules,
                 otherEntityField: props.otherEntityField,
                 ownerSide: props.ownerSide,
+                useJPADerivedIdentifier: props.useJPADerivedIdentifier,
                 otherEntityRelationshipName: props.otherEntityRelationshipName
             };
 

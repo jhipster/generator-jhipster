@@ -4,6 +4,7 @@
         "http": {
             "400": "Bad request.",
             "403": "Bạn không có quyền xem trang này.",
+            "404": "Trang không tồn tại.",
             "405": "The HTTP verb you used is not supported for this URL.",
             "500": "Internal server error."
         },

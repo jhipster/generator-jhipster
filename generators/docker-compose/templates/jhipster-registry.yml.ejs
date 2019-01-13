@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -53,6 +53,10 @@ services:
             - SECURITY_OAUTH2_CLIENT_CLIENT_ID=jhipster-registry
             - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=jhipster-registry
             - SECURITY_OAUTH2_RESOURCE_USER_INFO_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+            <%_ } _%>
+            <%_ if (authenticationType === 'uaa') { _%>
+            # change the name of UAA server here, if needed
+            - JHIPSTER_SECURITY_CLIENT_AUTHORIZATION_TOKEN_SERVICE_ID=uaa
             <%_ } _%>
         ports:
             - 8761:8761

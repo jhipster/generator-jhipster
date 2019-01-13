@@ -8,7 +8,7 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 if [[ "$JHI_APP" == *"uaa"* ]]; then
     cd "$JHI_FOLDER_UAA"
-    ./mvnw verify -DskipTests -P"$JHI_PROFILE"
+    ./mvnw verify -DskipTests -Pdev
 fi
 
 #-------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ if [ -f "mvnw" ]; then
     mv target/*.war app.war
 elif [ -f "gradlew" ]; then
     ./gradlew bootWar -P"$JHI_PROFILE" -x test
-    mv build/libs/*.war app.war
+    mv build/libs/*SNAPSHOT.war app.war
 else
     echo "*** no mvnw or gradlew"
     exit 0

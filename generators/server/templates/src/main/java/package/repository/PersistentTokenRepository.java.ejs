@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@ import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;<% if (databaseType !== 'cassandra') { %>
+import <%=packageName%>.domain.<%= asEntity('User') %>;<% if (databaseType !== 'cassandra') { %>
 import java.time.LocalDate;<% } %><% if (databaseType === 'sql') { %>
 import org.springframework.data.jpa.repository.JpaRepository;
 <% } %><% if (databaseType === 'mongodb') { %>
@@ -62,12 +62,12 @@ public interface PersistentTokenRepository extends <% if (databaseType === 'sql'
         delete(PersistentToken.PREFIX + ID_DELIMITER + series);
     }
 
-    default List<PersistentToken> findByUser(User user) {
+    default List<PersistentToken> findByUser(<%= asEntity('User') %> user) {
         return findByLogin(user.getLogin());
     }
 
     List<PersistentToken> findByLogin(String login);<% } else { %>
-    List<PersistentToken> findByUser(User user);<% } %>
+    List<PersistentToken> findByUser(<%= asEntity('User') %> user);<% } %>
 
     List<PersistentToken> findByTokenDateBefore(LocalDate localDate);
 
@@ -118,7 +118,7 @@ public class PersistentTokenRepository {
         return Optional.ofNullable(mapper.get(presentedSeries));
     }
 
-    public List<PersistentToken> findByUser(User user) {
+    public List<PersistentToken> findByUser(<%= asEntity('User') %> user) {
         BoundStatement stmt = findPersistentTokenSeriesByUserIdStmt.bind();
         stmt.setString("user_id", user.getId());
         ResultSet rs = session.execute(stmt);

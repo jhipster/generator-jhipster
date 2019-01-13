@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -48,10 +48,6 @@ task webpack_test(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn
 
 task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
     args = ["run", "webpack:prod"]
-}
-
-war {
-    webAppDirName = '<%= CLIENT_DIST_DIR %>'
 }
 
 task copyIntoStatic (type: Copy) {

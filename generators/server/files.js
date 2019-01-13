@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -331,6 +331,15 @@ const serverFiles = {
                 {
                     file: 'package/security/package-info.java',
                     renameTo: generator => `${generator.javaDir}security/package-info.java`
+                }
+            ]
+        },
+        {
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/SecurityUtilsUnitTest.java',
+                    renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`
                 }
             ]
         },
@@ -839,10 +848,6 @@ const serverFiles = {
                 {
                     file: 'package/config/LoggingAspectConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/LoggingAspectConfiguration.java`
-                },
-                {
-                    file: 'package/config/MetricsConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/MetricsConfiguration.java`
                 },
                 { file: 'package/config/WebConfigurer.java', renameTo: generator => `${generator.javaDir}config/WebConfigurer.java` }
             ]
@@ -1369,14 +1374,20 @@ const serverFiles = {
             condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                { file: 'package/domain/User.java', renameTo: generator => `${generator.javaDir}domain/User.java` },
+                {
+                    file: 'package/domain/User.java',
+                    renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`
+                },
                 { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
                 { file: 'package/service/UserService.java', renameTo: generator => `${generator.javaDir}service/UserService.java` },
                 {
                     file: 'package/service/dto/package-info.java',
                     renameTo: generator => `${generator.javaDir}service/dto/package-info.java`
                 },
-                { file: 'package/service/dto/UserDTO.java', renameTo: generator => `${generator.javaDir}service/dto/UserDTO.java` },
+                {
+                    file: 'package/service/dto/UserDTO.java',
+                    renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`
+                },
                 {
                     file: 'package/service/mapper/package-info.java',
                     renameTo: generator => `${generator.javaDir}service/mapper/package-info.java`
@@ -1418,12 +1429,12 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/security/SecurityUtilsUnitTest.java',
-                    renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`
-                },
-                {
                     file: 'package/service/UserServiceIntTest.java',
                     renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java`
+                },
+                {
+                    file: 'package/service/mapper/UserMapperTest.java',
+                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
                 },
                 {
                     file: 'package/web/rest/UserResourceIntTest.java',
@@ -1547,7 +1558,10 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 /* User management java domain files */
-                { file: 'package/domain/User.java', renameTo: generator => `${generator.javaDir}domain/User.java` },
+                {
+                    file: 'package/domain/User.java',
+                    renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`
+                },
                 {
                     file: 'package/repository/UserRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}UserRepository.java`
@@ -1562,7 +1576,10 @@ const serverFiles = {
                     file: 'package/service/dto/package-info.java',
                     renameTo: generator => `${generator.javaDir}service/dto/package-info.java`
                 },
-                { file: 'package/service/dto/UserDTO.java', renameTo: generator => `${generator.javaDir}service/dto/UserDTO.java` },
+                {
+                    file: 'package/service/dto/UserDTO.java',
+                    renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`
+                },
                 {
                     file: 'package/service/dto/PasswordChangeDTO.java',
                     renameTo: generator => `${generator.javaDir}service/dto/PasswordChangeDTO.java`
@@ -1611,7 +1628,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.skipUserManagement && generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -1621,7 +1638,13 @@ const serverFiles = {
                 {
                     file: 'package/security/jwt/JWTFilterTest.java',
                     renameTo: generator => `${generator.testDir}security/jwt/JWTFilterTest.java`
-                },
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement && generator.authenticationType === 'jwt',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
                 {
                     file: 'package/web/rest/UserJWTControllerIntTest.java',
                     renameTo: generator => `${generator.testDir}web/rest/UserJWTControllerIntTest.java`
@@ -1683,8 +1706,8 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}service/UserServiceIntTest.java`
                 },
                 {
-                    file: 'package/security/SecurityUtilsUnitTest.java',
-                    renameTo: generator => `${generator.testDir}security/SecurityUtilsUnitTest.java`
+                    file: 'package/service/mapper/UserMapperTest.java',
+                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
                 },
                 {
                     file: 'package/web/rest/AccountResourceIntTest.java',

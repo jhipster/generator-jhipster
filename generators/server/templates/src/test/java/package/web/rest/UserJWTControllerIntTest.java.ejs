@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;
 <%_ } _%>
 import <%=packageName%>.<%= mainClass %>;
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.<%= asEntity('User') %>;
 import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
 import <%=packageName%>.security.jwt.TokenProvider;
 import <%=packageName%>.web.rest.errors.ExceptionTranslator;
@@ -106,7 +106,7 @@ public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>e
     @Transactional
     <%_ } _%>
     public void testAuthorize() throws Exception {
-        User user = new User();
+        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
@@ -150,7 +150,7 @@ public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>e
     @Transactional
     <%_ } _%>
     public void testAuthorizeWithRememberMe() throws Exception {
-        User user = new User();
+        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>

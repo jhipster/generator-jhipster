@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -730,7 +730,6 @@ module.exports = class extends Generator {
         if (blueprint) {
             blueprint = this.normalizeBlueprintName(blueprint);
             this.checkBlueprint(blueprint, subGen);
-            this.log(`Trying to use blueprint ${blueprint}`);
             try {
                 const finalOptions = {
                     ...options,
@@ -738,10 +737,11 @@ module.exports = class extends Generator {
                 };
                 this.useBlueprint = true;
                 this.composeExternalModule(blueprint, subGen, finalOptions);
+                this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
                 return true;
             } catch (e) {
+                this.debug(`No blueprint found for ${chalk.yellow(subGen)} subgenerator: falling back to default generator`);
                 this.debug('Error', e);
-                this.info(`No blueprint found for ${subGen} falling back to default generator`);
                 return false;
             }
         }
@@ -915,16 +915,22 @@ module.exports = class extends Generator {
                 }
 
                 query = `this.${relationship.otherEntityName}Service
-            .query({${filter}})
-            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
+            .query({${filter}}).pipe(
+                filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
+                map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
+            )
+            .subscribe((res: I${relationship.otherEntityAngularName}[]) => {
                 if (${relationshipFieldNameIdCheck}) {
-                    this.${variableName} = res.body;
+                    this.${variableName} = res;
                 } else {
                     this.${relationship.otherEntityName}Service
-                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'})
-                        .subscribe((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
-                            this.${variableName} = [subRes.body].concat(res.body);
-                        }, (subRes: HttpErrorResponse) => this.onError(subRes.message));
+                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'}).pipe(
+                            filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
+                            map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
+                        )
+                        .subscribe((subRes: I${relationship.otherEntityAngularName}) => 
+                            this.${variableName} = [subRes].concat(res)
+                        , (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
             }, (res: HttpErrorResponse) => this.onError(res.message));`;
             } else if (relationship.relationshipType !== 'one-to-many') {
@@ -932,10 +938,13 @@ module.exports = class extends Generator {
                 if (variableName === entityInstance) {
                     variableName += 'Collection';
                 }
-                query = `this.${relationship.otherEntityName}Service.query()
-            .subscribe((res: HttpResponse<I${
-                relationship.otherEntityAngularName
-            }[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
+                query = `this.${relationship.otherEntityName}Service.query().pipe(
+                            filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
+                            map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
+                        )
+            .subscribe(
+                (res: I${relationship.otherEntityAngularName}[]) => this.${variableName} = res, 
+                (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
                 queries.push(query);
@@ -980,7 +989,7 @@ module.exports = class extends Generator {
      * @param {string} dto - dto
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto) {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
         const variablesWithTypes = [];
         let tsKeyType;
         if (pkType === 'String') {
@@ -1002,7 +1011,7 @@ module.exports = class extends Generator {
             } else if (fieldType === 'String' || fieldType === 'UUID') {
                 tsType = 'string';
             } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
-                tsType = 'Moment';
+                tsType = customDateType;
             } else {
                 // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
                 tsType = 'any';
@@ -1096,6 +1105,14 @@ module.exports = class extends Generator {
      */
     getDBTypeFromDBValue(db) {
         return jhipsterUtils.getDBTypeFromDBValue(db);
+    }
+
+    /**
+     * Get build directory used by buildTool
+     * @param {string} buildTool - buildTool
+     */
+    getBuildDirectoryForBuildTool(buildTool) {
+        return buildTool === 'maven' ? 'target/' : 'build/';
     }
 
     /**
@@ -1265,15 +1282,26 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Register file transforms for client side files
+     * Register prettier as transform stream for prettifying files during generation
      * @param {any} generator
      */
-    registerClientTransforms(generator = this) {
-        if (!generator.skipClient) {
-            // Prettier is clever, it uses correct rules and correct parser according to file extension.
-            const prettierFilter = filter(['src/**/*.{json,ts,tsx,scss,css}'], { restore: true });
-            // this pipe will pass through (restore) anything that doesn't match typescriptFilter
-            generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+    registerPrettierTransform(generator = this) {
+        // Prettier is clever, it uses correct rules and correct parser according to file extension.
+        const prettierFilter = filter(['{,src/**/}*.{md,json,ts,tsx,scss,css}'], { restore: true });
+        // this pipe will pass through (restore) anything that doesn't match typescriptFilter
+        generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+    }
+
+    /**
+     * Check if the subgenerator has been invoked from JHipster CLI or from Yeoman (yo jhipster:subgenerator)
+     */
+    checkInvocationFromCLI() {
+        if (!this.options['from-cli']) {
+            this.warning(
+                `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                    'jhipster <command>'
+                )} instead of ${chalk.red('yo jhipster:<command>')}`
+            );
         }
     }
 };

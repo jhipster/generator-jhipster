@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -55,7 +55,6 @@ import {
 @NgModule({
     imports: [
         BrowserModule,
-        <%=angularXAppName%>AppRoutingModule,
         Ng2Webstorage.forRoot({ prefix: '<%=jhiPrefixDashed %>', separator: '-'}),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
@@ -73,7 +72,8 @@ import {
         <%=angularXAppName%>AccountModule,
         <%_ } _%>
         // jhipster-needle-angular-add-module JHipster will add new module here
-        <%=angularXAppName%>EntityModule
+        <%=angularXAppName%>EntityModule,
+        <%=angularXAppName%>AppRoutingModule
     ],
     declarations: [
         <%=jhiPrefixCapitalized%>MainComponent,

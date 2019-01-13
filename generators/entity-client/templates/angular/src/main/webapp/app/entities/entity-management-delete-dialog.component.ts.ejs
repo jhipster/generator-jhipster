@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -34,9 +34,9 @@ export class <%= entityAngularName %>DeleteDialogComponent {
     <%= entityInstance %>: I<%= entityAngularName %>;
 
     constructor(
-        private <%= entityInstance %>Service: <%= entityAngularName %>Service,
+        protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
-        private eventManager: JhiEventManager
+        protected eventManager: JhiEventManager
     ) {
     }
 
@@ -61,12 +61,12 @@ export class <%= entityAngularName %>DeleteDialogComponent {
 })
 export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnDestroy {
 
-    private ngbModalRef: NgbModalRef;
+    protected ngbModalRef: NgbModalRef;
 
     constructor(
-        private activatedRoute: ActivatedRoute,
-        private router: Router,
-        private modalService: NgbModal
+        protected activatedRoute: ActivatedRoute,
+        protected router: Router,
+        protected modalService: NgbModal
     ) {}
 
     ngOnInit() {
@@ -75,10 +75,10 @@ export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnD
                 this.ngbModalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent as Component, { size: 'lg', backdrop: 'static'});
                 this.ngbModalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
                 this.ngbModalRef.result.then((result) => {
-                    this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
+                    this.router.navigate(['/<%= entityUrl %>', { outlets: { popup: null }}]);
                     this.ngbModalRef = null;
                 }, (reason) => {
-                    this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
+                    this.router.navigate(['/<%= entityUrl %>', { outlets: { popup: null }}]);
                     this.ngbModalRef = null;
                 });
             }, 0);

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -244,7 +244,7 @@ function writeFiles() {
                     this.entityAngularName,
                     this.entityFolderName,
                     this.entityFileName,
-                    this.enableTranslation,
+                    this.entityUrl,
                     this.clientFramework,
                     this.microserviceName
                 );
@@ -262,7 +262,7 @@ function writeFiles() {
                     this.entityAngularName,
                     this.entityFolderName,
                     this.entityFileName,
-                    this.enableTranslation,
+                    this.entityUrl,
                     this.clientFramework
                 );
             }

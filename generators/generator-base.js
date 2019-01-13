@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -274,7 +274,7 @@ module.exports = class extends PrivateBase {
      * @param {string} entityAngularName - Entity Angular Name
      * @param {string} entityFolderName - Entity Folder Name
      * @param {string} entityFileName - Entity File Name
-     * @param {boolean} enableTranslation - If translations are enabled or not
+     * @param {boolean} entityUrl - Entity router URL
      * @param {string} clientFramework - The name of the client framework
      */
     addEntityToModule(
@@ -283,7 +283,7 @@ module.exports = class extends PrivateBase {
         entityAngularName,
         entityFolderName,
         entityFileName,
-        enableTranslation,
+        entityUrl,
         clientFramework,
         microServiceName
     ) {
@@ -291,38 +291,28 @@ module.exports = class extends PrivateBase {
         try {
             if (clientFramework === 'angularX') {
                 const appName = this.getAngularXAppName();
-                let importName = `${appName}${entityAngularName}Module`;
-                if (microServiceName) {
-                    importName = `${importName} as ${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`;
-                }
-                let importStatement = `|import { ${importName} } from './${entityFolderName}/${entityFileName}.module';`;
-                if (importStatement.length > constants.LINE_LENGTH) {
-                    // prettier-ignore
-                    importStatement = `|// prettier-ignore
-                         |import {
-                         |    ${importName}
-                         |} from './${entityFolderName}/${entityFileName}.module';`;
-                }
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: entityModulePath,
-                        needle: 'jhipster-needle-add-entity-module-import',
-                        splicable: [this.stripMargin(importStatement)]
-                    },
-                    this
-                );
+                const isEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, 'loadChildren', this);
+                const modulePath = `./${entityFolderName}/${entityFileName}.module`;
+
+                const moduleName = microServiceName
+                    ? `${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
+                    : `${appName}${entityAngularName}Module`;
+
+                const splicable = isEntityAlreadyGenerated
+                    ? `|,{
+                        |                path: '${entityUrl}',
+                        |                loadChildren: '${modulePath}#${moduleName}'
+                        |            }`
+                    : `|{
+                            |                path: '${entityUrl}',
+                            |                loadChildren: '${modulePath}#${moduleName}'
+                            |            }`;
 
                 jhipsterUtils.rewriteFile(
                     {
                         file: entityModulePath,
-                        needle: 'jhipster-needle-add-entity-module',
-                        splicable: [
-                            this.stripMargin(
-                                microServiceName
-                                    ? `|${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module,`
-                                    : `|${appName}${entityAngularName}Module,`
-                            )
-                        ]
+                        needle: 'jhipster-needle-add-entity-route',
+                        splicable: [this.stripMargin(splicable)]
                     },
                     this
                 );
@@ -658,108 +648,6 @@ module.exports = class extends PrivateBase {
      */
     getAllSupportedLanguageOptions() {
         return constants.LANGUAGES;
-    }
-
-    /**
-     * Add a new dependency in the "bower.json".
-     *
-     * @param {string} name - dependency name
-     * @param {string} version - dependency version
-     */
-    addBowerDependency(name, version) {
-        const fullPath = 'bower.json';
-        try {
-            jhipsterUtils.rewriteJSONFile(
-                fullPath,
-                jsonObj => {
-                    if (jsonObj.dependencies === undefined) {
-                        jsonObj.dependencies = {};
-                    }
-                    jsonObj.dependencies[name] = version;
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow('. Reference to ')}bower dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new override configuration in the "bower.json".
-     *
-     * @param {string} bowerPackageName - Bower package name use in dependencies
-     * @param {array} main - You can specify which files should be selected
-     * @param {boolean} isIgnored - Default: false, Set to true if you want to ignore this package.
-     * @param {object} dependencies - You can override the dependencies of a package. Set to null to ignore the dependencies.
-     *
-     */
-    addBowerOverride(bowerPackageName, main, isIgnored, dependencies) {
-        const fullPath = 'bower.json';
-        try {
-            jhipsterUtils.rewriteJSONFile(
-                fullPath,
-                jsonObj => {
-                    const override = {};
-                    if (main !== undefined && main.length > 0) {
-                        override.main = main;
-                    }
-                    if (isIgnored) {
-                        override.ignore = true;
-                    }
-                    if (dependencies) {
-                        override.dependencies = dependencies;
-                    }
-                    if (jsonObj.overrides === undefined) {
-                        jsonObj.overrides = {};
-                    }
-                    jsonObj.overrides[bowerPackageName] = override;
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(
-                        '. Reference to '
-                    )}bower override configuration (bowerPackageName: ${bowerPackageName}, main:${JSON.stringify(
-                    main
-                )}, ignore:${isIgnored})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new parameter in the ".bowerrc".
-     *
-     * @param {string} key - name of the parameter
-     * @param {string | boolean | any} value - value of the parameter
-     */
-    addBowerrcParameter(key, value) {
-        const fullPath = '.bowerrc';
-        try {
-            this.log(chalk.yellow('   update ') + fullPath);
-            jhipsterUtils.rewriteJSONFile(
-                fullPath,
-                jsonObj => {
-                    jsonObj[key] = value;
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow('. Reference to ')}bowerrc parameter (key: ${key}, value:${value})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
     }
 
     /**
@@ -1581,6 +1469,35 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * A new Gradle property.
+     *
+     * @param {string} name - property name
+     * @param {string} value - property value
+     */
+    addGradleProperty(name, value) {
+        const fullPath = 'gradle.properties';
+        try {
+            jhipsterUtils.rewriteFile(
+                {
+                    file: fullPath,
+                    needle: 'jhipster-needle-gradle-property',
+                    splicable: [`${name}=${value}`]
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                `${chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(
+                        ' or missing required jhipster-needle. Reference to '
+                    )}gradle property (name: ${name}, value:${value})${chalk.yellow(' not added.\n')}`
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * A new Gradle plugin.
      *
      * @param {string} group - plugin GroupId
@@ -1594,7 +1511,7 @@ module.exports = class extends PrivateBase {
                 {
                     file: fullPath,
                     needle: 'jhipster-needle-gradle-buildscript-dependency',
-                    splicable: [`classpath '${group}:${name}:${version}'`]
+                    splicable: [`classpath "${group}:${name}:${version}"`]
                 },
                 this
             );
@@ -2141,6 +2058,9 @@ module.exports = class extends PrivateBase {
             this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
         }
+        if (context.fileData.databaseType) {
+            context.databaseType = context.fileData.databaseType;
+        }
         context.relationships = context.fileData.relationships || [];
         context.fields = context.fileData.fields || [];
         context.haveFieldWithJavadoc = false;
@@ -2347,6 +2267,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 64;
+        } else if (prodDatabaseType === 'postgresql' && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 63;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -2386,6 +2312,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 62;
+        } else if (prodDatabaseType === 'postgresql' && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 61;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -2633,6 +2565,39 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * get a hipster based on the applications name.
+     * @param {string} baseName of application
+     */
+    getHipster(baseName = this.baseName) {
+        let hash = 0;
+        let i;
+        let chr;
+
+        for (i = 0; i < baseName.length; i++) {
+            chr = baseName.charCodeAt(i);
+            hash = (hash << 5) - hash + chr; // eslint-disable-line no-bitwise
+            hash |= 0; // eslint-disable-line no-bitwise
+        }
+
+        if (hash < 0) {
+            hash *= -1;
+        }
+
+        switch (hash % 4) {
+            case 0:
+                return 'jhipster_family_member_0';
+            case 1:
+                return 'jhipster_family_member_1';
+            case 2:
+                return 'jhipster_family_member_2';
+            case 3:
+                return 'jhipster_family_member_3';
+            default:
+                return 'jhipster_family_member_0';
+        }
+    }
+
+    /**
      * ask a prompt for apps name.
      *
      * @param {object} generator - generator instance to use
@@ -2848,6 +2813,8 @@ module.exports = class extends PrivateBase {
      * @param {any} dest - destination context to use default is context
      */
     setupSharedOptions(generator, context = generator, dest = context) {
+        dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
+        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         dest.skipUserManagement =
             context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
         dest.otherModules = context.configOptions.otherModules || [];
@@ -2869,7 +2836,6 @@ module.exports = class extends PrivateBase {
      */
     setupClientOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         dest.authenticationType =
             context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
@@ -2877,7 +2843,7 @@ module.exports = class extends PrivateBase {
             dest.skipUserManagement = true;
         }
         const uaaBaseName = context.configOptions.uaaBaseName || context.config.get('uaaBaseName');
-        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
+        if (!dest.skipClient && dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
             generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
         }
         dest.uaaBaseName = uaaBaseName;
@@ -2915,7 +2881,6 @@ module.exports = class extends PrivateBase {
      */
     setupServerOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
         dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
         dest.testFrameworks = context.configOptions.testFrameworks;
     }
@@ -2976,5 +2941,21 @@ module.exports = class extends PrivateBase {
      */
     fetchFromInstalledJHipster(subpath) {
         return path.join(__dirname, subpath);
+    }
+
+    /**
+     * Construct the entity name by appending the entity suffix.
+     * @param {String} name entity name
+     */
+    asEntity(name) {
+        return name + this.entitySuffix;
+    }
+
+    /**
+     * Construct the entity's dto name by appending the dto suffix.
+     * @param {String} name entity name
+     */
+    asDto(name) {
+        return name + this.dtoSuffix;
     }
 };

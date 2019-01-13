@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -133,6 +133,9 @@ const getOptionAsArgs = (options, withEntities, force) => {
         const prefix = key.length === 1 ? '-' : '--';
         if (value === true) {
             return `${prefix}${_.kebabCase(key)}`;
+        }
+        if (value === false) {
+            return `${prefix}no-${_.kebabCase(key)}`;
         }
         return value ? `${prefix}${_.kebabCase(key)} ${value}` : '';
     });

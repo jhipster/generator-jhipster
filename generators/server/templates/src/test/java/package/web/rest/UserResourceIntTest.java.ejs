@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,7 +28,7 @@ import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
 <%_ if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
-import <%= packageName %>.domain.User;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
@@ -37,7 +37,7 @@ import <%= packageName %>.security.AuthoritiesConstants;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.service.MailService;<% } %>
 import <%= packageName %>.service.UserService;
-import <%= packageName %>.service.dto.UserDTO;
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
 import <%= packageName %>.service.mapper.UserMapper;
 import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -116,7 +116,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
     private static final Long DEFAULT_ID = 1L;
     <%_ } else if (databaseType === 'couchbase'){ _%>
-    private static final String DEFAULT_ID = User.PREFIX + DEFAULT_LOGIN;
+    private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
     <%_ } else { _%>
     private static final String DEFAULT_ID = "id1";
     <%_ } _%>
@@ -204,7 +204,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     private MockMvc restUserMockMvc;
     <%_ } _%>
 
-    private User user;
+    private <%= asEntity('User') %> user;
 
     @Before
     public void setup() {
@@ -233,8 +233,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static User createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
-        User user = new User();
+    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
+        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra' || (authenticationType === 'oauth2' && databaseType !== 'couchbase')) { _%>
         user.setId(UUID.randomUUID().toString());
         <%_ } _%>
@@ -306,9 +306,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Validate the User in the database
-        List<User> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
+        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(userList).hasSize(databaseSizeBeforeCreate + 1);
-        User testUser = userList.get(userList.size() - 1);
+        <%= asEntity('User') %> testUser = userList.get(userList.size() - 1);
         assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
@@ -362,7 +362,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Validate the User in the database
-        List<User> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
+        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(userList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -407,7 +407,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Validate the User in the database
-        List<User> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
+        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(userList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -452,7 +452,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Validate the User in the database
-        List<User> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
+        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(userList).hasSize(databaseSizeBeforeCreate);
     }
 <%_ } _%>
@@ -483,12 +483,12 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             <%_ } _%>
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
         <%_ } else { _%>
-        UserDTO foundUser = webTestClient.get().uri("/api/users?sort=createdDate,DESC")
+        <%= asDto('User') %> foundUser = webTestClient.get().uri("/api/users?sort=createdDate,DESC")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
-            .returnResult(UserDTO.class).getResponseBody().blockFirst();
+            .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -576,7 +576,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             .collectList().block()<% } %>.size();
 
         // Update the user
-        User updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= asEntity('User') %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -612,9 +612,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Validate the User in the database
-        List<User> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
+        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(userList).hasSize(databaseSizeBeforeUpdate);
-        User testUser = userList.get(userList.size() - 1);
+        <%= asEntity('User') %> testUser = userList.get(userList.size() - 1);
         assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
         assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
         assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
@@ -638,7 +638,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
             .collectList().block()<% } %>.size();
 
         // Update the user
-        User updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= asEntity('User') %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -674,9 +674,9 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Validate the User in the database
-        List<User> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
+        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(userList).hasSize(databaseSizeBeforeUpdate);
-        User testUser = userList.get(userList.size() - 1);
+        <%= asEntity('User') %> testUser = userList.get(userList.size() - 1);
         assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
         assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
         assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
@@ -698,7 +698,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         mockUserSearchRepository.save(user);
         <%_ } _%>
 
-        User anotherUser = new User();
+        <%= asEntity('User') %> anotherUser = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         anotherUser.setId(UUID.randomUUID().toString());
         <%_ } _%>
@@ -718,7 +718,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Update the user
-        User updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= asEntity('User') %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -765,7 +765,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         mockUserSearchRepository.save(user);
         <%_ } _%>
 
-        User anotherUser = new User();
+        <%= asEntity('User') %> anotherUser = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         anotherUser.setId(UUID.randomUUID().toString());
         <%_ } _%>
@@ -785,7 +785,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Update the user
-        User updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
+        <%= asEntity('User') %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>get<% } %>();
 
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setId(updatedUser.getId());
@@ -851,7 +851,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
 
         // Validate the database is empty
-        List<User> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
+        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
         assertThat(userList).hasSize(databaseSizeBeforeDelete - 1);
     }
     <%_ } _%>
@@ -890,10 +890,10 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     @Transactional
     <%_ } _%>
     public void testUserEquals() throws Exception {
-        TestUtil.equalsVerifier(User.class);
-        User user1 = new User();
+        TestUtil.equalsVerifier(<%= asEntity('User') %>.class);
+        <%= asEntity('User') %> user1 = new <%= asEntity('User') %>();
         user1.setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>1L<% } else { %>"id1"<% } %>);
-        User user2 = new User();
+        <%= asEntity('User') %> user2 = new <%= asEntity('User') %>();
         user2.setId(user1.getId());
         assertThat(user1).isEqualTo(user2);
         user2.setId(<% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>2L<% } else { %>"id2"<% } %>);
@@ -903,14 +903,8 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
     }
 
     @Test
-    public void testUserFromId() {
-        assertThat(userMapper.userFromId(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);
-        assertThat(userMapper.userFromId(null)).isNull();
-    }
-
-    @Test
     public void testUserDTOtoUser() {
-        UserDTO userDTO = new UserDTO();
+        <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
         userDTO.setId(DEFAULT_ID);
         userDTO.setLogin(DEFAULT_LOGIN);
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
@@ -927,7 +921,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         <%_ } _%>
         userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
-        User user = userMapper.userDTOToUser(userDTO);
+        <%= asEntity('User') %> user = userMapper.userDTOToUser(userDTO);
         assertThat(user.getId()).isEqualTo(DEFAULT_ID);
         assertThat(user.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -966,7 +960,7 @@ public class UserResourceIntTest <% if (databaseType === 'cassandra') { %>extend
         user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         <%_ } _%>
 
-        UserDTO userDTO = userMapper.userToUserDTO(user);
+        <%= asDto('User') %> userDTO = userMapper.userToUserDTO(user);
 
         assertThat(userDTO.getId()).isEqualTo(DEFAULT_ID);
         assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
