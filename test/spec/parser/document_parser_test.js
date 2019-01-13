@@ -960,6 +960,21 @@ describe('DocumentParser', () => {
           expect(jdlObject.entities.A.fields.myInteger.validations.unique).not.to.be.undefined;
         });
       });
+      context('when parsing a JDL relationship with JPA derived identifier enabled', () => {
+        let jdlObject = null;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/relationship_jpa_derived_identifier.jdl']);
+          jdlObject = DocumentParser.parseFromConfigurationObject({
+            document: input,
+            applicationType: ApplicationTypes.MONOLITH
+          });
+        });
+
+        it('sets it', () => {
+          expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.has('jpaDerivedIdentifier')).to.be.true;
+        });
+      });
     });
   });
 });
