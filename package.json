@@ -26,7 +26,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && npm run test && npm run coverage && npm run bundle"
+      "pre-commit": "lint-staged && npm run test && npm run bundle"
     }
   },
   "lint-staged": {
