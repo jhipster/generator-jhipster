@@ -47,12 +47,17 @@ export default class Principal {
           this.store.commit('currentLanguage', account.langKey);
         }
         <%_ } _%>
+        if(sessionStorage.getItem('requested-url')) {
+          this.router.replace(sessionStorage.getItem("requested-url"));
+          sessionStorage.removeItem("requested-url");
+        }
         <%_ if (websocket === 'spring-websocket') { _%>
         this.trackerService.connect();
         <%_ } _%>
       } else {
         this.store.commit('logout');
         this.router.push('/');
+        sessionStorage.removeItem("requested-url");
       }
       <%_ if (enableTranslation) { _%>
       this.refreshTranslation(this.store.getters.currentLanguage);

@@ -75,10 +75,10 @@ function addEntityToRouter(generator, entityName, entityFileName, className) {
             splicable: [generator.stripMargin(
                 // prettier-ignore
                 `|,
-                |  { path: '/entity/${entityFileName}', name: '${className}', component: ${className} },
-                |  { path: '/entity/${entityFileName}/new', name: '${className}Create', component: ${className}Update },
-                |  { path: '/entity/${entityFileName}/:${entityName}Id/edit', name: '${className}Edit', component: ${className}Update },
-                |  { path: '/entity/${entityFileName}/:${entityName}Id/view', name: '${className}View', component: ${className}Details }`
+                |  { path: '/entity/${entityFileName}', name: '${className}', component: ${className}, meta: { authorities: ['ROLE_USER'] } },
+                |  { path: '/entity/${entityFileName}/new', name: '${className}Create', component: ${className}Update, meta: { authorities: ['ROLE_USER'] } },
+                |  { path: '/entity/${entityFileName}/:${entityName}Id/edit', name: '${className}Edit', component: ${className}Update, meta: { authorities: ['ROLE_USER'] } },
+                |  { path: '/entity/${entityFileName}/:${entityName}Id/view', name: '${className}View', component: ${className}Details, meta: { authorities: ['ROLE_USER'] } }`
             )]
         },
         generator

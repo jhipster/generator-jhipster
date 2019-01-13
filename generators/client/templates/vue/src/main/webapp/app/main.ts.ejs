@@ -74,7 +74,18 @@ router.beforeEach((to, from, next) => {
   if (!to.matched.length) {
     next('/not-found');
   }
-  next();
+
+  if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
+    if (!principal.hasAnyAuthority(to.meta.authorities)) {
+      sessionStorage.setItem('requested-url', to.fullPath);
+      next('/forbidden');
+    } else {
+      next();
+    }
+  } else {
+    // no authorities, so just proceed
+    next();
+  }
 });
 
 // jhipster-needle-add-entity-service-to-main-declaration - JHipster will declare entities services here
