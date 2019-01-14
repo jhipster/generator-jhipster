@@ -49,7 +49,7 @@ function checkImages() {
             runCommand = './mvnw package -Pprod verify jib:dockerBuild';
         } else {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/jib-cache`);
-            runCommand = './gradlew bootWar -Pprod jibDockerBuild';
+            runCommand = './gradlew bootJar -Pprod jibDockerBuild';
         }
         if (shelljs.ls(imagePath).length === 0) {
             this.warning = true;
