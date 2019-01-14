@@ -179,8 +179,8 @@ public class <%= entityClass %>Resource {
      * @param filter the filter of the request<% } %>
      * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
      */
-    @GetMapping("/<%= entityApiUrl %>")
-    <%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
+    @GetMapping("/<%= entityApiUrl %>")<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
+
     @Transactional(readOnly = true) <%_ } _%>
 <%- include('../../common/get_all_template', {asEntity, asDto, viaService}); -%>
 
@@ -189,8 +189,8 @@ public class <%= entityClass %>Resource {
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %> as a stream.
      * @return the Flux of <%= entityInstancePlural %>
      */
-    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
-    <%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
+    @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
+
     @Transactional(readOnly = true) <%_ } _%>
     public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
         log.debug("REST request to get all <%= entityClassPlural %> as a stream");
@@ -208,8 +208,8 @@ public class <%= entityClass %>Resource {
      * @param id the id of the <%= instanceName %> to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the <%= instanceName %>, or with status 404 (Not Found)
      */
-    @GetMapping("/<%= entityApiUrl %>/{id}")
-    <%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
+    @GetMapping("/<%= entityApiUrl %>/{id}")<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
+
     @Transactional(readOnly = true) <%_ } %>
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false}); -%>
