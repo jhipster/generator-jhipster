@@ -25,9 +25,9 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
-    <% let autoIncrementValue = true; 
+    <% let autoIncrementValue = true;
         for (idx in relationships) {
-            if (relationships[idx].useJPADerivedIdentifier === true) { 
+            if (relationships[idx].useJPADerivedIdentifier === true) {
                 autoIncrementValue = false;
                 break;
             }
@@ -47,7 +47,7 @@
     <%_ } _%>
 
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
-    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
 
     <!--
         Added the entity <%= entityClass %>.
@@ -112,7 +112,7 @@
             <%_ } else { _%>
             <column name="<%=columnName %>" type="<%=columnType %>" remarks="<%- formatAsLiquibaseRemarks(fields[idx].javadoc) %>">
             <%_ } _%>
-                <%_ if (unique) { 
+                <%_ if (unique) {
                     const uniqueConstraintName = getUXConstraintName(entityTableName, columnName, prodDatabaseType);
                 _%>
                 <constraints nullable="<%= nullable %>" unique="true" uniqueConstraintName="<%= uniqueConstraintName %>" />
@@ -137,8 +137,8 @@
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
-            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true 
-                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) { 
+            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true
+                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) {
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
