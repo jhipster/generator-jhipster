@@ -100,7 +100,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
  */
 @RestController
 @RequestMapping("/api")<% if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { %>
-@Transactional <% } %>
+@Transactional <%_ } %>
 public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
@@ -182,7 +182,7 @@ public class <%= entityClass %>Resource {
     @GetMapping("/<%= entityApiUrl %>")
     <%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
     @Transactional(readOnly = true) <%_ } _%>
-    <%- include('../../common/get_all_template', {asEntity, asDto, viaService}); -%>
+<%- include('../../common/get_all_template', {asEntity, asDto, viaService}); -%>
 
     <%_ if (reactiveRepositories) { _%>
     /**
@@ -210,7 +210,7 @@ public class <%= entityClass %>Resource {
      */
     @GetMapping("/<%= entityApiUrl %>/{id}")
     <%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
-    @Transactional(readOnly = true) <% } %>
+    @Transactional(readOnly = true) <%_ } %>
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
