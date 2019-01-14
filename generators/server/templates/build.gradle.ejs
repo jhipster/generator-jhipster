@@ -176,6 +176,9 @@ task cucumberTestReport(type: TestReport) {
 <%_ if (!skipClient) { _%>
 <%_ } _%>
 
+if (project.hasProperty('war')) {
+    apply plugin: 'war'
+}
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
 
 if (project.hasProperty('zipkin')) {
@@ -499,9 +502,6 @@ task cleanResources(type: Delete) {
 wrapper {
     gradleVersion = '4.10.2'
 }
-
-task stage(dependsOn: 'bootWar') {
-}
 <%_ if (!skipClient) { _%>
 
 if (project.hasProperty('nodeInstall')) {
@@ -513,3 +513,7 @@ if (project.hasProperty('nodeInstall')) {
     }
 }
 <%_ } _%>
+
+compileJava.dependsOn processResources
+processResources.dependsOn cleanResources,bootBuildInfo
+bootBuildInfo.mustRunAfter cleanResources
