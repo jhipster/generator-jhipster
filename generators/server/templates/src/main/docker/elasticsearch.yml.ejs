@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-version: '2'
+version: '2.2'
 services:
     <%= baseName.toLowerCase() %>-elasticsearch:
         image: <%= DOCKER_ELASTICSEARCH %>
@@ -27,4 +27,4 @@ services:
             - 9300:9300
         environment:
             - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
-            - discovery.type=single-node
+            - "discovery.type=single-node"
