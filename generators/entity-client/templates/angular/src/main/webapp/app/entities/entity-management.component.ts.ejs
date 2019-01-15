@@ -98,7 +98,6 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-        this.queryCount = this.totalItems;
         <%_ } _%>
         this.<%= entityInstancePlural %> = data;
     }
