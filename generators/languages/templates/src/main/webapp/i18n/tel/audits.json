@@ -1,26 +1,26 @@
 {
     "audits": {
-        "title": "Audits",
+        "title": "తనిఖీలు",
         "filter": {
-            "title": "Filter per date",
-            "from": "from",
-            "to": "to",
+            "title": "తేదీ ప్రకారం వడియగట్టు",
+            "from": "నుండి",
+            "to": "వరకు",
             "button": {
-                "weeks": "Weeks",
-                "today": "today",
-                "clear": "clear",
-                "close": "close"
+                "weeks": "వారాలు",
+                "today": "ఈ రోజు",
+                "clear": "తొలగించు",
+                "close": "మూసివేత"
             }
         },
         "table": {
             "header": {
-                "principal": "User",
-                "date": "Date",
-                "status": "State",
-                "data": "Extra data"
+                "principal": "ఉపయోక్త",
+                "date": "తేదీ",
+                "status": "స్థితి",
+                "data": "అధిక సమాచారం"
             },
             "data": {
-                "remoteAddress": "Remote Address:"
+                "remoteAddress": "రిమోట్ అడ్రస్:"
             }
         }
     }

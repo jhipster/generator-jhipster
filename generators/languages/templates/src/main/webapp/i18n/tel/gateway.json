@@ -1,15 +1,15 @@
 {
     "gateway": {
-        "title": "Gateway",
+        "title": "ప్రవేశ దారులు",
         "routes": {
-            "title": "Current routes",
+            "title": "ప్రస్తుత దారులు",
             "url": "URL",
-            "service": "Service",
-            "servers": "Available servers",
-            "error": "Warning: no server available!"
+            "service": "సేవలు",
+            "servers": "అందుబాటులోని సర్వర్",
+            "error": "హెచ్చరిక! ఒక్క సర్వర్ కూడా అందుబాటులో లేదు"
         },
         "refresh": {
-            "button": "Refresh"
+            "button": "నవీకరించండి"
         }
     }
 }

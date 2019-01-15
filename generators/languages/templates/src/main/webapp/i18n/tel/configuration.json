@@ -1,10 +1,10 @@
 {
     "configuration": {
-        "title": "Configuration",
-        "filter": "Filter (by prefix)",
+        "title": "ఆకృతీకరణ",
+        "filter": "వడియగట్టు (ఉపసర్గ ప్రకారం)",
         "table": {
-            "prefix": "Prefix",
-            "properties": "Properties"
+            "prefix": "ఉపసర్గ",
+            "properties": "లక్షణాలు"
         }
     }
 }
