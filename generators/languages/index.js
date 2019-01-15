@@ -85,7 +85,10 @@ module.exports = class extends BaseBlueprintGenerator {
         if (!opts.fromBlueprint) {
             useBlueprint = this.composeBlueprint(blueprint, 'languages', {
                 'skip-install': this.options['skip-install'],
+                'skip-server': this.options['skip-server'],
+                'skip-client': this.options['skip-client'],
                 'from-cli': this.options['from-cli'],
+                languages: this.languages,
                 configOptions: this.configOptions,
                 force: this.options.force,
                 arguments: this.options.languages
@@ -251,17 +254,5 @@ module.exports = class extends BaseBlueprintGenerator {
     get writing() {
         if (useBlueprint) return;
         return this._writing();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _end() {
-        return {
-            end() {}
-        };
-    }
-
-    get end() {
-        if (useBlueprint) return;
-        return this._end();
     }
 };

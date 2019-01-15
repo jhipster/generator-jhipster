@@ -4,7 +4,6 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
 const LanguagesGenerator = require('../../generators/languages');
-const constants = require('../../generators/generator-constants');
 
 const mockBlueprintSubGen = class extends LanguagesGenerator {
     constructor(args, opts) {
@@ -40,14 +39,6 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
     get writing() {
         return super._writing();
     }
-
-    get install() {
-        return super._install();
-    }
-
-    get end() {
-        return super._end();
-    }
 };
 
 describe('JHipster languages generator with blueprint', () => {
@@ -67,9 +58,7 @@ describe('JHipster languages generator with blueprint', () => {
                         blueprint: blueprintName,
                         skipChecks: true
                     })
-                    .withGenerators([
-                        [mockBlueprintSubGen, 'jhipster-myblueprint:languages']
-                    ])
+                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
                     .withPrompts({
                         languages: ['de']
                     })
