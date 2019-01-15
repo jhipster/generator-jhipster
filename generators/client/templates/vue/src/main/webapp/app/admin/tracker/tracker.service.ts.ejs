@@ -11,7 +11,7 @@ export default class TrackerService {
   public connectedPromise: any = null;
   public listener: Observable<any>;
   public listenerObserver: Observer<any> = null;
-  public alreadyConnectedOnce: boolean = false;
+  public alreadyConnectedOnce = false;
 
   private router: VueRouter;
 
