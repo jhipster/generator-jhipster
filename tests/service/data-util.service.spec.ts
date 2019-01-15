@@ -20,107 +20,104 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { JhiDataUtils } from '../../src/service/data-util.service';
 
-describe('Data Utils service test', () => {
-
-    describe('Data Utils Service Test', () => {
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                providers: [
-                    JhiDataUtils
-                ]
-            });
+describe('Data Utils Service Test', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [
+                JhiDataUtils
+            ]
         });
+    });
 
-        it('should not abbreviate the text when below cutoff', inject([JhiDataUtils], (service: JhiDataUtils) => {
-            expect(service.abbreviate('Hello Jhipster')).toBe('Hello Jhipster');
-        }));
+    it('should not abbreviate the text when below cutoff', inject([JhiDataUtils], (service: JhiDataUtils) => {
+        expect(service.abbreviate('Hello Jhipster')).toBe('Hello Jhipster');
+    }));
 
-        it('should abbreviate the text and append ...', inject([JhiDataUtils], (service: JhiDataUtils) => {
-            expect(service.abbreviate('Hello Jhipster lets test the data utils function')).toBe('Hello Jhipster ...s function');
-        }));
+    it('should abbreviate the text and append ...', inject([JhiDataUtils], (service: JhiDataUtils) => {
+        expect(service.abbreviate('Hello Jhipster lets test the data utils function')).toBe('Hello Jhipster ...s function');
+    }));
 
-        it('should abbreviate the text and append +++', inject([JhiDataUtils], (service: JhiDataUtils) => {
-            expect(service.abbreviate('Hello Jhipster lets test the data utils function', '+++')).toBe('Hello Jhipster +++s function');
-        }));
+    it('should abbreviate the text and append +++', inject([JhiDataUtils], (service: JhiDataUtils) => {
+        expect(service.abbreviate('Hello Jhipster lets test the data utils function', '+++')).toBe('Hello Jhipster +++s function');
+    }));
 
-        it('should return the bytesize of the text', inject([JhiDataUtils], (service: JhiDataUtils) => {
-            expect(service.byteSize('Hello Jhipster')).toBe(`10.5 bytes`);
-        }));
+    it('should return the bytesize of the text', inject([JhiDataUtils], (service: JhiDataUtils) => {
+        expect(service.byteSize('Hello Jhipster')).toBe(`10.5 bytes`);
+    }));
 
-        it('should download the csv file', inject([JhiDataUtils], (service: JhiDataUtils) => {
+    it('should download the csv file', inject([JhiDataUtils], (service: JhiDataUtils) => {
             const tempLink = document.createElement('a');
             jest.spyOn(tempLink, 'click');
             jest.spyOn(document, 'createElement').mockReturnValue(tempLink);
-            // call downloadFile function
-            // csv content:
-            // ID,Name
-            // 1,Toto
-            const contentType = 'text/csv';
-            const data = 'SUQsTmFtZQ0KMSxUb3Rv';
-            const fileName = 'test-download-file.csv';
-            service.downloadFile(contentType, data, fileName);
-            expect(document.createElement).toHaveBeenCalledTimes(1);
-            expect(document.createElement).toHaveBeenCalledWith('a');
+        // call downloadFile function
+        // csv content:
+        // ID,Name
+        // 1,Toto
+        const contentType = 'text/csv';
+        const data = 'SUQsTmFtZQ0KMSxUb3Rv';
+        const fileName = 'test-download-file.csv';
+        service.downloadFile(contentType, data, fileName);
+        expect(document.createElement).toHaveBeenCalledTimes(1);
+        expect(document.createElement).toHaveBeenCalledWith('a');
             expect(tempLink.target).toBe('_blank');
             expect(tempLink.download).toBe('test-download-file.csv');
             expect(tempLink.click).toHaveBeenCalledTimes(1);
             expect(tempLink.click).toHaveBeenCalledWith();
-        }));
+    }));
 
-        it('should execute the toBase64()', inject([JhiDataUtils], (service: JhiDataUtils) => {
+    it('should execute the toBase64()', inject([JhiDataUtils], (service: JhiDataUtils) => {
 
-            spyOn(service, 'toBase64');
+        spyOn(service, 'toBase64');
 
+        const eventSake = {
+            target: {
+                files: [{}]
+            }
+        };
+
+        service.setFileData(eventSake, null, null, false);
+
+        setTimeout(() => {
+            expect(service.toBase64).toHaveBeenCalled();
+        }, 500);
+    }));
+
+    it('should skip the toBase64() when image is passed', inject([JhiDataUtils], (service: JhiDataUtils) => {
+
+        spyOn(service, 'toBase64');
+
+        const eventSake = {
+            target: {
+                files: [{}]
+            }
+        };
+
+        service.setFileData(eventSake, null, null, true);
+
+        expect(service.toBase64).toHaveBeenCalledTimes(0);
+    }));
+
+    it('should execute the callback in toBase64()', function(done) {
+        inject([JhiDataUtils], (service: JhiDataUtils) => {
+            const callBack: Spy = jasmine.createSpy();
+            callBack.and.callFake(() => done());
+
+            const file = new File(['file content'], 'test-file.txt');
             const eventSake = {
                 target: {
-                    files: [{}]
+                    files: [file]
                 }
             };
 
-            service.setFileData(eventSake, null, null, false);
+            const entity = {};
+            const field = 'document';
+            service.setFileData(eventSake, entity, field, false, callBack);
 
             setTimeout(() => {
-                expect(service.toBase64).toHaveBeenCalled();
+                expect(callBack).toHaveBeenCalled();
+                expect(entity).toEqual({ document: 'ZmlsZSBjb250ZW50', documentContentType: '' });
             }, 500);
-        }));
-
-        it('should skip the toBase64() when image is passed', inject([JhiDataUtils], (service: JhiDataUtils) => {
-
-            spyOn(service, 'toBase64');
-
-            const eventSake = {
-                target: {
-                    files: [{}]
-                }
-            };
-
-            service.setFileData(eventSake, null, null, true);
-
-            expect(service.toBase64).toHaveBeenCalledTimes(0);
-        }));
-
-        it('should execute the callback in toBase64()', function(done) {
-            inject([JhiDataUtils], (service: JhiDataUtils) => {
-                const callBack: Spy = jasmine.createSpy();
-                callBack.and.callFake(() => done());
-
-                const file = new File(['file content'], 'test-file.txt');
-                const eventSake = {
-                    target: {
-                        files: [file]
-                    }
-                };
-
-                const entity = {};
-                const field = 'document';
-                service.setFileData(eventSake, entity, field, false, callBack);
-
-                setTimeout(() => {
-                    expect(callBack).toHaveBeenCalled();
-                    expect(entity).toEqual({ document: 'ZmlsZSBjb250ZW50', documentContentType: '' });
-                }, 500);
-            })();
-        });
-
+        })();
     });
+
 });
