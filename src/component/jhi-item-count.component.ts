@@ -25,32 +25,40 @@ import { JhiConfigService } from '../config.service';
 @Component({
     selector: 'jhi-item-count',
     template: `
-        <div *ngIf="i18nEnabled; else noI18n" class="info jhi-item-count"
+        <div
+            *ngIf="i18nEnabled; else noI18n"
+            class="info jhi-item-count"
             jhiTranslate="global.item-count"
-            translateValues="{{i18nValues()}}"
-            [attr.translateValues]="i18nValues()">  /* [attr.translateValues] is used to get entire values in tests */
+            [translateValues]="i18nValues()"
+        >
+            /* [attr.translateValues] is used to get entire values in tests */
         </div>
         <ng-template #noI18n class="info jhi-item-count">
-            Showing {{((page - 1) * itemsPerPage) == 0 ? 1 : ((page - 1) * itemsPerPage + 1)}} -
-            {{(page * itemsPerPage) < total ? (page * itemsPerPage) : total}}
-            of {{total}} items.
-        </ng-template>`
+            Showing
+            {{
+                (page - 1) * itemsPerPage == 0
+                    ? 1
+                    : (page - 1) * itemsPerPage + 1
+            }}
+            - {{ page * itemsPerPage < total ? page * itemsPerPage : total }} of
+            {{ total }} items.
+        </ng-template>
+    `
 })
 export class JhiItemCountComponent {
-
-   /**
-    *  current page number.
-    */
+    /**
+     *  current page number.
+     */
     @Input() page: number;
 
-   /**
-    *  Total number of items.
-    */
+    /**
+     *  Total number of items.
+     */
     @Input() total: number;
 
-   /**
-    *  Number of items per page.
-    */
+    /**
+     *  Number of items per page.
+     */
     @Input() itemsPerPage: number;
 
     /**
@@ -61,14 +69,24 @@ export class JhiItemCountComponent {
     /**
      * "translate-values" JSON of the template
      */
-    i18nValues(): string {
-        const first = ((this.page - 1) * this.itemsPerPage) === 0 ? 1 : ((this.page - 1) * this.itemsPerPage + 1);
-        const second = (this.page * this.itemsPerPage) < this.total ? (this.page * this.itemsPerPage) : this.total;
-        return '{first: \'' + first + '\', second: \'' + second + '\', total: \'' + this.total + '\'}';
+    i18nValues(): Object {
+        const first =
+            (this.page - 1) * this.itemsPerPage === 0
+                ? 1
+                : (this.page - 1) * this.itemsPerPage + 1;
+        const second =
+            this.page * this.itemsPerPage < this.total
+                ? this.page * this.itemsPerPage
+                : this.total;
+
+        return {
+            first,
+            second,
+            total: this.total
+        };
     }
 
     constructor(config: JhiConfigService) {
         this.i18nEnabled = config.CONFIG_OPTIONS.i18nEnabled;
     }
-
 }

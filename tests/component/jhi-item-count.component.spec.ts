@@ -22,22 +22,14 @@ import { JhiItemCountComponent } from '../../src/component/jhi-item-count.compon
 import { JhiTranslateComponent } from '../../src/language/jhi-translate.directive';
 import { JhiConfigService } from '../../src/config.service';
 
-function getElementHtml(element: ComponentFixture<JhiItemCountComponent>): string {
+function getElementHtml(
+    element: ComponentFixture<JhiItemCountComponent>
+): string {
     const res = element.nativeElement.querySelector('.jhi-item-count');
-    return (res && res.innerHTML) ? res.innerHTML.trim() : '';
-}
-
-function getElementAttribute(element: ComponentFixture<JhiItemCountComponent>, value: string): string {
-    let res = element.nativeElement.querySelector('.jhi-item-count');
-    if (res && res.attributes) {
-        res = res.attributes.getNamedItem(value);
-        return (res && res.value) ? res.value.trim() : '';
-    }
-    return '';
+    return res && res.innerHTML ? res.innerHTML.trim() : '';
 }
 
 describe('JhiItemCountComponent test', () => {
-
     let comp: JhiItemCountComponent;
     let fixture: ComponentFixture<JhiItemCountComponent>;
 
@@ -48,7 +40,10 @@ describe('JhiItemCountComponent test', () => {
             providers: [
                 {
                     provide: JhiConfigService,
-                    useValue: new JhiConfigService({defaultI18nLang: 'en', i18nEnabled: true})
+                    useValue: new JhiConfigService({
+                        defaultI18nLang: 'en',
+                        i18nEnabled: true
+                    })
                 }
             ]
         }).compileComponents();
@@ -72,13 +67,20 @@ describe('JhiItemCountComponent test', () => {
             comp.total = 100;
             fixture.detectChanges();
 
-            getElementHtml(fixture);
-            expect(getElementAttribute(fixture, 'translateValues')).toBe(`{first: '1', second: '10', total: '100'}`);
+            expect(comp.i18nValues()).toEqual({
+                first: 1,
+                second: 10,
+                total: 100
+            });
+
             comp.page = 2;
             fixture.detectChanges();
 
-            getElementHtml(fixture);
-            expect(getElementAttribute(fixture, 'translateValues')).toBe(`{first: '11', second: '20', total: '100'}`);
+            expect(comp.i18nValues()).toEqual({
+                first: 11,
+                second: 20,
+                total: 100
+            });
         });
 
         it('should not translate the content', () => {
@@ -87,12 +89,10 @@ describe('JhiItemCountComponent test', () => {
             comp.itemsPerPage = 10;
             comp.total = 100;
             fixture.detectChanges();
-            expect(getElementAttribute(fixture, 'translateValues')).toBe(``);
             expect(getElementHtml(fixture)).toBe(``);
 
             comp.page = 2;
             fixture.detectChanges();
-            expect(getElementAttribute(fixture, 'translateValues')).toBe(``);
             expect(getElementHtml(fixture)).toBe(``);
         });
     });
