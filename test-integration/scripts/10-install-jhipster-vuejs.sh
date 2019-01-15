@@ -100,5 +100,6 @@ ls -al /home/travis/.nvm/versions/node/v10.15.0/lib/node_modules/
 
 npm run lint
 if [[ "$JHI_APP" == "" || "$JHI_APP" == "vuejs-default" ]]; then
+    # Run generator tests only for some configurations
     npm test
 fi
