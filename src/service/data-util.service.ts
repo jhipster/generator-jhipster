@@ -26,7 +26,8 @@ import { ElementRef, Injectable } from '@angular/core';
 })
 export class JhiDataUtils {
 
-    constructor() {}
+    constructor() {
+    }
 
     /**
      * Method to abbreviate the text given
@@ -122,15 +123,21 @@ export class JhiDataUtils {
         return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
     }
 
-    setFileData(event, entity, field: string, isImage: boolean) {
+    setFileData(event, entity, field: string, isImage: boolean, cb?: Function) {
         if (event && event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
             if (isImage && !/^image\//.test(file.type)) {
+                if (cb) {
+                    cb();
+                }
                 return;
             }
             this.toBase64(file, (base64Data) => {
                 entity[field] = base64Data;
                 entity[`${field}ContentType`] = file.type;
+                if (cb) {
+                    cb();
+                }
             });
         }
     }

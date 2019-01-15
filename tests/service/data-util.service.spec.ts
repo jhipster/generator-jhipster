@@ -99,5 +99,28 @@ describe('Data Utils service test', () => {
             expect(service.toBase64).toHaveBeenCalledTimes(0);
         }));
 
+        it('should execute the callback in toBase64()', function(done) {
+            inject([JhiDataUtils], (service: JhiDataUtils) => {
+                const callBack: Spy = jasmine.createSpy();
+                callBack.and.callFake(() => done());
+
+                const file = new File(['file content'], 'test-file.txt');
+                const eventSake = {
+                    target: {
+                        files: [file]
+                    }
+                };
+
+                const entity = {};
+                const field = 'document';
+                service.setFileData(eventSake, entity, field, false, callBack);
+
+                setTimeout(() => {
+                    expect(callBack).toHaveBeenCalled();
+                    expect(entity).toEqual({ document: 'ZmlsZSBjb250ZW50', documentContentType: '' });
+                }, 500);
+            })();
+        });
+
     });
 });
