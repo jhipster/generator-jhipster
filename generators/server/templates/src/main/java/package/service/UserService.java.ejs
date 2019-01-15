@@ -280,7 +280,7 @@ public class UserService {
             .flatMap(existingUser -> {
                 if (!existingUser.getActivated()) {
                     <%_ if (cacheManagerIsAvailable === true) { _%>
-                    this.clearUserCaches(newUser);
+                    this.clearUserCaches(existingUser);
                     <%_ } _%>
                     return userRepository.delete(existingUser);
                 } else {
@@ -291,7 +291,7 @@ public class UserService {
             .flatMap(existingUser -> {
                 if (!existingUser.getActivated()) {
                     <%_ if (cacheManagerIsAvailable === true) { _%>
-                    this.clearUserCaches(newUser);
+                    this.clearUserCaches(existingUser);
                     <%_ } _%>
                     return userRepository.delete(existingUser);
                 } else {
