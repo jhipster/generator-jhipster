@@ -16,20 +16,43 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Component, Input } from '@angular/core';
+import { Input, Directive, ElementRef, OnChanges } from '@angular/core';
+import { JhiConfigService } from '../config.service';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * A wrapper directive on top of the translate pipe as the inbuilt translate directive from ngx-translate is too verbose and buggy
  */
 /* tslint:disable */
-@Component({
-    selector: '[jhiTranslate]',
-    template: '<span [innerHTML]="jhiTranslate | translate:translateValues"></span>'
+@Directive({
+    selector: '[jhiTranslate]'
 })
-export class JhiTranslateComponent {
-
+export class JhiTranslateComponent implements OnChanges {
     @Input() jhiTranslate: string;
-
     @Input() translateValues: any;
+
+    constructor(
+        private configService: JhiConfigService,
+        private el: ElementRef,
+        private translateService: TranslateService
+    ) {}
+
+    ngOnChanges() {
+        const enabled = this.configService.getConfig().i18nEnabled;
+        if (enabled) {
+            this.translateService
+                .get(this.jhiTranslate, this.translateValues)
+                .subscribe(
+                    value => {
+                        this.el.nativeElement.innerHTML = value;
+                    },
+                    () => {
+                        return `${
+                            this.configService.getConfig().noi18nMessage
+                        }[${this.jhiTranslate}]`;
+                    }
+                );
+        }
+    }
 }
 /* tslint:enable */
