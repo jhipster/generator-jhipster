@@ -66,5 +66,38 @@ describe('Data Utils service test', () => {
             expect(tempLink.click).toHaveBeenCalledTimes(1);
             expect(tempLink.click).toHaveBeenCalledWith();
         }));
+
+        it('should execute the toBase64()', inject([JhiDataUtils], (service: JhiDataUtils) => {
+
+            spyOn(service, 'toBase64');
+
+            const eventSake = {
+                target: {
+                    files: [{}]
+                }
+            };
+
+            service.setFileData(eventSake, null, null, false);
+
+            setTimeout(() => {
+                expect(service.toBase64).toHaveBeenCalled();
+            }, 500);
+        }));
+
+        it('should skip the toBase64() when image is passed', inject([JhiDataUtils], (service: JhiDataUtils) => {
+
+            spyOn(service, 'toBase64');
+
+            const eventSake = {
+                target: {
+                    files: [{}]
+                }
+            };
+
+            service.setFileData(eventSake, null, null, true);
+
+            expect(service.toBase64).toHaveBeenCalledTimes(0);
+        }));
+
     });
 });
