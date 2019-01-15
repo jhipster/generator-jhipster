@@ -48,10 +48,9 @@ describe('Data Utils service test', () => {
         }));
 
         it('should download the csv file', inject([JhiDataUtils], (service: JhiDataUtils) => {
-            // create spy object with a click() method
-            const spyObj = jasmine.createSpyObj('a', ['click']);
-            // spy on document.createElement() and return the spy object
-            spyOn(document, 'createElement').and.returnValue(spyObj);
+            const tempLink = document.createElement('a');
+            jest.spyOn(tempLink, 'click');
+            jest.spyOn(document, 'createElement').mockReturnValue(tempLink);
             // call downloadFile function
             // csv content:
             // ID,Name
@@ -62,10 +61,10 @@ describe('Data Utils service test', () => {
             service.downloadFile(contentType, data, fileName);
             expect(document.createElement).toHaveBeenCalledTimes(1);
             expect(document.createElement).toHaveBeenCalledWith('a');
-            expect(spyObj.target).toBe('_blank');
-            expect(spyObj.download).toBe('test-download-file.csv');
-            expect(spyObj.click).toHaveBeenCalledTimes(1);
-            expect(spyObj.click).toHaveBeenCalledWith();
+            expect(tempLink.target).toBe('_blank');
+            expect(tempLink.download).toBe('test-download-file.csv');
+            expect(tempLink.click).toHaveBeenCalledTimes(1);
+            expect(tempLink.click).toHaveBeenCalledWith();
         }));
     });
 });

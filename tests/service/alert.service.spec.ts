@@ -35,13 +35,7 @@ describe('Alert service test', () => {
                     }
                 ]
             });
-            // Make sure we can install mock clock
-            jasmine.clock().uninstall();
-            jasmine.clock().install();
-        });
-
-        afterEach(() => {
-            jasmine.clock().uninstall();
+            jest.useFakeTimers();
         });
 
         it('should produce a proper alert object and fetch it', inject([JhiAlertService], (service: JhiAlertService) => {
@@ -123,7 +117,7 @@ describe('Alert service test', () => {
 
             expect(service.get().length).toBe(1);
 
-            jasmine.clock().tick(6000); // increment clock 6000 ms.
+            jest.advanceTimersByTime(6000);
 
             expect(service.get().length).toBe(0);
         }));
