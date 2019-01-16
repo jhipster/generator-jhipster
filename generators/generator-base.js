@@ -1000,7 +1000,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add new css style to the angular application in "main.css".
+     * Add new css style to the angular application in "global.css".
      *
      * @param {boolean} isUseSass - flag indicating if sass should be used
      * @param {string} style - css to add in the file
@@ -1019,12 +1019,12 @@ module.exports = class extends PrivateBase {
      * }
      *
      */
-    addMainCSSStyle(isUseSass, style, comment) {
+    addGlobalCSSStyle(isUseSass, style, comment) {
         if (isUseSass) {
-            this.addMainSCSSStyle(style, comment);
+            this.addGlobalSCSSStyle(style, comment);
         }
 
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}content/css/main.css`;
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}content/css/global.css`;
         let styleBlock = '';
         if (comment) {
             styleBlock += '/* ==========================================================================\n';
@@ -1036,7 +1036,7 @@ module.exports = class extends PrivateBase {
             jhipsterUtils.rewriteFile(
                 {
                     file: fullPath,
-                    needle: 'jhipster-needle-css-add-main',
+                    needle: 'jhipster-needle-css-add-global',
                     splicable: [styleBlock]
                 },
                 this
@@ -1052,7 +1052,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add new scss style to the angular application in "main.scss".
+     * Add new scss style to the angular application in "global.scss".
      *
      * @param {string} style - scss to add in the file
      * @param {string} comment - comment to add before css code
@@ -1071,8 +1071,8 @@ module.exports = class extends PrivateBase {
      * }
      *
      */
-    addMainSCSSStyle(style, comment) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}scss/main.scss`;
+    addGlobalSCSSStyle(style, comment) {
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}scss/global.scss`;
         let styleBlock = '';
         if (comment) {
             styleBlock += '/* ==========================================================================\n';
@@ -1084,7 +1084,7 @@ module.exports = class extends PrivateBase {
             jhipsterUtils.rewriteFile(
                 {
                     file: fullPath,
-                    needle: 'jhipster-needle-scss-add-main',
+                    needle: 'jhipster-needle-scss-add-global',
                     splicable: [styleBlock]
                 },
                 this
