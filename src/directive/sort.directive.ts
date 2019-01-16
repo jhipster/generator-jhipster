@@ -16,8 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Directive, Input, Output, Renderer, EventEmitter, ElementRef } from '@angular/core';
-import { JhiConfigService } from '../config.service';
+import { Directive, Input, Output, EventEmitter } from '@angular/core';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Directive({
     selector: '[jhiSort]'
@@ -27,45 +27,17 @@ export class JhiSortDirective {
     @Input() ascending: boolean;
     @Input() callback: Function;
 
-    sortIcon = 'fa-sort';
-    sortAscIcon = 'fa-sort-up';
-    sortDescIcon = 'fa-sort-down';
-    sortIconSelector = 'span.fa';
-
     @Output() predicateChange: EventEmitter<any> = new EventEmitter();
     @Output() ascendingChange: EventEmitter<any> = new EventEmitter();
 
-    element: any;
-
-    constructor(el: ElementRef, renderer: Renderer, configService: JhiConfigService) {
-        this.element = el.nativeElement;
-        const config = configService.getConfig();
-        this.sortIcon = config.sortIcon;
-        this.sortAscIcon = config.sortAscIcon;
-        this.sortDescIcon = config.sortDescIcon;
-        this.sortIconSelector = config.sortIconSelector;
-    }
+    activeIconComponent: FaIconComponent;
+    constructor() { }
 
     sort(field: any) {
-        this.resetClasses();
-        if (field !== this.predicate) {
-            this.ascending = true;
-        } else {
-            this.ascending = !this.ascending;
-        }
+        this.ascending = field !== this.predicate ? true : !this.ascending;
         this.predicate = field;
         this.predicateChange.emit(field);
         this.ascendingChange.emit(this.ascending);
         this.callback();
     }
-
-    private resetClasses() {
-        const allThIcons = this.element.querySelectorAll(this.sortIconSelector);
-        // Use normal loop instead of forEach because IE does not support forEach on NodeList.
-        for (let i = 0; i < allThIcons.length; i++) {
-            allThIcons[i].classList.remove(this.sortAscIcon);
-            allThIcons[i].classList.remove(this.sortDescIcon);
-            allThIcons[i].classList.add(this.sortIcon);
-        };
-    };
 }

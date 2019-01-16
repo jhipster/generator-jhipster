@@ -16,48 +16,53 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Directive, Host, HostListener, Input, ElementRef, Renderer, AfterViewInit } from '@angular/core';
-import { JhiSortDirective } from './sort.directive';
+import { Directive, Host, HostListener, Input, ContentChild, AfterContentInit } from '@angular/core';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
+
 import { JhiConfigService } from '../config.service';
+import { JhiSortDirective } from './sort.directive';
 
 @Directive({
     selector: '[jhiSortBy]'
 })
-export class JhiSortByDirective implements AfterViewInit {
-
+export class JhiSortByDirective implements AfterContentInit {
     @Input() jhiSortBy: string;
+    @ContentChild(FaIconComponent) iconComponent: FaIconComponent;
 
-    sortAscIcon = 'fa-sort-up';
-    sortDescIcon = 'fa-sort-down';
+    sortIcon: IconDefinition;
+    sortAscIcon: IconDefinition;
+    sortDescIcon: IconDefinition;
 
-    jhiSort: JhiSortDirective;
-
-    constructor(@Host() jhiSort: JhiSortDirective, private el: ElementRef, private renderer: Renderer, configService: JhiConfigService) {
+    constructor(@Host() private jhiSort: JhiSortDirective, configService: JhiConfigService) {
         this.jhiSort = jhiSort;
         const config = configService.getConfig();
+        this.sortIcon = config.sortIcon;
         this.sortAscIcon = config.sortAscIcon;
         this.sortDescIcon = config.sortDescIcon;
     }
 
-    ngAfterViewInit(): void {
+    ngAfterContentInit(): void {
         if (this.jhiSort.predicate && this.jhiSort.predicate !== '_score' && this.jhiSort.predicate === this.jhiSortBy) {
-            this.applyClass();
+            this.updateIconDefinition(this.iconComponent, this.jhiSort.ascending ? this.sortDescIcon : this.sortAscIcon);
+            this.jhiSort.activeIconComponent = this.iconComponent;
         }
     }
 
-    @HostListener('click') onClick() {
+    @HostListener('click')
+    onClick() {
         if (this.jhiSort.predicate && this.jhiSort.predicate !== '_score') {
             this.jhiSort.sort(this.jhiSortBy);
-            this.applyClass();
+            this.updateIconDefinition(this.jhiSort.activeIconComponent, this.sortIcon);
+            this.updateIconDefinition(this.iconComponent, this.jhiSort.ascending ? this.sortDescIcon : this.sortAscIcon);
+            this.jhiSort.activeIconComponent = this.iconComponent;
         }
     }
 
-    private applyClass() {
-        const childSpan = this.el.nativeElement.children[1];
-        let add = this.sortAscIcon;
-        if (!this.jhiSort.ascending) {
-            add = this.sortDescIcon;
+    private updateIconDefinition(iconComponent: FaIconComponent, icon: IconDefinition) {
+        if (iconComponent) {
+            iconComponent.iconProp = icon;
+            iconComponent.ngOnChanges({});
         }
-        this.renderer.setElementClass(childSpan, add, true);
-    };
+    }
 }

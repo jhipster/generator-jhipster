@@ -87,8 +87,6 @@ export class JhiDataUtils {
      * Method to clear the input
      */
     clearInputImage(entity: any, elementRef: ElementRef, field: string, fieldContentType: string, idInput: string) {
-        console.log(elementRef);
-        console.log(entity);
         if (entity && field && fieldContentType) {
             if (entity.hasOwnProperty(field)) {
                 entity[field] = null;
