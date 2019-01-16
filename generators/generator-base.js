@@ -31,6 +31,8 @@ const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
+const needleClientAngular = require('./needle/needle-client-angular');
+const needleClientReact = require('./needle/needle-client-react');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -999,151 +1001,38 @@ module.exports = class extends PrivateBase {
         }
     }
 
-    /**
-     * Add new css style to the angular application in "main.css".
-     *
-     * @param {boolean} isUseSass - flag indicating if sass should be used
-     * @param {string} style - css to add in the file
-     * @param {string} comment - comment to add before css code
-     *
-     * example:
-     *
-     * style = '.jhipster {\n     color: #baa186;\n}'
-     * comment = 'New JHipster color'
-     *
-     * * ==========================================================================
-     * New JHipster color
-     * ========================================================================== *
-     * .jhipster {
-     *     color: #baa186;
-     * }
-     *
-     */
-    addMainCSSStyle(isUseSass, style, comment) {
-        if (isUseSass) {
-            this.addMainSCSSStyle(style, comment);
+    addGlobalCSSStyle(style, comment) {
+        if (this.clientFramework !== 'angularX') {
+            this.error('Global css is only supported by Angular, for React @see addAppCSSStyle()');
+            return;
         }
 
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}content/css/main.css`;
-        let styleBlock = '';
-        if (comment) {
-            styleBlock += '/* ==========================================================================\n';
-            styleBlock += `${comment}\n`;
-            styleBlock += '========================================================================== */\n';
-        }
-        styleBlock += `${style}\n`;
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-css-add-main',
-                    splicable: [styleBlock]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n')
-            );
-            this.debug('Error:', e);
+        if (this.useSass) {
+            needleClientAngular.addGlobalSCSSStyle(style, comment);
+        } else {
+            needleClientAngular.addGlobalCSSStyle(style, comment);
         }
     }
 
-    /**
-     * Add new scss style to the angular application in "main.scss".
-     *
-     * @param {string} style - scss to add in the file
-     * @param {string} comment - comment to add before css code
-     *
-     * example:
-     *
-     * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
-     * comment = 'Message'
-     *
-     * * ==========================================================================
-     * Message
-     * ========================================================================== *
-     * .success {
-     *     @extend .message;
-     *     border-color: green;
-     * }
-     *
-     */
-    addMainSCSSStyle(style, comment) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}scss/main.scss`;
-        let styleBlock = '';
-        if (comment) {
-            styleBlock += '/* ==========================================================================\n';
-            styleBlock += `${comment}\n`;
-            styleBlock += '========================================================================== */\n';
-        }
-        styleBlock += `${style}\n`;
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-scss-add-main',
-                    splicable: [styleBlock]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add new scss style to the angular application in "vendor.scss".
-     *
-     * @param {string} style - scss to add in the file
-     * @param {string} comment - comment to add before css code
-     *
-     * example:
-     *
-     * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
-     * comment = 'Message'
-     *
-     * * ==========================================================================
-     * Message
-     * ========================================================================== *
-     * .success {
-     *     @extend .message;
-     *     border-color: green;
-     * }
-     *
-     */
     addVendorSCSSStyle(style, comment) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`;
-        let styleBlock = '';
-        if (comment) {
-            styleBlock += '/* ==========================================================================\n';
-            styleBlock += `${comment}\n`;
-            styleBlock += '========================================================================== */\n';
+        if (this.clientFramework !== 'angularX') {
+            this.error('Vendor is only supported by Angular');
+            return;
         }
-        styleBlock += `${style}\n`;
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-scss-add-vendor',
-                    splicable: [styleBlock]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n')
-            );
-            this.debug('Error:', e);
+
+        needleClientAngular.addVendorSCSSStyle(style, comment);
+    }
+
+    addAppCSSStyle(style, comment) {
+        if (this.clientFramework !== 'react') {
+            this.error('App css is only supported by React');
+            return;
+        }
+
+        if (this.useSass) {
+            needleClientReact.addAppSCSSStyle(style, comment);
+        } else {
+            needleClientReact.addAppCSSStyle(style, comment);
         }
     }
 
