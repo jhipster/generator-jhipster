@@ -39,13 +39,17 @@ import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.config.SecurityBeanOverrideConfiguration;
 <% } %>
 import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
-<%_ for (idx in relationships) { // import entities in required relationships
+<%_
+    var imported = [];
+    for (idx in relationships) { // import entities in required relationships
         const relationshipValidate = relationships[idx].relationshipValidate;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const isUsingMapsIdL1 = relationships[idx].useJPADerivedIdentifier;
-        if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
+        if(imported.indexOf(otherEntityNameCapitalized) === -1) {
+            if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
 import <%=packageName%>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
-<%_ } } _%>
+<%_         imported.push(otherEntityNameCapitalized);
+        } } } _%>
 <%_ if (saveUserSnapshot) { _%>
 import <%=packageName%>.repository.UserRepository;
 <%_ } _%>
