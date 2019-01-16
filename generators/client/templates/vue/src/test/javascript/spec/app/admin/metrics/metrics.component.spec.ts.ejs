@@ -54,15 +54,12 @@ describe('Metrics Component', () => {
     it('should call refresh on init', async () => {
       // GIVEN
       const response = {
-        timers: {
-          service: 'test',
-          unrelatedKey: 'test'
-        },
-        gauges: {
-          'jcache.statistics': {
-            value: 2
+        'jvm' : {
+          'PS Eden Space' : {
+            'committed' : 6.46447104E8,
+            'max' : 1.34479872E9,
+            'used' : 4.25808832E8
           },
-          unrelatedKey: 'test'
         }
       };
       mockedAxios.get.mockReturnValue(Promise.resolve({ data: response }));
@@ -72,9 +69,29 @@ describe('Metrics Component', () => {
       await metrics.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalledWith('management/metrics');
-      expect(metrics.servicesStats).toEqual({ service: 'test' });
-      expect(metrics.cachesStats).toEqual({ jcache: { name: 17, value: 2 } });
+      expect(mockedAxios.get).toHaveBeenCalledWith('management/jhi-metrics');
+      expect(metrics.metrics).toHaveProperty('jvm');
+      expect(metrics.metrics).toEqual(response);
+
+
+      // GIVEN
+      const dump = [{ name: 'test1', threadState: 'RUNNABLE' }];
+      mockedAxios.get.mockReturnValue(Promise.resolve({ data: { threads: dump } }));
+
+      // WHEN
+      metrics.refresh();
+      await metrics.$nextTick();
+
+      // THEN
+      expect(mockedAxios.get).toHaveBeenCalledWith('management/threaddump');
+      expect(metrics.threadData).toEqual(dump);
+      expect(metrics.threadStats).toEqual({
+        threadDumpRunnable: 1,
+        threadDumpWaiting: 0,
+        threadDumpTimedWaiting: 0,
+        threadDumpBlocked: 0,
+        threadDumpAll: 1
+      });
     });
   });
 
@@ -85,16 +102,4 @@ describe('Metrics Component', () => {
     });
   });
 
-  describe('Thread dump method', () => {
-    it('should return Thread Dump', async () => {
-      const dump = [{ name: 'test1', threadState: 'RUNNABLE' }];
-      mockedAxios.get.mockReturnValue(Promise.resolve({ data: { threads: dump } }));
-
-      metrics.refreshThreadDumpData();
-      await metrics.$nextTick();
-
-      expect(mockedAxios.get).toHaveBeenCalledWith('management/threaddump');
-      expect(metrics.threads).toEqual(dump);
-    });
-  });
 });

@@ -10,12 +10,11 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 })
 export default class <%=jhiPrefixCapitalized%>Metrics extends Vue {
   public metrics: any = {};
-  public cachesStats: any = {};
-  public servicesStats: any = {};
+  public threadData: any = null;
+  public threadStats: any = {};
   public updatingMetrics = true;
-  public JCACHE_KEY = 'jcache.statistics';
-  public threads: any = null;
-  @Inject('metricsService') private metricsService: () => MetricsService;
+  @Inject('metricsService')
+  private metricsService: () => MetricsService;
 
   public mounted(): void {
     this.refresh();
@@ -23,41 +22,50 @@ export default class <%=jhiPrefixCapitalized%>Metrics extends Vue {
 
   public refresh(): void {
     this.updatingMetrics = true;
-    this.metricsService().getMetrics().then(res => {
-      this.metrics = res.data;
-      this.updatingMetrics = false;
-      this.servicesStats = {};
-      this.cachesStats = {};
-      Object.keys(this.metrics.timers).forEach(key => {
-        const value = this.metrics.timers[key];
-        if (key.includes('web.rest') || key.includes('service')) {
-          this.servicesStats[key] = value;
-        }
-      });
-      Object.keys(this.metrics.gauges).forEach(key => {
-        if (key.includes('jcache.statistics')) {
-          const value = this.metrics.gauges[key].value;
-          // remove gets or puts
-          const index = key.lastIndexOf('.');
-          const newKey = key.substr(0, index);
+    this.metricsService()
+      .getMetrics()
+      .then(resultsMetrics => {
+        this.metrics = resultsMetrics.data;
+        this.metricsService()
+          .retrieveThreadDump()
+          .then(res => {
+            this.threadData = res.data.threads;
 
-          // Keep the name of the domain
-          this.cachesStats[newKey] = {
-            name: this.JCACHE_KEY.length,
-            value
-          };
-        }
+            this.threadStats = {
+              threadDumpRunnable: 0,
+              threadDumpWaiting: 0,
+              threadDumpTimedWaiting: 0,
+              threadDumpBlocked: 0,
+              threadDumpAll: 0
+            };
+
+            this.threadData.forEach(value => {
+              if (value.threadState === 'RUNNABLE') {
+                this.threadStats.threadDumpRunnable += 1;
+              } else if (value.threadState === 'WAITING') {
+                this.threadStats.threadDumpWaiting += 1;
+              } else if (value.threadState === 'TIMED_WAITING') {
+                this.threadStats.threadDumpTimedWaiting += 1;
+              } else if (value.threadState === 'BLOCKED') {
+                this.threadStats.threadDumpBlocked += 1;
+              }
+            });
+
+            this.threadStats.threadDumpAll =
+              this.threadStats.threadDumpRunnable +
+              this.threadStats.threadDumpWaiting +
+              this.threadStats.threadDumpTimedWaiting +
+              this.threadStats.threadDumpBlocked;
+
+            this.updatingMetrics = false;
+          });
       });
-    });
   }
 
-  public refreshThreadDumpData(): void {
+  openModal(): void {
     if ((<any>this.$refs.metricsModal).show) {
       (<any>this.$refs.metricsModal).show();
     }
-    this.metricsService().retrieveThreadDump().then(res => {
-      this.threads = res.data.threads;
-    });
   }
 
   filterNaN(input: any): any {
@@ -73,5 +81,30 @@ export default class <%=jhiPrefixCapitalized%>Metrics extends Vue {
 
   formatNumber2(value: any): any {
     return numeral(value).format('0,00');
+  }
+
+  convertMillisecondsToDuration(ms) {
+    const times = {
+      year: 31557600000,
+      month: 2629746000,
+      day: 86400000,
+      hour: 3600000,
+      minute: 60000,
+      second: 1000
+    };
+    let time_string = '';
+    let plural = '';
+    for (const key in times) {
+      if (Math.floor(ms / times[key]) > 0) {
+        if (Math.floor(ms / times[key]) > 1) {
+          plural = 's';
+        } else {
+          plural = '';
+        }
+        time_string += Math.floor(ms / times[key]).toString() + ' ' + key.toString() + plural + ' ';
+        ms = ms - times[key] * Math.floor(ms / times[key]);
+      }
+    }
+    return time_string;
   }
 }
