@@ -1072,7 +1072,7 @@ module.exports = class extends PrivateBase {
      *
      */
     addGlobalSCSSStyle(style, comment) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}scss/global.scss`;
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`;
         let styleBlock = '';
         if (comment) {
             styleBlock += '/* ==========================================================================\n';
