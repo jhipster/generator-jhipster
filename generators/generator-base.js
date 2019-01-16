@@ -1148,6 +1148,106 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add new css style to the react application in "app.css".
+     *
+     * @param {boolean} isUseSass - flag indicating if sass should be used
+     * @param {string} style - css to add in the file
+     * @param {string} comment - comment to add before css code
+     *
+     * example:
+     *
+     * style = '.jhipster {\n     color: #baa186;\n}'
+     * comment = 'New JHipster color'
+     *
+     * * ==========================================================================
+     * New JHipster color
+     * ========================================================================== *
+     * .jhipster {
+     *     color: #baa186;
+     * }
+     *
+     */
+    addAppCSSStyle(isUseSass, style, comment) {
+        if (isUseSass) {
+            this.addAppSCSSStyle(style, comment);
+        }
+
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/app.css`;
+        let styleBlock = '';
+        if (comment) {
+            styleBlock += '/* ==========================================================================\n';
+            styleBlock += `${comment}\n`;
+            styleBlock += '========================================================================== */\n';
+        }
+        styleBlock += `${style}\n`;
+        try {
+            jhipsterUtils.rewriteFile(
+                {
+                    file: fullPath,
+                    needle: 'jhipster-needle-css-add-app',
+                    splicable: [styleBlock]
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                fullPath +
+                chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Add new scss style to the react application in "app.scss".
+     *
+     * @param {string} style - scss to add in the file
+     * @param {string} comment - comment to add before css code
+     *
+     * example:
+     *
+     * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
+     * comment = 'Message'
+     *
+     * * ==========================================================================
+     * Message
+     * ========================================================================== *
+     * .success {
+     *     @extend .message;
+     *     border-color: green;
+     * }
+     *
+     */
+    addAppSCSSStyle(style, comment) {
+        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/app.scss`;
+        let styleBlock = '';
+        if (comment) {
+            styleBlock += '/* ==========================================================================\n';
+            styleBlock += `${comment}\n`;
+            styleBlock += '========================================================================== */\n';
+        }
+        styleBlock += `${style}\n`;
+        try {
+            jhipsterUtils.rewriteFile(
+                {
+                    file: fullPath,
+                    needle: 'jhipster-needle-scss-add-app',
+                    splicable: [styleBlock]
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                fullPath +
+                chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * Copy third-party library resources path.
      *
      * @param {string} sourceFolder - third-party library resources source path
