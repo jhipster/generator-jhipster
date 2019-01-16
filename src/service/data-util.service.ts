@@ -77,11 +77,11 @@ export class JhiDataUtils {
      */
     toBase64(file: File, cb: Function) {
         const fileReader: FileReader = new FileReader();
-        fileReader.readAsDataURL(file);
         fileReader.onload = function(e: any) {
             const base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
             cb(base64Data);
         };
+        fileReader.readAsDataURL(file);
     }
 
     /**
