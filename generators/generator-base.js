@@ -31,8 +31,9 @@ const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
-const needleClientAngular = require('./needle/needle-client-angular');
-const needleClientReact = require('./needle/needle-client-react');
+const NeedleClientAngular = require('./needle/needle-client-angular');
+const NeedleClientReact = require('./needle/needle-client-react');
+const NeedleServerMaven = require('./needle/needle-server-maven');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -51,6 +52,13 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
+    constructor(args, opts) {
+        super(args, opts);
+        this.needleServerMaven = new NeedleServerMaven(this);
+        this.needleClientAngular = new NeedleClientAngular(this);
+        this.needleClientReact = new NeedleClientReact(this);
+    }
+
     /**
      * Deprecated
      * Get the JHipster configuration from the .yo-rc.json file.
@@ -1008,9 +1016,9 @@ module.exports = class extends PrivateBase {
         }
 
         if (this.useSass) {
-            needleClientAngular.addGlobalSCSSStyle(style, comment);
+            this.needleClientAngular.addGlobalSCSSStyle(style, comment);
         } else {
-            needleClientAngular.addGlobalCSSStyle(style, comment);
+            this.needleClientAngular.addGlobalCSSStyle(style, comment);
         }
     }
 
@@ -1020,7 +1028,7 @@ module.exports = class extends PrivateBase {
             return;
         }
 
-        needleClientAngular.addVendorSCSSStyle(style, comment);
+        this.needleClientAngular.addVendorSCSSStyle(style, comment);
     }
 
     addAppCSSStyle(style, comment) {
@@ -1030,9 +1038,9 @@ module.exports = class extends PrivateBase {
         }
 
         if (this.useSass) {
-            needleClientReact.addAppSCSSStyle(style, comment);
+            this.needleClientReact.addAppSCSSStyle(style, comment);
         } else {
-            needleClientReact.addAppCSSStyle(style, comment);
+            this.needleClientReact.addAppCSSStyle(style, comment);
         }
     }
 
@@ -1081,44 +1089,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - (optional) explicit other thing:  exclusions...
      */
     addMavenDependencyManagement(groupId, artifactId, version, type, scope, other) {
-        const fullPath = 'pom.xml';
-        try {
-            // prettier-ignore
-            let dependency = `${'<dependency>\n'
-                + '                <groupId>'}${groupId}</groupId>\n`
-                + `                <artifactId>${artifactId}</artifactId>\n`;
-            if (version) {
-                dependency += `                <version>${version}</version>\n`;
-            }
-            if (type) {
-                dependency += `                <type>${type}</type>\n`;
-            }
-            if (scope) {
-                dependency += `                <scope>${version}</scope>\n`;
-            }
-            if (other) {
-                dependency += `${other}\n`;
-            }
-            dependency += '             </dependency>';
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-maven-add-dependency-management',
-                    splicable: [dependency]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(e);
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(
-                        ' or missing required jhipster-needle. Reference to '
-                    )}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerMaven.addDependencyManagement(groupId, artifactId, version, type, scope, other);
     }
 
     /**
@@ -1128,31 +1099,7 @@ module.exports = class extends PrivateBase {
      * @param {string} url - url of the repository
      */
     addMavenRepository(id, url) {
-        const fullPath = 'pom.xml';
-        try {
-            // prettier-ignore
-            const repository = `${'<repository>\n'
-                + '            <id>'}${id}</id>\n`
-                + `            <url>${url}</url>\n`
-                + '        </repository>';
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-maven-repository',
-                    splicable: [repository]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(
-                        ' or missing required jhipster-needle. Reference to '
-                    )}maven repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerMaven.addRepository(id, url);
     }
 
     /**
@@ -1162,31 +1109,7 @@ module.exports = class extends PrivateBase {
      * @param {string} url - url of the repository
      */
     addMavenPluginRepository(id, url) {
-        const fullPath = 'pom.xml';
-        try {
-            // prettier-ignore
-            const repository = `${'<pluginRepository>\n'
-                + '            <id>'}${id}</id>\n`
-                + `            <url>${url}</url>\n`
-                + '        </pluginRepository>';
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-maven-plugin-repository',
-                    splicable: [repository]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(
-                        ' or missing required jhipster-needle. Reference to '
-                    )}maven plugin repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerMaven.addPluginRepository(id, url);
     }
 
     /**
@@ -1196,35 +1119,7 @@ module.exports = class extends PrivateBase {
      * @param {string} url - url of the repository
      */
     addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
-        const fullPath = 'pom.xml';
-        try {
-            // prettier-ignore
-            const repository = `${'<distributionManagement>\n'
-                + '        <snapshotRepository>\n'
-                + '            <id>'}${snapshotsId}</id>\n`
-                + `            <url>${snapshotsUrl}</url>\n`
-                + '        </snapshotRepository>\n'
-                + '        <repository>\n'
-                + `            <id>${releasesId}</id>\n`
-                + `            <url>${releasesUrl}</url>\n`
-                + '        </repository>\n'
-                + '    </distributionManagement>';
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-distribution-management',
-                    splicable: [repository]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven repository ${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerMaven.addDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl);
     }
 
     /**
@@ -1234,28 +1129,7 @@ module.exports = class extends PrivateBase {
      * @param {string} value - property value
      */
     addMavenProperty(name, value) {
-        const fullPath = 'pom.xml';
-        try {
-            const property = `<${name}>${value}</${name}>`;
-
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-maven-property',
-                    splicable: [property]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(
-                        ' or missing required jhipster-needle. Reference to '
-                    )}maven property (name: ${name}, value:${value})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerMaven.addProperty(name, value);
     }
 
     /**
@@ -1280,37 +1154,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - (optional) explicit other thing: scope, exclusions...
      */
     addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
-        try {
-            // prettier-ignore
-            let dependency = `${'<dependency>\n'
-                + '            <groupId>'}${groupId}</groupId>\n`
-                + `            <artifactId>${artifactId}</artifactId>\n`;
-            if (version) {
-                dependency += `            <version>${version}</version>\n`;
-            }
-            if (other) {
-                dependency += `${other}\n`;
-            }
-            dependency += '        </dependency>';
-            jhipsterUtils.rewriteFile(
-                {
-                    path: directory,
-                    file: 'pom.xml',
-                    needle: 'jhipster-needle-maven-add-dependency',
-                    splicable: [dependency]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    directory +
-                    chalk.yellow(
-                        ' or missing required jhipster-needle. Reference to '
-                    )}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerMaven.addDependencyInDirectory(directory, groupId, artifactId, version, other);
     }
 
     /**
@@ -1322,37 +1166,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - explicit other thing: executions, configuration...
      */
     addMavenPlugin(groupId, artifactId, version, other) {
-        const fullPath = 'pom.xml';
-        try {
-            // prettier-ignore
-            let plugin = `${'<plugin>\n'
-                + '                <groupId>'}${groupId}</groupId>\n`
-                + `                <artifactId>${artifactId}</artifactId>\n`;
-            if (version) {
-                plugin += `                <version>${version}</version>\n`;
-            }
-            if (other) {
-                plugin += `${other}\n`;
-            }
-            plugin += '            </plugin>';
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-maven-add-plugin',
-                    splicable: [plugin]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(
-                        ' or missing required jhipster-needle. Reference to '
-                    )}maven plugin (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerMaven.addPlugin(groupId, artifactId, version, other);
     }
 
     /**
@@ -1362,33 +1176,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - explicit other thing: build, dependencies...
      */
     addMavenProfile(profileId, other) {
-        const fullPath = 'pom.xml';
-        try {
-            // prettier-ignore
-            let profile = '<profile>\n'
-                + `            <id>${profileId}</id>\n`;
-            if (other) {
-                profile += `${other}\n`;
-            }
-            profile += '        </profile>';
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-maven-add-profile',
-                    splicable: [profile]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven profile (id: ${profileId})${chalk.yellow(
-                    ' not added.\n'
-                )}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerMaven.addProfile(profileId, other);
     }
 
     /**
