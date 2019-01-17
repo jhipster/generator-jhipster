@@ -65,6 +65,7 @@ module.exports = class extends Generator {
      */
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
         if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
             generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
@@ -89,10 +90,10 @@ module.exports = class extends Generator {
         }
 
         // Templates
-        generator.template(`${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
-        generator.template(`${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
-        generator.template(`${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
-        generator.template(`${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
     }
 
     /**
@@ -104,9 +105,13 @@ module.exports = class extends Generator {
      */
     installI18nServerFilesByLanguage(_this, resourceDir, lang) {
         const generator = _this || this;
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
-        generator.template(`${resourceDir}i18n/messages_${langProp}.properties.ejs`, `${resourceDir}i18n/messages_${langProp}.properties`);
+        generator.template(
+            `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
+            `${resourceDir}i18n/messages_${langProp}.properties`
+        );
     }
 
     /**
