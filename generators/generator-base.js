@@ -38,6 +38,7 @@ const NeedleClientWebpack = require('./needle/needle-client-webpack');
 const NeedleClientI18n = require('./needle/needle-client-i18n');
 const NeedleServerMaven = require('./needle/needle-server-maven');
 const NeedleServerCache = require('./needle/needle-server-cache');
+const NeedleServerLiquibase = require('./needle/needle-server-liquibase');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -63,6 +64,7 @@ module.exports = class extends PrivateBase {
         this.needleClientWebpack = new NeedleClientWebpack(this);
         this.needleClientI18n = new NeedleClientI18n(this);
         this.needleServerCache = new NeedleServerCache(this);
+        this.needleServerLiquibase = new NeedleServerLiquibase(this);
     }
 
     /**
@@ -808,7 +810,7 @@ module.exports = class extends PrivateBase {
      * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
      */
     addChangelogToLiquibase(changelogName) {
-        this.addLiquibaseChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-changelog');
+        this.needleServerLiquibase.addChangelog(changelogName);
     }
 
     /**
@@ -817,7 +819,7 @@ module.exports = class extends PrivateBase {
      * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
      */
     addConstraintsChangelogToLiquibase(changelogName) {
-        this.addLiquibaseChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-constraints-changelog');
+        this.needleServerLiquibase.addConstraintsChangelog(changelogName);
     }
 
     /**
@@ -827,25 +829,7 @@ module.exports = class extends PrivateBase {
      * @param {string} needle - The needle at where it has to be added.
      */
     addLiquibaseChangelogToMaster(changelogName, needle) {
-        const fullPath = `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`;
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle,
-                    splicable: [`<include file="config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    changelogName}.xml ${chalk.yellow('not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerLiquibase.addChangelogToMaster(changelogName, needle);
     }
 
     /**
@@ -855,21 +839,7 @@ module.exports = class extends PrivateBase {
      * @param {string} content - The content to be added as column, can have multiple columns as well
      */
     addColumnToLiquibaseEntityChangeset(filePath, content) {
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: filePath,
-                    needle: 'jhipster-needle-liquibase-add-column',
-                    splicable: [content]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required jhipster-needle. Column not added.\n') + e
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerLiquibase.addColumnToEntityChangeset(filePath, content);
     }
 
     /**
@@ -879,24 +849,7 @@ module.exports = class extends PrivateBase {
      * @param {string} content - The content to be added as changeset
      */
     addChangesetToLiquibaseEntityChangelog(filePath, content) {
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: filePath,
-                    needle: 'jhipster-needle-liquibase-add-changeset',
-                    splicable: [content]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    filePath +
-                    chalk.yellow(' or missing required jhipster-needle. Changeset not added.\n') +
-                    e
-            );
-            this.debug('Error:', e);
-        }
+        this.needleServerLiquibase.addChangesetToEntityChangelog(filePath, content);
     }
 
     /**
