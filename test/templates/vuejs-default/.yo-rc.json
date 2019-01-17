@@ -1,0 +1,46 @@
+{
+    "generator-jhipster": {
+      "promptValues": {
+        "packageName": "com.mycompany.myapp",
+        "nativeLanguage": "en"
+      },
+      "applicationType": "monolith",
+      "baseName": "jhipster",
+      "packageName": "com.mycompany.myapp",
+      "packageFolder": "com/mycompany/myapp",
+      "serverPort": "8080",
+      "authenticationType": "jwt",
+      "cacheProvider": "ehcache",
+      "enableHibernateCache": true,
+      "websocket": false,
+      "databaseType": "sql",
+      "devDatabaseType": "h2Disk",
+      "prodDatabaseType": "mysql",
+      "searchEngine": false,
+      "messageBroker": false,
+      "serviceDiscoveryType": false,
+      "buildTool": "maven",
+      "enableSwaggerCodegen": false,
+      "jwtSecretKey": "YzQxYjVjZDJiZWM5ODQ1OTFiN2VjZDQwMTM2YjliODc1OWMyNTkyNTVjY2UxZmQ5YjA2YjQ5NDM1YzdiNWY0NzI3NjgzNjJhY2JmMjdjNTljYmQxMTdjNDc2N2ZhZTg2MWRkOThkZWVhZDc4NzA4YmVlOWZlOTIyMjkxZDI2MGU=",
+      "enableTranslation": true,
+      "languages": [
+        "en"
+      ],
+      "testFrameworks": ["protractor"],
+      "jhiPrefix": "jhi",
+      "clientPackageManager": "npm",
+      "nativeLanguage": "en",
+      "blueprint": "generator-jhipster-vuejs",
+      "clientFramework": "vue",
+      "useSass": false
+    },
+    "generator-jhipster-vuejs": {
+      "applicationType": "monolith",
+      "baseName": "jhipster",
+      "clientFramework": "vue",
+      "useSass": false,
+      "clientPackageManager": "npm",
+      "enableTranslation": true
+    }
+  }
+  

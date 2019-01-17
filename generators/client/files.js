@@ -368,11 +368,8 @@ const vueFiles = {
 
 function writeFiles() {
     mkdirp(MAIN_SRC_DIR);
-    // write React files
+    // write Vue.js files
     this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
-
-    utils.addLanguagesToApplication(this);
-    utils.addLanguagesToWebPackConfiguration(this);
 
     if (!this.enableTranslation) {
         utils.replaceTranslation(this, ['app/app.vue',

@@ -24,28 +24,26 @@ const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 
 module.exports = {
-    addLanguagesToApplication,
-    addLanguagesToWebPackConfiguration,
+    updateLanguagesInConfig,
+    updateLanguagesInWebpack,
     replaceTranslation
 };
 
-function addLanguagesToApplication(generator) {
+function updateLanguagesInConfig(generator) {
     const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`;
     try {
-        let content = '';
+        let content = 'languages: {\n';
         if (generator.enableTranslation) {
             generator.generateLanguageOptions(generator.languages, generator.clientFramework).forEach((ln, i) => {
-                content += `      ${ln}${i !== generator.languages.length - 1 ? ',\n' : ''}`;
+                content += `        ${ln}${i !== generator.languages.length - 1 ? ',' : ''}\n`;
             });
         }
-        jhipsterUtils.rewriteFile(
+        content += '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n      }';
+        jhipsterUtils.replaceContent(
             {
                 file: fullPath,
-                needle: 'jhipster-needle-i18n-language-key-pipe',
-                splicable: [
-                    // prettier-ignore
-                    `${content}`
-                ]
+                pattern: /languages:.*\{([^\]]*jhipster-needle-i18n-language-key-pipe[^}]*)}/g,
+                content
             },
             generator
         );
@@ -61,36 +59,33 @@ function addLanguagesToApplication(generator) {
     }
 }
 
-function addLanguagesToWebPackConfiguration(generator) {
-    const fullPath = `${CLIENT_WEBPACK_DIR}webpack.dev.js`;
+function updateLanguagesInWebpack(generator) {
+    const fullPath = `${CLIENT_WEBPACK_DIR}webpack.common.js`;
     try {
-        if (generator.enableTranslation) {
-            let content = '';
-            generator.languages.forEach((language, i) => {
-                content += `                    { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
-                    i !== generator.languages.length - 1 ? ',' : ''
-                }\n`;
-            });
+        let content = 'groupBy: [\n';
+        generator.languages.forEach((language, i) => {
+            content += `          { pattern: './src/main/webapp/i18n/${language}/*.json', fileName: './i18n/${language}.json' }${
+                i !== generator.languages.length - 1 ? ',' : ''
+            }\n`;
+        });
+        content += '          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n'
+            + '        ]';
 
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-i18n-language-webpack',
-                    splicable: [
-                        // prettier-ignore
-                        `${content}`
-                    ]
-                },
-                generator
-            );
-        }
+        jhipsterUtils.replaceContent(
+            {
+                file: fullPath,
+                pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
+                content
+            },
+            generator
+        );
     } catch (e) {
         generator.log(
             chalk.yellow('\nUnable to find ')
-            + fullPath
-            + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ')
-            + generator.languages
-            + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+                + fullPath
+                + chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ')
+                + generator.languages
+                + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
         );
         generator.debug('Error:', e);
     }
