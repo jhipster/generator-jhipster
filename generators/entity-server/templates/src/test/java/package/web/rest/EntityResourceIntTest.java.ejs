@@ -524,6 +524,39 @@ _%>
         verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
         <%_ } _%>
     }
+
+    <%_ if (databaseType === 'sql' && isUsingMapsId === true) { _%>
+    @Test
+    @Transactional
+    public void update<%= entityClass %>MapsIdAssociationWithNewId() throws Exception {
+        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll().size();
+
+        // Create the <%= entityClass %> with an existing ID
+        <%= asEntity(entityInstance) %>.setId(9999999999L);
+        <%_ if (dto === 'mapstruct') { _%>
+        <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
+        <%_ } _%>
+
+        // Update the entity
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
+            .andExpect(status().isOk());
+
+        // Validate the <%= entityClass %> in the database
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate);
+        <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
+
+        // Validate the id for MapsId, the ids must be same
+        assertThat(test<%= entityClass %>.getId()).isEqualTo(test<%= entityClass %>.get<%= mapsIdEntity %>().getId());
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+
+        // Validate the <%= entityClass %> in Elasticsearch
+        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        <%_ } _%>
+    }
+<%_ } _%>
 <% for (idx in fields) { %><% if (fields[idx].fieldValidate === true) {
     let required = false;
     if (fields[idx].fieldType !== 'byte[]' && fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) {
