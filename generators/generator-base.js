@@ -401,45 +401,7 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework.
      */
     addAdminToModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
-        const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`;
-        try {
-            let importStatement = `|import { ${appName}${adminAngularName}Module } from './${adminFolderName}/${adminFileName}.module';`;
-            if (importStatement.length > constants.LINE_LENGTH) {
-                // prettier-ignore
-                importStatement = `|import {
-                     |    ${appName}${adminAngularName}Module
-                     |} from './${adminFolderName}/${adminFileName}.module';`;
-            }
-            jhipsterUtils.rewriteFile(
-                {
-                    file: adminModulePath,
-                    needle: 'jhipster-needle-add-admin-module-import',
-                    splicable: [this.stripMargin(importStatement)]
-                },
-                this
-            );
-
-            jhipsterUtils.rewriteFile(
-                {
-                    file: adminModulePath,
-                    needle: 'jhipster-needle-add-admin-module',
-                    splicable: [this.stripMargin(`|${appName}${adminAngularName}Module,`)]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    appName +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    adminAngularName +
-                    adminFolderName +
-                    adminFileName +
-                    enableTranslation +
-                    clientFramework} ${chalk.yellow(`not added to ${adminModulePath}.\n`)}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleClientAngular.addToAdminModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework);
     }
 
     /**
@@ -690,45 +652,7 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework.
      */
     addAngularModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
-        const modulePath = `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`;
-        try {
-            let importStatement = `|import { ${appName}${angularName}Module } from './${folderName}/${fileName}.module';`;
-            if (importStatement.length > constants.LINE_LENGTH) {
-                // prettier-ignore
-                importStatement = `|import {
-                     |    ${appName}${angularName}Module
-                     |} from './${folderName}/${fileName}.module';`;
-            }
-            jhipsterUtils.rewriteFile(
-                {
-                    file: modulePath,
-                    needle: 'jhipster-needle-angular-add-module-import',
-                    splicable: [this.stripMargin(importStatement)]
-                },
-                this
-            );
-
-            jhipsterUtils.rewriteFile(
-                {
-                    file: modulePath,
-                    needle: 'jhipster-needle-angular-add-module',
-                    splicable: [this.stripMargin(`|${appName}${angularName}Module,`)]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    appName +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    angularName +
-                    folderName +
-                    fileName +
-                    enableTranslation +
-                    clientFramework} ${chalk.yellow(`not added to ${modulePath}.\n`)}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleClientAngular.addModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework);
     }
 
     /**
