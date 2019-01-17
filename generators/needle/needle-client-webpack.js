@@ -2,7 +2,7 @@ const needleClient = require('./needle-client-base');
 
 module.exports = class extends needleClient {
     addEntity(microserviceName) {
-        const errorMessage = `${chalk.yellow(' Reference to ') + microserviceName} ${chalk.yellow('not added to menu.\n')}`;
+        const errorMessage = `${chalk.yellow(' Reference to ') + microserviceName} ${chalk.yellow('not added to menu.')}`;
         const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.dev.js`;
         const rewriteFileModel = this.generateFileModel(webpackDevPath,
              'jhipster-needle-add-entity-to-webpack',
