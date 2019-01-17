@@ -31,6 +31,7 @@ const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
+const NeedleBase = require('./needle/needle-base');
 const NeedleClientAngular = require('./needle/needle-client-angular');
 const NeedleClientReact = require('./needle/needle-client-react');
 const NeedleServerMaven = require('./needle/needle-server-maven');
@@ -54,6 +55,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 module.exports = class extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
+        this.needleBase = new NeedleBase(this);
         this.needleServerMaven = new NeedleServerMaven(this);
         this.needleClientAngular = new NeedleClientAngular(this);
         this.needleClientReact = new NeedleClientReact(this);
@@ -1631,19 +1633,8 @@ module.exports = class extends PrivateBase {
      * @param {string} content - content to be written
      */
     rewriteFile(filePath, needle, content) {
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: filePath,
-                    needle,
-                    splicable: [content]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required needle. File rewrite failed.\n'));
-            this.debug('Error:', e);
-        }
+        const rewriteFileModel = this.needleBase.generateFileModel(filePath, needle, content);
+        this.needleBase.addBlockContentToFile(rewriteFileModel);
     }
 
     /**
