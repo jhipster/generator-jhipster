@@ -35,6 +35,8 @@ const NeedleBase = require('./needle/needle-base');
 const NeedleClientAngular = require('./needle/needle-client-angular');
 const NeedleClientReact = require('./needle/needle-client-react');
 const NeedleClientWebpack = require('./needle/needle-client-webpack');
+const NeedleClientI18n = require('./needle/needle-client-i18n');
+
 const NeedleServerMaven = require('./needle/needle-server-maven');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
@@ -61,6 +63,7 @@ module.exports = class extends PrivateBase {
         this.needleClientAngular = new NeedleClientAngular(this);
         this.needleClientReact = new NeedleClientReact(this);
         this.needleClientWebpack = new NeedleClientWebpack(this);
+        this.needleClientI18n = new NeedleClientI18n(this);
     }
 
     /**
@@ -446,26 +449,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addElementTranslationKey(key, value, language) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-menu-add-element',
-                    splicable: [`"${key}": "${_.startCase(value)}",`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    language +
-                    chalk.yellow(' not added as a new entity in the menu.\n')
-            );
-            this.debug('Error:', e);
-        }
+        this.needleClientI18n.addElementTranslationKey(key, value, language);
     }
 
     /**
@@ -476,26 +460,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addAdminElementTranslationKey(key, value, language) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-menu-add-admin-element',
-                    splicable: [`"${key}": "${_.startCase(value)}",`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    language +
-                    chalk.yellow(' not added as a new entry in the admin menu.\n')
-            );
-            this.debug('Error:', e);
-        }
+        this.needleClientI18n.addAdminElementTranslationKey(key, value, language);
     }
 
     /**
@@ -506,26 +471,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addEntityTranslationKey(key, value, language) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-menu-add-entry',
-                    splicable: [`"${key}": "${_.startCase(value)}",`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    language +
-                    chalk.yellow(' not added as a new entity in the menu.\n')
-            );
-            this.debug('Error:', e);
-        }
+        this.needleClientI18n.addEntityTranslationKey(key, value, language);
     }
 
     /**
