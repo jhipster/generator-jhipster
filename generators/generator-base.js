@@ -36,7 +36,6 @@ const NeedleClientAngular = require('./needle/needle-client-angular');
 const NeedleClientReact = require('./needle/needle-client-react');
 const NeedleClientWebpack = require('./needle/needle-client-webpack');
 const NeedleClientI18n = require('./needle/needle-client-i18n');
-
 const NeedleServerMaven = require('./needle/needle-server-maven');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
@@ -44,7 +43,6 @@ const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 

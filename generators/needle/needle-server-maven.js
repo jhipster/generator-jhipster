@@ -3,7 +3,7 @@ const needleServer = require('./needle-server');
 
 const pomPath = 'pom.xml';
 
-module.exports = class NeedleServerMaven extends needleServer {
+module.exports = class extends needleServer {
     addDependencyManagement(groupId, artifactId, version, type, scope, other) {
         const errorMessage = `${chalk.yellow('Reference to maven dependency ')}
             (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`;
