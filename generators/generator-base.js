@@ -1009,6 +1009,25 @@ module.exports = class extends PrivateBase {
         }
     }
 
+    /**
+     * Add new css or scss style to the angular application in "global.css" or "global.scss".
+     *
+     * @param {string} style - css to add in the file
+     * @param {string} comment - comment to add before css code
+     *
+     * example:
+     *
+     * style = '.jhipster {\n     color: #baa186;\n}'
+     * comment = 'New JHipster color'
+     *
+     * * ==========================================================================
+     * New JHipster color
+     * ========================================================================== *
+     * .jhipster {
+     *     color: #baa186;
+     * }
+     *
+     */
     addGlobalCSSStyle(style, comment) {
         if (this.clientFramework !== 'angularX') {
             this.error('Global css is only supported by Angular, for React @see addAppCSSStyle()');
@@ -1022,6 +1041,26 @@ module.exports = class extends PrivateBase {
         }
     }
 
+    /**
+     * Add new scss style to the angular application in "vendor.scss".
+     *
+     * @param {string} style - scss to add in the file
+     * @param {string} comment - comment to add before css code
+     *
+     * example:
+     *
+     * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
+     * comment = 'Message'
+     *
+     * * ==========================================================================
+     * Message
+     * ========================================================================== *
+     * .success {
+     *     @extend .message;
+     *     border-color: green;
+     * }
+     *
+     */
     addVendorSCSSStyle(style, comment) {
         if (this.clientFramework !== 'angularX') {
             this.error('Vendor is only supported by Angular');
@@ -1031,6 +1070,25 @@ module.exports = class extends PrivateBase {
         this.needleClientAngular.addVendorSCSSStyle(style, comment);
     }
 
+    /**
+     * Add new css or scss style to the react application in "app.css" or "app.scss".
+     *
+     * @param {string} style - css to add in the file
+     * @param {string} comment - comment to add before css code
+     *
+     * example:
+     *
+     * style = '.jhipster {\n     color: #baa186;\n}'
+     * comment = 'New JHipster color'
+     *
+     * * ==========================================================================
+     * New JHipster color
+     * ========================================================================== *
+     * .jhipster {
+     *     color: #baa186;
+     * }
+     *
+     */
     addAppCSSStyle(style, comment) {
         if (this.clientFramework !== 'react') {
             this.error('App css is only supported by React');
