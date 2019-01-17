@@ -34,6 +34,7 @@ const PrivateBase = require('./generator-base-private');
 const NeedleBase = require('./needle/needle-base');
 const NeedleClientAngular = require('./needle/needle-client-angular');
 const NeedleClientReact = require('./needle/needle-client-react');
+const NeedleClientWebpack = require('./needle/needle-client-webpack');
 const NeedleServerMaven = require('./needle/needle-server-maven');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
@@ -59,6 +60,7 @@ module.exports = class extends PrivateBase {
         this.needleServerMaven = new NeedleServerMaven(this);
         this.needleClientAngular = new NeedleClientAngular(this);
         this.needleClientReact = new NeedleClientReact(this);
+        this.needleClientWebpack = new NeedleClientWebpack(this);
     }
 
     /**
@@ -198,28 +200,9 @@ module.exports = class extends PrivateBase {
      * Add a new entity route path to webpacks config
      *
      * @param {string} microserviceName - The name of the microservice to put into the url
-     * @param {string} clientFramework - The name of the client framework
      */
-    addEntityToWebpack(microserviceName, clientFramework) {
-        const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.dev.js`;
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: webpackDevPath,
-                    needle: 'jhipster-needle-add-entity-to-webpack',
-                    splicable: [`'/${microserviceName.toLowerCase()}',`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    webpackDevPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    microserviceName} ${chalk.yellow('not added to menu.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+    addEntityToWebpack(microserviceName) {
+        this.needleClientWebpack.addEntity(microserviceName);
     }
 
     /**
@@ -1111,31 +1094,7 @@ module.exports = class extends PrivateBase {
      * @param {string} targetFolder - third-party library resources destination path
      */
     copyExternalAssetsInWebpack(sourceFolder, targetFolder) {
-        const from = `${CLIENT_MAIN_SRC_DIR}content/${sourceFolder}/`;
-        const to = `content/${targetFolder}/`;
-        const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
-        let assetBlock = '';
-        if (sourceFolder && targetFolder) {
-            assetBlock = `{ from: './${from}', to: '${to}' },`;
-        }
-
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: webpackDevPath,
-                    needle: 'jhipster-needle-add-assets-to-webpack',
-                    splicable: [assetBlock]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    webpackDevPath +
-                    chalk.yellow(' or missing required jhipster-needle. Resource path not added to JHipster app.\n')
-            );
-            this.debug('Error:', e);
-        }
+        this.needleClientWebpack.copyExternalAssets(sourceFolder, targetFolder);
     }
 
     /**
