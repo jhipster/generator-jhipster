@@ -37,13 +37,13 @@ const NeedleClientReact = require('./needle/needle-client-react');
 const NeedleClientWebpack = require('./needle/needle-client-webpack');
 const NeedleClientI18n = require('./needle/needle-client-i18n');
 const NeedleServerMaven = require('./needle/needle-server-maven');
+const NeedleServerCache = require('./needle/needle-server-cache');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 /**
@@ -62,6 +62,7 @@ module.exports = class extends PrivateBase {
         this.needleClientReact = new NeedleClientReact(this);
         this.needleClientWebpack = new NeedleClientWebpack(this);
         this.needleClientI18n = new NeedleClientI18n(this);
+        this.needleServerCache = new NeedleServerCache(this);
     }
 
     /**
@@ -787,19 +788,7 @@ module.exports = class extends PrivateBase {
      * @param {string} cacheProvider - the cache provider
      */
     addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider) {
-        // Add the entity to ehcache
-        this.addEntryToCache(`${packageName}.domain.${entityClass}.class.getName()`, packageFolder, cacheProvider);
-        // Add the collections linked to that entity to ehcache
-        relationships.forEach(relationship => {
-            const relationshipType = relationship.relationshipType;
-            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-                this.addEntryToCache(
-                    `${packageName}.domain.${entityClass}.class.getName() + ".${relationship.relationshipFieldNamePlural}"`,
-                    packageFolder,
-                    cacheProvider
-                );
-            }
-        });
+        this.needleServerCache.addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider);
     }
 
     /**
@@ -810,35 +799,7 @@ module.exports = class extends PrivateBase {
      * @param {string} cacheProvider - the cache provider
      */
     addEntryToCache(entry, packageFolder, cacheProvider) {
-        try {
-            const cachePath = `${SERVER_MAIN_SRC_DIR}${packageFolder}/config/CacheConfiguration.java`;
-            if (cacheProvider === 'ehcache') {
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: cachePath,
-                        needle: 'jhipster-needle-ehcache-add-entry',
-                        splicable: [`cm.createCache(${entry}, jcacheConfiguration);`]
-                    },
-                    this
-                );
-            } else if (cacheProvider === 'infinispan') {
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: cachePath,
-                        needle: 'jhipster-needle-infinispan-add-entry',
-                        // prettier-ignore
-                        splicable: [`registerPredefinedCache(${entry}, new JCache<Object, Object>(
-                cacheManager.getCache(${entry}).getAdvancedCache(), this,
-                ConfigurationAdapter.create()));`
-                    ]
-                    },
-                    this
-                );
-            }
-        } catch (e) {
-            this.log(chalk.yellow(`\nUnable to add ${entry} to CacheConfiguration.java file.\n\t${e.message}`));
-            this.debug('Error:', e);
-        }
+        this.needleServerCache.addEntryToCache(entry, packageFolder, cacheProvider);
     }
 
     /**
