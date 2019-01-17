@@ -16,18 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
+package <%=packageName%>.cucumber;
 
-@NgModule({
-    imports: [
-        RouterModule.forChild([
-            /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-        ])
-    ],
-    declarations: [],
-    entryComponents: [],
-    providers: [],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
-})
-export class <%=angularXAppName%>EntityModule {}
+import <%=packageName%>.<%= mainClass %>;
+import cucumber.api.java.Before;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+@SpringBootTest
+@WebAppConfiguration
+@ContextConfiguration(classes = <%= mainClass %>.class)
+public class CucumberContextConfiguration {
+
+    @Before
+    public void setup_cucumber_spring_context(){
+        // Dummy method so cucumber will recognize this class as glue
+        // and use its context configuration.
+    }
+
+}

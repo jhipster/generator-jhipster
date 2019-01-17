@@ -43,6 +43,10 @@
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
+    <pluginRepositories>
+        <!-- jhipster-needle-maven-plugin-repository -->
+    </pluginRepositories>
+
     <!-- jhipster-needle-distribution-management -->
 
     <properties>
@@ -1200,7 +1204,7 @@
             <id>webpack</id>
             <activation>
                 <file>
-                    <missing>${project.build.directory}/www/app/main.bundle.js</missing>
+                    <missing>${basedir}/target/www/app/main.bundle.js</missing>
                 </file>
             </activation>
             <dependencies>
