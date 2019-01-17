@@ -1219,7 +1219,7 @@ public class AccountResourceIntTest <% if (databaseType === 'cassandra') { %>ext
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("change-password-empty")
-    public void testChangePasswordEmpty()<% if (!reactive) { %> throws Exception<% } %> {
+    public void testChangePasswordEmpty() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
