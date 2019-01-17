@@ -1798,7 +1798,7 @@ module.exports = class extends PrivateBase {
                 regex = new RegExp(
                     [
                         /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
-                        /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
+                        /( \[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
                         /( translate-compile)/, // translate-compile
                         /( translate-value-max="[0-9{}()|]*")/ // translate-value-max
                     ]
