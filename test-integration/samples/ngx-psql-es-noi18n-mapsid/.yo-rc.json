@@ -21,7 +21,7 @@
         "clientFramework": "angularX",
         "useSass": false,
         "clientPackageManager": "npm",
-        "testFrameworks": [],
+        "testFrameworks": ["gatling", "protractor"],
         "jhiPrefix": "jhi",
         "otherModules": [],
         "enableTranslation": false
