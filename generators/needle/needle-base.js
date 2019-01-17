@@ -25,9 +25,9 @@ module.exports = class {
         if (!message) {
             message = 'Content not added to file';
         }
-        this.generator.log(chalk.yellow('\nUnable to find ') +
-         fullPath +
-         chalk.yellow(` or missing required jhipster-needle. ${message}\n`));
+        this.generator.log(
+            chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(` or missing required jhipster-needle. ${message}\n`)
+        );
         this.generator.debug('Error:', exception);
     }
 
