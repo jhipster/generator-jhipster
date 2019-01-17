@@ -1,0 +1,86 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+import <%= packageName %>.security.AuthoritiesConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+@Order(1)
+@ConditionalOnProperty({"spring.security.user.name", "spring.security.user.password", "spring.security.user.roles"})
+@Configuration
+public class ManagementSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private final Logger log = LoggerFactory.getLogger(ManagementSecurityConfiguration.class);
+
+    private static final String MANAGEMENT_REALM_NAME = "management";
+
+    private final SecurityProperties securityProperties;
+
+    @Value("${management.endpoints.web.base-path:management}")
+    private String managementBasePath;
+
+    public ManagementSecurityConfiguration(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .antMatcher(managementBasePath + "/**")
+            .authorizeRequests()
+            .antMatchers(managementBasePath + "/health").permitAll()
+            .antMatchers(managementBasePath + "/info").permitAll()
+            .antMatchers(managementBasePath +"/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+        .and()
+            .httpBasic()
+            .realmName(MANAGEMENT_REALM_NAME)
+        .and()
+            .userDetailsService(managementUserDetailsService())
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().csrf().disable();
+    }
+
+    @Bean
+    public UserDetailsService managementUserDetailsService() {
+        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+        SecurityProperties.User user = securityProperties.getUser();
+        boolean isUserPasswordGenerated = user.isPasswordGenerated();
+        String[] userRoles = user.getRoles().toArray(new String[0]);
+        manager.createUser(User.builder()
+            .username(user.getName())
+            .password(user.getPassword())
+            .roles(userRoles).build());
+        log.info("Securing endpoints under {} with Basic Authentication", managementBasePath);
+        return manager;
+    }
+}

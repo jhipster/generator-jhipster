@@ -331,6 +331,10 @@ const serverFiles = {
                 {
                     file: 'package/security/package-info.java',
                     renameTo: generator => `${generator.javaDir}security/package-info.java`
+                },
+                {
+                    file: 'package/config/ManagementSecurityConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/ManagementSecurityConfiguration.java`
                 }
             ]
         },

@@ -235,6 +235,13 @@ spring:
             discovery:
                 enabled: true
 <%_ } _%>
+    # Set Basic Authentication credentials for accessing management endpoints
+    security:
+        user:
+            name: admin
+            # BCrypt encrypted "admin"
+            password: "$2a$10$irth1Grc1faFEXNFcmHFyeLYM4IkoIAhqxA5HGOl1a/0I1N4vKuqy"
+            roles: ADMIN
 
 server:
     port: <%= serverPort %>

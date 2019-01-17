@@ -36,6 +36,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
 import org.springframework.http.HttpMethod;
 <%_ } _%>
@@ -89,6 +90,7 @@ import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
+@Order(2)
 @Configuration
 <%_ if (authenticationType === 'oauth2') { _%>
     <%_ if (['monolith', 'gateway'].includes(applicationType)) { _%>
@@ -266,9 +268,11 @@ public class SecurityConfiguration extends <% if (authenticationType === 'oauth2
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()
             <%_ } _%>
+            .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)<% if (authenticationType === 'jwt') { %>
+            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
+            <% if (authenticationType === 'jwt') { %>
         .and()
             .apply(securityConfigurerAdapter())<% } %>;
 
@@ -318,6 +322,7 @@ import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
 import org.springframework.web.client.RestTemplate;
 
+@Order(2)
 @Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -355,10 +360,12 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
+
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
+            .antMatchers("/api/**").authenticated();
     }
 
     @Bean
