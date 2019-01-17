@@ -50,10 +50,7 @@ export class LoginService {
 
     <%_ if (authenticationType === 'oauth2') { _%>
     login() {
-        let port = (location.port ? ':' + location.port : '');
-        if (port === ':9000') {
-            port = ':<%= serverPort %>';
-        }
+        const port = (location.port ? ':' + location.port : '');
         location.href = '//' + location.hostname + port + location.pathname + 'login';
     }
     <%_ } else { _%>
