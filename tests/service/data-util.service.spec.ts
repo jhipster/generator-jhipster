@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { fakeAsync, flush, inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
 
 import { JhiDataUtils } from '../../src/service/data-util.service';
 
@@ -65,34 +65,7 @@ describe('Data Utils Service Test', () => {
         expect(tempLink.click).toHaveBeenCalledWith();
     }));
 
-    it('should execute the toBase64()', fakeAsync(() => inject([JhiDataUtils], (service: JhiDataUtils) => {
-
-        jest.spyOn(service, 'toBase64');
-
-        const eventSake = {
-            target: {
-                files: [new Blob()]
-            }
-        };
-        service.setFileData(eventSake, null, null, false);
-
-        flush();
-
-        expect(service.toBase64).toHaveBeenCalled();
-    })()));
-
-    it('should not call toBase64() when image is passed and file type is not image', (done) => inject([JhiDataUtils], (service: JhiDataUtils) => {
-
-        jest.spyOn(service, 'toBase64');
-        const mockSuccessCallback = jest.fn(() => {
-        });
-        const mockErrorCallback = jest.fn(() => {
-            expect(mockSuccessCallback.mock.calls.length).toBe(0);
-            expect(mockErrorCallback.mock.calls.length).toBe(1);
-            expect(mockErrorCallback.mock.calls[0][0]).toMatch(/^File was expected to be an image but was found to be /);
-            expect(service.toBase64).toHaveBeenCalledTimes(0);
-            done();
-        });
+    it('should return a promise that rejects with an error message when image is passed but file type is not image', inject([JhiDataUtils], (service: JhiDataUtils) => {
 
         const eventSake = {
             target: {
@@ -100,20 +73,15 @@ describe('Data Utils Service Test', () => {
             }
         };
 
-        service.setFileData(eventSake, null, null, true, mockSuccessCallback, mockErrorCallback);
+        service.setFileData(eventSake, null, null, true)
+               .then(
+                   () => fail('Should not resolve'),
+                   error => expect(error).toMatch(/^File was expected to be an image but was found to be /)
+               );
 
-    })());
+    }));
 
-    it('should execute the callback in toBase64()', (done) => inject([JhiDataUtils], (service: JhiDataUtils) => {
-        const entity = {};
-        const mockSuccessCallback = jest.fn((arg) => {
-            const modifiedEntity = { document: 'ZmlsZSBjb250ZW50', documentContentType: '' };
-            expect(mockSuccessCallback.mock.calls.length).toBe(1);
-            expect(mockSuccessCallback.mock.calls[0][0]).toEqual(modifiedEntity);
-            expect(arg).toEqual(modifiedEntity);
-            expect(entity).toEqual(modifiedEntity);
-            done();
-        });
+    it('should return a promise that resolves to the modified entity', inject([JhiDataUtils], (service: JhiDataUtils) => {
 
         const eventSake = {
             target: {
@@ -121,8 +89,9 @@ describe('Data Utils Service Test', () => {
             }
         };
 
-        service.setFileData(eventSake, entity, 'document', false, mockSuccessCallback);
+        service.setFileData(eventSake, {}, 'document', false)
+               .then(modifiedEntity => expect(modifiedEntity).toEqual({ document: 'ZmlsZSBjb250ZW50', documentContentType: '' }));
 
-    })());
+    }));
 
 });

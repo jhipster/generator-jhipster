@@ -125,31 +125,29 @@ export class JhiDataUtils {
 
     /**
      * Sets the base 64 data & file type of the 1st file on the event (event.target.files[0]) in the passed entity object
+     * and returns a promise.
      *
      * @param event the object containing the file (at event.target.files[0])
      * @param entity the object to set the file's 'base 64 data' and 'file type' on
      * @param field the field name to set the file's 'base 64 data' on
      * @param isImage boolean representing if the file represented by the event is an image
-     * @param onSuccess optional callback to be executed upon successful setting of data (modified entity object is passed to this callback)
-     * @param onError optional callback to be executed upon unsuccessful setting of data (error message is passed to this callback)
+     * @returns a promise that resolves to the modified entity if operation is successful, otherwise rejects with an error message
      */
-    setFileData(event, entity, field: string, isImage: boolean, onSuccess?: Function, onError?: Function) {
-        if (event && event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
-            if (isImage && !/^image\//.test(file.type)) {
-                if (onError) {
-                    onError(`File was expected to be an image but was found to be ${file.type}`);
+    setFileData(event, entity, field: string, isImage: boolean): Promise<any> {
+        return new Promise((resolve, reject) => {
+            if (event && event.target.files && event.target.files[0]) {
+                const file = event.target.files[0];
+                if (isImage && !/^image\//.test(file.type)) {
+                    reject(`File was expected to be an image but was found to be ${file.type}`);
+                } else {
+                    this.toBase64(file, (base64Data) => {
+                        entity[field] = base64Data;
+                        entity[`${field}ContentType`] = file.type;
+                        resolve(entity);
+                    });
                 }
-                return;
             }
-            this.toBase64(file, (base64Data) => {
-                entity[field] = base64Data;
-                entity[`${field}ContentType`] = file.type;
-                if (onSuccess) {
-                    onSuccess(entity);
-                }
-            });
-        }
+        });
     }
 
     /**
