@@ -81,9 +81,14 @@ describe('Data Utils Service Test', () => {
         expect(service.toBase64).toHaveBeenCalled();
     })()));
 
-    it('should skip the toBase64() when image is passed', inject([JhiDataUtils], (service: JhiDataUtils) => {
+    it('should not call toBase64() when image is passed and file type is not image', (done) => inject([JhiDataUtils], (service: JhiDataUtils) => {
 
         jest.spyOn(service, 'toBase64');
+        const mockCallback = jest.fn(() => {
+            expect(mockCallback.mock.calls.length).toBe(1);
+            expect(service.toBase64).toHaveBeenCalledTimes(0);
+            done();
+        });
 
         const eventSake = {
             target: {
@@ -91,10 +96,9 @@ describe('Data Utils Service Test', () => {
             }
         };
 
-        service.setFileData(eventSake, null, null, true);
+        service.setFileData(eventSake, null, null, true, mockCallback);
 
-        expect(service.toBase64).toHaveBeenCalledTimes(0);
-    }));
+    })());
 
     it('should execute the callback in toBase64()', (done) => inject([JhiDataUtils], (service: JhiDataUtils) => {
         const entity = {};
