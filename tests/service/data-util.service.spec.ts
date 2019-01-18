@@ -46,9 +46,9 @@ describe('Data Utils Service Test', () => {
     }));
 
     it('should download the csv file', inject([JhiDataUtils], (service: JhiDataUtils) => {
-            const tempLink = document.createElement('a');
-            jest.spyOn(tempLink, 'click');
-            jest.spyOn(document, 'createElement').mockReturnValue(tempLink);
+        const tempLink = document.createElement('a');
+        jest.spyOn(tempLink, 'click');
+        jest.spyOn(document, 'createElement').mockReturnValue(tempLink);
         // call downloadFile function
         // csv content:
         // ID,Name
@@ -59,19 +59,19 @@ describe('Data Utils Service Test', () => {
         service.downloadFile(contentType, data, fileName);
         expect(document.createElement).toHaveBeenCalledTimes(1);
         expect(document.createElement).toHaveBeenCalledWith('a');
-            expect(tempLink.target).toBe('_blank');
-            expect(tempLink.download).toBe('test-download-file.csv');
-            expect(tempLink.click).toHaveBeenCalledTimes(1);
-            expect(tempLink.click).toHaveBeenCalledWith();
+        expect(tempLink.target).toBe('_blank');
+        expect(tempLink.download).toBe('test-download-file.csv');
+        expect(tempLink.click).toHaveBeenCalledTimes(1);
+        expect(tempLink.click).toHaveBeenCalledWith();
     }));
 
     it('should execute the toBase64()', inject([JhiDataUtils], (service: JhiDataUtils) => {
 
-        spyOn(service, 'toBase64');
+        jest.spyOn(service, 'toBase64');
 
         const eventSake = {
             target: {
-                files: [{}]
+                files: [new Blob()]
             }
         };
 
@@ -84,7 +84,7 @@ describe('Data Utils Service Test', () => {
 
     it('should skip the toBase64() when image is passed', inject([JhiDataUtils], (service: JhiDataUtils) => {
 
-        spyOn(service, 'toBase64');
+        jest.spyOn(service, 'toBase64');
 
         const eventSake = {
             target: {
@@ -114,7 +114,8 @@ describe('Data Utils Service Test', () => {
             service.setFileData(eventSake, entity, field, false, callBack);
 
             setTimeout(() => {
-                expect(callBack).toHaveBeenCalled();
+                const modifiedEntity = { document: 'ZmlsZSBjb250ZW50', documentContentType: '' };
+                expect(callBack).toHaveBeenCalledWith(modifiedEntity);
                 expect(entity).toEqual({ document: 'ZmlsZSBjb250ZW50', documentContentType: '' });
             }, 500);
         })();
