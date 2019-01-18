@@ -9,6 +9,7 @@ import bButton from 'bootstrap-vue/es/components/button/button';
 import bNavbar from 'bootstrap-vue/es/components/navbar/navbar';
 import bNavbarNav from 'bootstrap-vue/es/components/navbar/navbar-nav';
 import bNavbarBrand from 'bootstrap-vue/es/components/navbar/navbar-brand';
+import bNavbarToggle from 'bootstrap-vue/es/components/navbar/navbar-toggle';
 import bNavItem from 'bootstrap-vue/es/components/nav/nav-item';
 import bNavItemDropdown from 'bootstrap-vue/es/components/nav/nav-item-dropdown';
 import bCollapse from 'bootstrap-vue/es/components/collapse/collapse';
@@ -31,6 +32,7 @@ export function initBootstrapVue(vue) {
     vue.component('b-navbar', bNavbar);
     vue.component('b-navbar-nav', bNavbarNav);
     vue.component('b-navbar-brand', bNavbarBrand);
+    vue.component('b-navbar-toggle', bNavbarToggle);
     vue.component('b-pagination', bPagination);
     vue.component('b-progress', bProgress);
     vue.component('b-progress-bar', bProgressBar);

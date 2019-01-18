@@ -1,17 +1,14 @@
 <template>
     <b-navbar toggleable="md" type="dark" class="jh-navbar">
         <div class="jh-logo-container float-left">
-            <!--a class="jh-navbar-toggler d-lg-none float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()"-->
-            <b-link class="jh-navbar-toggler d-lg-none float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" >
+            <b-navbar-toggle right class="jh-navbar-toggler d-lg-none float-right" href="javascript:void(0);"  data-toggle="collapse" target="header-tabs" aria-expanded="false" aria-label="Toggle navigation">
                 <font-awesome-icon icon="bars" />
-            </b-link>
-            <!--a class="navbar-brand logo float-left" routerLink="/" (click)="collapseNavbar()"-->
+            </b-navbar-toggle>
             <b-navbar-brand class="logo float-left" b-link to="/">
                 <span class="logo-img"></span>
                 <span v-text="$t('global.title')" class="navbar-title">jhipster</span> <span class="navbar-version">{{version}}</span>
             </b-navbar-brand>
         </div>
-        <!--<div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed">-->
         <b-collapse is-nav id="header-tabs">
             <b-navbar-nav class="ml-auto">
                 <b-nav-item to="/" exact>
@@ -212,13 +209,20 @@
   color: #fff;
 }
 
+
 @media screen and (min-width: 768px) {
   .jh-navbar-toggler {
     display: none;
   }
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (min-width: 768px) and (max-width: 1150px) {
+  span span{
+    display:none;
+  }
+} 
+
+@media screen and (max-width: 767px) {
   .jh-logo-container {
     width: 100%;
   }
