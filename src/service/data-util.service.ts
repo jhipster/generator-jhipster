@@ -128,10 +128,10 @@ export class JhiDataUtils {
      *
      * @param event the object containing the file (at event.target.files[0])
      * @param entity the object to set the file's 'base 64 data' and 'file type' on
-     * @param {string} field the field name to set the file's 'base 64 data' on
-     * @param {boolean} isImage boolean representing if the file represented by the event is an image
-     * @param {Function} onSuccess optional callback to be executed upon successful setting of data (modified entity object is passed to this callback)
-     * @param {Function} onError optional callback to be executed upon unsuccessful setting of data (error message is passed to this callback)
+     * @param field the field name to set the file's 'base 64 data' on
+     * @param isImage boolean representing if the file represented by the event is an image
+     * @param onSuccess optional callback to be executed upon successful setting of data (modified entity object is passed to this callback)
+     * @param onError optional callback to be executed upon unsuccessful setting of data (error message is passed to this callback)
      */
     setFileData(event, entity, field: string, isImage: boolean, onSuccess?: Function, onError?: Function) {
         if (event && event.target.files && event.target.files[0]) {
