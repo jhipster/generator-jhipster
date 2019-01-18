@@ -63,7 +63,7 @@ env:
     - JHI_APP=ms-ngx-gateway-eureka JHI_ENTITY=sql
     - JHI_APP=ms-micro-eureka JHI_ENTITY=micro
     - JHI_APP=ngx-mongodb-kafka-cucumber JHI_ENTITY=mongodb
-    
+
 #----------------------------------------------------------------------
 # Install all tools and check configuration
 #----------------------------------------------------------------------
