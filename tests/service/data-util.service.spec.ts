@@ -84,8 +84,11 @@ describe('Data Utils Service Test', () => {
     it('should not call toBase64() when image is passed and file type is not image', (done) => inject([JhiDataUtils], (service: JhiDataUtils) => {
 
         jest.spyOn(service, 'toBase64');
-        const mockCallback = jest.fn(() => {
-            expect(mockCallback.mock.calls.length).toBe(1);
+        const mockSuccessCallback = jest.fn(() => {
+        });
+        const mockErrorCallback = jest.fn(() => {
+            expect(mockSuccessCallback.mock.calls.length).toBe(0);
+            expect(mockErrorCallback.mock.calls.length).toBe(1);
             expect(service.toBase64).toHaveBeenCalledTimes(0);
             done();
         });
@@ -96,16 +99,16 @@ describe('Data Utils Service Test', () => {
             }
         };
 
-        service.setFileData(eventSake, null, null, true, mockCallback);
+        service.setFileData(eventSake, null, null, true, mockSuccessCallback, mockErrorCallback);
 
     })());
 
     it('should execute the callback in toBase64()', (done) => inject([JhiDataUtils], (service: JhiDataUtils) => {
         const entity = {};
-        const mockCallback = jest.fn((arg) => {
+        const mockSuccessCallback = jest.fn((arg) => {
             const modifiedEntity = { document: 'ZmlsZSBjb250ZW50', documentContentType: '' };
-            expect(mockCallback.mock.calls.length).toBe(1);
-            expect(mockCallback.mock.calls[0][0]).toEqual(modifiedEntity);
+            expect(mockSuccessCallback.mock.calls.length).toBe(1);
+            expect(mockSuccessCallback.mock.calls[0][0]).toEqual(modifiedEntity);
             expect(arg).toEqual(modifiedEntity);
             expect(entity).toEqual(modifiedEntity);
             done();
@@ -117,7 +120,7 @@ describe('Data Utils Service Test', () => {
             }
         };
 
-        service.setFileData(eventSake, entity, 'document', false, mockCallback);
+        service.setFileData(eventSake, entity, 'document', false, mockSuccessCallback);
 
     })());
 

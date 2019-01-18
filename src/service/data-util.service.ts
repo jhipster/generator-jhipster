@@ -123,20 +123,20 @@ export class JhiDataUtils {
         return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
     }
 
-    setFileData(event, entity, field: string, isImage: boolean, cb?: Function) {
+    setFileData(event, entity, field: string, isImage: boolean, onSuccess?: Function, onError?: Function) {
         if (event && event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
             if (isImage && !/^image\//.test(file.type)) {
-                if (cb) {
-                    cb(entity);
+                if (onError) {
+                    onError();
                 }
                 return;
             }
             this.toBase64(file, (base64Data) => {
                 entity[field] = base64Data;
                 entity[`${field}ContentType`] = file.type;
-                if (cb) {
-                    cb(entity);
+                if (onSuccess) {
+                    onSuccess(entity);
                 }
             });
         }
