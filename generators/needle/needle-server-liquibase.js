@@ -16,7 +16,7 @@ module.exports = class extends needleServer {
     addChangelogToMaster(changelogName, needle) {
         const errorMessage = `${chalk.yellow('Reference to ') + changelogName}.xml ${chalk.yellow('not added.\n')}`;
         const fullPath = `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`;
-        const content = `<include file="config/liquibase/changelog/${changelogName}.xml"relativeToChangelogFile="false"/>`;
+        const content = `<include file="config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`;
 
         const rewriteFileModel = this.generateFileModel(fullPath, needle, content);
 
