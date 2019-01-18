@@ -102,9 +102,11 @@ describe('Data Utils Service Test', () => {
 
     it('should execute the callback in toBase64()', (done) => inject([JhiDataUtils], (service: JhiDataUtils) => {
         const entity = {};
-        const mockCallback = jest.fn(() => {
+        const mockCallback = jest.fn((arg) => {
             const modifiedEntity = { document: 'ZmlsZSBjb250ZW50', documentContentType: '' };
             expect(mockCallback.mock.calls.length).toBe(1);
+            expect(mockCallback.mock.calls[0][0]).toEqual(modifiedEntity);
+            expect(arg).toEqual(modifiedEntity);
             expect(entity).toEqual(modifiedEntity);
             done();
         });

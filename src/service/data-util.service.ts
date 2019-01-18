@@ -128,7 +128,7 @@ export class JhiDataUtils {
             const file = event.target.files[0];
             if (isImage && !/^image\//.test(file.type)) {
                 if (cb) {
-                    cb();
+                    cb(entity);
                 }
                 return;
             }
@@ -136,7 +136,7 @@ export class JhiDataUtils {
                 entity[field] = base64Data;
                 entity[`${field}ContentType`] = file.type;
                 if (cb) {
-                    cb();
+                    cb(entity);
                 }
             });
         }
