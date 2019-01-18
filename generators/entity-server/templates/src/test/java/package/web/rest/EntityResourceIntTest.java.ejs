@@ -529,18 +529,46 @@ _%>
     @Test
     @Transactional
     public void update<%= entityClass %>MapsIdAssociationWithNewId() throws Exception {
+        // Initialize the database
+<%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
+        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>);
+<%_ } else { _%>
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>);
+<%_ } _%>
+        <%_ const alreadyGeneratedEntities = []; _%>
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll().size();
 
-        // Create the <%= entityClass %> with an existing ID
-        <%= asEntity(entityInstance) %>.setId(9999999999L);
+        <%_ for (idx in relationships) {
+            const relationshipValidate = relationships[idx].relationshipValidate;
+            const otherEntityName = relationships[idx].otherEntityName;
+            const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+            const mapsIdUse = relationships[idx].useJPADerivedIdentifier;
+            if (mapsIdUse === true) { _%>
+        // Add a new parent entity
+                <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
+        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
+        em.persist(<%= otherEntityName %>);
+        em.flush();
+                <%_ } _%>
+        <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
+        <%_ } break; } _%>
+
+        // Load the <%= entityInstance %>
+        <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId()).get();<% if (databaseType === 'sql') { %>
+        // Disconnect from session so that the updates on updated<%= asEntity(entityClass) %> are not directly saved in db
+        em.detach(updated<%= asEntity(entityClass) %>);<% } %>
+
+        // Update the <%= mapsIdEntity %> with new association value
+        updated<%= asEntity(entityClass) %>.set<%= mapsIdEntity %>(<%= alreadyGeneratedEntities.pop() %>);
         <%_ if (dto === 'mapstruct') { _%>
-        <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
+        <%= asDto(entityClass) %> updated<%= asDto(entityClass) %> = <%= entityInstance %>Mapper.toDto(updated<%= asEntity(entityClass) %>);
         <%_ } _%>
 
         // Update the entity
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%_ if (dto === 'mapstruct') { _%>updated<%= asDto(entityClass) %> <%_ } else { _%> updated<%= asEntity(entityClass) %> <%_ } _%>)))
+        	.andDo(org.springframework.test.web.servlet.result.MockMvcResultHandlers.print())
             .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
