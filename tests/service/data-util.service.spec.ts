@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { TestBed, inject } from '@angular/core/testing';
+import { fakeAsync, flush, inject, TestBed } from '@angular/core/testing';
 
 import { JhiDataUtils } from '../../src/service/data-util.service';
 
@@ -65,7 +65,7 @@ describe('Data Utils Service Test', () => {
         expect(tempLink.click).toHaveBeenCalledWith();
     }));
 
-    it('should execute the toBase64()', inject([JhiDataUtils], (service: JhiDataUtils) => {
+    it('should execute the toBase64()', fakeAsync(() => inject([JhiDataUtils], (service: JhiDataUtils) => {
 
         jest.spyOn(service, 'toBase64');
 
@@ -74,13 +74,12 @@ describe('Data Utils Service Test', () => {
                 files: [new Blob()]
             }
         };
-
         service.setFileData(eventSake, null, null, false);
 
-        setTimeout(() => {
-            expect(service.toBase64).toHaveBeenCalled();
-        }, 500);
-    }));
+        flush();
+
+        expect(service.toBase64).toHaveBeenCalled();
+    })()));
 
     it('should skip the toBase64() when image is passed', inject([JhiDataUtils], (service: JhiDataUtils) => {
 
@@ -97,28 +96,23 @@ describe('Data Utils Service Test', () => {
         expect(service.toBase64).toHaveBeenCalledTimes(0);
     }));
 
-    it('should execute the callback in toBase64()', function(done) {
-        inject([JhiDataUtils], (service: JhiDataUtils) => {
-            const callBack: Spy = jasmine.createSpy();
-            callBack.and.callFake(() => done());
+    it('should execute the callback in toBase64()', (done) => inject([JhiDataUtils], (service: JhiDataUtils) => {
+        const entity = {};
+        const mockCallback = jest.fn(() => {
+            const modifiedEntity = { document: 'ZmlsZSBjb250ZW50', documentContentType: '' };
+            expect(mockCallback.mock.calls.length).toBe(1);
+            expect(entity).toEqual(modifiedEntity);
+            done();
+        });
 
-            const file = new File(['file content'], 'test-file.txt');
-            const eventSake = {
-                target: {
-                    files: [file]
-                }
-            };
+        const eventSake = {
+            target: {
+                files: [new File(['file content'], 'test-file.txt')]
+            }
+        };
 
-            const entity = {};
-            const field = 'document';
-            service.setFileData(eventSake, entity, field, false, callBack);
+        service.setFileData(eventSake, entity, 'document', false, mockCallback);
 
-            setTimeout(() => {
-                const modifiedEntity = { document: 'ZmlsZSBjb250ZW50', documentContentType: '' };
-                expect(callBack).toHaveBeenCalledWith(modifiedEntity);
-                expect(entity).toEqual({ document: 'ZmlsZSBjb250ZW50', documentContentType: '' });
-            }, 500);
-        })();
-    });
+    })());
 
 });
