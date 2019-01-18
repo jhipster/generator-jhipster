@@ -89,6 +89,7 @@ describe('Data Utils Service Test', () => {
         const mockErrorCallback = jest.fn(() => {
             expect(mockSuccessCallback.mock.calls.length).toBe(0);
             expect(mockErrorCallback.mock.calls.length).toBe(1);
+            expect(mockErrorCallback.mock.calls[0][0]).toMatch(/^File was expected to be an image but was found to be /);
             expect(service.toBase64).toHaveBeenCalledTimes(0);
             done();
         });

@@ -130,15 +130,15 @@ export class JhiDataUtils {
      * @param entity the object to set the file's 'base 64 data' and 'file type' on
      * @param {string} field the field name to set the file's 'base 64 data' on
      * @param {boolean} isImage boolean representing if the file represented by the event is an image
-     * @param {Function} onSuccess optional callback to be executed upon successful setting of data
-     * @param {Function} onError optional callback to be executed upon unsuccessful setting of data
+     * @param {Function} onSuccess optional callback to be executed upon successful setting of data (modified entity object is passed to this callback)
+     * @param {Function} onError optional callback to be executed upon unsuccessful setting of data (error message is passed to this callback)
      */
     setFileData(event, entity, field: string, isImage: boolean, onSuccess?: Function, onError?: Function) {
         if (event && event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
             if (isImage && !/^image\//.test(file.type)) {
                 if (onError) {
-                    onError();
+                    onError(`File was expected to be an image but was found to be ${file.type}`);
                 }
                 return;
             }
