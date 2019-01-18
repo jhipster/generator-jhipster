@@ -95,6 +95,8 @@
                 columnType="datetime";
             } else if (fieldType === 'ZonedDateTime') {
                 columnType="datetime";
+            } else if (fieldType === 'Duration') {
+                columnType="bigint";
             } else if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
                 if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql' || prodDatabaseType === 'mariadb') {
                     columnType="longblob";
