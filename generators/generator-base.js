@@ -95,29 +95,7 @@ module.exports = class extends PrivateBase {
      * @param {string} comment - comment to add before resources content.
      */
     addExternalResourcesToRoot(resources, comment) {
-        const indexFilePath = `${CLIENT_MAIN_SRC_DIR}index.html`;
-        let resourcesBlock = '';
-        if (comment) {
-            resourcesBlock += `<!-- ${comment} -->\n`;
-        }
-        resourcesBlock += `${resources}\n`;
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: indexFilePath,
-                    needle: 'jhipster-needle-add-resources-to-root',
-                    splicable: [resourcesBlock]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    indexFilePath +
-                    chalk.yellow(' or missing required jhipster-needle. Resources are not added to JHipster app.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleApi.base.addExternalResourcesToRoot(resources, comment);
     }
 
     /**
