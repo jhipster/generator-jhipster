@@ -76,7 +76,7 @@ describe('Data Utils Service Test', () => {
         service.setFileData(eventSake, null, null, true)
                .then(
                    () => fail('Should not resolve'),
-                   error => expect(error).toMatch(/^File was expected to be an image but was found to be /)
+                   (error) => expect(error).toMatch(/^File was expected to be an image but was found to be /)
                );
 
     }));
@@ -90,7 +90,7 @@ describe('Data Utils Service Test', () => {
         };
 
         service.setFileData(eventSake, {}, 'document', false)
-               .then(modifiedEntity => expect(modifiedEntity).toEqual({ document: 'ZmlsZSBjb250ZW50', documentContentType: '' }));
+               .then((modifiedEntity) => expect(modifiedEntity).toEqual({ document: 'ZmlsZSBjb250ZW50', documentContentType: '' }));
 
     }));
 
