@@ -31,14 +31,7 @@ const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
-const NeedleBase = require('./needle/needle-base');
-const NeedleClientAngular = require('./needle/needle-client-angular');
-const NeedleClientReact = require('./needle/needle-client-react');
-const NeedleClientWebpack = require('./needle/needle-client-webpack');
-const NeedleClientI18n = require('./needle/needle-client-i18n');
-const NeedleServerMaven = require('./needle/needle-server-maven');
-const NeedleServerCache = require('./needle/needle-server-cache');
-const NeedleServerLiquibase = require('./needle/needle-server-liquibase');
+const NeedleApi = require('./internal/needle-api/index');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -57,14 +50,7 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 module.exports = class extends PrivateBase {
     constructor(args, opts) {
         super(args, opts);
-        this.needleBase = new NeedleBase(this);
-        this.needleServerMaven = new NeedleServerMaven(this);
-        this.needleClientAngular = new NeedleClientAngular(this);
-        this.needleClientReact = new NeedleClientReact(this);
-        this.needleClientWebpack = new NeedleClientWebpack(this);
-        this.needleClientI18n = new NeedleClientI18n(this);
-        this.needleServerCache = new NeedleServerCache(this);
-        this.needleServerLiquibase = new NeedleServerLiquibase(this);
+        this.needleApi = new NeedleApi(this);
     }
 
     /**
@@ -206,7 +192,7 @@ module.exports = class extends PrivateBase {
      * @param {string} microserviceName - The name of the microservice to put into the url
      */
     addEntityToWebpack(microserviceName) {
-        this.needleClientWebpack.addEntity(microserviceName);
+        this.needleApi.clientWebpack.addEntity(microserviceName);
     }
 
     /**
@@ -401,7 +387,14 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework.
      */
     addAdminToModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
-        this.needleClientAngular.addToAdminModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework);
+        this.needleApi.clientAngular.addToAdminModule(
+            appName,
+            adminAngularName,
+            adminFolderName,
+            adminFileName,
+            enableTranslation,
+            clientFramework
+        );
     }
 
     /**
@@ -412,7 +405,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addElementTranslationKey(key, value, language) {
-        this.needleClientI18n.addElementTranslationKey(key, value, language);
+        this.needleApi.clientI18n.addElementTranslationKey(key, value, language);
     }
 
     /**
@@ -423,7 +416,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addAdminElementTranslationKey(key, value, language) {
-        this.needleClientI18n.addAdminElementTranslationKey(key, value, language);
+        this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language);
     }
 
     /**
@@ -434,7 +427,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addEntityTranslationKey(key, value, language) {
-        this.needleClientI18n.addEntityTranslationKey(key, value, language);
+        this.needleApi.clientI18n.addEntityTranslationKey(key, value, language);
     }
 
     /**
@@ -652,7 +645,7 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework.
      */
     addAngularModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
-        this.needleClientAngular.addModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework);
+        this.needleApi.clientAngular.addModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework);
     }
 
     /**
@@ -714,7 +707,7 @@ module.exports = class extends PrivateBase {
      * @param {string} cacheProvider - the cache provider
      */
     addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider) {
-        this.needleServerCache.addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider);
+        this.needleApi.serverCache.addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider);
     }
 
     /**
@@ -725,7 +718,7 @@ module.exports = class extends PrivateBase {
      * @param {string} cacheProvider - the cache provider
      */
     addEntryToCache(entry, packageFolder, cacheProvider) {
-        this.needleServerCache.addEntryToCache(entry, packageFolder, cacheProvider);
+        this.needleApi.serverCache.addEntryToCache(entry, packageFolder, cacheProvider);
     }
 
     /**
@@ -734,7 +727,7 @@ module.exports = class extends PrivateBase {
      * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
      */
     addChangelogToLiquibase(changelogName) {
-        this.needleServerLiquibase.addChangelog(changelogName);
+        this.needleApi.serverLiquibase.addChangelog(changelogName);
     }
 
     /**
@@ -743,7 +736,7 @@ module.exports = class extends PrivateBase {
      * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
      */
     addConstraintsChangelogToLiquibase(changelogName) {
-        this.needleServerLiquibase.addConstraintsChangelog(changelogName);
+        this.needleApi.serverLiquibase.addConstraintsChangelog(changelogName);
     }
 
     /**
@@ -753,7 +746,7 @@ module.exports = class extends PrivateBase {
      * @param {string} needle - The needle at where it has to be added.
      */
     addLiquibaseChangelogToMaster(changelogName, needle) {
-        this.needleServerLiquibase.addChangelogToMaster(changelogName, needle);
+        this.needleApi.serverLiquibase.addChangelogToMaster(changelogName, needle);
     }
 
     /**
@@ -763,7 +756,7 @@ module.exports = class extends PrivateBase {
      * @param {string} content - The content to be added as column, can have multiple columns as well
      */
     addColumnToLiquibaseEntityChangeset(filePath, content) {
-        this.needleServerLiquibase.addColumnToEntityChangeset(filePath, content);
+        this.needleApi.serverLiquibase.addColumnToEntityChangeset(filePath, content);
     }
 
     /**
@@ -773,7 +766,7 @@ module.exports = class extends PrivateBase {
      * @param {string} content - The content to be added as changeset
      */
     addChangesetToLiquibaseEntityChangelog(filePath, content) {
-        this.needleServerLiquibase.addChangesetToEntityChangelog(filePath, content);
+        this.needleApi.serverLiquibase.addChangesetToEntityChangelog(filePath, content);
     }
 
     /**
@@ -802,9 +795,9 @@ module.exports = class extends PrivateBase {
         }
 
         if (this.useSass) {
-            this.needleClientAngular.addGlobalSCSSStyle(style, comment);
+            this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
         } else {
-            this.needleClientAngular.addGlobalCSSStyle(style, comment);
+            this.needleApi.clientAngular.addGlobalCSSStyle(style, comment);
         }
     }
 
@@ -834,7 +827,7 @@ module.exports = class extends PrivateBase {
             return;
         }
 
-        this.needleClientAngular.addVendorSCSSStyle(style, comment);
+        this.needleApi.clientAngular.addVendorSCSSStyle(style, comment);
     }
 
     /**
@@ -863,9 +856,9 @@ module.exports = class extends PrivateBase {
         }
 
         if (this.useSass) {
-            this.needleClientReact.addAppSCSSStyle(style, comment);
+            this.needleApi.clientReact.addAppSCSSStyle(style, comment);
         } else {
-            this.needleClientReact.addAppCSSStyle(style, comment);
+            this.needleApi.clientReact.addAppCSSStyle(style, comment);
         }
     }
 
@@ -876,7 +869,7 @@ module.exports = class extends PrivateBase {
      * @param {string} targetFolder - third-party library resources destination path
      */
     copyExternalAssetsInWebpack(sourceFolder, targetFolder) {
-        this.needleClientWebpack.copyExternalAssets(sourceFolder, targetFolder);
+        this.needleApi.clientWebpack.copyExternalAssets(sourceFolder, targetFolder);
     }
 
     /**
@@ -890,7 +883,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - (optional) explicit other thing:  exclusions...
      */
     addMavenDependencyManagement(groupId, artifactId, version, type, scope, other) {
-        this.needleServerMaven.addDependencyManagement(groupId, artifactId, version, type, scope, other);
+        this.needleApi.serverMaven.addDependencyManagement(groupId, artifactId, version, type, scope, other);
     }
 
     /**
@@ -900,7 +893,7 @@ module.exports = class extends PrivateBase {
      * @param {string} url - url of the repository
      */
     addMavenRepository(id, url) {
-        this.needleServerMaven.addRepository(id, url);
+        this.needleApi.serverMaven.addRepository(id, url);
     }
 
     /**
@@ -910,7 +903,7 @@ module.exports = class extends PrivateBase {
      * @param {string} url - url of the repository
      */
     addMavenPluginRepository(id, url) {
-        this.needleServerMaven.addPluginRepository(id, url);
+        this.needleApi.serverMaven.addPluginRepository(id, url);
     }
 
     /**
@@ -920,7 +913,7 @@ module.exports = class extends PrivateBase {
      * @param {string} url - url of the repository
      */
     addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
-        this.needleServerMaven.addDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl);
+        this.needleApi.serverMaven.addDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl);
     }
 
     /**
@@ -930,7 +923,7 @@ module.exports = class extends PrivateBase {
      * @param {string} value - property value
      */
     addMavenProperty(name, value) {
-        this.needleServerMaven.addProperty(name, value);
+        this.needleApi.serverMaven.addProperty(name, value);
     }
 
     /**
@@ -955,7 +948,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - (optional) explicit other thing: scope, exclusions...
      */
     addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
-        this.needleServerMaven.addDependencyInDirectory(directory, groupId, artifactId, version, other);
+        this.needleApi.serverMaven.addDependencyInDirectory(directory, groupId, artifactId, version, other);
     }
 
     /**
@@ -967,7 +960,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - explicit other thing: executions, configuration...
      */
     addMavenPlugin(groupId, artifactId, version, other) {
-        this.needleServerMaven.addPlugin(groupId, artifactId, version, other);
+        this.needleApi.serverMaven.addPlugin(groupId, artifactId, version, other);
     }
 
     /**
@@ -977,7 +970,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - explicit other thing: build, dependencies...
      */
     addMavenProfile(profileId, other) {
-        this.needleServerMaven.addProfile(profileId, other);
+        this.needleApi.serverMaven.addProfile(profileId, other);
     }
 
     /**
@@ -1374,8 +1367,8 @@ module.exports = class extends PrivateBase {
      * @param {string} content - content to be written
      */
     rewriteFile(filePath, needle, content) {
-        const rewriteFileModel = this.needleBase.generateFileModel(filePath, needle, content);
-        this.needleBase.addBlockContentToFile(rewriteFileModel);
+        const rewriteFileModel = this.needleApi.base.generateFileModel(filePath, needle, content);
+        this.needleApi.base.addBlockContentToFile(rewriteFileModel);
     }
 
     /**

@@ -1,5 +1,5 @@
 const chalk = require('chalk');
-const jhipsterUtils = require('../utils');
+const jhipsterUtils = require('../../utils');
 
 module.exports = class {
     constructor(generator) {
