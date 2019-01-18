@@ -123,6 +123,16 @@ export class JhiDataUtils {
         return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
     }
 
+    /**
+     * Sets the base 64 data & file type of the 1st file on the event (event.target.files[0]) in the passed entity object
+     *
+     * @param event the object containing the file (at event.target.files[0])
+     * @param entity the object to set the file's 'base 64 data' and 'file type' on
+     * @param {string} field the field name to set the file's 'base 64 data' on
+     * @param {boolean} isImage boolean representing if the file represented by the event is an image
+     * @param {Function} onSuccess optional callback to be executed upon successful setting of data
+     * @param {Function} onError optional callback to be executed upon unsuccessful setting of data
+     */
     setFileData(event, entity, field: string, isImage: boolean, onSuccess?: Function, onError?: Function) {
         if (event && event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
