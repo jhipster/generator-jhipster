@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const _ = require('lodash');
 const needleClientBase = require('./needle-client');
 const constants = require('../../generator-constants');
 
@@ -108,5 +109,21 @@ module.exports = class extends needleClientBase {
 
     _generateRewriteFileModelAddModule(appName, angularName, modulePath, needle) {
         return this.generateFileModel(modulePath, needle, this.stripMargin(`|${appName}${angularName}Module,`));
+    }
+
+    addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu) {
+        const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
+        const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
+        const entityEntry =
+            // prettier-ignore
+            this.stripMargin(`|<li>
+                             |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                             |                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
+                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
+                             |                        </a>
+                             |                    </li>`);
+        const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 };

@@ -203,51 +203,10 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      */
     addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
-        let entityMenuPath;
-        try {
-            if (this.clientFramework === 'angularX') {
-                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: entityMenuPath,
-                        needle: 'jhipster-needle-add-entity-to-menu',
-                        splicable: [
-                            // prettier-ignore
-                            this.stripMargin(`|<li>
-                             |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>
-                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
-                             |                        </a>
-                             |                    </li>`)
-                        ]
-                    },
-                    this
-                );
-            } else if (this.clientFramework === 'react') {
-                // React
-                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/entities.tsx`;
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: entityMenuPath,
-                        needle: 'jhipster-needle-add-entity-to-menu',
-                        splicable: [
-                            // prettier-ignore
-                            this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
-                        |      <FontAwesomeIcon icon="asterisk" fixedWidth />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
-                        |    </DropdownItem>`)
-                        ]
-                    },
-                    this
-                );
-            }
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    entityMenuPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    routerName} ${chalk.yellow('not added to menu.\n')}`
-            );
-            this.debug('Error:', e);
+        if (this.clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+        } else if (this.clientFramework === 'react') {
+            this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
         }
     }
 
