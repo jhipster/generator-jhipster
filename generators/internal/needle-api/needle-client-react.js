@@ -22,7 +22,7 @@ module.exports = class extends needleClientBase {
         const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/entities.tsx`;
         const entityEntry =
             // prettier-ignore
-            this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
+            this.generator.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
                     |      <FontAwesomeIcon icon="asterisk" fixedWidth />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
                     |    </DropdownItem>`);
         const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
