@@ -1,6 +1,6 @@
 const chalk = require('chalk');
 
-const needleClient = require('./needle-client-base');
+const needleClient = require('./needle-client');
 const constants = require('../../generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;

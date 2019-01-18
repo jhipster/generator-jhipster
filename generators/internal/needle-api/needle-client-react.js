@@ -1,4 +1,4 @@
-const needleClientBase = require('./needle-client-base');
+const needleClientBase = require('./needle-client');
 const constants = require('../../generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
