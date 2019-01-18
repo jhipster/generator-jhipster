@@ -80,37 +80,11 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      */
     addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
-        let navbarPath;
-        try {
-            if (clientFramework === 'angularX') {
-                navbarPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: navbarPath,
-                        needle: 'jhipster-needle-add-element-to-menu',
-                        // prettier-ignore
-                        splicable: [`<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                                <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
-                                    <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
-                                    <span${enableTranslation ? ` jhiTranslate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
-                                </a>
-                            </li>`
-                    ]
-                    },
-                    this
-                );
-            } else {
-                // React
-                // TODO:
-            }
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    navbarPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    routerName} ${chalk.yellow('not added to menu.\n')}`
-            );
-            this.debug('Error:', e);
+        if (clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addElementToMenu(routerName, glyphiconName, enableTranslation);
+        } else if (clientFramework === 'react') {
+            // React
+            // TODO:
         }
     }
 
@@ -155,34 +129,11 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      */
     addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
-        let navbarAdminPath;
-        try {
-            if (clientFramework === 'angularX') {
-                navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: navbarAdminPath,
-                        needle: 'jhipster-needle-add-element-to-admin-menu',
-                        // prettier-ignore
-                        splicable: [`<li>
-                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
-                            <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
-                        </a>
-                    </li>`
-                    ]
-                    },
-                    this
-                );
-            }
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    navbarAdminPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    routerName} ${chalk.yellow('not added to admin menu.\n')}`
-            );
-            this.debug('Error:', e);
+        if (clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addElementToAdminMenu(routerName, glyphiconName, enableTranslation);
+        } else if (clientFramework === 'react') {
+            // React
+            // TODO:
         }
     }
 
