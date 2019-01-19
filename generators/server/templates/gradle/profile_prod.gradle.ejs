@@ -37,6 +37,10 @@ if (project.hasProperty('swagger')) {
     profiles += ',swagger'
 }
 
+springBoot {
+    buildInfo()
+}
+
 bootRun {
     args = []
 }
