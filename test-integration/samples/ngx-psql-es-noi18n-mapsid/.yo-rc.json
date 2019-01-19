@@ -19,10 +19,11 @@
         "enableSwaggerCodegen": false,
         "jwtSecretKey": "NDA4MWUyZjMzNDFmYWIxZGRlZTRkZDkzNDJiODM2MTQ4YTE4NTMxMTdhZmFlODg4NTNjYWM4MzZmMmYxN2M0OTUyYzllYjI3NDY4YWM2M2RmN2UyZTExNzA5MDQ5ZDVhN2QzNjNkMzQxZGQwOWZkZGVkYzlkMzU1NzA4MmU3Zjc=",
         "clientFramework": "angularX",
-        "useSass": false,
+        "useSass": true,
         "clientPackageManager": "npm",
         "testFrameworks": ["gatling", "protractor"],
         "jhiPrefix": "jhi",
+        "travis": true,
         "otherModules": [],
         "enableTranslation": false
     }
