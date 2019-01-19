@@ -310,6 +310,7 @@ const files = {
                 { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
                 { file: 'shared/error/error-boundary.tsx', method: 'processJsx' },
                 { file: 'shared/error/error-boundary-route.tsx', method: 'processJsx' },
+                { file: 'shared/error/page-not-found.tsx', method: 'processJsx' },
                 // model
                 'shared/model/user.model.ts'
             ]
