@@ -111,6 +111,8 @@ export function initVueXStore(vue) {
       logon: false,
       userIdentity: null,
       authenticated: false,
+      ribbonOnProfiles: '',
+      activeProfiles: '',
       <%_ if (enableTranslation) { _%>
       currentLanguage: '<%= nativeLanguage %>',
       languages: {
@@ -153,6 +155,12 @@ export function initVueXStore(vue) {
         state.userIdentity = null;
         state.authenticated = false;
         state.logon = false;
+      },
+      setActiveProfiles(state, profile) {
+        state.activeProfiles = profile;
+      },
+      setRibbonOnProfiles(state, ribbon) {
+        state.ribbonOnProfiles = ribbon;
       }
     },
     getters: {
@@ -166,7 +174,9 @@ export function initVueXStore(vue) {
       <%_ } _%>
       logon: state => state.logon,
       account: state => state.userIdentity,
-      authenticated: state => state.authenticated
+      authenticated: state => state.authenticated,
+      activeProfiles: state => state.activeProfiles,
+      ribbonOnProfiles: state => state.ribbonOnProfiles
     }
   });
 }

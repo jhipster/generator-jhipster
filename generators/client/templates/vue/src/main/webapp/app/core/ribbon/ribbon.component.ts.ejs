@@ -1,15 +1,9 @@
-import axios from 'axios';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Ribbon extends Vue {
-  public ribbonEnv: string = null;
 
-  public created(): void {
-    axios.get('management/info').then((res) => {
-      if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf(res.data['display-ribbon-on-profiles']) > -1) {
-        this.ribbonEnv = res.data['display-ribbon-on-profiles'];
-      }
-    });
+  public get ribbonEnv() : string {
+    return this.$store.getters.ribbonOnProfiles;
   }
 };

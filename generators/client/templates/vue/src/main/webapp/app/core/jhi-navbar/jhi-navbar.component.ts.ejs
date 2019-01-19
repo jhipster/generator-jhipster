@@ -9,8 +9,6 @@ export default class JhiNavbar extends Vue {
   @Inject('loginModalService') private loginModalService: () => LoginModalService;
   @Inject('principal') private principal: () => Principal;
   public version = VERSION ? 'v' + VERSION : '';
-  public swaggerEnabled = false;
-  public inProduction = false;
   public isNavbarCollapsed = true;
   private currentLanguage = this.$store.getters.currentLanguage;
   private languages: any = this.$store.getters.languages;
@@ -19,14 +17,6 @@ export default class JhiNavbar extends Vue {
     <%_ if (enableTranslation) { _%>
     this.principal().refreshTranslation(this.currentLanguage);
     <%_ } _%>
-    axios.get('management/info').then((res) => {
-      if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf('swagger') > -1) {
-        this.swaggerEnabled = true;
-      }
-      if (res.data && res.data.activeProfiles && res.data.activeProfiles.indexOf('prod') > -1) {
-        this.inProduction = true;
-      }
-    });
   }
 
   public subIsActive(input) {
@@ -73,5 +63,13 @@ export default class JhiNavbar extends Vue {
 
   public hasAnyAuthority(authorities: any): boolean {
     return this.principal().hasAnyAuthority(authorities);
+  }
+
+  public get swaggerEnabled() : boolean {
+    return (this.$store.getters.activeProfiles.indexOf('swagger') > -1);
+  }
+
+  public get inProduction() : boolean {
+    return (this.$store.getters.activeProfiles.indexOf('prod') > -1);
   }
 }
