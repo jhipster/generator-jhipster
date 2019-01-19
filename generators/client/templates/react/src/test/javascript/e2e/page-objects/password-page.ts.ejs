@@ -17,7 +17,7 @@ export default class PasswordPage extends BasePage {
   }
 
   async get() {
-    await browser.get('#/account/password');
+    await browser.get('/account/password');
     await this.waitUntilDisplayed();
   }
 
