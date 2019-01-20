@@ -1,30 +1,30 @@
 {
     "userManagement": {
         "home": {
-            "title": "Users",
-            "createLabel": "Create a new user",
-            "createOrEditLabel": "Create or edit a user"
+            "title": "వినియోగదారులు",
+            "createLabel": "క్రొత్త వినియోగదారుని సృష్టించండి",
+            "createOrEditLabel": "వినియోగదారుని సృష్టించండి లేదా సవరించండి"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "An user is updated with identifier {{ param }}",
-        "deleted": "An user is deleted with identifier {{ param }}",
+        "created": "ఒక కొత్త యూజర్ ఈ గుర్తింపు తో సృష్టించబడుతుంది {{ param }}",
+        "updated": "ఈ గుర్తింపు తో ఉన్న యూజర్ వివరాలు నవీకరించబడింది {{ param }}",
+        "deleted": "ఈ గుర్తింపు తో ఉన్న యూజర్ తొలగించబడింది {{ param }}",
         "delete": {
-            "question": "Are you sure you want to delete user {{ login }}?"
+            "question": "మీరు ఈ వినియోగదారుని ఖచ్చితంగా తొలగించాలనుకుంటున్నారా? {{ login }}?"
         },
         "detail": {
-            "title": "User"
+            "title": "యూజర్"
         },
-        "login": "Login",
-        "firstName": "First name",
-        "lastName": "Last name",
-        "email": "Email",
-        "activated": "Activated",
-        "deactivated": "Deactivated",
-        "profiles": "Profiles",
-        "langKey": "Language",
-        "createdBy": "Created by",
-        "createdDate": "Created date",
-        "lastModifiedBy": "Modified by",
-        "lastModifiedDate": "Modified date"
+        "login": "లాగిన్",
+        "firstName": "పేరు",
+        "lastName": "ఇంటి పేరు",
+        "email": "ఈ మెయిల్ ",
+        "activated": "క్రియాత్మకం",
+        "deactivated": "క్రియారహితం",
+        "profiles": "ప్రొఫైల్స్",
+        "langKey": "భాష",
+        "createdBy": "సృష్టికర్త",
+        "createdDate": "సృష్టించబడిన తేదీ",
+        "lastModifiedBy": "సవరించినది",
+        "lastModifiedDate": "చివరి మార్పు తేదీ"
     }
 }

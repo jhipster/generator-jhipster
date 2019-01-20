@@ -1,30 +1,30 @@
 {
     "settings": {
-        "title": "User settings for [<b>{{username}}</b>]",
+        "title": "[<b>{{username}}</b>] యొక్క యూజర్ సెట్టింగులు",
         "form": {
-            "firstname": "First Name",
-            "firstname.placeholder": "Your first name",
-            "lastname": "Last Name",
-            "lastname.placeholder": "Your last name",
-            "language": "Language",
-            "button": "Save"
+            "firstname": "పేరు",
+            "firstname.placeholder": "మీ పేరు",
+            "lastname": "ఇంటి పేరు",
+            "lastname.placeholder": "మీ ఇంటి పేరు",
+            "language": "భాష",
+            "button": "భద్రపరుచు"
         },
         "messages": {
             "error": {
-                "fail": "<strong>An error has occurred!</strong> Settings could not be saved.",
-                "emailexists": "<strong>Email is already in use!</strong> Please choose another one."
+                "fail": "<strong>ఒక లోపము సంభవించినది!</strong> సెట్టింగ్లు సేవ్ చేయబడలేదు.",
+                "emailexists": "<strong>ఇమెయిల్ ఇప్పటికే వినియోగంలో ఉంది!</strong> దయచేసి మరొకదాన్ని ఎంచుకోండి."
             },
-            "success": "<strong>Settings saved!</strong>",
+            "success": "<strong>సెట్టింగ్లు సేవ్ చేయబడ్డాయి!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "Your first name is required.",
-                    "minlength": "Your first name is required to be at least 1 character",
-                    "maxlength": "Your first name cannot be longer than 50 characters"
+                    "required": "మీ పేరు పూరించండి.",
+                    "minlength": "మీ పేరు కనీసం 1 అక్షరం ఉండాలి",
+                    "maxlength": "మీ పేరు 50 అక్షరాలు కంటే ఎక్కువ ఉండకూడదు"
                 },
                 "lastname": {
                     "required": "Your last name is required.",
-                    "minlength": "Your last name is required to be at least 1 character",
-                    "maxlength": "Your last name cannot be longer than 50 characters"
+                    "minlength": "మీ ఇంటి పేరు కనీసం 1 అక్షరం ఉండాలి",
+                    "maxlength": "మీ ఇంటి పేరు 50 అక్షరాలు కంటే ఎక్కువ ఉండకూడదు"
                 }
             }
         }
