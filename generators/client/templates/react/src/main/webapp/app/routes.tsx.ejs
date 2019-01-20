@@ -51,10 +51,10 @@ const Admin = Loadable({
 
 const Routes = () => (
   <div className="view-routes">
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    <ErrorBoundaryRoute path="/login" component={Login} />
-    <%_ } _%>
     <Switch>
+    <%_ if (authenticationType !== 'oauth2') { _%>
+      <ErrorBoundaryRoute path="/login" component={Login} />
+    <%_ } _%>
       <ErrorBoundaryRoute path="/logout" component={Logout} />
     <%_ if (authenticationType !== 'oauth2') { _%>
       <ErrorBoundaryRoute path="/register" component={Register} />
