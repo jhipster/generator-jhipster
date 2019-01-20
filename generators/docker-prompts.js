@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,6 +18,8 @@
  */
 const chalk = require('chalk');
 const shelljs = require('shelljs');
+const { loadConfigs, setClusteredApps } = require('./docker-base');
+const { getBase64Secret } = require('./utils');
 
 module.exports = {
     askForApplicationType,
@@ -38,12 +40,14 @@ module.exports = {
  * Ask For Application Type
  */
 function askForApplicationType() {
+    if (this.regenerate) return;
+
     const done = this.async();
 
     const prompts = [
         {
             type: 'list',
-            name: 'composeApplicationType',
+            name: 'deploymentApplicationType',
             message: 'Which *type* of application would you like to deploy?',
             choices: [
                 {
@@ -60,7 +64,7 @@ function askForApplicationType() {
     ];
 
     this.prompt(prompts).then(props => {
-        this.composeApplicationType = props.composeApplicationType;
+        this.deploymentApplicationType = props.deploymentApplicationType;
         done();
     });
 }
@@ -70,7 +74,7 @@ function askForApplicationType() {
  */
 function askForGatewayType() {
     if (this.regenerate) return;
-    if (this.composeApplicationType !== 'microservice') return;
+    if (this.deploymentApplicationType !== 'microservice') return;
     const done = this.async();
 
     const prompts = [
@@ -105,9 +109,9 @@ function askForPath() {
     if (this.regenerate) return;
 
     const done = this.async();
-    const composeApplicationType = this.composeApplicationType;
+    const deploymentApplicationType = this.deploymentApplicationType;
     let messageAskForPath;
-    if (composeApplicationType === 'monolith') {
+    if (deploymentApplicationType === 'monolith') {
         messageAskForPath = 'Enter the root directory where your applications are located';
     } else {
         messageAskForPath = 'Enter the root directory where your gateway(s) and microservices are located';
@@ -121,10 +125,10 @@ function askForPath() {
             validate: input => {
                 const path = this.destinationPath(input);
                 if (shelljs.test('-d', path)) {
-                    const appsFolders = getAppFolders.call(this, input, composeApplicationType);
+                    const appsFolders = getAppFolders.call(this, input, deploymentApplicationType);
 
                     if (appsFolders.length === 0) {
-                        return composeApplicationType === 'monolith'
+                        return deploymentApplicationType === 'monolith'
                             ? `No monolith found in ${path}`
                             : `No microservice or gateway found in ${path}`;
                     }
@@ -143,7 +147,7 @@ function askForPath() {
             this.directoryPath += '/';
         }
 
-        this.appsFolders = getAppFolders.call(this, this.directoryPath, composeApplicationType);
+        this.appsFolders = getAppFolders.call(this, this.directoryPath, deploymentApplicationType);
 
         // Removing registry from appsFolders, using reverse for loop
         for (let i = this.appsFolders.length - 1; i >= 0; i--) {
@@ -186,36 +190,6 @@ function askForApps() {
     });
 }
 
-/*
- * Load config from this.appFolders
- * TODO: Extracted from AdForApps. Move into utils?
- */
-function loadConfigs() {
-    this.appConfigs = [];
-    this.gatewayNb = 0;
-    this.monolithicNb = 0;
-    this.microserviceNb = 0;
-
-    // Loading configs
-    this.appsFolders.forEach(appFolder => {
-        const path = this.destinationPath(`${this.directoryPath + appFolder}/.yo-rc.json`);
-        const fileData = this.fs.readJSON(path);
-        const config = fileData['generator-jhipster'];
-
-        if (config.applicationType === 'monolith') {
-            this.monolithicNb++;
-        } else if (config.applicationType === 'gateway') {
-            this.gatewayNb++;
-        } else if (config.applicationType === 'microservice') {
-            this.microserviceNb++;
-        }
-
-        this.portsToBind = this.monolithicNb + this.gatewayNb;
-        config.appFolder = appFolder;
-        this.appConfigs.push(config);
-    });
-}
-
 /**
  * Ask For Clusters Mode
  */
@@ -244,11 +218,7 @@ function askForClustersMode() {
 
     this.prompt(prompts).then(props => {
         this.clusteredDbApps = props.clusteredDbApps;
-        for (let i = 0; i < this.appsFolders.length; i++) {
-            for (let j = 0; j < props.clusteredDbApps.length; j++) {
-                this.appConfigs[i].clusteredDb = this.appsFolders[i] === props.clusteredDbApps[j];
-            }
-        }
+        setClusteredApps.call(this);
 
         done();
     });
@@ -275,7 +245,7 @@ function askForMonitoring() {
                 {
                     value: 'elk',
                     name:
-                        this.composeApplicationType === 'monolith'
+                        this.deploymentApplicationType === 'monolith'
                             ? 'Yes, for logs and metrics with the JHipster Console (based on ELK)'
                             : 'Yes, for logs and metrics with the JHipster Console (based on ELK and Zipkin)'
                 },
@@ -319,7 +289,7 @@ function askForConsoleOptions() {
             default: this.monitoring
         }
     ];
-    if (this.composeApplicationType === 'microservice') {
+    if (this.deploymentApplicationType === 'microservice') {
         prompts[0].choices.push({
             value: 'zipkin',
             name: 'Zipkin, for distributed tracing (only compatible with JHipster >= v4.2.0)'
@@ -420,54 +390,17 @@ function askForAdminPassword() {
 
     this.prompt(prompts).then(props => {
         this.adminPassword = props.adminPassword;
-        this.adminPasswordBase64 = Buffer.from(this.adminPassword).toString('base64');
+        this.adminPasswordBase64 = getBase64Secret(this.adminPassword);
         done();
     });
-}
-
-/**
- * Get App Folders
- * @param input path to join to destination path
- * @param composeApplicationType type of application being composed
- * @returns {Array} array of string representing app folders
- */
-function getAppFolders(input, composeApplicationType) {
-    const destinationPath = this.destinationPath(input);
-    const files = shelljs.ls('-l', destinationPath);
-    const appsFolders = [];
-
-    files.forEach(file => {
-        if (file.isDirectory()) {
-            if (
-                shelljs.test('-f', `${destinationPath}/${file.name}/.yo-rc.json`) &&
-                shelljs.test('-f', `${destinationPath}/${file.name}/src/main/docker/app.yml`)
-            ) {
-                try {
-                    const fileData = this.fs.readJSON(`${destinationPath}/${file.name}/.yo-rc.json`);
-                    if (
-                        fileData['generator-jhipster'].baseName !== undefined &&
-                        (composeApplicationType === undefined ||
-                            composeApplicationType === fileData['generator-jhipster'].applicationType ||
-                            (composeApplicationType === 'microservice' && fileData['generator-jhipster'].applicationType === 'gateway') ||
-                            (composeApplicationType === 'microservice' && fileData['generator-jhipster'].applicationType === 'uaa'))
-                    ) {
-                        appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
-                    }
-                } catch (err) {
-                    this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
-                    this.debug('Error:', err);
-                }
-            }
-        }
-    });
-
-    return appsFolders;
 }
 
 /**
  * Ask For Docker Repository Name
  */
 function askForDockerRepositoryName() {
+    if (this.regenerate) return;
+
     const done = this.async();
 
     const prompts = [
@@ -489,6 +422,8 @@ function askForDockerRepositoryName() {
  * Ask For Docker Push Command
  */
 function askForDockerPushCommand() {
+    if (this.regenerate) return;
+
     const done = this.async();
 
     const prompts = [
@@ -504,4 +439,44 @@ function askForDockerPushCommand() {
         this.dockerPushCommand = props.dockerPushCommand;
         done();
     });
+}
+
+/**
+ * Get App Folders
+ * @param input path to join to destination path
+ * @param deploymentApplicationType type of application being composed
+ * @returns {Array} array of string representing app folders
+ */
+function getAppFolders(input, deploymentApplicationType) {
+    const destinationPath = this.destinationPath(input);
+    const files = shelljs.ls('-l', destinationPath);
+    const appsFolders = [];
+
+    files.forEach(file => {
+        if (file.isDirectory()) {
+            if (
+                shelljs.test('-f', `${destinationPath}/${file.name}/.yo-rc.json`) &&
+                shelljs.test('-f', `${destinationPath}/${file.name}/src/main/docker/app.yml`)
+            ) {
+                try {
+                    const fileData = this.fs.readJSON(`${destinationPath}/${file.name}/.yo-rc.json`);
+                    if (
+                        fileData['generator-jhipster'].baseName !== undefined &&
+                        (deploymentApplicationType === undefined ||
+                            deploymentApplicationType === fileData['generator-jhipster'].applicationType ||
+                            (deploymentApplicationType === 'microservice' &&
+                                fileData['generator-jhipster'].applicationType === 'gateway') ||
+                            (deploymentApplicationType === 'microservice' && fileData['generator-jhipster'].applicationType === 'uaa'))
+                    ) {
+                        appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
+                    }
+                } catch (err) {
+                    this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
+                    this.debug('Error:', err);
+                }
+            }
+        }
+    });
+
+    return appsFolders;
 }

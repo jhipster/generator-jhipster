@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -76,11 +76,11 @@ spring:
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         <%_ if (prodDatabaseType === 'mysql') { _%>
-        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false
+        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false
+        url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
@@ -97,6 +97,7 @@ spring:
         password: oracle
         <%_ } _%>
         hikari:
+            poolName: Hikari
             auto-commit: false
         <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
             data-source-properties:
@@ -134,7 +135,7 @@ spring:
             hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: false
+            hibernate.generate_statistics: true
             <%_ if (enableHibernateCache) { _%>
                 <%_ if (cacheProvider === 'ehcache') { _%>
             hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory
@@ -294,7 +295,7 @@ jhipster:
     security:
         authentication:
             jwt:
-                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+                # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
                 # As this is the PRODUCTION configuration, you MUST change the default key, and store it securely:
                 # - In the JHipster Registry (which includes a Spring Cloud Config server)
                 # - In a separate `application-prod.yml` file, in the same folder as your executable WAR file
@@ -331,12 +332,8 @@ jhipster:
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: <%= baseName %>@localhost
         base-url: http://my-server-url-to-change # Modify according to your server's URL
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx:
-            enabled: true
-        prometheus:
-            enabled: false #expose metrics via prometheus
-        logs: # Reports Dropwizard metrics in the logs
+    metrics:
+        logs: # Reports metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
     logging:

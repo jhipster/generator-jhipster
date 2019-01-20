@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -59,10 +59,14 @@ spring:
     devtools:
         restart:
             enabled: true
+            <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+            additional-exclude: .h2.server.properties
+            <%_ } _%>
         livereload:
             enabled: false # we use Webpack dev server + BrowserSync for livereload
     jackson:
-        serialization.indent_output: true
+        serialization:
+            indent-output: true
     <%_ if (messageBroker === 'kafka' || serviceDiscoveryType === 'consul') { _%>
     cloud:
         <%_ if (serviceDiscoveryType === 'consul') { _%>
@@ -87,11 +91,11 @@ spring:
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         <%_ if (devDatabaseType === 'mysql') { _%>
-        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false
+        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password:
         <%_ } else if (devDatabaseType === 'mariadb') { _%>
-        url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false
+        url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password:
         <%_ } else if (devDatabaseType === 'postgresql') { _%>
@@ -116,6 +120,7 @@ spring:
         password:
         <%_ } _%>
         hikari:
+            poolName: Hikari
             auto-commit: false
         <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb' || devDatabaseType === 'mssql') { _%>
             data-source-properties:
@@ -322,7 +327,7 @@ jhipster:
     security:
         authentication:
             jwt:
-                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+                # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
                 base64-secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
@@ -347,12 +352,8 @@ jhipster:
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: <%= baseName %>@localhost
         base-url: http://127.0.0.1:<%= applicationType !== 'uaa' ? serverPort : 8080 %>
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx:
-            enabled: true
-        prometheus:
-            enabled: false #expose metrics via prometheus
-        logs: # Reports Dropwizard metrics in the logs
+    metrics:
+        logs: # Reports metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
     logging:

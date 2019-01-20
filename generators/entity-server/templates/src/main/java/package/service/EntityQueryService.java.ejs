@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors.
+ Copyright 2013-2019 the original author or authors.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,8 +19,8 @@
 package <%=packageName%>.service;
 
 <%_ const serviceClassName = entityClass + 'QueryService';
-    const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
     const mapper = entityInstance  + 'Mapper';
     const dtoToEntity = mapper + '.'+ 'toEntity';
     const entityToDto = mapper + '.'+ 'toDto';
@@ -42,13 +42,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
 
-import <%=packageName%>.domain.<%= entityClass %>;
+import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
 import <%=packageName%>.domain.*; // for static metamodels
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine === 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %>
 import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
 <%_ if (dto === 'mapstruct') { _%>
-import <%=packageName%>.service.dto.<%= entityClass %>DTO;
+import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
 import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 
@@ -60,10 +60,10 @@ import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
  */
 @Service<% if (databaseType === 'sql') { %>
 @Transactional(readOnly = true)<% } %>
-public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
+public class <%= serviceClassName %> extends QueryService<<%= asEntity(entityClass) %>> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../common/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false}); -%>
+<%- include('../common/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: false, mapsIdAssoc: null, isController: false}); -%>
 
     /**
      * Return a {@link List} of {@link <%= instanceType %>} which matches the criteria from the database
@@ -73,7 +73,7 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
     @Transactional(readOnly = true)
     public List<<%= instanceType %>> findByCriteria(<%= criteria %> criteria) {
         log.debug("find by criteria : {}", criteria);
-        final Specification<<%= entityClass %>> specification = createSpecification(criteria);
+        final Specification<<%= asEntity(entityClass) %>> specification = createSpecification(criteria);
     <%_ if (dto === 'mapstruct') { _%>
         return <%= entityListToDto %>(<%= repository %>.findAll(specification));
     <%_ } else { _%>
@@ -90,7 +90,7 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
     @Transactional(readOnly = true)
     public Page<<%= instanceType %>> findByCriteria(<%= criteria %> criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
-        final Specification<<%= entityClass %>> specification = createSpecification(criteria);
+        final Specification<<%= asEntity(entityClass) %>> specification = createSpecification(criteria);
     <%_ if (dto === 'mapstruct') { _%>
         return <%= repository %>.findAll(specification, page)
             .map(<%= entityToDtoReference %>);
@@ -107,24 +107,24 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
     @Transactional(readOnly = true)
     public long countByCriteria(<%= criteria %> criteria) {
         log.debug("count by criteria : {}", criteria);
-        final Specification<<%= entityClass %>> specification = createSpecification(criteria);
+        final Specification<<%= asEntity(entityClass) %>> specification = createSpecification(criteria);
         return <%= repository %>.count(specification);
     }
 
     /**
      * Function to convert <%= criteria %> to a {@link Specification}
      */
-    private Specification<<%= entityClass %>> createSpecification(<%= criteria %> criteria) {
-        Specification<<%= entityClass %>> specification = Specification.where(null);
+    private Specification<<%= asEntity(entityClass) %>> createSpecification(<%= criteria %> criteria) {
+        Specification<<%= asEntity(entityClass) %>> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getId() != null) {
-                specification = specification.and(buildSpecification(criteria.getId(), <%= entityClass %>_.id));
+                specification = specification.and(buildSpecification(criteria.getId(), <%= asEntity(entityClass) %>_.id));
             }
             <%_
             fields.forEach((field) => {
                 if (isFilterableType(field.fieldType)) { _%>
             if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
-                specification = specification.and(<%= getSpecificationBuilder(field.fieldType) %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= entityClass %>_.<%= field.fieldName %>));
+                specification = specification.and(<%= getSpecificationBuilder(field.fieldType) %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= asEntity(entityClass) %>_.<%= field.fieldName %>));
             }
             <%_ }
             });
@@ -133,7 +133,7 @@ public class <%= serviceClassName %> extends QueryService<<%= entityClass %>> {
                 const metamodelFieldName = (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
             if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
                 specification = specification.and(buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
-                    root -> root.join(<%= entityClass %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= relationship.otherEntityNameCapitalized %>_.id)));
+                    root -> root.join(<%= asEntity(entityClass) %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= asEntity(relationship.otherEntityNameCapitalized) %>_.id)));
             }
             <%_ }); // forEach
         _%>

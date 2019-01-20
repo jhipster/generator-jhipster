@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -37,7 +37,7 @@ module.exports = {
  * @param failOver flag
  */
 function checkDocker() {
-    if (this.abort) return;
+    if (this.abort || this.skipChecks) return;
     const done = this.async();
 
     shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
@@ -85,7 +85,7 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
     this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
     if (opts.appConfig.buildTool === 'maven') {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/target/docker`);
-        this.dockerBuildCommand = './mvnw package -Pprod jib:dockerBuild';
+        this.dockerBuildCommand = './mvnw package -Pprod verify jib:dockerBuild';
     } else {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/build/docker`);
         this.dockerBuildCommand = './gradlew bootWar -Pprod jibDockerBuild';

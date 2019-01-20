@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,12 +23,21 @@ import promiseMiddleware from 'redux-promise-middleware';
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
+<%_ if (enableTranslation) { _%>
+import { TranslatorContext } from 'react-jhipster';
+<%_ } _%>
 
 import account, { ACTION_TYPES, saveAccountSettings, reset } from 'app/modules/account/settings/settings.reducer';
 import { ACTION_TYPES as authActionTypes } from 'app/shared/reducers/authentication';
 <% if (enableTranslation) { %>import { ACTION_TYPES as localeActionTypes } from 'app/shared/reducers/locale';<% } %>
 
 describe('Settings reducer tests', () => {
+  <%_ if (enableTranslation) { _%>
+  beforeAll(() => {
+    TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
+  });
+
+  <%_ } _%>
   describe('Common tests', () => {
     it('should return the initial state', () => {
       const toTest = account(undefined, {});

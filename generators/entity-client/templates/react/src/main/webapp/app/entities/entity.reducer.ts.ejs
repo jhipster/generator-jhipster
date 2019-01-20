@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -114,11 +114,6 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       };
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
-      return {
-        ...state,
-        loading: false,
-        entities: action.payload.data
-      };
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
       <%_ if (pagination === 'infinite-scroll') { _%>
@@ -189,9 +184,13 @@ const apiSearchUrl = '<% if (applicationType === 'gateway' && locals.microservic
 // Actions
 
 <%_ if (searchEngine === 'elasticsearch') { _%>
-export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = query => ({
+export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = (query, page, size, sort) => ({
   type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
-  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=` + query)
+<%_ if (pagination !== 'no') { _%>
+  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`)
+<%_ } else { _%>
+  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=${query}`)
+<%_ } _%>
 });
 
 <%_ } _%>

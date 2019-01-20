@@ -1,0 +1,173 @@
+package <%= packageName %>.service.mapper;
+
+<% if (databaseType === 'cassandra') { %>
+import <%=packageName%>.AbstractCassandraTest;<% } %>
+import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
+<%_ if (authenticationType !== 'oauth2') { _%>
+import org.apache.commons.lang3.RandomStringUtils;
+<%_ } _%>
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * Test class for the UserMapper.
+ *
+ * @see UserMapper
+ */
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = <%= mainClass %>.class)
+public class UserMapperTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+
+    private static final String DEFAULT_LOGIN = "johndoe";
+
+    @Autowired
+    private UserMapper userMapper;
+
+    private <%= asEntity('User') %> user;
+    private <%= asDto('User') %> userDto;
+
+    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
+    private static final Long DEFAULT_ID = 1L;
+    <%_ } else if (databaseType === 'couchbase'){ _%>
+    private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
+    <%_ } else { _%>
+    private static final String DEFAULT_ID = "id1";
+    <%_ } _%>
+
+    @Before
+    public void init() {
+        user = new <%= asEntity('User') %>();
+        user.setLogin(DEFAULT_LOGIN);
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        user.setPassword(RandomStringUtils.random(60));
+        <%_ } _%>
+        user.setActivated(true);
+        user.setEmail("johndoe@localhost");
+        user.setFirstName("john");
+        user.setLastName("doe");
+        <%_ if (databaseType !== 'cassandra') { _%>
+        user.setImageUrl("image_url");
+        <%_ } _%>
+        user.setLangKey("en");
+
+        userDto = new <%= asDto('User') %>(user);
+    }
+
+    @Test
+    public void usersToUserDTOsShouldMapOnlyNonNullUsers(){
+        List<<%= asEntity('User') %>> users = new ArrayList<>();
+        users.add(user);
+        users.add(null);
+
+        List<<%= asDto('User') %>> userDTOS = userMapper.usersToUserDTOs(users);
+
+        assertThat(userDTOS).isNotEmpty();
+        assertThat(userDTOS).size().isEqualTo(1);
+    }
+
+    @Test
+    public void userDTOsToUsersShouldMapOnlyNonNullUsers(){
+        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
+        usersDto.add(userDto);
+        usersDto.add(null);
+
+        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
+
+        assertThat(users).isNotEmpty();
+        assertThat(users).size().isEqualTo(1);
+    }
+
+    @Test
+    public void userDTOsToUsersWithAuthoritiesStringShouldMapToUsersWithAuthoritiesDomain(){
+        Set<String> authoritiesAsString = new HashSet<>();
+        authoritiesAsString.add("ADMIN");
+        userDto.setAuthorities(authoritiesAsString);
+
+        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
+        usersDto.add(userDto);
+
+        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
+
+        assertThat(users).isNotEmpty();
+        assertThat(users).size().isEqualTo(1);
+        assertThat(users.get(0).getAuthorities()).isNotNull();
+        assertThat(users.get(0).getAuthorities()).isNotEmpty();
+        <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+        assertThat(users.get(0).getAuthorities().iterator().next().getName()).isEqualTo("ADMIN");
+        <%_ } _%>
+        <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+        assertThat(users.get(0).getAuthorities().iterator().next()).isEqualTo("ADMIN");
+        <%_ } _%>
+    }
+
+    @Test
+    public void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities(){
+        userDto.setAuthorities(null);
+
+        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
+        usersDto.add(userDto);
+
+        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
+
+        assertThat(users).isNotEmpty();
+        assertThat(users).size().isEqualTo(1);
+        assertThat(users.get(0).getAuthorities()).isNotNull();
+        assertThat(users.get(0).getAuthorities()).isEmpty();
+    }
+
+    @Test
+    public void userDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities(){
+        Set<String> authoritiesAsString = new HashSet<>();
+        authoritiesAsString.add("ADMIN");
+        userDto.setAuthorities(authoritiesAsString);
+
+        userDto.setAuthorities(authoritiesAsString);
+
+        <%= asEntity('User') %> user = userMapper.userDTOToUser(userDto);
+
+        assertThat(user).isNotNull();
+        assertThat(user.getAuthorities()).isNotNull();
+        assertThat(user.getAuthorities()).isNotEmpty();
+        <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+        assertThat(user.getAuthorities().iterator().next().getName()).isEqualTo("ADMIN");
+        <%_ } _%>
+        <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+        assertThat(user.getAuthorities().iterator().next()).isEqualTo("ADMIN");
+        <%_ } _%>
+    }
+
+    @Test
+    public void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities(){
+        userDto.setAuthorities(null);
+
+        <%= asEntity('User') %> user = userMapper.userDTOToUser(userDto);
+
+        assertThat(user).isNotNull();
+        assertThat(user.getAuthorities()).isNotNull();
+        assertThat(user.getAuthorities()).isEmpty();
+    }
+
+    @Test
+    public void userDTOToUserMapWithNullUserShouldReturnNull(){
+        assertThat(userMapper.userDTOToUser(null)).isNull();
+    }
+
+    @Test
+    public void testUserFromId() {
+        assertThat(userMapper.userFromId(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);
+        assertThat(userMapper.userFromId(null)).isNull();
+    }
+}

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,8 +27,8 @@ import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
 import { VERSION } from 'app/app.constants';
-import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>Principal, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from 'app/core';
-import { ProfileService } from '../profiles/profile.service';
+import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>AccountService, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from 'app/core';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-navbar',
@@ -58,7 +58,7 @@ export class NavbarComponent implements OnInit {
         private languageHelper: JhiLanguageHelper,
         private sessionStorage: SessionStorageService,
         <%_ } _%>
-        private principal: Principal,
+        private accountService: AccountService,
         <%_ if (authenticationType !== 'oauth2') { _%>
         private loginModalService: LoginModalService,
         <%_ } _%>
@@ -94,7 +94,7 @@ export class NavbarComponent implements OnInit {
     }
 
     isAuthenticated() {
-        return this.principal.isAuthenticated();
+        return this.accountService.isAuthenticated();
     }
 
     login() {
@@ -116,6 +116,6 @@ export class NavbarComponent implements OnInit {
     }
 
     getImageUrl() {
-        return this.isAuthenticated() ? this.principal.getImageUrl() : null;
+        return this.isAuthenticated() ? this.accountService.getImageUrl() : null;
     }
 }

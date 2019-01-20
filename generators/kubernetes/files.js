@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -80,7 +80,7 @@ function writeFiles() {
                 this.template('console/jhipster-logstash.yml.ejs', 'console/jhipster-logstash.yml');
                 this.template('console/jhipster-console.yml.ejs', 'console/jhipster-console.yml');
                 this.template('console/jhipster-dashboard-console.yml.ejs', 'console/jhipster-dashboard-console.yml');
-                if (this.composeApplicationType === 'microservice') {
+                if (this.deploymentApplicationType === 'microservice') {
                     this.template('console/jhipster-zipkin.yml.ejs', 'console/jhipster-zipkin.yml');
                 }
             }

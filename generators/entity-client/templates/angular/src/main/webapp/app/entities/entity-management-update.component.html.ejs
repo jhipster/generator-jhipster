@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -94,7 +94,7 @@
                     </div>
                     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <div class="d-flex">
-                        <input id="field_<%= fieldName %>" type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= fieldName %>"
+                        <input id="field_<%= fieldName %>" type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" [(ngModel)]="<%= fieldName %>" placeholder="YYYY-MM-DD HH:mm"
                         <%- include ng_validators %>/>
                     </div>
                     <%_ } else if (fieldTypeBlobContent === 'text') { _%>
@@ -119,43 +119,43 @@
                         <%_ } _%>
                         <%_ if (fields[idx].fieldValidateRules.includes('minlength')) { _%>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.<%= fieldName %>?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: <%= fields[idx].fieldValidateRulesMinlength %> }">
+                        [hidden]="!editForm.controls.<%= fieldName %>?.errors?.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMinlength %> }">
                         This field is required to be at least <%= fields[idx].fieldValidateRulesMinlength %> characters.
                         </small>
                         <%_ } _%>
                         <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.<%= fieldName %>?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: <%= fields[idx].fieldValidateRulesMaxlength %> }">
+                        [hidden]="!editForm.controls.<%= fieldName %>?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMaxlength %> }">
                         This field cannot be longer than <%= fields[idx].fieldValidateRulesMaxlength %> characters.
                         </small>
                         <%_ } _%>
                         <%_ if (fields[idx].fieldValidateRules.includes('min')) { _%>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.<%= fieldName %>?.errors?.min" jhiTranslate="entity.validation.min" translateValues="{ min: <%= fields[idx].fieldValidateRulesMin %> }">
+                            [hidden]="!editForm.controls.<%= fieldName %>?.errors?.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMin %> }">
                             This field should be at least <%= fields[idx].fieldValidateRulesMin %>.
                         </small>
                         <%_ } _%>
                         <%_ if (fields[idx].fieldValidateRules.includes('max')) { _%>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.<%= fieldName %>?.errors?.max" jhiTranslate="entity.validation.max" translateValues="{ max: <%= fields[idx].fieldValidateRulesMax %> }">
+                            [hidden]="!editForm.controls.<%= fieldName %>?.errors?.max" jhiTranslate="entity.validation.max" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMax %> }">
                             This field cannot be more than <%= fields[idx].fieldValidateRulesMax %>.
                         </small>
                         <%_ } _%>
                         <%_ if (fields[idx].fieldValidateRules.includes('minbytes')) { _%>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.<%= fieldName %>?.errors?.minbytes" jhiTranslate="entity.validation.minbytes" translateValues="{ min: <%= fields[idx].fieldValidateRulesMinbytes %> }">
+                            [hidden]="!editForm.controls.<%= fieldName %>?.errors?.minbytes" jhiTranslate="entity.validation.minbytes" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMinbytes %> }">
                             This field should be at least <%= fields[idx].fieldValidateRulesMinbytes %>.
                         </small>
                         <%_ } _%>
                         <%_ if (fields[idx].fieldValidateRules.includes('maxbytes')) { _%>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.<%= fieldName %>?.errors?.maxbytes" jhiTranslate="entity.validation.maxbytes" translateValues="{ max: <%= fields[idx].fieldValidateRulesMaxbytes %> }">
+                            [hidden]="!editForm.controls.<%= fieldName %>?.errors?.maxbytes" jhiTranslate="entity.validation.maxbytes" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMaxbytes %> }">
                             This field cannot be more than <%= fields[idx].fieldValidateRulesMaxbytes %>.
                         </small>
                         <%_ } _%>
                         <%_ if (fields[idx].fieldValidateRules.includes('pattern')) { _%>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.controls.<%= fieldName %>?.errors?.pattern" jhiTranslate="entity.validation.pattern" translateValues="{ pattern: '<%= fieldNameHumanized %>' }">
+                            [hidden]="!editForm.controls.<%= fieldName %>?.errors?.pattern" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: '<%= fieldNameHumanized %>' }">
                             This field should follow pattern for "<%= fieldNameHumanized %>".
                         </small>
                         <%_ } _%>

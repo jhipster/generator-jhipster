@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,6 +23,7 @@ const ejs = require('ejs');
 const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const constants = require('./generator-constants');
 
@@ -42,7 +43,10 @@ module.exports = {
     copyObjectProps,
     decodeBase64,
     getAllJhipsterConfig,
-    getDBTypeFromDBValue
+    getDBTypeFromDBValue,
+    getBase64Secret,
+    getRandomHex,
+    checkStringInFile
 };
 
 /**
@@ -442,4 +446,25 @@ function getDBTypeFromDBValue(db) {
         return 'sql';
     }
     return db;
+}
+
+/**
+ * Get a random hex string
+ * @param {int} len the length to use, defaults to 50
+ */
+function getRandomHex(len = 50) {
+    return crypto.randomBytes(len).toString('hex');
+}
+/**
+ * Generates a base64 secret from given string or random hex
+ * @param {string} value the value used to get base64 secret
+ * @param {int} len the length to use for random hex, defaults to 50
+ */
+function getBase64Secret(value, len = 50) {
+    return Buffer.from(value || getRandomHex(len)).toString('base64');
+}
+
+function checkStringInFile(path, search, generator) {
+    const fileContent = generator.fs.read(path);
+    return fileContent.includes(search);
 }

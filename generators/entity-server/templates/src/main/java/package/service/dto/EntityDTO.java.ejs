@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -55,7 +55,7 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 /**
  * A DTO for the <%= entityClass %> entity.
  */
-public class <%= entityClass %>DTO implements Serializable {
+public class <%= asDto(entityClass) %> implements Serializable {
 
     private <%= pkType %> id;
     <%_ for (idx in fields) {
@@ -101,7 +101,7 @@ public class <%= entityClass %>DTO implements Serializable {
         const ownerSide = relationships[idx].ownerSide; _%>
     <%_ if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
 
-    private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldNamePlural %> = new HashSet<>();
+    private Set<<%= asDto(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
     private <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= pkType %><% } %> <%= relationshipFieldName %>Id;
@@ -163,11 +163,11 @@ public class <%= entityClass %>DTO implements Serializable {
         ownerSide = relationships[idx].ownerSide;
         if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
 
-    public Set<<%= otherEntityNameCapitalized %>DTO> get<%= relationshipNameCapitalizedPlural %>() {
+    public Set<<%= asDto(otherEntityNameCapitalized) %>> get<%= relationshipNameCapitalizedPlural %>() {
         return <%= relationshipFieldNamePlural %>;
     }
 
-    public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= otherEntityNameCapitalized %>DTO> <%= otherEntityNamePlural %>) {
+    public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= asDto(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
         this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
     }
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
@@ -209,11 +209,11 @@ public class <%= entityClass %>DTO implements Serializable {
             return false;
         }
 
-        <%= entityClass %>DTO <%= entityInstance %>DTO = (<%= entityClass %>DTO) o;
-        if (<%= entityInstance %>DTO.getId() == null || getId() == null) {
+        <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = (<%= asDto(entityClass) %>) o;
+        if (<%= asDto(entityInstance) %>.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), <%= entityInstance %>DTO.getId());
+        return Objects.equals(getId(), <%= asDto(entityInstance) %>.getId());
     }
 
     @Override
@@ -223,7 +223,7 @@ public class <%= entityClass %>DTO implements Serializable {
 
     @Override
     public String toString() {
-        return "<%= entityClass %>DTO{" +
+        return "<%= asDto(entityClass) %>{" +
             "id=" + getId() +
             <%_ for (idx in fields) {
                 const fieldName = fields[idx].fieldName;

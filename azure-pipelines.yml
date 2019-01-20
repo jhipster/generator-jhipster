@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2018 the original author or authors from the JHipster project.
+# Copyright 2013-2019 the original author or authors from the JHipster project.
 #
 # This file is part of the JHipster project, see https://www.jhipster.tech/
 # for more information.
@@ -36,7 +36,7 @@ jobs:
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
     JHI_E2E_HEADLESS: true
-    JHI_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
+    JHI_SCRIPTS: $(Build.Repository.LocalPath)/test-integration/scripts
 
   strategy:
     matrix:
@@ -44,25 +44,37 @@ jobs:
         JHI_APP: react-default
         JHI_PROFILE: prod
         JHI_PROTRACTOR: 1
+        JHI_ENTITY: sql
       react-noi18n-es-ws-gradle-session:
         JHI_APP: react-noi18n-es-ws-gradle-session
         JHI_PROTRACTOR: 1
+        JHI_ENTITY: sql
       ms-ngx-gateway-eureka-oauth2:
         JHI_APP: ms-ngx-gateway-eureka-oauth2
         JHI_PROTRACTOR: 1
+        JHI_ENTITY: sql
       ms-ngx-gateway-consul:
         JHI_APP: ms-ngx-gateway-consul
+        JHI_ENTITY: sql
       ms-ngx-gateway-uaa:
         JHI_APP: ms-ngx-gateway-uaa
+        JHI_ENTITY: uaa
       ms-micro-consul:
         JHI_APP: ms-micro-consul
+        JHI_ENTITY: micro
+      ngx-h2mem-ws-nol2:
+        JHI_APP: ngx-h2mem-ws-nol2
+        JHI_ENTITY: sql
       ngx-session-cassandra-fr:
         JHI_APP: ngx-session-cassandra-fr
+        JHI_ENTITY: cassandra
       ngx-couchbase:
         JHI_APP: ngx-couchbase
         JHI_PROFILE: prod
+        JHI_ENTITY: couchbase
       webflux-mongodb:
         JHI_APP: webflux-mongodb
+        JHI_ENTITY: mongodb
 
   steps:
   #----------------------------------------------------------------------
@@ -70,10 +82,10 @@ jobs:
   #----------------------------------------------------------------------
   - task: NodeTool@0
     inputs:
-      versionSpec: '10.13.0'
+      versionSpec: '10.15.0'
     displayName: 'TOOLS: install Node.js'
   - script: |
-      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
       sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
       sudo apt update
       sudo apt install google-chrome-stable
@@ -84,6 +96,8 @@ jobs:
     displayName: 'TOOLS: display configuration'
   - bash: $(JHI_SCRIPTS)/03-system.sh
     displayName: 'TOOLS: configure tools installed by the system'
+  - bash: $(JHI_SCRIPTS)/04-git-config.sh
+    displayName: 'TOOLS: configure git'
 
   #----------------------------------------------------------------------
   # Install JHipster and generate project+entities
@@ -102,7 +116,7 @@ jobs:
   #----------------------------------------------------------------------
   # Bugs fix
   #----------------------------------------------------------------------
-  - bash: test-integration/scripts/20-no-memory-limit-elasticsearch.sh
+  - bash: $(JHI_SCRIPTS)/20-no-memory-limit-elasticsearch.sh
     displayName: 'BUGS-FIX: no memory limit for Elasticsearch'
 
   #----------------------------------------------------------------------

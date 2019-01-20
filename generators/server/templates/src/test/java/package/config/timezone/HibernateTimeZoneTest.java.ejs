@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,6 +19,9 @@
 package <%= packageName %>.config.timezone;
 
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
+import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
+<%_ } _%>
 import <%= packageName %>.repository.timezone.DateTimeWrapper;
 import <%= packageName %>.repository.timezone.DateTimeWrapperRepository;
 import org.junit.Before;
@@ -41,7 +44,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Unit tests for the UTC Hibernate configuration.
  */
 @RunWith(SpringRunner.class)
+<%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
+@SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
+<%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
 public class HibernateTimeZoneTest {
 
     @Autowired

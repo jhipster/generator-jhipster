@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -65,13 +65,7 @@ module.exports = class extends BaseGenerator {
     get initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
+                this.checkInvocationFromCLI();
             },
             sayHello() {
                 this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
@@ -129,10 +123,10 @@ module.exports = class extends BaseGenerator {
                 this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
-                if (this.clientPackageManager === 'yarn') {
-                    this.frontTests = ' -u';
-                } else if (this.clientPackageManager === 'npm') {
-                    this.frontTests = ' -- -u';
+                if (this.clientFramework === 'react') {
+                    this.frontTestCommand = 'test-ci';
+                } else {
+                    this.frontTestCommand = 'test';
                 }
             }
         };
