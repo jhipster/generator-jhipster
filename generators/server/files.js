@@ -1349,7 +1349,7 @@ const serverFiles = {
                     generator.applicationType !== 'microservice') ||
                 (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
-            templates: ['config/liquibase/users.csv']
+            templates: ['config/liquibase/data/user.csv']
         },
         {
             condition: generator =>
@@ -1359,7 +1359,7 @@ const serverFiles = {
                     generator.databaseType === 'sql') ||
                 (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
-            templates: ['config/liquibase/authorities.csv', 'config/liquibase/users_authorities.csv']
+            templates: ['config/liquibase/data/authority.csv', 'config/liquibase/data/user_authority.csv']
         },
         {
             condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',

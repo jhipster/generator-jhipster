@@ -19,6 +19,7 @@
 const _ = require('lodash');
 const randexp = require('randexp');
 const chalk = require('chalk');
+const faker = require('faker');
 const fs = require('fs');
 const utils = require('../utils');
 const constants = require('../generator-constants');
@@ -29,6 +30,9 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+
+// In order to have consistent results with Faker, the seed is fixed.
+faker.seed(42);
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -44,6 +48,16 @@ const serverFiles = {
                     file: 'config/liquibase/changelog/added_entity.xml',
                     options: { interpolate: INTERPOLATE_REGEX },
                     renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.xml`
+                },
+                {
+                    file: 'config/liquibase/data/table.csv',
+                    options: {
+                        interpolate: INTERPOLATE_REGEX,
+                        context: {
+                            faker
+                        }
+                    },
+                    renameTo: generator => `config/liquibase/data/${generator.entityTableName}.csv`
                 }
             ]
         },

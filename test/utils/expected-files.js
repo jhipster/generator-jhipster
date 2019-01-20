@@ -209,9 +209,9 @@ const expectedFiles = {
     ],
 
     userManagementServer: [
-        `${SERVER_MAIN_RES_DIR}config/liquibase/authorities.csv`,
-        `${SERVER_MAIN_RES_DIR}config/liquibase/users.csv`,
-        `${SERVER_MAIN_RES_DIR}config/liquibase/users_authorities.csv`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/authority.csv`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/user.csv`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/user_authority.csv`,
         `${SERVER_MAIN_RES_DIR}templates/mail/activationEmail.html`,
         `${SERVER_MAIN_RES_DIR}templates/mail/passwordResetEmail.html`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Authority.java`,

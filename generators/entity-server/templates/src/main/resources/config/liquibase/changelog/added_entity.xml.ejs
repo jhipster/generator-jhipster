@@ -114,12 +114,17 @@
                 <constraints nullable="<%= nullable %>" />
                 <%_ } _%>
             </column>
-            <%_ if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') { _%>
-            <column name="<%=columnName %>_content_type" type="varchar(255)">
+                <%_ if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
+                    columnType = "varchar(255)"; _%>
+            <column name="<%=columnName %>_content_type" type="<%=columnType %>">
                 <constraints nullable="<%= nullable %>" />
             </column>
-            <%_ }  _%>
-            <%_ } _%><% for (idx in relationships) {
+                <%_ } _%>
+            <%_
+            fields[idx].columnType = columnType;
+            _%>
+            <%_ } _%>
+            <%_ for (idx in relationships) {
                 let nullable_relation = true,
                 relationshipType = relationships[idx].relationshipType,
                 relationshipName = relationships[idx].relationshipName,
@@ -127,7 +132,8 @@
                 if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
                     nullable_relation = false;
                 }
-                if (relationships[idx].relationshipType === 'many-to-one') { %>
+                if (relationships[idx].relationshipType === 'many-to-one') { _%>
+
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
@@ -139,12 +145,37 @@
             </column><% } %><% } %>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+
+        <loadData
+                  file="config/liquibase/data/<%= entityTableName %>.csv"
+                  separator=";"
+                  tableName="<%= entityTableName %>">
+            <column name="id" type="numeric"/>
+            <%_ for (idx in fields) {
+                let loadColumnType = 'string';
+                let columnType = fields[idx].columnType;
+                if (columnType === 'integer' || columnType === 'bigint' || columnType === 'double' || columnType === 'decimal(10,2)' || columnType === '${floatType}') {
+                    loadColumnType = 'numeric';
+                }
+                if (columnType === 'date' || columnType === 'datetime') {
+                    loadColumnType = 'date';
+                }
+                if (columnType === 'boolean') {
+                    loadColumnType = 'boolean';
+                }
+                if (fields[idx].fieldIsEnum) {
+                    loadColumnType = 'skip';
+                }
+                _%>
+            <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>" type="<%=loadColumnType%>"/>
+            <%_ } _%>
+        </loadData>
         <%_ for (const idx in fields) {
             if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
         <%_ }
         } _%>
-        <% for (idx in relationships) {
+        <%_ for (idx in relationships) {
             const relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
