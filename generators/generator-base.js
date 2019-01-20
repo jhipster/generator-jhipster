@@ -779,26 +779,7 @@ module.exports = class extends PrivateBase {
      * @param {string} value - property value
      */
     addGradleProperty(name, value) {
-        const fullPath = 'gradle.properties';
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-gradle-property',
-                    splicable: [`${name}=${value}`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(
-                        ' or missing required jhipster-needle. Reference to '
-                    )}gradle property (name: ${name}, value:${value})${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.addProperty(name, value);
     }
 
     /**
@@ -809,26 +790,7 @@ module.exports = class extends PrivateBase {
      * @param {string} version - explicit plugin version number
      */
     addGradlePlugin(group, name, version) {
-        const fullPath = 'build.gradle';
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-gradle-buildscript-dependency',
-                    splicable: [`classpath "${group}:${name}:${version}"`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(
-                        ' or missing required jhipster-needle. Reference to '
-                    )}classpath: ${group}:${name}:${version}${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.addPlugin(group, name, version);
     }
 
     /**
@@ -838,26 +800,7 @@ module.exports = class extends PrivateBase {
      * @param {string} version - explicit plugin version number
      */
     addGradlePluginToPluginsBlock(id, version) {
-        const fullPath = 'build.gradle';
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-gradle-plugins',
-                    splicable: [`id "${id}" version "${version}"`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ')}id ${id} version ${version}${chalk.yellow(
-                    ' not added.\n'
-                )}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.addPluginToPluginsBlock(id, version);
     }
 
     /**
@@ -869,29 +812,7 @@ module.exports = class extends PrivateBase {
      * @param {string} version - (optional) explicit dependency version number
      */
     addGradleDependencyManagement(scope, group, name, version) {
-        const fullPath = 'build.gradle';
-        let dependency = `${group}:${name}`;
-        if (version) {
-            dependency += `:${version}`;
-        }
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-gradle-dependency-management',
-                    splicable: [`${scope} "${dependency}"`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    group}:${name}:${version}${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.addDependencyManagement(scope, group, name, version);
     }
 
     /**
@@ -915,29 +836,7 @@ module.exports = class extends PrivateBase {
      * @param {string} version - (optional) explicit dependency version number
      */
     addGradleDependencyInDirectory(directory, scope, group, name, version) {
-        let dependency = `${group}:${name}`;
-        if (version) {
-            dependency += `:${version}`;
-        }
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    path: directory,
-                    file: 'build.gradle',
-                    needle: 'jhipster-needle-gradle-dependency',
-                    splicable: [`${scope} "${dependency}"`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    directory +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    group}:${name}:${version}${chalk.yellow(' not added.\n')}`
-            );
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.addDependencyInDirectory(directory, scope, group, name, version);
     }
 
     /**
@@ -946,26 +845,7 @@ module.exports = class extends PrivateBase {
      * @param {string} name - name of the file to apply from, must be 'fileName.gradle'
      */
     applyFromGradleScript(name) {
-        const fullPath = 'build.gradle';
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-gradle-apply-from',
-                    splicable: [`apply from: '${name}.gradle'`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    name +
-                    chalk.yellow(' not added.\n')
-            );
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.applyFromScript(name);
     }
 
     /**
@@ -976,41 +856,7 @@ module.exports = class extends PrivateBase {
      * @param {string} password - (optional) password of the repository credentials
      */
     addGradleMavenRepository(url, username, password) {
-        const fullPath = 'build.gradle';
-        try {
-            let repository = 'maven {\n';
-            if (url) {
-                repository += `        url "${url}"\n`;
-            }
-            if (username || password) {
-                repository += '        credentials {\n';
-                if (username) {
-                    repository += `            username = "${username}"\n`;
-                }
-                if (password) {
-                    repository += `            password = "${password}"\n`;
-                }
-                repository += '        }\n';
-            }
-            repository += '    }';
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-gradle-repositories',
-                    splicable: [repository]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    url +
-                    chalk.yellow(' not added.\n')
-            );
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.addMavenRepository(url, username, password);
     }
 
     /**

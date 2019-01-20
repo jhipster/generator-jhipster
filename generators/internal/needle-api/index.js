@@ -4,6 +4,7 @@ const ClientReact = require('./needle-client-react');
 const ClientWebpack = require('./needle-client-webpack');
 const ClientI18n = require('./needle-client-i18n');
 const ServerMaven = require('./needle-server-maven');
+const ServerGradle = require('./needle-server-gradle');
 const ServerCache = require('./needle-server-cache');
 const ServerLiquibase = require('./needle-server-liquibase');
 
@@ -17,5 +18,6 @@ module.exports = class NeedleApi {
         this.clientI18n = new ClientI18n(generator);
         this.serverCache = new ServerCache(generator);
         this.serverLiquibase = new ServerLiquibase(generator);
+        this.serverGradle = new ServerGradle(generator);
     }
 };
