@@ -529,6 +529,10 @@ describe('JHipster generator for entity', () => {
                 assert.file(expectedFiles.clientNg2GatewayMicroserviceEntity);
                 assert.noFile(expectedFiles.gatling);
                 assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.service.ts`, 'samplemicroservice');
+                assert.fileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.module.ts`,
+                    'SampleMicroserviceBarModule'
+                );
                 assert.noFile(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/BarResource.java`);
             });
         });
