@@ -56,7 +56,7 @@ module.exports = class extends needleClientBase {
         const reducerAddImportRewriteFileModel = this.generateFileModel(
             indexReducerPath,
             'jhipster-needle-add-reducer-import', // prettier-ignore
-            this.stripMargin(`|// prettier-ignore
+            this.generator.stripMargin(`|// prettier-ignore
                     |import ${entityInstance}, {
                     |  ${entityName}State
                     |} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
@@ -66,14 +66,14 @@ module.exports = class extends needleClientBase {
         const reducerAddTypeRewriteFileModel = this.generateFileModel(
             indexReducerPath,
             'jhipster-needle-add-reducer-type',
-            this.stripMargin(`|  readonly ${entityInstance}: ${entityName}State;`)
+            this.generator.stripMargin(`|  readonly ${entityInstance}: ${entityName}State;`)
         );
         this.addBlockContentToFile(reducerAddTypeRewriteFileModel, errorMessage(indexReducerPath));
 
         const reducerAddCombineRewriteFileModel = this.generateFileModel(
             indexReducerPath,
             'jhipster-needle-add-reducer-combine',
-            this.stripMargin(`|  ${entityInstance},`)
+            this.generator.stripMargin(`|  ${entityInstance},`)
         );
         this.addBlockContentToFile(reducerAddCombineRewriteFileModel, errorMessage(indexReducerPath));
     }
