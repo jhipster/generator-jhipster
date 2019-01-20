@@ -23,11 +23,10 @@ import { TranslateService } from '@ngx-translate/core';
 /**
  * A wrapper directive on top of the translate pipe as the inbuilt translate directive from ngx-translate is too verbose and buggy
  */
-/* tslint:disable */
 @Directive({
     selector: '[jhiTranslate]'
 })
-export class JhiTranslateComponent implements OnChanges {
+export class JhiTranslateDirective implements OnChanges {
     @Input() jhiTranslate: string;
     @Input() translateValues: any;
 
@@ -39,6 +38,7 @@ export class JhiTranslateComponent implements OnChanges {
 
     ngOnChanges() {
         const enabled = this.configService.getConfig().i18nEnabled;
+
         if (enabled) {
             this.translateService
                 .get(this.jhiTranslate, this.translateValues)
@@ -55,4 +55,3 @@ export class JhiTranslateComponent implements OnChanges {
         }
     }
 }
-/* tslint:enable */

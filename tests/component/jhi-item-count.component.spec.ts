@@ -19,7 +19,7 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { JhiItemCountComponent } from '../../src/component/jhi-item-count.component';
-import { JhiTranslateComponent } from '../../src/language/jhi-translate.directive';
+import { JhiTranslateDirective } from '../../src/language/jhi-translate.directive';
 import { JhiConfigService } from '../../src/config.service';
 
 function getElementHtml(
@@ -35,7 +35,7 @@ describe('JhiItemCountComponent test', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [JhiItemCountComponent, JhiTranslateComponent],
+            declarations: [JhiItemCountComponent, JhiTranslateDirective],
             imports: [TranslateModule.forRoot()],
             providers: [
                 {
