@@ -144,7 +144,7 @@ module.exports = class extends PrivateBase {
      *
      * @param {string} entityInstance - Entity Instance
      * @param {string} entityClass - Entity Class
-     * @param {string} entityAngularName - Entity Angular Name
+     * @param {string} entityName - Entity Name
      * @param {string} entityFolderName - Entity Folder Name
      * @param {string} entityFileName - Entity File Name
      * @param {boolean} entityUrl - Entity router URL
@@ -153,114 +153,25 @@ module.exports = class extends PrivateBase {
     addEntityToModule(
         entityInstance,
         entityClass,
-        entityAngularName,
+        entityName,
         entityFolderName,
         entityFileName,
         entityUrl,
         clientFramework,
         microServiceName
     ) {
-        const entityModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
-        try {
-            if (clientFramework === 'angularX') {
-                const appName = this.getAngularXAppName();
-                const isEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, 'loadChildren', this);
-                const modulePath = `./${entityFolderName}/${entityFileName}.module`;
-
-                const moduleName = microServiceName
-                    ? `${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
-                    : `${appName}${entityAngularName}Module`;
-
-                const splicable = isEntityAlreadyGenerated
-                    ? `|,{
-                        |                path: '${entityUrl}',
-                        |                loadChildren: '${modulePath}#${moduleName}'
-                        |            }`
-                    : `|{
-                            |                path: '${entityUrl}',
-                            |                loadChildren: '${modulePath}#${moduleName}'
-                            |            }`;
-
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: entityModulePath,
-                        needle: 'jhipster-needle-add-entity-route',
-                        splicable: [this.stripMargin(splicable)]
-                    },
-                    this
-                );
-            } else if (clientFramework === 'react') {
-                // React
-                const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
-
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: indexModulePath,
-                        needle: 'jhipster-needle-add-route-import',
-                        splicable: [this.stripMargin(`|import ${entityAngularName} from './${entityFolderName}';`)]
-                    },
-                    this
-                );
-
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: indexModulePath,
-                        needle: 'jhipster-needle-add-route-path',
-                        splicable: [
-                            this.stripMargin(
-                                `|<ErrorBoundaryRoute path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}} />`
-                            )
-                        ]
-                    },
-                    this
-                );
-
-                const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/shared/reducers/index.ts`;
-
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: indexReducerPath,
-                        needle: 'jhipster-needle-add-reducer-import',
-                        splicable: [
-                            // prettier-ignore
-                            this.stripMargin(`|// prettier-ignore
-                            |import ${entityInstance}, {
-                            |  ${entityAngularName}State
-                            |} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
-                        ]
-                    },
-                    this
-                );
-
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: indexReducerPath,
-                        needle: 'jhipster-needle-add-reducer-type',
-                        splicable: [this.stripMargin(`|  readonly ${entityInstance}: ${entityAngularName}State;`)]
-                    },
-                    this
-                );
-
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: indexReducerPath,
-                        needle: 'jhipster-needle-add-reducer-combine',
-                        splicable: [this.stripMargin(`|  ${entityInstance},`)]
-                    },
-                    this
-                );
-            }
-        } catch (e) {
-            this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    entityModulePath +
-                    chalk.yellow(' or missing required jhipster-needle. Reference to ') +
-                    entityInstance +
-                    entityClass +
-                    entityFolderName +
-                    entityFileName} ${chalk.yellow(`not added to ${entityModulePath}.\n`)}`
+        if (clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addEntityToModule(
+                entityInstance,
+                entityClass,
+                entityName,
+                entityFolderName,
+                entityFileName,
+                entityUrl,
+                microServiceName
             );
-            this.debug('Error:', e);
+        } else if (clientFramework === 'react') {
+            this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
         }
     }
 
