@@ -266,9 +266,6 @@ function writeFiles() {
                     this.clientFramework
                 );
             }
-            if (this.applicationType === 'gateway' && !_.isUndefined(this.microserviceName)) {
-                this.addEntityToWebpack(this.microserviceName, this.clientFramework);
-            }
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }
     };

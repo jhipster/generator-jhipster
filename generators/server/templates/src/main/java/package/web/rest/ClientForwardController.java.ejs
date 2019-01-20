@@ -23,8 +23,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ClientForwardController {
+    /**
+     * Forwards any unmapped paths (except those containing a period) to the client index.html
+     */
     @GetMapping(value = "/**/{path:[^\\.]*}")
-    public String redirect() {
+    public String forward() {
         return "forward:/";
     }
 }

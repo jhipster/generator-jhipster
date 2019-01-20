@@ -1148,7 +1148,13 @@ const serverFiles = {
                 },
                 { file: 'package/web/rest/package-info.java', renameTo: generator => `${generator.javaDir}web/rest/package-info.java` },
 
-                { file: 'package/web/rest/LogsResource.java', renameTo: generator => `${generator.javaDir}web/rest/LogsResource.java` },
+                { file: 'package/web/rest/LogsResource.java', renameTo: generator => `${generator.javaDir}web/rest/LogsResource.java` }
+            ]
+        },
+        {
+            condition: generator => !generator.skipClient,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
                 {
                     file: 'package/web/rest/ClientForwardController.java',
                     renameTo: generator => `${generator.javaDir}web/rest/ClientForwardController.java`
