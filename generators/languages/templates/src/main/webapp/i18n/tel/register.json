@@ -1,23 +1,23 @@
 {
     "register": {
-        "title": "Registration",
+        "title": "నమోదు",
         "form": {
-            "button": "Register"
+            "button": "నమోదు చేయు"
         },
         "messages": {
             "validate": {
                 "login": {
-                    "required": "Your username is required.",
-                    "minlength": "Your username is required to be at least 1 character.",
-                    "maxlength": "Your username cannot be longer than 50 characters.",
-                    "pattern": "Your username can only contain letters and digits."
+                    "required": "మీ వినియోగదారు పేరు అవసరం.",
+                    "minlength": "మీ వినియోగదారు పేరు కనీసం 1 అక్షరం ఉండాలి.",
+                    "maxlength": "మీ వినియోగదారు పేరు 50 అక్షరాలు కంటే ఎక్కువ ఉండకూడదు.",
+                    "pattern": "మీ వినియోగదారు పేరు అక్షరాలు మరియు అంకెలు మాత్రమే కలిగి ఉంటుంది."
                 }
             },
-            "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+            "success": "<strong>నమోదు సఫలం!</strong> నిర్ధారణ కోసం దయచేసి మీ ఇమెయిల్ను చూసుకోండి.",
             "error": {
-                "fail": "<strong>Registration failed!</strong> Please try again later.",
-                "userexists": "<strong>Login name already registered!</strong> Please choose another one.",
-                "emailexists": "<strong>Email is already in use!</strong> Please choose another one."
+                "fail": "<strong>నమోదు విఫలం!</strong> దయచేసి తర్వాత మళ్లీ ప్రయత్నించండి",
+                "userexists": "<strong>లాగిన్ పేరు ఇప్పటికే నమోదు చేయబడింది!</strong> దయచేసి మరొకదాన్ని ఎంచుకోండి.",
+                "emailexists": "<strong>ఇమెయిల్ ఇప్పటికే వినియోగంలో ఉంది!</strong> దయచేసి మరొకదాన్ని ఎంచుకోండి."
             }
         }
     }

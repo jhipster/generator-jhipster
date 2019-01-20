@@ -1,11 +1,11 @@
 {
     "logs": {
-        "title": "Logs",
-        "nbloggers": "There are {{ total }} loggers.",
-        "filter": "Filter",
+        "title": "లాగ్స్",
+        "nbloggers": "{{ total }} లాగర్స్ ఉన్నవి.",
+        "filter": "వడపోత",
         "table": {
-            "name": "Name",
-            "level": "Level"
+            "name": "పేరు",
+            "level": "స్థాయి"
         }
     }
 }

@@ -1,15 +1,15 @@
 {
     "sessions": {
-        "title": "Active sessions for [<b>{{username}}</b>]",
+        "title": "[<b>{{username}}</b>] యొక్క క్రియాశీల సెషన్స్",
         "table": {
-            "ipaddress": "IP address",
-            "useragent": "User Agent",
-            "date": "Date",
-            "button": "Invalidate"
+            "ipaddress": "ఇపి అడ్రస్",
+            "useragent": "యూజర్ ఏజెంట్",
+            "date": "తేదీ",
+            "button": "రద్దు చేయి"
         },
         "messages": {
-            "success": "<strong>Session invalidated!</strong>",
-            "error": "<strong>An error has occurred!</strong> The session could not be invalidated."
+            "success": "<strong>సెషన్ రద్దు చేయబడినది!</strong>",
+            "error": "<strong>ఒక లోపము సంభవించినది!</strong> సెషన్ రద్దు చర్య విఫలమైనది."
         }
     }
 }
