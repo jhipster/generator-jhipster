@@ -88,11 +88,15 @@ version = '0.0.1-SNAPSHOT'
 description = ''
 
 bootWar {
-   mainClassName = '<%= packageName %>.<%= mainClass %>'
+    mainClassName = '<%= packageName %>.<%= mainClass %>'
+}
+
+war {
     <%_ if (!skipClient) { _%>
     webAppDirName = '<%= CLIENT_DIST_DIR %>'
     <%_ } _%>
     enabled = true
+    extension = 'war.original'
 }
 
 springBoot {
