@@ -62,7 +62,7 @@ const ENTITY_STATES = [
     <%_ } _%>
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class <%= angularXAppName %><%= entityAngularName %>Module {
+export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {
     <%_ if (enableTranslation) { _%>
     constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
         this.languageHelper.language.subscribe((languageKey: string) => {
