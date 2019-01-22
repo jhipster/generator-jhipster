@@ -16,28 +16,28 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Directive, Input, Output, EventEmitter } from '@angular/core';
+import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Directive({
-    selector: '[jhiSort]'
+  selector: '[jhiSort]'
 })
 export class JhiSortDirective {
-    @Input() predicate: string;
-    @Input() ascending: boolean;
-    @Input() callback: Function;
+  @Input() predicate: string;
+  @Input() ascending: boolean;
+  @Input() callback: Function;
 
-    @Output() predicateChange: EventEmitter<any> = new EventEmitter();
-    @Output() ascendingChange: EventEmitter<any> = new EventEmitter();
+  @Output() predicateChange: EventEmitter<any> = new EventEmitter();
+  @Output() ascendingChange: EventEmitter<any> = new EventEmitter();
 
-    activeIconComponent: FaIconComponent;
-    constructor() { }
+  activeIconComponent: FaIconComponent;
+  constructor() {}
 
-    sort(field: any) {
-        this.ascending = field !== this.predicate ? true : !this.ascending;
-        this.predicate = field;
-        this.predicateChange.emit(field);
-        this.ascendingChange.emit(this.ascending);
-        this.callback();
-    }
+  sort(field: any) {
+    this.ascending = field !== this.predicate ? true : !this.ascending;
+    this.predicate = field;
+    this.predicateChange.emit(field);
+    this.ascendingChange.emit(this.ascending);
+    this.callback();
+  }
 }

@@ -16,86 +16,89 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-    selector: 'jhi-metrics-system',
-    template: `<h4>System</h4>
+  selector: 'jhi-metrics-system',
+  template: `
+    <h4>System</h4>
     <div class="row" *ngIf="!updating">
-        <div class="col-md-4">Uptime</div>
-        <div class="col-md-8 text-right">{{convertMillisecondsToDuration(systemMetrics["process.uptime"])}}</div>
+      <div class="col-md-4">Uptime</div>
+      <div class="col-md-8 text-right">{{ convertMillisecondsToDuration(systemMetrics['process.uptime']) }}</div>
     </div>
     <div class="row" *ngIf="!updating">
-        <div class="col-md-4">Start time</div>
-        <div class="col-md-8 text-right">{{systemMetrics["process.start.time"] | date:'full'}}</div>
+      <div class="col-md-4">Start time</div>
+      <div class="col-md-8 text-right">{{ systemMetrics['process.start.time'] | date: 'full' }}</div>
     </div>
     <div class="row" *ngIf="!updating">
-        <div class="col-md-9">Process CPU usage</div>
-        <div class="col-md-3 text-right">{{100 * systemMetrics["process.cpu.usage"] | number:'1.0-2'}} %</div>
+      <div class="col-md-9">Process CPU usage</div>
+      <div class="col-md-3 text-right">{{ 100 * systemMetrics['process.cpu.usage'] | number: '1.0-2' }} %</div>
     </div>
-    <ngb-progressbar [value]="100 * systemMetrics['process.cpu.usage']" [striped]="true" [animated]="false" type="success"
-                     *ngIf="!updating">
-        <span>{{100 * systemMetrics["process.cpu.usage"] | number:'1.0-2'}} %</span>
+    <ngb-progressbar
+      [value]="100 * systemMetrics['process.cpu.usage']"
+      [striped]="true"
+      [animated]="false"
+      type="success"
+      *ngIf="!updating"
+    >
+      <span>{{ 100 * systemMetrics['process.cpu.usage'] | number: '1.0-2' }} %</span>
     </ngb-progressbar>
     <div class="row" *ngIf="!updating">
-        <div class="col-md-9">System CPU usage</div>
-        <div class="col-md-3 text-right">{{100 * systemMetrics["system.cpu.usage"] | number:'1.0-2'}} %</div>
+      <div class="col-md-9">System CPU usage</div>
+      <div class="col-md-3 text-right">{{ 100 * systemMetrics['system.cpu.usage'] | number: '1.0-2' }} %</div>
     </div>
-    <ngb-progressbar [value]="100 * systemMetrics['system.cpu.usage']" [striped]="true" [animated]="false" type="success"
-                     *ngIf="!updating">
-        <span>{{100 * systemMetrics["system.cpu.usage"] | number:'1.0-2'}} %</span>
+    <ngb-progressbar [value]="100 * systemMetrics['system.cpu.usage']" [striped]="true" [animated]="false" type="success" *ngIf="!updating">
+      <span>{{ 100 * systemMetrics['system.cpu.usage'] | number: '1.0-2' }} %</span>
     </ngb-progressbar>
     <div class="row" *ngIf="!updating">
-        <div class="col-md-9">System CPU count</div>
-        <div class="col-md-3 text-right">{{systemMetrics["system.cpu.count"]}}</div>
+      <div class="col-md-9">System CPU count</div>
+      <div class="col-md-3 text-right">{{ systemMetrics['system.cpu.count'] }}</div>
     </div>
     <div class="row" *ngIf="!updating">
-        <div class="col-md-9">System 1m Load average</div>
-        <div class="col-md-3 text-right">{{systemMetrics["system.load.average.1m"] | number:'1.0-2'}}</div>
+      <div class="col-md-9">System 1m Load average</div>
+      <div class="col-md-3 text-right">{{ systemMetrics['system.load.average.1m'] | number: '1.0-2' }}</div>
     </div>
     <div class="row" *ngIf="!updating">
-        <div class="col-md-9">Process files max</div>
-        <div class="col-md-3 text-right">{{systemMetrics["process.files.max"] | number:'1.0-0'}}</div>
+      <div class="col-md-9">Process files max</div>
+      <div class="col-md-3 text-right">{{ systemMetrics['process.files.max'] | number: '1.0-0' }}</div>
     </div>
     <div class="row" *ngIf="!updating">
-        <div class="col-md-9">Process files open</div>
-        <div class="col-md-3 text-right">{{systemMetrics["process.files.open"] | number:'1.0-0'}}</div>
-    </div>`
+      <div class="col-md-9">Process files open</div>
+      <div class="col-md-3 text-right">{{ systemMetrics['process.files.open'] | number: '1.0-0' }}</div>
+    </div>
+  `
 })
 export class JhiMetricsSystemComponent {
+  /**
+   * object containing thread related metrics
+   */
+  @Input() systemMetrics: {};
 
-    /**
-     * object containing thread related metrics
-     */
-    @Input() systemMetrics: {};
+  /**
+   * boolean field saying if the metrics are in the process of being updated
+   */
+  @Input() updating: boolean;
 
-    /**
-     * boolean field saying if the metrics are in the process of being updated
-     */
-    @Input() updating: boolean;
-
-    convertMillisecondsToDuration(ms) {
-        const times = {
-            year: 31557600000,
-            month: 2629746000,
-            day: 86400000,
-            hour: 3600000,
-            minute: 60000,
-            second: 1000
-        };
-        let time_string = '';
+  convertMillisecondsToDuration(ms) {
+    const times = {
+      year: 31557600000,
+      month: 2629746000,
+      day: 86400000,
+      hour: 3600000,
+      minute: 60000,
+      second: 1000
+    };
+    let time_string = '';
+    for (const key in times) {
+      if (Math.floor(ms / times[key]) > 0) {
         let plural = '';
-        for (const key in times) {
-            if (Math.floor(ms / times[key]) > 0) {
-                if (Math.floor(ms / times[key]) > 1) {
-                    plural = 's';
-                } else {
-                    plural = '';
-                }
-                time_string += Math.floor(ms / times[key]).toString() + ' ' + key.toString() + plural + ' ';
-                ms = ms - times[key] * Math.floor(ms / times[key]);
-            }
+        if (Math.floor(ms / times[key]) > 1) {
+          plural = 's';
         }
-        return time_string;
+        time_string += Math.floor(ms / times[key]).toString() + ' ' + key.toString() + plural + ' ';
+        ms = ms - times[key] * Math.floor(ms / times[key]);
+      }
     }
+    return time_string;
+  }
 }

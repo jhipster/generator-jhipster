@@ -3,10 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSortDown, faSortUp, faSort } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 
-import { JhiSortDirective, JhiSortByDirective } from '../../src/directive';
 import { JhiConfigService } from '../../src/config.service';
+import { JhiSortByDirective, JhiSortDirective } from '../../src/directive';
 
 @Component({
     template: `

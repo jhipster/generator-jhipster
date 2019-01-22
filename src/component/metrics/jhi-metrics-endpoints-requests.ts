@@ -16,44 +16,44 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-    selector: 'jhi-metrics-endpoints-requests',
-    template: `<h3>Endpoints requests (time in millisecond)</h3>
+  selector: 'jhi-metrics-endpoints-requests',
+  template: `
+    <h3>Endpoints requests (time in millisecond)</h3>
     <div class="table-responsive" *ngIf="!updating">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Method</th>
-                <th>Endpoint url</th>
-                <th class="text-right">Count</th>
-                <th class="text-right">Mean</th>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Endpoint url</th>
+            <th class="text-right">Count</th>
+            <th class="text-right">Mean</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let entry of (endpointsRequestsMetrics | keys)">
+            <tr *ngFor="let method of (entry.value | keys)">
+              <td>{{ method.key }}</td>
+              <td>{{ entry.key }}</td>
+              <td class="text-right">{{ method.value.count }}</td>
+              <td class="text-right">{{ method.value.mean | number: '1.0-3' }}</td>
             </tr>
-            </thead>
-            <tbody>
-            <ng-container *ngFor="let entry of endpointsRequestsMetrics | keys">
-                <tr *ngFor="let method of entry.value | keys">
-                    <td>{{method.key}}</td>
-                    <td>{{entry.key}}</td>
-                    <td class="text-right">{{method.value.count}}</td>
-                    <td class="text-right">{{method.value.mean | number:'1.0-3'}}</td>
-                </tr>
-            </ng-container>
-            </tbody>
-        </table>
-    </div>`
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  `
 })
 export class JhiMetricsEndpointsRequestsComponent {
+  /**
+   * object containing service related metrics
+   */
+  @Input() endpointsRequestsMetrics: {};
 
-    /**
-     * object containing service related metrics
-     */
-    @Input() endpointsRequestsMetrics: {};
-
-    /**
-     * boolean field saying if the metrics are in the process of being updated
-     */
-    @Input() updating: boolean;
-
+  /**
+   * boolean field saying if the metrics are in the process of being updated
+   */
+  @Input() updating: boolean;
 }

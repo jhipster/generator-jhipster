@@ -23,13 +23,12 @@ import { Component, Input } from '@angular/core';
  */
 /* tslint:disable */
 @Component({
-    selector: '[jhiTranslate]',
-    template: '<span [innerHTML]="jhiTranslate | translate:translateValues"></span>'
+  selector: '[jhiTranslate]',
+  template: '<span [innerHTML]="jhiTranslate | translate:translateValues"></span>'
 })
 export class JhiTranslateComponent {
+  @Input() jhiTranslate: string;
 
-    @Input() jhiTranslate: string;
-
-    @Input() translateValues: any;
+  @Input() translateValues: any;
 }
 /* tslint:enable */

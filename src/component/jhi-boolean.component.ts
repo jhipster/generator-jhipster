@@ -17,8 +17,8 @@
  limitations under the License.
  */
 import { Component, Input, OnInit } from '@angular/core';
-import { JhiConfigService } from '../config.service';
 import { JhiModuleConfig } from '../config';
+import { JhiConfigService } from '../config.service';
 
 /**
  * This component can be used to display a boolean value by defining the @Input attributes
@@ -79,63 +79,62 @@ import { JhiModuleConfig } from '../config';
  * - Display a blue badge and write 'deactivated' when inputBooleanVariable is false
  */
 @Component({
-    selector: 'jhi-boolean',
-    template: `<span
-               [ngClass]="value ? classTrue : classFalse"
-               [innerHtml]="value ? textTrue : textFalse">
-               </span>`
+  selector: 'jhi-boolean',
+  template: `
+    <span [ngClass]="value ? classTrue : classFalse" [innerHtml]="value ? textTrue : textFalse"> </span>
+  `
 })
 export class JhiBooleanComponent implements OnInit {
-    /**
-     * the boolean input value
-     */
-    @Input() value: boolean;
+  /**
+   * the boolean input value
+   */
+  @Input() value: boolean;
 
-    /**
-     * the class(es) (space separated) that will be applied if value is true
-     */
-    @Input() classTrue: string;
+  /**
+   * the class(es) (space separated) that will be applied if value is true
+   */
+  @Input() classTrue: string;
 
-    /**
-     * the class(es) (space separated) that will be applied if the input value is false
-     */
-    @Input() classFalse: string;
+  /**
+   * the class(es) (space separated) that will be applied if the input value is false
+   */
+  @Input() classFalse: string;
 
-    /**
-     * the text that will be displayed if the input value is true
-     */
-    @Input() textTrue: string;
+  /**
+   * the text that will be displayed if the input value is true
+   */
+  @Input() textTrue: string;
 
-    /**
-     * the text that will be displayed if the input value is false
-     */
-    @Input() textFalse: string;
+  /**
+   * the text that will be displayed if the input value is false
+   */
+  @Input() textFalse: string;
 
-    config: JhiModuleConfig;
+  config: JhiModuleConfig;
 
-    constructor(configService: JhiConfigService) {
-        this.config = configService.getConfig();
+  constructor(configService: JhiConfigService) {
+    this.config = configService.getConfig();
+  }
+
+  ngOnInit() {
+    if (this.textTrue === undefined) {
+      if (this.classTrue === undefined) {
+        this.classTrue = this.config.classTrue;
+      }
+    } else {
+      if (this.classTrue === undefined) {
+        this.classTrue = this.config.classBadgeTrue;
+      }
     }
 
-    ngOnInit() {
-        if (this.textTrue === undefined) {
-            if (this.classTrue === undefined) {
-                this.classTrue = this.config.classTrue;
-            }
-        } else {
-            if (this.classTrue === undefined) {
-                this.classTrue = this.config.classBadgeTrue;
-            }
-        }
-
-        if (this.textFalse === undefined) {
-            if (this.classFalse === undefined) {
-                this.classFalse = this.config.classFalse;
-            }
-        } else {
-            if (this.classFalse === undefined) {
-                this.classFalse = this.config.classBadgeFalse;
-            }
-        }
+    if (this.textFalse === undefined) {
+      if (this.classFalse === undefined) {
+        this.classFalse = this.config.classFalse;
+      }
+    } else {
+      if (this.classFalse === undefined) {
+        this.classFalse = this.config.classBadgeFalse;
+      }
     }
+  }
 }
