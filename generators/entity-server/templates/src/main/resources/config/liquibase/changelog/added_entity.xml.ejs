@@ -146,10 +146,19 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
 
+        <%_ for (const idx in fields) {
+            if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
+        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
+        <%_ }
+        } _%>
+    </changeSet>
+
+    <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="dev">
         <loadData
                   file="config/liquibase/data/<%= entityTableName %>.csv"
                   separator=";"
-                  tableName="<%= entityTableName %>">
+                  tableName="<%= entityTableName %>"
+                  context="dev">
             <column name="id" type="numeric"/>
             <%_ for (idx in fields) {
                 let loadColumnType = 'string';
@@ -172,11 +181,9 @@
                 <%_ } _%>
             <%_ } _%>
         </loadData>
-        <%_ for (const idx in fields) {
-            if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
-        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
-        <%_ }
-        } _%>
+    </changeSet>
+
+    <changeSet id="<%= changelogDate %>-1-relations" author="jhipster">
         <%_ for (idx in relationships) {
             const relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
