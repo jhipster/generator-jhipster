@@ -79,8 +79,14 @@ for (lineNb = 1; lineNb <= 20; lineNb++) {
                 let maxlength = fields[idx].fieldValidateRulesMaxlength;
                 data = data.substring(0, maxlength);
             }
-        } else if (fields[idx].fieldIsEnum) {
-            data = '0';
+        }
+        if (fields[idx].fieldIsEnum) {
+            if (fields[idx].fieldValues.length !== 0) {
+                const enums = fields[idx].fieldValues.split(',');
+                data = enums[0];
+            } else {
+                data = '';
+            }
         }
         if (fieldType === 'byte[]') {
             data = Buffer.from(this.faker.random.words(), 'utf8').toString('hex');
