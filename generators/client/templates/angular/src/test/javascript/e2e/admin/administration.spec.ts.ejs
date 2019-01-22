@@ -41,6 +41,7 @@ describe('administration', () => {
         <%_ } else { _%>
         await signInPage.loginWithOAuth('admin', 'admin');
         <%_ } _%>
+        await browser.wait(ec.visibilityOf(navBarPage.adminMenu), 5000);
     });
 
     beforeEach(async () => {
