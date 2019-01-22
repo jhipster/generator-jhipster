@@ -148,11 +148,15 @@ export class SignInPage {
         // Entering non angular site, tell webdriver to switch to synchronous mode.
         await browser.waitForAngularEnabled(false);
 
-        await this.username.sendKeys(username);
-        await this.password.sendKeys(password);
-        await this.loginButton.click();
-        if (!await this.username.isPresent()) {
-            await browser.waitForAngularEnabled(true);
+        if (await this.username.isPresent()) {
+            await this.username.sendKeys(username);
+            await this.password.sendKeys(password);
+            await this.loginButton.click();
+            if (!await this.username.isPresent()) {
+                await browser.waitForAngularEnabled(true);
+            }
+        } else { // redirected back because already logged in
+            browser.waitForAngularEnabled(true);
         }
     }
     <%_ } _%>
