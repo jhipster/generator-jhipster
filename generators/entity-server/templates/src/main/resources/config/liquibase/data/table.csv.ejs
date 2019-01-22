@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-id;<% for (idx in fields) { %><%=fields[idx].fieldNameAsDatabaseColumn%><% if (idx < fields.length - 1) { %>;<% } } %>
+id;<% for (idx in fields) { %><%=fields[idx].fieldNameAsDatabaseColumn%><%if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {%>;<%=fields[idx].fieldNameAsDatabaseColumn%>_content_type<% } %><% if (idx < fields.length - 1) { %>;<% } } %>
 <%_
 let table = [];
 for (lineNb = 1; lineNb <= 20; lineNb++) {
@@ -24,15 +24,14 @@ for (lineNb = 1; lineNb <= 20; lineNb++) {
     for (idx in fields) {
         let data = '';
         let columnType = fields[idx].columnType;
-        if (columnType === 'integer' || columnType === 'bigint') {
+        let fieldType = fields[idx].fieldType;
+        if (columnType === 'integer' || columnType === 'bigint' || columnType.startsWith('decimal')) {
             data = this.faker.random.number();
-        }
-        if (columnType === 'date' || columnType === 'datetime') {
+        } else if (columnType === 'date' || columnType === 'datetime') {
             // Write the date without milliseconds so Java can parse it
             // See https://stackoverflow.com/a/34053802/150868
             data = this.faker.date.recent().toISOString().split('.')[0];
-        }
-        if (columnType.startsWith('varchar')) {
+        } else if (columnType.startsWith('varchar')) {
             let columnName = fields[idx].fieldNameAsDatabaseColumn;
             if (columnName === 'first_name') {
                 data = this.faker.name.firstName();
@@ -80,11 +79,16 @@ for (lineNb = 1; lineNb <= 20; lineNb++) {
                 let maxlength = fields[idx].fieldValidateRulesMaxlength;
                 data = data.substring(0, maxlength);
             }
-        }
-        if (fields[idx].fieldIsEnum) {
+        } else if (fields[idx].fieldIsEnum) {
             data = '0';
         }
+        if (fieldType === 'byte[]') {
+            data = Buffer.from(this.faker.random.words(), 'utf8').toString('hex');
+        }
         line.push(data);
+        if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
+            line.push('image/png');
+        }
     }
     table.push(line);
 }
