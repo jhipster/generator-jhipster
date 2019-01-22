@@ -21,7 +21,6 @@ export default class <%=jhiPrefixCapitalized%>Metrics extends Vue {
   }
 
   public refresh(): void {
-    this.updatingMetrics = true;
     this.metricsService()
       .getMetrics()
       .then(resultsMetrics => {
@@ -29,6 +28,7 @@ export default class <%=jhiPrefixCapitalized%>Metrics extends Vue {
         this.metricsService()
           .retrieveThreadDump()
           .then(res => {
+            this.updatingMetrics = true;
             this.threadData = res.data.threads;
 
             this.threadStats = {
@@ -58,7 +58,13 @@ export default class <%=jhiPrefixCapitalized%>Metrics extends Vue {
               this.threadStats.threadDumpBlocked;
 
             this.updatingMetrics = false;
+          })
+          .catch(() => {
+            this.updatingMetrics = true;
           });
+      })
+      .catch(() => {
+        this.updatingMetrics = true;
       });
   }
 

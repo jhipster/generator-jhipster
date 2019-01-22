@@ -11,14 +11,14 @@
     <div class="row" v-if="!updatingMetrics">
       <div class="col-md-4">
         <h4 v-text="$t('metrics.jvm.memory.title')">Memory</h4>
-        <div v-if="!updatingMetrics">
+        <div>
           <div v-for="(entry, key) of metrics.jvm">
-                        <span v-if="entry.max !== -1">
-                            <span>{{key}}</span> ({{formatNumber1(entry.used / 1048576)}}M / {{formatNumber1(entry.max / 1048576)}}M)
-                        </span>
+            <span v-if="entry.max !== -1">
+              <span>{{key}}</span> ({{formatNumber1(entry.used / 1048576)}}M / {{formatNumber1(entry.max / 1048576)}}M)
+            </span>
             <span v-else>
-                            <span>{{key}}</span> {{formatNumber1(entry.used / 1048576)}}M
-                        </span>
+              <span>{{key}}</span> {{formatNumber1(entry.used / 1048576)}}M
+            </span>
             <div>Committed : {{formatNumber1(entry.committed / 1048576)}}M</div>
             <b-progress v-if="entry.max !== -1" variant="success" animated :max="entry.max" striped >
               <b-progress-bar :value="entry.used" :label="formatNumber1(entry.used * 100 / entry.max) + '%'"></b-progress-bar>
@@ -38,27 +38,24 @@
           <b-progress-bar :value="threadStats.threadDumpTimedWaiting" :label="formatNumber1(threadStats.threadDumpTimedWaiting * 100 / threadStats.threadDumpAll) + '%'"></b-progress-bar>
         </b-progress>
 
-
         <span><span v-text="$t('metrics.jvm.threads.waiting')">Waiting</span> ({{threadStats.threadDumpWaiting}})</span>
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped >
           <b-progress-bar :value="threadStats.threadDumpWaiting" :label="formatNumber1(threadStats.threadDumpWaiting * 100 / threadStats.threadDumpAll) + '%'"></b-progress-bar>
         </b-progress>
-
 
         <span><span v-text="$t('metrics.jvm.threads.blocked')">Blocked</span> ({{threadStats.threadDumpBlocked}})</span>
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped >
           <b-progress-bar :value="threadStats.threadDumpBlocked" :label="formatNumber1(threadStats.threadDumpBlocked * 100 / threadStats.threadDumpAll) + '%'"></b-progress-bar>
         </b-progress>
 
-
         <span>Total: {{threadStats.threadDumpAll}}
-                    <a class="hand" v-b-modal.metricsModal
-                       data-toggle="modal"
-                       v-on:click="openModal()"
-                       data-target="#threadDump">
-                        <font-awesome-icon icon="eye"></font-awesome-icon>
-                    </a>
-                </span>
+          <a class="hand" v-b-modal.metricsModal
+            data-toggle="modal"
+            v-on:click="openModal()"
+            data-target="#threadDump">
+            <font-awesome-icon icon="eye"></font-awesome-icon>
+          </a>
+        </span>
 
       </div>
       <div class="col-md-4">
@@ -76,14 +73,18 @@
           <div class="col-md-3 text-right">{{formatNumber2(100 * metrics.processMetrics["process.cpu.usage"])}} %</div>
         </div>
         <b-progress variant="success" :max="100" striped >
-          <b-progress-bar :value="100 * metrics.processMetrics['process.cpu.usage']" :label="formatNumber1(100 * metrics.processMetrics['process.cpu.usage']) + '%'"></b-progress-bar>
+          <b-progress-bar :value="100 * metrics.processMetrics['process.cpu.usage']"
+            :label="formatNumber1(100 * metrics.processMetrics['process.cpu.usage']) + '%'">
+          </b-progress-bar>
         </b-progress>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-9">System CPU usage</div>
           <div class="col-md-3 text-right">{{formatNumber2(100 * metrics.processMetrics["system.cpu.usage"])}} %</div>
         </div>
         <b-progress variant="success" :max="100" striped >
-          <b-progress-bar :value="100 * metrics.processMetrics['system.cpu.usage']" :label="formatNumber1(100 * metrics.processMetrics['system.cpu.usage']) + '%'"></b-progress-bar>
+          <b-progress-bar :value="100 * metrics.processMetrics['system.cpu.usage']"
+            :label="formatNumber1(100 * metrics.processMetrics['system.cpu.usage']) + '%'">
+          </b-progress-bar>
         </b-progress>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-9">System CPU count</div>
@@ -104,38 +105,42 @@
       </div>
     </div>
 
-    <h3 v-text="$t('metrics.jvm.gc.title')">Garbage collector statistics</h3>
+    <h3 v-text="$t('metrics.jvm.gc.title')">Garbage collections</h3>
     <div class="row">
       <div class="col-md-4">
-        <div v-if="metrics.garbageCollector">
-                        <span>
-                            GC Live Data Size/GC Max Data Size
-                            ({{formatNumber1(metrics.garbageCollector['jvm.gc.live.data.size'] / 1048576)}}M
-                            / {{formatNumber1(metrics.garbageCollector['jvm.gc.max.data.size'] / 1048576)}}M)
-                        </span>
+        <div v-if="!updatingMetrics && metrics.garbageCollector">
+          <span>
+            GC Live Data Size/GC Max Data Size
+            ({{formatNumber1(metrics.garbageCollector['jvm.gc.live.data.size'] / 1048576)}}M
+            / {{formatNumber1(metrics.garbageCollector['jvm.gc.max.data.size'] / 1048576)}}M)
+          </span>
           <b-progress variant="success" :max="metrics.garbageCollector['jvm.gc.max.data.size']" striped >
-            <b-progress-bar :value="metrics.garbageCollector['jvm.gc.live.data.size']" :label="formatNumber2(100 * metrics.garbageCollector['jvm.gc.live.data.size'] / metrics.garbageCollector['jvm.gc.max.data.size']) + '%'"></b-progress-bar>
+            <b-progress-bar :value="metrics.garbageCollector['jvm.gc.live.data.size']"
+              :label="formatNumber2(100 * metrics.garbageCollector['jvm.gc.live.data.size'] / metrics.garbageCollector['jvm.gc.max.data.size']) + '%'">
+            </b-progress-bar>
           </b-progress>
         </div>
       </div>
       <div class="col-md-4">
-        <div v-if="metrics.garbageCollector">
-                        <span>
-                            GC Memory Promoted/GC Memory Allocated
-                            ({{formatNumber1(metrics.garbageCollector['jvm.gc.memory.promoted'] / 1048576)}}M
-                            / {{formatNumber1(metrics.garbageCollector['jvm.gc.memory.allocated'] / 1048576)}}M)
-                        </span>
+        <div v-if="!updatingMetrics && metrics.garbageCollector">
+          <span>
+            GC Memory Promoted/GC Memory Allocated
+            ({{formatNumber1(metrics.garbageCollector['jvm.gc.memory.promoted'] / 1048576)}}M
+            / {{formatNumber1(metrics.garbageCollector['jvm.gc.memory.allocated'] / 1048576)}}M)
+          </span>
           <b-progress variant="success" :max="metrics.garbageCollector['jvm.gc.memory.allocated']" striped >
-            <b-progress-bar :value="metrics.garbageCollector['jvm.gc.memory.promoted']" :label="formatNumber2(100 * metrics.garbageCollector['jvm.gc.memory.promoted'] / metrics.garbageCollector['jvm.gc.memory.allocated']) + '%'"></b-progress-bar>
+            <b-progress-bar :value="metrics.garbageCollector['jvm.gc.memory.promoted']"
+              :label="formatNumber2(100 * metrics.garbageCollector['jvm.gc.memory.promoted'] / metrics.garbageCollector['jvm.gc.memory.allocated']) + '%'">
+            </b-progress-bar>
           </b-progress>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="row" v-if="metrics.garbageCollector">
+        <div class="row" v-if="!updatingMetrics && metrics.garbageCollector">
           <div class="col-md-9">Classes loaded</div>
           <div class="col-md-3 text-right">{{metrics.garbageCollector.classesLoaded}}</div>
         </div>
-        <div class="row" v-if="metrics.garbageCollector">
+        <div class="row" v-if="!updatingMetrics && metrics.garbageCollector">
           <div class="col-md-9">Classes unloaded</div>
           <div class="col-md-3 text-right">{{metrics.garbageCollector.classesUnloaded}}</div>
         </div>
