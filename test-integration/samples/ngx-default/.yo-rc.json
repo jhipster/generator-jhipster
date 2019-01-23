@@ -65,6 +65,8 @@
         "messageBroker": false,
         "serviceDiscoveryType": false,
         "clientPackageManager": "npm",
-        "clientFramework": "angularX"
+        "clientFramework": "angularX",
+        "entitySuffix": "Entity",
+        "dtoSuffix": ""
     }
 }

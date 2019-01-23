@@ -73,7 +73,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @Document<% } %><% if (databaseType === 'cassandra') { %>
 @Table(name = "user")<% } %><% if (searchEngine === 'elasticsearch') { %>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "user")<% } %>
-public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
+public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 <% if (databaseType === 'sql') { %>
@@ -320,7 +320,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
             return false;
         }
 
-        User user = (User) o;
+        <%= asEntity('User') %> user = (<%= asEntity('User') %>) o;
         return !(user.getId() == null || getId() == null) && Objects.equals(getId(), user.getId());
     }
 
@@ -331,7 +331,7 @@ public class User<% if (databaseType === 'sql' || databaseType === 'mongodb' || 
 
     @Override
     public String toString() {
-        return "User{" +
+        return "<%= asEntity('User') %>{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +

@@ -4,6 +4,7 @@
         "http": {
             "400": "Mauvaise requête.",
             "403": "Vous n'avez pas les droits pour accéder à cette page.",
+            "404": "La page n'existe pas.",
             "405": "Le verbe HTTP que vous avez utilisé n'est pas reconnu par cet URL.",
             "500": "Erreur interne du serveur."
         },

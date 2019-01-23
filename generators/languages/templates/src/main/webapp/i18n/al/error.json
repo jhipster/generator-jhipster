@@ -4,6 +4,7 @@
         "http": {
             "400": "Kërkesë e gabuar.",
             "403": "Ju nuk jeni i autorizuar tek kjo faqe.",
+            "404": "Faqja e kërkuar nuk ekziston.",
             "405": "Folja HTTP që ju përdorët nuk mbulohet nga kjo URL.",
             "500": "Gabim i brëndshëm i serverit."
         },
