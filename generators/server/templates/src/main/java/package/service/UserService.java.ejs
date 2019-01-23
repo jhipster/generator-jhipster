@@ -803,7 +803,11 @@ public class UserService {
     private static <%= asEntity('User') %> getUser(Map<String, Object> details) {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         user.setId((String) details.get("sub"));
-        user.setLogin(((String) details.get("preferred_username")).toLowerCase());
+        if (details.get("preferred_username") != null) {
+            user.setLogin(((String) details.get("preferred_username")).toLowerCase());
+        } else {
+            user.setLogin(user.getId());
+        }
         if (details.get("given_name") != null) {
             user.setFirstName((String) details.get("given_name"));
         }
