@@ -1235,6 +1235,16 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => !generator.skipClient,
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/ClientForwardControllerIntTest.java',
+                    renameTo: generator => `${generator.testDir}web/rest/ClientForwardControllerIntTest.java`
+                }
+            ]
+        },
+        {
             condition: generator => generator.databaseType === 'sql',
             path: SERVER_TEST_SRC_DIR,
             templates: [
