@@ -94,4 +94,14 @@ describe('Data Utils Service Test', () => {
 
     })()));
 
+    it('should return a promise that rejects with an error message when passed event does not contain a file', async(() => inject([JhiDataUtils], (service: JhiDataUtils) => {
+
+        service.setFileData(null, null, null, false)
+               .then(
+                   () => fail('Should not resolve'),
+                   (error) => expect(error).toMatch(/^Base64 data was not set as file could not be extracted from passed parameter: /)
+               );
+
+    })()));
+
 });

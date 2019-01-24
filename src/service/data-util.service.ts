@@ -135,7 +135,7 @@ export class JhiDataUtils {
      */
     setFileData(event, entity, field: string, isImage: boolean): Promise<any> {
         return new Promise((resolve, reject) => {
-            if (event && event.target.files && event.target.files[0]) {
+            if (event && event.target && event.target.files && event.target.files[0]) {
                 const file = event.target.files[0];
                 if (isImage && !/^image\//.test(file.type)) {
                     reject(`File was expected to be an image but was found to be ${file.type}`);
@@ -146,6 +146,8 @@ export class JhiDataUtils {
                         resolve(entity);
                     });
                 }
+            } else {
+                reject(`Base64 data was not set as file could not be extracted from passed parameter: ${event}`);
             }
         });
     }
