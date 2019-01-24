@@ -240,8 +240,6 @@ public class SecurityConfiguration extends <% if (authenticationType === 'oauth2
             .loginProcessingUrl("/api/authentication")
             .successHandler(ajaxAuthenticationSuccessHandler())
             .failureHandler(ajaxAuthenticationFailureHandler())
-            .usernameParameter("j_username")
-            .passwordParameter("j_password")
             .permitAll()<% } %><% if (authenticationType === 'session') { %>
         .and()
             .logout()

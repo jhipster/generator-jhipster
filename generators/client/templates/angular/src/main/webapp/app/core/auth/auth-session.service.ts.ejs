@@ -32,8 +32,8 @@ export class AuthServerProvider {
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     login(credentials): Observable<any> {
-        const data = 'j_username=' + encodeURIComponent(credentials.username) +
-            '&j_password=' + encodeURIComponent(credentials.password) +
+        const data = 'username=' + encodeURIComponent(credentials.username) +
+            '&password=' + encodeURIComponent(credentials.password) +
             '&remember-me=' + credentials.rememberMe + '&submit=Login';
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
