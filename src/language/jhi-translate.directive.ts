@@ -43,7 +43,7 @@ export class JhiTranslateDirective implements OnChanges {
             this.translateService
                 .get(this.jhiTranslate, this.translateValues)
                 .subscribe(
-                    value => {
+                    (value) => {
                         this.el.nativeElement.innerHTML = value;
                     },
                     () => {
