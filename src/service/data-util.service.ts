@@ -67,7 +67,7 @@ export class JhiDataUtils {
       win.document.write(
         '<iframe src="' +
           fileURL +
-          '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>'
+          '" frameborder="0" style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>'
       );
     }
   }
@@ -77,11 +77,11 @@ export class JhiDataUtils {
    */
   toBase64(file: File, cb: Function) {
     const fileReader: FileReader = new FileReader();
-    fileReader.readAsDataURL(file);
     fileReader.onload = function(e: any) {
       const base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
       cb(base64Data);
     };
+    fileReader.readAsDataURL(file);
   }
 
   /**
@@ -101,17 +101,33 @@ export class JhiDataUtils {
     }
   }
 
-  setFileData(event, entity, field: string, isImage: boolean) {
-    if (event && event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      if (isImage && !/^image\//.test(file.type)) {
-        return;
+  /**
+   * Sets the base 64 data & file type of the 1st file on the event (event.target.files[0]) in the passed entity object
+   * and returns a promise.
+   *
+   * @param event the object containing the file (at event.target.files[0])
+   * @param entity the object to set the file's 'base 64 data' and 'file type' on
+   * @param field the field name to set the file's 'base 64 data' on
+   * @param isImage boolean representing if the file represented by the event is an image
+   * @returns a promise that resolves to the modified entity if operation is successful, otherwise rejects with an error message
+   */
+  setFileData(event, entity, field: string, isImage: boolean): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (event && event.target && event.target.files && event.target.files[0]) {
+        const file = event.target.files[0];
+        if (isImage && !/^image\//.test(file.type)) {
+          reject(`File was expected to be an image but was found to be ${file.type}`);
+        } else {
+          this.toBase64(file, base64Data => {
+            entity[field] = base64Data;
+            entity[`${field}ContentType`] = file.type;
+            resolve(entity);
+          });
+        }
+      } else {
+        reject(`Base64 data was not set as file could not be extracted from passed parameter: ${event}`);
       }
-      this.toBase64(file, base64Data => {
-        entity[field] = base64Data;
-        entity[`${field}ContentType`] = file.type;
-      });
-    }
+    });
   }
 
   /**
