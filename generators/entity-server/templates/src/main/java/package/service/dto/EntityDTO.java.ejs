@@ -18,23 +18,8 @@
 -%>
 package <%=packageName%>.service.dto;<%
 let importApiModelProperty = false;
-
-for (idx in relationships) {
-    if (typeof relationships[idx].javadoc != 'undefined') {
-        importApiModelProperty = true;
-        break;
-    }
-}
-if (!importApiModelProperty) {
-  for (idx in fields) {
-      if (typeof fields[idx].javadoc != 'undefined') {
-          importApiModelProperty = true;
-          break;
-      }
-  }
-}
-
-%>
+let importJsonIgnore = false;
+%><%- include ../../domain/imports -%>
 <%_ if (typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
 <%_ } if (importApiModelProperty === true) { _%>
@@ -102,10 +87,9 @@ public class <%= asDto(entityClass) %> implements Serializable {
         const fieldValidateRulesPatternJava = fields[idx].fieldValidateRulesPatternJava;
         const fieldType = fields[idx].fieldType;
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-        const fieldName = fields[idx].fieldName;
-        if (fieldValidate === true) {
-            let required = false;
-            if (fieldValidate === true && fieldValidateRules.includes('required')) {
+        const fieldName = fields[idx].fieldName;_%>
+    <%_ if (fieldValidate === true) {
+            if (fieldValidateRules.includes('required')) {
                 required = true;
             } _%>
     <%- include ../../common/field_validators -%>
