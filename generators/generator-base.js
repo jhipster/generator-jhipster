@@ -1291,10 +1291,10 @@ module.exports = class extends PrivateBase {
         } catch (e) {
             this.log(
                 `${chalk.yellow('\nUnable to find ') +
-                fullPath +
-                chalk.yellow(
-                    ' or missing required jhipster-needle. Reference to '
-                )}maven plugin repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`
+                    fullPath +
+                    chalk.yellow(
+                        ' or missing required jhipster-needle. Reference to '
+                    )}maven plugin repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`
             );
             this.debug('Error:', e);
         }

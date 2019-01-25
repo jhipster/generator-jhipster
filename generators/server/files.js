@@ -596,7 +596,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' &&
+            condition: generator =>
+                generator.authenticationType === 'oauth2' &&
                 (generator.applicationType === 'monolith' || generator.applicationType === 'gateway'),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -1298,7 +1299,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' &&
+            condition: generator =>
+                generator.authenticationType === 'oauth2' &&
                 (generator.applicationType === 'monolith' || generator.applicationType === 'gateway'),
             path: SERVER_TEST_SRC_DIR,
             templates: [
