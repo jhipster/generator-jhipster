@@ -35,9 +35,9 @@ export default class LoginForm extends Vue {
         }
     <%_ } else { _%>
     const data =
-      'j_username=' +
+      'username=' +
       encodeURIComponent(this.login) +
-      '&j_password=' +
+      '&password=' +
       encodeURIComponent(this.password) +
       '&remember-me=' +
       this.rememberMe +
