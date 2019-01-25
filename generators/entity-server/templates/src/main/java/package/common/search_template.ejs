@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%_
-    const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
     const mapper = entityInstance + 'Mapper';
     const entityToDtoReference = mapper + '::' + 'toDto';
     const entityListToDtoListReference = mapper + '.' + 'toDto';
@@ -29,8 +29,8 @@
     public ResponseEntity<List<<%= instanceType %>>> search<%= entityClassPlural %>(@RequestParam String query, Pageable pageable) {
         log.debug("REST request to search for a page of <%= entityClassPlural %> for query {}", query);<% if (viaService) { %>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.search(query, pageable);<% } else { %>
-        Page<<%= entityClass %>> page = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);<% } %>
+        Page<<%= asEntity(entityClass) %>> page = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);<% } %>
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/<%= entityApiUrl %>");
-        return new ResponseEntity<>(<% if (!viaService && dto === 'mapstruct') { %><%= entityListToDtoListReference %>(page.getContent())<% } else { %>page.getContent()<% } %>, headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(<% if (!viaService && dto === 'mapstruct') { %><%= entityListToDtoListReference %>(<% } %>page.getContent()<% if (!viaService && dto === 'mapstruct') { %>)<% } %>);
     <% } -%>
 }

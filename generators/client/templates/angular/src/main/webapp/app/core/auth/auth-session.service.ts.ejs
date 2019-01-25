@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,9 +32,11 @@ export class AuthServerProvider {
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     login(credentials): Observable<any> {
-        const data = 'j_username=' + encodeURIComponent(credentials.username) +
-            '&j_password=' + encodeURIComponent(credentials.password) +
-            '&remember-me=' + credentials.rememberMe + '&submit=Login';
+        const data =
+            `username=${encodeURIComponent(credentials.username)}` +
+            `&password=${encodeURIComponent(credentials.password)}` +
+            `&remember-me=${credentials.rememberMe}` +
+            `&submit=Login`;
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
         return this.http.post(SERVER_API_URL + 'api/authentication', data, { headers });

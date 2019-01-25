@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -274,7 +274,7 @@ module.exports = class extends PrivateBase {
      * @param {string} entityAngularName - Entity Angular Name
      * @param {string} entityFolderName - Entity Folder Name
      * @param {string} entityFileName - Entity File Name
-     * @param {boolean} enableTranslation - If translations are enabled or not
+     * @param {boolean} entityUrl - Entity router URL
      * @param {string} clientFramework - The name of the client framework
      */
     addEntityToModule(
@@ -283,7 +283,7 @@ module.exports = class extends PrivateBase {
         entityAngularName,
         entityFolderName,
         entityFileName,
-        enableTranslation,
+        entityUrl,
         clientFramework,
         microServiceName
     ) {
@@ -291,38 +291,28 @@ module.exports = class extends PrivateBase {
         try {
             if (clientFramework === 'angularX') {
                 const appName = this.getAngularXAppName();
-                let importName = `${appName}${entityAngularName}Module`;
-                if (microServiceName) {
-                    importName = `${importName} as ${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`;
-                }
-                let importStatement = `|import { ${importName} } from './${entityFolderName}/${entityFileName}.module';`;
-                if (importStatement.length > constants.LINE_LENGTH) {
-                    // prettier-ignore
-                    importStatement = `|// prettier-ignore
-                         |import {
-                         |    ${importName}
-                         |} from './${entityFolderName}/${entityFileName}.module';`;
-                }
-                jhipsterUtils.rewriteFile(
-                    {
-                        file: entityModulePath,
-                        needle: 'jhipster-needle-add-entity-module-import',
-                        splicable: [this.stripMargin(importStatement)]
-                    },
-                    this
-                );
+                const isEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, 'loadChildren', this);
+                const modulePath = `./${entityFolderName}/${entityFileName}.module`;
+
+                const moduleName = microServiceName
+                    ? `${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
+                    : `${appName}${entityAngularName}Module`;
+
+                const splicable = isEntityAlreadyGenerated
+                    ? `|,{
+                        |                path: '${entityUrl}',
+                        |                loadChildren: '${modulePath}#${moduleName}'
+                        |            }`
+                    : `|{
+                            |                path: '${entityUrl}',
+                            |                loadChildren: '${modulePath}#${moduleName}'
+                            |            }`;
 
                 jhipsterUtils.rewriteFile(
                     {
                         file: entityModulePath,
-                        needle: 'jhipster-needle-add-entity-module',
-                        splicable: [
-                            this.stripMargin(
-                                microServiceName
-                                    ? `|${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module,`
-                                    : `|${appName}${entityAngularName}Module,`
-                            )
-                        ]
+                        needle: 'jhipster-needle-add-entity-route',
+                        splicable: [this.stripMargin(splicable)]
                     },
                     this
                 );
@@ -1277,6 +1267,40 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a remote Maven Plugin Repository to the Maven build.
+     *
+     * @param {string} id - id of the repository
+     * @param {string} url - url of the repository
+     */
+    addMavenPluginRepository(id, url) {
+        const fullPath = 'pom.xml';
+        try {
+            // prettier-ignore
+            const repository = `${'<pluginRepository>\n'
+                + '            <id>'}${id}</id>\n`
+                + `            <url>${url}</url>\n`
+                + '        </pluginRepository>';
+            jhipsterUtils.rewriteFile(
+                {
+                    file: fullPath,
+                    needle: 'jhipster-needle-maven-plugin-repository',
+                    splicable: [repository]
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                `${chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(
+                        ' or missing required jhipster-needle. Reference to '
+                    )}maven plugin repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * Add a distributionManagement to the Maven build.
      *
      * @param {string} id - id of the repository
@@ -1479,6 +1503,35 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * A new Gradle property.
+     *
+     * @param {string} name - property name
+     * @param {string} value - property value
+     */
+    addGradleProperty(name, value) {
+        const fullPath = 'gradle.properties';
+        try {
+            jhipsterUtils.rewriteFile(
+                {
+                    file: fullPath,
+                    needle: 'jhipster-needle-gradle-property',
+                    splicable: [`${name}=${value}`]
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                `${chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(
+                        ' or missing required jhipster-needle. Reference to '
+                    )}gradle property (name: ${name}, value:${value})${chalk.yellow(' not added.\n')}`
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * A new Gradle plugin.
      *
      * @param {string} group - plugin GroupId
@@ -1492,7 +1545,7 @@ module.exports = class extends PrivateBase {
                 {
                     file: fullPath,
                     needle: 'jhipster-needle-gradle-buildscript-dependency',
-                    splicable: [`classpath '${group}:${name}:${version}'`]
+                    splicable: [`classpath "${group}:${name}:${version}"`]
                 },
                 this
             );
@@ -1745,7 +1798,7 @@ module.exports = class extends PrivateBase {
                 regex = new RegExp(
                     [
                         /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
-                        /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
+                        /( \[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
                         /( translate-compile)/, // translate-compile
                         /( translate-value-max="[0-9{}()|]*")/ // translate-value-max
                     ]
@@ -2039,6 +2092,9 @@ module.exports = class extends PrivateBase {
             this.debug('Error:', err);
             this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
         }
+        if (context.fileData.databaseType) {
+            context.databaseType = context.fileData.databaseType;
+        }
         context.relationships = context.fileData.relationships || [];
         context.fields = context.fileData.fields || [];
         context.haveFieldWithJavadoc = false;
@@ -2153,7 +2209,8 @@ module.exports = class extends PrivateBase {
      */
     copyI18nFilesByName(generator, webappDir, fileToCopy, lang) {
         const _this = generator || this;
-        _this.copy(`${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
+        _this.copy(`${prefix}/${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
     }
 
     /**
@@ -2919,5 +2976,21 @@ module.exports = class extends PrivateBase {
      */
     fetchFromInstalledJHipster(subpath) {
         return path.join(__dirname, subpath);
+    }
+
+    /**
+     * Construct the entity name by appending the entity suffix.
+     * @param {String} name entity name
+     */
+    asEntity(name) {
+        return name + this.entitySuffix;
+    }
+
+    /**
+     * Construct the entity's dto name by appending the dto suffix.
+     * @param {String} name entity name
+     */
+    asDto(name) {
+        return name + this.dtoSuffix;
     }
 };

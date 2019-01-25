@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,18 +19,31 @@
 package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% } %>;
 <%  const serviceClassName = service === 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
     let viaService = false;
-    const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
     const mapper = entityInstance  + 'Mapper';
     const dtoToEntity = mapper + '.'+ 'toEntity';
     const entityToDto = 'toDto';
     const entityToDtoReference = mapper + '::'+ 'toDto';
     const repository = entityInstance  + 'Repository';
     const searchRepository = entityInstance  + 'SearchRepository';
+    let isUsingMapsId = false;
+    let mapsIdAssoc;
+    for (idx in relationships) {
+        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+        if ( isUsingMapsId === true) {
+            mapsIdAssoc = relationships[idx];
+            break;
+        }
+        isUsingMapsId = false;
+    }
     if (service === 'serviceImpl') { %>
 import <%= packageName %>.service.<%= entityClass %>Service;<% } %>
-import <%= packageName %>.domain.<%= entityClass %>;
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 import <%= packageName %>.repository.<%= entityClass %>Repository;
+<%_ if (isUsingMapsId === true) { _%>
+import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+<%_ } _%>
 <%_ if (reactiveRepositories) { _%>
 import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
 <%_ } _%>
@@ -38,7 +51,7 @@ import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveReposito
 import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%= packageName %>.service.dto.<%= entityClass %>DTO;
+import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 import org.slf4j.Logger;
@@ -78,14 +91,14 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
 
 /**
- * Service Implementation for managing <%= entityClass %>.
+ * Service Implementation for managing <%= asEntity(entityClass) %>.
  */
 @Service<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
 public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> implements <%= entityClass %>Service<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../../common/inject_template', {viaService: viaService, constructorName: serviceClassName, queryService: false}); -%>
+<%- include('../../common/inject_template', {asEntity, asDto, viaService: viaService, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
 
     /**
      * Save a <%= entityInstance %>.
@@ -98,7 +111,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ } _%>
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
-<%- include('../../common/save_template', {viaService: viaService, returnDirectly: true}); -%>
+<%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
     }
 
     /**
@@ -147,7 +160,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         return <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
     }
     <% } %>
-<%- include('../../common/get_filtered_template'); -%>
+<%- include('../../common/get_filtered_template', {asEntity, asDto}); -%>
     /**
      * Get one <%= entityInstance %> by id.
      *
@@ -161,7 +174,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     @Transactional(readOnly = true)
     <%_ } _%>
     public Optional<<%= instanceType %>> findOne(<%= pkType %> id) {
-        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:true}); -%>
+        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:true}); -%>
     }
 
     /**

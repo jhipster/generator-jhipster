@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,20 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
+const prompts = require('./prompts');
 const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
 
-let configOptions = {};
+let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        configOptions = this.options.configOptions || {};
+        this.configOptions = this.options.configOptions || {};
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -78,69 +80,83 @@ module.exports = class extends BaseGenerator {
                 }
             });
         }
-    }
-
-    initializing() {
-        if (!this.options['from-cli']) {
-            this.warning(
-                `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                    'jhipster <command>'
-                )} instead of ${chalk.red('yo jhipster:<command>')}`
-            );
-        }
-
-        if (this.languages) {
-            if (this.skipClient) {
-                this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));
-            } else if (this.skipServer) {
-                this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for client`));
-            } else {
-                this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')}`));
-            }
-            this.languagesToApply = this.languages || [];
-        } else {
-            this.log(chalk.bold('\nLanguages configuration is starting'));
-        }
-        this.applicationType = this.config.get('applicationType');
-        this.baseName = this.config.get('baseName');
-        this.capitalizedBaseName = _.upperFirst(this.baseName);
-        this.websocket = this.config.get('websocket') === 'no' ? false : this.config.get('websocket');
-        this.databaseType = this.config.get('databaseType');
-        this.searchEngine = this.config.get('searchEngine') === 'no' ? false : this.config.get('searchEngine');
-        this.messageBroker = this.config.get('messageBroker') === 'no' ? false : this.config.get('messageBroker');
-        this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-        this.enableTranslation = this.config.get('enableTranslation');
-        this.currentLanguages = this.config.get('languages');
-        this.clientFramework = this.config.get('clientFramework');
-        this.serviceDiscoveryType = this.config.get('serviceDiscoveryType') === 'no' ? false : this.config.get('serviceDiscoveryType');
-        // Make dist dir available in templates
-        this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.config.get('buildTool'));
-    }
-
-    prompting() {
-        if (this.languages) return;
-
-        const done = this.async();
-        const languageOptions = this.getAllSupportedLanguageOptions();
-        const prompts = [
-            {
-                type: 'checkbox',
-                name: 'languages',
-                message: 'Please choose additional languages to install',
-                choices: languageOptions
-            }
-        ];
-        if (this.enableTranslation || configOptions.enableTranslation) {
-            this.prompt(prompts).then(props => {
-                this.languagesToApply = props.languages || [];
-                done();
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
+        // use global variable since getters dont have access to instance property
+        if (!opts.fromBlueprint) {
+            useBlueprint = this.composeBlueprint(blueprint, 'languages', {
+                'skip-install': this.options['skip-install'],
+                'skip-server': this.options['skip-server'],
+                'skip-client': this.options['skip-client'],
+                'from-cli': this.options['from-cli'],
+                languages: this.languages,
+                configOptions: this.configOptions,
+                force: this.options.force,
+                arguments: this.options.languages
             });
         } else {
-            this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
+            useBlueprint = false;
         }
     }
 
-    get configuring() {
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
+        return {
+            validateFromCli() {
+                this.checkInvocationFromCLI();
+            },
+
+            setupConsts() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                if (this.languages) {
+                    if (this.skipClient) {
+                        this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));
+                    } else if (this.skipServer) {
+                        this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for client`));
+                    } else {
+                        this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')}`));
+                    }
+                    this.languagesToApply = this.languages || [];
+                } else {
+                    this.log(chalk.bold('\nLanguages configuration is starting'));
+                }
+                this.applicationType = configuration.get('applicationType');
+                this.baseName = configuration.get('baseName');
+                this.capitalizedBaseName = _.upperFirst(this.baseName);
+                this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
+                this.databaseType = configuration.get('databaseType');
+                this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
+                this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
+                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+                this.enableTranslation = configuration.get('enableTranslation');
+                this.currentLanguages = configuration.get('languages');
+                this.clientFramework = configuration.get('clientFramework');
+                this.serviceDiscoveryType =
+                    configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
+                // Make dist dir available in templates
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(configuration.get('buildTool'));
+            }
+        };
+    }
+
+    get initializing() {
+        if (useBlueprint) return;
+        return this._initializing();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _prompting() {
+        return {
+            askForLanguages: prompts.askForLanguages
+        };
+    }
+
+    get prompting() {
+        if (useBlueprint) return;
+        return this._prompting();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
         return {
             saveConfig() {
                 if (this.enableTranslation) {
@@ -151,70 +167,92 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get default() {
+    get configuring() {
+        if (useBlueprint) return;
+        return this._configuring();
+    }
+
+    _default() {
         return {
             insight() {
                 statistics.sendSubGenEvent('generator', 'languages');
             },
 
             getSharedConfigOptions() {
-                if (configOptions.applicationType) {
-                    this.applicationType = configOptions.applicationType;
+                if (this.configOptions.applicationType) {
+                    this.applicationType = this.configOptions.applicationType;
                 }
-                if (configOptions.baseName) {
-                    this.baseName = configOptions.baseName;
+                if (this.configOptions.baseName) {
+                    this.baseName = this.configOptions.baseName;
                 }
-                if (configOptions.websocket !== undefined) {
-                    this.websocket = configOptions.websocket;
+                if (this.configOptions.websocket !== undefined) {
+                    this.websocket = this.configOptions.websocket;
                 }
-                if (configOptions.databaseType) {
-                    this.databaseType = configOptions.databaseType;
+                if (this.configOptions.databaseType) {
+                    this.databaseType = this.configOptions.databaseType;
                 }
-                if (configOptions.searchEngine !== undefined) {
-                    this.searchEngine = configOptions.searchEngine;
+                if (this.configOptions.searchEngine !== undefined) {
+                    this.searchEngine = this.configOptions.searchEngine;
                 }
-                if (configOptions.messageBroker !== undefined) {
-                    this.messageBroker = configOptions.messageBroker;
+                if (this.configOptions.messageBroker !== undefined) {
+                    this.messageBroker = this.configOptions.messageBroker;
                 }
-                if (configOptions.enableTranslation) {
-                    this.enableTranslation = configOptions.enableTranslation;
+                if (this.configOptions.enableTranslation) {
+                    this.enableTranslation = this.configOptions.enableTranslation;
                 }
-                if (configOptions.nativeLanguage) {
-                    this.nativeLanguage = configOptions.nativeLanguage;
+                if (this.configOptions.nativeLanguage) {
+                    this.nativeLanguage = this.configOptions.nativeLanguage;
                 }
-                if (configOptions.skipClient) {
-                    this.skipClient = configOptions.skipClient;
+                if (this.configOptions.skipClient) {
+                    this.skipClient = this.configOptions.skipClient;
                 }
-                if (configOptions.skipServer) {
-                    this.skipServer = configOptions.skipServer;
+                if (this.configOptions.skipServer) {
+                    this.skipServer = this.configOptions.skipServer;
                 }
-                if (configOptions.clientFramework) {
-                    this.clientFramework = configOptions.clientFramework;
+                if (this.configOptions.clientFramework) {
+                    this.clientFramework = this.configOptions.clientFramework;
                 }
             }
         };
     }
 
-    writing() {
-        this.languagesToApply.forEach(language => {
-            if (!this.skipClient) {
-                this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
+    get default() {
+        if (useBlueprint) return;
+        return this._default();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _writing() {
+        return {
+            translateFile() {
+                this.languagesToApply.forEach(language => {
+                    if (!this.skipClient) {
+                        this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
+                    }
+                    if (!this.skipServer) {
+                        this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language);
+                    }
+                    statistics.sendSubGenEvent('languages/language', language);
+                });
+            },
+            write() {
+                if (!this.skipClient) {
+                    this.updateLanguagesInLanguagePipe(this.languages);
+                    this.updateLanguagesInLanguageConstantNG2(this.languages);
+                    this.updateLanguagesInWebpack(this.languages);
+                    if (this.clientFramework === 'angularX') {
+                        this.updateLanguagesInMomentWebpackNgx(this.languages);
+                    }
+                    if (this.clientFramework === 'react') {
+                        this.updateLanguagesInMomentWebpackReact(this.languages);
+                    }
+                }
             }
-            if (!this.skipServer) {
-                this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language);
-            }
-            statistics.sendSubGenEvent('languages/language', language);
-        });
-        if (!this.skipClient) {
-            this.updateLanguagesInLanguagePipe(this.languages);
-            this.updateLanguagesInLanguageConstantNG2(this.languages);
-            this.updateLanguagesInWebpack(this.languages);
-            if (this.clientFramework === 'angularX') {
-                this.updateLanguagesInMomentWebpackNgx(this.languages);
-            }
-            if (this.clientFramework === 'react') {
-                this.updateLanguagesInMomentWebpackReact(this.languages);
-            }
-        }
+        };
+    }
+
+    get writing() {
+        if (useBlueprint) return;
+        return this._writing();
     }
 };

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,7 +27,7 @@ node {
     gitlabCommitStatus('build') {
 <%_ } _%>
 <%_ if (insideDocker) { _%>
-<%= gitLabIndent %>    docker.image('jhipster/jhipster:v<%= jhipsterVersion %>').inside('-u root<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
+<%= gitLabIndent %>    docker.image('jhipster/jhipster:v<%= jhipsterVersion %>').inside('-u jhipster<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
 <%_ } _%>
 <%= indent %>    stage('check java') {
 <%= indent %>        sh "java -version"
@@ -77,7 +77,7 @@ node {
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
-<%= indent %>            junit '**/target/test-results/jest/TESTS-*.xml'
+<%= indent %>            junit '**/target/test-results/TESTS-*.xml'
 <%= indent %>        }
 <%= indent %>    }
 
@@ -116,11 +116,11 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./gradlew <%= clientPackageManager %>_run_test-ci -PnodeInstall --no-daemon"
+<%= indent %>            sh "./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
-<%= indent %>            junit '**/build/test-results/jest/TESTS-*.xml'
+<%= indent %>            junit '**/build/test-results/TESTS-*.xml'
 <%= indent %>        }
 <%= indent %>    }
 

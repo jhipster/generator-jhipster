@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -58,8 +58,8 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '10.14.1';
-const YARN_VERSION = '1.12.3';
+const NODE_VERSION = '10.15.0';
+const YARN_VERSION = '1.13.0';
 const NPM_VERSION = '6.4.1';
 
 // all constants used throughout all generators

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -75,13 +75,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
+                this.checkInvocationFromCLI();
             },
 
             displayLogo() {
@@ -96,6 +90,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.TEST_DIR = constants.TEST_DIR;
                 this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+                this.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
                 this.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
@@ -233,6 +228,20 @@ module.exports = class extends BaseBlueprintGenerator {
                 // force variables unused by microservice applications
                 if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
                     this.websocket = false;
+                }
+
+                this.entitySuffix = configuration.get('entitySuffix');
+                if (_.isNil(this.entitySuffix)) {
+                    this.entitySuffix = '';
+                }
+
+                this.dtoSuffix = configuration.get('dtoSuffix');
+                if (_.isNil(this.dtoSuffix)) {
+                    this.dtoSuffix = 'DTO';
+                }
+
+                if (this.entitySuffix === this.dtoSuffix) {
+                    this.error(chalk.red('Entities cannot be generated as the entity suffix and DTO suffix are equals !'));
                 }
 
                 const serverConfigFound =

@@ -101,6 +101,24 @@ const expectedFiles = {
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar.service.spec.ts`
         ],
+        clientBazGatewayMicroserviceEntity: [
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.component.html`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz-detail.component.html`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz-update.component.html`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz-delete-dialog.component.html`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.route.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.component.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz-update.component.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz-delete-dialog.component.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz-detail.component.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.service.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/shared/model/sampleMicroservice/baz.model.ts`,
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/baz/baz-delete-dialog.component.spec.ts`,
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/baz/baz-detail.component.spec.ts`,
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/baz/baz-update.component.spec.ts`,
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/baz/baz.component.spec.ts`,
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/baz/baz.service.spec.ts`
+        ],
         server: [
             '.jhipster/Foo.json',
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`,
@@ -154,7 +172,6 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/JacksonConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LocaleConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LoggingAspectConfiguration.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MetricsConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/WebConfigurer.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/audit/package-info.java`,
@@ -264,6 +281,25 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/user-management.json`
     ],
 
+    i18nDeJson: [
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/activate.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/audits.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/configuration.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/error.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/global.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/health.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/login.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/logs.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/home.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/metrics.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/password.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/register.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/sessions.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/settings.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/reset.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/user-management.json`
+    ],
+
     userManagementClient: [
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-delete-dialog.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-delete-dialog.component.html`,
@@ -345,8 +381,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/logs/logs.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics-modal.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics-modal.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.route.ts`,
@@ -462,7 +496,6 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/logs/logs.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.service.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics-modal.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`,
@@ -646,6 +679,7 @@ const expectedFiles = {
     cucumber: [
         `${TEST_DIR}features/user/user.feature`,
         `${TEST_DIR}features/gitkeep`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberContextConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/StepDefs.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberTest.java`

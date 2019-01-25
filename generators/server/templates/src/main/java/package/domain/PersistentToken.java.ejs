@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -147,7 +147,7 @@ public class PersistentToken implements Serializable {
         <%_ if (databaseType === 'mongodb') { _%>
     @DBRef
         <%_ } _%>
-    private User user;
+    private <%= asEntity('User') %> user;
     <%_ } _%>
 
     public String getSeries() {
@@ -194,11 +194,11 @@ public class PersistentToken implements Serializable {
         }
     }<% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>
 
-    public User getUser() {
+    public <%= asEntity('User') %> getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(<%= asEntity('User') %> user) {
         this.user = user;
     }<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
 

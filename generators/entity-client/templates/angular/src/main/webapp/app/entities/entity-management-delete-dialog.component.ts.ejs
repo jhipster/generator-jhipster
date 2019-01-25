@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -75,10 +75,10 @@ export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnD
                 this.ngbModalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent as Component, { size: 'lg', backdrop: 'static'});
                 this.ngbModalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
                 this.ngbModalRef.result.then((result) => {
-                    this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
+                    this.router.navigate(['/<%= entityUrl %>', { outlets: { popup: null }}]);
                     this.ngbModalRef = null;
                 }, (reason) => {
-                    this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
+                    this.router.navigate(['/<%= entityUrl %>', { outlets: { popup: null }}]);
                     this.ngbModalRef = null;
                 });
             }, 0);

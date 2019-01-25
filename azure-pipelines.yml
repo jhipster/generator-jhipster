@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2018 the original author or authors from the JHipster project.
+# Copyright 2013-2019 the original author or authors from the JHipster project.
 #
 # This file is part of the JHipster project, see https://www.jhipster.tech/
 # for more information.
@@ -36,7 +36,7 @@ jobs:
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
     JHI_E2E_HEADLESS: true
-    JHI_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
+    JHI_SCRIPTS: $(Build.Repository.LocalPath)/test-integration/scripts
 
   strategy:
     matrix:
@@ -82,10 +82,10 @@ jobs:
   #----------------------------------------------------------------------
   - task: NodeTool@0
     inputs:
-      versionSpec: '10.14.1'
+      versionSpec: '10.15.0'
     displayName: 'TOOLS: install Node.js'
   - script: |
-      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
       sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
       sudo apt update
       sudo apt install google-chrome-stable
@@ -116,7 +116,7 @@ jobs:
   #----------------------------------------------------------------------
   # Bugs fix
   #----------------------------------------------------------------------
-  - bash: test-integration/scripts/20-no-memory-limit-elasticsearch.sh
+  - bash: $(JHI_SCRIPTS)/20-no-memory-limit-elasticsearch.sh
     displayName: 'BUGS-FIX: no memory limit for Elasticsearch'
 
   #----------------------------------------------------------------------
