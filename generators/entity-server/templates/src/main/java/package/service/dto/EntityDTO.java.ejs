@@ -21,6 +21,7 @@ let importApiModelProperty = false;
 let importJsonIgnore = false;
 let importJsonIgnoreProperties = false;
 let importSet = false;
+const uniqueEnums = {};
 %><%- include ../../domain/imports -%>
 <%_ if (typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
