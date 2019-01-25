@@ -138,7 +138,7 @@ describe('LoginForm Component', () => {
 
     // THEN
     expect(mockedAxios.post).toHaveBeenCalledWith('api/authentication',
-      'j_username=login&password=pwd&remember-me=true&submit=Login',
+      'username=login&password=pwd&remember-me=true&submit=Login',
       { "headers": { "Content-Type": "application/x-www-form-urlencoded" } });
 
     expect(loginForm.authenticationError).toBeFalsy();
