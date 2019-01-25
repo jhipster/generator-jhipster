@@ -24,26 +24,26 @@ import { TranslateService } from '@ngx-translate/core';
  * A wrapper directive on top of the translate pipe as the inbuilt translate directive from ngx-translate is too verbose and buggy
  */
 @Directive({
-  selector: '[jhiTranslate]'
+    selector: '[jhiTranslate]'
 })
 export class JhiTranslateDirective implements OnChanges {
-  @Input() jhiTranslate: string;
-  @Input() translateValues: any;
+    @Input() jhiTranslate: string;
+    @Input() translateValues: any;
 
-  constructor(private configService: JhiConfigService, private el: ElementRef, private translateService: TranslateService) {}
+    constructor(private configService: JhiConfigService, private el: ElementRef, private translateService: TranslateService) {}
 
-  ngOnChanges() {
-    const enabled = this.configService.getConfig().i18nEnabled;
+    ngOnChanges() {
+        const enabled = this.configService.getConfig().i18nEnabled;
 
-    if (enabled) {
-      this.translateService.get(this.jhiTranslate, this.translateValues).subscribe(
-        value => {
-          this.el.nativeElement.innerHTML = value;
-        },
-        () => {
-          return `${this.configService.getConfig().noi18nMessage}[${this.jhiTranslate}]`;
+        if (enabled) {
+            this.translateService.get(this.jhiTranslate, this.translateValues).subscribe(
+                value => {
+                    this.el.nativeElement.innerHTML = value;
+                },
+                () => {
+                    return `${this.configService.getConfig().noi18nMessage}[${this.jhiTranslate}]`;
+                }
+            );
         }
-      );
     }
-  }
 }

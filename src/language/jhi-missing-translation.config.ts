@@ -20,10 +20,10 @@ import { MissingTranslationHandler, MissingTranslationHandlerParams } from '@ngx
 import { JhiConfigService } from '../config.service';
 
 export class JhiMissingTranslationHandler implements MissingTranslationHandler {
-  constructor(private configService: JhiConfigService) {}
+    constructor(private configService: JhiConfigService) {}
 
-  handle(params: MissingTranslationHandlerParams) {
-    const key = params.key;
-    return `${this.configService.getConfig().noi18nMessage}[${key}]`;
-  }
+    handle(params: MissingTranslationHandlerParams) {
+        const key = params.key;
+        return `${this.configService.getConfig().noi18nMessage}[${key}]`;
+    }
 }

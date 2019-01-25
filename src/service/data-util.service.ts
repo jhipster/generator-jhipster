@@ -22,153 +22,153 @@ import { ElementRef, Injectable } from '@angular/core';
  * An utility service for data.
  */
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class JhiDataUtils {
-  constructor() {}
+    constructor() {}
 
-  /**
-   * Method to abbreviate the text given
-   */
-  abbreviate(text: string, append = '...') {
-    if (text.length < 30) {
-      return text;
-    }
-    return text ? text.substring(0, 15) + append + text.slice(-10) : '';
-  }
-
-  /**
-   * Method to find the byte size of the string provides
-   */
-  byteSize(base64String: string) {
-    return this.formatAsBytes(this.size(base64String));
-  }
-
-  /**
-   * Method to open file
-   */
-  openFile(contentType: string, data: string) {
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      // To support IE and Edge
-      const byteCharacters = atob(data);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], {
-        type: contentType
-      });
-      window.navigator.msSaveOrOpenBlob(blob);
-    } else {
-      // Other browsers
-      const fileURL = `data:${contentType};base64,${data}`;
-      const win = window.open();
-      win.document.write(
-        '<iframe src="' +
-          fileURL +
-          '" frameborder="0" style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>'
-      );
-    }
-  }
-
-  /**
-   * Method to convert the file to base64
-   */
-  toBase64(file: File, cb: Function) {
-    const fileReader: FileReader = new FileReader();
-    fileReader.onload = function(e: any) {
-      const base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
-      cb(base64Data);
-    };
-    fileReader.readAsDataURL(file);
-  }
-
-  /**
-   * Method to clear the input
-   */
-  clearInputImage(entity: any, elementRef: ElementRef, field: string, fieldContentType: string, idInput: string) {
-    if (entity && field && fieldContentType) {
-      if (entity.hasOwnProperty(field)) {
-        entity[field] = null;
-      }
-      if (entity.hasOwnProperty(fieldContentType)) {
-        entity[fieldContentType] = null;
-      }
-      if (elementRef && idInput && elementRef.nativeElement.querySelector('#' + idInput)) {
-        elementRef.nativeElement.querySelector('#' + idInput).value = null;
-      }
-    }
-  }
-
-  /**
-   * Sets the base 64 data & file type of the 1st file on the event (event.target.files[0]) in the passed entity object
-   * and returns a promise.
-   *
-   * @param event the object containing the file (at event.target.files[0])
-   * @param entity the object to set the file's 'base 64 data' and 'file type' on
-   * @param field the field name to set the file's 'base 64 data' on
-   * @param isImage boolean representing if the file represented by the event is an image
-   * @returns a promise that resolves to the modified entity if operation is successful, otherwise rejects with an error message
-   */
-  setFileData(event, entity, field: string, isImage: boolean): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (event && event.target && event.target.files && event.target.files[0]) {
-        const file = event.target.files[0];
-        if (isImage && !/^image\//.test(file.type)) {
-          reject(`File was expected to be an image but was found to be ${file.type}`);
-        } else {
-          this.toBase64(file, base64Data => {
-            entity[field] = base64Data;
-            entity[`${field}ContentType`] = file.type;
-            resolve(entity);
-          });
+    /**
+     * Method to abbreviate the text given
+     */
+    abbreviate(text: string, append = '...') {
+        if (text.length < 30) {
+            return text;
         }
-      } else {
-        reject(`Base64 data was not set as file could not be extracted from passed parameter: ${event}`);
-      }
-    });
-  }
-
-  /**
-   * Method to download file
-   */
-  downloadFile(contentType: string, data: string, fileName: string) {
-    const byteCharacters = atob(data);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
+        return text ? text.substring(0, 15) + append + text.slice(-10) : '';
     }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], {
-      type: contentType
-    });
-    const tempLink = document.createElement('a');
-    tempLink.href = window.URL.createObjectURL(blob);
-    tempLink.download = fileName;
-    tempLink.target = '_blank';
-    tempLink.click();
-  }
 
-  private endsWith(suffix: string, str: string): boolean {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
-  }
-
-  private paddingSize(value: string): number {
-    if (this.endsWith('==', value)) {
-      return 2;
+    /**
+     * Method to find the byte size of the string provides
+     */
+    byteSize(base64String: string) {
+        return this.formatAsBytes(this.size(base64String));
     }
-    if (this.endsWith('=', value)) {
-      return 1;
+
+    /**
+     * Method to open file
+     */
+    openFile(contentType: string, data: string) {
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            // To support IE and Edge
+            const byteCharacters = atob(data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], {
+                type: contentType
+            });
+            window.navigator.msSaveOrOpenBlob(blob);
+        } else {
+            // Other browsers
+            const fileURL = `data:${contentType};base64,${data}`;
+            const win = window.open();
+            win.document.write(
+                '<iframe src="' +
+                    fileURL +
+                    '" frameborder="0" style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>'
+            );
+        }
     }
-    return 0;
-  }
 
-  private size(value: string): number {
-    return (value.length / 4) * 3 - this.paddingSize(value);
-  }
+    /**
+     * Method to convert the file to base64
+     */
+    toBase64(file: File, cb: Function) {
+        const fileReader: FileReader = new FileReader();
+        fileReader.onload = function(e: any) {
+            const base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
+            cb(base64Data);
+        };
+        fileReader.readAsDataURL(file);
+    }
 
-  private formatAsBytes(size: number): string {
-    return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
-  }
+    /**
+     * Method to clear the input
+     */
+    clearInputImage(entity: any, elementRef: ElementRef, field: string, fieldContentType: string, idInput: string) {
+        if (entity && field && fieldContentType) {
+            if (entity.hasOwnProperty(field)) {
+                entity[field] = null;
+            }
+            if (entity.hasOwnProperty(fieldContentType)) {
+                entity[fieldContentType] = null;
+            }
+            if (elementRef && idInput && elementRef.nativeElement.querySelector('#' + idInput)) {
+                elementRef.nativeElement.querySelector('#' + idInput).value = null;
+            }
+        }
+    }
+
+    /**
+     * Sets the base 64 data & file type of the 1st file on the event (event.target.files[0]) in the passed entity object
+     * and returns a promise.
+     *
+     * @param event the object containing the file (at event.target.files[0])
+     * @param entity the object to set the file's 'base 64 data' and 'file type' on
+     * @param field the field name to set the file's 'base 64 data' on
+     * @param isImage boolean representing if the file represented by the event is an image
+     * @returns a promise that resolves to the modified entity if operation is successful, otherwise rejects with an error message
+     */
+    setFileData(event, entity, field: string, isImage: boolean): Promise<any> {
+        return new Promise((resolve, reject) => {
+            if (event && event.target && event.target.files && event.target.files[0]) {
+                const file = event.target.files[0];
+                if (isImage && !/^image\//.test(file.type)) {
+                    reject(`File was expected to be an image but was found to be ${file.type}`);
+                } else {
+                    this.toBase64(file, base64Data => {
+                        entity[field] = base64Data;
+                        entity[`${field}ContentType`] = file.type;
+                        resolve(entity);
+                    });
+                }
+            } else {
+                reject(`Base64 data was not set as file could not be extracted from passed parameter: ${event}`);
+            }
+        });
+    }
+
+    /**
+     * Method to download file
+     */
+    downloadFile(contentType: string, data: string, fileName: string) {
+        const byteCharacters = atob(data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], {
+            type: contentType
+        });
+        const tempLink = document.createElement('a');
+        tempLink.href = window.URL.createObjectURL(blob);
+        tempLink.download = fileName;
+        tempLink.target = '_blank';
+        tempLink.click();
+    }
+
+    private endsWith(suffix: string, str: string): boolean {
+        return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    private paddingSize(value: string): number {
+        if (this.endsWith('==', value)) {
+            return 2;
+        }
+        if (this.endsWith('=', value)) {
+            return 1;
+        }
+        return 0;
+    }
+
+    private size(value: string): number {
+        return (value.length / 4) * 3 - this.paddingSize(value);
+    }
+
+    private formatAsBytes(size: number): string {
+        return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
+    }
 }
