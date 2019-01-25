@@ -22,7 +22,7 @@ As this is a [JHipster](http://www.jhipster.tech/) blueprint, we expect you have
 
 - [Installing JHipster](https://www.jhipster.tech/installation/)
 
-# Installation (Only after stable release, for now use the development flow)
+# Installation
 
 
 ## With NPM
