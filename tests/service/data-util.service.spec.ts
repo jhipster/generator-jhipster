@@ -65,7 +65,7 @@ describe('Data Utils Service Test', () => {
         expect(tempLink.click).toHaveBeenCalledWith();
     }));
 
-    it('should return a promise that rejects with an error message when image is passed but file type is not image', async(() => inject([JhiDataUtils], (service: JhiDataUtils) => {
+    it('should return a promise that rejects with an error message when image is passed but file type is not image', async(inject([JhiDataUtils], (service: JhiDataUtils) => {
 
         const eventSake = {
             target: {
@@ -79,9 +79,9 @@ describe('Data Utils Service Test', () => {
                    (error) => expect(error).toMatch(/^File was expected to be an image but was found to be /)
                );
 
-    })()));
+    })));
 
-    it('should return a promise that resolves to the modified entity', async(() => inject([JhiDataUtils], (service: JhiDataUtils) => {
+    it('should return a promise that resolves to the modified entity', async(inject([JhiDataUtils], (service: JhiDataUtils) => {
 
         const eventSake = {
             target: {
@@ -92,9 +92,9 @@ describe('Data Utils Service Test', () => {
         service.setFileData(eventSake, {}, 'document', false)
                .then((modifiedEntity) => expect(modifiedEntity).toEqual({ document: 'ZmlsZSBjb250ZW50', documentContentType: '' }));
 
-    })()));
+    })));
 
-    it('should return a promise that rejects with an error message when passed event does not contain a file', async(() => inject([JhiDataUtils], (service: JhiDataUtils) => {
+    it('should return a promise that rejects with an error message when passed event does not contain a file', async(inject([JhiDataUtils], (service: JhiDataUtils) => {
 
         service.setFileData(null, null, null, false)
                .then(
@@ -102,6 +102,6 @@ describe('Data Utils Service Test', () => {
                    (error) => expect(error).toMatch(/^Base64 data was not set as file could not be extracted from passed parameter: /)
                );
 
-    })()));
+    })));
 
 });
