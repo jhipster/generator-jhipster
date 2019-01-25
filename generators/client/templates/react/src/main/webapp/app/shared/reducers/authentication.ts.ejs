@@ -169,7 +169,7 @@ export const getSession = () => async (dispatch, getState) => {
 
 <%_ if (authenticationType === 'session') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
-  const data = `j_username=${encodeURIComponent(username)}&j_password=${encodeURIComponent(password)}&remember-me=${rememberMe}&submit=Login`;
+  const data = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&remember-me=${rememberMe}&submit=Login`;
   await dispatch({
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
