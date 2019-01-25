@@ -3,27 +3,28 @@ import VueI18n from 'vue-i18n';
 import { Store } from 'vuex';
 
 export default class TranslationService {
-  
   private store: Store<{}>;
+  private i18n: VueI18n;
 
-  constructor(store: Store<{}>) {
+  constructor(store: Store<{}>, i18n: VueI18n) {
     this.store = store;
+    this.i18n = i18n;
   }
 
-  public refreshTranslation(i18n: VueI18n, newLanguage: string) {
+  public refreshTranslation(newLanguage: string) {
     let currentLanguage = this.store.getters.currentLanguage;
     currentLanguage = newLanguage ? newLanguage : '<%= nativeLanguage %>';
-    if (i18n && !i18n.messages[currentLanguage]) {
-      i18n.setLocaleMessage(currentLanguage, {});
+    if (this.i18n && !this.i18n.messages[currentLanguage]) {
+      this.i18n.setLocaleMessage(currentLanguage, {});
       axios.get('i18n/' + currentLanguage + '.json').then((res) => {
         if (res.data) {
-          i18n.setLocaleMessage(currentLanguage, res.data);
-          i18n.locale = currentLanguage;
+          this.i18n.setLocaleMessage(currentLanguage, res.data);
+          this.i18n.locale = currentLanguage;
           this.store.commit('currentLanguage', currentLanguage);
         }
       });
-    } else if (i18n) {
-      i18n.locale = currentLanguage;
+    } else if (this.i18n) {
+      this.i18n.locale = currentLanguage;
       this.store.commit('currentLanguage', currentLanguage);
     }
   }

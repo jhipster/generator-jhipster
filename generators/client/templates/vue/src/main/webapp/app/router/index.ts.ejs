@@ -8,23 +8,25 @@ Component.registerHooks([
 import Router from 'vue-router';
 const Home = () => import('../core/home/home.vue');
 const Error = () => import('../core/error/error.vue');
+<%_ if (authenticationType !== 'oauth2') { _%>
 const Register = () => import('../account/register/register.vue');
 const Activate = () => import('../account/activate/activate.vue');
 const ResetPassword = () => import('../account/reset-password/reset-password.vue');
 const ChangePassword = () => import('../account/change-password/change-password.vue');
+const Settings = () => import('../account/settings/settings.vue');
+const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('../admin/user-management/user-management.vue');
+const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('../admin/user-management/user-management-view.vue');
+const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('../admin/user-management/user-management-edit.vue');
+<%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
 const Sessions = () => import('../account/sessions/sessions.vue');
 <%_ } _%>
-const Settings = () => import('../account/settings/settings.vue');
 const <%= jhiPrefixCapitalized %>ConfigurationComponent = () => import('../admin/configuration/configuration.vue');
 const <%= jhiPrefixCapitalized %>DocsComponent = () => import('../admin/docs/docs.vue');
 const <%= jhiPrefixCapitalized %>HealthComponent = () => import('../admin/health/health.vue');
 const <%= jhiPrefixCapitalized %>LogsComponent = () => import('../admin/logs/logs.vue');
 const <%= jhiPrefixCapitalized %>AuditsComponent = () => import('../admin/audits/audits.vue');
 const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('../admin/metrics/metrics.vue');
-const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('../admin/user-management/user-management.vue');
-const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('../admin/user-management/user-management-view.vue');
-const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('../admin/user-management/user-management-edit.vue');
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
 const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('../admin/gateway/gateway.vue');
 <%_ } _%>
@@ -55,7 +57,7 @@ export default new Router({
       name: 'NotFound',
       component: Error,
       meta: { error404: true }
-    },
+    }<%_ if (authenticationType !== 'oauth2') { _%>,
     {
       path: '/register',
       name: 'Register',
@@ -113,7 +115,7 @@ export default new Router({
       name: '<%= jhiPrefixCapitalized %>UserView',
       component: <%= jhiPrefixCapitalized %>UserManagementViewComponent,
       meta: { authorities: ['ROLE_ADMIN'] }
-    },
+    }<%_ } _%>,
     {
       path: '/admin/docs',
       name: '<%= jhiPrefixCapitalized %>DocsComponent',

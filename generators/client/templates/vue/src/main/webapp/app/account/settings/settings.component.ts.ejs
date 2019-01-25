@@ -1,6 +1,5 @@
 import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
 import axios from 'axios';
-import Principal from '../principal';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
 import { Vue, Component, Inject } from 'vue-property-decorator';
 
@@ -33,7 +32,6 @@ export default class Settings extends Vue {
   public error: string = null;
   public errorEmailExists: string = null;
   public languages: any = this.$store.getters.languages;
-  @Inject('principal') private principal: () => Principal;
 
   public save(): void {
     this.error = null;
@@ -60,6 +58,6 @@ export default class Settings extends Vue {
   }
 
   public get username(): string {
-    return this.principal().username;
+    return this.$store.getters.account ? this.$store.getters.account.login : '';
   }
 }

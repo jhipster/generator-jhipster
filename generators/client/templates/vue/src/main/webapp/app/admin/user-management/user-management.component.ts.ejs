@@ -1,11 +1,9 @@
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import UserManagementService from './user-management.service';
-import Principal from '@/account/principal';
 
 @Component
 export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vue {
   @Inject('userService') private userManagementService: () => UserManagementService;
-  @Inject('principal') private principal: () => Principal;
   public error = '';
   public success = '';
   public users: any[] = [];
@@ -88,6 +86,6 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vu
   }
 
   public get username(): string {
-    return this.principal().username;
+    return this.$store.getters.account ? this.$store.getters.account.login : '';
   }
 }

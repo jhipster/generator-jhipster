@@ -1,0 +1,25 @@
+import LoginService from '@/account/login.service';
+
+describe('Login Service test suite', () => {
+  let loginService;
+
+  beforeEach(() => {
+    loginService = new LoginService();
+  });
+
+  it('should build url for login', () => {
+    const loc = {href: '', hostname: 'localhost', pathname: '/'};
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost/login');
+  });
+
+  it('should build url for login behind client proxy', () => {
+    const loc = {href: '', port: '8080', hostname: 'localhost', pathname: '/'};
+
+    loginService.login(loc);
+
+    expect(loc.href).toBe('//localhost:8080/login');
+  });
+});

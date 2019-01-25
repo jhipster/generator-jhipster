@@ -15,9 +15,6 @@ export default class NavBarPage extends BasePage {
   adminMenu: ElementFinder = this.selector.$('#admin-menu');
   accountMenu: ElementFinder = this.selector.$('#account-menu');
   entityMenu: ElementFinder = this.selector.$('#entity-menu');
-<%_ if (authenticationType === 'oauth2') { _%>
-  loginItem: ElementFinder = this.selector.$('#login-item');
-<%_ } _%>
 
   constructor() {
     super(selector);
@@ -45,11 +42,7 @@ export default class NavBarPage extends BasePage {
 <%_ } _%>
   async getSignInPage() {
     await this.clickOnAccountMenu();
-    <%_ if (authenticationType !== 'oauth2') { _%>
     await this.clickOnTabMenu('#login');
-    <%_ } else { _%>
-    await this.loginItem.click();
-    <%_ } _%>
     return this.signInPage;
   }
 

@@ -1,0 +1,7 @@
+export default class LoginService {
+
+  public login(loc = window.location) {
+    const port = (loc.port ? ':' + loc.port : '');
+    loc.href = '//' + loc.hostname + port + loc.pathname + 'login';
+  }
+}

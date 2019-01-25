@@ -1,13 +1,27 @@
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import axios from 'axios';
 import { VERSION } from '@/constants';
+<%_ if (authenticationType !== 'oauth2') { _%>
 import LoginModalService from '@/account/login-modal.service';
-import Principal from '@/account/principal';
+<%_ } else { %>
+import LoginService from '@/account/login.service';
+<%_ } %>
+import AccountService from '@/account/account.service';
+<%_ if (enableTranslation) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } %>
 
 @Component
 export default class JhiNavbar extends Vue {
+  <%_ if (authenticationType !== 'oauth2') { _%>
   @Inject('loginModalService') private loginModalService: () => LoginModalService;
-  @Inject('principal') private principal: () => Principal;
+  <%_ } else { %>
+  @Inject('loginService') private loginService: () => LoginService;
+  <%_ } %>
+  <%_ if (enableTranslation) { _%>
+  @Inject('translationService') private translationService: () => TranslationService;
+  <%_ } %>
+  @Inject('accountService') private accountService: () => AccountService;
   public version = VERSION ? 'v' + VERSION : '';
   public isNavbarCollapsed = true;
   private currentLanguage = this.$store.getters.currentLanguage;
@@ -15,7 +29,7 @@ export default class JhiNavbar extends Vue {
 
   created() {
     <%_ if (enableTranslation) { _%>
-    this.principal().refreshTranslation(this.currentLanguage);
+    this.translationService().refreshTranslation(this.currentLanguage);
     <%_ } _%>
   }
 
@@ -36,7 +50,7 @@ export default class JhiNavbar extends Vue {
 
   <%_ if (enableTranslation) { _%>
   public changeLanguage(newLanguage: string) : void {
-    this.principal().refreshTranslation(newLanguage);
+    this.translationService().refreshTranslation(newLanguage);
   }
 
   public isActiveLanguage(key: string) : boolean {
@@ -45,24 +59,35 @@ export default class JhiNavbar extends Vue {
   <%_ } _%>
 
   public logout() : void {
-    <%_ if (authenticationType === 'jwt') { _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
+    axios.post('api/logout').then(() => {
+      this.$store.commit('logout');
+      this.$router.push('/');
+    });
+    <%_ } else { _%>
+      <%_ if (authenticationType === 'jwt') { _%>
     localStorage.removeItem('jhi-authenticationToken');
     sessionStorage.removeItem('jhi-authenticationToken');
-    <%_ } _%>
+      <%_ } _%>
     this.$store.commit('logout');
     this.$router.push('/');
+    <%_ } _%>
   }
 
   public openLogin() : void {
+    <%_ if (authenticationType !== 'oauth2') { _%>
     this.loginModalService().openLogin((<any>this).$root);
+    <%_ } else { %>
+    this.loginService().login();
+    <%_ } %>
   }
 
   public get authenticated(): boolean {
-    return this.principal().authenticated;
+    return this.$store.getters.authenticated;
   }
 
   public hasAnyAuthority(authorities: any): boolean {
-    return this.principal().hasAnyAuthority(authorities);
+    return this.accountService().hasAnyAuthority(authorities);
   }
 
   public get swaggerEnabled() : boolean {

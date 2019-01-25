@@ -55,7 +55,12 @@ const expectedFiles = {
         'README.md',
     ],
 
-    app: [
+    oauth2: [
+        `${CLIENT_MAIN_SRC_DIR}app/account/login.service.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`
+    ],
+
+    jwtSession: [
         `${CLIENT_MAIN_SRC_DIR}app/account/change-password/change-password.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/change-password/change-password.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/account/login-form/login-form.component.ts`,
@@ -71,7 +76,13 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/settings/settings.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/settings/settings.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/account/login-modal.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/principal.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-edit.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-edit.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-view.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-view.vue`,
 
         `${CLIENT_SPEC_SRC_DIR}app/account/change-password/change-password.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/account/login-form/login-form.component.spec.ts`,
@@ -80,8 +91,16 @@ const expectedFiles = {
         // `${CLIENT_SPEC_SRC_DIR}app/account/reset-password/reset-password.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/account/settings/settings.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/account/login-modal.service.spec.ts`,
-        // `${CLIENT_SPEC_SRC_DIR}app/account/principal.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management-edit.component.spec.ts`,
+        // `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.service.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management-view.component.spec.ts`
 
+    ],
+
+    app: [
+
+        `${CLIENT_MAIN_SRC_DIR}app/account/account.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.service.ts`,
@@ -102,14 +121,8 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics-modal.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-edit.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-edit.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-view.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-view.vue`,
 
+        `${CLIENT_SPEC_SRC_DIR}app/account/account.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/configuration/configuration.component.spec.ts`,
@@ -123,10 +136,6 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/admin/metrics/metrics.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/metrics/metrics-modal.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/admin/metrics/metrics.service.spec.ts`,
-        `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.component.spec.ts`,
-        `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management-edit.component.spec.ts`,
-        // `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.service.spec.ts`,
-        `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management-view.component.spec.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/core/home/home.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/home/home.vue`,
@@ -244,6 +253,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
+            assert.file(expectedFiles.jwtSession);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -307,6 +317,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
+            assert.file(expectedFiles.jwtSession);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -369,6 +380,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.noFile(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
+            assert.file(expectedFiles.jwtSession);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -434,6 +446,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
+            assert.file(expectedFiles.jwtSession);
             assert.file(expectedFiles.test);
             assert.file(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -499,9 +512,74 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
+            assert.file(expectedFiles.jwtSession);
             assert.file(expectedFiles.test);
             assert.file(expectedFiles.protractor);
             assert.file(expectedFiles.websocket);
+            assert.file(expectedFiles.webpack);
+        });
+        it('contains the specific change added by the blueprint', () => {
+            assert.fileContent('package.json', `"generator-jhipster-vuejs": "${blueprintPackagejs.version}"`);
+            assert.fileContent('package.json', '"vue"');
+            assert.fileContent('package.json', '"vuex"');
+            assert.fileContent('package.json', '"vuelidate"');
+            assert.fileContent('.prettierrc', 'tabWidth: 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n'
+                + 'indent_style = space\n'
+                + 'indent_size = 2');
+        });
+        it('uses correct prettier formatting', () => {
+            // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+            assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+            assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
+        });
+    });
+    describe('OAuth2', () => {
+        before((done) => {
+            helpers
+                .run('generator-jhipster/generators/app')
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    blueprint: 'vuejs',
+                    skipChecks: true
+                })
+                .withGenerators([
+                    [
+                        require('../generators/client/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:client',
+                        path.join(__dirname, '../generators/client/index.js')
+                    ],
+                    [
+                        require('../generators/common/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:common',
+                        path.join(__dirname, '../generators/common/index.js')
+                    ]
+                ])
+                .withPrompts({
+                    baseName: 'sampleMysql',
+                    packageName: 'com.mycompany.myapp',
+                    applicationType: 'monolith',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Disk',
+                    prodDatabaseType: 'mysql',
+                    cacheProvider: 'ehcache',
+                    authenticationType: 'oauth2',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['en', 'fr'],
+                    buildTool: 'maven',
+                    clientFramework: 'Vue.js'
+                })
+                .on('end', done);
+        });
+        it('creates expected files from jhipster vue.js generator', () => {
+            assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.common);
+            assert.file(expectedFiles.app);
+            assert.file(expectedFiles.oauth2);
+            assert.file(expectedFiles.test);
+            assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
         });
         it('contains the specific change added by the blueprint', () => {

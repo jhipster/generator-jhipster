@@ -61,6 +61,7 @@ env:
     - JHI_APP=vuejs-gateway
     - JHI_APP=vuejs-gradle-session
     - JHI_APP=vuejs-ws JHI_PROTRACTOR=1
+    - JHI_APP=vuejs-oauth2 JHI_PROTRACTOR=1
 
 #----------------------------------------------------------------------
 # Install all tools and check configuration

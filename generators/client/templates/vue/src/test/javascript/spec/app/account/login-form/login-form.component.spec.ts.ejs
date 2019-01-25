@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
-import Principal from '@/account/principal';
+import AccountService from '@/account/account.service';
 import router from '@/router';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
@@ -51,7 +51,7 @@ describe('LoginForm Component', () => {
         <%_ } _%>
         localVue,
         provide: {
-          principal: () => new Principal(store, <% if (enableTranslation) { %>new TranslationService(store), i18n, <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %><% if (websocket === 'spring-websocket') { %>new TrackerService(router), <% } %>router)
+          accountService: () => new AccountService(store, <% if (enableTranslation) { %>new TranslationService(store, i18n), <% } %><% if (authenticationType === 'session') { %> { get: () => {} }, <% } %><% if (websocket === 'spring-websocket') { %>new TrackerService(router), <% } %>router)
         }
       });
     loginForm = wrapper.vm;

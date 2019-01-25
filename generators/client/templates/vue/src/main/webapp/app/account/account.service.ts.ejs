@@ -2,7 +2,6 @@ import axios from 'axios';
 import { Store } from 'vuex';
 import VueRouter from 'vue-router';
 <%_ if (enableTranslation) { _%>
-import VueI18n from 'vue-i18n';
 import TranslationService from '@/locale/translation.service';
 <%_ } _%>
 
@@ -10,15 +9,14 @@ import TranslationService from '@/locale/translation.service';
 import TrackerService from '@/admin/tracker/tracker.service';
 <%_ } _%>
 
-export default class Principal {
+export default class AccountService {
 
   constructor(
     private store: Store<any>,
     <%_ if (enableTranslation) { _%>
     private translationService: TranslationService,
-    private i18n: VueI18n,
     <%_ } _%>
-    <%_ if (authenticationType === 'session') { _%>
+    <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
     private cookie: any,
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
@@ -70,7 +68,7 @@ export default class Principal {
         sessionStorage.removeItem("requested-url");
       }
       <%_ if (enableTranslation) { _%>
-      this.refreshTranslation(this.store.getters.currentLanguage);
+      this.translationService.refreshTranslation(this.store.getters.currentLanguage);
       <%_ } _%>
     }).catch(() => {
       this.store.commit('logout');
@@ -102,14 +100,4 @@ export default class Principal {
   public get userAuthorities(): any {
     return this.store.getters.account.authorities;
   }
-
-  public get username(): string {
-    return this.store.getters.account ? this.store.getters.account.login : ''
-  }
-  <%_ if (enableTranslation) { _%>
-
-  public refreshTranslation(newLanguage: string) : void {
-    this.translationService.refreshTranslation(this.i18n, newLanguage);
-  }
-  <%_ } _%>
 }

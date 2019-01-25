@@ -17,25 +17,23 @@
                         <span v-text="$t('global.menu.home')">Home</span>
                     </span>
                 </b-nav-item>
-                <b-nav-item-dropdown 
-                    id="entity-menu" 
-                    v-if="authenticated" 
+                <b-nav-item-dropdown
+                    id="entity-menu"
+                    v-if="authenticated"
                     :class="{'router-link-active': subIsActive('/entity')}"
-                    active-class="active"class="pointer"
-                >
+                    active-class="active" class="pointer">
                     <span slot="button-content" class="navbar-dropdown-menu">
                         <font-awesome-icon icon="th-list" />
                         <span v-text="$t('global.menu.entities.main')">Entities</span>
                     </span>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </b-nav-item-dropdown>
-                <b-nav-item-dropdown 
-                    id="admin-menu" 
-                    v-if="hasAnyAuthority('ROLE_ADMIN')"  
-                    :class="{'router-link-active': subIsActive('/admin')}" 
-                    active-class="active" 
-                    class="pointer"
-                >
+                <b-nav-item-dropdown
+                    id="admin-menu"
+                    v-if="hasAnyAuthority('ROLE_ADMIN')"
+                    :class="{'router-link-active': subIsActive('/admin')}"
+                    active-class="active"
+                    class="pointer">
                     <span slot="button-content" class="navbar-dropdown-menu">
                         <font-awesome-icon icon="user-plus" />
                         <span v-text="$t('global.menu.admin.main')">Administration</span>
@@ -103,14 +101,13 @@
                     </b-dropdown-item>
                 </b-nav-item-dropdown>
                 <%_ } _%>
-                <b-nav-item-dropdown  
-                    right 
-                    href="javascript:void(0);" 
-                    id="account-menu" 
+                <b-nav-item-dropdown
+                    right
+                    href="javascript:void(0);"
+                    id="account-menu"
                     :class="{'router-link-active': subIsActive('/account')}"
                     active-class="active"
-                    class="pointer"
-                >
+                    class="pointer">
                     <span slot="button-content" class="navbar-dropdown-menu" v-if="!getImageUrl()">
                         <font-awesome-icon icon="user" />
                         <span v-text="$t('global.menu.account.main')">
@@ -120,6 +117,7 @@
                     <template slot="button-content" v-if="getImageUrl()">
                         <img [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
                     </template>
+                    <%_ if (authenticationType !== 'oauth2') { _%>
                     <b-dropdown-item to="/account/settings" tag="b-dropdown-item" v-if="authenticated"  v-on:click="collapseNavbar()">
                         <font-awesome-icon icon="wrench" />
                         <span v-text="$t('global.menu.account.settings')">Settings</span>
@@ -128,6 +126,7 @@
                         <font-awesome-icon icon="clock" />
                         <span v-text="$t('global.menu.account.password')">Password</span>
                     </b-dropdown-item>
+                    <%_ } _%>
                     <%_ if (authenticationType === 'session') { _%>
                     <b-dropdown-item to="/account/sessions" tag="b-dropdown-item" v-if="authenticated"  v-on:click="collapseNavbar()">
                         <font-awesome-icon icon="cloud" />
@@ -142,10 +141,12 @@
                         <font-awesome-icon icon="sign-in-alt" />
                         <span v-text="$t('global.menu.account.login')">Sign in</span>
                     </b-dropdown-item>
+                    <%_ if (authenticationType !== 'oauth2') { _%>
                     <b-dropdown-item to="/register" tag="b-dropdown-item" id="register" v-if="!authenticated"  v-on:click="collapseNavbar()">
                         <font-awesome-icon icon="user-plus" />
                         <span v-text="$t('global.menu.account.register')">Register</span>
                     </b-dropdown-item>
+                    <%_ } _%>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-collapse>
