@@ -74,7 +74,7 @@ function askForClientSideOpts() {
         {
             type: 'confirm',
             name: 'useSass',
-            message: `Would you like to enable ${chalk.yellow('*SASS*')} stylesheet preprocessor?`,
+            message: `Would you like to enable ${chalk.yellow('*Sass*')} stylesheet preprocessor?`,
             default: true
         }
     ];
