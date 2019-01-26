@@ -184,6 +184,7 @@ describe('JDLImporter', () => {
               javadoc: 'Another side of the same relationship,',
               relationshipName: 'department',
               otherEntityName: 'department',
+              otherEntityRelationshipName: 'employee',
               otherEntityField: 'id'
             }
           ],
@@ -236,6 +237,7 @@ describe('JDLImporter', () => {
               relationshipType: 'many-to-one',
               relationshipName: 'employee',
               otherEntityName: 'employee',
+              otherEntityRelationshipName: 'job',
               otherEntityField: 'id'
             }
           ],
