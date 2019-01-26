@@ -1,7 +1,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const LanguagesGenerator = require('generator-jhipster/generators/languages');
-const utils = require('../client/utils');
+const utils = require('../utils');
 
 module.exports = class extends LanguagesGenerator {
     constructor(args, opts) {

@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 const constants = require('generator-jhipster/generators/generator-constants');
-const utils = require('./utils');
-const clientUtils = require('../client/utils');
+const utils = require('../utils');
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -139,7 +138,7 @@ function writeFiles() {
     utils.addEntityServiceToMain(this, entityName);
 
     if (!this.enableTranslation) {
-        clientUtils.replaceTranslation(this, [
+        utils.replaceTranslation(this, [
             `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
             `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
             `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
