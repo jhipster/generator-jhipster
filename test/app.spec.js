@@ -1423,6 +1423,11 @@ describe('JHipster generator', () => {
             it('generates a README with no undefined value', () => {
                 assert.noFileContent('README.md', /undefined/);
             });
+            it('generates a pom.xml with no reference to client', () => {
+                assert.noFileContent('pom.xml', 'node.version');
+                assert.noFileContent('pom.xml', 'npm.version');
+                assert.noFileContent('pom.xml', 'frontend-maven-plugin');
+            });
         });
 
         describe('Gradle', () => {

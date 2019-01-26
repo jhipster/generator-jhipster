@@ -117,8 +117,8 @@ class <%= entityClass %>GatlingTest extends Simulation {
 <%_ if (authenticationType === 'session') { _%>
         .post("/api/authentication")
         .headers(headers_http_authenticated)
-        .formParam("j_username", "admin")
-        .formParam("j_password", "admin")
+        .formParam("username", "admin")
+        .formParam("password", "admin")
         .formParam("remember-me", "true")
         .formParam("submit", "Login")
         .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))).exitHereIfFailed

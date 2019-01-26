@@ -98,6 +98,20 @@ export class LoginService {
         } else {
             this.accountService.authenticate(null);
         }
+        <%_ } else if (authenticationType === 'oauth2') { _%>
+        this.authServerProvider.logout().subscribe(response => {
+            const data = response.body;
+            let logoutUrl = data.logoutUrl;
+            // if Keycloak, uri has protocol/openid-connect/token
+            if (logoutUrl.indexOf('/protocol') > -1) {
+                logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
+            } else {
+                // Okta
+                logoutUrl = logoutUrl + '?id_token_hint=' +
+                    data.idToken + '&post_logout_redirect_uri=' + window.location.origin;
+            }
+            window.location.href = logoutUrl;
+        });
         <%_ } else { _%>
         this.authServerProvider.logout().subscribe();
         this.accountService.authenticate(null);
