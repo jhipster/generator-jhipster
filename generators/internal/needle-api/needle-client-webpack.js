@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-
 const needleClient = require('./needle-client');
 const constants = require('../../generator-constants');
 

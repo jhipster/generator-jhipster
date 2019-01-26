@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
 const constants = require('../generator-constants');
 
 /* Constants use throughout */
