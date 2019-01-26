@@ -939,6 +939,33 @@ describe('JDLImporter', () => {
         expect(returned.exportedEntities[2].pagination).to.equal('pager');
       });
     });
+    context('when parsing a JDL with a pattern validation', () => {
+      let returned = null;
+      let entityContent;
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'regex_validation.jdl')], {
+          applicationName: 'MyApp',
+          applicationType: ApplicationTypes.MONOLITH,
+          databaseType: DatabaseTypes.SQL
+        });
+        returned = importer.import();
+        entityContent = JSON.parse(fse.readFileSync(path.join('.jhipster', 'Customer.json'), { encoding: 'utf8' }));
+      });
+
+      after(() => {
+        fse.removeSync('.jhipster');
+      });
+
+      it('escapes the back-slash in the returned object', () => {
+        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern).to.equal(
+          '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$'
+        );
+      });
+      it('escapes the back-slash in the written entity file', () => {
+        expect(entityContent.fields[0].fieldValidateRulesPattern).to.equal('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+      });
+    });
     context('when parsing a JDL with a pattern validation containing a quote', () => {
       let returned = null;
 
