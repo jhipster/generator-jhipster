@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Input, Directive, ElementRef, OnChanges } from '@angular/core';
+import { Input, Directive, ElementRef, OnChanges, OnInit } from '@angular/core';
 import { JhiConfigService } from '../config.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -26,7 +26,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Directive({
     selector: '[jhiTranslate]'
 })
-export class JhiTranslateDirective implements OnChanges {
+export class JhiTranslateDirective implements OnChanges, OnInit {
     @Input() jhiTranslate: string;
     @Input() translateValues: any;
 
@@ -36,11 +36,25 @@ export class JhiTranslateDirective implements OnChanges {
         private translateService: TranslateService
     ) {}
 
+    ngOnInit() {
+        const enabled = this.configService.getConfig().i18nEnabled;
+        if (enabled) {
+            this.translateService.onLangChange.subscribe(() => {
+                this.getTranslation();
+            })
+        }
+    }
+
     ngOnChanges() {
         const enabled = this.configService.getConfig().i18nEnabled;
 
         if (enabled) {
-            this.translateService
+            this.getTranslation();
+        }
+    }
+
+    private getTranslation() {
+        this.translateService
                 .get(this.jhiTranslate, this.translateValues)
                 .subscribe(
                     (value) => {
@@ -52,6 +66,5 @@ export class JhiTranslateDirective implements OnChanges {
                         }[${this.jhiTranslate}]`;
                     }
                 );
-        }
     }
 }
