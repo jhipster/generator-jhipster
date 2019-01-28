@@ -9,9 +9,9 @@
   ],
   "homepage": "https://github.com/jhipster/jhipster-vuejs",
   "author": {
-    "name": "Deepu K Sasidharan",
+    "name": "JHipster Team",
     "email": "d4udts@gmail.com",
-    "url": "https://deepu.js.org"
+    "url": "https://jhipster.tech"
   },
   "files": [
     "generators"
