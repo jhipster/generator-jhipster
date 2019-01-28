@@ -87,7 +87,7 @@ function writeFiles() {
                 this.template(`${k8s}/console/jhipster-logstash.yml.ejs`, 'csvc/templates/jhipster-logstash.yaml');
                 this.template(`${k8s}/console/jhipster-console.yml.ejs`, 'csvc/templates/jhipster-console.yaml');
                 this.template(`${k8s}/console/jhipster-dashboard-console.yml.ejs`, 'csvc/templates/jhipster-dashboard-console.yaml');
-                if (this.composeApplicationType === 'microservice') {
+                if (this.deploymentApplicationType === 'microservice') {
                     this.template(`${k8s}/console/jhipster-zipkin.yml.ejs`, 'csvc/templates/jhipster-zipkin.yaml');
                 }
             }
