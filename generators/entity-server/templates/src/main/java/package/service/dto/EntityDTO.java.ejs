@@ -62,12 +62,10 @@ import javax.persistence.Lob;
 import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
 
-<%_ if (typeof javadoc == 'undefined') { _%>
 /**
  * A DTO for the <%= entityClass %> entity.
  */
-<%_ } else { _%>
-<%- formatAsClassJavadoc(javadoc) %>
+<%_ if (typeof javadoc !== 'undefined') { _%>
 @ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
 <%_ } _%>
 public class <%= asDto(entityClass) %> implements Serializable {
