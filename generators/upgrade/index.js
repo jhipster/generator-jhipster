@@ -183,7 +183,8 @@ module.exports = class extends BaseGenerator {
         this.log(`Installing ${npmPackage} ${version} locally`);
         const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
         const devDependencyParam = this.clientPackageManager === 'yarn' ? '--dev' : '--save-dev';
-        const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} --no-lockfile --ignore-scripts`;
+        const noPackageLockParam = this.clientPackageManager === 'yarn' ? '--no-lockfile' : '--no-package-lock';
+        const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts`;
         this.info(generatorCommand);
         shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
             if (code === 0) this.success(`Installed ${npmPackage}@${version}`);
