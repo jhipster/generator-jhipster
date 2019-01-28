@@ -235,7 +235,7 @@ module.exports = class extends BaseGenerator {
                         this.log(chalk.yellow('Forced re-generation'));
                     } else {
                         this.newBlueprintVersionFound = false;
-                        this.warn(
+                        this.warning(
                             `${chalk.green('No update available.')} Application has already been generated with latest blueprint version.`
                         );
                     }
