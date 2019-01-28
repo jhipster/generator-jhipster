@@ -38,10 +38,14 @@
 
     <jhi-metrics-request [updating]="updatingMetrics" [requestMetrics]="metrics['http.server.requests']"></jhi-metrics-request>
 
-    <jhi-metrics-endpoints-requests [updating]="updatingMetrics" [endpointsRequestsMetrics]="metrics.services"></jhi-metrics-endpoints-requests>
+    <div *ngIf="isObjectExisting(metrics, 'services')">
+        <jhi-metrics-endpoints-requests [updating]="updatingMetrics" [endpointsRequestsMetrics]="metrics.services"></jhi-metrics-endpoints-requests>
+    </div>
 
     <jhi-metrics-cache [updating]="updatingMetrics" [cacheMetrics]="metrics.cache"></jhi-metrics-cache>
 
-    <jhi-metrics-datasource [updating]="updatingMetrics" [datasourceMetrics]="metrics.databases"></jhi-metrics-datasource>
+    <div *ngIf="isObjectExistingAndNotEmpty(metrics, 'databases')">
+        <jhi-metrics-datasource [updating]="updatingMetrics" [datasourceMetrics]="metrics.databases"></jhi-metrics-datasource>
+    </div>
 
 </div>
