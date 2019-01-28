@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageHelper } from 'app/core';
@@ -56,6 +56,9 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
                 <%_ } else { _%>
                 this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
                 <%_ } _%>
+            }
+            if (event instanceof NavigationError && event.error.status === 404) {
+                this.router.navigate(['/404']);
             }
         });
     }
