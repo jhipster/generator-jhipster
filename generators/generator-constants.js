@@ -192,6 +192,7 @@ const LANGUAGES = [
     { name: 'Swedish', dispName: 'Svenska', value: 'sv' },
     { name: 'Turkish', dispName: 'Türkçe', value: 'tr' },
     { name: 'Tamil', dispName: 'தமிழ்', value: 'ta' },
+    { name: 'Telugu', dispName: 'తెలుగు', value: 'te' },
     { name: 'Thai', dispName: 'ไทย', value: 'th' },
     {
         name: 'Ukrainian',
