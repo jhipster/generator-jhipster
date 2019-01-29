@@ -44,7 +44,7 @@ npm update -g generator-jhipster-vuejs
 To install this blueprint:
 
 ```bash
-yarn global add generator-jhipster-vuejs
+yarn global add generator-jhipster-vuejs@1.0.0-beta.0
 ```
 
 To update this blueprint:
