@@ -12,7 +12,7 @@ module.exports = {
         '<rootDir>/src/test/javascript'
     ],
     moduleNameMapper: {
-        'app/(.*)': '<rootDir>/src/main/webapp/app/$1'
+        'app/(.*)': '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/$1'
     },
     reporters: [
         'default',

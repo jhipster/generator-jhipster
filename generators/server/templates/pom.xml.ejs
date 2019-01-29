@@ -1305,7 +1305,7 @@
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory><%= MAIN_DIR %>webapp</directory>
+                                    <directory><%= CLIENT_MAIN_SRC_DIR %></directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -1354,7 +1354,7 @@
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory><%= MAIN_DIR %>webapp</directory>
+                                    <directory><%= CLIENT_MAIN_SRC_DIR %></directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -1399,7 +1399,7 @@
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory><%= MAIN_DIR %>webapp</directory>
+                                    <directory><%= CLIENT_MAIN_SRC_DIR %></directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -1542,7 +1542,7 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <warSourceDirectory><%= MAIN_DIR %>webapp/</warSourceDirectory>
+                            <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory>
                         </configuration>
                     </plugin>
                     <plugin>
