@@ -231,6 +231,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (context.entitySuffix === context.dtoSuffix) {
                     this.error(chalk.red('The entity cannot be generated as the entity suffix and DTO suffix are equals !'));
                 }
+
+                context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
             validateDbExistence() {

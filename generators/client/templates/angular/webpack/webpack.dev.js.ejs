@@ -168,7 +168,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         }),
         new webpack.ContextReplacementPlugin(
             /angular(\\|\/)core(\\|\/)/,
-            path.resolve(__dirname, './src/main/webapp')
+            path.resolve(__dirname, './<%= CLIENT_MAIN_SRC_DIR %>')
         ),
         new writeFilePlugin(),
         new webpack.WatchIgnorePlugin([
