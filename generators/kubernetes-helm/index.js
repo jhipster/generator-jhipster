@@ -19,17 +19,18 @@
 const chalk = require('chalk');
 const shelljs = require('shelljs');
 const fs = require('fs');
-const prompts = require('./prompts');
+const prompts = require('../kubernetes/prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
 const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
 const statistics = require('../statistics');
+const packagejs = require('../../package.json');
 
 module.exports = class extends BaseDockerGenerator {
     get initializing() {
         return {
             sayHello() {
-                this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
+                this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
 
@@ -39,11 +40,11 @@ module.exports = class extends BaseDockerGenerator {
                 if (this.skipChecks) return;
                 const done = this.async();
 
-                shelljs.exec('kubectl version', { silent: true }, (code, stdout, stderr) => {
+                shelljs.exec('helm version --client', { silent: true }, (code, stdout, stderr) => {
                     if (stderr) {
                         this.log(
-                            `${chalk.yellow.bold('WARNING!')} kubectl 1.2 or later is not installed on your computer.\n` +
-                                'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n'
+                            `${chalk.yellow.bold('WARNING!')} helm 2.8 or later is not installed on your computer.\n` +
+                                'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
                         );
                     }
                     done();
@@ -57,6 +58,7 @@ module.exports = class extends BaseDockerGenerator {
                 this.ingressDomain = this.config.get('ingressDomain');
                 this.istio = this.config.get('istio');
                 this.istioRoute = this.config.get('istioRoute');
+                this.jhipsterVersion = packagejs.version;
                 this.dbRandomPassword = Math.random()
                     .toString(36)
                     .slice(-8);
@@ -86,7 +88,7 @@ module.exports = class extends BaseDockerGenerator {
     get configuring() {
         return {
             insight() {
-                statistics.sendSubGenEvent('generator', 'kubernetes');
+                statistics.sendSubGenEvent('generator', 'kubernetes-helm');
             },
 
             checkImages,
@@ -129,11 +131,11 @@ module.exports = class extends BaseDockerGenerator {
 
     end() {
         if (this.warning) {
-            this.log(`\n${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated, but no Jib cache found`);
+            this.log(`\n${chalk.yellow.bold('WARNING!')} Helm configuration generated, but no Jib cache found`);
             this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(this.warningMessage);
         } else {
-            this.log(`\n${chalk.bold.green('Kubernetes configuration successfully generated!')}`);
+            this.log(`\n${chalk.bold.green('Helm configuration successfully generated!')}`);
         }
 
         this.log(
@@ -151,25 +153,20 @@ module.exports = class extends BaseDockerGenerator {
         }
 
         this.log('\nYou can deploy all your apps by running the following script:');
-        this.log(`  ${chalk.cyan('./kubectl-apply.sh')}`);
-        if (this.gatewayNb + this.monolithicNb >= 1) {
-            const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
-            this.log("\nUse these commands to find your application's IP addresses:");
-            for (let i = 0; i < this.appsFolders.length; i++) {
-                if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-                    this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}${namespaceSuffix}`)}`);
-                }
-            }
-            this.log();
-        }
+        this.log(`  ${chalk.cyan('bash helm-apply.sh')}`);
+
+        this.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
+        this.log(`  ${chalk.cyan('bash helm-upgrade.sh')}`);
+
         // Make the apply script executable
         try {
-            fs.chmodSync('kubectl-apply.sh', '755');
+            fs.chmodSync('helm-apply.sh', '755');
+            fs.chmodSync('helm-upgrade.sh', '755');
         } catch (err) {
             this.log(
                 `${chalk.yellow.bold(
                     'WARNING!'
-                )}Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'`
+                )}Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh`
             );
         }
     }

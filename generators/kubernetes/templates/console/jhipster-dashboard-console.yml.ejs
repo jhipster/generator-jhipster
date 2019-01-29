@@ -28,6 +28,8 @@ spec:
     metadata:
       labels:
         job: jhipster-import-dashboards
+      annotations:
+        "helm.sh/hook": post-install
     spec:
       initContainers:
         - name: init-dependent-service-check
