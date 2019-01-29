@@ -8,13 +8,13 @@ import RegisterPage from '../../page-objects/register-page';
 import PasswordPage from '../../page-objects/password-page';
 import SettingsPage from '../../page-objects/settings-page';
 import {
-    getToastByInnerText,
-    getUserDeactivatedButtonByLogin,
-    <%_ if (databaseType !== 'cassandra') { _%>
-    getModifiedDateSortButton,
-    <%_ } _%>
-    waitUntilDisplayed,
-    waitUntilHidden, getUserDeleteButtonByLogin
+  getToastByInnerText,
+  getUserDeactivatedButtonByLogin,
+  <%_ if (databaseType !== 'cassandra') { _%>
+  getModifiedDateSortButton,
+  <%_ } _%>
+  waitUntilDisplayed,
+  waitUntilHidden, getUserDeleteButtonByLogin
 } from '../../util/utils';
 <%_ } else { _%>
 import { waitUntilDisplayed } from '../../util/utils';
@@ -60,13 +60,13 @@ describe('Account', () => {
     await signInPage.loginWithOAuth('admin', 'foo');
     const alert = element(by.css('.alert-error'));
     if (await alert.isPresent()) {
-        // Keycloak
-        expect(await alert.getText()).to.eq('Invalid username or password.');
+      // Keycloak
+      expect(await alert.getText()).to.eq('Invalid username or password.');
     } else {
-        // Okta
-        const error = element(by.css('.infobox-error'));
-        await waitUntilDisplayed(error);
-        expect(await error.getText()).to.eq('Sign in failed!');
+      // Okta
+      const error = element(by.css('.infobox-error'));
+      await waitUntilDisplayed(error);
+      expect(await error.getText()).to.eq('Sign in failed!');
     }
     await signInPage.clearUserName();
     await signInPage.clearPassword();
@@ -90,7 +90,7 @@ describe('Account', () => {
     expect(await signInPage.isHidden()()).to.be.true;
     await navBarPage.autoSignOut();
 <%_ } else { _%>
-      // Keycloak credentials by default, change them to be able to use oauth2 with Okta
+    // Keycloak credentials by default, change them to be able to use oauth2 with Okta
     await signInPage.loginWithOAuth('admin', 'admin');
     const success = element(by.className('alert-success'));
     await waitUntilDisplayed(success);
@@ -117,13 +117,13 @@ describe('Account', () => {
   });
 
   it('should load user management', async () => {
-      await browser.get('/');
-      signInPage = await navBarPage.getSignInPage();
-      await signInPage.waitUntilDisplayed();
+    await browser.get('/');
+    signInPage = await navBarPage.getSignInPage();
+    await signInPage.waitUntilDisplayed();
 
-      expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
-      await signInPage.username.sendKeys('admin');
+    await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
     await signInPage.loginButton.click();
     await signInPage.waitUntilHidden();
@@ -157,9 +157,8 @@ describe('Account', () => {
   });
 
   it('should not be able to sign up if login already taken', async () => {
-      await browser.get('/');
-
-      await registerPage.get();
+    await browser.get('/');
+    await registerPage.get();
     expect(await registerPage.getTitle()).to.eq(registerPageTitle);
 
     await registerPage.autoSignUpUsing('user_test', 'admin@localhost.jh', 'user_test');
@@ -183,9 +182,9 @@ describe('Account', () => {
   });
 
   it('should be able to log in with new registered account', async () => {
-      await browser.get('/');
-      signInPage = await navBarPage.getSignInPage();
-      await signInPage.waitUntilDisplayed();
+    await browser.get('/');
+    signInPage = await navBarPage.getSignInPage();
+    await signInPage.waitUntilDisplayed();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
     await signInPage.username.sendKeys('user_test');
@@ -199,9 +198,9 @@ describe('Account', () => {
   });
 
   it('should login with admin account', async () => {
-      await browser.get('/');
-      signInPage = await navBarPage.getSignInPage();
-      await signInPage.waitUntilDisplayed();
+    await browser.get('/');
+    signInPage = await navBarPage.getSignInPage();
+    await signInPage.waitUntilDisplayed();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
     await signInPage.username.sendKeys('admin');
@@ -223,12 +222,26 @@ describe('Account', () => {
 
     // Error toast should appear
     expect(await toast.isPresent()).to.be.true;
+    await navBarPage.autoSignOut();
+  });
+
+  it('should login with admin account', async () => {
+    await browser.get('/');
+    signInPage = await navBarPage.getSignInPage();
+    await signInPage.waitUntilDisplayed();
+    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
+
+    await signInPage.username.sendKeys('admin');
+    await signInPage.password.sendKeys('admin');
+    await signInPage.loginButton.click();
+    await signInPage.waitUntilHidden();
+
+    expect(await signInPage.isHidden()()).to.be.true;
   });
 
   it('should be able to update password', async () => {
-    await browser.refresh();
     passwordPage = await navBarPage.getPasswordPage();
-        await passwordPage.waitUntilDisplayed();
+    await passwordPage.waitUntilDisplayed();
     expect(await passwordPage.getTitle()).to.eq(passwordPageTitle);
 
     await passwordPage.autoChangePassword('admin', 'new_password', 'new_password');
@@ -241,9 +254,9 @@ describe('Account', () => {
   });
 
   it('should be able to log in with new password', async () => {
-      await browser.get('/');
-      signInPage = await navBarPage.getSignInPage();
-      await signInPage.waitUntilDisplayed();
+    await browser.get('/');
+    signInPage = await navBarPage.getSignInPage();
+    await signInPage.waitUntilDisplayed();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
     await signInPage.username.sendKeys('admin');
@@ -262,9 +275,9 @@ describe('Account', () => {
   });
 
   it('should login with user_test account', async () => {
-      await browser.get('/');
-      signInPage = await navBarPage.getSignInPage();
-      await signInPage.waitUntilDisplayed();
+    await browser.get('/');
+    signInPage = await navBarPage.getSignInPage();
+    await signInPage.waitUntilDisplayed();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
     await signInPage.username.sendKeys('user_test');
@@ -276,9 +289,9 @@ describe('Account', () => {
   });
 
   it('should be able to change user_test settings', async () => {
-      await browser.refresh();
-      settingsPage = await navBarPage.getSettingsPage();
-      await settingsPage.waitUntilDisplayed();
+    await browser.refresh();
+    settingsPage = await navBarPage.getSettingsPage();
+    await settingsPage.waitUntilDisplayed();
 
     expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
 
@@ -295,9 +308,9 @@ describe('Account', () => {
   });
 
   it('should login with admin account', async () => {
-      await browser.get('/');
-      signInPage = await navBarPage.getSignInPage();
-      await signInPage.waitUntilDisplayed();
+    await browser.get('/');
+    signInPage = await navBarPage.getSignInPage();
+    await signInPage.waitUntilDisplayed();
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
     await signInPage.username.sendKeys('admin');
@@ -309,10 +322,10 @@ describe('Account', () => {
   });
 
   it('should not be able to change admin settings if email already exists', async () => {
-      await browser.refresh();
-      settingsPage = await navBarPage.getSettingsPage();
-      await settingsPage.waitUntilDisplayed();
-      expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
+    await browser.refresh();
+    settingsPage = await navBarPage.getSettingsPage();
+    await settingsPage.waitUntilDisplayed();
+    expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
 
     await settingsPage.setEmail('.jh');
     await settingsPage.save();
