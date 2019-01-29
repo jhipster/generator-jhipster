@@ -16,9 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Input, Directive, ElementRef, OnChanges } from '@angular/core';
-import { JhiConfigService } from '../config.service';
+import { Input, Directive, ElementRef, OnChanges, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+
+import { JhiConfigService } from '../config.service';
 
 /**
  * A wrapper directive on top of the translate pipe as the inbuilt translate directive from ngx-translate is too verbose and buggy
@@ -26,24 +27,37 @@ import { TranslateService } from '@ngx-translate/core';
 @Directive({
     selector: '[jhiTranslate]'
 })
-export class JhiTranslateDirective implements OnChanges {
+export class JhiTranslateDirective implements OnChanges, OnInit {
     @Input() jhiTranslate: string;
     @Input() translateValues: any;
 
     constructor(private configService: JhiConfigService, private el: ElementRef, private translateService: TranslateService) {}
 
+    ngOnInit() {
+        const enabled = this.configService.getConfig().i18nEnabled;
+        if (enabled) {
+            this.translateService.onLangChange.subscribe(() => {
+                this.getTranslation();
+            });
+        }
+    }
+
     ngOnChanges() {
         const enabled = this.configService.getConfig().i18nEnabled;
 
         if (enabled) {
-            this.translateService.get(this.jhiTranslate, this.translateValues).subscribe(
-                value => {
-                    this.el.nativeElement.innerHTML = value;
-                },
-                () => {
-                    return `${this.configService.getConfig().noi18nMessage}[${this.jhiTranslate}]`;
-                }
-            );
+            this.getTranslation();
         }
+    }
+
+    private getTranslation() {
+        this.translateService.get(this.jhiTranslate, this.translateValues).subscribe(
+            value => {
+                this.el.nativeElement.innerHTML = value;
+            },
+            () => {
+                return `${this.configService.getConfig().noi18nMessage}[${this.jhiTranslate}]`;
+            }
+        );
     }
 }
