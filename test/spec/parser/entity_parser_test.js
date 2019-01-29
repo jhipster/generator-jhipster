@@ -512,7 +512,8 @@ describe('EntityParser', () => {
               relationshipName: 'bb',
               otherEntityName: 'b',
               relationshipType: 'many-to-one',
-              otherEntityField: 'id'
+              otherEntityField: 'id',
+              otherEntityRelationshipName: 'aa'
             },
             {
               relationshipName: 'bbb',

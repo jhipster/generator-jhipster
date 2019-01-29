@@ -171,13 +171,15 @@ describe('JDLImporter', () => {
               relationshipType: 'many-to-one',
               relationshipName: 'user',
               otherEntityName: 'user',
-              otherEntityField: 'login'
+              otherEntityField: 'login',
+              otherEntityRelationshipName: 'employee'
             },
             {
               relationshipType: 'many-to-one',
               relationshipName: 'manager',
               otherEntityName: 'employee',
-              otherEntityField: 'id'
+              otherEntityField: 'id',
+              otherEntityRelationshipName: 'employee'
             },
             {
               relationshipType: 'many-to-one',
@@ -272,7 +274,7 @@ describe('JDLImporter', () => {
           relationships: [
             {
               relationshipType: 'many-to-many',
-              otherEntityRelationshipName: '',
+              otherEntityRelationshipName: 'jobHistory',
               relationshipName: 'department',
               otherEntityName: 'department',
               otherEntityField: 'id',
@@ -280,7 +282,7 @@ describe('JDLImporter', () => {
             },
             {
               relationshipType: 'many-to-many',
-              otherEntityRelationshipName: '',
+              otherEntityRelationshipName: 'jobHistory',
               relationshipName: 'department',
               otherEntityName: 'job',
               otherEntityField: 'id',
@@ -288,7 +290,7 @@ describe('JDLImporter', () => {
             },
             {
               relationshipType: 'many-to-many',
-              otherEntityRelationshipName: '',
+              otherEntityRelationshipName: 'jobHistory',
               relationshipName: 'employee',
               otherEntityName: 'employee',
               otherEntityField: 'id',
