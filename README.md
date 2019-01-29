@@ -1,7 +1,7 @@
 # JHipster-vuejs
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > ## ⚠️ Status: in development
-> JHipster-vuejs, a Vue.js blueprint for JHipster. It will use [Vue.js](https://vuejs.org/) as the frontend library
+> JHipster-vuejs, a Vue.js blueprint for JHipster. It will use [Vue.js](https://vuejs.org/) as the frontend library. Check out our latest beta release `1.0.0-beta.0` to try this out. 
 
 <div align="center">
   <a href="http://www.jhipster.tech/">
@@ -30,7 +30,7 @@ As this is a [JHipster](http://www.jhipster.tech/) blueprint, we expect you have
 To install this blueprint:
 
 ```bash
-npm install -g generator-jhipster-vuejs
+npm install -g generator-jhipster-vuejs@1.0.0-beta.0
 ```
 
 To update this blueprint:
