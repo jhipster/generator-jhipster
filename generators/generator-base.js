@@ -448,33 +448,6 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add a new http interceptor to the angular application in "blocks/config/http.config.js".
-     * The interceptor should be in its own .js file inside app/blocks/interceptor folder
-     * @param {string} interceptorName - angular name of the interceptor
-     *
-     */
-    addAngularJsInterceptor(interceptorName) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/blocks/config/http.config.js`;
-        try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: fullPath,
-                    needle: 'jhipster-needle-angularjs-add-interceptor',
-                    splicable: [`$httpProvider.interceptors.push('${interceptorName}');`]
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Interceptor not added to JHipster app.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
      * Add a new entity to Ehcache, for the 2nd level cache of an entity and its relationships.
      *
      * @param {string} entityClass - the entity to cache
