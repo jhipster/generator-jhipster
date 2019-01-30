@@ -14,9 +14,11 @@ import TranslationService from '@/locale/translation.service';
 @Component
 export default class JhiNavbar extends Vue {
   <%_ if (authenticationType !== 'oauth2') { _%>
-  @Inject('loginModalService') private loginModalService: () => LoginModalService;
+  @Inject('loginModalService')
+  private loginModalService: () => LoginModalService;
   <%_ } else { %>
-  @Inject('loginService') private loginService: () => LoginService;
+  @Inject('loginService')
+  private loginService: () => LoginService;
   <%_ } %>
   <%_ if (enableTranslation) { _%>
   @Inject('translationService') private translationService: () => TranslationService;

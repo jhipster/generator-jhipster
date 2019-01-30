@@ -9,9 +9,11 @@ import LoginService from '@/account/login.service';
 @Component
 export default class Home extends Vue {
   <%_ if (authenticationType !== 'oauth2') { _%>
-  @Inject('loginModalService') private loginModalService: () => LoginModalService;
+  @Inject('loginModalService')
+  private loginModalService: () => LoginModalService;
   <%_ } else { %>
-  @Inject('loginService') private loginService: () => LoginService;
+  @Inject('loginService')
+  private loginService: () => LoginService;
   <%_ } %>
 
   public openLogin(): void {
