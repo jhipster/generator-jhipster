@@ -281,6 +281,25 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/user-management.json`
     ],
 
+    i18nDeJson: [
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/activate.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/audits.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/configuration.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/error.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/global.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/health.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/login.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/logs.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/home.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/metrics.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/password.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/register.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/sessions.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/settings.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/reset.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/user-management.json`
+    ],
+
     userManagementClient: [
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-delete-dialog.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-delete-dialog.component.html`,
@@ -306,7 +325,7 @@ const expectedFiles = {
         'package.json',
         'postcss.config.js',
         'proxy.conf.json',
-        'src/main/webapp/404.html',
+        `${CLIENT_MAIN_SRC_DIR}404.html`,
         `${CLIENT_MAIN_SRC_DIR}app/account/account.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/account.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/activate/activate.component.html`,

@@ -231,6 +231,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (context.entitySuffix === context.dtoSuffix) {
                     this.error(chalk.red('The entity cannot be generated as the entity suffix and DTO suffix are equals !'));
                 }
+
+                context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
             validateDbExistence() {
@@ -526,13 +528,15 @@ module.exports = class extends BaseBlueprintGenerator {
                         relationship.relationshipType !== ''
                     ) {
                         relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
-                        this.warning(
-                            `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
-                                relationship,
-                                null,
-                                4
-                            )}, using ${_.lowerFirst(entityName)} as fallback`
-                        );
+                        if (relationship.otherEntityName !== 'user') {
+                            this.warning(
+                                `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
+                                    relationship,
+                                    null,
+                                    4
+                                )}, using ${_.lowerFirst(entityName)} as fallback`
+                            );
+                        }
                     }
 
                     if (

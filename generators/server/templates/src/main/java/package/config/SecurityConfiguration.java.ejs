@@ -28,10 +28,6 @@ import <%= packageName %>.security.jwt.*;
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.security.*;
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2' && applicationType !== 'microservice') { _%>
-
-import io.github.jhipster.security.*;
-<%_ } _%>
 
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
 import org.springframework.beans.factory.BeanInitializationException;
@@ -65,12 +61,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+    <%_ if (applicationType === 'microservice') { _%>
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
@@ -179,7 +177,7 @@ public class SecurityConfiguration extends <% if (authenticationType === 'oauth2
         return new AjaxAuthenticationFailureHandler();
     }
     <%_ } _%>
-    <%_ if (authenticationType === 'session' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
+    <%_ if (authenticationType === 'session') { _%>
 
     @Bean
     public AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler() {
@@ -242,9 +240,7 @@ public class SecurityConfiguration extends <% if (authenticationType === 'oauth2
             .loginProcessingUrl("/api/authentication")
             .successHandler(ajaxAuthenticationSuccessHandler())
             .failureHandler(ajaxAuthenticationFailureHandler())
-            .usernameParameter("j_username")
-            .passwordParameter("j_password")
-            .permitAll()<% } %><% if (authenticationType === 'session' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { %>
+            .permitAll()<% } %><% if (authenticationType === 'session') { %>
         .and()
             .logout()
             .logoutUrl("/api/logout")
@@ -286,7 +282,7 @@ public class SecurityConfiguration extends <% if (authenticationType === 'oauth2
         return new JWTConfigurer(tokenProvider);
     }
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
 
     /**
      * This OAuth2RestTemplate is only used by AuthorizationHeaderUtil that is currently used by TokenRelayRequestInterceptor

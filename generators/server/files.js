@@ -594,6 +594,18 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}security/OAuth2AuthenticationSuccessHandler.java`
                 }
             ]
+        },
+        {
+            condition: generator =>
+                generator.authenticationType === 'oauth2' &&
+                (generator.applicationType === 'monolith' || generator.applicationType === 'gateway'),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/LogoutResource.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/LogoutResource.java`
+                }
+            ]
         }
     ],
     serverMicroservice: [
@@ -1283,6 +1295,18 @@ const serverFiles = {
                 {
                     file: 'package/security/oauth2/CookieCollectionTest.java',
                     renameTo: generator => `${generator.testDir}security/oauth2/CookieCollectionTest.java`
+                }
+            ]
+        },
+        {
+            condition: generator =>
+                generator.authenticationType === 'oauth2' &&
+                (generator.applicationType === 'monolith' || generator.applicationType === 'gateway'),
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/LogoutResourceIntTest.java',
+                    renameTo: generator => `${generator.testDir}web/rest/LogoutResourceIntTest.java`
                 }
             ]
         },

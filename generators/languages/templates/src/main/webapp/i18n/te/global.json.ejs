@@ -1,0 +1,159 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "మీది <strong>కాలం చెల్లిన</strong> బ్రౌజరు. దయచేసి <a href=\"http://browsehappy.com/?locale=en\">నవీకరణ చేసుకోండి</a> ",
+        "menu": {
+            "home": "ఇల్లు",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "ఎంటిటీలు",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "ఖాతా",
+                "settings": "అమరికలు",
+                "password": "రహస్య సంకేత పదం",
+                "sessions": "సెషన్స్",
+                "login": "సైన్ ఇన్ చేయండి",
+                "logout": "సైన్ అవుట్ చేయండి",
+                "register": "నమోదు"
+            },
+            "admin": {
+                "main": "పెత్తనం",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "ప్రవేశ దారులు",
+                <%_ } _%>
+                "userManagement": "ఉపయోక్త నిర్వహణ",
+                "tracker": "ఉపయోక్త ట్రాకర్",
+                "metrics": "కొలమానాలు",
+                "health": "పరిస్థితి",
+                "configuration": "ఆకృతీకరణ",
+                "logs": "లాగ్స్",
+                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                "audits": "తనిఖీలు",
+                <%_ } _%>
+                "apidocs": "API",
+                "database": "డేటాబేస్",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "భాష"
+        },
+        "form": {
+            "username": "వాడుకరిపేరు",
+            "username.placeholder": "మీ వాడుకరిపేరు",
+            "currentpassword": "ప్రస్తుత రహస్య సంకేతపదం",
+            "currentpassword.placeholder": "ప్రస్తుత రహస్య సంకేతపదం",
+            "newpassword": "కొత్త రహస్య సంకేతపదం",
+            "newpassword.placeholder": "కొత్త రహస్య సంకేతపదం",
+            "confirmpassword": "రహస్య సంకేతపదం ధ్రువీకరణ",
+            "confirmpassword.placeholder": "రహస్య సంకేతపదం ధ్రువీకరణ",
+            "email": "ఈ మెయిల్",
+            "email.placeholder": "మీ ఈ మెయిల్"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "మీరు కావాలంటే",
+                    "link": "సైన్ ఇన్ ",
+                    "suffix": ", ఈ ఖాతా లు వాడుకోవచ్చు:<br/>- పెత్తందారి (login=\"admin\" and password=\"admin\") <br/>- సాధారణ ఉపయోక్త (login=\"user\" and password=\"user\")."
+                },
+                "register": {
+                    "noaccount": "మీకు ఖాతా లేదా?",
+                    "link": "ఖాతా నమోదు చేసుకోండి"
+                }
+            },
+            "error": {
+                "dontmatch": "రహస్య సంకేతపదం ధ్రువీకరణ విఫలం!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "రహస్య సంకేతపదం పూరించండి.",
+                    "minlength": "రహస్య సంకేత పదం కనీసం నాలుగు అక్షరాలు ఉండాలి",
+                    "maxlength": "రహస్య సంకేత పదం 50 అక్షరాలకు మించరాదు",
+                    "strength": "రహస్య సంకేత పదం బలం:"
+                },
+                "confirmpassword": {
+                    "required": "రహస్య సంకేతపదం ధ్రువీకరణ పూరించండి",
+                    "minlength": "రహస్య సంకేతపదం ధ్రువీకరణ కనీసం నాలుగు అక్షరాలు ఉండాలి",
+                    "maxlength": "రహస్య సంకేతపదం ధ్రువీకరణ 50 అక్షరాలకు మించరాదు"
+                },
+                "email": {
+                    "required": "ఈ-మెయిల్ పూరించండి",
+                    "invalid": "ఈ-మెయిల్ సరైనది కాదు",
+                    "minlength": "ఈ-మెయిల్ కనీసం 5 అక్షరాలు ఉండాలి",
+                    "maxlength": "ఈ-మెయిల్ 50 అక్షరాలకు మించరాదు."
+                }
+            }
+        },
+        "field": {
+            "id": "ఐడి"
+        },
+        "ribbon": {
+            "dev": "డెవలప్మెంట్"
+        },
+        "item-count": " మీరు చూస్తున్నారు {{first}} - {{second}} మొత్తం {{total}} వివరాలు."
+    },
+    "entity": {
+        "action": {
+            "addblob": "బ్లాబ్ జోడించండి",
+            "addimage": "బొమ్మ జోడించండి",
+            "back": "వెనక్కి",
+            "cancel": "రద్దు",
+            "delete": "తొలగించండి",
+            "edit": "మార్చు",
+            "open": "తెరవండి",
+            "save": "భద్రపరుచు",
+            "view": "చూడు"
+        },
+        "detail": {
+            "field": "అంశం",
+            "value": "విలువ"
+        },
+        "delete": {
+            "title": "తొలగింపు నిర్ధారించండి"
+        },
+        "validation": {
+            "required": "ఈ ఖాళీని తప్పనిసరిగా పూరించవలెను.",
+            "minlength": "ఈ ఫీల్డ్ కనీసం  {{ min }} అక్షరాలను కలిగి ఉండాలి.",
+            "maxlength": "ఈ ఫీల్డ్ {{ max }} అక్షరాల కంటే ఎక్కువ పొడవు ఉండకూడదు ",
+            "min": "ఈ ఫీల్డ్ లో {{ min }} కంటే ఎక్కువ ఉండాలి",
+            "max": "ఈ ఫీల్డ్ లో {{ max }} కంటే తక్కువ ఉండాలి",
+            "minbytes": "ఈ ఫీల్డ్ {{ min }} బైట్స్ కంటే ఎక్కువ ఉండాలి",
+            "maxbytes": "ఈ ఫీల్డ్ {{ max }} బైట్స్ కంటే తక్కువ ఉండాలి",
+            "pattern": "ఈ ఫీల్డ్ ఈ పద్దతి లో ఉండాలి {{ pattern }}.",
+            "number": "ఈ ఫీల్డ్ ఒక అంకె",
+            "datetimelocal": "ఈ ఫీల్డ్ తేదీ మరియు సమయం అయి ఉండాలి.",
+            "patternLogin": "ఈ ఫీల్డ్ అక్షరాలు, అంకెలు మరియు ఇ-మెయిల్ చిరునామాలను మాత్రమే కలిగి ఉంటుంది."
+        }
+    },
+    "error": {
+        "internalServerError": "అంతర్గత సర్వర్ లోపం",
+        "server.not.reachable": "సర్వర్ అందుబాటులో లేదు",
+        "url.not.found": "దొరకలేదు",
+        "NotNull": "{{ fieldName }} ఫీల్డ్ ఖాళీ ఉంచరాదు!",
+        "Size": " {{ fieldName }} కనిష్ఠ / గరిష్ట పరిమాణ పరిమితులకు తగినట్లు లేదు!",
+        "userexists": "లాగిన్ పేరు ఇప్పటికే ఉపయోగించబడింది!",
+        "emailexists": "ఇమెయిల్ ఇప్పటికే వినియోగంలో ఉంది!",
+        "idexists": "ఒక కొత్త {{ entityName }} ఇప్పటికే ఐడి ని కలిగి ఉండకూడదు ",
+        "idnull": "చెల్లని ఐడి"
+    },
+    "footer": "ఇది మీ ఫుటరు"
+}

@@ -83,6 +83,10 @@ Example:
     kubernetes: {
         desc: 'Deploy the current application to Kubernetes'
     },
+    'kubernetes-helm': {
+        alias: 'k8s-helm',
+        desc: 'Deploy the current application to Kubernetes using Helm package manager'
+    },
     languages: {
         argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
