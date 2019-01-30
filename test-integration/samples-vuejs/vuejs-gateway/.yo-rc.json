@@ -1,14 +1,13 @@
 {
   "generator-jhipster": {
     "promptValues": {
-      "packageName": "com.mycompany.myapp",
+      "packageName": "io.github.jhipster.sample",
       "nativeLanguage": "en"
     },
-    "jhipsterVersion": "5.5.0",
     "applicationType": "gateway",
     "baseName": "test2",
-    "packageName": "com.mycompany.myapp",
-    "packageFolder": "com/mycompany/myapp",
+    "packageName": "io.github.jhipster.sample",
+    "packageFolder": "io/github/jhipster/sample",
     "serverPort": "8080",
     "authenticationType": "jwt",
     "cacheProvider": "hazelcast",

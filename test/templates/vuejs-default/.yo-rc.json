@@ -7,7 +7,7 @@
       "applicationType": "monolith",
       "baseName": "jhipster",
       "packageName": "com.mycompany.myapp",
-      "packageFolder": "com/mycompany/myapp",
+      "packageFolder": "io/github/jhipster/sample",
       "serverPort": "8080",
       "authenticationType": "jwt",
       "cacheProvider": "ehcache",
