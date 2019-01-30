@@ -71,8 +71,10 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/register/register.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/register/register.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/account/register/register.service.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/reset-password/reset-password.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/reset-password/reset-password.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/reset-password/init/reset-password-init.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/reset-password/init/reset-password-init.vue`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/reset-password/finish/reset-password-finish.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/reset-password/finish/reset-password-finish.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/account/settings/settings.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/settings/settings.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/account/login-modal.service.ts`,
@@ -88,18 +90,17 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/account/login-form/login-form.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/account/activate/activate.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/account/register/register.component.spec.ts`,
-        // `${CLIENT_SPEC_SRC_DIR}app/account/reset-password/reset-password.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/account/reset-password/init/reset-password-init.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/account/reset-password/finish/reset-password-finish.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/account/settings/settings.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/account/login-modal.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management-edit.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management-view.component.spec.ts`
-
     ],
 
     app: [
-
         `${CLIENT_MAIN_SRC_DIR}app/account/account.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.vue`,
@@ -183,7 +184,7 @@ const expectedFiles = {
     ],
 
     test: [
-        // `${CLIENT_TEST_SRC_DIR}jest.conf.js`,
+        `${CLIENT_TEST_SRC_DIR}jest.conf.js`,
     ],
 
     protractor: [

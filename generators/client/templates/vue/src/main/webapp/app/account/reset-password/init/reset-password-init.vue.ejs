@@ -12,7 +12,7 @@
                     <p v-text="$t('reset.request.messages.info')">Enter the email address you used to register.</p>
                 </div>
 
-                <div class="alert alert-success" v-if="success === 'OK'">
+                <div class="alert alert-success" v-if="success">
                     <p v-text="$t('reset.request.messages.success')">Check your emails for details on how to reset your password.</p>
                 </div>
 
@@ -48,5 +48,5 @@
     </div>
 </template>
 
-<script lang="ts" src="./reset-password.component.ts">
+<script lang="ts" src="./reset-password-init.component.ts">
 </script>

@@ -25,7 +25,7 @@ jest.mock('axios', () => ({
 describe('Register Component', () => {
   let wrapper: Wrapper<RegisterClass>;
   let register: RegisterClass;
-  const filledRegisterAccount = {'email': 'jhi@pster.net', 'langKey': null, 'login': 'jhi', 'password': 'jhipster'};
+  const filledRegisterAccount = {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'};
 
   beforeEach(() => {
     mockedAxios.get.mockReset();
@@ -86,7 +86,7 @@ describe('Register Component', () => {
     register.register();
     await register.$nextTick();
 
-    expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': <%_ if (enableTranslation) { _%>'en'<%_ } else { _%>undefined<%_ } _%>, 'login': 'jhi', 'password': 'jhipster'});
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'});
     expect(register.success).toBe(true);
     expect(register.doNotMatch).toBe(null);
     expect(register.error).toBe(null);
@@ -102,7 +102,7 @@ describe('Register Component', () => {
     register.register();
     await register.$nextTick();
 
-    expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': <%_ if (enableTranslation) { _%>'en'<%_ } else { _%>undefined<%_ } _%>, 'login': 'jhi', 'password': 'jhipster'});
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'});
     expect(register.success).toBe(null);
     expect(register.doNotMatch).toBe(null);
     expect(register.error).toBe(null);
@@ -118,7 +118,7 @@ describe('Register Component', () => {
     register.register();
     await register.$nextTick();
 
-    expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': <%_ if (enableTranslation) { _%>'en'<%_ } else { _%>undefined<%_ } _%>, 'login': 'jhi', 'password': 'jhipster'});
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'});
     expect(register.success).toBe(null);
     expect(register.doNotMatch).toBe(null);
     expect(register.error).toBe(null);
@@ -134,7 +134,7 @@ describe('Register Component', () => {
     register.register();
     await register.$nextTick();
 
-    expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': <%_ if (enableTranslation) { _%>'en'<%_ } else { _%>undefined<%_ } _%>, 'login': 'jhi', 'password': 'jhipster'});
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'});
     expect(register.success).toBe(null);
     expect(register.doNotMatch).toBe(null);
     expect(register.errorEmailExists).toBe(null);
