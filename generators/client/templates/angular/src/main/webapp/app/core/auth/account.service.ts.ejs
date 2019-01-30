@@ -17,9 +17,10 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-<%_ if (enableTranslation && authenticationType !== 'oauth2' && authenticationType !== 'uaa') { _%>
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
+import { IUser } from 'app/core/user/user.model';
 <%_ } _%>
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
@@ -38,7 +39,7 @@ export class AccountService  {
 
 
     constructor(
-        <%_ if (enableTranslation && authenticationType !== 'oauth2' && authenticationType !== 'uaa') { _%>
+        <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
         private sessionStorage: SessionStorageService,
         <%_ } _%>
@@ -105,11 +106,10 @@ export class AccountService  {
                 <%_ if (websocket === 'spring-websocket') { _%>
                 this.trackerService.connect();
                 <%_ } _%>
-                <%_ if (enableTranslation && authenticationType !== 'oauth2' && authenticationType !== 'uaa') { _%>
+                <%_ if (enableTranslation) { _%>
                 // After retrieve the account info, the language will be changed to
                 // the user's preferred language configured in the account setting
-                const langKey = this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
-                this.languageService.changeLanguage(langKey);
+                this.setPreferredLanguage(account);
                 <%_ } _%>
             } else {
                 this.userIdentity = null;
@@ -129,6 +129,13 @@ export class AccountService  {
             return null;
         });
     }
+    <%_ if (enableTranslation) { _%>
+    
+    setPreferredLanguage(account: IUser) {
+        const langKey = this.sessionStorage.retrieve('locale') || account.langKey;
+        this.languageService.changeLanguage(langKey);
+    }
+    <%_ } _%>
 
     isAuthenticated(): boolean {
         return this.authenticated;

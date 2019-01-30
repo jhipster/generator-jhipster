@@ -823,14 +823,10 @@ public class UserService {
         if (details.get("langKey") != null) {
             user.setLangKey((String) details.get("langKey"));
         } else if (details.get("locale") != null) {
+            // https://github.com/jhipster/generator-jhipster/issues/7866
+            // for the locale issue, we suggest you should adjust the format based on the oauth server. here we can't cater for all the cases
             String locale = (String) details.get("locale");
-            if (locale.contains("-")) {
-              String langKey = locale.substring(0, locale.indexOf('-'));
-              user.setLangKey(langKey);
-            } else if (locale.contains("_")) {
-              String langKey = locale.substring(0, locale.indexOf('_'));
-              user.setLangKey(langKey);
-            }
+            user.setLangKey(locale);
         }
         if (details.get("picture") != null) {
             user.setImageUrl((String) details.get("picture"));
