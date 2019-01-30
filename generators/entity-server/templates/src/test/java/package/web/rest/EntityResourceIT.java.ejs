@@ -150,11 +150,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
-public class <%= entityClass %>ResourceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 <%_
     let oldSource = '';
     try {
-        oldSource = this.fs.readFileSync(this.SERVER_TEST_SRC_DIR + packageFolder + '/web/rest/' + entityClass + 'ResourceIntTest.java', 'utf8');
+        oldSource = this.fs.readFileSync(this.SERVER_TEST_SRC_DIR + packageFolder + '/web/rest/' + entityClass + 'ResourceIT.java', 'utf8');
     } catch (e) {}
 _%>
     <%_ for (idx in fields) {
@@ -245,7 +245,7 @@ _%>
                 updatedTextString = updatedTextString + "B";
                 log(this.chalkRed('Randomly generated first and second test values for entity "' + entityClass +
                     '" field "' + fields[idx].fieldName + '" with pattern "' + fields[idx].fieldValidateRulesPattern +
-                    '" in file "' + entityClass + 'ResourceIntTest" where equal, added symbol "B" to second value.'));
+                    '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.'));
             }
         }_%>
 
@@ -428,7 +428,7 @@ _%>
             if ((relationshipValidate !== null && relationshipValidate === true) || mapsIdUse === true) { _%>
         // Add required entity
             <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
-        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIntTest.createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
+        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
                 <%_ if (databaseType === 'sql') { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
@@ -734,7 +734,7 @@ _%>
     @Transactional<% } %>
     public void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() throws Exception {
         // Initialize the database
-        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIntTest.createEntity(em);
+        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
 <%_ if (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') { _%>

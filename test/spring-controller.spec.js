@@ -25,7 +25,7 @@ describe('JHipster generator spring-controller', () => {
         it('creates controller files', () => {
             assert.file([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`]);
 
-            assert.file([`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIntTest.java`]);
+            assert.file([`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`]);
         });
     });
 
@@ -44,7 +44,7 @@ describe('JHipster generator spring-controller', () => {
         it('creates controller files', () => {
             assert.file([`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`]);
 
-            assert.file([`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIntTest.java`]);
+            assert.file([`${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`]);
         });
     });
 });

@@ -125,7 +125,7 @@ const expectedFiles = {
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
             // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-            `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIntTest.java`
+            `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`
         ],
         gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`]
     },
@@ -201,7 +201,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/LogsResource.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/SecurityUtilsUnitTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/LogsResourceIntTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/LogsResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/TestUtil.java`,
         `${SERVER_TEST_RES_DIR}config/application.yml`,
         `${SERVER_TEST_RES_DIR}logback.xml`
@@ -234,10 +234,10 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/UserResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/ManagedUserVM.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AccountResourceIntTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIntTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIntTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIntTest.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AccountResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`
     ],
 
     infinispan: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`],
@@ -642,7 +642,7 @@ const expectedFiles = {
     couchbase: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/N1qlCouchbaseRepository.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepository.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/DatabaseTestConfiguration.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/DatabaseConfigurationIT.java`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`,
@@ -682,7 +682,7 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberContextConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/StepDefs.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberTest.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberIT.java`
     ],
 
     eureka: [

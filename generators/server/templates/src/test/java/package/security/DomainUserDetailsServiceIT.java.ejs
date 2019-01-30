@@ -69,7 +69,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (databaseType === 'couchbase') { _%>
 @WithMockUser("test-user-one")
 <%_ } _%>
-public class DomainUserDetailsServiceIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String USER_ONE_LOGIN = "test-user-one";
     private static final String USER_ONE_EMAIL = "test-user-one@localhost";

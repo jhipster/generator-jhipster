@@ -34,13 +34,13 @@ import org.testcontainers.couchbase.CouchbaseContainer;
 import java.util.List;
 
 @Configuration
-public class DatabaseTestConfiguration extends AbstractCouchbaseConfiguration {
+public class DatabaseConfigurationIT extends AbstractCouchbaseConfiguration {
 
     private CouchbaseProperties couchbaseProperties;
 
     private static CouchbaseContainer<? extends CouchbaseContainer<?>> couchbaseContainer;
 
-    public DatabaseTestConfiguration(CouchbaseProperties couchbaseProperties) {
+    public DatabaseConfigurationIT(CouchbaseProperties couchbaseProperties) {
         this.couchbaseProperties = couchbaseProperties;
     }
 
