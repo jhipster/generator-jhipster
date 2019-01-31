@@ -56,7 +56,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       mockedAxios.get.mockReset();
-      mockedAxios.get.mockReturnValue(Promise.resolve({}));
+      mockedAxios.get.mockReturnValue(Promise.resolve({ headers: {}}));
 
       wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>Component, {
         store,
@@ -79,7 +79,7 @@ describe('Component Tests', () => {
 
     it('Should call load all on init', async () => {
       // GIVEN
-      mockedAxios.get.mockReturnValue(Promise.resolve({data: [{id: <%- tsKeyId %>}]}));
+      mockedAxios.get.mockReturnValue(Promise.resolve({headers: {}, data: [{id: <%- tsKeyId %>}]}));
 
       // WHEN
       comp.retrieveAll<%= entityAngularName %>s();
@@ -93,7 +93,7 @@ describe('Component Tests', () => {
 
     it('should load a page', async () => {
       // GIVEN
-      mockedAxios.get.mockReturnValue(Promise.resolve({data: [{id: <%- tsKeyId %>}]}));
+      mockedAxios.get.mockReturnValue(Promise.resolve({headers: {}, data: [{id: <%- tsKeyId %>}]}));
 
       // WHEN
       comp.loadPage(1);
@@ -121,7 +121,7 @@ describe('Component Tests', () => {
     it('should re-initialize the page', async () => {
       // GIVEN
       mockedAxios.get.mockReset();
-      mockedAxios.get.mockReturnValue(Promise.resolve({data: [{id: <%- tsKeyId %>}]}));
+      mockedAxios.get.mockReturnValue(Promise.resolve({headers: {}, data: [{id: <%- tsKeyId %>}]}));
 
       // WHEN
       comp.loadPage(2);
