@@ -823,10 +823,14 @@ public class UserService {
         if (details.get("langKey") != null) {
             user.setLangKey((String) details.get("langKey"));
         } else if (details.get("locale") != null) {
-            // https://github.com/jhipster/generator-jhipster/issues/7866
             // for the locale issue, we suggest you should adjust the format based on the oauth server. here we can't cater for all the cases
+            // https://github.com/jhipster/generator-jhipster/issues/7866 
+            // for the en_US or en_** issue. since jhipter only have one "en" language, we will handle it here, for other language, please handle it accordingly. 
             String locale = (String) details.get("locale");
-            user.setLangKey(locale);
+            if(locale.startsWith("en_") || locale.startsWith("en-")) {
+                locale = "en";
+            }
+            user.setLangKey(locale.toLowerCase());
         }
         if (details.get("picture") != null) {
             user.setImageUrl((String) details.get("picture"));
