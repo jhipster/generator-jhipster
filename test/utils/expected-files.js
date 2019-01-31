@@ -325,7 +325,7 @@ const expectedFiles = {
         'package.json',
         'postcss.config.js',
         'proxy.conf.json',
-        'src/main/webapp/404.html',
+        `${CLIENT_MAIN_SRC_DIR}404.html`,
         `${CLIENT_MAIN_SRC_DIR}app/account/account.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/account.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/activate/activate.component.html`,

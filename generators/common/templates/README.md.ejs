@@ -169,12 +169,12 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
 <%_ if (clientFramework === 'angularX') { _%>
-Edit [src/main/webapp/app/vendor.ts](src/main/webapp/app/vendor.ts) file:
+Edit [<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts](<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts) file:
 ~~~
 import 'leaflet/dist/leaflet.js';
 ~~~
 
-Edit [src/main/webapp/content/css/vendor.css](src/main/webapp/content/css/vendor.css) file:
+Edit [<%= CLIENT_MAIN_SRC_DIR %>content/css/vendor.css](<%= CLIENT_MAIN_SRC_DIR %>content/css/vendor.css) file:
 ~~~
 @import '~leaflet/dist/leaflet.css';
 ~~~
@@ -195,9 +195,9 @@ For example, the following command:
 
 will generate few files:
 
-    create src/main/webapp/app/my-component/my-component.component.html
-    create src/main/webapp/app/my-component/my-component.component.ts
-    update src/main/webapp/app/app.module.ts
+    create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.html
+    create <%= CLIENT_MAIN_SRC_DIR %>app/my-component/my-component.component.ts
+    update <%= CLIENT_MAIN_SRC_DIR %>app/app.module.ts
 <%_ } _%>
 
 <%_ if (enableSwaggerCodegen) { _%>
