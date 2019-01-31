@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-<%_ if (enableTranslation && authenticationType !== 'oauth2' && authenticationType !== 'uaa') { _%>
+<%_ if (enableTranslation && authenticationType !== 'uaa') { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
@@ -38,7 +38,7 @@ export class AccountService  {
 
 
     constructor(
-        <%_ if (enableTranslation && authenticationType !== 'oauth2' && authenticationType !== 'uaa') { _%>
+        <%_ if (enableTranslation && authenticationType !== 'uaa') { _%>
         private languageService: JhiLanguageService,
         private sessionStorage: SessionStorageService,
         <%_ } _%>
@@ -105,7 +105,7 @@ export class AccountService  {
                 <%_ if (websocket === 'spring-websocket') { _%>
                 this.trackerService.connect();
                 <%_ } _%>
-                <%_ if (enableTranslation && authenticationType !== 'oauth2' && authenticationType !== 'uaa') { _%>
+                <%_ if (enableTranslation && authenticationType !== 'uaa') { _%>
                 // After retrieve the account info, the language will be changed to
                 // the user's preferred language configured in the account setting
                 const langKey = this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
