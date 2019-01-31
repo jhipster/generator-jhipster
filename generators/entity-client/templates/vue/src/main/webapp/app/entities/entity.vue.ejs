@@ -107,7 +107,7 @@
                                     </span>
                                 <%_ } else { _%>
                                     <%_ if (dto === 'no') { _%>
-                                        {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
+                                        {{<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField%> : ''}}
                                     <%_ } else { _%>
                                         {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
                                     <%_ } _%>
