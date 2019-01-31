@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
+import router from '@/router';
 import * as config from '@/shared/config/config';
 import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
 import UserManagementEditClass from '@/admin/user-management/user-management-edit.component';
@@ -28,7 +29,7 @@ describe('UserManagementEdit Component', () => {
   let userManagementEdit: UserManagementEditClass;
 
   beforeEach(() => {
-    wrapper = shallowMount<UserManagementEditClass>(UserManagementEdit, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: { userService: () => new UserManagementService() } });
+    wrapper = shallowMount<UserManagementEditClass>(UserManagementEdit, { store, router, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: { userService: () => new UserManagementService() } });
     userManagementEdit = wrapper.vm;
   });
 
