@@ -289,7 +289,6 @@ describe('Account', () => {
   });
 
   it('should be able to change user_test settings', async () => {
-    await browser.refresh();
     settingsPage = await navBarPage.getSettingsPage();
     await settingsPage.waitUntilDisplayed();
 
@@ -322,7 +321,6 @@ describe('Account', () => {
   });
 
   it('should not be able to change admin settings if email already exists', async () => {
-    await browser.refresh();
     settingsPage = await navBarPage.getSettingsPage();
     await settingsPage.waitUntilDisplayed();
     expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
@@ -338,8 +336,6 @@ describe('Account', () => {
   });
 
   it('should delete previously created fake user', async () => {
-    await browser.get('/');
-
     await browser.get('#/admin/user-management');
     const deleteBtn = getUserDeleteButtonByLogin('user_test');
     await waitUntilDisplayed(deleteBtn);
