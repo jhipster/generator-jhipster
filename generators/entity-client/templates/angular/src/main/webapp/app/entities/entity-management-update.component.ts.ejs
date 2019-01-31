@@ -135,7 +135,11 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     }
 
     setFileData(event, entity, field, isImage) {
-        this.dataUtils.setFileData(event, entity, field, isImage);
+        this.dataUtils.setFileData(event, entity, field, isImage)
+            .then(
+                modifiedEntity => entity = { ...modifiedEntity },
+                error => this.jhiAlertService.error(error, null, null)
+            );
     }
 
     <%_ if (fieldsContainImageBlob) { _%>
