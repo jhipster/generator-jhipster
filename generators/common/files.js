@@ -26,6 +26,7 @@ const commonFiles = {
         {
             templates: [
                 '.prettierrc', // this needs to be the first file for prettier transform to work
+                'src/main/resources/banner.txt',
                 {
                     file: 'editorconfig',
                     renameTo: () => '.editorconfig',
