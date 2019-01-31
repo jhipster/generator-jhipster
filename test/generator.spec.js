@@ -4,6 +4,7 @@ const helpers = require('yeoman-test');
 const constants = require('generator-jhipster/generators/generator-constants');
 const blueprintPackagejs = require('../package.json');
 
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const CLIENT_SPEC_SRC_DIR = `${CLIENT_TEST_SRC_DIR}/spec/`;
@@ -53,6 +54,7 @@ const expectedFiles = {
         '.prettierrc',
         '.prettierignore',
         'README.md',
+        `${SERVER_MAIN_RES_DIR}banner.txt`
     ],
 
     oauth2: [
