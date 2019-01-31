@@ -54,6 +54,9 @@ const trackerService = new TrackerService(router);
 <%_ if (enableTranslation) { _%>
 const translationService = new TranslationService(store, i18n);
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+const loginService = new LoginService();
+<%_ } %>
 const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>(<any>Vue).cookie, <%_ } _%><%_ if (websocket === 'spring-websocket') { _%>trackerService, <%_ } _%>router);
 config.initVueApp(Vue);
 config.initFortAwesome(Vue);
@@ -79,8 +82,6 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
-
-// jhipster-needle-add-entity-service-to-main-declaration - JHipster will declare entities services here
 
 /* tslint:disable */
 new Vue({
