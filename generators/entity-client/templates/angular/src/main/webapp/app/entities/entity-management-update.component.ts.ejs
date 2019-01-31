@@ -34,7 +34,7 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
     <%_ } _%>
 <%_ } _%>
 <%_ if (queries && queries.length > 0 || fieldsContainBlob) { _%>
-import { <% if (queries && queries.length > 0) { %>JhiAlertService, <% } %><% if (fieldsContainBlob) { %>JhiDataUtils<% } %> } from 'ng-jhipster';
+import { <% if (fieldsContainBlob || queries && queries.length > 0) { %>JhiAlertService, <% } %><% if (fieldsContainBlob) { %>JhiDataUtils<% } %> } from 'ng-jhipster';
 <%_ } _%>
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
@@ -88,7 +88,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
         <%_ if (fieldsContainBlob) { _%>
         protected dataUtils: JhiDataUtils,
         <%_ } _%>
-        <%_ if (queries && queries.length > 0) { _%>
+        <%_ if (fieldsContainBlob || queries && queries.length > 0) { _%>
         protected jhiAlertService: JhiAlertService,
         <%_ } _%>
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
@@ -138,7 +138,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
         this.dataUtils.setFileData(event, entity, field, isImage)
             .then(
                 modifiedEntity => entity = { ...modifiedEntity },
-                error => this.jhiAlertService.error(error, null, null)
+                this.onError
             );
     }
 
@@ -184,7 +184,7 @@ export class <%= entityAngularName %>UpdateComponent implements OnInit {
     protected onSaveError() {
         this.isSaving = false;
     }
-    <%_ if (queries && queries.length > 0) { _%>
+    <%_ if (fieldsContainBlob || queries && queries.length > 0) { _%>
 
     protected onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
