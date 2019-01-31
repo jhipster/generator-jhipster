@@ -1,4 +1,10 @@
 import LoginService from '@/account/login.service';
+import axios from 'axios';
+
+const mockedAxios: any = axios;
+jest.mock('axios', () => ({
+  post: jest.fn()
+}));
 
 describe('Login Service test suite', () => {
   let loginService;
@@ -21,5 +27,11 @@ describe('Login Service test suite', () => {
     loginService.login(loc);
 
     expect(loc.href).toBe('//localhost:8080/login');
+  });
+
+  it('should call global logout when asked to', () => {
+    loginService.logout();
+
+    expect(mockedAxios.post).toHaveBeenCalledWith('api/logout');
   });
 });

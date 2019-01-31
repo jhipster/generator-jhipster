@@ -1,7 +1,13 @@
+import axios, { AxiosPromise } from 'axios';
+
 export default class LoginService {
 
   public login(loc = window.location) {
     const port = (loc.port ? ':' + loc.port : '');
     loc.href = '//' + loc.hostname + port + loc.pathname + 'login';
+  }
+
+  public logout() : AxiosPromise<any> {
+    return axios.post('api/logout');
   }
 }
