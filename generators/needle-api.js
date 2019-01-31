@@ -16,24 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const Base = require('./needle-base');
-const ClientAngular = require('./needle-client-angular');
-const ClientReact = require('./needle-client-react');
-const ClientWebpack = require('./needle-client-webpack');
-const ClientI18n = require('./needle-client-i18n');
-const ServerMaven = require('./needle-server-maven');
-const ServerGradle = require('./needle-server-gradle');
-const ServerCache = require('./needle-server-cache');
-const ServerLiquibase = require('./needle-server-liquibase');
+const Base = require('./internal/needle-api/needle-base');
+const ClientAngular = require('./internal/needle-api/needle-client-angular');
+const ClientReact = require('./internal/needle-api/needle-client-react');
+const ClientWebpack = require('./internal/needle-api/needle-client-webpack');
+const ClientI18n = require('./internal/needle-api/needle-client-i18n');
+const ServerMaven = require('./server/internal/needle-api/needle-server-maven');
+const ServerGradle = require('./server/internal/needle-api/needle-server-gradle');
+const ServerCache = require('./server/internal/needle-api/needle-server-cache');
+const ServerLiquibase = require('./server/internal/needle-api/needle-server-liquibase');
 
 module.exports = class NeedleApi {
     constructor(generator) {
         this.base = new Base(generator);
-        this.serverMaven = new ServerMaven(generator);
         this.clientAngular = new ClientAngular(generator);
         this.clientReact = new ClientReact(generator);
         this.clientWebpack = new ClientWebpack(generator);
         this.clientI18n = new ClientI18n(generator);
+        this.serverMaven = new ServerMaven(generator);
         this.serverCache = new ServerCache(generator);
         this.serverLiquibase = new ServerLiquibase(generator);
         this.serverGradle = new ServerGradle(generator);
