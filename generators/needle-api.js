@@ -21,10 +21,10 @@ const ClientAngular = require('./internal/needle-api/needle-client-angular');
 const ClientReact = require('./internal/needle-api/needle-client-react');
 const ClientWebpack = require('./internal/needle-api/needle-client-webpack');
 const ClientI18n = require('./internal/needle-api/needle-client-i18n');
-const ServerMaven = require('./server/internal/needle-api/needle-server-maven');
-const ServerGradle = require('./server/internal/needle-api/needle-server-gradle');
-const ServerCache = require('./server/internal/needle-api/needle-server-cache');
-const ServerLiquibase = require('./server/internal/needle-api/needle-server-liquibase');
+const ServerMaven = require('./server/needle-api/needle-server-maven');
+const ServerGradle = require('./server/needle-api/needle-server-gradle');
+const ServerCache = require('./server/needle-api/needle-server-cache');
+const ServerLiquibase = require('./server/needle-api/needle-server-liquibase');
 
 module.exports = class NeedleApi {
     constructor(generator) {
