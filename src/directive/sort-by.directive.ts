@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Directive, Host, HostListener, Input, ContentChild, AfterContentInit } from '@angular/core';
+import { AfterContentInit, ContentChild, Directive, Host, HostListener, Input } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 

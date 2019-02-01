@@ -17,8 +17,8 @@
  limitations under the License.
  */
 import { Component, Input, OnInit } from '@angular/core';
-import { JhiConfigService } from '../config.service';
 import { JhiModuleConfig } from '../config';
+import { JhiConfigService } from '../config.service';
 
 /**
  * This component can be used to display a boolean value by defining the @Input attributes
@@ -80,10 +80,9 @@ import { JhiModuleConfig } from '../config';
  */
 @Component({
     selector: 'jhi-boolean',
-    template: `<span
-               [ngClass]="value ? classTrue : classFalse"
-               [innerHtml]="value ? textTrue : textFalse">
-               </span>`
+    template: `
+        <span [ngClass]="value ? classTrue : classFalse" [innerHtml]="value ? textTrue : textFalse"> </span>
+    `
 })
 export class JhiBooleanComponent implements OnInit {
     /**

@@ -16,38 +16,45 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'jhi-metrics-request',
-    template: `<h3 jhiTranslate="metrics.jvm.http.title">HTTP requests (time in millisecond)</h3>
-    <table class="table table-striped" *ngIf="!updating">
-        <thead>
-        <tr>
-            <th jhiTranslate="metrics.jvm.http.table.code">Code</th>
-            <th jhiTranslate="metrics.jvm.http.table.count">Count</th>
-            <th class="text-right" jhiTranslate="metrics.jvm.http.table.mean">Mean</th>
-            <th class="text-right" jhiTranslate="metrics.jvm.http.table.max">Max</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let entry of requestMetrics['percode'] | keys">
-            <td>{{entry.key}}</td>
-            <td>
-                <ngb-progressbar [max]="requestMetrics['all'].count" [value]="entry.value.count" [striped]="true"
-                                 [animated]="false" type="success">
-                    <span>{{entry.value.count}}</span>
-                </ngb-progressbar>
-            </td>
-            <td class="text-right">
-                {{filterNaN(entry.value.mean) | number:'1.0-2'}}
-            </td>
-            <td class="text-right">{{entry.value.max | number:'1.0-2'}}</td>
-        </tbody>
-    </table>`
+    template: `
+        <h3 jhiTranslate="metrics.jvm.http.title">HTTP requests (time in millisecond)</h3>
+        <table class="table table-striped" *ngIf="!updating">
+            <thead>
+                <tr>
+                    <th jhiTranslate="metrics.jvm.http.table.code">Code</th>
+                    <th jhiTranslate="metrics.jvm.http.table.count">Count</th>
+                    <th class="text-right" jhiTranslate="metrics.jvm.http.table.mean">Mean</th>
+                    <th class="text-right" jhiTranslate="metrics.jvm.http.table.max">Max</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let entry of (requestMetrics['percode'] | keys)">
+                    <td>{{ entry.key }}</td>
+                    <td>
+                        <ngb-progressbar
+                            [max]="requestMetrics['all'].count"
+                            [value]="entry.value.count"
+                            [striped]="true"
+                            [animated]="false"
+                            type="success"
+                        >
+                            <span>{{ entry.value.count }}</span>
+                        </ngb-progressbar>
+                    </td>
+                    <td class="text-right">
+                        {{ filterNaN(entry.value.mean) | number: '1.0-2' }}
+                    </td>
+                    <td class="text-right">{{ entry.value.max | number: '1.0-2' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    `
 })
 export class JhiMetricsHttpRequestComponent {
-
     /**
      * object containing http request related metrics
      */

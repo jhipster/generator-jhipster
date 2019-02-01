@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JhiBooleanComponent } from '../../src/component/jhi-boolean.component';
 import { JhiConfigService } from '../../src/config.service';
 
@@ -58,10 +58,10 @@ describe('JhiBooleanComponent test', () => {
     describe('UI logic tests', () => {
         it('should initialize with defaults', () => {
             expect(comp.value).toBeFalsy();
-            expect(comp.classTrue).toBeUndefined()
-            expect(comp.classFalse).toBeUndefined()
-            expect(comp.textTrue).toBeUndefined()
-            expect(comp.textFalse).toBeUndefined()
+            expect(comp.classTrue).toBeUndefined();
+            expect(comp.classFalse).toBeUndefined();
+            expect(comp.textTrue).toBeUndefined();
+            expect(comp.textFalse).toBeUndefined();
         });
 
         it('should apply fa-times and text-danger', () => {
@@ -85,7 +85,7 @@ describe('JhiBooleanComponent test', () => {
 
         it('should apply fa fa-lg fa-check', () => {
             comp.value = true;
-            comp.classTrue = 'fa fa-lg fa-check'
+            comp.classTrue = 'fa fa-lg fa-check';
             fixture.detectChanges();
             expect(getElementAttribute(fixture, 'class')).toBe('fa fa-lg fa-check');
         });

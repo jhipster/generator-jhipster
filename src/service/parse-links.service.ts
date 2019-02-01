@@ -25,7 +25,6 @@ import { Injectable } from '@angular/core';
     providedIn: 'root'
 })
 export class JhiParseLinks {
-
     constructor() {}
 
     /**
@@ -41,7 +40,7 @@ export class JhiParseLinks {
         const links: any = {};
 
         // Parse each part into a named link
-        parts.forEach((p) => {
+        parts.forEach(p => {
             const section: string[] = p.split(';');
 
             if (section.length !== 2) {
@@ -51,10 +50,7 @@ export class JhiParseLinks {
             const url: string = section[0].replace(/<(.*)>/, '$1').trim();
             const queryString: any = {};
 
-            url.replace(
-                new RegExp('([^?=&]+)(=([^&]*))?', 'g'),
-                ($0, $1, $2, $3) => queryString[$1] = $3
-            );
+            url.replace(new RegExp('([^?=&]+)(=([^&]*))?', 'g'), ($0, $1, $2, $3) => (queryString[$1] = $3));
 
             let page: any = queryString.page;
 

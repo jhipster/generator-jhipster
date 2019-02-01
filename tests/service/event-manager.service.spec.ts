@@ -17,7 +17,7 @@
  limitations under the License.
  */
 import { Injectable } from '@angular/core';
-import { TestBed, inject } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
 
 import { JhiEventManager } from '../../src/service/event-manager.service';
 
@@ -54,7 +54,7 @@ describe('Event Manager test', () => {
         it('should create an observable and callback when broadcasted', inject([JhiEventManager, SpyService],
             (eventManager: JhiEventManager, spyService: SpyService) => {
             expect(spyService.called).toBeFalsy();
-            eventManager.subscribe('modifier', (response) => callback(spyService));
+            eventManager.subscribe('modifier',response => callback(spyService));
             eventManager.broadcast({ name: 'modifier', content: 'modified something'});
             expect(spyService.called).toBeTruthy();
         }));

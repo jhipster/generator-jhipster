@@ -16,50 +16,58 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'jhi-metrics-cache',
-    template: `<h3 jhiTranslate="metrics.cache.title">Cache statistics</h3>
-    <div class="table-responsive" *ngIf="!updating">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th jhiTranslate="metrics.cache.cachename">Cache name</th>
-                <th class="text-right" data-translate="metrics.cache.hits">Cache Hits</th>
-                <th class="text-right" data-translate="metrics.cache.misses">Cache Misses</th>
-                <th class="text-right" data-translate="metrics.cache.gets">Cache Gets</th>
-                <th class="text-right" data-translate="metrics.cache.puts">Cache Puts</th>
-                <th class="text-right" data-translate="metrics.cache.removals">Cache Removals</th>
-                <th class="text-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
-                <th class="text-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
-                <th class="text-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let entry of cacheMetrics | keys">
-                <td>{{entry.key}}</td>
-                <td class="text-right">{{entry.value['cache.gets.hit']}}</td>
-                <td class="text-right">{{entry.value['cache.gets.miss']}}</td>
-                <td class="text-right">{{entry.value['cache.gets.hit'] + entry.value['cache.gets.miss']}}</td>
-                <td class="text-right">{{entry.value['cache.puts']}}</td>
-                <td class="text-right">{{entry.value['cache.removals']}}</td>
-                <td class="text-right">{{entry.value['cache.evictions']}}</td>
-                <td class="text-right">
-                    {{filterNaN(100 * entry.value['cache.gets.hit'] / (entry.value['cache.gets.hit'] +
-                    entry.value['cache.gets.miss'])) | number: '1.0-4'}}
-                </td>
-                <td class="text-right">
-                    {{filterNaN(100 * entry.value['cache.gets.miss'] / (entry.value['cache.gets.hit'] +
-                    entry.value['cache.gets.miss'])) | number: '1.0-4'}}
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>`
+    template: `
+        <h3 jhiTranslate="metrics.cache.title">Cache statistics</h3>
+        <div class="table-responsive" *ngIf="!updating">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th jhiTranslate="metrics.cache.cachename">Cache name</th>
+                        <th class="text-right" data-translate="metrics.cache.hits">Cache Hits</th>
+                        <th class="text-right" data-translate="metrics.cache.misses">Cache Misses</th>
+                        <th class="text-right" data-translate="metrics.cache.gets">Cache Gets</th>
+                        <th class="text-right" data-translate="metrics.cache.puts">Cache Puts</th>
+                        <th class="text-right" data-translate="metrics.cache.removals">Cache Removals</th>
+                        <th class="text-right" data-translate="metrics.cache.evictions">Cache Evictions</th>
+                        <th class="text-right" data-translate="metrics.cache.hitPercent">Cache Hit %</th>
+                        <th class="text-right" data-translate="metrics.cache.missPercent">Cache Miss %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let entry of (cacheMetrics | keys)">
+                        <td>{{ entry.key }}</td>
+                        <td class="text-right">{{ entry.value['cache.gets.hit'] }}</td>
+                        <td class="text-right">{{ entry.value['cache.gets.miss'] }}</td>
+                        <td class="text-right">{{ entry.value['cache.gets.hit'] + entry.value['cache.gets.miss'] }}</td>
+                        <td class="text-right">{{ entry.value['cache.puts'] }}</td>
+                        <td class="text-right">{{ entry.value['cache.removals'] }}</td>
+                        <td class="text-right">{{ entry.value['cache.evictions'] }}</td>
+                        <td class="text-right">
+                            {{
+                                filterNaN(
+                                    (100 * entry.value['cache.gets.hit']) / (entry.value['cache.gets.hit'] + entry.value['cache.gets.miss'])
+                                ) | number: '1.0-4'
+                            }}
+                        </td>
+                        <td class="text-right">
+                            {{
+                                filterNaN(
+                                    (100 * entry.value['cache.gets.miss']) /
+                                        (entry.value['cache.gets.hit'] + entry.value['cache.gets.miss'])
+                                ) | number: '1.0-4'
+                            }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    `
 })
 export class JhiMetricsCacheComponent {
-
     /**
      * object containing all cache related metrics
      */

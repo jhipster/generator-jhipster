@@ -25,19 +25,16 @@ import { ElementRef, Injectable } from '@angular/core';
     providedIn: 'root'
 })
 export class JhiDataUtils {
-
-    constructor() {
-    }
+    constructor() {}
 
     /**
      * Method to abbreviate the text given
      */
     abbreviate(text: string, append = '...') {
-
         if (text.length < 30) {
             return text;
         }
-        return text ? (text.substring(0, 15) + append + text.slice(-10)) : '';
+        return text ? text.substring(0, 15) + append + text.slice(-10) : '';
     }
 
     /**
@@ -68,7 +65,10 @@ export class JhiDataUtils {
             const fileURL = `data:${contentType};base64,${data}`;
             const win = window.open();
             win.document.write(
-                '<iframe src="' + fileURL + '" frameborder="0" style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>');
+                '<iframe src="' +
+                    fileURL +
+                    '" frameborder="0" style="border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;" allowfullscreen></iframe>'
+            );
         }
     }
 
@@ -101,28 +101,6 @@ export class JhiDataUtils {
         }
     }
 
-    private endsWith(suffix: string, str: string): boolean {
-        return str.indexOf(suffix, str.length - suffix.length) !== -1;
-    }
-
-    private paddingSize(value: string): number {
-        if (this.endsWith('==', value)) {
-            return 2;
-        }
-        if (this.endsWith('=', value)) {
-            return 1;
-        }
-        return 0;
-    }
-
-    private size(value: string): number {
-        return value.length / 4 * 3 - this.paddingSize(value);
-    }
-
-    private formatAsBytes(size: number): string {
-        return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
-    }
-
     /**
      * Sets the base 64 data & file type of the 1st file on the event (event.target.files[0]) in the passed entity object
      * and returns a promise.
@@ -140,7 +118,7 @@ export class JhiDataUtils {
                 if (isImage && !/^image\//.test(file.type)) {
                     reject(`File was expected to be an image but was found to be ${file.type}`);
                 } else {
-                    this.toBase64(file, (base64Data) => {
+                    this.toBase64(file, base64Data => {
                         entity[field] = base64Data;
                         entity[`${field}ContentType`] = file.type;
                         resolve(entity);
@@ -170,5 +148,27 @@ export class JhiDataUtils {
         tempLink.download = fileName;
         tempLink.target = '_blank';
         tempLink.click();
+    }
+
+    private endsWith(suffix: string, str: string): boolean {
+        return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    private paddingSize(value: string): number {
+        if (this.endsWith('==', value)) {
+            return 2;
+        }
+        if (this.endsWith('=', value)) {
+            return 1;
+        }
+        return 0;
+    }
+
+    private size(value: string): number {
+        return (value.length / 4) * 3 - this.paddingSize(value);
+    }
+
+    private formatAsBytes(size: number): string {
+        return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
     }
 }

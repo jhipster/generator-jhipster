@@ -16,54 +16,65 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'jhi-metrics-system',
-    template: `<h4>System</h4>
-    <div class="row" *ngIf="!updating">
-        <div class="col-md-4">Uptime</div>
-        <div class="col-md-8 text-right">{{convertMillisecondsToDuration(systemMetrics["process.uptime"])}}</div>
-    </div>
-    <div class="row" *ngIf="!updating">
-        <div class="col-md-4">Start time</div>
-        <div class="col-md-8 text-right">{{systemMetrics["process.start.time"] | date:'full'}}</div>
-    </div>
-    <div class="row" *ngIf="!updating">
-        <div class="col-md-9">Process CPU usage</div>
-        <div class="col-md-3 text-right">{{100 * systemMetrics["process.cpu.usage"] | number:'1.0-2'}} %</div>
-    </div>
-    <ngb-progressbar [value]="100 * systemMetrics['process.cpu.usage']" [striped]="true" [animated]="false" type="success"
-                     *ngIf="!updating">
-        <span>{{100 * systemMetrics["process.cpu.usage"] | number:'1.0-2'}} %</span>
-    </ngb-progressbar>
-    <div class="row" *ngIf="!updating">
-        <div class="col-md-9">System CPU usage</div>
-        <div class="col-md-3 text-right">{{100 * systemMetrics["system.cpu.usage"] | number:'1.0-2'}} %</div>
-    </div>
-    <ngb-progressbar [value]="100 * systemMetrics['system.cpu.usage']" [striped]="true" [animated]="false" type="success"
-                     *ngIf="!updating">
-        <span>{{100 * systemMetrics["system.cpu.usage"] | number:'1.0-2'}} %</span>
-    </ngb-progressbar>
-    <div class="row" *ngIf="!updating">
-        <div class="col-md-9">System CPU count</div>
-        <div class="col-md-3 text-right">{{systemMetrics["system.cpu.count"]}}</div>
-    </div>
-    <div class="row" *ngIf="!updating">
-        <div class="col-md-9">System 1m Load average</div>
-        <div class="col-md-3 text-right">{{systemMetrics["system.load.average.1m"] | number:'1.0-2'}}</div>
-    </div>
-    <div class="row" *ngIf="!updating">
-        <div class="col-md-9">Process files max</div>
-        <div class="col-md-3 text-right">{{systemMetrics["process.files.max"] | number:'1.0-0'}}</div>
-    </div>
-    <div class="row" *ngIf="!updating">
-        <div class="col-md-9">Process files open</div>
-        <div class="col-md-3 text-right">{{systemMetrics["process.files.open"] | number:'1.0-0'}}</div>
-    </div>`
+    template: `
+        <h4>System</h4>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-4">Uptime</div>
+            <div class="col-md-8 text-right">{{ convertMillisecondsToDuration(systemMetrics['process.uptime']) }}</div>
+        </div>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-4">Start time</div>
+            <div class="col-md-8 text-right">{{ systemMetrics['process.start.time'] | date: 'full' }}</div>
+        </div>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-9">Process CPU usage</div>
+            <div class="col-md-3 text-right">{{ 100 * systemMetrics['process.cpu.usage'] | number: '1.0-2' }} %</div>
+        </div>
+        <ngb-progressbar
+            [value]="100 * systemMetrics['process.cpu.usage']"
+            [striped]="true"
+            [animated]="false"
+            type="success"
+            *ngIf="!updating"
+        >
+            <span>{{ 100 * systemMetrics['process.cpu.usage'] | number: '1.0-2' }} %</span>
+        </ngb-progressbar>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-9">System CPU usage</div>
+            <div class="col-md-3 text-right">{{ 100 * systemMetrics['system.cpu.usage'] | number: '1.0-2' }} %</div>
+        </div>
+        <ngb-progressbar
+            [value]="100 * systemMetrics['system.cpu.usage']"
+            [striped]="true"
+            [animated]="false"
+            type="success"
+            *ngIf="!updating"
+        >
+            <span>{{ 100 * systemMetrics['system.cpu.usage'] | number: '1.0-2' }} %</span>
+        </ngb-progressbar>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-9">System CPU count</div>
+            <div class="col-md-3 text-right">{{ systemMetrics['system.cpu.count'] }}</div>
+        </div>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-9">System 1m Load average</div>
+            <div class="col-md-3 text-right">{{ systemMetrics['system.load.average.1m'] | number: '1.0-2' }}</div>
+        </div>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-9">Process files max</div>
+            <div class="col-md-3 text-right">{{ systemMetrics['process.files.max'] | number: '1.0-0' }}</div>
+        </div>
+        <div class="row" *ngIf="!updating">
+            <div class="col-md-9">Process files open</div>
+            <div class="col-md-3 text-right">{{ systemMetrics['process.files.open'] | number: '1.0-0' }}</div>
+        </div>
+    `
 })
 export class JhiMetricsSystemComponent {
-
     /**
      * object containing thread related metrics
      */
@@ -84,13 +95,11 @@ export class JhiMetricsSystemComponent {
             second: 1000
         };
         let time_string = '';
-        let plural = '';
         for (const key in times) {
             if (Math.floor(ms / times[key]) > 0) {
+                let plural = '';
                 if (Math.floor(ms / times[key]) > 1) {
                     plural = 's';
-                } else {
-                    plural = '';
                 }
                 time_string += Math.floor(ms / times[key]).toString() + ' ' + key.toString() + plural + ' ';
                 ms = ms - times[key] * Math.floor(ms / times[key]);

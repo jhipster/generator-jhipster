@@ -21,7 +21,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { JhiConfigService } from '../config.service';
 
-export type JhiAlertType =  'success' | 'danger' | 'warning' | 'info';
+export type JhiAlertType = 'success' | 'danger' | 'warning' | 'info';
 
 export interface JhiAlert {
     id?: number;
@@ -39,18 +39,7 @@ export interface JhiAlert {
     providedIn: 'root'
 })
 export class JhiAlertService {
-
-    private alertId: number;
-    private alerts: JhiAlert[];
-    private timeout: number;
-    private toast: boolean;
-    private i18nEnabled: boolean;
-
-    constructor(
-        private sanitizer: Sanitizer,
-        private configService: JhiConfigService,
-        private translateService: TranslateService
-    ) {
+    constructor(private sanitizer: Sanitizer, private configService: JhiConfigService, private translateService: TranslateService) {
         const config = this.configService.getConfig();
         this.toast = config.alertAsToast;
         this.i18nEnabled = config.i18nEnabled;
@@ -58,9 +47,14 @@ export class JhiAlertService {
         this.alerts = [];
         this.timeout = config.alertTimeout;
     }
+    private alertId: number;
+    private alerts: JhiAlert[];
+    private timeout: number;
+    private toast: boolean;
+    private i18nEnabled: boolean;
 
     clear() {
-       this.alerts.splice(0, this.alerts.length);
+        this.alerts.splice(0, this.alerts.length);
     }
 
     get(): JhiAlert[] {
@@ -68,47 +62,86 @@ export class JhiAlertService {
     }
 
     success(msg: string, params?: any, position?: string): JhiAlert {
-        return this.addAlert({
-            type: 'success',
-            msg,
-            params,
-            timeout: this.timeout,
-            toast: this.isToast(),
-            position
-        }, []);
+        return this.addAlert(
+            {
+                type: 'success',
+                msg,
+                params,
+                timeout: this.timeout,
+                toast: this.isToast(),
+                position
+            },
+            []
+        );
     }
 
     error(msg: string, params?: any, position?: string): JhiAlert {
-        return this.addAlert({
-            type: 'danger',
-            msg,
-            params,
-            timeout: this.timeout,
-            toast: this.isToast(),
-            position
-        }, []);
+        return this.addAlert(
+            {
+                type: 'danger',
+                msg,
+                params,
+                timeout: this.timeout,
+                toast: this.isToast(),
+                position
+            },
+            []
+        );
     }
 
     warning(msg: string, params?: any, position?: string): JhiAlert {
-        return this.addAlert({
-            type: 'warning',
-            msg,
-            params,
-            timeout: this.timeout,
-            toast: this.isToast(),
-            position
-        }, []);
+        return this.addAlert(
+            {
+                type: 'warning',
+                msg,
+                params,
+                timeout: this.timeout,
+                toast: this.isToast(),
+                position
+            },
+            []
+        );
     }
 
     info(msg: string, params?: any, position?: string): JhiAlert {
-        return this.addAlert({
-            type: 'info',
-            msg,
-            params,
-            timeout: this.timeout,
-            toast: this.isToast(),
-            position
-        }, []);
+        return this.addAlert(
+            {
+                type: 'info',
+                msg,
+                params,
+                timeout: this.timeout,
+                toast: this.isToast(),
+                position
+            },
+            []
+        );
+    }
+
+    addAlert(alertOptions: JhiAlert, extAlerts: JhiAlert[]): JhiAlert {
+        alertOptions.id = this.alertId++;
+        if (this.i18nEnabled && alertOptions.msg) {
+            alertOptions.msg = this.translateService.instant(alertOptions.msg, alertOptions.params);
+        }
+        const alert = this.factory(alertOptions);
+        if (alertOptions.timeout && alertOptions.timeout > 0) {
+            setTimeout(() => {
+                this.closeAlert(alertOptions.id, extAlerts);
+            }, alertOptions.timeout);
+        }
+        return alert;
+    }
+
+    closeAlert(id: number, extAlerts?: JhiAlert[]): any {
+        const thisAlerts: JhiAlert[] = extAlerts && extAlerts.length > 0 ? extAlerts : this.alerts;
+        return this.closeAlertByIndex(thisAlerts.map(e => e.id).indexOf(id), thisAlerts);
+    }
+
+    closeAlertByIndex(index: number, thisAlerts: JhiAlert[]): JhiAlert[] {
+        return thisAlerts.splice(index, 1);
+    }
+
+    isToast(): boolean {
+        return this.toast;
     }
 
     private factory(alertOptions: JhiAlert): JhiAlert {
@@ -128,32 +161,5 @@ export class JhiAlertService {
             this.alerts.push(alert);
         }
         return alert;
-    }
-
-    addAlert(alertOptions: JhiAlert, extAlerts: JhiAlert[]): JhiAlert {
-        alertOptions.id = this.alertId++;
-        if (this.i18nEnabled && alertOptions.msg) {
-            alertOptions.msg = this.translateService.instant(alertOptions.msg, alertOptions.params);
-        }
-        const alert = this.factory(alertOptions);
-        if (alertOptions.timeout && alertOptions.timeout > 0) {
-            setTimeout(() => {
-                this.closeAlert(alertOptions.id, extAlerts);
-            }, alertOptions.timeout);
-        }
-        return alert;
-    }
-
-    closeAlert(id: number, extAlerts?: JhiAlert[]): any {
-        const thisAlerts: JhiAlert[] = (extAlerts && extAlerts.length > 0) ? extAlerts : this.alerts;
-        return this.closeAlertByIndex(thisAlerts.map((e) => e.id).indexOf(id), thisAlerts);
-    }
-
-    closeAlertByIndex(index: number, thisAlerts: JhiAlert[]): JhiAlert[] {
-        return thisAlerts.splice(index, 1);
-    }
-
-    isToast(): boolean {
-        return this.toast;
     }
 }
