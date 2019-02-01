@@ -16,6 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const needleBase = require('../../../internal/needle-api/needle-base');
+const needleBase = require('../../needle-base');
 
 module.exports = class extends needleBase {};
