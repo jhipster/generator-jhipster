@@ -55,7 +55,7 @@ describe('<%= entityClass %> e2e test', () => {
     const fileToUpload = '../../../../../<%= entityParentPathAddition %>main/webapp/content/images/logo-jhipster.png';
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
-    let nbButtonsBeforeCreate: number = 0;
+    let nbButtonsBeforeCreate = 0;
 
     before(async () => {
         await browser.get('/');
@@ -68,7 +68,8 @@ describe('<%= entityClass %> e2e test', () => {
         await signInPage.password.sendKeys('admin');
         await signInPage.loginButton.click();
         await signInPage.waitUntilHidden();
-
+        <%_ } else if (authenticationType === 'oauth2') {_%>
+        await signInPage.loginWithOAuth('admin', 'admin');
         <%_ } _%>
         await waitUntilDisplayed(navBarPage.entityMenu);
     });
@@ -176,7 +177,6 @@ describe('<%= entityClass %> e2e test', () => {
     });<%= closeBlockComment %>
 
     after(async () => {
-        await browser.get('/');
         await navBarPage.autoSignOut();
     });
 });

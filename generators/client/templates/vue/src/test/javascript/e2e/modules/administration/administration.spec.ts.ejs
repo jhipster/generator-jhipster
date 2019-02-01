@@ -17,12 +17,13 @@ describe('Administration', () => {
     signInPage = await navBarPage.getSignInPage();
 <%_ if (authenticationType !== 'oauth2') { _%>
     await signInPage.waitUntilDisplayed();
-
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
     await signInPage.loginButton.click();
     await signInPage.waitUntilHidden();
 
+<%_ } else if (authenticationType === 'oauth2') {_%>
+    await signInPage.loginWithOAuth('admin', 'admin');
 <%_ } _%>
     await waitUntilDisplayed(navBarPage.adminMenu);
   });

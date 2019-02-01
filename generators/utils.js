@@ -119,7 +119,7 @@ function addEntityToMenu(generator, entityName, translationKey, className) {
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                 // prettier-ignore
-                `<b-dropdown-item to="/entity/${entityName}" class="dropdown-item" v-on:click="collapseNavbar()">
+                `<b-dropdown-item to="/entity/${entityName}" v-on:click="collapseNavbar()">
                     <font-awesome-icon icon="asterisk" />
                     <span ${menuI18nTitle}>${className}</span>
               </b-dropdown-item>`
