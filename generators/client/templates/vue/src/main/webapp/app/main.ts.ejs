@@ -41,6 +41,11 @@ import TrackerService from './admin/tracker/tracker.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 Vue.config.productionTip = false;
+config.initVueApp(Vue);
+config.initFortAwesome(Vue);
+bootstrapVueConfig.initBootstrapVue(Vue);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component('jhi-item-count', JhiItemCountComponent);
 
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(Vue);
@@ -58,11 +63,6 @@ const translationService = new TranslationService(store, i18n);
 const loginService = new LoginService();
 <%_ } %>
 const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>(<any>Vue).cookie, <%_ } _%><%_ if (websocket === 'spring-websocket') { _%>trackerService, <%_ } _%>router);
-config.initVueApp(Vue);
-config.initFortAwesome(Vue);
-bootstrapVueConfig.initBootstrapVue(Vue);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
-Vue.component('jhi-item-count', JhiItemCountComponent);
 
 router.beforeEach((to, from, next) => {
 
