@@ -74,7 +74,7 @@ module.exports = options => ({
       {
         test: /\.tsx?$/,
         use: getTsLoaderRule(options.env),
-        include: [utils.root('./src/main/webapp/app')],
+        include: [utils.root('./<%= CLIENT_MAIN_SRC_DIR %>app')],
         exclude: [utils.root('node_modules')]
       },
       {
@@ -142,7 +142,7 @@ module.exports = options => ({
       { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
     ]),
     new HtmlWebpackPlugin({
-      template: './src/main/webapp/index.html',
+      template: './<%= CLIENT_MAIN_SRC_DIR %>index.html',
       chunksSortMode: 'dependency',
       inject: 'body'
     }),

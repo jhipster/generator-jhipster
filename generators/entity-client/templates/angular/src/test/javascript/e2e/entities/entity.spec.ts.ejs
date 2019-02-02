@@ -50,7 +50,7 @@ describe('<%= entityClass %> e2e test', () => {
     <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
     <%_ if (fieldsContainBlobOrImage) { _%>
     const fileNameToUpload = 'logo-jhipster.png';
-    const fileToUpload = '../../../../../<%= entityParentPathAddition %>main/webapp/content/images/' + fileNameToUpload;
+    const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/' + fileNameToUpload;
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
 
