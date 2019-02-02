@@ -21,7 +21,7 @@ import { FormBuilder } from '@angular/forms';
 import { Observable, throwError } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { AccountService, User } from 'app/core';
+import { AccountService, Account } from 'app/core';
 import { SettingsComponent } from 'app/account/settings/settings.component';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/core/tracker/tracker.service';
@@ -74,13 +74,13 @@ describe('Component Tests', () => {
             mockAuth.setIdentityResponse(accountValues);
 
             // WHEN
-            comp.settingsAccount = accountValues;
+            comp.updateForm(accountValues);
             comp.save();
 
             // THEN
             expect(mockAuth.identitySpy).toHaveBeenCalled();
             expect(mockAuth.saveSpy).toHaveBeenCalledWith(accountValues);
-            expect(comp.settingsAccount).toEqual(accountValues);
+            expect(comp.settingsForm.value).toEqual(accountValues);
         });
 
         it('should notify of success upon successful save', () => {
@@ -89,7 +89,6 @@ describe('Component Tests', () => {
                 firstName: 'John',
                 lastName: 'Doe'
             };
-            comp.settingsAccount = new User();
             comp.settingsForm.patchValue({
                 firstName: 'John',
                 lastName: 'Doe'

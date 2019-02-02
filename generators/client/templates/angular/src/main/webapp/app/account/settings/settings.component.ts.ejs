@@ -21,6 +21,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { JhiLanguageService } from 'ng-jhipster';
 
 import { AccountService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/core';
+import { Account } from 'app/core/user/account.model';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-settings',
@@ -29,12 +30,16 @@ import { AccountService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> 
 export class SettingsComponent implements OnInit {
     error: string;
     success: string;
-    settingsAccount: any;
     languages: any[];
     settingsForm = this.fb.group({
         firstName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
         lastName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-        email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]]
+        email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
+        activated: [false],
+        authorities: [[]],
+        langKey: ['en'],
+        login: [''],
+        imageUrl: ['']
     });
 
     constructor(
@@ -46,8 +51,7 @@ export class SettingsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.accountService.identity().then((account) => {
-            this.settingsAccount = this.copyAccount(account);
+        this.accountService.identity().then((account: Account) => {
             this.updateForm(this.settingsAccount);
         });
         <%_ if (enableTranslation) { _%>
@@ -80,29 +84,21 @@ export class SettingsComponent implements OnInit {
         });
     }
 
-    private updateAccount(account) {
-        account.firstName = this.settingsForm.get(['firstName']).value;
-        account.lastName = this.settingsForm.get(['lastName']).value;
-        account.email = this.settingsForm.get(['email']).value;
+    private updateAccount(account: Account) {
+        account = this.settingsForm.value;
     }
 
-    private updateForm(account): void {
+    updateForm(account: Account): void {
         this.settingsForm.patchValue({
             firstName: account.firstName,
             lastName: account.lastName,
-            email: account.email
+            email: account.email,
+            activated: account.activated,
+            authorities: account.authorities,
+            langKey: account.langKey,
+            login: account.login,
+            imageUrl: account.imageUrl
         });
     }
 
-    private copyAccount(account) {
-        return {
-            activated: account.activated,
-            email: account.email,
-            firstName: account.firstName,
-            langKey: account.langKey,
-            lastName: account.lastName,
-            login: account.login,
-            imageUrl: account.imageUrl
-        };
-    }
 }
