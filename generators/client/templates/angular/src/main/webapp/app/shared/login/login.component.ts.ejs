@@ -31,11 +31,11 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 })
 export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewInit {
     authenticationError: boolean;
-    rememberMe: boolean;
 
     loginForm = this.fb.group({
-        username: ['', []],
-        password: ['', []]
+        username: [''],
+        password: [''],
+        rememberMe: [true]
     });
 
     constructor(
@@ -55,7 +55,6 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
     }
 
     cancel() {
-        this.rememberMe = true
         this.authenticationError = false;
         this.loginForm.patchValue({
             username: '',
@@ -68,7 +67,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
         this.loginService.login({
             username: this.loginForm.get('username').value,
             password: this.loginForm.get('password').value,
-            rememberMe: this.rememberMe
+            rememberMe: this.loginForm.get('rememberMe').value
         }).then(() => {
             this.authenticationError = false;
             this.activeModal.dismiss('login success');

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { element, by, ElementFinder } from 'protractor';
+import { browser, ExpectedConditions, element, by, ElementFinder } from 'protractor';
 
 <%_
 let elementGetter = `getText()`;
@@ -37,11 +37,13 @@ export class <%= entityClass %>ComponentsPage {
     deleteButtons = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div table .btn-danger'));
     title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
 
-    async clickOnCreateButton() {
+    async clickOnCreateButton(timeout?: number) {
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.createButton), timeout ? timeout : 2000);
         await this.createButton.click();
     }
 
-    async clickOnLastDeleteButton() {
+    async clickOnLastDeleteButton(timeout?: number) {
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.deleteButtons.last()), timeout ? timeout : 2000);
         await this.deleteButtons.last().click();
     }
 
@@ -99,7 +101,7 @@ export class <%= entityClass %>UpdatePage {
             let ngModelOption = '';
     _%>
             <%_ if (fieldType === 'Boolean') { _%>
-    get<%= fieldNameCapitalized %>Input() {
+    get<%= fieldNameCapitalized %>Input(timeout?: number) {
         return this.<%= fieldName %>Input;
     }
             <%_ } else if (fieldIsEnum) { _%>
@@ -108,10 +110,11 @@ export class <%= entityClass %>UpdatePage {
     }
 
     async get<%= fieldNameCapitalized %>Select() {
-        return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
+        return await this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
     }
 
-    async <%=fieldName %>SelectLastOption() {
+    async <%=fieldName %>SelectLastOption(timeout?: number) {
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.<%=fieldName %>Select.all(by.tagName('option')).last()), timeout ? timeout : 2000);
         await this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
     }
 
@@ -121,7 +124,7 @@ export class <%= entityClass %>UpdatePage {
     }
 
     async get<%= fieldNameCapitalized %>Input() {
-        return this.<%= fieldName %>Input.getAttribute('value');
+        return await this.<%= fieldName %>Input.getAttribute('value');
     }
 
     <%_ } else { _%>
@@ -130,7 +133,7 @@ export class <%= entityClass %>UpdatePage {
     }
 
     async get<%= fieldNameCapitalized %>Input() {
-        return this.<%= fieldName %>Input.getAttribute('value');
+        return await this.<%= fieldName %>Input.getAttribute('value');
     }
 
     <%_ } _%>
@@ -143,7 +146,8 @@ export class <%= entityClass %>UpdatePage {
         const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
 
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    async <%=relationshipName %>SelectLastOption() {
+    async <%=relationshipName %>SelectLastOption(timeout?: number) {
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.<%=relationshipName %>Select.all(by.tagName('option')).last()), timeout ? timeout : 2000);
         await this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
     }
 
@@ -156,16 +160,18 @@ export class <%= entityClass %>UpdatePage {
     }
 
     async get<%=relationshipNameCapitalized %>SelectedOption() {
-        return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
+        return await this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
     }
 
     <%_ } _%>
     <%_ }); _%>
-    async save() {
+    async save(timeout?: number) {
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.saveButton), timeout ? timeout : 2000);
         await this.saveButton.click();
     }
 
-    async cancel() {
+    async cancel(timeout?: number) {
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.cancelButton), timeout ? timeout : 2000);
         await this.cancelButton.click();
     }
 
@@ -182,7 +188,8 @@ export class <%= entityClass %>DeleteDialog {
         return this.dialogTitle.<%- elementGetter %>;
     }
 
-    async clickOnConfirmButton() {
+    async clickOnConfirmButton(timeout?: number) {
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.confirmButton), timeout ? timeout : 2000);
         await this.confirmButton.click();
     }
 }

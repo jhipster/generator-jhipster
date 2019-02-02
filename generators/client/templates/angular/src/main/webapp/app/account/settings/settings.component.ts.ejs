@@ -51,8 +51,8 @@ export class SettingsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.accountService.identity().then((account: Account) => {
-            this.updateForm(this.settingsAccount);
+        this.accountService.identity().then((account) => {
+            this.updateForm(account);
         });
         <%_ if (enableTranslation) { _%>
         this.languageHelper.getAll().then((languages) => {
@@ -63,18 +63,17 @@ export class SettingsComponent implements OnInit {
     }
 
     save() {
-        this.updateAccount(this.settingsAccount);
-        this.accountService.save(this.settingsAccount).subscribe(() => {
+        const settingsAccount = this.accountFromForm();
+        this.accountService.save(settingsAccount).subscribe(() => {
             this.error = null;
             this.success = 'OK';
             this.accountService.identity(true).then((account) => {
-                this.settingsAccount = this.copyAccount(account);
                 this.updateForm(account);
             });
             <%_ if (enableTranslation) { _%>
             this.languageService.getCurrent().then((current) => {
-                if (this.settingsAccount.langKey !== current) {
-                    this.languageService.changeLanguage(this.settingsAccount.langKey);
+                if (settingsAccount.langKey !== current) {
+                    this.languageService.changeLanguage(settingsAccount.langKey);
                 }
             });
             <%_ } _%>
@@ -84,11 +83,21 @@ export class SettingsComponent implements OnInit {
         });
     }
 
-    private updateAccount(account: Account) {
-        account = this.settingsForm.value;
+    private accountFromForm(): any {
+        const account = {};
+        return {...account,
+            firstName: this.settingsForm.get('firstName').value,
+            lastName: this.settingsForm.get('lastName').value,
+            email: this.settingsForm.get('email').value,
+            activated: this.settingsForm.get('activated').value,
+            authorities: this.settingsForm.get('authorities').value,
+            langKey: this.settingsForm.get('langKey').value,
+            login: this.settingsForm.get('login').value,
+            imageUrl: this.settingsForm.get('imageUrl').value
+        };
     }
 
-    updateForm(account: Account): void {
+    updateForm(account: any): void {
         this.settingsForm.patchValue({
             firstName: account.firstName,
             lastName: account.lastName,

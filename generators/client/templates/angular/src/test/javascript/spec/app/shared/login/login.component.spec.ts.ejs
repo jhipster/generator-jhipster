@@ -83,9 +83,9 @@ describe('Component Tests', () => {
 
                     comp.loginForm.patchValue({
                         username: 'admin',
-                        password: 'admin'
+                        password: 'admin',
+                        rememberMe: true
                     });
-                    comp.rememberMe = true;
                     mockLoginService.setResponse({});
                     mockStateStorageService.setResponse({redirect: 'dummy'});
 
@@ -116,9 +116,9 @@ describe('Component Tests', () => {
                     };
                     comp.loginForm.patchValue({
                         username: 'admin',
-                        password: 'admin'
+                        password: 'admin',
+                        rememberMe: true
                     });
-                    comp.rememberMe = true;
                     mockLoginService.setResponse({});
                     mockStateStorageService.setResponse(null);
 
@@ -160,7 +160,7 @@ describe('Component Tests', () => {
             expect(comp.authenticationError).toEqual(false);
             expect(comp.loginForm.get('username').value).toEqual(expected.username);
             expect(comp.loginForm.get('password').value).toEqual(expected.password);
-            expect(comp.rememberMe).toEqual(expected.rememberMe);
+            expect(comp.loginForm.get('rememberMe').value).toEqual(expected.rememberMe);
             expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('cancel');
         });
 

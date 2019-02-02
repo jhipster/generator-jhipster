@@ -105,7 +105,6 @@ describe('Component Tests', () => {
         it('should notify of error upon failed save', () => {
             // GIVEN
             mockAuth.saveSpy.and.returnValue(throwError('ERROR'));
-            comp.settingsAccount = new User();
             // WHEN
             comp.save();
 
