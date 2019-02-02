@@ -61,11 +61,11 @@ describe('JDLUnaryOption', () => {
       });
 
       it('removes the dupes', () => {
-        expect(option.entityNames.size()).to.eq(3);
+        expect(option.entityNames.size).to.eq(3);
         expect(option.entityNames.has('A')).to.be.true;
         expect(option.entityNames.has('B')).to.be.true;
         expect(option.entityNames.has('C')).to.be.true;
-        expect(option.excludedNames.size()).to.eq(2);
+        expect(option.excludedNames.size).to.eq(2);
         expect(option.excludedNames.has('E')).to.be.true;
         expect(option.excludedNames.has('D')).to.be.true;
       });
@@ -83,7 +83,7 @@ describe('JDLUnaryOption', () => {
     });
 
     it('sets the entity names', () => {
-      expect(option.entityNames.size()).to.equal(1);
+      expect(option.entityNames.size).to.equal(1);
       expect(option.entityNames.has('A')).to.be.true;
     });
   });
@@ -151,53 +151,41 @@ describe('JDLUnaryOption', () => {
     });
     context("when passing a valid entity that hasn't been added yet", () => {
       let option = null;
-      let result = null;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-        result = option.addEntity(new JDLEntity({ name: 'A' }));
+        option.addEntity(new JDLEntity({ name: 'A' }));
       });
 
-      it('returns true', () => {
-        expect(result).to.be.true;
-      });
-      it('changes the size', () => {
-        expect(option.entityNames.size()).to.eq(1);
+      it('changes the set', () => {
+        expect(option.entityNames.size).to.eq(1);
       });
     });
     context('when passing a valid entity that has already been added', () => {
       let option = null;
-      let result = null;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
         option.addEntity(new JDLEntity({ name: 'A' }));
-        result = option.addEntity(new JDLEntity({ name: 'A' }));
+        option.addEntity(new JDLEntity({ name: 'A' }));
       });
 
-      it('returns false', () => {
-        expect(result).to.be.false;
-      });
       it('does not change the size', () => {
-        expect(option.entityNames.size()).to.eq(1);
+        expect(option.entityNames.size).to.eq(1);
       });
     });
     context('when passing an excluded entity', () => {
       let option = null;
-      let result = null;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
         option.addEntity(new JDLEntity({ name: 'A' }));
-        result = option.excludeEntity(new JDLEntity({ name: 'A' }));
+        option.excludeEntity(new JDLEntity({ name: 'A' }));
       });
 
-      it('returns false', () => {
-        expect(result).to.be.false;
-      });
       it('does not change the sizes', () => {
-        expect(option.entityNames.size()).to.eq(1);
-        expect(option.excludedNames.size()).to.eq(0);
+        expect(option.entityNames.size).to.eq(1);
+        expect(option.excludedNames.size).to.eq(0);
       });
     });
   });
@@ -217,53 +205,41 @@ describe('JDLUnaryOption', () => {
     });
     context("when passing a name that hasn't been added yet", () => {
       let option = null;
-      let result = null;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-        result = option.addEntityName('A');
+        option.addEntityName('A');
       });
 
-      it('returns true', () => {
-        expect(result).to.be.true;
-      });
-      it('changes the size', () => {
-        expect(option.entityNames.size()).to.eq(1);
+      it('changes the set', () => {
+        expect(option.entityNames.size).to.eq(1);
       });
     });
     context('when passing a name that has already been added', () => {
       let option = null;
-      let result = null;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
         option.addEntityName('A');
-        result = option.addEntityName('A');
+        option.addEntityName('A');
       });
 
-      it('returns false', () => {
-        expect(result).to.be.false;
-      });
       it('does not change the size', () => {
-        expect(option.entityNames.size()).to.eq(1);
+        expect(option.entityNames.size).to.eq(1);
       });
     });
     context('when passing an excluded name', () => {
       let option = null;
-      let result = null;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
         option.addEntityName('A');
-        result = option.excludeEntityName('A');
+        option.excludeEntityName('A');
       });
 
-      it('returns false', () => {
-        expect(result).to.be.false;
-      });
       it('does not change the sizes', () => {
-        expect(option.entityNames.size()).to.eq(1);
-        expect(option.excludedNames.size()).to.eq(0);
+        expect(option.entityNames.size).to.eq(1);
+        expect(option.excludedNames.size).to.eq(0);
       });
     });
   });
@@ -335,35 +311,27 @@ describe('JDLUnaryOption', () => {
     });
     context("when passing a valid entity that hasn't been excluded yet", () => {
       let option = null;
-      let result = null;
-
-      before(() => {
-        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-        result = option.excludeEntity(new JDLEntity({ name: 'A' }));
-      });
-
-      it('returns true', () => {
-        expect(result).to.be.true;
-      });
-      it('changes the size', () => {
-        expect(option.excludedNames.size()).to.eq(1);
-      });
-    });
-    context('when passing a valid entity that has already been excluded', () => {
-      let option = null;
-      let result = null;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
         option.excludeEntity(new JDLEntity({ name: 'A' }));
-        result = option.excludeEntity(new JDLEntity({ name: 'A' }));
       });
 
-      it('returns false', () => {
-        expect(result).to.be.false;
+      it('changes the set', () => {
+        expect(option.excludedNames.size).to.eq(1);
       });
+    });
+    context('when passing a valid entity that has already been excluded', () => {
+      let option = null;
+
+      before(() => {
+        option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+        option.excludeEntity(new JDLEntity({ name: 'A' }));
+        option.excludeEntity(new JDLEntity({ name: 'A' }));
+      });
+
       it('does not change the size', () => {
-        expect(option.excludedNames.size()).to.eq(1);
+        expect(option.excludedNames.size).to.eq(1);
       });
     });
     context('when passing an added entity', () => {
@@ -380,7 +348,7 @@ describe('JDLUnaryOption', () => {
         expect(result).to.be.false;
       });
       it('does not change the size', () => {
-        expect(option.entityNames.size()).to.eq(1);
+        expect(option.entityNames.size).to.eq(1);
       });
     });
   });
@@ -400,52 +368,40 @@ describe('JDLUnaryOption', () => {
     });
     context("when passing a name that hasn't been excluded yet", () => {
       let option = null;
-      let result = null;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-        result = option.excludeEntityName('A');
+        option.excludeEntityName('A');
       });
 
-      it('returns true', () => {
-        expect(result).to.be.true;
-      });
-      it('changes the size', () => {
-        expect(option.excludedNames.size()).to.eq(1);
+      it('changes the set', () => {
+        expect(option.excludedNames.size).to.eq(1);
       });
     });
     context('when passing a name that has already been excluded', () => {
       let option = null;
-      let result = null;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
         option.excludeEntityName('A');
-        result = option.excludeEntityName('A');
+        option.excludeEntityName('A');
       });
 
-      it('returns false', () => {
-        expect(result).to.be.false;
-      });
       it('does not change the size', () => {
-        expect(option.excludedNames.size()).to.eq(1);
+        expect(option.excludedNames.size).to.eq(1);
       });
     });
     context('when passing an added name', () => {
       let option = null;
-      let result = null;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
         option.excludeEntityName('A');
-        result = option.addEntityName('A');
+        option.addEntityName('A');
       });
 
-      it('returns false', () => {
-        expect(result).to.be.false;
-      });
       it('does not change the size', () => {
-        expect(option.entityNames.size()).to.eq(1);
+        expect(option.entityNames.size).to.eq(1);
       });
     });
   });

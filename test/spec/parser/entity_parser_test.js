@@ -512,7 +512,8 @@ describe('EntityParser', () => {
               relationshipName: 'bb',
               otherEntityName: 'b',
               relationshipType: 'many-to-one',
-              otherEntityField: 'id'
+              otherEntityField: 'id',
+              otherEntityRelationshipName: 'aa'
             },
             {
               relationshipName: 'bbb',
@@ -535,7 +536,8 @@ describe('EntityParser', () => {
               relationshipName: 'a',
               otherEntityName: 'a',
               relationshipType: 'many-to-one',
-              otherEntityField: 'id'
+              otherEntityField: 'id',
+              otherEntityRelationshipName: 'b'
             },
             {
               relationshipName: 'aa',
@@ -751,6 +753,33 @@ describe('EntityParser', () => {
         it('sets one by default', () => {
           expect(content.A.relationships[0].relationshipName).to.equal('b');
           expect(content.B.relationships[0].otherEntityRelationshipName).to.equal('a');
+        });
+      });
+      context('when parsing a relationship with a useJPADerivedIdentifier flag', () => {
+        let content = null;
+
+        before(() => {
+          const entityA = new JDLEntity({ name: 'A' });
+          const entityB = new JDLEntity({ name: 'B' });
+          const relationship = new JDLRelationship({
+            from: entityA.name,
+            to: entityB.name,
+            injectedFieldInTo: 'a',
+            type: RelationshipTypes.ONE_TO_ONE,
+            options: new Set(['jpaDerivedIdentifier'])
+          });
+          const jdlObject = new JDLObject();
+          jdlObject.addEntity(entityA);
+          jdlObject.addEntity(entityB);
+          jdlObject.addRelationship(relationship);
+          content = EntityParser.parse({
+            jdlObject,
+            databaseType: DatabaseTypes.SQL
+          });
+        });
+
+        it('sets it', () => {
+          expect(content.A.relationships[0].useJPADerivedIdentifier).to.be.true;
         });
       });
     });

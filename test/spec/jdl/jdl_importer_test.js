@@ -171,19 +171,22 @@ describe('JDLImporter', () => {
               relationshipType: 'many-to-one',
               relationshipName: 'user',
               otherEntityName: 'user',
-              otherEntityField: 'login'
+              otherEntityField: 'login',
+              otherEntityRelationshipName: 'employee'
             },
             {
               relationshipType: 'many-to-one',
               relationshipName: 'manager',
               otherEntityName: 'employee',
-              otherEntityField: 'id'
+              otherEntityField: 'id',
+              otherEntityRelationshipName: 'employee'
             },
             {
               relationshipType: 'many-to-one',
               javadoc: 'Another side of the same relationship,',
               relationshipName: 'department',
               otherEntityName: 'department',
+              otherEntityRelationshipName: 'employee',
               otherEntityField: 'id'
             }
           ],
@@ -236,6 +239,7 @@ describe('JDLImporter', () => {
               relationshipType: 'many-to-one',
               relationshipName: 'employee',
               otherEntityName: 'employee',
+              otherEntityRelationshipName: 'job',
               otherEntityField: 'id'
             }
           ],
@@ -270,7 +274,7 @@ describe('JDLImporter', () => {
           relationships: [
             {
               relationshipType: 'many-to-many',
-              otherEntityRelationshipName: '',
+              otherEntityRelationshipName: 'jobHistory',
               relationshipName: 'department',
               otherEntityName: 'department',
               otherEntityField: 'id',
@@ -278,7 +282,7 @@ describe('JDLImporter', () => {
             },
             {
               relationshipType: 'many-to-many',
-              otherEntityRelationshipName: '',
+              otherEntityRelationshipName: 'jobHistory',
               relationshipName: 'department',
               otherEntityName: 'job',
               otherEntityField: 'id',
@@ -286,7 +290,7 @@ describe('JDLImporter', () => {
             },
             {
               relationshipType: 'many-to-many',
-              otherEntityRelationshipName: '',
+              otherEntityRelationshipName: 'jobHistory',
               relationshipName: 'employee',
               otherEntityName: 'employee',
               otherEntityField: 'id',
@@ -937,6 +941,33 @@ describe('JDLImporter', () => {
         expect(returned.exportedEntities[2].skipClient).to.equal(true);
         expect(returned.exportedEntities[2].jpaMetamodelFiltering).to.equal(true);
         expect(returned.exportedEntities[2].pagination).to.equal('pager');
+      });
+    });
+    context('when parsing a JDL with a pattern validation', () => {
+      let returned = null;
+      let entityContent;
+
+      before(() => {
+        const importer = new JDLImporter([path.join('test', 'test_files', 'regex_validation.jdl')], {
+          applicationName: 'MyApp',
+          applicationType: ApplicationTypes.MONOLITH,
+          databaseType: DatabaseTypes.SQL
+        });
+        returned = importer.import();
+        entityContent = JSON.parse(fse.readFileSync(path.join('.jhipster', 'Customer.json'), { encoding: 'utf8' }));
+      });
+
+      after(() => {
+        fse.removeSync('.jhipster');
+      });
+
+      it('escapes the back-slash in the returned object', () => {
+        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern).to.equal(
+          '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$'
+        );
+      });
+      it('escapes the back-slash in the written entity file', () => {
+        expect(entityContent.fields[0].fieldValidateRulesPattern).to.equal('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
       });
     });
     context('when parsing a JDL with a pattern validation containing a quote', () => {

@@ -388,5 +388,28 @@ describe('JDLRelationship', () => {
         );
       });
     });
+    context('with options', () => {
+      let relationship = null;
+
+      before(() => {
+        relationship = new JDLRelationship({
+          from: 'A',
+          to: 'B',
+          type: RelationshipTypes.ONE_TO_ONE,
+          injectedFieldInFrom: 'b',
+          injectedFieldInTo: 'a',
+          options: new Set(['jpaDerivedIdentifier'])
+        });
+      });
+
+      it('adds them', () => {
+        expect(relationship.toString()).to.equal(
+          `relationship ${relationship.type} {
+  ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{` +
+            `${relationship.injectedFieldInTo}} with jpaDerivedIdentifier
+}`
+        );
+      });
+    });
   });
 });

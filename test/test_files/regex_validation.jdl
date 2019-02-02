@@ -1,0 +1,3 @@
+entity Customer {
+  email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+}

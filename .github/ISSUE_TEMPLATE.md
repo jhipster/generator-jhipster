@@ -51,6 +51,7 @@
 | ------------------ |
 | `JHipster Version` |
 
+---
 
 - [ ] Checking this box is mandatory (this is just to show you read everything)
 
