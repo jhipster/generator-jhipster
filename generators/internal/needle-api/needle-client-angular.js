@@ -193,18 +193,19 @@ module.exports = class extends needleClientBase {
                 : `${appName}${entityAngularName}Module`;
 
             const splicable = isEntityAlreadyGenerated
-                ? `|,{
+                ? `|,
+                        |{
                         |                path: '${entityUrl}',
                         |                loadChildren: '${modulePath}#${moduleName}'
                         |            }`
                 : `|{
-                            |                path: '${entityUrl}',
-                            |                loadChildren: '${modulePath}#${moduleName}'
-                            |            }`;
+                        |                path: '${entityUrl}',
+                        |                loadChildren: '${modulePath}#${moduleName}'
+                        |            }`;
             const rewriteFileModel = this.generateFileModel(
                 entityModulePath,
                 'jhipster-needle-add-entity-route',
-                this.generator.stripMargin(splicable)
+                ...this.generator.stripMargin(splicable).split(/\n/)
             );
 
             this.addBlockContentToFile(rewriteFileModel, errorMessage);

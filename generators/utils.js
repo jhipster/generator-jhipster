@@ -90,6 +90,25 @@ function escapeRegExp(str) {
 }
 
 /**
+ * Escape leading comma in case the splicable is like a JSON array entry. This
+ * will allow it to match the first element of the list, in case that element is
+ * the same.
+ *
+ * @param {string} line the parsed line
+ * @param {number} idx the current line index
+ * @returns {string} a regex representing an optional comma if needed, or the
+ * common escaped regexp
+ */
+function escapeJsonArray(line, idx) {
+    if (idx === 0 && line === ',') {
+        // ignore the leading comma in order to allow the first element
+        // to match if the output is like a JSON array
+        return ',?';
+    }
+    return `\\s*${escapeRegExp(line)}`;
+}
+
+/**
  * Rewrite using the passed argument object.
  *
  * @param {object} args arguments object (containing splicable, haystack, needle properties) to be used
@@ -97,7 +116,7 @@ function escapeRegExp(str) {
  */
 function rewrite(args) {
     // check if splicable is already in the body text
-    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(line)}`).join('\n'));
+    const re = new RegExp(args.splicable.map((line, idx) => escapeJsonArray(line, idx)).join('\n'));
 
     if (re.test(args.haystack)) {
         return args.haystack;
