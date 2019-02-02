@@ -153,6 +153,9 @@
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.junit.reportsPath>${project.testresult.directory}</sonar.junit.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
+        <!-- Used to keep correct jacoco report filename for the surefire/failsafe arg line. Therefore we set this empty property here -->
+        <surefireArgLine />
+        <failsafeArgLine />
 
         <!-- jhipster-needle-maven-property -->
     </properties>
@@ -885,6 +888,8 @@
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
                                 <destFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</destFile>
+                                <!-- Sets the name of the property containing the settings for JaCoCo runtime agent. -->
+                                <propertyName>surefireArgLine</propertyName>
                             </configuration>
                         </execution>
                         <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
@@ -907,6 +912,8 @@
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
                                 <destFile>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</destFile>
+                                <!-- Sets the name of the property containing the settings for JaCoCo runtime agent. -->
+                                <propertyName>failsafeArgLine</propertyName>
                             </configuration>
                         </execution>
                         <!-- Ensures that the code coverage report for integration tests is created after integration tests have been run -->
@@ -1109,6 +1116,10 @@
                         <!-- Force alphabetical order to have a reproducible build -->
                         <runOrder>alphabetical</runOrder>
                         <outputDirectory>${sonar.junit.reportsPath}</outputDirectory>
+                        <!-- To get jacoco report we need to set argLine in surefire, without this snippet the jacoco argLine is lost.
+                             The property must be prefixed with @ and not $. The reason for this is the usage of late binding of variables
+                             by other plugins (jacoco in this case) -->
+                        <argLine>@{surefireArgLine}</argLine>
                         <excludes>
                             <exclude>**/*IntTest.java</exclude>
                             <exclude>**/*IT.java</exclude>
@@ -1123,6 +1134,10 @@
                         <!-- Force alphabetical order to have a reproducible build -->
                         <runOrder>alphabetical</runOrder>
                         <outputDirectory>${sonar.junit.reportsPath}</outputDirectory>
+                        <!-- To get jacoco report we need to set argLine in failsafe, without this snippet the jacoco argLine is lost.
+                             The property must be prefixed with @ and not $. The reason for this is the usage of late binding of variables
+                             by other plugins (jacoco in this case) -->
+                        <argLine>@{failsafeArgLine}</argLine>
                         <includes>
                             <include>**/*IntTest.java</include>
                             <include>**/*IT.java</include>
