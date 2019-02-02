@@ -176,18 +176,18 @@
                             <%_ if (dto === 'no') { _%>
                                 <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>" <% if (relationshipRequired) { %> required<% } %>>
                                     <%_ if (!relationshipRequired) { _%>
-                                    <option value="null"></option>
+                                    <option v-bind:value="null"></option>
                                     <%_ } else { _%>
-                                        <option v-if="!editForm.value.<%= relationshipName %>" value="null" selected></option>
+                                        <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
                                     <%_ } _%>
                                     <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                                 </select>
                             <%_ } else { _%>
                                 <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>Id" <% if (relationshipRequired) { %> required<% } %>>
                                     <%_ if (!relationshipRequired) { _%>
-                                    <option value="null"></option>
+                                    <option v-bind:value="null"></option>
                                     <%_ } else { _%>
-                                        <option v-if="!editForm.value.<%= relationshipName %>" value="null" selected></option>
+                                        <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
                                     <%_ } _%>
                                     <option v-bind:value="<%=otherEntityName %>Option.id" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                                 </select>
@@ -199,18 +199,18 @@
                             <%_ if (dto === 'no') { _%>
                                 <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
                                     <%_ if (!relationshipRequired) { _%>
-                                    <option value="null"></option>
+                                    <option v-bind:value="null"></option>
                                     <%_ } else { _%>
-                                        <option v-if="!editForm.value.<%= relationshipName %>" value="null" selected></option>
+                                        <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
                                     <%_ } _%>
                                     <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=relationshipFieldNamePlural %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                                 </select>
                             <%_ } else { _%>
                                 <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>Id"<% if (relationshipRequired) { %> required<% } %>>
                                     <%_ if (!relationshipRequired) { _%>
-                                    <option value="null"></option>
+                                    <option v-bind:value="null"></option>
                                     <%_ } else { _%>
-                                        <option v-if="!editForm.value.<%= relationshipName %>" value="null" selected></option>
+                                        <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
                                     <%_ } _%>
                                     <option v-bind:value="<%=otherEntityName %>Option.id" v-for="<%=otherEntityName %>Option in <%=relationshipFieldNamePlural %>">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                                 </select>
