@@ -19,7 +19,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 
 const path = require('path');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const JDLLinter = require('../../../lib/linter/jdl_linter');
 
 describe('JDLLinter', () => {
@@ -101,6 +101,25 @@ describe('JDLLinter', () => {
           expect(issues.getEntityIssuesForEntityName('A')[0].ruleName).to.equal('ENT_DUPLICATED');
           expect(issues.getEntityIssuesForEntityName('B')).to.have.lengthOf(1);
           expect(issues.getEntityIssuesForEntityName('B')[0].ruleName).to.equal('ENT_DUPLICATED');
+        });
+      });
+      context('fields', () => {
+        let linter = null;
+        let issues = null;
+
+        before(() => {
+          linter = new JDLLinter({
+            filePath: path.join('test', 'test_files', 'lint', 'duplicate_fields.jdl')
+          });
+          issues = linter.check();
+        });
+
+        it('reports the issues', () => {
+          expect(issues.getFieldIssuesForFieldName('bb')).to.have.lengthOf(0);
+          expect(issues.getFieldIssuesForFieldName('aa')).to.have.lengthOf(1);
+          expect(issues.getFieldIssuesForFieldName('aa')[0].ruleName).to.equal('FLD_DUPLICATED');
+          expect(issues.getFieldIssuesForFieldName('cc')).to.have.lengthOf(1);
+          expect(issues.getFieldIssuesForFieldName('cc')[0].ruleName).to.equal('FLD_DUPLICATED');
         });
       });
     });
