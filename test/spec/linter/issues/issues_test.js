@@ -17,9 +17,9 @@
  */
 
 const expect = require('chai').expect;
-const Issues = require('../../../lib/linter/issues/issues');
-const EntityIssue = require('../../../lib/linter/issues/entity_issue');
-const FieldIssue = require('../../../lib/linter/issues/field_issue');
+const Issues = require('../../../../lib/linter/issues/issues');
+const EntityIssue = require('../../../../lib/linter/issues/entity_issue');
+const FieldIssue = require('../../../../lib/linter/issues/field_issue');
 
 describe('Issues', () => {
   describe('getEntityIssuesForEntityName', () => {
