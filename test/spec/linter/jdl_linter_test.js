@@ -122,6 +122,23 @@ describe('JDLLinter', () => {
           expect(issues.getFieldIssuesForFieldName('cc')[0].ruleName).to.equal('FLD_DUPLICATED');
         });
       });
+      context('enums', () => {
+        let linter;
+        let issues;
+
+        before(() => {
+          linter = new JDLLinter({
+            filePath: path.join('test', 'test_files', 'lint', 'duplicate_enums.jdl')
+          });
+          issues = linter.check();
+        });
+
+        it('reports the issues', () => {
+          expect(issues.getEnumIssuesForEnumName('B')).to.have.lengthOf(0);
+          expect(issues.getEnumIssuesForEnumName('A')).to.have.lengthOf(1);
+          expect(issues.getEnumIssuesForEnumName('A')[0].ruleName).to.equal('ENUM_DUPLICATED');
+        });
+      });
     });
   });
 });
