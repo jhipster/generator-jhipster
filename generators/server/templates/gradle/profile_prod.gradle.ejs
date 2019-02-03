@@ -16,12 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apply plugin: 'org.springframework.boot'
-apply plugin: 'com.gorylenko.gradle-git-properties'
-<%_ if (!skipClient) { _%>
-apply plugin: 'com.moowork.node'
-<%_ } _%>
-
 dependencies {
     <%_ if (databaseType === 'sql') { _%>
     testCompile "com.h2database:h2"

@@ -18,11 +18,6 @@
 -%>
 import org.gradle.internal.os.OperatingSystem
 
-apply plugin: 'org.springframework.boot'
-<%_ if (!skipClient) { _%>
-apply plugin: 'com.moowork.node'
-<%_ } _%>
-
 dependencies {
     compile "org.springframework.boot:spring-boot-devtools"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
