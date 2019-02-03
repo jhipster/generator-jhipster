@@ -146,6 +146,7 @@
         <sonar.issue.ignore.multicriteria.S4684.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S4684.resourceKey>
         <sonar.issue.ignore.multicriteria.S4684.ruleKey>squid:S4684</sonar.issue.ignore.multicriteria.S4684.ruleKey>
         <sonar.jacoco.reportPaths>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.jacoco.itReportPath>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</sonar.jacoco.itReportPath>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
         <%_ if (!skipClient) { _%>
         <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/lcov.info</sonar.typescript.lcov.reportPaths>
@@ -780,6 +781,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-idea-plugin</artifactId>
             </plugin>
             <plugin>
@@ -887,7 +892,7 @@
                             </goals>
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
-                                <destFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</destFile>
+                                <destFile>${sonar.jacoco.reportPaths}</destFile>
                                 <!-- Sets the name of the property containing the settings for JaCoCo runtime agent. -->
                                 <propertyName>surefireArgLine</propertyName>
                             </configuration>
@@ -900,7 +905,7 @@
                                 <goal>report</goal>
                             </goals>
                             <configuration>
-                                <dataFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</dataFile>
+                                <dataFile>${sonar.jacoco.reportPaths}</dataFile>
                                 <outputDirectory>${project.testresult.directory}/coverage/jacoco</outputDirectory>
                             </configuration>
                         </execution>
@@ -911,7 +916,7 @@
                             </goals>
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
-                                <destFile>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</destFile>
+                                <destFile>${sonar.jacoco.itReportPath}</destFile>
                                 <!-- Sets the name of the property containing the settings for JaCoCo runtime agent. -->
                                 <propertyName>failsafeArgLine</propertyName>
                             </configuration>
@@ -924,7 +929,7 @@
                                 <goal>report-integration</goal>
                             </goals>
                             <configuration>
-                                <dataFile>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</dataFile>
+                                <dataFile>${sonar.jacoco.itReportPath}</dataFile>
                                 <outputDirectory>${project.testresult.directory}/coverage/jacoco</outputDirectory>
                             </configuration>
                         </execution>
