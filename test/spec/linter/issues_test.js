@@ -19,6 +19,7 @@
 const expect = require('chai').expect;
 const Issues = require('../../../lib/linter/issues/issues');
 const EntityIssue = require('../../../lib/linter/issues/entity_issue');
+const FieldIssue = require('../../../lib/linter/issues/field_issue');
 
 describe('Issues', () => {
   describe('getEntityIssuesForEntityName', () => {
@@ -42,6 +43,32 @@ describe('Issues', () => {
         expect(
           issues
             .getEntityIssuesForEntityName('A')
+            .map(issue => issue.ruleName)
+            .join(', ')
+        ).to.equal('Toto, Titi');
+      });
+    });
+  });
+  describe('getFieldIssuesForFieldName', () => {
+    context('when not having any issue', () => {
+      it('returns an empty array', () => {
+        expect(new Issues().getFieldIssuesForFieldName('A')).to.have.lengthOf(0);
+      });
+    });
+    context('when having issues', () => {
+      let issues = null;
+
+      before(() => {
+        issues = new Issues();
+        issues.addFieldIssue(new FieldIssue({ ruleName: 'Toto', fieldName: 'a', entityName: 'A' }));
+        issues.addFieldIssue(new FieldIssue({ ruleName: 'Titi', fieldName: 'a', entityName: 'A' }));
+      });
+
+      it('returns them', () => {
+        expect(issues.getFieldIssuesForFieldName('a')).to.have.lengthOf(2);
+        expect(
+          issues
+            .getFieldIssuesForFieldName('a')
             .map(issue => issue.ruleName)
             .join(', ')
         ).to.equal('Toto, Titi');
