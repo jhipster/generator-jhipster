@@ -37,6 +37,8 @@ jobs:
   <%_ if (clientPackageManager === 'npm') { _%>
   - script: sudo npm install -g npm
     displayName: 'TOOLS: update NPM'
+  - script: sudo chown -R vsts:docker /home/vsts/.npm/
+    displayName: 'BUGS-FIX: change /home/vsts/.npm/ permission'
   <%_ } else if (clientPackageManager === 'yarn') { _%>
   - script: |
       curl -o- -L https://yarnpkg.com/install.sh | bash
