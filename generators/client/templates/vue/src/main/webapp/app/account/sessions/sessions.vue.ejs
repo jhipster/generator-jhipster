@@ -20,7 +20,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="session in sessions">
+                <tr v-for="session in sessions" :key="session.ipAddress">
                     <td>{{session.ipAddress}}</td>
                     <td>{{session.userAgent}}</td>
                     <td>{{session.tokenDate}}</td>

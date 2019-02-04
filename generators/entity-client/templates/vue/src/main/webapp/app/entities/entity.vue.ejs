@@ -103,7 +103,7 @@
                         <td>
                             <%_ if (otherEntityName === 'user') { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
-                                    <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">{{i > 0 ? ', ' : ''}}
+                                    <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
                                         {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
                                     </span>
                                 <%_ } else { _%>
@@ -115,7 +115,7 @@
                                 <%_ } _%>
                             <%_ } else { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
-                                    <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>">{{i > 0 ? ', ' : ''}}
+                                    <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
                                         <router-link class="form-control-static" :to="{name: '<%= relationshipNameCapitalized %>View', params: {<%= relationshipFieldName %>Id: <%= relationshipFieldName %>.id}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
                                     </span>
                                 <%_ } else { _%>

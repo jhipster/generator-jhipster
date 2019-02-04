@@ -94,14 +94,14 @@
                     <div class="form-group" v-if="languages && Object.keys(languages).length > 0">
                         <label for="langKey" v-text="$t('userManagement.langKey')">Language</label>
                         <select class="form-control" id="langKey" name="langKey" v-model="userAccount.langKey">
-                            <option v-for="(language, key) in languages" :value="key">{{language.name}}</option>
+                            <option v-for="(language, key) in languages" :value="key" :key="key">{{language.name}}</option>
                         </select>
                     </div>
                     <%_ } _%>
                     <div class="form-group">
                         <label v-text="$t('userManagement.profiles')">Profiles</label>
                         <select class="form-control" multiple name="authority" v-model="userAccount.authorities">
-                            <option v-for="authority of authorities" :value="authority">{{authority}}</option>
+                            <option v-for="authority of authorities" :value="authority" :key="authority">{{authority}}</option>
                         </select>
                     </div>
                 </div>

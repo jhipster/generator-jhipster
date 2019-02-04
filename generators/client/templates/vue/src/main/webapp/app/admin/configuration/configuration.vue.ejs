@@ -13,10 +13,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="entry in orderBy(filterBy(configuration, filtered), orderProp, reverse === true ? 1 : -1)">
+                <tr v-for="entry in orderBy(filterBy(configuration, filtered), orderProp, reverse === true ? 1 : -1)" :key="entry.prefix">
                     <td><span>{{entry.prefix}}</span></td>
                     <td>
-                        <div class="row" v-for="key in keys(entry.properties)">
+                        <div class="row" v-for="key in keys(entry.properties)" :key="key">
                             <div class="col-md-4">{{key}}</div>
                             <div class="col-md-8">
                                 <span class="float-right badge-secondary break">{{entry.properties[key]}}</span>
@@ -26,7 +26,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div v-for="key in keys(allConfiguration)">
+            <div v-for="key in keys(allConfiguration)" :key="key">
                 <h4><span>{{key}}</span></h4>
                 <table class="table table-sm table-striped table-bordered table-responsive d-table">
                     <thead>
@@ -36,7 +36,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="item of allConfiguration[key]">
+                    <tr v-for="item of allConfiguration[key]" :key="item.key">
                         <td class="break">{{item.key}}</td>
                         <td class="break">
                             <span class="float-right badge-secondary break">{{item.val}}</span>

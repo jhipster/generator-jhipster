@@ -11,7 +11,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(item, index) in currentHealth.details.details">
+                    <tr v-for="(item, index) in currentHealth.details.details" :key="index">
                         <td class="text-left">{{index}}</td>
                         <td class="text-left">{{readableValue(item)}}</td>
                     </tr>

@@ -30,7 +30,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="audit of orderBy(audits, predicate, reverse === true ? 1 : -1)">
+                <tr v-for="audit of orderBy(audits, predicate, reverse === true ? 1 : -1)" :key="audit.timestamp">
                     <td><span>{{audit.timestamp | formatDate}}</span></td>
                     <td><small>{{audit.principal}}</small></td>
                     <td>{{audit.type}}</td>
