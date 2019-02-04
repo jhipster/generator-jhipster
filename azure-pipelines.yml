@@ -92,6 +92,8 @@ jobs:
     displayName: 'TOOLS: install google-chrome-stable'
   - script: sudo npm install -g npm
     displayName: 'TOOLS: update NPM'
+  - script: sudo chown -R vsts:docker /home/vsts/.npm/
+    displayName: 'BUGS-FIX: change /home/vsts/.npm/ permission'
   - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
     displayName: 'TOOLS: display configuration'
   - bash: $(JHI_SCRIPTS)/03-system.sh
