@@ -68,7 +68,7 @@ describe('<%= entityClass %> e2e test', () => {
         await signInPage.password.sendKeys('admin');
         await signInPage.loginButton.click();
         await signInPage.waitUntilHidden();
-        <%_ } else if (authenticationType === 'oauth2') {_%>
+        <%_ } else if (authenticationType === 'oauth2') { _%>
         await signInPage.loginWithOAuth('admin', 'admin');
         <%_ } _%>
         await waitUntilDisplayed(navBarPage.entityMenu);
@@ -141,10 +141,9 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ relationships.forEach((relationship) => {
             const relationshipType = relationship.relationshipType;
             const ownerSide = relationship.ownerSide;
-            const relationshipName = relationship.relationshipName;
-            const relationshipFieldName = relationship.relationshipFieldName; _%>
+            const relationshipName = relationship.relationshipName; _%>
         <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-        //await <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption();
+        // await <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption();
         <%_ } else if ((relationshipType === 'many-to-many' && ownerSide === true)) { _%>
         // <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption();
         <%_ } _%>
