@@ -53,11 +53,6 @@ task webpack_test(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn
 task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
     args = ["run", "webpack:prod"]
 }
-
-task copyIntoStatic (type: Copy) {
-    from '<%= CLIENT_DIST_DIR %>'
-    into 'build/resources/main/static'
-}
 <%_ } _%>
 
 processResources {
@@ -93,6 +88,5 @@ gitProperties {
 <%_ if (!skipClient) { _%>
 test.dependsOn webpack_test
 processResources.dependsOn webpack
-copyIntoStatic.dependsOn processResources
-bootJar.dependsOn copyIntoStatic
+bootJar.dependsOn processResources
 <%_ } _%>

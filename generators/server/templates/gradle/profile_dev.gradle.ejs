@@ -64,11 +64,6 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
 
     args = ["run", "webpack:build"]
 }
-
-task copyIntoStatic (type: Copy) {
-    from '<%= CLIENT_DIST_DIR %>'
-    into 'build/resources/main/static'
-}
 <%_ } _%>
 
 processResources {
@@ -93,6 +88,5 @@ processResources {
 
 <%_ if (!skipClient) { _%>
 processResources.dependsOn webpackBuildDev
-copyIntoStatic.dependsOn processResources
-bootJar.dependsOn copyIntoStatic
+bootJar.dependsOn processResources
 <%_ } _%>

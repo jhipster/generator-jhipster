@@ -1060,22 +1060,6 @@
                                 </resources>
                             </configuration>
                         </execution>
-                        <execution>
-                            <id>jib-www-resources</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>copy-resources</goal>
-                            </goals>
-                            <configuration>
-                                <outputDirectory>${project.build.directory}/classes/static/</outputDirectory>
-                                <resources>
-                                    <resource>
-                                        <directory>${project.build.directory}/www</directory>
-                                        <filtering>false</filtering>
-                                    </resource>
-                                </resources>
-                            </configuration>
-                        </execution>
                     </executions>
                 </plugin>
                 <plugin>
@@ -1219,7 +1203,7 @@
             <id>webpack</id>
             <activation>
                 <file>
-                    <missing>${basedir}/target/www/app/main.bundle.js</missing>
+                    <missing>${basedir}/<%= CLIENT_DIST_DIR %>app/main.bundle.js</missing>
                 </file>
             </activation>
             <dependencies>
@@ -1301,16 +1285,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
-                            <webResources>
-                                <resource>
-                                    <directory><%= CLIENT_MAIN_SRC_DIR %></directory>
-                                    <includes>
-                                        <include>WEB-INF/**</include>
-                                    </includes>
-                                </resource>
-                            </webResources>
+                            <packagingIncludes>WEB-INF/**,META-INF/**</packagingIncludes>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -1349,18 +1324,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <%_ if (!skipClient) { _%>
-                            <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
-                            <webResources>
-                                <resource>
-                                    <directory><%= CLIENT_MAIN_SRC_DIR %></directory>
-                                    <includes>
-                                        <include>WEB-INF/**</include>
-                                    </includes>
-                                </resource>
-                            </webResources>
-                            <%_ } _%>
+                            <packagingIncludes>WEB-INF/**,META-INF/**</packagingIncludes>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -1394,18 +1358,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <%_ if (!skipClient) { _%>
-                            <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
-                            <webResources>
-                                <resource>
-                                    <directory><%= CLIENT_MAIN_SRC_DIR %></directory>
-                                    <includes>
-                                        <include>WEB-INF/**</include>
-                                    </includes>
-                                </resource>
-                            </webResources>
-                            <%_ } _%>
+                            <packagingIncludes>WEB-INF/**,META-INF/**</packagingIncludes>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -1541,8 +1494,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory>
+                            <packagingIncludes>WEB-INF/**,META-INF/**</packagingIncludes>
                         </configuration>
                     </plugin>
                     <plugin>

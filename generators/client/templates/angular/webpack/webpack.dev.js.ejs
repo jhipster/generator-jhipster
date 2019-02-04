@@ -37,7 +37,7 @@ const ENV = 'development';
 module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'eval-source-map',
     devServer: {
-        contentBase: './<%= BUILD_DIR %>www',
+        contentBase: './<%= DIST_DIR %>',
         proxy: [{
             context: [<% if (authenticationType === 'uaa') { %>
                 '/<%= uaaBaseName.toLowerCase() %>',<% } %>
@@ -76,7 +76,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
     output: {
-        path: utils.root('<%= BUILD_DIR %>www'),
+        path: utils.root('<%= DIST_DIR %>'),
         filename: 'app/[name].bundle.js',
         chunkFilename: 'app/[id].chunk.js'
     },
