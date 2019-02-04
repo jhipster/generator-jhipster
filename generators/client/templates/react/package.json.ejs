@@ -145,6 +145,7 @@ limitations under the License.
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
+    "terser": "3.14.1",
     "terser-webpack-plugin": "1.0.2",
     "thread-loader": "1.2.0",
     "to-string-loader": "1.1.5",
@@ -169,7 +170,8 @@ limitations under the License.
     "xml2js": "0.4.19"<% } %>
   },
   "resolutions": {
-    "@types/react": "16.4.12"
+    "@types/react": "16.4.12",
+    "terser": "3.14.1"
   },
   "engines": {
     "node": ">=8.9.0"<% if (clientPackageManager === 'yarn') { %>,
