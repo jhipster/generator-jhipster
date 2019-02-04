@@ -111,7 +111,7 @@ module.exports = class extends needleClientBase {
     _generateRewriteFileModelWithImportStatement(appName, angularName, folderName, fileName, modulePath, needle) {
         const importStatement = this._generateImportStatement(appName, angularName, folderName, fileName);
 
-        return this.generateFileModel(modulePath, needle, this.stripMargin(importStatement));
+        return this.generateFileModel(modulePath, needle, this.generator.stripMargin(importStatement));
     }
 
     _generateImportStatement(appName, angularName, folderName, fileName) {
@@ -127,7 +127,7 @@ module.exports = class extends needleClientBase {
     }
 
     _generateRewriteFileModelAddModule(appName, angularName, modulePath, needle) {
-        return this.generateFileModel(modulePath, needle, this.stripMargin(`|${appName}${angularName}Module,`));
+        return this.generateFileModel(modulePath, needle, this.generator.stripMargin(`|${appName}${angularName}Module,`));
     }
 
     addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu) {
