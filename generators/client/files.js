@@ -308,6 +308,7 @@ const vueFiles = {
                 'spec/app/admin/configuration/configuration.component.spec.ts',
                 'spec/app/admin/docs/docs.component.spec.ts',
                 'spec/app/admin/health/health.component.spec.ts',
+                'spec/app/admin/health/health-modal.component.spec.ts',
                 'spec/app/admin/health/health.service.spec.ts',
                 'spec/app/admin/logs/logs.component.spec.ts',
                 'spec/app/admin/audits/audits.component.spec.ts',
