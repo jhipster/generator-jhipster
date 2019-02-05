@@ -59,6 +59,7 @@ import org.springframework.data.domain.Pageable;
     <%_ if (!reactive) { _%>
 import org.springframework.http.HttpHeaders;
     <%_ } _%>
+import javax.servlet.http.HttpServletRequest;
 <%_ } _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -271,15 +272,15 @@ public class UserResource {
     @GetMapping("/users")
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
-    public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(Pageable pageable) {
+    public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(HttpServletRequest request, Pageable pageable) {
         final Page<<%= asDto('User') %>> page = userService.getAllManagedUsers(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(request, page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         <%_ } else { _%>
-    public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllUsers(Pageable pageable) {
+    public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllUsers(HttpServletRequest request, Pageable pageable) {
         return userService.countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(page -> PaginationUtil.generatePaginationHttpHeaders(page, "/api/users"))
+            .map(page -> PaginationUtil.generatePaginationHttpHeaders(request, page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
         <%_ } _%>
     }
