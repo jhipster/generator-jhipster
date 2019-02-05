@@ -36,9 +36,57 @@ import java.net.URLEncoder;
  */
 public final class PaginationUtil {
 
+    private static final String HEADER_X_TOTAL_COUNT = "X-Total-Count";
+    private static final String HEADER_LINK_FORMAT = "<{0}>; rel=\"{1}\"";
+
     private PaginationUtil() {
     }
 
+    public static <T> HttpHeaders generatePaginationHttpHeaders(HttpServletRequest request, Page<T> page) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HEADER_X_TOTAL_COUNT, Long.toString(page.getTotalElements()));
+        int pageNumber = page.getNumber();
+        int pageSize = page.getSize();
+        StringBuilder link = new StringBuilder();
+        if (pageNumber < page.getTotalPages() - 1) {
+            link.append(prepareLink(request, pageNumber + 1, pageSize, "next"))
+                .append(",");
+        }
+        if (pageNumber > 0) {
+            link.append(prepareLink(request, pageNumber - 1, pageSize, "prev"))
+                .append(",");
+        }
+        link.append(prepareLink(request, page.getTotalPages() - 1, pageSize, "last"))
+            .append(",")
+            .append(prepareLink(request, 0, pageSize, "first"));
+        headers.add(HttpHeaders.LINK, link.toString());
+        return headers;
+    }
+
+    private static String prepareLink(HttpServletRequest request, int pageNumber, int pageSize, String relType) {
+        return MessageFormat.format(HEADER_LINK_FORMAT, preparePageUri(request, pageNumber, pageSize), relType);
+    }
+
+    private static String preparePageUri(HttpServletRequest request, int pageNumber, int pageSize) {
+        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+        parameters.set("page", Integer.toString(pageNumber));
+        parameters.set("size", Integer.toString(pageSize));
+        request.getParameterMap().entrySet().stream()
+            .filter(map -> !"page".equalsIgnoreCase(map.getKey()) && !"size".equalsIgnoreCase(map.getKey()))
+            .forEach(map -> Arrays.asList(map.getValue()).forEach(value -> {
+                    try {
+                        parameters.add(map.getKey(), URLEncoder.encode(value, "UTF-8"));
+                    } catch (UnsupportedEncodingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+            );
+        return UriComponentsBuilder.fromUriString(request.getRequestURI())
+            .queryParams(parameters).build(false)
+            .toUriString();
+    }
+
+    @Deprecated
     public static <T> HttpHeaders generatePaginationHttpHeaders(Page<T> page, String baseUrl) {
 
         HttpHeaders headers = new HttpHeaders();
@@ -66,7 +114,7 @@ public final class PaginationUtil {
         return UriComponentsBuilder.fromUriString(baseUrl).queryParam("page", page).queryParam("size", size).toUriString();
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
-
+    @Deprecated
     public static <T> HttpHeaders generateSearchPaginationHttpHeaders(String query, Page<T> page, String baseUrl) {
         String escapedQuery;
         try {
