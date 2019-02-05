@@ -316,6 +316,13 @@ const vueFiles = {
             ]
         },
         {
+            condition: generator => generator.authenticationType === 'session',
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/account/sessions/sessions.component.spec.ts'
+            ]
+        },
+        {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
             templates: [

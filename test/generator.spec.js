@@ -62,7 +62,13 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`
     ],
 
-    jwtSession: [
+    session: [
+        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.vue`,
+        `${CLIENT_SPEC_SRC_DIR}app/account/sessions/sessions.component.spec.ts`
+    ],
+
+    jwt: [
         `${CLIENT_MAIN_SRC_DIR}app/account/change-password/change-password.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/change-password/change-password.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/account/login-form/login-form.component.ts`,
@@ -256,7 +262,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.jwtSession);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -320,7 +326,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.jwtSession);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -341,7 +347,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
         });
     });
-    describe('noi18n with Maven', () => {
+    describe('noi18n with Session Maven', () => {
         before((done) => {
             helpers
                 .run('generator-jhipster/generators/app')
@@ -371,7 +377,7 @@ describe('Vue.js JHipster blueprint', () => {
                     devDatabaseType: 'h2Disk',
                     prodDatabaseType: 'mysql',
                     cacheProvider: 'ehcache',
-                    authenticationType: 'jwt',
+                    authenticationType: 'session',
                     enableTranslation: false,
                     nativeLanguage: 'en',
                     buildTool: 'maven',
@@ -383,7 +389,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.noFile(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.jwtSession);
+            assert.file(expectedFiles.session);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -449,7 +455,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.jwtSession);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.test);
             assert.file(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -515,7 +521,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.jwtSession);
+            assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.test);
             assert.file(expectedFiles.protractor);
             assert.file(expectedFiles.websocket);
