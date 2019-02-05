@@ -228,7 +228,7 @@ public class <%= entityClass %>Resource {
      * DELETE  /<%= entityApiUrl %>/:id : delete the "id" <%= entityInstance %>.
      *
      * @param id the id of the <%= instanceName %> to delete
-     * @return the ResponseEntity with status 200 (OK)
+     * @return the ResponseEntity with status 204 (NO_CONTENT)
      */
     @DeleteMapping("/<%= entityApiUrl %>/{id}")
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
