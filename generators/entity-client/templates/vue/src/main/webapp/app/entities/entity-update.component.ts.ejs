@@ -19,11 +19,15 @@ import { DATE_TIME_LONG_FORMAT, INSTANT_FORMAT, ZONED_DATE_TIME_FORMAT } from '@
 
 <%_
     const importEntitiesSeen = [entityAngularName];
+    let hasManyToMany = false;
     for (idx in relationships) {
     const otherEntityAngularName = relationships[idx].otherEntityAngularName;
     const otherEntityFileName = relationships[idx].otherEntityFileName;
     const otherEntityFolderName = relationships[idx].otherEntityFileName;
     const otherEntityModelName = relationships[idx].otherEntityModelName;
+    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) {
+      hasManyToMany = true;
+    }
 _%>
   <% if (otherEntityAngularName === 'User' && authenticationType !== "oauth2") { %>
 import UserService from '@/admin/user-management/user-management.service';
@@ -95,6 +99,18 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
       <%_ } _%>
     });
   }
+
+  <%_ if (hasManyToMany) { _%>
+  created(): void {
+    <%_
+      for (idx in relationships) {
+      const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
+      if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) {
+    _%>
+    this.<%= entityInstance %>.<%= otherEntityNamePlural %> = [];
+    <%_ } } _%>
+  }
+  <%_ } _%>
 
   public save() : void {
     this.isSaving = true;
@@ -202,14 +218,10 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   <%_ } _%>
   public initRelationships() : void {
     <%_
-        let hasManyToMany = false;
         for (idx in relationships) {
         const otherEntityName = relationships[idx].otherEntityName;
         const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
         const otherEntityAngularName = relationships[idx].otherEntityAngularName;
-        if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) {
-            hasManyToMany = true;
-        }
         if (!(otherEntityAngularName === 'User' && authenticationType === "oauth2")) {
     _%>
     this.<%= otherEntityName %>Service().retrieve().then((res) => {
