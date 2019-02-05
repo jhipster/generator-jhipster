@@ -74,7 +74,9 @@ describe('Health Modal Component for diskSpace', () => {
       propsData: {
         currentHealth: {name: 'diskSpace'},
       },
+      <%_ if (enableTranslation) { _%>
       i18n,
+      <%_ } _%>
       localVue,
       provide: {
         healthService: () => healthsService
