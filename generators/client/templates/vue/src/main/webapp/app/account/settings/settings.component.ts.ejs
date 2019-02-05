@@ -31,7 +31,7 @@ export default class Settings extends Vue {
   public success: string = null;
   public error: string = null;
   public errorEmailExists: string = null;
-  public languages: any = this.$store.getters.languages;
+  public languages: any = this.$store.getters.languages || [];
 
   public save(): void {
     this.error = null;
