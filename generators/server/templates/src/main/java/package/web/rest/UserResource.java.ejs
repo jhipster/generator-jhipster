@@ -344,7 +344,7 @@ public class UserResource {
     public Mono<ResponseEntity<Void>> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         return userService.deleteUser(login)
-            .map(it -> ResponseEntity.ok().headers(HeaderUtil.createAlert( applicationName, "userManagement.deleted", login)).build());
+            .map(it -> ResponseEntity.noContent().headers(HeaderUtil.createAlert( applicationName, "userManagement.deleted", login)).build());
     <%_ } _%>
     }
 <%_ } _%>

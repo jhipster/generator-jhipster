@@ -234,7 +234,7 @@ public class <%= entityClass %>Resource {
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: viaService}); -%>
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();
     }<% if (searchEngine === 'elasticsearch') { %>
 
     /**

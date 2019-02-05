@@ -838,12 +838,12 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(delete("/api/users/{login}", user.getLogin())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
-            .andExpect(status().isOk());
+            .andExpect(status().isNoContent());
         <%_ } else { _%>
         webTestClient.delete().uri("/api/users/{login}", user.getLogin())
             .accept(TestUtil.APPLICATION_JSON_UTF8)
             .exchange()
-            .expectStatus().isOk();
+            .expectStatus().isNoContent();
         <%_ } _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
 
