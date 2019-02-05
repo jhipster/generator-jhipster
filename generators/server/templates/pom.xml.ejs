@@ -145,17 +145,17 @@
         <!-- Rule https://sonarcloud.io/coding_rules?open=squid%3AS4684&rule_key=squid%3AS4684 -->
         <sonar.issue.ignore.multicriteria.S4684.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S4684.resourceKey>
         <sonar.issue.ignore.multicriteria.S4684.ruleKey>squid:S4684</sonar.issue.ignore.multicriteria.S4684.ruleKey>
-        <sonar.jacoco.reportPath>${project.testresult.directory}/coverage/jacoco</sonar.jacoco.reportPath>
-        <sonar.jacoco.utReportPath>${sonar.jacoco.reportPath}/jacoco.exec</sonar.jacoco.utReportPath>
-        <sonar.jacoco.itReportPath>${sonar.jacoco.reportPath}/jacoco-it.exec</sonar.jacoco.itReportPath>
-        <sonar.jacoco.reportPaths>${sonar.jacoco.utReportPath},${sonar.jacoco.itReportPath}</sonar.jacoco.reportPaths>
+        <sonar.jacoco.reportFolder>${project.testresult.directory}/coverage/jacoco</sonar.jacoco.reportFolder>
+        <sonar.jacoco.utReportFile>${sonar.jacoco.reportFolder}/jacoco.exec</sonar.jacoco.utReportFile>
+        <sonar.jacoco.itReportFile>${sonar.jacoco.reportFolder}/jacoco-it.exec</sonar.jacoco.itReportFile>
+        <sonar.jacoco.reportPaths>${sonar.jacoco.utReportFile},${sonar.jacoco.itReportFile}</sonar.jacoco.reportPaths>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
+        <sonar.junit.reportPaths>${project.testresult.directory}/surefire-reports,${project.testresult.directory}/failsafe-reports</sonar.junit.reportPaths>
+        <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
+        <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
         <%_ if (!skipClient) { _%>
         <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/lcov.info</sonar.typescript.lcov.reportPaths>
         <%_ } _%>
-        <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
-        <sonar.junit.reportPaths>${project.testresult.directory}/surefire-reports,${project.testresult.directory}/failsafe-reports</sonar.junit.reportPaths>
-        <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
         <!-- Used to keep correct jacoco report filename for the surefire/failsafe arg line. Therefore we set this empty property here -->
         <surefireArgLine />
         <failsafeArgLine />
@@ -894,7 +894,7 @@
                             </goals>
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
-                                <destFile>${sonar.jacoco.utReportPath}</destFile>
+                                <destFile>${sonar.jacoco.utReportFile}</destFile>
                                 <!-- Sets the name of the property containing the settings for JaCoCo runtime agent. -->
                                 <propertyName>surefireArgLine</propertyName>
                             </configuration>
@@ -907,8 +907,8 @@
                                 <goal>report</goal>
                             </goals>
                             <configuration>
-                                <dataFile>${sonar.jacoco.utReportPath}</dataFile>
-                                <outputDirectory>${sonar.jacoco.reportPath}</outputDirectory>
+                                <dataFile>${sonar.jacoco.utReportFile}</dataFile>
+                                <outputDirectory>${sonar.jacoco.reportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                         <execution>
@@ -918,7 +918,7 @@
                             </goals>
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
-                                <destFile>${sonar.jacoco.itReportPath}</destFile>
+                                <destFile>${sonar.jacoco.itReportFile}</destFile>
                                 <!-- Sets the name of the property containing the settings for JaCoCo runtime agent. -->
                                 <propertyName>failsafeArgLine</propertyName>
                             </configuration>
@@ -931,8 +931,8 @@
                                 <goal>report-integration</goal>
                             </goals>
                             <configuration>
-                                <dataFile>${sonar.jacoco.itReportPath}</dataFile>
-                                <outputDirectory>${sonar.jacoco.reportPath}</outputDirectory>
+                                <dataFile>${sonar.jacoco.itReportFile}</dataFile>
+                                <outputDirectory>${sonar.jacoco.reportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                     </executions>
