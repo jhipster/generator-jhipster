@@ -24,7 +24,6 @@ export default class JhiNavbar extends Vue {
   <%_ } %>
   @Inject('accountService') private accountService: () => AccountService;
   public version = VERSION ? 'v' + VERSION : '';
-  public isNavbarCollapsed = true;
   private currentLanguage = this.$store.getters.currentLanguage;
   private languages: any = this.$store.getters.languages;
 
@@ -41,13 +40,6 @@ export default class JhiNavbar extends Vue {
     })
   }
 
-  public getImageUrl() : boolean {
-    return false;
-  }
-
-  public collapseNavbar() : void {
-    this.isNavbarCollapsed = true;
-  }
 
   <%_ if (enableTranslation) { _%>
   public changeLanguage(newLanguage: string) : void {

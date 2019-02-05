@@ -304,6 +304,7 @@ const vueFiles = {
                 'jest.conf.js',
                 'spec/app/account/account.service.spec.ts',
                 'spec/app/core/jhi-footer/jhi-footer.component.spec.ts',
+                'spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts',
                 'spec/app/core/ribbon/ribbon.component.spec.ts',
                 'spec/app/admin/configuration/configuration.component.spec.ts',
                 'spec/app/admin/docs/docs.component.spec.ts',
