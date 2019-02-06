@@ -75,13 +75,9 @@ describe('Account', () => {
 
   it('should login with admin account', async () => {
 <%_ if (authenticationType !== 'oauth2') { _%>
-    await browser.refresh();
-    signInPage = await navBarPage.getSignInPage();
-    await signInPage.waitUntilDisplayed();
-
-    expect(await signInPage.getTitle()).to.eq(loginPageTitle);
-
+    await signInPage.username.clear();
     await signInPage.username.sendKeys('admin');
+    await signInPage.password.clear();
     await signInPage.password.sendKeys('admin');
     await signInPage.loginButton.click();
     await signInPage.waitUntilHidden();
