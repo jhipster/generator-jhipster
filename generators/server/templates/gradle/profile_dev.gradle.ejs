@@ -60,7 +60,7 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
 
     outputs.files(fileTree("<%= CLIENT_DIST_DIR %>"))
 
-    dependsOn <%= clientPackageManager %>Install
+    dependsOn <%= clientPackageManager %>_install
 
     args = ["run", "webpack:build"]
 }
