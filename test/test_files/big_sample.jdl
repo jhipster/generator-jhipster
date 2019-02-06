@@ -79,21 +79,21 @@ relationship OneToMany {
    * Another side of the same relationship,
    */
   Employee{department},
-  Employee{job} to Job{employee},
+  Employee{job} to Job{emp(employee)},
   Location{country} to Country,
-  Country{region} to Region
+  Country{area(region)} to Region
 }
 
 relationship ManyToOne {
   Employee{user(login)} to User{employee},
-  Employee{manager} to Employee
+  Employee{manager(director)} to Employee
 }
 
 relationship ManyToMany {
   JobHistory{department} to Department,
-  JobHistory{department} to Job,
-  JobHistory{employee} to Employee,
-  Job{chore(title)} to Task{job}
+  JobHistory to Job{history},
+  JobHistory{emp(employee)} to Employee,
+  Job{chore(title)} to Task{linkedJob(JobTitle)}
 }
 
 paginate JobHistory, Employee with infinite-scroll
