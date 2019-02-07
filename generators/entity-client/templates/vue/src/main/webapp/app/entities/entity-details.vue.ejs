@@ -26,6 +26,8 @@
                             <a v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="$t('entity.action.open')">open</a>
                             {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                         </div>
+                        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                        <span>{{<%= entityInstance %>.<%=fieldName %> | formatDate}}</span>
                         <%_ } else { _%>
                         <span>{{<%= entityInstance %>.<%= fieldName %>}}</span>
                         <%_ } _%>
