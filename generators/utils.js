@@ -123,9 +123,9 @@ function addEntityToMenu(generator, entityName, translationKey, className) {
             splicable: [
                 // prettier-ignore
                 `<b-dropdown-item to="/entity/${entityName}" v-on:click="collapseNavbar()">
-                    <font-awesome-icon icon="asterisk" />
-                    <span ${menuI18nTitle}>${className}</span>
-              </b-dropdown-item>`
+                        <font-awesome-icon icon="asterisk" />
+                        <span ${menuI18nTitle}>${className}</span>
+                    </b-dropdown-item>`
             ]
         },
         generator
