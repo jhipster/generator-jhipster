@@ -59,6 +59,42 @@ public class PaginationUtilUnitTest {
         assertTrue(Long.valueOf(xTotalCountHeaders.get(0)).equals(400L));
     }
 
+    @Test
+    public void generatePageFromListTestShouldCreatePage() {
+        List<Integer> content = new ArrayList<>();
+
+        content.add(1);
+        content.add(2);
+        content.add(3);
+
+        Page<Integer> page = PaginationUtil.generatePageFromList(content, PageRequest.of(0, 20));
+
+        assertNotNull(page);
+        assertEquals(20, page.getSize());
+        assertEquals(3, page.getTotalElements());
+        assertEquals(1, page.getTotalPages());
+    }
+
+    @Test
+    public void generatePageFromListShouldCreatePageWithTwoTotalPages() {
+        List<Integer> content = new ArrayList<>();
+        for (int i = 0; i < 40; i++) {
+            content.add(i);
+        }
+
+        Page<Integer> page = PaginationUtil.generatePageFromList(content, PageRequest.of(0, 20));
+
+        assertNotNull(page);
+        assertEquals(20, page.getSize());
+        assertEquals(40, page.getTotalElements());
+        assertEquals(2, page.getTotalPages());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void generatePageFromListShouldThrowIllegalArgumentExceptionIfListNull() {
+        PaginationUtil.generatePageFromList(null, PageRequest.of(0, 20));
+    }
+
     <%_ if (searchEngine === 'elasticsearch') { _%>
     @Test
     public void commaTest() {
