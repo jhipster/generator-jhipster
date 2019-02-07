@@ -43,14 +43,14 @@
                 <tr>
                     <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('id')"<% } %>><span v-text="$t('global.field.id')">ID</span><% if (pagination !== 'no') { %> <font-awesome-icon icon="sort"></font-awesome-icon><% } %></th>
                     <%_ for (idx in fields) { _%>
-                        <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%= fields[idx].fieldName%>')"<% } %>><span v-text="$t('<%=`${i18nKeyPrefix}.${fields[idx].fieldName}` %>')"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <font-awesome-icon icon="sort"></font-awesome-icon><% } %></th>
+                    <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%= fields[idx].fieldName%>')"<% } %>><span v-text="$t('<%=`${i18nKeyPrefix}.${fields[idx].fieldName}` %>')"><%= fields[idx].fieldNameHumanized %></span><% if (pagination !== 'no') { %> <font-awesome-icon icon="sort"></font-awesome-icon><% } %></th>
                     <%_ } _%>
                     <%_ for (idx in relationships) { _%>
                         <%_ if (relationships[idx].relationshipType === 'many-to-one'
                         || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                         || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
                             const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
-                            <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%=relationships[idx].relationshipName + (fieldName)%>')"<% } %>><span v-text="$t('<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>')"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <font-awesome-icon icon="sort"></font-awesome-icon><% } %></th>
+                    <th<% if (pagination !== 'no') { %> v-on:click="changeOrder('<%=relationships[idx].relationshipName + (fieldName)%>')"<% } %>><span v-text="$t('<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>')"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <font-awesome-icon icon="sort"></font-awesome-icon><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
                     <th></th>
@@ -59,32 +59,34 @@
                 <tbody>
                 <tr v-for="<% if (pagination !== 'no') { %><%= entityInstance %> of orderBy(<%= entityInstancePlural %>, propOrder, reverse === true ? 1 : -1)<% } else {%><%= entityInstance %> in <%= entityInstancePlural %><% } %>"
                     :key="<%= entityInstance %>.id">
-                    <td><router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}">{{<%= entityInstance %>.id}}</router-link></td>
+                    <td>
+                        <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}">{{<%= entityInstance %>.id}}</router-link>
+                    </td>
                     <%_ for (idx in fields) {
                         const fieldName = fields[idx].fieldName;
                         const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
                         const fieldType = fields[idx].fieldType;
                         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
                         <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'image') { _%>
-                            <td>
-                                <a v-if="<%= entityInstance %>.<%= fieldName %>" v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
-                                    <img v-bind:src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 30px;" alt="<%=entityInstance %> image"/>
-                                </a>
-                                <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
-                            </td>
+                    <td>
+                        <a v-if="<%= entityInstance %>.<%= fieldName %>" v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
+                            <img v-bind:src="'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>" style="max-height: 30px;" alt="<%=entityInstance %> image"/>
+                        </a>
+                        <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
+                    </td>
                         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'any') { _%>
-                            <td>
-                                <a v-if="<%= entityInstance %>.<%= fieldName %>" v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="$t('entity.action.open')">open</a>
-                                <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
-                            </td>
+                    <td>
+                        <a v-if="<%= entityInstance %>.<%= fieldName %>" v-on:click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" v-text="$t('entity.action.open')">open</a>
+                        <span v-if="<%= entityInstance %>.<%= fieldName %>">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
+                    </td>
                         <%_ } else if (fields[idx].fieldIsEnum) { _%>
-                            <td v-text="$t('<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</td>
+                    <td v-text="$t('<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</td>
                         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                            <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
+                    <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
                         <%_ } else if (fieldType === 'LocalDate') { _%>
-                            <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
+                    <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
                         <%_ } else { _%>
-                            <td>{{<%=entityInstance %>.<%=fieldName%>}}</td>
+                    <td>{{<%=entityInstance %>.<%=fieldName%>}}</td>
                         <%_ } _%>
                     <%_ } _%>
                     <%_ for (idx in relationships) {
@@ -100,37 +102,37 @@
                         <%_ if (relationshipType === 'many-to-one'
                         || (relationshipType === 'one-to-one' && ownerSide === true)
                         || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>
-                        <td>
+                    <td>
                             <%_ if (otherEntityName === 'user') { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
-                                    <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
-                                        {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
-                                    </span>
+                        <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
+                            {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
+                        </span>
                                 <%_ } else { _%>
                                     <%_ if (dto === 'no') { _%>
-                                        {{<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField%> : ''}}
+                        {{<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField%> : ''}}
                                     <%_ } else { _%>
-                                        {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
+                        {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
                                     <%_ } _%>
                                 <%_ } _%>
                             <%_ } else { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
-                                    <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
-                                        <router-link class="form-control-static" :to="{name: '<%= relationshipNameCapitalized %>View', params: {<%= relationshipFieldName %>Id: <%= relationshipFieldName %>.id}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
-                                    </span>
+                        <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
+                            <router-link class="form-control-static" :to="{name: '<%= relationshipNameCapitalized %>View', params: {<%= relationshipFieldName %>Id: <%= relationshipFieldName %>.id}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
+                        </span>
                                 <%_ } else { _%>
                                     <%_ if (dto === 'no') { _%>
-                                        <div v-if="<%= entityInstance + "." + relationshipFieldName %>">
-                                            <router-link :to="{name: '<%= relationshipNameCapitalized %>View', params: {<%= relationshipFieldName %>Id: <%= entityInstance + "." + relationshipFieldName %>.id}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
-                                        </div>
+                        <div v-if="<%= entityInstance + "." + relationshipFieldName %>">
+                            <router-link :to="{name: '<%= relationshipNameCapitalized %>View', params: {<%= relationshipFieldName %>Id: <%= entityInstance + "." + relationshipFieldName %>.id}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
+                        </div>
                                     <%_ } else { _%>
-                                        <div v-if="<%= entityInstance + "." + relationshipFieldName + "Id" %>">
-                                            <router-link :to="{name: '<%= relationshipNameCapitalized %>View', params: {<%= relationshipFieldName %>Id: <%= entityInstance + "." + relationshipFieldName + "Id" %>}}">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</router-link>
-                                        </div>
+                        <div v-if="<%= entityInstance + "." + relationshipFieldName + "Id" %>">
+                            <router-link :to="{name: '<%= relationshipNameCapitalized %>View', params: {<%= relationshipFieldName %>Id: <%= entityInstance + "." + relationshipFieldName + "Id" %>}}">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</router-link>
+                        </div>
                                     <%_ } _%>
                                 <%_ } _%>
                             <%_ } _%>
-                        </td>
+                    </td>
                         <%_ } _%>
                     <%_ } _%>
                     <td class="text-right">

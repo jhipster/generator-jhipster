@@ -4,13 +4,11 @@
             <form name="editForm" role="form" novalidate v-on:submit.prevent="save()" >
                 <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" v-text="$t('<%= i18nKeyPrefix %>.home.createOrEditLabel')">Create or edit a <%= entityAngularName %></h2>
                 <div>
-                    <!--<jhi-alert-error></jhi-alert-error>-->
                     <div class="form-group" v-if="<%= entityInstance %>.id">
                         <label for="id" v-text="$t('global.field.id')">ID</label>
                         <input type="text" class="form-control" id="id" name="id"
                                v-model="<%= entityInstance %>.id" readonly />
                     </div>
-
                     <%_ for (idx in fields) {
                         const fieldName = fields[idx].fieldName;
                         const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
@@ -102,60 +100,44 @@
                         <%_ if (fields[idx].fieldValidate === true) { _%>
                         <div v-if="$v.<%= entityInstance %>.<%= fieldName %>.$anyDirty && $v.<%= entityInstance %>.<%= fieldName %>.$invalid">
                             <%_ if (fields[idx].fieldValidateRules.includes('required')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.required" v-text="$t('entity.validation.required')">
-                                    This field is required.
-                                </small>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.required" v-text="$t('entity.validation.required')">
+                                This field is required.
+                            </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('minlength')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minLength" v-bind:value="$t('entity.validation.minlength')">
-                                    This field is required to be at least <%= fields[idx].fieldValidateRulesMinlength %> characters.
-                                </small>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minLength" v-bind:value="$t('entity.validation.minlength')">
+                                This field is required to be at least <%= fields[idx].fieldValidateRulesMinlength %> characters.
+                            </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxLength" v-bind:value="$t('entity.validation.maxlength')">
-                                    This field cannot be longer than <%= fields[idx].fieldValidateRulesMaxlength %> characters.
-                                </small>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxLength" v-bind:value="$t('entity.validation.maxlength')">
+                                This field cannot be longer than <%= fields[idx].fieldValidateRulesMaxlength %> characters.
+                            </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('min')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minLength" v-bind:value="$t('entity.validation.min')">
-                                    This field should be at least <%= fields[idx].fieldValidateRulesMin %> characters.
-                                </small>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minLength" v-bind:value="$t('entity.validation.min')">
+                                This field should be at least <%= fields[idx].fieldValidateRulesMin %> characters.
+                            </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('max')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxLength" v-bind:value="$t('entity.validation.max')">
-                                    This field cannot be longer than <%= fields[idx].fieldValidateRulesMax %> characters.
-                                </small>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxLength" v-bind:value="$t('entity.validation.max')">
+                                This field cannot be longer than <%= fields[idx].fieldValidateRulesMax %> characters.
+                            </small>
                             <%_ } _%>
-                            <!--<%_ if (fields[idx].fieldValidateRules.includes('minbytes')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minbytes" v-bind:value="$t('entity.validation.minbytes')">
-                                    This field should be at least <%= fields[idx].fieldValidateRulesMinbytes %> characters.
-                                </small>
-                            <%_ } _%>
-                            <%_ if (fields[idx].fieldValidateRules.includes('maxbytes')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxbytes" v-bind:value="$t('entity.validation.maxbytes')">
-                                    This field should be at least <%= fields[idx].fieldValidateRulesMaxbytes %> characters.
-                                </small>
-                            <%_ } _%>
-                            <%_ if (fields[idx].fieldValidateRules.includes('pattern')) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.pattern" v-bind:value="$t('entity.validation.pattern')">
-                                    This field should follow pattern for "<%= fieldNameHumanized %>".
-                                </small>
-                            <%_ } _%>-->
                             <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.number" v-text="$t('entity.validation.number')">
-                                    This field should be a number.
-                                </small>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.number" v-text="$t('entity.validation.number')">
+                                This field should be a number.
+                            </small>
                             <%_ } _%>
                             <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                                <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.ZonedDateTimelocal" v-text="$t('entity.validation.ZonedDateTimelocal')">
-                                    This field should be a date and time.
-                                </small>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.ZonedDateTimelocal" v-text="$t('entity.validation.ZonedDateTimelocal')">
+                                This field should be a date and time.
+                            </small>
                             <%_ } _%>
                         </div>
                         <%_ } _%>
                     </div>
                     <%_ } _%>
-
                     <%_ for (idx in relationships) {
                         const relationshipType = relationships[idx].relationshipType;
                         const ownerSide = relationships[idx].ownerSide;
@@ -171,71 +153,70 @@
                         const relationshipRequired = relationships[idx].relationshipRequired;
                         const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
                     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
-                        <div class="form-group">
-                            <label class="form-control-label" v-bind:value="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
-                            <%_ if (dto === 'no') { _%>
-                                <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>" <% if (relationshipRequired) { %> required<% } %>>
-                                    <%_ if (!relationshipRequired) { _%>
-                                    <option v-bind:value="null"></option>
-                                    <%_ } else { _%>
-                                        <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
-                                    <%_ } _%>
-                                    <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
-                                </select>
+                    <div class="form-group">
+                        <label class="form-control-label" v-bind:value="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                        <%_ if (dto === 'no') { _%>
+                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>" <% if (relationshipRequired) { %> required<% } %>>
+                            <%_ if (!relationshipRequired) { _%>
+                            <option v-bind:value="null"></option>
                             <%_ } else { _%>
-                                <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>Id" <% if (relationshipRequired) { %> required<% } %>>
-                                    <%_ if (!relationshipRequired) { _%>
-                                    <option v-bind:value="null"></option>
-                                    <%_ } else { _%>
-                                        <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
-                                    <%_ } _%>
-                                    <option v-bind:value="<%=otherEntityName %>Option.id" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
-                                </select>
+                            <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
                             <%_ } _%>
-                        </div>
+                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        </select>
+                        <%_ } else { _%>
+                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>Id" <% if (relationshipRequired) { %> required<% } %>>
+                            <%_ if (!relationshipRequired) { _%>
+                            <option v-bind:value="null"></option>
+                            <%_ } else { _%>
+                            <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
+                            <%_ } _%>
+                            <option v-bind:value="<%=otherEntityName %>Option.id" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        </select>
+                        <%_ } _%>
+                    </div>
                     <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
-                        <div class="form-group">
-                            <label class="form-control-label" v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
-                            <%_ if (dto === 'no') { _%>
-                                <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
-                                    <%_ if (!relationshipRequired) { _%>
-                                    <option v-bind:value="null"></option>
-                                    <%_ } else { _%>
-                                        <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
-                                    <%_ } _%>
-                                    <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=relationshipFieldNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
-                                </select>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                        <%_ if (dto === 'no') { _%>
+                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
+                            <%_ if (!relationshipRequired) { _%>
+                            <option v-bind:value="null"></option>
                             <%_ } else { _%>
-                                <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>Id"<% if (relationshipRequired) { %> required<% } %>>
-                                    <%_ if (!relationshipRequired) { _%>
-                                    <option v-bind:value="null"></option>
-                                    <%_ } else { _%>
-                                        <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
-                                    <%_ } _%>
-                                    <option v-bind:value="<%=otherEntityName %>Option.id" v-for="<%=otherEntityName %>Option in <%=relationshipFieldNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
-                                </select>
+                            <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
                             <%_ } _%>
-                        </div>
+                            <option v-bind:value="<%= entityInstance %>.<%=relationshipFieldName %> && <%=otherEntityName %>Option.id === <%= entityInstance %>.<%=relationshipFieldName %>.id ? <%= entityInstance %>.<%=relationshipFieldName %> : <%=otherEntityName %>Option" v-for="<%=otherEntityName %>Option in <%=relationshipFieldNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        </select>
+                        <%_ } else { _%>
+                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>Id"<% if (relationshipRequired) { %> required<% } %>>
+                            <%_ if (!relationshipRequired) { _%>
+                            <option v-bind:value="null"></option>
+                            <%_ } else { _%>
+                            <option v-if="!editForm.value.<%= relationshipName %>" v-bind:value="null" selected></option>
+                            <%_ } _%>
+                            <option v-bind:value="<%=otherEntityName %>Option.id" v-for="<%=otherEntityName %>Option in <%=relationshipFieldNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        </select>
+                        <%_ } _%>
+                    </div>
                     <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
-                        <div class="form-group">
-                            <label v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
-                            <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" multiple name="<%= relationshipName %>" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
-                                <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option)" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                        <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" multiple name="<%= relationshipName %>" v-model="<%=entityInstance %>.<%=relationshipFieldNamePlural %>"<% if (relationshipRequired) { %> required<% } %>>
+                            <option v-bind:value="getSelected(<%=entityInstance %>.<%=relationshipFieldNamePlural %>, <%=otherEntityName %>Option)" v-for="<%=otherEntityName %>Option in <%=otherEntityNamePlural %>" :key="<%=otherEntityName %>Option.id">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        </select>
+                    </div>
                     <%_ } _%>
                     <%_ if (relationships[idx].relationshipValidate === true) { _%>
-                        <div :hidden="!(editForm.controls.<%= relationshipName %>?.dirty && editForm.controls.<%= relationshipName %>?.invalid)">
-                            <%_ if (relationshipRequired) { _%>
-                                <small class="form-text text-danger"
-                                       :hidden="!editForm.controls.<%= relationshipName %>?.errors?.required" v-text="$t('entity.validation.required')">
-                                    This field is required.
-                                </small>
-                            <%_ } _%>
-                        </div>
+                    <div :hidden="!(editForm.controls.<%= relationshipName %>?.dirty && editForm.controls.<%= relationshipName %>?.invalid)">
+                        <%_ if (relationshipRequired) { _%>
+                        <small class="form-text text-danger"
+                            :hidden="!editForm.controls.<%= relationshipName %>?.errors?.required" v-text="$t('entity.validation.required')">
+                            This field is required.
+                        </small>
+                        <%_ } _%>
+                    </div>
                     <%_ } _%>
                 <%_ } _%>
-
                 </div>
                 <div>
                     <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">
