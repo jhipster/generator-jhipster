@@ -38,12 +38,12 @@ export class <%= entityClass %>ComponentsPage {
     title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
 
     async clickOnCreateButton(timeout?: number) {
-        await browser.wait(ExpectedConditions.elementToBeClickable(this.createButton), timeout ? timeout : 2000, 'Create button shall be clickable');
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.createButton), timeout ? timeout : 5000, 'Create button shall be clickable');
         await this.createButton.click();
     }
 
     async clickOnLastDeleteButton(timeout?: number) {
-        await browser.wait(ExpectedConditions.elementToBeClickable(this.deleteButtons.last()), timeout ? timeout : 2000, 'Last delete button shall be clickable');
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.deleteButtons.last()), timeout ? timeout : 5000, 'Last delete button shall be clickable');
         await this.deleteButtons.last().click();
     }
 
@@ -114,7 +114,7 @@ export class <%= entityClass %>UpdatePage {
     }
 
     async <%=fieldName %>SelectLastOption(timeout?: number) {
-        await browser.wait(ExpectedConditions.elementToBeClickable(this.<%=fieldName %>Select.all(by.tagName('option')).last()), timeout ? timeout : 10000, '<%=fieldName %>Select last option shall be clickable');
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.<%=fieldName %>Select.all(by.tagName('option')).last()), timeout ? timeout : 5000, '<%=fieldName %>Select last option shall be clickable');
         await this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
     }
 
@@ -147,7 +147,7 @@ export class <%= entityClass %>UpdatePage {
 
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
     async <%=relationshipName %>SelectLastOption(timeout?: number) {
-        await browser.wait(ExpectedConditions.elementToBeClickable(this.<%=relationshipName %>Select.all(by.tagName('option')).last()), timeout ? timeout : 2000, '<%=relationshipName %>Select last option shall be clickable');
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.<%=relationshipName %>Select.all(by.tagName('option')).last()), timeout ? timeout : 5000, '<%=relationshipName %>Select last option shall be clickable');
         await this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
     }
 
@@ -166,12 +166,12 @@ export class <%= entityClass %>UpdatePage {
     <%_ } _%>
     <%_ }); _%>
     async save(timeout?: number) {
-        await browser.wait(ExpectedConditions.elementToBeClickable(this.saveButton), timeout ? timeout : 2000, 'Save button shall be clickable');
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.saveButton), timeout ? timeout : 5000, 'Save button shall be clickable');
         await this.saveButton.click();
     }
 
     async cancel(timeout?: number) {
-        await browser.wait(ExpectedConditions.elementToBeClickable(this.cancelButton), timeout ? timeout : 2000, 'Cancel button shall be clickable');
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.cancelButton), timeout ? timeout : 5000, 'Cancel button shall be clickable');
         await this.cancelButton.click();
     }
 
@@ -189,7 +189,7 @@ export class <%= entityClass %>DeleteDialog {
     }
 
     async clickOnConfirmButton(timeout?: number) {
-        await browser.wait(ExpectedConditions.elementToBeClickable(this.confirmButton), timeout ? timeout : 10000, 'Confirm button shall be clickable');
+        await browser.wait(ExpectedConditions.elementToBeClickable(this.confirmButton), timeout ? timeout : 5000, 'Confirm button shall be clickable');
         await this.confirmButton.click();
     }
 }
