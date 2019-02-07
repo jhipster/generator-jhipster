@@ -1,5 +1,5 @@
 # JHipster-vuejs
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] ![][npmcharts-url]
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url]
 > ## ⚠️ Status: in development
 > JHipster-vuejs, a Vue.js blueprint for JHipster. It will use [Vue.js](https://vuejs.org/) as the frontend library. Check out our latest beta release `1.0.0-beta.0` to try this out. 
 
@@ -110,4 +110,5 @@ Apache-2.0 © [Deepu K Sasidharan](https://deepu.js.org)
 [travis-url]: https://travis-ci.com/jhipster/jhipster-vuejs
 [daviddm-image]: https://david-dm.org/jhipster/jhipster-vuejs.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jhipster/jhipster-vuejs
-[npmcharts-url]: https://img.shields.io/npm/dm/generator-jhipster-vuejs.svg?label=Downloads&style=flat
+[npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster-vuejs.svg?label=Downloads&style=flat
+[npmcharts-url]: https://npmcharts.com/compare/generator-jhipster-vuejs
