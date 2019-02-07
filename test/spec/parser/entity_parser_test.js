@@ -550,6 +550,7 @@ describe('EntityParser', () => {
               otherEntityName: 'a',
               relationshipType: 'many-to-many',
               ownerSide: false,
+              otherEntityField: 'id',
               otherEntityRelationshipName: 'bbb'
             }
           ]);

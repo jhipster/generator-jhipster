@@ -58,7 +58,7 @@ describe('JDLImporter', () => {
             },
             {
               relationshipType: 'one-to-many',
-              relationshipName: 'region',
+              relationshipName: 'area',
               otherEntityName: 'region',
               otherEntityRelationshipName: 'country'
             }
@@ -165,7 +165,7 @@ describe('JDLImporter', () => {
               relationshipType: 'one-to-many',
               relationshipName: 'job',
               otherEntityName: 'job',
-              otherEntityRelationshipName: 'employee'
+              otherEntityRelationshipName: 'emp'
             },
             {
               relationshipType: 'many-to-one',
@@ -178,7 +178,7 @@ describe('JDLImporter', () => {
               relationshipType: 'many-to-one',
               relationshipName: 'manager',
               otherEntityName: 'employee',
-              otherEntityField: 'id',
+              otherEntityField: 'director',
               otherEntityRelationshipName: 'employee'
             },
             {
@@ -229,7 +229,7 @@ describe('JDLImporter', () => {
           relationships: [
             {
               relationshipType: 'many-to-many',
-              otherEntityRelationshipName: 'job',
+              otherEntityRelationshipName: 'linkedJob',
               relationshipName: 'chore',
               otherEntityName: 'task',
               otherEntityField: 'title',
@@ -237,10 +237,18 @@ describe('JDLImporter', () => {
             },
             {
               relationshipType: 'many-to-one',
-              relationshipName: 'employee',
+              relationshipName: 'emp',
               otherEntityName: 'employee',
               otherEntityRelationshipName: 'job',
-              otherEntityField: 'id'
+              otherEntityField: 'employee'
+            },
+            {
+              relationshipType: 'many-to-many',
+              relationshipName: 'history',
+              otherEntityName: 'jobHistory',
+              otherEntityRelationshipName: 'jobHistory',
+              otherEntityField: 'id',
+              ownerSide: false
             }
           ],
           name: 'Job',
@@ -282,8 +290,8 @@ describe('JDLImporter', () => {
             },
             {
               relationshipType: 'many-to-many',
-              otherEntityRelationshipName: 'jobHistory',
-              relationshipName: 'department',
+              otherEntityRelationshipName: 'history',
+              relationshipName: 'job',
               otherEntityName: 'job',
               otherEntityField: 'id',
               ownerSide: true
@@ -291,9 +299,9 @@ describe('JDLImporter', () => {
             {
               relationshipType: 'many-to-many',
               otherEntityRelationshipName: 'jobHistory',
-              relationshipName: 'employee',
+              relationshipName: 'emp',
               otherEntityName: 'employee',
-              otherEntityField: 'id',
+              otherEntityField: 'employee',
               ownerSide: true
             }
           ],
@@ -389,9 +397,10 @@ describe('JDLImporter', () => {
           relationships: [
             {
               relationshipType: 'many-to-many',
-              relationshipName: 'job',
+              relationshipName: 'linkedJob',
               otherEntityName: 'job',
               ownerSide: false,
+              otherEntityField: 'jobTitle',
               otherEntityRelationshipName: 'chore'
             }
           ],
