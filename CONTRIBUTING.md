@@ -21,7 +21,7 @@ If you have a question on using JHipster, or if you need help with your JHipster
 
 ## <a name="issue"></a> Issues and Bugs
 
-If you find a bug in the source code or a mistake in the documentation, you can help us by [submitting a ticket](https://opensource.guide/how-to-contribute/#opening-an-issue) to our [GitHub issues](https://github.com/jhipster/jhipster-vuejs/issues). Even better, you can submit a Pull Request to our [JHipster generator project](https://github.com/jhipster/generator-jhipster) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
+If you find a bug in the source code or a mistake in the documentation, you can help us by [submitting a ticket](https://opensource.guide/how-to-contribute/#opening-an-issue) to our [GitHub issues](https://github.com/jhipster/jhipster-vuejs/issues). Even better, you can submit a Pull Request to our [JHipster generator project](https://github.com/jhipster/jhipster-vuejs) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
 
 **Please see the Submission Guidelines below**.
 
@@ -192,15 +192,15 @@ JHipster is a [Yeoman Generator](http://yeoman.io/), so you must follow the [Yeo
 
 Here are the most important steps.
 
-### Fork the generator-jhipster-vuejs project
+### Fork the jhipster-vuejs project
 
-Go to the [generator-jhipster-vuejs project](https://github.com/jhipster/generator-jhipster-vuejs) and click on the "fork" button. You can then clone your own fork of the project, and start working on it.
+Go to the [jhipster-vuejs project](https://github.com/jhipster/jhipster-vuejs) and click on the "fork" button. You can then clone your own fork of the project, and start working on it.
 
 [Please read the GitHub forking documentation for more information](https://help.github.com/articles/fork-a-repo)
 
 ### Set NPM/YARN to use the cloned project
 
-In your cloned `generator-jhipster-vuejs` project, type `npm link` or `yarn && yarn link` depending on the package manager you use.
+In your cloned `jhipster-vuejs` project, type `npm link` or `yarn && yarn link` depending on the package manager you use.
 
 This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster --blueprint vuejs`, you will now use the development version of JHipster.
 
