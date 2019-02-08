@@ -31,9 +31,9 @@ const prettierOptions = {
 
 const prettierTransform = function(defaultOptions) {
     const transform = (file, encoding, callback) => {
-        if(file.state !== 'deleted') {
-            /* resolve from the projects config */
-            prettier.resolveConfig(file.relative).then(options => {
+        /* resolve from the projects config */
+        prettier.resolveConfig(file.relative).then(options => {
+            if(file.state !== 'deleted') {
                 const str = file.contents.toString('utf8');
                 if (!options || Object.keys(options).length === 0) {
                     options = defaultOptions;
@@ -42,9 +42,9 @@ const prettierTransform = function(defaultOptions) {
                 options.filepath = file.relative;
                 const data = prettier.format(str, options);
                 file.contents = Buffer.from(data);
-                callback(null, file);
-            });
-        }
+            }
+            callback(null, file);
+        });
     };
     return through.obj(transform);
 };
