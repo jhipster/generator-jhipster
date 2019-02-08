@@ -74,9 +74,9 @@ describe('JHipster generator', () => {
                 assert.noFileContent('README.md', /undefined/);
             });
             it('uses correct prettier formatting', () => {
-                // tabWidth = 4 (see generators/common/templates/.prettierrc.ejs)
-                assert.fileContent('webpack/webpack.dev.js', / {4}devtool:/);
-                assert.fileContent('tsconfig.json', / {4}"compilerOptions":/);
+                // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
+                assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
+                assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
             });
         });
 

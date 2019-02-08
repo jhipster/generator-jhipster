@@ -23,6 +23,7 @@ const prettierOptions = {
     printWidth: 140,
     singleQuote: true,
     useTabs: false,
+    tabWidth: 2,
     // js and ts rules:
     arrowParens: 'avoid',
     // jsx and tsx rules:
