@@ -61,7 +61,7 @@
         "jhipster-core": "3.6.9",
         "js-object-pretty-print": "0.3.0",
         "js-yaml": "3.12.0",
-        "lodash": "4.17.10",
+        "lodash": "4.17.11",
         "meow": "5.0.0",
         "mkdirp": "0.5.1",
         "os-locale": "2.1.0",
