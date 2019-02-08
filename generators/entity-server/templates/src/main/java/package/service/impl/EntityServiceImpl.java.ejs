@@ -186,7 +186,8 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     @Override
     <%_ } _%>
     public void delete(<%= pkType %> id) {
-        log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
+        log.debug("Request to delete <%= entityClass %> : {}", id);
+<%- include('../../common/delete_template', {viaService: viaService}); -%>
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
