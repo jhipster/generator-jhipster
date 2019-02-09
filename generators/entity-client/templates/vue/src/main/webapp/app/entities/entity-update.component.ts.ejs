@@ -85,8 +85,10 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   <%_ if (!entitiesSeen.includes(otherEntityAngularName)) { %>
   @Inject('<%= otherEntityName %>Service') private <%= otherEntityName %>Service : () => <%= otherEntityAngularName %>Service;
   <%_ } _%>
+  <%_ if (!entitiesSeen.includes(otherEntityNamePlural)) { %>
   public <%= otherEntityNamePlural %> : <% if (otherEntityAngularName === 'User') { %>Array<any><%_ } else { _%>I<%= otherEntityAngularName %>[]<%_ } _%> = [];
-  <%_ entitiesSeen.push(otherEntityAngularName); } } _%>
+  <%_ } _%>
+  <%_ entitiesSeen.push(otherEntityAngularName);entitiesSeen.push(otherEntityNamePlural); } } _%>
   public isSaving = false;
 
   beforeRouteEnter(to, from, next) {
@@ -106,8 +108,9 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
       for (idx in relationships) {
       const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
       if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) {
+      const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
     _%>
-    this.<%= entityInstance %>.<%= otherEntityNamePlural %> = [];
+    this.<%= entityInstance %>.<%= relationshipFieldNamePlural %> = [];
     <%_ } } _%>
   }
   <%_ } _%>
