@@ -57,6 +57,9 @@ module.exports = class extends BaseDockerGenerator {
                 this.ingressDomain = this.config.get('ingressDomain');
                 this.istio = this.config.get('istio');
                 this.istioRoute = this.config.get('istioRoute');
+                this.dbRandomPassword = Math.random()
+                    .toString(36)
+                    .slice(-8);
             }
         };
     }

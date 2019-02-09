@@ -36,7 +36,7 @@ jobs:
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
     JHI_E2E_HEADLESS: true
-    JHI_SCRIPTS: $BUILD_REPOSITORY_LOCALPATH/test-integration/scripts
+    JHI_SCRIPTS: $(Build.Repository.LocalPath)/test-integration/scripts
 
   strategy:
     matrix:
@@ -82,16 +82,18 @@ jobs:
   #----------------------------------------------------------------------
   - task: NodeTool@0
     inputs:
-      versionSpec: '10.14.1'
+      versionSpec: '10.15.0'
     displayName: 'TOOLS: install Node.js'
   - script: |
-      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
       sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
       sudo apt update
       sudo apt install google-chrome-stable
     displayName: 'TOOLS: install google-chrome-stable'
   - script: sudo npm install -g npm
     displayName: 'TOOLS: update NPM'
+  - script: sudo chown -R vsts:docker /home/vsts/.npm/
+    displayName: 'BUGS-FIX: change /home/vsts/.npm/ permission'
   - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
     displayName: 'TOOLS: display configuration'
   - bash: $(JHI_SCRIPTS)/03-system.sh
@@ -116,7 +118,7 @@ jobs:
   #----------------------------------------------------------------------
   # Bugs fix
   #----------------------------------------------------------------------
-  - bash: test-integration/scripts/20-no-memory-limit-elasticsearch.sh
+  - bash: $(JHI_SCRIPTS)/20-no-memory-limit-elasticsearch.sh
     displayName: 'BUGS-FIX: no memory limit for Elasticsearch'
 
   #----------------------------------------------------------------------

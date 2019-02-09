@@ -66,6 +66,12 @@ apply plugin: 'com.moowork.node'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'idea'
 
+idea {
+  module {
+    excludeDirs += files('node_modules')
+  }
+}
+
 dependencyManagement {
   imports {
     mavenBom 'io.github.jhipster:jhipster-dependencies:' + jhipster_dependencies_version
@@ -81,7 +87,7 @@ version = '0.0.1-SNAPSHOT'
 description = ''
 
 bootWar {
-   mainClassName = '<%= packageName %>.<%= mainClass %>'
+    mainClassName = '<%= packageName %>.<%= mainClass %>'
 }
 
 war {
@@ -89,12 +95,11 @@ war {
     webAppDirName = '<%= CLIENT_DIST_DIR %>'
     <%_ } _%>
     enabled = true
-    classifier = 'original'
+    extension = 'war.original'
 }
 
 springBoot {
     mainClassName = '<%= packageName %>.<%= mainClass %>'
-    buildInfo()
 }
 
 if (OperatingSystem.current().isWindows()) {
@@ -509,21 +514,3 @@ if (project.hasProperty('nodeInstall')) {
     }
 }
 <%_ } _%>
-
-task renameWarFile (type: Copy) {
-    from ("$buildDir/libs/")
-    include "$project.name-$version-original.war"
-    destinationDir file("$buildDir/libs/")
-    rename "$project.name-$version-original.war", "$project.name-{$version}.war.original"
-}
-
-task deleteWarFile(type: Delete) {
-  delete "$buildDir/libs/$project.name-$version-original.war"
-}
-
-renameWarFile.dependsOn war
-bootWar.dependsOn war,renameWarFile,deleteWarFile
-compileJava.dependsOn processResources
-processResources.dependsOn cleanResources,bootBuildInfo
-bootBuildInfo.mustRunAfter cleanResources
-deleteWarFile.mustRunAfter renameWarFile

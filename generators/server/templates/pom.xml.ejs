@@ -63,8 +63,8 @@
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
-    <!-- TODO To remove after final Spring-cloud 2.1 release -->
     <pluginRepositories>
+        <!-- TODO To remove after final Spring-cloud 2.1 release -->
         <pluginRepository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
@@ -73,6 +73,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </pluginRepository>
+        <!-- jhipster-needle-maven-plugin-repository -->
     </pluginRepositories>
 
     <!-- jhipster-needle-distribution-management -->
@@ -82,12 +83,14 @@
         <maven.version>3.0.0</maven.version>
         <java.version><%= JAVA_VERSION %></java.version>
         <scala.version><%= SCALA_VERSION %></scala.version>
+        <%_ if (!skipClient) { _%>
         <node.version>v<%= NODE_VERSION %></node.version>
-        <%_ if (clientPackageManager === 'npm') { _%>
+            <%_ if (clientPackageManager === 'npm') { _%>
         <npm.version><%= NPM_VERSION %></npm.version>
-        <%_ } _%>
-        <%_ if (clientPackageManager === 'yarn') { _%>
+            <%_ } _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
         <yarn.version>v<%= YARN_VERSION %></yarn.version>
+            <%_ } _%>
         <%_ } _%>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -133,6 +136,7 @@
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <!-- We can't go to 3.0.0-M2 as it has a regression. See https://issues.apache.org/jira/browse/MENFORCER-306 -->
         <maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
+        <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.2</maven-war-plugin.version>
@@ -173,11 +177,10 @@
         <sonar.jacoco.reportPaths>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPaths>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
         <%_ if (!skipClient) { _%>
-        <sonar.testExecutionReportPaths>${project.testresult.directory}/jest/TESTS-results-sonar.xml</sonar.testExecutionReportPaths>
         <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/lcov.info</sonar.typescript.lcov.reportPaths>
         <%_ } _%>
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
-        <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
+        <sonar.junit.reportsPath>${project.testresult.directory}</sonar.junit.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
 
         <!-- jhipster-needle-maven-property -->
@@ -814,6 +817,10 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-idea-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
             <plugin>
@@ -888,21 +895,21 @@
                     <groupId>pl.project13.maven</groupId>
                     <artifactId>git-commit-id-plugin</artifactId>
                     <version>${git-commit-id-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>revision</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <failOnNoGitDirectory>false</failOnNoGitDirectory>
-                            <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                            <includeOnlyProperties>
-                                <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
-                                <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
-                                <includeOnlyProperty>^git.branch$</includeOnlyProperty>
-                            </includeOnlyProperties>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>revision</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                        <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                        <includeOnlyProperties>
+                            <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                            <includeOnlyProperty>^git.commit.id.describe$</includeOnlyProperty>
+                            <includeOnlyProperty>^git.branch$</includeOnlyProperty>
+                        </includeOnlyProperties>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -972,10 +979,10 @@
                     <artifactId>liquibase-maven-plugin</artifactId>
                     <version>${liquibase.version}</version>
                     <configuration>
-                        <changeLogFile><%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml</changeLogFile>
-                        <diffChangeLogFile><%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
+                        <changeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml</changeLogFile>
+                        <diffChangeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                         <driver><% if (devDatabaseType === 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %></driver>
-                        <url><% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %></url>
+                        <url><% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:${project.build.directory}/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %></url>
                         <defaultSchemaName><% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %></defaultSchemaName>
                         <username><% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %></username>
                         <password><% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %></password>
@@ -1052,6 +1059,14 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-idea-plugin</artifactId>
+                    <version>${maven-idea-plugin.version}</version>
+                    <configuration>
+                        <exclude>node_modules</exclude>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
                     <executions>
@@ -1062,7 +1077,7 @@
                                 <goal>copy-resources</goal>
                             </goals>
                             <configuration>
-                                <outputDirectory>target/classes</outputDirectory>
+                                <outputDirectory>${project.build.directory}/classes</outputDirectory>
                                 <useDefaultDelimiters>false</useDefaultDelimiters>
                                 <delimiters>
                                     <delimiter>#</delimiter>
@@ -1092,10 +1107,10 @@
                                 <goal>copy-resources</goal>
                             </goals>
                             <configuration>
-                                <outputDirectory>target/classes/static/</outputDirectory>
+                                <outputDirectory>${project.build.directory}/classes/static/</outputDirectory>
                                 <resources>
                                     <resource>
-                                        <directory>target/www</directory>
+                                        <directory>${project.build.directory}/www</directory>
                                         <filtering>false</filtering>
                                     </resource>
                                 </resources>
@@ -1137,6 +1152,7 @@
                         <!-- Fixes a bug which will be solved in next version after 2.22.1 then this can be removed -->
                         <!-- see: https://issues.apache.org/jira/browse/SUREFIRE-1588 -->
                         <useSystemClassLoader>false</useSystemClassLoader>
+                        <outputDirectory>${sonar.junit.reportsPath}</outputDirectory>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -1329,7 +1345,7 @@
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory><%= MAIN_DIR %>webapp</directory>
+                                    <directory><%= CLIENT_MAIN_SRC_DIR %></directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -1378,7 +1394,7 @@
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory><%= MAIN_DIR %>webapp</directory>
+                                    <directory><%= CLIENT_MAIN_SRC_DIR %></directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -1423,7 +1439,7 @@
                             <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
                             <webResources>
                                 <resource>
-                                    <directory><%= MAIN_DIR %>webapp</directory>
+                                    <directory><%= CLIENT_MAIN_SRC_DIR %></directory>
                                     <includes>
                                         <include>WEB-INF/**</include>
                                     </includes>
@@ -1566,7 +1582,7 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <configuration>
                             <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <warSourceDirectory><%= MAIN_DIR %>webapp/</warSourceDirectory>
+                            <warSourceDirectory><%= CLIENT_MAIN_SRC_DIR %></warSourceDirectory>
                         </configuration>
                     </plugin>
                     <plugin>

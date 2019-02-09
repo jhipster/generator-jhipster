@@ -90,6 +90,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.TEST_DIR = constants.TEST_DIR;
                 this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+                this.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
                 this.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
@@ -227,6 +228,20 @@ module.exports = class extends BaseBlueprintGenerator {
                 // force variables unused by microservice applications
                 if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
                     this.websocket = false;
+                }
+
+                this.entitySuffix = configuration.get('entitySuffix');
+                if (_.isNil(this.entitySuffix)) {
+                    this.entitySuffix = '';
+                }
+
+                this.dtoSuffix = configuration.get('dtoSuffix');
+                if (_.isNil(this.dtoSuffix)) {
+                    this.dtoSuffix = 'DTO';
+                }
+
+                if (this.entitySuffix === this.dtoSuffix) {
+                    this.error(chalk.red('Entities cannot be generated as the entity suffix and DTO suffix are equals !'));
                 }
 
                 const serverConfigFound =

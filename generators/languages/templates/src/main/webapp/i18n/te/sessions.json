@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "[<b>{{username}}</b>] యొక్క క్రియాశీల సెషన్స్",
+        "table": {
+            "ipaddress": "ఇపి అడ్రస్",
+            "useragent": "యూజర్ ఏజెంట్",
+            "date": "తేదీ",
+            "button": "రద్దు చేయి"
+        },
+        "messages": {
+            "success": "<strong>సెషన్ రద్దు చేయబడినది!</strong>",
+            "error": "<strong>ఒక లోపము సంభవించినది!</strong> సెషన్ రద్దు చర్య విఫలమైనది."
+        }
+    }
+}

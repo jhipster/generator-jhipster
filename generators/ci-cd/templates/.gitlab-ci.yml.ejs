@@ -76,7 +76,7 @@ frontend-test:
         - ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
     artifacts:
         reports:
-            junit: build/test-results/jest/TESTS-*.xml
+            junit: build/test-results/TESTS-*.xml
         paths:
             - build/test-results/
             - build/jacoco/
@@ -177,7 +177,7 @@ frontend-test:
         - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='<%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
-            junit: target/test-results/jest/TESTS-*.xml
+            junit: target/test-results/TESTS-*.xml
         paths:
             - target/test-results
         expire_in: 1 day

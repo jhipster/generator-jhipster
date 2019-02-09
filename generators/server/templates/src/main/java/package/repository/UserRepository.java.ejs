@@ -24,7 +24,7 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 <%_ } _%>
 
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.<%= asEntity('User') %>;
 
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.annotation.Cacheable;
@@ -89,7 +89,7 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 @Repository
-public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<User, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<User, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<User, String><% } %> {
+public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><% } %> {
     <%_ if (cacheManagerIsAvailable === true) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
@@ -98,13 +98,13 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
 
-    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> findOneByActivationKey(String activationKey);
+    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey);
     <%_ } _%>
 
-    <% if (reactive) { %>Flux<% } else { %>List<% } %><User> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
     <%_ if (authenticationType !== 'oauth2') { _%>
 
-    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> findOneByResetKey(String resetKey);
+    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> findOneByResetKey(String resetKey);
     <%_ } _%>
 
     <%_ if (databaseType === 'couchbase' || databaseType === 'mongodb') { _%>
@@ -112,42 +112,42 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
         <%_ } _%>
     <%_ } _%>
-    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> findOneByEmailIgnoreCase(String email);
+    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email);
 
     <%_ if (databaseType === 'couchbase') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
-    default <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> findOneByLogin(String login) {
-        return findById(User.PREFIX + ID_DELIMITER + login);
+    default Optional<<%= asEntity('User') %>> findOneByLogin(String login) {
+        return findById(<%= asEntity('User') %>.PREFIX + ID_DELIMITER + login);
     }
     <%_ } else if (databaseType === 'mongodb') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
-    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><User> findOneByLogin(String login);
+    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> findOneByLogin(String login);
     <%_ } else { _%>
-    Optional<User> findOneByLogin(String login);
+    Optional<<%= asEntity('User') %>> findOneByLogin(String login);
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
 
     @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesById(<%= pkType %> id);
+    Optional<<%= asEntity('User') %>> findOneWithAuthoritiesById(<%= pkType %> id);
 
     @EntityGraph(attributePaths = "authorities")
     <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
-    Optional<User> findOneWithAuthoritiesByLogin(String login);
+    Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByLogin(String login);
 
     @EntityGraph(attributePaths = "authorities")
     <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     <%_ } _%>
-    Optional<User> findOneWithAuthoritiesByEmail(String email);
+    Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByEmail(String email);
     <%_ } _%>
 
-    <% if (reactive) { %>Flux<% } else { %>Page<% } %><User> findAllByLoginNot(Pageable pageable, String login);
+    <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asEntity('User') %>> findAllByLoginNot(Pageable pageable, String login);
     <%_ if (reactive) { _%>
 
     Mono<Long> countAllByLoginNot(String anonymousUser);
@@ -167,7 +167,7 @@ public class UserRepository {
 
     private final Validator validator;
 
-    private Mapper<User> mapper;
+    private Mapper<<%= asEntity('User') %>> mapper;
 
     private PreparedStatement findAllStmt;
 
@@ -206,7 +206,7 @@ public class UserRepository {
     public UserRepository(Session session, Validator validator) {
         this.session = session;
         this.validator = validator;
-        mapper = new MappingManager(session).mapper(User.class);
+        mapper = new MappingManager(session).mapper(<%= asEntity('User') %>.class);
 
         findAllStmt = session.prepare("SELECT * FROM user");
 
@@ -271,17 +271,17 @@ public class UserRepository {
         truncateByEmailStmt = session.prepare("TRUNCATE user_by_email");
     }
 
-    public Optional<User> findById(String id) {
+    public Optional<<%= asEntity('User') %>> findById(String id) {
         return Optional.ofNullable(mapper.get(id));
     }
 
-    public Optional<User> findOneByActivationKey(String activationKey) {
+    public Optional<<%= asEntity('User') %>> findOneByActivationKey(String activationKey) {
         BoundStatement stmt = findOneByActivationKeyStmt.bind();
         stmt.setString("activation_key", activationKey);
         return findOneFromIndex(stmt);
     }
 
-    public Optional<User> findOneByResetKey(String resetKey) {
+    public Optional<<%= asEntity('User') %>> findOneByResetKey(String resetKey) {
         BoundStatement stmt = findOneByResetKeyStmt.bind();
         stmt.setString("reset_key", resetKey);
         return findOneFromIndex(stmt);
@@ -290,7 +290,7 @@ public class UserRepository {
     <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     <%_ } _%>
-    public Optional<User> findOneByEmailIgnoreCase(String email) {
+    public Optional<<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email) {
         BoundStatement stmt = findOneByEmailStmt.bind();
         stmt.setString("email", email.toLowerCase());
         return findOneFromIndex(stmt);
@@ -299,22 +299,22 @@ public class UserRepository {
     <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
-    public Optional<User> findOneByLogin(String login) {
+    public Optional<<%= asEntity('User') %>> findOneByLogin(String login) {
         BoundStatement stmt = findOneByLoginStmt.bind();
         stmt.setString("login", login);
         return findOneFromIndex(stmt);
     }
 
-    public List<User> findAll() {
+    public List<<%= asEntity('User') %>> findAll() {
         return mapper.map(session.execute(findAllStmt.bind())).all();
     }
 
-    public User save(User user) {
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
+    public <%= asEntity('User') %> save(<%= asEntity('User') %> user) {
+        Set<ConstraintViolation<<%= asEntity('User') %>>> violations = validator.validate(user);
         if (violations != null && !violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
-        User oldUser = mapper.get(user.getId());
+        <%= asEntity('User') %> oldUser = mapper.get(user.getId());
         if (oldUser != null) {
             if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {
                 session.execute(deleteByActivationKeyStmt.bind().setString("activation_key", oldUser.getActivationKey()));
@@ -351,7 +351,7 @@ public class UserRepository {
         return user;
     }
 
-    public void delete(User user) {
+    public void delete(<%= asEntity('User') %> user) {
         BatchStatement batch = new BatchStatement();
         batch.add(mapper.deleteQuery(user));
         if (!StringUtils.isEmpty(user.getActivationKey())) {
@@ -365,7 +365,7 @@ public class UserRepository {
         session.execute(batch);
     }
 
-    private Optional<User> findOneFromIndex(BoundStatement stmt) {
+    private Optional<<%= asEntity('User') %>> findOneFromIndex(BoundStatement stmt) {
         ResultSet rs = session.execute(stmt);
         if (rs.isExhausted()) {
             return Optional.empty();

@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <div>
-    <h2 jhiTranslate="sessions.title" translateValues="{username: '{{account.login}}'}" *ngIf="account">Active sessions for [<b>{{account.login}}</b>]</h2>
+    <h2 jhiTranslate="sessions.title" [translateValues]="{username: account.login}" *ngIf="account">Active sessions for [<b>{{account.login}}</b>]</h2>
 
     <div class="alert alert-success" *ngIf="success" jhiTranslate="sessions.messages.success">
         <strong>Session invalidated!</strong>

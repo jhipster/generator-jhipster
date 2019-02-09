@@ -18,7 +18,7 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v4.0.6';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v4.1.1';
 const DOCKER_JAVA_JRE = 'openjdk:11.0.1-slim-stretch';
 const DOCKER_MYSQL = 'mysql:8.0.13';
 const DOCKER_MARIADB = 'mariadb:10.4.1';
@@ -58,8 +58,8 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '10.14.1';
-const YARN_VERSION = '1.12.3';
+const NODE_VERSION = '10.15.0';
+const YARN_VERSION = '1.13.0';
 const NPM_VERSION = '6.4.1';
 
 // all constants used throughout all generators
@@ -192,6 +192,7 @@ const LANGUAGES = [
     { name: 'Swedish', dispName: 'Svenska', value: 'sv' },
     { name: 'Turkish', dispName: 'Türkçe', value: 'tr' },
     { name: 'Tamil', dispName: 'தமிழ்', value: 'ta' },
+    { name: 'Telugu', dispName: 'తెలుగు', value: 'te' },
     { name: 'Thai', dispName: 'ไทย', value: 'th' },
     {
         name: 'Ukrainian',

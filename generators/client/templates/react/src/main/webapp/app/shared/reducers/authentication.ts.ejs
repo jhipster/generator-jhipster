@@ -49,7 +49,9 @@ const initialState = {
   account: {} as any,
   errorMessage: null as string, // Errors returned from server side
   redirectMessage: null as string,
-  sessionHasBeenFetched: false
+  sessionHasBeenFetched: false,
+  idToken: null as string,
+  logoutUrl: null as string
 };
 
 export type AuthenticationState =  Readonly<typeof initialState>;
@@ -96,11 +98,18 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         loginSuccess: true
       };
     <%_ } _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
+    case SUCCESS(ACTION_TYPES.LOGOUT):
+    <%_ } else { _%>
     case ACTION_TYPES.LOGOUT:
+    <%_ } _%>
       return {
         ...initialState,
       <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: true
+      <%_ } else { _%>
+        idToken: action.payload.data.idToken,
+        logoutUrl: action.payload.data.logoutUrl
       <%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION):
@@ -160,7 +169,7 @@ export const getSession = () => async (dispatch, getState) => {
 
 <%_ if (authenticationType === 'session') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
-  const data = `j_username=${encodeURIComponent(username)}&j_password=${encodeURIComponent(password)}&remember-me=${rememberMe}&submit=Login`;
+  const data = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&remember-me=${rememberMe}&submit=Login`;
   await dispatch({
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })

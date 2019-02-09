@@ -65,6 +65,7 @@ module.exports = class extends Generator {
      */
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
         if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
             generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
@@ -89,10 +90,10 @@ module.exports = class extends Generator {
         }
 
         // Templates
-        generator.template(`${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
-        generator.template(`${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
-        generator.template(`${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
-        generator.template(`${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
     }
 
     /**
@@ -104,9 +105,13 @@ module.exports = class extends Generator {
      */
     installI18nServerFilesByLanguage(_this, resourceDir, lang) {
         const generator = _this || this;
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
-        generator.template(`${resourceDir}i18n/messages_${langProp}.properties.ejs`, `${resourceDir}i18n/messages_${langProp}.properties`);
+        generator.template(
+            `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
+            `${resourceDir}i18n/messages_${langProp}.properties`
+        );
     }
 
     /**
@@ -916,16 +921,22 @@ module.exports = class extends Generator {
                 }
 
                 query = `this.${relationship.otherEntityName}Service
-            .query({${filter}})
-            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
+            .query({${filter}}).pipe(
+                filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
+                map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
+            )
+            .subscribe((res: I${relationship.otherEntityAngularName}[]) => {
                 if (${relationshipFieldNameIdCheck}) {
-                    this.${variableName} = res.body;
+                    this.${variableName} = res;
                 } else {
                     this.${relationship.otherEntityName}Service
-                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'})
-                        .subscribe((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
-                            this.${variableName} = [subRes.body].concat(res.body);
-                        }, (subRes: HttpErrorResponse) => this.onError(subRes.message));
+                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'}).pipe(
+                            filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
+                            map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
+                        )
+                        .subscribe((subRes: I${relationship.otherEntityAngularName}) => 
+                            this.${variableName} = [subRes].concat(res)
+                        , (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
             }, (res: HttpErrorResponse) => this.onError(res.message));`;
             } else if (relationship.relationshipType !== 'one-to-many') {
@@ -933,10 +944,13 @@ module.exports = class extends Generator {
                 if (variableName === entityInstance) {
                     variableName += 'Collection';
                 }
-                query = `this.${relationship.otherEntityName}Service.query()
-            .subscribe((res: HttpResponse<I${
-                relationship.otherEntityAngularName
-            }[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
+                query = `this.${relationship.otherEntityName}Service.query().pipe(
+                            filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
+                            map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
+                        )
+            .subscribe(
+                (res: I${relationship.otherEntityAngularName}[]) => this.${variableName} = res, 
+                (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
                 queries.push(query);
