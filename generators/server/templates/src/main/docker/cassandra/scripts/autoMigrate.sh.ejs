@@ -69,7 +69,7 @@ if [ "$#" -gt 0 ]; then
     fi
     CREATE_KEYSPACE_SCRIPT_FOLDER="$(dirname $CQL_FILES_PATH)"
     SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-    EXECUTE_CQL_SCRIPT=$SCRIPT_DIR'/execute-cql.sh'
+    EXECUTE_CQL_SCRIPT=$SCRIPT_DIR'/execute-cql'
 else
     CQL_FILES_PATH="/cql/changelog/"
     EXECUTE_CQL_SCRIPT="./usr/local/bin/execute-cql"

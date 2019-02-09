@@ -21,7 +21,7 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
@@ -47,7 +47,7 @@
     <%_ } _%>
 
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
-    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
 
     <!--
         Added the entity <%= entityClass %>.
@@ -112,7 +112,7 @@
             <%_ } else { _%>
             <column name="<%=columnName %>" type="<%=columnType %>" remarks="<%- formatAsLiquibaseRemarks(fields[idx].javadoc) %>">
             <%_ } _%>
-                <%_ if (unique) { 
+                <%_ if (unique) {
                     const uniqueConstraintName = getUXConstraintName(entityTableName, columnName, prodDatabaseType);
                 _%>
                 <constraints nullable="<%= nullable %>" unique="true" uniqueConstraintName="<%= uniqueConstraintName %>" />

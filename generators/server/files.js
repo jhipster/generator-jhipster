@@ -817,6 +817,10 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}aop/logging/LoggingAspect.java`
                 },
                 {
+                    file: 'package/config/lazy/LazyInitBeanFactoryPostProcessor.java',
+                    renameTo: generator => `${generator.javaDir}config/lazy/LazyInitBeanFactoryPostProcessor.java`
+                },
+                {
                     file: 'package/config/DefaultProfileUtil.java',
                     renameTo: generator => `${generator.javaDir}config/DefaultProfileUtil.java`
                 },
@@ -934,6 +938,20 @@ const serverFiles = {
                 {
                     file: 'package/repository/CustomN1qlCouchbaseRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/CustomN1qlCouchbaseRepository.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.reactive && generator.databaseType === 'couchbase',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/reactive/ReactiveN1qlCouchbaseRepository.java',
+                    renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}ReactiveN1qlCouchbaseRepository.java`
+                },
+                {
+                    file: 'package/repository/reactive/CustomReactiveN1qlCouchbaseRepository.java',
+                    renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}CustomReactiveN1qlCouchbaseRepository.java`
                 }
             ]
         },
@@ -1171,11 +1189,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}config/CassandraTestConfiguration.java`
                 }
             ]
-        },
-        {
-            condition: generator => generator.databaseType === 'cassandra',
-            path: SERVER_TEST_RES_DIR,
-            templates: ['cassandra-random-port.yml']
         },
         {
             condition: generator => generator.databaseType === 'couchbase',

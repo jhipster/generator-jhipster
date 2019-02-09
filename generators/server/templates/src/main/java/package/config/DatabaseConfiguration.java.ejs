@@ -31,6 +31,9 @@ import com.mongodb.MongoClient;
 import com.couchbase.client.java.Bucket;
 import com.github.couchmove.Couchmove;
 import <%=packageName%>.repository.CustomN1qlCouchbaseRepository;
+<%_ if (reactive) { _%>
+import <%=packageName%>.repository.reactive.CustomReactiveN1qlCouchbaseRepository;
+<%_ } _%>
 import org.apache.commons.codec.binary.Base64;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
@@ -148,7 +151,7 @@ import java.util.List;
 <%_ if (databaseType === 'couchbase') { _%>
 @EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
     <%_ if (reactive) { _%>
-@EnableReactiveCouchbaseRepositories("<%=packageName%>.repository.reactive")
+@EnableReactiveCouchbaseRepositories(repositoryBaseClass = CustomReactiveN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository.reactive")
     <%_ } _%>
 @Import(value = CouchbaseAutoConfiguration.class)
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")

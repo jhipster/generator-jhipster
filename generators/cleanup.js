@@ -171,5 +171,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     }
     if (generator.isJhipsterVersionLessThan('5.8.0')) {
         generator.removeFile(`${javaDir}config/MetricsConfiguration.java`);
+        if (generator.databaseType === 'cassandra') {
+            generator.removeFile(`${testResourceDir}cassandra-random-port.yml`);
+        }
     }
 }

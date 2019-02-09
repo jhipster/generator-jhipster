@@ -25,7 +25,7 @@ language: node_js
 node_js:
   - "10.15.0"
 jdk:
-  - oraclejdk8
+  - openjdk11
 addons:
   apt:
     sources:
@@ -43,10 +43,10 @@ env:
     - JHI_PROTRACTOR=0
     # if JHI_LIB_BRANCH value is release, use the release from Maven
     - JHI_LIB_REPO=https://github.com/jhipster/jhipster.git
-    - JHI_LIB_BRANCH=release
+    - JHI_LIB_BRANCH=spring-boot_2.1.0
     # if JHI_GEN_BRANCH value is release, use the release from NPM
     - JHI_GEN_REPO=https://github.com/jhipster/generator-jhipster.git
-    - JHI_GEN_BRANCH=release
+    - JHI_GEN_BRANCH=spring-boot_2.1.0
     # specific config
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false

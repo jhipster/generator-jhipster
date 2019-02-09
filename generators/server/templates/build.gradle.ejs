@@ -29,7 +29,7 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "io.spring.gradle:propdeps-plugin:0.0.10.RELEASE"
         <%_ if (enableSwaggerCodegen) { _%>
-        classpath "org.openapitools:openapi-generator-gradle-plugin:3.3.0"
+        classpath "org.openapitools:openapi-generator-gradle-plugin:3.3.4"
         <%_ } _%>
         classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.5.2"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -37,10 +37,10 @@ buildscript {
 }
 
 plugins {
-    id "org.sonarqube" version "2.6.2"
-    id "net.ltgt.apt-eclipse" version "0.19"
-    id "net.ltgt.apt-idea" version "0.19"
-    id "net.ltgt.apt" version "0.19"
+    id "org.sonarqube" version "2.7"
+    id "net.ltgt.apt-eclipse" version "0.20"
+    id "net.ltgt.apt-idea" version "0.20"
+    id "net.ltgt.apt" version "0.20"
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
     <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
@@ -54,8 +54,7 @@ plugins {
 apply plugin: 'java'
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-// Until JHipster supports JDK 9
-assert System.properties['java.specification.version'] == '1.8'
+assert System.properties['java.specification.version'] == '1.8' || '11'
 
 apply plugin: 'maven'
 apply plugin: 'org.springframework.boot'
@@ -208,7 +207,7 @@ liquibase {
             username '<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>'
             password '<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>'
             changeLogFile project.ext.diffChangelogFile
-            referenceUrl 'hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServerDialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy'
+            referenceUrl 'hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL95Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServerDialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy'
             defaultSchemaName '<% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %>'
             logLevel 'debug'
             classpath "$buildDir/classes/java/main"
@@ -235,6 +234,10 @@ repositories {
     // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
     maven { url "https://maven.oracle.com" }
     <%_ } _%>
+    // TODO To remove after final JHipster release
+    maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
+    // TODO To remove after final Spring-cloud 2.1 release
+    maven { url "http://repo.spring.io/milestone" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -264,7 +267,7 @@ dependencies {
     <%_ if (cacheProvider === 'hazelcast') { _%>
     compile "com.hazelcast:hazelcast"
     <%_ if (enableHibernateCache) { _%>
-    compile "com.hazelcast:hazelcast-hibernate52"
+    compile "com.hazelcast:hazelcast-hibernate53"
     <%_ } _%>
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
@@ -273,10 +276,8 @@ dependencies {
     compile "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') { _%>
-    compile "org.hibernate:hibernate-infinispan"
-    <%_ } _%>
-    <%_ if (cacheProvider === 'infinispan') {_%>
-    compile "org.infinispan:infinispan-spring-boot-starter"
+    compile "org.infinispan:infinispan-hibernate-cache-v53"
+    compile "org.infinispan:infinispan-spring-boot-starter-embedded"
     compile "org.infinispan:infinispan-core"
     compile "org.infinispan:infinispan-jcache"
     compile ("org.infinispan:infinispan-cloud") {
@@ -315,7 +316,6 @@ dependencies {
     compile "org.hibernate:hibernate-envers"
     compile "org.hibernate.validator:hibernate-validator"
     compile "org.liquibase:liquibase-core"
-    compile "com.mattbertolini:liquibase-slf4j"
     liquibaseRuntime "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibase_hibernate5_version}"
     liquibaseRuntime sourceSets.main.compileClasspath
@@ -356,7 +356,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    compile "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>:0.24.0-RC.0"
+    compile "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>"
     <%_ if (databaseType === 'cassandra') { _%>
     compile "com.datastax.cassandra:cassandra-driver-extras"
     compile "com.datastax.cassandra:cassandra-driver-mapping"
@@ -445,6 +445,8 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen"
+    annotationProcessor "javax.xml.bind:jaxb-api:${jaxb_api_version}"
+    annotationProcessor "com.sun.xml.bind:jaxb-impl:${jaxb_impl_version}"
     <%_ } _%>
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
@@ -454,6 +456,7 @@ dependencies {
     testCompile ("org.cassandraunit:cassandra-unit-spring") {
         exclude(group: 'org.slf4j')
     }
+    testCompile "org.testcontainers:database-commons"
     <%_ } _%>
     <%_ if (cucumberTests) { _%>
     testCompile "io.cucumber:cucumber-junit"
@@ -467,9 +470,6 @@ dependencies {
     testCompile "org.assertj:assertj-core"
     testCompile "junit:junit"
     testCompile "org.mockito:mockito-core"
-    <%_ if (databaseType === 'sql') { _%>
-    testCompile "com.mattbertolini:liquibase-slf4j"
-    <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     testCompile "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
     <%_ } _%>
