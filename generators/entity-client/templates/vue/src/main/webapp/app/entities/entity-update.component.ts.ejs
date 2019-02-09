@@ -181,21 +181,6 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   public retrieve<%= entityAngularName %>(<%= entityInstance %>Id) : void {
     this.<%= entityInstance %>Service().find(<%= entityInstance %>Id).then((res) => {
       this.<%= entityInstance %> = res;
-
-      <%_ for (idx in fields) {
-          const fieldName = fields[idx].fieldName;
-          const fieldType = fields[idx].fieldType;
-          if ([ 'Instant' ].includes(fieldType)) { _%>
-            if (this.<%= entityInstance %>.<%= fieldName %>) {
-              this.<%= entityInstance %>.<%= fieldName %> = parse(this.<%= entityInstance %>.<%= fieldName %>.toString(), INSTANT_FORMAT, new Date());
-            }
-          <%_ }
-          if ([ 'ZonedDateTime' ].includes(fieldType)) { _%>
-            if (this.<%= entityInstance %>.<%= fieldName %>) {
-              this.<%= entityInstance %>.<%= fieldName %> = parse(this.<%= entityInstance %>.<%= fieldName %>.toString(), ZONED_DATE_TIME_FORMAT, new Date());
-            }
-          <%_ }
-      } _%>
     });
   }
 

@@ -83,8 +83,6 @@
                     <td v-text="$t('<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</td>
                         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
-                        <%_ } else if (fieldType === 'LocalDate') { _%>
-                    <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
                         <%_ } else { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%>}}</td>
                         <%_ } _%>
