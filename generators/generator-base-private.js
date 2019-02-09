@@ -1122,6 +1122,14 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Get resource build directory used by buildTool
+     * @param {string} buildTool - buildTool
+     */
+    getResourceBuildDirectoryForBuildTool(buildTool) {
+        return buildTool === 'maven' ? 'target/classes/' : 'build/resources/main/';
+    }
+
+    /**
      * @returns generated JDL from entities
      */
     generateJDLFromEntities() {

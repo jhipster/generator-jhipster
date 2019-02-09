@@ -41,7 +41,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     './<%= CLIENT_MAIN_SRC_DIR %>app/index'
   ],
   output: {
-    path: utils.root('<%= BUILD_DIR %>www'),
+    path: utils.root('<%= DIST_DIR %>'),
     filename: 'app/[name].bundle.js',
     chunkFilename: 'app/[id].chunk.js'
   },
@@ -67,7 +67,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   devServer: {
     stats: options.stats,
     hot: true,
-    contentBase: './<%= BUILD_DIR %>www',
+    contentBase: './<%= DIST_DIR %>',
     proxy: [{
       context: [<% if (authenticationType === 'uaa') { %>
         '/<%= uaaBaseName.toLowerCase() %>',<% } %>

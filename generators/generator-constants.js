@@ -67,8 +67,8 @@ const NPM_VERSION = '6.4.1';
 const MAIN_DIR = 'src/main/';
 const TEST_DIR = 'src/test/';
 
-// Note: this will be prepended with 'target/' for Maven, or with 'build/' for Gradle.
-const CLIENT_DIST_DIR = 'www/';
+// Note: this will be prepended with 'target/classes' for Maven, or with 'build/resources/main' for Gradle.
+const CLIENT_DIST_DIR = 'static/';
 
 const SUPPORTED_VALIDATION_RULES = ['required', 'unique', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
 
