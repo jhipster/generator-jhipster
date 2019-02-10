@@ -51,28 +51,10 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        <!-- TODO To remove after final Spring-cloud 2.1 release -->
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>http://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
     <pluginRepositories>
-        <!-- TODO To remove after final Spring-cloud 2.1 release -->
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>http://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
         <!-- jhipster-needle-maven-plugin-repository -->
     </pluginRepositories>
 
@@ -109,7 +91,7 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.2.0-SNAPSHOT</jhipster-dependencies.version>
+        <jhipster-dependencies.version>3.0.0-SNAPSHOT</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.1.2.RELEASE</spring-boot.version>
@@ -121,6 +103,8 @@
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
         <javassist.version>3.23.1-GA</javassist.version>
         <%_ if (databaseType === 'sql') { _%>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
+        <jaxb-impl.version>2.3.2</jaxb-impl.version>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>3.6.2</liquibase.version>
@@ -796,12 +780,12 @@
                         <path>
                             <groupId>javax.xml.bind</groupId>
                             <artifactId>jaxb-api</artifactId>
-                            <version>2.3.1</version>
+                            <version>${jaxb-api.version}</version>
                         </path>
                         <path>
                             <groupId>com.sun.xml.bind</groupId>
                             <artifactId>jaxb-impl</artifactId>
-                            <version>2.3.1</version>
+                            <version>${jaxb-impl.version}</version>
                         </path>
 <%_ } _%>
                     </annotationProcessorPaths>
