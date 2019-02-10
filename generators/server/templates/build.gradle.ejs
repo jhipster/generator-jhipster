@@ -22,8 +22,8 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
+        gradlePluginPortal()
         maven { url "http://repo.spring.io/plugins-release" }
-        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
@@ -31,40 +31,51 @@ buildscript {
         <%_ if (enableSwaggerCodegen) { _%>
         classpath "org.openapitools:openapi-generator-gradle-plugin:3.3.4"
         <%_ } _%>
-        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.5.2"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
 
 plugins {
-    id "org.sonarqube" version "2.7"
-    id "net.ltgt.apt-eclipse" version "0.20"
-    id "net.ltgt.apt-idea" version "0.20"
-    id "net.ltgt.apt" version "0.20"
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "java"
+    id "maven"
+    id "war"
+    id "idea"
+    id "jacoco"
+    id "com.google.cloud.tools.jib" version "0.9.11"
+    id "com.gorylenko.gradle-git-properties" version "2.0.0"
     <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
     <%_ } _%>
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "net.ltgt.apt-eclipse" version "0.20"
+    id "net.ltgt.apt-idea" version "0.20"
+    id "net.ltgt.apt" version "0.20"
     <%_ if (databaseType === 'sql') { _%>
     id 'org.liquibase.gradle' version '2.0.1'
     <%_ } _%>
+    id "org.sonarqube" version "2.7"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
-apply plugin: 'java'
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
 assert System.properties['java.specification.version'] == '1.8' || '11'
 
-apply plugin: 'maven'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'war'
 apply plugin: 'propdeps'
-<%_ if (!skipClient) { _%>
-apply plugin: 'com.moowork.node'
+
+apply from: 'gradle/docker.gradle'
+apply from: 'gradle/sonar.gradle'
+<%_ if (enableSwaggerCodegen) { _%>
+apply from: 'gradle/swagger.gradle'
 <%_ } _%>
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'idea'
+//jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
+
+if (project.hasProperty('prod')) {
+    apply from: 'gradle/profile_prod.gradle'
+} else {
+    apply from: 'gradle/profile_dev.gradle'
+}
 
 idea {
   module {
@@ -164,18 +175,6 @@ task cucumberTestReport(type: TestReport) {
 
 <%_ if (!skipClient) { _%>
 <%_ } _%>
-apply from: 'gradle/docker.gradle'
-apply from: 'gradle/sonar.gradle'
-<%_ if (enableSwaggerCodegen) { _%>
-apply from: 'gradle/swagger.gradle'
-<%_ } _%>
-//jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
-
-if (project.hasProperty('prod')) {
-    apply from: 'gradle/profile_prod.gradle'
-} else {
-    apply from: 'gradle/profile_dev.gradle'
-}
 
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
 
