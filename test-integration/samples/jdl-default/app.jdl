@@ -144,7 +144,7 @@ relationship OneToMany {
 
 relationship ManyToOne {
   Employee{user(login)} to User{employee},
-  Employee{manager(director)} to Employee
+  Employee{manager(lastName)} to Employee
 }
 
 relationship ManyToMany {
@@ -154,17 +154,17 @@ relationship ManyToMany {
   Job{chore(title)} to Task{linkedJob(JobTitle)}
 }
 
-dto BankAccount with mapstruct
-service BankAccount with serviceImpl
+dto BankAccount, Employee, Department, Location, Country, Region with mapstruct
+
 angularSuffix BankAccount with mySuffix
 filter BankAccount
 clientRootFolder BankAccount, TheLabel, Operation with test-root
-paginate TheLabel with pagination
-service TheLabel with serviceClass
-paginate Operation with infinite-scroll
 
-paginate JobHistory, Employee with infinite-scroll
-paginate Job with pagination
-dto Employee with mapstruct
-service Employee with serviceClass
-skipServer Country
+paginate TheLabel, Job with pagination
+paginate Operation, JobHistory, Employee with infinite-scroll
+
+service TheLabel, Employee, Department, Region with serviceClass
+service BankAccount, Location, Country with serviceImpl
+
+skipClient Country
+
