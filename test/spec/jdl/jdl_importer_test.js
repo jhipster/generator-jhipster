@@ -178,7 +178,7 @@ describe('JDLImporter', () => {
               relationshipType: 'many-to-one',
               relationshipName: 'manager',
               otherEntityName: 'employee',
-              otherEntityField: 'director',
+              otherEntityField: 'lastName',
               otherEntityRelationshipName: 'employee'
             },
             {
@@ -246,7 +246,7 @@ describe('JDLImporter', () => {
               relationshipType: 'many-to-many',
               relationshipName: 'history',
               otherEntityName: 'jobHistory',
-              otherEntityRelationshipName: 'jobHistory',
+              otherEntityRelationshipName: 'job',
               otherEntityField: 'id',
               ownerSide: false
             }

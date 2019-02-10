@@ -86,7 +86,7 @@ relationship OneToMany {
 
 relationship ManyToOne {
   Employee{user(login)} to User{employee},
-  Employee{manager(director)} to Employee
+  Employee{manager(lastName)} to Employee
 }
 
 relationship ManyToMany {
