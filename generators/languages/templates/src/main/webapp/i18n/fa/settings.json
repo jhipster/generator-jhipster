@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "تنظیمات کاربر برای [<b>{{username}}</b>]",
+        "title": "تنظیمات کاربر برای [<strong>{{username}}</strong>]",
         "form": {
             "firstname": "نام",
             "firstname.placeholder": "نام شما",

@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "Felhasználói beállítások [<b>{{username}}</b>]-nak",
+        "title": "Felhasználói beállítások [<strong>{{username}}</strong>]-nak",
         "form": {
             "firstname": "Keresztnév",
             "firstname.placeholder": "Az Ön keresztneve",

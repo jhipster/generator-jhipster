@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "Ակտիվ  միացումներ [<b>{{username}}</b>] համար",
+        "title": "Ակտիվ  միացումներ [<strong>{{username}}</strong>] համար",
         "table": {
             "ipaddress": "IP հասցե",
             "useragent": "User Agent",
