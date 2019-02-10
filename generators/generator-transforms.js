@@ -33,7 +33,7 @@ const prettierTransform = function(defaultOptions) {
     const transform = (file, encoding, callback) => {
         /* resolve from the projects config */
         prettier.resolveConfig(file.relative).then(options => {
-            if(file.state !== 'deleted') {
+            if (file.state !== 'deleted') {
                 const str = file.contents.toString('utf8');
                 if (!options || Object.keys(options).length === 0) {
                     options = defaultOptions;
