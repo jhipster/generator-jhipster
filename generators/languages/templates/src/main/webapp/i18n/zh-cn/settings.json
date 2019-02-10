@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "[<b>{{username}}</b>] 的用户设置",
+        "title": "[<strong>{{username}}</strong>] 的用户设置",
         "form": {
             "firstname": "名字",
             "firstname.placeholder": "您的名字",

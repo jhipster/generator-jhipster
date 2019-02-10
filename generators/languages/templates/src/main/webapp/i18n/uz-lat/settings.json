@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "[<b>{{username}}</b>] sozlamalari",
+        "title": "[<strong>{{username}}</strong>] sozlamalari",
         "form": {
             "firstname": "Ism",
             "firstname.placeholder": "Ismingiz",

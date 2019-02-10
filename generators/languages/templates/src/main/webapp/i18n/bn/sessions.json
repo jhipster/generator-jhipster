@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "চলতি সেশন [<b>{{username}}</b>] এর জন্য",
+        "title": "চলতি সেশন [<strong>{{username}}</strong>] এর জন্য",
         "table": {
             "ipaddress": "আই পি অ্যাড্রেস",
             "useragent": "ইউজার এজেন্ট",

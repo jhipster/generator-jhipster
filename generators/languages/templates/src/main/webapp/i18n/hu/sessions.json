@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "[<b>{{username}}</b>]-hoz tartozó aktív munkamenetek",
+        "title": "[<strong>{{username}}</strong>]-hoz tartozó aktív munkamenetek",
         "table": {
             "ipaddress": "IP cím",
             "useragent": "Böngésző típusa",
