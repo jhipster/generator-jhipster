@@ -569,7 +569,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add new css style to the application.
+     * Add new css style to the angular application in "global.css.
      *
      * @param {string} style - css to add in the file
      * @param {string} comment - comment to add before css code
@@ -588,15 +588,11 @@ module.exports = class extends PrivateBase {
      *
      */
     addMainCSSStyle(style, comment) {
-        if (this.clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addGlobalCSSStyle(style, comment);
-        } else if (this.clientFramework === 'react') {
-            this.needleApi.clientReact.addAppCSSStyle(style, comment);
-        }
+        this.needleApi.clientAngular.addGlobalCSSStyle(style, comment);
     }
 
     /**
-     * Add new scss style to the application.
+     * Add new scss style to the angular application in "global.scss
      *
      * @param {string} style - css to add in the file
      * @param {string} comment - comment to add before css code
@@ -615,11 +611,7 @@ module.exports = class extends PrivateBase {
      *
      */
     addMainSCSSStyle(style, comment) {
-        if (this.clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
-        } else if (this.clientFramework === 'react') {
-            this.needleApi.clientReact.addAppSCSSStyle(style, comment);
-        }
+        this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
     }
 
     /**
@@ -643,11 +635,6 @@ module.exports = class extends PrivateBase {
      *
      */
     addVendorSCSSStyle(style, comment) {
-        if (this.clientFramework !== 'angularX') {
-            this.error('Vendor is only supported by Angular');
-            return;
-        }
-
         this.needleApi.clientAngular.addVendorSCSSStyle(style, comment);
     }
 
