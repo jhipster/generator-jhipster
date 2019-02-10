@@ -90,7 +90,7 @@ module.exports = class extends PrivateBase {
      * @param {string} comment - comment to add before resources content.
      */
     addExternalResourcesToRoot(resources, comment) {
-        this.needleApi.base.addExternalResourcesToRoot(resources, comment);
+        this.needleApi.client.addExternalResourcesToRoot(resources, comment);
     }
 
     /**
