@@ -18,6 +18,8 @@
 -%>
 package  <%=packageName%>.config.lazy;
 
+import io.github.jhipster.config.JHipsterConstants;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -34,7 +36,7 @@ import org.springframework.stereotype.Component;
  * As this is an experimental feature, we only recommend to use it in "dev" mode for the moment.
  */
 @Component
-@Profile("dev")
+@Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
 public class LazyInitBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
     private Class<?>[] exclusionList;
