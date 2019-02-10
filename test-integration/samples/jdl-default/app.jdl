@@ -165,6 +165,3 @@ paginate Operation, JobHistory, Employee with infinite-scroll
 
 service TheLabel, Employee, Department, Region with serviceClass
 service BankAccount, Location, Country with serviceImpl
-
-skipClient Country
-
