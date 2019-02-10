@@ -440,7 +440,7 @@ dependencies {
     liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
     liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
     <%_ } _%>
-    compile "org.mapstruct:mapstruct-jdk8:${mapstruct_version}"
+    compile "org.mapstruct:mapstruct:${mapstruct_version}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen"
