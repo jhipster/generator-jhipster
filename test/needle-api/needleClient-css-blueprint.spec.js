@@ -38,6 +38,9 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
             addCssStylesProperty() {
+                this.addMainSCSSStyle('@import style_without_comment');
+                this.addVendorSCSSStyle('@import style_without_comment');
+                this.addMainCSSStyle('without-comment { font-size: 200%; color: red; }');
                 this.addMainSCSSStyle('@import style', 'my comment');
                 this.addVendorSCSSStyle('@import style', 'my comment');
                 this.addMainCSSStyle('h1 { font-size: 200%; color: navy; }', 'my comment');
@@ -55,7 +58,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
     }
 };
 
-describe('JHipster client generator with blueprint and needle API SCSS', () => {
+describe('needle API SCSS: JHipster client generator with blueprint', () => {
     const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
 
     blueprintNames.forEach(blueprintName => {
@@ -84,6 +87,14 @@ describe('JHipster client generator with blueprint and needle API SCSS', () => {
                     .on('end', done);
             });
 
+            it('vendor.scss contains the specific change (without comment) added by needle api', () => {
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`, /@import style_without_comment/);
+            });
+
+            it('global.scss contains the specific change (without comment) added by needle api', () => {
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`, /@import style_without_comment/);
+            });
+
             it('vendor.scss contains the specific change added by needle api', () => {
                 assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`, /@import style/);
                 assert.fileContent(
@@ -107,7 +118,7 @@ describe('JHipster client generator with blueprint and needle API SCSS', () => {
     });
 });
 
-describe('JHipster client generator with blueprint and needle API CSS', () => {
+describe('needle API CSS: JHipster client generator with blueprint', () => {
     const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
 
     blueprintNames.forEach(blueprintName => {
@@ -134,6 +145,10 @@ describe('JHipster client generator with blueprint and needle API CSS', () => {
                         languages: ['fr']
                     })
                     .on('end', done);
+            });
+
+            it('global.css contains the specific change (without comment) added by needle api', () => {
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/css/global.css`, /without-comment { font-size: 200%; color: red; }/);
             });
 
             it('global.css contains the specific change added by needle api', () => {
