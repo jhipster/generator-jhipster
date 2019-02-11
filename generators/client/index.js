@@ -21,6 +21,8 @@ module.exports = class extends ClientGenerator {
 
         this.configOptions = jhContext.configOptions || {};
         this.blueprintjs = blueprintPackagejs;
+        this.configOptions.clientTheme = this.config.get('clientTheme');
+        this.configOptions.clientThemeVariant = this.config.get('clientThemeVariant');
         // This sets up options for this sub generator and is being reused from JHipster
         jhContext.setupClientOptions(this, jhContext);
     }
@@ -71,12 +73,18 @@ module.exports = class extends ClientGenerator {
         return {
             askForClient: prompts.askForClient,
             askForClientSideOpts: prompts.askForClientSideOpts,
+            askForClientTheme: prompts.askForClientTheme,
+            askForClientThemeVariant: prompts.askForClientThemeVariant,
 
             setSharedConfigOptions() {
                 this.configOptions.lastQuestion = this.currentQuestion;
                 this.configOptions.totalQuestions = this.totalQuestions;
                 this.configOptions.clientFramework = this.clientFramework;
                 this.configOptions.useSass = this.useSass;
+                this.configOptions.clientTheme = this.clientTheme;
+                this.configOptions.clientThemeVariant = this.clientThemeVariant;
+                this.config.set('clientTheme', this.clientTheme);
+                this.config.set('clientThemeVariant', this.clientThemeVariant);
             }
         };
     }
