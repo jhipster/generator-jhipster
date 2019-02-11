@@ -132,7 +132,7 @@ function addEntityToMenu(generator, entityName, translationKey, className) {
     );
 }
 
-function addEntityToRouterImport(generator, className, fileName, folderName) {
+function addEntityToRouterImport(generator, entityAngularName, fileName, folderName) {
     jhipsterUtils.rewriteFile(
         {
             file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
@@ -140,18 +140,18 @@ function addEntityToRouterImport(generator, className, fileName, folderName) {
             splicable: [generator.stripMargin(
                 // prettier-ignore
                 `|// prettier-ignore
-                |const ${className} = () => import('../entities/${folderName}/${fileName}.vue');
+                |const ${entityAngularName} = () => import('../entities/${folderName}/${fileName}.vue');
                 |// prettier-ignore
-                |const ${className}Update = () => import('../entities/${folderName}/${fileName}-update.vue');
+                |const ${entityAngularName}Update = () => import('../entities/${folderName}/${fileName}-update.vue');
                 |// prettier-ignore
-                |const ${className}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
+                |const ${entityAngularName}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
             )]
         },
         generator
     );
 }
 
-function addEntityToRouter(generator, entityName, entityFileName, className) {
+function addEntityToRouter(generator, entityName, entityFileName, entityAngularName) {
     jhipsterUtils.rewriteFile(
         {
             file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
@@ -159,10 +159,30 @@ function addEntityToRouter(generator, entityName, entityFileName, className) {
             splicable: [generator.stripMargin(
                 // prettier-ignore
                 `|,
-                |  { path: '/entity/${entityFileName}', name: '${className}', component: ${className}, meta: { authorities: ['ROLE_USER'] } },
-                |  { path: '/entity/${entityFileName}/new', name: '${className}Create', component: ${className}Update, meta: { authorities: ['ROLE_USER'] } },
-                |  { path: '/entity/${entityFileName}/:${entityName}Id/edit', name: '${className}Edit', component: ${className}Update, meta: { authorities: ['ROLE_USER'] } },
-                |  { path: '/entity/${entityFileName}/:${entityName}Id/view', name: '${className}View', component: ${className}Details, meta: { authorities: ['ROLE_USER'] } }`
+                |    {
+                |      path: '/entity/${entityFileName}',
+                |      name: '${entityAngularName}',
+                |      component: ${entityAngularName},
+                |      meta: { authorities: ['ROLE_USER'] }
+                |    },
+                |    {
+                |      path: '/entity/${entityFileName}/new',
+                |      name: '${entityAngularName}Create',
+                |      component: ${entityAngularName}Update,
+                |      meta: { authorities: ['ROLE_USER'] }
+                |    },
+                |    {
+                |      path: '/entity/${entityFileName}/:${entityName}Id/edit',
+                |      name: '${entityAngularName}Edit',
+                |      component: ${entityAngularName}Update,
+                |      meta: { authorities: ['ROLE_USER'] }
+                |    },
+                |    {
+                |      path: '/entity/${entityFileName}/:${entityName}Id/view',
+                |      name: '${entityAngularName}View',
+                |      component: ${entityAngularName}Details,
+                |      meta: { authorities: ['ROLE_USER'] }
+                |    }`
             )]
         },
         generator

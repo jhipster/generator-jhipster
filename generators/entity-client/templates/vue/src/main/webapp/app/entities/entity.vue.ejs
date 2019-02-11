@@ -2,7 +2,7 @@
     <div>
         <h2 id="page-heading">
             <span v-text="$t('<%= i18nKeyPrefix %>.home.title')" id="<%= entityFileName %>-heading"><%= entityClassPluralHumanized %></span>
-            <router-link :to="{name: '<%= entityClass %>Create'}" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>">
+            <router-link :to="{name: '<%= entityAngularName %>Create'}" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>">
                 <font-awesome-icon icon="plus"></font-awesome-icon>
                 <span  v-text="$t('<%= i18nKeyPrefix %>.home.createLabel')">
                     Create new <%= entityAngularName %>
@@ -96,7 +96,8 @@
                         const otherEntityName = relationships[idx].otherEntityName;
                         const otherEntityStateName = relationships[idx].otherEntityStateName;
                         const otherEntityField = relationships[idx].otherEntityField;
-                        const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
+                        const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+                        const otherEntityAngularName = relationships[idx].otherEntityAngularName; _%>
                         <%_ if (relationshipType === 'many-to-one'
                         || (relationshipType === 'one-to-one' && ownerSide === true)
                         || (relationshipType === 'many-to-many' && ownerSide === true && pagination === 'no')) { _%>
@@ -116,16 +117,16 @@
                             <%_ } else { _%>
                                 <%_ if (relationshipType === 'many-to-many') { _%>
                         <span v-for="(<%= relationshipFieldName %>, i) in <%= entityInstance %>.<%= relationshipFieldNamePlural %>" :key="<%= relationshipFieldName %>.id">{{i > 0 ? ', ' : ''}}
-                            <router-link class="form-control-static" :to="{name: '<%= relationshipNameCapitalized %>View', params: {<%= relationshipFieldName %>Id: <%= relationshipFieldName %>.id}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
+                            <router-link class="form-control-static" :to="{name: '<%= otherEntityAngularName %>View', params: {<%= relationshipFieldName %>Id: <%= relationshipFieldName %>.id}}">{{<%= relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </span>
                                 <%_ } else { _%>
                                     <%_ if (dto === 'no') { _%>
                         <div v-if="<%= entityInstance + "." + relationshipFieldName %>">
-                            <router-link :to="{name: '<%= relationshipNameCapitalized %>View', params: {<%= relationshipFieldName %>Id: <%= entityInstance + "." + relationshipFieldName %>.id}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
+                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= relationshipFieldName %>Id: <%= entityInstance + "." + relationshipFieldName %>.id}}">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</router-link>
                         </div>
                                     <%_ } else { _%>
                         <div v-if="<%= entityInstance + "." + relationshipFieldName + "Id" %>">
-                            <router-link :to="{name: '<%= relationshipNameCapitalized %>View', params: {<%= relationshipFieldName %>Id: <%= entityInstance + "." + relationshipFieldName + "Id" %>}}">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</router-link>
+                            <router-link :to="{name: '<%= otherEntityAngularName %>View', params: {<%= relationshipFieldName %>Id: <%= entityInstance + "." + relationshipFieldName + "Id" %>}}">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</router-link>
                         </div>
                                     <%_ } _%>
                                 <%_ } _%>
@@ -135,11 +136,11 @@
                     <%_ } _%>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
-                            <router-link :to="{name: '<%= entityClass %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-info btn-sm">
+                            <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}" tag="button" class="btn btn-info btn-sm">
                                 <font-awesome-icon icon="eye"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
                             </router-link>
-                            <router-link :to="{name: '<%= entityClass %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}"  tag="button" class="btn btn-primary btn-sm">
+                            <router-link :to="{name: '<%= entityAngularName %>Edit', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}"  tag="button" class="btn btn-primary btn-sm">
                                 <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
                             </router-link>

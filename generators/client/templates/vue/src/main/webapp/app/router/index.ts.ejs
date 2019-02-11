@@ -58,7 +58,7 @@ export default new Router({
       name: 'NotFound',
       component: Error,
       meta: { error404: true }
-    }<%_ if (authenticationType !== 'oauth2') { _%>,
+    }<% if (authenticationType !== 'oauth2') { %>,
     {
       path: '/register',
       name: 'Register',
@@ -84,14 +84,15 @@ export default new Router({
       name: 'ChangePassword',
       component: ChangePassword,
       meta: { authorities: ['ROLE_USER'] }
-    }
-    <%_ if (authenticationType === 'session') { _%>,
+    },
+    <%_ if (authenticationType === 'session') { _%>
     {
       path: '/account/sessions',
       name: 'Sessions',
       component: Sessions,
       meta: { authorities: ['ROLE_USER'] }
-    }<%_ } _%>,
+    },
+    <%_ } _%>
     {
       path: '/account/settings',
       name: 'Settings',
@@ -121,7 +122,7 @@ export default new Router({
       name: '<%= jhiPrefixCapitalized %>UserView',
       component: <%= jhiPrefixCapitalized %>UserManagementViewComponent,
       meta: { authorities: ['ROLE_ADMIN'] }
-    }<%_ } _%>,
+    }<% } %>,
     {
       path: '/admin/docs',
       name: '<%= jhiPrefixCapitalized %>DocsComponent',

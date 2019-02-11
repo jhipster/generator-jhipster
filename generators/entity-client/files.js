@@ -126,11 +126,12 @@ function writeFiles() {
     // Add entity to menu
     const className = this.entityClass;
     const entityName = this.entityInstance;
+    const entityAngularName = this.entityAngularName;
     utils.addEntityToMenu(this, this.entityFileName, this.entityTranslationKeyMenu, className);
 
     // Add entity paths to routing system
-    utils.addEntityToRouterImport(this, className, this.entityFileName, this.entityFolderName);
-    utils.addEntityToRouter(this, entityName, this.entityFileName, className);
+    utils.addEntityToRouterImport(this, entityAngularName, this.entityFileName, this.entityFolderName);
+    utils.addEntityToRouter(this, entityName, this.entityFileName, entityAngularName);
 
     // Add entity services to main
     utils.addEntityServiceToMainImport(this, className, this.entityFileName, this.entityFolderName);
