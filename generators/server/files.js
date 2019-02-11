@@ -947,11 +947,13 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/repository/reactive/ReactiveN1qlCouchbaseRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}ReactiveN1qlCouchbaseRepository.java`
+                    renameTo: generator =>
+                        `${generator.javaDir}repository/${generator.reactiveRepository}ReactiveN1qlCouchbaseRepository.java`
                 },
                 {
                     file: 'package/repository/reactive/CustomReactiveN1qlCouchbaseRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}CustomReactiveN1qlCouchbaseRepository.java`
+                    renameTo: generator =>
+                        `${generator.javaDir}repository/${generator.reactiveRepository}CustomReactiveN1qlCouchbaseRepository.java`
                 }
             ]
         },
