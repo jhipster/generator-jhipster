@@ -25,9 +25,9 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
-    <% let autoIncrementValue = true; 
+    <% let autoIncrementValue = true;
         for (idx in relationships) {
-            if (relationships[idx].useJPADerivedIdentifier === true) { 
+            if (relationships[idx].useJPADerivedIdentifier === true) {
                 autoIncrementValue = false;
                 break;
             }
@@ -143,8 +143,8 @@
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
-            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true 
-                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) { 
+            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true
+                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) {
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
@@ -160,7 +160,15 @@
         } _%>
     </changeSet>
 
-    <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="dev">
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/data/<%= entityTableName %>.csv"
                   separator=";"

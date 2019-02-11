@@ -212,7 +212,8 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
-        contexts: dev
+        # Remove 'faker' if you do not want the sample data to be loaded automatically
+        contexts: dev, faker
     <%_ } _%>
     mail:
         host: localhost

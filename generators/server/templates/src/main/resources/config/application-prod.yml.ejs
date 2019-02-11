@@ -181,6 +181,7 @@ spring:
             password: password
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
+    # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
     liquibase:
         contexts: prod
     <%_ } _%>
