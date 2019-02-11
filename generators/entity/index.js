@@ -31,9 +31,11 @@ const statistics = require('../statistics');
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 let useBlueprint;
 
-module.exports = class extends BaseBlueprintGenerator {
+class EntityGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
+
+        this.configOptions = this.options.configOptions || {};
 
         // This makes `name` a required argument.
         this.argument('name', {
@@ -122,7 +124,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
-        const blueprint = this.config.get('blueprint');
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'entity', {
@@ -1158,4 +1160,6 @@ module.exports = class extends BaseBlueprintGenerator {
         if (useBlueprint) return;
         return this._install();
     }
-};
+}
+
+module.exports = EntityGenerator;
