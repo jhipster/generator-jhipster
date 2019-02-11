@@ -38,10 +38,10 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   mode: ENV,
   entry: [
     'react-hot-loader/patch',
-    './src/main/webapp/app/index'
+    './<%= CLIENT_MAIN_SRC_DIR %>app/index'
   ],
   output: {
-    path: utils.root('<%= BUILD_DIR %>www'),
+    path: utils.root('<%= DIST_DIR %>'),
     filename: 'app/[name].bundle.js',
     chunkFilename: 'app/[id].chunk.js'
   },
@@ -67,7 +67,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   devServer: {
     stats: options.stats,
     hot: true,
-    contentBase: './<%= BUILD_DIR %>www',
+    contentBase: './<%= DIST_DIR %>',
     proxy: [{
       context: [<% if (authenticationType === 'uaa') { %>
         '/<%= uaaBaseName.toLowerCase() %>',<% } %>
@@ -76,7 +76,8 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         '/management',
         '/swagger-resources',
         '/v2/api-docs',
-        '/h2-console',
+        '/h2-console',<% if (authenticationType === 'oauth2') { %>
+        '/login',<% } %>        
         '/auth'
       ],
       target: `http${options.tls ? 's' : ''}://127.0.0.1:<%= serverPort %>`,

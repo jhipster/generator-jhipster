@@ -40,7 +40,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     main: './<%= MAIN_SRC_DIR %>app/index'
   },
   output: {
-    path: utils.root('<%= BUILD_DIR %>www'),
+    path: utils.root('<%= DIST_DIR %>'),
     filename: 'app/[name].[hash].bundle.js',
     chunkFilename: 'app/[name].[hash].chunk.js'
   },

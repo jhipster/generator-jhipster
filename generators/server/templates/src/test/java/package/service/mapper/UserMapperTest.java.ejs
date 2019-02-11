@@ -3,8 +3,8 @@ package <%= packageName %>.service.mapper;
 <% if (databaseType === 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%= packageName %>.<%= mainClass %>;
-import <%= packageName %>.domain.User;
-import <%= packageName %>.service.dto.UserDTO;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
@@ -36,20 +36,20 @@ public class UserMapperTest <% if (databaseType === 'cassandra') { %>extends Abs
     @Autowired
     private UserMapper userMapper;
 
-    private User user;
-    private UserDTO userDto;
+    private <%= asEntity('User') %> user;
+    private <%= asDto('User') %> userDto;
 
     <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
     private static final Long DEFAULT_ID = 1L;
     <%_ } else if (databaseType === 'couchbase'){ _%>
-    private static final String DEFAULT_ID = User.PREFIX + DEFAULT_LOGIN;
+    private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
     <%_ } else { _%>
     private static final String DEFAULT_ID = "id1";
     <%_ } _%>
 
     @Before
     public void init() {
-        user = new User();
+        user = new <%= asEntity('User') %>();
         user.setLogin(DEFAULT_LOGIN);
         <%_ if (authenticationType !== 'oauth2') { _%>
         user.setPassword(RandomStringUtils.random(60));
@@ -63,16 +63,16 @@ public class UserMapperTest <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } _%>
         user.setLangKey("en");
 
-        userDto = new UserDTO(user);
+        userDto = new <%= asDto('User') %>(user);
     }
 
     @Test
     public void usersToUserDTOsShouldMapOnlyNonNullUsers(){
-        List<User> users = new ArrayList<>();
+        List<<%= asEntity('User') %>> users = new ArrayList<>();
         users.add(user);
         users.add(null);
 
-        List<UserDTO> userDTOS = userMapper.usersToUserDTOs(users);
+        List<<%= asDto('User') %>> userDTOS = userMapper.usersToUserDTOs(users);
 
         assertThat(userDTOS).isNotEmpty();
         assertThat(userDTOS).size().isEqualTo(1);
@@ -80,11 +80,11 @@ public class UserMapperTest <% if (databaseType === 'cassandra') { %>extends Abs
 
     @Test
     public void userDTOsToUsersShouldMapOnlyNonNullUsers(){
-        List<UserDTO> usersDto = new ArrayList<>();
+        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
         usersDto.add(null);
 
-        List<User> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users).isNotEmpty();
         assertThat(users).size().isEqualTo(1);
@@ -96,10 +96,10 @@ public class UserMapperTest <% if (databaseType === 'cassandra') { %>extends Abs
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
 
-        List<UserDTO> usersDto = new ArrayList<>();
+        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
-        List<User> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users).isNotEmpty();
         assertThat(users).size().isEqualTo(1);
@@ -117,10 +117,10 @@ public class UserMapperTest <% if (databaseType === 'cassandra') { %>extends Abs
     public void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities(){
         userDto.setAuthorities(null);
 
-        List<UserDTO> usersDto = new ArrayList<>();
+        List<<%= asDto('User') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
-        List<User> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%= asEntity('User') %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users).isNotEmpty();
         assertThat(users).size().isEqualTo(1);
@@ -136,7 +136,7 @@ public class UserMapperTest <% if (databaseType === 'cassandra') { %>extends Abs
 
         userDto.setAuthorities(authoritiesAsString);
 
-        User user = userMapper.userDTOToUser(userDto);
+        <%= asEntity('User') %> user = userMapper.userDTOToUser(userDto);
 
         assertThat(user).isNotNull();
         assertThat(user.getAuthorities()).isNotNull();
@@ -153,7 +153,7 @@ public class UserMapperTest <% if (databaseType === 'cassandra') { %>extends Abs
     public void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities(){
         userDto.setAuthorities(null);
 
-        User user = userMapper.userDTOToUser(userDto);
+        <%= asEntity('User') %> user = userMapper.userDTOToUser(userDto);
 
         assertThat(user).isNotNull();
         assertThat(user.getAuthorities()).isNotNull();

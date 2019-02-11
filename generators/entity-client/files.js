@@ -244,7 +244,7 @@ function writeFiles() {
                     this.entityAngularName,
                     this.entityFolderName,
                     this.entityFileName,
-                    this.enableTranslation,
+                    this.entityUrl,
                     this.clientFramework,
                     this.microserviceName
                 );
@@ -262,7 +262,7 @@ function writeFiles() {
                     this.entityAngularName,
                     this.entityFolderName,
                     this.entityFileName,
-                    this.enableTranslation,
+                    this.entityUrl,
                     this.clientFramework
                 );
             }

@@ -102,6 +102,7 @@ const files = {
         {
             path: MAIN_SRC_DIR,
             templates: [
+                'WEB-INF/web.xml',
                 { file: 'favicon.ico', method: 'copy' },
                 'robots.txt',
                 '404.html',

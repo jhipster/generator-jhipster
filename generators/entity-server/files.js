@@ -92,7 +92,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/domain/Entity.java',
-                    renameTo: generator => `${generator.packageFolder}/domain/${generator.entityClass}.java`
+                    renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java`
                 },
                 {
                     file: 'package/repository/EntityRepository.java',
@@ -168,7 +168,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/service/dto/EntityDTO.java',
-                    renameTo: generator => `${generator.packageFolder}/service/dto/${generator.entityClass}DTO.java`
+                    renameTo: generator => `${generator.packageFolder}/service/dto/${generator.asDto(generator.entityClass)}.java`
                 },
                 {
                     file: 'package/service/mapper/BaseEntityMapper.java',
@@ -257,7 +257,13 @@ function writeFiles() {
                 this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
 
                 if (['ehcache', 'infinispan'].includes(this.cacheProvider) && this.enableHibernateCache) {
-                    this.addEntityToCache(this.entityClass, this.relationships, this.packageName, this.packageFolder, this.cacheProvider);
+                    this.addEntityToCache(
+                        this.asEntity(this.entityClass),
+                        this.relationships,
+                        this.packageName,
+                        this.packageFolder,
+                        this.cacheProvider
+                    );
                 }
             }
         },

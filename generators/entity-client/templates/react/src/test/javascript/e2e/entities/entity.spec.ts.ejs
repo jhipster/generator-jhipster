@@ -52,7 +52,7 @@ describe('<%= entityClass %> e2e test', () => {
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
     <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
     <%_ if (fieldsContainBlobOrImage) { _%>
-    const fileToUpload = '../../../../../<%= entityParentPathAddition %>main/webapp/static/images/logo-jhipster.png';
+    const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>static/images/logo-jhipster.png';
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
 
@@ -67,7 +67,8 @@ describe('<%= entityClass %> e2e test', () => {
         await signInPage.password.sendKeys('admin');
         await signInPage.loginButton.click();
         await signInPage.waitUntilHidden();
-
+        <%_ } else { _%>
+        await signInPage.loginWithOAuth('admin', 'admin');
         <%_ } _%>
         await waitUntilDisplayed(navBarPage.entityMenu);
     });

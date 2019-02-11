@@ -25,10 +25,16 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
-
+    <% let autoIncrementValue = true; 
+        for (idx in relationships) {
+            if (relationships[idx].useJPADerivedIdentifier === true) { 
+                autoIncrementValue = false;
+                break;
+            }
+        }%>
     <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     <property name="now" value="now()" dbms="mysql"/>
-    <property name="autoIncrement" value="true"/>
+    <property name="autoIncrement" value="<%- autoIncrementValue %>"/>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'postgresql') { _%>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
@@ -137,7 +143,8 @@
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
-            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true) {
+            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true 
+                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) { 
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
@@ -194,15 +201,15 @@
           _%>
 
         <createTable tableName="<%= joinTableName %>">
-            <column name="<%= getPluralColumnName(relationshipName) %>_id" type="bigint">
+            <column name="<%= getColumnName(relationshipName) %>_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="<%= getPluralColumnName(name) %>_id" type="bigint">
+            <column name="<%= getColumnName(name) %>_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= getPluralColumnName(name) %>_id, <%= getPluralColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
+        <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
         <% } %><% } %>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->

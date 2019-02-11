@@ -18,11 +18,6 @@
 -%>
 import org.gradle.internal.os.OperatingSystem
 
-apply plugin: 'org.springframework.boot'
-<%_ if (!skipClient) { _%>
-apply plugin: 'com.moowork.node'
-<%_ } _%>
-
 dependencies {
     compile "org.springframework.boot:spring-boot-devtools"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
@@ -38,22 +33,31 @@ if (project.hasProperty('tls')) {
     profiles += ',tls'
 }
 
+springBoot {
+    buildInfo {
+		properties {
+			time = null
+		}
+	}
+}
+
 bootRun {
     args = []
 }
 
 <%_ if (!skipClient) { _%>
-task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
-    inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
+task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
     inputs.files(fileTree('<%= CLIENT_MAIN_SRC_DIR %>'))
-    outputs.dir("<%= CLIENT_DIST_DIR %>")
-    outputs.file("<%= CLIENT_DIST_DIR %>app/main.bundle.js")
-    args = ["run", "webpack:build"]
-}
 
-task copyIntoStatic (type: Copy) {
-    from '<%= CLIENT_DIST_DIR %>'
-    into 'build/resources/main/static'
+    def webpackDevFiles = fileTree('<%= CLIENT_WEBPACK_DIR %>/')
+    webpackDevFiles.exclude('webpack.prod.js')
+    inputs.files(webpackDevFiles)
+
+    outputs.files(fileTree("<%= CLIENT_DIST_DIR %>"))
+
+    dependsOn <%= clientPackageManager %>_install
+
+    args = ["run", "webpack:build"]
 }
 <%_ } _%>
 
@@ -79,6 +83,5 @@ processResources {
 
 <%_ if (!skipClient) { _%>
 processResources.dependsOn webpackBuildDev
-copyIntoStatic.dependsOn processResources
-bootJar.dependsOn copyIntoStatic
+bootJar.dependsOn processResources
 <%_ } _%>

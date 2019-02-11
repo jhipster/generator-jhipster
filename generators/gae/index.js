@@ -566,7 +566,7 @@ module.exports = class extends BaseGenerator {
                     }
 
                     this.gcpCloudSqlInstanceName = execSync(
-                        `gcloud sql instances describe jhipster --format="value(connectionName)" --project="${this.gcpProjectId}"`,
+                        `gcloud sql instances describe ${name} --format="value(connectionName)" --project="${this.gcpProjectId}"`,
                         { encoding: 'utf8' }
                     );
 

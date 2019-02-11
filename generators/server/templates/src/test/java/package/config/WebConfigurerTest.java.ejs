@@ -26,9 +26,6 @@ import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 import io.undertow.Undertow;
 import io.undertow.Undertow.Builder;
 import io.undertow.UndertowOptions;
-<%_ if (!skipClient) { _%>
-import org.apache.commons.io.FilenameUtils;
-<%_ } %>
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.h2.server.web.WebServlet;
 <%_ } _%>
@@ -44,6 +41,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.xnio.OptionMap;
 
 import javax.servlet.*;
+<%_ if (!skipClient) { _%>
+import java.io.File;
+<%_ } _%>
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -120,7 +120,7 @@ public class WebConfigurerTest {
         assertThat(container.getMimeMappings().get("json")).isEqualTo("text/html;charset=utf-8");
         <%_ if (!skipClient) { _%>
         if (container.getDocumentRoot() != null) {
-            assertThat(container.getDocumentRoot().getPath()).isEqualTo(FilenameUtils.separatorsToSystem("<%= BUILD_DIR %>www"));
+            assertThat(container.getDocumentRoot()).isEqualTo(new File("<%= CLIENT_DIST_DIR %>"));
         }
         <%_ } _%>
 

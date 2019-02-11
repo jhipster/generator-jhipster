@@ -21,16 +21,16 @@ import { Injectable } from '@angular/core';
 <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
-import { IUser } from '../user/user.model';
+import { IUser } from 'app/core/user/user.model';
 <%_ } _%>
-import { AccountService } from '../auth/account.service';
+import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthServerProvider } from '../auth/auth-jwt.service';
+import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from '../auth/auth-session.service';
+import { AuthServerProvider } from 'app/core/auth/auth-session.service';
 <%_ } _%>
 <%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/core/tracker/tracker.service';
 <%_ } _%>
 
 @Injectable({providedIn: 'root'})
@@ -50,10 +50,7 @@ export class LoginService {
 
     <%_ if (authenticationType === 'oauth2') { _%>
     login() {
-        let port = (location.port ? ':' + location.port : '');
-        if (port === ':9000') {
-            port = ':<%= serverPort %>';
-        }
+        const port = (location.port ? ':' + location.port : '');
         location.href = '//' + location.hostname + port + location.pathname + 'login';
     }
     <%_ } else { _%>
@@ -101,6 +98,20 @@ export class LoginService {
         } else {
             this.accountService.authenticate(null);
         }
+        <%_ } else if (authenticationType === 'oauth2') { _%>
+        this.authServerProvider.logout().subscribe(response => {
+            const data = response.body;
+            let logoutUrl = data.logoutUrl;
+            // if Keycloak, uri has protocol/openid-connect/token
+            if (logoutUrl.indexOf('/protocol') > -1) {
+                logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
+            } else {
+                // Okta
+                logoutUrl = logoutUrl + '?id_token_hint=' +
+                    data.idToken + '&post_logout_redirect_uri=' + window.location.origin;
+            }
+            window.location.href = logoutUrl;
+        });
         <%_ } else { _%>
         this.authServerProvider.logout().subscribe();
         this.accountService.authenticate(null);

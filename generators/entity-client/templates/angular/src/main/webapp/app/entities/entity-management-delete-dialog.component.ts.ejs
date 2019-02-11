@@ -75,10 +75,10 @@ export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnD
                 this.ngbModalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent as Component, { size: 'lg', backdrop: 'static'});
                 this.ngbModalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
                 this.ngbModalRef.result.then((result) => {
-                    this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
+                    this.router.navigate(['/<%= entityUrl %>', { outlets: { popup: null }}]);
                     this.ngbModalRef = null;
                 }, (reason) => {
-                    this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
+                    this.router.navigate(['/<%= entityUrl %>', { outlets: { popup: null }}]);
                     this.ngbModalRef = null;
                 });
             }, 0);

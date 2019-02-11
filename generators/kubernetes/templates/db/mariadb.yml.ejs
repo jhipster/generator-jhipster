@@ -16,6 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+apiVersion: v1
+kind: Secret
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mariadb
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: <%= app.baseName.toLowerCase() %>-mariadb
+type: Opaque
+data:
+  mariadb-root-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -35,10 +46,11 @@ spec:
       - name: mariadb
         image: <%= DOCKER_MARIADB %>
         env:
-        - name: MYSQL_USER
-          value: root
-        - name: MYSQL_ALLOW_EMPTY_PASSWORD
-          value: 'yes'
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: <%= app.baseName.toLowerCase() %>-mariadb
+              key: mariadb-root-password
         - name: MYSQL_DATABASE
           value: <%= app.baseName.toLowerCase() %>
 #        command:

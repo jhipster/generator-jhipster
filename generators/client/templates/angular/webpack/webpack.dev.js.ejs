@@ -37,7 +37,7 @@ const ENV = 'development';
 module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'eval-source-map',
     devServer: {
-        contentBase: './<%= BUILD_DIR %>www',
+        contentBase: './<%= DIST_DIR %>',
         proxy: [{
             context: [<% if (authenticationType === 'uaa') { %>
                 '/<%= uaaBaseName.toLowerCase() %>',<% } %>
@@ -46,7 +46,8 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 '/management',
                 '/swagger-resources',
                 '/v2/api-docs',
-                '/h2-console',
+                '/h2-console',<% if (authenticationType === 'oauth2') { %>
+                '/login',<% } %>
                 '/auth'
             ],
             target: `http${options.tls ? 's' : ''}://127.0.0.1:<%= serverPort %>`,
@@ -75,7 +76,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
     output: {
-        path: utils.root('<%= BUILD_DIR %>www'),
+        path: utils.root('<%= DIST_DIR %>'),
         filename: 'app/[name].bundle.js',
         chunkFilename: 'app/[id].chunk.js'
     },
@@ -167,7 +168,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         }),
         new webpack.ContextReplacementPlugin(
             /angular(\\|\/)core(\\|\/)/,
-            path.resolve(__dirname, './src/main/webapp')
+            path.resolve(__dirname, './<%= CLIENT_MAIN_SRC_DIR %>')
         ),
         new writeFilePlugin(),
         new webpack.WatchIgnorePlugin([

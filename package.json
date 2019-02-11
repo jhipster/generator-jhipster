@@ -1,6 +1,6 @@
 {
     "name": "generator-jhipster",
-    "version": "5.7.2",
+    "version": "5.8.1",
     "description": "Spring Boot + Angular/React in one handy generator",
     "files": [
         "cli",
@@ -59,10 +59,10 @@
         "glob": "7.1.2",
         "gulp-filter": "5.1.0",
         "insight": "0.10.1",
-        "jhipster-core": "3.6.7",
+        "jhipster-core": "3.6.10",
         "js-object-pretty-print": "0.3.0",
         "js-yaml": "3.12.0",
-        "lodash": "4.17.10",
+        "lodash": "4.17.11",
         "meow": "5.0.0",
         "mkdirp": "0.5.1",
         "os-locale": "2.1.0",
