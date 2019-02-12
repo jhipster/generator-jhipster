@@ -111,11 +111,11 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhi-metrics", "prometheus" ]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhimetrics", "prometheus" ]
     endpoint:
         health:
             show-details: when-authorized
-        jhi-metrics:
+        jhimetrics:
             enabled: true
     info:
         git:
@@ -147,6 +147,8 @@ management:
                 all: true
             percentiles:
                 all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+        tags:
+            application: ${spring.application.name}
         web:
             server:
                 auto-time-requests: true
