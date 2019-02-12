@@ -176,9 +176,6 @@ task cucumberTestReport(type: TestReport) {
 <%_ if (!skipClient) { _%>
 <%_ } _%>
 
-if (project.hasProperty('war')) {
-    apply plugin: 'war'
-}
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
 
 if (project.hasProperty('zipkin')) {
