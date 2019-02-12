@@ -191,21 +191,13 @@ const vueFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2',
-            path: VUE_DIR,
-            templates: [
-                'account/login.service.ts'
-            ]
-        },
-        {
-            condition: generator => generator.authenticationType !== 'oauth2',
             path: VUE_DIR,
             templates: [
                 'account/change-password/change-password.vue',
                 'account/change-password/change-password.component.ts',
                 'account/login-form/login-form.vue',
                 'account/login-form/login-form.component.ts',
-                'account/login-modal.service.ts',
+                'account/login.service.ts',
                 'account/register/register.vue',
                 'account/register/register.component.ts',
                 'account/register/register.service.ts',
@@ -315,7 +307,8 @@ const vueFiles = {
                 'spec/app/admin/logs/logs.component.spec.ts',
                 'spec/app/admin/audits/audits.component.spec.ts',
                 'spec/app/admin/metrics/metrics.component.spec.ts',
-                'spec/app/admin/metrics/metrics-modal.component.spec.ts'
+                'spec/app/admin/metrics/metrics-modal.component.spec.ts',
+                'spec/app/account/login.service.spec.ts'
             ]
         },
         {
@@ -336,13 +329,6 @@ const vueFiles = {
                 'spec/app/account/reset-password/finish/reset-password-finish.component.spec.ts',
                 'spec/app/account/settings/settings.component.spec.ts',
                 'spec/app/account/activate/activate.component.spec.ts'
-            ]
-        },
-        {
-            condition: generator => generator.authenticationType === 'oauth2',
-            path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/account/login.service.spec.ts'
             ]
         },
         {

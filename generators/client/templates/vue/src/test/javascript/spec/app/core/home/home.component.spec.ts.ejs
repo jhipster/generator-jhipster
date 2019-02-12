@@ -14,11 +14,13 @@ localVue.component('router-link', {});
 describe('Home', () => {
   let home: HomeClass;
   let wrapper: Wrapper<HomeClass>;
-  <%_ if (authenticationType !== 'oauth2') { _%>
-  const loginModalService = {openLogin: jest.fn()};
-  <%_ } else { %>
-  const loginService = {login: jest.fn()};
-  <%_ } %>
+  <%_ if (authenticationType === 'jwt') { _%>
+  const loginService = { openLogin: jest.fn() };
+  <%_ } else if (authenticationType === 'session') { _%>
+  const loginService = { openLogin: jest.fn(), logout: jest.fn() };
+  <%_ } else if (authenticationType === 'oauth2') { _%>
+  const loginService = { login: jest.fn(), logout: jest.fn() };
+  <%_ } _%>
 
   beforeEach(() => {
     wrapper = shallowMount<HomeClass>(Home, {
@@ -28,11 +30,7 @@ describe('Home', () => {
       store,
       localVue,
       provide: {
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        loginModalService: () => loginModalService
-        <%_ } else { %>
         loginService: () => loginService
-        <%_ } %>
       }
     });
     home = wrapper.vm;
@@ -58,7 +56,7 @@ describe('Home', () => {
     home.openLogin();
 
     <%_ if (authenticationType !== 'oauth2') { _%>
-    expect(loginModalService.openLogin).toHaveBeenCalled();
+    expect(loginService.openLogin).toHaveBeenCalled();
     <%_ } else { %>
     expect(loginService.login).toHaveBeenCalled();
     <%_ } %>

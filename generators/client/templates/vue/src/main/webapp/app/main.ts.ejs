@@ -13,13 +13,10 @@ import MetricsService from './admin/metrics/metrics.service';
 import LogsService from './admin/logs/logs.service';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import ActivateService from './account/activate/activate.service';
-import LoginModalService from './account/login-modal.service';
 import RegisterService from './account/register/register.service';
 import UserManagementService from '@/admin/user-management/user-management.service';
 <%_ } %>
-<%_ if (authenticationType === 'oauth2') { _%>
 import LoginService from './account/login.service';
-<%_ } %>
 import AccountService from './account/account.service';
 
 <%_ if (useSass) { _%>
@@ -59,9 +56,7 @@ const trackerService = new TrackerService(router);
 <%_ if (enableTranslation) { _%>
 const translationService = new TranslationService(store, i18n);
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
 const loginService = new LoginService();
-<%_ } %>
 const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>(<any>Vue).cookie, <%_ } _%><%_ if (websocket === 'spring-websocket') { _%>trackerService, <%_ } _%>router);
 
 router.beforeEach((to, from, next) => {
@@ -90,11 +85,9 @@ new Vue({
   template: '<App/>',
   router,
   provide: {
-    <%_ if (authenticationType === 'oauth2') { _%>
     loginService: () => loginService,
-    <%_ } else { %>
+    <%_ if (authenticationType !== 'oauth2') { _%>
     activateService: () => new ActivateService(),
-    loginModalService: () => new LoginModalService(),
     registerService: () => new RegisterService(),
     userService: () => new UserManagementService(),
     <%_ } %>

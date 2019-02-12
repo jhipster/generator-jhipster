@@ -1,13 +1,24 @@
+<%_ if (authenticationType !== 'oauth2') { _%>
+import Vue from 'vue';
+<%_ } _%>
 import axios, { AxiosPromise } from 'axios';
 
 export default class LoginService {
 
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  public openLogin(instance : Vue) : void {
+    instance.$emit('bv::show::modal','login-page');
+  }
+  <%_ } else { _%>
   public login(loc = window.location) {
     const port = (loc.port ? ':' + loc.port : '');
     loc.href = '//' + loc.hostname + port + loc.pathname + 'login';
   }
+  <%_ } _%>
 
+  <%_ if (authenticationType !== 'jwt') { _%>
   public logout() : AxiosPromise<any> {
     return axios.post('api/logout');
   }
+  <%_ } _%>
 }
