@@ -39,7 +39,7 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hipster-labs/jhipster-daily-builds)
 
 | Type                 | Status                                                 |
-|:---------------------|:-------------------------------------------------------|
+| :------------------- | :----------------------------------------------------- |
 | Docker               | [![Build Status][img-docker]][azure-url]               |
 | Angular.Maven        | [![Build Status][img-angular-maven]][azure-url]        |
 | Angular.Maven.NoSQL  | [![Build Status][img-angular-maven-nosql]][azure-url]  |
@@ -72,7 +72,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [img-ms-jwt]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.JWT
 [img-ms-oauth2]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.OAuth2
 [img-ms-uaa]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.UAA
-
 [sonar-url]: https://sonarcloud.io/dashboard?id=io.github.jhipster.sample%3Ajhipster-sample-application
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=alert_status
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=coverage
