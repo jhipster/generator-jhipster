@@ -147,6 +147,8 @@ management:
                 all: true
             percentiles:
                 all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+        tags:
+            application: ${spring.application.name}
         web:
             server:
                 auto-time-requests: true
