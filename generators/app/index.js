@@ -208,7 +208,7 @@ module.exports = class extends BaseGenerator {
             },
 
             validateBlueprint() {
-                if (this.blueprint) {
+                if (this.blueprint && !this.skipChecks) {
                     this.checkBlueprint(this.blueprint);
                 }
             },
