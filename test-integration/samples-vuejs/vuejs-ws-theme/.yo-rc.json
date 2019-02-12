@@ -38,6 +38,8 @@
       "applicationType": "monolith",
       "baseName": "travisWebsocket",
       "clientFramework": "vue",
+      "clientTheme": "lux",
+      "clientThemeVariant": "primary",
       "useSass": false,
       "clientPackageManager": "npm",
       "enableTranslation": true

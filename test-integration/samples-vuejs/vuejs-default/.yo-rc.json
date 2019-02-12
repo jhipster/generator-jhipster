@@ -38,6 +38,7 @@
     "applicationType": "monolith",
     "baseName": "jhipster",
     "clientFramework": "vue",
+    "clientTheme": "none",
     "useSass": false,
     "clientPackageManager": "npm",
     "enableTranslation": true

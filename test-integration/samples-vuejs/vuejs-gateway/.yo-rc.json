@@ -39,6 +39,7 @@
     "applicationType": "gateway",
     "baseName": "test2",
     "clientFramework": "vue",
+    "clientTheme": "none",
     "useSass": false,
     "clientPackageManager": "npm",
     "enableTranslation": true
