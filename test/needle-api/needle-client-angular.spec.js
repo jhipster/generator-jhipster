@@ -38,12 +38,15 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
             addCssStylesProperty() {
-                this.addMainSCSSStyle('@import style_without_comment');
-                this.addVendorSCSSStyle('@import style_without_comment');
-                this.addMainCSSStyle('without-comment { font-size: 200%; color: red; }');
-                this.addMainSCSSStyle('@import style', 'my comment');
-                this.addVendorSCSSStyle('@import style', 'my comment');
-                this.addMainCSSStyle('h1 { font-size: 200%; color: navy; }', 'my comment');
+                if (this.useSass) {
+                    this.addMainSCSSStyle('@import style_without_comment');
+                    this.addMainSCSSStyle('@import style', 'my comment');
+                    this.addVendorSCSSStyle('@import style', 'my comment');
+                    this.addVendorSCSSStyle('@import style_without_comment');
+                } else {
+                    this.addMainCSSStyle('without-comment { font-size: 200%; color: red; }');
+                    this.addMainCSSStyle('h1 { font-size: 200%; color: navy; }', 'my comment');
+                }
             }
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
