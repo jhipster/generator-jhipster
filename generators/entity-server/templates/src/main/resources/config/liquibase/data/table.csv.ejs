@@ -19,7 +19,7 @@
 id;<% for (idx in fields) { %><%=fields[idx].fieldNameAsDatabaseColumn%><%if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {%>;<%=fields[idx].fieldNameAsDatabaseColumn%>_content_type<% } %><% if (idx < fields.length - 1) { %>;<% } } %>
 <%_
 let table = [];
-for (lineNb = 1; lineNb <= 20; lineNb++) {
+for (lineNb = 1; lineNb <= 10; lineNb++) {
     let line = [ lineNb ];
     for (idx in fields) {
         let data = '';
