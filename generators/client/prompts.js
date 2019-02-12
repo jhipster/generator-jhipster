@@ -53,27 +53,27 @@ function askForClientTheme(meta) {
             value: 'none',
             name: 'Default JHipster'
         },
-        { value: 'cerulean', name: 'Cerulean'},
-        { value: 'cosmo', name: 'Cosmo'},
-        { value: 'cerulean', name: 'Cyborg'},
-        { value: 'darkly', name: 'Darkly'},
-        { value: 'flatly', name: 'Flatly'},
-        { value: 'journal', name: 'Journal'},
-        { value: 'litera', name: 'Litera'},
-        { value: 'lumen', name: 'Lumen'},
-        { value: 'lux', name: 'Lux'},
-        { value: 'materia', name: 'Materia'},
-        { value: 'minty', name: 'Minty'},
-        { value: 'pulse', name: 'Pulse'},
-        { value: 'sandstone', name: 'Sandstone'},
-        { value: 'simplex', name: 'Simplex'},
-        { value: 'sketchy', name: 'Sketchy'},
-        { value: 'slate', name: 'Slate'},
-        { value: 'solar', name: 'Solar'},
-        { value: 'spacelab', name: 'Spacelab'},
-        { value: 'superhero', name: 'Superhero'},
-        { value: 'united', name: 'United'},
-        { value: 'yeti', name: 'Yeti'}
+        { value: 'cerulean', name: 'Cerulean' },
+        { value: 'cosmo', name: 'Cosmo' },
+        { value: 'cerulean', name: 'Cyborg' },
+        { value: 'darkly', name: 'Darkly' },
+        { value: 'flatly', name: 'Flatly' },
+        { value: 'journal', name: 'Journal' },
+        { value: 'litera', name: 'Litera' },
+        { value: 'lumen', name: 'Lumen' },
+        { value: 'lux', name: 'Lux' },
+        { value: 'materia', name: 'Materia' },
+        { value: 'minty', name: 'Minty' },
+        { value: 'pulse', name: 'Pulse' },
+        { value: 'sandstone', name: 'Sandstone' },
+        { value: 'simplex', name: 'Simplex' },
+        { value: 'sketchy', name: 'Sketchy' },
+        { value: 'slate', name: 'Slate' },
+        { value: 'solar', name: 'Solar' },
+        { value: 'spacelab', name: 'Spacelab' },
+        { value: 'superhero', name: 'Superhero' },
+        { value: 'united', name: 'United' },
+        { value: 'yeti', name: 'Yeti' }
     ];
 
     const PROMPT = {
@@ -100,14 +100,17 @@ function askForClientThemeVariant(meta) {
         this.clientThemeVariant = this.config.get('clientThemeVariant');
         return;
     }
-    if (this.clientTheme === 'none') return;
+    if (this.clientTheme === 'none') {
+        this.clientThemeVariant = '';
+        return;
+    }
 
     const applicationType = this.applicationType;
 
     const choices = [
-        { value: 'primary', name: 'Primary'},
-        { value: 'dark', name: 'Dark'},
-        { value: 'light', name: 'Light'}
+        { value: 'primary', name: 'Primary' },
+        { value: 'dark', name: 'Dark' },
+        { value: 'light', name: 'Light' }
     ];
 
     const PROMPT = {
