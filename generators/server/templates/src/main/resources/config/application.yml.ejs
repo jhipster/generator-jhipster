@@ -111,11 +111,11 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhi-metrics", "prometheus" ]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhimetrics", "prometheus" ]
     endpoint:
         health:
             show-details: when-authorized
-        jhi-metrics:
+        jhimetrics:
             enabled: true
     info:
         git:
