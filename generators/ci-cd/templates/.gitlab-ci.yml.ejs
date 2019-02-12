@@ -99,10 +99,10 @@ sonar-analyze:
 gradle-package:
     stage: package
     script:
-        - ./gradlew bootWar -Pprod -x check --no-daemon
+        - ./gradlew bootJar -Pprod -x check --no-daemon
     artifacts:
         paths:
-            - build/libs/*.war
+            - build/libs/*.jar
         expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
@@ -120,7 +120,7 @@ gradle-package:
 #        - gradle-package
 #    before_script:
 #        - docker info
-#        - cp build/libs/*.war src/main/docker
+#        - cp build/libs/*.jar src/main/docker
 #    script:
 #        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $REGISTRY_URL
 #        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker
@@ -202,7 +202,7 @@ maven-package:
         - ./mvnw verify <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
-            - target/*.war
+            - target/*.jar
         expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
@@ -220,7 +220,7 @@ maven-package:
 #        - maven-package
 #    before_script:
 #        - docker info
-#        - cp target/*.war src/main/docker
+#        - cp target/*.jar src/main/docker
 #    script:
 #        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $REGISTRY_URL
 #        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker

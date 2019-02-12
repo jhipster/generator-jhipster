@@ -499,9 +499,6 @@ task cleanResources(type: Delete) {
 wrapper {
     gradleVersion = '4.10.2'
 }
-
-task stage(dependsOn: 'bootWar') {
-}
 <%_ if (!skipClient) { _%>
 
 if (project.hasProperty('nodeInstall')) {
@@ -513,3 +510,7 @@ if (project.hasProperty('nodeInstall')) {
     }
 }
 <%_ } _%>
+
+compileJava.dependsOn processResources
+processResources.dependsOn cleanResources,bootBuildInfo
+bootBuildInfo.mustRunAfter cleanResources

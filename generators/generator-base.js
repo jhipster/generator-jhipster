@@ -1836,7 +1836,7 @@ module.exports = class extends PrivateBase {
         let buildCmd = 'mvnw verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew bootWar -x test';
+            buildCmd = 'gradlew bootJar -x test';
         }
 
         if (os.platform() !== 'win32') {

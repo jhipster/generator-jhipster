@@ -89,7 +89,7 @@ script:
   <%_ if (cicdIntegrations.includes('sonar')) { _%>
   - ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
   <%_ } _%>
-  - ./gradlew bootWar -Pprod -x test
+  - ./gradlew bootJar -Pprod -x test
   <%_ if (cicdIntegrations.includes('heroku')) { _%>
   - ./gradlew deployHeroku
   <%_ } _%>
