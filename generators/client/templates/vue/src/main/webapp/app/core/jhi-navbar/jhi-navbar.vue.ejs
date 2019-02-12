@@ -1,5 +1,5 @@
 <template>
-    <b-navbar toggleable="md" type="<%_ if (clientTheme === 'none' || clientThemeVariant !== 'light') { _%>dark<%_ } else { _%>light<%_ } _%>" class="<%_ if (clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
+    <b-navbar toggleable="md" type="<%_ if (!clientTheme || (clientTheme === 'none' || clientThemeVariant !== 'light')) { _%>dark<%_ } else { _%>light<%_ } _%>" class="<%_ if (!clientTheme || clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
         <div class="jh-logo-container float-left">
             <b-navbar-toggle right class="jh-navbar-toggler d-lg-none float-right" href="javascript:void(0);"  data-toggle="collapse" target="header-tabs" aria-expanded="false" aria-label="Toggle navigation">
                 <font-awesome-icon icon="bars" />
@@ -160,12 +160,12 @@
     ========================================================================== */
 .navbar-version {
   font-size: 10px;
-  <%_ if (clientTheme === 'none') { _%>
+  <%_ if (!clientTheme || clientTheme === 'none') { _%>
   color: #ccc;
   <%_ } _%>
 }
 
-<%_ if (clientTheme === 'none') { _%>
+<%_ if (!clientTheme || clientTheme === 'none') { _%>
 .jh-navbar {
   background-color: #353d47;
   padding: 0.2em 1em;
@@ -232,7 +232,7 @@
 .navbar-title {
   display: inline-block;
   vertical-align: middle;
-  <%_ if (clientTheme === 'none' && clientThemeVariant !== 'dark') { _%>
+  <%_ if (!clientTheme || (clientTheme === 'none' && clientThemeVariant !== 'dark')) { _%>
   color: white;
   <%_ } _%>
 }
@@ -241,7 +241,7 @@ https://github.com/bootstrap-vue/bootstrap-vue/issues/2219
 */
 nav li.router-link-active .navbar-dropdown-menu {
   cursor: pointer;
-  <%_ if (clientTheme === 'none' && clientThemeVariant !== 'dark') { _%>
+  <%_ if (!clientTheme || (clientTheme === 'none' && clientThemeVariant !== 'dark')) { _%>
   color: #fff;
   <%_ } _%>
 }
