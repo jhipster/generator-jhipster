@@ -254,7 +254,8 @@ describe('Vue.js JHipster blueprint', () => {
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     buildTool: 'maven',
-                    clientFramework: 'Vue.js'
+                    clientFramework: 'Vue.js',
+                    clientTheme: 'none'
                 })
                 .on('end', done);
         });
@@ -281,6 +282,9 @@ describe('Vue.js JHipster blueprint', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
             assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
             assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
+        });
+        it('uses default JHipster theme', () => {
+            assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import \'~bootswatch/dist/');
         });
     });
     describe('Default with Gradle', () => {
@@ -318,7 +322,8 @@ describe('Vue.js JHipster blueprint', () => {
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     buildTool: 'gradle',
-                    clientFramework: 'Vue.js'
+                    clientFramework: 'Vue.js',
+                    clientTheme: 'none'
                 })
                 .on('end', done);
         });
@@ -345,6 +350,9 @@ describe('Vue.js JHipster blueprint', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
             assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
             assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
+        });
+        it('uses default JHipster theme', () => {
+            assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import \'~bootswatch/dist/');
         });
     });
     describe('noi18n with Session Maven', () => {
@@ -381,7 +389,8 @@ describe('Vue.js JHipster blueprint', () => {
                     enableTranslation: false,
                     nativeLanguage: 'en',
                     buildTool: 'maven',
-                    clientFramework: 'Vue.js'
+                    clientFramework: 'Vue.js',
+                    clientTheme: 'none'
                 })
                 .on('end', done);
         });
@@ -408,6 +417,9 @@ describe('Vue.js JHipster blueprint', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
             assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
             assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
+        });
+        it('uses default JHipster theme', () => {
+            assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import \'~bootswatch/dist/');
         });
     });
     describe('Elasticsearch and Protractor', () => {
@@ -447,7 +459,8 @@ describe('Vue.js JHipster blueprint', () => {
                     testFrameworks: ['protractor'],
                     buildTool: 'maven',
                     clientFramework: 'Vue.js',
-                    serverSideOptions: ['searchEngine:elasticsearch']
+                    serverSideOptions: ['searchEngine:elasticsearch'],
+                    clientTheme: 'none'
                 })
                 .on('end', done);
         });
@@ -474,6 +487,9 @@ describe('Vue.js JHipster blueprint', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
             assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
             assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
+        });
+        it('uses default JHipster theme', () => {
+            assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import \'~bootswatch/dist/');
         });
     });
     describe('Websocket', () => {
@@ -513,7 +529,8 @@ describe('Vue.js JHipster blueprint', () => {
                     testFrameworks: ['protractor'],
                     buildTool: 'maven',
                     clientFramework: 'Vue.js',
-                    serverSideOptions: ['websocket:spring-websocket']
+                    serverSideOptions: ['websocket:spring-websocket'],
+                    clientTheme: 'none'
                 })
                 .on('end', done);
         });
@@ -541,6 +558,9 @@ describe('Vue.js JHipster blueprint', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
             assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
             assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
+        });
+        it('uses default JHipster theme', () => {
+            assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import \'~bootswatch/dist/');
         });
     });
     describe('OAuth2', () => {
@@ -578,7 +598,8 @@ describe('Vue.js JHipster blueprint', () => {
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     buildTool: 'maven',
-                    clientFramework: 'Vue.js'
+                    clientFramework: 'Vue.js',
+                    clientTheme: 'none'
                 })
                 .on('end', done);
         });
@@ -605,6 +626,74 @@ describe('Vue.js JHipster blueprint', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
             assert.fileContent('webpack/webpack.dev.js', / {2}devtool:/);
             assert.fileContent('tsconfig.json', / {2}"compilerOptions":/);
+        });
+        it('uses default JHipster theme', () => {
+            assert.noFileContent('src/main/webapp/content/scss/vendor.scss', '@import \'~bootswatch/dist/');
+        });
+    });
+    describe('Client theme', () => {
+        before((done) => {
+            helpers
+                .run('generator-jhipster/generators/app')
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    blueprint: 'vuejs',
+                    skipChecks: true
+                })
+                .withGenerators([
+                    [
+                        require('../generators/client/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:client',
+                        path.join(__dirname, '../generators/client/index.js')
+                    ],
+                    [
+                        require('../generators/common/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:common',
+                        path.join(__dirname, '../generators/common/index.js')
+                    ]
+                ])
+                .withPrompts({
+                    baseName: 'sampleMysql',
+                    packageName: 'com.mycompany.myapp',
+                    applicationType: 'monolith',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Disk',
+                    prodDatabaseType: 'mysql',
+                    cacheProvider: 'ehcache',
+                    authenticationType: 'oauth2',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['en', 'fr'],
+                    buildTool: 'maven',
+                    clientFramework: 'Vue.js',
+                    clientTheme: 'lux',
+                    clientThemeVariant: 'primary'
+                })
+                .on('end', done);
+        });
+        it('creates expected files from jhipster vue.js generator', () => {
+            assert.file(expectedFiles.i18n);
+            assert.file(expectedFiles.common);
+            assert.file(expectedFiles.app);
+            assert.file(expectedFiles.oauth2);
+            assert.file(expectedFiles.test);
+            assert.noFile(expectedFiles.protractor);
+            assert.file(expectedFiles.webpack);
+        });
+        it('contains the specific change added by the blueprint', () => {
+            assert.fileContent('package.json', `"generator-jhipster-vuejs": "${blueprintPackagejs.version}"`);
+            assert.fileContent('package.json', '"vue"');
+            assert.fileContent('package.json', '"vuex"');
+            assert.fileContent('package.json', '"vuelidate"');
+            assert.fileContent('.prettierrc', 'tabWidth: 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n'
+                + 'indent_style = space\n'
+                + 'indent_size = 2');
+        });
+        it('uses correct theme from bootswatch', () => {
+            assert.fileContent('src/main/webapp/content/scss/vendor.scss', '@import \'~bootswatch/dist/lux/variables\';');
+            assert.fileContent('src/main/webapp/content/scss/vendor.scss', '@import \'~bootswatch/dist/lux/bootswatch\';');
         });
     });
 });

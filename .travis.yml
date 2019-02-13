@@ -60,7 +60,7 @@ env:
     - JHI_APP=vuejs-fulli18n-es
     - JHI_APP=vuejs-gateway
     - JHI_APP=vuejs-gradle-session
-    - JHI_APP=vuejs-ws JHI_PROTRACTOR=1
+    - JHI_APP=vuejs-ws-theme JHI_PROTRACTOR=1
     - JHI_APP=vuejs-oauth2 JHI_PROTRACTOR=1
 
 #----------------------------------------------------------------------
