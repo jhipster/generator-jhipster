@@ -101,7 +101,6 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/account/reset-password/init/reset-password-init.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/account/reset-password/finish/reset-password-finish.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/account/settings/settings.component.spec.ts`,
-        `${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management-edit.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.service.spec.ts`,

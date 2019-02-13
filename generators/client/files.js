@@ -307,7 +307,13 @@ const vueFiles = {
                 'spec/app/admin/logs/logs.component.spec.ts',
                 'spec/app/admin/audits/audits.component.spec.ts',
                 'spec/app/admin/metrics/metrics.component.spec.ts',
-                'spec/app/admin/metrics/metrics-modal.component.spec.ts',
+                'spec/app/admin/metrics/metrics-modal.component.spec.ts'
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: [
                 'spec/app/account/login.service.spec.ts'
             ]
         },
@@ -315,7 +321,8 @@ const vueFiles = {
             condition: generator => generator.authenticationType === 'session',
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/account/sessions/sessions.component.spec.ts'
+                'spec/app/account/sessions/sessions.component.spec.ts',
+                'spec/app/account/login.service.spec.ts'
             ]
         },
         {
