@@ -16,9 +16,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-id;<% for (idx in fields) { %><%=fields[idx].fieldNameAsDatabaseColumn%><%if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {%>;<%=fields[idx].fieldNameAsDatabaseColumn%>_content_type<% } %><% if (idx < fields.length - 1) { %>;<% } } %>
 <%_
 let table = [];
+
+// Generate CSV header
+let header = [];
+header.push('id');
+for (idx in fields) {
+    header.push(fields[idx].fieldNameAsDatabaseColumn);
+    if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
+        header.push(fields[idx].fieldNameAsDatabaseColumn + '_content_type');
+    }
+}
+for (idx in relationships) {
+    if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
+        header.push(getColumnName(relationships[idx].relationshipName) + '_id');
+    }
+}
+table.push(header);
+
+// Generate CSV rows
+
 for (lineNb = 1; lineNb <= 10; lineNb++) {
     let line = [ lineNb ];
     for (idx in fields) {
@@ -96,8 +114,14 @@ for (lineNb = 1; lineNb <= 10; lineNb++) {
             line.push('image/png');
         }
     }
+    for (idx in relationships) {
+        if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
+            line.push(this.faker.random.number({min: 1, max: 10}));
+        }
+    }
     table.push(line);
 }
+
 let result = table
         .map(line =>
             line.map(data => {
