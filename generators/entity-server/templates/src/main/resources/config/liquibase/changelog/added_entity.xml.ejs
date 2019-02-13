@@ -25,9 +25,9 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <property name="now" value="now()" dbms="h2"/>
-    <% let autoIncrementValue = true; 
+    <% let autoIncrementValue = true;
         for (idx in relationships) {
-            if (relationships[idx].useJPADerivedIdentifier === true) { 
+            if (relationships[idx].useJPADerivedIdentifier === true) {
                 autoIncrementValue = false;
                 break;
             }
@@ -120,12 +120,17 @@
                 <constraints nullable="<%= nullable %>" />
                 <%_ } _%>
             </column>
-            <%_ if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') { _%>
-            <column name="<%=columnName %>_content_type" type="varchar(255)">
+                <%_ if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
+                    columnType = "varchar(255)"; _%>
+            <column name="<%=columnName %>_content_type" type="<%=columnType %>">
                 <constraints nullable="<%= nullable %>" />
             </column>
-            <%_ }  _%>
-            <%_ } _%><% for (idx in relationships) {
+                <%_ } _%>
+            <%_
+            fields[idx].columnType = columnType;
+            _%>
+            <%_ } _%>
+            <%_ for (idx in relationships) {
                 let nullable_relation = true,
                 relationshipType = relationships[idx].relationshipType,
                 relationshipName = relationships[idx].relationshipName,
@@ -133,12 +138,13 @@
                 if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
                     nullable_relation = false;
                 }
-                if (relationships[idx].relationshipType === 'many-to-one') { %>
+                if (relationships[idx].relationshipType === 'many-to-one') { _%>
+
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
-            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true 
-                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) { 
+            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true
+                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) {
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
             <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
@@ -146,12 +152,54 @@
             </column><% } %><% } %>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+
         <%_ for (const idx in fields) {
             if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
         <%_ }
         } _%>
-        <% for (idx in relationships) {
+    </changeSet>
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/data/<%= entityTableName %>.csv"
+                  separator=";"
+                  tableName="<%= entityTableName %>"
+                  context="dev">
+            <column name="id" type="numeric"/>
+            <%_ for (idx in fields) {
+                let loadColumnType = 'string';
+                let columnType = fields[idx].columnType;
+                if (columnType === 'integer' || columnType === 'bigint' || columnType === 'double' || columnType === 'decimal(10,2)' || columnType === '${floatType}') {
+                    loadColumnType = 'numeric';
+                } else if (columnType === 'date' || columnType === 'datetime') {
+                    loadColumnType = 'date';
+                } else if (columnType === 'boolean') {
+                    loadColumnType = 'boolean';
+                } else if (fields[idx].fieldIsEnum) {
+                    loadColumnType = 'string';
+                } else if (columnType === 'clob' || columnType === 'blob' || columnType === 'longblob') {
+                    loadColumnType = 'string';
+                }
+                _%>
+            <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>" type="<%=loadColumnType%>"/>
+                <%_ if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') { _%>
+            <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>_content_type" type="string"/>
+                <%_ } _%>
+            <%_ } _%>
+        </loadData>
+    </changeSet>
+
+    <changeSet id="<%= changelogDate %>-1-relations" author="jhipster">
+        <%_ for (idx in relationships) {
             const relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,

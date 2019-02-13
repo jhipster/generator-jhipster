@@ -52,6 +52,7 @@
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= entityTableName %>"/>
+
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= getColumnName(otherEntityConstraintName) %>"
