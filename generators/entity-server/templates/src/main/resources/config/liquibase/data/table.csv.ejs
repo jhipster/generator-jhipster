@@ -43,8 +43,15 @@ for (lineNb = 1; lineNb <= 10; lineNb++) {
         let data = '';
         let columnType = fields[idx].columnType;
         let fieldType = fields[idx].fieldType;
-        if (columnType === 'integer' || columnType === 'bigint' || columnType.startsWith('decimal')) {
+        if (columnType === 'integer'
+            || columnType === 'bigint'
+            || columnType === 'double'
+            || columnType.startsWith('decimal')) {
             data = this.faker.random.number();
+        } else if (columnType === '${floatType}') {
+            data = this.faker.random.number();
+        } else if (columnType === 'boolean') {
+            data = this.faker.random.boolean();
         } else if (columnType === 'date' || columnType === 'datetime') {
             // Write the date without milliseconds so Java can parse it
             // See https://stackoverflow.com/a/34053802/150868

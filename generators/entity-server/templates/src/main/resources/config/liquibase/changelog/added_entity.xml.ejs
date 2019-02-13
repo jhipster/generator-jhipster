@@ -185,7 +185,7 @@
                 } else if (columnType === 'boolean') {
                     loadColumnType = 'boolean';
                 } else if (fields[idx].fieldIsEnum) {
-                    loadColumnType = 'skip';
+                    loadColumnType = 'string';
                 } else if (columnType === 'clob' || columnType === 'blob' || columnType === 'longblob') {
                     loadColumnType = 'string';
                 }
