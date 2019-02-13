@@ -42,7 +42,6 @@ function askForClient(meta) {
 
 function askForClientTheme(meta) {
     if (!meta && this.existingProject) {
-        this.clientTheme = this.config.get('clientTheme');
         return;
     }
 
@@ -97,7 +96,6 @@ function askForClientTheme(meta) {
 
 function askForClientThemeVariant(meta) {
     if (!meta && this.existingProject) {
-        this.clientThemeVariant = this.config.get('clientThemeVariant');
         return;
     }
     if (this.clientTheme === 'none') {
