@@ -95,7 +95,7 @@ describe('UserManagement Component', () => {
   describe('confirmDelete', () => {
     it('Should call delete service on confirmDelete', async () => {
       // GIVEN
-      mockedAxios.delete.mockReturnValue(Promise.resolve({}));
+      mockedAxios.delete.mockReturnValue(Promise.resolve({ headers: {} }));
 
       // WHEN
       userManagement.prepareRemove({ login: 'test' });

@@ -49,6 +49,13 @@ jest.mock('axios', () => ({
   delete: jest.fn()
 }));
 
+const bModalStub = {
+  render: () => { },
+  methods: {
+    hide: () => { }
+  }
+};
+
 describe('Component Tests', () => {
   describe('<%= entityAngularName %> Management Component', () => {
     let wrapper: Wrapper<<%= entityAngularName %>Class>;
@@ -64,7 +71,7 @@ describe('Component Tests', () => {
         i18n,
         <%_ } _%>
         localVue,
-        stubs: {<%_ if (pagination !== 'no') { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal:true},
+        stubs: {<%_ if (pagination !== 'no') { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal: bModalStub as any},
         provide: {
           alertService: () => new AlertService(store),
           <%= entityInstance %>Service: () => new <%= entityAngularName %>Service()

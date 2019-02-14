@@ -2,14 +2,15 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-import router from '@/router';
 import AlertService from '@/shared/alert/alert.service';
 import * as config from '@/shared/config/config';
 import UserManagementEdit from '@/admin/user-management/user-management-edit.vue';
 import UserManagementEditClass from '@/admin/user-management/user-management-edit.component';
 import UserManagementService from '@/admin/user-management/user-management.service';
+import VueRouter from 'vue-router';
 
 const localVue = createLocalVue();
+localVue.use(VueRouter);
 const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
@@ -31,6 +32,7 @@ describe('UserManagementEdit Component', () => {
   let userManagementEdit: UserManagementEditClass;
 
   beforeEach(() => {
+    const router = new VueRouter();
     wrapper = shallowMount<UserManagementEditClass>(UserManagementEdit, {
       store,
       router,
@@ -81,7 +83,7 @@ describe('UserManagementEdit Component', () => {
   describe('save', () => {
     it('Should call update service on save for existing user', async () => {
       // GIVEN
-      mockedAxios.put.mockReturnValue(Promise.resolve({}));
+      mockedAxios.put.mockReturnValue(Promise.resolve({ headers: {} }));
       userManagementEdit.userAccount = { id: 1, authorities: [] };
 
       // WHEN
@@ -95,7 +97,7 @@ describe('UserManagementEdit Component', () => {
 
     it('Should call create service on save for new user', async () => {
       // GIVEN
-      mockedAxios.post.mockReturnValue(Promise.resolve({}));
+      mockedAxios.post.mockReturnValue(Promise.resolve({ headers: {} }));
       userManagementEdit.userAccount = { authorities: [] };
 
       // WHEN
