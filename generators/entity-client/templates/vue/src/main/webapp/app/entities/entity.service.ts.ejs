@@ -4,9 +4,13 @@ import buildPaginationQueryOpts from '@/shared/sort/sorts';
 <% } %>
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 
-const baseApiUrl = 'api/<%= entityApiUrl %>';
+<%_
+const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? microserviceName.toLowerCase() + '/api/' : 'api/';
+_%>
+
+const baseApiUrl = '<%= baseApi + entityApiUrl %>';
 <%_ if (searchEngine === 'elasticsearch') { _%>
-const baseSearchApiUrl = 'api/_search/<%= entityApiUrl %>?query=';
+const baseSearchApiUrl = '<%= baseApi %>_search/<%= entityApiUrl %>?query=';
 <%_ } _%>
 
 export default class <%= entityAngularName %>Service {
