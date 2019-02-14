@@ -272,7 +272,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 -   Java files **must be** formatted using Intellij IDEA default code style.
 -   Generators JavaScript files **must follow** the eslint configuration defined at the project root, which is based on [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript).
 -   Any client side feature/change should be done for both Angular and react clients
--   Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
+-   Web apps JavaScript files **must follow** [Google's JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html).
 -   Angular Typescript files **must follow** the [Official Angular style guide](https://angular.io/styleguide).
 -   React/Redux Typescript files **may follow** the [React/Redux Typescript guide](https://github.com/piotrwitek/react-redux-typescript-guide).
 
