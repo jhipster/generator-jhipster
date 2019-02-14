@@ -42,10 +42,9 @@ module.exports = class extends BaseBlueprintGenerator {
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'common', {
+                ...this.options,
                 'client-hook': !this.skipClient,
-                'from-cli': this.options['from-cli'],
-                configOptions: this.configOptions,
-                force: this.options.force
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;
