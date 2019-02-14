@@ -191,6 +191,7 @@ const vueFiles = {
             ]
         },
         {
+            condition: generator => generator.authenticationType !== 'oauth2',
             path: VUE_DIR,
             templates: [
                 'account/change-password/change-password.vue',
@@ -218,6 +219,13 @@ const vueFiles = {
             templates: [
                 'account/sessions/sessions.vue',
                 'account/sessions/sessions.component.ts'
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: VUE_DIR,
+            templates: [
+                'account/login.service.ts'
             ]
         }
     ],
