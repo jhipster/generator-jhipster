@@ -1150,6 +1150,16 @@ const serverFiles = {
 
                 { file: 'package/web/rest/LogsResource.java', renameTo: generator => `${generator.javaDir}web/rest/LogsResource.java` }
             ]
+        },
+        {
+            condition: generator => !generator.skipClient,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/ClientForwardController.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/ClientForwardController.java`
+                }
+            ]
         }
     ],
     serverJavaWebsocket: [
@@ -1221,6 +1231,16 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/util/PaginationUtilUnitTest.java',
                     renameTo: generator => `${generator.testDir}web/rest/util/PaginationUtilUnitTest.java`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.skipClient,
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/ClientForwardControllerIT.java',
+                    renameTo: generator => `${generator.testDir}web/rest/ClientForwardControllerIT.java`
                 }
             ]
         },

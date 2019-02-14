@@ -116,15 +116,6 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add a new entity route path to webpacks config
-     *
-     * @param {string} microserviceName - The name of the microservice to put into the url
-     */
-    addEntityToWebpack(microserviceName) {
-        this.needleApi.clientWebpack.addEntity(microserviceName);
-    }
-
-    /**
      * Add a new entity in the "entities" menu.
      *
      * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).

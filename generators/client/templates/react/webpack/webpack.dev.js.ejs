@@ -69,16 +69,8 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     hot: true,
     contentBase: './<%= DIST_DIR %>',
     proxy: [{
-      context: [<% if (authenticationType === 'uaa') { %>
-        '/<%= uaaBaseName.toLowerCase() %>',<% } %>
-        /* jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here */
-        '/api',
-        '/management',
-        '/swagger-resources',
-        '/v2/api-docs',
-        '/h2-console',<% if (authenticationType === 'oauth2') { %>
-        '/login',<% } %>        
-        '/auth'
+      context: [
+        '/'
       ],
       target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
       secure: false,
