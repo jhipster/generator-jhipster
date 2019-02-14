@@ -667,7 +667,7 @@ describe('Vue.js JHipster blueprint', () => {
                     devDatabaseType: 'h2Disk',
                     prodDatabaseType: 'mysql',
                     cacheProvider: 'ehcache',
-                    authenticationType: 'oauth2',
+                    authenticationType: 'jwt',
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
@@ -682,8 +682,9 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.oauth2);
+            assert.file(expectedFiles.allAuthExceptOAuth2);
             assert.file(expectedFiles.test);
+            assert.noFile(expectedFiles.session);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
         });
