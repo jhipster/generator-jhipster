@@ -175,4 +175,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
             generator.removeFile(`${testResourceDir}cassandra-random-port.yml`);
         }
     }
+    if (generator.isJhipsterVersionLessThan('6.0.0')) {
+        generator.removeFile(`${javaDir}web/rest/util/PaginationUtil.java`);
+        generator.removeFile(`${javaDir}web/rest/util/HeaderUtil.java`);
+        generator.removeFile(`${testDir}web/rest/util/PaginationUtilUnitTest.java`);
+    }
 }

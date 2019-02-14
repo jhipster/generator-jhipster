@@ -1136,19 +1136,18 @@ const serverFiles = {
                     file: 'package/web/rest/vm/package-info.java',
                     renameTo: generator => `${generator.javaDir}web/rest/vm/package-info.java`
                 },
-                { file: 'package/web/rest/vm/LoggerVM.java', renameTo: generator => `${generator.javaDir}web/rest/vm/LoggerVM.java` },
-
                 {
-                    file: 'package/web/rest/util/HeaderUtil.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/util/HeaderUtil.java`
+                    file: 'package/web/rest/vm/LoggerVM.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/vm/LoggerVM.java`
                 },
                 {
-                    file: 'package/web/rest/util/PaginationUtil.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/util/PaginationUtil.java`
+                    file: 'package/web/rest/package-info.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/package-info.java`
                 },
-                { file: 'package/web/rest/package-info.java', renameTo: generator => `${generator.javaDir}web/rest/package-info.java` },
-
-                { file: 'package/web/rest/LogsResource.java', renameTo: generator => `${generator.javaDir}web/rest/LogsResource.java` }
+                {
+                    file: 'package/web/rest/LogsResource.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/LogsResource.java`
+                }
             ]
         }
     ],
@@ -1217,10 +1216,6 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/errors/ExceptionTranslatorTestController.java',
                     renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorTestController.java`
-                },
-                {
-                    file: 'package/web/rest/util/PaginationUtilUnitTest.java',
-                    renameTo: generator => `${generator.testDir}web/rest/util/PaginationUtilUnitTest.java`
                 }
             ]
         },
