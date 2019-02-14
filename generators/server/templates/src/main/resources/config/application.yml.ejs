@@ -67,6 +67,7 @@ zuul: # those values must be configured depending on the application specific ne
     host:
         max-total-connections: 1000
         max-per-route-connections: 100
+    prefix: /services
     semaphore:
         max-semaphores: 500
     <%_ if (serviceDiscoveryType === 'consul') { _%>
@@ -268,7 +269,7 @@ security:
 server:
     servlet:
         <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { _%>
-        context-path: /${spring.application.name}
+        context-path: /services/${spring.application.name}
         <%_ } _%>
         session:
             cookie:
