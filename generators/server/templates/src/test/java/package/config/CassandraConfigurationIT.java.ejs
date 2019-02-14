@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile(JHipsterConstants.SPRING_PROFILE_TEST)
-public class CassandraTestConfiguration extends CassandraConfiguration {
+public class CassandraConfigurationIT extends CassandraConfiguration {
 
     /**
      * Override how to get the port to connect to the Cassandra cluster.

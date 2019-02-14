@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class CassandraKeyspaceUnitTest extends AbstractCassandraTest {
+public class CassandraKeyspaceIT extends AbstractCassandraTest {
 
     @Autowired
     private Session session;

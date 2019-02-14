@@ -54,7 +54,7 @@ import static <%=packageName%>.repository.CustomAuditEventRepository.EVENT_DATA_
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
-public class CustomAuditEventRepositoryIntTest {
+public class CustomAuditEventRepositoryIT {
 
     @Autowired
     private PersistenceAuditEventRepository persistenceAuditEventRepository;

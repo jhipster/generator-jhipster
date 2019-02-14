@@ -139,7 +139,7 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 test {
-    exclude '**/CucumberTest*'
+    exclude '**/*CucumberIT*'
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
@@ -151,7 +151,7 @@ test {
 task cucumberTest(type: Test) {
     description = "Execute cucumber BDD tests."
     group = "verification"
-    include '**/CucumberTest*'
+    include '**/*CucumberIT*'
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484

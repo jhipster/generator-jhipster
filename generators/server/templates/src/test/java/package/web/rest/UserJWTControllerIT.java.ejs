@@ -65,7 +65,7 @@ import static org.hamcrest.Matchers.not;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class UserJWTControllerIntTest <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private TokenProvider tokenProvider;
