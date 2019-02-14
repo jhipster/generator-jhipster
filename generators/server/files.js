@@ -1239,8 +1239,8 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/web/rest/ClientForwardControllerIntTest.java',
-                    renameTo: generator => `${generator.testDir}web/rest/ClientForwardControllerIntTest.java`
+                    file: 'package/web/rest/ClientForwardControllerIT.java',
+                    renameTo: generator => `${generator.testDir}web/rest/ClientForwardControllerIT.java`
                 }
             ]
         },
