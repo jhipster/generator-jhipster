@@ -1,20 +1,11 @@
 import Component from 'vue-class-component';
 import { Vue, Inject } from 'vue-property-decorator';
-<%_ if (authenticationType !== 'oauth2') { _%>
-import LoginModalService from '@/account/login-modal.service';
-<%_ } else { %>
 import LoginService from '@/account/login.service';
-<%_ } %>
 
 @Component
 export default class Error extends Vue {
-  <%_ if (authenticationType !== 'oauth2') { _%>
-  @Inject('loginModalService')
-  private loginModalService: () => LoginModalService;
-  <%_ } else { %>
   @Inject('loginService')
   private loginService: () => LoginService;
-  <%_ } %>
   errorMessage: string = null;
   error403 = false;
   error404 = false;
@@ -48,7 +39,7 @@ export default class Error extends Vue {
 
     if (!this.$store.getters.authenticated && this.error403) {
       <%_ if (authenticationType !== 'oauth2') { _%>
-      this.loginModalService().openLogin((<any>this).$root);
+      this.loginService().openLogin((<any>this).$root);
       <%_ } else { %>
       this.loginService().login();
       <%_ } %>

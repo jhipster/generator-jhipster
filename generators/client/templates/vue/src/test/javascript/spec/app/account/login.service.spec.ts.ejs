@@ -1,10 +1,12 @@
 import LoginService from '@/account/login.service';
+<%_ if (authenticationType !== 'jwt') { _%>
 import axios from 'axios';
 
 const mockedAxios: any = axios;
 jest.mock('axios', () => ({
   post: jest.fn()
 }));
+<%_ } _%>
 
 describe('Login Service test suite', () => {
   let loginService;
@@ -13,6 +15,7 @@ describe('Login Service test suite', () => {
     loginService = new LoginService();
   });
 
+  <%_ if (authenticationType === 'oauth2') { _%>
   it('should build url for login', () => {
     const loc = {href: '', hostname: 'localhost', pathname: '/'};
 
@@ -28,10 +31,13 @@ describe('Login Service test suite', () => {
 
     expect(loc.href).toBe('//localhost:8080/login');
   });
+  <%_ } _%>
 
+  <%_ if (authenticationType !== 'jwt') { _%>
   it('should call global logout when asked to', () => {
     loginService.logout();
 
     expect(mockedAxios.post).toHaveBeenCalledWith('api/logout');
   });
+  <%_ } _%>
 });

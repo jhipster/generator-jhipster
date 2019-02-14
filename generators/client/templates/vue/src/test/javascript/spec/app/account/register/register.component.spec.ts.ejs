@@ -6,7 +6,7 @@ import * as config from '@/shared/config/config';
 import Register from '@/account/register/register.vue';
 import RegisterClass from '@/account/register/register.component';
 import RegisterService from '@/account/register/register.service';
-import LoginModalService from '@/account/login-modal.service';
+import LoginService from '@/account/login.service';
 
 const localVue = createLocalVue();
 const mockedAxios: any = axios;
@@ -40,7 +40,7 @@ describe('Register Component', () => {
       localVue,
       provide: {
         registerService: () => new RegisterService(),
-        loginModalService: () => new LoginModalService()
+        loginService: () => new LoginService()
        }
     });
     register = wrapper.vm;

@@ -7,7 +7,7 @@ const blueprintPackagejs = require('../package.json');
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-const CLIENT_SPEC_SRC_DIR = `${CLIENT_TEST_SRC_DIR}/spec/`;
+const CLIENT_SPEC_SRC_DIR = `${CLIENT_TEST_SRC_DIR}spec/`;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 
 const expectedFiles = {
@@ -57,18 +57,13 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}banner.txt`
     ],
 
-    oauth2: [
-        `${CLIENT_MAIN_SRC_DIR}app/account/login.service.ts`,
-        `${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`
-    ],
-
     session: [
         `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.vue`,
         `${CLIENT_SPEC_SRC_DIR}app/account/sessions/sessions.component.spec.ts`
     ],
 
-    jwt: [
+    allAuthExceptOAuth2: [
         `${CLIENT_MAIN_SRC_DIR}app/account/change-password/change-password.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/change-password/change-password.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/account/login-form/login-form.component.ts`,
@@ -85,7 +80,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/reset-password/finish/reset-password-finish.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/account/settings/settings.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/settings/settings.vue`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/login-modal.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-edit.component.ts`,
@@ -101,7 +95,6 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/account/reset-password/init/reset-password-init.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/account/reset-password/finish/reset-password-finish.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/account/settings/settings.component.spec.ts`,
-        // `${CLIENT_SPEC_SRC_DIR}app/account/login-modal.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management-edit.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/admin/user-management/user-management.service.spec.ts`,
@@ -130,6 +123,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics-modal.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/metrics/metrics.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/login.service.ts`,
 
         `${CLIENT_SPEC_SRC_DIR}app/account/account.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.component.spec.ts`,
@@ -263,7 +257,9 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.allAuthExceptOAuth2);
+            assert.noFile(expectedFiles.session);
+            assert.noFile([`${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`]);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -331,7 +327,9 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.allAuthExceptOAuth2);
+            assert.noFile(expectedFiles.session);
+            assert.noFile([`${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`]);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -399,6 +397,8 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
             assert.file(expectedFiles.session);
+            assert.file([`${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`]);
+            assert.file(expectedFiles.allAuthExceptOAuth2);
             assert.file(expectedFiles.test);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -468,7 +468,9 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.allAuthExceptOAuth2);
+            assert.noFile(expectedFiles.session);
+            assert.noFile([`${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`]);
             assert.file(expectedFiles.test);
             assert.file(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
@@ -538,7 +540,9 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.allAuthExceptOAuth2);
+            assert.noFile(expectedFiles.session);
+            assert.noFile([`${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`]);
             assert.file(expectedFiles.test);
             assert.file(expectedFiles.protractor);
             assert.file(expectedFiles.websocket);
@@ -607,9 +611,11 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.oauth2);
             assert.file(expectedFiles.test);
+            assert.file([`${CLIENT_SPEC_SRC_DIR}app/account/login.service.spec.ts`]);
             assert.noFile(expectedFiles.protractor);
+            assert.noFile(expectedFiles.allAuthExceptOAuth2);
+            assert.noFile(expectedFiles.session);
             assert.file(expectedFiles.webpack);
         });
         it('contains the specific change added by the blueprint', () => {
@@ -661,7 +667,7 @@ describe('Vue.js JHipster blueprint', () => {
                     devDatabaseType: 'h2Disk',
                     prodDatabaseType: 'mysql',
                     cacheProvider: 'ehcache',
-                    authenticationType: 'oauth2',
+                    authenticationType: 'jwt',
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
@@ -676,8 +682,9 @@ describe('Vue.js JHipster blueprint', () => {
             assert.file(expectedFiles.i18n);
             assert.file(expectedFiles.common);
             assert.file(expectedFiles.app);
-            assert.file(expectedFiles.oauth2);
+            assert.file(expectedFiles.allAuthExceptOAuth2);
             assert.file(expectedFiles.test);
+            assert.noFile(expectedFiles.session);
             assert.noFile(expectedFiles.protractor);
             assert.file(expectedFiles.webpack);
         });

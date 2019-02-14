@@ -24,9 +24,11 @@ localVue.component('b-navbar-nav', {});
 describe('JhiNavbar', () => {
 let jhiNavbar: JhiNavbarClass;
 let wrapper: Wrapper<JhiNavbarClass>;
-  <%_ if (authenticationType !== 'oauth2') { _%>
-  const loginModalService = { openLogin: jest.fn() };
-  <%_ } else { _%>
+  <%_ if (authenticationType === 'jwt') { _%>
+  const loginService = { openLogin: jest.fn() };
+  <%_ } else if (authenticationType === 'session') { _%>
+  const loginService = { openLogin: jest.fn(), logout: jest.fn() };
+  <%_ } else if (authenticationType === 'oauth2') { _%>
   const loginService = { login: jest.fn(), logout: jest.fn() };
   <%_ } _%>
   const accountService = { hasAnyAuthority: jest.fn() };
@@ -43,11 +45,7 @@ let wrapper: Wrapper<JhiNavbarClass>;
       router,
       localVue,
       provide: {
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        loginModalService: () => loginModalService,
-        <%_ } else { _%>
         loginService: () => loginService,
-        <%_ } _%>
         <%_ if (enableTranslation) { _%>
         translationService: () => translationService,
         <%_ } _%>
@@ -87,7 +85,7 @@ let wrapper: Wrapper<JhiNavbarClass>;
   it('should use login service', () => {
     jhiNavbar.openLogin();
     <%_ if (authenticationType !== 'oauth2') { _%>
-    expect(loginModalService.openLogin).toHaveBeenCalled();
+    expect(loginService.openLogin).toHaveBeenCalled();
     <%_ } else { _%>
     expect(loginService.login).toHaveBeenCalled();
     <%_ } _%>
@@ -101,12 +99,12 @@ let wrapper: Wrapper<JhiNavbarClass>;
 
   it('logout should clear credentials', () => {
     store.commit('authenticated', { login: 'test' });
-    <%_ if (authenticationType === 'oauth2') { _%>
+    <%_ if (authenticationType !== 'jwt') { _%>
     loginService.logout.mockReturnValue(Promise.resolve());
     <%_ } _%>
     jhiNavbar.logout();
 
-    <%_ if (authenticationType === 'oauth2') { _%>
+    <%_ if (authenticationType !== 'jwt') { _%>
     expect(loginService.logout).toHaveBeenCalled();
     <%_ } else { _%>
     expect(jhiNavbar.authenticated).toBeFalsy();
