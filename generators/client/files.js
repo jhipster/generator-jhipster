@@ -37,7 +37,6 @@ const vueFiles = {
                 'tsconfig.json',
                 '.huskyrc',
                 '.postcssrc.js',
-                'tsconfig.test.json',
                 'tslint.json',
                 'config/index.js',
                 'config/dev.env.js',
