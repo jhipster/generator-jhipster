@@ -16,6 +16,7 @@
                         const fieldType = fields[idx].fieldType;
                         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
                         let fieldInputType = 'text';
+                        let fieldInputClass = 'form-control';
                         let ngModelOption = '';
                         const translationKey = `${i18nKeyPrefix}.${fieldName}`;
                         if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
@@ -26,6 +27,7 @@
                             fieldInputType = 'datetime-local';
                         } else if (fieldType === 'Boolean') {
                             fieldInputType = 'checkbox';
+                            fieldInputClass = 'form-check';
                         } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') {
                             fieldInputType = 'hidden';
                         }
@@ -68,31 +70,31 @@
                         <%_ } _%>
                         <%_ if (fieldType === 'LocalDate') { _%>
                         <div class="input-group">
-                            <input id="<%= entityFileName %>-<%= fieldName %>" type="date" class="form-control" name="<%= fieldName %>"  :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" 
+                            <input id="<%= entityFileName %>-<%= fieldName %>" type="date" class="<%= fieldInputClass %>" name="<%= fieldName %>"  :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }"
                             v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %> />
                         </div>
                         <%_ } else if (['Instant'].includes(fieldType)) { _%>
                         <div class="d-flex">
-                            <input id="<%= entityFileName %>-<%= fieldName %>" type="datetime-local" class="form-control" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" 
+                            <input id="<%= entityFileName %>-<%= fieldName %>" type="datetime-local" class="<%= fieldInputClass %>" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }"
                             <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>
                             :value="convertDateTimeFromServer($v.<%= entityInstance %>.<%= fieldName %>.$model)"
                             @change="updateInstantField('<%= fieldName %>', $event)"/>
                         </div>
                         <%_ } else if (['ZonedDateTime'].includes(fieldType)) { _%>
                         <div class="d-flex">
-                            <input id="<%= entityFileName %>-<%= fieldName %>" type="datetime-local" class="form-control" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" 
+                            <input id="<%= entityFileName %>-<%= fieldName %>" type="datetime-local" class="<%= fieldInputClass %>" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }"
                             <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>
                             :value="convertDateTimeFromServer($v.<%= entityInstance %>.<%= fieldName %>.$model)"
                             @change="updateZonedDateTimeField('<%= fieldName %>', $event)"/>
                         </div>
                         <%_ } else if (fieldTypeBlobContent === 'text') { _%>
-                        <textarea class="form-control" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"
+                        <textarea class="<%= fieldInputClass %>" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"
                             :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>></textarea>
                         <%_ } else { _%>
-                        <input type="<%= fieldInputType %>" class="form-control" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"
+                        <input type="<%= fieldInputType %>" class="<%= fieldInputClass %>" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"
                             :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>/>
                             <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
-                        <input type="hidden" class="form-control" name="<%= fieldName %>ContentType" id="<%= entityFileName %>-<%= fieldName %>ContentType"
+                        <input type="hidden" class="<%= fieldInputClass %>" name="<%= fieldName %>ContentType" id="<%= entityFileName %>-<%= fieldName %>ContentType"
                             v-model="<%= entityInstance %>.<%= fieldName %>ContentType" />
                             <%_ } _%>
                         <%_ } _%>
