@@ -40,8 +40,8 @@
     "semver": "5.5.0",
     "shelljs": "0.8.2",
     "through2": "2.0.3",
-    "yeoman-environment": "2.3.0",
-    "yeoman-generator": "2.0.5"
+    "yeoman-environment": "2.3.4",
+    "yeoman-generator": "3.2.0"
   },
   "devDependencies": {
     "chai": "4.1.2",
@@ -54,7 +54,7 @@
     "mocha": "5.2.0",
     "sinon": "6.0.0",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "1.7.2"
+    "yeoman-test": "1.9.1"
   },
   "scripts": {
     "lint": "eslint .",
