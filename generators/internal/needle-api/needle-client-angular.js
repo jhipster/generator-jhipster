@@ -20,7 +20,6 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const needleClientBase = require('./needle-client');
 const constants = require('../../generator-constants');
-const jhipsterUtils = require('../../utils');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
@@ -186,21 +185,16 @@ module.exports = class extends needleClientBase {
 
         try {
             const appName = this.generator.getAngularXAppName();
-            const isEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, 'loadChildren', this.generator);
             const modulePath = `./${entityFolderName}/${entityFileName}.module`;
             const moduleName = microServiceName
                 ? `${this.generator.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
                 : `${appName}${entityAngularName}Module`;
 
-            const splicable = isEntityAlreadyGenerated
-                ? `|,{
-                        |                path: '${entityUrl}',
-                        |                loadChildren: '${modulePath}#${moduleName}'
-                        |            }`
-                : `|{
+            const splicable = `|{
                             |                path: '${entityUrl}',
                             |                loadChildren: '${modulePath}#${moduleName}'
-                            |            }`;
+                            |            },`;
+
             const rewriteFileModel = this.generateFileModel(
                 entityModulePath,
                 'jhipster-needle-add-entity-route',
