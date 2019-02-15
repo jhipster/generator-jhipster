@@ -19,7 +19,6 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const rxPaths = require('rxjs/_esm5/path-mapping');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
@@ -112,12 +111,6 @@ module.exports = (options) => ({
             chunks: ['vendors', 'polyfills', 'main', 'global'],
             chunksSortMode: 'manual',
             inject: 'body'
-        }),
-        new ScriptExtHtmlWebpackPlugin({
-            custom: {
-                attribute: 'nomodule',
-                test: /polyfills/
-            }
         })
     ]
 });
