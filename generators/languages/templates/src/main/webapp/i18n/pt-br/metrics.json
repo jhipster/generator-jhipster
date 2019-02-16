@@ -2,7 +2,7 @@
     "metrics": {
         "title": "Métricas da aplicação",
         "refresh.button": "Atualizar",
-        "updating": "Atualização...",
+        "updating": "Atualizando...",
         "jvm": {
             "title": "Métricas da JVM",
             "memory": {
@@ -14,7 +14,7 @@
             "threads": {
                 "title": "Threads",
                 "all": "Tudo",
-                "runnable": "Runnable",
+                "runnable": "Em execução",
                 "timedwaiting": "Tempo de espera",
                 "waiting": "Aguardando",
                 "blocked": "Bloqueado",
@@ -27,26 +27,27 @@
                     "waitedcount": "Número de esperas",
                     "lockname": "Nome do Lock",
                     "stacktrace": "Stacktrace",
-                    "show": "Mostrar",
-                    "hide": "Esconder"
+                    "show": "Mostrar Stacktrace",
+                    "hide": "Ocultar Stacktrace"
                 }
             },
             "gc": {
-                "title": "Coletas de lixo",
+                "title": "Coletor de lixo",
                 "marksweepcount": "Número de marcados para coleta",
                 "marksweeptime": "Tempo de marcação para coleta",
                 "scavengecount": "Número de varreduras",
                 "scavengetime": "Tempo de varreduras"
             },
             "http": {
-                "title": "Requisições HTTP (eventos por segundo)",
+                "title": "Requisições HTTP (eventos em milissegundo)",
                 "active": "Requisições ativas:",
                 "total": "Total de requisições:",
                 "table": {
                     "code": "Código",
                     "count": "Contagem",
                     "mean": "Mediana",
-                    "average": "Média"
+                    "average": "Média",
+                    "max": "Máxima"
                 },
                 "code": {
                     "ok": "Ok",
@@ -56,7 +57,7 @@
             }
         },
         "servicesstats": {
-            "title": "Estatísticas dos serviços (tempo em milisegundos)",
+            "title": "Estatísticas dos serviços (tempo em milissegundo)",
             "table": {
                 "name": "Nome do serviço",
                 "count": "Contagem",
@@ -72,13 +73,21 @@
         "cache": {
             "title": "Estatísticas da cache",
             "cachename": "Nome da cache",
-            "hits": "Hits",
-            "misses": "Misses",
-            "evictions": "Número de despejos"
+            "hits": "Cache Hits",
+            "misses": "Cache Misses",
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Removals",
+            "evictions": "Cache Evictions",
+            "hitPercent": "Cache Hit %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Average get time (µs)",
+            "averagePutTime": "Average put time (µs)",
+            "averageRemoveTime": "Average remove time (µs)"
         },
         "datasource": {
             "usage": "Utilização",
-            "title": "Estatísticas do datasource (tempo em milisegundos)",
+            "title": "Estatísticas do datasource (tempo em milissegundo)",
             "name": "Utilização do pool",
             "count": "Contagem",
             "mean": "Mediana",
