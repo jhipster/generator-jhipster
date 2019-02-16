@@ -29,7 +29,7 @@
     "glob": "7.1.2",
     "gulp-filter": "5.1.0",
     "insight": "0.10.1",
-    "jhipster-core": "3.0.2",
+    "jhipster-core": "3.6.8",
     "js-yaml": "3.12.0",
     "lodash": "4.17.10",
     "meow": "5.0.0",
