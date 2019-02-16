@@ -2,7 +2,7 @@
     "sessions": {
         "title": "Sessões ativas para [<strong>{{username}}</strong>]",
         "table": {
-            "ipaddress": "IP",
+            "ipaddress": "Endereço IP",
             "useragent": "Agente",
             "date": "Data",
             "button": "Invalidar"

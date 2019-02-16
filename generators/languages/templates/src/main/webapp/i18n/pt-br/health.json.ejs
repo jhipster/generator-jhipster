@@ -22,11 +22,11 @@
         "refresh.button": "Atualizar",
         "stacktrace": "Stacktrace",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
-            "error": "Error"
+            "details": "Detalhes",
+            "properties": "Propriedades",
+            "name": "Nome",
+            "value": "Valor",
+            "error": "Erro"
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
@@ -40,7 +40,7 @@
             "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "Espaço em disco",
-            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
+            "mail": "E-mail"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
             "db": "Banco de dados"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
@@ -52,7 +52,7 @@
             "status": "Estado"
         },
         "status": {
-            "UNKNOWN": "UNKNOWN",
+            "UNKNOWN": "DESCONHECIDO",
             "UP": "UP",
             "DOWN": "DOWN"
         }
