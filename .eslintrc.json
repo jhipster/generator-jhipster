@@ -35,6 +35,7 @@
     "no-param-reassign": "off",
     "no-shadow": "off",
     "function-paren-newline": "off",
-    "mocha/no-exclusive-tests": "error"
+    "mocha/no-exclusive-tests": "error",
+    "no-new": "off"
   }
 }
