@@ -88,11 +88,11 @@ hystrix:
 feign:
     hystrix:
         enabled: true
-#    client:
-#        config:
-#            default:
-#                connectTimeout: 5000
-#                readTimeout: 5000
+    # client:
+    #     config:
+    #         default:
+    #             connectTimeout: 5000
+    #             readTimeout: 5000
 
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 hystrix:
@@ -101,9 +101,9 @@ hystrix:
             execution:
                 isolation:
                     strategy: SEMAPHORE
-# See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
-#                    thread:
-#                        timeoutInMilliseconds: 10000
+                    # See https://github.com/spring-cloud/spring-cloud-netflix/issues/1330
+                    # thread:
+                    #     timeoutInMilliseconds: 10000
     shareSecurityContext: true
 
 <%_ } _%>
@@ -290,17 +290,17 @@ jhipster:
     clientApp:
         name: "<%= angularAppName %>"
     # By default CORS is disabled. Uncomment to enable.
-    #cors:
-        #allowed-origins: "*"
-        #allowed-methods: "*"
-        #allowed-headers: "*"
-        <%_ if (authenticationType === 'session') { _%>
-        #exposed-headers: "Link,X-Total-Count"
-        <%_ } else { _%>
-        #exposed-headers: "Authorization,Link,X-Total-Count"
-        <%_ } _%>
-        #allow-credentials: true
-        #max-age: 1800
+    # cors:
+    #     allowed-origins: "*"
+    #     allowed-methods: "*"
+    #     allowed-headers: "*"
+    <%_ if (authenticationType === 'session') { _%>
+    #     exposed-headers: "Link,X-Total-Count"
+    <%_ } else { _%>
+    #     exposed-headers: "Authorization,Link,X-Total-Count"
+    <%_ } _%>
+    #     allow-credentials: true
+    #     max-age: 1800
     mail:
         from: <%= baseName %>@localhost
     swagger:

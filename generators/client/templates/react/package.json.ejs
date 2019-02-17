@@ -179,14 +179,14 @@ limitations under the License.
   },
   <%_ if (!skipCommitHook) { _%>
   "lint-staged": {
-    "{,src/**/}*.{md,json,ts,tsx,css,scss}": [
+    "{,src/**/}*.{md,json,ts,tsx,css,scss,yml}": [
       "prettier --write",
       "git add"
     ]
   },
   <%_ } _%>
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss}\"",
+    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
