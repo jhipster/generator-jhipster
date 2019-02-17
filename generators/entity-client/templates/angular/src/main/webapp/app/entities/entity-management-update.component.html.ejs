@@ -68,9 +68,9 @@ _%>
                         <div *ngIf="editForm.get(['<%= fieldName %>']).value" class="form-text text-danger clearfix">
             <%_ if (fieldTypeBlobContent === 'any') { _%>
                             <a class="pull-left" (click)="openFile(editForm.get(['<%= fieldName %>ContentType']).value, editForm.get(['<%= fieldName %>']).value)" jhiTranslate="entity.action.open">open</a><br>
-                            <span class="pull-left">{{editForm.get(['<%= fieldName %>ContentType']).value}}, {{byteSize(editForm.get(['<%= fieldName %>']).value)}}</span>
+                            <span class="pull-left">{{editForm.get('<%= fieldName %>ContentType').value}}, {{byteSize(editForm.get(['<%= fieldName %>']).value)}}</span>
             <%_ } else { _%>
-                            <span class="pull-left">{{editForm.get(['<%= fieldName %>ContentType']).value}}, {{byteSize(editForm.get(['<%= fieldName %>']).value)}}</span>
+                            <span class="pull-left">{{editForm.get('<%= fieldName %>ContentType').value}}, {{byteSize(editForm.get(['<%= fieldName %>']).value)}}</span>
             <%_ } _%>
             <%_ if (fieldTypeBlobContent === 'image') { _%>
                             <button type="button" (click)="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">

@@ -69,7 +69,7 @@ S3.prototype.createBucket = function createBucket(params, callback) {
     });
 };
 
-S3.prototype.uploadWar = function uploadWar(params, callback) {
+S3.prototype.uploadJar = function uploadJar(params, callback) {
     const bucket = params.bucket;
     const buildTool = params.buildTool;
     let buildFolder;
@@ -80,45 +80,45 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
         buildFolder = 'target/';
     }
 
-    findWarFilename(buildFolder, (err, warFilename) => {
+    findJarFilename(buildFolder, (err, jarFilename) => {
         if (err) {
             error(err, callback);
         } else {
-            const warKey = warFilename.slice(0, -FILE_EXTENSION.length);
+            const jarKey = jarFilename.slice(0, -FILE_EXTENSION.length);
 
             const s3 = new this.Aws.S3({
                 params: {
                     Bucket: bucket,
-                    Key: warKey
+                    Key: jarKey
                 },
                 signatureVersion: 'v4',
                 httpOptions: { timeout: 600000 }
             });
 
-            const filePath = buildFolder + warFilename;
+            const filePath = buildFolder + jarFilename;
             const body = fs.createReadStream(filePath);
 
             uploadToS3(s3, body, (err, message) => {
                 if (err) {
                     error(err.message, callback);
                 } else {
-                    callback(null, { message, warKey });
+                    callback(null, { message, jarKey });
                 }
             });
         }
     });
 };
 
-function findWarFilename(buildFolder, callback) {
-    let warFilename = '';
+function findJarFilename(buildFolder, callback) {
+    let jarFilename = '';
     fs.readdir(buildFolder, (err, files) => {
         if (err) {
             error(err, callback);
         }
         files.filter(file => file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION).forEach(file => {
-            warFilename = file;
+            jarFilename = file;
         });
-        callback(null, warFilename);
+        callback(null, jarFilename);
     });
 }
 
@@ -149,7 +149,7 @@ function uploadToS3(s3, body, callback) {
                     if (err) {
                         callback(err, null);
                     } else {
-                        callback(null, 'War uploaded successful');
+                        callback(null, 'Jar uploaded successful');
                     }
                 });
         }

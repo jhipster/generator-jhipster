@@ -141,10 +141,10 @@ module.exports = class extends BaseGenerator {
                     }
                 });
             },
-            uploadWar() {
+            uploadJar() {
                 const cb = this.async();
                 this.log();
-                this.log(chalk.bold('Upload WAR to S3'));
+                this.log(chalk.bold('Upload JAR to S3'));
 
                 const s3 = this.awsFactory.getS3();
 
@@ -153,11 +153,11 @@ module.exports = class extends BaseGenerator {
                     buildTool: this.buildTool
                 };
 
-                s3.uploadWar(params, (err, data) => {
+                s3.uploadJar(params, (err, data) => {
                     if (err) {
                         this.error(chalk.red(err.message));
                     } else {
-                        this.warKey = data.warKey;
+                        this.jarKey = data.jarKey;
                         this.log(data.message);
                         cb();
                     }
@@ -236,7 +236,7 @@ module.exports = class extends BaseGenerator {
                 const params = {
                     applicationName: this.applicationName,
                     bucketName: this.bucketName,
-                    warKey: this.warKey,
+                    jarKey: this.jarKey,
                     environmentName: this.environmentName,
                     dbUrl: this.dbUrl,
                     dbUsername: this.dbUsername,

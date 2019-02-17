@@ -27,10 +27,10 @@ jobs:
     JHI_PROTRACTOR: 0
     # if JHI_LIB_BRANCH value is release, use the release from Maven
     JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-    JHI_LIB_BRANCH: release
+    JHI_LIB_BRANCH: master
     # if JHI_GEN_BRANCH value is release, use the release from NPM
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
-    JHI_GEN_BRANCH: release
+    JHI_GEN_BRANCH: master
     # specific config
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
@@ -47,6 +47,7 @@ jobs:
         JHI_ENTITY: sql
       react-noi18n-es-ws-gradle-session:
         JHI_APP: react-noi18n-es-ws-gradle-session
+        JHI_PROFILE: prod
         JHI_PROTRACTOR: 1
         JHI_ENTITY: sql
       ms-ngx-gateway-eureka-oauth2:

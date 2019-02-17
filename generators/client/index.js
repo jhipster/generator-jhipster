@@ -330,8 +330,9 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 this.styleSheetExt = this.useSass ? 'scss' : 'css';
                 this.pkType = this.getPkType(this.databaseType);
-                this.apiUaaPath = `${this.authenticationType === 'uaa' ? `${this.uaaBaseName.toLowerCase()}/` : ''}`;
-                this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
+                this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
+                this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
+                this.AOT_DIR = `${this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool)}aot`;
                 this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 

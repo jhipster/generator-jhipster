@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "सक्रिय सत्र [<b>{{username}}</b>]",
+        "title": "सक्रिय सत्र [<strong>{{username}}</strong>]",
         "table": {
             "ipaddress": "IP address",
             "useragent": "User Agent",

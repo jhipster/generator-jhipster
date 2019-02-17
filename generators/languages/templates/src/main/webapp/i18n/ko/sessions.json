@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "[<b>{{username}}</b>] Active 세션",
+        "title": "[<strong>{{username}}</strong>] Active 세션",
         "table": {
             "ipaddress": "IP 주소",
             "useragent": "User Agent",

@@ -116,20 +116,12 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add a new entity route path to webpacks config
-     *
-     * @param {string} microserviceName - The name of the microservice to put into the url
-     */
-    addEntityToWebpack(microserviceName) {
-        this.needleApi.clientWebpack.addEntity(microserviceName);
-    }
-
-    /**
      * Add a new entity in the "entities" menu.
      *
      * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
+     * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
      */
     addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
         if (this.clientFramework === 'angularX') {
@@ -149,6 +141,7 @@ module.exports = class extends PrivateBase {
      * @param {string} entityFileName - Entity File Name
      * @param {boolean} entityUrl - Entity router URL
      * @param {string} clientFramework - The name of the client framework
+     * @param {string} microServiceName - Microservice Name
      */
     addEntityToModule(
         entityInstance,
@@ -681,8 +674,10 @@ module.exports = class extends PrivateBase {
     /**
      * Add a distributionManagement to the Maven build.
      *
-     * @param {string} id - id of the repository
-     * @param {string} url - url of the repository
+     * @param {string} snapshotsId Snapshots Repository Id
+     * @param {string} snapshotsUrl Snapshots Repository Url
+     * @param {string} releasesId Repository Id
+     * @param {string} releasesUrl Repository Url
      */
     addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
         this.needleApi.serverMaven.addDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl);
@@ -803,6 +798,7 @@ module.exports = class extends PrivateBase {
     /**
      * A new dependency to build.gradle file in a specific folder.
      *
+     * @param {string} directory - directory
      * @param {string} scope - scope of the new dependency, e.g. compile
      * @param {string} group - maven GroupId
      * @param {string} name - maven ArtifactId
@@ -1836,7 +1832,7 @@ module.exports = class extends PrivateBase {
         let buildCmd = 'mvnw verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew bootWar -x test';
+            buildCmd = 'gradlew bootJar -x test';
         }
 
         if (os.platform() !== 'win32') {

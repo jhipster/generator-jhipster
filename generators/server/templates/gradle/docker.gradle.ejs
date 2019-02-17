@@ -16,17 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:0.9.11"
-    }
-}
-
-apply plugin: com.google.cloud.tools.jib.gradle.JibPlugin
-
 jib {
     from {
         image = '<%= DOCKER_JAVA_JRE %>'
@@ -46,11 +35,3 @@ jib {
     }
 }
 
-<%_ if (!skipClient) { _%>
-task copyWwwIntoStatic (type: Copy) {
-    from '<%= CLIENT_DIST_DIR %>'
-    into 'build/resources/main/static'
-}
-
-jibDockerBuild.dependsOn copyWwwIntoStatic
-<%_ } _%>

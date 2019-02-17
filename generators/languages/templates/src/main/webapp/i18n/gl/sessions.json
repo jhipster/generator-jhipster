@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "Sesións activas para [<b>{{username}}</b>]",
+        "title": "Sesións activas para [<strong>{{username}}</strong>]",
         "table": {
             "ipaddress": "Dirección IP",
             "useragent": "Axente de usuario",

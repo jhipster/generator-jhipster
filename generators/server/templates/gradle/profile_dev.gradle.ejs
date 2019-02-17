@@ -18,11 +18,6 @@
 -%>
 import org.gradle.internal.os.OperatingSystem
 
-apply plugin: 'org.springframework.boot'
-<%_ if (!skipClient) { _%>
-apply plugin: 'com.moowork.node'
-<%_ } _%>
-
 dependencies {
     compile "org.springframework.boot:spring-boot-devtools"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
@@ -64,11 +59,6 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
 
     args = ["run", "webpack:build"]
 }
-
-task copyIntoStatic (type: Copy) {
-    from '<%= CLIENT_DIST_DIR %>'
-    into 'build/resources/main/static'
-}
 <%_ } _%>
 
 processResources {
@@ -93,6 +83,5 @@ processResources {
 
 <%_ if (!skipClient) { _%>
 processResources.dependsOn webpackBuildDev
-copyIntoStatic.dependsOn processResources
-bootJar.dependsOn copyIntoStatic
+bootJar.dependsOn processResources
 <%_ } _%>

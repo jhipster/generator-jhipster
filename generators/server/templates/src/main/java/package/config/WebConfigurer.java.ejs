@@ -45,6 +45,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 <%_ } _%>
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.MediaType;
 import org.springframework.web.cors.CorsConfiguration;
 <%_ if (!reactive) { _%>
@@ -71,8 +72,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 <%_ } _%>
 import java.util.*;
-
 <%_ if (!skipClient) { _%>
+
 import static java.net.URLDecoder.decode;
 <%_ } _%>
 
@@ -111,12 +112,12 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         }
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
         <%_ if (!skipClient) { _%>
-        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_PRODUCTION))) {
             initCachingHttpHeadersFilter(servletContext, disps);
         }
         <%_ } _%>
         <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
+        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             initH2Console(servletContext);
         }
         <%_ } _%>

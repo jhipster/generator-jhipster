@@ -138,7 +138,7 @@ spring:
         <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (devDatabaseType === 'postgresql') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
         <%_ } else if (devDatabaseType === 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle12cDialect
         <%_ } else if (devDatabaseType === 'mssql') { _%>
@@ -163,11 +163,9 @@ spring:
             hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: true
+            hibernate.generate_statistics: false
             <%_ if (enableHibernateCache) { _%>
-                <%_ if (cacheProvider === 'ehcache') { _%>
-            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory
-                <%_ } else if (cacheProvider === 'hazelcast') { _%>
+                <%_ if (cacheProvider === 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
                 <%_ } else if (cacheProvider === 'infinispan') { _%>
@@ -175,7 +173,7 @@ spring:
             hibernate.cache.inifinispan.statistics: true
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
-            hibernate.cache.infinispan.entity.eviction.max_entries: 1000
+            hibernate.cache.infinispan.entity.memory.size: 1000
             hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
                 <%_ } _%>
                 <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -214,7 +212,8 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
-        contexts: dev
+        # Remove 'faker' if you do not want the sample data to be loaded automatically
+        contexts: dev, faker
     <%_ } _%>
     mail:
         host: localhost

@@ -814,13 +814,14 @@ module.exports = class extends Generator {
         const done = this.async();
         exec('java -version', (err, stdout, stderr) => {
             if (err) {
-                this.warning('Java 8 is not found on your computer.');
+                this.warning('Java is not found on your computer.');
             } else {
                 const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-                if (!javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))) {
-                    this.warning(
-                        `Java ${constants.JAVA_VERSION} is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`
-                    );
+                if (
+                    !javaVersion.match(new RegExp('11'.replace('.', '\\.'))) &&
+                    !javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))
+                ) {
+                    this.warning(`Java 8 or Java 11 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
                 }
             }
             done();
@@ -1118,6 +1119,14 @@ module.exports = class extends Generator {
      */
     getBuildDirectoryForBuildTool(buildTool) {
         return buildTool === 'maven' ? 'target/' : 'build/';
+    }
+
+    /**
+     * Get resource build directory used by buildTool
+     * @param {string} buildTool - buildTool
+     */
+    getResourceBuildDirectoryForBuildTool(buildTool) {
+        return buildTool === 'maven' ? 'target/classes/' : 'build/resources/main/';
     }
 
     /**

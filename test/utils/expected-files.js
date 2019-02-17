@@ -125,7 +125,7 @@ const expectedFiles = {
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
             // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-            `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIntTest.java`
+            `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`
         ],
         gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`]
     },
@@ -161,6 +161,7 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}i18n/messages.properties`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/JhipsterApp.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/aop/logging/LoggingAspect.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/lazy/LazyInitBeanFactoryPostProcessor.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/ApplicationProperties.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/AsyncConfiguration.java`,
@@ -197,20 +198,19 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/errors/LoginAlreadyUsedException.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/LoggerVM.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/util/PaginationUtil.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/LogsResource.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/SecurityUtilsUnitTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/LogsResourceIntTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/LogsResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/TestUtil.java`,
         `${SERVER_TEST_RES_DIR}config/application.yml`,
         `${SERVER_TEST_RES_DIR}logback.xml`
     ],
 
     userManagementServer: [
-        `${SERVER_MAIN_RES_DIR}config/liquibase/authorities.csv`,
-        `${SERVER_MAIN_RES_DIR}config/liquibase/users.csv`,
-        `${SERVER_MAIN_RES_DIR}config/liquibase/users_authorities.csv`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/data/authority.csv`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/data/user.csv`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/data/user_authority.csv`,
         `${SERVER_MAIN_RES_DIR}templates/mail/activationEmail.html`,
         `${SERVER_MAIN_RES_DIR}templates/mail/passwordResetEmail.html`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Authority.java`,
@@ -234,10 +234,10 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/UserResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/ManagedUserVM.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AccountResourceIntTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIntTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIntTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIntTest.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AccountResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`
     ],
 
     infinispan: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`],
@@ -471,6 +471,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2_head-512.png`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-512.png`,
         `${CLIENT_MAIN_SRC_DIR}content/images/logo-jhipster.png`,
+        `${CLIENT_MAIN_SRC_DIR}WEB-INF/web.xml`,
         `${CLIENT_MAIN_SRC_DIR}favicon.ico`,
         `${CLIENT_MAIN_SRC_DIR}index.html`,
         `${CLIENT_MAIN_SRC_DIR}manifest.webapp`,
@@ -642,7 +643,7 @@ const expectedFiles = {
     couchbase: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/N1qlCouchbaseRepository.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepository.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/DatabaseTestConfiguration.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/DatabaseConfigurationIT.java`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`,
@@ -682,7 +683,7 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberContextConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/StepDefs.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberTest.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberIT.java`
     ],
 
     eureka: [

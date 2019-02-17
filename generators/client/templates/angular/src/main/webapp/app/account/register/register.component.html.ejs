@@ -108,7 +108,7 @@
                             Your password cannot be longer than 50 characters.
                         </small>
                     </div>
-                    <<%= jhiPrefixDashed %>-password-strength-bar [passwordToCheck]="registerForm.get(['password']).value"></<%= jhiPrefixDashed %>-password-strength-bar>
+                    <<%= jhiPrefixDashed %>-password-strength-bar [passwordToCheck]="registerForm.get('password').value"></<%= jhiPrefixDashed %>-password-strength-bar>
                 </div>
                 <div class="form-group">
                     <label class="form-control-label" for="confirmPassword" jhiTranslate="global.form.confirmpassword">New password confirmation</label>
