@@ -63,14 +63,14 @@ _%>
         <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
                     <div>
             <%_ if (fieldTypeBlobContent === 'image') { _%>
-                        <img [src]="'data:' + editForm.get(['<%= fieldName %>ContentType']).value + ';base64,' + editForm.get(['<%= fieldName %>']).value" style="max-height: 100px;" *ngIf="editForm.get(['<%= fieldName %>']).value" alt="<%=entityInstance %> image"/>
+                        <img [src]="'data:' + editForm.get('<%= fieldName %>ContentType').value + ';base64,' + editForm.get('<%= fieldName %>').value" style="max-height: 100px;" *ngIf="editForm.get('<%= fieldName %>').value" alt="<%=entityInstance %> image"/>
             <%_ } _%>
-                        <div *ngIf="editForm.get(['<%= fieldName %>']).value" class="form-text text-danger clearfix">
+                        <div *ngIf="editForm.get('<%= fieldName %>').value" class="form-text text-danger clearfix">
             <%_ if (fieldTypeBlobContent === 'any') { _%>
-                            <a class="pull-left" (click)="openFile(editForm.get(['<%= fieldName %>ContentType']).value, editForm.get(['<%= fieldName %>']).value)" jhiTranslate="entity.action.open">open</a><br>
-                            <span class="pull-left">{{editForm.get('<%= fieldName %>ContentType').value}}, {{byteSize(editForm.get(['<%= fieldName %>']).value)}}</span>
+                            <a class="pull-left" (click)="openFile(editForm.get('<%= fieldName %>ContentType').value, editForm.get('<%= fieldName %>').value)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{editForm.get('<%= fieldName %>ContentType').value}}, {{byteSize(editForm.get('<%= fieldName %>').value)}}</span>
             <%_ } else { _%>
-                            <span class="pull-left">{{editForm.get('<%= fieldName %>ContentType').value}}, {{byteSize(editForm.get(['<%= fieldName %>']).value)}}</span>
+                            <span class="pull-left">{{editForm.get('<%= fieldName %>ContentType').value}}, {{byteSize(editForm.get('<%= fieldName %>').value)}}</span>
             <%_ } _%>
             <%_ if (fieldTypeBlobContent === 'image') { _%>
                             <button type="button" (click)="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
@@ -108,64 +108,64 @@ _%>
         <%_ } _%>
     <%_ } _%>
     <%_ if (fields[idx].fieldValidate === true) { _%>
-                    <div *ngIf="editForm.get(['<%= fieldName %>']).invalid && (editForm.get(['<%= fieldName %>']).dirty || editForm.get(['<%= fieldName %>']).touched)">
+                    <div *ngIf="editForm.get('<%= fieldName %>').invalid && (editForm.get('<%= fieldName %>').dirty || editForm.get('<%= fieldName %>').touched)">
         <%_ if (fields[idx].fieldValidateRules.includes('required')) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get(['<%= fieldName %>']).errors.required" jhiTranslate="entity.validation.required">
+                               *ngIf="editForm.get('<%= fieldName %>').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.includes('minlength')) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get(['<%= fieldName %>']).errors.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMinlength %> }">
+                               *ngIf="editForm.get('<%= fieldName %>').errors.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMinlength %> }">
                         This field is required to be at least <%= fields[idx].fieldValidateRulesMinlength %> characters.
                         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get(['<%= fieldName %>']).errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMaxlength %> }">
+                               *ngIf="editForm.get('<%= fieldName %>').errors.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMaxlength %> }">
                         This field cannot be longer than <%= fields[idx].fieldValidateRulesMaxlength %> characters.
                         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.includes('min')) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get(['<%= fieldName %>']).errors.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMin %> }">
+                               *ngIf="editForm.get('<%= fieldName %>').errors.min" jhiTranslate="entity.validation.min" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMin %> }">
                             This field should be at least <%= fields[idx].fieldValidateRulesMin %>.
                         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.includes('max')) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get(['<%= fieldName %>']).errors.max" jhiTranslate="entity.validation.max" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMax %> }">
+                               *ngIf="editForm.get('<%= fieldName %>').errors.max" jhiTranslate="entity.validation.max" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMax %> }">
                             This field cannot be more than <%= fields[idx].fieldValidateRulesMax %>.
                         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.includes('minbytes')) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get(['<%= fieldName %>']).errors.minbytes" jhiTranslate="entity.validation.minbytes" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMinbytes %> }">
+                               *ngIf="editForm.get('<%= fieldName %>').errors.minbytes" jhiTranslate="entity.validation.minbytes" [translateValues]="{ min: <%= fields[idx].fieldValidateRulesMinbytes %> }">
                             This field should be at least <%= fields[idx].fieldValidateRulesMinbytes %>.
                         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.includes('maxbytes')) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get(['<%= fieldName %>']).errors.maxbytes" jhiTranslate="entity.validation.maxbytes" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMaxbytes %> }">
+                               *ngIf="editForm.get('<%= fieldName %>').errors.maxbytes" jhiTranslate="entity.validation.maxbytes" [translateValues]="{ max: <%= fields[idx].fieldValidateRulesMaxbytes %> }">
                             This field cannot be more than <%= fields[idx].fieldValidateRulesMaxbytes %>.
                         </small>
         <%_ } _%>
         <%_ if (fields[idx].fieldValidateRules.includes('pattern')) { _%>
                         <small class="form-text text-danger"
-                               *ngIf="editForm.get(['<%= fieldName %>']).errors.pattern" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: '<%= fieldNameHumanized %>' }">
+                               *ngIf="editForm.get('<%= fieldName %>').errors.pattern" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: '<%= fieldNameHumanized %>' }">
                             This field should follow pattern for "<%= fieldNameHumanized %>".
                         </small>
         <%_ } _%>
         <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.get(['<%= fieldName %>'])?.errors?.number" jhiTranslate="entity.validation.number">
+                            [hidden]="!editForm.get('<%= fieldName %>')?.errors?.number" jhiTranslate="entity.validation.number">
                             This field should be a number.
                         </small>
         <%_ } _%>
         <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.get(['<%= fieldName %>']).errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                            [hidden]="!editForm.get('<%= fieldName %>').errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
                             This field should be a date and time.
                         </small>
         <%_ } _%>
@@ -243,10 +243,10 @@ _%>
                 </div>
                 <%_ } _%>
                 <%_ if (relationships[idx].relationshipValidate === true) { _%>
-                <div *ngIf="editForm.get(['<%= relationshipName %>']).invalid && (editForm.get(['<%= relationshipName %>']).dirty || editForm.get(['<%= relationshipName %>']).touched)">
+                <div *ngIf="editForm.get('<%= relationshipName %>').invalid && (editForm.get('<%= relationshipName %>').dirty || editForm.get('<%= relationshipName %>').touched)">
                     <%_ if (relationshipRequired) { _%>
                     <small class="form-text text-danger"
-                           *ngIf="editForm.get(['<%= relationshipName %>']).errors.required" jhiTranslate="entity.validation.required">
+                           *ngIf="editForm.get('<%= relationshipName %>').errors.required" jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                     <%_ } _%>
