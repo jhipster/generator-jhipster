@@ -19,7 +19,13 @@ let wrapper: Wrapper<ErrorClass>;
   let loginService: LoginService;
 
   beforeEach(() => {
-    loginService  = { openLogin: jest.fn()<%_ if (authenticationType !== 'jwt') { _%>, logout: jest.fn()<%_ } _%> };
+    <%_ if (authenticationType === 'jwt') { _%>
+    loginService = { openLogin: jest.fn() };
+    <%_ } else if (authenticationType === 'session') { _%>
+    loginService = { openLogin: jest.fn(), logout: jest.fn() };
+    <%_ } else if (authenticationType === 'oauth2') { _%>
+    loginService = { login: jest.fn(), logout: jest.fn() };
+    <%_ } _%>
     wrapper = shallowMount<ErrorClass>(Error, {
       <%_ if (enableTranslation) { _%>
       i18n,
