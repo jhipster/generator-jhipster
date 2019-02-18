@@ -148,6 +148,7 @@ function loadFromYoRc() {
     this.dockerRepositoryName = this.config.get('dockerRepositoryName');
     this.dockerPushCommand = this.config.get('dockerPushCommand');
     this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+    this.reactive = this.config.get('reactive');
     if (this.serviceDiscoveryType === undefined) {
         this.serviceDiscoveryType = 'eureka';
     }
