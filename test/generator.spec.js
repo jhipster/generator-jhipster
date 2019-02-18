@@ -156,6 +156,7 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/core/jhi-footer/jhi-footer.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/core/jhi-navbar/jhi-navbar.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/core/ribbon/ribbon.component.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/shared/alert/alert.service.spec.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/axios-interceptor.ts`,
 
