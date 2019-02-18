@@ -7,7 +7,9 @@ import LoginService from '@/account/login.service';
 
 const localVue = createLocalVue();
 config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(localVue);
+<%_ } _%>
 const store = config.initVueXStore(localVue);
 const customErrorMsg = 'An error occured.';
 
@@ -17,9 +19,11 @@ let wrapper: Wrapper<ErrorClass>;
   let loginService: LoginService;
 
   beforeEach(() => {
-    loginService  = { openLogin: jest.fn() };
+    loginService  = { openLogin: jest.fn()<%_ if (authenticationType !== 'jwt') { _%>, logout: jest.fn()<%_ } _%> };
     wrapper = shallowMount<ErrorClass>(Error, {
+      <%_ if (enableTranslation) { _%>
       i18n,
+      <%_ } _%>
       store,
       router,
       localVue,
