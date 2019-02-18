@@ -92,7 +92,9 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 {
                     loader: 'thread-loader',
                     options: {
-                        // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+                        // There should be 1 cpu for the fork-ts-checker-webpack-plugin.
+                        // The value may need to be adjusted (e.g. to 1) in some CI environments,
+                        // as cpus() may report more cores than what are available to the build.
                         workers: require('os').cpus().length - 1
                     }
                 },
