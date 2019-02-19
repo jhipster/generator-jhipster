@@ -317,7 +317,7 @@ public class UserService {
                 <%_ if (databaseType === 'couchbase') { _%>
                 authorities.add(AuthoritiesConstants.USER);
                 newUser.setAuthorities(authorities);
-                return createUser(newUser)
+                return createUser(newUser);
                 <%_ } else { _%>
                 return authorityRepository.findById(AuthoritiesConstants.USER)
                     .map(authorities::add)
