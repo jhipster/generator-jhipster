@@ -106,8 +106,9 @@ public class SecurityConfiguration {
             .authorizeExchange()
             .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             <%_ if (!skipClient) { _%>
-            .pathMatchers("/app/**/*.js").permitAll()
-            .pathMatchers("/app/**/*.html").permitAll()
+            .pathMatchers("/").permitAll()
+            .pathMatchers("/*.*").permitAll()
+            .pathMatchers("/app/**").permitAll()
             .pathMatchers("/i18n/**").permitAll()
             .pathMatchers("/content/**").permitAll()
             .pathMatchers("/swagger-ui/index.html").permitAll()
