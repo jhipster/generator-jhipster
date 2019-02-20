@@ -245,7 +245,6 @@ jhipster:
             app1: /api # recommended prod configuration
     <%_ } _%>
     http:
-        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 1461
     <%_ if (cacheProvider !== 'no') { _%>
