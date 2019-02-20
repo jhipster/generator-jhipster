@@ -1,0 +1,10 @@
+entity A
+entity B
+entity A {
+  name String required
+}
+entity A {
+  title String
+}
+entity B
+entity C

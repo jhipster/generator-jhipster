@@ -1,0 +1,6 @@
+entity A {
+  tata String,
+  titi Integer,
+  toto Boolean,
+  tutu String
+}

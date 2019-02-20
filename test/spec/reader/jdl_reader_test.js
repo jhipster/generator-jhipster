@@ -76,7 +76,7 @@ describe('JDLReader', () => {
         it('fails', () => {
           expect(() => {
             JDLReader.parseFromFiles(['./test/test_files/test_file.jdl']);
-          }).to.throw('File content must be passed in order to be parsed, it is currently empty.');
+          }).to.throw('File content must be passed, it is currently empty.');
         });
       });
       context('when passing a JDL file with a syntax error', () => {

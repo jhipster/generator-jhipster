@@ -550,6 +550,7 @@ describe('EntityParser', () => {
               otherEntityName: 'a',
               relationshipType: 'many-to-many',
               ownerSide: false,
+              otherEntityField: 'id',
               otherEntityRelationshipName: 'bbb'
             }
           ]);
@@ -752,7 +753,7 @@ describe('EntityParser', () => {
 
         it('sets one by default', () => {
           expect(content.A.relationships[0].relationshipName).to.equal('b');
-          expect(content.B.relationships[0].otherEntityRelationshipName).to.equal('a');
+          expect(content.B.relationships[0].otherEntityRelationshipName).to.equal('b');
         });
       });
       context('when parsing a relationship with a useJPADerivedIdentifier flag', () => {
