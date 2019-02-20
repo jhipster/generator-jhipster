@@ -557,9 +557,12 @@ module.exports = class extends BaseGenerator {
 
                 const name = this.gcpCloudSqlInstanceName;
                 // for mysql keep default options, set specific option for pg
-                const dbVersionFlag = this.prodDatabaseType === 'postgresql' ? ' --database-version="POSTGRES_9_6" --tier="db-g1-small"' : '';
+                const dbVersionFlag =
+                    this.prodDatabaseType === 'postgresql' ? ' --database-version="POSTGRES_9_6" --tier="db-g1-small"' : '';
 
-                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${this.gcpProjectId}${dbVersionFlag}`;
+                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${
+                    this.gcpProjectId
+                }${dbVersionFlag}`;
                 this.log(chalk.bold(`\n... Running: ${cmd}`));
 
                 exec(cmd, (err, stdout, stderr) => {
