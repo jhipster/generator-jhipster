@@ -150,7 +150,7 @@ relationship ManyToOne {
 relationship ManyToMany {
   JobHistory to Department,
   JobHistory to Job{history},
-  JobHistory{emp(employee)} to Employee,
+  JobHistory{emp(employee)} to Employee{history},
   Job{chore(title)} to Task{linkedJob(JobTitle)}
 }
 
