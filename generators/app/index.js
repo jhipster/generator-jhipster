@@ -208,7 +208,7 @@ module.exports = class extends BaseGenerator {
             },
 
             validateBlueprint() {
-                if (this.blueprint) {
+                if (this.blueprint && !this.skipChecks) {
                     this.checkBlueprint(this.blueprint);
                 }
             },
@@ -346,35 +346,37 @@ module.exports = class extends BaseGenerator {
 
             composeServer() {
                 if (this.skipServer) return;
+                const options = this.options;
+                const configOptions = this.configOptions;
 
                 this.composeWith(require.resolve('../server'), {
+                    ...options,
+                    configOptions,
                     'client-hook': !this.skipClient,
-                    'from-cli': this.options['from-cli'],
-                    configOptions: this.configOptions,
-                    force: this.options.force,
                     debug: this.isDebugEnabled
                 });
             },
 
             composeClient() {
                 if (this.skipClient) return;
+                const options = this.options;
+                const configOptions = this.configOptions;
 
                 this.composeWith(require.resolve('../client'), {
-                    'skip-install': this.options['skip-install'],
-                    'skip-commit-hook': this.options['skip-commit-hook'],
-                    'from-cli': this.options['from-cli'],
-                    configOptions: this.configOptions,
-                    force: this.options.force,
+                    ...options,
+                    configOptions,
                     debug: this.isDebugEnabled
                 });
             },
 
             composeCommon() {
+                const options = this.options;
+                const configOptions = this.configOptions;
+
                 this.composeWith(require.resolve('../common'), {
+                    ...options,
                     'client-hook': !this.skipClient,
-                    'from-cli': this.options['from-cli'],
-                    configOptions: this.configOptions,
-                    force: this.options.force,
+                    configOptions,
                     debug: this.isDebugEnabled
                 });
             },
@@ -454,12 +456,14 @@ module.exports = class extends BaseGenerator {
 
             regenerateEntities() {
                 if (this.withEntities) {
+                    const options = this.options;
+                    const configOptions = this.configOptions;
                     this.getExistingEntities().forEach(entity => {
                         this.composeWith(require.resolve('../entity'), {
+                            ...options,
+                            configOptions,
                             regenerate: true,
                             'skip-install': true,
-                            'from-cli': this.options['from-cli'],
-                            force: this.options.force,
                             debug: this.isDebugEnabled,
                             arguments: [entity.name]
                         });

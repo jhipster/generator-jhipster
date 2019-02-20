@@ -84,13 +84,9 @@ module.exports = class extends BaseBlueprintGenerator {
         // use global variable since getters dont have access to instance property
         if (!opts.fromBlueprint) {
             useBlueprint = this.composeBlueprint(blueprint, 'languages', {
-                'skip-install': this.options['skip-install'],
-                'skip-server': this.options['skip-server'],
-                'skip-client': this.options['skip-client'],
-                'from-cli': this.options['from-cli'],
+                ...this.options,
                 languages: this.languages,
                 configOptions: this.configOptions,
-                force: this.options.force,
                 arguments: this.options.languages
             });
         } else {

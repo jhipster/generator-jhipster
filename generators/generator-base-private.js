@@ -734,7 +734,9 @@ module.exports = class extends Generator {
     composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
             blueprint = this.normalizeBlueprintName(blueprint);
-            this.checkBlueprint(blueprint, subGen);
+            if (options.skipChecks === undefined || !options.skipChecks) {
+                this.checkBlueprint(blueprint, subGen);
+            }
             try {
                 const finalOptions = {
                     ...options,

@@ -36,10 +36,10 @@ module.exports = class extends BaseBlueprintGenerator {
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'entity-server', {
+                ...this.options,
                 context: opts.context,
-                force: opts.force,
                 debug: opts.context.isDebugEnabled,
-                'from-cli': opts.context.options['from-cli']
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;
