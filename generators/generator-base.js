@@ -48,11 +48,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
-    constructor(args, opts) {
-        super(args, opts);
-        this.needleApi = new NeedleApi(this);
-    }
-
     /**
      * Deprecated
      * Get the JHipster configuration from the .yo-rc.json file.
@@ -95,7 +90,7 @@ module.exports = class extends PrivateBase {
      * @param {string} comment - comment to add before resources content.
      */
     addExternalResourcesToRoot(resources, comment) {
-        this.needleApi.base.addExternalResourcesToRoot(resources, comment);
+        this.needleApi.client.addExternalResourcesToRoot(resources, comment);
     }
 
     /**
@@ -2067,5 +2062,12 @@ module.exports = class extends PrivateBase {
      */
     asDto(name) {
         return name + this.dtoSuffix;
+    }
+
+    get needleApi() {
+        if (this._needleApi === undefined || this._needleApi === null) {
+            this._needleApi = new NeedleApi(this);
+        }
+        return this._needleApi;
     }
 };
