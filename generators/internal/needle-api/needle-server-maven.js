@@ -36,7 +36,7 @@ module.exports = class extends needleServer {
             dependency += `                <type>${type}</type>\n`;
         }
         if (scope) {
-            dependency += `                <scope>${version}</scope>\n`;
+            dependency += `                <scope>${scope}</scope>\n`;
         }
         if (other) {
             dependency += `${other}\n`;
