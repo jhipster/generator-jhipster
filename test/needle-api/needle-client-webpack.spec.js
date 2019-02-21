@@ -6,7 +6,6 @@ const constants = require('../../generators/generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
-const microserviceName = 'myMicroService';
 const assetFrom = 'source';
 const assetTo = 'target';
 
@@ -45,7 +44,6 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
             webpackPhase() {
-                this.addEntityToWebpack(microserviceName);
                 this.copyExternalAssetsInWebpack(assetFrom, assetTo);
             }
         };
@@ -81,11 +79,6 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
                     })
                     .on('end', done);
             });
-
-            it('Assert microservice name is added to webpack.dev.js in lowercase', () => {
-                assert.fileContent(`${CLIENT_WEBPACK_DIR}/webpack.dev.js`, `'/${microserviceName.toLowerCase()}',`);
-            });
-
             it('Assert external asset is added to webpack.common.js', () => {
                 const from = `${CLIENT_MAIN_SRC_DIR}content/${assetFrom}/`;
                 const to = `content/${assetTo}/`;
