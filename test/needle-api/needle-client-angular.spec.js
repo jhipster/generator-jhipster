@@ -1,6 +1,7 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
+
 const ClientGenerator = require('../../generators/client');
 const constants = require('../../generators/generator-constants');
 
@@ -47,6 +48,25 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     this.addMainCSSStyle('without-comment { font-size: 200%; color: red; }');
                     this.addMainCSSStyle('h1 { font-size: 200%; color: navy; }', 'my comment');
                 }
+            },
+            addToMenuStep() {
+                this.addElementToMenu('routerName1', 'glyphiconName1', true, 'angularX');
+                this.addElementToAdminMenu('routerName2', 'glyphiconName2', true, 'angularX');
+                this.addEntityToMenu('routerName3', true, 'angularX', 'routerName3');
+            },
+            addToModuleStep() {
+                this.addEntityToModule(
+                    'entityInstance',
+                    'entityClass',
+                    'entityName',
+                    'entityFolderName',
+                    'entityFileName',
+                    'entityUrl',
+                    'angularX',
+                    'microServiceName'
+                );
+                this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, 'angularX');
+                this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, 'angularX');
             }
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
@@ -116,6 +136,68 @@ describe('needle API SCSS: JHipster client generator with blueprint', () => {
                         'my comment\n' +
                         '========================================================================== */\n'
                 );
+            });
+
+            it('menu contains the element added by needle api', () => {
+                assert.fileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
+                    '            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">\n' +
+                        '                                <a class="nav-link" routerLink="routerName1" (click)="collapseNavbar()">\n' +
+                        '                                    <fa-icon [icon]="\'glyphiconName1\'" [fixedWidth]="true"></fa-icon>&nbsp;\n' +
+                        '                                    <span jhiTranslate="global.menu.routerName1">Router Name 1</span>\n' +
+                        '                                </a>\n' +
+                        '                            </li>'
+                );
+            });
+
+            it('admin menu contains the admin element added by needle api', () => {
+                assert.fileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
+                    '                    <li>\n' +
+                        '                        <a class="dropdown-item" routerLink="routerName2" routerLinkActive="active" (click)="collapseNavbar()">\n' +
+                        '                            <fa-icon [icon]="\'glyphiconName2\'" [fixedWidth]="true"></fa-icon>&nbsp;\n' +
+                        '                            <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>\n' +
+                        '                        </a>\n' +
+                        '                    </li>'
+                );
+            });
+
+            it('entity menu contains the entity added by needle api', () => {
+                assert.fileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
+                    '                    <li>\n' +
+                        '                        <a class="dropdown-item" routerLink="routerName3" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">\n' +
+                        '                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>\n' +
+                        '                            <span jhiTranslate="global.menu.entities.routerName3">Router Name 3</span>\n' +
+                        '                        </a>\n' +
+                        '                    </li>'
+                );
+            });
+
+            it('entity module contains the microservice object added by needle api', () => {
+                assert.fileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
+                    '            {\n' +
+                        "                path: 'entityUrl',\n" +
+                        "                loadChildren: './entityFolderName/entityFileName.module#MicroServiceNameentityNameModule'\n" +
+                        '            }'
+                );
+            });
+
+            it('admin module contains the import and the module added by needle api', () => {
+                assert.fileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`,
+                    "import { appNameadminAngularNameModule } from './adminFolderName/adminFileName.module';"
+                );
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`, 'appNameadminAngularNameModule,');
+            });
+
+            it('app module contains the import and the module added by needle api', () => {
+                assert.fileContent(
+                    `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`,
+                    "import { appNameangularNameModule } from './folderName/fileName.module';"
+                );
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.module.ts`, 'appNameangularNameModule,');
             });
         });
     });
