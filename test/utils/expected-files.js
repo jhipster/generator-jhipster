@@ -619,7 +619,6 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2TokenEndpointClient.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2TokenEndpointClientAdapter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/UaaTokenEndpointClient.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SecurityBeanOverrideConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2CookieHelperTest.java`,
