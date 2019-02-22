@@ -69,6 +69,18 @@ gradle-test:
             - build/jacoco/
         expire_in: 1 day
 
+gradle integration-test:
+    stage: test
+    script:
+        - ./gradlew integrationTest -PnodeInstall --no-daemon
+    artifacts:
+        reports:
+            junit: build/test-results/test/TEST-*.xml
+        paths:
+            - build/test-results/
+            - build/jacoco/
+        expire_in: 1 day
+
 <%_ if (!skipClient) { _%>
 frontend-test:
     stage: test
@@ -88,6 +100,7 @@ sonar-analyze:
     stage: analyze
     dependencies:
         - gradle-test
+        - gradle-integration-test
         <%_ if (!skipClient) { _%>
         - frontend-test
         <%_ } _%>

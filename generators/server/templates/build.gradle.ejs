@@ -77,6 +77,12 @@ if (project.hasProperty('prod')) {
     apply from: 'gradle/profile_dev.gradle'
 }
 
+<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+if (project.hasProperty('zipkin')) {
+    apply from: 'gradle/zipkin.gradle'
+}
+<%_ } _%>
+
 idea {
   module {
     excludeDirs += files('node_modules')
@@ -139,6 +145,18 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 test {
+    exclude '**/*IT*', '**/*IntTest*', '**/*CucumberIT*'
+
+    // uncomment if the tests reports are not generated
+    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
+    // ignoreFailures true
+    reports.html.enabled = false
+}
+
+task integrationTest(type: Test) {
+    description = "Execute integration tests."
+    group = "verification"
+    include '**/*IT*', '**/*IntTest*'
     exclude '**/*CucumberIT*'
 
     // uncomment if the tests reports are not generated
@@ -161,25 +179,21 @@ task cucumberTest(type: Test) {
 
 check.dependsOn cucumberTest
 <%_ } _%>
+check.dependsOn integrationTest
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
     reportOn test
+}
+
+task integrationTestReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn integrationTest
 }
 
 <%_ if (cucumberTests) { _%>
 task cucumberTestReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
     reportOn cucumberTest
-}
-<%_ } _%>
-
-<%_ if (!skipClient) { _%>
-<%_ } _%>
-
-<%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
-
-if (project.hasProperty('zipkin')) {
-    apply from: 'gradle/zipkin.gradle'
 }
 <%_ } _%>
 
