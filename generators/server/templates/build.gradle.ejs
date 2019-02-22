@@ -526,5 +526,5 @@ if (project.hasProperty('nodeInstall')) {
 <%_ } _%>
 
 compileJava.dependsOn processResources
-processResources.dependsOn cleanResources,bootBuildInfo
-bootBuildInfo.mustRunAfter cleanResources
+processResources.dependsOn bootBuildInfo
+<!-- bootBuildInfo.mustRunAfter cleanResources -->
