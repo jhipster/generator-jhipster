@@ -140,9 +140,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
 /**
- * Test class for the <%= entityClass %>Resource REST controller.
- *
- * @see <%= entityClass %>Resource
+ * Integration tests for the {@Link <%= entityClass %>Resource} REST controller.
  */
 @RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>

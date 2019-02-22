@@ -119,9 +119,7 @@ import static org.mockito.Mockito.when;
 <%_ } _%>
 
 /**
- * Test class for the UserResource REST controller.
- *
- * @see UserService
+ * Integration tests for {@link UserService}.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>

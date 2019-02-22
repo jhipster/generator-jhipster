@@ -44,9 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Test class for the ExceptionTranslator controller advice.
- *
- * @see ExceptionTranslator
+ * Integration tests {@link ExceptionTranslator} controller advice.
  */
 @RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
@@ -193,9 +191,7 @@ import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 import java.util.List;
 
 /**
- * Test class for the ExceptionTranslator controller advice.
- *
- * @see ExceptionTranslator
+ * Integration tests {@link ExceptionTranslator} controller advice.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
