@@ -842,9 +842,11 @@ public class UserService {
         if (details.get("langKey") != null) {
             user.setLangKey((String) details.get("langKey"));
         } else if (details.get("locale") != null) {
-            // for the locale issue, we suggest you should adjust the format based on the oauth server. here we can't cater for all the cases
-            // https://github.com/jhipster/generator-jhipster/issues/7866 
-            // for the en_US or en_** issue. since jhipter only have one "en" language, we will handle it here, for other language, please handle it accordingly. 
+            // For the locale issue, we suggest you adjust the format based on the OAuth server.
+            // Here we can't cater for all the use-cases, see:
+            // https://github.com/jhipster/generator-jhipster/issues/7866
+            // for the en_US or en_** issue.
+            // Since JHipter only have one "en" language, we will handle it here, for other languages, please handle it accordingly. 
             String locale = (String) details.get("locale");
             if(locale.startsWith("en_") || locale.startsWith("en-")) {
                 locale = "en";
