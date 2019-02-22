@@ -24,7 +24,7 @@ import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
 import org.mapstruct.*;
 
 /**
- * Mapper for the entity <%= asEntity(entityClass) %> and its DTO <%= asDto(entityClass) %>.
+ * Mapper for the entity {@link <%= asEntity(entityClass) %>} and its DTO {@link <%= asDto(entityClass) %>}.
  */
 @Mapper(componentModel = "spring", uses = {<% var existingMappings = [];
   for (idx in relationships) {

@@ -91,7 +91,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
 
 /**
- * Service Implementation for managing <%= asEntity(entityClass) %>.
+ * Service Implementation for managing {@link <%= asEntity(entityClass) %>}.
  */
 @Service<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
