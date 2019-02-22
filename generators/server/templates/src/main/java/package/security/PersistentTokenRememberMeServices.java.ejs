@@ -214,7 +214,7 @@ public class PersistentTokenRememberMeServices extends
         String presentedSeries = cookieTokens[0];
         String presentedToken = cookieTokens[1];
         <%_ if (databaseType === 'couchbase') { _%>
-        Optional<PersistentToken> optionalToken = Optional.of(persistentTokenRepository.findBySeries(presentedSeries));
+        Optional<PersistentToken> optionalToken = persistentTokenRepository.findBySeries(presentedSeries);
         <%_ } else { _%>
         Optional<PersistentToken> optionalToken = persistentTokenRepository.findById(presentedSeries);
         <%_ } _%>
