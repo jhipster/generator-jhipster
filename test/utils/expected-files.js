@@ -580,8 +580,12 @@ const expectedFiles = {
     swaggerCodegenGradle: ['gradle/swagger.gradle'],
 
     uaa: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaWebSecurityConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaConfiguration.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaWebSecurityConfiguration.java`
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaProperties.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/IatTokenEnhancer.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SecurityBeanOverrideConfiguration.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`
     ],
 
     gateway: [
@@ -593,12 +597,36 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/accesscontrol/AccessControlFilter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/responserewriting/SwaggerBasePathRewritingFilter.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/RouteVM.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/GatewayResource.java`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.ts`
+    ],
+
+    gatewayWithUaa: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AuthResource.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/filter/RefreshTokenFilter.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/filter/RefreshTokenFilterConfigurer.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/oauth2/OAuth2AuthenticationConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieCollection.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/CookiesHttpServletRequestWrapper.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieTokenExtractor.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2AuthenticationService.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2CookieHelper.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2Cookies.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2TokenEndpointClient.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2TokenEndpointClientAdapter.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/UaaTokenEndpointClient.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SecurityBeanOverrideConfiguration.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2CookieHelperTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2AuthenticationServiceTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieTokenExtractorTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieCollectionTest.java`
     ],
 
     feignConfig: [

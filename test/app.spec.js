@@ -1754,6 +1754,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files for UAA auth with the Gateway application type', () => {
                 assert.file(expectedFiles.gateway);
+                assert.file(expectedFiles.gatewayWithUaa);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.eureka);
                 assert.file(expectedFiles.hazelcast);
@@ -1869,6 +1870,44 @@ describe('JHipster generator', () => {
 
             it('creates expected files with the gateway application type', () => {
                 assert.file(expectedFiles.jwtServer);
+                assert.noFile(expectedFiles.gateway);
+                assert.noFile(expectedFiles.eureka);
+                assert.noFile(expectedFiles.consul);
+            });
+        });
+
+        describe('UAA gateway with no service discovery', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, 'uaa-base-name': 'jhipsterApp' })
+                    .withPrompts({
+                        applicationType: 'gateway',
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'uaa',
+                        uaaBaseName: 'jhipsterApp',
+                        cacheProvider: 'ehcache',
+                        enableHibernateCache: true,
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        useSass: false,
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with the gateway application type', () => {
+                assert.file(expectedFiles.gatewayWithUaa);
                 assert.noFile(expectedFiles.gateway);
                 assert.noFile(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);

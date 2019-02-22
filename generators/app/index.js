@@ -176,6 +176,7 @@ module.exports = class extends BaseGenerator {
         this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier =
             this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
+        this.uaaBaseName = this.configOptions.uaaBaseName = this.options['uaa-base-name'] || this.config.get('uaaBaseName');
 
         this.entitySuffix = this.configOptions.entitySuffix = _.isNil(this.config.get('entitySuffix'))
             ? this.options['entity-suffix']

@@ -1905,6 +1905,12 @@ module.exports = class extends PrivateBase {
         dest.clientPackageManager = context.configOptions.clientPackageManager;
         dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
         dest.experimental = context.configOptions.experimental || context.options.experimental;
+
+        const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
+        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
+            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+        }
+        dest.uaaBaseName = uaaBaseName;
     }
 
     /**
@@ -1924,11 +1930,6 @@ module.exports = class extends PrivateBase {
         if (dest.authenticationType === 'oauth2') {
             dest.skipUserManagement = true;
         }
-        const uaaBaseName = context.configOptions.uaaBaseName || context.config.get('uaaBaseName');
-        if (!dest.skipClient && dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
-            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        dest.uaaBaseName = uaaBaseName;
         dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
 
         dest.buildTool = context.configOptions.buildTool;
