@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "အသုံးပြုသူ [<b>{{username}}</b>] ၏ settings",
+        "title": "အသုံးပြုသူ [<strong>{{username}}</strong>] ၏ settings",
         "form": {
             "firstname": "အမည်",
             "firstname.placeholder": "သင်၏အမည်",

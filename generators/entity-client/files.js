@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
 const constants = require('../generator-constants');
 
 /* Constants use throughout */
@@ -265,9 +264,6 @@ function writeFiles() {
                     this.entityUrl,
                     this.clientFramework
                 );
-            }
-            if (this.applicationType === 'gateway' && !_.isUndefined(this.microserviceName)) {
-                this.addEntityToWebpack(this.microserviceName, this.clientFramework);
             }
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }

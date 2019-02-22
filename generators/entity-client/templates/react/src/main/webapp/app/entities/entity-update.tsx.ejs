@@ -37,7 +37,7 @@ import {
   Col,
   Label
   <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-import { AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
+import { AvFeedback, AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
 import {
   Translate,
@@ -449,6 +449,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                 className="form-control"
                 name="<%= relationshipFieldName %>.id"
                 value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id}
+                required
               >
                 {
                   <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -460,7 +461,8 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                   ) : null
                 }
               </AvInput>
-                <%_ } _%>
+              <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
+              <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
                   <AvInput
@@ -486,6 +488,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                     type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
+                    required
                   >
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -497,6 +500,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                       ) : null
                     }
                   </AvInput>
+                  <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
                 <%_ } _%>
               <%_ } _%>
             </AvGroup>

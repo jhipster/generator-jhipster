@@ -36,8 +36,10 @@ import javax.validation.Validator;
 
 import java.util.ArrayList;<% } %>
 import java.util.List;
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
 import java.util.Optional;
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
 import java.util.Set;
 <%_ } _%>
 <% if (databaseType === 'couchbase') { %>
@@ -54,12 +56,12 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
  */<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><PersistentToken, String> {
 <% if (databaseType === 'couchbase') { %>
-    default PersistentToken findBySeries(String series) {
-        return findOne(PersistentToken.PREFIX + ID_DELIMITER + series);
+    default Optional<PersistentToken> findBySeries(String series) {
+        return findById(PersistentToken.PREFIX + ID_DELIMITER + series);
     }
 
     default void deleteBySeries(String series) {
-        delete(PersistentToken.PREFIX + ID_DELIMITER + series);
+        deleteById(PersistentToken.PREFIX + ID_DELIMITER + series);
     }
 
     default List<PersistentToken> findByUser(<%= asEntity('User') %> user) {

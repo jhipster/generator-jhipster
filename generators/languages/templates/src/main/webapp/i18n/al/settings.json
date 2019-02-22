@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "Mjedisi për përdoruesin [<b>{{username}}</b>]",
+        "title": "Mjedisi për përdoruesin [<strong>{{username}}</strong>]",
         "form": {
             "firstname": "Emri",
             "firstname.placeholder": "Emri juar",

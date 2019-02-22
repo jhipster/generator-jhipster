@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "جلسات العمل النشطة ل [<b>{{username}}</b>]",
+        "title": "جلسات العمل النشطة ل [<strong>{{username}}</strong>]",
         "table": {
             "ipaddress": "IP عنوان",
             "useragent": "وكيل المستخدم",

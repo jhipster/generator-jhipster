@@ -37,20 +37,12 @@ const ENV = 'development';
 module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'eval-source-map',
     devServer: {
-        contentBase: './<%= BUILD_DIR %>www',
+        contentBase: './<%= DIST_DIR %>',
         proxy: [{
-            context: [<% if (authenticationType === 'uaa') { %>
-                '/<%= uaaBaseName.toLowerCase() %>',<% } %>
-                /* jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here */
-                '/api',
-                '/management',
-                '/swagger-resources',
-                '/v2/api-docs',
-                '/h2-console',<% if (authenticationType === 'oauth2') { %>
-                '/login',<% } %>
-                '/auth'
+            context: [
+                '/'
             ],
-            target: `http${options.tls ? 's' : ''}://127.0.0.1:<%= serverPort %>`,
+            target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
             secure: false,
             changeOrigin: options.tls,
             headers: { host: 'localhost:9000' }
@@ -76,7 +68,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
     output: {
-        path: utils.root('<%= BUILD_DIR %>www'),
+        path: utils.root('<%= DIST_DIR %>'),
         filename: 'app/[name].bundle.js',
         chunkFilename: 'app/[id].chunk.js'
     },
@@ -100,7 +92,9 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 {
                     loader: 'thread-loader',
                     options: {
-                        // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+                        // There should be 1 cpu for the fork-ts-checker-webpack-plugin.
+                        // The value may need to be adjusted (e.g. to 1) in some CI environments,
+                        // as cpus() may report more cores than what are available to the build.
                         workers: require('os').cpus().length - 1
                     }
                 },

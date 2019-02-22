@@ -84,6 +84,7 @@ limitations under the License.
     <%_ } _%>
     "@types/webpack-env": "1.13.6",
     "autoprefixer": "9.2.0",
+    "base-href-webpack-plugin": "2.0.0",
     "browser-sync": "2.26.3",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "1.2.2",
@@ -187,7 +188,7 @@ limitations under the License.
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
-    "cleanup": "rimraf <%= BUILD_DIR %>www",
+    "cleanup": "rimraf <%= DIST_DIR %>",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     "postinstall": "webdriver-manager update --gecko false",

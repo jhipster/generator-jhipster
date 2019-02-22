@@ -2,10 +2,6 @@ const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const fse = require('fs-extra');
-const CommonGenerator = require('../../generators/common');
-const ServerGenerator = require('../../generators/server');
-const ClientGenerator = require('../../generators/client');
-const createBlueprintMockForSubgen = require('../utils/utils').createBlueprintMockForSubgen;
 const expectedFiles = require('../utils/expected-files');
 const getFilesForOptions = require('../utils/utils').getFilesForOptions;
 const angularFiles = require('../../generators/client/files-angular').files;
@@ -48,12 +44,6 @@ describe('JHipster application generator with blueprint', () => {
                     nativeLanguage: 'en',
                     languages: ['fr']
                 })
-                .withGenerators([
-                    [helpers.createDummyGenerator(), 'jhipster-myblueprint:'],
-                    [createBlueprintMockForSubgen(CommonGenerator), 'jhipster-myblueprint:common'],
-                    [createBlueprintMockForSubgen(ServerGenerator), 'jhipster-myblueprint:server'],
-                    [createBlueprintMockForSubgen(ClientGenerator), 'jhipster-myblueprint:client']
-                ])
                 .on('end', done);
         });
 

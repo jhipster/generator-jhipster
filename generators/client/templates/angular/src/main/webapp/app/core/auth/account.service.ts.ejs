@@ -85,7 +85,7 @@ export class AccountService  {
         });
     }
 
-    identity(force?: boolean): Promise<any> {
+    identity(force?: boolean): Promise<Account> {
         if (force) {
             this.userIdentity = undefined;
         }
@@ -98,7 +98,7 @@ export class AccountService  {
 
         // retrieve the userIdentity data from the server, update the identity object, and then resolve.
         return this.fetch().toPromise().then((response) => {
-            const account = response.body;
+            const account: Account = response.body;
             if (account) {
                 this.userIdentity = account;
                 this.authenticated = true;

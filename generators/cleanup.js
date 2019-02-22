@@ -157,7 +157,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${mainResourceDir}mails/passwordResetEmail.html`);
         generator.removeFile(`${mainResourceDir}mails/socialRegistrationValidationEmail.html`);
         generator.removeFile(`${testResourceDir}mail/testEmail.html`);
-        generator.removeFile(`${testDir}web/rest/ProfileInfoResourceIntTest.java`);
+        generator.removeFile(`${testDir}web/rest/ProfileInfoResourceIT.java`);
         generator.removeFile('gradle/mapstruct.gradle');
     }
     if (generator.isJhipsterVersionLessThan('5.2.2')) {
@@ -171,5 +171,13 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     }
     if (generator.isJhipsterVersionLessThan('5.8.0')) {
         generator.removeFile(`${javaDir}config/MetricsConfiguration.java`);
+        if (generator.databaseType === 'cassandra') {
+            generator.removeFile(`${testResourceDir}cassandra-random-port.yml`);
+        }
+    }
+    if (generator.isJhipsterVersionLessThan('6.0.0')) {
+        generator.removeFile(`${javaDir}web/rest/util/PaginationUtil.java`);
+        generator.removeFile(`${javaDir}web/rest/util/HeaderUtil.java`);
+        generator.removeFile(`${testDir}web/rest/util/PaginationUtilUnitTest.java`);
     }
 }

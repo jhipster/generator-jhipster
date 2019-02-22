@@ -25,7 +25,7 @@ language: node_js
 node_js:
   - "10.15.0"
 jdk:
-  - oraclejdk8
+  - openjdk11
 addons:
   apt:
     sources:
@@ -43,10 +43,10 @@ env:
     - JHI_PROTRACTOR=0
     # if JHI_LIB_BRANCH value is release, use the release from Maven
     - JHI_LIB_REPO=https://github.com/jhipster/jhipster.git
-    - JHI_LIB_BRANCH=release
+    - JHI_LIB_BRANCH=master
     # if JHI_GEN_BRANCH value is release, use the release from NPM
     - JHI_GEN_REPO=https://github.com/jhipster/generator-jhipster.git
-    - JHI_GEN_BRANCH=release
+    - JHI_GEN_BRANCH=master
     # specific config
     - SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
     - SPRING_JPA_SHOW_SQL=false
@@ -57,10 +57,10 @@ env:
     - JHI_APP=jdl-default JHI_ENTITY=jdl JHI_PROFILE=prod JHI_PROTRACTOR=1
     - JHI_APP=ngx-default JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql JHI_SONAR=1
     - JHI_APP=ngx-psql-es-noi18n JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sqlfull
-    - JHI_APP=ngx-gradle-fr JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql
+    - JHI_APP=ngx-gradle-fr JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql JHI_WAR=1
     - JHI_APP=ngx-mariadb-oauth2-sass-infinispan JHI_PROTRACTOR=1 JHI_ENTITY=sql
-    - JHI_APP=ms-ngx-gateway-eureka JHI_ENTITY=sql
-    - JHI_APP=ms-micro-eureka JHI_ENTITY=micro
+    - JHI_APP=ms-ngx-gateway-eureka JHI_ENTITY=sql JHI_WAR=1
+    - JHI_APP=ms-micro-eureka JHI_ENTITY=micro JHI_WAR=1
     - JHI_APP=ngx-mongodb-kafka-cucumber JHI_ENTITY=mongodb
 
 #----------------------------------------------------------------------

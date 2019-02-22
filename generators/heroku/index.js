@@ -623,14 +623,14 @@ module.exports = class extends BaseGenerator {
                     });
                 } else {
                     this.log(chalk.bold('\nDeploying application'));
-                    let warFileWildcard = 'target/*.war';
+                    let jarFileWildcard = 'target/*.jar';
                     if (this.buildTool === 'gradle') {
-                        warFileWildcard = 'build/libs/*.war';
+                        jarFileWildcard = 'build/libs/*.jar';
                     }
 
-                    const files = glob.sync(warFileWildcard, {});
-                    const warFile = files[0];
-                    const herokuDeployCommand = `heroku deploy:jar ${warFile} --app ${this.herokuAppName}`;
+                    const files = glob.sync(jarFileWildcard, {});
+                    const jarFile = files[0];
+                    const herokuDeployCommand = `heroku deploy:jar ${jarFile} --app ${this.herokuAppName}`;
 
                     this.log(
                         chalk.bold(

@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component, AfterViewInit, Renderer, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
@@ -30,10 +31,12 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 })
 export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewInit {
     authenticationError: boolean;
-    password: string;
-    rememberMe: boolean;
-    username: string;
-    credentials: any;
+
+    loginForm = this.fb.group({
+        username: [''],
+        password: [''],
+        rememberMe: [true]
+    });
 
     constructor(
         private eventManager: JhiEventManager,
@@ -42,9 +45,9 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
         private elementRef: ElementRef,
         private renderer: Renderer,
         private router: Router,
-        public activeModal: NgbActiveModal
+        public activeModal: NgbActiveModal,
+        private fb: FormBuilder
     ) {
-        this.credentials = {};
     }
 
     ngAfterViewInit() {
@@ -52,20 +55,19 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
     }
 
     cancel() {
-        this.credentials = {
-            username: null,
-            password: null,
-            rememberMe: true
-        };
         this.authenticationError = false;
+        this.loginForm.patchValue({
+            username: '',
+            password: ''
+        });
         this.activeModal.dismiss('cancel');
     }
 
     login() {
         this.loginService.login({
-            username: this.username,
-            password: this.password,
-            rememberMe: this.rememberMe
+            username: this.loginForm.get('username').value,
+            password: this.loginForm.get('password').value,
+            rememberMe: this.loginForm.get('rememberMe').value
         }).then(() => {
             this.authenticationError = false;
             this.activeModal.dismiss('login success');

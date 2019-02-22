@@ -18,8 +18,9 @@
 -%>
 package <%=packageName%>.web.rest.errors;
 
-import <%=packageName%>.web.rest.util.HeaderUtil;
+import io.github.jhipster.web.util.HeaderUtil;
 
+import org.springframework.beans.factory.annotation.Value;
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
@@ -80,6 +81,9 @@ _%>
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
     private static final String VIOLATIONS_KEY = "violations";
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
 
     /**
      * Post-process the Problem payload to add the message key for the front-end if needed
@@ -158,7 +162,7 @@ _%>
 
     @ExceptionHandler
     public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
-        return create(ex, request, HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+        return create(ex, request, HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 

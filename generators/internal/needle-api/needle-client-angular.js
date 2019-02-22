@@ -27,12 +27,12 @@ const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 module.exports = class extends needleClientBase {
     addGlobalCSSStyle(style, comment) {
         const filePath = `${CLIENT_MAIN_SRC_DIR}content/css/global.css`;
-        this.addStyle(style, comment, filePath, 'jhipster-needle-css-add-global');
+        this.addStyle(style, comment, filePath, 'jhipster-needle-css-add-main');
     }
 
     addGlobalSCSSStyle(style, comment) {
         const filePath = `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`;
-        this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-global');
+        this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
     }
 
     addVendorSCSSStyle(style, comment) {
@@ -111,7 +111,7 @@ module.exports = class extends needleClientBase {
     _generateRewriteFileModelWithImportStatement(appName, angularName, folderName, fileName, modulePath, needle) {
         const importStatement = this._generateImportStatement(appName, angularName, folderName, fileName);
 
-        return this.generateFileModel(modulePath, needle, this.stripMargin(importStatement));
+        return this.generateFileModel(modulePath, needle, this.generator.stripMargin(importStatement));
     }
 
     _generateImportStatement(appName, angularName, folderName, fileName) {
@@ -127,7 +127,7 @@ module.exports = class extends needleClientBase {
     }
 
     _generateRewriteFileModelAddModule(appName, angularName, modulePath, needle) {
-        return this.generateFileModel(modulePath, needle, this.stripMargin(`|${appName}${angularName}Module,`));
+        return this.generateFileModel(modulePath, needle, this.generator.stripMargin(`|${appName}${angularName}Module,`));
     }
 
     addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu) {

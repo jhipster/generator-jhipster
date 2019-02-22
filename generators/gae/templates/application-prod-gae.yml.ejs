@@ -38,3 +38,12 @@ spring:
         hikari:
             maximumPoolSize: 8
 <%_ } _%>
+<%_ if (prodDatabaseType === 'postgresql') { _%>
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:postgresql://google/<%=gcpCloudSqlDatabaseName%>?cloudSqlInstance=<%=gcpCloudSqlInstanceName%>&socketFactory=com.google.cloud.sql.postgres.SocketFactory
+        username: <%=gcpCloudSqlUserName%>
+        password: <%=gcpCloudSqlPassword%>
+        hikari:
+            maximumPoolSize: 8
+<%_ } _%>

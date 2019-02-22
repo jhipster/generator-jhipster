@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "Gebruikersinstellingen voor [<b>{{username}}</b>]",
+        "title": "Gebruikersinstellingen voor [<strong>{{username}}</strong>]",
         "form": {
             "firstname": "Voornaam",
             "firstname.placeholder": "Uw voornaam",

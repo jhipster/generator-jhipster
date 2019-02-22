@@ -32,6 +32,7 @@ let useBlueprint;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
+        this.configOptions = this.options.configOptions || {};
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
         // This adds support for a `--from-cli` flag
@@ -47,14 +48,13 @@ module.exports = class extends BaseBlueprintGenerator {
         });
         this.defaultOption = this.options.default;
 
-        const blueprint = this.config.get('blueprint');
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'spring-controller', {
-                'from-cli': this.options['from-cli'],
-                force: this.options.force,
+                ...this.options,
                 arguments: [this.name],
-                default: this.options.default
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;
@@ -166,8 +166,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.template(
                     `${this.fetchFromInstalledJHipster(
                         'spring-controller/templates'
-                    )}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIntTest.java.ejs`,
-                    `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IntTest.java`
+                    )}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIT.java.ejs`,
+                    `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IT.java`
                 );
             }
         };

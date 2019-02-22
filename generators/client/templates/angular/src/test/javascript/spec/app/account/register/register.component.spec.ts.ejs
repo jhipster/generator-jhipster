@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async, inject, tick, fakeAsync } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
 import { Observable, of, throwError } from 'rxjs';
 
 <%_ if (enableTranslation) { _%>
@@ -37,7 +38,8 @@ describe('Component Tests', () => {
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [RegisterComponent]
+                declarations: [RegisterComponent],
+                providers : [FormBuilder]
             })
             .overrideTemplate(RegisterComponent, '')
             .compileComponents();
@@ -50,8 +52,10 @@ describe('Component Tests', () => {
         });
 
         it('should ensure the two passwords entered match', () => {
-            comp.registerAccount.password = 'password';
-            comp.confirmPassword = 'non-matching';
+            comp.registerForm.patchValue({
+                password: 'password',
+                confirmPassword: 'non-matching'
+            });
 
             comp.register();
 
@@ -62,17 +66,21 @@ describe('Component Tests', () => {
             inject([Register<% if (enableTranslation) { %>, JhiLanguageService<% } %>],
                 fakeAsync((service: Register<% if (enableTranslation) { %>, mockTranslate: MockLanguageService<% } %>) => {
                     spyOn(service, 'save').and.returnValue(of({}));
-                    comp.registerAccount.password = comp.confirmPassword = 'password';
+                    comp.registerForm.patchValue({
+                        password: 'password',
+                        confirmPassword: 'password'
+                    });
 
                     comp.register();
                     tick();
 
                     expect(service.save).toHaveBeenCalledWith({
+                        email: '',
                         password: 'password',
+                        login: '',
                         langKey: '<%= nativeLanguage %>'
                     });
                     expect(comp.success).toEqual(true);
-                    expect(comp.registerAccount.langKey).toEqual('<%= nativeLanguage %>');
                     <%_ if (enableTranslation) { _%>
                     expect(mockTranslate.getCurrentSpy).toHaveBeenCalled();
                     <%_ } _%>
@@ -90,7 +98,10 @@ describe('Component Tests', () => {
                         status: 400,
                         error: { type: LOGIN_ALREADY_USED_TYPE }
                     }));
-                    comp.registerAccount.password = comp.confirmPassword = 'password';
+                    comp.registerForm.patchValue({
+                        password: 'password',
+                        confirmPassword: 'password'
+                    });
 
                     comp.register();
                     tick();
@@ -109,7 +120,10 @@ describe('Component Tests', () => {
                         status: 400,
                         error: { type: EMAIL_ALREADY_USED_TYPE }
                     }));
-                    comp.registerAccount.password = comp.confirmPassword = 'password';
+                    comp.registerForm.patchValue({
+                        password: 'password',
+                        confirmPassword: 'password'
+                    });
 
                     comp.register();
                     tick();
@@ -127,7 +141,10 @@ describe('Component Tests', () => {
                     spyOn(service, 'save').and.returnValue(throwError({
                         status: 503
                     }));
-                    comp.registerAccount.password = comp.confirmPassword = 'password';
+                    comp.registerForm.patchValue({
+                        password: 'password',
+                        confirmPassword: 'password'
+                    });
 
                     comp.register();
                     tick();

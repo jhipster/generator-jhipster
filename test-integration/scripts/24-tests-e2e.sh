@@ -66,7 +66,7 @@ if [ "$JHI_RUN_APP" == 1 ]; then
     if [[ "$JHI_APP" == *"uaa"* ]]; then
         cd "$JHI_FOLDER_UAA"
         java \
-            -jar app.war \
+            -jar app.jar \
             --spring.profiles.active=dev \
             --logging.level.ROOT=OFF \
             --logging.level.org.zalando=OFF \
@@ -77,7 +77,26 @@ if [ "$JHI_RUN_APP" == 1 ]; then
     fi
 
     cd "$JHI_FOLDER_APP"
+    # Run the app packaged as jar
     java \
+        -jar app.jar \
+        --spring.profiles.active="$JHI_PROFILE" \
+        --logging.level.ROOT=OFF \
+        --logging.level.org.zalando=OFF \
+        --logging.level.org.springframework.web=ERROR \
+        --logging.level.io.github.jhipster=OFF \
+        --logging.level.io.github.jhipster.sample=OFF \
+        --logging.level.io.github.jhipster.travis=OFF &
+    echo $! > .pidRunJar
+    sleep 40
+
+    launchCurlOrProtractor
+    resultRunJar=$?
+    kill $(cat .pidRunJar)
+
+    # Run the app packaged as war
+    if [[ $result == 0 && "$JHI_WAR" == 1 ]]; then
+        java \
         -jar app.war \
         --spring.profiles.active="$JHI_PROFILE" \
         --logging.level.ROOT=OFF \
@@ -86,12 +105,13 @@ if [ "$JHI_RUN_APP" == 1 ]; then
         --logging.level.io.github.jhipster=OFF \
         --logging.level.io.github.jhipster.sample=OFF \
         --logging.level.io.github.jhipster.travis=OFF &
-    echo $! > .pid
-    sleep 40
+        echo $! > .pidRunWar
+        sleep 40
 
-    launchCurlOrProtractor
-    result=$?
-    kill $(cat .pid)
+        launchCurlOrProtractor
+        resultRunWar=$?
+        kill $(cat .pidRunWar)
+    fi
 
-    exit $result
+    exit $((resultRunJar + resultRunWar))
 fi
