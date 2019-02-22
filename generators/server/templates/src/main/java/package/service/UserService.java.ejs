@@ -756,9 +756,9 @@ public class UserService {
         for (String authority : userAuthorities) {
             if (!dbAuthorities.contains(authority)) {
                 log.debug("Saving authority '{}' in local database", authority);
-                Authority authoritytoSave = new Authority();
-                authoritytoSave.setName(authority);
-                authorityRepository.save(authoritytoSave);
+                Authority authorityToSave = new Authority();
+                authorityToSave.setName(authority);
+                authorityRepository.save(authorityToSave);
             }
         }
         // save account in to sync users between IdP and JHipster's local database
@@ -846,7 +846,7 @@ public class UserService {
             // Here we can't cater for all the use-cases, see:
             // https://github.com/jhipster/generator-jhipster/issues/7866
             // for the en_US or en_** issue.
-            // Since JHipter only have one "en" language, we will handle it here, for other languages, please handle it accordingly. 
+            // Since JHipter only have one "en" language, we will handle it here, for other languages, please handle it accordingly.
             String locale = (String) details.get("locale");
             if(locale.startsWith("en_") || locale.startsWith("en-")) {
                 locale = "en";
