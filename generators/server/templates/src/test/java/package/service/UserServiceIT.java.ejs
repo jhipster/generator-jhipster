@@ -154,7 +154,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     private AuditingHandler auditingHandler;
 
     @Mock
-    DateTimeProvider dateTimeProvider;
+    private DateTimeProvider dateTimeProvider;
     <%_ } _%>
 
     private <%= asEntity('User') %> user;
