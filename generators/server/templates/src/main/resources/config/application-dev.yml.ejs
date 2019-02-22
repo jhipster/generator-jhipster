@@ -187,7 +187,7 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
         mongodb:
-            uri: mongodb://localhost:27017
+            uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
             database: <%= baseName %>
     <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
@@ -255,8 +255,6 @@ jhipster:
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
             app1: /api,/v2/api-docs # recommended dev configuration
     <%_ } _%>
-    http:
-        version: V_1_1 # To use HTTP/2 you will need to activate TLS (see application-tls.yml)
     <%_ if (cacheProvider !== 'no') { _%>
     cache: # Cache configuration
         <%_ if (cacheProvider === 'hazelcast') { _%>

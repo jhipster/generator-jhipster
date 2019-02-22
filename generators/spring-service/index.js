@@ -48,10 +48,9 @@ module.exports = class extends BaseBlueprintGenerator {
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'spring-service', {
-                'from-cli': this.options['from-cli'],
-                force: this.options.force,
+                ...this.options,
                 arguments: [this.name],
-                default: this.options.default
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;

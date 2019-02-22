@@ -48,11 +48,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
-    constructor(args, opts) {
-        super(args, opts);
-        this.needleApi = new NeedleApi(this);
-    }
-
     /**
      * Deprecated
      * Get the JHipster configuration from the .yo-rc.json file.
@@ -95,7 +90,7 @@ module.exports = class extends PrivateBase {
      * @param {string} comment - comment to add before resources content.
      */
     addExternalResourcesToRoot(resources, comment) {
-        this.needleApi.base.addExternalResourcesToRoot(resources, comment);
+        this.needleApi.client.addExternalResourcesToRoot(resources, comment);
     }
 
     /**
@@ -535,7 +530,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add new css or scss style to the angular application in "global.css" or "global.scss".
+     * Add new css style to the angular application in "global.css.
      *
      * @param {string} style - css to add in the file
      * @param {string} comment - comment to add before css code
@@ -553,17 +548,31 @@ module.exports = class extends PrivateBase {
      * }
      *
      */
-    addGlobalCSSStyle(style, comment) {
-        if (this.clientFramework !== 'angularX') {
-            this.error('Global css is only supported by Angular, for React @see addAppCSSStyle()');
-            return;
-        }
+    addMainCSSStyle(style, comment) {
+        this.needleApi.clientAngular.addGlobalCSSStyle(style, comment);
+    }
 
-        if (this.useSass) {
-            this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
-        } else {
-            this.needleApi.clientAngular.addGlobalCSSStyle(style, comment);
-        }
+    /**
+     * Add new scss style to the angular application in "global.scss
+     *
+     * @param {string} style - css to add in the file
+     * @param {string} comment - comment to add before css code
+     *
+     * example:
+     *
+     * style = '.jhipster {\n     color: #baa186;\n}'
+     * comment = 'New JHipster color'
+     *
+     * * ==========================================================================
+     * New JHipster color
+     * ========================================================================== *
+     * .jhipster {
+     *     color: #baa186;
+     * }
+     *
+     */
+    addMainSCSSStyle(style, comment) {
+        this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
     }
 
     /**
@@ -587,44 +596,7 @@ module.exports = class extends PrivateBase {
      *
      */
     addVendorSCSSStyle(style, comment) {
-        if (this.clientFramework !== 'angularX') {
-            this.error('Vendor is only supported by Angular');
-            return;
-        }
-
         this.needleApi.clientAngular.addVendorSCSSStyle(style, comment);
-    }
-
-    /**
-     * Add new css or scss style to the react application in "app.css" or "app.scss".
-     *
-     * @param {string} style - css to add in the file
-     * @param {string} comment - comment to add before css code
-     *
-     * example:
-     *
-     * style = '.jhipster {\n     color: #baa186;\n}'
-     * comment = 'New JHipster color'
-     *
-     * * ==========================================================================
-     * New JHipster color
-     * ========================================================================== *
-     * .jhipster {
-     *     color: #baa186;
-     * }
-     *
-     */
-    addAppCSSStyle(style, comment) {
-        if (this.clientFramework !== 'react') {
-            this.error('App css is only supported by React');
-            return;
-        }
-
-        if (this.useSass) {
-            this.needleApi.clientReact.addAppSCSSStyle(style, comment);
-        } else {
-            this.needleApi.clientReact.addAppCSSStyle(style, comment);
-        }
     }
 
     /**
@@ -1803,6 +1775,7 @@ module.exports = class extends PrivateBase {
                 'skip-server': skipServer,
                 'skip-client': skipClient,
                 'from-cli': generator.options['from-cli'],
+                skipChecks: generator.options.skipChecks,
                 languages: generator.languages,
                 force: generator.options.force,
                 debug: generator.options.debug
@@ -1932,6 +1905,12 @@ module.exports = class extends PrivateBase {
         dest.clientPackageManager = context.configOptions.clientPackageManager;
         dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
         dest.experimental = context.configOptions.experimental || context.options.experimental;
+
+        const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
+        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
+            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+        }
+        dest.uaaBaseName = uaaBaseName;
     }
 
     /**
@@ -1951,11 +1930,6 @@ module.exports = class extends PrivateBase {
         if (dest.authenticationType === 'oauth2') {
             dest.skipUserManagement = true;
         }
-        const uaaBaseName = context.configOptions.uaaBaseName || context.config.get('uaaBaseName');
-        if (!dest.skipClient && dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
-            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        dest.uaaBaseName = uaaBaseName;
         dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
 
         dest.buildTool = context.configOptions.buildTool;
@@ -2066,5 +2040,12 @@ module.exports = class extends PrivateBase {
      */
     asDto(name) {
         return name + this.dtoSuffix;
+    }
+
+    get needleApi() {
+        if (this._needleApi === undefined || this._needleApi === null) {
+            this._needleApi = new NeedleApi(this);
+        }
+        return this._needleApi;
     }
 };

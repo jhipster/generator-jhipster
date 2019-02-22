@@ -56,15 +56,16 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
+        this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
+
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'server', {
+                ...this.options,
                 'client-hook': !this.skipClient,
-                'from-cli': this.options['from-cli'],
-                configOptions: this.configOptions,
-                force: this.options.force
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;
@@ -212,7 +213,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.jwtSecretKey = configuration.get('jwtSecretKey');
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
-                this.uaaBaseName = configuration.get('uaaBaseName');
+                const uaaBaseName = configuration.get('uaaBaseName');
+                if (uaaBaseName) {
+                    this.uaaBaseName = uaaBaseName;
+                }
                 this.clientFramework = configuration.get('clientFramework');
                 const testFrameworks = configuration.get('testFrameworks');
                 if (testFrameworks) {
@@ -322,7 +326,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.configOptions.buildTool = this.buildTool;
                 this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
                 this.configOptions.authenticationType = this.authenticationType;
-                this.configOptions.uaaBaseName = this.uaaBaseName;
+                const uaaBaseName = this.uaaBaseName;
+                if (uaaBaseName) {
+                    this.configOptions.uaaBaseName = this.uaaBaseName;
+                }
                 this.configOptions.serverPort = this.serverPort;
 
                 // Make dist dir available in templates
@@ -436,6 +443,9 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
+                }
+                if (this.configOptions.uaaBaseName !== undefined) {
+                    this.uaaBaseName = this.configOptions.uaaBaseName;
                 }
                 this.gatlingTests = this.testFrameworks.includes('gatling');
                 this.cucumberTests = this.testFrameworks.includes('cucumber');

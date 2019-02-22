@@ -128,9 +128,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'entity', {
-                'skip-install': this.options['skip-install'],
-                'from-cli': this.options['from-cli'],
-                force: this.options.force,
+                ...this.options,
+                configOptions: this.configOptions,
                 arguments: [this.context.name]
             });
         } else {
@@ -1083,9 +1082,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
             composeServer() {
                 const context = this.context;
                 if (context.skipServer) return;
+                const configOptions = this.configOptions;
 
                 this.composeWith(require.resolve('../entity-server'), {
                     context,
+                    configOptions,
                     force: context.options.force,
                     debug: context.isDebugEnabled
                 });
@@ -1094,9 +1095,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
             composeClient() {
                 const context = this.context;
                 if (context.skipClient) return;
+                const configOptions = this.configOptions;
 
                 this.composeWith(require.resolve('../entity-client'), {
                     context,
+                    configOptions,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,
                     debug: context.isDebugEnabled
@@ -1106,9 +1109,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
             composeI18n() {
                 const context = this.context;
                 if (context.skipClient) return;
-
+                const configOptions = this.configOptions;
                 this.composeWith(require.resolve('../entity-i18n'), {
                     context,
+                    configOptions,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,
                     debug: context.isDebugEnabled

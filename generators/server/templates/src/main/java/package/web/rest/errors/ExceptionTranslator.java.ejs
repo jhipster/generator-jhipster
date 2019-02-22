@@ -82,7 +82,7 @@ _%>
     private static final String PATH_KEY = "path";
     private static final String VIOLATIONS_KEY = "violations";
 
-    @Value("${spring.application.name:JHIPSTER}")
+    @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     /**
@@ -162,7 +162,7 @@ _%>
 
     @ExceptionHandler
     public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
-        return create(ex, request, HeaderUtil.createFailureAlert(applicationName, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+        return create(ex, request, HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 
