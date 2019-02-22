@@ -421,7 +421,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
 
         userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertThat(userDTO.getLangKey()).isEqualTo("it");
+        assertThat(userDTO.getLangKey()).isEqualTo("it-it");
     }
 
     private OAuth2Authentication createMockOAuth2AuthenticationWithDetails(Map<String, Object> userDetails) {
