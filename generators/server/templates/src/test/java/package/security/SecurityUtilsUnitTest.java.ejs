@@ -47,7 +47,7 @@ public class SecurityUtilsUnitTest {
 
 <%_ if (!reactive) { _%>
     @Test
-    public void testgetCurrentUserLogin() {
+    public void testGetCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
         SecurityContextHolder.setContext(securityContext);
