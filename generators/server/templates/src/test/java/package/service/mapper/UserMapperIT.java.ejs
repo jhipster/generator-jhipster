@@ -85,7 +85,7 @@ public class UserMapperIT <% if (databaseType === 'cassandra') { %>extends Abstr
     }
 
     @Test
-    public void usersToUserDTOsShouldMapOnlyNonNullUsers(){
+    public void usersToUserDTOsShouldMapOnlyNonNullUsers() {
         List<<%= asEntity('User') %>> users = new ArrayList<>();
         users.add(user);
         users.add(null);
@@ -97,7 +97,7 @@ public class UserMapperIT <% if (databaseType === 'cassandra') { %>extends Abstr
     }
 
     @Test
-    public void userDTOsToUsersShouldMapOnlyNonNullUsers(){
+    public void userDTOsToUsersShouldMapOnlyNonNullUsers() {
         List<<%= asDto('User') %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
         usersDto.add(null);
@@ -109,7 +109,7 @@ public class UserMapperIT <% if (databaseType === 'cassandra') { %>extends Abstr
     }
 
     @Test
-    public void userDTOsToUsersWithAuthoritiesStringShouldMapToUsersWithAuthoritiesDomain(){
+    public void userDTOsToUsersWithAuthoritiesStringShouldMapToUsersWithAuthoritiesDomain() {
         Set<String> authoritiesAsString = new HashSet<>();
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
@@ -132,7 +132,7 @@ public class UserMapperIT <% if (databaseType === 'cassandra') { %>extends Abstr
     }
 
     @Test
-    public void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities(){
+    public void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
         List<<%= asDto('User') %>> usersDto = new ArrayList<>();
@@ -147,7 +147,7 @@ public class UserMapperIT <% if (databaseType === 'cassandra') { %>extends Abstr
     }
 
     @Test
-    public void userDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities(){
+    public void userDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities() {
         Set<String> authoritiesAsString = new HashSet<>();
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
@@ -168,7 +168,7 @@ public class UserMapperIT <% if (databaseType === 'cassandra') { %>extends Abstr
     }
 
     @Test
-    public void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities(){
+    public void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
         <%= asEntity('User') %> user = userMapper.userDTOToUser(userDto);
@@ -179,7 +179,7 @@ public class UserMapperIT <% if (databaseType === 'cassandra') { %>extends Abstr
     }
 
     @Test
-    public void userDTOToUserMapWithNullUserShouldReturnNull(){
+    public void userDTOToUserMapWithNullUserShouldReturnNull() {
         assertThat(userMapper.userDTOToUser(null)).isNull();
     }
 

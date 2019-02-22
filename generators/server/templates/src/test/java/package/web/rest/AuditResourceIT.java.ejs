@@ -136,7 +136,7 @@ public class AuditResourceIT {
         auditEventRepository.save(auditEvent);
 
         // Generate dates for selecting audits by date, making sure the period will contain the audit
-        String fromDate  = SAMPLE_TIMESTAMP.minusSeconds(SECONDS_PER_DAY).toString().substring(0, 10);
+        String fromDate = SAMPLE_TIMESTAMP.minusSeconds(SECONDS_PER_DAY).toString().substring(0, 10);
         String toDate = SAMPLE_TIMESTAMP.plusSeconds(SECONDS_PER_DAY).toString().substring(0, 10);
 
         // Get the audit
