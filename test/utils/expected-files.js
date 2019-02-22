@@ -203,6 +203,8 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/SecurityUtilsUnitTest.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/LogsResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/TestUtil.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java`,
         `${SERVER_TEST_RES_DIR}config/application.yml`,
         `${SERVER_TEST_RES_DIR}logback.xml`
     ],
@@ -227,6 +229,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/util/RandomUtil.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/UserDTO.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/PasswordChangeDTO.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapper.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AccountResource.java`,
@@ -237,7 +240,10 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AccountResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapperIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomAuditEventRepositoryIT.java`
     ],
 
     infinispan: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`],
@@ -645,6 +651,12 @@ const expectedFiles = {
     microserviceGradle: ['gradle/docker.gradle'],
 
     dockerServices: [`${DOCKER_DIR}app.yml`, `${DOCKER_DIR}Dockerfile`, `${DOCKER_DIR}sonar.yml`],
+
+    hibernateTimeZoneConfig: [
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapper.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java`
+    ],
 
     mysql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mysql.yml`],
 

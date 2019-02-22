@@ -54,6 +54,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
                         useSass: false,
@@ -124,6 +125,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(reactFiles, {
                         useSass: false,
@@ -182,6 +184,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
                         useSass: false,
@@ -236,6 +239,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
                         useSass: false,
@@ -288,6 +292,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.maven);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mariadb);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
                         useSass: false,
@@ -413,6 +418,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with "Microsoft SQL Server"', () => {
                 assert.file(expectedFiles.mssql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.fileContent('pom.xml', /mssql-jdbc/);
                 assert.fileContent(
                     `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
@@ -530,6 +536,7 @@ describe('JHipster generator', () => {
             it('creates expected files with "PostgreSQL" and "Elasticsearch"', () => {
                 assert.file(expectedFiles.postgresql);
                 assert.file(expectedFiles.elasticsearch);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
             shouldBeV3DockerfileCompatible('postgresql');
         });
@@ -607,6 +614,8 @@ describe('JHipster generator', () => {
 
             it('creates expected files with authenticationType "oauth2"', () => {
                 assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
             it('generates README with instructions for OAuth', () => {
                 assert.fileContent('README.md', 'OAuth 2.0');
@@ -644,6 +653,8 @@ describe('JHipster generator', () => {
             it('creates expected files with authenticationType "oauth2" and elasticsearch', () => {
                 assert.file(expectedFiles.oauth2);
                 assert.file(expectedFiles.elasticsearch);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
+                assert.file(expectedFiles.mysql);
             });
         });
 
@@ -713,6 +724,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.hazelcast);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
 
@@ -749,6 +762,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.infinispan);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
 
@@ -786,6 +801,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.eureka);
                 assert.file(expectedFiles.infinispan);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
 
@@ -822,6 +839,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.memcached);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
 
@@ -866,6 +885,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.messageBroker);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
         });
 
@@ -908,6 +929,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.jwtServer);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.swaggerCodegen);
             });
@@ -956,6 +979,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.jwtServer);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.swaggerCodegen);
                 assert.file(expectedFiles.swaggerCodegenGradle);
@@ -1276,6 +1301,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
                         useSass: false,
@@ -1326,6 +1353,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(expectedFiles.cucumber);
                 assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
             });
@@ -1358,6 +1387,8 @@ describe('JHipster generator', () => {
             assert.noFile(expectedFiles.server);
             assert.noFile(expectedFiles.userManagementServer);
             assert.noFile(expectedFiles.maven);
+            assert.noFile(expectedFiles.mysql);
+            assert.noFile(expectedFiles.hibernateTimeZoneConfig);
             assert.file(
                 getFilesForOptions(angularFiles, {
                     useSass: false,
@@ -1405,6 +1436,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.maven);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.noFile(
                     getFilesForOptions(
                         angularFiles,
@@ -1461,6 +1494,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
                 assert.file(expectedFiles.gradle);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.noFile(
                     getFilesForOptions(
                         angularFiles,
@@ -1636,6 +1671,8 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.common);
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.userManagementServer);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(expectedFiles.client);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
