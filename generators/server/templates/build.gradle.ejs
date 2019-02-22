@@ -365,6 +365,7 @@ dependencies {
     <%_ } _%>
     <%_ if (reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "io.netty:netty-tcnative-boringssl-static"
     <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     implementation "org.springframework.boot:spring-boot-starter-websocket"
