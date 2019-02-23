@@ -42,7 +42,7 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Service Interface for managing {@link <%= entityClass %>}.
+ * Service Interface for managing {@link <% if (dto === 'mapstruct') { %><%= packageName %>.domain.<% } %><%= asEntity(entityClass) %>}.
  */
 public interface <%= entityClass %>Service {
 

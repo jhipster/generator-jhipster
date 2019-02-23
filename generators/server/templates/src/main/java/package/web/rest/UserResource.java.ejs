@@ -94,7 +94,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 /**
  * REST controller for managing users.
  * <p>
- * This class accesses the {@link <%= asEntity('User') %>} entity, and needs to fetch its collection of authorities.
+ * This class accesses the {@link <% if (!(authenticationType !== 'oauth2' || searchEngine === 'elasticsearch')) { %><%=packageName%>.domain.<% } %><%= asEntity('User') %>} entity, and needs to fetch its collection of authorities.
  * <p>
  * For a normal use-case, it would be better to have an eager relationship between User and Authority,
  * and send everything to the client side: there would be no View Model and DTO, a lot less code, and an outer-join

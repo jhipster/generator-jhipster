@@ -101,7 +101,7 @@ import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsea
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 
 /**
- * REST controller for managing {@link <%= entityClass %>}.
+ * REST controller for managing {@link <%= packageName %>.domain.<%= asEntity(entityClass) %>}.
  */
 @RestController
 @RequestMapping("/api")<% if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { %>
