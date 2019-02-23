@@ -73,7 +73,7 @@
         "semver": "5.6.0",
         "shelljs": "0.8.3",
         "tabtab": "2.2.2",
-        "through2": "2.0.5",
+        "through2": "3.0.0",
         "uuid": "3.3.2",
         "yeoman-environment": "2.3.4",
         "yeoman-generator": "3.2.0"
