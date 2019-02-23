@@ -94,7 +94,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 /**
  * REST controller for managing users.
  * <p>
- * This class accesses the User entity, and needs to fetch its collection of authorities.
+ * This class accesses the {@link <%= asEntity('User') %>} entity, and needs to fetch its collection of authorities.
  * <p>
  * For a normal use-case, it would be better to have an eager relationship between User and Authority,
  * and send everything to the client side: there would be no View Model and DTO, a lot less code, and an outer-join
@@ -150,18 +150,18 @@ public class UserResource {
 
 <%_ if (authenticationType !== 'oauth2') { _%>
     /**
-     * POST  /users  : Creates a new user.
+     * {@code POST  /users}  : Creates a new user.
      * <p>
      * Creates a new user if the login and email are not already used, and sends an
      * mail with an activation link.
      * The user needs to be activated on creation.
      *
-     * @param userDTO the user to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
+     * @param userDTO the user to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new user, or with status {@code 400 (Bad Request)} if the login or email is already in use.
     <%_ if (!reactive) { _%>
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
     <%_ } _%>
-     * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
+     * @throws BadRequestAlertException {@code 400 (Bad Request)} if the login or email is already in use.
      */
     @PostMapping("/users")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
@@ -214,12 +214,12 @@ public class UserResource {
     }
 
     /**
-     * PUT /users : Updates an existing User.
+     * {@code PUT /users} : Updates an existing User.
      *
-     * @param userDTO the user to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated user
-     * @throws EmailAlreadyUsedException 400 (Bad Request) if the email is already in use
-     * @throws LoginAlreadyUsedException 400 (Bad Request) if the login is already in use
+     * @param userDTO the user to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user.
+     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
+     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
      */
     @PutMapping("/users")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
@@ -268,10 +268,10 @@ public class UserResource {
 
 <%_ } _%>
     /**
-     * GET /users : get all users.
+     * {@code GET /users} : get all users.
      *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-     * @param pageable the pagination information<% } %>
-     * @return the ResponseEntity with status 200 (OK) and with body all users
+     * @param pageable the pagination information.<% } %>
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
     @GetMapping("/users")
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -290,7 +290,8 @@ public class UserResource {
     }
 
     /**
-     * @return a string list of the all of the roles
+     * Gets a list of all roles.
+     * @return a string list of all roles.
      */
     @GetMapping("/users/authorities")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
@@ -305,10 +306,10 @@ public class UserResource {
     <%_ } _%>
 
     /**
-     * GET /users/:login : get the "login" user.
+     * {@code GET /users/:login} : get the "login" user.
      *
-     * @param login the login of the user to find
-     * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
+     * @param login the login of the user to find.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the "login" user, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     <%_ if (!reactive) { _%>
@@ -328,10 +329,10 @@ public class UserResource {
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     /**
-     * DELETE /users/:login : delete the "login" User.
+     * {@code DELETE /users/:login} : delete the "login" User.
      *
-     * @param login the login of the user to delete
-     * @return the ResponseEntity with status 204 (NO_CONTENT)
+     * @param login the login of the user to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
@@ -352,11 +353,10 @@ public class UserResource {
 <%_ if (searchEngine === 'elasticsearch') { _%>
 
     /**
-     * SEARCH /_search/users/:query : search for the User corresponding
-     * to the query.
+     * {@code SEARCH /_search/users/:query} : search for the User corresponding to the query.
      *
-     * @param query the query to search
-     * @return the result of the search
+     * @param query the query to search.
+     * @return the result of the search.
      */
     @GetMapping("/_search/users/{query}")
     public List<<%= asEntity('User') %>> search(@PathVariable String query) {

@@ -28,11 +28,11 @@ import java.time.Instant;
 import java.util.List;
 
 <% if (databaseType === 'sql') { %>/**
- * Spring Data JPA repository for the PersistentAuditEvent entity.
+ * Spring Data JPA repository for the {@link PersistentAuditEvent} entity.
  */<% } %><% if (databaseType === 'mongodb') { %>/**
- * Spring Data MongoDB repository for the PersistentAuditEvent entity.
+ * Spring Data MongoDB repository for the {@link PersistentAuditEvent} entity.
  */<% } %><% if (databaseType === 'couchbase') { %>/**
- * Spring Data Couchbase repository for the PersistentAuditEvent entity.
+ * Spring Data Couchbase repository for the {@link PersistentAuditEvent} entity.
  */<% } %>
 public interface PersistenceAuditEventRepository extends <% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') {
  %><PersistentAuditEvent, String><% } %> {

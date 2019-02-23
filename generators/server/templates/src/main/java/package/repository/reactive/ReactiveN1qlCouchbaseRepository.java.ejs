@@ -27,7 +27,7 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 
 /**
- * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests
+ * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
  */
 @NoRepositoryBean
 public interface ReactiveN1qlCouchbaseRepository<T, ID extends Serializable> extends ReactiveCouchbaseSortingRepository<T, ID> {

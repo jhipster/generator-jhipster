@@ -69,22 +69,22 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
 <% } %>
 <%_ if (databaseType === 'sql') { _%>
 /**
- * Spring Data JPA repository for the User entity.
+ * Spring Data JPA repository for the {@link User} entity.
  */
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 /**
- * Spring Data MongoDB repository for the User entity.
+ * Spring Data MongoDB repository for the {@link User} entity.
  */
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 /**
- * Spring Data Couchbase repository for the User entity.
+ * Spring Data Couchbase repository for the {@link User} entity.
  */
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
 /**
- * Cassandra repository for the User entity.
+ * Cassandra repository for the {@link User} entity.
  */
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>

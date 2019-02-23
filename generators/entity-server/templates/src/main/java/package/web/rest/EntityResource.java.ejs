@@ -127,8 +127,8 @@ public class <%= entityClass %>Resource {
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
      *
      * @param <%= instanceName %> the <%= instanceName %> to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new <%= instanceName %>, or with status 400 (Bad Request) if the <%= entityInstance %> has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @return the {@link ResponseEntity} with status 201 (Created) and with body the new <%= instanceName %>, or with status 400 (Bad Request) if the <%= entityInstance %> has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/<%= entityApiUrl %>")
     public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
@@ -154,11 +154,11 @@ public class <%= entityClass %>Resource {
     /**
      * PUT  /<%= entityApiUrl %> : Updates an existing <%= entityInstance %>.
      *
-     * @param <%= instanceName %> the <%= instanceName %> to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated <%= instanceName %>,
+     * @param <%= instanceName %> the <%= instanceName %> to update.
+     * @return the {@link ResponseEntity} with status 200 (OK) and with body the updated <%= instanceName %>,
      * or with status 400 (Bad Request) if the <%= instanceName %> is not valid,
-     * or with status 500 (Internal Server Error) if the <%= instanceName %> couldn't be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * or with status 500 (Internal Server Error) if the <%= instanceName %> couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/<%= entityApiUrl %>")
     public ResponseEntity<<%= instanceType %>> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
@@ -181,11 +181,11 @@ public class <%= entityClass %>Resource {
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information<% } if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { %>
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)<% } if (jpaMetamodelFiltering) { %>
-     * @param criteria the criterias which the requested entities should match<% } else if (fieldsContainNoOwnerOneToOne) { %>
-     * @param filter the filter of the request<% } %>
-     * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
+     * @param pageable the pagination information.<% } if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { %>
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).<% } if (jpaMetamodelFiltering) { %>
+     * @param criteria the criteria which the requested entities should match.<% } else if (fieldsContainNoOwnerOneToOne) { %>
+     * @param filter the filter of the request.<% } %>
+     * @return the {@link ResponseEntity} with status 200 (OK) and the list of <%= entityInstancePlural %> in body.
      */
     @GetMapping("/<%= entityApiUrl %>")<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
 
@@ -195,7 +195,7 @@ public class <%= entityClass %>Resource {
     <%_ if (reactiveRepositories) { _%>
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %> as a stream.
-     * @return the Flux of <%= entityInstancePlural %>
+     * @return the {@link Flux} of <%= entityInstancePlural %>.
      */
     @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
 
@@ -213,8 +213,8 @@ public class <%= entityClass %>Resource {
     /**
      * GET  /<%= entityApiUrl %>/:id : get the "id" <%= entityInstance %>.
      *
-     * @param id the id of the <%= instanceName %> to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the <%= instanceName %>, or with status 404 (Not Found)
+     * @param id the id of the <%= instanceName %> to retrieve.
+     * @return the {@link ResponseEntity} with status 200 (OK) and with body the <%= instanceName %>, or with status 404 (Not Found).
      */
     @GetMapping("/<%= entityApiUrl %>/{id}")<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
 
@@ -227,8 +227,8 @@ public class <%= entityClass %>Resource {
     /**
      * DELETE  /<%= entityApiUrl %>/:id : delete the "id" <%= entityInstance %>.
      *
-     * @param id the id of the <%= instanceName %> to delete
-     * @return the ResponseEntity with status 204 (NO_CONTENT)
+     * @param id the id of the <%= instanceName %> to delete.
+     * @return the {@link ResponseEntity} with status 204 (NO_CONTENT).
      */
     @DeleteMapping("/<%= entityApiUrl %>/{id}")
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
