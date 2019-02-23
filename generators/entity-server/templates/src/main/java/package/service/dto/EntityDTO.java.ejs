@@ -63,7 +63,7 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
 
 /**
- * A DTO for the {@link <%= entityClass %>} entity.
+ * A DTO for the {@link <%=packageName%>.domain.<%= entityClass %>} entity.
  */
 <%_ if (typeof javadoc !== 'undefined') { _%>
 @ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
