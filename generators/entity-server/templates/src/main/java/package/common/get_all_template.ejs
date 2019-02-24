@@ -38,8 +38,8 @@
     /**
     * GET  /<%= entityApiUrl %>/count : count all the <%= entityInstancePlural %>.
     *
-    * @param criteria the criterias which the requested entities should match
-    * @return the ResponseEntity with status 200 (OK) and the count in body
+    * @param criteria the criteria which the requested entities should match.
+    * @return the ResponseEntity with status 200 (OK) and the count in body.
     */
     @GetMapping("/<%= entityApiUrl %>/count")
     public ResponseEntity<Long> count<%= entityClassPlural %>(<%= entityClass %>Criteria criteria) {

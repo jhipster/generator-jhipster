@@ -46,13 +46,13 @@ import java.util.Set;
 import static <%=packageName%>.config.Constants.ID_DELIMITER;
 <% } %>
 <% if (databaseType === 'sql') { %>/**
- * Spring Data JPA repository for the PersistentToken entity.
+ * Spring Data JPA repository for the {@link PersistentToken} entity.
  */<% } %><% if (databaseType === 'mongodb') { %>/**
- * Spring Data MongoDB repository for the PersistentToken entity.
+ * Spring Data MongoDB repository for the {@link PersistentToken} entity.
  */<% } %><% if (databaseType === 'couchbase') { %>/**
- * Spring Data Couchbase repository for the PersistentToken entity.
+ * Spring Data Couchbase repository for the {@link PersistentToken} entity.
  */<% } %><% if (databaseType === 'cassandra') { %>/**
- * Cassandra repository for the PersistentToken entity.
+ * Cassandra repository for the {@link PersistentToken} entity.
  */<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 public interface PersistentTokenRepository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><PersistentToken, String> {
 <% if (databaseType === 'couchbase') { %>

@@ -35,7 +35,7 @@ import java.time.ZoneId;
 import java.util.List;
 
 /**
- * REST controller for getting the audit events.
+ * REST controller for getting the {@link AuditEvent}s.
  */
 @RestController
 @RequestMapping("/management/audits")
@@ -48,10 +48,10 @@ public class AuditResource {
     }
 
     /**
-     * GET /audits : get a page of AuditEvents.
+     * {@code GET /audits} : get a page of {@link AuditEvent}s.
      *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of AuditEvents in body
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of {@link AuditEvent}s in body.
      */
     @GetMapping
     public ResponseEntity<List<AuditEvent>> getAll(Pageable pageable) {
@@ -61,12 +61,12 @@ public class AuditResource {
     }
 
     /**
-     * GET  /audits : get a page of AuditEvents between the fromDate and toDate.
+     * {@code GET  /audits} : get a page of {@link AuditEvent} between the {@code fromDate} and {@code toDate}.
      *
-     * @param fromDate the start of the time period of AuditEvents to get
-     * @param toDate the end of the time period of AuditEvents to get
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of AuditEvents in body
+     * @param fromDate the start of the time period of {@link AuditEvent} to get.
+     * @param toDate the end of the time period of {@link AuditEvent} to get.
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of {@link AuditEvent} in body.
      */
     @GetMapping(params = {"fromDate", "toDate"})
     public ResponseEntity<List<AuditEvent>> getByDates(
@@ -83,10 +83,10 @@ public class AuditResource {
     }
 
     /**
-     * GET  /audits/:id : get an AuditEvent by id.
+     * {@code GET  /audits/:id} : get an {@link AuditEvent} by id.
      *
-     * @param id the id of the entity to get
-     * @return the ResponseEntity with status 200 (OK) and the AuditEvent in body, or status 404 (Not Found)
+     * @param id the id of the entity to get.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the {@link AuditEvent} in body, or status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id:.+}")
     public ResponseEntity<AuditEvent> get(@PathVariable <% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String <% } %>id) {

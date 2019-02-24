@@ -24,7 +24,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import java.util.UUID;<% } %>
 
 /**
- * Spring Data Elasticsearch repository for the <%=asEntity(entityClass)%> entity.
+ * Spring Data Elasticsearch repository for the {@link <%=asEntity(entityClass)%>} entity.
  */
 public interface <%=entityClass%>SearchRepository extends ElasticsearchRepository<<%=asEntity(entityClass)%>, <% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %>> {
 }

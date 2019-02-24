@@ -140,9 +140,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
 /**
- * Test class for the <%= entityClass %>Resource REST controller.
- *
- * @see <%= entityClass %>Resource
+ * Integration tests for the {@Link <%= entityClass %>Resource} REST controller.
  */
 @RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
@@ -228,7 +226,7 @@ _%>
             try {
                 const patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
                 const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
-                // set infinite repetitionals max range
+                // set infinite repetitions max range
                 randExp.max = 1;
                 if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
                     sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
@@ -690,7 +688,7 @@ _%>
     }
 <%_
             }
-            // the range criterias
+            // the range criteria
             if (['Byte', 'Short', 'Integer', 'Long', 'LocalDate', 'ZonedDateTime'].includes(searchBy.fieldType)) {
               var defaultValue = 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase();
               var biggerValue = 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase();
@@ -757,7 +755,7 @@ _%>
 
 <%_ }); _%>
     /**
-     * Executes the search, and checks that the default entity is returned
+     * Executes the search, and checks that the default entity is returned.
      */
     private void default<%= entityClass %>ShouldBeFound(String filter) throws Exception {
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
@@ -777,7 +775,7 @@ _%>
     }
 
     /**
-     * Executes the search, and checks that the default entity is not returned
+     * Executes the search, and checks that the default entity is not returned.
      */
     private void default<%= entityClass %>ShouldNotBeFound(String filter) throws Exception {
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))

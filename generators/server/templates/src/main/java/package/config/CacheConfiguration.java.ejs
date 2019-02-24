@@ -385,8 +385,8 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
      * supports discovery natively for most of the platforms like Kubernetes/OpenShift,
      * AWS, Azure and Google.
      *
-     * @param jHipsterProperties the jhipster properties to configure from
-     * @return the infinispan global configurer
+     * @param jHipsterProperties the jhipster properties to configure from.
+     * @return the infinispan global configurer.
      */
     @Bean
     public InfinispanGlobalConfigurer globalConfiguration(JHipsterProperties jHipsterProperties) {
@@ -450,8 +450,8 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
      *      </li>
      *  </ol>
      *
-     * @param jHipsterProperties the jhipster properties to configure from
-     * @return the infinispan cache configurer
+     * @param jHipsterProperties the jhipster properties to configure from.
+     * @return the infinispan cache configurer.
      */
     @Bean
     public InfinispanCacheConfigurer cacheConfigurer(JHipsterProperties jHipsterProperties) {
@@ -503,14 +503,14 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     /**
      * <p>
      * Instance of {@link JCacheManager} with cache being managed by the underlying Infinispan layer. This helps to record stats
-     * info if enabled and the same is accessible through MBX:javax.cache,type=CacheStatistics.
+     * info if enabled and the same is accessible through {@code MBX:javax.cache,type=CacheStatistics}.
      *
      * <p>
-     * jCache stats are at instance level. If you need stats at clustering level, then it needs to be retrieved from MBX:org.infinispan
+     * jCache stats are at instance level. If you need stats at clustering level, then it needs to be retrieved from {@code MBX:org.infinispan}
      *
-     * @param cacheManager the embedded cache manager
-     * @param jHipsterProperties the jhipster properties to configure from
-     * @return the jcache manager
+     * @param cacheManager the embedded cache manager.
+     * @param jHipsterProperties the jhipster properties to configure from.
+     * @return the jcache manager.
      */
     @Bean
     public JCacheManager getJCacheManager(EmbeddedCacheManager cacheManager, JHipsterProperties jHipsterProperties){

@@ -26,7 +26,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests
+ * Couchbase specific {@link org.springframework.data.repository.Repository} interface uses N1QL for all requests.
  */
 @NoRepositoryBean
 public interface N1qlCouchbaseRepository<T, ID extends Serializable> extends CouchbasePagingAndSortingRepository<T, ID> {
