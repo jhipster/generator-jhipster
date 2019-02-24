@@ -1,7 +1,6 @@
 ---
 name: 🤗 Support Question
 about: If you have a question, please use StackOverflow!
-
 ---
 
 --------------^ Click "Preview" for a nicer view!
