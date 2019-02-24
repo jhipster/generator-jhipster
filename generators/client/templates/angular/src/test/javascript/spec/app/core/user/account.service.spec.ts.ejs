@@ -7,7 +7,7 @@ import { JhiDateUtils
     ,JhiLanguageService
 <%_ } _%>
 } from 'ng-jhipster';
-import { SessionStorageService } from 'ngx-webstorage';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 <%_ if (enableTranslation) { _%>
 import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
@@ -22,10 +22,12 @@ describe('Service Tests', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [HttpClientTestingModule],
+                imports: [
+                    HttpClientTestingModule,
+                    NgxWebstorageModule.forRoot()
+                ],
                 providers: [
                     JhiDateUtils,
-                    SessionStorageService,
                     <%_ if (enableTranslation) { _%>
                     {
                         provide: JhiLanguageService,
