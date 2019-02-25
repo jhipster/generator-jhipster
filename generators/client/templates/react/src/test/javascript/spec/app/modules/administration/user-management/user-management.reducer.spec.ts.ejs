@@ -210,7 +210,7 @@ describe('User management reducer tests', () => {
 
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
-      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      const mockStore = configureStore([thunk, promiseMiddleware]);
       store = mockStore({});
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
