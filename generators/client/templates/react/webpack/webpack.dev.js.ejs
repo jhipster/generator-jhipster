@@ -37,7 +37,6 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
-    'react-hot-loader/patch',
     './<%= CLIENT_MAIN_SRC_DIR %>app/index'
   ],
   output: {
@@ -110,6 +109,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     }, {
       reload: false
     }),
+    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new writeFilePlugin(),
     new webpack.WatchIgnorePlugin([
