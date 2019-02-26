@@ -42,8 +42,8 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const customPhaseSteps = {
             addAppCssStep() {
                 // please change this to public API when it will be available see https://github.com/jhipster/generator-jhipster/issues/9234
-                this.needleApi.clientReact.addAppSCSSStyle('@import without-comment');
-                this.needleApi.clientReact.addAppSCSSStyle('@import with-comment', 'my comment');
+                this.addAppSCSSStyle('@import without-comment');
+                this.addAppSCSSStyle('@import with-comment', 'my comment');
             },
             addEntityToMenuStep() {
                 this.addEntityToMenu('routerName', false, 'react', false);
