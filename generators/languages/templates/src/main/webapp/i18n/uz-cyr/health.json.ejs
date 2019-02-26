@@ -1,0 +1,55 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "health": {
+        "title": "Ҳолати",
+        "refresh.button": "Янгилаш",
+        "stacktrace": "Стектрейс",
+        "details": {
+            "details": "Батафсил",
+            "properties": "Хоссалари",
+            "name": "Номи",
+            "value": "Қиймати",
+            "error": "Хатолик"
+        },
+        "indicator": {
+            <%_ if (messageBroker === 'kafka') { _%>
+            "binders": "Xabar brokeri",
+            <%_ } _%>
+            <%_ if (applicationType === 'gateway') { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Қайта юклаш доираси",
+            "configServer": "Microservice Config Server",
+            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
+            "consul": "Consul",<% } %>
+            <%_ } _%>
+            "diskSpace": "Дискдаги жой",
+            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
+            "elasticsearch": "Эластик қидирув"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "Маълумотлар базаси"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
+            "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
+            "couchbase": "Couchbase"<% } %>
+        },
+        "table": {
+            "service": "Сервис номи",
+            "status": "Ҳолат"
+        },
+        "status": {
+            "UP": "ФАОЛ",
+            "DOWN": "ФАОЛ ЭМАС"
+        }
+    }
+}

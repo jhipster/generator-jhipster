@@ -205,7 +205,13 @@ const LANGUAGES = [
         name: 'Uzbek (latin)',
         dispName: 'O`zbekcha',
         value: 'uz-lat',
-        localeId: 'uz'
+        localeId: 'uz-Lat'
+    },
+    {
+        name: 'Uzbek (cyrillic)',
+        dispName: 'Ўзбекча',
+        value: 'uz-cyr',
+        localeId: 'uz-Cyr'
     },
     { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
 ];
