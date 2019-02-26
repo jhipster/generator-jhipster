@@ -463,19 +463,15 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof <%= asEntity(entityClass) %>)) {
             return false;
         }
-        <%= asEntity(entityClass) %> <%= entityInstance %> = (<%= asEntity(entityClass) %>) o;
-        if (<%= entityInstance %>.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), <%= entityInstance %>.getId());
+        return id != null && id.equals(((<%= asEntity(entityClass) %>) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override
