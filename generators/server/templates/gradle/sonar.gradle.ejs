@@ -54,17 +54,19 @@ sonarqube {
         property "sonar.issue.ignore.multicriteria.S4684.resourceKey", "src/main/java/**/*"
         property "sonar.issue.ignore.multicriteria.S4684.ruleKey", "squid:S4684"
 
-        property "sonar.junit.utReportFolder", "${project.buildDir}/jacoco/test.exec"
-        property "sonar.junit.itReportFolder", "${project.buildDir}/jacoco/integrationTest.exec"
+        property "sonar.jacoco.utReportFolder", "${project.buildDir}/jacoco/test.exec"
+        property "sonar.jacoco.itReportFolder", "${project.buildDir}/jacoco/integrationTest.exec"
         property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/test.exec,${project.buildDir}/jacoco/integrationTest.exec"
         property "sonar.java.codeCoveragePlugin", "jacoco"
         <%_ if (!skipClient) { _%>
         property "sonar.typescript.lcov.reportPaths", "${project.buildDir}/test-results/lcov.info"
+        property "sonar.testExecutionReportPaths", "${project.buildDir}/test-results/jest/TESTS-results-sonar.xml"
         <%_ } _%>
-        property "sonar.coverageReportPaths", "${project.buildDir}/test-results/TESTS-results-jest.xml"
         property "sonar.junit.utReportFolder", "${project.buildDir}/test-results/test"
         property "sonar.junit.itReportFolder", "${project.buildDir}/test-results/integrationTest"
         property "sonar.junit.reportPaths", "${project.buildDir}/test-results/test,${project.buildDir}/test-results/integrationTest"
+        property "sonar.sources", "${project.projectDir}/src/main/"
+        property "sonar.tests", "${project.projectDir}/src/test/"
         property "sonar.sources", "${project.projectDir}/<%= MAIN_DIR %>"
         property "sonar.tests", "${project.projectDir}/<%= TEST_DIR %>"
     }
