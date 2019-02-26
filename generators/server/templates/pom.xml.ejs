@@ -159,7 +159,6 @@
         <!-- Rule https://sonarcloud.io/coding_rules?open=squid%3AS4684&rule_key=squid%3AS4684 -->
         <sonar.issue.ignore.multicriteria.S4684.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S4684.resourceKey>
         <sonar.issue.ignore.multicriteria.S4684.ruleKey>squid:S4684</sonar.issue.ignore.multicriteria.S4684.ruleKey>
-        <sonar.coverageReportPaths>${project.testresult.directory}/TESTS-results-jest.xml</sonar.coverageReportPaths>
         <sonar.jacoco.reportFolder>${project.build.directory}/jacoco</sonar.jacoco.reportFolder>
         <sonar.jacoco.utReportFile>${sonar.jacoco.reportFolder}/test.exec</sonar.jacoco.utReportFile>
         <sonar.jacoco.itReportFile>${sonar.jacoco.reportFolder}/integrationTest.exec</sonar.jacoco.itReportFile>
@@ -171,6 +170,7 @@
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
         <%_ if (!skipClient) { _%>
+        <sonar.testExecutionReportPaths>${project.testresult.directory}/TESTS-results-jest.xml</sonar.testExecutionReportPaths>
         <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/lcov.info</sonar.typescript.lcov.reportPaths>
         <%_ } _%>
         <!-- Used to keep correct jacoco report filename for the surefire/failsafe arg line. Therefore we set this empty property here -->
