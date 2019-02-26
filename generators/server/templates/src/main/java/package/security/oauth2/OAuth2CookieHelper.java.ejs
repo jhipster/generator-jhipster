@@ -111,7 +111,7 @@ public class OAuth2CookieHelper {
      *
      * @param request    the request containing the cookie.
      * @param cookieName the case-sensitive name of the cookie to get.
-     * @return the resulting Cookie; or null, if not found.
+     * @return the resulting {@link Cookie}; or {@code null}, if not found.
      */
     private static Cookie getCookie(HttpServletRequest request, String cookieName) {
         if (request.getCookies() != null) {
@@ -241,7 +241,7 @@ public class OAuth2CookieHelper {
      *
      * @param refreshToken the JWT token to examine.
      * @param claimName    name of the claim to get.
-     * @param clazz        the Class we expect to find there.
+     * @param clazz        the {@link Class} we expect to find there.
      * @return the desired claim.
      * @throws InvalidTokenException if we cannot find the claim in the token or it is of wrong type.
      */

@@ -64,7 +64,7 @@ public class AuditEventConverter {
      * Internal conversion. This is needed to support the current SpringBoot actuator {@code AuditEventRepository} interface.
      *
      * @param data the data to convert.
-     * @return a map of String, Object.
+     * @return a map of {@link String}, {@link Object}.
      */
     public Map<String, Object> convertDataToObjects(Map<String, String> data) {
         Map<String, Object> results = new HashMap<>();
@@ -82,7 +82,7 @@ public class AuditEventConverter {
      * By default, it will save the object as string.
      *
      * @param data the data to convert.
-     * @return a map of String, String.
+     * @return a map of {@link String}, {@link String}.
      */
     public Map<String, String> convertDataToStrings(Map<String, Object> data) {
         Map<String, String> results = new HashMap<>();
