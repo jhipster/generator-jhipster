@@ -202,16 +202,16 @@ const LANGUAGES = [
         momentLocaleId: 'uk'
     },
     {
-        name: 'Uzbek (latin)',
-        dispName: 'O`zbekcha',
-        value: 'uz-lat',
-        localeId: 'uz-Lat'
-    },
-    {
         name: 'Uzbek (cyrillic)',
         dispName: 'Ўзбекча',
         value: 'uz-cyr',
         localeId: 'uz-Cyr'
+    },
+    {
+        name: 'Uzbek (latin)',
+        dispName: 'O`zbekcha',
+        value: 'uz-lat',
+        localeId: 'uz-Lat'
     },
     { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
 ];
