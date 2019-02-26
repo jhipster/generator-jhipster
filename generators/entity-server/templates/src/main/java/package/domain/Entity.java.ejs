@@ -193,7 +193,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else if (fieldType === 'BigDecimal') { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 10, scale = 2<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 21, scale = 2<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %><% } %>)
         <%_ }
