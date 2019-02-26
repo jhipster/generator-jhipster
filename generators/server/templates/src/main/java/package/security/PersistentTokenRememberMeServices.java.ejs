@@ -180,6 +180,10 @@ public class PersistentTokenRememberMeServices extends
      * <p>
      * The standard Spring Security implementations are too basic: they invalidate all tokens for the
      * current user, so when he logs out from one browser, all his other sessions are destroyed.
+     *
+     * @param request the request.
+     * @param response the response.
+     * @param authentication the authentication.
      */
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

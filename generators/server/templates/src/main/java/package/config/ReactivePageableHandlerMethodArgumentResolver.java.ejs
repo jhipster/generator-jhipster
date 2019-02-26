@@ -320,7 +320,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
      * @param parameter the parameter value.
      * @param upper the upper bound to be applied.
      * @param shiftIndex whether to shift the index if {@link #oneIndexedParameters} is set to true.
-     * @return
+     * @return the parsed integer.
      */
     private Optional<Integer> parseAndApplyBoundaries(@Nullable String parameter, int upper, boolean shiftIndex) {
 
@@ -354,7 +354,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
      * Returns whether the given {@link Method} has more than one {@link Pageable} parameter.
      *
      * @param method must not be {@code null}.
-     * @return
+     * @return whether the given {@link Method} has more than one {@link Pageable} parameter.
      */
     private static boolean containsMoreThanOnePageableParameter(Method method) {
 
@@ -380,7 +380,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
      *
      * @param annotation must not be {@code null}.
      * @param property must not be {@code null} or empty.
-     * @return
+     * @return the value of the given specific property of the given annotation.
      */
     @SuppressWarnings("unchecked")
     public static <T> T getSpecificPropertyOrDefaultFromValue(Annotation annotation, String property) {
@@ -431,11 +431,11 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
     }
 
     /**
-     * Returns a {@link Qualifier} annotation from the given array of {@link Annotation}s. Returns {@code null} if the
+     * Returns the first {@link Qualifier} annotation from the given array of {@link Annotation}s. Returns {@code null} if the
      * array does not contain a {@link Qualifier} annotation.
      *
      * @param annotations must not be {@code null}.
-     * @return
+     * @return the first {@link Qualifier} annotation from the given array of {@link Annotation}s.
      */
     @Nullable
     private static Qualifier findAnnotation(Annotation[] annotations) {
