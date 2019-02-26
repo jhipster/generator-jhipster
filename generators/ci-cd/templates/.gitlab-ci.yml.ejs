@@ -165,9 +165,22 @@ maven-test:
         - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
-            junit: target/surefire-reports/TEST-*.xml
+            junit: target/test-results/test/TEST-*.xml
         paths:
             - target/test-results
+            - target/jacoco
+        expire_in: 1 day
+
+maven-integration-test:
+    stage: test
+    script:
+        - ./mvnw integration-test -Dmaven.repo.local=$MAVEN_USER_HOME
+    artifacts:
+        reports:
+            junit: target/test-results/integrationTest/TEST-*.xml
+        paths:
+            - target/test-results
+            - target/jacoco
         expire_in: 1 day
 
 <%_ if (!skipClient) { _%>
@@ -177,9 +190,10 @@ frontend-test:
         - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='<%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
-            junit: target/test-results/TESTS-*.xml
+            junit: target/test-results/TESTS-results-jest.xml
         paths:
             - target/test-results
+            - target/jacoco
         expire_in: 1 day
 <%_ } _%>
 <%_ if (cicdIntegrations.includes('sonar')) { _%>
@@ -187,6 +201,7 @@ sonar-analyze:
     stage: analyze
     dependencies:
         - maven-test
+        - maven-integration-test
         <%_ if (!skipClient) { _%>
         - frontend-test
         <%_ } _%>
