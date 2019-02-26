@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "Kullanıcı ayarları [<b>{{username}}</b>]",
+        "title": "Kullanıcı ayarları [<strong>{{username}}</strong>]",
         "form": {
             "firstname": "İsim",
             "firstname.placeholder": "Adınız",

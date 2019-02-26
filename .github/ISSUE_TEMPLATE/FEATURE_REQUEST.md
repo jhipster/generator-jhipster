@@ -1,7 +1,6 @@
 ---
 name: 🚀 Feature Request
 about: Suggest an improvement.
-
 ---
 
 ##### **Overview of the feature request**

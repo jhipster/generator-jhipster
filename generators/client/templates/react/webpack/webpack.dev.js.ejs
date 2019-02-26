@@ -37,11 +37,10 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
-    'react-hot-loader/patch',
     './<%= CLIENT_MAIN_SRC_DIR %>app/index'
   ],
   output: {
-    path: utils.root('<%= BUILD_DIR %>www'),
+    path: utils.root('<%= DIST_DIR %>'),
     filename: 'app/[name].bundle.js',
     chunkFilename: 'app/[id].chunk.js'
   },
@@ -67,20 +66,12 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   devServer: {
     stats: options.stats,
     hot: true,
-    contentBase: './<%= BUILD_DIR %>www',
+    contentBase: './<%= DIST_DIR %>',
     proxy: [{
-      context: [<% if (authenticationType === 'uaa') { %>
-        '/<%= uaaBaseName.toLowerCase() %>',<% } %>
-        /* jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here */
-        '/api',
-        '/management',
-        '/swagger-resources',
-        '/v2/api-docs',
-        '/h2-console',<% if (authenticationType === 'oauth2') { %>
-        '/login',<% } %>        
-        '/auth'
+      context: [
+        '/'
       ],
-      target: `http${options.tls ? 's' : ''}://127.0.0.1:<%= serverPort %>`,
+      target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
       secure: false,
       changeOrigin: options.tls,
       headers: { host: 'localhost:9000' }
@@ -118,6 +109,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     }, {
       reload: false
     }),
+    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new writeFilePlugin(),
     new webpack.WatchIgnorePlugin([

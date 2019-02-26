@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.web.rest;
+
 <%_ const viaService = service !== 'no';
     let isUsingMapsId = false;
     let mapsIdAssoc;
@@ -49,8 +50,6 @@ import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;
 import <%=packageName%>.repository.UserRepository;
 <%_ } _%>
 import <%=packageName%>.web.rest.errors.BadRequestAlertException;
-import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination !== 'no') { %>
-import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 <%_ if (dto === 'mapstruct') { _%>
 import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
 <%_ if (service === 'no') { _%>
@@ -60,9 +59,15 @@ import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
 import <%=packageName%>.service.<%= entityClass %>QueryService;
 <%_ } _%>
+
+import io.github.jhipster.web.util.HeaderUtil;
+<%_ if (pagination !== 'no') { _%>
+import io.github.jhipster.web.util.PaginationUtil;
+<%_ } _%>
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 <%_ if (pagination !== 'no') { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -96,7 +101,7 @@ import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsea
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 
 /**
- * REST controller for managing <%= entityClass %>.
+ * REST controller for managing {@link <%= packageName %>.domain.<%= asEntity(entityClass) %>}.
  */
 @RestController
 @RequestMapping("/api")<% if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { %>
@@ -110,6 +115,9 @@ public class <%= entityClass %>Resource {
         entityName = _.camelCase(`${clientRootFolder}${entityClass}`);
     } _%>
     private static final String ENTITY_NAME = "<%= entityName %>";
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
     <%_
     const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
     const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
@@ -119,8 +127,8 @@ public class <%= entityClass %>Resource {
      * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
      *
      * @param <%= instanceName %> the <%= instanceName %> to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new <%= instanceName %>, or with status 400 (Bad Request) if the <%= entityInstance %> has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @return the {@link ResponseEntity} with status 201 (Created) and with body the new <%= instanceName %>, or with status 400 (Bad Request) if the <%= entityInstance %> has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/<%= entityApiUrl %>")
     public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
@@ -139,18 +147,18 @@ public class <%= entityClass %>Resource {
         <%_ } _%>
 <%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
      * PUT  /<%= entityApiUrl %> : Updates an existing <%= entityInstance %>.
      *
-     * @param <%= instanceName %> the <%= instanceName %> to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated <%= instanceName %>,
+     * @param <%= instanceName %> the <%= instanceName %> to update.
+     * @return the {@link ResponseEntity} with status 200 (OK) and with body the updated <%= instanceName %>,
      * or with status 400 (Bad Request) if the <%= instanceName %> is not valid,
-     * or with status 500 (Internal Server Error) if the <%= instanceName %> couldn't be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * or with status 500 (Internal Server Error) if the <%= instanceName %> couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/<%= entityApiUrl %>")
     public ResponseEntity<<%= instanceType %>> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
@@ -166,18 +174,18 @@ public class <%= entityClass %>Resource {
         <%_ } _%>
 <%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc}); -%>
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, <%= instanceName %>.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
     }
 
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information<% } if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { %>
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)<% } if (jpaMetamodelFiltering) { %>
-     * @param criteria the criterias which the requested entities should match<% } else if (fieldsContainNoOwnerOneToOne) { %>
-     * @param filter the filter of the request<% } %>
-     * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body
+     * @param pageable the pagination information.<% } if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { %>
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).<% } if (jpaMetamodelFiltering) { %>
+     * @param criteria the criteria which the requested entities should match.<% } else if (fieldsContainNoOwnerOneToOne) { %>
+     * @param filter the filter of the request.<% } %>
+     * @return the {@link ResponseEntity} with status 200 (OK) and the list of <%= entityInstancePlural %> in body.
      */
     @GetMapping("/<%= entityApiUrl %>")<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
 
@@ -187,7 +195,7 @@ public class <%= entityClass %>Resource {
     <%_ if (reactiveRepositories) { _%>
     /**
      * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %> as a stream.
-     * @return the Flux of <%= entityInstancePlural %>
+     * @return the {@link Flux} of <%= entityInstancePlural %>.
      */
     @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
 
@@ -205,8 +213,8 @@ public class <%= entityClass %>Resource {
     /**
      * GET  /<%= entityApiUrl %>/:id : get the "id" <%= entityInstance %>.
      *
-     * @param id the id of the <%= instanceName %> to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the <%= instanceName %>, or with status 404 (Not Found)
+     * @param id the id of the <%= instanceName %> to retrieve.
+     * @return the {@link ResponseEntity} with status 200 (OK) and with body the <%= instanceName %>, or with status 404 (Not Found).
      */
     @GetMapping("/<%= entityApiUrl %>/{id}")<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
 
@@ -219,14 +227,14 @@ public class <%= entityClass %>Resource {
     /**
      * DELETE  /<%= entityApiUrl %>/:id : delete the "id" <%= entityInstance %>.
      *
-     * @param id the id of the <%= instanceName %> to delete
-     * @return the ResponseEntity with status 200 (OK)
+     * @param id the id of the <%= instanceName %> to delete.
+     * @return the {@link ResponseEntity} with status 204 (NO_CONTENT).
      */
     @DeleteMapping("/<%= entityApiUrl %>/{id}")
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: viaService}); -%>
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();
     }<% if (searchEngine === 'elasticsearch') { %>
 
     /**

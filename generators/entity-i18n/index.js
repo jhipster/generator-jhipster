@@ -28,15 +28,15 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         utils.copyObjectProps(this, this.options.context);
-        const blueprint = this.config.get('blueprint');
+        this.configOptions = this.options.configOptions || {};
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'entity-i18n', {
+                ...this.options,
                 context: opts.context,
-                force: opts.force,
                 debug: opts.context.isDebugEnabled,
-                'skip-install': opts.context.options['skip-install'],
-                'from-cli': opts.context.options['from-cli']
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;

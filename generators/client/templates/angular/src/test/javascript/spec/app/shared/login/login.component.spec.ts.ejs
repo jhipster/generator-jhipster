@@ -17,6 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
@@ -45,6 +46,7 @@ describe('Component Tests', () => {
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [<%=jhiPrefixCapitalized%>LoginModalComponent],
                 providers : [
+                    FormBuilder,
                     {
                         provide: LoginService,
                         useClass: MockLoginService
@@ -78,10 +80,12 @@ describe('Component Tests', () => {
                         password: 'admin',
                         rememberMe: true
                     };
-                    comp.username = 'admin';
-                    comp.password = 'admin';
-                    comp.rememberMe = true;
-                    comp.credentials = credentials;
+
+                    comp.loginForm.patchValue({
+                        username: 'admin',
+                        password: 'admin',
+                        rememberMe: true
+                    });
                     mockLoginService.setResponse({});
                     mockStateStorageService.setResponse({redirect: 'dummy'});
 
@@ -110,10 +114,11 @@ describe('Component Tests', () => {
                         password: 'admin',
                         rememberMe: true
                     };
-                    comp.username = 'admin';
-                    comp.password = 'admin';
-                    comp.rememberMe = true;
-                    comp.credentials = credentials;
+                    comp.loginForm.patchValue({
+                        username: 'admin',
+                        password: 'admin',
+                        rememberMe: true
+                    });
                     mockLoginService.setResponse({});
                     mockStateStorageService.setResponse(null);
 
@@ -135,26 +140,27 @@ describe('Component Tests', () => {
 
         it('should empty the credentials upon cancel', () => {
             // GIVEN
-            const credentials = {
+
+            comp.loginForm.patchValue({
                 username: 'admin',
-                password: 'admin',
-                rememberMe: true
-            };
+                password: 'admin'
+            });
 
             const expected = {
-                username: null,
-                password: null,
+                username: '',
+                password: '',
                 rememberMe: true
             };
 
-            comp.credentials = credentials;
 
             // WHEN
             comp.cancel();
 
             // THEN
             expect(comp.authenticationError).toEqual(false);
-            expect(comp.credentials).toEqual(expected);
+            expect(comp.loginForm.get('username').value).toEqual(expected.username);
+            expect(comp.loginForm.get('password').value).toEqual(expected.password);
+            expect(comp.loginForm.get('rememberMe').value).toEqual(expected.rememberMe);
             expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('cancel');
         });
 

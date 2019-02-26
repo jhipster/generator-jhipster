@@ -73,6 +73,6 @@ jobs:
 <%_ if (buildTool === 'maven') { _%>
   - script: ./mvnw verify -Pprod -DskipTests
 <%_ } else if (buildTool === 'gradle') { _%>
-  - script: ./gradlew bootWar -Pprod -x test
+  - script: ./gradlew bootJar -Pprod -x test
 <%_ } _%>
     displayName: 'TESTS: packaging'

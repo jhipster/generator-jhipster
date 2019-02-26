@@ -46,7 +46,6 @@ public class JacksonConfiguration {
     public Jdk8Module jdk8TimeModule() {
         return new Jdk8Module();
     }
-
 <%_ if (databaseType === 'sql') { _%>
 
     /*
@@ -81,5 +80,4 @@ public class JacksonConfiguration {
     ConstraintViolationProblemModule constraintViolationProblemModule() {
         return new ConstraintViolationProblemModule();
     }
-
 }

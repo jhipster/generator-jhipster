@@ -40,6 +40,9 @@ import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
 import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 <%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.data.elasticsearch.annotations.FieldType;
+<%_ } _%>
 
 <%_ if (databaseType === 'sql') { _%>
 import javax.persistence.*;
@@ -84,6 +87,9 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
+    <%_ } _%>
     private <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;<% } else { %><% if (databaseType === 'couchbase') { %>
     public static final String PREFIX = "user";
 
@@ -94,6 +100,9 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     @Id<% } %><% if (databaseType === 'couchbase') { %>
     @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)<% } %><% if (databaseType === 'cassandra') { %>
     @PartitionKey<% } %>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
+    <%_ } _%>
     private String id;<% } %>
 
     @NotNull

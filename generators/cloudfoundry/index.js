@@ -151,16 +151,16 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
                 let cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -t 120 -p';
-                let warFolder = '';
+                let jarFolder = '';
                 if (this.buildTool === 'maven') {
-                    warFolder = ' target/';
+                    jarFolder = ' target/';
                 } else if (this.buildTool === 'gradle') {
-                    warFolder = ' build/libs/';
+                    jarFolder = ' build/libs/';
                 }
                 if (os.platform() === 'win32') {
-                    cloudfoundryDeployCommand += ` ${glob.sync(`${warFolder.trim()}*.war`)[0]}`;
+                    cloudfoundryDeployCommand += ` ${glob.sync(`${jarFolder.trim()}*.jar`)[0]}`;
                 } else {
-                    cloudfoundryDeployCommand += `${warFolder}*.war`;
+                    cloudfoundryDeployCommand += `${jarFolder}*.jar`;
                 }
 
                 this.log(chalk.bold('\nPushing the application to Cloud Foundry'));

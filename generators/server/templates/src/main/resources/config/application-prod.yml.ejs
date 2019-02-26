@@ -110,7 +110,7 @@ spring:
         <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
         <%_ } else if (prodDatabaseType === 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle12cDialect
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
@@ -135,11 +135,9 @@ spring:
             hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: true
+            hibernate.generate_statistics: false
             <%_ if (enableHibernateCache) { _%>
-                <%_ if (cacheProvider === 'ehcache') { _%>
-            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory
-                <%_ } else if (cacheProvider === 'hazelcast') { _%>
+                <%_ if (cacheProvider === 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
                 <%_ } else if (cacheProvider === 'infinispan') { _%>
@@ -147,7 +145,7 @@ spring:
             hibernate.cache.inifinispan.statistics: false
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
-            hibernate.cache.infinispan.entity.eviction.max_entries: 1000
+            hibernate.cache.infinispan.entity.memory.size: 1000
             hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
                 <%_ } _%>
                 <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -161,7 +159,7 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
         mongodb:
-            uri: mongodb://localhost:27017
+            uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
             database: <%= baseName %>
     <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
@@ -183,6 +181,7 @@ spring:
             password: password
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
+    # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
     liquibase:
         contexts: prod
     <%_ } _%>
@@ -246,7 +245,6 @@ jhipster:
             app1: /api # recommended prod configuration
     <%_ } _%>
     http:
-        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 1461
     <%_ if (cacheProvider !== 'no') { _%>
@@ -298,7 +296,7 @@ jhipster:
                 # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
                 # As this is the PRODUCTION configuration, you MUST change the default key, and store it securely:
                 # - In the JHipster Registry (which includes a Spring Cloud Config server)
-                # - In a separate `application-prod.yml` file, in the same folder as your executable WAR file
+                # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
                 # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
                 base64-secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours

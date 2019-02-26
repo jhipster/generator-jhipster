@@ -25,7 +25,6 @@ import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 import { LoginModalService } from 'app/core/login/login-modal.service';
-import { AccountService } from 'app/core/auth/account.service';
     <%_ } _%>
 import { LoginService } from 'app/core/login/login.service';
 <%_ } _%>
@@ -49,7 +48,6 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
         <%_ if (['oauth2', 'jwt', 'uaa'].includes(authenticationType)) { _%>
             <%_ if (authenticationType === 'uaa') { _%>
         private loginModalService: LoginModalService,
-        private accountService: AccountService,
         private router: Router,
             <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
@@ -67,8 +65,8 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
 <%_ if (authenticationType === 'jwt') { _%>
                     this.loginService.logout();
 <% } if (authenticationType === 'uaa') { %>
-                    if (this.accountService.isAuthenticated()) {
-                        this.accountService.authenticate(null);
+                    if (this.loginService.isAuthenticated()) {
+                        this.loginService.logoutDirectly();
                         this.loginModalService.open();
                     } else {
                         this.loginService.logout();

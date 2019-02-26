@@ -47,7 +47,7 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@<%= baseName.toLowerCase() %>-oracle:1521:<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mongodb') { _%>
-            - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017
+            - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
             - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'couchbase') { _%>

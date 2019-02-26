@@ -18,7 +18,7 @@ export default class SettingsPage extends BasePage {
   }
 
   async get() {
-    await browser.get('#/account/settings');
+    await browser.get('/account/settings');
     await this.waitUntilDisplayed();
   }
 

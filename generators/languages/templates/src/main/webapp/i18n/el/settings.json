@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "Ρυθμίσεις για τον χρηστη [<b>{{username}}</b>]",
+        "title": "Ρυθμίσεις για τον χρηστη [<strong>{{username}}</strong>]",
         "form": {
             "firstname": "First Name",
             "firstname.placeholder": "Το μικρό σας όνομα",

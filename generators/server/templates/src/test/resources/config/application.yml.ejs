@@ -43,10 +43,6 @@ eureka:
 spring:
     application:
         name: <%= baseName %>
-    <%_ if (cacheManagerIsAvailable === true) { _%>
-    cache:
-        type: simple
-    <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     cloud:
         stream:
@@ -121,11 +117,24 @@ spring:
     <%_ } _%>
     mail:
         host: localhost
+    main:
+        allow-bean-definition-overriding: true
     messages:
         basename: i18n/messages
     mvc:
         favicon:
             enabled: false
+    task:
+        execution:
+            thread-name-prefix: <%= dasherizedBaseName %>-task-
+            pool:
+                core-size: 1
+                max-size: 50
+                queue-capacity: 10000
+        scheduling:
+            thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
+            pool:
+                size: 1
     thymeleaf:
         mode: HTML
 
@@ -154,10 +163,8 @@ server:
 # ===================================================================
 
 jhipster:
-    async:
-        core-pool-size: 1
-        max-pool-size: 50
-        queue-capacity: 10000
+    clientApp:
+        name: "<%= angularAppName %>"
     # To test logstash appender
     logging:
         logstash:

@@ -26,10 +26,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * A Collection of Cookies that allows modification - unlike a mere array.
+ * A {@link Collection} of {@link Cookie}s that allows modification - unlike a mere array.
  * <p>
- * Since {@link Cookie} doesn't implement <code>hashCode</code> nor <code>equals</code>,
- * we cannot simply put it into a <code>HashSet</code>.
+ * Since {@link Cookie} doesn't implement {@code hashCode} nor {@code equals},
+ * we cannot simply put it into a {@code HashSet}.
  */
 public class CookieCollection implements Collection<Cookie> {
     private final Map<String, Cookie> cookieMap;
@@ -95,7 +95,7 @@ public class CookieCollection implements Collection<Cookie> {
     @Override
     public boolean remove(Object o) {
         if (o instanceof String) {
-            return cookieMap.remove((String)o) != null;
+            return cookieMap.remove(o) != null;
         }
         if (o instanceof Cookie) {
             Cookie c = (Cookie)o;

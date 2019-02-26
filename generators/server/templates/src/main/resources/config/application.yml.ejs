@@ -67,6 +67,7 @@ zuul: # those values must be configured depending on the application specific ne
     host:
         max-total-connections: 1000
         max-per-route-connections: 100
+    prefix: /services
     semaphore:
         max-semaphores: 500
     <%_ if (serviceDiscoveryType === 'consul') { _%>
@@ -111,11 +112,11 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhi-metrics", "prometheus" ]
+                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhimetrics", "prometheus" ]
     endpoint:
         health:
             show-details: when-authorized
-        jhi-metrics:
+        jhimetrics:
             enabled: true
     info:
         git:
@@ -147,6 +148,8 @@ management:
                 all: true
             percentiles:
                 all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+        tags:
+            application: ${spring.application.name}
         web:
             server:
                 auto-time-requests: true
@@ -174,11 +177,17 @@ spring:
     <%_ if (!serviceDiscoveryType) { _%>
     profiles:
         # The commented value for `active` can be replaced with valid Spring profiles to load.
-        # Otherwise, it will be filled in by <%= buildTool %> when building the WAR file
+        # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
         # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
         active: #spring.profiles.active#
     <%_ } _%>
+    jmx:
+        enabled: false
     <%_ if (databaseType === 'sql') { _%>
+    data:
+        jpa:
+            repositories:
+                bootstrap-mode: deferred
     jpa:
         open-in-view: false
         properties:
@@ -191,9 +200,22 @@ spring:
     <%_ } _%>
     messages:
         basename: i18n/messages
+    main:
+        allow-bean-definition-overriding: true
     mvc:
         favicon:
             enabled: false
+    task:
+        execution:
+            thread-name-prefix: <%= dasherizedBaseName %>-task-
+            pool:
+                core-size: 2
+                max-size: 50
+                queue-capacity: 10000
+        scheduling:
+            thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
+            pool:
+                size: 2
     thymeleaf:
         mode: HTML
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -247,7 +269,7 @@ security:
 server:
     servlet:
         <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { _%>
-        context-path: /${spring.application.name}
+        context-path: /services/${spring.application.name}
         <%_ } _%>
         session:
             cookie:
@@ -265,10 +287,8 @@ info:
 # ===================================================================
 
 jhipster:
-    async:
-        core-pool-size: 2
-        max-pool-size: 50
-        queue-capacity: 10000
+    clientApp:
+        name: "<%= angularAppName %>"
     # By default CORS is disabled. Uncomment to enable.
     #cors:
         #allowed-origins: "*"
