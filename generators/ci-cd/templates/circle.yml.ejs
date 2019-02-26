@@ -53,7 +53,7 @@ test:
     override:
 <%_ if (buildTool === 'maven') { _%>
         - chmod +x mvnw
-        - ./mvnw clean test
+        - ./mvnw clean test integration-test
 <%_ } else if (buildTool === 'gradle') { _%>
         - chmod +x gradlew
         - ./gradlew clean test --no-daemon
