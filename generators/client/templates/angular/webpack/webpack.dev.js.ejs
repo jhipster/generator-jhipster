@@ -57,7 +57,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     },
     entry: {
         polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
-        global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
+        vendor: './<%= MAIN_SRC_DIR %>app/vendor',
         main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
     output: {
