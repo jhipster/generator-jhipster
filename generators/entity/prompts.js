@@ -196,7 +196,7 @@ function askForRelationships() {
     if (context.useConfigurationFile && context.updateEntity !== 'add') {
         return;
     }
-    if (['cassandra', 'couchbase'].includes(context.databaseType)) {
+    if (context.databaseType === 'cassandra') {
         return;
     }
 
@@ -211,7 +211,7 @@ function askForRelationsToRemove() {
     if (!context.useConfigurationFile || context.updateEntity !== 'remove' || context.relNameChoices.length === 0) {
         return;
     }
-    if (['cassandra', 'couchbase'].includes(context.databaseType)) {
+    if (context.databaseType === 'cassandra') {
         return;
     }
 
