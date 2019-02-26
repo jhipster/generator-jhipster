@@ -62,11 +62,11 @@ node {
     <%_ } _%>
 <%= indent %>    stage('backend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./mvnw test"
+<%= indent %>            sh "./mvnw test integration-test"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
-<%= indent %>            junit '**/target/surefire-reports/TEST-*.xml'
+<%= indent %>            junit '**/target/test-results/**/TEST-*.xml'
 <%= indent %>        }
 <%= indent %>    }
 
