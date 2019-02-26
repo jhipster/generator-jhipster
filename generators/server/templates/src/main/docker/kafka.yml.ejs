@@ -21,7 +21,7 @@ services:
     zookeeper:
         image: <%= DOCKER_ZOOKEEPER %>
         ports:
-          - 2181:2181
+            - 2181:2181
     kafka:
         image: <%= DOCKER_KAFKA %>
         environment:

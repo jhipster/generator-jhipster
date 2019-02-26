@@ -141,7 +141,7 @@ spring:
 <%_ if (authenticationType === 'oauth2') { _%>
 security:
     oauth2:
-    # client configuration needed : for condition in Spring Boot
+        # client configuration needed : for condition in Spring Boot
         client:
             access-token-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/token
             user-authorization-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/auth

@@ -36,7 +36,7 @@
         "url": "git://github.com/jhipster/generator-jhipster.git"
     },
     "scripts": {
-        "prettier:format": "prettier --write \"{,**/}*.{js,json,md}\"",
+        "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml}\"",
         "completion": "tabtab install --name jhipster --auto",
         "lint": "npm run eslint && npm run ejs-lint",
         "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
