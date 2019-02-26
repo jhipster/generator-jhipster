@@ -170,14 +170,14 @@ import <%=packageName%>.config.Constants;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
 import <%=packageName%>.domain.Authority;
 <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%=packageName%>.domain.PersistentToken;
 <%_ } _%>
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.AuthorityRepository;
 <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%=packageName%>.repository.PersistentTokenRepository;
 <%_ } _%>
 import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
@@ -224,13 +224,13 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 
 import java.time.Instant;
-<%_ if (authenticationType === 'session' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
+<%_ if (authenticationType === 'session' && !reactive && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.LocalDate;
 <%_ } _%>
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
 import static org.hamcrest.Matchers.hasItem;
 <%_ } _%>
 import static org.mockito.ArgumentMatchers.any;
@@ -260,7 +260,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Autowired
     private UserService userService;
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
 
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
@@ -302,10 +302,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(any());
         AccountResource accountResource =
-            new AccountResource(userRepository, userService, mockMailService<% if (authenticationType === 'session') { %>, persistentTokenRepository<% } %>);
+            new AccountResource(userRepository, userService, mockMailService<% if (authenticationType === 'session' && !reactive) { %>, persistentTokenRepository<% } %>);
 
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService, mockMailService<% if (authenticationType === 'session') { %>, persistentTokenRepository<% } %>);
+            new AccountResource(userRepository, mockUserService, mockMailService<% if (authenticationType === 'session' && !reactive) { %>, persistentTokenRepository<% } %>);
         <%_ if (!reactive) { _%>
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
@@ -1246,7 +1246,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-empty")<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
-    <%_ if (authenticationType === 'session') { _%>
+    <%_ if (authenticationType === 'session' && !reactive) { _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>

@@ -25,7 +25,7 @@ import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.AuthorityRepository;
-    <%_ if (authenticationType === 'session') { _%>
+    <%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%=packageName%>.repository.PersistentTokenRepository;
     <%_ } _%>
 <%_ } _%>
@@ -77,7 +77,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
-<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session'  && !reactive) { _%>
 import java.time.LocalDate;
 <%_ } _%>
 import java.time.Instant;
@@ -116,7 +116,7 @@ public class UserService {
     private final UserSearchRepository userSearchRepository;
     <%_ } _%>
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-        <%_ if (authenticationType === 'session') { _%>
+        <%_ if (authenticationType === 'session'  && !reactive) { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
         <%_ } _%>
@@ -128,7 +128,7 @@ public class UserService {
     private final CacheManager cacheManager;
     <%_ } _%>
 
-    public UserService(UserRepository userRepository<% if (authenticationType !== 'oauth2') { %>, PasswordEncoder passwordEncoder<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %><% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
+    public UserService(UserRepository userRepository<% if (authenticationType !== 'oauth2') { %>, PasswordEncoder passwordEncoder<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %><% if (authenticationType === 'session'  && !reactive) { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheManagerIsAvailable === true) { %>, CacheManager cacheManager<% } %>) {
         this.userRepository = userRepository;
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.passwordEncoder = passwordEncoder;
@@ -137,7 +137,7 @@ public class UserService {
         this.userSearchRepository = userSearchRepository;
         <%_ } _%>
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-            <%_ if (authenticationType === 'session') { _%>
+            <%_ if (authenticationType === 'session'  && !reactive) { _%>
         this.persistentTokenRepository = persistentTokenRepository;
             <%_ } _%>
         this.authorityRepository = authorityRepository;
@@ -652,7 +652,7 @@ public class UserService {
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin);
     }
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session'  && !reactive) { _%>
 
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after

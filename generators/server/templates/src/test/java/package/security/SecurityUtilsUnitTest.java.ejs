@@ -110,6 +110,7 @@ public class SecurityUtilsUnitTest {
             .block();
         assertThat(login).isEqualTo("admin");
     }
+    <%_ if (authenticationType === 'jwt') { _%>
 
     @Test
     public void testgetCurrentUserJWT() {
@@ -122,6 +123,7 @@ public class SecurityUtilsUnitTest {
             .block();
         assertThat(jwt).isEqualTo("token");
     }
+    <%_ } _%>
 
     @Test
     public void testIsAuthenticated() {

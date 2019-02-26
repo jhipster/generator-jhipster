@@ -23,11 +23,11 @@ import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.Constants;
-<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -82,7 +82,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
-<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+<%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 import java.time.LocalDate;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
@@ -128,7 +128,7 @@ import static org.mockito.Mockito.when;
 @Transactional<% } %>
 public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
 
@@ -164,7 +164,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'couchbase') { _%>
         mockAuthentication();
         <%_ } _%>
-        <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+        <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
         persistentTokenRepository.deleteAll();
         <%_ } _%>
         <%_ if (databaseType !== 'sql') { _%>
@@ -192,7 +192,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         auditingHandler.setDateTimeProvider(dateTimeProvider);
         <%_ } _%>
     }
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -322,7 +322,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ } _%>
     }
     <%_ } _%>
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 
     private void generateUserToken(<%= asEntity('User') %> user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();

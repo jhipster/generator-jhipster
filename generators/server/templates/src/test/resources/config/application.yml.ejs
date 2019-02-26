@@ -197,7 +197,7 @@ jhipster:
             client-secret: internal
     <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
     security:
         remember-me:
             # security key (this key should be unique for your application, and kept secret)

@@ -56,7 +56,7 @@ public final class RandomUtil {
     public static String generateResetKey() {
         return RandomStringUtils.randomNumeric(DEF_COUNT);
     }
-    <%_ if (authenticationType === 'session') { _%>
+    <%_ if (authenticationType === 'session' && !reactive) { _%>
 
     /**
      * Generate a unique series to validate a persistent token, used in the
