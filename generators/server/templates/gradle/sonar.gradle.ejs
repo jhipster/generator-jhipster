@@ -65,8 +65,6 @@ sonarqube {
         property "sonar.junit.utReportFolder", "${project.buildDir}/test-results/test"
         property "sonar.junit.itReportFolder", "${project.buildDir}/test-results/integrationTest"
         property "sonar.junit.reportPaths", "${project.buildDir}/test-results/test,${project.buildDir}/test-results/integrationTest"
-        property "sonar.sources", "${project.projectDir}/src/main/"
-        property "sonar.tests", "${project.projectDir}/src/test/"
         property "sonar.sources", "${project.projectDir}/<%= MAIN_DIR %>"
         property "sonar.tests", "${project.projectDir}/<%= TEST_DIR %>"
     }
