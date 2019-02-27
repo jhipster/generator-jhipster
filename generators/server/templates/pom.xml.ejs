@@ -170,7 +170,7 @@
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
         <%_ if (!skipClient) { _%>
-        <sonar.testExecutionReportPaths>${project.testresult.directory}/TESTS-results-jest.xml</sonar.testExecutionReportPaths>
+        <sonar.testExecutionReportPaths>${project.testresult.directory}/TESTS-results-sonar.xml</sonar.testExecutionReportPaths>
         <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/lcov.info</sonar.typescript.lcov.reportPaths>
         <%_ } _%>
         <!-- Used to keep correct jacoco report filename for the surefire/failsafe arg line. Therefore we set this empty property here -->
