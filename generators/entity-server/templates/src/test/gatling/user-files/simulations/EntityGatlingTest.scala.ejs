@@ -168,7 +168,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .post("/api/authenticate")
         .headers(headers_http_authentication)
         .body(StringBody("""{"username":"admin", "password":"admin"}""")).asJson
-        .check(header.get("Authorization").saveAs("access_token"))).exitHereIfFailed
+        .check(header("Authorization").saveAs("access_token"))).exitHereIfFailed
 <%_ } _%>
         .pause(2)
         .exec(http("Authenticated request")
