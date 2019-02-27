@@ -54,7 +54,7 @@ const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.28.0';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
 // Version of Java, Scala
-const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
+const JAVA_VERSION = '11'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
 const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
