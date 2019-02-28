@@ -39,15 +39,10 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
             addCssStylesProperty() {
-                if (this.useSass) {
-                    this.addMainSCSSStyle('@import style_without_comment');
-                    this.addMainSCSSStyle('@import style', 'my comment');
-                    this.addVendorSCSSStyle('@import style', 'my comment');
-                    this.addVendorSCSSStyle('@import style_without_comment');
-                } else {
-                    this.addMainCSSStyle('without-comment { font-size: 200%; color: red; }');
-                    this.addMainCSSStyle('h1 { font-size: 200%; color: navy; }', 'my comment');
-                }
+                this.addMainSCSSStyle('@import style_without_comment');
+                this.addMainSCSSStyle('@import style', 'my comment');
+                this.addVendorSCSSStyle('@import style', 'my comment');
+                this.addVendorSCSSStyle('@import style_without_comment');
             },
             addToMenuStep() {
                 this.addElementToMenu('routerName1', 'glyphiconName1', true, 'angularX');
@@ -102,7 +97,6 @@ describe('needle API SCSS: JHipster client generator with blueprint', () => {
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: 'angularX',
-                        useSass: true,
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr']
@@ -224,7 +218,6 @@ describe('needle API CSS: JHipster client generator with blueprint', () => {
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: 'angularX',
-                        useSass: false,
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr']

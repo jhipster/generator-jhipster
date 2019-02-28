@@ -44,8 +44,7 @@ describe('JHipster server generator', () => {
                 getFilesForOptions(
                     angularfiles,
                     {
-                        useSass: false,
-                        enableTranslation: true,
+                                                enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         testFrameworks: []

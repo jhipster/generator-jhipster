@@ -12,7 +12,6 @@
         "devDatabaseType": "cassandra",
         "prodDatabaseType": "cassandra",
         "searchEngine": false,
-        "useSass": false,
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "fr",
