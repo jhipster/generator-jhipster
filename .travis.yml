@@ -5,5 +5,8 @@ node_js:
 addons:
   sonarcloud:
     organization: "jhipster"
-script:
-  - sonar-scanner
+deploy:
+  provider: script
+  script: sonar-scanner
+  on:
+    branch: master
