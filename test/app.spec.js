@@ -33,7 +33,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -56,7 +56,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         testFrameworks: []
@@ -102,7 +102,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -125,7 +125,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(reactFiles, {
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         testFrameworks: []
@@ -159,7 +159,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -182,7 +182,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         testFrameworks: []
@@ -214,7 +214,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'gradle',
@@ -235,7 +235,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         testFrameworks: []
@@ -263,7 +263,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Disk',
                         prodDatabaseType: 'mariadb',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -286,7 +286,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         testFrameworks: []
@@ -313,7 +313,7 @@ describe('JHipster generator', () => {
                         databaseType: 'mongodb',
                         devDatabaseType: 'mongodb',
                         prodDatabaseType: 'mongodb',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -352,7 +352,7 @@ describe('JHipster generator', () => {
                         databaseType: 'couchbase',
                         devDatabaseType: 'couchbase',
                         prodDatabaseType: 'couchbase',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -391,7 +391,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'mssql',
                         prodDatabaseType: 'mssql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -432,7 +432,7 @@ describe('JHipster generator', () => {
                         databaseType: 'cassandra',
                         devDatabaseType: 'cassandra',
                         prodDatabaseType: 'cassandra',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -471,7 +471,7 @@ describe('JHipster generator', () => {
                         databaseType: 'cassandra',
                         devDatabaseType: 'cassandra',
                         prodDatabaseType: 'cassandra',
-                                                enableTranslation: false,
+                        enableTranslation: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
@@ -505,7 +505,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'postgresql',
                         prodDatabaseType: 'postgresql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -542,7 +542,7 @@ describe('JHipster generator', () => {
                         databaseType: 'no',
                         devDatabaseType: 'no',
                         prodDatabaseType: 'no',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -584,7 +584,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -621,7 +621,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -656,7 +656,7 @@ describe('JHipster generator', () => {
                         databaseType: 'mongodb',
                         devDatabaseType: 'mongodb',
                         prodDatabaseType: 'mongodb',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -689,7 +689,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -725,7 +725,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -762,7 +762,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -800,7 +800,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -842,7 +842,7 @@ describe('JHipster generator', () => {
                         searchEngine: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                                                applicationType: 'monolith',
+                        applicationType: 'monolith',
                         testFrameworks: ['gatling'],
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
@@ -887,7 +887,7 @@ describe('JHipster generator', () => {
                         searchEngine: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                                                applicationType: 'monolith',
+                        applicationType: 'monolith',
                         testFrameworks: ['gatling'],
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
@@ -935,7 +935,7 @@ describe('JHipster generator', () => {
                         searchEngine: false,
                         buildTool: 'gradle',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                                                applicationType: 'monolith',
+                        applicationType: 'monolith',
                         testFrameworks: ['gatling'],
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
@@ -979,7 +979,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1013,7 +1013,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1049,7 +1049,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1084,7 +1084,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: false,
+                        enableTranslation: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         serverSideOptions: []
@@ -1115,7 +1115,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['ar-ly'],
                         buildTool: 'maven',
@@ -1131,7 +1131,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.i18nRtl);
                 assert.file(
                     getFilesForOptions(angularFiles, {
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         testFrameworks: []
@@ -1162,7 +1162,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1176,7 +1176,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(
                     getFilesForOptions(angularFiles, {
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         testFrameworks: []
@@ -1202,7 +1202,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1216,7 +1216,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.session);
                 assert.file(
                     getFilesForOptions(angularFiles, {
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'session',
                         testFrameworks: []
@@ -1249,7 +1249,7 @@ describe('JHipster generator', () => {
                         searchEngine: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                                                applicationType: 'monolith',
+                        applicationType: 'monolith',
                         testFrameworks: ['protractor'],
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
@@ -1267,7 +1267,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(
                     getFilesForOptions(angularFiles, {
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         testFrameworks: ['protractor']
@@ -1299,7 +1299,7 @@ describe('JHipster generator', () => {
                         searchEngine: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                                                applicationType: 'monolith',
+                        applicationType: 'monolith',
                         testFrameworks: ['cucumber'],
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
@@ -1333,7 +1333,7 @@ describe('JHipster generator', () => {
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                                        enableTranslation: true,
+                    enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277'
@@ -1350,7 +1350,7 @@ describe('JHipster generator', () => {
             assert.noFile(expectedFiles.hibernateTimeZoneConfig);
             assert.file(
                 getFilesForOptions(angularFiles, {
-                                        enableTranslation: true,
+                    enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     testFrameworks: []
@@ -1400,7 +1400,7 @@ describe('JHipster generator', () => {
                     getFilesForOptions(
                         angularFiles,
                         {
-                                                        enableTranslation: true,
+                            enableTranslation: true,
                             serviceDiscoveryType: false,
                             authenticationType: 'session',
                             testFrameworks: []
@@ -1457,7 +1457,7 @@ describe('JHipster generator', () => {
                     getFilesForOptions(
                         angularFiles,
                         {
-                                                        enableTranslation: true,
+                            enableTranslation: true,
                             serviceDiscoveryType: false,
                             authenticationType: 'jwt',
                             testFrameworks: []
@@ -1537,7 +1537,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1573,7 +1573,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'mysql',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1610,7 +1610,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1649,7 +1649,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'gradle',
@@ -1689,7 +1689,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'mysql',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1728,7 +1728,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'mysql',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1768,7 +1768,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1803,7 +1803,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'mysql',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1842,7 +1842,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1879,7 +1879,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
@@ -1914,7 +1914,7 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'mysql',
                         prodDatabaseType: 'mysql',
-                                                enableTranslation: true,
+                        enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'maven',
