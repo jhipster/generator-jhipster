@@ -93,17 +93,6 @@ describe('needle API React: JHipster client generator with blueprint', () => {
                     .on('end', done);
             });
 
-            it('Assert app.css is updated', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.css`, 'without-comment { color:red; }');
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.css`, 'with-comment { color:red; }');
-                assert.fileContent(
-                    `${CLIENT_MAIN_SRC_DIR}app/app.css`,
-                    '* ==========================================================================\n' +
-                        'my comment\n' +
-                        '========================================================================== */\n'
-                );
-            });
-
             it('Assert entity is added to menu', () => {
                 assert.fileContent(
                     `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/entities.tsx`,
