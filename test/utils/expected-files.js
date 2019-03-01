@@ -541,7 +541,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/ar-ly/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}content/css/rtl.scss`,
+        `${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
