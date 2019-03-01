@@ -455,6 +455,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`,
         `${CLIENT_MAIN_SRC_DIR}content/css/loading.css`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`,
+        `${CLIENT_MAIN_SRC_DIR}content/scss/_bootstrap-variables.scss`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0.svg`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1.svg`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2.svg`,
