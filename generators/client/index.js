@@ -125,7 +125,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.serviceDiscoveryType = false;
                 }
 
-                const clientConfigFound = this.clientFramework !== undefined;
+                const clientConfigFound = this.enableTranslation !== undefined;
                 if (clientConfigFound) {
                     // If translation is not defined, it is enabled by default
                     if (this.enableTranslation === undefined) {
