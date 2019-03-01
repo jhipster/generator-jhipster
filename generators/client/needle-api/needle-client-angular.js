@@ -25,11 +25,6 @@ const jhipsterUtils = require('../../utils');
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 module.exports = class extends needleClientBase {
-    addGlobalCSSStyle(style, comment) {
-        const filePath = `${CLIENT_MAIN_SRC_DIR}content/css/global.css`;
-        this.addStyle(style, comment, filePath, 'jhipster-needle-css-add-main');
-    }
-
     addGlobalSCSSStyle(style, comment) {
         const filePath = `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`;
         this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');

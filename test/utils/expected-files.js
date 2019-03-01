@@ -452,7 +452,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/core/core.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/index.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/vendor.ts`,
-        `${CLIENT_MAIN_SRC_DIR}content/scss/documentation.scss`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`,
         `${CLIENT_MAIN_SRC_DIR}content/css/loading.css`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`,
@@ -542,7 +541,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/ar-ly/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}content/css/rtl.css`,
+        `${CLIENT_MAIN_SRC_DIR}content/css/rtl.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],

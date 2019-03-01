@@ -224,20 +224,6 @@ describe('needle API CSS: JHipster client generator with blueprint', () => {
                     })
                     .on('end', done);
             });
-
-            it('global.css contains the specific change (without comment) added by needle api', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/css/global.css`, /without-comment { font-size: 200%; color: red; }/);
-            });
-
-            it('global.css contains the specific change added by needle api', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}content/css/global.css`, /h1 { font-size: 200%; color: navy; }/);
-                assert.fileContent(
-                    `${CLIENT_MAIN_SRC_DIR}content/css/global.css`,
-                    '* ==========================================================================\n' +
-                        'my comment\n' +
-                        '========================================================================== */\n'
-                );
-            });
         });
     });
 });
