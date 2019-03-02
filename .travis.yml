@@ -67,7 +67,7 @@ env:
 # Install all tools and check configuration
 #----------------------------------------------------------------------
 before_install:
-    - jdk_switcher use oraclejdk8
+    - jdk_switcher use openjdk11
     - java -version
     - export TZ=Australia/Canberra
     - date
