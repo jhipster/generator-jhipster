@@ -304,7 +304,6 @@ describe('EntityParser', () => {
       });
       context('when converting JDL to entity json for Couchbase type', () => {
         before(() => {
-          jdlObject.relationships = new JDLRelationships();
           content = EntityParser.parse({
             jdlObject,
             databaseType: DatabaseTypes.COUCHBASE
@@ -342,7 +341,17 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'pager',
-              relationships: [],
+              relationships: [
+                {
+                  otherEntityField: 'id',
+                  otherEntityName: 'entityB',
+                  otherEntityRelationshipName: 'a',
+                  ownerSide: true,
+                  relationshipName: 'b',
+                  relationshipType: 'one-to-one',
+                  relationshipValidateRules: 'required'
+                }
+              ],
               service: 'no',
               skipClient: true
             },
@@ -364,7 +373,15 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'no',
-              relationships: [],
+              relationships: [
+                {
+                  otherEntityName: 'entityA',
+                  otherEntityRelationshipName: 'b',
+                  ownerSide: false,
+                  relationshipName: 'a',
+                  relationshipType: 'one-to-one'
+                }
+              ],
               service: 'no'
             }
           });
