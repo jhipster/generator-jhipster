@@ -800,6 +800,58 @@ describe('EntityParser', () => {
           expect(content.A.relationships[0].useJPADerivedIdentifier).to.be.true;
         });
       });
+      context('when converting a JDL with DTO', () => {
+        context('if there was not a service option for entity', () => {
+          let content;
+
+          before(() => {
+            const entity = new JDLEntity({ name: 'A' });
+            const jdlObject = new JDLObject();
+            const option = new JDLBinaryOption({
+              name: BinaryOptions.DTO,
+              value: BinaryOptionValues.dto.MAPSTRUCT
+            });
+            jdlObject.addEntity(entity);
+            jdlObject.addOption(option);
+            content = EntityParser.parse({
+              jdlObject,
+              databaseType: DatabaseTypes.SQL
+            });
+          });
+
+          it('sets one as default', () => {
+            expect(content.A.service).to.equal('serviceClass');
+          });
+        });
+        context('if there was a service option for the entity', () => {
+          let content = null;
+
+          before(() => {
+            const entityA = new JDLEntity({ name: 'A' });
+            const dtoOption = new JDLBinaryOption({
+              name: BinaryOptions.DTO,
+              value: BinaryOptionValues.dto.MAPSTRUCT
+            });
+            const serviceOption = new JDLBinaryOption({
+              name: BinaryOptions.SERVICE,
+              value: BinaryOptionValues.service.SERVICE_IMPL,
+              entityNames: ['A']
+            });
+            const jdlObject = new JDLObject();
+            jdlObject.addEntity(entityA);
+            jdlObject.addOption(dtoOption);
+            jdlObject.addOption(serviceOption);
+            content = EntityParser.parse({
+              jdlObject,
+              databaseType: DatabaseTypes.SQL
+            });
+          });
+
+          it('uses the wanted service instead of the default one', () => {
+            expect(content.A.service).to.equal('serviceImpl');
+          });
+        });
+      });
     });
     context("when passing 'no' as database type", () => {
       let jdlObject = null;
