@@ -85,17 +85,17 @@ public class <%= entityClass %>Criteria implements Serializable {
     private <%- filterVariable.filterType %> <%= filterVariable.name %>;
 <%_ }); _%>
 
-    public <%= entityClass %>(){
+    public <%= entityClass %>Criteria(){
     }
 
-    public <%= entityClass %>(<%= entityClass %> other){
+    public <%= entityClass %>Criteria(<%= entityClass %>Criteria other){
 <%_ filterVariables.forEach((filterVariable) => { _%>
         this.<%= filterVariable.name %> = other.<%= filterVariable.name %> == null ? null : other.<%= filterVariable.name %>.copy();
 <%_ }); _%>
     }
 
-    public <%= entityClass %> copy() {
-        return new <%= entityClass %>(this);
+    public <%= entityClass %>Criteria copy() {
+        return new <%= entityClass %>Criteria(this);
     }
 
 <%_ filterVariables.forEach((filterVariable) => { _%>
