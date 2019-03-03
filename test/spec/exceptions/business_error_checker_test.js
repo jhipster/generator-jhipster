@@ -949,10 +949,10 @@ describe('BusinessErrorChecker', () => {
         checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.SQL });
       });
 
-      it('fails', () => {
+      it('does not fail', () => {
         expect(() => {
           checker.checkForOptionErrors();
-        }).to.throw('Selecting DTOs without services is forbidden, for entities A, C.');
+        }).not.to.throw();
       });
     });
     context('when having DTOs with services', () => {
