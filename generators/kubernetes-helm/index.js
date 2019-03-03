@@ -22,9 +22,9 @@ const fs = require('fs');
 const prompts = require('../kubernetes/prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
-const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const { checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
-const packagejs = require('../../package.json');
 
 module.exports = class extends BaseDockerGenerator {
     get initializing() {
@@ -33,10 +33,9 @@ module.exports = class extends BaseDockerGenerator {
                 this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
-
             ...super.initializing,
-
-            checkKubernetes() {
+            checkKubernetes,
+            checkHelm() {
                 if (this.skipChecks) return;
                 const done = this.async();
 
@@ -50,18 +49,8 @@ module.exports = class extends BaseDockerGenerator {
                     done();
                 });
             },
-
-            loadConfig() {
-                loadFromYoRc.call(this);
-                this.kubernetesNamespace = this.config.get('kubernetesNamespace');
-                this.kubernetesServiceType = this.config.get('kubernetesServiceType');
-                this.ingressDomain = this.config.get('ingressDomain');
-                this.istio = this.config.get('istio');
-                this.jhipsterVersion = packagejs.version;
-                this.dbRandomPassword = Math.random()
-                    .toString(36)
-                    .slice(-8);
-            }
+            loadConfig,
+            setupKubernetesConstants
         };
     }
 
@@ -102,23 +91,7 @@ module.exports = class extends BaseDockerGenerator {
                     }
                 });
             },
-
-            saveConfig() {
-                this.config.set({
-                    appsFolders: this.appsFolders,
-                    directoryPath: this.directoryPath,
-                    clusteredDbApps: this.clusteredDbApps,
-                    serviceDiscoveryType: this.serviceDiscoveryType,
-                    jwtSecretKey: this.jwtSecretKey,
-                    dockerRepositoryName: this.dockerRepositoryName,
-                    dockerPushCommand: this.dockerPushCommand,
-                    kubernetesNamespace: this.kubernetesNamespace,
-                    kubernetesServiceType: this.kubernetesServiceType,
-                    ingressDomain: this.ingressDomain,
-                    monitoring: this.monitoring,
-                    istio: this.istio
-                });
-            }
+            saveConfig
         };
     }
 

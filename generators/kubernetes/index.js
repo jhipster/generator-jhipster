@@ -17,14 +17,13 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const shelljs = require('shelljs');
 const fs = require('fs');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
-const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const { checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
-const constants = require('../generator-constants');
 
 module.exports = class extends BaseDockerGenerator {
     get initializing() {
@@ -33,45 +32,10 @@ module.exports = class extends BaseDockerGenerator {
                 this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
-
             ...super.initializing,
-
-            checkKubernetes() {
-                if (this.skipChecks) return;
-                const done = this.async();
-
-                shelljs.exec('kubectl version', { silent: true }, (code, stdout, stderr) => {
-                    if (stderr) {
-                        this.log(
-                            `${chalk.yellow.bold('WARNING!')} kubectl 1.2 or later is not installed on your computer.\n` +
-                                'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n'
-                        );
-                    }
-                    done();
-                });
-            },
-
-            loadConfig() {
-                loadFromYoRc.call(this);
-                this.kubernetesNamespace = this.config.get('kubernetesNamespace');
-                this.kubernetesServiceType = this.config.get('kubernetesServiceType');
-                this.ingressDomain = this.config.get('ingressDomain');
-                this.istio = this.config.get('istio');
-                this.dbRandomPassword = Math.random()
-                    .toString(36)
-                    .slice(-8);
-            },
-
-            setupKubernetesConstants() {
-                // Make constants available in templates
-                this.KUBERNETES_CORE_API_VERSION = constants.KUBERNETES_CORE_API_VERSION;
-                this.KUBERNETES_BATCH_API_VERSION = constants.KUBERNETES_BATCH_API_VERSION;
-                this.KUBERNETES_DEPLOYMENT_API_VERSION = constants.KUBERNETES_DEPLOYMENT_API_VERSION;
-                this.KUBERNETES_STATEFULSET_API_VERSION = constants.KUBERNETES_STATEFULSET_API_VERSION;
-                this.KUBERNETES_INGRESS_API_VERSION = constants.KUBERNETES_INGRESS_API_VERSION;
-                this.KUBERNETES_ISTIO_NETWORKING_API_VERSION = constants.KUBERNETES_ISTIO_NETWORKING_API_VERSION;
-                this.KUBERNETES_RBAC_API_VERSION = constants.KUBERNETES_RBAC_API_VERSION;
-            }
+            checkKubernetes,
+            loadConfig,
+            setupKubernetesConstants
         };
     }
 
@@ -112,6 +76,7 @@ module.exports = class extends BaseDockerGenerator {
                     }
                 });
             },
+<<<<<<< HEAD
 
             saveConfig() {
                 this.config.set({
@@ -129,6 +94,9 @@ module.exports = class extends BaseDockerGenerator {
                     istio: this.istio
                 });
             }
+=======
+            saveConfig
+>>>>>>> refactor common code between the kubernetes and helm subgens
         };
     }
 

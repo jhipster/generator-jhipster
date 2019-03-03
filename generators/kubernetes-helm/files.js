@@ -24,47 +24,53 @@ module.exports = {
 function writeFiles() {
     return {
         writeAppChart() {
-            const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
+            const kubernetesSubgenPath = this.fetchFromInstalledJHipster('kubernetes/templates');
             if (this.kubernetesNamespace !== 'default') {
-                this.template(`${k8s}/namespace.yml.ejs`, 'namespace.yaml');
+                this.template(`${kubernetesSubgenPath}/namespace.yml.ejs`, 'namespace.yaml');
             }
             for (let i = 0; i < this.appConfigs.length; i++) {
                 const appName = this.appConfigs[i].baseName.toLowerCase();
                 this.app = this.appConfigs[i];
 
-                this.template(`${k8s}/deployment.yml.ejs`, `${appName}/templates/${appName}-deployment.yaml`);
-                this.template(`${k8s}/service.yml.ejs`, `${appName}/templates/${appName}-service.yaml`);
+                this.template(`${kubernetesSubgenPath}/deployment.yml.ejs`, `${appName}/templates/${appName}-deployment.yaml`);
+                this.template(`${kubernetesSubgenPath}/service.yml.ejs`, `${appName}/templates/${appName}-service.yaml`);
                 this.template('app/values.yml.ejs', `${appName}/values.yaml`);
-                this.template('app/chart.yml.ejs', `${appName}/Chart.yaml`);
+                this.template('app/Chart.yml.ejs', `${appName}/Chart.yaml`);
                 this.template('app/requirements.yml.ejs', `${appName}/requirements.yaml`);
                 this.template('app/helpers.tpl.ejs', `${appName}/templates/_helpers.tpl`);
 
                 if (this.app.prodDatabaseType === 'couchbase') {
                     this.template(
-                        `${k8s}/db/${this.app.prodDatabaseType}.yml.ejs`,
+                        `${kubernetesSubgenPath}/db/${this.app.prodDatabaseType}.yml.ejs`,
                         `${appName}/templates/${appName}-${this.app.prodDatabaseType}.yaml`
                     );
                 }
 
                 if (this.app.searchEngine === 'elasticsearch') {
-                    this.template(`${k8s}/db/elasticsearch.yml.ejs`, `${appName}/templates/${appName}-elasticsearch.yaml`);
+                    this.template(`${kubernetesSubgenPath}/db/elasticsearch.yml.ejs`, `${appName}/templates/${appName}-elasticsearch.yaml`);
                 }
                 if (
                     (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') &&
                     this.kubernetesServiceType === 'Ingress'
                 ) {
                     if (this.istio) {
-                        this.template(`${k8s}/istio/gateway.yml.ejs`, `${appName}/templates/${appName}-gateway.yaml`);
+                        this.template(`${kubernetesSubgenPath}/istio/gateway.yml.ejs`, `${appName}/templates/${appName}-gateway.yaml`);
                     } else {
-                        this.template(`${k8s}/ingress.yml.ejs`, `${appName}/templates/${appName}-ingress.yaml`);
+                        this.template(`${kubernetesSubgenPath}/ingress.yml.ejs`, `${appName}/templates/${appName}-ingress.yaml`);
                     }
                 }
                 if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
-                    this.template(`${k8s}/secret/jwt-secret.yml.ejs`, `${appName}/templates/jwt-secret.yaml`);
+                    this.template(`${kubernetesSubgenPath}/secret/jwt-secret.yml.ejs`, `${appName}/templates/jwt-secret.yaml`);
                 }
                 if (this.istio) {
-                    this.template(`${k8s}/istio/destination-rule.yml.ejs`, `${appName}/templates/${appName}-destination-rule.yaml`);
-                    this.template(`${k8s}/istio/virtual-service.yml.ejs`, `${appName}/templates/${appName}-virtual-service.yaml`);
+                    this.template(
+                        `${kubernetesSubgenPath}/istio/destination-rule.yml.ejs`,
+                        `${appName}/templates/${appName}-destination-rule.yaml`
+                    );
+                    this.template(
+                        `${kubernetesSubgenPath}/istio/virtual-service.yml.ejs`,
+                        `${appName}/templates/${appName}-virtual-service.yaml`
+                    );
                 }
             }
         },
@@ -79,7 +85,7 @@ function writeFiles() {
                 this.serviceDiscoveryType === 'consul'
             ) {
                 this.template('csvc/values.yml.ejs', 'csvc/values.yaml');
-                this.template('csvc/chart.yml.ejs', 'csvc/Chart.yaml');
+                this.template('csvc/Chart.yml.ejs', 'csvc/Chart.yaml');
                 this.template('csvc/requirements.yml.ejs', 'csvc/requirements.yaml');
                 this.template('csvc/helpers.tpl.ejs', 'csvc/templates/_helpers.tpl');
             }
