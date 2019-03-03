@@ -999,7 +999,6 @@ describe('JDLImporter', () => {
         expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes("\\'")).to.be.true;
       });
     });
-
     context('when parsing JDL applications and deployment config', () => {
       const contents = [];
       const expectedContents = [
@@ -1179,7 +1178,6 @@ describe('JDLImporter', () => {
         expect(contents).to.deep.equal(expectedContents);
       });
     });
-
     context('when parsing deployment config', () => {
       const contents = [];
       const expectedContents = [
@@ -1274,7 +1272,6 @@ describe('JDLImporter', () => {
         expect(contents).to.deep.equal(expectedContents);
       });
     });
-
     context('when parsing JDL applications and deployment config with a realistic sample', () => {
       const contents = [];
       const expectedContents = [
