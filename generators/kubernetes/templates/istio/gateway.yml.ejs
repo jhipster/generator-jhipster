@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: Gateway
 metadata:
   name: <%= app.baseName.toLowerCase() %>-gateway
@@ -41,7 +41,7 @@ spec:
     hosts:
     - <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %><%= ingressDomain %>
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: VirtualService
 metadata:
   name: <%= app.baseName.toLowerCase() %>-gw-virtualservice

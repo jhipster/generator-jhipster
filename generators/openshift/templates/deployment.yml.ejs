@@ -24,7 +24,7 @@
 # customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
 # referenced in other places.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: <%= app.baseName.toLowerCase() %>-app-template
@@ -79,7 +79,7 @@ parameters:
 <%_ } _%>
 objects:
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${APPLICATION_NAME}
@@ -262,7 +262,7 @@ objects:
             - name: http
               containerPort: "${APP_PORT}"
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       annotations:
@@ -283,7 +283,7 @@ objects:
       - name: http
         port: "${APP_PORT}"
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
     metadata:
       name: ${APPLICATION_NAME}

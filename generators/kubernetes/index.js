@@ -24,6 +24,7 @@ const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
 const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
 const statistics = require('../statistics');
+const constants = require('../generator-constants');
 
 module.exports = class extends BaseDockerGenerator {
     get initializing() {
@@ -59,6 +60,17 @@ module.exports = class extends BaseDockerGenerator {
                 this.dbRandomPassword = Math.random()
                     .toString(36)
                     .slice(-8);
+            },
+
+            setupKubernetesConstants() {
+                // Make constants available in templates
+                this.KUBERNETES_CORE_API_VERSION = constants.KUBERNETES_CORE_API_VERSION;
+                this.KUBERNETES_BATCH_API_VERSION = constants.KUBERNETES_BATCH_API_VERSION;
+                this.KUBERNETES_DEPLOYMENT_API_VERSION = constants.KUBERNETES_DEPLOYMENT_API_VERSION;
+                this.KUBERNETES_STATEFULSET_API_VERSION = constants.KUBERNETES_STATEFULSET_API_VERSION;
+                this.KUBERNETES_INGRESS_API_VERSION = constants.KUBERNETES_INGRESS_API_VERSION;
+                this.KUBERNETES_ISTIO_NETWORKING_API_VERSION = constants.KUBERNETES_ISTIO_NETWORKING_API_VERSION;
+                this.KUBERNETES_RBAC_API_VERSION = constants.KUBERNETES_RBAC_API_VERSION;
             }
         };
     }

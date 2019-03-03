@@ -52,6 +52,15 @@ const DOCKER_COMPOSE_FORMAT_VERSION = '2';
 const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.29.0';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
+// Kubernetes versions
+const KUBERNETES_CORE_API_VERSION="v1";
+const KUBERNETES_BATCH_API_VERSION="batch/v1";
+const KUBERNETES_DEPLOYMENT_API_VERSION="apps/v1";
+const KUBERNETES_STATEFULSET_API_VERSION="apps/v1";
+const KUBERNETES_INGRESS_API_VERSION="extensions/v1beta1";
+const KUBERNETES_ISTIO_NETWORKING_API_VERSION="networking.istio.io/v1alpha3";
+const KUBERNETES_RBAC_API_VERSION="rbac.authorization.k8s.io/v1";
+
 // Version of Java
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
 
@@ -278,7 +287,14 @@ const constants = {
     SQL_DB_OPTIONS,
     DOCKER_COMPOSE_FORMAT_VERSION,
     DOCKER_PROMETHEUS_OPERATOR,
-    DOCKER_GRAFANA_WATCHER
+    DOCKER_GRAFANA_WATCHER,
+    KUBERNETES_CORE_API_VERSION,
+    KUBERNETES_BATCH_API_VERSION,
+    KUBERNETES_DEPLOYMENT_API_VERSION,
+    KUBERNETES_STATEFULSET_API_VERSION,
+    KUBERNETES_INGRESS_API_VERSION,
+    KUBERNETES_ISTIO_NETWORKING_API_VERSION,
+    KUBERNETES_RBAC_API_VERSION
 };
 
 module.exports = constants;

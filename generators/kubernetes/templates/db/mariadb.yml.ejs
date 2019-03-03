@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mariadb
@@ -27,7 +27,7 @@ type: Opaque
 data:
   mariadb-root-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
 ---
-apiVersion: extensions/v1beta1
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mariadb
@@ -69,7 +69,7 @@ spec:
         - name: data
           mountPath: /var/lib/mysql/
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mariadb
