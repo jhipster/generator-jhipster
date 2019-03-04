@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const jhipsterUtils = require('../../utils');
+const jhipsterUtils = require('./utils');
 
 module.exports = class {
     constructor(generator) {
@@ -26,14 +26,7 @@ module.exports = class {
 
     addBlockContentToFile(rewriteFileModel, errorMessage) {
         try {
-            jhipsterUtils.rewriteFile(
-                {
-                    file: rewriteFileModel.file,
-                    needle: rewriteFileModel.needle,
-                    splicable: rewriteFileModel.splicable
-                },
-                this.generator
-            );
+            jhipsterUtils.rewriteFile(rewriteFileModel, this.generator);
         } catch (e) {
             this.logNeedleNotFound(e, errorMessage, rewriteFileModel.file);
         }

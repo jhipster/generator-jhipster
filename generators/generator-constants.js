@@ -58,9 +58,9 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '10.15.0';
+const NODE_VERSION = '10.15.2';
 const YARN_VERSION = '1.13.0';
-const NPM_VERSION = '6.4.1';
+const NPM_VERSION = '6.8.0';
 
 // all constants used throughout all generators
 
@@ -202,10 +202,16 @@ const LANGUAGES = [
         momentLocaleId: 'uk'
     },
     {
-        name: 'Uzbek (latin)',
+        name: 'Uzbek (Cyrillic)',
+        dispName: 'Ўзбекча',
+        value: 'uz-cyr',
+        localeId: 'uz-Cyr'
+    },
+    {
+        name: 'Uzbek (Latin)',
         dispName: 'O`zbekcha',
         value: 'uz-lat',
-        localeId: 'uz'
+        localeId: 'uz-Lat'
     },
     { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
 ];

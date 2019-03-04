@@ -204,7 +204,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      * Returns the sort parameter to be looked up from the request. Potentially applies qualifiers to it.
      *
      * @param parameter can be {@code null}.
-     * @return
+     * @return the sort parameter to be looked up from the request.
      */
     protected String getSortParameter(@Nullable MethodParameter parameter) {
 
@@ -226,7 +226,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      *
      * @param source will never be {@code null}.
      * @param delimiter the delimiter to be used to split up the source elements, will never be {@code null}.
-     * @return
+     * @return the parsed {@link Sort}.
      */
     Sort parseParameterIntoSort(List<String> source, String delimiter) {
 
@@ -267,7 +267,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      * of the same direction into a single expression if they are in order.
      *
      * @param sort must not be {@code null}.
-     * @return
+     * @return the list of sort expresssions.
      */
     protected List<String> foldIntoExpressions(Sort sort) {
 
@@ -297,7 +297,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      *
      * @throws IllegalArgumentException if a {@link Sort} with multiple {@link Direction}s has been handed in.
      * @param sort must not be {@code null}.
-     * @return
+     * @return the list of epxressions.
      */
     protected List<String> legacyFoldExpressions(Sort sort) {
 
@@ -355,7 +355,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
         /**
          * Adds the given property to the expression to be built.
          *
-         * @param property
+         * @param property the property to add.
          */
         void add(String property) {
             this.elements.add(property);
@@ -387,7 +387,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      *
      * @param annotation must not be {@code null}.
      * @param property must not be {@code null} or empty.
-     * @return
+     * @return the value of the given specific property of the given annotation.
      */
     @SuppressWarnings("unchecked")
     public static <T> T getSpecificPropertyOrDefaultFromValue(Annotation annotation, String property) {

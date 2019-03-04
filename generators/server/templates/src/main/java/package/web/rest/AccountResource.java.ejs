@@ -49,7 +49,7 @@ public class AccountResource {
     }
 
     /**
-     * GET  /authenticate : check if the user is authenticated, and return its login.
+     * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
      *
      * @param request the HTTP request.
      * @return the login if the user is authenticated.
@@ -61,11 +61,11 @@ public class AccountResource {
     }
 
     /**
-     * GET  /account : get the current user.
+     * {@code GET  /account} : get the current user.
      *
-     * @param principal the current user; resolves to null if not authenticated.
+     * @param principal the current user; resolves to {@code null} if not authenticated.
      * @return the current user.
-     * @throws InternalServerErrorException 500 (Internal Server Error) if the user couldn't be returned.
+     * @throws InternalServerErrorException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
     @SuppressWarnings("unchecked")

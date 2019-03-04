@@ -73,6 +73,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import javax.servlet.http.HttpServletRequest;
 <%_ } _%>
 <%_ if (reactiveRepositories) { _%>
 import org.springframework.http.MediaType;
@@ -124,10 +125,10 @@ public class <%= entityClass %>Resource {
     _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
 
     /**
-     * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
+     * {@code POST  /<%= entityApiUrl %>} : Create a new <%= entityInstance %>.
      *
-     * @param <%= instanceName %> the <%= instanceName %> to create
-     * @return the {@link ResponseEntity} with status 201 (Created) and with body the new <%= instanceName %>, or with status 400 (Bad Request) if the <%= entityInstance %> has already an ID.
+     * @param <%= instanceName %> the <%= instanceName %> to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new <%= instanceName %>, or with status {@code 400 (Bad Request)} if the <%= entityInstance %> has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/<%= entityApiUrl %>")
@@ -152,12 +153,12 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * PUT  /<%= entityApiUrl %> : Updates an existing <%= entityInstance %>.
+     * {@code PUT  /<%= entityApiUrl %>} : Updates an existing <%= entityInstance %>.
      *
      * @param <%= instanceName %> the <%= instanceName %> to update.
-     * @return the {@link ResponseEntity} with status 200 (OK) and with body the updated <%= instanceName %>,
-     * or with status 400 (Bad Request) if the <%= instanceName %> is not valid,
-     * or with status 500 (Internal Server Error) if the <%= instanceName %> couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated <%= instanceName %>,
+     * or with status {@code 400 (Bad Request)} if the <%= instanceName %> is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the <%= instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/<%= entityApiUrl %>")
@@ -179,13 +180,13 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %>.
+     * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
      * @param pageable the pagination information.<% } if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { %>
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).<% } if (jpaMetamodelFiltering) { %>
      * @param criteria the criteria which the requested entities should match.<% } else if (fieldsContainNoOwnerOneToOne) { %>
      * @param filter the filter of the request.<% } %>
-     * @return the {@link ResponseEntity} with status 200 (OK) and the list of <%= entityInstancePlural %> in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of <%= entityInstancePlural %> in body.
      */
     @GetMapping("/<%= entityApiUrl %>")<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
 
@@ -194,7 +195,7 @@ public class <%= entityClass %>Resource {
 
     <%_ if (reactiveRepositories) { _%>
     /**
-     * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %> as a stream.
+     * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %> as a stream.
      * @return the {@link Flux} of <%= entityInstancePlural %>.
      */
     @GetMapping(value = "/<%= entityApiUrl %>", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
@@ -211,10 +212,10 @@ public class <%= entityClass %>Resource {
 
     <%_ } _%>
     /**
-     * GET  /<%= entityApiUrl %>/:id : get the "id" <%= entityInstance %>.
+     * {@code GET  /<%= entityApiUrl %>/:id} : get the "id" <%= entityInstance %>.
      *
      * @param id the id of the <%= instanceName %> to retrieve.
-     * @return the {@link ResponseEntity} with status 200 (OK) and with body the <%= instanceName %>, or with status 404 (Not Found).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the <%= instanceName %>, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/<%= entityApiUrl %>/{id}")<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
 
@@ -225,10 +226,10 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * DELETE  /<%= entityApiUrl %>/:id : delete the "id" <%= entityInstance %>.
+     * {@code DELETE  /<%= entityApiUrl %>/:id} : delete the "id" <%= entityInstance %>.
      *
      * @param id the id of the <%= instanceName %> to delete.
-     * @return the {@link ResponseEntity} with status 204 (NO_CONTENT).
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/<%= entityApiUrl %>/{id}")
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= pkType %> id) {
@@ -238,12 +239,12 @@ public class <%= entityClass %>Resource {
     }<% if (searchEngine === 'elasticsearch') { %>
 
     /**
-     * SEARCH  /_search/<%= entityApiUrl %>?query=:query : search for the <%= entityInstance %> corresponding
+     * {@code SEARCH  /_search/<%= entityApiUrl %>?query=:query} : search for the <%= entityInstance %> corresponding
      * to the query.
      *
-     * @param query the query of the <%= entityInstance %> search<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information<% } %>
-     * @return the result of the search
+     * @param query the query of the <%= entityInstance %> search.<% if (pagination !== 'no') { %>
+     * @param pageable the pagination information.<% } %>
+     * @return the result of the search.
      */
     @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {asEntity, asDto, viaService}); -%><% } %>
 }

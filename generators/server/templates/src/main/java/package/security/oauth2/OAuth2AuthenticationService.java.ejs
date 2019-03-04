@@ -73,7 +73,7 @@ public class OAuth2AuthenticationService {
      * @param request  the request coming from the client.
      * @param response the response going back to the server.
      * @param params   the params holding the username, password and rememberMe.
-     * @return the {@link OAuth2AccessToken} as a {@link ResponseEntity}. Will return OK (200), if successful.
+     * @return the {@link OAuth2AccessToken} as a {@link ResponseEntity}. Will return {@code OK (200)}, if successful.
      * If the UAA cannot authenticate the user, the status code returned by UAA will be returned.
      */
     public ResponseEntity<OAuth2AccessToken> authenticate(HttpServletRequest request, HttpServletResponse response,

@@ -18,120 +18,120 @@
 #
 
 jobs:
-- job: Test
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  variables:
-    JHI_PROFILE: dev
-    JHI_RUN_APP: 1
-    JHI_PROTRACTOR: 0
-    # if JHI_LIB_BRANCH value is release, use the release from Maven
-    JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-    JHI_LIB_BRANCH: master
-    # if JHI_GEN_BRANCH value is release, use the release from NPM
-    JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
-    JHI_GEN_BRANCH: master
-    # specific config
-    SPRING_OUTPUT_ANSI_ENABLED: NEVER
-    SPRING_JPA_SHOW_SQL: false
-    JHI_DISABLE_WEBPACK_LOGS: true
-    JHI_E2E_HEADLESS: true
-    JHI_SCRIPTS: $(Build.Repository.LocalPath)/test-integration/scripts
+    - job: Test
+      pool:
+          vmImage: 'Ubuntu 16.04'
+      variables:
+          JHI_PROFILE: dev
+          JHI_RUN_APP: 1
+          JHI_PROTRACTOR: 0
+          # if JHI_LIB_BRANCH value is release, use the release from Maven
+          JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
+          JHI_LIB_BRANCH: master
+          # if JHI_GEN_BRANCH value is release, use the release from NPM
+          JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
+          JHI_GEN_BRANCH: master
+          # specific config
+          SPRING_OUTPUT_ANSI_ENABLED: NEVER
+          SPRING_JPA_SHOW_SQL: false
+          JHI_DISABLE_WEBPACK_LOGS: true
+          JHI_E2E_HEADLESS: true
+          JHI_SCRIPTS: $(Build.Repository.LocalPath)/test-integration/scripts
 
-  strategy:
-    matrix:
-      react-default:
-        JHI_APP: react-default
-        JHI_PROFILE: prod
-        JHI_PROTRACTOR: 1
-        JHI_ENTITY: sql
-      react-noi18n-es-ws-gradle-session:
-        JHI_APP: react-noi18n-es-ws-gradle-session
-        JHI_PROFILE: prod
-        JHI_PROTRACTOR: 1
-        JHI_ENTITY: sql
-      ms-ngx-gateway-eureka-oauth2:
-        JHI_APP: ms-ngx-gateway-eureka-oauth2
-        JHI_PROTRACTOR: 1
-        JHI_ENTITY: sql
-      ms-ngx-gateway-consul:
-        JHI_APP: ms-ngx-gateway-consul
-        JHI_ENTITY: sql
-      ms-ngx-gateway-uaa:
-        JHI_APP: ms-ngx-gateway-uaa
-        JHI_ENTITY: uaa
-      ms-micro-consul:
-        JHI_APP: ms-micro-consul
-        JHI_ENTITY: micro
-      ngx-h2mem-ws-nol2:
-        JHI_APP: ngx-h2mem-ws-nol2
-        JHI_ENTITY: sql
-      ngx-session-cassandra-fr:
-        JHI_APP: ngx-session-cassandra-fr
-        JHI_ENTITY: cassandra
-      ngx-couchbase:
-        JHI_APP: ngx-couchbase
-        JHI_PROFILE: prod
-        JHI_ENTITY: couchbase
-      webflux-mongodb:
-        JHI_APP: webflux-mongodb
-        JHI_ENTITY: mongodb
+      strategy:
+          matrix:
+              react-default:
+                  JHI_APP: react-default
+                  JHI_PROFILE: prod
+                  JHI_PROTRACTOR: 1
+                  JHI_ENTITY: sql
+              react-noi18n-es-ws-gradle-session:
+                  JHI_APP: react-noi18n-es-ws-gradle-session
+                  JHI_PROFILE: prod
+                  JHI_PROTRACTOR: 1
+                  JHI_ENTITY: sql
+              ms-ngx-gateway-eureka-oauth2:
+                  JHI_APP: ms-ngx-gateway-eureka-oauth2
+                  JHI_PROTRACTOR: 1
+                  JHI_ENTITY: sql
+              ms-ngx-gateway-consul:
+                  JHI_APP: ms-ngx-gateway-consul
+                  JHI_ENTITY: sql
+              ms-ngx-gateway-uaa:
+                  JHI_APP: ms-ngx-gateway-uaa
+                  JHI_ENTITY: uaa
+              ms-micro-consul:
+                  JHI_APP: ms-micro-consul
+                  JHI_ENTITY: micro
+              ngx-h2mem-ws-nol2:
+                  JHI_APP: ngx-h2mem-ws-nol2
+                  JHI_ENTITY: sql
+              ngx-session-cassandra-fr:
+                  JHI_APP: ngx-session-cassandra-fr
+                  JHI_ENTITY: cassandra
+              ngx-couchbase:
+                  JHI_APP: ngx-couchbase
+                  JHI_PROFILE: prod
+                  JHI_ENTITY: couchbase
+              webflux-mongodb:
+                  JHI_APP: webflux-mongodb
+                  JHI_ENTITY: mongodb
 
-  steps:
-  #----------------------------------------------------------------------
-  # Install all tools and check configuration
-  #----------------------------------------------------------------------
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '10.15.0'
-    displayName: 'TOOLS: install Node.js'
-  - script: |
-      wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-      sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-      sudo apt update
-      sudo apt install google-chrome-stable
-    displayName: 'TOOLS: install google-chrome-stable'
-  - script: sudo npm install -g npm
-    displayName: 'TOOLS: update NPM'
-  - script: sudo chown -R vsts:docker /home/vsts/.npm/
-    displayName: 'BUGS-FIX: change /home/vsts/.npm/ permission'
-  - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
-    displayName: 'TOOLS: display configuration'
-  - bash: $(JHI_SCRIPTS)/03-system.sh
-    displayName: 'TOOLS: configure tools installed by the system'
-  - bash: $(JHI_SCRIPTS)/04-git-config.sh
-    displayName: 'TOOLS: configure git'
+      steps:
+          #----------------------------------------------------------------------
+          # Install all tools and check configuration
+          #----------------------------------------------------------------------
+          - task: NodeTool@0
+            inputs:
+                versionSpec: '10.15.2'
+            displayName: 'TOOLS: install Node.js'
+          - script: |
+                wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+                sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+                sudo apt update
+                sudo apt install google-chrome-stable
+            displayName: 'TOOLS: install google-chrome-stable'
+          - script: sudo npm install -g npm
+            displayName: 'TOOLS: update NPM'
+          - script: sudo chown -R vsts:docker /home/vsts/.npm/
+            displayName: 'BUGS-FIX: change /home/vsts/.npm/ permission'
+          - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
+            displayName: 'TOOLS: display configuration'
+          - bash: $(JHI_SCRIPTS)/03-system.sh
+            displayName: 'TOOLS: configure tools installed by the system'
+          - bash: $(JHI_SCRIPTS)/04-git-config.sh
+            displayName: 'TOOLS: configure git'
 
-  #----------------------------------------------------------------------
-  # Install JHipster and generate project+entities
-  #----------------------------------------------------------------------
-  - bash: $(JHI_SCRIPTS)/10-install-jhipster.sh
-    displayName: 'GENERATION: install JHipster'
-  - bash: $(JHI_SCRIPTS)/11-generate-entities.sh
-    displayName: 'GENERATION: entities'
-  - bash: $(JHI_SCRIPTS)/12-generate-project.sh
-    displayName: 'GENERATION: project'
-  - bash: $(JHI_SCRIPTS)/13-replace-version-generated-project.sh
-    displayName: 'GENERATION: replace version in generated project'
-  - bash: $(JHI_SCRIPTS)/14-jhipster-info.sh
-    displayName: 'GENERATION: jhipster info'
+          #----------------------------------------------------------------------
+          # Install JHipster and generate project+entities
+          #----------------------------------------------------------------------
+          - bash: $(JHI_SCRIPTS)/10-install-jhipster.sh
+            displayName: 'GENERATION: install JHipster'
+          - bash: $(JHI_SCRIPTS)/11-generate-entities.sh
+            displayName: 'GENERATION: entities'
+          - bash: $(JHI_SCRIPTS)/12-generate-project.sh
+            displayName: 'GENERATION: project'
+          - bash: $(JHI_SCRIPTS)/13-replace-version-generated-project.sh
+            displayName: 'GENERATION: replace version in generated project'
+          - bash: $(JHI_SCRIPTS)/14-jhipster-info.sh
+            displayName: 'GENERATION: jhipster info'
 
-  #----------------------------------------------------------------------
-  # Bugs fix
-  #----------------------------------------------------------------------
-  - bash: $(JHI_SCRIPTS)/20-no-memory-limit-elasticsearch.sh
-    displayName: 'BUGS-FIX: no memory limit for Elasticsearch'
+          #----------------------------------------------------------------------
+          # Bugs fix
+          #----------------------------------------------------------------------
+          - bash: $(JHI_SCRIPTS)/20-no-memory-limit-elasticsearch.sh
+            displayName: 'BUGS-FIX: no memory limit for Elasticsearch'
 
-  #----------------------------------------------------------------------
-  # Launch tests
-  #----------------------------------------------------------------------
-  - bash: $(JHI_SCRIPTS)/20-docker-compose.sh
-    displayName: 'TESTS: Start docker-compose containers'
-  - bash: $(JHI_SCRIPTS)/21-tests-backend.sh
-    displayName: 'TESTS: backend'
-  - bash: $(JHI_SCRIPTS)/22-tests-frontend.sh
-    displayName: 'TESTS: frontend'
-  - bash: $(JHI_SCRIPTS)/23-package.sh
-    displayName: 'TESTS: packaging'
-  - bash: $(JHI_SCRIPTS)/24-tests-e2e.sh
-    displayName: 'TESTS: End-to-End'
+          #----------------------------------------------------------------------
+          # Launch tests
+          #----------------------------------------------------------------------
+          - bash: $(JHI_SCRIPTS)/20-docker-compose.sh
+            displayName: 'TESTS: Start docker-compose containers'
+          - bash: $(JHI_SCRIPTS)/21-tests-backend.sh
+            displayName: 'TESTS: backend'
+          - bash: $(JHI_SCRIPTS)/22-tests-frontend.sh
+            displayName: 'TESTS: frontend'
+          - bash: $(JHI_SCRIPTS)/23-package.sh
+            displayName: 'TESTS: packaging'
+          - bash: $(JHI_SCRIPTS)/24-tests-e2e.sh
+            displayName: 'TESTS: End-to-End'

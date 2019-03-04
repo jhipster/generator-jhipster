@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Авторизация",
+        "form": {
+            "password": "Парол",
+            "password.placeholder": "Паролингиз",
+            "rememberme": "Мени эслаб қол",
+            "button": "Кириш"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Кириш имкони бўлмади!</strong> Илтимос, маълумотларингизни текшириб қайта уруниб кўринг."
+            }
+        },
+        "password": {
+            "forgot": "Паролингизни унутдингизми?"
+        }
+    }
+}
