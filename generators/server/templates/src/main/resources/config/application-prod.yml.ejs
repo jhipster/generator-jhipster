@@ -321,7 +321,7 @@ jhipster:
                 # Refresh Token is valid for 7 days
                 token-validity-in-seconds-for-remember-me: 252000
     <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
     security:
         remember-me:
             # security key (this key should be unique for your application, and kept secret)
