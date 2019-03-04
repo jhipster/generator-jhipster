@@ -49,6 +49,7 @@ module.exports = class extends BaseGenerator {
 
         this.herokuSkipBuild = this.options['skip-build'];
         this.herokuSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
+        this.registerPrettierTransform();
     }
 
     initializing() {
