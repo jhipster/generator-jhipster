@@ -86,7 +86,7 @@ public class AccountResource {
 }
 <%_ } else { _%>
 
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 <%_ } _%>
@@ -117,7 +117,7 @@ import reactor.core.publisher.Mono;
 import javax.servlet.http.HttpServletRequest;
 <%_ } _%>
 import javax.validation.Valid;
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 <%_ } _%>
@@ -142,17 +142,17 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
-    <%_ if (authenticationType === 'session') { _%>
+    <%_ if (authenticationType === 'session' && !reactive) { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService<% if (authenticationType === 'session') { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService<% if (authenticationType === 'session' && !reactive) { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
-        <%_ if (authenticationType === 'session') { _%>
+        <%_ if (authenticationType === 'session' && !reactive) { _%>
         this.persistentTokenRepository = persistentTokenRepository;
         <%_ } _%>
     }
@@ -288,7 +288,7 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         <% if (reactive) { %>return <% } %>userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
-    }<% if (authenticationType === 'session') { %>
+    }<% if (authenticationType === 'session' && !reactive) { %>
 
     /**
      * {@code GET  /account/sessions} : get the current open sessions.

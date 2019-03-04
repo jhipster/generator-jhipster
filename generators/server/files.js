@@ -422,7 +422,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType === 'session',
+            condition: generator =>
+                !shouldSkipUserManagement(generator) && generator.authenticationType === 'session' && !generator.reactive,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -802,10 +803,12 @@ const serverFiles = {
     serverJavaApp: [
         {
             path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` },
-                { file: 'package/ApplicationWebXml.java', renameTo: generator => `${generator.javaDir}ApplicationWebXml.java` }
-            ]
+            templates: [{ file: 'package/Application.java', renameTo: generator => `${generator.javaDir}${generator.mainClass}.java` }]
+        },
+        {
+            condition: generator => !generator.reactive,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [{ file: 'package/ApplicationWebXml.java', renameTo: generator => `${generator.javaDir}ApplicationWebXml.java` }]
         }
     ],
     serverJavaConfig: [
@@ -1151,7 +1154,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.skipClient,
+            condition: generator => !generator.skipClient && !generator.reactive,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1230,7 +1233,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.skipClient,
+            condition: generator => !generator.skipClient && !generator.reactive,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
