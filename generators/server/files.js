@@ -54,7 +54,7 @@ const serverFiles = {
             templates: ['Dockerfile', 'entrypoint.sh', '.dockerignore', 'app.yml', 'sonar.yml']
         },
         {
-            condition: generator => generator.prodDatabaseType !== 'no',
+            condition: generator => generator.prodDatabaseType !== 'no' && generator.prodDatabaseType !== 'oracle',
             path: DOCKER_DIR,
             templates: [{ file: generator => `${generator.prodDatabaseType}.yml` }]
         },
