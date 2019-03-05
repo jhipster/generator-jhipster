@@ -43,13 +43,13 @@ const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.0.0';
 const DOCKER_TRAEFIK = 'traefik:1.7.9';
 const DOCKER_CONSUL = 'consul:1.4.2';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v2.7.1';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v2.7.2';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.16.1';
-const DOCKER_GRAFANA = 'grafana/grafana:5.4.3';
+const DOCKER_GRAFANA = 'grafana/grafana:6.0.0';
 const DOCKER_JENKINS = 'jenkins:latest';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
-const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.28.0';
+const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.29.0';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
 // Version of Java, Scala
