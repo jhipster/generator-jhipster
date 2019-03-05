@@ -49,24 +49,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  */
 module.exports = class extends PrivateBase {
     /**
-     * Deprecated
-     * Get the JHipster configuration from the .yo-rc.json file.
-     *
-     * @param {string} namespace - namespace of the .yo-rc.json config file. By default: generator-jhipster
-     */
-    getJhipsterAppConfig(namespace = 'generator-jhipster') {
-        this.warning('This method is deprecated. Use getAllJhipsterConfig');
-        const fromPath = '.yo-rc.json';
-        if (shelljs.test('-f', fromPath)) {
-            const fileData = this.fs.readJSON(fromPath);
-            if (fileData && fileData[namespace]) {
-                return fileData[namespace];
-            }
-        }
-        return false;
-    }
-
-    /**
      * Add a new menu element, at the root of the menu.
      *
      * @param {string} routerName - The name of the Angular router that is added to the menu.
@@ -1781,17 +1763,6 @@ module.exports = class extends PrivateBase {
                 debug: generator.options.debug
             });
         }
-    }
-
-    /**
-     * @Deprecated
-     * Add numbering to a question
-     *
-     * @param {String} msg - question text
-     * @param {boolean} cond - increment question
-     */
-    getNumberedQuestion(msg, cond) {
-        return msg;
     }
 
     /**
