@@ -936,7 +936,7 @@ module.exports = class extends Generator {
                             filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
                             map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
                         )
-                        .subscribe((subRes: I${relationship.otherEntityAngularName}) => 
+                        .subscribe((subRes: I${relationship.otherEntityAngularName}) =>
                             this.${variableName} = [subRes].concat(res)
                         , (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
@@ -951,7 +951,7 @@ module.exports = class extends Generator {
                             map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
                         )
             .subscribe(
-                (res: I${relationship.otherEntityAngularName}[]) => this.${variableName} = res, 
+                (res: I${relationship.otherEntityAngularName}[]) => this.${variableName} = res,
                 (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
@@ -1303,7 +1303,7 @@ module.exports = class extends Generator {
      */
     registerPrettierTransform(generator = this) {
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const prettierFilter = filter(['{,src/**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        const prettierFilter = filter(['{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }
