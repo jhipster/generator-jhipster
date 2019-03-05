@@ -57,7 +57,7 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         String targetUrl = determineTargetUrl(request);
 
         if (response.isCommitted()) {
-            log.error("Response has already been committed. Unable to redirect to " + targetUrl);
+            log.error("Response has already been committed. Unable to redirect to {}", targetUrl);
             return;
         }
 

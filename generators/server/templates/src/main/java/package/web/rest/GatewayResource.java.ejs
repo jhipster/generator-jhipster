@@ -64,6 +64,6 @@ public class GatewayResource {
             routeVM.setServiceInstances(discoveryClient.getInstances(route.getLocation()));
             routeVMs.add(routeVM);
         });
-        return new ResponseEntity<>(routeVMs, HttpStatus.OK);
+        return ResponseEntity.ok(routeVMs);
     }
 }
