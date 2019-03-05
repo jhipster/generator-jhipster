@@ -46,6 +46,11 @@ eureka:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
+management:
+    endpoint:
+        prometheus:
+            enabled: false
+
 spring:
     devtools:
         restart:
