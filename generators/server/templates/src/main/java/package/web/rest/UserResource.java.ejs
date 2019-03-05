@@ -300,9 +300,8 @@ public class UserResource {
         return userService.getAuthorities()<% if (reactive) { %>.collectList()<% } %>;
     }
     <%_ } else { // Cassandra _%>
-    public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers() {
-        final List<<%= asDto('User') %>> userDTOs = userService.getAllManagedUsers();
-        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asDto('User') %>> getAllUsers() {
+        return userService.getAllManagedUsers();
     }
     <%_ } _%>
 

@@ -256,7 +256,7 @@ public class AccountResource {
             throw new InternalServerErrorException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey()<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, userDTO.getImageUrl()<% } %>);
+            userDTO.getLangKey()<% if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { %>, userDTO.getImageUrl()<% } %>);
     <%_ } else { _%>
     public Mono<Void> saveAccount(@Valid @RequestBody <%= asDto('User') %> userDTO) {
         return SecurityUtils.getCurrentUserLogin()
@@ -272,7 +272,7 @@ public class AccountResource {
                 }))
                 .switchIfEmpty(Mono.error(new InternalServerErrorException("User could not be found")))
                 .flatMap(user -> userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                    userDTO.getLangKey(), userDTO.getImageUrl()));
+                    userDTO.getLangKey()<% if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { %>, userDTO.getImageUrl()<% } %>));
     <%_ } _%>
     }
 
