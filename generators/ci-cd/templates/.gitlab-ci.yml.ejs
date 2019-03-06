@@ -162,22 +162,10 @@ maven-compile:
 maven-test:
     stage: test
     script:
-        - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
-    artifacts:
-        reports:
-            junit: target/test-results/test/TEST-*.xml
-        paths:
-            - target/test-results
-            - target/jacoco
-        expire_in: 1 day
-
-maven-integration-test:
-    stage: test
-    script:
         - ./mvnw integration-test -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
-            junit: target/test-results/integrationTest/TEST-*.xml
+            junit: target/test-results/test/TEST-*.xml
         paths:
             - target/test-results
             - target/jacoco
@@ -201,7 +189,6 @@ sonar-analyze:
     stage: analyze
     dependencies:
         - maven-test
-        - maven-integration-test
         <%_ if (!skipClient) { _%>
         - frontend-test
         <%_ } _%>

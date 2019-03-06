@@ -62,7 +62,7 @@ node {
     <%_ } _%>
 <%= indent %>    stage('backend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./mvnw test integration-test"
+<%= indent %>            sh "./mvnw integration-test"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
