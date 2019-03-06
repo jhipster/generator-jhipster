@@ -56,7 +56,7 @@ test:
         - ./mvnw clean integration-test
 <%_ } else if (buildTool === 'gradle') { _%>
         - chmod +x gradlew
-        - ./gradlew clean test --no-daemon
+        - ./gradlew clean test integrationTest --no-daemon
 <%_ } _%>
 <%_ if (!skipClient) { _%>
         - <%= clientPackageManager %> run <%= frontTestCommand %>

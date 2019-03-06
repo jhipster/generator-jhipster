@@ -68,7 +68,7 @@ script:
   - ./mvnw clean integration-test
 <%_ } else if (buildTool === 'gradle') { _%>
   - chmod +x gradlew
-  - ./gradlew clean test
+  - ./gradlew clean test integrationTest
 <%_ } _%>
 <%_ if (!skipClient) { _%>
   <%_ if (buildTool === 'maven') { _%>

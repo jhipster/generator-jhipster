@@ -105,7 +105,7 @@ node {
 
 <%= indent %>    stage('backend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./gradlew test -PnodeInstall --no-daemon"
+<%= indent %>            sh "./gradlew test integrationTest -PnodeInstall --no-daemon"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
