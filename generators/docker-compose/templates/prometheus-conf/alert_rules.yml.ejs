@@ -16,4 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-# Sample alerting rules
+groups:
+- name: example
+  rules:
+  - alert: InstanceDown
+    # Based on https://prometheus.io/docs/prometheus/latest/configuration/template_examples/
+    expr: up == 0
+    for: 10s
+    labels:
+      severity: page
+    annotations:
+      summary: "Instance {{$labels.instance}} down"
+      description: "{{$labels.instance}} of job {{$labels.job}} has been down for more than 10 seconds."
