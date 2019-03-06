@@ -55,7 +55,7 @@ jobs:
   <%_ if (buildTool === 'maven') { _%>
   - script: |
       chmod +x mvnw
-      ./mvnw clean test
+      ./mvnw clean integration-test
   <%_ } else if (buildTool === 'gradle') { _%>
   - script: |
       chmod +x gradlew
