@@ -27,7 +27,6 @@ const DOCKER_MONGODB = 'mongo:4.0.6';
 const DOCKER_COUCHBASE = 'couchbase/server:6.0.1';
 const DOCKER_CASSANDRA = 'cassandra:3.11.4';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
-const DOCKER_ORACLE = 'sath89/oracle-12c:latest';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.11.3';
 const DOCKER_MEMCACHED = 'memcached:1.5.12-alpine';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:4.8.3.Final';
@@ -252,7 +251,6 @@ const constants = {
     DOCKER_COUCHBASE,
     DOCKER_CASSANDRA,
     DOCKER_MSSQL,
-    DOCKER_ORACLE,
     DOCKER_HAZELCAST_MANAGEMENT_CENTER,
     DOCKER_MEMCACHED,
     DOCKER_ELASTICSEARCH,

@@ -28,6 +28,11 @@ const statistics = require('../statistics');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+        this.registerPrettierTransform();
+    }
+
     get initializing() {
         return {
             sayHello() {
