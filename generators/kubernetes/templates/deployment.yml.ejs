@@ -169,10 +169,8 @@ spec:
             <%_ } _%>
         <%_ } _%>
         <%_ if (monitoring === 'prometheus') { _%>
-        - name: JHIPSTER_METRICS_PROMETHEUS_ENABLED
+        - name: MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED
           value: 'true'
-        - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
-          value: /prometheusMetrics
         <%_ } _%>
         <%_ if (deploymentApplicationType === 'microservice') { _%>
         - name: SPRING_SLEUTH_PROPAGATION_KEYS
