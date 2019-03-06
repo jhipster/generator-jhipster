@@ -192,15 +192,13 @@ task integrationTestReport(type: TestReport) {
 }
 
 <%_ if (cucumberTests) { _%>
-
 task cucumberTestReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
     reportOn cucumberTest
 }
+
 <%_ } _%>
-
 <%_ if (databaseType === 'sql') { _%>
-
 if (!project.hasProperty('runList')) {
     project.ext.runList = 'main'
 }
