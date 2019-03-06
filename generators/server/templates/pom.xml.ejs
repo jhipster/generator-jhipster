@@ -1154,6 +1154,9 @@
                              The property must be prefixed with @ and not $. The reason for this is the usage of late binding of variables
                              by other plugins (jacoco in this case) -->
                         <argLine>@{failsafeArgLine}</argLine>
+                        <!-- Due to spring-boot repackage, without adding this property test classes are not found
+                             See https://github.com/spring-projects/spring-boot/issues/6254 -->
+                        <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                         <!-- Force alphabetical order to have a reproducible build -->
                         <runOrder>alphabetical</runOrder>
                         <reportsDirectory>${sonar.junit.itReportFolder}</reportsDirectory>
