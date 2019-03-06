@@ -164,8 +164,8 @@ task integrationTest(type: Test) {
     // ignoreFailures true
     reports.html.enabled = false
 }
-
 <%_ if (cucumberTests) { _%>
+
 task cucumberTest(type: Test) {
     description = "Execute cucumber BDD tests."
     group = "verification"
@@ -179,6 +179,7 @@ task cucumberTest(type: Test) {
 
 check.dependsOn cucumberTest
 <%_ } _%>
+
 check.dependsOn integrationTest
 task testReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
@@ -191,6 +192,7 @@ task integrationTestReport(type: TestReport) {
 }
 
 <%_ if (cucumberTests) { _%>
+
 task cucumberTestReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/tests")
     reportOn cucumberTest
@@ -198,6 +200,7 @@ task cucumberTestReport(type: TestReport) {
 <%_ } _%>
 
 <%_ if (databaseType === 'sql') { _%>
+
 if (!project.hasProperty('runList')) {
     project.ext.runList = 'main'
 }
@@ -234,11 +237,11 @@ liquibase {
 
     runList = project.ext.runList
 }
-<%_ } _%>
 
+<%_ } _%>
 configurations {
     providedRuntime
-    compile.exclude module: "spring-boot-starter-tomcat"
+    implementation.exclude module: "spring-boot-starter-tomcat"
 }
 
 repositories {
@@ -523,7 +526,7 @@ if (project.hasProperty('nodeInstall')) {
         download = true
     }
 }
-<%_ } _%>
 
+<%_ } _%>
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo
