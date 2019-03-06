@@ -165,7 +165,7 @@ maven-test:
         - ./mvnw integration-test -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
-            junit: target/test-results/test/TEST-*.xml
+            junit: target/test-results/**/TEST-*.xml
         paths:
             - target/test-results
             - target/jacoco
