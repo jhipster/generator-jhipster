@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import org.gradle.internal.os.OperatingSystem
-
 dependencies {
     implementation "org.springframework.boot:spring-boot-devtools"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
