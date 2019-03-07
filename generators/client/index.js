@@ -228,6 +228,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     applicationType: this.applicationType,
                     baseName: this.baseName,
                     clientFramework: this.clientFramework,
+                    useSass: true,
                     enableTranslation: this.enableTranslation,
                     skipCommitHook: this.skipCommitHook,
                     clientPackageManager: this.clientPackageManager
