@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 dependencies {
-    implementation "org.springframework.boot:spring-boot-devtools"
+    runtimeOnly "org.springframework.boot:spring-boot-devtools"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     implementation "com.h2database:h2"
     <%_ } _%>
