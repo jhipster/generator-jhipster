@@ -16,12 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import org.gradle.internal.os.OperatingSystem
-
 dependencies {
-    compile "org.springframework.boot:spring-boot-devtools"
+    implementation "org.springframework.boot:spring-boot-devtools"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-    compile "com.h2database:h2"
+    implementation "com.h2database:h2"
     <%_ } _%>
 }
 
