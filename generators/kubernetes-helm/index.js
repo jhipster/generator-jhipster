@@ -57,7 +57,6 @@ module.exports = class extends BaseDockerGenerator {
                 this.kubernetesServiceType = this.config.get('kubernetesServiceType');
                 this.ingressDomain = this.config.get('ingressDomain');
                 this.istio = this.config.get('istio');
-                this.istioRoute = this.config.get('istioRoute');
                 this.jhipsterVersion = packagejs.version;
                 this.dbRandomPassword = Math.random()
                     .toString(36)
@@ -79,7 +78,6 @@ module.exports = class extends BaseDockerGenerator {
             askForDockerRepositoryName: prompts.askForDockerRepositoryName,
             askForDockerPushCommand: prompts.askForDockerPushCommand,
             askForIstioSupport: prompts.askForIstioSupport,
-            askForIstioRouteFiles: prompts.askForIstioRouteFiles,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
             askForIngressDomain: prompts.askForIngressDomain
         };
@@ -118,8 +116,7 @@ module.exports = class extends BaseDockerGenerator {
                     kubernetesServiceType: this.kubernetesServiceType,
                     ingressDomain: this.ingressDomain,
                     monitoring: this.monitoring,
-                    istio: this.istio,
-                    istioRoute: this.istioRoute
+                    istio: this.istio
                 });
             }
         };
