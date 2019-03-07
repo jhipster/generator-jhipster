@@ -751,18 +751,6 @@ module.exports = class extends PrivateBase {
      * @param {string} name - maven ArtifactId
      * @param {string} version - (optional) explicit dependency version number
      */
-    addGradleDependencyManagement(scope, group, name, version) {
-        this.needleApi.serverGradle.addDependencyManagement(scope, group, name, version);
-    }
-
-    /**
-     * A new dependency to build.gradle file.
-     *
-     * @param {string} scope - scope of the new dependency, e.g. compile
-     * @param {string} group - maven GroupId
-     * @param {string} name - maven ArtifactId
-     * @param {string} version - (optional) explicit dependency version number
-     */
     addGradleDependency(scope, group, name, version) {
         this.addGradleDependencyInDirectory('.', scope, group, name, version);
     }
