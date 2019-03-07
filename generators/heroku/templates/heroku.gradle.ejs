@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apply plugin: 'com.heroku.sdk.heroku-gradle'
+apply plugin: "com.heroku.sdk.heroku-gradle"
 
 heroku {
   appName = "<%= herokuAppName %>"
@@ -25,7 +25,7 @@ heroku {
 
 gradle.taskGraph.whenReady {taskGraph ->
     taskGraph.afterTask() {task ->
-        if (task.getName().equals('stage') && System.getenv("DYNO") != null) {
+        if (task.getName().equals("stage") && System.getenv("DYNO") != null) {
             delete "node_modules"
             delete fileTree(dir: "build/libs", exclude: "*.jar")
         }

@@ -87,17 +87,8 @@ Example:
         argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
     },
-    // login: {
-    //     desc: 'Link the installed JHipster CLI to your JHipster Online account'
-    // },
-    // logout: {
-    //     desc: 'Unlink the installed JHipster CLI from your JHipster Online account'
-    // },
     openshift: {
         desc: 'Deploy the current application to OpenShift'
-    },
-    'rancher-compose': {
-        desc: 'Deploy the current application to Rancher'
     },
     'spring-service': {
         alias: 'service',

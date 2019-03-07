@@ -13,8 +13,3 @@ deployment {
   appsFolders [tata, titi],
   dockerRepositoryName "test"
 }
-deployment {
-  deploymentType rancher-compose,
-  appsFolders [tata, titi],
-  dockerRepositoryName "test"
-}
