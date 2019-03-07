@@ -137,7 +137,7 @@ relationship OneToMany {
    * Another side of the same relationship,
    */
   Employee{department},
-  Employee{job} to Job{emp(employee)},
+  Employee{job} to Job{emp(lastName)},
   Location{country} to Country,
   Country{area(region)} to Region
 }
