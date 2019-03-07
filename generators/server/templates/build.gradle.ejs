@@ -46,7 +46,6 @@ plugins {
     <%_ if (!skipClient) { _%>
     id "com.moowork.node" version "1.2.0"
     <%_ } _%>
-    id "io.spring.dependency-management" version "1.0.7.RELEASE"
     id "net.ltgt.apt-eclipse" version "0.21"
     id "net.ltgt.apt-idea" version "0.21"
     id "net.ltgt.apt" version "0.21"
@@ -86,13 +85,6 @@ if (project.hasProperty('zipkin')) {
 idea {
   module {
     excludeDirs += files('node_modules')
-  }
-}
-
-dependencyManagement {
-  imports {
-    mavenBom 'io.github.jhipster:jhipster-dependencies:' + jhipster_dependencies_version
-    //jhipster-needle-gradle-dependency-management - JHipster will add additional dependencies management here
   }
 }
 
@@ -256,6 +248,9 @@ repositories {
 }
 
 dependencies {
+    // import JHipster dependencies BOM
+    implementation enforcedPlatform("io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}" )
+
     // Use ", version: jhipster_dependencies_version, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
     implementation group: "io.github.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
@@ -458,11 +453,11 @@ dependencies {
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     <%_ if (databaseType === 'sql') { _%>
-    annotationProcessor "org.hibernate:hibernate-jpamodelgen"
+    annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernate_version}"
     annotationProcessor "javax.xml.bind:jaxb-api:${jaxb_api_version}"
     annotationProcessor "com.sun.xml.bind:jaxb-impl:${jaxb_impl_version}"
     <%_ } _%>
-    annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor") {
+    annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}") {
         exclude group: 'com.vaadin.external.google', module: 'android-json'
     }
     testImplementation "com.jayway.jsonpath:json-path"
