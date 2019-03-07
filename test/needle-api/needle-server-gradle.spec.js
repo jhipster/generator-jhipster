@@ -41,8 +41,6 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                 this.addGradleProperty('name', 'value');
                 this.addGradlePlugin('group', 'name', 'version');
                 this.addGradlePluginToPluginsBlock('id', 'version');
-                this.addGradleDependencyManagement('scope1', 'group1', 'name1', 'version1');
-                this.addGradleDependencyManagement('scope2', 'group2', 'name2');
                 this.addGradleDependency('scope3', 'group3', 'name3', 'version3');
                 this.addGradleDependency('scope4', 'group4', 'name4');
                 this.addGradleDependencyInDirectory('.', 'scope5', 'group5', 'name5', 'version5');
@@ -101,14 +99,6 @@ describe('needle API server gradle: JHipster server generator with blueprint', (
 
             it('Assert gradle.properties has the PluginToPluginsBlock added', () => {
                 assert.fileContent('build.gradle', 'id "id" version "version"');
-            });
-
-            it('Assert gradle.properties has the DependencyManagement with version added', () => {
-                assert.fileContent('build.gradle', 'scope1 "group1:name1:version1"');
-            });
-
-            it('Assert gradle.properties has the DependencyManagement without version added', () => {
-                assert.fileContent('build.gradle', 'scope2 "group2:name2"');
             });
 
             it('Assert gradle.properties has the Dependency with version added', () => {
