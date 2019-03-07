@@ -23,12 +23,12 @@ dependencies {
     <%_ } _%>
 }
 
-def profiles = 'dev'
-if (project.hasProperty('no-liquibase')) {
-    profiles += ',no-liquibase'
+def profiles = "dev"
+if (project.hasProperty("no-liquibase")) {
+    profiles += ",no-liquibase"
 }
-if (project.hasProperty('tls')) {
-    profiles += ',tls'
+if (project.hasProperty("tls")) {
+    profiles += ",tls"
 }
 
 springBoot {
@@ -45,10 +45,10 @@ bootRun {
 
 <%_ if (!skipClient) { _%>
 task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
-    inputs.files(fileTree('<%= CLIENT_MAIN_SRC_DIR %>'))
+    inputs.files(fileTree("<%= CLIENT_MAIN_SRC_DIR %>"))
 
-    def webpackDevFiles = fileTree('<%= CLIENT_WEBPACK_DIR %>/')
-    webpackDevFiles.exclude('webpack.prod.js')
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>/")
+    webpackDevFiles.exclude("webpack.prod.js")
     inputs.files(webpackDevFiles)
 
     outputs.files(fileTree("<%= CLIENT_DIST_DIR %>"))
@@ -60,20 +60,20 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
 <%_ } _%>
 
 processResources {
-    filesMatching('**/application.yml') {
+    filesMatching("**/application.yml") {
         filter {
-            it.replace('#project.version#', version)
+            it.replace("#project.version#", version)
         }
         <%_ if (!serviceDiscoveryType) { _%>
         filter {
-            it.replace('#spring.profiles.active#', profiles)
+            it.replace("#spring.profiles.active#", profiles)
         }
         <%_ } _%>
     }
     <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-    filesMatching('**/bootstrap.yml') {
+    filesMatching("**/bootstrap.yml") {
         filter {
-            it.replace('#spring.profiles.active#', profiles)
+            it.replace("#spring.profiles.active#", profiles)
         }
     }
     <%_ } _%>

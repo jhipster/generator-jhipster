@@ -50,7 +50,7 @@ plugins {
     id "net.ltgt.apt-idea" version "0.21"
     id "net.ltgt.apt" version "0.21"
     <%_ if (databaseType === 'sql') { _%>
-    id 'org.liquibase.gradle' version '2.0.1'
+    id "org.liquibase.gradle" version "2.0.1"
     <%_ } _%>
     id "org.sonarqube" version "2.7"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
@@ -58,72 +58,72 @@ plugins {
 
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties['java.specification.version'] == '1.8' || '11'
+assert System.properties["java.specification.version"] == "1.8" || "11"
 
-apply plugin: 'org.springframework.boot'
-apply plugin: 'propdeps'
+apply plugin: "org.springframework.boot"
+apply plugin: "propdeps"
 
-apply from: 'gradle/docker.gradle'
-apply from: 'gradle/sonar.gradle'
+apply from: "gradle/docker.gradle"
+apply from: "gradle/sonar.gradle"
 <%_ if (enableSwaggerCodegen) { _%>
-apply from: 'gradle/swagger.gradle'
+apply from: "gradle/swagger.gradle"
 <%_ } _%>
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
-if (project.hasProperty('prod')) {
-    apply from: 'gradle/profile_prod.gradle'
+if (project.hasProperty("prod")) {
+    apply from: "gradle/profile_prod.gradle"
 } else {
-    apply from: 'gradle/profile_dev.gradle'
+    apply from: "gradle/profile_dev.gradle"
 }
 
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
-if (project.hasProperty('zipkin')) {
-    apply from: 'gradle/zipkin.gradle'
+if (project.hasProperty("zipkin")) {
+    apply from: "gradle/zipkin.gradle"
 }
 <%_ } _%>
 
 idea {
   module {
-    excludeDirs += files('node_modules')
+    excludeDirs += files("node_modules")
   }
 }
 
-defaultTasks 'bootRun'
+defaultTasks "bootRun"
 
-group = '<%= packageName %>'
-version = '0.0.1-SNAPSHOT'
+group = "<%= packageName %>"
+version = "0.0.1-SNAPSHOT"
 
-description = ''
+description = ""
 
 bootWar {
-    mainClassName = '<%= packageName %>.<%= mainClass %>'
-    includes = ['WEB-INF/**', 'META-INF/**']
+    mainClassName = "<%= packageName %>.<%= mainClass %>"
+    includes = ["WEB-INF/**", "META-INF/**"]
 }
 
 war {
     <%_ if (!skipClient) { _%>
-    webAppDirName = '<%= CLIENT_DIST_DIR %>'
+    webAppDirName = "<%= CLIENT_DIST_DIR %>"
     <%_ } _%>
     enabled = true
-    extension = 'war.original'
-    includes = ['WEB-INF/**', 'META-INF/**']
+    extension = "war.original"
+    includes = ["WEB-INF/**", "META-INF/**"]
 }
 
 springBoot {
-    mainClassName = '<%= packageName %>.<%= mainClass %>'
+    mainClassName = "<%= packageName %>.<%= mainClass %>"
 }
 
 if (OperatingSystem.current().isWindows()) {
     // https://stackoverflow.com/questions/40037487/the-filename-or-extension-is-too-long-error-using-gradle
     task classpathJar(type: Jar) {
         dependsOn configurations.runtime
-        appendix = 'classpath'
+        appendix = "classpath"
 
         doFirst {
             manifest {
-                attributes 'Class-Path': configurations.runtime.files.collect {
-                    it.toURI().toURL().toString().replaceFirst(/file:\/+/, '/').replaceAll(' ', '%20')
-                }.join(' ')
+                attributes "Class-Path": configurations.runtime.files.collect {
+                    it.toURI().toURL().toString().replaceFirst(/file:\/+/, "/").replaceAll(" ", "%20")
+                }.join(" ")
             }
         }
     }
@@ -137,7 +137,7 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 test {
-    exclude '**/*IT*', '**/*IntTest*', '**/*CucumberIT*'
+    exclude "**/*IT*", "**/*IntTest*", "**/*CucumberIT*"
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
@@ -148,8 +148,8 @@ test {
 task integrationTest(type: Test) {
     description = "Execute integration tests."
     group = "verification"
-    include '**/*IT*', '**/*IntTest*'
-    exclude '**/*CucumberIT*'
+    include "**/*IT*", "**/*IntTest*"
+    exclude "**/*CucumberIT*"
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
@@ -161,7 +161,7 @@ task integrationTest(type: Test) {
 task cucumberTest(type: Test) {
     description = "Execute cucumber BDD tests."
     group = "verification"
-    include '**/*CucumberIT*'
+    include "**/*CucumberIT*"
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
@@ -191,36 +191,36 @@ task cucumberTestReport(type: TestReport) {
 
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
-if (!project.hasProperty('runList')) {
-    project.ext.runList = 'main'
+if (!project.hasProperty("runList")) {
+    project.ext.runList = "main"
 }
 
-project.ext.diffChangelogFile = '<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/' + new Date().format('yyyyMMddHHmmss') + '_changelog.xml'
+project.ext.diffChangelogFile = "<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
 
 liquibase {
     activities {
         main {
-            driver '<% if (devDatabaseType === 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>'
-            url '<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>'
-            username '<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>'
-            password '<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>'
-            changeLogFile '<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml'
-            defaultSchemaName '<% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %>'
-            logLevel 'debug'
-            classpath '<%= SERVER_MAIN_RES_DIR %>'
+            driver "<% if (devDatabaseType === 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>"
+            url "<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>"
+            username "<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>"
+            password "<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>"
+            changeLogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
+            defaultSchemaName "<% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %>"
+            logLevel "debug"
+            classpath "<%= SERVER_MAIN_RES_DIR %>"
         }
         diffLog {
-            driver '<% if (devDatabaseType === 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>'
-            url '<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>'
-            username '<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>'
-            password '<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>'
+            driver "<% if (devDatabaseType === 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>"
+            url "<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>"
+            username "<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>"
+            password "<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>"
             changeLogFile project.ext.diffChangelogFile
-            referenceUrl 'hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL95Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServerDialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy'
-            defaultSchemaName '<% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %>'
-            logLevel 'debug'
+            referenceUrl "hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL95Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServerDialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
+            defaultSchemaName "<% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %>"
+            logLevel "debug"
             classpath "$buildDir/classes/java/main"
             <%_ if (authenticationType === 'oauth2') { _%>
-            excludeObjects 'oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token'
+            excludeObjects "oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
             <%_ } _%>
         }
     }
@@ -254,13 +254,13 @@ dependencies {
     // Use ", version: jhipster_dependencies_version, changing: true" if you want
     // to use a SNAPSHOT release instead of a stable release
     implementation group: "io.github.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
-        exclude group: 'org.springframework', module: 'spring-webmvc'
+        exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
     <%_ if (cacheProvider !== 'no') { _%>
     implementation "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
     implementation "io.dropwizard.metrics:metrics-core"
-    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation "io.micrometer:micrometer-registry-prometheus"
     implementation "net.logstash.logback:logstash-logback-encoder"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
@@ -290,7 +290,7 @@ dependencies {
     implementation "org.infinispan:infinispan-core"
     implementation "org.infinispan:infinispan-jcache"
     implementation ("org.infinispan:infinispan-cloud") {
-        exclude module: 'undertow-core'
+        exclude module: "undertow-core"
     }
     <%_ } _%>
     <%_ if (cacheProvider === 'memcached') { _%>
@@ -341,7 +341,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
     // Spring Data Jest dependencies for Elasticsearch
     implementation ("com.github.vanroy:spring-boot-starter-data-jest") {
-        exclude module: 'commons-logging'
+        exclude module: "commons-logging"
     }
     // log4j needed to create embedded elasticsearch instance
     runtimeOnly "org.apache.logging.log4j:log4j-api:2.7"
@@ -358,7 +358,7 @@ dependencies {
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
-        exclude module: 'spring-boot-starter-tomcat'
+        exclude module: "spring-boot-starter-tomcat"
     }
     implementation "org.springframework.boot:spring-boot-starter-undertow"
     <%_ if (websocket === 'spring-websocket') { _%>
@@ -428,7 +428,7 @@ dependencies {
     <%_ } _%>
     <%_ if (!reactive) { _%>
     implementation ("io.springfox:springfox-swagger2") {
-        exclude module: 'mapstruct'
+        exclude module: "mapstruct"
     }
     implementation "io.springfox:springfox-bean-validators"
     <%_ } _%>
@@ -458,12 +458,12 @@ dependencies {
     annotationProcessor "com.sun.xml.bind:jaxb-impl:${jaxb_impl_version}"
     <%_ } _%>
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}") {
-        exclude group: 'com.vaadin.external.google', module: 'android-json'
+        exclude group: "com.vaadin.external.google", module: "android-json"
     }
     testImplementation "com.jayway.jsonpath:json-path"
     <%_ if (databaseType === 'cassandra') { _%>
     testImplementation ("org.cassandraunit:cassandra-unit-spring") {
-        exclude(group: 'org.slf4j')
+        exclude(group: "org.slf4j")
     }
     testImplementation "org.testcontainers:database-commons"
     <%_ } _%>
@@ -472,7 +472,7 @@ dependencies {
     testImplementation "io.cucumber:cucumber-spring"
     <%_ } _%>
     testImplementation ("org.springframework.boot:spring-boot-starter-test") {
-        exclude group: 'com.vaadin.external.google', module: 'android-json'
+        exclude group: "com.vaadin.external.google", module: "android-json"
     }
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
@@ -503,15 +503,15 @@ dependencies {
 }
 
 task cleanResources(type: Delete) {
-    delete 'build/resources'
+    delete "build/resources"
 }
 
 wrapper {
-    gradleVersion = '5.2.1'
+    gradleVersion = "5.2.1"
 }
 <%_ if (!skipClient) { _%>
 
-if (project.hasProperty('nodeInstall')) {
+if (project.hasProperty("nodeInstall")) {
     node {
         version = "${node_version}"
         npmVersion = "${npm_version}"
