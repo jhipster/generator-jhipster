@@ -822,7 +822,6 @@ public class UserService {
 
     private static <%= asEntity('User') %> getUser(Map<String, Object> details) {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
-        final String defaultLocale = "en";
         user.setId((String) details.get("sub"));
         if (details.get("preferred_username") != null) {
             user.setLogin(((String) details.get("preferred_username")).toLowerCase());
@@ -852,12 +851,12 @@ public class UserService {
             // for other languages, please handle it accordingly.
             String locale = (String) details.get("locale");
             if (locale.startsWith("en_") || locale.startsWith("en-")) {
-                locale = defaultLocale;
+                locale = Constants.DEFAULT_LANGUAGE;
             }
             user.setLangKey(locale.toLowerCase());
         } else {
             // set langKey to default if not specified by IdP
-            user.setLangKey(defaultLocale);
+            user.setLangKey(Constants.DEFAULT_LANGUAGE);
         }
         if (details.get("picture") != null) {
             user.setImageUrl((String) details.get("picture"));
