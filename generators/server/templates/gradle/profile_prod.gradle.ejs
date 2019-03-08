@@ -40,11 +40,11 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webpack_test(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: "<%= clientPackageManager %>_install") {
+task webpack_test(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: "<%= clientPackageManager %>Install") {
     args = ["run", "webpack:test"]
 }
 
-task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: "<%= clientPackageManager %>_install") {
+task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: "<%= clientPackageManager %>Install") {
     args = ["run", "webpack:prod"]
 }
 <%_ } _%>
