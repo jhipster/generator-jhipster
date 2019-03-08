@@ -1627,7 +1627,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    const BOOLEAN = ['istioRoute', 'enableRancherLoadBalancing'];
+    const BOOLEAN = ['istioRoute'];
 
     BOOLEAN.forEach(type => {
       context(`and using for ${type}`, () => {

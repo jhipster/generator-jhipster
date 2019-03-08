@@ -1229,24 +1229,9 @@ describe('JDLImporter', () => {
             serviceDiscoveryType: 'eureka',
             storageType: 'ephemeral'
           }
-        },
-        {
-          'generator-jhipster': {
-            appsFolders: ['tata', 'titi'],
-            clusteredDbApps: [],
-            consoleOptions: [],
-            directoryPath: '../',
-            deploymentType: 'rancher-compose',
-            dockerPushCommand: 'docker push',
-            dockerRepositoryName: 'test',
-            enableRancherLoadBalancing: false,
-            gatewayType: 'zuul',
-            monitoring: 'no',
-            serviceDiscoveryType: 'eureka'
-          }
         }
       ];
-      const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes', 'openshift', 'rancher-compose'];
+      const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes', 'openshift'];
 
       before(() => {
         const importer = new JDLImporter([path.join('test', 'test_files', 'deployments.jdl')]);
