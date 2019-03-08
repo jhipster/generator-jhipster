@@ -851,7 +851,7 @@ public class UserService {
             // Since JHipter only has one "en" language, we will handle it here,
             // for other languages, please handle it accordingly.
             String locale = (String) details.get("locale");
-            if(locale.startsWith("en_") || locale.startsWith("en-")) {
+            if (locale.startsWith("en_") || locale.startsWith("en-")) {
                 locale = defaultLocale;
             }
             user.setLangKey(locale.toLowerCase());
