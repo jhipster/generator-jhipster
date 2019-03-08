@@ -127,11 +127,11 @@
         <maven-war-plugin.version>3.2.2</maven-war-plugin.version>
         <jib-maven-plugin.version>0.9.11</jib-maven-plugin.version>
         <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.7.5</frontend-maven-plugin.version>
         <%_ } _%>
         <jacoco-maven-plugin.version>0.8.3</jacoco-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <scala-maven-plugin.version>3.4.4</scala-maven-plugin.version>
+        <scala-maven-plugin.version>4.0.1</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
         <openapi-generator-maven-plugin.version>3.3.4</openapi-generator-maven-plugin.version>
@@ -1701,7 +1701,7 @@
                                         <pluginExecution>
                                             <pluginExecutionFilter>
                                                 <groupId>com.github.eirslett</groupId>
-                                        <artifactId>frontend-maven-plugin</artifactId>
+                                                <artifactId>frontend-maven-plugin</artifactId>
                                                 <versionRange>${frontend-maven-plugin.version}</versionRange>
                                                 <goals>
                                                     <%_ if (clientPackageManager === 'yarn') { _%>
