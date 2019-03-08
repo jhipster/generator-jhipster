@@ -201,6 +201,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.error(chalk.red('The entity cannot be generated as the entity suffix and DTO suffix are equals !'));
                 }
 
+                context.dto = configuration.get('dto');
+                context.service = configuration.get('service');
+                context.jpaMetamodelFiltering = configuration.get('service');
+                context.pagination = configuration.get('pagination');
+
                 context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
@@ -299,13 +304,60 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     return;
                 }
                 const entityName = context.entityName;
-                if (_.isUndefined(context.field)) {
+                if (_.isUndefined(context.fieldName)) {
                     this.error(chalk.red('field name is missing.'));
                 }
                 if (_.isUndefined(context.fieldType)) {
                     this.error(chalk.red('field type is missing.'));
                 }
+                if (_.isUndefined(context.dto)) {
+                    this.warning(`dto is missing in .jhipster/${entityName}.json, using no as fallback`);
+                    context.dto = 'no';
+                }
+                if (_.isUndefined(context.service)) {
+                    this.warning(`service is missing in .jhipster/${entityName}.json, using no as fallback`);
+                    context.service = 'no';
+                }
+                if (_.isUndefined(context.jpaMetamodelFiltering)) {
+                    this.warning(`jpaMetamodelFiltering is missing in .jhipster/${entityName}.json, using 'no' as fallback`);
+                    context.jpaMetamodelFiltering = false;
+                }
+                if (_.isUndefined(context.pagination)) {
+                    this.warning(`pagination is missing in .jhipster/${entityName}.json, using no as fallback`);
+                    context.pagination = 'no';
+                }
+                if (!context.clientRootFolder && !context.skipUiGrouping) {
+                    // if it is a gateway generating from a microservice, or a microservice
+                    if (context.useMicroserviceJson || context.applicationType === 'microservice') {
+                        context.clientRootFolder = context.microserviceName;
+                    }
+                }
+
+                // If the field is not a relationship
+                context.isRelationship = !['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'Instant', 'ZonedDateTime', 'Boolean'].includes(context.fieldType);
+
+            },
+            writeEntityJson() {
+                const context = this.context;
+                // store information in a file for further use.
+                if (!context.useConfigurationFile && ['sql', 'cassandra'].includes(context.databaseType)) {
+                    context.changelogDate = this.dateFormatForLiquibase();
+                }
+                this.data = {};
+                this.data.fluentMethods = context.fluentMethods;
+                this.data.clientRootFolder = context.clientRootFolder;
+                this.data.changelogDate = context.changelogDate;
+                this.data.dto = context.dto;
+                this.data.searchEngine = context.searchEngine;
+                this.data.service = context.service;
+                this.data.databaseType = context.databaseType;
+                this.copyFilteringFlag(context, this.data, context);
+                if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
+                    this.data.pagination = context.pagination;
+                } else {
+                    this.data.pagination = 'no';
+                }
             }
-        };
+        }
     }
 }
