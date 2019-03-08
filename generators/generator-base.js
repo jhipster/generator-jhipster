@@ -530,29 +530,6 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add new css style to the angular application in "global.css.
-     *
-     * @param {string} style - css to add in the file
-     * @param {string} comment - comment to add before css code
-     *
-     * example:
-     *
-     * style = '.jhipster {\n     color: #baa186;\n}'
-     * comment = 'New JHipster color'
-     *
-     * * ==========================================================================
-     * New JHipster color
-     * ========================================================================== *
-     * .jhipster {
-     *     color: #baa186;
-     * }
-     *
-     */
-    addMainCSSStyle(style, comment) {
-        this.needleApi.clientAngular.addGlobalCSSStyle(style, comment);
-    }
-
-    /**
      * Add new scss style to the angular application in "global.scss
      *
      * @param {string} style - css to add in the file

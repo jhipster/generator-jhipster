@@ -427,7 +427,6 @@ module.exports = class extends BaseBlueprintGenerator {
     _default() {
         return {
             getSharedConfigOptions() {
-                this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
                 if (this.configOptions.enableTranslation !== undefined) {
                     this.enableTranslation = this.configOptions.enableTranslation;
                 }

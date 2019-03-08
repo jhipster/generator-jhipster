@@ -39,7 +39,6 @@ describe('JHipster application generator with blueprint', () => {
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
                     prodDatabaseType: 'mysql',
-                    useSass: false,
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr']
@@ -52,7 +51,6 @@ describe('JHipster application generator with blueprint', () => {
             assert.file(expectedFiles.server);
             assert.file(
                 getFilesForOptions(angularFiles, {
-                    useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',

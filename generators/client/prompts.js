@@ -21,7 +21,6 @@ const chalk = require('chalk');
 module.exports = {
     askForModuleName,
     askForClient,
-    askForClientSideOpts,
     askFori18n
 };
 
@@ -62,24 +61,6 @@ function askForClient(meta) {
 
     this.prompt(PROMPT).then(prompt => {
         this.clientFramework = prompt.clientFramework;
-        done();
-    });
-}
-
-function askForClientSideOpts() {
-    if (this.existingProject) return;
-
-    const done = this.async();
-    const prompts = [
-        {
-            type: 'confirm',
-            name: 'useSass',
-            message: `Would you like to enable ${chalk.yellow('*SASS*')} stylesheet preprocessor?`,
-            default: true
-        }
-    ];
-    this.prompt(prompts).then(props => {
-        this.useSass = props.useSass;
         done();
     });
 }
