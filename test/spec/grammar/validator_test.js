@@ -1549,7 +1549,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    const ALPHANUMERIC_NAME = ['kubernetesServiceType', 'istio'];
+    const ALPHANUMERIC_NAME = ['kubernetesServiceType'];
 
     ALPHANUMERIC_NAME.forEach(type => {
       context(`and using for ${type}`, () => {
@@ -1627,35 +1627,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    const BOOLEAN = ['istioRoute'];
 
-    BOOLEAN.forEach(type => {
-      context(`and using for ${type}`, () => {
-        context('a valid value', () => {
-          it('does not report a syntax error', () => {
-            expect(() =>
-              parse(`
-            deployment {
-              ${type} true
-            }`)
-            ).to.not.throw();
-          });
-        });
-
-        context('an invalid value', () => {
-          context('such as having numbers or chars', () => {
-            it('will report a syntax error', () => {
-              expect(() =>
-                parse(`
-                deployment {
-                  ${type} test_123
-              }`)
-              ).to.throw('A boolean literal is expected, but found: "test_123"');
-            });
-          });
-        });
-      });
-    });
     const URL_TYPE = ['ingressDomain', 'dockerRepositoryName'];
     URL_TYPE.forEach(type => {
       context(`and using for ${type}`, () => {

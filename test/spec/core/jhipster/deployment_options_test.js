@@ -78,8 +78,7 @@ describe('DeploymentOptions', () => {
             monitoring: 'no',
             serviceDiscoveryType: 'eureka',
             ingressDomain: '',
-            istio: 'no',
-            istioRoute: false,
+            istio: false,
             kubernetesNamespace: 'default',
             kubernetesServiceType: 'LoadBalancer'
           });

@@ -1206,8 +1206,7 @@ describe('JDLImporter', () => {
             dockerRepositoryName: 'test',
             gatewayType: 'zuul',
             ingressDomain: '',
-            istio: 'no',
-            istioRoute: false,
+            istio: false,
             kubernetesNamespace: 'default',
             kubernetesServiceType: 'LoadBalancer',
             monitoring: 'no',
@@ -1421,8 +1420,7 @@ describe('JDLImporter', () => {
             kubernetesNamespace: 'default',
             kubernetesServiceType: 'LoadBalancer',
             ingressDomain: '',
-            istio: 'no',
-            istioRoute: false
+            istio: false
           }
         }
       ];
