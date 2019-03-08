@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "[<b>{{username}}</b>] uchun faol sessiyalar",
+        "title": "[<strong>{{username}}</strong>] uchun faol sessiyalar",
         "table": {
             "ipaddress": "IP manzil",
             "useragent": "User Agent",

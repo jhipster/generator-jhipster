@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "[<b>{{username}}</b>] యొక్క క్రియాశీల సెషన్స్",
+        "title": "[<strong>{{username}}</strong>] యొక్క క్రియాశీల సెషన్స్",
         "table": {
             "ipaddress": "ఇపి అడ్రస్",
             "useragent": "యూజర్ ఏజెంట్",

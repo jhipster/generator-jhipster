@@ -31,9 +31,11 @@ const statistics = require('../statistics');
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 let useBlueprint;
 
-module.exports = class extends BaseBlueprintGenerator {
+class EntityGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
+
+        this.configOptions = this.options.configOptions || {};
 
         // This makes `name` a required argument.
         this.argument('name', {
@@ -122,13 +124,12 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
-        const blueprint = this.config.get('blueprint');
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'entity', {
-                'skip-install': this.options['skip-install'],
-                'from-cli': this.options['from-cli'],
-                force: this.options.force,
+                ...this.options,
+                configOptions: this.configOptions,
                 arguments: [this.context.name]
             });
         } else {
@@ -1081,9 +1082,11 @@ module.exports = class extends BaseBlueprintGenerator {
             composeServer() {
                 const context = this.context;
                 if (context.skipServer) return;
+                const configOptions = this.configOptions;
 
                 this.composeWith(require.resolve('../entity-server'), {
                     context,
+                    configOptions,
                     force: context.options.force,
                     debug: context.isDebugEnabled
                 });
@@ -1092,9 +1095,11 @@ module.exports = class extends BaseBlueprintGenerator {
             composeClient() {
                 const context = this.context;
                 if (context.skipClient) return;
+                const configOptions = this.configOptions;
 
                 this.composeWith(require.resolve('../entity-client'), {
                     context,
+                    configOptions,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,
                     debug: context.isDebugEnabled
@@ -1104,9 +1109,10 @@ module.exports = class extends BaseBlueprintGenerator {
             composeI18n() {
                 const context = this.context;
                 if (context.skipClient) return;
-
+                const configOptions = this.configOptions;
                 this.composeWith(require.resolve('../entity-i18n'), {
                     context,
+                    configOptions,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,
                     debug: context.isDebugEnabled
@@ -1158,4 +1164,6 @@ module.exports = class extends BaseBlueprintGenerator {
         if (useBlueprint) return;
         return this._install();
     }
-};
+}
+
+module.exports = EntityGenerator;

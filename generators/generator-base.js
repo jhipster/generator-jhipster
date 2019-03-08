@@ -31,7 +31,7 @@ const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
-const NeedleApi = require('./internal/needle-api/index');
+const NeedleApi = require('./needle-api');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -48,11 +48,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
-    constructor(args, opts) {
-        super(args, opts);
-        this.needleApi = new NeedleApi(this);
-    }
-
     /**
      * Deprecated
      * Get the JHipster configuration from the .yo-rc.json file.
@@ -95,7 +90,7 @@ module.exports = class extends PrivateBase {
      * @param {string} comment - comment to add before resources content.
      */
     addExternalResourcesToRoot(resources, comment) {
-        this.needleApi.base.addExternalResourcesToRoot(resources, comment);
+        this.needleApi.client.addExternalResourcesToRoot(resources, comment);
     }
 
     /**
@@ -116,20 +111,12 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add a new entity route path to webpacks config
-     *
-     * @param {string} microserviceName - The name of the microservice to put into the url
-     */
-    addEntityToWebpack(microserviceName) {
-        this.needleApi.clientWebpack.addEntity(microserviceName);
-    }
-
-    /**
      * Add a new entity in the "entities" menu.
      *
      * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
+     * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
      */
     addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
         if (this.clientFramework === 'angularX') {
@@ -149,6 +136,7 @@ module.exports = class extends PrivateBase {
      * @param {string} entityFileName - Entity File Name
      * @param {boolean} entityUrl - Entity router URL
      * @param {string} clientFramework - The name of the client framework
+     * @param {string} microServiceName - Microservice Name
      */
     addEntityToModule(
         entityInstance,
@@ -542,7 +530,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add new css or scss style to the angular application in "global.css" or "global.scss".
+     * Add new css style to the angular application in "global.css.
      *
      * @param {string} style - css to add in the file
      * @param {string} comment - comment to add before css code
@@ -560,17 +548,31 @@ module.exports = class extends PrivateBase {
      * }
      *
      */
-    addGlobalCSSStyle(style, comment) {
-        if (this.clientFramework !== 'angularX') {
-            this.error('Global css is only supported by Angular, for React @see addAppCSSStyle()');
-            return;
-        }
+    addMainCSSStyle(style, comment) {
+        this.needleApi.clientAngular.addGlobalCSSStyle(style, comment);
+    }
 
-        if (this.useSass) {
-            this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
-        } else {
-            this.needleApi.clientAngular.addGlobalCSSStyle(style, comment);
-        }
+    /**
+     * Add new scss style to the angular application in "global.scss
+     *
+     * @param {string} style - css to add in the file
+     * @param {string} comment - comment to add before css code
+     *
+     * example:
+     *
+     * style = '.jhipster {\n     color: #baa186;\n}'
+     * comment = 'New JHipster color'
+     *
+     * * ==========================================================================
+     * New JHipster color
+     * ========================================================================== *
+     * .jhipster {
+     *     color: #baa186;
+     * }
+     *
+     */
+    addMainSCSSStyle(style, comment) {
+        this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
     }
 
     /**
@@ -594,44 +596,7 @@ module.exports = class extends PrivateBase {
      *
      */
     addVendorSCSSStyle(style, comment) {
-        if (this.clientFramework !== 'angularX') {
-            this.error('Vendor is only supported by Angular');
-            return;
-        }
-
         this.needleApi.clientAngular.addVendorSCSSStyle(style, comment);
-    }
-
-    /**
-     * Add new css or scss style to the react application in "app.css" or "app.scss".
-     *
-     * @param {string} style - css to add in the file
-     * @param {string} comment - comment to add before css code
-     *
-     * example:
-     *
-     * style = '.jhipster {\n     color: #baa186;\n}'
-     * comment = 'New JHipster color'
-     *
-     * * ==========================================================================
-     * New JHipster color
-     * ========================================================================== *
-     * .jhipster {
-     *     color: #baa186;
-     * }
-     *
-     */
-    addAppCSSStyle(style, comment) {
-        if (this.clientFramework !== 'react') {
-            this.error('App css is only supported by React');
-            return;
-        }
-
-        if (this.useSass) {
-            this.needleApi.clientReact.addAppSCSSStyle(style, comment);
-        } else {
-            this.needleApi.clientReact.addAppCSSStyle(style, comment);
-        }
     }
 
     /**
@@ -681,8 +646,10 @@ module.exports = class extends PrivateBase {
     /**
      * Add a distributionManagement to the Maven build.
      *
-     * @param {string} id - id of the repository
-     * @param {string} url - url of the repository
+     * @param {string} snapshotsId Snapshots Repository Id
+     * @param {string} snapshotsUrl Snapshots Repository Url
+     * @param {string} releasesId Repository Id
+     * @param {string} releasesUrl Repository Url
      */
     addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
         this.needleApi.serverMaven.addDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl);
@@ -784,18 +751,6 @@ module.exports = class extends PrivateBase {
      * @param {string} name - maven ArtifactId
      * @param {string} version - (optional) explicit dependency version number
      */
-    addGradleDependencyManagement(scope, group, name, version) {
-        this.needleApi.serverGradle.addDependencyManagement(scope, group, name, version);
-    }
-
-    /**
-     * A new dependency to build.gradle file.
-     *
-     * @param {string} scope - scope of the new dependency, e.g. compile
-     * @param {string} group - maven GroupId
-     * @param {string} name - maven ArtifactId
-     * @param {string} version - (optional) explicit dependency version number
-     */
     addGradleDependency(scope, group, name, version) {
         this.addGradleDependencyInDirectory('.', scope, group, name, version);
     }
@@ -803,6 +758,7 @@ module.exports = class extends PrivateBase {
     /**
      * A new dependency to build.gradle file in a specific folder.
      *
+     * @param {string} directory - directory
      * @param {string} scope - scope of the new dependency, e.g. compile
      * @param {string} group - maven GroupId
      * @param {string} name - maven ArtifactId
@@ -1807,6 +1763,7 @@ module.exports = class extends PrivateBase {
                 'skip-server': skipServer,
                 'skip-client': skipClient,
                 'from-cli': generator.options['from-cli'],
+                skipChecks: generator.options.skipChecks,
                 languages: generator.languages,
                 force: generator.options.force,
                 debug: generator.options.debug
@@ -1836,7 +1793,7 @@ module.exports = class extends PrivateBase {
         let buildCmd = 'mvnw verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew bootWar -x test';
+            buildCmd = 'gradlew bootJar -x test';
         }
 
         if (os.platform() !== 'win32') {
@@ -1936,6 +1893,12 @@ module.exports = class extends PrivateBase {
         dest.clientPackageManager = context.configOptions.clientPackageManager;
         dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
         dest.experimental = context.configOptions.experimental || context.options.experimental;
+
+        const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
+        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
+            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+        }
+        dest.uaaBaseName = uaaBaseName;
     }
 
     /**
@@ -1955,11 +1918,6 @@ module.exports = class extends PrivateBase {
         if (dest.authenticationType === 'oauth2') {
             dest.skipUserManagement = true;
         }
-        const uaaBaseName = context.configOptions.uaaBaseName || context.config.get('uaaBaseName');
-        if (!dest.skipClient && dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
-            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        dest.uaaBaseName = uaaBaseName;
         dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
 
         dest.buildTool = context.configOptions.buildTool;
@@ -2070,5 +2028,12 @@ module.exports = class extends PrivateBase {
      */
     asDto(name) {
         return name + this.dtoSuffix;
+    }
+
+    get needleApi() {
+        if (this._needleApi === undefined || this._needleApi === null) {
+            this._needleApi = new NeedleApi(this);
+        }
+        return this._needleApi;
     }
 };

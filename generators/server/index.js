@@ -56,19 +56,21 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
+        this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
+
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'server', {
+                ...this.options,
                 'client-hook': !this.skipClient,
-                'from-cli': this.options['from-cli'],
-                configOptions: this.configOptions,
-                force: this.options.force
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;
         }
+        this.registerPrettierTransform();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -104,7 +106,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
                 this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
-                this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
                 this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
                 this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
@@ -212,7 +213,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.jwtSecretKey = configuration.get('jwtSecretKey');
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
-                this.uaaBaseName = configuration.get('uaaBaseName');
+                const uaaBaseName = configuration.get('uaaBaseName');
+                if (uaaBaseName) {
+                    this.uaaBaseName = uaaBaseName;
+                }
                 this.clientFramework = configuration.get('clientFramework');
                 const testFrameworks = configuration.get('testFrameworks');
                 if (testFrameworks) {
@@ -322,12 +326,15 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.configOptions.buildTool = this.buildTool;
                 this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
                 this.configOptions.authenticationType = this.authenticationType;
-                this.configOptions.uaaBaseName = this.uaaBaseName;
+                const uaaBaseName = this.uaaBaseName;
+                if (uaaBaseName) {
+                    this.configOptions.uaaBaseName = this.uaaBaseName;
+                }
                 this.configOptions.serverPort = this.serverPort;
 
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
-                this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
+                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
             }
         };
     }
@@ -436,6 +443,9 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
+                }
+                if (this.configOptions.uaaBaseName !== undefined) {
+                    this.uaaBaseName = this.configOptions.uaaBaseName;
                 }
                 this.gatlingTests = this.testFrameworks.includes('gatling');
                 this.cucumberTests = this.testFrameworks.includes('cucumber');

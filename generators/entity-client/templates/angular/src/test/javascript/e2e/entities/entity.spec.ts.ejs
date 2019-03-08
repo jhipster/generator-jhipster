@@ -140,34 +140,34 @@ describe('<%= entityClass %> e2e test', () => {
             const fieldTypeBlobContent = field.fieldTypeBlobContent;
             const fieldIsEnum = field.fieldIsEnum;
             if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5', 'Expected <%=fieldName%> value to be equals to 5');
             <%_ } else if (fieldType === 'LocalDate') { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('2000-12-31');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('2000-12-31', 'Expected <%=fieldName%> value to be equals to 2000-12-31');
             <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30', 'Expected <%=fieldName%> value to be equals to 2000-12-31');
             <%_ } else if (fieldType === 'Boolean') { _%>
         const selected<%= fieldNameCapitalized %> = <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input();
         if (await selected<%= fieldNameCapitalized %>.isSelected()) {
             await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.false;
+            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected(), 'Expected <%=fieldName%> not to be selected').to.be.false;
         } else {
             await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.true;
+            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected(), 'Expected <%=fieldName%> to be selected').to.be.true;
         }
             <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldName %>');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldName %>', 'Expected <%=fieldNameCapitalized%> value to be equals to <%=fieldName%>');
             <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.endsWith(fileNameToUpload);
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.endsWith(fileNameToUpload, 'Expected <%=fieldNameCapitalized%> value to be end with ' + fileNameToUpload);
             <%_ } else if (fieldType === 'UUID'){ _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('64c99148-3908-465d-8c4a-e510e3ade974');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('64c99148-3908-465d-8c4a-e510e3ade974', 'Expected <%=fieldNameCapitalized%> value to be equals to 64c99148-3908-465d-8c4a-e510e3ade974');
             <%_ } else if (!fieldIsEnum) { _%>
-        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldName %>');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldName %>', 'Expected <%=fieldNameCapitalized%> value to be equals to <%= fieldName %>');
             <%_ } _%>
         <%_ }); _%>
         await <%= entityInstance %>UpdatePage.save();
-        expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).to.be.false;
+        expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-        expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
+        expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
     });<%= closeBlockComment %>
 
     <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {

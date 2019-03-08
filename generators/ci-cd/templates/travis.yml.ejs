@@ -65,10 +65,10 @@ install:
 script:
 <%_ if (buildTool === 'maven') { _%>
   - chmod +x mvnw
-  - ./mvnw clean test
+  - ./mvnw clean integration-test
 <%_ } else if (buildTool === 'gradle') { _%>
   - chmod +x gradlew
-  - ./gradlew clean test
+  - ./gradlew clean test integrationTest
 <%_ } _%>
 <%_ if (!skipClient) { _%>
   <%_ if (buildTool === 'maven') { _%>
@@ -89,7 +89,7 @@ script:
   <%_ if (cicdIntegrations.includes('sonar')) { _%>
   - ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
   <%_ } _%>
-  - ./gradlew bootWar -Pprod -x test
+  - ./gradlew bootJar -Pprod -x test
   <%_ if (cicdIntegrations.includes('heroku')) { _%>
   - ./gradlew deployHeroku
   <%_ } _%>

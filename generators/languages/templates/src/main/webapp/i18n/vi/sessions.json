@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "Các phiên đăng nhập hiện tại của [<b>{{username}}</b>]",
+        "title": "Các phiên đăng nhập hiện tại của [<strong>{{username}}</strong>]",
         "table": {
             "ipaddress": "Địa chỉ IP",
             "useragent": "Trình duyệt",

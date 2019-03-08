@@ -68,8 +68,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 <%_ } _%>
 
-<%_ if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
-import org.springframework.data.elasticsearch.annotations.Document;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.data.elasticsearch.annotations.FieldType;
 <%_ } _%>
 import java.io.Serializable;
 <%_ if (fieldsContainBigDecimal === true) { _%>
@@ -126,10 +126,8 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 @Document
 <%_ } if (databaseType === 'cassandra') { _%>
 @Table("<%= entityInstance %>")
-<%_ } if (searchEngine === 'elasticsearch' && databaseType === 'mongodb') { _%>
+<%_ } if (searchEngine === 'elasticsearch') { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
-<%_ } if (searchEngine === 'elasticsearch' && databaseType !== 'mongodb') { _%>
-@Document(indexName = "<%= entityInstance.toLowerCase() %>")
 <%_ } _%>
 public class <%= asEntity(entityClass) %> implements Serializable {
 
@@ -153,6 +151,9 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
+    <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     <%_ } _%>
     private <%= pkType %> id;
 
@@ -192,7 +193,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else if (fieldType === 'BigDecimal') { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 10, scale = 2<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 21, scale = 2<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %><% } %>)
         <%_ }
@@ -462,19 +463,15 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof <%= asEntity(entityClass) %>)) {
             return false;
         }
-        <%= asEntity(entityClass) %> <%= entityInstance %> = (<%= asEntity(entityClass) %>) o;
-        if (<%= entityInstance %>.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), <%= entityInstance %>.getId());
+        return id != null && id.equals(((<%= asEntity(entityClass) %>) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

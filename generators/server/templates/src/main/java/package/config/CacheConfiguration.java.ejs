@@ -25,7 +25,7 @@ import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
 
     <%_ if (enableHibernateCache) { _%>
-import io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory;
+import org.hibernate.cache.jcache.ConfigSettings;
     <%_ } _%>
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -46,6 +46,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 <%_ } _%>
 <%_ if (cacheProvider === 'ehcache') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+    <%_ if (enableHibernateCache) { _%>
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProvider === 'hazelcast') { _%>
     <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
@@ -77,24 +80,24 @@ import org.springframework.cache.support.NoOpCacheManager;
 <%_ } _%>
 import org.springframework.context.annotation.*;
 <%_ if (cacheProvider === 'hazelcast') { _%>
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.core.env.Environment;
-
-import javax.annotation.PreDestroy;
+import org.springframework.core.env.Profiles;
 <%_ } _%>
 <%_ if (cacheProvider === 'infinispan') { _%>
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
-import infinispan.autoconfigure.embedded.InfinispanCacheConfigurer;
-import infinispan.autoconfigure.embedded.InfinispanGlobalConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.jhipster.config.JHipsterProperties;
 import java.util.concurrent.TimeUnit;
 import org.infinispan.eviction.EvictionType;
 import org.infinispan.manager.EmbeddedCacheManager;
+import org.infinispan.spring.starter.embedded.InfinispanCacheConfigurer;
+import org.infinispan.spring.starter.embedded.InfinispanEmbeddedCacheManagerAutoConfiguration;
+import org.infinispan.spring.starter.embedded.InfinispanGlobalConfigurer;
 import org.infinispan.transaction.TransactionMode;
-import infinispan.autoconfigure.embedded.InfinispanEmbeddedCacheManagerAutoConfiguration;
 import org.infinispan.jcache.embedded.ConfigurationAdapter;
 import org.infinispan.jcache.embedded.JCache;
 import org.infinispan.jcache.embedded.JCacheManager;
@@ -135,15 +138,12 @@ import io.github.jhipster.config.JHipsterProperties;
 <%_ if (cacheProvider === 'infinispan') { _%>
 @Import(InfinispanEmbeddedCacheManagerAutoConfiguration.class)
 <%_ } _%>
-public class CacheConfiguration {
+public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implements DisposableBean<% } %> {
     <%_ if (cacheProvider === 'ehcache') { _%>
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-        <%_ if (enableHibernateCache) { _%>
-        BeanClassLoaderAwareJCacheRegionFactory.setBeanClassLoader(this.getClass().getClassLoader());
-        <%_ } _%>
         JHipsterProperties.Cache.Ehcache ehcache =
             jHipsterProperties.getCache().getEhcache();
 
@@ -153,6 +153,13 @@ public class CacheConfiguration {
                 .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
                 .build());
     }
+
+        <%_ if (enableHibernateCache) { _%>
+    @Bean
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
+        return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
+    }
+        <%_ } _%>
 
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
@@ -206,8 +213,8 @@ public class CacheConfiguration {
     }
         <%_ } _%>
 
-    @PreDestroy
-    public void destroy() {
+    @Override
+    public void destroy() throws Exception {
         log.info("Closing Cache Manager");
         Hazelcast.shutdownAll();
     }
@@ -238,7 +245,7 @@ public class CacheConfiguration {
             String serviceId = registration.getServiceId();
             log.debug("Configuring Hazelcast clustering for instanceId: {}", serviceId);
             // In development, everything goes through 127.0.0.1, with a different port
-            if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
+            if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
                 log.debug("Application is running with the \"dev\" profile, Hazelcast " +
                           "cluster will only work with localhost instances");
 
@@ -265,7 +272,7 @@ public class CacheConfiguration {
         config.getNetworkConfig().setPortAutoIncrement(true);
 
         // In development, remove multicast auto-configuration
-        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)) {
+        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             System.setProperty("hazelcast.local.localAddress", "127.0.0.1");
 
             config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
@@ -378,6 +385,8 @@ public class CacheConfiguration {
      * supports discovery natively for most of the platforms like Kubernetes/OpenShift,
      * AWS, Azure and Google.
      *
+     * @param jHipsterProperties the jhipster properties to configure from.
+     * @return the infinispan global configurer.
      */
     @Bean
     public InfinispanGlobalConfigurer globalConfiguration(JHipsterProperties jHipsterProperties) {
@@ -386,20 +395,21 @@ public class CacheConfiguration {
             if (this.registration == null) { // if registry is not defined, use native discovery
                 log.warn("No discovery service is set up, Infinispan will use default discovery for cluster formation");
                 return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().transport().defaultTransport()
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
             }
             return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().transport().transport(new JGroupsTransport(getTransportChannel()))
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport()
+                    .transport(new JGroupsTransport(getTransportChannel()))
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
         <%_ } else { _%>
             return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().transport().defaultTransport()
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
@@ -440,6 +450,8 @@ public class CacheConfiguration {
      *      </li>
      *  </ol>
      *
+     * @param jHipsterProperties the jhipster properties to configure from.
+     * @return the infinispan cache configurer.
      */
     @Bean
     public InfinispanCacheConfigurer cacheConfigurer(JHipsterProperties jHipsterProperties) {
@@ -448,19 +460,21 @@ public class CacheConfiguration {
 
         return manager -> {
             // initialize application cache
-            manager.defineConfiguration("local-app-data", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
+            manager.defineConfiguration("local-app-data", new ConfigurationBuilder()
+                .clustering().cacheMode(CacheMode.LOCAL)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
-                .eviction().type(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
+                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
             manager.defineConfiguration("dist-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(cacheInfo.getDistributed().getInstanceCount())
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled()).eviction()
-                .type(EvictionType.COUNT).size(cacheInfo.getDistributed().getMaxEntries()).expiration().lifespan(cacheInfo.getDistributed()
-                .getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
-            manager.defineConfiguration("repl-app-data", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_SYNC)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
-                .eviction().type(EvictionType.COUNT).size(cacheInfo.getReplicated()
-                .getMaxEntries()).expiration().lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
+                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getDistributed().getMaxEntries()).expiration()
+                .lifespan(cacheInfo.getDistributed().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
+            manager.defineConfiguration("repl-app-data", new ConfigurationBuilder()
+                .clustering().cacheMode(CacheMode.REPL_SYNC)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getReplicated().getMaxEntries()).expiration()
+                .lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
 
             // initialize Hibernate L2 cache
             manager.defineConfiguration("entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.INVALIDATION_SYNC)
@@ -489,11 +503,14 @@ public class CacheConfiguration {
     /**
      * <p>
      * Instance of {@link JCacheManager} with cache being managed by the underlying Infinispan layer. This helps to record stats
-     * info if enabled and the same is accessible through MBX:javax.cache,type=CacheStatistics.
+     * info if enabled and the same is accessible through {@code MBX:javax.cache,type=CacheStatistics}.
      *
      * <p>
-     * jCache stats are at instance level. If you need stats at clustering level, then it needs to be retrieved from MBX:org.infinispan
+     * jCache stats are at instance level. If you need stats at clustering level, then it needs to be retrieved from {@code MBX:org.infinispan}
      *
+     * @param cacheManager the embedded cache manager.
+     * @param jHipsterProperties the jhipster properties to configure from.
+     * @return the jcache manager.
      */
     @Bean
     public JCacheManager getJCacheManager(EmbeddedCacheManager cacheManager, JHipsterProperties jHipsterProperties){
@@ -512,7 +529,7 @@ public class CacheConfiguration {
                 cacheManager.getCache("oAuth2Authentication").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
             <%_ } _%>
-            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
+            <%_ if (!skipUserManagement || (authenticationType === 'oauth2')) { _%>
             registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
@@ -556,8 +573,8 @@ public class CacheConfiguration {
      * MPING multicast is replaced with TCPPING with the host details discovered
      * from registry and sends only unicast messages to the host list.
      */
-    private Channel getTransportChannel() {
-        JChannel channel = new JChannel(false);
+    private JChannel getTransportChannel() {
+        JChannel channel = null;
         List<PhysicalAddress> initialHosts = new ArrayList<>();
         try {
             for (ServiceInstance instance : discoveryClient.getInstances(registration.getServiceId())) {
@@ -570,12 +587,7 @@ public class CacheConfiguration {
             tcp.setBindPort(7800);
             tcp.setThreadPoolMinThreads(2);
             tcp.setThreadPoolMaxThreads(30);
-            tcp.setThreadPoolQueueEnabled(false);
             tcp.setThreadPoolKeepAliveTime(60000);
-            tcp.setOOBThreadPoolMinThreads(2);
-            tcp.setOOBThreadPoolMaxThreads(200);
-            tcp.setOOBThreadPoolKeepAliveTime(60000);
-            tcp.setOOBThreadPoolQueueEnabled(false);
 
             TCPPING tcpping = new TCPPING();
             initialHosts.add(new IpAddress(InetAddress.getLocalHost(), 7800));
@@ -612,7 +624,7 @@ public class CacheConfiguration {
                 .addProtocol(new GMS())
                 .addProtocol(new MFC())
                 .addProtocol(new FRAG2());
-            channel.setProtocolStack(stack);
+            channel = new JChannel(stack);
             stack.init();
         } catch (Exception e) {
             throw new BeanInitializationException("Cache (Infinispan protocol stack) configuration failed", e);

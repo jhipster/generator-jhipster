@@ -91,9 +91,9 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
     }
 
     /**
-     * propertyDel Configure the request parameter to lookup sort information from. Defaults to {@code sort}.
+     * Configure the request parameter to lookup sort information from. Defaults to {@code sort}.
      *
-     * @param sortParameter must not be {@literal null} or empty.
+     * @param sortParameter must not be {@code null} or empty.
      */
     public void setSortParameter(String sortParameter) {
 
@@ -103,9 +103,9 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
 
     /**
      * Configures the delimiter used to separate property references and the direction to be sorted by. Defaults to
-     * {@code}, which means sort values look like this: {@code firstname,lastname,asc}.
+     * {@code ,} which means sort values look like this: {@code firstname,lastname,asc}.
      *
-     * @param propertyDelimiter must not be {@literal null} or empty.
+     * @param propertyDelimiter must not be {@code null} or empty.
      */
     public void setPropertyDelimiter(String propertyDelimiter) {
 
@@ -114,7 +114,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
     }
 
     /**
-     * @return the configured delimiter used to separate property references and the direction to be sorted by
+     * @return the configured delimiter used to separate property references and the direction to be sorted by.
      */
     public String getPropertyDelimiter() {
         return propertyDelimiter;
@@ -124,7 +124,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      * Configures the delimiter used to separate the qualifier from the sort parameter. Defaults to {@code _}, so a
      * qualified sort property would look like {@code qualifier_sort}.
      *
-     * @param qualifierDelimiter the qualifier delimiter to be used or {@literal null} to reset to the default.
+     * @param qualifierDelimiter the qualifier delimiter to be used or {@code null} to reset to the default.
      */
     public void setQualifierDelimiter(String qualifierDelimiter) {
         this.qualifierDelimiter = qualifierDelimiter == null ? DEFAULT_QUALIFIER_DELIMITER : qualifierDelimiter;
@@ -134,7 +134,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      * Configures the {@link Sort} to be used as fallback in case no {@link SortDefault} or {@link SortDefaults} (the
      * latter only supported in legacy mode) can be found at the method parameter to be resolved.
      * <p>
-     * If you set this to {@literal null}, be aware that you controller methods will get {@literal null} handed into them
+     * If you set this to {@code null}, be aware that you controller methods will get {@code null} handed into them
      * in case no {@link Sort} data can be found in the request.
      *
      * @param fallbackSort the {@link Sort} to be used as general fallback.
@@ -148,7 +148,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      * {@link SortDefaults} and {@link SortDefault} annotation is found as we cannot build a reliable {@link Sort}
      * instance then (property ordering).
      *
-     * @param parameter will never be {@literal null}.
+     * @param parameter will never be {@code null}.
      * @return the default {@link Sort} instance derived from the parameter annotations or the configured fallback-sort
      *         {@link #setFallbackSort(Sort)}.
      */
@@ -183,7 +183,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
 
     /**
      * Creates a new {@link Sort} instance from the given {@link SortDefault} or appends it to the given {@link Sort}
-     * instance if it's not {@literal null}.
+     * instance if it's not {@code null}.
      *
      * @param sortDefault
      * @param sortOrNull
@@ -203,8 +203,8 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
     /**
      * Returns the sort parameter to be looked up from the request. Potentially applies qualifiers to it.
      *
-     * @param parameter can be {@literal null}.
-     * @return
+     * @param parameter can be {@code null}.
+     * @return the sort parameter to be looked up from the request.
      */
     protected String getSortParameter(@Nullable MethodParameter parameter) {
 
@@ -224,9 +224,9 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      * concatenation of Strings using the given delimiter. If the last element can be parsed into a {@link Direction} it's
      * considered a {@link Direction} and a simple property otherwise.
      *
-     * @param source will never be {@literal null}.
-     * @param delimiter the delimiter to be used to split up the source elements, will never be {@literal null}.
-     * @return
+     * @param source will never be {@code null}.
+     * @param delimiter the delimiter to be used to split up the source elements, will never be {@code null}.
+     * @return the parsed {@link Sort}.
      */
     Sort parseParameterIntoSort(List<String> source, String delimiter) {
 
@@ -266,8 +266,8 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      * Folds the given {@link Sort} instance into a {@link List} of sort expressions, accumulating {@link Order} instances
      * of the same direction into a single expression if they are in order.
      *
-     * @param sort must not be {@literal null}.
-     * @return
+     * @param sort must not be {@code null}.
+     * @return the list of sort expresssions.
      */
     protected List<String> foldIntoExpressions(Sort sort) {
 
@@ -296,8 +296,8 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      * direction.
      *
      * @throws IllegalArgumentException if a {@link Sort} with multiple {@link Direction}s has been handed in.
-     * @param sort must not be {@literal null}.
-     * @return
+     * @param sort must not be {@code null}.
+     * @return the list of epxressions.
      */
     protected List<String> legacyFoldExpressions(Sort sort) {
 
@@ -334,7 +334,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
         /**
          * Sets up a new {@link ExpressionBuilder} for properties to be sorted in the given {@link Direction}.
          *
-         * @param direction must not be {@literal null}.
+         * @param direction must not be {@code null}.
          */
         ExpressionBuilder(Direction direction) {
 
@@ -345,7 +345,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
         /**
          * Returns whether the given {@link Order} has the same direction as the current {@link ExpressionBuilder}.
          *
-         * @param order must not be {@literal null}.
+         * @param order must not be {@code null}.
          * @return
          */
         boolean hasSameDirectionAs(Order order) {
@@ -355,7 +355,7 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
         /**
          * Adds the given property to the expression to be built.
          *
-         * @param property
+         * @param property the property to add.
          */
         void add(String property) {
             this.elements.add(property);
@@ -385,9 +385,9 @@ public class ReactiveSortHandlerMethodArgumentResolver implements SyncHandlerMet
      * Returns the value of the given specific property of the given annotation. If the value of that property is the
      * properties default, we fall back to the value of the {@code value} attribute.
      *
-     * @param annotation must not be {@literal null}.
-     * @param property must not be {@literal null} or empty.
-     * @return
+     * @param annotation must not be {@code null}.
+     * @param property must not be {@code null} or empty.
+     * @return the value of the given specific property of the given annotation.
      */
     @SuppressWarnings("unchecked")
     public static <T> T getSpecificPropertyOrDefaultFromValue(Annotation annotation, String property) {

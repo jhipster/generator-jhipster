@@ -28,7 +28,7 @@ let helpBlocks = 0; %>
             },<% if (!microserviceAppName) { %>
             "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
             "updated": "Um <%= entityClassHumanized %> foi atualizado com o identificador {{ param }}",
-            "deleted": "Um <%= entityClassHumanized %> foi deletado com o identificador {{ param }}",<% } %>
+            "deleted": "Um <%= entityClassHumanized %> foi excluído com o identificador {{ param }}",<% } %>
             "delete": {
                 "question": "Tem certeza de que deseja excluir <%= entityClassHumanized %> {{ id }}?"
             },
@@ -51,7 +51,7 @@ let helpBlocks = 0; %>
         "<%= entityTranslationKey %>" : {
             "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
             "updated": "Um <%= entityClassHumanized %> foi atualizado com o identificador {{ param }}",
-            "deleted": "Um <%= entityClassHumanized %> foi deletado com o identificador {{ param }}"
+            "deleted": "Um <%= entityClassHumanized %> foi excluído com o identificador {{ param }}"
         }
     }<% } %>
 }

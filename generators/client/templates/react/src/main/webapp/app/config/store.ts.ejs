@@ -33,7 +33,7 @@ const defaultMiddlewares = [
   thunkMiddleware,
   errorMiddleware,
   notificationMiddleware,
-  promiseMiddleware(),
+  promiseMiddleware,
   loadingBarMiddleware(),
   <%_ if (websocket === 'spring-websocket') { _%>
   websocketMiddleware,

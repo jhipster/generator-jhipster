@@ -62,11 +62,11 @@ node {
     <%_ } _%>
 <%= indent %>    stage('backend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./mvnw test"
+<%= indent %>            sh "./mvnw integration-test"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
-<%= indent %>            junit '**/target/surefire-reports/TEST-*.xml'
+<%= indent %>            junit '**/target/test-results/**/TEST-*.xml'
 <%= indent %>        }
 <%= indent %>    }
 
@@ -89,7 +89,7 @@ node {
 <%= indent %>    stage('packaging') {
 <%= indent %>        sh "./mvnw verify <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests"
     <%_ } _%>
-<%= indent %>        archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
+<%= indent %>        archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
 <%= indent %>    }
 <%_ } else if (buildTool === 'gradle') { _%>
 <%= indent %>    stage('clean') {
@@ -105,7 +105,7 @@ node {
 
 <%= indent %>    stage('backend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./gradlew test -PnodeInstall --no-daemon"
+<%= indent %>            sh "./gradlew test integrationTest -PnodeInstall --no-daemon"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
@@ -126,8 +126,8 @@ node {
 
     <%_ } _%>
 <%= indent %>    stage('packaging') {
-<%= indent %>        sh "./gradlew bootWar -x test -Pprod -PnodeInstall --no-daemon"
-<%= indent %>        archiveArtifacts artifacts: '**/build/libs/*.war', fingerprint: true
+<%= indent %>        sh "./gradlew bootJar -x test -Pprod -PnodeInstall --no-daemon"
+<%= indent %>        archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true
 <%= indent %>    }
 
     <%_ if (cicdIntegrations.includes('heroku')) { _%>
@@ -157,11 +157,11 @@ node {
 <%= gitLabIndent %>    stage('build docker') {
     <%_ if (buildTool === 'maven') { _%>
 <%= gitLabIndent %>        sh "cp -R src/main/docker target/"
-<%= gitLabIndent %>        sh "cp target/*.war target/docker/"
+<%= gitLabIndent %>        sh "cp target/*.jar target/docker/"
 <%= gitLabIndent %>        dockerImage = docker.build('<%= dockerRegistryOrganizationName %>/<%= baseName.toLowerCase() %>', 'target/docker')
     <%_ } else if (buildTool === 'gradle' ) { _%>
 <%= gitLabIndent %>        sh "cp -R src/main/docker build/"
-<%= gitLabIndent %>        sh "cp build/libs/*.war build/docker/"
+<%= gitLabIndent %>        sh "cp build/libs/*.jar build/docker/"
 <%= gitLabIndent %>        dockerImage = docker.build('<%= dockerRegistryOrganizationName %>/<%= baseName.toLowerCase() %>', 'build/docker')
     <%_ } _%>
 <%= gitLabIndent %>    }

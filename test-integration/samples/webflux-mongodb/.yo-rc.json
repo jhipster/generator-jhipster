@@ -23,6 +23,6 @@
         "jhiPrefix": "jhi",
         "travis": true,
         "clientPackageManager": "yarn",
-        "skipClient": true
+        "clientFramework": "angularX"
     }
 }

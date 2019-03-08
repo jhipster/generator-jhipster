@@ -43,10 +43,6 @@ eureka:
 spring:
     application:
         name: <%= baseName %>
-    <%_ if (cacheManagerIsAvailable === true) { _%>
-    cache:
-        type: simple
-    <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     cloud:
         stream:
@@ -121,18 +117,31 @@ spring:
     <%_ } _%>
     mail:
         host: localhost
+    main:
+        allow-bean-definition-overriding: true
     messages:
         basename: i18n/messages
     mvc:
         favicon:
             enabled: false
+    task:
+        execution:
+            thread-name-prefix: <%= dasherizedBaseName %>-task-
+            pool:
+                core-size: 1
+                max-size: 50
+                queue-capacity: 10000
+        scheduling:
+            thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
+            pool:
+                size: 1
     thymeleaf:
         mode: HTML
 
 <%_ if (authenticationType === 'oauth2') { _%>
 security:
     oauth2:
-    # client configuration needed : for condition in Spring Boot
+        # client configuration needed : for condition in Spring Boot
         client:
             access-token-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/token
             user-authorization-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/auth
@@ -154,10 +163,8 @@ server:
 # ===================================================================
 
 jhipster:
-    async:
-        core-pool-size: 1
-        max-pool-size: 50
-        queue-capacity: 10000
+    clientApp:
+        name: "<%= angularAppName %>"
     # To test logstash appender
     logging:
         logstash:
@@ -190,7 +197,7 @@ jhipster:
             client-secret: internal
     <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
     security:
         remember-me:
             # security key (this key should be unique for your application, and kept secret)

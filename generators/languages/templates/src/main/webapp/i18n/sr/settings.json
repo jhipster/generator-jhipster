@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "Podešavanja za [<b>{{username}}</b>]",
+        "title": "Podešavanja za [<strong>{{username}}</strong>]",
         "form": {
             "firstname": "Ime",
             "firstname.placeholder": "Vaše ime",

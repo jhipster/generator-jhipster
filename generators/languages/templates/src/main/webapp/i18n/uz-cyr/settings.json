@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "[<b>{{username}}</b>] созламалари",
+        "form": {
+            "firstname": "Исм",
+            "firstname.placeholder": "Исмингиз",
+            "lastname": "Фамилия",
+            "lastname.placeholder": "Фамилиянгиз",
+            "language": "Тил",
+            "button": "Сақлаш"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Хатолик юз берди!</strong> Созламалар сақланмади.",
+                "emailexists": "<strong>Email банд!</strong> Илтимос, бошқасини киритинг."
+            },
+            "success": "<strong>Созламалар сақланди!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Исмингизни киритинг.",
+                    "minlength": "Исмингиз узунлиги камида 1 ҳарф бўлсин",
+                    "maxlength": "Исмингиз узунлиги кўпида 50 ҳарф бўлсин"
+                },
+                "lastname": {
+                    "required": "Фамилиянгизни киритинг.",
+                    "minlength": "Фамилиянгиз узунлиги камида 1 ҳарф бўлсин",
+                    "maxlength": "Фамилиянгиз узунлиги кўпида 50 ҳарф бўлсин"
+                }
+            }
+        }
+    }
+}

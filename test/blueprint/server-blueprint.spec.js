@@ -91,6 +91,8 @@ describe('JHipster server generator with blueprint', () => {
                 assert.file(expectedFiles.server);
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.maven);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
 
             it('contains the specific change added by the blueprint', () => {

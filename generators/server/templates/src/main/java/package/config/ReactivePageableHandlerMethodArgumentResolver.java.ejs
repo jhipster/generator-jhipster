@@ -111,7 +111,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
      * {@link PageableDefault} (the latter only supported in legacy mode) can be found at the method parameter to be
      * resolved.
      * <p>
-     * If you set this to {@literal Optional#empty()}, be aware that you controller methods will get {@literal null}
+     * If you set this to {@link Optional#empty()}, be aware that you controller methods will get {@code null}
      * handed into them in case no {@link Pageable} data can be found in the request. Note, that doing so will require you
      * supply bot the page <em>and</em> the size parameter with the requests as there will be no default for any of the
      * parameters available.
@@ -128,7 +128,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
     /**
      * Returns whether the given {@link Pageable} is the fallback one.
      *
-     * @param pageable can be {@literal null}.
+     * @param pageable can be {@code null}.
      * @return
      */
     public boolean isFallbackPageable(Pageable pageable) {
@@ -139,7 +139,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
      * Configures the maximum page size to be accepted. This allows to put an upper boundary of the page size to prevent
      * potential attacks trying to issue an {@link OutOfMemoryError}. Defaults to {@link #DEFAULT_MAX_PAGE_SIZE}.
      *
-     * @param maxPageSize the maxPageSize to set
+     * @param maxPageSize the maxPageSize to set.
      */
     public void setMaxPageSize(int maxPageSize) {
         this.maxPageSize = maxPageSize;
@@ -158,7 +158,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
     /**
      * Configures the parameter name to be used to find the page number in the request. Defaults to {@code page}.
      *
-     * @param pageParameterName the parameter name to be used, must not be {@literal null} or empty.
+     * @param pageParameterName the parameter name to be used, must not be {@code null} or empty.
      */
     public void setPageParameterName(String pageParameterName) {
 
@@ -169,7 +169,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
     /**
      * Retrieves the parameter name to be used to find the page number in the request. Defaults to {@code page}.
      *
-     * @return the parameter name to be used, never {@literal null} or empty.
+     * @return the parameter name to be used, never {@code null} or empty.
      */
     protected String getPageParameterName() {
         return this.pageParameterName;
@@ -178,7 +178,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
     /**
      * Configures the parameter name to be used to find the page size in the request. Defaults to {@code size}.
      *
-     * @param sizeParameterName the parameter name to be used, must not be {@literal null} or empty.
+     * @param sizeParameterName the parameter name to be used, must not be {@code null} or empty.
      */
     public void setSizeParameterName(String sizeParameterName) {
 
@@ -189,7 +189,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
     /**
      * Retrieves the parameter name to be used to find the page size in the request. Defaults to {@code size}.
      *
-     * @return the parameter name to be used, never {@literal null} or empty.
+     * @return the parameter name to be used, never {@code null} or empty.
      */
     protected String getSizeParameterName() {
         return this.sizeParameterName;
@@ -199,7 +199,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
      * Configures a general prefix to be prepended to the page number and page size parameters. Useful to namespace the
      * property names used in case they are clashing with ones used by your application. By default, no prefix is used.
      *
-     * @param prefix the prefix to be used or {@literal null} to reset to the default.
+     * @param prefix the prefix to be used or {@code null} to reset to the default.
      */
     public void setPrefix(String prefix) {
         this.prefix = prefix == null ? DEFAULT_PREFIX : prefix;
@@ -209,7 +209,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
      * The delimiter to be used between the qualifier and the actual page number and size properties. Defaults to
      * {@code _}. So a qualifier of {@code foo} will result in a page number parameter of {@code foo_page}.
      *
-     * @param qualifierDelimiter the delimiter to be used or {@literal null} to reset to the default.
+     * @param qualifierDelimiter the delimiter to be used or {@code null} to reset to the default.
      */
     public void setQualifierDelimiter(String qualifierDelimiter) {
         this.qualifierDelimiter = qualifierDelimiter == null ? DEFAULT_QUALIFIER_DELIMITER : qualifierDelimiter;
@@ -217,10 +217,10 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
 
     /**
      * Configures whether to expose and assume 1-based page number indexes in the request parameters. Defaults to
-     * {@literal false}, meaning a page number of 0 in the request equals the first page. If this is set to
-     * {@literal true}, a page number of 1 in the request will be considered the first page.
+     * {@code false}, meaning a page number of 0 in the request equals the first page. If this is set to
+     * {@code true}, a page number of 1 in the request will be considered the first page.
      *
-     * @param oneIndexedParameters the oneIndexedParameters to set
+     * @param oneIndexedParameters the oneIndexedParameters to set.
      */
     public void setOneIndexedParameters(boolean oneIndexedParameters) {
         this.oneIndexedParameters = oneIndexedParameters;
@@ -228,8 +228,8 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
 
     /**
      * Indicates whether to expose and assume 1-based page number indexes in the request parameters. Defaults to
-     * {@literal false}, meaning a page number of 0 in the request equals the first page. If this is set to
-     * {@literal true}, a page number of 1 in the request will be considered the first page.
+     * {@code false}, meaning a page number of 0 in the request equals the first page. If this is set to
+     * {@code true}, a page number of 1 in the request will be considered the first page.
      *
      * @return whether to assume 1-based page number indexes in the request parameters.
      */
@@ -320,7 +320,7 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
      * @param parameter the parameter value.
      * @param upper the upper bound to be applied.
      * @param shiftIndex whether to shift the index if {@link #oneIndexedParameters} is set to true.
-     * @return
+     * @return the parsed integer.
      */
     private Optional<Integer> parseAndApplyBoundaries(@Nullable String parameter, int upper, boolean shiftIndex) {
 
@@ -353,8 +353,8 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
     /**
      * Returns whether the given {@link Method} has more than one {@link Pageable} parameter.
      *
-     * @param method must not be {@literal null}.
-     * @return
+     * @param method must not be {@code null}.
+     * @return whether the given {@link Method} has more than one {@link Pageable} parameter.
      */
     private static boolean containsMoreThanOnePageableParameter(Method method) {
 
@@ -378,9 +378,9 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
      * Returns the value of the given specific property of the given annotation. If the value of that property is the
      * properties default, we fall back to the value of the {@code value} attribute.
      *
-     * @param annotation must not be {@literal null}.
-     * @param property must not be {@literal null} or empty.
-     * @return
+     * @param annotation must not be {@code null}.
+     * @param property must not be {@code null} or empty.
+     * @return the value of the given specific property of the given annotation.
      */
     @SuppressWarnings("unchecked")
     public static <T> T getSpecificPropertyOrDefaultFromValue(Annotation annotation, String property) {
@@ -403,8 +403,8 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
      * Asserts that every {@link Pageable} parameter of the given parameters carries an {@link Qualifier} annotation to
      * distinguish them from each other.
      *
-     * @param parameterTypes must not be {@literal null}.
-     * @param annotations must not be {@literal null}.
+     * @param parameterTypes must not be {@code null}.
+     * @param annotations must not be {@code null}.
      */
     public static void assertQualifiersFor(Class<?>[] parameterTypes, Annotation[][] annotations) {
 
@@ -431,11 +431,11 @@ public class ReactivePageableHandlerMethodArgumentResolver implements SyncHandle
     }
 
     /**
-     * Returns a {@link Qualifier} annotation from the given array of {@link Annotation}s. Returns {@literal null} if the
+     * Returns the first {@link Qualifier} annotation from the given array of {@link Annotation}s. Returns {@code null} if the
      * array does not contain a {@link Qualifier} annotation.
      *
-     * @param annotations must not be {@literal null}.
-     * @return
+     * @param annotations must not be {@code null}.
+     * @return the first {@link Qualifier} annotation from the given array of {@link Annotation}s.
      */
     @Nullable
     private static Qualifier findAnnotation(Annotation[] annotations) {

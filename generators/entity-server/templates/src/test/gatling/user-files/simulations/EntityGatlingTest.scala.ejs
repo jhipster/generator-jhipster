@@ -41,7 +41,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
     val baseURL = Option(System.getProperty("baseURL")) getOrElse """http://localhost:8080"""
 
     val httpConf = http
-        .baseURL(baseURL)
+        .baseUrl(baseURL)
         .inferHtmlResources()
         .acceptHeader("*/*")
         .acceptEncodingHeader("gzip, deflate")
@@ -167,8 +167,8 @@ class <%= entityClass %>GatlingTest extends Simulation {
 <%_ } else if (authenticationType === 'jwt') { _%>
         .post("/api/authenticate")
         .headers(headers_http_authentication)
-        .body(StringBody("""{"username":"admin", "password":"admin"}""")).asJSON
-        .check(header.get("Authorization").saveAs("access_token"))).exitHereIfFailed
+        .body(StringBody("""{"username":"admin", "password":"admin"}""")).asJson
+        .check(header("Authorization").saveAs("access_token"))).exitHereIfFailed
 <%_ } _%>
         .pause(2)
         .exec(http("Authenticated request")
@@ -190,7 +190,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
                 <%_ for (idx in fields) { _%>
                 , "<%= fields[idx].fieldName %>":<% if (fields[idx].fieldType === 'String') { %>"SAMPLE_TEXT"<% } else if (['Integer', 'BigDecimal'].includes(fields[idx].fieldType)) { %>"0"<% } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType)) { %>"2020-01-01T00:00:00.000Z"<% } else if (fields[idx].fieldIsEnum) { %>"<%= fields[idx].fieldValues.split(',')[0] %>"<% } else { %>null<% } %>
                 <%_ } _%>
-                }""")).asJSON
+                }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_<%= entityInstance %>_url"))).exitHereIfFailed
             .pause(10)
@@ -209,6 +209,6 @@ class <%= entityClass %>GatlingTest extends Simulation {
     val users = scenario("Users").exec(scn)
 
     setUp(
-        users.inject(rampUsers(Integer.getInteger("users", 100)) over (Integer.getInteger("ramp", 1) minutes))
+        users.inject(rampUsers(Integer.getInteger("users", 100)) during (Integer.getInteger("ramp", 1) minutes))
     ).protocols(httpConf)
 }

@@ -33,7 +33,7 @@ metadata:
     description: This template defines objects that are required to spin up an <%= app.baseName.toLowerCase() %> service pod
     tags: <%= app.baseName.toLowerCase() %>, service
     openshift.io/display-name: <%= app.baseName.toLowerCase() %>-template
-    openshift.io/long-description: This template provides objects that are required to spin up a <%= app.baseName.toLowerCase() %> service pod.
+    openshift.io/long-description: "This template provides objects that are required to spin up a <%= app.baseName.toLowerCase() %> service pod."
     openshift.io/provider-display-name: JHipster
 labels:
   app: <%= app.baseName.toLowerCase() %>-app
@@ -202,7 +202,7 @@ objects:
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'mongodb') { _%>
             - name: SPRING_DATA_MONGODB_URI
-              value: mongodb://${APPLICATION_NAME}-mongodb
+              value: mongodb://${APPLICATION_NAME}-mongodb<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
             - name: SPRING_DATA_MONGODB_DATABASE
               value: ${APPLICATION_NAME}
             - name: SPRING_DATASOURCE_USERNAME

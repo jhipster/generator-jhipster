@@ -60,7 +60,7 @@ function askForMicroserviceJson() {
             message: 'Enter the path to the microservice root directory:',
             store: true,
             validate: input => {
-                let fromPath = '';
+                let fromPath;
                 if (path.isAbsolute(input)) {
                     fromPath = `${input}/${context.filename}`;
                 } else {
