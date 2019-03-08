@@ -851,7 +851,7 @@ public class UserService {
             // for other languages, please handle it accordingly.
             String locale = (String) details.get("locale");
             if (locale.startsWith("en_") || locale.startsWith("en-")) {
-                locale = Constants.DEFAULT_LANGUAGE;
+                locale = "en";
             }
             user.setLangKey(locale.toLowerCase());
         } else {
