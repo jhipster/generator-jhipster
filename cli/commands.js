@@ -30,10 +30,6 @@ module.exports = {
     'ci-cd': {
         desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools'
     },
-    client: {
-        desc:
-            'DEPRECATED: Create a new JHipster client-side application based on the selected options -  Use jhipster --skip-server instead'
-    },
     cloudfoundry: {
         desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry'
     },
@@ -93,9 +89,6 @@ Example:
     },
     openshift: {
         desc: 'Deploy the current application to OpenShift'
-    },
-    server: {
-        desc: 'DEPRECATED: Create a new JHipster server-side application - Use jhipster --skip-client instead'
     },
     'spring-service': {
         alias: 'service',
