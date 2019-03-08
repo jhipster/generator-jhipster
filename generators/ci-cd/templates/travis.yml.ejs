@@ -65,7 +65,7 @@ install:
 script:
 <%_ if (buildTool === 'maven') { _%>
   - chmod +x mvnw
-  - ./mvnw clean integration-test
+  - ./mvnw clean verify
 <%_ } else if (buildTool === 'gradle') { _%>
   - chmod +x gradlew
   - ./gradlew clean test integrationTest

@@ -27,7 +27,7 @@ fi
 #-------------------------------------------------------------------------------
 if [[ "$JHI_APP" == *"uaa"* ]]; then
     cd "$JHI_FOLDER_UAA"
-    ./mvnw test integration-test
+    ./mvnw verify
 fi
 
 #-------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ fi
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw test integration-test \
+    ./mvnw verify \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
