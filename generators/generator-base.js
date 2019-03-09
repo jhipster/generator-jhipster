@@ -49,24 +49,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  */
 module.exports = class extends PrivateBase {
     /**
-     * Deprecated
-     * Get the JHipster configuration from the .yo-rc.json file.
-     *
-     * @param {string} namespace - namespace of the .yo-rc.json config file. By default: generator-jhipster
-     */
-    getJhipsterAppConfig(namespace = 'generator-jhipster') {
-        this.warning('This method is deprecated. Use getAllJhipsterConfig');
-        const fromPath = '.yo-rc.json';
-        if (shelljs.test('-f', fromPath)) {
-            const fileData = this.fs.readJSON(fromPath);
-            if (fileData && fileData[namespace]) {
-                return fileData[namespace];
-            }
-        }
-        return false;
-    }
-
-    /**
      * Add a new menu element, at the root of the menu.
      *
      * @param {string} routerName - The name of the Angular router that is added to the menu.
@@ -530,29 +512,6 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add new css style to the angular application in "global.css.
-     *
-     * @param {string} style - css to add in the file
-     * @param {string} comment - comment to add before css code
-     *
-     * example:
-     *
-     * style = '.jhipster {\n     color: #baa186;\n}'
-     * comment = 'New JHipster color'
-     *
-     * * ==========================================================================
-     * New JHipster color
-     * ========================================================================== *
-     * .jhipster {
-     *     color: #baa186;
-     * }
-     *
-     */
-    addMainCSSStyle(style, comment) {
-        this.needleApi.clientAngular.addGlobalCSSStyle(style, comment);
-    }
-
-    /**
      * Add new scss style to the angular application in "global.scss
      *
      * @param {string} style - css to add in the file
@@ -741,18 +700,6 @@ module.exports = class extends PrivateBase {
      */
     addGradlePluginToPluginsBlock(id, version) {
         this.needleApi.serverGradle.addPluginToPluginsBlock(id, version);
-    }
-
-    /**
-     * A new dependency to build.gradle file.
-     *
-     * @param {string} scope - scope of the new dependency, e.g. compile
-     * @param {string} group - maven GroupId
-     * @param {string} name - maven ArtifactId
-     * @param {string} version - (optional) explicit dependency version number
-     */
-    addGradleDependencyManagement(scope, group, name, version) {
-        this.needleApi.serverGradle.addDependencyManagement(scope, group, name, version);
     }
 
     /**
@@ -1781,17 +1728,6 @@ module.exports = class extends PrivateBase {
                 debug: generator.options.debug
             });
         }
-    }
-
-    /**
-     * @Deprecated
-     * Add numbering to a question
-     *
-     * @param {String} msg - question text
-     * @param {boolean} cond - increment question
-     */
-    getNumberedQuestion(msg, cond) {
-        return msg;
     }
 
     /**

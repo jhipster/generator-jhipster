@@ -82,7 +82,6 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: 'angularX',
-                        useSass: true,
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['en', 'fr']

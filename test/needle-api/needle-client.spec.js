@@ -69,7 +69,6 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: 'angularX',
-                        useSass: true,
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['en', 'fr']

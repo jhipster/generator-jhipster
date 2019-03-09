@@ -11,8 +11,7 @@
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "postgresql",
     "searchEngine": "no",
-    "useSass": false,
-    "buildTool": "maven",
+        "buildTool": "maven",
     "enableTranslation": true,
     "nativeLanguage": "en",
     "languages": [

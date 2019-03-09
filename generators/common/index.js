@@ -88,7 +88,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.enableSwaggerCodegen = this.configOptions.enableSwaggerCodegen;
                 this.serverPort = this.configOptions.serverPort;
                 this.clientFramework = this.configOptions.clientFramework;
-                this.useSass = this.configOptions.useSass;
                 this.protractorTests = this.testFrameworks.includes('protractor');
                 this.gatlingTests = this.testFrameworks.includes('gatling');
             },

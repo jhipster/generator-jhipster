@@ -14,7 +14,6 @@
         "searchEngine": false,
         "messageBroker": false,
         "buildTool": "gradle",
-        "useSass": true,
         "applicationType": "monolith",
         "testFrameworks": ["gatling", "protractor"],
         "jhiPrefix": "jhi",

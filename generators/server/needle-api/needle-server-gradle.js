@@ -54,21 +54,6 @@ module.exports = class extends needleServer {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addDependencyManagement(scope, group, name, version) {
-        const errorMessage = `${chalk.yellow('Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.')}`;
-        let dependency = `${group}:${name}`;
-        if (version) {
-            dependency += `:${version}`;
-        }
-        const rewriteFileModel = this.generateFileModel(
-            buildGradlePath,
-            'jhipster-needle-gradle-dependency-management',
-            `${scope} "${dependency}"`
-        );
-
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
-
     addDependencyInDirectory(directory, scope, group, name, version) {
         const errorMessage = `${chalk.yellow('Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.')}`;
         let dependency = `${group}:${name}`;

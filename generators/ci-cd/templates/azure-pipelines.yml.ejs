@@ -55,11 +55,11 @@ jobs:
   <%_ if (buildTool === 'maven') { _%>
   - script: |
       chmod +x mvnw
-      ./mvnw clean test
+      ./mvnw clean verify
   <%_ } else if (buildTool === 'gradle') { _%>
   - script: |
       chmod +x gradlew
-      ./gradlew clean test
+      ./gradlew clean test integrationTest
   <%_ } _%>
     displayName: 'TESTS: backend'
 <%_ if (!skipClient) { _%>
