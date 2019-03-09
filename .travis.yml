@@ -21,9 +21,7 @@ os:
     - linux
 services:
     - docker
-language: node_js
-node_js:
-    - '10.15.3'
+language: java
 jdk:
     - oraclejdk8
     - openjdk11
@@ -39,6 +37,7 @@ cache:
         - $HOME/.gradle
 env:
     global:
+        - NODE_VERSION=10.15.2
         - JHI_PROFILE=dev
         - JHI_RUN_APP=1
         - JHI_PROTRACTOR=0
@@ -68,6 +67,8 @@ env:
 # Install all tools and check configuration
 #----------------------------------------------------------------------
 before_install:
+    - nvm install $NODE_VERSION
+    - nvm use $NODE_VERSION
     - java -version
     - export TZ=Australia/Canberra
     - date
