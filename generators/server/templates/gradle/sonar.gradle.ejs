@@ -29,7 +29,12 @@ jacocoTestReport {
 sonarqube {
     properties {
         property "sonar.host.url", "http://localhost:9001"
-        property "sonar.exclusions", "<%= CLIENT_MAIN_SRC_DIR %>content/**/*.*,<%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*"
+        property("sonar.exclusions", [
+            "<%= CLIENT_MAIN_SRC_DIR %>content/**/*.*",
+            "<%= CLIENT_MAIN_SRC_DIR %>i18n/*.js",
+            "<%= CLIENT_DIST_DIR %>**/*.*",
+            "<%= SERVER_MAIN_SRC_DIR %><%= javaDir %><%= mainClass %>.java"
+        ])
 
         property "sonar.issue.ignore.multicriteria", "S3437,<% if (authenticationType === 'jwt') { %>S4502,<% } %>S4684,UndocumentedApi,BoldAndItalicTagsCheck"
 
