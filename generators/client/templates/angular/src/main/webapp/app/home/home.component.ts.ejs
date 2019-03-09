@@ -28,11 +28,7 @@ import { <% if (authenticationType !== 'oauth2') { %>LoginModalService<% } else 
     selector: '<%= jhiPrefixDashed %>-home',
     templateUrl: './home.component.html',
     styleUrls: [
-        <%_ if (useSass) { _%>
         'home.scss'
-        <%_ } else { _%>
-        'home.css'
-        <%_ } _%>
     ]
 
 })

@@ -32,9 +32,7 @@ const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
 
 const ENV = 'production';
-<%_ if (useSass) { _%>
 const sass = require('sass');
-<%_ } _%>
 
 module.exports = webpackMerge(commonConfig({ env: ENV }), {
     // Enable source maps. Please note that this will slow down the build.
@@ -42,11 +40,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     // devtool: 'source-map',
     entry: {
         polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
-        <%_ if (useSass) { _%>
         global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
-        <%_ } else { _%>
-        global: './<%= MAIN_SRC_DIR %>content/css/global.css',
-        <%_ } _%>
         main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
     output: {
@@ -59,7 +53,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
             loader: '@ngtools/webpack'
         },
-        <%_ if (useSass) { _%>
         {
             test: /\.scss$/,
             use: ['to-string-loader', 'css-loader', {
@@ -85,7 +78,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
                 }
             ]
         },
-        <%_ } _%>
         {
             test: /\.css$/,
             use: ['to-string-loader', 'css-loader'],

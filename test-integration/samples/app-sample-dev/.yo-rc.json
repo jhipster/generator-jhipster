@@ -12,7 +12,7 @@
         "devDatabaseType": "h2Disk",
         "prodDatabaseType": "mysql",
         "searchEngine": false,
-        "useSass": false,
+
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",

@@ -25,9 +25,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const path = require('path');
-<%_ if (useSass) { _%>
 const sass = require('sass');
-<%_ } _%>
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -52,7 +50,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         test: /\.s?css$/,
         loader: 'stripcomment-loader'
       },
-      <%_ if (useSass) { _%>
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
@@ -69,21 +66,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             options: { implementation: sass }
           }
         ]
-      },
-      <%_ } else { _%>
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: '../'
-            }
-          },
-          'css-loader'
-        ]
       }
-      <%_ } _%>
     ]
   },
   optimization: {
