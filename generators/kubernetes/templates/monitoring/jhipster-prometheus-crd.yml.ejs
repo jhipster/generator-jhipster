@@ -102,6 +102,10 @@ spec:
     metadata:
       labels:
         k8s-app: prometheus-operator
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       containers:
       - args:

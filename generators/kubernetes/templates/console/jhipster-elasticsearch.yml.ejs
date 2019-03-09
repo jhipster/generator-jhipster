@@ -49,6 +49,10 @@ spec:
       labels:
         component: jhipster-elasticsearch
         role: master
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       initContainers:
       - name: init-sysctl
@@ -195,6 +199,10 @@ spec:
       labels:
         component: jhipster-elasticsearch
         role: data
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       initContainers:
       - name: init-sysctl
@@ -336,6 +344,10 @@ spec:
       labels:
         component: jhipster-elasticsearch
         role: client
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       initContainers:
       - name: init-sysctl

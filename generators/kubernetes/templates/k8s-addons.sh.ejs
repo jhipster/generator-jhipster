@@ -1,0 +1,68 @@
+#!/bin/bash
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
+# kiali - istio service mesh observability
+export GRAFANA_URL="http://grafana.${ISTIO_SYSTEM}<%= ingressDomain %>"
+export JAEGER_URL="http://jaeger.${ISTIO_SYSTEM}<%= ingressDomain %>"
+export IMAGE_NAME="${IMAGE_NAME:-kiali/kiali}"
+export IMAGE_VERSION=
+export VERSION_LABEL=
+export IMAGE_PULL_POLICY_TOKEN="${IMAGE_PULL_POLICY_TOKEN:-imagePullPolicy: Always}"
+export NAMESPACE=istio-system
+export ISTIO_NAMESPACE="${NAMESPACE}"
+export VERBOSE_MODE="${VERBOSE_MODE:-3}"
+export KIALI_USERNAME_BASE64="YWRtaW4K"
+export KIALI_PASSPHRASE_BASE64="YWRtaW4K"
+
+if ! which 'envsubst' > /dev/null 2>&1 ; then
+  echo "ERROR: You do not have 'envsubst' in your PATH. Please install it and retry."
+  echo "If you are on MacOS, you can get this by installing the gettext package"
+  exit 1
+fi
+
+IMAGE_VERSION=$(curl https://api.github.com/repos/kiali/kiali/releases/latest 2> /dev/null | grep  "tag_name" | sed -e 's/.*://' -e 's/ *"//' -e 's/",//')
+VERSION_LABEL=${IMAGE_VERSION}
+
+get_downloader() {
+  if [ ! "$downloader" ] ; then
+    # Use wget command if available, otherwise try curl
+    if which wget > /dev/null ; then
+      downloader="wget -q -O -"
+    fi
+    if [ ! "$downloader" ] ; then
+      if which curl > /dev/null ; then
+        downloader="curl -s"
+      fi
+    fi
+    if [ ! "$downloader" ] ; then
+      echo "ERROR: You must install either curl or wget to allow downloading"
+      exit 1
+    fi
+  fi
+}
+
+for yaml in secret configmap serviceaccount clusterrole clusterrolebinding deployment service ingress
+do
+    get_downloader
+    yaml_url="https://raw.githubusercontent.com/kiali/kiali/${VERSION_LABEL}/deploy/kubernetes/${yaml}.yaml"
+    ${downloader} ${yaml_url} | envsubst | kubectl apply -n ${NAMESPACE} -f -
+done
+
+kubectl apply -f istio/
