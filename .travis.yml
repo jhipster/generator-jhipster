@@ -25,6 +25,7 @@ language: node_js
 node_js:
     - '10.15.3'
 jdk:
+    - oraclejdk8
     - openjdk11
 addons:
     apt:
@@ -67,7 +68,6 @@ env:
 # Install all tools and check configuration
 #----------------------------------------------------------------------
 before_install:
-    - jdk_switcher use oraclejdk8
     - java -version
     - export TZ=Australia/Canberra
     - date
@@ -94,6 +94,7 @@ install:
 # Launch tests
 #----------------------------------------------------------------------
 script:
+    - java -version
     - $JHI_SCRIPTS/20-docker-compose.sh
     - $JHI_SCRIPTS/21-tests-backend.sh
     - $JHI_SCRIPTS/22-tests-frontend.sh
