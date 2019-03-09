@@ -73,7 +73,7 @@ spec:
       labels:
         app: jhipster-registry
         version: "1.0"
-     <%_ if (istio !== 'no') { _%>
+     <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
      <%_ } _%>
@@ -94,7 +94,7 @@ spec:
             secretKeyRef:
               name: registry-secret
               key: registry-admin-password
-        <%_ if (istio !== 'no') { _%>
+        <%_ if (istio) { _%>
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "false"
         <%_ } _%>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,8 +19,8 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-gateway
-  namespace: <%= kubernetesNamespace %>
+  name: kiali-observability-gateway
+  namespace: istio-system
 spec:
   selector:
     istio: ingressgateway
@@ -30,44 +30,28 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - <%= app.baseName.toLowerCase() %>.<%= ingressDomain %>
+    - kiali.istio-system<%= ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - <%= app.baseName.toLowerCase() %>.<%= ingressDomain %>
-#  - port:
-#      number: 443
-#      name: https
-#      protocol: HTTPS
-#    hosts:
-#    - <%= app.baseName.toLowerCase() %>.<%= ingressDomain %>
+    - kiali.istio-system<%= ingressDomain %>
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-gw-virtualservice
-  namespace: <%= kubernetesNamespace %>
+  name: kiali-gw-virtualservice
+  namespace: istio-system
 spec:
   hosts:
-  - <%= app.baseName.toLowerCase() %>.<%= ingressDomain %>
+  - kiali.istio-system<%= ingressDomain %>
   gateways:
-  - <%= app.baseName.toLowerCase() %>-gateway
+  - kiali-observability-gateway
   http:
-  <%_ if (!app.serviceDiscoveryType) { _%>
-    <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(function(config) { _%>
-  - match:
-    - uri:
-        prefix: /<%= config.baseName.toLowerCase() %>/
-    route:
-    - destination:
-        host: <%= config.baseName.toLowerCase() %>
-    <%_ }); _%>
-  <%_ } _%>
   - match:
     - uri:
         prefix: /
     route:
     - destination:
-        host: <%= app.baseName.toLowerCase() %>
+        host: kiali
