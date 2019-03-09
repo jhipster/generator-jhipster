@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:cosmic
 
 RUN \
   # configure the "jhipster" user
@@ -8,7 +8,7 @@ RUN \
   mkdir /home/jhipster/app && \
   # install open-jdk 8
   apt-get update && \
-  apt-get install -y openjdk-8-jdk && \
+  apt-get install -y openjdk-11-jdk && \
   # install utilities
   apt-get install -y \
     wget \
