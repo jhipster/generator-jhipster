@@ -108,8 +108,8 @@ export class AccountService  {
                 <%_ if (enableTranslation) { _%>
                 // After retrieve the account info, the language will be changed to
                 // the user's preferred language configured in the account setting
-                const langKey = this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
-                if (langKey) {
+                if (this.userIdentity.langKey) {
+                    const langKey = this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
                     this.languageService.changeLanguage(langKey);
                 }
                 <%_ } _%>
