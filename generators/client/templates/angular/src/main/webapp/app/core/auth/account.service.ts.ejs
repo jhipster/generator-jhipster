@@ -110,10 +110,8 @@ export class AccountService  {
                 // After retrieve the account info, the language will be changed to
                 // the user's preferred language configured in the account setting
                 const langKey = this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
-                if (langKey && LANGUAGES.includes(langKey)) {
+                if (langKey) {
                     this.languageService.changeLanguage(langKey);
-                } else {
-                    this.languageService.changeLanguage('<%= nativeLanguage %>');
                 }
                 <%_ } _%>
             } else {
