@@ -20,6 +20,7 @@ import { Injectable } from '@angular/core';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
+import { LANGUAGES } from 'app/core/language/language.constants';
 <%_ } _%>
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
@@ -109,7 +110,11 @@ export class AccountService  {
                 // After retrieve the account info, the language will be changed to
                 // the user's preferred language configured in the account setting
                 const langKey = this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
-                this.languageService.changeLanguage(langKey);
+                if (langKey && LANGUAGES.includes(langKey)) {
+                    this.languageService.changeLanguage(langKey);
+                } else {
+                    this.languageService.changeLanguage('<%= nativeLanguage %>');
+                }
                 <%_ } _%>
             } else {
                 this.userIdentity = null;
