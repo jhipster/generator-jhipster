@@ -160,6 +160,7 @@ entity Shipment {
     trackingCode String
     date Instant required
     details String
+    shippingDuration Duration
 }
 
 enum PaymentMethod {
