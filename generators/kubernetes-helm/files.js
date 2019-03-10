@@ -53,8 +53,8 @@ function writeFiles() {
                     (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') &&
                     this.kubernetesServiceType === 'Ingress'
                 ) {
-                    if (this.istio !== 'no') {
-                        this.template(`${k8s}/gateway.yml.ejs`, `${appName}/templates/${appName}-gateway.yaml`);
+                    if (this.istio) {
+                        this.template(`${k8s}/istio/gateway.yml.ejs`, `${appName}/templates/${appName}-gateway.yaml`);
                     } else {
                         this.template(`${k8s}/ingress.yml.ejs`, `${appName}/templates/${appName}-ingress.yaml`);
                     }
@@ -62,7 +62,7 @@ function writeFiles() {
                 if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
                     this.template(`${k8s}/secret/jwt-secret.yml.ejs`, `${appName}/templates/jwt-secret.yaml`);
                 }
-                if (this.istioRoute === true) {
+                if (this.istio) {
                     this.template(`${k8s}/istio/destination-rule.yml.ejs`, `${appName}/templates/${appName}-destination-rule.yaml`);
                     this.template(`${k8s}/istio/virtual-service.yml.ejs`, `${appName}/templates/${appName}-virtual-service.yaml`);
                 }
