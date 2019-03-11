@@ -441,16 +441,22 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType === 'oauth2',
+            condition: generator => generator.authenticationType === 'oauth2' && ['monolith', 'gateway'].includes(generator.applicationType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/OAuth2Configuration.java',
-                    renameTo: generator => `${generator.javaDir}config/OAuth2Configuration.java`
-                },
+                    file: 'package/security/oauth2/AuthRedirectController.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/AuthRedirectController.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
                 {
-                    file: 'package/security/OAuth2AuthenticationSuccessHandler.java',
-                    renameTo: generator => `${generator.javaDir}security/OAuth2AuthenticationSuccessHandler.java`
+                    file: 'package/security/oauth2/AudienceValidator.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/AudienceValidator.java`
                 }
             ]
         },
@@ -578,21 +584,6 @@ const serverFiles = {
                 {
                     file: 'package/security/oauth2/UaaTokenEndpointClient.java',
                     renameTo: generator => `${generator.javaDir}security/oauth2/UaaTokenEndpointClient.java`
-                }
-            ]
-        },
-        {
-            condition: generator =>
-                generator.applicationType === 'gateway' && generator.authenticationType === 'oauth2' && generator.serviceDiscoveryType,
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/OAuth2Configuration.java',
-                    renameTo: generator => `${generator.javaDir}config/OAuth2Configuration.java`
-                },
-                {
-                    file: 'package/security/OAuth2AuthenticationSuccessHandler.java',
-                    renameTo: generator => `${generator.javaDir}security/OAuth2AuthenticationSuccessHandler.java`
                 }
             ]
         },

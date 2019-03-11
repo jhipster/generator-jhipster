@@ -58,12 +58,7 @@ import org.springframework.scheduling.annotation.Scheduled;
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -408,11 +403,11 @@ public class UserService {
      * Update basic information (first name, last name, email, language) for the current user.
      *
      * @param firstName first name of user.
-     * @param lastName last name of user.
-     * @param email email id of user.
-     * @param langKey language key.
+     * @param lastName  last name of user.
+     * @param email     email id of user.
+     * @param langKey   language key.
      <%_ if (databaseType === 'mongodb' || databaseType === 'sql' || databaseType === 'couchbase') { _%>
-     * @param imageUrl image URL of user.
+     * @param imageUrl  image URL of user.
      <%_ } _%>
      */
     public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>, String imageUrl<% } %>) {
@@ -715,34 +710,21 @@ public class UserService {
     <%_ if (authenticationType === 'oauth2') { _%>
 
     /**
-     * Returns the user for a OAuth2 authentication.
+     * Returns the user from an OAuth 2.0 login.
      * Synchronizes the user in the local repository.
      *
      * @param authentication OAuth2 authentication.
      * @return the user from the authentication.
      */
-    @SuppressWarnings("unchecked")
-    public <%= asDto('User') %> getUserFromAuthentication(OAuth2Authentication authentication) {
-        Object oauth2AuthenticationDetails = authentication.getDetails(); // should be an OAuth2AuthenticationDetails
-        Map<String, Object> details = (Map<String, Object>) authentication.getUserAuthentication().getDetails();
-        <%= asEntity('User') %> user = getUser(details);
-        Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> userAuthorities = extractAuthorities(authentication, details);
-        user.setAuthorities(userAuthorities);
-
-        // convert Authorities to GrantedAuthorities
-        Set<GrantedAuthority> grantedAuthorities = userAuthorities.stream()
-        <%_ if (databaseType !== 'couchbase') { _%>
-            .map(Authority::getName)
-        <%_ } _%>
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toSet());
-
-        UsernamePasswordAuthenticationToken token = getToken(details, user, grantedAuthorities);
-        authentication = new OAuth2Authentication(authentication.getOAuth2Request(), token);
-        authentication.setDetails(oauth2AuthenticationDetails); // must be present in a gateway for TokenRelayFilter to work
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return new <%= asDto('User') %>(syncUserWithIdP(details, user));
+    public <%= asDto('User') %> getUserFromAuthentication(OAuth2AuthenticationToken authToken) {
+        Map<String, Object> attributes = authToken.getPrincipal().getAttributes();
+        <%= asEntity('User') %> user = getUser(attributes);
+        user.setAuthorities(authToken.getAuthorities().stream().map(authority -> {
+                Authority auth = new Authority();
+                auth.setName((authority).getAuthority());
+                return auth;
+            }).collect(Collectors.toSet()));
+        return new <%= asDto('User') %>(syncUserWithIdP(attributes, user));
     }
 
     private <%= asEntity('User') %> syncUserWithIdP(Map<String, Object> details, <%= asEntity('User') %> user) {
@@ -790,36 +772,6 @@ public class UserService {
         return user;
     }
 
-    private static UsernamePasswordAuthenticationToken getToken(Map<String, Object> details, <%= asEntity('User') %> user, Set<GrantedAuthority> grantedAuthorities) {
-        // create UserDetails so #{principal.username} works
-        UserDetails userDetails =
-            new org.springframework.security.core.userdetails.User(user.getLogin(),
-            "N/A", grantedAuthorities);
-        // update Spring Security Authorities to match groups claim from IdP
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-            userDetails, "N/A", grantedAuthorities);
-        token.setDetails(details);
-        return token;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> extractAuthorities(OAuth2Authentication authentication, Map<String, Object> details) {
-        Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> userAuthorities;
-        // get roles from details
-        if (details.get("roles") != null) {
-            userAuthorities = extractAuthorities((List<String>) details.get("roles"));
-            // if roles don't exist, try groups
-        } else if (details.get("groups") != null) {
-            userAuthorities = extractAuthorities((List<String>) details.get("groups"));
-        } else {
-            userAuthorities = authoritiesFromStringStream(
-                authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-            );
-        }
-        return userAuthorities;
-    }
-
     private static <%= asEntity('User') %> getUser(Map<String, Object> details) {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         user.setId((String) details.get("sub"));
@@ -863,21 +815,6 @@ public class UserService {
         }
         user.setActivated(true);
         return user;
-    }
-
-    private static Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> extractAuthorities(List<String> values) {
-        return authoritiesFromStringStream(
-            values.stream().filter(role -> role.startsWith("ROLE_"))
-        );
-    }
-
-    private static Set<<% if (databaseType === 'couchbase') { %>String<% } else { %>Authority<% } %>> authoritiesFromStringStream(Stream<String> strings) {
-        return strings<% if (databaseType !== 'couchbase') { %>
-                    .map(string -> {
-                        Authority auth = new Authority();
-                        auth.setName(string);
-                        return auth;
-                    })<% } %>.collect(Collectors.toSet());
     }
     <%_ } _%>
     <%_ if (cacheManagerIsAvailable === true) { _%>

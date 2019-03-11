@@ -542,10 +542,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+        <%_ if (authenticationType !== 'oauth2') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -596,20 +598,19 @@
         </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2') { _%>
+        <!-- Spring Security OAuth 2.0 -->
         <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security.oauth.boot</groupId>
-            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-        </dependency>
-            <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-jwt</artifactId>
-        </dependency>
+            <%_ if (['monolith', 'gateway'].includes(applicationType)) { _%>
+        <!-- The dependency below is not used, but is required by Ignite JHipster and Ionic for JHipster. -->
+        <!-- If you want to set up your API as a resource server, this dependency is necessary. -->
             <%_ } _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         <dependency>
