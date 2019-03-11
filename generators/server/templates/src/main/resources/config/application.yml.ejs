@@ -237,9 +237,6 @@ spring:
 <%_ } else if (authenticationType === 'uaa') { _%>
 security:
     oauth2:
-        resource:
-            filter-order: 3
-    oauth2:
         client:
             access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
             user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
@@ -247,6 +244,7 @@ security:
             client-secret: web_app
             scope: openid profile email
         resource:
+            filter-order: 3
             user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
 <%_ } _%>
 
