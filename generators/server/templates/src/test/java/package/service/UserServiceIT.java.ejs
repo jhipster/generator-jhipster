@@ -353,7 +353,8 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         final <% if (reactive) { %>List<% } else { %>Page<% } %><<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers(pageable)<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(allManagedUsers<% if (!reactive) { %>.getContent()<% } %>.stream()<% } %><% if (databaseType === 'cassandra') { %>
-        final List<<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers();
+        final List<<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers()<% if (reactive) { %>
+            .collectList().block()<% } %>;
         assertThat(allManagedUsers.stream()<% } %>
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
