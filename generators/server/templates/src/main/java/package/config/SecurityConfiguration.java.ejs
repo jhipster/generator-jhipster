@@ -207,6 +207,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        // @formatter:off
         http
             .csrf()
             <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
@@ -223,7 +224,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
                 <%_ } _%>
             <%_ } _%>
             .exceptionHandling()
-            .authenticationEntryPoint(problemSupport)
             .accessDeniedHandler(problemSupport)<% if (authenticationType === 'session') { %>
         .and()
             .rememberMe()
@@ -283,6 +283,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
             oauth2resourceServer().jwt();
             <%_ } _%>
         <%_ } _%>
+        // @formatter:on
     }
     <%_ if (authenticationType === 'jwt') { _%>
 
@@ -295,6 +296,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
     /**
      * Map authorities from "groups" or "roles" claim in ID Token.
      */
+    @Bean
     @SuppressWarnings("unchecked")
     public GrantedAuthoritiesMapper userAuthoritiesMapper() {
         return (authorities) -> {

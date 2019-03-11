@@ -42,8 +42,7 @@ export class LoginService {
     <%_ if (authenticationType === 'oauth2') { _%>
     login() {
         const port = (location.port ? ':' + location.port : '');
-        const authorize = location.pathname.endsWith('/') ? 'authorize' : '/authorize';
-        location.href = '//' + location.hostname + port + authorize;
+        location.href = '//' + location.hostname + port + location.pathname + 'authorize';
     }
     <%_ } else { _%>
     login(credentials, callback?) {
