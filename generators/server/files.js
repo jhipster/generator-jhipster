@@ -688,40 +688,12 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                !(
-                    generator.applicationType !== 'microservice' &&
-                    !(
-                        generator.applicationType === 'gateway' &&
-                        (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')
-                    )
-                ) && generator.authenticationType === 'oauth2',
+            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/security/oauth2/AuthorizationHeaderUtil.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderUtil.java`
-                },
-                {
-                    file: 'package/security/oauth2/SimplePrincipalExtractor.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/SimplePrincipalExtractor.java`
-                },
-                {
-                    file: 'package/security/oauth2/SimpleAuthoritiesExtractor.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/SimpleAuthoritiesExtractor.java`
-                }
-            ]
-        },
-        {
-            condition: generator =>
-                generator.applicationType === 'microservice' &&
-                generator.authenticationType === 'oauth2' &&
-                generator.cacheProvider !== 'no',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/security/oauth2/CachedUserInfoTokenServices.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/CachedUserInfoTokenServices.java`
+                    file: 'package/security/oauth2/AuthorizationHeaderFilter.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderFilter.java`
                 }
             ]
         },
@@ -731,6 +703,10 @@ const serverFiles = {
                 (generator.applicationType === 'microservice' || generator.applicationType === 'gateway'),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
+                {
+                    file: 'package/security/oauth2/AuthorizationHeaderUtil.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderUtil.java`
+                },
                 {
                     file: 'package/config/FeignConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java`
@@ -744,30 +720,18 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}client/OAuth2InterceptedFeignConfiguration.java`
                 },
                 {
-                    file: 'package/config/OAuth2TokenServicesConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/OAuth2TokenServicesConfiguration.java`
-                },
-                {
                     file: 'package/client/TokenRelayRequestInterceptor.java',
                     renameTo: generator => `${generator.javaDir}client/TokenRelayRequestInterceptor.java`
                 }
             ]
         },
         {
-            condition: generator =>
-                !(
-                    generator.applicationType !== 'microservice' &&
-                    !(
-                        generator.applicationType === 'gateway' &&
-                        (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')
-                    )
-                ) &&
-                (generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway'),
+            condition: generator => generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/OAuth2SsoConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/OAuth2SsoConfiguration.java`
+                    file: 'package/config/SecurityConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/SecurityConfiguration.java`
                 }
             ]
         },
