@@ -298,6 +298,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
 
     /**
      * Map authorities from "groups" or "roles" claim in ID Token.
+     *
+     * @return a {@link GrantedAuthoritiesMapper} that maps groups from
+     * the IdP to Spring Security Authorities.
      */
     @Bean
     @SuppressWarnings("unchecked")
