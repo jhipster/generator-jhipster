@@ -63,8 +63,7 @@ import <%= packageName %>.security.oauth2.AudienceValidator;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
-    <%_ } _%>
-    <%_ if (applicationType === 'gateway') { _%>
+    <%_ } else if (applicationType === 'gateway') { _%>
 import <%=packageName%>.security.oauth2.AuthorizationHeaderFilter;
 import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
     <%_ } _%>
@@ -79,7 +78,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -88,6 +86,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 <%_ if (authenticationType === 'oauth2' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
+<%_ } _%>
 <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 <%_ } _%>
@@ -284,7 +283,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
             .oauth2Login();
             <%_ } else { _%>
         .and()
-            oauth2resourceServer().jwt();
+            .oauth2ResourceServer().jwt();
             <%_ } _%>
         <%_ } _%>
         // @formatter:on
@@ -337,7 +336,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
         return jwtDecoder;
     }
         <%_ } _%>
-
         <%_ if (applicationType === 'gateway') { _%>
 
     @Bean
