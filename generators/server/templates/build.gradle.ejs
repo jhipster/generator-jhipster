@@ -360,7 +360,13 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
         exclude module: "spring-boot-starter-tomcat"
     }
+    <%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-undertow"
+    <%_ } _%>
+    <%_ if (reactive) { _%>
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "io.netty:netty-tcnative-boringssl-static"
+    <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     implementation "org.springframework.boot:spring-boot-starter-websocket"
     <%_ } _%>
