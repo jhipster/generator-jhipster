@@ -138,7 +138,10 @@
         <%_ } _%>
         <git-commit-id-plugin.version>2.2.6</git-commit-id-plugin.version>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
-
+        <jacoco.reportFolder>${project.build.directory}/jacoco</jacoco.reportFolder>
+        <jacoco.utReportFile>${jacoco.reportFolder}/test.exec</jacoco.utReportFile>
+        <jacoco.itReportFile>${jacoco.reportFolder}/integrationTest.exec</jacoco.itReportFile>
+        
         <!-- Sonar properties -->
         <!--
         <sonar.host.url>http://localhost:9001</sonar.host.url>
@@ -161,10 +164,6 @@
 
         <sonar.issue.ignore.multicriteria.S4684.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S4684.resourceKey>
         <sonar.issue.ignore.multicriteria.S4684.ruleKey>squid:S4684</sonar.issue.ignore.multicriteria.S4684.ruleKey>
-        <sonar.jacoco.reportFolder>${project.build.directory}/jacoco</sonar.jacoco.reportFolder>
-        <sonar.jacoco.utReportFile>${sonar.jacoco.reportFolder}/test.exec</sonar.jacoco.utReportFile>
-        <sonar.jacoco.itReportFile>${sonar.jacoco.reportFolder}/integrationTest.exec</sonar.jacoco.itReportFile>
-        <sonar.jacoco.reportPaths>${sonar.jacoco.utReportFile},${sonar.jacoco.itReportFile}</sonar.jacoco.reportPaths>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
         <sonar.junit.utReportFolder>${project.testresult.directory}/test</sonar.junit.utReportFolder>
         <sonar.junit.itReportFolder>${project.testresult.directory}/integrationTest</sonar.junit.itReportFolder>
@@ -875,6 +874,24 @@
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>${properties-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>sonar-project.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <%_ if (enableSwaggerCodegen) { _%>
             <plugin>
                 <!--
@@ -934,7 +951,7 @@
                             </goals>
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
-                                <destFile>${sonar.jacoco.utReportFile}</destFile>
+                                <destFile>${jacoco.utReportFile}</destFile>
                             </configuration>
                         </execution>
                         <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
@@ -945,8 +962,8 @@
                                 <goal>report</goal>
                             </goals>
                             <configuration>
-                                <dataFile>${sonar.jacoco.utReportFile}</dataFile>
-                                <outputDirectory>${sonar.jacoco.reportFolder}</outputDirectory>
+                                <dataFile>${jacoco.utReportFile}</dataFile>
+                                <outputDirectory>${jacoco.reportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                         <execution>
@@ -956,7 +973,7 @@
                             </goals>
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
-                                <destFile>${sonar.jacoco.itReportFile}</destFile>
+                                <destFile>${jacoco.itReportFile}</destFile>
                             </configuration>
                         </execution>
                         <!-- Ensures that the code coverage report for integration tests is created after integration tests have been run -->
@@ -967,8 +984,8 @@
                                 <goal>report-integration</goal>
                             </goals>
                             <configuration>
-                                <dataFile>${sonar.jacoco.itReportFile}</dataFile>
-                                <outputDirectory>${sonar.jacoco.reportFolder}</outputDirectory>
+                                <dataFile>${jacoco.itReportFile}</dataFile>
+                                <outputDirectory>${jacoco.reportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                     </executions>
@@ -1257,24 +1274,6 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>properties-maven-plugin</artifactId>
-                    <version>${properties-maven-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <phase>initialize</phase>
-                            <goals>
-                                <goal>read-project-properties</goal>
-                            </goals>
-                            <configuration>
-                                <files>
-                                    <file>sonar-project.properties</file>
-                                </files>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

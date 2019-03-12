@@ -7,12 +7,12 @@ sonar.host.url=http://localhost:9001
 
 sonar.tests=<%= TEST_DIR %>
 <%_ if (!skipServer) { _%>
-sonar.jacoco.reportPaths=${project.testresult.directory}/coverage/jacoco/jacoco.exec
+sonar.jacoco.reportPaths=target/jacoco/test.exec,target/jacoco/integrationTest.exec
 sonar.java.codeCoveragePlugin=jacoco
-sonar.junit.reportsPath=${project.testresult.directory}
+sonar.junit.reportsPath=target/test-results
 <%_ } _%>
 <%_ if (!skipClient) { _%>
-sonar.typescript.lcov.reportPaths=<%_ if (buildTool === 'maven') { _%>${project.testresult.directory}/lcov.info<%_ } else { _%> build/test-results/lcov.info <%_ } _%>
+sonar.typescript.lcov.reportPaths=<%_ if (buildTool === 'maven') { _%>target/<%_ } else { _%> build/<%_ } _%>test-results/lcov.info
 <%_ } _%>
 
 sonar.sourceEncoding=UTF-8
