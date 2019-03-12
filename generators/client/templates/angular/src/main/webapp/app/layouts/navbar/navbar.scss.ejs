@@ -18,6 +18,9 @@
 -%>
 
 @import '~bootstrap/scss/functions';
+<%_ if (clientTheme !== 'none') { _%>
+@import "~bootswatch/dist/<%= clientTheme %>/variables";
+<%_ } _%>
 @import '~bootstrap/scss/variables';
 
 /* ==========================================================================
@@ -42,21 +45,25 @@ Navbar
         background-color: $dark;
     }
 
+    .dropdown-item:hover {
+        color: $dropdown-link-hover-color;
+    }
+
     ul.navbar-nav {
         .nav-item {
             margin-left: 0.5em;
         }
     }
-    
+
     a.nav-link {
         font-weight: 400;
     }
-    
+
     .navbar-toggler {
         &:hover {
             color: $navbar-dark-hover-color;
         }
-    }    
+    }
 }
 
 /* ==========================================================================

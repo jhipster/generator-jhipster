@@ -106,6 +106,13 @@ module.exports = class extends BaseBlueprintGenerator {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
                 }
+
+                this.clientTheme = configuration.get('clientTheme');
+                if (!this.clientTheme) {
+                    this.clientTheme = 'none';
+                }
+                this.clientThemeVariant = configuration.get('clientThemeVariant');
+
                 this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
@@ -181,9 +188,13 @@ module.exports = class extends BaseBlueprintGenerator {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
             askFori18n: prompts.askFori18n,
+            askForClientTheme: prompts.askForClientTheme,
+            askForClientThemeVariant: prompts.askForClientThemeVariant,
 
             setSharedConfigOptions() {
                 this.configOptions.clientFramework = this.clientFramework;
+                this.configOptions.clientTheme = this.clientTheme;
+                this.configOptions.clientThemeVariant = this.clientThemeVariant;
             }
         };
     }
@@ -228,6 +239,8 @@ module.exports = class extends BaseBlueprintGenerator {
                     applicationType: this.applicationType,
                     baseName: this.baseName,
                     clientFramework: this.clientFramework,
+                    clientTheme: this.clientTheme,
+                    clientThemeVariant: this.clientThemeVariant,
                     useSass: true,
                     enableTranslation: this.enableTranslation,
                     skipCommitHook: this.skipCommitHook,
