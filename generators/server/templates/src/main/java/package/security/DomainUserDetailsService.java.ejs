@@ -90,7 +90,7 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
         }
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
             .map(authority -> new SimpleGrantedAuthority(authority.getName()))<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
-            .map(authority -> new SimpleGrantedAuthority(authority))<% } %>
+            .map(SimpleGrantedAuthority::new)<% } %>
             .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(user.getLogin(),
             user.getPassword(),

@@ -19,22 +19,34 @@
 package <%=packageName%>.domain;
 
 import <%=packageName%>.config.Constants;
-<% if (databaseType === 'cassandra') { %>
-import com.datastax.driver.mapping.annotations.*;<% } %>
+
+<%_ if (databaseType === 'couchbase') { _%>
+import com.couchbase.client.java.repository.annotation.Field;
+<%_ } _%>
+<%_ if (!reactive && databaseType === 'cassandra') { _%>
+import com.datastax.driver.mapping.annotations.*;
+<%_ } _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.StringUtils;<% if (databaseType === 'sql') { %>
-import org.hibernate.annotations.BatchSize;<% } %><% if (enableHibernateCache) { %>
+import org.apache.commons.lang3.StringUtils;
+<%_ if (databaseType === 'sql') { _%>
+import org.hibernate.annotations.BatchSize;
+<%_ } _%>
+<%_ if (enableHibernateCache) { _%>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
-import javax.validation.constraints.Email;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 <%_ } _%>
+<%_ if (reactive && databaseType === 'cassandra') { _%>
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
+<%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.data.annotation.Id;
-import com.couchbase.client.java.repository.annotation.Field;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
@@ -47,17 +59,17 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 <%_ if (databaseType === 'sql') { _%>
 import javax.persistence.*;
 <%_ } _%>
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import java.time.Instant;
 <%_ } _%>
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 <%_ if (databaseType === 'couchbase') { _%>
 import static <%=packageName%>.config.Constants.ID_DELIMITER;
@@ -66,20 +78,31 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } _%>
 /**
  * A user.
- */<% if (databaseType === 'sql') { %>
+ */
+ <%_ if (databaseType === 'sql') { _%>
 @Entity
-@Table(name = "<%= jhiTablePrefix %>_user")<% } %>
-<%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE) <%_ } else { _%>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE) <%_ } } _%><% if (databaseType === 'mongodb') { %>
-@org.springframework.data.mongodb.core.mapping.Document(collection = "<%= jhiTablePrefix %>_user")<% } %><% if (databaseType === 'couchbase') { %>
-@Document<% } %><% if (databaseType === 'cassandra') { %>
-@Table(name = "user")<% } %><% if (searchEngine === 'elasticsearch') { %>
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "user")<% } %>
+@Table(name = "<%= jhiTablePrefix %>_user")
+<%_ } _%>
+<%_ if (enableHibernateCache) { _%>
+@Cache(usage = CacheConcurrencyStrategy.<% if (cacheProvider !== 'infinispan') { %>NONSTRICT_<% } %>READ_WRITE)
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+@org.springframework.data.mongodb.core.mapping.Document(collection = "<%= jhiTablePrefix %>_user")
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+@Document
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
+@Table(<% if(!reactive) { %>name = <% } %>"user")
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
+<%_ } _%>
 public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 
     private static final long serialVersionUID = 1L;
-<% if (databaseType === 'sql') { %>
+
+<%_ if (databaseType === 'sql') { _%>
     @Id
     <%_ if (authenticationType !== 'oauth2' && (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb')) { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -90,20 +113,32 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (searchEngine === 'elasticsearch') { _%>
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     <%_ } _%>
-    private <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;<% } else { %><% if (databaseType === 'couchbase') { %>
+    private <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;
+<%_ } else { _%>
+    <%_ if (databaseType === 'couchbase') { _%>
     public static final String PREFIX = "user";
 
     @IdPrefix
     private String prefix = PREFIX;
-<%_ } _%>
-<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-    @Id<% } %><% if (databaseType === 'couchbase') { %>
-    @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)<% } %><% if (databaseType === 'cassandra') { %>
-    @PartitionKey<% } %>
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    @Id
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    @GeneratedValue(strategy = USE_ATTRIBUTES, delimiter = ID_DELIMITER)
+    <%_ } _%>
+    <%_ if (databaseType === 'cassandra') { _%>
+        <%_ if (!reactive) { _%>
+    @PartitionKey
+        <%_ } else { _%>
+    @PrimaryKey
+        <%_ } _%>
+    <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     <%_ } _%>
-    private String id;<% } %>
+    private String id;
+<%_ } _%>
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -146,7 +181,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     @Size(min = 2, max = 6)<% if (databaseType === 'sql') { %>
     @Column(name = "lang_key", length = 6)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Field("lang_key")<% } %><% if (databaseType === 'cassandra') { %>
-    @Column(name = "lang_key")<% } %>
+    @Column(<% if(!reactive) { %>name = <% } %>"lang_key")<% } %>
     private String langKey;
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 
@@ -160,19 +195,19 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     @Size(max = 20)<% if (databaseType === 'sql') { %>
     @Column(name = "activation_key", length = 20)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Field("activation_key")<% } %><% if (databaseType === 'cassandra') { %>
-    @Column(name = "activation_key")<% } %>
+    @Column(<% if(!reactive) { %>name = <% } %>"activation_key")<% } %>
     @JsonIgnore
     private String activationKey;
 
     @Size(max = 20)<% if (databaseType === 'sql') { %>
     @Column(name = "reset_key", length = 20)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Field("reset_key")<% } %><% if (databaseType === 'cassandra') { %>
-    @Column(name = "reset_key")<% } %>
+    @Column(<% if(!reactive) { %>name = <% } %>"reset_key")<% } %>
     @JsonIgnore
     private String resetKey;
 
     <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
-    @Column(name = "reset_date")
+    @Column(<% if(!reactive) { %>name = <% } %>"reset_date")
     <%_ } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("reset_date")
     <%_ } _%>

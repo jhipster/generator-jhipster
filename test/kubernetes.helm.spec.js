@@ -430,7 +430,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
     });
 
-    describe('gateway with istio routing', () => {
+    describe('gateway with istio', () => {
         beforeEach(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes-helm'))
@@ -448,8 +448,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesServiceType: 'Ingress',
                     ingressDomain: 'example.com',
                     clusteredDbApps: [],
-                    istio: 'manualInjection',
-                    istioRoute: true
+                    istio: true
                 })
                 .on('end', done);
         });
