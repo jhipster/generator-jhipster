@@ -22,10 +22,7 @@ function askForClient(meta) {
         type: 'list',
         name: 'clientFramework',
         when: () => (applicationType !== 'microservice' && applicationType !== 'uaa'),
-        message: () => this.getNumberedQuestion(
-            'Which *Framework* would you like to use for the client?',
-            applicationType !== 'microservice' && applicationType !== 'uaa'
-        ),
+        message: () => 'Which *Framework* would you like to use for the client?',
         choices,
         default: 'vue'
     };
