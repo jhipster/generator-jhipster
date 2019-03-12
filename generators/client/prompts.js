@@ -119,6 +119,7 @@ function askForClientTheme(meta) {
 
     this.httpsGet(
         'https://bootswatch.com/api/4.json',
+        // eslint-disable-next-line consistent-return
         body => {
             try {
                 const { themes } = JSON.parse(body);
@@ -136,7 +137,7 @@ function askForClientTheme(meta) {
                     })
                 ];
 
-                if (meta) return PROMPT;
+                if (meta) return PROMPT; // eslint-disable-line consistent-return
                 promptQuestion(PROMPT, done, this);
             } catch (err) {
                 this.warning('Could not fetch bootswatch themes from API. Using default ones.');
@@ -179,7 +180,7 @@ function askForClientThemeVariant(meta) {
         default: 'primary'
     };
 
-    if (meta) return PROMPT;
+    if (meta) return PROMPT; // eslint-disable-line consistent-return
 
     const done = this.async();
 
