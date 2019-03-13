@@ -515,16 +515,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- log4j needed to create embedded elasticsearch instance -->
+        <!-- log4j2-mock needed to create embedded elasticsearch instance with SLF4J -->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.7</version>
+            <groupId>de.dentrassi.elasticsearch</groupId>
+            <artifactId>log4j2-mock</artifactId>
+            <version>0.0.1</version>
+            <scope>runtime</scope>
         </dependency>
         <!-- end of Spring Data Jest dependencies -->
         <%_ } _%>

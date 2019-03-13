@@ -343,9 +343,8 @@ dependencies {
     implementation ("com.github.vanroy:spring-boot-starter-data-jest") {
         exclude module: "commons-logging"
     }
-    // log4j needed to create embedded elasticsearch instance
-    runtimeOnly "org.apache.logging.log4j:log4j-api:2.7"
-    runtimeOnly "org.apache.logging.log4j:log4j-core:2.7"
+    // log4j2-mock needed to create embedded elasticsearch instance with SLF4J
+    runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:0.0.1"
     // end of Spring Data Jest dependencies
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
