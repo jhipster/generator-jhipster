@@ -282,7 +282,7 @@ docker-compose -f src/main/docker/sonar.yml up -d
 Then, run a Sonar analysis:
 
 ```
-<% if (buildTool === 'maven') { %>./mvnw -Pprod clean test sonar:sonar<% } else { %>./gradlew -Pprod clean test sonarqube<% } %>
+<% if (buildTool === 'maven') { %>./mvnw -Pprod clean verify sonar:sonar<% } else { %>./gradlew -Pprod clean test sonarqube<% } %>
 ```
 
 For more information, refer to the [Code quality page][].
