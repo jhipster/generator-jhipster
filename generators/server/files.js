@@ -451,12 +451,22 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'microservice',
+            condition: generator => generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
                     file: 'package/security/oauth2/AudienceValidator.java',
                     renameTo: generator => `${generator.javaDir}security/oauth2/AudienceValidator.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/oauth2/AudienceValidatorTest.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/AudienceValidatorTest.java`
                 }
             ]
         },

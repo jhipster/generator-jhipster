@@ -58,12 +58,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
-    <%_ if (applicationType === 'microservice') { _%>
 import <%= packageName %>.security.oauth2.AudienceValidator;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
-    <%_ } else if (applicationType === 'gateway') { _%>
+    <%_ if (applicationType === 'gateway') { _%>
 import <%=packageName%>.security.oauth2.AuthorizationHeaderFilter;
 import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
     <%_ } _%>
@@ -268,6 +267,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
             .antMatchers("/api/**").authenticated()
             <%_ if (authenticationType === 'oauth2') { _%>
             .antMatchers("/authorize").authenticated()
+            .antMatchers("/api/auth-info").permitAll()
             <%_ } _%>
             <%_ if (websocket === 'spring-websocket') { _%>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
@@ -281,13 +281,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
         .and()
             .apply(securityConfigurerAdapter());
         <%_ } else if (authenticationType === 'oauth2') { _%>
-            <%_ if (['monolith', 'gateway'].includes(applicationType)) { _%>
         .and()
-            .oauth2Login();
-            <%_ } else { _%>
+            .oauth2Login()
         .and()
             .oauth2ResourceServer().jwt();
-            <%_ } _%>
         <%_ } _%>
         // @formatter:on
     }
@@ -326,7 +323,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
             return mappedAuthorities;
         };
     }
-        <%_ if (applicationType === 'microservice') { _%>
 
     @Bean
     JwtDecoder jwtDecoder() {
@@ -341,7 +337,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
 
         return jwtDecoder;
     }
-        <%_ } _%>
         <%_ if (applicationType === 'gateway') { _%>
 
     @Bean
