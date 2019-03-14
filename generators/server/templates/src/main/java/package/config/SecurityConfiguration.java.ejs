@@ -281,8 +281,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
         .and()
             .apply(securityConfigurerAdapter());
         <%_ } else if (authenticationType === 'oauth2') { _%>
+            <%_ if (['monolith', 'gateway'].includes(applicationType)) { _%>
         .and()
             .oauth2Login()
+            <%_ } _%>
         .and()
             .oauth2ResourceServer().jwt();
         <%_ } _%>
