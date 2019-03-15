@@ -96,6 +96,7 @@ describe('Component Tests', () => {
                             body: entity
                         })));
                         comp.user = entity;
+                        comp.editForm.patchValue({ id: entity.id });
                         // WHEN
                         comp.save();
                         tick(); // simulate async
