@@ -23,6 +23,9 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: consul-config-loader
   template:
     metadata:
       labels:

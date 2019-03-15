@@ -339,6 +339,10 @@ metadata:
     role: client
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      component: jhipster-elasticsearch
+      role: client
   template:
     metadata:
       labels:

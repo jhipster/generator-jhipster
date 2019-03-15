@@ -34,6 +34,9 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-mariadb
   template:
     metadata:
       labels:

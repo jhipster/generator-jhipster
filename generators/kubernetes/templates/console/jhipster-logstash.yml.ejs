@@ -41,6 +41,9 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: jhipster-logstash
   template:
     metadata:
       labels:
