@@ -64,7 +64,6 @@
         <!-- Build properties -->
         <maven.version>3.0.0</maven.version>
         <java.version><%= JAVA_VERSION %></java.version>
-        <scala.version><%= SCALA_VERSION %></scala.version>
         <%_ if (!skipClient) { _%>
         <node.version>v<%= NODE_VERSION %></node.version>
             <%_ if (clientPackageManager === 'npm') { _%>
@@ -132,7 +131,6 @@
         <%_ } _%>
         <jacoco-maven-plugin.version>0.8.3</jacoco-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <scala-maven-plugin.version>4.0.1</scala-maven-plugin.version>
         <sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
         <openapi-generator-maven-plugin.version>3.3.4</openapi-generator-maven-plugin.version>
@@ -771,14 +769,14 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-            <plugin> 
-                <groupId>org.apache.maven.plugins</groupId> 
-                <artifactId>maven-javadoc-plugin</artifactId> 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven-javadoc-plugin.version}</version>
-                <configuration> 
-                  <source>8</source> 
-                </configuration> 
-              </plugin> 
+                <configuration>
+                  <source>8</source>
+                </configuration>
+              </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -1206,34 +1204,6 @@
                 </plugin>
                 <%_ } _%>
                 <plugin>
-                    <groupId>net.alchim31.maven</groupId>
-                    <artifactId>scala-maven-plugin</artifactId>
-                    <version>${scala-maven-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>compile</id>
-                            <phase>compile</phase>
-                            <goals>
-                                <goal>add-source</goal>
-                                <goal>compile</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>test-compile</id>
-                            <phase>test-compile</phase>
-                            <goals>
-                                <goal>add-source</goal>
-                                <goal>testCompile</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <recompileMode>incremental</recompileMode>
-                        <verbose>true</verbose>
-                        <scalaVersion>${scala.version}</scalaVersion>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <groupId>org.sonarsource.scanner.maven</groupId>
                     <artifactId>sonar-maven-plugin</artifactId>
                     <version>${sonar-maven-plugin.version}</version>
@@ -1550,71 +1520,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
-            <!--
-                Profile for doing "continuous compilation" with the Scala Maven plugin.
-                It allows automatic compilation of Java classes as soon as they are saved.
-                To use it, run in 3 terminals:
-                - './mvnw -Pcc scala:cc' for continuous compilation of your classes
-                - './mvnw -Pcc -Pdev' for hot reload of Spring boot
-                - 'npm start/yarn start' for hot reload of the HTML/JavaScript asset
-                Everything should hot reload automatically!
-            -->
-            <id>cc</id>
-            <dependencies>
-                <%_ if (!reactive) { _%>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-undertow</artifactId>
-                </dependency>
-                <%_ } _%>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-devtools</artifactId>
-                    <optional>true</optional>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <mainClass>${start-class}</mainClass>
-                            <executable>true</executable>
-                            <fork>true</fork>
-                            <addResources>true</addResources>
-                            <!--
-                            Enable the line below to have remote debugging of your application on port 5005
-                            <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
-                            -->
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>default-compile</id>
-                                <phase>none</phase>
-                            </execution>
-                            <execution>
-                                <id>default-testCompile</id>
-                                <phase>none</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>net.alchim31.maven</groupId>
-                        <artifactId>scala-maven-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-            <properties>
-                <!-- default Spring profiles -->
-                <spring.profiles.active>dev,swagger</spring.profiles.active>
-            </properties>
         </profile>
         <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
         <profile>
