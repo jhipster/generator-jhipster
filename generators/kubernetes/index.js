@@ -76,27 +76,7 @@ module.exports = class extends BaseDockerGenerator {
                     }
                 });
             },
-<<<<<<< HEAD
-
-            saveConfig() {
-                this.config.set({
-                    appsFolders: this.appsFolders,
-                    directoryPath: this.directoryPath,
-                    clusteredDbApps: this.clusteredDbApps,
-                    serviceDiscoveryType: this.serviceDiscoveryType,
-                    jwtSecretKey: this.jwtSecretKey,
-                    dockerRepositoryName: this.dockerRepositoryName,
-                    dockerPushCommand: this.dockerPushCommand,
-                    kubernetesNamespace: this.kubernetesNamespace,
-                    kubernetesServiceType: this.kubernetesServiceType,
-                    ingressDomain: this.ingressDomain,
-                    monitoring: this.monitoring,
-                    istio: this.istio
-                });
-            }
-=======
             saveConfig
->>>>>>> refactor common code between the kubernetes and helm subgens
         };
     }
 
