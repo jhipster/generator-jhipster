@@ -234,7 +234,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const relationshipRequired = relationships[idx].relationshipRequired;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const ownerSide = relationships[idx].ownerSide;
-        const useJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
+        const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
         if (otherEntityRelationshipName) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
@@ -308,7 +308,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
             <%_ }_%>
-            <%_ if (useJPADerivedIdentifier === true) { %>
+            <%_ if (isUsingMapsId === true) { %>
     @MapsId
     @JoinColumn(name = "id")
             <%_ } else { %>
