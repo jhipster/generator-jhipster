@@ -49,7 +49,6 @@ function loadConfig() {
     this.kubernetesServiceType = this.config.get('kubernetesServiceType');
     this.ingressDomain = this.config.get('ingressDomain');
     this.istio = this.config.get('istio');
-    this.istioRoute = this.config.get('istioRoute');
     this.dbRandomPassword = Math.random()
         .toString(36)
         .slice(-8);
@@ -69,7 +68,6 @@ function saveConfig() {
         ingressDomain: this.ingressDomain,
         monitoring: this.monitoring,
         istio: this.istio,
-        istioRoute: this.istioRoute
     });
 }
 
