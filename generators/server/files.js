@@ -441,7 +441,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' && ['monolith', 'gateway'].includes(generator.applicationType),
+            condition: generator =>
+                generator.authenticationType === 'oauth2' && ['monolith', 'gateway'].includes(generator.applicationType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
