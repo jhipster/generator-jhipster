@@ -534,6 +534,16 @@
             <artifactId>spring-boot-starter-data-<%=databaseType%><% if (reactive) { %>-reactive<% } %></artifactId>
         </dependency>
         <%_ } _%>
+        <%_ if (reactive) { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-tcnative-boringssl-static</artifactId>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
@@ -1276,10 +1286,12 @@
                 </file>
             </activation>
             <dependencies>
+                <%_ if (!reactive) { _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
+                <%_ } _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
@@ -1364,10 +1376,12 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <dependencies>
+                <%_ if (!reactive) { _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
+                <%_ } _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
@@ -1387,12 +1401,14 @@
         </profile>
         <profile>
             <id>prod</id>
+            <%_ if (!reactive) { _%>
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
             </dependencies>
+            <%_ } _%>
             <build>
                 <plugins>
                     <plugin>
@@ -1557,10 +1573,12 @@
             -->
             <id>cc</id>
             <dependencies>
+                <%_ if (!reactive) { _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
+                <%_ } _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>

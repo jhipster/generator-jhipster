@@ -492,7 +492,9 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(foundUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        <%_ if (databaseType !== 'cassandra') { _%>
         assertThat(foundUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         <%_ } _%>
     }
@@ -535,7 +537,9 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
             .jsonPath("$.firstName").isEqualTo(DEFAULT_FIRSTNAME)
             .jsonPath("$.lastName").isEqualTo(DEFAULT_LASTNAME)
             .jsonPath("$.email").isEqualTo(DEFAULT_EMAIL)
+            <%_ if (databaseType !== 'cassandra') { _%>
             .jsonPath("$.imageUrl").isEqualTo(DEFAULT_IMAGEURL)
+            <%_ } _%>
             .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY);
         <%_ } _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
