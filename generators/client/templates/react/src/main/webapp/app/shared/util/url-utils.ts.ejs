@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (authenticationType === 'oauth2') { _%>
 export const getLoginUrl = () => {
   const port = location.port ? `:${location.port}` : '';
-  return `//${location.hostname}${port}/login`;
+  return `//${location.hostname}${port}${location.pathname}authorize`;
 }
-<%_ } _%>

@@ -343,9 +343,8 @@ dependencies {
     implementation ("com.github.vanroy:spring-boot-starter-data-jest") {
         exclude module: "commons-logging"
     }
-    // log4j needed to create embedded elasticsearch instance
-    runtimeOnly "org.apache.logging.log4j:log4j-api:2.7"
-    runtimeOnly "org.apache.logging.log4j:log4j-core:2.7"
+    // log4j2-mock needed to create embedded elasticsearch instance with SLF4J
+    runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:0.0.1"
     // end of Spring Data Jest dependencies
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
@@ -395,7 +394,7 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-consul-discovery"
     implementation "org.springframework.cloud:spring-cloud-starter-consul-config"
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
+    <%_ if (authenticationType === 'uaa') { _%>
     implementation "org.springframework.cloud:spring-cloud-security"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
@@ -409,11 +408,8 @@ dependencies {
     implementation "org.springframework.security:spring-security-messaging"
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
-    implementation "org.springframework.security.oauth:spring-security-oauth2"
-    implementation "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure"
-        <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
-    implementation "org.springframework.security:spring-security-jwt"
-        <%_ } _%>
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     implementation "io.jsonwebtoken:jjwt-api"
@@ -422,6 +418,7 @@ dependencies {
     <%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
     implementation "org.springframework.security.oauth:spring-security-oauth2"
+    implementation "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure"
     implementation "org.springframework.security:spring-security-jwt"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>

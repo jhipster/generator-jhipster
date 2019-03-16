@@ -42,7 +42,7 @@ export class LoginService {
     <%_ if (authenticationType === 'oauth2') { _%>
     login() {
         const port = (location.port ? ':' + location.port : '');
-        location.href = '//' + location.hostname + port + location.pathname + 'login';
+        location.href = '//' + location.hostname + port + location.pathname + 'authorize';
     }
     <%_ } else { _%>
     login(credentials, callback?) {
@@ -72,7 +72,7 @@ export class LoginService {
     }
     <%_ } _%>
     <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
-    
+
     isAuthenticated() {
         return this.accountService.isAuthenticated();
     }
