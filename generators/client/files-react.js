@@ -143,20 +143,6 @@ const files = {
             path: REACT_DIR,
             templates: ['app.scss', '_bootstrap-variables.scss']
         }
-        // {
-        //   condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
-        //   path: REACT_DIR,
-        //   templates: [
-        //     'blocks/interceptor/_auth.interceptor.js'
-        //   ]
-        // },
-        // {
-        //   condition: generator => !generator.skipServer,
-        //   path: REACT_DIR,
-        //   templates: [
-        //     'blocks/interceptor/_auth-expired.interceptor.js'
-        //   ]
-        // }
     ],
     reactEntities: [
         {
@@ -286,7 +272,6 @@ const files = {
                 // util
                 'shared/util/date-utils.ts',
                 'shared/util/pagination.constants.ts',
-                'shared/util/url-utils.ts',
                 'shared/util/entity-utils.ts',
                 // components
                 { file: 'shared/auth/private-route.tsx', method: 'processJsx' },

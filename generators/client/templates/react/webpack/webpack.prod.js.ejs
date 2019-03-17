@@ -77,13 +77,27 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         parallel: true,
         // sourceMap: true, // Enable source maps. Please note that this will slow down the build
         terserOptions: {
+          ecma: 6,
+          toplevel: true,
+          module: true,
           beautify: false,
           comments: false,
           compress: {
-            warnings: false
+            warnings: false,
+            ecma: 6,
+            module: true,
+            toplevel: true
+          },
+          output: {
+              comments: false,
+              beautify: false,
+              indent_level: 2,
+              ecma: 6
           },
           mangle: {
-            keep_fnames: true
+            keep_fnames: true,
+            module: true,
+            toplevel: true
           }
         }
       }),

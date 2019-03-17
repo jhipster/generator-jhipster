@@ -515,16 +515,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- log4j needed to create embedded elasticsearch instance -->
+        <!-- log4j2-mock needed to create embedded elasticsearch instance with SLF4J -->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.7</version>
+            <groupId>de.dentrassi.elasticsearch</groupId>
+            <artifactId>log4j2-mock</artifactId>
+            <version>0.0.1</version>
+            <scope>runtime</scope>
         </dependency>
         <!-- end of Spring Data Jest dependencies -->
         <%_ } _%>
@@ -552,10 +548,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+        <%_ if (authenticationType !== 'oauth2') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -606,20 +604,15 @@
         </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2') { _%>
+        <!-- Spring Security OAuth 2.0 -->
         <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security.oauth.boot</groupId>
-            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
-            <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-jwt</artifactId>
-        </dependency>
-            <%_ } _%>
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         <dependency>
@@ -641,6 +634,10 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -711,7 +708,7 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
+        <%_ if (authenticationType === 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-security</artifactId>
