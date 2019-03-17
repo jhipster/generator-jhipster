@@ -46,7 +46,7 @@
         <div class="col-md-8">
             <form name="form" role="form" (ngSubmit)="register()" #registerForm="ngForm" *ngIf="!success">
                 <div class="form-group">
-                    <label class="form-control-label" for="login" jhiTranslate="global.form.username">Username</label>
+                    <label class="form-control-label" for="login" jhiTranslate="global.form.username.label">Username</label>
                     <input type="text" class="form-control" [(ngModel)]="registerAccount.login" id="login" name="login" #login="ngModel" placeholder="{{'global.form.username.placeholder' | translate}}"
                             required minlength="1" maxlength="50" pattern="^[_.@A-Za-z0-9-]*$">
                     <div *ngIf="login.dirty && login.invalid">
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="email" jhiTranslate="global.form.email">Email</label>
+                    <label class="form-control-label" for="email" jhiTranslate="global.form.email.label">Email</label>
                     <input type="email" class="form-control" id="email" name="email" #email="ngModel" placeholder="{{'global.form.email.placeholder' | translate}}"
                             [(ngModel)]="registerAccount.email" minlength=5 maxlength=254 email required>
                     <div *ngIf="email.dirty && email.invalid">
@@ -91,7 +91,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="password" jhiTranslate="global.form.newpassword">New password</label>
+                    <label class="form-control-label" for="password" jhiTranslate="global.form.newpassword.label">New password</label>
                     <input type="password" class="form-control" id="password" name="password" #password="ngModel" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
                             [(ngModel)]="registerAccount.password" minlength=4 maxlength=50 required>
                     <div *ngIf="password.dirty && password.invalid">
@@ -111,7 +111,7 @@
                     <<%= jhiPrefixDashed %>-password-strength-bar [passwordToCheck]="registerAccount.password"></<%= jhiPrefixDashed %>-password-strength-bar>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" for="confirmPassword" jhiTranslate="global.form.confirmpassword">New password confirmation</label>
+                    <label class="form-control-label" for="confirmPassword" jhiTranslate="global.form.confirmpassword.label">New password confirmation</label>
                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" #confirmPasswordInput="ngModel" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
                             [(ngModel)]="confirmPassword" minlength=4 maxlength=50 required>
                     <div *ngIf="confirmPasswordInput.dirty && confirmPasswordInput.invalid">
