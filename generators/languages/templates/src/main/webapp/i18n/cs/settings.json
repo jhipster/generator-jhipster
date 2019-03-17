@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "Nastavení uživatele [<b>{{username}}</b>]",
+        "title": "Nastavení uživatele [<strong>{{username}}</strong>]",
         "form": {
             "firstname": "Křestní jméno",
             "firstname.placeholder": "Vaše křestní jméno",

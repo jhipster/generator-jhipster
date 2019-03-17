@@ -18,11 +18,6 @@
 -%>
 import { Injectable } from '@angular/core';
 
-<%_ if (enableTranslation && authenticationType === 'uaa') { _%>
-import { JhiLanguageService } from 'ng-jhipster';
-import { SessionStorageService } from 'ngx-webstorage';
-import { IUser } from 'app/core/user/user.model';
-<%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
@@ -41,20 +36,13 @@ export class LoginService {
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
-        <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
-        private languageService: JhiLanguageService,
-        private sessionStorage: SessionStorageService,
-        <%_ } _%>
         private authServerProvider: AuthServerProvider
     ) {}
 
     <%_ if (authenticationType === 'oauth2') { _%>
     login() {
-        let port = (location.port ? ':' + location.port : '');
-        if (port === ':9000') {
-            port = ':<%= serverPort %>';
-        }
-        location.href = '//' + location.hostname + port + location.pathname + 'login';
+        const port = (location.port ? ':' + location.port : '');
+        location.href = '//' + location.hostname + port + location.pathname + 'authorize';
     }
     <%_ } else { _%>
     login(credentials, callback?) {
@@ -65,9 +53,6 @@ export class LoginService {
                 this.accountService.identity(true).then((account) => {
                     <%_ if (websocket === 'spring-websocket') { _%>
                     this.trackerService.sendActivity();
-                    <%_ } _%>
-                    <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
-                    this.setPreferredLanguage(account);
                     <%_ } _%>
                     resolve(data);
                 });
@@ -87,10 +72,13 @@ export class LoginService {
     }
     <%_ } _%>
     <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
-    
-    setPreferredLanguage(account: IUser) {
-        const langKey = account.langKey || this.sessionStorage.retrieve('locale');
-        this.languageService.changeLanguage(langKey);
+
+    isAuthenticated() {
+        return this.accountService.isAuthenticated();
+    }
+
+    logoutDirectly() {
+        this.accountService.authenticate(null);
     }
     <%_ } _%>
 
@@ -101,9 +89,22 @@ export class LoginService {
         } else {
             this.accountService.authenticate(null);
         }
+        <%_ } else if (authenticationType === 'oauth2') { _%>
+        this.authServerProvider.logout().subscribe(response => {
+            const data = response.body;
+            let logoutUrl = data.logoutUrl;
+            // if Keycloak, uri has protocol/openid-connect/token
+            if (logoutUrl.indexOf('/protocol') > -1) {
+                logoutUrl = logoutUrl + '?redirect_uri=' + window.location.origin;
+            } else {
+                // Okta
+                logoutUrl = logoutUrl + '?id_token_hint=' +
+                    data.idToken + '&post_logout_redirect_uri=' + window.location.origin;
+            }
+            window.location.href = logoutUrl;
+        });
         <%_ } else { _%>
-        this.authServerProvider.logout().subscribe();
-        this.accountService.authenticate(null);
+        this.authServerProvider.logout().subscribe(null, null, () => this.accountService.authenticate(null));
         <%_ } _%>
     }
 }

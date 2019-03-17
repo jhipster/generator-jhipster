@@ -39,15 +39,13 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test class for the SecurityUtils utility class.
- *
- * @see SecurityUtils
+ * Test class for the {@link SecurityUtils} utility class.
  */
 public class SecurityUtilsUnitTest {
 
 <%_ if (!reactive) { _%>
     @Test
-    public void testgetCurrentUserLogin() {
+    public void testGetCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
         securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
         SecurityContextHolder.setContext(securityContext);
@@ -110,6 +108,7 @@ public class SecurityUtilsUnitTest {
             .block();
         assertThat(login).isEqualTo("admin");
     }
+    <%_ if (authenticationType === 'jwt') { _%>
 
     @Test
     public void testgetCurrentUserJWT() {
@@ -122,6 +121,7 @@ public class SecurityUtilsUnitTest {
             .block();
         assertThat(jwt).isEqualTo("token");
     }
+    <%_ } _%>
 
     @Test
     public void testIsAuthenticated() {

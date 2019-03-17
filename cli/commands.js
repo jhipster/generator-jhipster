@@ -30,10 +30,6 @@ module.exports = {
     'ci-cd': {
         desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools'
     },
-    client: {
-        desc:
-            'DEPRECATED: Create a new JHipster client-side application based on the selected options -  Use jhipster --skip-server instead'
-    },
     cloudfoundry: {
         desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry'
     },
@@ -83,24 +79,16 @@ Example:
     kubernetes: {
         desc: 'Deploy the current application to Kubernetes'
     },
+    'kubernetes-helm': {
+        alias: 'k8s-helm',
+        desc: 'Deploy the current application to Kubernetes using Helm package manager'
+    },
     languages: {
         argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
     },
-    // login: {
-    //     desc: 'Link the installed JHipster CLI to your JHipster Online account'
-    // },
-    // logout: {
-    //     desc: 'Unlink the installed JHipster CLI from your JHipster Online account'
-    // },
     openshift: {
         desc: 'Deploy the current application to OpenShift'
-    },
-    'rancher-compose': {
-        desc: 'Deploy the current application to Rancher'
-    },
-    server: {
-        desc: 'DEPRECATED: Create a new JHipster server-side application - Use jhipster --skip-client instead'
     },
     'spring-service': {
         alias: 'service',

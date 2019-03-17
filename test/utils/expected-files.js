@@ -125,7 +125,7 @@ const expectedFiles = {
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
             // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-            `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIntTest.java`
+            `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`
         ],
         gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`]
     },
@@ -161,6 +161,7 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}i18n/messages.properties`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/JhipsterApp.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/aop/logging/LoggingAspect.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/lazy/LazyInitBeanFactoryPostProcessor.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/ApplicationProperties.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/AsyncConfiguration.java`,
@@ -197,20 +198,21 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/errors/LoginAlreadyUsedException.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/LoggerVM.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/util/PaginationUtil.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/LogsResource.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/SecurityUtilsUnitTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/LogsResourceIntTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/LogsResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/TestUtil.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java`,
         `${SERVER_TEST_RES_DIR}config/application.yml`,
         `${SERVER_TEST_RES_DIR}logback.xml`
     ],
 
     userManagementServer: [
-        `${SERVER_MAIN_RES_DIR}config/liquibase/authorities.csv`,
-        `${SERVER_MAIN_RES_DIR}config/liquibase/users.csv`,
-        `${SERVER_MAIN_RES_DIR}config/liquibase/users_authorities.csv`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/data/authority.csv`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/data/user.csv`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/data/user_authority.csv`,
         `${SERVER_MAIN_RES_DIR}templates/mail/activationEmail.html`,
         `${SERVER_MAIN_RES_DIR}templates/mail/passwordResetEmail.html`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Authority.java`,
@@ -227,6 +229,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/util/RandomUtil.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/UserDTO.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/PasswordChangeDTO.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapper.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AccountResource.java`,
@@ -234,10 +237,13 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/UserResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/ManagedUserVM.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AccountResourceIntTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIntTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIntTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIntTest.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AccountResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapperIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomAuditEventRepositoryIT.java`
     ],
 
     infinispan: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`],
@@ -281,6 +287,25 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/user-management.json`
     ],
 
+    i18nDeJson: [
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/activate.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/audits.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/configuration.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/error.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/global.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/health.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/login.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/logs.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/home.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/metrics.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/password.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/register.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/sessions.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/settings.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/reset.json`,
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/user-management.json`
+    ],
+
     userManagementClient: [
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-delete-dialog.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-delete-dialog.component.html`,
@@ -306,7 +331,7 @@ const expectedFiles = {
         'package.json',
         'postcss.config.js',
         'proxy.conf.json',
-        'src/main/webapp/404.html',
+        `${CLIENT_MAIN_SRC_DIR}404.html`,
         `${CLIENT_MAIN_SRC_DIR}app/account/account.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/account.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/activate/activate.component.html`,
@@ -323,7 +348,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/password-reset/init/password-reset-init.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/password-reset/init/password-reset-init.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/password/password-strength-bar.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/account/password/password-strength-bar.css`,
+        `${CLIENT_MAIN_SRC_DIR}app/account/password/password-strength-bar.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/account/password/password.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/account/password/password.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/password/password.route.ts`,
@@ -378,7 +403,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/home/home.css`,
+        `${CLIENT_MAIN_SRC_DIR}app/home/home.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/home/index.ts`,
@@ -393,10 +418,10 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/active-menu.directive.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.css`,
+        `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/layouts/profiles/page-ribbon.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/layouts/profiles/page-ribbon.css`,
+        `${CLIENT_MAIN_SRC_DIR}app/layouts/profiles/page-ribbon.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/layouts/profiles/profile-info.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/layouts/profiles/profile.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/polyfills.ts`,
@@ -427,10 +452,10 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/core/core.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/index.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/vendor.ts`,
-        `${CLIENT_MAIN_SRC_DIR}content/css/documentation.css`,
-        `${CLIENT_MAIN_SRC_DIR}content/css/global.css`,
+        `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`,
         `${CLIENT_MAIN_SRC_DIR}content/css/loading.css`,
-        `${CLIENT_MAIN_SRC_DIR}content/css/vendor.css`,
+        `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`,
+        `${CLIENT_MAIN_SRC_DIR}content/scss/_bootstrap-variables.scss`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_0.svg`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_1.svg`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2.svg`,
@@ -452,6 +477,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_2_head-512.png`,
         `${CLIENT_MAIN_SRC_DIR}content/images/jhipster_family_member_3_head-512.png`,
         `${CLIENT_MAIN_SRC_DIR}content/images/logo-jhipster.png`,
+        `${CLIENT_MAIN_SRC_DIR}WEB-INF/web.xml`,
         `${CLIENT_MAIN_SRC_DIR}favicon.ico`,
         `${CLIENT_MAIN_SRC_DIR}index.html`,
         `${CLIENT_MAIN_SRC_DIR}manifest.webapp`,
@@ -516,7 +542,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/ar-ly/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}content/css/rtl.css`,
+        `${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
@@ -560,8 +586,12 @@ const expectedFiles = {
     swaggerCodegenGradle: ['gradle/swagger.gradle'],
 
     uaa: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaWebSecurityConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaConfiguration.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaWebSecurityConfiguration.java`
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaProperties.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/IatTokenEnhancer.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SecurityBeanOverrideConfiguration.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`
     ],
 
     gateway: [
@@ -569,13 +599,40 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}config/bootstrap-prod.yml`,
         `${SERVER_TEST_RES_DIR}config/bootstrap.yml`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/GatewayConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/apidoc/GatewaySwaggerResourcesProvider.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/accesscontrol/AccessControlFilter.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/responserewriting/SwaggerBasePathRewritingFilter.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/RouteVM.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/GatewayResource.java`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.ts`
+    ],
+
+    gatewayWithUaa: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AuthResource.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/filter/RefreshTokenFilter.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/filter/RefreshTokenFilterConfigurer.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/oauth2/OAuth2AuthenticationConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieCollection.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/CookiesHttpServletRequestWrapper.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieTokenExtractor.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2AuthenticationService.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2CookieHelper.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2Cookies.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2TokenEndpointClient.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2TokenEndpointClientAdapter.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/UaaTokenEndpointClient.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SecurityBeanOverrideConfiguration.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2CookieHelperTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2AuthenticationServiceTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieTokenExtractorTest.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieCollectionTest.java`
     ],
 
     feignConfig: [
@@ -594,6 +651,12 @@ const expectedFiles = {
     microserviceGradle: ['gradle/docker.gradle'],
 
     dockerServices: [`${DOCKER_DIR}app.yml`, `${DOCKER_DIR}Dockerfile`, `${DOCKER_DIR}sonar.yml`],
+
+    hibernateTimeZoneConfig: [
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapper.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java`
+    ],
 
     mysql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mysql.yml`],
 
@@ -623,7 +686,7 @@ const expectedFiles = {
     couchbase: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/N1qlCouchbaseRepository.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepository.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/DatabaseTestConfiguration.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/DatabaseConfigurationIT.java`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0__create_indexes.n1ql`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_ADMIN.json`,
         `${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V0.1__initial_setup/ROLE_USER.json`,
@@ -660,9 +723,10 @@ const expectedFiles = {
     cucumber: [
         `${TEST_DIR}features/user/user.feature`,
         `${TEST_DIR}features/gitkeep`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberContextConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/StepDefs.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberTest.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberIT.java`
     ],
 
     eureka: [

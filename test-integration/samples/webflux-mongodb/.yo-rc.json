@@ -13,7 +13,6 @@
         "devDatabaseType": "mongodb",
         "prodDatabaseType": "mongodb",
         "searchEngine": false,
-        "useSass": false,
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",
@@ -23,6 +22,6 @@
         "jhiPrefix": "jhi",
         "travis": true,
         "clientPackageManager": "yarn",
-        "skipClient": true
+        "clientFramework": "angularX"
     }
 }

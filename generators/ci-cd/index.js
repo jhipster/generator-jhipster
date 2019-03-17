@@ -60,6 +60,7 @@ module.exports = class extends BaseGenerator {
             defaults: false,
             description: 'Automatically configure Azure'
         });
+        this.registerPrettierTransform();
     }
 
     get initializing() {

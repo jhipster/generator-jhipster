@@ -24,9 +24,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
-<%_ if (useSass) { _%>
 const sass = require('sass');
-<%_ } _%>
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -37,17 +35,15 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
-    'react-hot-loader/patch',
-    './src/main/webapp/app/index'
+    './<%= CLIENT_MAIN_SRC_DIR %>app/index'
   ],
   output: {
-    path: utils.root('<%= BUILD_DIR %>www'),
+    path: utils.root('<%= DIST_DIR %>'),
     filename: 'app/[name].bundle.js',
     chunkFilename: 'app/[id].chunk.js'
   },
   module: {
     rules: [
-      <%_ if (useSass) { _%>
       {
         test: /\.(sa|sc|c)ss$/,
         use: ['style-loader', 'css-loader', 'postcss-loader', {
@@ -55,34 +51,20 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             options: { implementation: sass }
           }
         ]
-      },
-      <%_ } else { _%>
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
       }
-      <%_ } _%>
     ]
   },
   devServer: {
     stats: options.stats,
     hot: true,
-    contentBase: './<%= BUILD_DIR %>www',
+    contentBase: './<%= DIST_DIR %>',
     proxy: [{
-      context: [<% if (authenticationType === 'uaa') { %>
-        '/<%= uaaBaseName.toLowerCase() %>',<% } %>
-        /* jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here */
-        '/api',
-        '/management',
-        '/swagger-resources',
-        '/v2/api-docs',
-        '/h2-console',
-        '/auth'
+      context: [
+        '/'
       ],
-      target: `http${options.tls ? 's' : ''}://127.0.0.1:<%= serverPort %>`,
+      target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
       secure: false,
-      changeOrigin: options.tls,
-      headers: { host: 'localhost:9000' }
+      changeOrigin: options.tls
     }<% if (websocket === 'spring-websocket') { %>,{
       context: [
         '/websocket'
@@ -107,7 +89,10 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
       port: 9000,
       proxy: {
         target: 'http://localhost:9060'<% if (websocket === 'spring-websocket') { %>,
-        ws: true<% } %>
+          ws: true<% } %>,
+          proxyOptions: {
+              changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
+          }
       },
       socket: {
         clients: {
@@ -117,6 +102,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     }, {
       reload: false
     }),
+    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new writeFilePlugin(),
     new webpack.WatchIgnorePlugin([

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (!viaService) { %>
+<%_ if (!viaService) { _%>
         <%= entityInstance %>Repository.deleteById(id);
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <%= entityInstance %>SearchRepository.deleteById(id);

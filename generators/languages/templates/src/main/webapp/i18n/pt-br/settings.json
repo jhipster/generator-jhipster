@@ -1,9 +1,9 @@
 {
     "settings": {
-        "title": "Configurações para o usuário [<b>{{username}}</b>]",
+        "title": "Configurações para o usuário [<strong>{{username}}</strong>]",
         "form": {
-            "firstname": "Primeiro nome",
-            "firstname.placeholder": "Seu primeiro nome",
+            "firstname": "Nome",
+            "firstname.placeholder": "Seu nome",
             "lastname": "Sobrenome",
             "lastname.placeholder": "Seu sobrenome",
             "language": "Idioma",
@@ -12,14 +12,14 @@
         "messages": {
             "error": {
                 "fail": "<strong>Ocorreu um erro!</strong> As configurações não foram salvas.",
-                "emailexists": "<strong>Email is already in use!</strong> Please choose another one."
+                "emailexists": "<strong>E-mail já cadastrado!</strong> Favor escolher outro."
             },
             "success": "<strong>Configurações salvas com sucesso!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "O primeiro nome é obrigatório.",
-                    "minlength": "O primeiro nome deve ter pelo menos 1 caractere",
-                    "maxlength": "O primeiro nome não pode ter mais de 50 caracteres"
+                    "required": "O nome é obrigatório.",
+                    "minlength": "O nome deve ter pelo menos 1 caractere",
+                    "maxlength": "O nome não pode ter mais de 50 caracteres"
                 },
                 "lastname": {
                     "required": "O sobrenome é obrigatório.",

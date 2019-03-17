@@ -30,13 +30,13 @@ const LAYOUT_ROUTES = [
     imports: [
         RouterModule.forRoot(
             [
-                ...LAYOUT_ROUTES,
                 {
                     path: 'admin',
                     loadChildren: './admin/admin.module#<%=angularXAppName%>AdminModule'
-                }
+                },
+                ...LAYOUT_ROUTES
             ],
-            { useHash: true , enableTracing: DEBUG_INFO_ENABLED }
+            { enableTracing: DEBUG_INFO_ENABLED }
         )
     ],
     exports: [

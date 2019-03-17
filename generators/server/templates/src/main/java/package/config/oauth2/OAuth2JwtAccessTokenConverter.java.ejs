@@ -29,7 +29,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import java.util.Map;
 
 /**
- * Improved JwtAccessTokenConverter that can handle lazy fetching of public verifier keys.
+ * Improved {@link JwtAccessTokenConverter} that can handle lazy fetching of public verifier keys.
  */
 public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
     private final Logger log = LoggerFactory.getLogger(OAuth2JwtAccessTokenConverter.class);
@@ -115,8 +115,8 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
      *  }
      * </code>
      *  </pre>
-     * @param claims OAuth2JWTToken claims
-     * @return OAuth2Authentication
+     * @param claims OAuth2JWTToken claims.
+     * @return {@link OAuth2Authentication}.
      */
     @Override
     public OAuth2Authentication extractAuthentication(Map<String, ?> claims) {

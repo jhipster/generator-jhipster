@@ -28,17 +28,18 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
+        this.configOptions = this.options.configOptions || {};
         if (this.databaseType === 'cassandra') {
             this.pkType = 'UUID';
         }
-        const blueprint = this.config.get('blueprint');
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'entity-server', {
+                ...this.options,
                 context: opts.context,
-                force: opts.force,
                 debug: opts.context.isDebugEnabled,
-                'from-cli': opts.context.options['from-cli']
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;

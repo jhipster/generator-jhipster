@@ -146,13 +146,16 @@ export class SignInPage {
 
     async loginWithOAuth(username: string, password: string) {
         // Entering non angular site, tell webdriver to switch to synchronous mode.
-        browser.waitForAngularEnabled(false);
+        await browser.waitForAngularEnabled(false);
 
         if (await this.username.isPresent()) {
             await this.username.sendKeys(username);
             await this.password.sendKeys(password);
             await this.loginButton.click();
-        } else {
+            if (!await this.username.isPresent()) {
+                await browser.waitForAngularEnabled(true);
+            }
+        } else { // redirected back because already logged in
             browser.waitForAngularEnabled(true);
         }
     }

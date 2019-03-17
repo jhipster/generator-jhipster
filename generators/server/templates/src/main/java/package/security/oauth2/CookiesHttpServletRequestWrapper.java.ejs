@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 /**
  * A request mapper used to modify the cookies in the original request.
  * This is needed such that we can modify the cookies of the request during a token refresh.
- * The token refresh happens before authentication by the <code>OAuth2AuthenticationProcessingFilter</code>
+ * The token refresh happens before authentication by the {@code OAuth2AuthenticationProcessingFilter}
  * so we must make sure that further in the filter chain, we have the new cookies and not the expired/missing ones.
  */
 class CookiesHttpServletRequestWrapper extends HttpServletRequestWrapper {
@@ -41,6 +41,7 @@ class CookiesHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     /**
      * Return the modified cookies instead of the original ones.
+     * @return the modified cookies.
      */
     @Override
     public Cookie[] getCookies() {

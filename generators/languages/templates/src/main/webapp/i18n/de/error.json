@@ -4,6 +4,7 @@
         "http": {
             "400": "Ungültige Anfrage.",
             "403": "Sie haben nicht die nötigen Berechtigungen um diese Seite anzuzeigen.",
+            "404": "Die Seite existiert nicht.",
             "405": "Die verwendete Anfrage-Methode ist für diese URL nicht erlaubt.",
             "500": "Interner Serverfehler."
         },

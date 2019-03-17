@@ -28,6 +28,11 @@ spec:
     metadata:
       labels:
         job: jhipster-import-dashboards
+      annotations:
+        "helm.sh/hook": post-install
+     <%_ if (istio) { _%>
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       initContainers:
         - name: init-dependent-service-check

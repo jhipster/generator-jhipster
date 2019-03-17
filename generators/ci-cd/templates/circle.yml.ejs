@@ -53,10 +53,10 @@ test:
     override:
 <%_ if (buildTool === 'maven') { _%>
         - chmod +x mvnw
-        - ./mvnw clean test
+        - ./mvnw clean verify
 <%_ } else if (buildTool === 'gradle') { _%>
         - chmod +x gradlew
-        - ./gradlew clean test --no-daemon
+        - ./gradlew clean test integrationTest --no-daemon
 <%_ } _%>
 <%_ if (!skipClient) { _%>
         - <%= clientPackageManager %> run <%= frontTestCommand %>
@@ -68,7 +68,7 @@ test:
         - ./mvnw verify -Pprod -DskipTests
     <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
-        - ./gradlew bootWar -Pprod -x test --no-daemon
+        - ./gradlew bootJar -Pprod -x test --no-daemon
     <%_ if (heroku.includes('circle')) { _%>
         - ./gradlew deployHeroku --no-daemon
     <%_ } _%>

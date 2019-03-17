@@ -61,7 +61,7 @@ public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerA
     }
 
     /**
-     * A SecurityConfigurerAdapter to install a servlet filter that refreshes OAuth2 tokens.
+     * A {@code SecurityConfigurerAdapter} to install a servlet filter that refreshes OAuth2 tokens.
      */
     private RefreshTokenFilterConfigurer refreshTokenSecurityConfigurerAdapter() {
         return new RefreshTokenFilterConfigurer(uaaAuthenticationService(), tokenStore);
@@ -78,7 +78,7 @@ public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerA
     }
 
     /**
-     * Configure the ResourceServer security by installing a new TokenExtractor.
+     * Configure the ResourceServer security by installing a new {@link TokenExtractor}.
      */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -86,9 +86,9 @@ public class OAuth2AuthenticationConfiguration extends ResourceServerConfigurerA
     }
 
     /**
-     * The new TokenExtractor can extract tokens from Cookies and Authorization headers.
+     * The new {@link TokenExtractor} can extract tokens from Cookies and Authorization headers.
      *
-     * @return the CookieTokenExtractor bean.
+     * @return the {@link CookieTokenExtractor} bean.
      */
     @Bean
     public TokenExtractor tokenExtractor() {

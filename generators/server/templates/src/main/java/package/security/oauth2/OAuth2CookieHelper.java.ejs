@@ -111,7 +111,7 @@ public class OAuth2CookieHelper {
      *
      * @param request    the request containing the cookie.
      * @param cookieName the case-sensitive name of the cookie to get.
-     * @return the resulting Cookie; or null, if not found.
+     * @return the resulting {@link Cookie}; or {@code null}, if not found.
      */
     private static Cookie getCookie(HttpServletRequest request, String cookieName) {
         if (request.getCookies() != null) {
@@ -241,7 +241,7 @@ public class OAuth2CookieHelper {
      *
      * @param refreshToken the JWT token to examine.
      * @param claimName    name of the claim to get.
-     * @param clazz        the Class we expect to find there.
+     * @param clazz        the {@link Class} we expect to find there.
      * @return the desired claim.
      * @throws InvalidTokenException if we cannot find the claim in the token or it is of wrong type.
      */
@@ -265,7 +265,7 @@ public class OAuth2CookieHelper {
      *
      * @param cookie   the cookie to modify.
      * @param isSecure whether it is coming from a secure request.
-     * @param domain   the domain for which the cookie is valid. If null, then will fall back to default.
+     * @param domain   the domain for which the cookie is valid. If {@code null}, then will fall back to default.
      */
     private void setCookieProperties(Cookie cookie, boolean isSecure, String domain) {
         cookie.setHttpOnly(true);
@@ -305,12 +305,12 @@ public class OAuth2CookieHelper {
      * A lot of times, individual gateways of the same domain get their own subdomain but authentication
      * shall work across all subdomains of the top level domain.
      * <p>
-     * For example, when sending a request to <code>app1.domain.com</code>,
-     * this returns <code>.domain.com</code>.
+     * For example, when sending a request to {@code app1.domain.com},
+     * this returns {@code .domain.com}.
      *
      * @param request the HTTP request we received from the client.
      * @return the top level domain to set the cookies for.
-     * Returns null if the domain is not under a public suffix (.com, .co.uk), e.g. for localhost.
+     * Returns {@code null} if the domain is not under a public suffix (.com, .co.uk), e.g. for localhost.
      */
     private String getCookieDomain(HttpServletRequest request) {
         String domain = oAuth2Properties.getWebClientConfiguration().getCookieDomain();

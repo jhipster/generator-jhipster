@@ -28,6 +28,11 @@ const statistics = require('../statistics');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+        this.registerPrettierTransform();
+    }
+
     get initializing() {
         return {
             sayHello() {
@@ -362,7 +367,8 @@ module.exports = class extends BaseGenerator {
 
             askForCloudSqlInstance() {
                 if (this.abort) return;
-                if (this.prodDatabaseType !== 'mysql' && this.prodDatabaseType !== 'mariadb') return;
+                if (this.prodDatabaseType !== 'mysql' && this.prodDatabaseType !== 'mariadb' && this.prodDatabaseType !== 'postgresql')
+                    return;
 
                 const done = this.async();
 
@@ -555,8 +561,13 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nCreating New Cloud SQL Instance'));
 
                 const name = this.gcpCloudSqlInstanceName;
+                // for mysql keep default options, set specific option for pg
+                const dbVersionFlag =
+                    this.prodDatabaseType === 'postgresql' ? ' --database-version="POSTGRES_9_6" --tier="db-g1-small"' : '';
 
-                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${this.gcpProjectId}`;
+                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${
+                    this.gcpProjectId
+                }${dbVersionFlag}`;
                 this.log(chalk.bold(`\n... Running: ${cmd}`));
 
                 exec(cmd, (err, stdout, stderr) => {
@@ -566,7 +577,7 @@ module.exports = class extends BaseGenerator {
                     }
 
                     this.gcpCloudSqlInstanceName = execSync(
-                        `gcloud sql instances describe jhipster --format="value(connectionName)" --project="${this.gcpProjectId}"`,
+                        `gcloud sql instances describe ${name} --format="value(connectionName)" --project="${this.gcpProjectId}"`,
                         { encoding: 'utf8' }
                     );
 
@@ -670,6 +681,13 @@ module.exports = class extends BaseGenerator {
                         this.addMavenDependency('com.google.cloud.sql', 'mysql-socket-factory', '1.0.8');
                     } else if (this.buildTool === 'gradle') {
                         this.addGradleDependency('compile', 'com.google.cloud.sql', 'mysql-socket-factory', '1.0.8');
+                    }
+                }
+                if (this.prodDatabaseType === 'postgresql') {
+                    if (this.buildTool === 'maven') {
+                        this.addMavenDependency('com.google.cloud.sql', 'postgres-socket-factory', '1.0.12');
+                    } else if (this.buildTool === 'gradle') {
+                        this.addGradleDependency('compile', 'com.google.cloud.sql', 'postgres-socket-factory', '1.0.12');
                     }
                 }
             },

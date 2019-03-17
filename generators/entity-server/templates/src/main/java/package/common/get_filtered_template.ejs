@@ -23,8 +23,8 @@ const entityToDtoReference = mapper + '::' + 'toDto';
 for (const idx in relationships) { if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) { %>
 
     /**
-     *  get all the <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is null.
-     *  @return the list of entities
+    *  Get all the <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is {@code null}.
+     *  @return the list of entities.
      */<% if (databaseType === 'sql') { %>
     @Transactional(readOnly = true) <% } %>
     public List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull() {

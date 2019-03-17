@@ -35,7 +35,7 @@ spec:
     spec:
       initContainers:
         - name: init-ds
-          image: busybox
+          image: busybox:latest
           command:
             - '/bin/sh'
             - '-c'
@@ -80,7 +80,7 @@ spec:
               key: registry-admin-password
         - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
           value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
-          <%_ if (istio !== 'no') { _%>
+          <%_ if (istio) { _%>
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "false"
         - name: EUREKA_INSTANCE_HOSTNAME
@@ -92,7 +92,7 @@ spec:
           value: consul.<%= kubernetesNamespace %>.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
-          <%_ if (istio !== 'no') { _%>
+          <%_ if (istio) { _%>
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_PREFER_IP_ADDRESS
           value: "false"
         - name: SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME
@@ -115,16 +115,28 @@ spec:
         <%_ if (app.prodDatabaseType === 'mariadb') { _%>
         - name: SPRING_DATASOURCE_URL
           value: jdbc:mariadb://<%= app.baseName.toLowerCase() %>-mariadb.<%= kubernetesNamespace %>.svc.cluster.local:3306/<%= app.baseName.toLowerCase() %>
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: <%= app.baseName.toLowerCase() %>-mariadb
+              key: mariadb-root-password
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'postgresql') { _%>
         - name: SPRING_DATASOURCE_URL
           value: jdbc:postgresql://<%= app.baseName.toLowerCase() %>-postgresql.<%= kubernetesNamespace %>.svc.cluster.local:5432/<%= app.baseName %>
+        - name: SPRING_DATASOURCE_USERNAME
+          value: <%= app.baseName.toLowerCase() %>
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: <%= app.baseName.toLowerCase() %>-postgresql
+              key: postgres-password
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mongodb') { _%>
         - name: SPRING_DATA_MONGODB_DATABASE
           value: <%= app.baseName %>
         - name: SPRING_DATA_MONGODB_URI
-          value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
+          value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %><% if (i < (app.dbPeerCount-1)) { %>,<% }} %>"
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'couchbase') { _%>
         - name: SPRING_COUCHBASE_BOOTSTRAP_HOSTS

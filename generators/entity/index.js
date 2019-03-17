@@ -31,9 +31,11 @@ const statistics = require('../statistics');
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 let useBlueprint;
 
-module.exports = class extends BaseBlueprintGenerator {
+class EntityGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
+
+        this.configOptions = this.options.configOptions || {};
 
         // This makes `name` a required argument.
         this.argument('name', {
@@ -122,13 +124,12 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
-        const blueprint = this.config.get('blueprint');
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'entity', {
-                'skip-install': this.options['skip-install'],
-                'from-cli': this.options['from-cli'],
-                force: this.options.force,
+                ...this.options,
+                configOptions: this.configOptions,
                 arguments: [this.context.name]
             });
         } else {
@@ -231,6 +232,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (context.entitySuffix === context.dtoSuffix) {
                     this.error(chalk.red('The entity cannot be generated as the entity suffix and DTO suffix are equals !'));
                 }
+
+                context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
             validateDbExistence() {
@@ -518,14 +521,15 @@ module.exports = class extends BaseBlueprintGenerator {
                             )
                         );
                     }
+                    relationship.otherEntityRelationshipNameUndefined = _.isUndefined(relationship.otherEntityRelationshipName);
 
-                    if (_.isUndefined(relationship.otherEntityRelationshipName)) {
-                        if (
-                            relationship.relationshipType === 'one-to-many' ||
-                            (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) ||
-                            relationship.relationshipType === 'one-to-one'
-                        ) {
-                            relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
+                    if (
+                        relationship.otherEntityRelationshipNameUndefined &&
+                        _.isUndefined(relationship.relationshipType) === false &&
+                        relationship.relationshipType !== ''
+                    ) {
+                        relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
+                        if (relationship.otherEntityName !== 'user') {
                             this.warning(
                                 `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
                                     relationship,
@@ -857,9 +861,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                     if (
                         _.isUndefined(relationship.otherEntityRelationshipNamePlural) &&
-                        (relationship.relationshipType === 'one-to-many' ||
-                            (relationship.relationshipType === 'many-to-many' && relationship.ownerSide === false) ||
-                            (relationship.relationshipType === 'one-to-one' && relationship.otherEntityName.toLowerCase() !== 'user'))
+                        _.isUndefined(relationship.otherEntityRelationshipName) === false
                     ) {
                         relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                     }
@@ -922,17 +924,29 @@ module.exports = class extends BaseBlueprintGenerator {
                         relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                     }
 
-                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
-                        if (relationship.relationshipType === 'many-to-one') {
+                    if (
+                        _.isUndefined(relationship.otherEntityRelationshipNamePlural) ||
+                        relationship.otherEntityRelationshipNameUndefined
+                    ) {
+                        if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
                             if (otherEntityData && otherEntityData.relationships) {
                                 otherEntityData.relationships.forEach(otherRelationship => {
                                     if (
                                         _.upperFirst(otherRelationship.otherEntityName) === entityName &&
                                         otherRelationship.otherEntityRelationshipName === relationship.relationshipName &&
-                                        otherRelationship.relationshipType === 'one-to-many'
+                                        ((relationship.relationshipType === 'many-to-one' &&
+                                            otherRelationship.relationshipType === 'one-to-many') ||
+                                            (relationship.relationshipType === 'many-to-many' &&
+                                                otherRelationship.relationshipType === 'many-to-many'))
                                     ) {
                                         relationship.otherEntityRelationshipName = otherRelationship.relationshipName;
                                         relationship.otherEntityRelationshipNamePlural = pluralize(otherRelationship.relationshipName);
+                                        relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(
+                                            otherRelationship.relationshipName
+                                        );
+                                        relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
+                                            _.upperFirst(otherRelationship.relationshipName)
+                                        );
                                     }
                                 });
                             }
@@ -1068,9 +1082,11 @@ module.exports = class extends BaseBlueprintGenerator {
             composeServer() {
                 const context = this.context;
                 if (context.skipServer) return;
+                const configOptions = this.configOptions;
 
                 this.composeWith(require.resolve('../entity-server'), {
                     context,
+                    configOptions,
                     force: context.options.force,
                     debug: context.isDebugEnabled
                 });
@@ -1079,9 +1095,11 @@ module.exports = class extends BaseBlueprintGenerator {
             composeClient() {
                 const context = this.context;
                 if (context.skipClient) return;
+                const configOptions = this.configOptions;
 
                 this.composeWith(require.resolve('../entity-client'), {
                     context,
+                    configOptions,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,
                     debug: context.isDebugEnabled
@@ -1091,9 +1109,10 @@ module.exports = class extends BaseBlueprintGenerator {
             composeI18n() {
                 const context = this.context;
                 if (context.skipClient) return;
-
+                const configOptions = this.configOptions;
                 this.composeWith(require.resolve('../entity-i18n'), {
                     context,
+                    configOptions,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,
                     debug: context.isDebugEnabled
@@ -1145,4 +1164,6 @@ module.exports = class extends BaseBlueprintGenerator {
         if (useBlueprint) return;
         return this._install();
     }
-};
+}
+
+module.exports = EntityGenerator;

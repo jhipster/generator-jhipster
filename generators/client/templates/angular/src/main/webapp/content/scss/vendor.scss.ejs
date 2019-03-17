@@ -27,7 +27,7 @@ eg $input-color: red;
 // Import Bootstrap source files from node_modules
 @import '~bootstrap/scss/bootstrap';
 <%_ if (enableI18nRTL) { _%>
-@import 'src/main/webapp/content/scss/rtl.scss';
+@import '<%= CLIENT_MAIN_SRC_DIR %>content/scss/rtl.scss';
 <%_ } _%>
 
 

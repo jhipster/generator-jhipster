@@ -23,7 +23,7 @@
     <groupId><%= packageName %></groupId>
     <artifactId><%= dasherizedBaseName %></artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name><%= humanizedBaseName %></name>
 
     <repositories>
@@ -40,8 +40,23 @@
             </releases>
         </repository>
     <%_ } _%>
+        <!-- TODO To remove after final JHipster release -->
+        <repository>
+            <id>oss.sonatype.org-snapshot</id>
+            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
+
+    <pluginRepositories>
+        <!-- jhipster-needle-maven-plugin-repository -->
+    </pluginRepositories>
 
     <!-- jhipster-needle-distribution-management -->
 
@@ -50,12 +65,14 @@
         <maven.version>3.0.0</maven.version>
         <java.version><%= JAVA_VERSION %></java.version>
         <scala.version><%= SCALA_VERSION %></scala.version>
+        <%_ if (!skipClient) { _%>
         <node.version>v<%= NODE_VERSION %></node.version>
-        <%_ if (clientPackageManager === 'npm') { _%>
+            <%_ if (clientPackageManager === 'npm') { _%>
         <npm.version><%= NPM_VERSION %></npm.version>
-        <%_ } _%>
-        <%_ if (clientPackageManager === 'yarn') { _%>
+            <%_ } _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
         <yarn.version>v<%= YARN_VERSION %></yarn.version>
+            <%_ } _%>
         <%_ } _%>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -74,47 +91,52 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>2.1.0</jhipster-dependencies.version>
+        <jhipster-dependencies.version>3.0.0-SNAPSHOT</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.0.7.RELEASE</spring-boot.version>
+        <spring-boot.version>2.1.3.RELEASE</spring-boot.version>
         <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <hibernate.version>5.2.17.Final</hibernate.version>
+        <hibernate.version>5.3.7.Final</hibernate.version>
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
-        <javassist.version>3.22.0-GA</javassist.version>
+        <javassist.version>3.23.1-GA</javassist.version>
         <%_ if (databaseType === 'sql') { _%>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
+        <jaxb-impl.version>2.3.2</jaxb-impl.version>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <liquibase.version>3.5.5</liquibase.version>
+        <liquibase.version>3.6.3</liquibase.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <%_ } _%>
-        <mapstruct.version>1.2.0.Final</mapstruct.version>
+        <mapstruct.version>1.3.0.Final</mapstruct.version>
 
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-        <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
+        <!-- We can't go to 3.0.0-M2 as it has a regression. See https://issues.apache.org/jira/browse/MENFORCER-306 -->
+        <maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
+        <maven-failsafe-plugin.version>3.0.0-M3</maven-failsafe-plugin.version>
+        <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.2</maven-war-plugin.version>
         <jib-maven-plugin.version>0.9.11</jib-maven-plugin.version>
         <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.7.5</frontend-maven-plugin.version>
         <%_ } _%>
-        <jacoco-maven-plugin.version>0.8.2</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.3</jacoco-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <scala-maven-plugin.version>3.4.2</scala-maven-plugin.version>
-        <sonar-maven-plugin.version>3.5.0.1254</sonar-maven-plugin.version>
+        <scala-maven-plugin.version>4.0.1</scala-maven-plugin.version>
+        <sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
         <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>3.3.0</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>3.3.4</openapi-generator-maven-plugin.version>
         <%_ } _%>
-        <git-commit-id-plugin.version>2.2.5</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>2.2.6</git-commit-id-plugin.version>
 
         <!-- Sonar properties -->
         <sonar.host.url>http://localhost:9001</sonar.host.url>
@@ -137,14 +159,20 @@
         <!-- Rule https://sonarcloud.io/coding_rules?open=squid%3AS4684&rule_key=squid%3AS4684 -->
         <sonar.issue.ignore.multicriteria.S4684.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S4684.resourceKey>
         <sonar.issue.ignore.multicriteria.S4684.ruleKey>squid:S4684</sonar.issue.ignore.multicriteria.S4684.ruleKey>
-        <sonar.jacoco.reportPaths>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.jacoco.reportFolder>${project.build.directory}/jacoco</sonar.jacoco.reportFolder>
+        <sonar.jacoco.utReportFile>${sonar.jacoco.reportFolder}/test.exec</sonar.jacoco.utReportFile>
+        <sonar.jacoco.itReportFile>${sonar.jacoco.reportFolder}/integrationTest.exec</sonar.jacoco.itReportFile>
+        <sonar.jacoco.reportPaths>${sonar.jacoco.utReportFile},${sonar.jacoco.itReportFile}</sonar.jacoco.reportPaths>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
+        <sonar.junit.utReportFolder>${project.testresult.directory}/test</sonar.junit.utReportFolder>
+        <sonar.junit.itReportFolder>${project.testresult.directory}/integrationTest</sonar.junit.itReportFolder>
+        <sonar.junit.reportPaths>${sonar.junit.utReportFolder},${sonar.junit.itReportFolder}</sonar.junit.reportPaths>
+        <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
+        <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
         <%_ if (!skipClient) { _%>
+        <sonar.testExecutionReportPaths>${project.testresult.directory}/jest/TESTS-results-sonar.xml</sonar.testExecutionReportPaths>
         <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/lcov.info</sonar.typescript.lcov.reportPaths>
         <%_ } _%>
-        <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
-        <sonar.junit.reportsPath>${project.testresult.directory}</sonar.junit.reportsPath>
-        <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
 
         <!-- jhipster-needle-maven-property -->
     </properties>
@@ -221,7 +249,7 @@
         <%_ if (cacheProvider === 'hazelcast' && enableHibernateCache) { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate52</artifactId>
+            <artifactId>hazelcast-hibernate53</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -232,14 +260,12 @@
         <%_ } _%>
         <%_ if (cacheProvider === 'infinispan') { _%>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-infinispan</artifactId>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-hibernate-cache-v53</artifactId>
         </dependency>
-        <%_ } _%>
-        <%_ if (cacheProvider === 'infinispan') { _%>
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-spring-boot-starter</artifactId>
+            <artifactId>infinispan-spring-boot-starter-embedded</artifactId>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
@@ -249,12 +275,10 @@
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-jcache</artifactId>
         </dependency>
-<!--
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-cloud</artifactId>
         </dependency>
--->
         <%_ } _%>
         <%_ if (cacheProvider === 'memcached') { _%>
         <dependency>
@@ -284,12 +308,6 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-bean-validators</artifactId>
-        </dependency>
-        <%_ } _%>
-        <%_ if (databaseType === 'sql') { _%>
-        <dependency>
-            <groupId>com.mattbertolini</groupId>
-            <artifactId>liquibase-slf4j</artifactId>
         </dependency>
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
@@ -386,6 +404,11 @@
             <artifactId>cassandra-unit-spring</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>database-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
         <%_ } _%>
         <%_ if (cacheProvider === 'ehcache') { _%>
         <dependency>
@@ -404,6 +427,10 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -442,7 +469,7 @@
         <%_ } _%>
         <dependency>
             <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-jdk8</artifactId>
+            <artifactId>mapstruct</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -488,16 +515,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- log4j needed to create embedded elasticsearch instance -->
+        <!-- log4j2-mock needed to create embedded elasticsearch instance with SLF4J -->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.7</version>
+            <groupId>de.dentrassi.elasticsearch</groupId>
+            <artifactId>log4j2-mock</artifactId>
+            <version>0.0.1</version>
+            <scope>runtime</scope>
         </dependency>
         <!-- end of Spring Data Jest dependencies -->
         <%_ } _%>
@@ -505,6 +528,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-<%=databaseType%><% if (reactive) { %>-reactive<% } %></artifactId>
+        </dependency>
+        <%_ } _%>
+        <%_ if (reactive) { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-tcnative-boringssl-static</artifactId>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -515,10 +548,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+        <%_ if (authenticationType !== 'oauth2') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -569,20 +604,15 @@
         </dependency>
         <%_ } _%>
         <%_ if (authenticationType === 'oauth2') { _%>
+        <!-- Spring Security OAuth 2.0 -->
         <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security.oauth.boot</groupId>
-            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
-            <%_ if (applicationType === 'gateway' || applicationType === 'microservice') { _%>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-jwt</artifactId>
-        </dependency>
-            <%_ } _%>
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         <dependency>
@@ -604,6 +634,10 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth.boot</groupId>
+            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -674,7 +708,7 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
+        <%_ if (authenticationType === 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-security</artifactId>
@@ -742,6 +776,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>
@@ -755,7 +791,17 @@
                             <artifactId>hibernate-jpamodelgen</artifactId>
                             <version>${hibernate.version}</version>
                         </path>
-<% } %>
+                        <path>
+                            <groupId>javax.xml.bind</groupId>
+                            <artifactId>jaxb-api</artifactId>
+                            <version>${jaxb-api.version}</version>
+                        </path>
+                        <path>
+                            <groupId>com.sun.xml.bind</groupId>
+                            <artifactId>jaxb-impl</artifactId>
+                            <version>${jaxb-impl.version}</version>
+                        </path>
+<%_ } _%>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
@@ -766,6 +812,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-idea-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -872,7 +926,7 @@
                             </goals>
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
-                                <destFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</destFile>
+                                <destFile>${sonar.jacoco.utReportFile}</destFile>
                             </configuration>
                         </execution>
                         <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
@@ -883,8 +937,30 @@
                                 <goal>report</goal>
                             </goals>
                             <configuration>
-                                <dataFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</dataFile>
-                                <outputDirectory>${project.testresult.directory}/coverage/jacoco</outputDirectory>
+                                <dataFile>${sonar.jacoco.utReportFile}</dataFile>
+                                <outputDirectory>${sonar.jacoco.reportFolder}</outputDirectory>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>pre-integration-tests</id>
+                            <goals>
+                                <goal>prepare-agent-integration</goal>
+                            </goals>
+                            <configuration>
+                                <!-- Sets the path to the file which contains the execution data. -->
+                                <destFile>${sonar.jacoco.itReportFile}</destFile>
+                            </configuration>
+                        </execution>
+                        <!-- Ensures that the code coverage report for integration tests is created after integration tests have been run -->
+                        <execution>
+                            <id>post-integration-tests</id>
+                            <phase>post-integration-test</phase>
+                            <goals>
+                                <goal>report-integration</goal>
+                            </goals>
+                            <configuration>
+                                <dataFile>${sonar.jacoco.itReportFile}</dataFile>
+                                <outputDirectory>${sonar.jacoco.reportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                     </executions>
@@ -934,7 +1010,7 @@
                         <defaultSchemaName><% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %></defaultSchemaName>
                         <username><% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %></username>
                         <password><% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %></password>
-                        <referenceUrl>hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServerDialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                        <referenceUrl>hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MySQL5InnoDBDialect<% } else if (devDatabaseType === 'postgresql') { %>org.hibernate.dialect.PostgreSQL95Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServerDialect<% } %>&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                         <verbose>true</verbose>
                         <logging>debug</logging>
                         <%_ if (authenticationType === 'oauth2') { _%>
@@ -999,11 +1075,18 @@
                                 <version>[${maven.version},)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <!-- Until JHipster supports JDK 9 -->
-                                <message>You are running an incompatible version of Java. JHipster requires JDK ${java.version}</message>
-                                <version>[1.8,1.9)</version>
+                                <message>You are running an incompatible version of Java. JHipster supports JDK 8 to 11.</message>
+                                <version>[1.8,12)</version>
                             </requireJavaVersion>
                         </rules>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-idea-plugin</artifactId>
+                    <version>${maven-idea-plugin.version}</version>
+                    <configuration>
+                        <exclude>node_modules</exclude>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -1041,65 +1124,61 @@
                                 </resources>
                             </configuration>
                         </execution>
-                        <execution>
-                            <id>jib-www-resources</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>copy-resources</goal>
-                            </goals>
-                            <configuration>
-                                <outputDirectory>${project.build.directory}/classes/static/</outputDirectory>
-                                <resources>
-                                    <resource>
-                                        <directory>${project.build.directory}/www</directory>
-                                        <filtering>false</filtering>
-                                    </resource>
-                                </resources>
-                            </configuration>
-                        </execution>
                     </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
-                    <%_ if (cucumberTests) { _%>
-                    <executions>
-                        <execution>
-                            <id>default-test</id>
-                            <configuration>
-                                <excludes>
-                                    <exclude>**/Abstract*.java</exclude>
-                                    <exclude>**/*Cucumber*.java</exclude>
-                                </excludes>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>without-cucumber</id>
-                            <goals>
-                                <goal>test</goal>
-                            </goals>
-                            <configuration>
-                                <includes>
-                                    <include>**/*Cucumber*.java</include>
-                                </includes>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <%_ } _%>
                     <configuration>
                         <!-- Force alphabetical order to have a reproducible build -->
                         <runOrder>alphabetical</runOrder>
-                        <!-- Fixes a bug which will be solved in next version after 2.22.1 then this can be removed -->
-                        <!-- see: https://issues.apache.org/jira/browse/SUREFIRE-1588 -->
-                        <useSystemClassLoader>false</useSystemClassLoader>
-                        <outputDirectory>${sonar.junit.reportsPath}</outputDirectory>
+                        <reportsDirectory>${sonar.junit.utReportFolder}</reportsDirectory>
+                        <excludes>
+                            <exclude>**/*IT*</exclude>
+                            <exclude>**/*IntTest*</exclude>
+                            <exclude>**/*CucumberIT*</exclude>
+                        </excludes>
                     </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>${maven-war-plugin.version}</version>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-failsafe-plugin.version}</version>
+                    <configuration>
+                        <!-- Due to spring-boot repackage, without adding this property test classes are not found
+                             See https://github.com/spring-projects/spring-boot/issues/6254 -->
+                        <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                        <!-- Force alphabetical order to have a reproducible build -->
+                        <runOrder>alphabetical</runOrder>
+                        <reportsDirectory>${sonar.junit.itReportFolder}</reportsDirectory>
+                        <includes>
+                            <include>**/*IT*</include>
+                            <include>**/*IntTest*</include>
+                    <%_ if (cucumberTests) { _%>
+                            <include>**/*CucumberIT*</include>
+                    <%_ } _%>
+                        </includes>
+                    <%_ if (!cucumberTests) { _%>
+                        <excludes>
+                            <exclude>**/*CucumberIT*</exclude>
+                        </excludes>
+                    <%_ } _%>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>verify</id>
+                            <goals>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <%_ if (enableSwaggerCodegen) { _%>
                 <plugin>
@@ -1200,14 +1279,16 @@
             <id>webpack</id>
             <activation>
                 <file>
-                    <missing>${project.build.directory}/www/app/main.bundle.js</missing>
+                    <missing>${basedir}/<%= CLIENT_DIST_DIR %>app/main.bundle.js</missing>
                 </file>
             </activation>
             <dependencies>
+                <%_ if (!reactive) { _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
+                <%_ } _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
@@ -1278,22 +1359,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
-                            <webResources>
-                                <resource>
-                                    <directory><%= MAIN_DIR %>webapp</directory>
-                                    <includes>
-                                        <include>WEB-INF/**</include>
-                                    </includes>
-                                </resource>
-                            </webResources>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
             <properties>
@@ -1308,10 +1373,12 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <dependencies>
+                <%_ if (!reactive) { _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
+                <%_ } _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
@@ -1324,28 +1391,6 @@
                 </dependency>
                 <%_ } _%>
             </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <%_ if (!skipClient) { _%>
-                            <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
-                            <webResources>
-                                <resource>
-                                    <directory><%= MAIN_DIR %>webapp</directory>
-                                    <includes>
-                                        <include>WEB-INF/**</include>
-                                    </includes>
-                                </resource>
-                            </webResources>
-                            <%_ } _%>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
             <properties>
                 <!-- default Spring profiles -->
                 <spring.profiles.active>dev${profile.tls}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
@@ -1353,12 +1398,14 @@
         </profile>
         <profile>
             <id>prod</id>
+            <%_ if (!reactive) { _%>
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
             </dependencies>
+            <%_ } _%>
             <build>
                 <plugins>
                     <plugin>
@@ -1369,24 +1416,6 @@
                                     <directory><%= CLIENT_DIST_DIR %></directory>
                                 </fileset>
                             </filesets>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <%_ if (!skipClient) { _%>
-                            <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
-                            <webResources>
-                                <resource>
-                                    <directory><%= MAIN_DIR %>webapp</directory>
-                                    <includes>
-                                        <include>WEB-INF/**</include>
-                                    </includes>
-                                </resource>
-                            </webResources>
-                            <%_ } _%>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -1495,6 +1524,41 @@
             </properties>
         </profile>
         <profile>
+            <id>war</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>war</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <%_ if (!skipClient) { _%>
+                            <warSourceDirectory><%= CLIENT_DIST_DIR %></warSourceDirectory>
+                            <webResources>
+                                <resource>
+                                    <directory><%= MAIN_DIR %>webapp</directory>
+                                    <includes>
+                                        <include>WEB-INF/**</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
+                            <%_ } _%>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <!--
                 Profile for doing "continuous compilation" with the Scala Maven plugin.
                 It allows automatic compilation of Java classes as soon as they are saved.
@@ -1506,10 +1570,12 @@
             -->
             <id>cc</id>
             <dependencies>
+                <%_ if (!reactive) { _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
+                <%_ } _%>
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
@@ -1518,14 +1584,6 @@
             </dependencies>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <configuration>
-                            <failOnMissingWebXml>false</failOnMissingWebXml>
-                            <warSourceDirectory><%= MAIN_DIR %>webapp/</warSourceDirectory>
-                        </configuration>
-                    </plugin>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -1643,7 +1701,7 @@
                                         <pluginExecution>
                                             <pluginExecutionFilter>
                                                 <groupId>com.github.eirslett</groupId>
-                                        <artifactId>frontend-maven-plugin</artifactId>
+                                                <artifactId>frontend-maven-plugin</artifactId>
                                                 <versionRange>${frontend-maven-plugin.version}</versionRange>
                                                 <goals>
                                                     <%_ if (clientPackageManager === 'yarn') { _%>

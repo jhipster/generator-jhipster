@@ -13,7 +13,6 @@
         "prodDatabaseType": "mysql",
         "searchEngine": false,
         "serviceDiscoveryType": "consul",
-        "useSass": false,
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",

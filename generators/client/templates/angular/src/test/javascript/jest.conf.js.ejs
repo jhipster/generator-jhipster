@@ -1,6 +1,6 @@
 module.exports = {
     preset: 'jest-preset-angular',
-    setupTestFrameworkScriptFile: '<rootDir>/src/test/javascript/jest.ts',
+    setupFilesAfterEnv: ['<rootDir>/src/test/javascript/jest.ts'],
     coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
     globals: {
         'ts-jest': {
@@ -12,7 +12,7 @@ module.exports = {
         '<rootDir>/src/test/javascript'
     ],
     moduleNameMapper: {
-        'app/(.*)': '<rootDir>/src/main/webapp/app/$1'
+        'app/(.*)': '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/$1'
     },
     reporters: [
         'default',

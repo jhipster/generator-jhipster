@@ -12,7 +12,6 @@
         "devDatabaseType": "h2Disk",
         "prodDatabaseType": "mysql",
         "searchEngine": "elasticsearch",
-        "useSass": false,
         "buildTool": "gradle",
         "enableTranslation": false,
         "messageBroker": false,

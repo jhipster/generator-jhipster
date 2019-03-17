@@ -34,11 +34,7 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
     selector: '<%= jhiPrefixDashed %>-navbar',
     templateUrl: './navbar.component.html',
     styleUrls: [
-        <%_ if (useSass) { _%>
         'navbar.scss'
-        <%_ } else { _%>
-        'navbar.css'
-        <%_ } _%>
     ]
 })
 export class NavbarComponent implements OnInit {

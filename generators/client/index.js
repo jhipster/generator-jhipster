@@ -66,10 +66,8 @@ module.exports = class extends BaseBlueprintGenerator {
         // use global variable since getters dont have access to instance property
         if (!opts.fromBlueprint) {
             useBlueprint = this.composeBlueprint(blueprint, 'client', {
-                'skip-install': this.options['skip-install'],
-                'from-cli': this.options['from-cli'],
-                configOptions: this.configOptions,
-                force: this.options.force
+                ...this.options,
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;
@@ -108,7 +106,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
                 }
-                this.useSass = configuration.get('useSass');
                 this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
@@ -128,7 +125,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.serviceDiscoveryType = false;
                 }
 
-                const clientConfigFound = this.useSass !== undefined;
+                const clientConfigFound = this.enableTranslation !== undefined;
                 if (clientConfigFound) {
                     // If translation is not defined, it is enabled by default
                     if (this.enableTranslation === undefined) {
@@ -183,12 +180,10 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
-            askForClientSideOpts: prompts.askForClientSideOpts,
             askFori18n: prompts.askFori18n,
 
             setSharedConfigOptions() {
                 this.configOptions.clientFramework = this.clientFramework;
-                this.configOptions.useSass = this.useSass;
             }
         };
     }
@@ -205,7 +200,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 statistics.sendSubGenEvent('generator', 'client', {
                     app: {
                         clientFramework: this.clientFramework,
-                        useSass: this.useSass,
                         enableTranslation: this.enableTranslation,
                         nativeLanguage: this.nativeLanguage,
                         languages: this.languages
@@ -234,7 +228,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     applicationType: this.applicationType,
                     baseName: this.baseName,
                     clientFramework: this.clientFramework,
-                    useSass: this.useSass,
+                    useSass: true,
                     enableTranslation: this.enableTranslation,
                     skipCommitHook: this.skipCommitHook,
                     clientPackageManager: this.clientPackageManager
@@ -328,10 +322,12 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.configOptions.buildTool);
 
-                this.styleSheetExt = this.useSass ? 'scss' : 'css';
+                this.styleSheetExt = 'scss';
                 this.pkType = this.getPkType(this.databaseType);
-                this.apiUaaPath = `${this.authenticationType === 'uaa' ? `${this.uaaBaseName.toLowerCase()}/` : ''}`;
-                this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
+                this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
+                this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
+                this.AOT_DIR = `${this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool)}aot`;
+                this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
             composeLanguages() {

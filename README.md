@@ -1,6 +1,6 @@
 [![Logo][jhipster-image]][jhipster-url]
 
-[![NPM version][npm-image]][npm-url] [![Travis Build Status][travis-image]][travis-url-main] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main] [![Dependency Status][daviddm-image]][daviddm-url]
+[![NPM version][npm-image]][npm-url] [![Travis Build Status][travis-image]][travis-url-main] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url]
 
 Greetings, Java Hipster!
 
@@ -28,6 +28,8 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 [![CodeFirst][codefirst-image]][codefirst-url]
 
+[![TalentPlot][talentplot-image]][talentplot-url]
+
 **Thank you to all our backers!**
 
 [![Backers][backers-image]][backers-url]
@@ -37,7 +39,7 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hipster-labs/jhipster-daily-builds)
 
 | Type                 | Status                                                 |
-|:---------------------|:-------------------------------------------------------|
+| :------------------- | :----------------------------------------------------- |
 | Docker               | [![Build Status][img-docker]][azure-url]               |
 | Angular.Maven        | [![Build Status][img-angular-maven]][azure-url]        |
 | Angular.Maven.NoSQL  | [![Build Status][img-angular-maven-nosql]][azure-url]  |
@@ -70,7 +72,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [img-ms-jwt]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.JWT
 [img-ms-oauth2]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.OAuth2
 [img-ms-uaa]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.UAA
-
 [sonar-url]: https://sonarcloud.io/dashboard?id=io.github.jhipster.sample%3Ajhipster-sample-application
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=alert_status
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=io.github.jhipster.sample%3Ajhipster-sample-application&metric=coverage
@@ -98,5 +99,9 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [intesys-url]: https://www.intesys.it/
 [codefirst-image]: https://www.jhipster.tech/images/open-collective/codefirst.png
 [codefirst-url]: https://www.codefirst.co.uk
+[talentplot-image]: https://www.jhipster.tech/images/open-collective/talentplot.png
+[talentplot-url]: https://talentplot.com/
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
+[npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster.svg?label=Downloads&style=flat
+[npmcharts-url]: https://npmcharts.com/compare/generator-jhipster

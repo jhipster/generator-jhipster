@@ -49,7 +49,7 @@ function checkImages() {
             runCommand = './mvnw package -Pprod verify jib:dockerBuild';
         } else {
             imagePath = this.destinationPath(`${this.directoryPath + appsFolder}/build/jib-cache`);
-            runCommand = './gradlew bootWar -Pprod jibDockerBuild';
+            runCommand = './gradlew bootJar -Pprod jibDockerBuild';
         }
         if (shelljs.ls(imagePath).length === 0) {
             this.warning = true;
@@ -148,6 +148,7 @@ function loadFromYoRc() {
     this.dockerRepositoryName = this.config.get('dockerRepositoryName');
     this.dockerPushCommand = this.config.get('dockerPushCommand');
     this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+    this.reactive = this.config.get('reactive');
     if (this.serviceDiscoveryType === undefined) {
         this.serviceDiscoveryType = 'eureka';
     }

@@ -65,6 +65,7 @@ module.exports = class extends Generator {
      */
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
         if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
             generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
@@ -89,10 +90,10 @@ module.exports = class extends Generator {
         }
 
         // Templates
-        generator.template(`${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
-        generator.template(`${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
-        generator.template(`${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
-        generator.template(`${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
     }
 
     /**
@@ -104,9 +105,13 @@ module.exports = class extends Generator {
      */
     installI18nServerFilesByLanguage(_this, resourceDir, lang) {
         const generator = _this || this;
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
-        generator.template(`${resourceDir}i18n/messages_${langProp}.properties.ejs`, `${resourceDir}i18n/messages_${langProp}.properties`);
+        generator.template(
+            `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
+            `${resourceDir}i18n/messages_${langProp}.properties`
+        );
     }
 
     /**
@@ -729,7 +734,9 @@ module.exports = class extends Generator {
     composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
             blueprint = this.normalizeBlueprintName(blueprint);
-            this.checkBlueprint(blueprint, subGen);
+            if (options.skipChecks === undefined || !options.skipChecks) {
+                this.checkBlueprint(blueprint, subGen);
+            }
             try {
                 const finalOptions = {
                     ...options,
@@ -809,13 +816,14 @@ module.exports = class extends Generator {
         const done = this.async();
         exec('java -version', (err, stdout, stderr) => {
             if (err) {
-                this.warning('Java 8 is not found on your computer.');
+                this.warning('Java is not found on your computer.');
             } else {
                 const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-                if (!javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))) {
-                    this.warning(
-                        `Java ${constants.JAVA_VERSION} is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`
-                    );
+                if (
+                    !javaVersion.match(new RegExp('11'.replace('.', '\\.'))) &&
+                    !javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))
+                ) {
+                    this.warning(`Java 8 or Java 11 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
                 }
             }
             done();
@@ -928,7 +936,7 @@ module.exports = class extends Generator {
                             filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
                             map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
                         )
-                        .subscribe((subRes: I${relationship.otherEntityAngularName}) => 
+                        .subscribe((subRes: I${relationship.otherEntityAngularName}) =>
                             this.${variableName} = [subRes].concat(res)
                         , (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
@@ -943,7 +951,7 @@ module.exports = class extends Generator {
                             map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
                         )
             .subscribe(
-                (res: I${relationship.otherEntityAngularName}[]) => this.${variableName} = res, 
+                (res: I${relationship.otherEntityAngularName}[]) => this.${variableName} = res,
                 (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
@@ -1113,6 +1121,14 @@ module.exports = class extends Generator {
      */
     getBuildDirectoryForBuildTool(buildTool) {
         return buildTool === 'maven' ? 'target/' : 'build/';
+    }
+
+    /**
+     * Get resource build directory used by buildTool
+     * @param {string} buildTool - buildTool
+     */
+    getResourceBuildDirectoryForBuildTool(buildTool) {
+        return buildTool === 'maven' ? 'target/classes/' : 'build/resources/main/';
     }
 
     /**
@@ -1287,7 +1303,7 @@ module.exports = class extends Generator {
      */
     registerPrettierTransform(generator = this) {
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const prettierFilter = filter(['{,src/**/}*.{md,json,ts,tsx,scss,css}'], { restore: true });
+        const prettierFilter = filter(['{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }

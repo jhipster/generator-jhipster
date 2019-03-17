@@ -122,6 +122,7 @@
     <logger name="sun.rmi" level="WARN"/><% if (databaseType === 'sql') { %>
     <logger name="liquibase" level="WARN"/>
     <logger name="LiquibaseSchemaResolver" level="INFO"/><% } %>
+    <logger name="springfox.documentation.schema.property" level="ERROR"/>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || cacheProvider === 'hazelcast') { _%>
     <logger name="sun.net.www" level="INFO"/>
     <%_ } _%>

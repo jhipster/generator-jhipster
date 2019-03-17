@@ -117,18 +117,18 @@ function askForServerSideOpts(meta) {
                         name: 'JWT authentication (stateless, with a token)'
                     }
                 ];
+                if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
+                    opts.push({
+                        value: 'session',
+                        name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
+                    });
+                }
                 if (!reactive) {
                     opts.push({
                         value: 'oauth2',
                         name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
                     });
-
-                    if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
-                        opts.push({
-                            value: 'session',
-                            name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
-                        });
-                    } else if (['gateway', 'microservice'].includes(applicationType)) {
+                    if (['gateway', 'microservice'].includes(applicationType)) {
                         opts.push({
                             value: 'uaa',
                             name: 'Authentication with JHipster UAA server (the server must be generated separately)'
@@ -171,11 +171,11 @@ function askForServerSideOpts(meta) {
                     value: 'mongodb',
                     name: 'MongoDB'
                 });
+                opts.push({
+                    value: 'couchbase',
+                    name: 'Couchbase'
+                });
                 if (!reactive) {
-                    opts.push({
-                        value: 'couchbase',
-                        name: 'Couchbase'
-                    });
                     if (
                         (response.authenticationType !== 'oauth2' && applicationType === 'microservice') ||
                         (response.authenticationType === 'uaa' && applicationType === 'gateway')

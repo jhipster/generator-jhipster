@@ -27,10 +27,23 @@ package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% 
     const entityToDtoReference = mapper + '::'+ 'toDto';
     const repository = entityInstance  + 'Repository';
     const searchRepository = entityInstance  + 'SearchRepository';
+    let isUsingMapsId = false;
+    let mapsIdAssoc;
+    for (idx in relationships) {
+        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+        if ( isUsingMapsId === true) {
+            mapsIdAssoc = relationships[idx];
+            break;
+        }
+        isUsingMapsId = false;
+    }
     if (service === 'serviceImpl') { %>
 import <%= packageName %>.service.<%= entityClass %>Service;<% } %>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 import <%= packageName %>.repository.<%= entityClass %>Repository;
+<%_ if (isUsingMapsId === true) { _%>
+import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+<%_ } _%>
 <%_ if (reactiveRepositories) { _%>
 import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
 <%_ } _%>
@@ -78,34 +91,34 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
 
 /**
- * Service Implementation for managing <%= asEntity(entityClass) %>.
+ * Service Implementation for managing {@link <%= asEntity(entityClass) %>}.
  */
 @Service<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
 public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> implements <%= entityClass %>Service<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../../common/inject_template', {asEntity, asDto, viaService, constructorName: serviceClassName, queryService: false}); -%>
+<%- include('../../common/inject_template', {asEntity, asDto, viaService: viaService, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
 
     /**
      * Save a <%= entityInstance %>.
      *
-     * @param <%= instanceName %> the entity to save
-     * @return the persisted entity
+     * @param <%= instanceName %> the entity to save.
+     * @return the persisted entity.
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
-<%- include('../../common/save_template', {asEntity, asDto, viaService, returnDirectly: true}); -%>
+<%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
     }
 
     /**
      * Get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information<% } %>
-     * @return the list of entities
+     * @param pageable the pagination information.<% } %>
+     * @return the list of entities.
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
@@ -128,7 +141,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
 
     /**
      * Get all the <%= entityInstancePlural %>.
-     * @return the Flux of entities
+     * @return the {@link Flux} of entities.
      */
     public Flux<<%= instanceType %>> findAllAsFlux() {
         log.debug("Request to get all <%= entityClassPlural %> as a flux");
@@ -139,9 +152,9 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
 
     /**
-     * Get all the <%= entityClass %> with eager load of many-to-many relationships.
+     * Get all the <%= entityInstancePlural %> with eager load of many-to-many relationships.
      *
-     * @return the list of entities
+     * @return the list of entities.
      */
     public Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
         return <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
@@ -151,8 +164,8 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     /**
      * Get one <%= entityInstance %> by id.
      *
-     * @param id the id of the entity
-     * @return the entity
+     * @param id the id of the entity.
+     * @return the entity.
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
@@ -167,22 +180,23 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     /**
      * Delete the <%= entityInstance %> by id.
      *
-     * @param id the id of the entity
+     * @param id the id of the entity.
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
     public void delete(<%= pkType %> id) {
-        log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
+        log.debug("Request to delete <%= entityClass %> : {}", id);
+<%- include('../../common/delete_template', {viaService: viaService}); -%>
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
-     * @param query the query of the search<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information<% } %>
-     * @return the list of entities
+     * @param query the query of the search.<% if (pagination !== 'no') { %>
+     * @param pageable the pagination information.<% } %>
+     * @return the list of entities.
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override

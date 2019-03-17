@@ -98,7 +98,7 @@ describe('Settings reducer tests', () => {
 
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
-      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      const mockStore = configureStore([thunk, promiseMiddleware]);
       <%_ if (enableTranslation) { _%>
       store = mockStore({ authentication: { account: { langKey: '<%= nativeLanguage %>' } } });
       <%_ } else { _%>
