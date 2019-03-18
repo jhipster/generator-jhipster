@@ -131,7 +131,7 @@ public class LoggingConfiguration {
         consoleAppender.setName(CONSOLE_APPENDER_NAME);
         consoleAppender.start();
 
-        context.getLogger("ROOT").addAppender(consoleAppender);
+        context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).addAppender(consoleAppender);
     }
 
     private void addLogstashTcpSocketAppender(LoggerContext context) {
@@ -153,7 +153,8 @@ public class LoggingConfiguration {
         asyncLogstashAppender.addAppender(logstashAppender);
         asyncLogstashAppender.start();
 
-        context.getLogger("ROOT").addAppender(asyncLogstashAppender);
+        context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).detachAppender(CONSOLE_APPENDER_NAME);
+        context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).addAppender(asyncLogstashAppender);
     }
 
     private LoggingEventFormattedTimestampJsonProvider timestampJsonProvider() {
