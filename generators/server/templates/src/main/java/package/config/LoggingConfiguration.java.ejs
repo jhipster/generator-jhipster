@@ -51,7 +51,6 @@ import net.logstash.logback.composite.loggingevent.StackTraceJsonProvider;
 import net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder;
 import net.logstash.logback.encoder.LogstashEncoder;
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
-import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -159,7 +158,7 @@ public class LoggingConfiguration {
 
     private LoggingEventFormattedTimestampJsonProvider timestampJsonProvider() {
         final LoggingEventFormattedTimestampJsonProvider timestampJsonProvider = new LoggingEventFormattedTimestampJsonProvider();
-        timestampJsonProvider.setTimeZone(DateTimeZone.UTC.getID());
+        timestampJsonProvider.setTimeZone("UTC");
         timestampJsonProvider.setFieldName("timestamp");
         return timestampJsonProvider;
     }
