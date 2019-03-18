@@ -274,12 +274,22 @@ public class LoggingConfiguration {
 
         @Override
         public void onStart(LoggerContext context) {
-            addLogstashAppender(context);
+            if (true) {
+                addJsonConsoleAppender(context);
+            }
+            if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
+                addLogstashTcpSocketAppender(context);
+            }
         }
 
         @Override
         public void onReset(LoggerContext context) {
-            addLogstashAppender(context);
+            if (true) {
+                addJsonConsoleAppender(context);
+            }
+            if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
+                addLogstashTcpSocketAppender(context);
+            }
         }
 
         @Override
