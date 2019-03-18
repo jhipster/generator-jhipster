@@ -20,6 +20,9 @@ package <%=packageName%>.config;
 
 import java.net.InetSocketAddress;
 import java.util.Iterator;
+<%_ if (serviceDiscoveryType === "consul") { _%>
+import java.util.Optional;
+<%_ } _%>
 
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -43,7 +46,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
 <%_ if (serviceDiscoveryType === "consul") { _%>
-import org.springframework.cloud.consul.ConditionalOnConsulEnabled;
 import org.springframework.cloud.consul.serviceregistry.ConsulRegistration;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
@@ -54,7 +56,6 @@ import org.springframework.context.annotation.Configuration;
 @RefreshScope
 <%_ } _%>
 <%_ if (serviceDiscoveryType === "consul") { _%>
-@ConditionalOnConsulEnabled
 @RefreshScope
 <%_ } _%>
 public class LoggingConfiguration {
@@ -82,11 +83,11 @@ public class LoggingConfiguration {
     private final JHipsterProperties jHipsterProperties;
 
     public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort,
-        <% if (serviceDiscoveryType === "consul") { %> ConsulRegistration consulRegistration,<% } %><% if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { %> @Value("${info.project.version:}") String version,<% } %> JHipsterProperties jHipsterProperties) {
+        <% if (serviceDiscoveryType === "consul") { %> Optional<ConsulRegistration> consulRegistration,<% } %><% if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { %> @Value("${info.project.version:}") String version,<% } %> JHipsterProperties jHipsterProperties) {
         this.appName = appName;
         this.serverPort = serverPort;
         <%_ if (serviceDiscoveryType === 'consul') { _%>
-        this.consulRegistration = consulRegistration;
+        this.consulRegistration = consulRegistration.orElse(null);
         <%_ } _%>
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
         this.version = version;
