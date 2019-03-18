@@ -34,8 +34,18 @@ const validations: any = {
   }
 };
 
+const beforeRouteEnter = (to, from, next) => {
+  next(vm => {
+    vm.initAuthorities();
+      if (to.params.userId) {
+        vm.init(to.params.userId);
+      }
+  });
+}
+
 @Component({
-  validations
+  validations,
+  beforeRouteEnter
 })
 export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
@@ -44,15 +54,6 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
   public isSaving = false;
   public authorities: any[] = [];
   public languages: any = this.$store.getters.languages;
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.initAuthorities();
-      if (to.params.userId) {
-        vm.init(to.params.userId);
-      }
-    });
-  }
 
   public constructor() {
     super();

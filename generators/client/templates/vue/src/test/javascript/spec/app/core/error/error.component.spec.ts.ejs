@@ -44,45 +44,6 @@ let wrapper: Wrapper<ErrorClass>;
     expect(wrapper.isVueInstance()).toBeTruthy();
   });
 
-  it('should have retrieve custom error on routing', () => {
-    error.beforeRouteEnter({meta: { errorMessage: customErrorMsg}}, null, cb => cb(error));
-
-    expect(error.errorMessage).toBe(customErrorMsg);
-    expect(error.error403).toBeFalsy();
-    expect(error.error404).toBeFalsy();
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    expect(loginService.openLogin).toHaveBeenCalledTimes(0);
-    <%_ } else { _%>
-    expect(loginService.login).toHaveBeenCalledTimes(0);
-    <%_ } _%>
-  });
-
-  it('should have set forbidden error on routing', () => {
-    error.beforeRouteEnter({meta: { error403: true}}, null, cb => cb(error));
-
-    expect(error.errorMessage).toBeNull();
-    expect(error.error403).toBeTruthy();
-    expect(error.error404).toBeFalsy();
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    expect(loginService.openLogin).toHaveBeenCalled();
-    <%_ } else { _%>
-    expect(loginService.login).toHaveBeenCalled();
-    <%_ } _%>
-  });
-
-  it('should have set not found error on routing', () => {
-    error.beforeRouteEnter({meta: { error404: true}}, null, cb => cb(error));
-
-    expect(error.errorMessage).toBeNull();
-    expect(error.error403).toBeFalsy();
-    expect(error.error404).toBeTruthy();
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    expect(loginService.openLogin).toHaveBeenCalledTimes(0);
-    <%_ } else { _%>
-    expect(loginService.login).toHaveBeenCalledTimes(0);
-    <%_ } _%>
-  });
-
   it('should have retrieve custom error on init', () => {
     error.init(customErrorMsg, false, false);
 
