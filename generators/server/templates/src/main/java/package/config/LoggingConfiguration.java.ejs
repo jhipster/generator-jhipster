@@ -109,16 +109,16 @@ public class LoggingConfiguration {
         this.version = version;
         <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
-        if (true) {
+        if (this.jHipsterProperties.getLogging().useJsonFormat()) {
             addJsonConsoleAppender(context);
         }
-        if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
+        if (this.jHipsterProperties.getLogging().getLogstash().isEnabled()) {
             addLogstashTcpSocketAppender(context);
         }
-        if (true || jHipsterProperties.getLogging().getLogstash().isEnabled()) {
+        if (this.jHipsterProperties.getLogging().useJsonFormat() || this.jHipsterProperties.getLogging().getLogstash().isEnabled()) {
             addContextListener(context);
         }
-        if (jHipsterProperties.getMetrics().getLogs().isEnabled()) {
+        if (this.jHipsterProperties.getMetrics().getLogs().isEnabled()) {
             setMetricsMarkerLogbackFilter(context);
         }
     }
@@ -262,7 +262,7 @@ public class LoggingConfiguration {
             for (Iterator<Appender<ILoggingEvent>> it = logger.iteratorForAppenders(); it.hasNext();) {
                 Appender<ILoggingEvent> appender = it.next();
                 if (!appender.getName().equals(ASYNC_LOGSTASH_APPENDER_NAME) &&
-                    !(appender.getName().equals(CONSOLE_APPENDER_NAME) && true)) {
+                    !(appender.getName().equals(CONSOLE_APPENDER_NAME) && this.jHipsterProperties.getLogging().useJsonFormat())) {
                     log.debug("Filter metrics logs from the {} appender", appender.getName());
                     appender.setContext(context);
                     appender.addFilter(metricsFilter);
@@ -291,7 +291,7 @@ public class LoggingConfiguration {
 
         @Override
         public void onStart(LoggerContext context) {
-            if (true) {
+            if (this.jHipsterProperties.getLogging().useJsonFormat()) {
                 addJsonConsoleAppender(context);
             }
             if (this.jHipsterProperties.getLogging().getLogstash().isEnabled()) {
@@ -301,7 +301,7 @@ public class LoggingConfiguration {
 
         @Override
         public void onReset(LoggerContext context) {
-            if (true) {
+            if (this.jHipsterProperties.getLogging().useJsonFormat()) {
                 addJsonConsoleAppender(context);
             }
             if (this.jHipsterProperties.getLogging().getLogstash().isEnabled()) {
