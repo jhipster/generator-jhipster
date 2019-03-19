@@ -45,7 +45,11 @@ bootRun {
 
 <%_ if (!skipClient) { _%>
 task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
+    <%_ if (clientPackageManager==='npm') { _%>
     inputs.file("package-lock.json")
+    <%_ } else { _%>
+    inputs.file("yarn.lock")
+    <%_ } _%>
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
 
     def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>/")
@@ -54,7 +58,7 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
 
     outputs.dir("<%= CLIENT_DIST_DIR %>")
 
-    dependsOn <%= clientPackageManager %>Install
+    dependsOn <%= clientPackageManager %>_install
 
     args = ["run", "webpack:build"]
 }
