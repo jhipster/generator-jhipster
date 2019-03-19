@@ -42,12 +42,14 @@ import net.logstash.logback.composite.ContextJsonProvider;
 import net.logstash.logback.composite.GlobalCustomFieldsJsonProvider;
 import net.logstash.logback.composite.loggingevent.ArgumentsJsonProvider;
 import net.logstash.logback.composite.loggingevent.LogLevelJsonProvider;
+import net.logstash.logback.composite.loggingevent.LoggerNameJsonProvider;
 import net.logstash.logback.composite.loggingevent.LoggingEventFormattedTimestampJsonProvider;
 import net.logstash.logback.composite.loggingevent.LoggingEventJsonProviders;
 import net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider;
 import net.logstash.logback.composite.loggingevent.MdcJsonProvider;
 import net.logstash.logback.composite.loggingevent.MessageJsonProvider;
 import net.logstash.logback.composite.loggingevent.StackTraceJsonProvider;
+import net.logstash.logback.composite.loggingevent.ThreadNameJsonProvider;
 import net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder;
 import net.logstash.logback.encoder.LogstashEncoder;
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
@@ -238,7 +240,7 @@ public class LoggingConfiguration {
     }
 
     private void addContextListener(LoggerContext context) {
-        LogbackLoggerContextListener loggerContextListener = new LogbackLoggerContextListener();
+        LogbackLoggerContextListener loggerContextListener = new LogbackLoggerContextListener(this.jHipsterProperties);
         loggerContextListener.setContext(context);
         context.addListener(loggerContextListener);
     }
@@ -275,7 +277,12 @@ public class LoggingConfiguration {
      * This listener ensures that the programmatic configuration is also re-applied after reset.
      */
     class LogbackLoggerContextListener extends ContextAwareBase implements LoggerContextListener {
-
+        private final JHipsterProperties jHipsterProperties;
+        
+        private LogbackLoggerContextListener(JHipsterProperties jHipsterProperties) {
+            this.jHipsterProperties = jHipsterProperties;
+        }
+        
         @Override
         public boolean isResetResistant() {
             return true;
@@ -286,7 +293,7 @@ public class LoggingConfiguration {
             if (true) {
                 addJsonConsoleAppender(context);
             }
-            if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
+            if (this.jHipsterProperties.getLogging().getLogstash().isEnabled()) {
                 addLogstashTcpSocketAppender(context);
             }
         }
@@ -296,7 +303,7 @@ public class LoggingConfiguration {
             if (true) {
                 addJsonConsoleAppender(context);
             }
-            if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
+            if (this.jHipsterProperties.getLogging().getLogstash().isEnabled()) {
                 addLogstashTcpSocketAppender(context);
             }
         }
