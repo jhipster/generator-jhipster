@@ -32,7 +32,7 @@ const uniqueEnums = {}; %><%- include imports -%>
             break;
         }
         isUsingMapsId = false;
-    } 
+    }
     for (idx in fields) {
         if ((prodDatabaseType === 'postgresql' || devDatabaseType === 'postgresql') && fields[idx].fieldTypeBlobContent === 'text') {
             hasTextBlob = true;
@@ -106,7 +106,7 @@ import java.util.Objects;
 <%_ if (databaseType === 'couchbase' && hasRelationship) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra' || fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ }
 Object.keys(uniqueEnums).forEach(function(element) { _%>
