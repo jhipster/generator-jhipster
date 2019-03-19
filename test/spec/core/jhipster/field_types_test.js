@@ -39,7 +39,7 @@ describe('FieldTypes', () => {
     });
     context('when passing a false type', () => {
       it('returns false', () => {
-        expect(FieldTypes.isCommonDBType(FieldTypes.CassandraTypes.UUID)).to.be.false;
+        expect(FieldTypes.isCommonDBType(FieldTypes.CassandraTypes.DATE)).to.be.false;
       });
     });
     context('when passing a valid type', () => {
