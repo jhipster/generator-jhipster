@@ -131,6 +131,7 @@ public class LoggingConfiguration {
         consoleAppender.setName(CONSOLE_APPENDER_NAME);
         consoleAppender.start();
 
+        context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).detachAppender(CONSOLE_APPENDER_NAME);
         context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).addAppender(consoleAppender);
     }
 
@@ -153,15 +154,39 @@ public class LoggingConfiguration {
         asyncLogstashAppender.addAppender(logstashAppender);
         asyncLogstashAppender.start();
 
-        context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).detachAppender(CONSOLE_APPENDER_NAME);
         context.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME).addAppender(asyncLogstashAppender);
     }
 
-    private LoggingEventFormattedTimestampJsonProvider timestampJsonProvider() {
-        final LoggingEventFormattedTimestampJsonProvider timestampJsonProvider = new LoggingEventFormattedTimestampJsonProvider();
-        timestampJsonProvider.setTimeZone("UTC");
-        timestampJsonProvider.setFieldName("timestamp");
-        return timestampJsonProvider;
+    private LoggingEventCompositeJsonEncoder compositeJsonEncoder(LoggerContext context) {
+        final LoggingEventCompositeJsonEncoder compositeJsonEncoder = new LoggingEventCompositeJsonEncoder();
+        compositeJsonEncoder.setContext(context);
+        compositeJsonEncoder.setProviders(jsonProviders(context));
+        compositeJsonEncoder.start();
+        return compositeJsonEncoder;
+    }
+    
+    private LogstashEncoder logstashEncoder(LoggerContext context) {
+        final LogstashEncoder logstashEncoder = new LogstashEncoder();
+        logstashEncoder.setThrowableConverter(throwableConverter());
+        logstashEncoder.setCustomFields(customFields());
+        return logstashEncoder;
+    }
+    
+    private LoggingEventJsonProviders jsonProviders(LoggerContext context) {
+        final LoggingEventJsonProviders jsonProviders = new LoggingEventJsonProviders();
+        jsonProviders.addArguments(new ArgumentsJsonProvider());
+        jsonProviders.addContext(new ContextJsonProvider<>());
+        jsonProviders.addGlobalCustomFields(customFieldsJsonProvider());
+        jsonProviders.addLogLevel(new LogLevelJsonProvider());
+        jsonProviders.addLoggerName(loggerNameJsonProvider());
+        jsonProviders.addMdc(new MdcJsonProvider());
+        jsonProviders.addMessage(new MessageJsonProvider());
+        jsonProviders.addPattern(new LoggingEventPatternJsonProvider());
+        jsonProviders.addStackTrace(stackTraceJsonProvider());
+        jsonProviders.addThreadName(new ThreadNameJsonProvider());
+        jsonProviders.addTimestamp(timestampJsonProvider());
+        jsonProviders.setContext(context);
+        return jsonProviders;
     }
 
     private GlobalCustomFieldsJsonProvider<ILoggingEvent> customFieldsJsonProvider() {
@@ -187,10 +212,10 @@ public class LoggingConfiguration {
         return customFields.toString();
     }
     
-    private ShortenedThrowableConverter throwableConverter() {
-        final ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
-        throwableConverter.setRootCauseFirst(true);
-        return throwableConverter;
+    private LoggerNameJsonProvider loggerNameJsonProvider() {
+        final LoggerNameJsonProvider loggerNameJsonProvider = new LoggerNameJsonProvider();
+        loggerNameJsonProvider.setShortenedLoggerNameLength(20);
+        return loggerNameJsonProvider;
     }
     
     private StackTraceJsonProvider stackTraceJsonProvider() {
@@ -199,36 +224,19 @@ public class LoggingConfiguration {
         return stackTraceJsonProvider;
     }
 
-    private LoggingEventJsonProviders jsonProviders(LoggerContext context) {
-        final LoggingEventJsonProviders jsonProviders = new LoggingEventJsonProviders();
-        jsonProviders.addArguments(new ArgumentsJsonProvider());
-        jsonProviders.addContext(new ContextJsonProvider<>());
-        jsonProviders.addGlobalCustomFields(customFieldsJsonProvider());
-        jsonProviders.addLogLevel(new LogLevelJsonProvider());
-        jsonProviders.addMdc(new MdcJsonProvider());
-        jsonProviders.addMessage(new MessageJsonProvider());
-        jsonProviders.addPattern(new LoggingEventPatternJsonProvider());
-        jsonProviders.addStackTrace(stackTraceJsonProvider());
-        jsonProviders.addTimestamp(timestampJsonProvider());
-        jsonProviders.setContext(context);
-        return jsonProviders;
+    private ShortenedThrowableConverter throwableConverter() {
+        final ShortenedThrowableConverter throwableConverter = new ShortenedThrowableConverter();
+        throwableConverter.setRootCauseFirst(true);
+        return throwableConverter;
+    }
+    
+    private LoggingEventFormattedTimestampJsonProvider timestampJsonProvider() {
+        final LoggingEventFormattedTimestampJsonProvider timestampJsonProvider = new LoggingEventFormattedTimestampJsonProvider();
+        timestampJsonProvider.setTimeZone("UTC");
+        timestampJsonProvider.setFieldName("timestamp");
+        return timestampJsonProvider;
     }
 
-    private LoggingEventCompositeJsonEncoder compositeJsonEncoder(LoggerContext context) {
-        final LoggingEventCompositeJsonEncoder compositeJsonEncoder = new LoggingEventCompositeJsonEncoder();
-        compositeJsonEncoder.setContext(context);
-        compositeJsonEncoder.setProviders(jsonProviders(context));
-        compositeJsonEncoder.start();
-        return compositeJsonEncoder;
-    }
-    
-    private LogstashEncoder logstashEncoder(LoggerContext context) {
-        final LogstashEncoder logstashEncoder = new LogstashEncoder();
-        logstashEncoder.setThrowableConverter(throwableConverter());
-        logstashEncoder.setCustomFields(customFields());
-        return logstashEncoder;
-    }
-    
     private void addContextListener(LoggerContext context) {
         LogbackLoggerContextListener loggerContextListener = new LogbackLoggerContextListener();
         loggerContextListener.setContext(context);
