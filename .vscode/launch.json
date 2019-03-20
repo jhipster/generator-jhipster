@@ -18,7 +18,7 @@
                 "--blueprint",
                 "sample-blueprint"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -33,7 +33,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -48,7 +48,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/ngx-default/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ngx-default/",
             "console": "integratedTerminal"
         },
         {
@@ -63,7 +63,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/ngx-default/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ngx-default/",
             "console": "integratedTerminal"
         },
         {
@@ -78,7 +78,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/ms-ngx-gateway-eureka/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ms-ngx-gateway-eureka/",
             "console": "integratedTerminal"
         },
         {
@@ -93,7 +93,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/ms-micro-eureka/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ms-micro-eureka/",
             "console": "integratedTerminal"
         },
         {
@@ -108,7 +108,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/ngx-gradle-fr/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ngx-gradle-fr/",
             "console": "integratedTerminal"
         },
         {
@@ -121,7 +121,7 @@
                 "BankAccount",
                 "--force"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -132,7 +132,7 @@
             "args": [
                 "ci-cd"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -143,7 +143,7 @@
             "args": [
                 "import-jdl"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -154,7 +154,7 @@
             "args": [
                 "info"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -165,7 +165,7 @@
             "args": [
                 "language"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -176,7 +176,7 @@
             "args": [
                 "upgrade"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/"
         },
         {
             "type": "node",
@@ -186,7 +186,7 @@
             "args": [
                 "docker-compose"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -197,7 +197,7 @@
             "args": [
                 "kubernetes"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -208,7 +208,7 @@
             "args": [
                 "rancher-compose"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -219,7 +219,7 @@
             "args": [
                 "openshift"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -230,7 +230,7 @@
             "args": [
                 "heroku"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -244,7 +244,7 @@
             "env": {
                 "JHIPSTER_ONLINE_URL": "http://localhost:8080"
             },
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -258,7 +258,7 @@
             "env": {
                 "JHIPSTER_ONLINE_URL": "http://localhost:8080"
             },
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         }
     ]
