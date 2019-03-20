@@ -27,7 +27,7 @@ const crypto = require('crypto');
 
 const constants = require('./generator-constants');
 
-const LANGUAGES_MAIN_SRC_DIR = `../../languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
+const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
 
 module.exports = {
     rewrite,
@@ -306,12 +306,12 @@ function geti18nJson(key, generator) {
     }
     let filename = `${i18nDirectory + name}.json`;
     let render;
-    if (!shelljs.test('-f', path.join(generator.sourceRoot(), filename))) {
-        filename = `${i18nDirectory}${name}.json.ejs`;
+    if (!shelljs.test('-f', filename)) {
+        filename = `${filename}.ejs`;
         render = true;
     }
     try {
-        let file = generator.fs.read(path.join(generator.sourceRoot(), filename));
+        let file = generator.fs.read(filename);
         file = render ? ejs.render(file, generator, {}) : file;
         file = JSON.parse(file);
         return file;
