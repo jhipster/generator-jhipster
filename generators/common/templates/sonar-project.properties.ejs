@@ -9,9 +9,10 @@ sonar.tests=<%= TEST_DIR %>
 <%_ if (!skipServer) { _%>
 sonar.jacoco.reportPaths=target/jacoco/test.exec,target/jacoco/integrationTest.exec
 sonar.java.codeCoveragePlugin=jacoco
-sonar.junit.reportsPath=target/test-results
+sonar.junit.reportPaths=target/test-results/test,target/test-results/integrationTest
 <%_ } _%>
 <%_ if (!skipClient) { _%>
+sonar.testExecutionReportPaths=target/test-results/jest/TESTS-results-sonar.xml
 sonar.typescript.lcov.reportPaths=<%_ if (buildTool === 'maven') { _%>target/<%_ } else { _%> build/<%_ } _%>test-results/lcov.info
 <%_ } _%>
 
