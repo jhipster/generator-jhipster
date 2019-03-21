@@ -99,7 +99,7 @@ public class LoggingConfiguration {
     private final JHipsterProperties jHipsterProperties;
 
     public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort,
-        <% if (serviceDiscoveryType === "consul") { %> Optional<ConsulRegistration> consulRegistration,<% } %><% if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { %> @Value("#{buildProperties.get('version'):}") String version,<% } %> JHipsterProperties jHipsterProperties) {
+        <% if (serviceDiscoveryType === "consul") { %> Optional<ConsulRegistration> consulRegistration,<% } %><% if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { %> @Value("#{buildProperties.get('version')}") String version,<% } %> JHipsterProperties jHipsterProperties) {
         this.appName = appName;
         this.serverPort = serverPort;
         <%_ if (serviceDiscoveryType === 'consul') { _%>
