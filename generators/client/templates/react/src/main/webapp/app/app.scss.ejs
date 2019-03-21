@@ -17,9 +17,7 @@
  limitations under the License.
 -%>
 // Override Boostrap variables
-<%_ if (clientTheme === 'none') { _%>
-@import "bootstrap-variables";
-<%_ } else {_%>
+<%_ if (clientTheme !== 'none') {_%>
 @import "~bootswatch/dist/<%= clientTheme %>/variables";
 <%_ } _%>
 // Import Bootstrap source files from node_modules

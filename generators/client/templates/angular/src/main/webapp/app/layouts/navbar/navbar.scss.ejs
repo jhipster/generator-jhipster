@@ -39,11 +39,13 @@ Navbar
 
 .navbar {
     padding: 0.2rem 1rem;
+    <%_ if (clientTheme !== 'none') {_%>
     .dropdown-item.active,
     .dropdown-item.active:focus,
     .dropdown-item.active:hover {
         background-color: $dark;
     }
+    <%_ } _%>
 
     .dropdown-item:hover {
         color: $dropdown-link-hover-color;
@@ -59,11 +61,13 @@ Navbar
         font-weight: 400;
     }
 
+    <%_ if (clientTheme !== 'none') {_%>
     .navbar-toggler {
         &:hover {
             color: $navbar-dark-hover-color;
         }
     }
+    <%_ } _%>
 }
 
 /* ==========================================================================
