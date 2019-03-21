@@ -286,12 +286,12 @@ Then, run a Sonar analysis:
 
 <%_ if (buildTool === 'maven') { _%>
 ```
-/mvnw -Pprod clean verify sonar:sonar
+./mvnw -Pprod clean verify sonar:sonar
 ```
 or
 <%_ } else if(buildTool === 'gradle') { _%>
 ```
-/gradlew -Pprod clean check sonarqube
+./gradlew -Pprod clean check sonarqube
 ```
 or
 <%_ } _%>
