@@ -13,7 +13,16 @@ mysql:
 <%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
 postgresql:
   enabled: true
-  postgresUser: <%= app.baseName.toLowerCase() %>
+  postgresqlUsername: <%= app.baseName.toLowerCase() %>
+  postgresqlDatabase: <%= app.baseName %>
+  <%_ if (istio) { _%>
+  master:
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+  slave:
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+  <%_ } _%>
 <%_ } else if (app.prodDatabaseType === 'mariadb') { _%>
 mariadb:
   enabled: true

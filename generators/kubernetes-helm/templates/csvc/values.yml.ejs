@@ -1,7 +1,6 @@
 <%_ if (useKafka) { _%>
 kafka:
   enabled: true
-#  imageTag: <%= DOCKER_KAFKA %>
   replicas: 3
   <%_ if (istio) { _%>
   podAnnotations:
@@ -60,15 +59,21 @@ prometheus:
       servicePort: 9090
   nodeExporter:
     enabled: false
+  kubeStateMetrics:
+    enabled: false
+  pushgateway:
+    enabled: false
 grafana:
   <%_ if (istio) { _%>
   podAnnotations:
     sidecar.istio.io/inject: "false"
   <%_ } _%>
+  <%_ if (!istio && kubernetesServiceType === 'Ingress') { _%>
   ingress:
     enabled: true
     hosts:
-    - jhipster-grafana.<%= ingressDomain %>
+    - jhipster-grafana.<%= kubernetesNamespace %><%= ingressDomain %>
+  <%_ } _%>
   datasources:
     datasources.yaml:
       apiVersion: 1

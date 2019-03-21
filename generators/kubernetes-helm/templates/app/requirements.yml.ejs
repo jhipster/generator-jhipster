@@ -6,7 +6,7 @@ dependencies:
     condition: mysql.enabled
 <%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
   - name: postgresql
-    version: ^0.19.0
+    version: ^3.14.3
     repository: https://kubernetes-charts.storage.googleapis.com
     condition: postgresql.enabled
 <%_ } else if (app.prodDatabaseType === 'mariadb') { _%>
