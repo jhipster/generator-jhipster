@@ -144,7 +144,7 @@ public class LoggingConfiguration {
         LogstashTcpSocketAppender logstashAppender = new LogstashTcpSocketAppender();
         logstashAppender.addDestinations(new InetSocketAddress(this.jHipsterProperties.getLogging().getLogstash().getHost(), this.jHipsterProperties.getLogging().getLogstash().getPort()));
         logstashAppender.setContext(context);
-        logstashAppender.setEncoder(logstashEncoder(context));
+        logstashAppender.setEncoder(logstashEncoder());
         logstashAppender.setName(LOGSTASH_APPENDER_NAME);
         logstashAppender.start();
 
@@ -167,7 +167,7 @@ public class LoggingConfiguration {
         return compositeJsonEncoder;
     }
     
-    private LogstashEncoder logstashEncoder(LoggerContext context) {
+    private LogstashEncoder logstashEncoder() {
         final LogstashEncoder logstashEncoder = new LogstashEncoder();
         logstashEncoder.setThrowableConverter(throwableConverter());
         logstashEncoder.setCustomFields(customFields());
