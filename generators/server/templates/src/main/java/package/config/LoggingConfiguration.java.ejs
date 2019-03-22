@@ -20,7 +20,7 @@ package <%=packageName%>.config;
 
 import java.net.InetSocketAddress;
 import java.util.Iterator;
-<%_ if (serviceDiscoveryType === "consul") { _%>
+<%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
 import java.util.Optional;
 <%_ } _%>
 
