@@ -56,6 +56,9 @@ import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+<%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
+import org.springframework.boot.info.BuildProperties;
+<%_ } _%>
 <%_ if (serviceDiscoveryType === "eureka") { _%>
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
@@ -99,14 +102,14 @@ public class LoggingConfiguration {
     private final JHipsterProperties jHipsterProperties;
 
     public LoggingConfiguration(@Value("${spring.application.name}") String appName, @Value("${server.port}") String serverPort,
-        <% if (serviceDiscoveryType === "consul") { %> Optional<ConsulRegistration> consulRegistration,<% } %><% if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { %> @Value("#{buildProperties.get('version')}") String version,<% } %> JHipsterProperties jHipsterProperties) {
+        <% if (serviceDiscoveryType === "consul") { %> Optional<ConsulRegistration> consulRegistration,<% } %><% if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { %> Optional<BuildProperties> buildProperties,<% } %> JHipsterProperties jHipsterProperties) {
         this.appName = appName;
         this.serverPort = serverPort;
         <%_ if (serviceDiscoveryType === 'consul') { _%>
         this.consulRegistration = consulRegistration.orElse(null);
         <%_ } _%>
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
-        this.version = version;
+        this.version = buildProperties.isPresent() ? buildProperties.get().getVersion() : "";
         <%_ } _%>
         this.jHipsterProperties = jHipsterProperties;
         if (this.jHipsterProperties.getLogging().isUseJsonFormat()) {
@@ -258,18 +261,18 @@ public class LoggingConfiguration {
         metricsFilter.setOnMatch(FilterReply.DENY);
         metricsFilter.start();
 
-        for (ch.qos.logback.classic.Logger logger : context.getLoggerList()) {
+        context.getLoggerList().forEach((logger) -> {
             for (Iterator<Appender<ILoggingEvent>> it = logger.iteratorForAppenders(); it.hasNext();) {
                 Appender<ILoggingEvent> appender = it.next();
-                if (!appender.getName().equals(ASYNC_LOGSTASH_APPENDER_NAME) &&
-                    !(appender.getName().equals(CONSOLE_APPENDER_NAME) && this.jHipsterProperties.getLogging().isUseJsonFormat())) {
+                if (!appender.getName().equals(ASYNC_LOGSTASH_APPENDER_NAME)
+                        && !(appender.getName().equals(CONSOLE_APPENDER_NAME) && this.useJsonFormat)) {
                     log.debug("Filter metrics logs from the {} appender", appender.getName());
                     appender.setContext(context);
                     appender.addFilter(metricsFilter);
                     appender.start();
                 }
             }
-        }
+        });
     }
 
     /**
