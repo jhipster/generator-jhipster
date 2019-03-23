@@ -165,23 +165,31 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
             <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
-            cm.createCache("oAuth2Authentication", jcacheConfiguration);
+            createCache(cm, "oAuth2Authentication");
             <%_ } _%>
             <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
-            cm.createCache(<%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
-            cm.createCache(<%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE);
+            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE);
                 <%_ if (enableHibernateCache) { _%>
-            cm.createCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
-            cm.createCache(<%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
-            cm.createCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", jcacheConfiguration);
+            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName());
+            createCache(cm, <%=packageName%>.domain.Authority.class.getName());
+            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities");
                     <%_ if (authenticationType === 'session') { _%>
-            cm.createCache(<%=packageName%>.domain.PersistentToken.class.getName(), jcacheConfiguration);
-            cm.createCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", jcacheConfiguration);
+            createCache(cm, <%=packageName%>.domain.PersistentToken.class.getName());
+            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens");
                     <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
             // jhipster-needle-ehcache-add-entry
         };
+    }
+
+    private void createCache(javax.cache.CacheManager cm, String cacheName) {
+        javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
+        if (cache != null) {
+            cm.destroyCache(cacheName);
+        }
+        cm.createCache(cacheName, jcacheConfiguration);
     }
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
