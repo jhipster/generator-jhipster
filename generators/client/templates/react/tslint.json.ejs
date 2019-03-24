@@ -224,8 +224,12 @@
 
     "jsx-boolean-value": [true, "never"],
     "jsx-no-multiline-js": false,
-    "jsx-alignment": false
-
+    "jsx-alignment": false<% if (websocket === 'spring-websocket') { %>,
+    "rxjs-collapse-imports": true,
+    "rxjs-pipeable-operators-only": true,
+    "rxjs-no-static-observable-methods": true,
+    "rxjs-proper-imports": true
+    <%_ } _%>
   },
-  "rulesDirectory": []
+  "rulesDirectory": [<% if (websocket === 'spring-websocket') { %>"node_modules/rxjs-tslint"<% } %>]
 }

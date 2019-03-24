@@ -54,7 +54,7 @@ limitations under the License.
     "redux-promise-middleware": "6.1.0",
     "redux-thunk": "2.3.0",
     <%_ if (websocket === 'spring-websocket') { _%>
-    "rxjs": "5.5.12",
+    "rxjs": "6.4.0",
     "sockjs-client": "1.3.0",
     <%_ } _%>
     "tslib": "1.9.3",
@@ -131,6 +131,9 @@ limitations under the License.
     "react-infinite-scroller": "1.2.4",
     "redux-mock-store": "1.5.3",
     "rimraf": "2.6.3",
+    <%_ if (websocket === 'spring-websocket') { _%>
+    "rxjs-tslint": "0.1.7",
+    <%_ } _%>
     "sass": "1.17.3",
     "sass-loader": "7.1.0",
     "simple-progress-webpack-plugin": "1.1.2",
