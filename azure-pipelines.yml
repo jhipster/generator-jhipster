@@ -83,7 +83,7 @@ jobs:
           #----------------------------------------------------------------------
           - task: NodeTool@0
             inputs:
-                versionSpec: '10.15.2'
+                versionSpec: '10.15.3'
             displayName: 'TOOLS: install Node.js'
           - script: |
                 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -

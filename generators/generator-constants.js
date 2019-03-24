@@ -57,7 +57,7 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '10.15.2';
+const NODE_VERSION = '10.15.3';
 const YARN_VERSION = '1.15.2';
 const NPM_VERSION = '6.8.0';
 
