@@ -21,7 +21,9 @@ import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import { Observable } from 'rxjs'; // tslint:disable-line
 import { Observer } from 'rxjs/Observer'; // tslint:disable-line
+<%_ if (authenticationType !== 'session') { _%>
 import { Storage } from 'react-jhipster';
+<%_ } _%>
 
 import { ACTION_TYPES as ADMIN_ACTIONS } from 'app/modules/administration/administration.reducer';
 import { ACTION_TYPES as AUTH_ACTIONS } from 'app/shared/reducers/authentication';
