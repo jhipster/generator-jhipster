@@ -36,7 +36,7 @@
     let fieldInputType = 'text';
     let ngModelOption = '';
     const translationKey = `${i18nKeyPrefix}.${fieldName}`;
-    if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
+    if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
         fieldInputType = 'number';
     } else if (fieldType === 'LocalDate') {
         fieldInputType = 'date';
@@ -157,7 +157,7 @@ _%>
                             This field should follow pattern for "<%= fieldNameHumanized %>".
                         </small>
         <%_ } _%>
-        <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+        <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
                         <small class="form-text text-danger"
                             [hidden]="!editForm.get('<%= fieldName %>')?.errors?.number" jhiTranslate="entity.validation.number">
                             This field should be a number.

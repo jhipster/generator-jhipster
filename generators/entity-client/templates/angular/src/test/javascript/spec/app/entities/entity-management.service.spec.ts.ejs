@@ -75,7 +75,7 @@ describe('Service Tests', () => {
                 <%= fieldType + '.' + field.fieldValues.split(',')[0] %>,
                     <%_ } else if (fieldType === 'Boolean') { _%>
                 false,
-                    <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+                    <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
                 0,
                     <%_ } else if (fieldType === 'String' || fieldType === 'UUID') { _%>
                 'AAAAAAA',

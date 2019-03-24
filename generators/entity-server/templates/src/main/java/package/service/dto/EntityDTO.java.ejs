@@ -37,6 +37,9 @@ import java.time.LocalDate;
 <%_ if (fieldsContainZonedDateTime) { _%>
 import java.time.ZonedDateTime;
 <%_ } _%>
+<%_ if (fieldsContainDuration) { _%>
+import java.time.Duration;
+<%_ } _%>
 <%_ if (validation) { _%>
 import javax.validation.constraints.*;
 <%_ } _%>
