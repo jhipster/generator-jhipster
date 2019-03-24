@@ -95,10 +95,8 @@ describe('needle API React: JHipster client generator with blueprint', () => {
 
             it('Assert entity is added to menu', () => {
                 assert.fileContent(
-                    `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/entities.tsx`,
-                    '<DropdownItem tag={Link} to="/entity/routerName">\n' +
-                        '      <FontAwesomeIcon icon="asterisk" fixedWidth />&nbsp;Router Name\n' +
-                        '    </DropdownItem>'
+                    `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/entities.tsx`,
+                    '<MenuItem icon="asterisk" to="/entity/routerName">\n      Router Name\n    </MenuItem>'
                 );
             });
 
