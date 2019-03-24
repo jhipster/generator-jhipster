@@ -111,24 +111,21 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
             });
 
             it('Assert ehCache configuration has entry added', () => {
-                assert.fileContent(
-                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                    'cm.createCache(entry, jcacheConfiguration);'
-                );
+                assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`, 'createCache(cm, entry);');
             });
 
             it('Assert ehCache configuration has entity added', () => {
                 assert.fileContent(
                     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                    'cm.createCache(com.mycompany.myapp.domain.entityClass.class.getName(), jcacheConfiguration);'
+                    'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName());'
                 );
                 assert.fileContent(
                     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                    'cm.createCache(com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany", jcacheConfiguration);'
+                    'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany");'
                 );
                 assert.fileContent(
                     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                    'cm.createCache(com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany", jcacheConfiguration);'
+                    'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany");'
                 );
             });
         });
