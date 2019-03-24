@@ -45,7 +45,7 @@ spring:
             discovery:
                 tags:
                     - profile=${spring.profiles.active}
-                    - version=${info.project.version:}
+                    - version=#project.version#
                     - git-version=${git.commit.id.describe:}
                     - git-commit=${git.commit.id.abbrev:}
                     - git-branch=${git.branch:}
