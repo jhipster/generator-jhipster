@@ -24,7 +24,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-<%_ if (authenticationType === 'oauth2' && applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway') { _%>
 import org.springframework.cloud.netflix.zuul.ZuulFilterInitializer;
 <%_ } _%>
 import org.springframework.context.annotation.Profile;
@@ -42,7 +42,7 @@ import org.springframework.stereotype.Component;
 @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
 public class LazyInitBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
-    private Class<?>[] exclusionList = {<% if (authenticationType === 'oauth2' && applicationType === 'gateway') { %>ZuulFilterInitializer.class<% } %>};
+    private Class<?>[] exclusionList = {<% if (applicationType === 'gateway') { %>ZuulFilterInitializer.class<% } %>};
 
     public LazyInitBeanFactoryPostProcessor() {
     }
