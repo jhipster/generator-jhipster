@@ -1,12 +1,12 @@
 dependencies:
 <%_ if (app.prodDatabaseType === 'mysql') { _%>
   - name: mysql
-    version: ^0.10.1
+    version: ^0.15.0
     repository: https://kubernetes-charts.storage.googleapis.com
     condition: mysql.enabled
 <%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
   - name: postgresql
-    version: ^0.19.0
+    version: ^3.14.3
     repository: https://kubernetes-charts.storage.googleapis.com
     condition: postgresql.enabled
 <%_ } else if (app.prodDatabaseType === 'mariadb') { _%>
