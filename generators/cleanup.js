@@ -181,6 +181,5 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${testDir}web/rest/util/PaginationUtilUnitTest.java`);
         generator.removeFile(`${javaDir}config/OAuth2Configuration.java`);
         generator.removeFile(`${javaDir}security/OAuth2AuthenticationSuccessHandler.java`);
-        
     }
 }
