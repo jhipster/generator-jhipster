@@ -47,13 +47,6 @@ logSummary(){
     echo "#####################################################"
 }
 
-<%_ if (istio && kubernetesServiceType === 'Ingress') { _%>
-execAddons(){
-    chmod +x k8s-addons.sh
-    bash k8s-addons.sh
-}
-<%_ } _%>
-
 <%_ if (kubernetesNamespace !== 'default') { _%>
 kubectl apply -f namespace.yml
 <%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
@@ -79,7 +72,6 @@ kubectl apply -f monitoring/jhipster-grafana-dashboard.yml
 <%_ } _%>
 
 <%_ if (istio && kubernetesServiceType === 'Ingress') { _%>
-export ISTIO_SYSTEM=istio-system
-execAddons
+kubectl apply -f istio/
 <%_ } _%>
 logSummary

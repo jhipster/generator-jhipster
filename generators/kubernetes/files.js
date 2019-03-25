@@ -119,7 +119,6 @@ function writeFiles() {
         writeObservabilityGatewayFiles() {
             if (!this.istio) return;
             if (this.kubernetesServiceType === 'Ingress') {
-                this.template('k8s-addons.sh.ejs', 'k8s-addons.sh');
                 this.template('istio/gateway/grafana-gateway.yml.ejs', 'istio/grafana-gateway.yml');
                 this.template('istio/gateway/jaeger-gateway.yml.ejs', 'istio/jaeger-gateway.yml');
                 this.template('istio/gateway/kiali-gateway.yml.ejs', 'istio/kiali-gateway.yml');

@@ -35,3 +35,8 @@ helm delete --purge <%- appConfig.baseName.toLowerCase() %> 2>/dev/null
 helm dep up ./<%- appConfig.baseName.toLowerCase() %>
 helm install --name <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %> --namespace <%- kubernetesNamespace %>
 <%_ }) _%>
+
+<%_ if (istio && kubernetesServiceType === 'Ingress') { _%>
+kubectl apply -f istio/
+<%_ } _%>
+
