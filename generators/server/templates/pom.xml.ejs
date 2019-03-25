@@ -137,43 +137,12 @@
         <openapi-generator-maven-plugin.version>3.3.4</openapi-generator-maven-plugin.version>
         <%_ } _%>
         <git-commit-id-plugin.version>2.2.6</git-commit-id-plugin.version>
-
-        <!-- Sonar properties -->
-        <sonar.host.url>http://localhost:9001</sonar.host.url>
-        <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>i18n/*.js, <%= CLIENT_DIST_DIR %>**/*.*</sonar.exclusions>
-        <sonar.issue.ignore.multicriteria>S3437,<% if (authenticationType === 'jwt') { %>S4502,<% } %>S4684,UndocumentedApi,BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria>
-        <!-- Rule https://sonarcloud.io/coding_rules?open=Web%3ABoldAndItalicTagsCheck&rule_key=Web%3ABoldAndItalicTagsCheck is ignored. Even if we agree that using the "i" tag is an awful practice, this is what is recommended by http://fontawesome.io/examples/ -->
-        <sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey><%= CLIENT_MAIN_SRC_DIR %>app/**/*.*</sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.resourceKey>
-        <sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.ruleKey>Web:BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria.BoldAndItalicTagsCheck.ruleKey>
-        <!-- Rule https://sonarcloud.io/coding_rules?open=squid%3AS3437&rule_key=squid%3AS3437 is ignored, as a JPA-managed field cannot be transient -->
-        <sonar.issue.ignore.multicriteria.S3437.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S3437.resourceKey>
-        <sonar.issue.ignore.multicriteria.S3437.ruleKey>squid:S3437</sonar.issue.ignore.multicriteria.S3437.ruleKey>
-        <!-- Rule https://sonarcloud.io/coding_rules?open=squid%3AUndocumentedApi&rule_key=squid%3AUndocumentedApi is ignored, as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory -->
-        <sonar.issue.ignore.multicriteria.UndocumentedApi.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.UndocumentedApi.resourceKey>
-        <sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey>squid:UndocumentedApi</sonar.issue.ignore.multicriteria.UndocumentedApi.ruleKey>
-        <%_ if (authenticationType === 'jwt') { _%>
-        <!-- Rule https://sonarcloud.io/coding_rules?open=squid%3AS4502&rule_key=squid%3AS4502 is ignored, as for JWT tokens we are not subject to CSRF attack -->
-        <sonar.issue.ignore.multicriteria.S4502.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S4502.resourceKey>
-        <sonar.issue.ignore.multicriteria.S4502.ruleKey>squid:S4502</sonar.issue.ignore.multicriteria.S4502.ruleKey>
-        <%_ } _%>
-        <!-- Rule https://sonarcloud.io/coding_rules?open=squid%3AS4684&rule_key=squid%3AS4684 -->
-        <sonar.issue.ignore.multicriteria.S4684.resourceKey><%= MAIN_DIR %>java/**/*</sonar.issue.ignore.multicriteria.S4684.resourceKey>
-        <sonar.issue.ignore.multicriteria.S4684.ruleKey>squid:S4684</sonar.issue.ignore.multicriteria.S4684.ruleKey>
-        <sonar.jacoco.reportFolder>${project.build.directory}/jacoco</sonar.jacoco.reportFolder>
-        <sonar.jacoco.utReportFile>${sonar.jacoco.reportFolder}/test.exec</sonar.jacoco.utReportFile>
-        <sonar.jacoco.itReportFile>${sonar.jacoco.reportFolder}/integrationTest.exec</sonar.jacoco.itReportFile>
-        <sonar.jacoco.reportPaths>${sonar.jacoco.utReportFile},${sonar.jacoco.itReportFile}</sonar.jacoco.reportPaths>
-        <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
-        <sonar.junit.utReportFolder>${project.testresult.directory}/test</sonar.junit.utReportFolder>
-        <sonar.junit.itReportFolder>${project.testresult.directory}/integrationTest</sonar.junit.itReportFolder>
-        <sonar.junit.reportPaths>${sonar.junit.utReportFolder},${sonar.junit.itReportFolder}</sonar.junit.reportPaths>
-        <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
-        <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
-        <%_ if (!skipClient) { _%>
-        <sonar.testExecutionReportPaths>${project.testresult.directory}/jest/TESTS-results-sonar.xml</sonar.testExecutionReportPaths>
-        <sonar.typescript.lcov.reportPaths>${project.testresult.directory}/lcov.info</sonar.typescript.lcov.reportPaths>
-        <%_ } _%>
-
+        <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
+        <jacoco.reportFolder>${project.build.directory}/jacoco</jacoco.reportFolder>
+        <jacoco.utReportFile>${jacoco.reportFolder}/test.exec</jacoco.utReportFile>
+        <jacoco.itReportFile>${jacoco.reportFolder}/integrationTest.exec</jacoco.itReportFile>
+        <junit.utReportFolder>${project.testresult.directory}/test</junit.utReportFolder>
+        <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -867,6 +836,24 @@
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>${properties-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>sonar-project.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <%_ if (enableSwaggerCodegen) { _%>
             <plugin>
                 <!--
@@ -926,7 +913,7 @@
                             </goals>
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
-                                <destFile>${sonar.jacoco.utReportFile}</destFile>
+                                <destFile>${jacoco.utReportFile}</destFile>
                             </configuration>
                         </execution>
                         <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
@@ -937,8 +924,8 @@
                                 <goal>report</goal>
                             </goals>
                             <configuration>
-                                <dataFile>${sonar.jacoco.utReportFile}</dataFile>
-                                <outputDirectory>${sonar.jacoco.reportFolder}</outputDirectory>
+                                <dataFile>${jacoco.utReportFile}</dataFile>
+                                <outputDirectory>${jacoco.reportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                         <execution>
@@ -948,7 +935,7 @@
                             </goals>
                             <configuration>
                                 <!-- Sets the path to the file which contains the execution data. -->
-                                <destFile>${sonar.jacoco.itReportFile}</destFile>
+                                <destFile>${jacoco.itReportFile}</destFile>
                             </configuration>
                         </execution>
                         <!-- Ensures that the code coverage report for integration tests is created after integration tests have been run -->
@@ -959,8 +946,8 @@
                                 <goal>report-integration</goal>
                             </goals>
                             <configuration>
-                                <dataFile>${sonar.jacoco.itReportFile}</dataFile>
-                                <outputDirectory>${sonar.jacoco.reportFolder}</outputDirectory>
+                                <dataFile>${jacoco.itReportFile}</dataFile>
+                                <outputDirectory>${jacoco.reportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                     </executions>
@@ -1133,7 +1120,7 @@
                     <configuration>
                         <!-- Force alphabetical order to have a reproducible build -->
                         <runOrder>alphabetical</runOrder>
-                        <reportsDirectory>${sonar.junit.utReportFolder}</reportsDirectory>
+                        <reportsDirectory>${junit.utReportFolder}</reportsDirectory>
                         <excludes>
                             <exclude>**/*IT*</exclude>
                             <exclude>**/*IntTest*</exclude>
@@ -1151,7 +1138,7 @@
                         <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                         <!-- Force alphabetical order to have a reproducible build -->
                         <runOrder>alphabetical</runOrder>
-                        <reportsDirectory>${sonar.junit.itReportFolder}</reportsDirectory>
+                        <reportsDirectory>${junit.itReportFolder}</reportsDirectory>
                         <includes>
                             <include>**/*IT*</include>
                             <include>**/*IntTest*</include>
