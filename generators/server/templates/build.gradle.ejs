@@ -435,7 +435,6 @@ dependencies {
     <%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
     implementation "org.springframework.security.oauth:spring-security-oauth2"
-    implementation "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure"
     implementation "org.springframework.security:spring-security-jwt"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
