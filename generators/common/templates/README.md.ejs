@@ -289,7 +289,8 @@ Then, run a Sonar analysis:
 ```
 ./mvnw -Pprod clean verify sonar:sonar
 ```
-If you need to re-run the sonar phase, please be sur to specify at least the `initialize` phase since sonar properties are loaded from the sonar-project.properties file.
+
+If you need to re-run the sonar phase, please be sure to specify at least the `initialize` phase since sonar properties are loaded from the sonar-project.properties file.
 
 ```
 ./mvnw initialize sonar:sonar
@@ -299,8 +300,9 @@ or
 ```
 ./gradlew -Pprod clean check sonarqube
 ```
-or
 <%_ } _%>
+
+You can, now, run analysis with [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) if you already have installed it.
 
 ```
 sonar-scanner
