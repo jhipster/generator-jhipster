@@ -301,6 +301,12 @@ or
 sonar-scanner
 ```
 
+If you need to re-run the sonar phase, please be sur to specify at least the `initialize` phase since sonar properties are loaded from the sonar-project.properties file.
+
+```
+./mvnw initialize sonar:sonar
+```
+
 For more information, refer to the [Code quality page][].
 
 ## Using Docker to simplify development (optional)
