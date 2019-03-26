@@ -37,6 +37,10 @@ a:hover {
     cursor: pointer;
 }
 
+.dropdown-item:hover {
+    color: $dropdown-link-hover-color;
+}
+
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */
@@ -51,6 +55,7 @@ Browser Upgrade Prompt
 Generic styles
 ========================================================================== */
 
+<%_ if (clientTheme === 'none') { _%>
 /* Error highlight on input fields */
 .ng-valid[required],
 .ng-valid.required {
@@ -60,6 +65,7 @@ Generic styles
 .ng-invalid:not(form) {
     border-left: 5px solid red;
 }
+<%_ } _%>
 
 /* other generic styles */
 
