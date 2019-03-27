@@ -86,7 +86,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
             const redirect = this.stateStorageService.getUrl();
             if (redirect) {
                 this.stateStorageService.storeUrl(null);
-                this.router.navigate([redirect]);
+                this.router.navigateByUrl(redirect);
             }
         }).catch(() => {
             this.authenticationError = true;
