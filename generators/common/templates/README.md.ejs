@@ -280,8 +280,7 @@ Sonar is used to analyse code quality. You can start a local Sonar server (acces
 docker-compose -f src/main/docker/sonar.yml up -d
 ```
 
-You can both run Sonar with maven or gradle but also with a sonar-scanner.
-In this case you must install it before.
+You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner)<% if (buildTool) { %> or by using the <% if (buildTool === 'maven') { %>maven<% } %><% if (buildTool === 'gradle') { %>gradle<% } %> plugin<% } %>.
 
 Then, run a Sonar analysis:
 
@@ -301,12 +300,6 @@ or
 ./gradlew -Pprod clean check sonarqube
 ```
 <%_ } _%>
-
-You can, now, run analysis with [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) if you already have installed it.
-
-```
-sonar-scanner
-```
 
 For more information, refer to the [Code quality page][].
 
