@@ -158,7 +158,7 @@ describe('<%= entityClass %> e2e test', () => {
         }
 
         await create<%= entityClass %>();
-        <%= entityInstance %>ComponentsPage.waitUntilLoaded();
+        await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
         const nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
         await create<%= entityClass %>();
 
