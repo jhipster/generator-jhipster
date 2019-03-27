@@ -59,11 +59,7 @@ import org.springframework.web.context.WebApplicationContext;
  * Integration tests for the {@link AccountResource} REST controller.
  */
 @RunWith(SpringRunner.class)
-<%_ if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
-<%_ } else { _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
-<%_ } _%>
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
