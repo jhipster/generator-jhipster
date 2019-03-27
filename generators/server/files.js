@@ -786,10 +786,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}aop/logging/LoggingAspect.java`
                 },
                 {
-                    file: 'package/config/lazy/LazyInitBeanFactoryPostProcessor.java',
-                    renameTo: generator => `${generator.javaDir}config/lazy/LazyInitBeanFactoryPostProcessor.java`
-                },
-                {
                     file: 'package/config/DefaultProfileUtil.java',
                     renameTo: generator => `${generator.javaDir}config/DefaultProfileUtil.java`
                 },
