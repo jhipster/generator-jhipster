@@ -130,19 +130,12 @@ management:
             prometheus:
                 enabled: true
                 step: 60
-        binders:
-            jvm:
-                enabled: true
-            processor:
-                enabled: true
-            uptime:
-                enabled: true
-            logback:
-                enabled: true
-            files:
-                enabled: true
-            integration:
-                enabled: true
+        enable:
+            http: true
+            jvm: true
+            logback: true
+            process: true
+            system: true
         distribution:
             percentiles-histogram:
                 all: true
