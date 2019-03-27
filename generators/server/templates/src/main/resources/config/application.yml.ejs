@@ -169,7 +169,8 @@ spring:
         consul:
             discovery:
                 healthCheckPath: /management/health
-                instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+                instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
+                service-name: <%= baseName.toLowerCase() %>
             config:
                 watch:
                     enabled: false
