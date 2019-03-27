@@ -37,9 +37,11 @@ export class MockActivatedRoute extends ActivatedRoute {
 
 export class MockRouter extends SpyObject {
     navigateSpy: Spy;
+    navigateByUrlSpy: Spy;
 
     constructor() {
         super(Router);
         this.navigateSpy = this.spy('navigate');
+        this.navigateByUrlSpy = this.spy('navigateByUrl');
     }
 }
