@@ -468,6 +468,10 @@ const serverFiles = {
                 {
                     file: 'package/security/oauth2/AudienceValidatorTest.java',
                     renameTo: generator => `${generator.javaDir}security/oauth2/AudienceValidatorTest.java`
+                },
+                {
+                    file: 'package/config/TestSecurityConfiguration.java',
+                    renameTo: generator => `${generator.testDir}config/TestSecurityConfiguration.java`
                 }
             ]
         },

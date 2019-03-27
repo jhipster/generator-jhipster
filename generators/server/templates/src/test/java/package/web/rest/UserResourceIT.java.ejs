@@ -22,6 +22,9 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%=packageName%>.config.TestSecurityConfiguration;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
 <%_ } _%>
@@ -103,7 +106,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link UserResource} REST controller.
  */
 @RunWith(SpringRunner.class)
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
 public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String DEFAULT_LOGIN = "johndoe";
