@@ -16,8 +16,8 @@
                         <b-form-input id="password" type="password" name="password" v-model.trim="name" v-bind:placeholder="$t('login.form[\'password.placeholder\']')" <% if (!enableTranslation) { %>placeholder="Your password" <% } %>v-model="password">
                         </b-form-input>
                     </b-form-group>
-                    <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked v-text="$t('login.form.rememberme')">
-                        Remember me
+                    <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked>
+                      <span v-text="$t('login.form.rememberme')">Remember me</span>
                     </b-form-checkbox>
                     <div>
                         <b-button type="submit" variant="primary" v-text="$t('login.form.button')">Sign in</b-button>
