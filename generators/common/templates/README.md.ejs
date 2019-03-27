@@ -280,7 +280,7 @@ Sonar is used to analyse code quality. You can start a local Sonar server (acces
 docker-compose -f src/main/docker/sonar.yml up -d
 ```
 
-You can both run sonar with maven or gradle but also with a sonar-scanner.
+You can both run Sonar with maven or gradle but also with a sonar-scanner.
 In this case you must install it before.
 
 Then, run a Sonar analysis:
@@ -290,7 +290,7 @@ Then, run a Sonar analysis:
 ./mvnw -Pprod clean verify sonar:sonar
 ```
 
-If you need to re-run the sonar phase, please be sure to specify at least the `initialize` phase since sonar properties are loaded from the sonar-project.properties file.
+If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
 
 ```
 ./mvnw initialize sonar:sonar
