@@ -719,6 +719,9 @@ module.exports = class extends Generator {
      * @param {string} blueprint - name of the blueprint
      */
     normalizeBlueprintName(blueprint) {
+        if (blueprint && blueprint.startsWith('@')) {
+            return blueprint;
+        }
         if (blueprint && !blueprint.startsWith('generator-jhipster')) {
             return `generator-jhipster-${blueprint}`;
         }
