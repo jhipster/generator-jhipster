@@ -476,6 +476,11 @@ const files = {
                 'e2e/page-objects/jhi-page-objects.ts',
                 'protractor.conf.js'
             ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: ['spec/app/layouts/main/main.component.spec.ts']
         }
     ]
 };
