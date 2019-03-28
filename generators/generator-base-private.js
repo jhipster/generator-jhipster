@@ -823,10 +823,11 @@ module.exports = class extends Generator {
             } else {
                 const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
                 if (
+                    !javaVersion.match(new RegExp('12'.replace('.', '\\.'))) &&
                     !javaVersion.match(new RegExp('11'.replace('.', '\\.'))) &&
                     !javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))
                 ) {
-                    this.warning(`Java 8 or Java 11 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
+                    this.warning(`Java 8, 11, or 12 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
                 }
             }
             done();
