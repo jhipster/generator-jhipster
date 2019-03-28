@@ -91,10 +91,10 @@ jobs:
                 sudo apt update
                 sudo apt install google-chrome-stable
             displayName: 'TOOLS: install google-chrome-stable'
-          - script: sudo npm install -g npm
+          - script: npm install -g npm
             displayName: 'TOOLS: update NPM'
-          - script: sudo chown -R vsts:docker /home/vsts/.npm/
-            displayName: 'BUGS-FIX: change /home/vsts/.npm/ permission'
+          - script: npm install -g yarn
+            displayName: 'TOOLS: install Yarn'
           - bash: $(JHI_SCRIPTS)/01-display-configuration.sh
             displayName: 'TOOLS: display configuration'
           - bash: $(JHI_SCRIPTS)/03-system.sh

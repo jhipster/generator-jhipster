@@ -78,6 +78,8 @@ before_install:
     - sh -e /etc/init.d/xvfb start
     # Update NPM
     - npm install -g npm
+    # Install Yarn
+    - npm install -g yarn
     - $JHI_SCRIPTS/04-git-config.sh
 
 #----------------------------------------------------------------------
