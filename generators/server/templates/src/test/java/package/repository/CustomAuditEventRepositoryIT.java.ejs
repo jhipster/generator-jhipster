@@ -20,6 +20,9 @@ package <%=packageName%>.repository;
 
 import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.config.Constants;
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%=packageName%>.config.TestSecurityConfiguration;
+<%_ } _%>
 import <%=packageName%>.config.audit.AuditEventConverter;
 import <%=packageName%>.domain.PersistentAuditEvent;
 import org.junit.Before;
@@ -42,6 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpSession;
 <%_ } _%>
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +60,14 @@ import static <%=packageName%>.repository.CustomAuditEventRepository.EVENT_DATA_
  * Integration tests for {@link CustomAuditEventRepository}.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
-@Transactional<% } %>
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else { _%>
+@SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+@Transactional
+<%_ } _%>
 public class CustomAuditEventRepositoryIT {
 
     @Autowired
@@ -115,7 +125,8 @@ public class CustomAuditEventRepositoryIT {
         assertThat(persistentAuditEvent.getAuditEventType()).isEqualTo(event.getType());
         assertThat(persistentAuditEvent.getData()).containsKey("test-key");
         assertThat(persistentAuditEvent.getData().get("test-key")).isEqualTo("test-value");
-        assertThat(persistentAuditEvent.getAuditEventDate()).isEqualTo(event.getTimestamp());
+        assertThat(persistentAuditEvent.getAuditEventDate().truncatedTo(ChronoUnit.MILLIS))
+            .isEqualTo(event.getTimestamp().truncatedTo(ChronoUnit.MILLIS));
     }
 
     @Test
@@ -137,7 +148,8 @@ public class CustomAuditEventRepositoryIT {
         String actualData = persistentAuditEvent.getData().get("test-key");
         assertThat(actualData.length()).isEqualTo(EVENT_DATA_COLUMN_MAX_LENGTH);
         assertThat(actualData).isSubstringOf(largeData);
-        assertThat(persistentAuditEvent.getAuditEventDate()).isEqualTo(event.getTimestamp());
+        assertThat(persistentAuditEvent.getAuditEventDate().truncatedTo(ChronoUnit.MILLIS))
+            .isEqualTo(event.getTimestamp().truncatedTo(ChronoUnit.MILLIS));
     }
     <%_ if (!reactive) { _%>
 

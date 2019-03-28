@@ -42,7 +42,14 @@ export class LoginService {
     <%_ if (authenticationType === 'oauth2') { _%>
     login() {
         const port = (location.port ? ':' + location.port : '');
-        location.href = '//' + location.hostname + port + location.pathname + 'login';
+        let contextPath = location.pathname;
+        if (contextPath.endsWith('accessdenied')) {
+            contextPath = contextPath.substring(0, contextPath.indexOf('accessdenied'));
+        }
+        if (!contextPath.endsWith('/')) {
+            contextPath = contextPath + '/';
+        }
+        location.href = `//${location.hostname}${port}${contextPath}authorize`;
     }
     <%_ } else { _%>
     login(credentials, callback?) {
@@ -72,7 +79,7 @@ export class LoginService {
     }
     <%_ } _%>
     <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
-    
+
     isAuthenticated() {
         return this.accountService.isAuthenticated();
     }

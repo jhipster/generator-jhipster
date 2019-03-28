@@ -19,9 +19,13 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.<%= mainClass %>;
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%=packageName%>.config.TestSecurityConfiguration;
+<%_ } _%>
 import <%=packageName%>.config.audit.AuditEventConverter;
 import <%=packageName%>.domain.PersistentAuditEvent;
 import <%=packageName%>.repository.PersistenceAuditEventRepository;
+
 import <%=packageName%>.service.AuditEventService;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,8 +56,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link AuditResource} REST controller.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
-@Transactional<% } %>
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else { _%>
+@SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+@Transactional
+<%_ } _%>
 public class AuditResourceIT {
 
     private static final String SAMPLE_PRINCIPAL = "SAMPLE_PRINCIPAL";

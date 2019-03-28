@@ -113,6 +113,9 @@ describe('<%= entityClass %> e2e test', () => {
             <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
             await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM');
             expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30');
+            <%_ } else if (fieldType === 'Duration') { _%>
+            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('PT12S');
+            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('12');
             <%_ } else if (fieldType === 'Boolean') { _%>
             const selected<%= fieldNameCapitalized %> = await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected();
             if (selected<%= fieldNameCapitalized %>) {
@@ -155,7 +158,7 @@ describe('<%= entityClass %> e2e test', () => {
         }
 
         await create<%= entityClass %>();
-        <%= entityInstance %>ComponentsPage.waitUntilLoaded();
+        await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
         const nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
         await create<%= entityClass %>();
 

@@ -25,6 +25,9 @@ import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'uaa') { _%>
 import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%= packageName %>.config.TestSecurityConfiguration;
+<%_ } _%>
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +52,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
+<%_ } else if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
@@ -195,7 +200,7 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class ExceptionTranslatorIT {
+public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
     private ExceptionTranslatorTestController controller;

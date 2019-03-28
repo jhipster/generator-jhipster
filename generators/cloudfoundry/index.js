@@ -29,6 +29,11 @@ const constants = require('../generator-constants');
 const exec = childProcess.exec;
 
 module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+        this.registerPrettierTransform();
+    }
+
     initializing() {
         this.log(chalk.bold('CloudFoundry configuration is starting'));
         this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;

@@ -687,6 +687,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;
                 context.fieldsContainZonedDateTime = false;
+                context.fieldsContainDuration = false;
                 context.fieldsContainLocalDate = false;
                 context.fieldsContainBigDecimal = false;
                 context.fieldsContainBlob = false;
@@ -730,6 +731,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'LocalDate',
                         'Instant',
                         'ZonedDateTime',
+                        'Duration',
                         'Boolean',
                         'byte[]',
                         'ByteBuffer'
@@ -808,6 +810,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     } else if (fieldType === 'Instant') {
                         context.fieldsContainInstant = true;
                         context.fieldsContainDate = true;
+                    } else if (fieldType === 'Duration') {
+                        context.fieldsContainDuration = true;
                     } else if (fieldType === 'LocalDate') {
                         context.fieldsContainLocalDate = true;
                         context.fieldsContainDate = true;

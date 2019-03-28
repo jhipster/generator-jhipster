@@ -52,7 +52,7 @@ eureka:
         metadata-map:
             zone: primary # This is needed for the load balancer
             profile: ${spring.profiles.active}
-            version: ${info.project.version:}
+            version: #project.version#
             git-version: ${git.commit.id.describe:}
             git-commit: ${git.commit.id.abbrev:}
             git-branch: ${git.branch:}
@@ -130,19 +130,12 @@ management:
             prometheus:
                 enabled: true
                 step: 60
-        binders:
-            jvm:
-                enabled: true
-            processor:
-                enabled: true
-            uptime:
-                enabled: true
-            logback:
-                enabled: true
-            files:
-                enabled: true
-            integration:
-                enabled: true
+        enable:
+            http: true
+            jvm: true
+            logback: true
+            process: true
+            system: true
         distribution:
             percentiles-histogram:
                 all: true
@@ -169,7 +162,8 @@ spring:
         consul:
             discovery:
                 healthCheckPath: /management/health
-                instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+                instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
+                service-name: <%= baseName.toLowerCase() %>
             config:
                 watch:
                     enabled: false
@@ -219,52 +213,34 @@ spring:
     thymeleaf:
         mode: HTML
 <%_ if (authenticationType === 'oauth2') { _%>
-
-# ===================================================================
-# OpenID Connect Settings. Default settings are for Keycloak in Docker.
-# Start Keycloak using `docker-compose -f src/main/docker/keycloak.yml up`.
-#
-# To use Okta, your settings should resemble the following:
-#
-# accessTokenUri: https://{yourOktaDomain}.com/oauth2/default/v1/token
-# userAuthorizationUri: https://{yourOktaDomain}.com/oauth2/default/v1/authorize
-# clientId: {copy after creating an OIDC app}
-# clientSecret: {copy after creating an OIDC app}
-# userInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/userinfo
-# tokenInfoUri: https://{yourOktaDomain}.com/oauth2/default/v1/introspect
-#
-# You can also override these properties using environment variables.
-# For example:
-#
-# export SECURITY_OAUTH2_CLIENT_CLIENT_ID="jhipster"
-# export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET="38561a05"
-# ===================================================================
-<%_ } _%>
-<%_ if (authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
+    security:
+        oauth2:
+            client:
+                provider:
+                    oidc:
+                        issuer-uri: http://localhost:9080/auth/realms/jhipster
+                registration:
+                    oidc:
+                    <%_ if (applicationType === 'microservice') { _%>
+                        client-id: internal
+                        client-secret: internal
+                    <%_ } else { _%>
+                        client-id: web_app
+                        client-secret: web_app
+                    <%_ } _%>
+<%_ } else if (authenticationType === 'uaa') { _%>
 security:
-<%_ } _%>
-    <%_ if (authenticationType === 'uaa') { _%>
-    oauth2:
-        resource:
-            filter-order: 3
-    <%_ } _%>
-    <%_ if (authenticationType === 'oauth2') {  _%>
     oauth2:
         client:
-            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
             access-token-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
             user-authorization-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
             client-id: web_app
             client-secret: web_app
             scope: openid profile email
-            <%_ } _%>
-            <%_ if (applicationType === 'microservice') { _%>
-            client-id: internal
-            client-secret: internal
-            <%_ } _%>
         resource:
+            filter-order: 3
             user-info-uri: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
-    <%_ } _%>
+<%_ } _%>
 
 server:
     servlet:

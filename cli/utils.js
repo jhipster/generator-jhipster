@@ -185,9 +185,11 @@ const done = () => {
 const createYeomanEnv = () => {
     const env = yeoman.createEnv();
     /* Register yeoman generators */
-    Object.keys(SUB_GENERATORS).forEach(generator => {
-        env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
-    });
+    Object.keys(SUB_GENERATORS)
+        .filter(command => !SUB_GENERATORS[command].cliOnly)
+        .forEach(generator => {
+            env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
+        });
     return env;
 };
 

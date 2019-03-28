@@ -46,6 +46,7 @@ module.exports = class extends BaseGenerator {
         });
         this.regenerate = this.options['skip-prompts'];
         this.skipChecks = this.options['skip-checks'];
+        this.registerPrettierTransform();
     }
 
     get initializing() {

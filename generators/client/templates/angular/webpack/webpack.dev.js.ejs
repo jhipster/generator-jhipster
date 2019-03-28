@@ -25,9 +25,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
-<%_ if (useSass) { _%>
 const sass = require('sass');
-<%_ } _%>
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -44,8 +42,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             ],
             target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
             secure: false,
-            changeOrigin: options.tls,
-            headers: { host: 'localhost:9000' }
+            changeOrigin: options.tls
         }<% if (websocket === 'spring-websocket') { %>,{
             context: [
                 '/websocket'
@@ -60,11 +57,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     },
     entry: {
         polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
-        <%_ if (useSass) { _%>
         global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
-        <%_ } else { _%>
-        global: './<%= MAIN_SRC_DIR %>content/css/global.css',
-        <%_ } _%>
         main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
     output: {
@@ -109,7 +102,6 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             ],
             exclude: /(node_modules)/
         },
-        <%_ if (useSass) { _%>
         {
             test: /\.scss$/,
             use: ['to-string-loader', 'css-loader', {
@@ -124,16 +116,6 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 loader: 'sass-loader',
                 options: { implementation: sass }
             }]
-        },
-        <%_ } _%>
-        {
-            test: /\.css$/,
-            use: ['to-string-loader', 'css-loader'],
-            exclude: /(vendor\.css|global\.css)/
-        },
-        {
-            test: /(vendor\.css|global\.css)/,
-            use: ['style-loader', 'css-loader']
         }]
     },
     stats: process.env.JHI_DISABLE_WEBPACK_LOGS ? 'none' : options.stats,
@@ -150,7 +132,10 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             port: 9000,
             proxy: {
                 target: 'http://localhost:9060'<% if (websocket === 'spring-websocket') { %>,
-                ws: true<% } %>
+                ws: true<% } %>,
+                proxyOptions: {
+                    changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
+                }
             },
             socket: {
                 clients: {

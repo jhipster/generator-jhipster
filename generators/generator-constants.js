@@ -19,10 +19,10 @@
 
 // version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v4.1.1';
-const DOCKER_JAVA_JRE = 'openjdk:11.0.1-slim-stretch';
+const DOCKER_JAVA_JRE = 'openjdk:11-jre-slim-stretch';
 const DOCKER_MYSQL = 'mysql:8.0.15';
-const DOCKER_MARIADB = 'mariadb:10.4.2';
-const DOCKER_POSTGRESQL = 'postgres:11.1';
+const DOCKER_MARIADB = 'mariadb:10.4.3';
+const DOCKER_POSTGRESQL = 'postgres:11.2';
 const DOCKER_MONGODB = 'mongo:4.0.6';
 const DOCKER_COUCHBASE = 'couchbase/server:6.0.1';
 const DOCKER_CASSANDRA = 'cassandra:3.11.4';
@@ -33,7 +33,7 @@ const DOCKER_KEYCLOAK = 'jboss/keycloak:4.8.3.Final';
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.4.3'; // The version should be coerent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = 'wurstmeister/kafka:2.11-2.0.1';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
-const DOCKER_SONAR = 'sonarqube:7.1';
+const DOCKER_SONAR = 'sonarqube:7.7-community';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v4.0.0';
 const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v4.0.0';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v4.0.0';
@@ -41,7 +41,7 @@ const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v4.0.0';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v4.0.0';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.0.0';
 const DOCKER_TRAEFIK = 'traefik:1.7.9';
-const DOCKER_CONSUL = 'consul:1.4.2';
+const DOCKER_CONSUL = 'consul:1.4.4';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v2.8.0';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.16.1';
@@ -57,9 +57,9 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const SCALA_VERSION = '2.12.6';
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '10.15.2';
-const YARN_VERSION = '1.13.0';
-const NPM_VERSION = '6.8.0';
+const NODE_VERSION = '10.15.3';
+const YARN_VERSION = '1.15.2';
+const NPM_VERSION = '6.9.0';
 
 // all constants used throughout all generators
 

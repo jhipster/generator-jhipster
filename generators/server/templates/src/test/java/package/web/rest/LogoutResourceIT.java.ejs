@@ -19,26 +19,34 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.<%= mainClass %>;
+import <%=packageName%>.config.TestSecurityConfiguration;
+import <%=packageName%>.security.AuthoritiesConstants;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoRestTemplateFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,8 +54,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link LogoutResource} REST controller.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = <%= mainClass %>.class)
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 public class LogoutResourceIT {
+
+    @Autowired
+    private ClientRegistrationRepository registrations;
+
+    @Autowired
+    private WebApplicationContext context;
 
     private final static String ID_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9" +
         ".eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsIm" +
@@ -55,24 +69,26 @@ public class LogoutResourceIT {
         "Tk3MTU4MywiZXhwIjoxNTQxOTc1MTgzfQ.QaQOarmV8xEUYV7yvWzX3cUE_4W1luMcWCwpr" +
         "oqqUrg";
 
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Value("${security.oauth2.client.access-token-uri}")
-    private String accessTokenUri;
-
     private MockMvc restLogoutMockMvc;
 
     @Before
-    public void before() {
-        LogoutResource logoutResource = new LogoutResource(restTemplateFactory(), accessTokenUri);
-        this.restLogoutMockMvc = MockMvcBuilders.standaloneSetup(logoutResource)
-            .setMessageConverters(jacksonMessageConverter).build();
+    public void before() throws Exception {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("groups", "ROLE_USER");
+        claims.put("sub", 123);
+        OidcIdToken idToken = new OidcIdToken(ID_TOKEN, Instant.now(),
+            Instant.now().plusSeconds(60), claims);
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken(idToken));
+        SecurityContextHolderAwareRequestFilter authInjector = new SecurityContextHolderAwareRequestFilter();
+        authInjector.afterPropertiesSet();
+
+        this.restLogoutMockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
     @Test
     public void getLogoutInformation() throws Exception {
-        String logoutUrl = accessTokenUri.replace("token", "logout");
+        String logoutUrl = this.registrations.findByRegistrationId("oidc").getProviderDetails()
+            .getConfigurationMetadata().get("end_session_endpoint").toString();
         restLogoutMockMvc.perform(post("/api/logout"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
@@ -80,14 +96,10 @@ public class LogoutResourceIT {
             .andExpect(jsonPath("$.idToken").value(ID_TOKEN));
     }
 
-    private UserInfoRestTemplateFactory restTemplateFactory() {
-        UserInfoRestTemplateFactory factory = mock(UserInfoRestTemplateFactory.class);
-        Map<String, Object> idToken = new HashMap<>();
-        idToken.put("id_token", ID_TOKEN);
-        DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken("my-fun-token");
-        token.setAdditionalInformation(idToken);
-        when(factory.getUserInfoRestTemplate()).thenReturn(mock(OAuth2RestTemplate.class));
-        when(factory.getUserInfoRestTemplate().getAccessToken()).thenReturn(token);
-        return factory;
+    private OAuth2AuthenticationToken authenticationToken(OidcIdToken idToken) {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        OidcUser user = new DefaultOidcUser(authorities, idToken);
+        return new OAuth2AuthenticationToken(user, authorities, "oidc");
     }
 }

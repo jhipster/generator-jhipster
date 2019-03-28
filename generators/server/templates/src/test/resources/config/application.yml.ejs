@@ -137,19 +137,14 @@ spring:
                 size: 1
     thymeleaf:
         mode: HTML
-
 <%_ if (authenticationType === 'oauth2') { _%>
-security:
-    oauth2:
-        # client configuration needed : for condition in Spring Boot
-        client:
-            access-token-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/token
-            user-authorization-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/auth
-            client-id: web_app
-            client-secret: web_app
-            scope: openid profile email
-        resource:
-            user-info-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+    # Allow SecurityConfiguration to initialize w/o specifying an empty issuer-uri is OK
+    security:
+        oauth2:
+            client:
+                provider:
+                    oidc:
+                        issuer-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster
 <%_ } _%>
 
 server:
@@ -165,8 +160,10 @@ server:
 jhipster:
     clientApp:
         name: "<%= angularAppName %>"
-    # To test logstash appender
     logging:
+        # To test json console appender
+        use-json-format: true # By default, logs are in Json format
+        # To test logstash appender
         logstash:
             enabled: true
             host: localhost

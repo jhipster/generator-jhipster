@@ -18,17 +18,17 @@
 -%>
 dependencies {
     <%_ if (databaseType === 'sql') { _%>
-    testCompile "com.h2database:h2"
+    testImplementation "com.h2database:h2"
     <%_ } _%>
 }
 
-def profiles = 'prod'
-if (project.hasProperty('no-liquibase')) {
-    profiles += ',no-liquibase'
+def profiles = "prod"
+if (project.hasProperty("no-liquibase")) {
+    profiles += ",no-liquibase"
 }
 
-if (project.hasProperty('swagger')) {
-    profiles += ',swagger'
+if (project.hasProperty("swagger")) {
+    profiles += ",swagger"
 }
 
 springBoot {
@@ -40,30 +40,30 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webpack_test(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
+task webpack_test(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: "<%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>") {
     args = ["run", "webpack:test"]
 }
 
-task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
+task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: "<%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>") {
     args = ["run", "webpack:prod"]
 }
 <%_ } _%>
 
 processResources {
-    filesMatching('**/application.yml') {
+    filesMatching("**/application.yml") {
         filter {
-            it.replace('#project.version#', version)
+            it.replace("#project.version#", version)
         }
         <%_ if (!serviceDiscoveryType) { _%>
         filter {
-            it.replace('#spring.profiles.active#', profiles)
+            it.replace("#spring.profiles.active#", profiles)
         }
         <%_ } _%>
     }
     <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-    filesMatching('**/bootstrap.yml') {
+    filesMatching("**/bootstrap.yml") {
         filter {
-            it.replace('#spring.profiles.active#', profiles)
+            it.replace("#spring.profiles.active#", profiles)
         }
     }
     <%_ } _%>
@@ -76,7 +76,7 @@ generateGitProperties {
 }
 
 gitProperties {
-    keys = ['git.branch', 'git.commit.id.abbrev', 'git.commit.id.describe']
+    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
 }
 
 <%_ if (!skipClient) { _%>

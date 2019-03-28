@@ -51,28 +51,13 @@ const files = {
             templates: ['.huskyrc']
         }
     ],
-    css: [
-        // this css file will be overwritten by the sass generated css if sass is enabled
-        // but this will avoid errors when running app without running sass task first
-        {
-            condition: generator => !generator.useSass,
-            path: MAIN_SRC_DIR,
-            templates: ['content/css/global.css', 'content/css/vendor.css', 'content/css/documentation.css']
-        },
-        {
-            condition: generator => !generator.useSass && generator.enableI18nRTL,
-            path: MAIN_SRC_DIR,
-            templates: ['content/css/rtl.css']
-        }
-    ],
     sass: [
         {
-            condition: generator => generator.useSass,
             path: MAIN_SRC_DIR,
             templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss']
         },
         {
-            condition: generator => generator.useSass && generator.enableI18nRTL,
+            condition: generator => generator.enableI18nRTL,
             path: MAIN_SRC_DIR,
             templates: ['content/scss/rtl.scss']
         }
@@ -184,14 +169,8 @@ const files = {
             templates: ['layouts/navbar/active-menu.directive.ts']
         },
         {
-            condition: generator => generator.useSass,
             path: ANGULAR_DIR,
             templates: ['layouts/profiles/page-ribbon.scss', 'layouts/navbar/navbar.scss', 'home/home.scss']
-        },
-        {
-            condition: generator => !generator.useSass,
-            path: ANGULAR_DIR,
-            templates: ['layouts/profiles/page-ribbon.css', 'layouts/navbar/navbar.css', 'home/home.css']
         }
     ],
     angularAccountModule: [
@@ -240,14 +219,9 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.useSass && generator.authenticationType !== 'oauth2',
+            condition: generator => generator.authenticationType !== 'oauth2',
             path: ANGULAR_DIR,
             templates: ['account/password/password-strength-bar.scss']
-        },
-        {
-            condition: generator => !generator.useSass && generator.authenticationType !== 'oauth2',
-            path: ANGULAR_DIR,
-            templates: ['account/password/password-strength-bar.css']
         }
     ],
     angularAdminModule: [
@@ -502,6 +476,11 @@ const files = {
                 'e2e/page-objects/jhi-page-objects.ts',
                 'protractor.conf.js'
             ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: ['spec/app/layouts/main/main.component.spec.ts']
         }
     ]
 };

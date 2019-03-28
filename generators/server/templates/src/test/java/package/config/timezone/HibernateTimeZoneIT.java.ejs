@@ -22,6 +22,9 @@ import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%= packageName %>.config.TestSecurityConfiguration;
+<%_ } _%>
 import <%= packageName %>.repository.timezone.DateTimeWrapper;
 import <%= packageName %>.repository.timezone.DateTimeWrapperRepository;
 import org.junit.Before;
@@ -46,6 +49,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
+<%_ } else if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>

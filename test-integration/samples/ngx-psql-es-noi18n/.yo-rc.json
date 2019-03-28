@@ -12,7 +12,6 @@
         "devDatabaseType": "postgresql",
         "prodDatabaseType": "postgresql",
         "searchEngine": "elasticsearch",
-        "useSass": true,
         "buildTool": "maven",
         "enableTranslation": false,
         "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",

@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:cosmic
 
 RUN \
   # configure the "jhipster" user
@@ -8,7 +8,7 @@ RUN \
   mkdir /home/jhipster/app && \
   # install open-jdk 8
   apt-get update && \
-  apt-get install -y openjdk-8-jdk && \
+  apt-get install -y openjdk-11-jdk && \
   # install utilities
   apt-get install -y \
     wget \
@@ -23,7 +23,7 @@ RUN \
     libpng-dev \
     build-essential && \
   # install node.js
-  wget https://nodejs.org/dist/v10.15.2/node-v10.15.2-linux-x64.tar.gz -O /tmp/node.tar.gz && \
+  wget https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \

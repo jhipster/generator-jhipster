@@ -27,7 +27,7 @@ fi
 #-------------------------------------------------------------------------------
 if [[ "$JHI_APP" == *"uaa"* ]]; then
     cd "$JHI_FOLDER_UAA"
-    ./mvnw test
+    ./mvnw verify
 fi
 
 #-------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ fi
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw test \
+    ./mvnw verify \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
@@ -46,7 +46,7 @@ if [ -f "mvnw" ]; then
         -Dlogging.level.org.springframework.security=OFF
 
 elif [ -f "gradlew" ]; then
-    ./gradlew test \
+    ./gradlew test integrationTest \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \

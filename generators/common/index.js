@@ -60,6 +60,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
             setupConsts() {
                 // Make constants available in templates
+                this.MAIN_DIR = constants.MAIN_DIR;
                 this.TEST_DIR = constants.TEST_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
@@ -88,7 +89,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.enableSwaggerCodegen = this.configOptions.enableSwaggerCodegen;
                 this.serverPort = this.configOptions.serverPort;
                 this.clientFramework = this.configOptions.clientFramework;
-                this.useSass = this.configOptions.useSass;
                 this.protractorTests = this.testFrameworks.includes('protractor');
                 this.gatlingTests = this.testFrameworks.includes('gatling');
             },

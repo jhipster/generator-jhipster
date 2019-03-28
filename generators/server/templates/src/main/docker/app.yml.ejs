@@ -59,18 +59,15 @@ services:
             - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
             <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
+            - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
             <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
-            - SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/token
-            - SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/auth
-            - SECURITY_OAUTH2_CLIENT_CLIENT_ID=web_app
-            - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=web_app
-            - SECURITY_OAUTH2_CLIENT_SCOPE=openid profile email
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
             <%_ } _%>
             <%_ if (applicationType === 'microservice') { _%>
-            - SECURITY_OAUTH2_CLIENT_CLIENT_ID=internal
-            - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=internal
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
             <%_ } _%>
-            - SECURITY_OAUTH2_RESOURCE_USER_INFO_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
             <%_ } _%>
             <%_ if (prodDatabaseType === 'cassandra') { _%>
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra

@@ -60,29 +60,31 @@ import java.util.UUID;
 /**
  * Spring Data <% if (databaseType === 'mongodb') { %>MongoDB<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } %> repository for the <%= asEntity(entityClass) %> entity.
  */
+<%_ if (!fieldsContainOwnerManyToMany) { _%>
 @SuppressWarnings("unused")
+<%_ } _%>
 @Repository
 public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'cassandra') { %>CassandraRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><<%=asEntity(entityClass)%>, <%= pkType %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%=asEntity(entityClass)%>><% } %> {
     <%_ for (idx in relationships) {
         if (relationships[idx].relationshipType === 'many-to-one' && relationships[idx].otherEntityName === 'user' && databaseType === 'sql') { _%>
 
-    @Query("select <%= entityTableName %> from <%= asEntity(entityClass) %> <%= entityTableName %> where <%= entityTableName %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
+    @Query("select <%= entityInstance %> from <%= asEntity(entityClass) %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
     List<<%= asEntity(entityClass) %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();
     <%_ } } _%>
     <%_ if (fieldsContainOwnerManyToMany === true) {
         if (databaseType === 'sql') { _%>
 
-    @Query(value = "select distinct <%= entityTableName %> from <%= asEntity(entityClass) %> <%= entityTableName %><% for (idx in relationships) {
-    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>",
-        countQuery = "select count(distinct <%= entityTableName %>) from <%= asEntity(entityClass) %> <%= entityTableName %>")
+    @Query(value = "select distinct <%= entityInstance %> from <%= asEntity(entityClass) %> <%= entityInstance %><% for (idx in relationships) {
+    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityInstance%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>",
+        countQuery = "select count(distinct <%= entityInstance %>) from <%= asEntity(entityClass) %> <%= entityInstance %>")
     Page<<%=asEntity(entityClass)%>> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query(value = "select distinct <%= entityTableName %> from <%= asEntity(entityClass) %> <%= entityTableName %><% for (idx in relationships) {
-    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>")
+    @Query("select distinct <%= entityInstance %> from <%= asEntity(entityClass) %> <%= entityInstance %><% for (idx in relationships) {
+    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityInstance%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%>")
     List<<%=asEntity(entityClass)%>> findAllWithEagerRelationships();
 
-    @Query("select <%= entityTableName %> from <%= asEntity(entityClass) %> <%= entityTableName %><% for (idx in relationships) {
-    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityTableName%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityTableName%>.id =:id")
+    @Query("select <%= entityInstance %> from <%= asEntity(entityClass) %> <%= entityInstance %><% for (idx in relationships) {
+    if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityInstance%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityInstance%>.id =:id")
     Optional<<%=asEntity(entityClass)%>> findOneWithEagerRelationships(@Param("id") <%= pkType %> id);
     <%_
         } else if (databaseType === 'mongodb')  { _%>

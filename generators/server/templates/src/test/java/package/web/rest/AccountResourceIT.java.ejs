@@ -23,6 +23,7 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;
 <%_ } _%>
 import <%=packageName%>.<%= mainClass %>;
+import <%=packageName%>.config.TestSecurityConfiguration;
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 import <%=packageName%>.repository.UserRepository;
@@ -58,7 +59,7 @@ import org.springframework.web.context.WebApplicationContext;
  * Integration tests for the {@link AccountResource} REST controller.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = <%= mainClass %>.class)
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
@@ -375,7 +376,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setFirstName("john");
         user.setLastName("doe");
         user.setEmail("john.doe@jhipster.com");
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         user.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         user.setLangKey("en");
@@ -391,7 +392,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .andExpect(jsonPath("$.firstName").value("john"))
             .andExpect(jsonPath("$.lastName").value("doe"))
             .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
-            <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+            <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
             .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
             <%_ } _%>
             .andExpect(jsonPath("$.langKey").value("en"))
@@ -407,7 +408,9 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .jsonPath("$.firstName").isEqualTo("john")
             .jsonPath("$.lastName").isEqualTo("doe")
             .jsonPath("$.email").isEqualTo("john.doe@jhipster.com")
+            <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
             .jsonPath("$.imageUrl").isEqualTo("http://placehold.it/50x50")
+            <%_ } _%>
             .jsonPath("$.langKey").isEqualTo("en")
             .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
         <%_ } _%>
@@ -441,7 +444,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         validUser.setFirstName("Alice");
         validUser.setLastName("Test");
         validUser.setEmail("test-register-valid@example.com");
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         validUser.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -475,7 +478,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         invalidUser.setLastName("One");
         invalidUser.setEmail("funky@example.com");
         invalidUser.setActivated(true);
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         invalidUser.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -509,7 +512,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         invalidUser.setLastName("Green");
         invalidUser.setEmail("invalid");// <-- invalid
         invalidUser.setActivated(true);
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         invalidUser.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -543,7 +546,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         invalidUser.setLastName("Green");
         invalidUser.setEmail("bob@example.com");
         invalidUser.setActivated(true);
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         invalidUser.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -577,7 +580,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         invalidUser.setLastName("Green");
         invalidUser.setEmail("bob@example.com");
         invalidUser.setActivated(true);
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         invalidUser.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -611,7 +614,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Something");
         firstUser.setEmail("alice@example.com");
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         firstUser.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -624,11 +627,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
         secondUser.setEmail("alice2@example.com");
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         secondUser.setImageUrl(firstUser.getImageUrl());
         <%_ } _%>
         secondUser.setLangKey(firstUser.getLangKey());
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         secondUser.setCreatedBy(firstUser.getCreatedBy());
         secondUser.setCreatedDate(firstUser.getCreatedDate());
         secondUser.setLastModifiedBy(firstUser.getLastModifiedBy());
@@ -697,7 +700,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Test");
         firstUser.setEmail("test-register-duplicate-email@example.com");
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         firstUser.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -728,7 +731,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
         secondUser.setEmail(firstUser.getEmail());
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         secondUser.setImageUrl(firstUser.getImageUrl());
         <%_ } _%>
         secondUser.setLangKey(firstUser.getLangKey());
@@ -763,7 +766,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         userWithUpperCaseEmail.setFirstName(firstUser.getFirstName());
         userWithUpperCaseEmail.setLastName(firstUser.getLastName());
         userWithUpperCaseEmail.setEmail("TEST-register-duplicate-email@example.com");
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         userWithUpperCaseEmail.setImageUrl(firstUser.getImageUrl());
         <%_ } _%>
         userWithUpperCaseEmail.setLangKey(firstUser.getLangKey());
@@ -817,7 +820,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         validUser.setLastName("Guy");
         validUser.setEmail("badguy@example.com");
         validUser.setActivated(true);
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         validUser.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -907,7 +910,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-account@example.com");
         userDTO.setActivated(false);
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         userDTO.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -959,7 +962,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         userDTO.setLastName("lastname");
         userDTO.setEmail("invalid email");
         userDTO.setActivated(false);
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         userDTO.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -1014,7 +1017,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-existing-email2@example.com");
         userDTO.setActivated(false);
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         userDTO.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
@@ -1059,7 +1062,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-existing-email-and-login@example.com");
         userDTO.setActivated(false);
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         userDTO.setImageUrl("http://placehold.it/50x50");
         <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);

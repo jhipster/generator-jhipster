@@ -36,7 +36,7 @@
     let fieldInputType = 'text';
     let ngModelOption = '';
     const translationKey = `${i18nKeyPrefix}.${fieldName}`;
-    if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
+    if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
         fieldInputType = 'number';
     } else if (fieldType === 'LocalDate') {
         fieldInputType = 'date';
@@ -157,7 +157,7 @@ _%>
                             This field should follow pattern for "<%= fieldNameHumanized %>".
                         </small>
         <%_ } _%>
-        <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+        <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
                         <small class="form-text text-danger"
                             [hidden]="!editForm.get('<%= fieldName %>')?.errors?.number" jhiTranslate="entity.validation.number">
                             This field should be a number.
@@ -236,8 +236,8 @@ _%>
                 </div>
                 <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
                 <div class="form-group">
-                    <label jhiTranslate="<%= translationKey %>" for="field_<%= relationshipName %>"><%= relationshipNameHumanized %></label>
-                    <select class="form-control" id="field_<%= relationshipName %>" multiple name="<%= relationshipName %>" formControlName="<%=relationshipName %>">
+                    <label jhiTranslate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%= relationshipNameHumanized %></label>
+                    <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%=relationshipFieldNamePlural %>">
                         <option [ngValue]="getSelected(editForm.get('<%= relationshipFieldNamePlural %>').value, <%=otherEntityName %>Option)" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: track<%=otherEntityNameCapitalized %>ById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                     </select>
                 </div>
