@@ -23,6 +23,7 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;
 <%_ } _%>
 import <%=packageName%>.<%= mainClass %>;
+import <%=packageName%>.config.TestSecurityConfiguration;
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 import <%=packageName%>.repository.UserRepository;
@@ -58,7 +59,7 @@ import org.springframework.web.context.WebApplicationContext;
  * Integration tests for the {@link AccountResource} REST controller.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = <%= mainClass %>.class)
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired

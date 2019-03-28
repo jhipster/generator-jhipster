@@ -38,6 +38,9 @@ import <%=packageName%>.<%= mainClass %>;
 <% if (authenticationType === 'uaa') { %>
 import <%=packageName%>.config.SecurityBeanOverrideConfiguration;
 <% } %>
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%=packageName%>.config.TestSecurityConfiguration;
+<%_ } _%>
 import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
 <%_
     var imported = [];
@@ -143,7 +146,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@Link <%= entityClass %>Resource} REST controller.
  */
 @RunWith(SpringRunner.class)
-<%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
