@@ -47,9 +47,10 @@ eureka:
 <%_ } _%>
 
 management:
-    endpoint:
-        prometheus:
-            enabled: false
+    metrics:
+        export:
+            prometheus:
+                enabled: false
 
 spring:
     devtools:

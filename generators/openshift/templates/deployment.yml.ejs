@@ -253,7 +253,7 @@ objects:
             <%_ if (monitoring === 'prometheus') { _%>
             - name: JHIPSTER_METRICS_LOGS_ENABLED
               value: "true"
-            - name: MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED
+            - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
               value: "true"
             <%_ } _%>
             ports:

@@ -169,7 +169,7 @@ spec:
             <%_ } _%>
         <%_ } _%>
         <%_ if (monitoring === 'prometheus') { _%>
-        - name: MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED
+        - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
           value: 'true'
         <%_ } _%>
         <%_ if (deploymentApplicationType === 'microservice') { _%>
