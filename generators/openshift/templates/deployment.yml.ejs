@@ -255,6 +255,8 @@ objects:
               value: "true"
             - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
               value: "true"
+            - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
+              value: "/prometheusMetrics"
             <%_ } _%>
             ports:
             - name: http

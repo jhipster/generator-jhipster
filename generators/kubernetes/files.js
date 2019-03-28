@@ -88,7 +88,8 @@ function writeFiles() {
 
         writePrometheusGrafanaFiles() {
             if (this.monitoring === 'prometheus') {
-                this.template('monitoring/prometheus.yml.ejs', 'monitoring/prometheus.yml');
+                this.template('monitoring/jhipster-prometheus-crd.yml.ejs', 'monitoring/jhipster-prometheus-crd.yml');
+                this.template('monitoring/jhipster-prometheus-cr.yml.ejs', 'monitoring/jhipster-prometheus-cr.yml');
                 this.template('monitoring/jhipster-grafana.yml.ejs', 'monitoring/jhipster-grafana.yml');
                 this.template('monitoring/jhipster-grafana-dashboard.yml.ejs', 'monitoring/jhipster-grafana-dashboard.yml');
             }
