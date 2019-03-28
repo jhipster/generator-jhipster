@@ -121,6 +121,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
                 this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
+                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
+                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
 
                 this.JAVA_VERSION = constants.JAVA_VERSION;
                 this.SCALA_VERSION = constants.SCALA_VERSION;
