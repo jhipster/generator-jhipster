@@ -16,11 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-# Sample alerting rules
-
-ALERT first_registration
-  IF com_mycompany_myapp_web_rest_AccountResource_registerAccount_count == 1
-  ANNOTATIONS {
-    summary = "Your first user has registered his account. Congrats !",
-    description = "Current AccountResource_registerAccount_count value: {{ $value }}"
-  }
+groups:
+- name: example
+  rules:
+  - alert: InstanceDown
+    # Based on https://prometheus.io/docs/prometheus/latest/configuration/template_examples/
+    expr: up == 0
+    for: 10s
+    labels:
+      severity: page
+    annotations:
+      summary: "Instance {{$labels.instance}} down"
+      description: "{{$labels.instance}} of job {{$labels.job}} has been down for more than 10 seconds."

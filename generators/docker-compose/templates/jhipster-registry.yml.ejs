@@ -43,8 +43,7 @@ services:
             - JHIPSTER_METRICS_LOGS_REPORTFREQUENCY=60
             <%_ } _%>
             <%_ if (monitoring === 'prometheus') { _%>
-            - JHIPSTER_METRICS_PROMETHEUS_ENABLED=true
-            - JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics
+            - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
             <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
             # For Keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
