@@ -225,6 +225,9 @@ export const logout = () => async dispatch => {
     type: ACTION_TYPES.LOGOUT,
     payload: axios.post(<%_ if (authenticationType === 'uaa') { _%>'auth/logout'<%_ } else { _%>'api/logout'<%_ } _%>, {})
   });
+
+  // fetch new csrf token
+  dispatch(getSession());
 };
 <%_ } _%>
 

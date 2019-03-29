@@ -223,6 +223,13 @@ describe('Authentication reducer tests', () => {
         {
          "payload": {},
          type: SUCCESS(ACTION_TYPES.LOGOUT),
+        },
+        {
+         type: REQUEST(ACTION_TYPES.GET_SESSION),
+        },
+        {
+         "payload": resolvedObject,
+         type: SUCCESS(ACTION_TYPES.GET_SESSION),
         }
         <%_ } _%>
       ];
