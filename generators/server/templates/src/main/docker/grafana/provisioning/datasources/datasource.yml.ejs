@@ -35,6 +35,7 @@ datasources:
     # <int> org id. will default to orgId 1 if not specified
     orgId: 1
     # <string> url
+    # Change localhost by host.docker.internal on MacOS
     url: http://localhost:9090
     # <string> database password, if used
     password:
@@ -47,7 +48,7 @@ datasources:
     # <string> basic auth username
     basicAuthUser: admin
     # <string> basic auth password
-    basicAuthPassword: foobar
+    basicAuthPassword: admin
     # <bool> enable/disable with credentials headers
     withCredentials:
     # <bool> mark as default datasource. Max one per org

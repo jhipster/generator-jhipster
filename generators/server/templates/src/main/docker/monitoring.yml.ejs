@@ -26,6 +26,8 @@ services:
             - '--config.file=/etc/prometheus/prometheus.yml'
         ports:
             - 9090:9090
+        # Remove this on MacOS and replace localhost by host.docker.internal in prometheus/prometheus.yml and
+        # grafana/provisioning/datasources/datasource.yml.ejs
         network_mode: "host" # to test locally running service
     <%= baseName.toLowerCase() %>-grafana:
         image: <%= DOCKER_GRAFANA %>
@@ -37,4 +39,6 @@ services:
             - GF_INSTALL_PLUGINS=grafana-piechart-panel
         ports:
             - 3000:3000
+        # Remove this on MacOS and replace localhost by host.docker.internal in prometheus/prometheus.yml and
+        # grafana/provisioning/datasources/datasource.yml.ejs
         network_mode: "host" # to test locally running service
