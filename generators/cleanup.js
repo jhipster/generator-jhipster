@@ -182,12 +182,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}config/OAuth2Configuration.java`);
         generator.removeFile(`${javaDir}security/OAuth2AuthenticationSuccessHandler.java`);
 
-        generator.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/index.ts`);
-        generator.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/account.tsx`);
-        generator.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/admin.tsx`);
-        generator.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/entities.tsx`);
-        generator.removeFile(`${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/locale.tsx`);
-
-        generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/header/menus/account.spec.tsx`);
+        generator.removeFolder(`${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus`);
+        generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/header/menus`);
     }
 }
