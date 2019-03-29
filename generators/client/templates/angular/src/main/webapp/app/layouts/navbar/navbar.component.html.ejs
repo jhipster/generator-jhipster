@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<nav class="navbar navbar-dark navbar-expand-md bg-dark">
+<nav class="navbar navbar-<% if (clientTheme === 'none') { %>dark<% } else { %><%= clientThemeVariant %><% } %> navbar-expand-md <% if (clientTheme === 'none') { %>bg-dark<% } else { %>bg-<%= clientThemeVariant %><% } %>">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
         <span class="logo-img"></span>
         <span jhiTranslate="global.title" class="navbar-title"><%= capitalizedBaseName %></span> <span class="navbar-version">{{version}}</span>
