@@ -452,17 +452,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                generator.authenticationType === 'oauth2' && ['monolith', 'gateway'].includes(generator.applicationType),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/security/oauth2/AuthRedirectController.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/AuthRedirectController.java`
-                }
-            ]
-        },
-        {
             condition: generator => generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
