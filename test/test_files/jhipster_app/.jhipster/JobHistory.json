@@ -36,6 +36,10 @@
       "fieldType": "ZonedDateTime"
     },
     {
+      "fieldName": "positionDuration",
+      "fieldType": "Duration"
+    },
+    {
       "fieldName": "language",
       "fieldType": "Language",
       "fieldValues": "FRENCH,ENGLISH,SPANISH"

@@ -11,7 +11,8 @@ entity Department {
 entity JobHistory {
   startDate ZonedDateTime,
   endDate ZonedDateTime,
-  language Language
+  language Language,
+  positionDuration Duration
 }
 
 enum Language {

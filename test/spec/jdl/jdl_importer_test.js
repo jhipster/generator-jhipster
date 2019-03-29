@@ -277,6 +277,10 @@ describe('JDLImporter', () => {
               fieldName: 'language',
               fieldType: 'Language',
               fieldValues: 'FRENCH,ENGLISH,SPANISH'
+            },
+            {
+              fieldName: 'positionDuration',
+              fieldType: 'Duration'
             }
           ],
           relationships: [

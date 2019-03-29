@@ -8,7 +8,8 @@ entity Department {
  */
 entity JobHistory {
   startDate ZonedDateTime,
-  endDate ZonedDateTime
+  endDate ZonedDateTime,
+  positionDuration Duration
 }
 
 enum JobType {

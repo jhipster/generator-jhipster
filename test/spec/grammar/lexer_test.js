@@ -30,7 +30,8 @@ describe('JDLLexer', () => {
    entity JobHistory {
      startDate ZonedDateTime,
      endDate ZonedDateTime,
-     language Language
+     language Language,
+     positionDuration Duration
    }`;
       lexingResult = JDLLexer.tokenize(input);
     });
@@ -41,7 +42,7 @@ describe('JDLLexer', () => {
 
     it('can lex a simple valid JDL text', () => {
       const tokens = lexingResult.tokens;
-      expect(tokens.length).to.equal(12);
+      expect(tokens.length).to.equal(15);
       expect(tokens[0].image).to.equal('entity');
       expect(tokens[1].image).to.equal('JobHistory');
       expect(tokens[2].image).to.equal('{');
@@ -53,7 +54,10 @@ describe('JDLLexer', () => {
       expect(tokens[8].image).to.equal(',');
       expect(tokens[9].image).to.equal('language');
       expect(tokens[10].image).to.equal('Language');
-      expect(tokens[11].image).to.equal('}');
+      expect(tokens[11].image).to.equal(',');
+      expect(tokens[12].image).to.equal('positionDuration');
+      expect(tokens[13].image).to.equal('Duration');
+      expect(tokens[14].image).to.equal('}');
     });
   });
 
