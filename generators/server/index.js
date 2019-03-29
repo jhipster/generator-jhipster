@@ -125,7 +125,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
 
                 this.JAVA_VERSION = constants.JAVA_VERSION;
-                this.SCALA_VERSION = constants.SCALA_VERSION;
 
                 this.NODE_VERSION = constants.NODE_VERSION;
                 this.YARN_VERSION = constants.YARN_VERSION;
