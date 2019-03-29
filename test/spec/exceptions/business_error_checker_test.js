@@ -800,7 +800,8 @@ describe('BusinessErrorChecker', () => {
         expect(() => {
           checker.checkForRelationshipErrors();
         }).to.throw(
-          "Entities for the ManyToMany relationship from 'B' to 'C'.\nEntities for the ManyToMany relationship from 'A' to 'C'."
+          "Entities for the ManyToMany relationship from 'B' to 'C' do not belong to the same application." +
+            "\nEntities for the ManyToMany relationship from 'A' to 'C' do not belong to the same application."
         );
       });
     });
