@@ -117,6 +117,7 @@
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <!-- We can't go to 3.0.0-M2 as it has a regression. See https://issues.apache.org/jira/browse/MENFORCER-306 -->
         <maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
@@ -770,6 +771,14 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            <plugin> 
+                <groupId>org.apache.maven.plugins</groupId> 
+                <artifactId>maven-javadoc-plugin</artifactId> 
+                <version>${maven-javadoc-plugin.version}</version>
+                <configuration> 
+                  <source>8</source> 
+                </configuration> 
+              </plugin> 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>

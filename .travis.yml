@@ -53,8 +53,10 @@ env:
         - JHI_DISABLE_WEBPACK_LOGS=true
         - JHI_E2E_HEADLESS=true
         - JHI_SCRIPTS=$TRAVIS_BUILD_DIR/test-integration/scripts
+        - JHI_JDK=11
     matrix:
         - JHI_APP=jdl-default JHI_ENTITY=jdl JHI_PROFILE=prod JHI_PROTRACTOR=1
+        - JHI_APP=jdl-default JHI_ENTITY=jdl JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_JDK=8
         - JHI_APP=ngx-default JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql JHI_SONAR=1
         - JHI_APP=ngx-psql-es-noi18n JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sqlfull
         - JHI_APP=ngx-gradle-fr JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql JHI_WAR=1
@@ -67,7 +69,9 @@ env:
 # Install all tools and check configuration
 #----------------------------------------------------------------------
 before_install:
-    - jdk_switcher use oraclejdk8
+    - sudo add-apt-repository ppa:openjdk-r/ppa -y
+    - sudo apt-get update
+    - sudo apt-get install -y openjdk-11-jdk
     - java -version
     - export TZ=Australia/Canberra
     - date
