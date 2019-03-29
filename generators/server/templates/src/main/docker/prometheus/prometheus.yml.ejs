@@ -40,5 +40,5 @@ scrape_configs:
     metrics_path: /management/prometheus
     static_configs:
       - targets:
-          # Change localhost by host.docker.internal on MacOS
+          # On MacOS, replace localhost by host.docker.internal
           - localhost:<%= serverPort %>
