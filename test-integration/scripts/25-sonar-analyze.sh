@@ -11,6 +11,7 @@ if [[ "$JHI_APP" = "ngx-default" && "$TRAVIS_REPO_SLUG" = "jhipster/generator-jh
     echo "*** Sonar analyze for master branch"
     ./mvnw initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
         -Dsonar.host.url=https://sonarcloud.io \
+        -Dsonar.projectKey=io.github.jhipster.sample:jhipster-sample-application \
         -Dsonar.login=$SONAR_TOKEN
 
 elif [[ $JHI_SONAR = 1 ]]; then
