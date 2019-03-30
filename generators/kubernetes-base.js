@@ -67,7 +67,7 @@ function saveConfig() {
         kubernetesServiceType: this.kubernetesServiceType,
         ingressDomain: this.ingressDomain,
         monitoring: this.monitoring,
-        istio: this.istio,
+        istio: this.istio
     });
 }
 
