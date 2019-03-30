@@ -176,6 +176,9 @@ metadata:
 spec:
   serviceName: <%= app.baseName.toLowerCase() %>-mongodb
   replicas: <%= app.dbPeerCount %>
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-mongodb
   template:
     metadata:
       labels:
