@@ -38,6 +38,15 @@ spec:
       volumes:
       - name: data
         emptyDir: {}
+      initContainers:
+      - name: init-sysctl
+        image: busybox
+        command:
+        - sysctl
+        - -w
+        - vm.max_map_count=262144
+        securityContext:
+          privileged: true
       containers:
       - name: elasticsearch
         image: <%= DOCKER_ELASTICSEARCH %>
