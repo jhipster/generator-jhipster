@@ -36,9 +36,10 @@ mapstruct_version=1.3.0.Final
 
 liquibase_hibernate5_version=3.6
 liquibaseTaskPrefix=liquibase
+<%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
 
-jaxb_api_version=2.3.1
-jaxb_impl_version=2.3.2
+jaxb_runtime_version=2.3.2
+<%_ } _%>
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 
