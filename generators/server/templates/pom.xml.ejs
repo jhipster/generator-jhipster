@@ -101,15 +101,14 @@
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
         <javassist.version>3.23.1-GA</javassist.version>
-        <%_ if (databaseType === 'sql') { _%>
-        <jaxb-api.version>2.3.1</jaxb-api.version>
-        <jaxb-impl.version>2.3.2</jaxb-impl.version>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>3.6.3</liquibase.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
-        <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
+        <%_ } _%>
+        <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
+        <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
         <%_ } _%>
         <mapstruct.version>1.3.0.Final</mapstruct.version>
 
@@ -607,6 +606,15 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-jwt</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${jaxb-runtime.version}</version>
+            <%_ if (databaseType !== 'sql') { _%>
+            <scope>runtime</scope>
+            <%_ } _%>
+        </dependency>
+
         <%_ } _%>
         <%_ if (databaseType === 'cassandra') { _%>
         <!-- DataStax driver -->
@@ -755,16 +763,13 @@
                             <artifactId>hibernate-jpamodelgen</artifactId>
                             <version>${hibernate.version}</version>
                         </path>
+    <%_ if (authenticationType !== 'uaa') { _%>
                         <path>
-                            <groupId>javax.xml.bind</groupId>
-                            <artifactId>jaxb-api</artifactId>
-                            <version>${jaxb-api.version}</version>
+                            <groupId>org.glassfish.jaxb</groupId>
+                            <artifactId>jaxb-runtime</artifactId>
+                            <version>${jaxb-runtime.version}</version>
                         </path>
-                        <path>
-                            <groupId>com.sun.xml.bind</groupId>
-                            <artifactId>jaxb-impl</artifactId>
-                            <version>${jaxb-impl.version}</version>
-                        </path>
+    <%_ } _%>
 <%_ } _%>
                     </annotationProcessorPaths>
                 </configuration>
