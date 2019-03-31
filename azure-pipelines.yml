@@ -94,11 +94,9 @@ jobs:
           - script: |
                 if [[ $JHI_JDK = '11' ]]; then
                     echo '*** Using OpenJDK 11'
-                    echo '*** Installing SDKMAN!'
                     curl -s get.sdkman.io | bash
                     echo sdkman_auto_answer=true > ~/.sdkman/etc/config
                     source "$HOME/.sdkman/bin/sdkman-init.sh"
-                    echo '*** Installing OpenJDK 11'
                     sdk install java 11.0.2-open
                     java --version
                 else
