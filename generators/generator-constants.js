@@ -214,14 +214,14 @@ const LANGUAGES = [
     {
         name: 'Uzbek (Cyrillic)',
         dispName: 'Ўзбекча',
-        value: 'uz-cyr',
-        localeId: 'uz-Cyr'
+        value: 'uz-Cyrl-uz',
+        localeId: 'uz-Cyrl'
     },
     {
         name: 'Uzbek (Latin)',
         dispName: 'O`zbekcha',
-        value: 'uz-lat',
-        localeId: 'uz-Lat'
+        value: 'uz-Latn-uz',
+        localeId: 'uz-Latn'
     },
     { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
 ];

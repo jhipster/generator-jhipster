@@ -96,6 +96,10 @@ module.exports = class extends Generator {
         generator.template(`${prefix}/${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
     }
 
+    replaceLowerToUpper(match) {
+        return match.toUpperCase();
+    }
+
     /**
      * Install I18N Server Files By Language
      *
@@ -108,9 +112,10 @@ module.exports = class extends Generator {
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
+        const langJavaProp = langProp.replace(/_[a-z]+$/g, this.replaceLowerToUpper);
         generator.template(
             `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
-            `${resourceDir}i18n/messages_${langProp}.properties`
+            `${resourceDir}i18n/messages_${langJavaProp}.properties`
         );
     }
 
