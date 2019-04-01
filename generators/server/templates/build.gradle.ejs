@@ -436,7 +436,7 @@ dependencies {
     <%_ if (authenticationType === 'uaa') { _%>
     implementation "org.springframework.security.oauth:spring-security-oauth2"
     implementation "org.springframework.security:spring-security-jwt"
-    <% if (databaseType === 'sql') { %>implementation<% } else { %>runtimeOnly<% } %>> "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
+    <% if (databaseType === 'sql') { %>implementation<% } else { %>runtimeOnly<% } %> "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
     implementation "com.github.mongobee:mongobee"
