@@ -64,13 +64,35 @@ export const getModifiedDateSortButton = (): ElementFinder => element(by.id('mod
 export const getUserDeactivatedButtonByLogin = (login: string): ElementFinder =>
   element(by.css('table > tbody'))
     .element(by.id(login))
-    .element(by.buttonText('Deactivated'));
+    .element(by.css('.btn-danger.deactivated'));
 
 export const getUserDeleteButtonByLogin = (login: string): ElementFinder =>
-    element(by.css('table > tbody'))
-        .element(by.id(login))
-        .element(by.buttonText('Delete'));
+  element(by.css('table > tbody'))
+    .element(by.id(login))
+    .element(by.css('.btn-danger.delete'));
+
+export const getUserDetailsButtonByLogin = (login: string): ElementFinder =>
+  element(by.css('table > tbody'))
+    .element(by.id(login))
+    .element(by.css('.btn-info.details'));
+
+export const getUserEditButtonByLogin = (login: string): ElementFinder =>
+  element(by.css('table > tbody'))
+    .element(by.id(login))
+    .element(by.css('.btn-primary.edit'));
+
+export const getUserEmailByLogin = (login: string): ElementFinder =>
+  element(by.css('table > tbody'))
+    .element(by.id(login))
+    .element(by.css('.jhi-user-email'));
 
 export const getToastByInnerText = (text: string): ElementFinder =>
   element(by.css('.toastify-container')).element(by.cssContainingText('div[role=alert]', text));
+
+export const getSuccessToast = (): ElementFinder =>
+  element(by.css('.toastify-container')).element(by.css('div[role=alert].alert.alert-success'));
+
+export const getDangerToast = (): ElementFinder =>
+  element(by.css('.toastify-container')).element(by.css('div[role=alert].alert.alert-danger'));
+
 <%_ } _%>
