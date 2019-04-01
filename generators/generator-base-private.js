@@ -112,6 +112,7 @@ module.exports = class extends Generator {
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
+        // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
         const langJavaProp = langProp.replace(/_[a-z]+$/g, this.replaceLowerToUpper);
         generator.template(
             `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
