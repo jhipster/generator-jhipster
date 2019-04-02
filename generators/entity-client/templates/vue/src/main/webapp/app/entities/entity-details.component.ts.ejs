@@ -6,19 +6,20 @@ import JhiDataUtils from '@/shared/data/data-utils.service';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
-@Component
+const beforeRouteEnter = (to, from, next) => {
+  next(vm => {
+    if (to.params.<%= entityInstance %>Id) {
+      vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
+    }
+  });
+};
+
+@Component({
+  beforeRouteEnter
+})
 export default class <%= entityAngularName %>Details extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
   public <%= entityInstance %>: I<%= entityAngularName %> = {};
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.<%= entityInstance %>Id) {
-        vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
-      }
-    });
-  };
-
 
   public retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
     this.<%= entityInstance %>Service().find(<%= entityInstance %>Id).then((res) => {

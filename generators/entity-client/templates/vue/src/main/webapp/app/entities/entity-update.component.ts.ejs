@@ -67,8 +67,20 @@ const validations: any = {
   }
 };
 
+const beforeRouteEnter = (to, from, next) => {
+  next(vm => {
+    if (to.params.<%= entityInstance %>Id) {
+      vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
+    }
+    <%_ if (relationships.length > 0) { _%>
+      vm.initRelationships();
+    <%_ } _%>
+  });
+}
+
 @Component({
-  validations
+  validations,
+  beforeRouteEnter
 })
 export default class <%= entityAngularName %>Update extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
   @Inject('alertService') private alertService: () => AlertService;
@@ -90,17 +102,6 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   <%_ } _%>
   <%_ entitiesSeen.push(otherEntityAngularName);entitiesSeen.push(otherEntityNamePlural); } } _%>
   public isSaving = false;
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.<%= entityInstance %>Id) {
-        vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
-      }
-      <%_ if (relationships.length > 0) { _%>
-      vm.initRelationships();
-      <%_ } _%>
-    });
-  }
 
   <%_ if (hasManyToMany) { _%>
   created(): void {
