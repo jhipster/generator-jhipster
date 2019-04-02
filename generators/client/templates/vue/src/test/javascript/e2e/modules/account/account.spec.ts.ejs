@@ -8,7 +8,6 @@ import RegisterPage from '../../page-objects/register-page';
 import PasswordPage from '../../page-objects/password-page';
 import SettingsPage from '../../page-objects/settings-page';
 import {
-  getToastByInnerText,
   getUserDeactivatedButtonByLogin,
   <%_ if (databaseType !== 'cassandra') { _%>
   getModifiedDateSortButton,
@@ -20,6 +19,7 @@ import {
   getUserEditButtonByLogin,
   getUserEmailByLogin,
   getSuccessToast,
+  getInfoToast,
   getDangerToast
 } from '../../util/utils';
 <%_ } else { _%>
@@ -360,7 +360,10 @@ describe('Account', () => {
     await $('input#email').sendKeys('ipster');
     const saveBtn = element(by.css('.btn-primary'));
     await saveBtn.click();
-    await waitUntilDisplayed(editBtn);
+    const toast = getInfoToast();
+    await waitUntilDisplayed(toast);
+    // Info toast should appear
+    expect(await toast.isPresent()).to.be.true;
 
     const userEmail = getUserEmailByLogin('user_test');
     expect(await userEmail.getText()).to.eq('admin@localhost.jhipster');
@@ -380,6 +383,10 @@ describe('Account', () => {
 
     // Delete modal should disappear
     expect(await deleteModal.isDisplayed()).to.be.false;
+
+    const toast = getDangerToast();
+    // Danger toast should appear
+    expect(await toast.isPresent()).to.be.true;
   });
 <%_ } _%>
 

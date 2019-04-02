@@ -86,13 +86,13 @@ export const getUserEmailByLogin = (login: string): ElementFinder =>
     .element(by.id(login))
     .element(by.css('.jhi-user-email'));
 
-export const getToastByInnerText = (text: string): ElementFinder =>
-  element(by.css('.toastify-container')).element(by.cssContainingText('div[role=alert]', text));
-
 export const getSuccessToast = (): ElementFinder =>
-  element(by.css('.toastify-container')).element(by.css('div[role=alert].alert.alert-success'));
+  element(by.css('div[role=alert].alert.alert-success'));
+
+export const getInfoToast = (): ElementFinder =>
+  element(by.css('div[role=alert].alert.alert-info'));
 
 export const getDangerToast = (): ElementFinder =>
-  element(by.css('.toastify-container')).element(by.css('div[role=alert].alert.alert-danger'));
+  element(by.css('div[role=alert].alert.alert-danger'));
 
 <%_ } _%>
