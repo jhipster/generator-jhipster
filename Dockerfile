@@ -6,9 +6,11 @@ RUN \
   useradd jhipster -s /bin/bash -m -g jhipster -G sudo && \
   echo 'jhipster:jhipster' |chpasswd && \
   mkdir /home/jhipster/app && \
-  # install open-jdk 8
-  apt-get update && \
-  apt-get install -y openjdk-11-jdk && \
+  # install open-jdk 8 using SDKMAN
+  curl -s get.sdkman.io | bash && \
+  echo sdkman_auto_answer=true > ~/.sdkman/etc/config && \
+  source "$HOME/.sdkman/bin/sdkman-init.sh" && \
+  sdk install java 11.0.2-open && \
   # install utilities
   apt-get install -y \
     wget \

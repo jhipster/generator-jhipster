@@ -70,17 +70,13 @@ before_install:
     - |
         if [[ $JHI_JDK = '11' ]]; then
             echo '*** Using OpenJDK 11'
-            sudo add-apt-repository ppa:openjdk-r/ppa
-            sudo apt-get update
-            sudo apt-get install -y openjdk-11-jdk
-            sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
+            curl -s get.sdkman.io | bash
+            echo sdkman_auto_answer=true > ~/.sdkman/etc/config
+            source "$HOME/.sdkman/bin/sdkman-init.sh"
+            sdk install java 11.0.2-open
         else
             echo '*** Using OpenJDK 8 by default'
         fi
-    - sudo add-apt-repository ppa:openjdk-r/ppa -y
-    - sudo apt-get update
-    - sudo apt-get install -y openjdk-11-jdk
-    - sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
     - java -version
     - export TZ=Australia/Canberra
     - date
