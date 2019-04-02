@@ -81,7 +81,7 @@ describe('<%= entityClass %> e2e test', () => {
     <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
     const heading = <%= entityInstance %>ComponentsPage.getTitle();
     await waitUntilDisplayed(heading);
-    expect(await heading.getText()).to.match(/<%= entityClassPluralHumanized %>/);
+    expect(await heading.getText()).not.to.be.empty;
     nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
   });
 
@@ -211,15 +211,15 @@ describe('<%= entityClass %> e2e test', () => {
       expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.true;
       }
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-      await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('-modified');
-      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>-modified/);
+      await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('1');
+      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>1/);
     <%_ } else if (fieldType === 'UUID'){ _%>
       await <%= entityInstance %>UpdatePage.clear<%= fieldNameCapitalized %>Input();
       await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade978');
       expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade978/);
-    <%_ } else { _%>
-      await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('-modified');
-      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>-modified/);
+    <%_ } else if (!fieldIsEnum && !['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+      await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('1');
+      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>1/);
     <%_ } _%>
     <%_ }); _%>
     await waitUntilDisplayed(<%= entityInstance %>UpdatePage.getSaveButton());
