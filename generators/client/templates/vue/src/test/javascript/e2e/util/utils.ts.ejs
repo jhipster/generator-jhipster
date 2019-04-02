@@ -86,6 +86,7 @@ export const getUserEmailByLogin = (login: string): ElementFinder =>
     .element(by.id(login))
     .element(by.css('.jhi-user-email'));
 
+<%_ } _%>
 export const getSuccessToast = (): ElementFinder =>
   element(by.css('div[role=alert].alert.alert-success'));
 
@@ -94,5 +95,3 @@ export const getInfoToast = (): ElementFinder =>
 
 export const getDangerToast = (): ElementFinder =>
   element(by.css('div[role=alert].alert.alert-danger'));
-
-<%_ } _%>
