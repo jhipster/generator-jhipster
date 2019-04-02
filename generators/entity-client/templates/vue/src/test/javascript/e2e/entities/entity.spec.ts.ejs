@@ -218,8 +218,9 @@ describe('<%= entityClass %> e2e test', () => {
       await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade978');
       expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade978/);
     <%_ } else if (!fieldIsEnum && !['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-      await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('1');
-      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>1/);
+      await <%= entityInstance %>UpdatePage.clear<%= fieldNameCapitalized %>Input();
+      await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('modified');
+      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/modified/);
     <%_ } _%>
     <%_ }); _%>
     await waitUntilDisplayed(<%= entityInstance %>UpdatePage.getSaveButton());
