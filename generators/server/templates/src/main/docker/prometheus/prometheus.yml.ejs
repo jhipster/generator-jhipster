@@ -37,7 +37,7 @@ scrape_configs:
     scrape_interval: 5s
 
     # scheme defaults to 'http'.
-    metrics_path: /management/prometheus
+    metrics_path: <% if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { %>/services/<%= baseName %><% } %>/management/prometheus
     static_configs:
       - targets:
           # On MacOS, replace localhost by host.docker.internal
