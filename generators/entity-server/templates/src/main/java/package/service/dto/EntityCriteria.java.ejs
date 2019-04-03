@@ -2,6 +2,7 @@ package <%= packageName %>.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+import io.github.jhipster.service.Criteria;
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
 import <%= packageName %>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
@@ -69,7 +70,7 @@ _%>
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class <%= entityClass %>Criteria implements Serializable {
+public class <%= entityClass %>Criteria implements Serializable, Criteria {
 <%_ Object.keys(extraFilters).forEach((key) => {
         extraFilter = extraFilters[key]; _%>
     /**
@@ -84,6 +85,7 @@ public class <%= entityClass %>Criteria implements Serializable {
             super(filter);
         }
 
+        @Override
         public <%= extraFilter.type %> copy() {
             return new <%= extraFilter.type %>(this);
         }
@@ -106,6 +108,7 @@ public class <%= entityClass %>Criteria implements Serializable {
 <%_ }); _%>
     }
 
+    @Override
     public <%= entityClass %>Criteria copy() {
         return new <%= entityClass %>Criteria(this);
     }
