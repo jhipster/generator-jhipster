@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.time.Duration;
 <%_ } _%>
 import java.util.Objects;
+import io.github.jhipster.service.Criteria;
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
 import <%= packageName %>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
@@ -78,13 +79,26 @@ _%>
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class <%= entityClass %>Criteria implements Serializable {
+public class <%= entityClass %>Criteria implements Serializable, Criteria {
 <%_ Object.keys(extraFilters).forEach((key) => {
         extraFilter = extraFilters[key]; _%>
     /**
      * Class for filtering <%= key %>
      */
     public static class <%= extraFilter.type %> extends <%- extraFilter.superType %> {
+
+        public <%= extraFilter.type %>() {
+        }
+
+        public <%= extraFilter.type %>(<%= extraFilter.type %> filter) {
+            super(filter);
+        }
+
+        @Override
+        public <%= extraFilter.type %> copy() {
+            return new <%= extraFilter.type %>(this);
+        }
+
     }
 <%_ }); _%>
 
@@ -93,6 +107,20 @@ public class <%= entityClass %>Criteria implements Serializable {
 
     private <%- filterVariable.filterType %> <%= filterVariable.name %>;
 <%_ }); _%>
+
+    public <%= entityClass %>Criteria(){
+    }
+
+    public <%= entityClass %>Criteria(<%= entityClass %>Criteria other){
+<%_ filterVariables.forEach((filterVariable) => { _%>
+        this.<%= filterVariable.name %> = other.<%= filterVariable.name %> == null ? null : other.<%= filterVariable.name %>.copy();
+<%_ }); _%>
+    }
+
+    @Override
+    public <%= entityClass %>Criteria copy() {
+        return new <%= entityClass %>Criteria(this);
+    }
 
 <%_ filterVariables.forEach((filterVariable) => { _%>
     public <%- filterVariable.filterType %> get<%= filterVariable.fieldInJavaBeanMethod %>() {
