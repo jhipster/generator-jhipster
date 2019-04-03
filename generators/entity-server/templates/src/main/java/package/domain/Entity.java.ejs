@@ -141,7 +141,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @IdPrefix
     private String prefix = PREFIX;
     <%_ } _%>
-    
+
     @Id
     <%_ if (databaseType === 'sql' && isUsingMapsId === false) { _%>
         <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
@@ -262,6 +262,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @Field("<%= relationshipFieldName %>")
     <%_ } _%>
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
+
     <%_ } else if (relationshipType === 'many-to-one') {
             if (databaseType === 'sql') {
     _%>
