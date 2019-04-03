@@ -23,7 +23,7 @@ import { waitUntilCount, waitUntilDisplayed } from '<% if (clientRootFolder && !
 export default class <%= entityClass %>ComponentsPage {
   createButton: ElementFinder = element(by.id('jh-create-entity'));
   detailButtons = element.all(by.css('.btn-info.details'));
-  editButton = element.all(by.css('.btn-primary.edit'));
+  editButtons = element.all(by.css('.btn-primary.edit'));
   deleteButtons = element.all(by.css('div table .btn-danger'));
   title: ElementFinder = element(by.id('<%= entityFileName %>-heading'));
 
@@ -36,7 +36,7 @@ export default class <%= entityClass %>ComponentsPage {
   }
 
   async clickOnFirstEditButton() {
-    await this.editButton.first().click();
+    await this.editButtons.first().click();
   }
 
   async clickOnLastDeleteButton() {
