@@ -17,8 +17,7 @@ export default class <%= entityAngularName %>Details extends <% if (fieldsContai
         vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
       }
     });
-  };
-
+  }
 
   public retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
     this.<%= entityInstance %>Service().find(<%= entityInstance %>Id).then((res) => {

@@ -37,9 +37,9 @@
                     <tr v-for="user of orderBy(users, propOrder, reverse === true ? 1 : -1)" :key="user.id" :id="user.login">
                         <td><router-link tag="a" :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}">{{user.id}}</router-link></td>
                         <td>{{user.login}}</td>
-                        <td>{{user.email}}</td>
+                        <td class="jhi-user-email">{{user.email}}</td>
                         <td>
-                            <button class="btn btn-danger btn-sm" v-on:click="setActive(user, true)" v-if="!user.activated"
+                            <button class="btn btn-danger btn-sm deactivated" v-on:click="setActive(user, true)" v-if="!user.activated"
                                     v-text="$t('userManagement.deactivated')">Deactivated</button>
                             <button class="btn btn-success btn-sm" v-on:click="setActive(user, false)" v-if="user.activated"
                                     :disabled="username === user.login" v-text="$t('userManagement.activated')">Activated</button>
@@ -57,17 +57,17 @@
                         <%_ } _%>
                         <td class="text-right">
                             <div class="btn-group flex-btn-group-container">
-                                <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}" tag="button" class="btn btn-info btn-sm">
+                                <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}" tag="button" class="btn btn-info btn-sm details">
                                     <font-awesome-icon icon="eye"></font-awesome-icon>
                                     <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
                                 </router-link>
-                                <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserEdit', params: {userId: user.login}}"  tag="button" class="btn btn-primary btn-sm">
+                                <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserEdit', params: {userId: user.login}}"  tag="button" class="btn btn-primary btn-sm edit">
                                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                     <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
                                 </router-link>
                                 <b-button v-on:click="prepareRemove(user)"
                                        variant="danger"
-                                       class="btn btn-sm"
+                                       class="btn btn-sm delete"
                                        :disabled="username === user.login"
                                        v-b-modal.removeUser>
                                     <font-awesome-icon icon="times"></font-awesome-icon>

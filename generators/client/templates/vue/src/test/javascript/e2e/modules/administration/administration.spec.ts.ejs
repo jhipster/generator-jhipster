@@ -43,7 +43,7 @@ describe('Administration', () => {
     await navBarPage.clickOnAdminMenuItem('gateway');
     const heading = element(by.id('gateway-page-heading'));
     await waitUntilDisplayed(heading);
-    expect(await heading.getText()).to.eq('Gateway');
+    expect(await heading.getText()).not.to.be.empty;
   });
 <%_ } _%>
 
@@ -51,21 +51,21 @@ describe('Administration', () => {
     await navBarPage.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-metrics');
     const heading = element(by.id('metrics-page-heading'));
     await waitUntilDisplayed(heading);
-    expect(await heading.getText()).to.eq('Application Metrics');
+    expect(await heading.getText()).not.to.be.empty;
   });
 
   it('should load health', async () => {
     await navBarPage.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-health');
     const heading = element(by.id('health-page-heading'));
     await waitUntilDisplayed(heading);
-    expect(await heading.getText()).to.eq('Health Checks');
+    expect(await heading.getText()).not.to.be.empty;
   });
 
   it('should load configuration', async () => {
     await navBarPage.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-configuration');
     const heading = element(by.id('configuration-page-heading'));
     await waitUntilDisplayed(heading);
-    expect(await heading.getText()).to.eq('Configuration');
+    expect(await heading.getText()).not.to.be.empty;
   });
 
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
@@ -73,7 +73,7 @@ describe('Administration', () => {
     await navBarPage.clickOnAdminMenuItem('audits');
     const heading = element(by.id('audits-page-heading'));
     await waitUntilDisplayed(heading);
-    expect(await heading.getText()).to.eq('Audits');
+    expect(await heading.getText()).not.to.be.empty;
   });
 
 <%_ } _%>
@@ -81,7 +81,7 @@ describe('Administration', () => {
     await navBarPage.clickOnAdminMenuItem('logs');
     const heading = element(by.id('logs-page-heading'));
     await waitUntilDisplayed(heading);
-    expect(await heading.getText()).to.eq('Logs');
+    expect(await heading.getText()).not.to.be.empty;
   });
 
   after(async () => {

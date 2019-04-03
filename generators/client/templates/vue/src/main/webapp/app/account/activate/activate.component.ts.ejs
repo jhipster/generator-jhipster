@@ -3,17 +3,7 @@ import { Vue, Inject } from 'vue-property-decorator';
 import LoginService from '@/account/login.service';
 import ActivateService from './activate.service';
 
-const beforeRouteEnter = (to, from, next) => {
-  next(vm => {
-    if (to.query.key) {
-      vm.init(to.query.key);
-    }
-  });
-};
-
-@Component({
-  beforeRouteEnter
-})
+@Component
 export default class Activate extends Vue {
   @Inject('activateService')
   private activateService: () => ActivateService;
@@ -21,6 +11,14 @@ export default class Activate extends Vue {
   private loginService: () => LoginService;
   success = false;
   error = false;
+
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (to.query.key) {
+        vm.init(to.query.key);
+      }
+    });
+  }
 
   public init(key: string): void {
     this.activateService().activateAccount(key)

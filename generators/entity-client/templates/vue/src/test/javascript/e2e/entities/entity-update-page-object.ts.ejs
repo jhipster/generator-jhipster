@@ -110,6 +110,10 @@ export default class <%= entityClass %>UpdatePage {
         return this.<%= fieldName %>Input.getAttribute('value');
     }
 
+    async clear<%= fieldNameCapitalized %>Input() {
+      return this.<%= fieldName %>Input.clear();
+    }
+
     <%_ } _%>
     <%_ }); _%>
     <%_ relationships.forEach((relationship) => {
