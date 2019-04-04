@@ -85,6 +85,7 @@ services:
             <%_ } _%>
             <%_ if (searchEngine === 'elasticsearch') { _%>
             - SPRING_DATA_JEST_URI=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
+            - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
             - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
