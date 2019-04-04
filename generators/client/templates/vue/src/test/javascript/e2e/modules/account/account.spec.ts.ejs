@@ -104,6 +104,7 @@ describe('Account', () => {
 
 <%_ if (authenticationType !== 'oauth2') { _%>
   it('should be able to sign up', async () => {
+    await browser.get('/');
     await waitUntilDisplayed(navBarPage.accountMenu);
 
     registerPage = await navBarPage.getRegisterPage();

@@ -26,20 +26,19 @@
     "languages": [
       "en"
     ],
-    "testFrameworks": [],
+    "testFrameworks": ["protractor"],
     "jhiPrefix": "jhi",
     "clientPackageManager": "npm",
     "nativeLanguage": "en",
     "blueprint": "generator-jhipster-vuejs",
-    "clientFramework": "vue",
-    "useSass": false
+    "clientFramework": "vue"
   },
   "generator-jhipster-vuejs": {
     "applicationType": "monolith",
     "baseName": "jhipster",
     "clientFramework": "vue",
     "clientTheme": "none",
-    "useSass": false,
+    "useSass": true,
     "clientPackageManager": "npm",
     "enableTranslation": true
   }

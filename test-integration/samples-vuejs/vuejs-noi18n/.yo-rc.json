@@ -27,8 +27,7 @@
     "jhiPrefix": "jhi",
     "clientPackageManager": "npm",
     "blueprint": "generator-jhipster-vuejs",
-    "clientFramework": "vue",
-    "useSass": false
+    "clientFramework": "vue"
   },
   "generator-jhipster-vuejs": {
     "applicationType": "monolith",

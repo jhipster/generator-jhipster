@@ -40,7 +40,7 @@
     "baseName": "test2",
     "clientFramework": "vue",
     "clientTheme": "none",
-    "useSass": false,
+    "useSass": true,
     "clientPackageManager": "npm",
     "enableTranslation": true
   }

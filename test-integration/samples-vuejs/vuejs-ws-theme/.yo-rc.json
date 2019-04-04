@@ -31,8 +31,7 @@
       "clientPackageManager": "npm",
       "nativeLanguage": "en",
       "blueprint": "generator-jhipster-vuejs",
-      "clientFramework": "vue",
-      "useSass": false
+      "clientFramework": "vue"
     },
     "generator-jhipster-vuejs": {
       "applicationType": "monolith",
@@ -40,7 +39,7 @@
       "clientFramework": "vue",
       "clientTheme": "lux",
       "clientThemeVariant": "primary",
-      "useSass": false,
+      "useSass": true,
       "clientPackageManager": "npm",
       "enableTranslation": true
     }

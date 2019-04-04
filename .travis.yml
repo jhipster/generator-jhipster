@@ -40,7 +40,7 @@ env:
   global:
     - JHI_PROFILE=dev
     - JHI_RUN_APP=1
-    - JHI_PROTRACTOR=0
+    - JHI_PROTRACTOR=1
     - JHI_ENTITY=sql
     # if JHI_LIB_BRANCH value is release, use the release from Maven
     - JHI_LIB_REPO=https://github.com/jhipster/jhipster.git
@@ -55,13 +55,13 @@ env:
     - JHI_E2E_HEADLESS=true
     - JHI_SCRIPTS=$HOME/generator-jhipster/test-integration/scripts
   matrix:
-    - JHI_APP=vuejs-default JHI_PROTRACTOR=1
-    - JHI_APP=vuejs-noi18n-sass JHI_PROTRACTOR=1
-    - JHI_APP=vuejs-fulli18n-es
+    - JHI_APP=vuejs-default JHI_PROFILE=prod
+    - JHI_APP=vuejs-noi18n JHI_PROFILE=prod
+    - JHI_APP=vuejs-fulli18n-es JHI_PROFILE=prod
     - JHI_APP=vuejs-gateway
     - JHI_APP=vuejs-gradle-session
-    - JHI_APP=vuejs-ws-theme JHI_PROTRACTOR=1
-    - JHI_APP=vuejs-oauth2 JHI_PROTRACTOR=1
+    - JHI_APP=vuejs-ws-theme
+    - JHI_APP=vuejs-oauth2
 
 #----------------------------------------------------------------------
 # Install all tools and check configuration
