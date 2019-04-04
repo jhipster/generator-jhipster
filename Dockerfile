@@ -1,4 +1,4 @@
-FROM ubuntu:cosmic
+FROM ubuntu:bionic
 
 RUN \
   # configure the "jhipster" user
@@ -6,11 +6,7 @@ RUN \
   useradd jhipster -s /bin/bash -m -g jhipster -G sudo && \
   echo 'jhipster:jhipster' |chpasswd && \
   mkdir /home/jhipster/app && \
-  # install open-jdk 8 using SDKMAN
-  curl -s get.sdkman.io | bash && \
-  echo sdkman_auto_answer=true > ~/.sdkman/etc/config && \
-  source "$HOME/.sdkman/bin/sdkman-init.sh" && \
-  sdk install java 11.0.2-open && \
+  apt-get update && \
   # install utilities
   apt-get install -y \
     wget \
@@ -23,7 +19,8 @@ RUN \
     python \
     g++ \
     libpng-dev \
-    build-essential && \
+    build-essential \
+    sudo && \
   # install node.js
   wget https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
@@ -65,6 +62,12 @@ RUN \
 
 # expose the working directory, the Tomcat port, the BrowserSync ports
 USER jhipster
+
+# install open-jdk 11 using SDKMAN
+RUN curl -s get.sdkman.io | bash && \
+    echo sdkman_auto_answer=true > /home/jhipster/.sdkman/etc/config && \
+    /bin/bash -c "source /home/jhipster/.sdkman/bin/sdkman-init.sh ; sdk install java 11.0.2-open"
+
 ENV PATH $PATH:/usr/bin:/home/jhipster/.yarn-global/bin:/home/jhipster/.yarn/bin:/home/jhipster/.config/yarn/global/node_modules/.bin
 WORKDIR "/home/jhipster/app"
 VOLUME ["/home/jhipster/app"]
