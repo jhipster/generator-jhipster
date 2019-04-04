@@ -28,6 +28,7 @@ describe('Service Tests', () => {
     describe('Audits Service', () => {
         let service: AuditsService;
         let httpMock;
+        let expectedResult;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -36,6 +37,7 @@ describe('Service Tests', () => {
                 ]
             });
 
+            expectedResult = {};
             service = TestBed.get(AuditsService);
             httpMock = TestBed.get(HttpTestingController);
         });
@@ -58,23 +60,25 @@ describe('Service Tests', () => {
                 const audit = new Audit({ remoteAddress: '127.0.0.1', sessionId: '123' }, 'user', '20140101', 'AUTHENTICATION_SUCCESS');
 
                 service.query({}).subscribe((received) => {
-                    expect(received.body[0]).toEqual(audit);
+                    expectedResult = received;
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
                 req.flush([audit]);
+                expect(expectedResult.body[0]).toEqual(audit);
             });
 
             it('should propagate not found response', () => {
 
                 service.query({}).subscribe(null, (_error: any) => {
-                    expect(_error.status).toEqual(404);
+                    expectedResult = _error.status;
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
                 req.flush('Invalid request parameters', {
                     status: 404, statusText: 'Bad Request'
                 });
+                expect(expectedResult).toEqual(404);
             });
         });
     });
