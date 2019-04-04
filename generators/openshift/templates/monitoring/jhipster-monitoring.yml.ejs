@@ -23,7 +23,7 @@
 # namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
 # displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: jhipster-monitoring-template
@@ -90,7 +90,7 @@ parameters:
 objects:
 <%_ if (storageType === 'persistent') { _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
     metadata:
       name: ${ES_APP_NAME}
@@ -101,7 +101,7 @@ objects:
         requests:
           storage: "${VOLUME_CAPACITY}"
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
     metadata:
       name: ${LS_APP_NAME}
@@ -113,7 +113,7 @@ objects:
           storage: "${VOLUME_CAPACITY}"
 <%_ } _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${ES_APP_NAME}
@@ -170,7 +170,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${ES_APP_NAME}
@@ -191,7 +191,7 @@ objects:
       selector:
         app: ${ES_APP_NAME}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${LS_APP_NAME}
@@ -248,7 +248,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${LS_APP_NAME}
@@ -267,7 +267,7 @@ objects:
       selector:
         app: ${LS_APP_NAME}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${KB_APP_NAME}
@@ -309,7 +309,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${KB_APP_NAME}
@@ -330,7 +330,7 @@ objects:
       selector:
         app: ${KB_APP_NAME}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>1
     kind: Route
     metadata:
       name: ${KB_APP_NAME}
@@ -343,7 +343,7 @@ objects:
         targetPort: "http"
       wildcardPolicy: None
   -
-    apiVersion: batch/v1
+    apiVersion: <%= KUBERNETES_BATCH_API_VERSION %>
     kind: Job
     metadata:
       name: ${KB_DASHBOARD_APP_NAME}
@@ -362,7 +362,7 @@ objects:
           restartPolicy: OnFailure
 <%_ if (deploymentApplicationType === 'microservice') { _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${ZK_APP_NAME}
@@ -409,7 +409,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${ZK_APP_NAME}
@@ -430,7 +430,7 @@ objects:
       selector:
         app: ${ZK_APP_NAME}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
     metadata:
       name: ${ZK_APP_NAME}

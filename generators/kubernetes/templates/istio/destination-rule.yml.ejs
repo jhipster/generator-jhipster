@@ -1,4 +1,4 @@
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: DestinationRule
 metadata:
   name: <%= app.baseName.toLowerCase() %>-destinationrule

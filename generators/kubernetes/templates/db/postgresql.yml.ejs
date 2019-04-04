@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: <%= app.baseName.toLowerCase() %>-postgresql
@@ -27,13 +27,16 @@ type: Opaque
 data:
   postgresql-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
 ---
-apiVersion: extensions/v1beta1
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>-postgresql
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-postgresql
   template:
     metadata:
       labels:
@@ -63,7 +66,7 @@ spec:
         - name: data
           mountPath: /var/lib/postgresql/
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-postgresql

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: jhipster-grafana-credentials
@@ -25,13 +25,16 @@ data:
   username: amhpcHN0ZXI=
   password: amhpcHN0ZXI=
 ---
-apiVersion: extensions/v1beta1
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: jhipster-grafana
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: jhipster-grafana
   template:
     metadata:
       labels:
@@ -76,7 +79,7 @@ spec:
         emptyDir: {}
       restartPolicy: Always
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-grafana
@@ -97,7 +100,7 @@ spec:
     app: jhipster-grafana
 ---
 <%_ if (kubernetesServiceType === 'Ingress' && !istio ) { _%>
-apiVersion: extensions/v1beta1
+apiVersion: <%= KUBERNETES_INGRESS_API_VERSION %>
 kind: Ingress
 metadata:
   name: jhipster-grafana

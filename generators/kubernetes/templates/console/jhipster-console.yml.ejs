@@ -16,13 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: extensions/v1beta1
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: jhipster-console
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: jhipster-console
   template:
     metadata:
       labels:
@@ -39,7 +42,7 @@ spec:
         - containerPort: 5601
       restartPolicy: Always
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-console
@@ -60,7 +63,7 @@ spec:
     app: jhipster-console
 ---
 <%_ if (kubernetesServiceType === 'Ingress' && !istio) { _%>
-apiVersion: extensions/v1beta1
+apiVersion: <%= KUBERNETES_INGRESS_API_VERSION %>
 kind: Ingress
 metadata:
   name: jhipster-console
