@@ -117,6 +117,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 this.applicationType = configuration.get('applicationType');
                 this.baseName = configuration.get('baseName');
+                this.packageFolder = configuration.get('packageFolder');
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
                 this.databaseType = configuration.get('databaseType');
@@ -227,6 +228,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                     if (!this.skipServer) {
                         this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language);
+                        this.updateLanguagesInLanguageMailServiceIT(`${constants.SERVER_TEST_SRC_DIR}${this.packageFolder}`, this.languages);
                     }
                     statistics.sendSubGenEvent('languages/language', language);
                 });
@@ -243,6 +245,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
                     }
                 }
+
             }
         };
     }

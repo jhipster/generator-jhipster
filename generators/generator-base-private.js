@@ -236,6 +236,41 @@ module.exports = class extends Generator {
         }
     }
 
+
+    /**
+     * Update Languages In MailServiceIT
+     *
+     * @param languages
+     */
+    updateLanguagesInLanguageMailServiceIT(testDir, languages) {
+        const fullPath = `${testDir}/service/MailServiceIT.java`;
+        try {
+            let content = 'String[] languages = {\n';
+            languages.forEach((language, i) => {
+                content += `    "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
+            });
+            content += '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n};';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /String.*languages.*\{([^\}]*jhipster-needle-i18n-language-constant[^\}]*)\};/g,
+                    content
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
     /**
      * Update Languages In Language Pipe
      *

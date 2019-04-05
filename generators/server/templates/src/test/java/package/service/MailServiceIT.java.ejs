@@ -42,6 +42,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.ByteArrayOutputStream;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -206,4 +207,15 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
     }
 
+    @Test
+    public void testGetLocalizedActivationTitle() throws Exception {
+        String[] languages = {
+            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array
+        };
+        for (String language : languages) {
+            String subject = messageSource.getMessage("email.activation.title", null, Locale.forLanguageTag(language));
+            // Test fails if message translation equals the messages.properties value
+            assertThat(subject).isNotEqualTo("<%= baseName %> account activation is requested");
+        }
+    }
 }
