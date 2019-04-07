@@ -8,7 +8,7 @@
             </div>
             <div class="col-md-8">
                 <b-form role="form" v-on:submit.prevent="doLogin()">
-                    <b-form-group <% if (!enableTranslation) { %>label="Username" <% } %>v-bind:label="$t('global.form.username')" label-for="username">
+                    <b-form-group <% if (!enableTranslation) { %>label="Username" <% } %>v-bind:label="$t('global.form[\'username.label\']')" label-for="username">
                         <b-form-input id="username" type="text" name="username" autofocus v-bind:placeholder="$t('global.form[\'username.placeholder\']')" <% if (!enableTranslation) { %>placeholder="Your username" <% } %>v-model="login">
                         </b-form-input>
                     </b-form-group>
