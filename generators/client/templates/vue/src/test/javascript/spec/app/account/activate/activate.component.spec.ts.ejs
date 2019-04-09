@@ -47,6 +47,15 @@ describe('Activate Component', () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
   });
 
+  it('should display error when activation fails using route', async () => {
+    mockedAxios.get.mockReturnValue(Promise.reject({}));
+    activate.beforeRouteEnter({query: {key: 'invalid-key'}}, null, cb => cb(activate));
+    await activate.$nextTick();
+
+    expect(activate.error).toBeTruthy();
+    expect(activate.success).toBeFalsy();
+  });
+
   it('should display error when activation fails', async () => {
 
     mockedAxios.get.mockReturnValue(Promise.reject({}));

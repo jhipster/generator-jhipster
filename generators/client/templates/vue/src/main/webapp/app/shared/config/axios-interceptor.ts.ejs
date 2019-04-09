@@ -20,20 +20,22 @@ import axios from 'axios';
 
 import {SERVER_API_URL} from "@/constants";
 
-const TIMEOUT = 1000000; // 10000
-const setupAxiosInterceptors = onUnauthenticated => {
-  const onRequestSuccess = config => {
-    <%_ if (authenticationType === 'jwt') { _%>
-    const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+const TIMEOUT = 1000000;
+const onRequestSuccess = config => {
+  <%_ if (authenticationType === 'jwt') { _%>
+  const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+  if (token) {
+    if (!config.headers) {
+      config.headers = {};
     }
-    <%_ } _%>
-    config.timeout = TIMEOUT;
-    config.url = `${SERVER_API_URL}${config.url}`;
-    return config;
-  };
-  const onResponseSuccess = response => response;
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  <%_ } _%>
+  config.timeout = TIMEOUT;
+  config.url = `${SERVER_API_URL}${config.url}`;
+  return config;
+};
+const setupAxiosInterceptors = onUnauthenticated => {
   const onResponseError = err => {
     const status = err.status || err.response.status;
     if (status === 403 || status === 401) {
@@ -43,8 +45,8 @@ const setupAxiosInterceptors = onUnauthenticated => {
   };
   if (axios.interceptors) {
     axios.interceptors.request.use(onRequestSuccess);
-    axios.interceptors.response.use(onResponseSuccess, onResponseError);
+    axios.interceptors.response.use(res => res, onResponseError);
   }
 };
 
-export default setupAxiosInterceptors;
+export { onRequestSuccess, setupAxiosInterceptors };

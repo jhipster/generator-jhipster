@@ -308,6 +308,7 @@ const vueFiles = {
                 'spec/app/core/jhi-navbar/jhi-navbar.component.spec.ts',
                 'spec/app/core/ribbon/ribbon.component.spec.ts',
                 'spec/app/shared/alert/alert.service.spec.ts',
+                'spec/app/shared/config/axios-interceptor.spec.ts',
                 'spec/app/admin/configuration/configuration.component.spec.ts',
                 'spec/app/admin/docs/docs.component.spec.ts',
                 'spec/app/admin/health/health.component.spec.ts',
@@ -317,6 +318,13 @@ const vueFiles = {
                 'spec/app/admin/audits/audits.component.spec.ts',
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics-modal.component.spec.ts'
+            ]
+        },
+        {
+            condition: generator => generator.enableTranslation,
+            path: TEST_SRC_DIR,
+            templates: [
+                'spec/app/shared/config/formatter.spec.ts',
             ]
         },
         {
