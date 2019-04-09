@@ -129,7 +129,6 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/configuration/configuration.component.spec.ts`,
-        // `${CLIENT_SPEC_SRC_DIR}app/admin/configuration/configuration.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/docs/docs.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/health/health.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/health/health-modal.component.spec.ts`,
@@ -157,6 +156,8 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/core/jhi-navbar/jhi-navbar.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/core/ribbon/ribbon.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/shared/alert/alert.service.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/shared/config/axios-interceptor.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/shared/data/data-utils.service.spec.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/axios-interceptor.ts`,
 
