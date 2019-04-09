@@ -309,6 +309,7 @@ const vueFiles = {
                 'spec/app/core/ribbon/ribbon.component.spec.ts',
                 'spec/app/shared/alert/alert.service.spec.ts',
                 'spec/app/shared/config/axios-interceptor.spec.ts',
+                'spec/app/shared/data/data-utils.service.spec.ts',
                 'spec/app/admin/configuration/configuration.component.spec.ts',
                 'spec/app/admin/docs/docs.component.spec.ts',
                 'spec/app/admin/health/health.component.spec.ts',

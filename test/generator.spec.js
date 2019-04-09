@@ -157,6 +157,7 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/core/ribbon/ribbon.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/shared/alert/alert.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/shared/config/axios-interceptor.spec.ts`,
+        `${CLIENT_SPEC_SRC_DIR}app/shared/data/data-utils.service.spec.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/axios-interceptor.ts`,
 
