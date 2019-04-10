@@ -1,11 +1,6 @@
 FROM ubuntu:bionic
 
 RUN \
-  # configure the "jhipster" user
-  groupadd jhipster && \
-  useradd jhipster -s /bin/bash -m -g jhipster -G sudo && \
-  echo 'jhipster:jhipster' |chpasswd && \
-  mkdir /home/jhipster/app && \
   apt-get update && \
   # install utilities
   apt-get install -y \
@@ -28,48 +23,37 @@ RUN \
   npm install -g npm && \
   # install yarn
   npm install -g yarn && \
-  su -c "yarn config set prefix /home/jhipster/.yarn-global" jhipster && \
   # install yeoman
   npm install -g yo && \
   # cleanup
   apt-get clean && \
   rm -rf \
-    /home/jhipster/.cache/ \
     /var/lib/apt/lists/* \
     /tmp/* \
     /var/tmp/*
 
+# install open-jdk 11 using SDKMAN
+RUN export SDKMAN_DIR="/usr/local/sdkman" && curl -s get.sdkman.io | bash && \
+    echo sdkman_auto_answer=true > $SDKMAN_DIR/etc/config && \
+    /bin/bash -c "source $SDKMAN_DIR/bin/sdkman-init.sh ; sdk install java 11.0.2-open"
+
 # copy sources
-COPY . /home/jhipster/generator-jhipster
+COPY . /usr/local/generator-jhipster
 
 RUN \
   # clean jhipster folder
-  rm -Rf /home/jhipster/generator-jhipster/node_modules \
-    /home/jhipster/generator-jhipster/yarn.lock \
-    /home/jhipster/generator-jhipster/yarn-error.log && \
+  rm -Rf /usr/local/generator-jhipster/node_modules \
+    /usr/local/generator-jhipster/yarn.lock \
+    /usr/local/generator-jhipster/yarn-error.log && \
   # install jhipster
-  npm install -g /home/jhipster/generator-jhipster && \
-  # fix jhipster user permissions
-  chown -R jhipster:jhipster \
-    /home/jhipster \
-    /usr/local/lib/node_modules && \
+  npm install -g /usr/local/generator-jhipster && \
   # cleanup
   rm -rf \
-    /home/jhipster/.cache/ \
     /var/lib/apt/lists/* \
     /tmp/* \
     /var/tmp/*
 
-# expose the working directory, the Tomcat port, the BrowserSync ports
-USER jhipster
+ENTRYPOINT ["/usr/local/generator-jhipster/docker-entrypoint.sh"]
 
-# install open-jdk 11 using SDKMAN
-RUN curl -s get.sdkman.io | bash && \
-    echo sdkman_auto_answer=true > /home/jhipster/.sdkman/etc/config && \
-    /bin/bash -c "source /home/jhipster/.sdkman/bin/sdkman-init.sh ; sdk install java 11.0.2-open"
-
-ENV PATH $PATH:/usr/bin:/home/jhipster/.yarn-global/bin:/home/jhipster/.yarn/bin:/home/jhipster/.config/yarn/global/node_modules/.bin
-WORKDIR "/home/jhipster/app"
-VOLUME ["/home/jhipster/app"]
 EXPOSE 8080 9000 3001
-CMD ["tail", "-f", "/home/jhipster/generator-jhipster/generators/server/templates/src/main/resources/banner-no-color.txt"]
+CMD ["tail", "-f", "/usr/local/generator-jhipster/generators/server/templates/src/main/resources/banner-no-color.txt"]
