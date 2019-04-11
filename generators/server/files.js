@@ -1049,14 +1049,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/rest/errors/CustomParameterizedException.java`
                 },
                 {
-                    file: 'package/web/rest/errors/EmailAlreadyUsedException.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/errors/EmailAlreadyUsedException.java`
-                },
-                {
-                    file: 'package/web/rest/errors/EmailNotFoundException.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/errors/EmailNotFoundException.java`
-                },
-                {
                     file: 'package/web/rest/errors/ErrorConstants.java',
                     renameTo: generator => `${generator.javaDir}web/rest/errors/ErrorConstants.java`
                 },
@@ -1067,6 +1059,20 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/errors/FieldErrorVM.java',
                     renameTo: generator => `${generator.javaDir}web/rest/errors/FieldErrorVM.java`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/errors/EmailAlreadyUsedException.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/errors/EmailAlreadyUsedException.java`
+                },
+                {
+                    file: 'package/web/rest/errors/EmailNotFoundException.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/errors/EmailNotFoundException.java`
                 },
                 {
                     file: 'package/web/rest/errors/InvalidPasswordException.java',
