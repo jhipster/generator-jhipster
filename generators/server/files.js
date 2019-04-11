@@ -1066,10 +1066,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/rest/errors/package-info.java`
                 },
                 {
-                    file: 'package/web/rest/errors/InternalServerErrorException.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/errors/InternalServerErrorException.java`
-                },
-                {
                     file: 'package/web/rest/errors/BadRequestAlertException.java',
                     renameTo: generator => `${generator.javaDir}web/rest/errors/BadRequestAlertException.java`
                 },
