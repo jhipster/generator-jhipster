@@ -60,7 +60,7 @@ describe('Account Service test suite', () => {
     expect(mockedAxios.get).toHaveBeenCalledWith('api/account');
     expect(mockedAxios.get).toHaveBeenCalledWith('management/info');
     <%_ if (enableTranslation) { _%>
-    expect(mockedAxios.get).toHaveBeenCalledWith('i18n/en.json');
+    expect(mockedAxios.get).toHaveBeenCalledWith('i18n/<%= nativeLanguage %>.json');
     <%_ } %>
   });
 
