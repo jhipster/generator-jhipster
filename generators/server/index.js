@@ -198,7 +198,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
 
                 // Hazelcast is mandatory for Gateways, as it is used for rate limiting
-                if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
+                if (this.cacheProvider !== 'memcached' && this.applicationType === 'gateway' && this.serviceDiscoveryType) {
                     this.cacheProvider = 'hazelcast';
                 }
 
