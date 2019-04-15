@@ -341,10 +341,6 @@ function askForServerSideOpts(meta) {
             this.prodDatabaseType = 'cassandra';
             this.enableHibernateCache = false;
         }
-        // Hazelcast is mandatory for Gateways, as it is used for rate limiting
-        if (this.cacheProvider !== 'memcached' && this.applicationType === 'gateway' && this.serviceDiscoveryType) {
-            this.cacheProvider = 'hazelcast';
-        }
         done();
     });
 }
