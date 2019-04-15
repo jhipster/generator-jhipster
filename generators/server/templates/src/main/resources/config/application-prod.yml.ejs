@@ -247,7 +247,7 @@ server:
 # ===================================================================
 
 jhipster:
-    <%_ if (applicationType === 'gateway') { _%>
+    <%_ if (applicationType === 'gateway' && cacheProvider === 'hazelcast' && serviceDiscoveryType) { _%>
     gateway:
         rate-limiting:
             enabled: false
