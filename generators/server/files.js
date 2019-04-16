@@ -965,10 +965,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/MessagingConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/MessagingConfiguration.java`
-                },
-                {
                     file: 'package/web/rest/KafkaResource.java',
                     renameTo: generator => `${generator.javaDir}web/rest/KafkaResource.java`
                 },

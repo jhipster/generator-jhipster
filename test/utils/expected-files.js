@@ -575,7 +575,6 @@ const expectedFiles = {
     ],
 
     messageBroker: [
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MessagingConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/KafkaResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/SampleKafkaConsumer.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/SampleKafkaProducer.java`,
