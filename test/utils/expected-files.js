@@ -574,7 +574,13 @@ const expectedFiles = {
         `${DOCKER_DIR}keycloak.yml`
     ],
 
-    messageBroker: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MessagingConfiguration.java`, `${DOCKER_DIR}kafka.yml`],
+    messageBroker: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MessagingConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/KafkaResource.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/SampleKafkaConsumer.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/SampleKafkaProducer.java`,
+        `${DOCKER_DIR}kafka.yml`
+    ],
 
     swaggerCodegen: [`${SERVER_MAIN_RES_DIR}swagger/api.yml`],
 

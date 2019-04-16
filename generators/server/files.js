@@ -967,6 +967,18 @@ const serverFiles = {
                 {
                     file: 'package/config/MessagingConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/MessagingConfiguration.java`
+                },
+                {
+                    file: 'package/web/rest/KafkaResource.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/KafkaResource.java`
+                },
+                {
+                    file: 'package/service/SampleKafkaConsumer.java',
+                    renameTo: generator => `${generator.javaDir}service/SampleKafkaConsumer.java`
+                },
+                {
+                    file: 'package/service/SampleKafkaProducer.java',
+                    renameTo: generator => `${generator.javaDir}service/SampleKafkaProducer.java`
                 }
             ]
         }
