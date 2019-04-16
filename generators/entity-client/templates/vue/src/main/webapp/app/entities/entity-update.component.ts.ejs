@@ -64,6 +64,14 @@ const validations: any = {
     <%_ } _%>
     },
     <%_ } _%>
+    <%_
+    for (idx in relationships) {
+      if (relationships[idx].relationshipValidate === true) { _%>
+    <%= relationships[idx].relationshipFieldName %>Id: {
+      required
+    },
+    <%_ } _%>
+  <%_ } _%>
   }
 };
 
