@@ -19,7 +19,7 @@
                         let fieldInputClass = 'form-control';
                         let ngModelOption = '';
                         const translationKey = `${i18nKeyPrefix}.${fieldName}`;
-                        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
+                        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
                             fieldInputType = 'number';
                         } else if (fieldType === 'LocalDate') {
                             fieldInputType = 'date';
@@ -92,7 +92,7 @@
                             :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>></textarea>
                         <%_ } else { _%>
                         <input type="<%= fieldInputType %>" class="<%= fieldInputClass %>" name="<%= fieldName %>" id="<%= entityFileName %>-<%= fieldName %>"
-                            :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>/>
+                            :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }" v-model<% if (fieldInputType === 'number') { %>.number<% } %>="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %>/>
                             <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
                         <input type="hidden" class="<%= fieldInputClass %>" name="<%= fieldName %>ContentType" id="<%= entityFileName %>-<%= fieldName %>ContentType"
                             v-model="<%= entityInstance %>.<%= fieldName %>ContentType" />
@@ -126,7 +126,7 @@
                                 This field cannot be longer than <%= fields[idx].fieldValidateRulesMax %> characters.
                             </small>
                             <%_ } _%>
-                            <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+                            <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
                             <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.number" v-text="$t('entity.validation.number')">
                                 This field should be a number.
                             </small>

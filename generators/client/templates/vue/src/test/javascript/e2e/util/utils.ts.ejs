@@ -1,4 +1,4 @@
-import { ExpectedConditions, ElementArrayFinder, ElementFinder, browser, by, element } from 'protractor';
+import { ExpectedConditions, ElementArrayFinder, ElementFinder, browser, by, element, protractor } from 'protractor';
 
 const waitUntilDisplayedTimeout = 30000;
 
@@ -40,7 +40,7 @@ export const waitUntilHidden = async (selector: ElementFinder, classname = '', t
   );
 };
 
-export const waitForCount = (elementArrayFinder: ElementArrayFinder, expectedCount: number) => () => {
+export const waitForCount = async (elementArrayFinder: ElementArrayFinder, expectedCount: number) => () => {
   return elementArrayFinder.count().then(actualCount => expectedCount === actualCount);
 };
 
@@ -50,7 +50,7 @@ export const waitUntilCount = async (
   timeout = waitUntilDisplayedTimeout
 ) => {
   await browser.wait(
-    waitForCount(elementArrayFinder, expectedCount),
+    await waitForCount(elementArrayFinder, expectedCount),
     timeout,
     `Failed while waiting for "${elementArrayFinder.locator()}" to have ${expectedCount} elements.`
   );
@@ -95,3 +95,12 @@ export const getInfoToast = (): ElementFinder =>
 
 export const getDangerToast = (): ElementFinder =>
   element(by.css('div[role=alert].alert.alert-danger'));
+
+export const clearElement = (elem, length) => {
+  length = length || 100;
+  var backspaceSeries = '';
+  for (var i = 0; i < length; i++) {
+    backspaceSeries += protractor.Key.BACK_SPACE;
+  }
+  elem.sendKeys(backspaceSeries);
+}

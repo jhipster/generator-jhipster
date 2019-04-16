@@ -19,11 +19,7 @@ import UserManagementService from '@/admin/user-management/user-management.servi
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
 
-<%_ if (useSass) { _%>
 import '../content/scss/vendor.scss';
-<%_} else { _%>
-import '../content/css/vendor.css';
-<%_ } _%>
 import AlertService from '@/shared/alert/alert.service';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';

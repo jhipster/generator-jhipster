@@ -12,7 +12,7 @@ export default class LoginService {
   <%_ } else { _%>
   public login(loc = window.location) {
     const port = (loc.port ? ':' + loc.port : '');
-    loc.href = '//' + loc.hostname + port + loc.pathname + 'login';
+    loc.href = '//' + loc.hostname + port + loc.pathname + 'authorize';
   }
   <%_ } _%>
 

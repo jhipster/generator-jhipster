@@ -79,17 +79,34 @@ describe('<%= entityClass %> e2e test', () => {
   it('should load <%= entityClassPlural %>', async () => {
     await navBarPage.getEntityPage('<%= entityStateName %>');
     <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
-    const heading = <%= entityInstance %>ComponentsPage.getTitle();
+    const heading = await <%= entityInstance %>ComponentsPage.getTitle();
     await waitUntilDisplayed(heading);
+
+    const footer = await <%= entityInstance %>ComponentsPage.getFooter();
+    await waitUntilDisplayed(footer);
+    
     expect(await heading.getText()).not.to.be.empty;
     nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
+    
+    // Bug-fix with Protractor.
+    // force to recalculate in case of value is still 0
+    if (nbButtonsBeforeCreate === 0) {
+      nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
+    }
   });
 
   it('should load create <%= entityClass %> page', async () => {
     await <%= entityInstance %>ComponentsPage.clickOnCreateButton();
     <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
-    const heading = <%= entityInstance %>UpdatePage.getPageTitle();
+
+    const heading = await <%= entityInstance %>UpdatePage.getPageTitle();
     await waitUntilDisplayed(heading);
+
+    const footer = await <%= entityInstance %>UpdatePage.getFooter();
+    await waitUntilDisplayed(footer);
+
+    await waitUntilDisplayed(await <%= entityInstance %>UpdatePage.getSaveButton());
+
     <%_ if (enableTranslation) { _%>
     expect(await heading.getAttribute('id'))
       .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
@@ -107,37 +124,51 @@ describe('<%= entityClass %> e2e test', () => {
       const fieldTypeBlobContent = field.fieldTypeBlobContent;
       const fieldIsEnum = field.fieldIsEnum;
     _%>
+
     <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
     await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5');
     expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5');
+
     <%_ } else if (fieldType === 'LocalDate') { _%>
     await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01-01-2001');
     expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('2001-01-01');
+
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
     await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM');
     expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30');
+
+    <%_ } else if (fieldType === 'Duration') { _%>
+    await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('PT12S');
+    expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('12');
+
     <%_ } else if (fieldType === 'Boolean') { _%>
-    const selected<%= fieldNameCapitalized %> = await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected();
+    const selected<%= fieldNameCapitalized %> = await <%= entityInstance %>UpdatePage.isSelected<%= fieldNameCapitalized %>Input();
     if (selected<%= fieldNameCapitalized %>) {
-      await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.false;
+      await <%= entityInstance %>UpdatePage.click<%= fieldNameCapitalized %>Input();
+      expect(await <%= entityInstance %>UpdatePage.isSelected<%= fieldNameCapitalized %>Input()).to.be.false;
     } else {
-      await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.true;
+      await <%= entityInstance %>UpdatePage.click<%= fieldNameCapitalized %>Input();
+      expect(await <%= entityInstance %>UpdatePage.isSelected<%= fieldNameCapitalized %>Input()).to.be.true;
     }
+
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
     await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
     expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);
+
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
     await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input(absolutePath);
+
     <%_ } else if (fieldIsEnum) { _%>
     await <%= entityInstance %>UpdatePage.<%=fieldName %>SelectLastOption();
+
     <%_ } else if (fieldType === 'UUID'){ _%>
     await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
     expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
+
     <%_ } else { _%>
     await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
     expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);
+
     <%_ } _%>
     <%_ }); _%>
     <%_ relationships.forEach((relationship) => {
@@ -150,36 +181,50 @@ describe('<%= entityClass %> e2e test', () => {
     // <%= entityInstance %>UpdatePage.<%=relationshipName %>SelectLastOption();
     <%_ } _%>
     <%_ }); _%>
-    await waitUntilDisplayed(<%= entityInstance %>UpdatePage.getSaveButton());
+
     await <%= entityInstance %>UpdatePage.save();
-    await waitUntilHidden(<%= entityInstance %>UpdatePage.getSaveButton());
-    expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).to.be.false;
+    await waitUntilHidden(await <%= entityInstance %>UpdatePage.getSaveButton());
+    expect(await <%= entityInstance %>UpdatePage.isSaveButtonPresent()).to.be.false;
 
     const toast = getSuccessToast();
     await waitUntilDisplayed(toast);
     // Success toast should appear
     expect(await toast.isPresent()).to.be.true;
-
+    
     await <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeCreate + 1);
     expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
   });<%= closeBlockComment %>
 
   it('should load details <%= entityClass %> page and fetch data', async () => {
-    await <%= entityInstance %>ComponentsPage.clickOnFirstDetailsButton();
+    await <%= entityInstance %>ComponentsPage.clickOnLastDetailsButton();
     <%= entityInstance %>DetailsPage = new <%= entityClass %>DetailsPage();
-    const heading = <%= entityInstance %>DetailsPage.getPageTitle();
+
+    const heading = await <%= entityInstance %>DetailsPage.getPageTitle();
     await waitUntilDisplayed(heading);
+
+    const footer = await <%= entityInstance %>UpdatePage.getFooter();
+    await waitUntilDisplayed(footer);
+    
+    await waitUntilDisplayed(await <%= entityInstance %>DetailsPage.getBackButton());
     expect(await heading.getText()).not.to.be.empty;
+
     const firstDetail = <%= entityInstance %>DetailsPage.getFirstDetail();
     expect(await firstDetail.getText()).not.to.be.empty;
+
     await <%= entityInstance %>DetailsPage.getBackButton().click();
     await <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeCreate + 1);
   });
 
   it('should load edit <%= entityClass %> page and fetch data', async () => {
-    await <%= entityInstance %>ComponentsPage.clickOnFirstEditButton();
-    const heading = <%= entityInstance %>UpdatePage.getPageTitle();
+    await <%= entityInstance %>ComponentsPage.clickOnLastEditButton();
+    const heading = await <%= entityInstance %>UpdatePage.getPageTitle();
     await waitUntilDisplayed(heading);
+
+    const footer = await <%= entityInstance %>UpdatePage.getFooter();
+    await waitUntilDisplayed(footer);
+
+    await waitUntilDisplayed(await <%= entityInstance %>UpdatePage.getSaveButton());
+
     expect(await heading.getText()).not.to.be.empty;
 
     <%_ fields.forEach((field) => {
@@ -193,40 +238,56 @@ describe('<%= entityClass %> e2e test', () => {
       await <%= entityInstance %>UpdatePage.clear<%= fieldNameCapitalized %>Input();
       await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('6');
       expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('6');
+
     <%_ } else if (fieldType === 'LocalDate') { _%>
       await <%= entityInstance %>UpdatePage.clear<%= fieldNameCapitalized %>Input();
       await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01-01-2019');
       expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('2019-01-01');
+
     <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
       await <%= entityInstance %>UpdatePage.clear<%= fieldNameCapitalized %>Input();
       await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2019' + protractor.Key.TAB + '02:30AM');
       expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2019-01-01T02:30');
+
+    <%_ } else if (fieldType === 'Duration') { _%>
+      await <%= entityInstance %>UpdatePage.clear<%= fieldNameCapitalized %>Input();
+      await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('PT14S');
+      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('14');
+
     <%_ } else if (fieldType === 'Boolean') { _%>
-      const selected<%= fieldNameCapitalized %> = await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected();
+      const selected<%= fieldNameCapitalized %> = await <%= entityInstance %>UpdatePage.isSelected<%= fieldNameCapitalized %>Input();
       if (selected<%= fieldNameCapitalized %>) {
-      await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.false;
+      await <%= entityInstance %>UpdatePage.click<%= fieldNameCapitalized %>Input();
+      expect(await <%= entityInstance %>UpdatePage.isSelected<%= fieldNameCapitalized %>Input()).to.be.false;
       } else {
-      await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
-      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.true;
+      await <%= entityInstance %>UpdatePage.click<%= fieldNameCapitalized %>Input();
+      expect(await <%= entityInstance %>UpdatePage.isSelected<%= fieldNameCapitalized %>Input()).to.be.true;
       }
+
     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-      await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('1');
-      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>1/);
+      await <%= entityInstance %>UpdatePage.clear<%= fieldNameCapitalized %>Input();
+      await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('updated<%= fieldName %>');
+      expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/updated<%= fieldName %>/);
+
     <%_ } else if (fieldType === 'UUID'){ _%>
       await <%= entityInstance %>UpdatePage.clear<%= fieldNameCapitalized %>Input();
       await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade978');
       expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade978/);
+
     <%_ } else if (!fieldIsEnum && !['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
       await <%= entityInstance %>UpdatePage.clear<%= fieldNameCapitalized %>Input();
       await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('modified');
       expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/modified/);
+
     <%_ } _%>
     <%_ }); _%>
-    await waitUntilDisplayed(<%= entityInstance %>UpdatePage.getSaveButton());
+
     await <%= entityInstance %>UpdatePage.save();
-    await waitUntilHidden(<%= entityInstance %>UpdatePage.getSaveButton());
-    expect(await <%= entityInstance %>UpdatePage.getSaveButton().isPresent()).to.be.false;
+
+    await waitUntilHidden(await <%= entityInstance %>UpdatePage.getSaveButton());
+
+    expect(await <%= entityInstance %>UpdatePage.isSaveButtonPresent()).to.be.false;
+
     const toast = getInfoToast();
     await waitUntilDisplayed(toast);
     // Info toast should appear

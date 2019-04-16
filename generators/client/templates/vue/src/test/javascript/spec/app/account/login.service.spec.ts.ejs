@@ -21,7 +21,7 @@ describe('Login Service test suite', () => {
 
     loginService.login(loc);
 
-    expect(loc.href).toBe('//localhost/login');
+    expect(loc.href).toBe('//localhost/authorize');
   });
 
   it('should build url for login behind client proxy', () => {
@@ -29,7 +29,7 @@ describe('Login Service test suite', () => {
 
     loginService.login(loc);
 
-    expect(loc.href).toBe('//localhost:8080/login');
+    expect(loc.href).toBe('//localhost:8080/authorize');
   });
   <%_ } _%>
 

@@ -8,7 +8,7 @@ export default class MetricsService {
   }
 
   public getMetrics(): AxiosPromise<any> {
-    return axios.get('management/jhi-metrics');
+    return axios.get('management/jhimetrics');
   }
 
   public retrieveThreadDump(): AxiosPromise<any> {

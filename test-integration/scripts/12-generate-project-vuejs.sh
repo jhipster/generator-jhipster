@@ -18,7 +18,7 @@ if [[ "$JHI_APP" == *"uaa"* ]]; then
     mkdir -p "$JHI_FOLDER_UAA"
     cp -f "$JHI_SAMPLES"/uaa/.yo-rc.json "$JHI_FOLDER_UAA"/
     cd "$JHI_FOLDER_UAA"
-    jhipster --force --no-insight --with-entities --skip-checks --skip-git --skip-commit-hook --from-cli
+    jhipster --force --no-insight --skip-checks --with-entities --from-cli
     ls -al "$JHI_FOLDER_UAA"
 fi
 
@@ -29,5 +29,5 @@ mkdir -p "$JHI_FOLDER_APP"
 cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
 cd "$JHI_FOLDER_APP"
 npm link generator-jhipster-vuejs
-jhipster --force --no-insight --skip-checks --with-entities --skip-git --skip-commit-hook --from-cli --blueprint vuejs
+jhipster --force --no-insight --skip-checks --with-entities --from-cli --blueprint vuejs
 ls -al "$JHI_FOLDER_APP"

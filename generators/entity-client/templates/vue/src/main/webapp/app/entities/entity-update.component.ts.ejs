@@ -57,7 +57,7 @@ const validations: any = {
     <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
       maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
     <%_ } _%>
-    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+    <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
     numeric
     <%_ } _%>
 

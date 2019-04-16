@@ -176,7 +176,9 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/app.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/main.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shims-vue.d.ts`
+        `${CLIENT_MAIN_SRC_DIR}app/shims-vue.d.ts`,
+
+        `${CLIENT_MAIN_SRC_DIR}WEB-INF/web.xml`
     ],
 
     websocket: [
@@ -521,7 +523,7 @@ describe('Vue.js JHipster blueprint', () => {
                 ])
                 .withPrompts({
                     baseName: 'sampleWebsocket',
-                    packageName: 'io.github.jhipster',
+                    packageName: 'io.github.jhipster.sample',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',

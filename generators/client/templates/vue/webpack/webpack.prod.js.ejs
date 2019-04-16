@@ -23,15 +23,11 @@ const webpackConfig = merge(baseWebpackConfig, {
   },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   entry: {
-  <%_ if (useSass) { _%>
     global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
-  <%_ } else { _%>
-    global: './<%= MAIN_SRC_DIR %>content/css/global.css',
-  <%_ } _%>
     main: './<%= MAIN_SRC_DIR %>app/main'
   },
   output: {
-    path: jhiUtils.root('<%= BUILD_DIR %>www'),
+    path: jhiUtils.root('<%= DIST_DIR %>'),
     filename: 'app/[name].[hash].bundle.js',
     chunkFilename: 'app/[id].[hash].chunk.js'
   },

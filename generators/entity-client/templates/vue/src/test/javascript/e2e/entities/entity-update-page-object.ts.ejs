@@ -16,7 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { element, by, ElementFinder } from 'protractor';
+import { element, by, ElementFinder, protractor, browser } from 'protractor';
+import { clearElement, waitUntilDisplayed } from '<% if (clientRootFolder && !skipUiGrouping) { %>../<% } %>../../util/utils';
 
 <%_
 let elementGetter = `getText()`;
@@ -33,37 +34,31 @@ for (let relationship of relationships) {
     }
 } _%>
 export default class <%= entityClass %>UpdatePage {
-    pageTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.home.createOrEditLabel'));
-    saveButton: ElementFinder = element(by.id('save-entity'));
-    cancelButton: ElementFinder = element(by.id('cancel-save'));
-    <%_ fields.forEach((field) => {
-            const fieldName = field.fieldName;
-            const fieldType = field.fieldType;
-            const fieldIsEnum = field.fieldIsEnum;
-            const fieldTypeBlobContent = field.fieldTypeBlobContent;
-    _%>
-    <%_ if (fieldIsEnum) { _%>
-    <%= fieldName %>Select: ElementFinder = element(by.css('select#<%= entityFileName %>-<%= fieldName %>'));
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    <%= fieldName %>Input: ElementFinder = element(by.css('textarea#<%= entityFileName %>-<%= fieldName %>'));
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-    <%= fieldName %>Input: ElementFinder = element(by.css('input#file_<%= fieldName %>'));
-    <%_ } else { _%>
-    <%= fieldName %>Input: ElementFinder = element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
-    <%_ } _%>
-    <%_ }); _%>
-    <%_ relationships.forEach((relationship) => {
-        const relationshipType = relationship.relationshipType;
-        const ownerSide = relationship.ownerSide;
-        const relationshipName = relationship.relationshipName;
-        const relationshipFieldName = relationship.relationshipFieldName; _%>
-    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    <%=relationshipName %>Select: ElementFinder = element(by.css('select#<%= entityFileName %>-<%= relationshipName %>'));
-    <%_ } _%>
-    <%_ }); _%>
+    async getPageTitle() {
+        return await element(by.id('<%= i18nKeyPrefix %>.home.createOrEditLabel'));
+    }
 
-    getPageTitle() {
-        return this.pageTitle;
+    async getFooter() {
+        return await element(by.id('footer'));
+    }
+
+    async getSaveButton() {
+        return await element(by.id('save-entity'));
+    }
+
+    async isSaveButtonPresent() {
+        const saveButton = await element(by.id('save-entity'));
+        return await saveButton.isPresent();
+    }
+    
+    async save() {
+        const saveButton = await element(by.id('save-entity'));
+        await saveButton.click();
+    }
+
+    async cancel() {
+        const cancelButton = await element(by.id('cancel-save'));
+        await cancelButton.click();
     }
 
     <%_ fields.forEach((field) => {
@@ -76,42 +71,66 @@ export default class <%= entityClass %>UpdatePage {
             let fieldInputType = 'text';
             let ngModelOption = '';
     _%>
-            <%_ if (fieldType === 'Boolean') { _%>
-    get<%= fieldNameCapitalized %>Input() {
-        return this.<%= fieldName %>Input;
+    //--------------------------------------------------
+
+    <%_ if (fieldType === 'Boolean') { _%>
+    async click<%= fieldNameCapitalized %>Input() {
+        const elementInput = await element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
+        await elementInput.click();
     }
-            <%_ } else if (fieldIsEnum) { _%>
+
+    async get<%= fieldNameCapitalized %>Input() {
+        const elementInput = await element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
+        return elementInput;
+    }
+
+    async isSelected<%= fieldNameCapitalized %>Input() {
+        const elementInput = await element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
+        return await elementInput.isSelected();
+    }
+
+    <%_ } else if (fieldIsEnum) { _%>
     async set<%= fieldNameCapitalized %>Select(<%= fieldName %>) {
-        await this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
+        const elem = await element(by.css('select#<%= entityFileName %>-<%= fieldName %>'))
+        await elem.sendKeys(<%= fieldName %>);
     }
 
     async get<%= fieldNameCapitalized %>Select() {
-        return this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
+        const elem = await element(by.css('select#<%= entityFileName %>-<%= fieldName %>'))
+        const elemChecked = await elem.element(by.css('option:checked'));
+        return elemChecked.getText();
     }
 
     async <%=fieldName %>SelectLastOption() {
-        await this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
-    }
-    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
-        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
-    }
-
-    async get<%= fieldNameCapitalized %>Input() {
-        return this.<%= fieldName %>Input.getAttribute('value');
+        const elem = await element(by.css('select#<%= entityFileName %>-<%= fieldName %>'))
+        await elem.all(by.tagName('option')).last().click();
     }
 
     <%_ } else { _%>
+    async find<%= fieldNameCapitalized %>Input() {
+        <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+        return await element(by.css('textarea#<%= entityFileName %>-<%= fieldName %>'));
+        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+        return await element(by.css('input#file_<%= fieldName %>'));
+        <%_ } else { _%>
+        return await element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
+        <%_ } _%>
+    }
+
     async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
-        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+        const elementInput = await this.find<%= fieldNameCapitalized %>Input();
+        await waitUntilDisplayed(elementInput);
+        await elementInput.sendKeys(<%= fieldName %>);
     }
 
     async get<%= fieldNameCapitalized %>Input() {
-        return this.<%= fieldName %>Input.getAttribute('value');
+        const elementInput = await this.find<%= fieldNameCapitalized %>Input();
+        return elementInput.getAttribute('value');
     }
 
     async clear<%= fieldNameCapitalized %>Input() {
-      return this.<%= fieldName %>Input.clear();
+        const elementInput = await this.find<%= fieldNameCapitalized %>Input();
+        await clearElement(elementInput, 100);
     }
 
     <%_ } _%>
@@ -123,33 +142,27 @@ export default class <%= entityClass %>UpdatePage {
         const relationshipFieldName = relationship.relationshipFieldName;
         const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    async <%=relationshipName %>SelectLastOption() {
-        await this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
+    //--------------------------------------------------
+
+    async get<%=relationshipNameCapitalized %>Select() {
+        return await element(by.css('select#<%= entityFileName %>-<%= relationshipName %>'));
     }
 
-    async <%=relationshipName %>SelectOption(option) {
-        await this.<%=relationshipName %>Select.sendKeys(option);
+    async get<%=relationshipNameCapitalized %>SelectLastOption() {
+        const elem = await this.get<%=relationshipNameCapitalized %>Select();
+        await elem.all(by.tagName('option')).last().click();
     }
 
-    get<%=relationshipNameCapitalized %>Select() {
-        return this.<%=relationshipName %>Select;
+    async get<%=relationshipNameCapitalized %>SelectOption(option) {
+        const elem = await this.get<%=relationshipNameCapitalized %>Select();
+        await elem.sendKeys(option);
     }
 
     async get<%=relationshipNameCapitalized %>SelectedOption() {
-        return this.<%=relationshipName %>Select.element(by.css('option:checked')).getText();
+        const elem = await this.get<%=relationshipNameCapitalized %>Select();
+        return elem.element(by.css('option:checked')).getText();
     }
 
     <%_ } _%>
     <%_ }); _%>
-    async save() {
-        await this.saveButton.click();
-    }
-
-    async cancel() {
-        await this.cancelButton.click();
-    }
-
-    getSaveButton() {
-        return this.saveButton;
-    }
 }
