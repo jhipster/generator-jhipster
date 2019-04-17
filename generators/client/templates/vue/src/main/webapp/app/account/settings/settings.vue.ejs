@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" for="email" v-text="$t('global.form.email')">Email</label>
+                        <label class="form-control-label" for="email" v-text="$t('global.form[\'email.label\']')">Email</label>
                         <input type="email" class="form-control" id="email" name="email" v-bind:placeholder="$t('global.form[\'email.placeholder\']')"
                                :class="{'valid': !$v.settingsAccount.email.$invalid, 'invalid': $v.settingsAccount.email.$invalid }"
                                v-model="$v.settingsAccount.email.$model" minlength="5" maxlength="254" email required>
@@ -83,7 +83,7 @@
                     <div class="form-group" v-if="languages && Object.keys(languages).length > 1">
                         <label for="langKey" v-text="$t('settings.form.language')">Language</label>
                         <select class="form-control" id="langKey" name="langKey" v-model="settingsAccount.langKey">
-                            <option v-for="(language, key) in languages" :value="key">{{language.name}}</option>
+                            <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{language.name}}</option>
                         </select>
                     </div>
                     <button type="submit" :disabled="$v.settingsAccount.$invalid" class="btn btn-primary" v-text="$t('settings.form.button')">Save</button>
