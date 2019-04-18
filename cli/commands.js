@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 
-let commands = {};
+let customCommands = {};
 if (process.argv.indexOf('--blueprint') > -1) {
     /* eslint-disable import/no-dynamic-require */
     /* eslint-disable global-require */
-    commands = require(`generator-jhipster-${process.argv[process.argv.indexOf('--blueprint') + 1]}/commands`);
+    customCommands = require(`generator-jhipster-${process.argv[process.argv.indexOf('--blueprint') + 1]}/commands`);
 }
 
 const defaultCommands = {
@@ -111,4 +111,8 @@ Example:
         desc: 'Upgrade the JHipster version, and upgrade the generated application'
     }
 };
-module.exports = Object.assign(defaultCommands, commands);
+
+module.exports = {
+    ...defaultCommands,
+    ...customCommands
+};
