@@ -16,7 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = {
+let commands = {};
+if (process.argv.indexOf('--blueprint') > -1) {
+    commands = require(`generator-jhipster-${process.argv[process.argv.indexOf('--blueprint') + 1]}/commands`);
+}
+
+const defaultCommands = {
     app: {
         default: true,
         desc: 'Create a new JHipster application based on the selected options'
@@ -103,3 +108,4 @@ Example:
         desc: 'Upgrade the JHipster version, and upgrade the generated application'
     }
 };
+module.exports = Object.assign(defaultCommands, commands);
