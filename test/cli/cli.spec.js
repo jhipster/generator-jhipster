@@ -36,4 +36,17 @@ describe('jhipster cli test', () => {
             done();
         });
     });
+
+    it('should delegate to blueprint on blueprint command but will not find it', function(done) {
+        this.timeout(4000);
+
+        exec(`${cmd} foo --blueprint bar`, (error, stdout, stderr) => {
+            console.log(error);
+            expect(error).to.not.be.null;
+            expect(error.code).to.equal(1);
+            /* eslint-disable prettier/prettier */
+            expect(stderr.includes('Cannot find module \'generator-jhipster-bar/commands\'')).to.be.true;
+            done();
+        });
+    });
 });

@@ -16,8 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 let commands = {};
 if (process.argv.indexOf('--blueprint') > -1) {
+    /* eslint-disable import/no-dynamic-require */
+    /* eslint-disable global-require */
     commands = require(`generator-jhipster-${process.argv[process.argv.indexOf('--blueprint') + 1]}/commands`);
 }
 
