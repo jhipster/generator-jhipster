@@ -32,7 +32,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.<% if (reactive) { %>Reactive<% } %>AuthenticationManager;
+<%_ if (reactive) { _%>
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+<%_ } _%>
+<%_ if (!reactive) { _%>
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+<%_ } _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 <%_ if (reactive) { _%>
@@ -71,7 +76,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     private TokenProvider tokenProvider;
 
     @Autowired
-    private <% if (reactive) { %>Reactive<% } %>AuthenticationManager authenticationManager;
+    private <% if (reactive) { %>Reactive<% } %>AuthenticationManager<% if (!reactive) { %>Builder<% } %> authenticationManager;
 
     @Autowired
     private UserRepository userRepository;
