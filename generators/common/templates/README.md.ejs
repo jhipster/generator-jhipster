@@ -255,7 +255,7 @@ To package your application as a war in order to deploy it to an application ser
 To launch your application's tests, run:
 
     <%_ if (buildTool === 'maven') { _%>
-    ./mvnw test integration-test
+    ./mvnw verify
     <%_ } else { _%>
     ./gradlew test integrationTest
     <%_ } _%>
