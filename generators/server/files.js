@@ -1419,7 +1419,7 @@ const serverFiles = {
         {
             condition: generator =>
                 generator.skipUserManagement &&
-                generator.authenticationType === 'oauth2' &&
+                generator.authenticationType !== 'uaa' &&
                 ['monolith', 'gateway'].includes(generator.applicationType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
