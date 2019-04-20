@@ -27,6 +27,9 @@ const JDLObject = require('../../../lib/core/jdl_object');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const {
+  Options: { JPA_DERIVED_IDENTIFIER }
+} = require('../../../lib/core/jhipster/relationship_options');
+const {
   Options: { DTO, SEARCH_ENGINE, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
   Values: {
     dto: { MAPSTRUCT },
@@ -261,6 +264,18 @@ describe('JSONToJDLEntityConverter', () => {
 
         it('parses tableName', () => {
           expect(jdlObject.entities.CassBankAccount.tableName).eq('cassBankAccount');
+        });
+      });
+    });
+
+    context('when parsing relationships with options', () => {
+      context('such as jpaDerivedIdentifier', () => {
+        it('accepts it', () => {
+          expect(
+            jdlObject.relationships
+              .getOneToOne('OneToOne_Country{region}_Region{country}')
+              .options.has(JPA_DERIVED_IDENTIFIER)
+          ).to.be.true;
         });
       });
     });

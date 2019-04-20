@@ -1,4 +1,29 @@
-# Latest: v3.6.12
+# To be released
+
+## What's new
+  - Added new option memcached to cache providers (thanks to @Hawkurane) 
+
+## Bug fixes
+  - Relationship options are now correctly exported (notably: the jpaDerivedIdentifier option)~~~~ 
+
+---
+
+# Latest: v3.6.13
+
+## What's new
+  - This changelog file :)
+  - Removed Rancher from the JDL
+  - Removed `istioRoute`
+  - `istio` is now a boolean
+  - Improved error message for relationships between applications
+  - `Duration` has been added as type (thanks to @massimosiani)
+
+## Bug fixes
+  - Nothing
+
+---
+
+# v3.6.12
 _Released on: 2019-03-03_
 
 ## What's new
