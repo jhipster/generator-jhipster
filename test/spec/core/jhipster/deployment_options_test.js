@@ -22,7 +22,6 @@
 
 const { expect } = require('chai');
 const { DeploymentTypes, Options } = require('../../../../lib/core/jhipster/deployment_options');
-const CustomSet = require('../../../../lib/utils/objects/custom_set');
 
 describe('DeploymentOptions', () => {
   describe('DeploymentTypes', () => {
@@ -52,9 +51,9 @@ describe('DeploymentOptions', () => {
         it('should return docker deployment config', () => {
           expect(Options.defaults()).to.eql({
             deploymentType: 'docker-compose',
-            appsFolders: new CustomSet(),
-            clusteredDbApps: new CustomSet(),
-            consoleOptions: new CustomSet(),
+            appsFolders: new Set(),
+            clusteredDbApps: new Set(),
+            consoleOptions: new Set(),
             directoryPath: '../',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',
@@ -68,9 +67,9 @@ describe('DeploymentOptions', () => {
         it('should return kubernetes deployment config', () => {
           expect(Options.defaults('kubernetes')).to.eql({
             deploymentType: 'kubernetes',
-            appsFolders: new CustomSet(),
-            clusteredDbApps: new CustomSet(),
-            consoleOptions: new CustomSet(),
+            appsFolders: new Set(),
+            clusteredDbApps: new Set(),
+            consoleOptions: new Set(),
             directoryPath: '../',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',
@@ -88,9 +87,9 @@ describe('DeploymentOptions', () => {
         it('should return openshift deployment config', () => {
           expect(Options.defaults('openshift')).to.eql({
             deploymentType: 'openshift',
-            appsFolders: new CustomSet(),
-            clusteredDbApps: new CustomSet(),
-            consoleOptions: new CustomSet(),
+            appsFolders: new Set(),
+            clusteredDbApps: new Set(),
+            consoleOptions: new Set(),
             directoryPath: '../',
             dockerPushCommand: 'docker push',
             dockerRepositoryName: '',
