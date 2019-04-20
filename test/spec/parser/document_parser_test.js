@@ -690,7 +690,7 @@ describe('DocumentParser', () => {
         });
 
         it('parses it', () => {
-          expect(deployment.appsFolders.toString()).to.eql('[tata,titi]');
+          expect(deployment.appsFolders).to.deep.equal(new Set(['tata', 'titi']));
           delete deployment.appsFolders;
           delete deployment.clusteredDbApps;
           delete deployment.consoleOptions;
