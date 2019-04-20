@@ -18,6 +18,8 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
+const { renameSync } = require('fs');
+const { join } = require('path');
 const { expect } = require('chai');
 
 const JSONReader = require('../../../lib/reader/json_reader');
@@ -55,7 +57,17 @@ describe('JSONReader', () => {
         let content;
 
         before(() => {
+          renameSync(
+            join('test', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
+            join('test', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt')
+          );
           content = JSONReader.parseFromDir('./test/test_files/jhipster_app');
+        });
+        after(() => {
+          renameSync(
+            join('test', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
+            join('test', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json')
+          );
         });
 
         it('reads it', () => {
