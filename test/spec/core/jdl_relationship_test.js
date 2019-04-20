@@ -21,6 +21,7 @@
 const { expect } = require('chai');
 
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
+const { Options } = require('../../../lib/core/jhipster/relationship_options');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 
 describe('JDLRelationship', () => {
@@ -398,7 +399,7 @@ describe('JDLRelationship', () => {
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
           injectedFieldInTo: 'a',
-          options: new Set(['jpaDerivedIdentifier'])
+          options: new Set([Options.JPA_DERIVED_IDENTIFIER])
         });
       });
 
@@ -406,7 +407,7 @@ describe('JDLRelationship', () => {
         expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{` +
-            `${relationship.injectedFieldInTo}} with jpaDerivedIdentifier
+            `${relationship.injectedFieldInTo}} with ${Options.JPA_DERIVED_IDENTIFIER}
 }`
         );
       });
