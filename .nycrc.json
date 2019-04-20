@@ -3,6 +3,9 @@
   "check-coverage": true,
   "exclude": [
     "lib/dsl/gen/*.js",
+    "lib/dsl/self_checks/*.js",
+    "lib/dsl/ast_builder.js",
+    "lib/dsl/jdl_parser.js",
     "test/**/*.js"
   ],
   "reporter": [
