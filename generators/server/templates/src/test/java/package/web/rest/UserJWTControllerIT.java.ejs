@@ -27,14 +27,12 @@ import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepo
 import <%=packageName%>.security.jwt.TokenProvider;
 import <%=packageName%>.web.rest.errors.ExceptionTranslator;
 import <%=packageName%>.web.rest.vm.LoginVM;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.<% if (reactive) { %>Reactive<% } %>AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
@@ -63,7 +61,6 @@ import static org.hamcrest.Matchers.not;
 /**
  * Integration tests for the {@link UserJWTController} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -88,7 +85,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     private MockMvc mockMvc;
     <%_ }  _%>
 
-    @Before
+    @BeforeEach
     public void setup() {
         UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager);
         <%_ if (!reactive) { _%>

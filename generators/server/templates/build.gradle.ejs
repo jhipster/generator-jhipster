@@ -234,7 +234,7 @@ repositories {
         }
     }
     <%_ } _%>
-    // TODO To remove after final JHipster release	
+    // TODO To remove after final JHipster release
     maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
@@ -468,10 +468,15 @@ dependencies {
     testImplementation "io.cucumber:cucumber-spring"
     <%_ } _%>
     testImplementation ("org.springframework.boot:spring-boot-starter-test") {
+        exclude module: "junit"
         exclude group: "com.vaadin.external.google", module: "android-json"
     }
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine"
+    <%_ if (cucumberTests) { _%>
+    testImplementation "org.junit.vintage:junit-vintage-engine"
+    <%_ } _%>
     testImplementation "org.assertj:assertj-core"
     testImplementation "junit:junit"
     testImplementation "org.mockito:mockito-core"

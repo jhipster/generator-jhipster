@@ -29,12 +29,10 @@ import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,7 +44,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Integration tests for {@link UserMapper}.
  */
-@RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
@@ -69,7 +66,7 @@ public class UserMapperIT <% if (databaseType === 'cassandra') { %>extends Abstr
     private <%= asEntity('User') %> user;
     private <%= asDto('User') %> userDto;
 
-    @Before
+    @BeforeEach
     public void init() {
         user = new <%= asEntity('User') %>();
         user.setLogin(DEFAULT_LOGIN);

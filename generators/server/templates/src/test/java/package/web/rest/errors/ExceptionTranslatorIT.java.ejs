@@ -28,15 +28,13 @@ import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (!reactive) { _%>
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -49,7 +47,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
-@RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
 <%_ } else if (authenticationType === 'oauth2') { _%>
@@ -70,7 +67,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
             .setControllerAdvice(exceptionTranslator)
@@ -187,7 +184,6 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 import org.springframework.boot.web.codec.CodecCustomizer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.MockServerConfigurer;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.server.WebExceptionHandler;
@@ -198,7 +194,6 @@ import java.util.List;
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -216,7 +211,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 
     private WebTestClient webTestClient;
 
-    @Before
+    @BeforeEach
     public void setup() {
         webTestClient = WebTestClient.bindToController(controller)
             .controllerAdvice(exceptionTranslator)

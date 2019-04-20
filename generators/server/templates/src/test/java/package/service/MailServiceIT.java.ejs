@@ -24,9 +24,8 @@ import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 import io.github.jhipster.config.JHipsterProperties;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
@@ -36,7 +35,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.Multipart;
@@ -52,7 +50,6 @@ import static org.mockito.Mockito.*;
 /**
  * Integration tests for {@link MailService}.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -73,7 +70,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
 
     private MailService mailService;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(javaMailSender).send(any(MimeMessage.class));
