@@ -27,12 +27,14 @@ describe('Service Tests', () => {
     describe('Logs Service', () => {
         let service: <%=jhiPrefixCapitalized%>ConfigurationService;
         let httpMock;
+        let expectedResult;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule]
             });
 
+            expectedResult = {};
             service = TestBed.get(<%=jhiPrefixCapitalized%>ConfigurationService);
             httpMock = TestBed.get(HttpTestingController);
         });
@@ -61,24 +63,34 @@ describe('Service Tests', () => {
                     }
                 }
                 service.get().subscribe(received => {
-                    expect(received.body[0]).toEqual(angularConfig);
+                    expectedResult = received;
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
                 req.flush(angularConfig);
+                expect(expectedResult).toEqual(['test2']);
             });
 
             it('should get the env', () => {
-                const propertySources = new HttpResponse({body: [
-                    {name: 'test1', properties: 'test1'},
-                    {name: 'test2', properties: 'test2'},
-                ]})
-                service.get().subscribe(received => {
-                    expect(received.body[0]).toEqual(propertySources);
+                const propertySources = {
+                    propertySources: [
+                        {
+                        name: 'server.ports',
+                        properties: {
+                            'local.server.port': {
+                            value: 8080
+                            }
+                        }
+                        }
+                    ]
+                };
+                service.getEnv().subscribe(received => {
+                    expectedResult = received;
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
                 req.flush(propertySources);
+                expect(expectedResult).toEqual({ 'server.ports': [{ key: 'local.server.port', val: 8080 }] });
             });
         });
     });

@@ -141,7 +141,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @IdPrefix
     private String prefix = PREFIX;
     <%_ } _%>
-    
+
     @Id
     <%_ if (databaseType === 'sql' && isUsingMapsId === false) { _%>
         <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
@@ -236,7 +236,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const relationshipRequired = relationships[idx].relationshipRequired;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const ownerSide = relationships[idx].ownerSide;
-        const useJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
+        const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
         if (otherEntityRelationshipName) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
@@ -262,6 +262,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @Field("<%= relationshipFieldName %>")
     <%_ } _%>
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
+
     <%_ } else if (relationshipType === 'many-to-one') {
             if (databaseType === 'sql') {
     _%>
@@ -310,7 +311,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
             <%_ }_%>
-            <%_ if (useJPADerivedIdentifier === true) { %>
+            <%_ if (isUsingMapsId === true) { %>
     @MapsId
     @JoinColumn(name = "id")
             <%_ } else { %>

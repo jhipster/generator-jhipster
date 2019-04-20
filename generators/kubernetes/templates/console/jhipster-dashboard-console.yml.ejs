@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: batch/v1
+apiVersion: <%= KUBERNETES_BATCH_API_VERSION %>
 kind: Job
 metadata:
   name: jhipster-import-dashboards

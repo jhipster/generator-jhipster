@@ -27,12 +27,14 @@ describe('Service Tests', () => {
     describe('Logs Service', () => {
         let service: LogsService;
         let httpMock;
+        let expectedResult;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule]
             });
 
+            expectedResult = {};
             service = TestBed.get(LogsService);
             httpMock = TestBed.get(HttpTestingController);
         });
@@ -54,22 +56,24 @@ describe('Service Tests', () => {
                 const log = new Log('main', 'ERROR');
 
                 service.findAll().subscribe(received => {
-                    expect(received.body[0]).toEqual(log);
+                    expectedResult = received;
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
                 req.flush([log]);
+                expect(expectedResult.body[0]).toEqual(log);
             });
 
             it('should change log level', () => {
                 const log = new Log('main', 'ERROR');
 
                 service.changeLevel(log).subscribe(received => {
-                    expect(received.body[0]).toEqual(log);
+                    expectedResult = received;
                 });
 
                 const req = httpMock.expectOne({ method: 'PUT' });
                 req.flush([log]);
+                expect(expectedResult.body[0]).toEqual(log);
             });
         });
     });

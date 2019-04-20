@@ -23,7 +23,7 @@
 # flexibility to do any project specific customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch
 # that as those parameters will be referenced in other places.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: jhipster-metrics-template
@@ -75,7 +75,7 @@ parameters:
 objects:
   <%_ if (storageType === 'persistent') { _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
     metadata:
       name: ${PT_APP_NAME}
@@ -86,7 +86,7 @@ objects:
         requests:
           storage: "${VOLUME_CAPACITY}"
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
     metadata:
       name: ${AM_APP_NAME}
@@ -97,7 +97,7 @@ objects:
         requests:
           storage: "${VOLUME_CAPACITY}"
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
     metadata:
       name: ${GF_APP_NAME}
@@ -109,7 +109,7 @@ objects:
           storage: "${VOLUME_CAPACITY}"
   <%_ } _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: ConfigMap
     metadata:
       name: metrics-config
@@ -193,7 +193,7 @@ objects:
             description = "Current AccountResource_registerAccount_count value: {{ $value }}"
           }
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${PT_APP_NAME}
@@ -260,7 +260,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${PT_APP_NAME}
@@ -276,7 +276,7 @@ objects:
       selector:
         app: ${PT_APP_NAME}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
     metadata:
       name: ${PT_APP_NAME}
@@ -289,7 +289,7 @@ objects:
         targetPort: "tcp"
       wildcardPolicy: None
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${AM_APP_NAME}
@@ -348,7 +348,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${AM_APP_NAME}
@@ -363,7 +363,7 @@ objects:
       selector:
         app: ${AM_APP_NAME}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
     metadata:
       name: ${AM_APP_NAME}
@@ -376,7 +376,7 @@ objects:
         targetPort: "tcp"
       wildcardPolicy: None
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${GF_APP_NAME}
@@ -435,7 +435,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${GF_APP_NAME}
@@ -451,7 +451,7 @@ objects:
       selector:
         app: ${GF_APP_NAME}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
     metadata:
       name: ${GF_APP_NAME}

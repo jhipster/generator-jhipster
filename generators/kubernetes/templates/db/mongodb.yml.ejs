@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ConfigMap
 metadata:
   namespace: <%= kubernetesNamespace %>
@@ -30,7 +30,7 @@ data:
     storage:
       dbPath: /data/db
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ConfigMap
 metadata:
   namespace: <%= kubernetesNamespace %>
@@ -168,7 +168,7 @@ data:
     shutdown_mongo
     log "Good bye."
 ---
-apiVersion: apps/v1beta1
+apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mongodb
@@ -176,6 +176,9 @@ metadata:
 spec:
   serviceName: <%= app.baseName.toLowerCase() %>-mongodb
   replicas: <%= app.dbPeerCount %>
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-mongodb
   template:
     metadata:
       labels:
@@ -223,7 +226,7 @@ spec:
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
+                  apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
                   fieldPath: metadata.namespace
             - name: REPLICA_SET
               value: rs0
@@ -248,7 +251,7 @@ spec:
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
+                  apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
                   fieldPath: metadata.namespace
             - name: REPLICA_SET
               value: rs0
@@ -318,7 +321,7 @@ spec:
             storage: "1Gi"
 ---
 # Headless service for DNS record
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   annotations:

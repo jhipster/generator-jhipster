@@ -454,10 +454,7 @@ function getAppFolders(input, deploymentApplicationType) {
 
     files.forEach(file => {
         if (file.isDirectory()) {
-            if (
-                shelljs.test('-f', `${destinationPath}/${file.name}/.yo-rc.json`) &&
-                shelljs.test('-f', `${destinationPath}/${file.name}/src/main/docker/app.yml`)
-            ) {
+            if (shelljs.test('-f', `${destinationPath}/${file.name}/.yo-rc.json`)) {
                 try {
                     const fileData = this.fs.readJSON(`${destinationPath}/${file.name}/.yo-rc.json`);
                     if (

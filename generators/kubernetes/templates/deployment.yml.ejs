@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: apps/v1
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>
@@ -147,6 +147,8 @@ spec:
         <%_ if (app.searchEngine === 'elasticsearch') { _%>
         - name: SPRING_DATA_JEST_URI
           value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
+        - name: SPRING_ELASTICSEARCH_REST_URIS
+          value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
         <%_ } _%>
         <%_ if (app.messageBroker === 'kafka') { _%>
         - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
@@ -182,10 +184,10 @@ spec:
           value: " -Xmx256m -Xms256m"
         resources:
           requests:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "500m"
           limits:
-            memory: "512Mi"
+            memory: "1Gi"
             cpu: "1"
         ports:
         - name: http

@@ -22,7 +22,7 @@
 # saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
 # displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: <%= app.baseName.toLowerCase() %>-postgresqldb-template
@@ -86,7 +86,7 @@ parameters:
     required: true
 objects:
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Secret
     metadata:
       name: ${SECRET_REF}
@@ -95,7 +95,7 @@ objects:
       database-password: "${POSTGRESQL_PASSWORD}"
 <%_ if (storageType === 'persistent') { _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
     metadata:
       name: ${APPLICATION_NAME}
@@ -107,7 +107,7 @@ objects:
           storage: "${VOLUME_CAPACITY}"
 <%_ } _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${APPLICATION_NAME}
@@ -189,7 +189,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${APPLICATION_NAME}

@@ -23,13 +23,13 @@ const DOCKER_JAVA_JRE = 'openjdk:11-jre-slim-stretch';
 const DOCKER_MYSQL = 'mysql:8.0.15';
 const DOCKER_MARIADB = 'mariadb:10.4.3';
 const DOCKER_POSTGRESQL = 'postgres:11.2';
-const DOCKER_MONGODB = 'mongo:4.0.6';
+const DOCKER_MONGODB = 'mongo:4.0.8';
 const DOCKER_COUCHBASE = 'couchbase/server:6.0.1';
 const DOCKER_CASSANDRA = 'cassandra:3.11.4';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.11.3';
 const DOCKER_MEMCACHED = 'memcached:1.5.12-alpine';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:4.8.3.Final';
+const DOCKER_KEYCLOAK = 'jboss/keycloak:5.0.0';
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.4.3'; // The version should be coerent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = 'wurstmeister/kafka:2.11-2.0.1';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
@@ -40,17 +40,26 @@ const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v4.0.0';
 const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v4.0.0';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v4.0.0';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.0.0';
-const DOCKER_TRAEFIK = 'traefik:1.7.9';
+const DOCKER_TRAEFIK = 'traefik:1.7.10';
 const DOCKER_CONSUL = 'consul:1.4.4';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v2.8.0';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v2.8.1';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.16.1';
-const DOCKER_GRAFANA = 'grafana/grafana:6.0.2';
+const DOCKER_GRAFANA = 'grafana/grafana:6.1.0';
 const DOCKER_JENKINS = 'jenkins:latest';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
 const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.29.0';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
+
+// Kubernetes versions
+const KUBERNETES_CORE_API_VERSION = 'v1';
+const KUBERNETES_BATCH_API_VERSION = 'batch/v1';
+const KUBERNETES_DEPLOYMENT_API_VERSION = 'apps/v1';
+const KUBERNETES_STATEFULSET_API_VERSION = 'apps/v1';
+const KUBERNETES_INGRESS_API_VERSION = 'extensions/v1beta1';
+const KUBERNETES_ISTIO_NETWORKING_API_VERSION = 'networking.istio.io/v1alpha3';
+const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
 
 // Version of Java
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
@@ -278,7 +287,14 @@ const constants = {
     SQL_DB_OPTIONS,
     DOCKER_COMPOSE_FORMAT_VERSION,
     DOCKER_PROMETHEUS_OPERATOR,
-    DOCKER_GRAFANA_WATCHER
+    DOCKER_GRAFANA_WATCHER,
+    KUBERNETES_CORE_API_VERSION,
+    KUBERNETES_BATCH_API_VERSION,
+    KUBERNETES_DEPLOYMENT_API_VERSION,
+    KUBERNETES_STATEFULSET_API_VERSION,
+    KUBERNETES_INGRESS_API_VERSION,
+    KUBERNETES_ISTIO_NETWORKING_API_VERSION,
+    KUBERNETES_RBAC_API_VERSION
 };
 
 module.exports = constants;

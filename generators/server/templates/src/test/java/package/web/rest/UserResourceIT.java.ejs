@@ -47,9 +47,8 @@ import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
 <%_ } _%>
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -62,7 +61,6 @@ import org.springframework.http.MediaType;
 <%_ if (!reactive) { _%>
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 <%_ } _%>
-import org.springframework.test.context.junit4.SpringRunner;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
@@ -105,7 +103,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
-@RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
@@ -211,7 +208,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
     private <%= asEntity('User') %> user;
 
-    @Before
+    @BeforeEach
     public void setup() {
         <%_ if (cacheManagerIsAvailable === true) { _%>
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
@@ -258,7 +255,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         return user;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         <%_ if (databaseType === 'couchbase') { _%>
         mockAuthentication();

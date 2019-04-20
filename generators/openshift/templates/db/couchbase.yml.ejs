@@ -25,7 +25,7 @@
 # Replication mode is not tested yet.
 #
 # TODO - Later to be updated to statefulset
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: <%= app.baseName.toLowerCase() %>-couchbase-template
@@ -84,7 +84,7 @@ parameters:
     required: true
 objects:
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Secret
     metadata:
       name: ${SECRET_REF}
@@ -93,7 +93,7 @@ objects:
       database-admin-password: "${COUCHBASE_ADMIN_PASSWORD}"
 <%_ if (storageType === 'persistent') { _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
     metadata:
       name: ${APPLICATION_NAME}
@@ -105,7 +105,7 @@ objects:
           storage: "${VOLUME_CAPACITY}"
 <%_ } _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${APPLICATION_NAME}
@@ -230,7 +230,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${APPLICATION_NAME}

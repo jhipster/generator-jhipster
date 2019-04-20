@@ -30,7 +30,7 @@
 #   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
 #   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
 #   `kubectl delete pod jhipster-registry-0`, `kubectl delete pod jhipster-registry-1`
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: registry-secret
@@ -39,7 +39,7 @@ type: Opaque
 data:
   registry-admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-registry
@@ -56,7 +56,7 @@ spec:
   selector:
     app: jhipster-registry
 ---
-apiVersion: apps/v1
+apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: jhipster-registry
