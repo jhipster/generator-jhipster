@@ -654,17 +654,20 @@ const serverFiles = {
         {
             condition: generator =>
                 !generator.reactive &&
-                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway') &&
+                !(
+                    generator.applicationType !== 'microservice' &&
+                    !(
+                        generator.applicationType === 'gateway' &&
+                        (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')
+                    )
+                ) &&
+                generator.applicationType === 'microservice' &&
                 generator.authenticationType === 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
                     file: 'package/config/FeignConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java`
-                },
-                {
-                    file: 'package/config/PageableSpringEncoder.java',
-                    renameTo: generator => `${generator.javaDir}config/PageableSpringEncoder.java`
                 },
                 {
                     file: 'package/client/AuthorizedFeignClient.java',
@@ -700,10 +703,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java`
                 },
                 {
-                    file: 'package/config/PageableSpringEncoder.java',
-                    renameTo: generator => `${generator.javaDir}config/PageableSpringEncoder.java`
-                },
-                {
                     file: 'package/config/FeignConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java`
                 },
@@ -714,34 +713,7 @@ const serverFiles = {
             ]
         },
         {
-<<<<<<< HEAD
-            condition: generator =>
-                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway') &&
-                generator.authenticationType === 'oauth2',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/security/oauth2/AuthorizationHeaderUtil.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/AuthorizationHeaderUtil.java`
-                },
-                {
-                    file: 'package/security/oauth2/SimplePrincipalExtractor.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/SimplePrincipalExtractor.java`
-                },
-                {
-                    file: 'package/security/oauth2/SimpleAuthoritiesExtractor.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/SimpleAuthoritiesExtractor.java`
-                }
-            ]
-        },
-        {
-            condition: generator =>
-                generator.applicationType === 'microservice' &&
-                generator.authenticationType === 'oauth2' &&
-                generator.cacheProvider !== 'no',
-=======
             condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway',
->>>>>>> de61464925fd8c49856cc6c3944c978f8a35c989
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -793,7 +765,14 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'microservice',
+            condition: generator =>
+                !(
+                    generator.applicationType !== 'microservice' &&
+                    !(
+                        generator.applicationType === 'gateway' &&
+                        (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')
+                    )
+                ) && generator.applicationType === 'microservice',
             path: SERVER_MAIN_RES_DIR,
             templates: [{ file: 'static/microservices_index.html', method: 'copy', renameTo: () => 'static/index.html' }]
         }

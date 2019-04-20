@@ -19,9 +19,7 @@
 package <%=packageName%>.config;
 
 import feign.codec.Encoder;
-import io.github.jhipster.config.feign.PageableQueryEncoder;
 import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -38,9 +36,6 @@ import org.springframework.data.domain.Pageable;
 @Import(FeignClientsConfiguration.class)
 public class FeignConfiguration {
 
-    @Autowired
-    private ObjectFactory<HttpMessageConverters> messageConverters;
-
     /**
      * Set the Feign specific log level to log client REST requests.
      */
@@ -52,7 +47,7 @@ public class FeignConfiguration {
     @Bean
     @ConditionalOnClass(Pageable.class)
     @Primary
-    public Encoder feignEncoderPageable() {
+    public Encoder feignEncoderPageable(ObjectFactory<HttpMessageConverters> messageConverters) {
         return new PageableQueryEncoder(new SpringEncoder(this.messageConverters));
     }
 }

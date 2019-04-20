@@ -21,12 +21,9 @@ package <%=packageName%>.client;
 import java.io.IOException;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+
 import feign.RequestInterceptor;
 
-import <%=packageName%>.FeignConfiguration;
-
-@Import(FeignConfiguration.class)
 public class OAuth2UserClientFeignConfiguration {
 
     @Bean(name = "userFeignClientInterceptor")
