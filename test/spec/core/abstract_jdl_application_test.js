@@ -131,7 +131,7 @@ describe('AbstractJDLApplication', () => {
       });
 
       it('returns the entity list', () => {
-        expect(result.toString()).to.equal('[A,B]');
+        expect(result).to.deep.equal(new Set(['A', 'B']));
       });
     });
   });
