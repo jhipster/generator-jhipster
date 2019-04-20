@@ -40,16 +40,16 @@
             </releases>
         </repository>
     <%_ } _%>
-        <!-- TODO To remove after final JHipster release -->	
-        <repository>	
-            <id>oss.sonatype.org-snapshot</id>	
-            <url>http://oss.sonatype.org/content/repositories/snapshots</url>	
-            <releases>	
-                <enabled>false</enabled>	
-            </releases>	
-            <snapshots>	
-                <enabled>true</enabled>	
-            </snapshots>	
+        <!-- TODO To remove after final JHipster release -->
+        <repository>
+            <id>oss.sonatype.org-snapshot</id>
+            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
@@ -364,6 +364,18 @@
         </dependency>
         <%_ } _%>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <%_ if (cucumberTests) { _%>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <%_ } _%>
+        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
@@ -536,6 +548,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

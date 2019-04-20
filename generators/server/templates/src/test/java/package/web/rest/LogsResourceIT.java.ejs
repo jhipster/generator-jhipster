@@ -31,13 +31,11 @@ import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 import <%= packageName %>.web.rest.vm.LoggerVM;
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.LoggerContext;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
@@ -56,7 +54,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link LogsResource} REST controller.
  */
-@RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
 <%_ } else if (authenticationType === 'oauth2') { _%>
@@ -72,7 +69,7 @@ public class LogsResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     private MockMvc restLogsMockMvc;
     <%_ } _%>
 
-    @Before
+    @BeforeEach
     public void setup() {
         LogsResource logsResource = new LogsResource();
         <%_ if (reactive) { _%>

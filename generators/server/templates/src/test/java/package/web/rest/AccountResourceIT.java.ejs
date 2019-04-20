@@ -42,14 +42,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +56,6 @@ import org.springframework.web.context.WebApplicationContext;
 /**
  * Integration tests for the {@link AccountResource} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -76,7 +73,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Autowired
     private WebApplicationContext context;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         AccountResource accountUserMockResource = new AccountResource(userService);
@@ -190,9 +187,8 @@ import <%=packageName%>.web.rest.vm.KeyAndPasswordVM;
 import <%=packageName%>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,7 +205,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
 import org.springframework.security.web.server.context.SecurityContextServerWebExchangeWebFilter;
 <%_ } _%>
-import org.springframework.test.context.junit4.SpringRunner;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -243,7 +238,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link AccountResource} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -291,7 +285,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     private WebTestClient userWebTestClient;
 <%_ } _%>
 
-    @Before
+    @BeforeEach
     public void setup() {
         <%_ if (databaseType === 'mongodb') { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;

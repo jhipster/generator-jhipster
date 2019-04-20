@@ -78,9 +78,8 @@ import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
 import <%=packageName%>.service.<%= entityClass %>QueryService;
 <%_ } _%>
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 <%_ if (fieldsContainOwnerManyToMany) { _%>
 import org.mockito.Mock;
 <%_ } _%>
@@ -94,7 +93,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
 <%_ if (reactiveRepositories) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
@@ -145,7 +143,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@Link <%= entityClass %>Resource} REST controller.
  */
-@RunWith(SpringRunner.class)
 <%_ if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
@@ -386,7 +383,7 @@ _%>
 
     private <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         <%_ if (service !== 'no') { _%>
@@ -454,7 +451,7 @@ _%>
         return <%= asEntity(entityInstance) %>;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         <%_ if (databaseType === 'couchbase') { _%>
         mockAuthentication();
