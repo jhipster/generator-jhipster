@@ -275,10 +275,10 @@ describe('JDLUnaryOption', () => {
         expect(returned).to.be.true;
       });
       it('adds the source entities to the target option', () => {
-        expect(option.entityNames.toString()).to.equal('[B,C,A]');
+        expect(option.entityNames).to.deep.equal(new Set(['B', 'C', 'A']));
       });
       it('adds the excluded source entities to the target option', () => {
-        expect(option.excludedNames.toString()).to.equal('[Z,Y]');
+        expect(option.excludedNames).to.deep.equal(new Set(['Z', 'Y']));
       });
     });
   });

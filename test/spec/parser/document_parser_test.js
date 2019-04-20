@@ -481,32 +481,18 @@ describe('DocumentParser', () => {
         context('checking the options', () => {
           it('parses them', () => {
             expect(options.length).to.eq(7);
-            expect(options[0].name).to.eq('skipClient');
-            expect(options[0].entityNames.toString()).to.eq('[G]');
-            expect(options[0].excludedNames.toString()).to.eq('[]');
-            expect(options[1].name).to.eq('skipServer');
-            expect(options[1].entityNames.toString()).to.eq('[B,D]');
-            expect(options[1].excludedNames.toString()).to.eq('[D]');
-            expect(options[2].name).to.eq('dto');
-            expect(options[2].value).to.eq('mapstruct');
-            expect(options[2].entityNames.toString()).to.eq('[*]');
-            expect(options[2].excludedNames.toString()).to.eq('[G]');
-            expect(options[3].name).to.eq('service');
-            expect(options[3].entityNames.toString()).to.eq('[G]');
-            expect(options[3].excludedNames.toString()).to.eq('[]');
-            expect(options[3].value).to.eq('serviceImpl');
-            expect(options[4].name).to.eq('service');
-            expect(options[4].entityNames.toString()).to.eq('[A,C,D]');
-            expect(options[4].excludedNames.toString()).to.eq('[]');
-            expect(options[4].value).to.eq('serviceClass');
-            expect(options[5].name).to.eq('pagination');
-            expect(options[5].entityNames.toString()).to.eq('[*]');
-            expect(options[5].excludedNames.toString()).to.eq('[G]');
-            expect(options[5].value).to.eq('pager');
-            expect(options[6].name).to.eq('pagination');
-            expect(options[6].entityNames.toString()).to.eq('[G]');
-            expect(options[6].excludedNames.toString()).to.eq('[]');
-            expect(options[6].value).to.eq('pagination');
+            expect(options[0].name).to.equal('skipClient');
+            expect(options[1].name).to.equal('skipServer');
+            expect(options[2].name).to.equal('dto');
+            expect(options[2].value).to.equal('mapstruct');
+            expect(options[3].name).to.equal('service');
+            expect(options[3].value).to.equal('serviceImpl');
+            expect(options[4].name).to.equal('service');
+            expect(options[4].value).to.equal('serviceClass');
+            expect(options[5].name).to.equal('pagination');
+            expect(options[5].value).to.equal('pager');
+            expect(options[6].name).to.equal('pagination');
+            expect(options[6].value).to.equal('pagination');
           });
         });
       });
@@ -793,7 +779,7 @@ describe('DocumentParser', () => {
 
           it('adds it to every entity', () => {
             expect(jdlObject.getOptionQuantity()).to.equal(2);
-            expect(microserviceOption.entityNames.toString()).to.equal('[A,B,C,D,E,F,G]');
+            expect(microserviceOption.entityNames).to.deep.equal(new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G']));
           });
         });
         context('with the microservice option in the JDL', () => {
@@ -812,7 +798,7 @@ describe('DocumentParser', () => {
 
           it('does not automatically setup the microservice option', () => {
             expect(jdlObject.getOptionQuantity()).to.equal(2);
-            expect(microserviceOption.entityNames.toString()).to.equal('[A]');
+            expect(microserviceOption.entityNames).to.deep.equal(new Set(['A']));
           });
         });
       });
@@ -878,11 +864,11 @@ describe('DocumentParser', () => {
         });
 
         it('sets the annotations as options', () => {
-          expect(dtoOption.entityNames.toString()).to.equal('[A,B]');
-          expect(filterOption.entityNames.toString()).to.equal('[C]');
-          expect(paginationOption.entityNames.toString()).to.equal('[B,C]');
-          expect(serviceOption.entityNames.toString()).to.equal('[A,B]');
-          expect(skipClientOption.entityNames.toString()).to.equal('[A,C]');
+          expect(dtoOption.entityNames).to.deep.equal(new Set(['A', 'B']));
+          expect(filterOption.entityNames).to.deep.equal(new Set(['C']));
+          expect(paginationOption.entityNames).to.deep.equal(new Set(['B', 'C']));
+          expect(serviceOption.entityNames).to.deep.equal(new Set(['A', 'B']));
+          expect(skipClientOption.entityNames).to.deep.equal(new Set(['A', 'C']));
         });
       });
       context('when parsing a mix between annotations and regular options', () => {
@@ -909,24 +895,24 @@ describe('DocumentParser', () => {
 
         it('correctly sets the options', () => {
           expect(dtoOptions).to.have.length(1);
-          expect(dtoOptions[0].entityNames.toString()).to.equal('[A,B]');
+          expect(dtoOptions[0].entityNames).to.deep.equal(new Set(['A', 'B']));
 
           expect(filterOptions).to.have.length(1);
-          expect(filterOptions[0].entityNames.toString()).to.equal('[C]');
+          expect(filterOptions[0].entityNames).to.deep.equal(new Set(['C']));
 
           expect(paginationOptions).to.have.length(2);
-          expect(paginationOptions[0].entityNames.toString()).to.equal('[B,C]');
-          expect(paginationOptions[1].entityNames.toString()).to.equal('[B,C]');
+          expect(paginationOptions[0].entityNames).to.deep.equal(new Set(['B', 'C']));
+          expect(paginationOptions[1].entityNames).to.deep.equal(new Set(['B', 'C']));
 
           expect(serviceOptions).to.have.length(2);
-          expect(serviceOptions[0].entityNames.toString()).to.equal('[A,B]');
-          expect(serviceOptions[1].entityNames.toString()).to.equal('[A]');
+          expect(serviceOptions[0].entityNames).to.deep.equal(new Set(['A', 'B']));
+          expect(serviceOptions[1].entityNames).to.deep.equal(new Set(['A']));
 
           expect(skipClientOptions).to.have.length(1);
-          expect(skipClientOptions[0].entityNames.toString()).to.equal('[A,C]');
+          expect(skipClientOptions[0].entityNames).to.deep.equal(new Set(['A', 'C']));
 
           expect(skipServerOptions).to.have.length(1);
-          expect(skipServerOptions[0].entityNames.toString()).to.equal('[A]');
+          expect(skipServerOptions[0].entityNames).to.deep.equal(new Set(['A']));
         });
       });
       context('when having a pattern validation with a quote in it', () => {

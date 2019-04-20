@@ -62,9 +62,21 @@ describe('JDLEnum', () => {
         jdlEnum.addValue(42);
       });
 
-      it('converts it to a string value', () => {
-        expect(jdlEnum.values.toString()).to.deep.eq('[42]');
+      it('adds it', () => {
+        expect(jdlEnum.toString()).to.equal('enum MyEnum {\n  42\n}');
       });
+    });
+  });
+  describe('#getValuesAsString', () => {
+    let result;
+
+    before(() => {
+      const jdlEnum = new JDLEnum({ name: 'Toto', values: ['A', 'B'] });
+      result = jdlEnum.getValuesAsString();
+    });
+
+    it('returns the values separated by a comma', () => {
+      expect(result).to.equal('A,B');
     });
   });
   describe('::isValid', () => {

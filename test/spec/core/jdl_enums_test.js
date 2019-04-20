@@ -186,12 +186,10 @@ describe('JDLEnums', () => {
       });
 
       it('returns a stringified version of enums', () => {
-        expect(jdlEnums.toString()).to.equal(`
-enum A {
+        expect(jdlEnums.toString()).to.equal(`enum A {
   AA,
   AB
 }
-
 enum B {
   BA,
   BB,

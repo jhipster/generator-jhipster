@@ -53,12 +53,11 @@ describe('AbstractJDLOption', () => {
           value: BinaryOptions.Values.service.SERVICE_CLASS,
           excludedNames: ['C']
         });
-        const entityNames = AbstractJDLOption.resolveEntityNames(option, ['A', 'B', 'C']);
-        result = entityNames.toString();
+        result = AbstractJDLOption.resolveEntityNames(option, ['A', 'B', 'C']);
       });
 
       it("resolves the option's entity names", () => {
-        expect(result).to.equal('[A,B]');
+        expect(result).to.deep.equal(new Set(['B', 'A']));
       });
     });
   });
