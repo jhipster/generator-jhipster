@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const _ = require('lodash');
 const chalk = require('chalk');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const prompts = require('./prompts');
 const statistics = require('../statistics');
@@ -29,9 +29,10 @@ const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
+        this.configOptions = this.options.configOptions || {};
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
         // This adds support for a `--from-cli` flag
@@ -47,14 +48,13 @@ module.exports = class extends BaseGenerator {
         });
         this.defaultOption = this.options.default;
 
-        const blueprint = this.config.get('blueprint');
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'spring-controller', {
-                'from-cli': this.options['from-cli'],
-                force: this.options.force,
+                ...this.options,
                 arguments: [this.name],
-                default: this.options.default
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;
@@ -65,13 +65,7 @@ module.exports = class extends BaseGenerator {
     _initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
+                this.checkInvocationFromCLI();
             },
 
             initializing() {
@@ -172,8 +166,8 @@ module.exports = class extends BaseGenerator {
                 this.template(
                     `${this.fetchFromInstalledJHipster(
                         'spring-controller/templates'
-                    )}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIntTest.java.ejs`,
-                    `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IntTest.java`
+                    )}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIT.java.ejs`,
+                    `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IT.java`
                 );
             }
         };

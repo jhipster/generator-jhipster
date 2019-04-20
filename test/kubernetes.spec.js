@@ -1,5 +1,3 @@
-/* global describe, beforeEach, it */
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -56,7 +54,7 @@ const expectedFiles = {
 
 describe('JHipster Kubernetes Sub Generator', () => {
     describe('only gateway', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -64,7 +62,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway'],
                     adminPassword: 'meetup',
@@ -92,7 +90,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('gateway and mysql microservice', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -100,7 +98,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     dockerRepositoryName: 'jhipster',
@@ -127,7 +125,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('mysql microservice with custom namespace and jhipster-console (with zipkin)', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -135,7 +133,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['02-mysql'],
                     dockerRepositoryName: 'jhipster',
@@ -166,7 +164,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('gateway and ingress', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -174,7 +172,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway'],
                     dockerRepositoryName: 'jhipster',
@@ -201,7 +199,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('MySQL and PostgreSQL microservices without gateway', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -209,7 +207,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['02-mysql', '03-psql'],
                     dockerRepositoryName: 'jhipster',
@@ -239,7 +237,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -247,7 +245,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
                     dockerRepositoryName: 'jhipster',
@@ -283,7 +281,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('monolith application', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -291,7 +289,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'monolith',
+                    deploymentApplicationType: 'monolith',
                     directoryPath: './',
                     chosenApps: ['08-monolith'],
                     dockerRepositoryName: 'jhipster',
@@ -315,7 +313,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('Kafka application', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -323,7 +321,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'monolith',
+                    deploymentApplicationType: 'monolith',
                     directoryPath: './',
                     chosenApps: ['09-kafka'],
                     dockerRepositoryName: 'jhipster',
@@ -347,7 +345,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('mysql microservice with custom namespace and jhipster prometheus monitoring', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -355,7 +353,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['02-mysql'],
                     dockerRepositoryName: 'jhipster',
@@ -384,7 +382,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
     });
 
     describe('gateway with istio routing', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
                 .inTmpDir(dir => {
@@ -392,7 +390,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
-                    composeApplicationType: 'microservice',
+                    deploymentApplicationType: 'microservice',
                     directoryPath: './',
                     chosenApps: ['01-gateway'],
                     dockerRepositoryName: 'jhipster',
@@ -401,8 +399,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'Ingress',
                     ingressDomain: 'example.com',
                     clusteredDbApps: [],
-                    istio: 'manualInjection',
-                    istioRoute: true
+                    istio: true
                 })
                 .on('end', done);
         });

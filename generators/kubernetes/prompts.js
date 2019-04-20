@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,11 +23,11 @@ module.exports = {
     askForKubernetesServiceType,
     askForIngressDomain,
     askForIstioSupport,
-    askForIstioRouteFiles,
     ...dockerPrompts
 };
 
 function askForKubernetesNamespace() {
+    if (this.regenerate) return;
     const done = this.async();
 
     const prompts = [
@@ -46,17 +46,18 @@ function askForKubernetesNamespace() {
 }
 
 function askForKubernetesServiceType() {
+    if (this.regenerate) return;
     const done = this.async();
 
     const prompts = [
         {
             type: 'list',
             name: 'kubernetesServiceType',
-            message: 'Choose the kubernetes service type for your edge services',
+            message: 'Choose the Kubernetes service type for your edge services',
             choices: [
                 {
                     value: 'LoadBalancer',
-                    name: 'LoadBalancer - Let a kubernetes cloud provider automatically assign an IP'
+                    name: 'LoadBalancer - Let a Kubernetes cloud provider automatically assign an IP'
                 },
                 {
                     value: 'NodePort',
@@ -78,8 +79,10 @@ function askForKubernetesServiceType() {
 }
 
 function askForIngressDomain() {
+    if (this.regenerate) return;
     const done = this.async();
     const kubernetesServiceType = this.kubernetesServiceType;
+    this.ingressDomain = this.ingressDomain && this.ingressDomain.startsWith('.') ? this.ingressDomain.substring(1) : this.ingressDomain;
 
     const prompts = [
         {
@@ -89,7 +92,7 @@ function askForIngressDomain() {
             message:
                 'What is the root FQDN for your ingress services (e.g. example.com, sub.domain.co, www.10.10.10.10.xip.io, [namespace.ip]...)?',
             // default to minikube ip
-            default: this.ingressDomain ? this.ingressDomain : `${this.kubernetesNamespace}.192.168.99.100.nip.io`,
+            default: this.ingressDomain ? this.ingressDomain : '192.168.99.100.nip.io',
             validate: input => {
                 if (input.length === 0) {
                     return 'domain name cannot be empty';
@@ -107,14 +110,15 @@ function askForIngressDomain() {
     ];
 
     this.prompt(prompts).then(props => {
-        this.ingressDomain = props.ingressDomain;
+        this.ingressDomain = props.ingressDomain ? '.'.concat(props.ingressDomain) : '';
         done();
     });
 }
 
 function askForIstioSupport() {
-    if (this.composeApplicationType === 'monolith') {
-        this.istio = 'no';
+    if (this.regenerate) return;
+    if (this.deploymentApplicationType === 'monolith') {
+        this.istio = false;
         return;
     }
     const done = this.async();
@@ -123,43 +127,7 @@ function askForIstioSupport() {
         {
             type: 'list',
             name: 'istio',
-            message: 'Do you want to configure Istio?',
-            choices: [
-                {
-                    value: 'no',
-                    name: 'Not required'
-                },
-                {
-                    value: 'manualInjection',
-                    name: 'Manual sidecar injection (ensure istioctl in $PATH)'
-                },
-                {
-                    value: 'autoInjection',
-                    name: 'Label tag namespace as automatic injection is already configured'
-                }
-            ],
-            default: this.istio ? this.istio : 'no'
-        }
-    ];
-
-    this.prompt(prompts).then(props => {
-        this.istio = props.istio;
-        done();
-    });
-}
-
-function askForIstioRouteFiles() {
-    if (this.istio === 'no') {
-        this.istioRoute = false;
-        return;
-    }
-    const done = this.async();
-
-    const prompts = [
-        {
-            type: 'list',
-            name: 'istioRoute',
-            message: 'Do you want to generate Istio route files?',
+            message: 'Do you want to enable Istio?',
             choices: [
                 {
                     value: false,
@@ -170,12 +138,12 @@ function askForIstioRouteFiles() {
                     name: 'Yes'
                 }
             ],
-            default: this.istioRoute
+            default: this.istio
         }
     ];
 
     this.prompt(prompts).then(props => {
-        this.istioRoute = props.istioRoute;
+        this.istio = props.istio;
         done();
     });
 }

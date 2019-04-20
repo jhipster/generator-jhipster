@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,7 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
@@ -29,7 +29,7 @@ const statistics = require('../statistics');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -40,87 +40,15 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
-        // This adds support for a `--protractor` flag
-        this.option('protractor', {
-            desc: 'Enable protractor tests',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--uaa-base-name` flag
-        this.option('uaa-base-name', {
-            desc: 'Provide the name of UAA server, when using --auth uaa',
-            type: String
-        });
-
-        // This adds support for a `--build` flag
-        this.option('build', {
-            desc: 'Provide build tool for the application',
-            type: String
-        });
-
-        // This adds support for a `--websocket` flag
-        this.option('websocket', {
-            desc: 'Provide websocket option for the application',
-            type: String
-        });
-
         // This adds support for a `--auth` flag
         this.option('auth', {
             desc: 'Provide authentication type for the application',
             type: String
         });
 
-        // This adds support for a `--db` flag
-        this.option('db', {
-            desc: 'Provide DB name for the application',
-            type: String
-        });
-
-        // This adds support for a `--search-engine` flag
-        this.option('search-engine', {
-            desc: 'Provide development DB option for the application',
-            type: String
-        });
-
-        // This adds support for a `--cache-provider` flag
-        this.option('cache-provider', {
-            desc: 'Provide a cache provider option for the application',
-            type: String,
-            defaults: 'no'
-        });
-
-        // This adds support for a `--hb-cache` flag
-        this.option('hb-cache', {
-            desc: 'Provide hibernate cache option for the application',
-            type: Boolean,
-            default: false
-        });
-
-        // This adds support for a `--jhi-prefix` flag
-        this.option('jhi-prefix', {
-            desc: 'Add prefix before services, controllers and states name',
-            type: String,
-            defaults: 'jhi'
-        });
-
-        // This adds support for a `--skip-user-management` flag
-        this.option('skip-user-management', {
-            desc: 'Skip the user management module during app generation',
-            type: Boolean,
-            defaults: false
-        });
-
         // This adds support for a `--skip-commit-hook` flag
         this.option('skip-commit-hook', {
             desc: 'Skip adding husky commit hooks',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--yarn` flag
-        this.option('yarn', {
-            desc: 'Use yarn instead of npm',
             type: Boolean,
             defaults: false
         });
@@ -138,10 +66,8 @@ module.exports = class extends BaseGenerator {
         // use global variable since getters dont have access to instance property
         if (!opts.fromBlueprint) {
             useBlueprint = this.composeBlueprint(blueprint, 'client', {
-                'skip-install': this.options['skip-install'],
-                'from-cli': this.options['from-cli'],
-                configOptions: this.configOptions,
-                force: this.options.force
+                ...this.options,
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;
@@ -152,13 +78,7 @@ module.exports = class extends BaseGenerator {
     _initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
+                this.checkInvocationFromCLI();
             },
 
             displayLogo() {
@@ -182,11 +102,17 @@ module.exports = class extends BaseGenerator {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
                 }
-                if (this.clientFramework === 'angular2') {
+                if (this.clientFramework === 'angular' || this.clientFramework === 'angular2') {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
                 }
-                this.useSass = configuration.get('useSass');
+
+                this.clientTheme = configuration.get('clientTheme');
+                if (!this.clientTheme) {
+                    this.clientTheme = 'none';
+                }
+                this.clientThemeVariant = configuration.get('clientThemeVariant');
+
                 this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
@@ -206,7 +132,7 @@ module.exports = class extends BaseGenerator {
                     this.serviceDiscoveryType = false;
                 }
 
-                const clientConfigFound = this.useSass !== undefined;
+                const clientConfigFound = this.enableTranslation !== undefined;
                 if (clientConfigFound) {
                     // If translation is not defined, it is enabled by default
                     if (this.enableTranslation === undefined) {
@@ -261,12 +187,14 @@ module.exports = class extends BaseGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
-            askForClientSideOpts: prompts.askForClientSideOpts,
             askFori18n: prompts.askFori18n,
+            askForClientTheme: prompts.askForClientTheme,
+            askForClientThemeVariant: prompts.askForClientThemeVariant,
 
             setSharedConfigOptions() {
                 this.configOptions.clientFramework = this.clientFramework;
-                this.configOptions.useSass = this.useSass;
+                this.configOptions.clientTheme = this.clientTheme;
+                this.configOptions.clientThemeVariant = this.clientThemeVariant;
             }
         };
     }
@@ -283,7 +211,6 @@ module.exports = class extends BaseGenerator {
                 statistics.sendSubGenEvent('generator', 'client', {
                     app: {
                         clientFramework: this.clientFramework,
-                        useSass: this.useSass,
                         enableTranslation: this.enableTranslation,
                         nativeLanguage: this.nativeLanguage,
                         languages: this.languages
@@ -296,6 +223,7 @@ module.exports = class extends BaseGenerator {
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.angularAppName = this.getAngularAppName();
                 this.angularXAppName = this.getAngularXAppName();
+                this.hipster = this.getHipster(this.baseName);
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
@@ -311,7 +239,9 @@ module.exports = class extends BaseGenerator {
                     applicationType: this.applicationType,
                     baseName: this.baseName,
                     clientFramework: this.clientFramework,
-                    useSass: this.useSass,
+                    clientTheme: this.clientTheme,
+                    clientThemeVariant: this.clientThemeVariant,
+                    useSass: true,
                     enableTranslation: this.enableTranslation,
                     skipCommitHook: this.skipCommitHook,
                     clientPackageManager: this.clientPackageManager
@@ -403,16 +333,14 @@ module.exports = class extends BaseGenerator {
                 }
 
                 // Make dist dir available in templates
-                if (this.configOptions.buildTool === 'maven') {
-                    this.BUILD_DIR = 'target/';
-                } else {
-                    this.BUILD_DIR = 'build/';
-                }
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.configOptions.buildTool);
 
-                this.styleSheetExt = this.useSass ? 'scss' : 'css';
+                this.styleSheetExt = 'scss';
                 this.pkType = this.getPkType(this.databaseType);
-                this.apiUaaPath = `${this.authenticationType === 'uaa' ? `${this.uaaBaseName.toLowerCase()}/` : ''}`;
-                this.DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
+                this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
+                this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
+                this.AOT_DIR = `${this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool)}aot`;
+                this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
             composeLanguages() {

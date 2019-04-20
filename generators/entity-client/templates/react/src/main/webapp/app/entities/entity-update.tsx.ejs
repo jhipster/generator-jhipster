@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -37,7 +37,7 @@ import {
   Col,
   Label
   <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-import { AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
+import { AvFeedback, AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
 import {
   Translate,
@@ -46,7 +46,7 @@ import {
   ICrudGetAllAction,
   <%_ if (fieldsContainBlob) { _%>
   setFileData,
-  <% if(fieldsContainBlobOrImage) { %> openFile,<% } %>
+  <% if (fieldsContainBlobOrImage) { %> openFile,<% } %>
   byteSize,
   <%_ } _%>
   ICrudPutAction
@@ -116,7 +116,7 @@ import {
 } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 // tslint:disable-next-line:no-unused-variable
-import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
+import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 <%_ if (relationships.filter(e => e.relationshipType === 'many-to-many') !== undefined) { _%>
 import { mapIdList } from 'app/shared/util/entity-utils';
 <%_ } _%>
@@ -146,6 +146,12 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
       <%_ }) _%>
       isNew: !this.props.match.params || !this.props.match.params.id,
     };
+  }
+
+  componentWillUpdate (nextProps, nextState) {
+    if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
+      this.handleClose();
+    }
   }
 
   componentDidMount() {
@@ -182,7 +188,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
         const fieldName = fields[idx].fieldName;
     _%>
     <%_ if (fieldType === 'Instant' || fieldType === 'ZonedDateTime')  { _%>
-    values.<%=fieldName%> = new Date(values.<%= fieldName %>);
+    values.<%=fieldName%> = convertDateTimeToServer(values.<%= fieldName %>);
     <%_ } _%>
     <%_ } _%>
 
@@ -201,7 +207,6 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
       } else {
         this.props.updateEntity(entity);
       }
-      this.handleClose();
     }
   }
 
@@ -277,6 +282,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                 type="datetime-local"
                 className="form-control"
                 name="<%= fieldName %>"
+                placeholder={"YYYY-MM-DD HH:mm"}
                 value={isNew ? null : convertDateTimeFromServer(this.props.<%= entityInstance %>Entity.<%= fieldName %>)}
                 <%- include react_validators %>
               />
@@ -443,6 +449,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                 className="form-control"
                 name="<%= relationshipFieldName %>.id"
                 value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id}
+                required
               >
                 {
                   <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -454,7 +461,8 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                   ) : null
                 }
               </AvInput>
-                <%_ } _%>
+              <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
+              <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
                   <AvInput
@@ -480,6 +488,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                     type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
+                    required
                   >
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -491,6 +500,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                       ) : null
                     }
                   </AvInput>
+                  <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
                 <%_ } _%>
               <%_ } _%>
             </AvGroup>
@@ -586,7 +596,8 @@ const mapStateToProps = (storeState: IRootState) => ({
   <%_ }) _%>
   <%= entityInstance %>Entity: storeState.<%= entityInstance %>.entity,
   loading: storeState.<%= entityInstance %>.loading,
-  updating: storeState.<%= entityInstance %>.updating
+  updating: storeState.<%= entityInstance %>.updating,
+  updateSuccess: storeState.<%= entityInstance %>.updateSuccess,
 });
 
 const mapDispatchToProps = {

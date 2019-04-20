@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,18 +19,18 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const crypto = require('crypto');
 const os = require('os');
 const prompts = require('./prompts');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+const { getBase64Secret, getRandomHex } = require('../utils');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
@@ -48,34 +48,6 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
-        // This adds support for a `--[no-]i18n` flag
-        this.option('i18n', {
-            desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
-            type: Boolean,
-            defaults: true
-        });
-
-        // This adds support for a `--protractor` flag
-        this.option('protractor', {
-            desc: 'Enable protractor tests',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--cucumber` flag
-        this.option('cucumber', {
-            desc: 'Enable cucumber tests',
-            type: Boolean,
-            defaults: false
-        });
-
-        // This adds support for a `--skip-user-management` flag
-        this.option('skip-user-management', {
-            desc: 'Skip the user management module during app generation',
-            type: Boolean,
-            defaults: false
-        });
-
         // This adds support for a `--experimental` flag which can be used to enable experimental features
         this.option('experimental', {
             desc:
@@ -84,32 +56,28 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
+
         this.setupServerOptions(this);
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'server', {
+                ...this.options,
                 'client-hook': !this.skipClient,
-                'from-cli': this.options['from-cli'],
-                configOptions: this.configOptions,
-                force: this.options.force
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;
         }
+        this.registerPrettierTransform();
     }
 
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
+                this.checkInvocationFromCLI();
             },
 
             displayLogo() {
@@ -124,6 +92,7 @@ module.exports = class extends BaseGenerator {
                 this.TEST_DIR = constants.TEST_DIR;
                 this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+                this.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
                 this.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
@@ -137,7 +106,6 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
                 this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
-                this.DOCKER_ORACLE = constants.DOCKER_ORACLE;
                 this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
                 this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
@@ -153,9 +121,10 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
                 this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
+                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
+                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
 
                 this.JAVA_VERSION = constants.JAVA_VERSION;
-                this.SCALA_VERSION = constants.SCALA_VERSION;
 
                 this.NODE_VERSION = constants.NODE_VERSION;
                 this.YARN_VERSION = constants.YARN_VERSION;
@@ -245,7 +214,10 @@ module.exports = class extends BaseGenerator {
                 this.jwtSecretKey = configuration.get('jwtSecretKey');
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
-                this.uaaBaseName = configuration.get('uaaBaseName');
+                const uaaBaseName = configuration.get('uaaBaseName');
+                if (uaaBaseName) {
+                    this.uaaBaseName = uaaBaseName;
+                }
                 this.clientFramework = configuration.get('clientFramework');
                 const testFrameworks = configuration.get('testFrameworks');
                 if (testFrameworks) {
@@ -263,6 +235,20 @@ module.exports = class extends BaseGenerator {
                     this.websocket = false;
                 }
 
+                this.entitySuffix = configuration.get('entitySuffix');
+                if (_.isNil(this.entitySuffix)) {
+                    this.entitySuffix = '';
+                }
+
+                this.dtoSuffix = configuration.get('dtoSuffix');
+                if (_.isNil(this.dtoSuffix)) {
+                    this.dtoSuffix = 'DTO';
+                }
+
+                if (this.entitySuffix === this.dtoSuffix) {
+                    this.error(chalk.red('Entities cannot be generated as the entity suffix and DTO suffix are equals !'));
+                }
+
                 const serverConfigFound =
                     this.packageName !== undefined &&
                     this.authenticationType !== undefined &&
@@ -278,12 +264,12 @@ module.exports = class extends BaseGenerator {
                 if (this.baseName !== undefined && serverConfigFound) {
                     // Generate remember me key if key does not already exist in config
                     if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
-                        this.rememberMeKey = crypto.randomBytes(50).toString('hex');
+                        this.rememberMeKey = getRandomHex();
                     }
 
                     // Generate JWT secret key if key does not already exist in config
                     if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
-                        this.jwtSecretKey = Buffer.from(crypto.randomBytes(64).toString('hex')).toString('base64');
+                        this.jwtSecretKey = getBase64Secret(null, 64);
                     }
 
                     // If translation is not defined, it is enabled by default
@@ -341,21 +327,15 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.buildTool = this.buildTool;
                 this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
                 this.configOptions.authenticationType = this.authenticationType;
-                this.configOptions.uaaBaseName = this.uaaBaseName;
+                const uaaBaseName = this.uaaBaseName;
+                if (uaaBaseName) {
+                    this.configOptions.uaaBaseName = this.uaaBaseName;
+                }
                 this.configOptions.serverPort = this.serverPort;
 
                 // Make dist dir available in templates
-                if (this.buildTool === 'maven') {
-                    this.BUILD_DIR = 'target/';
-                } else {
-                    this.BUILD_DIR = 'build/';
-                }
-                this.CLIENT_DIST_DIR = this.BUILD_DIR + constants.CLIENT_DIST_DIR;
-                // Make documentation URL available in templates
-                this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
-                this.DOCUMENTATION_ARCHIVE_URL = `${constants.JHIPSTER_DOCUMENTATION_URL + constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH}v${
-                    this.jhipsterVersion
-                }`;
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
+                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
             }
         };
     }
@@ -448,7 +428,6 @@ module.exports = class extends BaseGenerator {
     _default() {
         return {
             getSharedConfigOptions() {
-                this.useSass = this.configOptions.useSass ? this.configOptions.useSass : false;
                 if (this.configOptions.enableTranslation !== undefined) {
                     this.enableTranslation = this.configOptions.enableTranslation;
                 }
@@ -458,13 +437,16 @@ module.exports = class extends BaseGenerator {
                 if (this.configOptions.languages !== undefined) {
                     this.languages = this.configOptions.languages;
                 }
+                this.testFrameworks = [];
                 if (this.configOptions.testFrameworks) {
                     this.testFrameworks = this.configOptions.testFrameworks;
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
-                this.protractorTests = this.testFrameworks.includes('protractor');
+                if (this.configOptions.uaaBaseName !== undefined) {
+                    this.uaaBaseName = this.configOptions.uaaBaseName;
+                }
                 this.gatlingTests = this.testFrameworks.includes('gatling');
                 this.cucumberTests = this.testFrameworks.includes('cucumber');
             },
@@ -490,6 +472,29 @@ module.exports = class extends BaseGenerator {
     get writing() {
         if (useBlueprint) return;
         return this._writing();
+    }
+
+    _install() {
+        return {
+            installing() {
+                if (this.skipClient) {
+                    if (!this.options['skip-install']) {
+                        if (this.clientPackageManager === 'yarn') {
+                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using yarn`));
+                            this.yarnInstall();
+                        } else if (this.clientPackageManager === 'npm') {
+                            this.log(chalk.bold(`\nInstalling generator-jhipster@${this.jhipsterVersion} locally using npm`));
+                            this.npmInstall();
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    get install() {
+        if (useBlueprint) return;
+        return this._install();
     }
 
     // Public API method used by the getter and also by Blueprints

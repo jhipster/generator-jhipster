@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,33 +21,15 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <property name="now" value="now()" dbms="h2"/>
     <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-    <property name="now" value="now()" dbms="mysql"/>
     <property name="autoIncrement" value="true"/>
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql') { _%>
-    <property name="now" value="current_timestamp" dbms="postgresql"/>
-
+    <%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'oracle' || prodDatabaseType === 'mssql') { _%>
     <changeSet id="00000000000000" author="jhipster">
-        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
-    </changeSet>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'oracle') { _%>
-    <property name="now" value="sysdate" dbms="oracle"/>
-
-    <changeSet id="00000000000000" author="jhipster">
-        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
-    </changeSet>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'mssql') { _%>
-    <property name="now" value="GETDATE()" dbms="mssql"/>
-
-    <changeSet id="00000000000000" author="jhipster">
-        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="50"/>
+        <createSequence sequenceName="sequence_generator" startValue="1050" incrementBy="50"/>
     </changeSet>
     <%_ } _%>
 
@@ -75,7 +57,7 @@
             <%_ } _%>
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
-            <column name="email" type="varchar(254)">
+            <column name="email" type="varchar(191)">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
             </column>
             <column name="image_url" type="varchar(256)"/>
@@ -90,9 +72,7 @@
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" type="timestamp" defaultValueDate="${now}">
-                <constraints nullable="false"/>
-            </column>
+            <column name="created_date" type="timestamp"/>
             <%_ if (authenticationType !== 'oauth2') { _%>
             <column name="reset_date" type="timestamp">
                 <constraints nullable="true"/>
@@ -160,27 +140,30 @@
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
-        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
-                  file="config/liquibase/users.csv"
+        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+                  file="config/liquibase/data/user.csv"
                   separator=";"
                   <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_user">
+            <%_ if (prodDatabaseType === 'postgresql') { _%>
+            <column name="id" type="numeric"/>
+            <%_ } _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
         <dropDefaultValue tableName="<%= jhiTablePrefix %>_user" columnName="created_date" columnDataType="datetime"/>
-        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
-                  file="config/liquibase/authorities.csv"
+        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+                  file="config/liquibase/data/authority.csv"
                   separator=";"
                   <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_authority"/>
 
-        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData encoding="UTF-8"
-                  file="config/liquibase/users_authorities.csv"
+        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+                  file="config/liquibase/data/user_authority.csv"
                   separator=";"
                   <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
@@ -228,5 +211,20 @@
                                  constraintName="fk_evt_pers_audit_evt_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="<%= jhiTablePrefix %>_persistent_audit_event"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000002" context="test">
+        <createTable tableName="<%= jhiTablePrefix %>_date_time_wrapper">
+            <column autoIncrement="${autoIncrement}" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="<%= jhiTablePrefix %>_date_time_wrapperPK"/>
+            </column>
+            <column name="instant" type="timestamp"/>
+            <column name="local_date_time" type="timestamp"/>
+            <column name="offset_date_time" type="timestamp"/>
+            <column name="zoned_date_time" type="timestamp"/>
+            <column name="local_time" type="time"/>
+            <column name="offset_time" type="time"/>
+            <column name="local_date" type="date"/>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -30,7 +30,7 @@
 #   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
 #   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
 #   `kubectl delete pod jhipster-registry-0`, `kubectl delete pod jhipster-registry-1`
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: registry-secret
@@ -39,7 +39,7 @@ type: Opaque
 data:
   registry-admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-registry
@@ -56,7 +56,7 @@ spec:
   selector:
     app: jhipster-registry
 ---
-apiVersion: apps/v1
+apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: jhipster-registry
@@ -73,7 +73,7 @@ spec:
       labels:
         app: jhipster-registry
         version: "1.0"
-     <%_ if (istio !== 'no') { _%>
+     <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
      <%_ } _%>
@@ -94,12 +94,12 @@ spec:
             secretKeyRef:
               name: registry-secret
               key: registry-admin-password
-        <%_ if (istio !== 'no') { _%>
+        <%_ if (istio) { _%>
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "false"
         <%_ } _%>
-        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_SECRET
-          value: bXktc2VjcmV0LXRva2VuLXRvLWNoYW5nZS1pbi1wcm9kdWN0aW9uLWFuZC10by1rZWVwLWluLWEtc2VjdXJlLXBsYWNl
+        - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+          value: YlhrdGMyVmpjbVYwTFhSdmEyVnVMWFJ2TFdOb1lXNW5aUzFwYmkxd2NtOWtkV04wYVc5dUxXRnVaQzEwYnkxclpXVndMV2x1TFdFdGMyVmpkWEpsTFhCc1lXTmwK
         - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE
           value: native
         - name: SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS

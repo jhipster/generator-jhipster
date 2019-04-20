@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,7 +29,7 @@ import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 // tslint:disable-next-line:no-unused-variable
 import {
   <%_ if (blobFields.length > 0) { _%>
-    <%_ if(fieldsContainBlobOrImage) { _%>
+    <%_ if (fieldsContainBlobOrImage) { _%>
   openFile,
     <%_ } _%>
   byteSize,
@@ -110,14 +110,26 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ if (searchEngine === 'elasticsearch') { _%>
   search = () => {
     if (this.state.search) {
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      this.props.reset();
+      <%_ } _%>
+      <%_ if (pagination !== 'no') { _%>
+      this.setState({ activePage: 1 }, () => {
+        const { activePage, itemsPerPage, sort, order, search } = this.state;
+        this.props.getSearchEntities(search, activePage - 1, itemsPerPage, `${sort},${order}`);
+      });
+      <%_ } else { _%>
       this.props.getSearchEntities(this.state.search);
+      <%_ } _%>
     }
   };
 
   clear = () => {
-    this.props.getEntities();
-    this.setState({
-      search: ''
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    this.props.reset();
+    <%_ } _%>
+    this.setState({ search: ''<% if (pagination !== 'no') { %>, activePage: 1<% } %> }, () => {
+      this.props.getEntities()
     });
   };
 
@@ -162,8 +174,17 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
   <%_ } _%>
 
   getEntities = () => {
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    const { activePage, itemsPerPage, sort, order, search } = this.state;
+    if (search) {
+      this.props.getSearchEntities(search, activePage - 1, itemsPerPage, `${sort},${order}`);
+    } else {
+      this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+    }
+    <%_ } else { _%>
     const { activePage, itemsPerPage, sort, order } = this.state;
     this.props.getEntities(activePage - 1, itemsPerPage, `${sort},${order}`);
+    <%_ } _%>
   };
   <%_ } _%>
 

@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "वापरकर्ता सेटिंग्ज [<b>{{username}}</b>]",
+        "title": "वापरकर्ता सेटिंग्ज [<strong>{{username}}</strong>]",
         "form": {
             "firstname": "नाव",
             "firstname.placeholder": "आपले नाव",

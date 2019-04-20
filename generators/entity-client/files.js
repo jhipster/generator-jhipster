@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
 const constants = require('../generator-constants');
 
 /* Constants use throughout */
@@ -244,7 +243,7 @@ function writeFiles() {
                     this.entityAngularName,
                     this.entityFolderName,
                     this.entityFileName,
-                    this.enableTranslation,
+                    this.entityUrl,
                     this.clientFramework,
                     this.microserviceName
                 );
@@ -262,12 +261,9 @@ function writeFiles() {
                     this.entityAngularName,
                     this.entityFolderName,
                     this.entityFileName,
-                    this.enableTranslation,
+                    this.entityUrl,
                     this.clientFramework
                 );
-            }
-            if (this.applicationType === 'gateway' && !_.isUndefined(this.microserviceName)) {
-                this.addEntityToWebpack(this.microserviceName, this.clientFramework);
             }
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }

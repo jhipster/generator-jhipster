@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -29,6 +29,11 @@ const constants = require('../generator-constants');
 const exec = childProcess.exec;
 
 module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+        this.registerPrettierTransform();
+    }
+
     initializing() {
         this.log(chalk.bold('CloudFoundry configuration is starting'));
         this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
@@ -61,16 +66,6 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
                 this.template('manifest.yml.ejs', 'deploy/cloudfoundry/manifest.yml');
                 this.template('application-cloudfoundry.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}config/application-cloudfoundry.yml`);
-            },
-
-            addCloudFoundryDependencies() {
-                if (this.buildTool === 'maven') {
-                    this.addMavenDependency('org.springframework.cloud', 'spring-cloud-localconfig-connector');
-                    this.addMavenDependency('org.springframework.cloud', 'spring-cloud-cloudfoundry-connector');
-                } else if (this.buildTool === 'gradle') {
-                    this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-localconfig-connector');
-                    this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-cloudfoundry-connector');
-                }
             },
 
             checkInstallation() {
@@ -161,16 +156,16 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
                 let cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -t 120 -p';
-                let warFolder = '';
+                let jarFolder = '';
                 if (this.buildTool === 'maven') {
-                    warFolder = ' target/';
+                    jarFolder = ' target/';
                 } else if (this.buildTool === 'gradle') {
-                    warFolder = ' build/libs/';
+                    jarFolder = ' build/libs/';
                 }
                 if (os.platform() === 'win32') {
-                    cloudfoundryDeployCommand += ` ${glob.sync(`${warFolder.trim()}*.war`)[0]}`;
+                    cloudfoundryDeployCommand += ` ${glob.sync(`${jarFolder.trim()}*.jar`)[0]}`;
                 } else {
-                    cloudfoundryDeployCommand += `${warFolder}*.war`;
+                    cloudfoundryDeployCommand += `${jarFolder}*.jar`;
                 }
 
                 this.log(chalk.bold('\nPushing the application to Cloud Foundry'));

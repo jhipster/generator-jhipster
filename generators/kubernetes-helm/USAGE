@@ -1,0 +1,5 @@
+Description:
+    Creates all required helm packages for the selected applications to deploy in kubernetes.
+
+Example:
+    jhipster kubernetes-helm

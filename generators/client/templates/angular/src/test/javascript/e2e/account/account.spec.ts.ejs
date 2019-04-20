@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -82,7 +82,7 @@ describe('account', () => {
         signInPage = await navBarPage.getSignInPage();
 
         <%_ if (enableTranslation) { _%>
-        const expect1 = 'global.form.username';
+        const expect1 = 'global.form.username.label';
         <%_ } else { _%>
         const expect1 = 'Login';
         <%_ } _%>
@@ -101,10 +101,6 @@ describe('account', () => {
         await browser.wait(ec.visibilityOf(element(by.id('home-logged-message'))));
         const value2 = await element(by.id('home-logged-message')).<%- elementGetter %>;
         expect(value2).to.eq(expect2);
-
-        <%_ if (authenticationType === 'oauth2') { _%>
-        await navBarPage.autoSignOut();
-        <%_ } _%>
     });
 
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -188,9 +184,9 @@ describe('account', () => {
         await passwordPage.setConfirmPassword('admin');
         await passwordPage.save();
     });
+<%_ } _%>
 
     after(async () => {
         await navBarPage.autoSignOut();
     });
-<%_ } _%>
 });

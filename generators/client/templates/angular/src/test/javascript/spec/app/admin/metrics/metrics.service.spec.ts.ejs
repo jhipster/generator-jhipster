@@ -1,5 +1,5 @@
 <%#
-Copyright 2013-2018 the original author or authors from the JHipster project.
+Copyright 2013-2019 the original author or authors from the JHipster project.
 
     This file is part of the JHipster project, see https://www.jhipster.tech/
     for more information.
@@ -26,12 +26,14 @@ describe('Service Tests', () => {
     describe('Logs Service', () => {
         let service: <%=jhiPrefixCapitalized%>MetricsService;
         let httpMock;
+        let expectedResult;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule]
             });
 
+            expectedResult = {};
             service = TestBed.get(<%=jhiPrefixCapitalized%>MetricsService);
             httpMock = TestBed.get(HttpTestingController);
         });
@@ -45,7 +47,7 @@ describe('Service Tests', () => {
                 service.getMetrics().subscribe(() => {});
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                const resourceUrl = SERVER_API_URL + 'management/metrics';
+                const resourceUrl = SERVER_API_URL + 'management/jhimetrics';
                 expect(req.request.url).toEqual(resourceUrl);
             });
 
@@ -53,11 +55,12 @@ describe('Service Tests', () => {
                 const metrics = [];
 
                 service.getMetrics().subscribe(received => {
-                    expect(received.body[0]).toEqual(metrics);
+                    expectedResult = received;
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush([metrics]);
+                req.flush(metrics);
+                expect(expectedResult).toEqual(metrics);
             });
 
             it('should return Thread Dump', () => {
@@ -66,11 +69,12 @@ describe('Service Tests', () => {
                 ];
 
                 service.threadDump().subscribe(received => {
-                    expect(received.body[0]).toEqual(dump);
+                    expectedResult = received;
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush([dump]);
+                req.flush(dump);
+                expect(expectedResult).toEqual(dump);
             });
         });
     });

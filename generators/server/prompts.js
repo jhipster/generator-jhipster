@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 
-const crypto = require('crypto');
 const chalk = require('chalk');
 
 const constants = require('../generator-constants');
+const { getBase64Secret, getRandomHex } = require('../utils');
 
 module.exports = {
     askForModuleName,
@@ -117,18 +117,18 @@ function askForServerSideOpts(meta) {
                         name: 'JWT authentication (stateless, with a token)'
                     }
                 ];
+                if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
+                    opts.push({
+                        value: 'session',
+                        name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
+                    });
+                }
                 if (!reactive) {
                     opts.push({
                         value: 'oauth2',
                         name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
                     });
-
-                    if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
-                        opts.push({
-                            value: 'session',
-                            name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
-                        });
-                    } else if (['gateway', 'microservice'].includes(applicationType)) {
+                    if (['gateway', 'microservice'].includes(applicationType)) {
                         opts.push({
                             value: 'uaa',
                             name: 'Authentication with JHipster UAA server (the server must be generated separately)'
@@ -171,11 +171,11 @@ function askForServerSideOpts(meta) {
                     value: 'mongodb',
                     name: 'MongoDB'
                 });
+                opts.push({
+                    value: 'couchbase',
+                    name: 'Couchbase'
+                });
                 if (!reactive) {
-                    opts.push({
-                        value: 'couchbase',
-                        name: 'Couchbase'
-                    });
                     if (
                         (response.authenticationType !== 'oauth2' && applicationType === 'microservice') ||
                         (response.authenticationType === 'uaa' && applicationType === 'gateway')
@@ -295,11 +295,11 @@ function askForServerSideOpts(meta) {
         }
 
         if (this.authenticationType === 'session') {
-            this.rememberMeKey = crypto.randomBytes(50).toString('hex');
+            this.rememberMeKey = getRandomHex();
         }
 
         if (this.authenticationType === 'jwt' || this.applicationType === 'microservice') {
-            this.jwtSecretKey = Buffer.from(crypto.randomBytes(64).toString('hex')).toString('base64');
+            this.jwtSecretKey = getBase64Secret(null, 64);
         }
 
         // user-management will be handled by UAA app, oauth expects users to be managed in IpP
@@ -352,30 +352,31 @@ function askForServerSideOpts(meta) {
 
 function askForOptionalItems(meta) {
     if (!meta && this.existingProject) return;
-    if (this.reactive) return;
 
     const applicationType = this.applicationType;
     const choices = [];
     const defaultChoice = [];
-    if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+    if (!this.reactive) {
+        if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+            choices.push({
+                name: 'Search engine using Elasticsearch',
+                value: 'searchEngine:elasticsearch'
+            });
+        }
+        if (applicationType === 'monolith' || applicationType === 'gateway') {
+            choices.push({
+                name: 'WebSockets using Spring Websocket',
+                value: 'websocket:spring-websocket'
+            });
+        }
         choices.push({
-            name: 'Search engine using Elasticsearch',
-            value: 'searchEngine:elasticsearch'
-        });
-    }
-    if (applicationType === 'monolith' || applicationType === 'gateway') {
-        choices.push({
-            name: 'WebSockets using Spring Websocket',
-            value: 'websocket:spring-websocket'
+            name: 'Asynchronous messages using Apache Kafka',
+            value: 'messageBroker:kafka'
         });
     }
     choices.push({
         name: 'API first development using OpenAPI-generator',
         value: 'enableSwaggerCodegen:true'
-    });
-    choices.push({
-        name: 'Asynchronous messages using Apache Kafka',
-        value: 'messageBroker:kafka'
     });
 
     const PROMPTS = {

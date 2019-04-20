@@ -1,0 +1,15 @@
+deployment {
+  deploymentType docker-compose,
+  appsFolders [tata, titi],
+  dockerRepositoryName "test"
+}
+deployment {
+  deploymentType kubernetes,
+  appsFolders [tata, titi],
+  dockerRepositoryName "test"
+}
+deployment {
+  deploymentType openshift,
+  appsFolders [tata, titi],
+  dockerRepositoryName "test"
+}

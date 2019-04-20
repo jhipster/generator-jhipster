@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,9 +17,6 @@
  limitations under the License.
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-
-import { NgbDateMomentAdapter } from './util/datepicker-adapter';
 import {
     <%=angularXAppName%>SharedLibsModule,
     <%=angularXAppName%>SharedCommonModule,
@@ -40,9 +37,6 @@ import {
         <%_ } _%>
         HasAnyAuthorityDirective
     ],
-    providers: [
-        { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter},
-    ],
     <%_ if (authenticationType !== 'oauth2') { _%>
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     <%_ } _%>
@@ -56,4 +50,10 @@ import {
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
 })
-export class <%=angularXAppName%>SharedModule {}
+export class <%=angularXAppName%>SharedModule {
+    static forRoot() {
+        return {
+            ngModule: <%=angularXAppName%>SharedModule
+        };
+    }
+}

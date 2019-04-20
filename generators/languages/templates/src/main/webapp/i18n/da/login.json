@@ -12,7 +12,7 @@
                 "authentication": "<strong>Autentifikation mislykkedes!</strong> Kontroller venligst brugernavn og kodeord og prøv igen."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Did you forget your password?"
         }
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -49,6 +49,7 @@ module.exports = class extends BaseGenerator {
 
         this.herokuSkipBuild = this.options['skip-build'];
         this.herokuSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
+        this.registerPrettierTransform();
     }
 
     initializing() {
@@ -623,14 +624,14 @@ module.exports = class extends BaseGenerator {
                     });
                 } else {
                     this.log(chalk.bold('\nDeploying application'));
-                    let warFileWildcard = 'target/*.war';
+                    let jarFileWildcard = 'target/*.jar';
                     if (this.buildTool === 'gradle') {
-                        warFileWildcard = 'build/libs/*.war';
+                        jarFileWildcard = 'build/libs/*.jar';
                     }
 
-                    const files = glob.sync(warFileWildcard, {});
-                    const warFile = files[0];
-                    const herokuDeployCommand = `heroku deploy:jar ${warFile} --app ${this.herokuAppName}`;
+                    const files = glob.sync(jarFileWildcard, {});
+                    const jarFile = files[0];
+                    const herokuDeployCommand = `heroku deploy:jar ${jarFile} --app ${this.herokuAppName}`;
 
                     this.log(
                         chalk.bold(

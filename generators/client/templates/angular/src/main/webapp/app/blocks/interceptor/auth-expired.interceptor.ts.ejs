@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -25,7 +25,6 @@ import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 import { LoginModalService } from 'app/core/login/login-modal.service';
-import { Principal } from 'app/core/auth/principal.service';
     <%_ } _%>
 import { LoginService } from 'app/core/login/login.service';
 <%_ } _%>
@@ -37,13 +36,25 @@ import { LoginModalService } from 'app/core/login/login-modal.service';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 <%_ } _%>
 
+@Injectable()
 export class AuthExpiredInterceptor implements HttpInterceptor {
 
     constructor(
-        <%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
-        private stateStorageService: StateStorageService,
+        <%_ if (authenticationType === 'session') { _%>
+        private loginModalService: LoginModalService,
+        private authServerProvider: AuthServerProvider,
+        private stateStorageService: StateStorageService
         <%_ } _%>
-        private injector: Injector
+        <%_ if (['oauth2', 'jwt', 'uaa'].includes(authenticationType)) { _%>
+            <%_ if (authenticationType === 'uaa') { _%>
+        private loginModalService: LoginModalService,
+        private router: Router,
+            <%_ } _%>
+            <%_ if (authenticationType === 'oauth2') { _%>
+        private stateStorageService: StateStorageService,
+            <%_ } _%>
+        private loginService: LoginService
+        <%_ } _%>
     ) {}
 
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
@@ -52,20 +63,14 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
             if (err instanceof HttpErrorResponse) {
                 if (err.status === 401) {
 <%_ if (authenticationType === 'jwt') { _%>
-                    const loginService: LoginService = this.injector.get(LoginService);
-                    loginService.logout();
+                    this.loginService.logout();
 <% } if (authenticationType === 'uaa') { %>
-                    const principal = this.injector.get(Principal);
-
-                    if (principal.isAuthenticated()) {
-                        principal.authenticate(null);
-                        const loginModalService: LoginModalService = this.injector.get(LoginModalService);
-                        loginModalService.open();
+                    if (this.loginService.isAuthenticated()) {
+                        this.loginService.logoutDirectly();
+                        this.loginModalService.open();
                     } else {
-                        const loginService: LoginService = this.injector.get(LoginService);
-                        loginService.logout();
-                        const router = this.injector.get(Router);
-                        router.navigate(['/']);
+                        this.loginService.logout();
+                        this.router.navigate(['/']);
                     }
 <%_ } _%>
                 }
@@ -88,13 +93,10 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
                         this.stateStorageService.storeUrl('/');
                     }
 <% if (authenticationType === 'session') { %>
-                    const authServer: AuthServerProvider = this.injector.get(AuthServerProvider);
-                    authServer.logout();
-                    const loginModalService: LoginModalService = this.injector.get(LoginModalService);
-                    loginModalService.open();
+                    this.authServerProvider.logout();
+                    this.loginModalService.open();
 <% } else { %>
-                    const loginService: LoginService = this.injector.get(LoginService);
-                    loginService.login();
+                    this.loginService.login();
 <% } %>
                 }
             }

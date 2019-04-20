@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "ইউজার সেটিংস [<b>{{username}}</b>] এর জন্য",
+        "title": "ইউজার সেটিংস [<strong>{{username}}</strong>] এর জন্য",
         "form": {
             "firstname": "নামের প্রথম অংশ",
             "firstname.placeholder": "নামের প্রথম অংশ",

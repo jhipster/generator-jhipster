@@ -1,0 +1,29 @@
+{
+    "generator-jhipster": {
+        "applicationType": "monolith",
+        "baseName": "travisMongo",
+        "packageName": "io.github.jhipster.travis",
+        "packageFolder": "io/github/jhipster/travis",
+        "authenticationType": "jwt",
+        "cacheProvider": "ehcache",
+        "enableHibernateCache": false,
+        "websocket": false,
+        "databaseType": "mongodb",
+        "devDatabaseType": "mongodb",
+        "prodDatabaseType": "mongodb",
+        "searchEngine": false,
+        "buildTool": "maven",
+        "enableTranslation": true,
+        "nativeLanguage": "en",
+        "languages": ["en", "fr"],
+        "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
+        "testFrameworks": ["gatling", "cucumber"],
+        "serverPort": "8080",
+        "jhiPrefix": "myPrefix",
+        "travis": true,
+        "messageBroker": "kafka",
+        "serviceDiscoveryType": false,
+        "clientPackageManager": "npm",
+        "clientFramework": "angularX"
+    }
+}

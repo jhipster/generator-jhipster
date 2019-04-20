@@ -1,3 +1,21 @@
+/**
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const dockerCLI = require('./docker-cli');
@@ -19,7 +37,7 @@ module.exports = {
  * @param failOver flag
  */
 function checkDocker() {
-    if (this.abort) return;
+    if (this.abort || this.skipChecks) return;
     const done = this.async();
 
     shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
@@ -67,7 +85,7 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
     this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
     if (opts.appConfig.buildTool === 'maven') {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/target/docker`);
-        this.dockerBuildCommand = './mvnw package -Pprod jib:dockerBuild';
+        this.dockerBuildCommand = './mvnw -Pprod verify jib:dockerBuild';
     } else {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/build/docker`);
         this.dockerBuildCommand = './gradlew bootWar -Pprod jibDockerBuild';

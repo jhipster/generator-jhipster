@@ -1,7 +1,6 @@
 ---
 name: 🤝 Sponsor the project
 about: If you would like to support our efforts in maintaining this community-driven project!
-
 ---
 
 --------------^ Click "Preview" for a nicer view!

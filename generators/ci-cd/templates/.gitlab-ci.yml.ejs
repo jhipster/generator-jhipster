@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -44,11 +44,7 @@ stages:
 before_script:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     <%_ if (!skipClient) { _%>
-        <%_ if (clientPackageManager === 'yarn') { _%>
-    - ./gradlew yarn_install -PnodeInstall --no-daemon
-        <%_ } else if (clientPackageManager === 'npm') { _%>
-    - ./gradlew npmInstall -PnodeInstall --no-daemon
-        <%_ } _%>
+    - ./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon
     <%_ } _%>
 
 gradle-compile:
@@ -73,18 +69,26 @@ gradle-test:
             - build/jacoco/
         expire_in: 1 day
 
+gradle-integration-test:
+    stage: test
+    script:
+        - ./gradlew integrationTest -PnodeInstall --no-daemon
+    artifacts:
+        reports:
+            junit: build/test-results/integrationTest/TEST-*.xml
+        paths:
+            - build/test-results/
+            - build/jacoco/
+        expire_in: 1 day
+
 <%_ if (!skipClient) { _%>
 frontend-test:
     stage: test
     script:
-        <%_ if (clientPackageManager === 'yarn') { _%>
-        - ./gradlew yarn_test -PnodeInstall --no-daemon
-        <%_ } else if (clientPackageManager === 'npm') { _%>
-        - ./gradlew npm_test -PnodeInstall --no-daemon
-        <%_ } _%>
+        - ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
     artifacts:
         reports:
-            junit: build/test-results/jest/TESTS-*.xml
+            junit: build/test-results/TESTS-results-jest.xml
         paths:
             - build/test-results/
             - build/jacoco/
@@ -96,6 +100,7 @@ sonar-analyze:
     stage: analyze
     dependencies:
         - gradle-test
+        - gradle-integration-test
         <%_ if (!skipClient) { _%>
         - frontend-test
         <%_ } _%>
@@ -107,10 +112,10 @@ sonar-analyze:
 gradle-package:
     stage: package
     script:
-        - ./gradlew bootWar -Pprod -x check --no-daemon
+        - ./gradlew bootJar -Pprod -x check --no-daemon
     artifacts:
         paths:
-            - build/libs/*.war
+            - build/libs/*.jar
         expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
@@ -128,9 +133,9 @@ gradle-package:
 #        - gradle-package
 #    before_script:
 #        - docker info
-#        - cp build/libs/*.war src/main/docker
+#        - cp build/libs/*.jar src/main/docker
 #    script:
-#        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" REGISTRY_URL
+#        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $REGISTRY_URL
 #        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker
 #        - docker push $IMAGE_TAG
 
@@ -151,11 +156,10 @@ before_script:
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
-    - ./mvnw com.github.eirslett:frontend-maven-plugin:yarn -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } else if (clientPackageManager === 'npm') { _%>
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
-    - ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } _%>
+    - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dmaven.repo.local=$MAVEN_USER_HOME
     <%_ } _%>
 
 maven-compile:
@@ -171,24 +175,26 @@ maven-compile:
 maven-test:
     stage: test
     script:
-        - ./mvnw test -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw verify -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
-            junit: target/surefire-reports/TEST-*.xml
+            junit: target/test-results/**/TEST-*.xml
         paths:
             - target/test-results
+            - target/jacoco
         expire_in: 1 day
 
 <%_ if (!skipClient) { _%>
 frontend-test:
     stage: test
     script:
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='test<%= frontTests%>' -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='<%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
-            junit: target/test-results/jest/TESTS-*.xml
+            junit: target/test-results/TESTS-results-jest.xml
         paths:
             - target/test-results
+            - target/jacoco
         expire_in: 1 day
 <%_ } _%>
 <%_ if (cicdIntegrations.includes('sonar')) { _%>
@@ -200,7 +206,8 @@ sonar-analyze:
         - frontend-test
         <%_ } _%>
     script:
-        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar -Dsonar.organization=atomfrede-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
     allow_failure: true
 <%_ } _%>
 
@@ -210,7 +217,7 @@ maven-package:
         - ./mvnw verify <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
-            - target/*.war
+            - target/*.jar
         expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
@@ -228,7 +235,7 @@ maven-package:
 #        - maven-package
 #    before_script:
 #        - docker info
-#        - cp target/*.war src/main/docker
+#        - cp target/*.jar src/main/docker
 #    script:
 #        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $REGISTRY_URL
 #        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ConfigMap
 metadata:
   name: es-config
@@ -27,13 +27,13 @@ data:
     unicast.host: jhipster-elasticsearch-discovery
     network.host: 0.0.0.0
     http.enabled: "true"
-    memory.opts: -Xms512m -Xmx512m
+    memory.opts: -Djava.net.preferIPv4Stack=true -Xms512m -Xmx512m
     cluster.name: jhipster-elasticsearch-cluster
     memory.lock: "false"
     path.data: /es/data
     path.logs: /es/logs
 ---
-apiVersion: apps/v1beta1
+apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: jhipster-elasticsearch-master
@@ -49,6 +49,10 @@ spec:
       labels:
         component: jhipster-elasticsearch
         role: master
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       initContainers:
       - name: init-sysctl
@@ -59,11 +63,18 @@ spec:
         - "/bin/sh"
         - "-c"
         - "chown -R 1000:1000 /es"
-        - sysctl
-        - -w
-        - vm.max_map_count=262144
         securityContext:
-          runAsUser: 0
+          privileged: true
+        volumeMounts:
+        - name: storage
+          mountPath: /es
+      - name: init-sysctl-2
+        image: busybox
+        # This would be needed to give access to 'elasticsearch' user that comes from the base
+        # image where the provisioned volume is host path (in minikube)
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
         volumeMounts:
         - name: storage
           mountPath: /es
@@ -142,10 +153,10 @@ spec:
               key: path.logs
         resources:
           requests:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "200m"
           limits:
-            memory: "512Mi"
+            memory: "1024Mi"
             cpu: "400m"
         ports:
         - containerPort: 9300
@@ -168,12 +179,11 @@ spec:
       name: storage
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: standard
       resources:
         requests:
           storage: 1Gi
 ---
-apiVersion: apps/v1beta1
+apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: jhipster-elasticsearch-data
@@ -189,6 +199,10 @@ spec:
       labels:
         component: jhipster-elasticsearch
         role: data
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       initContainers:
       - name: init-sysctl
@@ -197,11 +211,16 @@ spec:
         - "/bin/sh"
         - "-c"
         - "chown -R 1000:1000 /es"
-        - sysctl
-        - -w
-        - vm.max_map_count=262144
         securityContext:
-          runAsUser: 0
+          privileged: true
+        volumeMounts:
+        - name: storage
+          mountPath: /es
+      - name: init-sysctl-2
+        image: busybox
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
         volumeMounts:
         - name: storage
           mountPath: /es
@@ -280,10 +299,10 @@ spec:
               key: path.logs
         resources:
           requests:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "200m"
           limits:
-            memory: "512Mi"
+            memory: "1024Mi"
             cpu: "400m"
         ports:
         - containerPort: 9300
@@ -305,13 +324,12 @@ spec:
   - metadata:
       name: storage
     spec:
-      storageClassName: standard
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
           storage: 1Gi
 ---
-apiVersion: apps/v1beta1
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: jhipster-elasticsearch-client
@@ -321,11 +339,19 @@ metadata:
     role: client
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      component: jhipster-elasticsearch
+      role: client
   template:
     metadata:
       labels:
         component: jhipster-elasticsearch
         role: client
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       initContainers:
       - name: init-sysctl
@@ -411,10 +437,10 @@ spec:
               key: path.logs
         resources:
           requests:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "200m"
           limits:
-            memory: "512Mi"
+            memory: "1024Mi"
             cpu: "400m"
         ports:
         - containerPort: 9300
@@ -435,7 +461,7 @@ spec:
       - name: storage
         emptyDir: {}
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-elasticsearch-discovery
@@ -453,7 +479,7 @@ spec:
     component: jhipster-elasticsearch
     role: master
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-elasticsearch-data
@@ -471,7 +497,7 @@ spec:
     component: jhipster-elasticsearch
     role: data
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-elasticsearch

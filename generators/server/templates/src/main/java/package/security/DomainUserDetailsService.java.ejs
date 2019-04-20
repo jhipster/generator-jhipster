@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.security;
 
-import <%= packageName %>.domain.User;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
@@ -84,13 +84,13 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
 
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, <%= asEntity('User') %> user) {
         if (!user.getActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
             .map(authority -> new SimpleGrantedAuthority(authority.getName()))<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
-            .map(authority -> new SimpleGrantedAuthority(authority))<% } %>
+            .map(SimpleGrantedAuthority::new)<% } %>
             .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(user.getLogin(),
             user.getPassword(),

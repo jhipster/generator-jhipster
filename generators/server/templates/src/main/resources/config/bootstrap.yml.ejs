@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 # ===================================================================
 # Spring Cloud <% if (serviceDiscoveryType === 'consul') { %>Consul <% } %>Config bootstrap configuration for the "dev" profile
-# In prod profile, properties will be overwriten by the ones defined in bootstrap-prod.yml
+# In prod profile, properties will be overwritten by the ones defined in bootstrap-prod.yml
 # ===================================================================
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
@@ -32,7 +32,7 @@ spring:
         name: <%= baseName %>
     profiles:
         # The commented value for `active` can be replaced with valid Spring profiles to load.
-        # Otherwise, it will be filled in by <%= buildTool %> when building the WAR file
+        # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
         # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
         active: #spring.profiles.active#
     cloud:
@@ -43,7 +43,12 @@ spring:
                 format: yaml
                 profile-separator: "-"
             discovery:
-                tags: profile=${spring.profiles.active}, version=${info.project.version:}
+                tags:
+                    - profile=${spring.profiles.active}
+                    - version=#project.version#
+                    - git-version=${git.commit.id.describe:}
+                    - git-commit=${git.commit.id.abbrev:}
+                    - git-branch=${git.branch:}
             host: localhost
             port: 8500
         <%_ } _%>

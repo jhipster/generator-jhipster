@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "نشست های فعال برای [<b>{{username}}</b>]",
+        "title": "نشست های فعال برای [<strong>{{username}}</strong>]",
         "table": {
             "ipaddress": "IP آدرس",
             "useragent": "User Agent",

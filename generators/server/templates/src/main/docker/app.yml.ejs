@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,8 +21,9 @@ services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
         environment:
-            # - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            - _JAVA_OPTIONS=-Xmx512m -Xms256m
             - SPRING_PROFILES_ACTIVE=prod,swagger
+            - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
             <%_ if (serviceDiscoveryType === 'consul') { _%>
             - SPRING_CLOUD_CONSUL_HOST=consul
             - SPRING_CLOUD_CONSUL_PORT=8500
@@ -47,7 +48,7 @@ services:
             - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@<%= baseName.toLowerCase() %>-oracle:1521:<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mongodb') { _%>
-            - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017
+            - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
             - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'couchbase') { _%>
@@ -58,18 +59,15 @@ services:
             - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
             <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
+            - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
             <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
-            - SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/token
-            - SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/auth
-            - SECURITY_OAUTH2_CLIENT_CLIENT_ID=web_app
-            - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=web_app
-            - SECURITY_OAUTH2_CLIENT_SCOPE=openid profile email
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
             <%_ } _%>
             <%_ if (applicationType === 'microservice') { _%>
-            - SECURITY_OAUTH2_CLIENT_CLIENT_ID=internal
-            - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=internal
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
             <%_ } _%>
-            - SECURITY_OAUTH2_RESOURCE_USER_INFO_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
             <%_ } _%>
             <%_ if (prodDatabaseType === 'cassandra') { _%>
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
@@ -87,6 +85,7 @@ services:
             <%_ } _%>
             <%_ if (searchEngine === 'elasticsearch') { _%>
             - SPRING_DATA_JEST_URI=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
+            - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
             - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
@@ -201,12 +200,12 @@ services:
             - INIT_SLEEP_SECONDS=5
             - CONSUL_URL=consul
             - CONSUL_PORT=8500
-        # Uncomment to load configuration into Consul from a Git repository
-        # as configured in central-server-config/git2consul.json
-        # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
-        #    - CONFIG_MODE=git
+            # Uncomment to load configuration into Consul from a Git repository
+            # as configured in central-server-config/git2consul.json
+            # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
+            # - CONFIG_MODE=git
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2') { _%>
+    <%_ if (authenticationType === 'oauth2' && applicationType !== 'microservice') { _%>
     keycloak:
         extends:
             file: keycloak.yml

@@ -1,4 +1,0 @@
-Description:
-    Unlink the installed JHipster CLI from your JHipster Online account
-Example:
-    jhipster logout

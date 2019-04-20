@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,10 +23,11 @@ const ejs = require('ejs');
 const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const constants = require('./generator-constants');
 
-const LANGUAGES_MAIN_SRC_DIR = `../../languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
+const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
 
 module.exports = {
     rewrite,
@@ -42,7 +43,10 @@ module.exports = {
     copyObjectProps,
     decodeBase64,
     getAllJhipsterConfig,
-    getDBTypeFromDBValue
+    getDBTypeFromDBValue,
+    getBase64Secret,
+    getRandomHex,
+    checkStringInFile
 };
 
 /**
@@ -267,10 +271,15 @@ function replaceTranslation(body, generator) {
             // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
             const key = match[2];
             const target = match[1];
+            const limit = match[4]; // string indicating validation limit (e.g. "{ max: 4 }")
             const jsonData = geti18nJson(key, generator);
             let keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
             if (!keyValue) {
                 keyValue = deepFind(jsonData, key, true); // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
+            }
+            if (limit) {
+                // Replace "{{ placeholder }}" with numeric limit
+                keyValue = keyValue.replace(/{{.+}}/, /{.+:\s(.+)\s}/.exec(limit)[1]);
             }
 
             body = body.replace(target, keyValue !== undefined ? `"${keyValue}"` : defultReplaceText);
@@ -297,12 +306,12 @@ function geti18nJson(key, generator) {
     }
     let filename = `${i18nDirectory + name}.json`;
     let render;
-    if (!shelljs.test('-f', path.join(generator.sourceRoot(), filename))) {
-        filename = `${i18nDirectory}${name}.json.ejs`;
+    if (!shelljs.test('-f', filename)) {
+        filename = `${filename}.ejs`;
         render = true;
     }
     try {
-        let file = generator.fs.read(path.join(generator.sourceRoot(), filename));
+        let file = generator.fs.read(filename);
         file = render ? ejs.render(file, generator, {}) : file;
         file = JSON.parse(file);
         return file;
@@ -437,4 +446,25 @@ function getDBTypeFromDBValue(db) {
         return 'sql';
     }
     return db;
+}
+
+/**
+ * Get a random hex string
+ * @param {int} len the length to use, defaults to 50
+ */
+function getRandomHex(len = 50) {
+    return crypto.randomBytes(len).toString('hex');
+}
+/**
+ * Generates a base64 secret from given string or random hex
+ * @param {string} value the value used to get base64 secret
+ * @param {int} len the length to use for random hex, defaults to 50
+ */
+function getBase64Secret(value, len = 50) {
+    return Buffer.from(value || getRandomHex(len)).toString('base64');
+}
+
+function checkStringInFile(path, search, generator) {
+    const fileContent = generator.fs.read(path);
+    return fileContent.includes(search);
 }

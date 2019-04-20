@@ -1,5 +1,3 @@
-/* global describe, beforeEach, it */
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -7,7 +5,7 @@ const fse = require('fs-extra');
 
 describe('JHipster generator export jdl', () => {
     describe('exports entities to a JDL file without argument', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/export-jdl'))
                 .inTmpDir(dir => {
@@ -22,7 +20,7 @@ describe('JHipster generator export jdl', () => {
     });
 
     describe('exports entities to a JDL file with file argument', () => {
-        beforeEach(done => {
+        before(done => {
             helpers
                 .run(require.resolve('../generators/export-jdl'))
                 .inTmpDir(dir => {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -53,18 +53,20 @@ module.exports = class extends BaseGenerator {
             defaults: false,
             description: 'Automatically configure Gitlab'
         });
+
+        // Automatically configure Azure
+        this.argument('autoconfigure-azure', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure Azure'
+        });
+        this.registerPrettierTransform();
     }
 
     get initializing() {
         return {
             validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
+                this.checkInvocationFromCLI();
             },
             sayHello() {
                 this.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
@@ -85,6 +87,7 @@ module.exports = class extends BaseGenerator {
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
                 this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
                 this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
+                this.autoconfigureAzure = this.options['autoconfigure-azure'];
                 this.abort = false;
             },
             initConstants() {
@@ -114,14 +117,17 @@ module.exports = class extends BaseGenerator {
                 statistics.sendSubGenEvent('generator', 'ci-cd');
             },
             setTemplateConstants() {
-                if (this.abort || this.cicdIntegrations === undefined) return;
+                if (this.abort) return;
+                if (this.cicdIntegrations === undefined) {
+                    this.cicdIntegrations = [];
+                }
                 this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
-                if (this.clientPackageManager === 'yarn') {
-                    this.frontTests = ' -u';
-                } else if (this.clientPackageManager === 'npm') {
-                    this.frontTests = ' -- -u';
+                if (this.clientFramework === 'react') {
+                    this.frontTestCommand = 'test-ci';
+                } else {
+                    this.frontTestCommand = 'test';
                 }
             }
         };
@@ -141,6 +147,9 @@ module.exports = class extends BaseGenerator {
         }
         if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');
+        }
+        if (this.pipeline === 'azure') {
+            this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
         }
 
         if (this.cicdIntegrations.includes('deploy')) {

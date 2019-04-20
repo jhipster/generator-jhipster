@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -46,6 +46,12 @@ function askPipeline() {
         return;
     }
 
+    if (this.autoconfigureAzure) {
+        this.log('Auto-configuring Azure');
+        this.pipeline = 'azure';
+        return;
+    }
+
     const done = this.async();
     const prompts = [
         {
@@ -55,6 +61,7 @@ function askPipeline() {
             default: 'jenkins',
             choices: [
                 { name: 'Jenkins pipeline', value: 'jenkins' },
+                { name: 'Azure Pipelines', value: 'azure' },
                 { name: 'GitLab CI', value: 'gitlab' },
                 { name: 'Travis CI', value: 'travis' }
             ]
@@ -67,7 +74,7 @@ function askPipeline() {
 }
 
 function askIntegrations() {
-    if (this.abort || !this.pipeline) return;
+    if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
     if (this.autoconfigureTravis) {
         this.cicdIntegrations = [];
         return;
@@ -83,6 +90,12 @@ function askIntegrations() {
         this.cicdIntegrations = [];
         this.sendBuildToGitlab = true;
         this.insideDocker = true;
+        return;
+    }
+
+    if (this.autoconfigureAzure) {
+        this.log('Auto-configuring Azure');
+        this.pipeline = 'azure';
         return;
     }
 

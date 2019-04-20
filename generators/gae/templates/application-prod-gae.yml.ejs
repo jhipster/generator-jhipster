@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,6 +33,15 @@ spring:
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://google/<%=gcpCloudSqlDatabaseName%>?cloudSqlInstance=<%=gcpCloudSqlInstanceName%>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
+        username: <%=gcpCloudSqlUserName%>
+        password: <%=gcpCloudSqlPassword%>
+        hikari:
+            maximumPoolSize: 8
+<%_ } _%>
+<%_ if (prodDatabaseType === 'postgresql') { _%>
+    datasource:
+        type: com.zaxxer.hikari.HikariDataSource
+        url: jdbc:postgresql://google/<%=gcpCloudSqlDatabaseName%>?cloudSqlInstance=<%=gcpCloudSqlInstanceName%>&socketFactory=com.google.cloud.sql.postgres.SocketFactory
         username: <%=gcpCloudSqlUserName%>
         password: <%=gcpCloudSqlPassword%>
         hikari:

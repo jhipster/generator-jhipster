@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,23 +20,23 @@
 const chalk = require('chalk');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 let useBlueprint;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         utils.copyObjectProps(this, this.options.context);
-        const blueprint = this.config.get('blueprint');
+        this.configOptions = this.options.configOptions || {};
+        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
             useBlueprint = this.composeBlueprint(blueprint, 'entity-client', {
+                ...this.options,
                 context: opts.context,
-                force: opts.force,
                 debug: opts.context.isDebugEnabled,
-                'skip-install': opts.context.options['skip-install'],
-                'from-cli': opts.context.options['from-cli']
+                configOptions: this.configOptions
             });
         } else {
             useBlueprint = false;

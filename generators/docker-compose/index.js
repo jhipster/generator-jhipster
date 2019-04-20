@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,73 +20,21 @@ const chalk = require('chalk');
 const shelljs = require('shelljs');
 const jsyaml = require('js-yaml');
 const pathjs = require('path');
-const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const BaseGenerator = require('../generator-base');
-const docker = require('../docker-base');
-const statistics = require('../statistics');
+const BaseDockerGenerator = require('../generator-base-docker');
 
-const constants = require('../generator-constants');
-
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseDockerGenerator {
     constructor(args, opts) {
         super(args, opts);
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false
-        });
-        // This adds support for a `--skip-checks` flag
-        this.option('skip-checks', {
-            desc: 'Check the status of the required tools',
-            type: Boolean,
-            defaults: false
-        });
+        this.registerPrettierTransform();
     }
 
     get initializing() {
         return {
-            validateFromCli() {
-                if (!this.options['from-cli']) {
-                    this.warning(
-                        `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                            'jhipster <command>'
-                        )} instead of ${chalk.red('yo jhipster:<command>')}`
-                    );
-                }
-            },
-
-            sayHello() {
-                this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
-                this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
-            },
-
-            setupServerConsts() {
-                // Make constants available in templates
-                this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-                this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-                this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-                this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
-                this.DOCKER_JHIPSTER_CURATOR = constants.DOCKER_JHIPSTER_CURATOR;
-                this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
-                this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
-                this.DOCKER_JHIPSTER_IMPORT_DASHBOARDS = constants.DOCKER_JHIPSTER_IMPORT_DASHBOARDS;
-                this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
-                this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
-                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
-                this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-                this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-                this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
-                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-                this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
-            },
-
-            checkDocker: docker.checkDocker,
+            ...super.initializing,
 
             checkDockerCompose() {
-                if (this.options['skip-checks']) return;
+                if (this.skipChecks) return;
 
                 const done = this.async();
 
@@ -114,59 +62,26 @@ module.exports = class extends BaseGenerator {
                     }
                     done();
                 });
-            },
-
-            loadConfig() {
-                this.authenticationType = this.config.get('authenticationType');
-                this.defaultAppsFolders = this.config.get('appsFolders');
-                this.directoryPath = this.config.get('directoryPath');
-                this.gatewayType = this.config.get('gatewayType');
-                this.clusteredDbApps = this.config.get('clusteredDbApps');
-                this.monitoring = this.config.get('monitoring');
-                this.consoleOptions = this.config.get('consoleOptions');
-                this.useKafka = false;
-                this.useMemcached = false;
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-                if (this.serviceDiscoveryType === undefined) {
-                    this.serviceDiscoveryType = 'eureka';
-                }
-                this.adminPassword = this.config.get('adminPassword');
-                this.jwtSecretKey = this.config.get('jwtSecretKey');
-
-                if (this.defaultAppsFolders !== undefined) {
-                    this.log('\nFound .yo-rc.json config file...');
-                }
             }
         };
     }
 
     get prompting() {
-        return {
-            askForApplicationType: prompts.askForApplicationType,
-            askForGatewayType: prompts.askForGatewayType,
-            askForPath: prompts.askForPath,
-            askForApps: prompts.askForApps,
-            askForClustersMode: prompts.askForClustersMode,
-            askForMonitoring: prompts.askForMonitoring,
-            askForConsoleOptions: prompts.askForConsoleOptions,
-            askForServiceDiscovery: prompts.askForServiceDiscovery,
-            askForAdminPassword: prompts.askForAdminPassword
-        };
+        return super.prompting;
     }
 
     get configuring() {
         return {
-            insight() {
-                statistics.sendSubGenEvent('generator', 'docker-compose');
+            sayHello() {
+                this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
+                this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
 
-            checkImages: docker.checkImages,
-            generateJwtSecret: docker.generateJwtSecret,
-            setAppsFolderPaths: docker.setAppsFolderPaths,
+            ...super.configuring,
 
             setAppsYaml() {
                 this.appsYaml = [];
-                this.keycloakRedirectUri = '';
+                this.keycloakRedirectUris = '';
                 let portIndex = 8080;
                 this.serverPort = portIndex;
                 this.appsFolders.forEach((appsFolder, index) => {
@@ -180,7 +95,7 @@ module.exports = class extends BaseGenerator {
                     if (this.gatewayType === 'traefik' && appConfig.applicationType === 'gateway') {
                         delete yamlConfig.ports; // Do not export the ports as Traefik is the gateway
                     } else if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
-                        this.keycloakRedirectUri += `"http://localhost:${portIndex}/*", `;
+                        this.keycloakRedirectUris += `"http://localhost:${portIndex}/*", "https://localhost:${portIndex}/*", `;
                         const ports = yamlConfig.ports[0].split(':');
                         ports[0] = portIndex;
                         yamlConfig.ports[0] = ports.join(':');
@@ -193,11 +108,6 @@ module.exports = class extends BaseGenerator {
                         yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
-                    }
-
-                    if (this.monitoring === 'prometheus') {
-                        yamlConfig.environment.push('JHIPSTER_METRICS_PROMETHEUS_ENABLED=true');
-                        yamlConfig.environment.push('JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics');
                     }
 
                     if (this.serviceDiscoveryType === 'eureka') {
@@ -303,7 +213,6 @@ module.exports = class extends BaseGenerator {
                     monitoring: this.monitoring,
                     consoleOptions: this.consoleOptions,
                     serviceDiscoveryType: this.serviceDiscoveryType,
-                    adminPassword: this.adminPassword,
                     jwtSecretKey: this.jwtSecretKey
                 });
             }

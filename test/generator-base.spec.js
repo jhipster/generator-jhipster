@@ -1,5 +1,3 @@
-/* global describe, before, it */
-
 const expect = require('chai').expect;
 const jhiCore = require('jhipster-core');
 const expectedFiles = require('./utils/expected-files');
@@ -319,7 +317,6 @@ describe('Generator Base', () => {
             it('should produce correct files', () => {
                 const files = require('../generators/client/files-angular').files; // eslint-disable-line global-require
                 const generator = {
-                    useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
@@ -327,7 +324,7 @@ describe('Generator Base', () => {
                 };
                 let filesToAssert = expectedFiles.client;
                 filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
-                filesToAssert = filesToAssert.concat(expectedFiles.userManagement).sort();
+                filesToAssert = filesToAssert.concat(expectedFiles.userManagementClient).sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
                 expect(out).to.eql(filesToAssert);
             });
@@ -336,7 +333,6 @@ describe('Generator Base', () => {
             it('should produce correct files', () => {
                 const files = require('../generators/client/files-angular').files; // eslint-disable-line global-require
                 const generator = {
-                    useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',

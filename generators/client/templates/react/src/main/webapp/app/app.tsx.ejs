@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,8 +22,9 @@ import './app.<%= styleSheetExt %>';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Card } from 'reactstrap';
-import { HashRouter as Router } from 'react-router-dom';
-import { ToastContainer, ToastPosition, toast } from 'react-toastify';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { hot } from 'react-hot-loader';
 
 import { IRootState } from 'app/shared/reducers';
 import { getSession } from 'app/shared/reducers/authentication';
@@ -51,7 +52,7 @@ export class App extends React.Component<IAppProps> {
     return (
       <Router>
         <div className="app-container" style={{ paddingTop }}>
-          <ToastContainer position={toast.POSITION.TOP_LEFT as ToastPosition} className="toastify-container" toastClassName="toastify-toast"/>
+          <ToastContainer position={toast.POSITION.TOP_LEFT} className="toastify-container" toastClassName="toastify-toast"/>
           <ErrorBoundary>
             <Header
               isAuthenticated={this.props.isAuthenticated}
@@ -95,4 +96,4 @@ const mapDispatchToProps = { <% if (enableTranslation) { %>setLocale, <% } %>get
 type StateProps = ReturnType<typeof mapStateToProps>;
 type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(hot(module)(App));

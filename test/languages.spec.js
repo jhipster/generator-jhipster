@@ -1,5 +1,3 @@
-/* global describe, context, beforeEach, it */
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -13,7 +11,7 @@ describe('JHipster generator languages', () => {
     context('Cretes default i18n files', () => {
         constants.LANGUAGES.forEach(language => {
             describe(`for ${language.name}`, () => {
-                beforeEach(done => {
+                before(done => {
                     helpers
                         .run(require.resolve('../generators/languages'))
                         .inTmpDir(dir => {

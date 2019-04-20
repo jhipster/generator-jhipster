@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,6 +19,7 @@
 const _ = require('lodash');
 const randexp = require('randexp');
 const chalk = require('chalk');
+const faker = require('faker');
 const fs = require('fs');
 const utils = require('../utils');
 const constants = require('../generator-constants');
@@ -29,6 +30,9 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+
+// In order to have consistent results with Faker, the seed is fixed.
+faker.seed(42);
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -44,6 +48,16 @@ const serverFiles = {
                     file: 'config/liquibase/changelog/added_entity.xml',
                     options: { interpolate: INTERPOLATE_REGEX },
                     renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.xml`
+                },
+                {
+                    file: 'config/liquibase/data/table.csv',
+                    options: {
+                        interpolate: INTERPOLATE_REGEX,
+                        context: {
+                            faker
+                        }
+                    },
+                    renameTo: generator => `config/liquibase/data/${generator.entityTableName}.csv`
                 }
             ]
         },
@@ -78,7 +92,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/domain/Entity.java',
-                    renameTo: generator => `${generator.packageFolder}/domain/${generator.entityClass}.java`
+                    renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java`
                 },
                 {
                     file: 'package/repository/EntityRepository.java',
@@ -154,7 +168,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/service/dto/EntityDTO.java',
-                    renameTo: generator => `${generator.packageFolder}/service/dto/${generator.entityClass}DTO.java`
+                    renameTo: generator => `${generator.packageFolder}/service/dto/${generator.asDto(generator.entityClass)}.java`
                 },
                 {
                     file: 'package/service/mapper/BaseEntityMapper.java',
@@ -174,7 +188,7 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/web/rest/EntityResourceIntTest.java',
+                    file: 'package/web/rest/EntityResourceIT.java',
                     options: {
                         context: {
                             randexp,
@@ -184,7 +198,7 @@ const serverFiles = {
                             SERVER_TEST_SRC_DIR
                         }
                     },
-                    renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}ResourceIntTest.java`
+                    renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}ResourceIT.java`
                 }
             ]
         },
@@ -243,7 +257,13 @@ function writeFiles() {
                 this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
 
                 if (['ehcache', 'infinispan'].includes(this.cacheProvider) && this.enableHibernateCache) {
-                    this.addEntityToCache(this.entityClass, this.relationships, this.packageName, this.packageFolder, this.cacheProvider);
+                    this.addEntityToCache(
+                        this.asEntity(this.entityClass),
+                        this.relationships,
+                        this.packageName,
+                        this.packageFolder,
+                        this.cacheProvider
+                    );
                 }
             }
         },

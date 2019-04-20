@@ -1,0 +1,27 @@
+{
+    "generator-jhipster": {
+        "baseName": "travisOauth2SassInfinispan",
+        "packageName": "io.github.jhipster.travis",
+        "packageFolder": "io/github/jhipster/travis",
+        "serverPort": "8080",
+        "authenticationType": "oauth2",
+        "cacheProvider": "infinispan",
+        "enableHibernateCache": true,
+        "websocket": false,
+        "databaseType": "sql",
+        "devDatabaseType": "mariadb",
+        "prodDatabaseType": "mariadb",
+        "searchEngine": false,
+        "messageBroker": false,
+        "buildTool": "maven",
+        "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
+        "applicationType": "monolith",
+        "testFrameworks": ["gatling", "protractor"],
+        "jhiPrefix": "myPrefix",
+        "travis": true,
+        "serviceDiscoveryType": false,
+        "enableTranslation": false,
+        "clientPackageManager": "npm",
+        "clientFramework": "angularX"
+    }
+}

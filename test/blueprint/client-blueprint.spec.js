@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -74,7 +72,6 @@ describe('JHipster client generator with blueprint', () => {
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: 'angularX',
-                        useSass: false,
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr']
@@ -90,6 +87,32 @@ describe('JHipster client generator with blueprint', () => {
             it('contains the specific change added by the blueprint', () => {
                 assert.fileContent('package.json', /dummy-blueprint-property/);
             });
+        });
+    });
+
+    describe('generate client with dummy blueprint overriding everything', () => {
+        before(done => {
+            helpers
+                .run(path.join(__dirname, '../../generators/client'))
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    blueprint: 'myblueprint',
+                    skipChecks: true
+                })
+                .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:client']])
+                .withPrompts({
+                    baseName: 'jhipster',
+                    clientFramework: 'angularX',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr']
+                })
+                .on('end', done);
+        });
+
+        it("doesn't create any expected files from jhipster client generator", () => {
+            assert.noFile(expectedFiles.client);
         });
     });
 });

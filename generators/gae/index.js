@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -28,6 +28,11 @@ const statistics = require('../statistics');
 const constants = require('../generator-constants');
 
 module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+        this.registerPrettierTransform();
+    }
+
     get initializing() {
         return {
             sayHello() {
@@ -93,7 +98,7 @@ module.exports = class extends BaseGenerator {
                 this.gcpProjectId = this.config.get('gcpProjectId');
                 this.gcpCloudSqlInstanceName = this.config.get('gcpCloudSqlInstanceName');
                 this.gcpCloudSqlUserName = this.config.get('gcpCloudSqlUserName');
-                this.gcpDatabaseName = this.config.get('gcpCloudSqlDatabaseName');
+                this.gcpCloudSqlDatabaseName = this.config.get('gcpCloudSqlDatabaseName');
                 this.gaeServiceName = this.config.get('gaeServiceName');
                 this.gaeLocation = this.config.get('gaeLocation');
                 this.gaeInstanceClass = this.config.get('gaeInstanceClass');
@@ -362,7 +367,8 @@ module.exports = class extends BaseGenerator {
 
             askForCloudSqlInstance() {
                 if (this.abort) return;
-                if (this.prodDatabaseType !== 'mysql' && this.prodDatabaseType !== 'mariadb') return;
+                if (this.prodDatabaseType !== 'mysql' && this.prodDatabaseType !== 'mariadb' && this.prodDatabaseType !== 'postgresql')
+                    return;
 
                 const done = this.async();
 
@@ -532,8 +538,8 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 if (!this.gaeLocationExists) {
-                    this.log(chalk.bold(`Configuring Google App Engine Location "${chalk.cyanthis.gaeLocation}"`));
-                    exec(`gcloud app create --region="${this.gaeLocation}" --project="${this.gaeProjectId}"`, (err, stdout) => {
+                    this.log(chalk.bold(`Configuring Google App Engine Location "${chalk.cyan(this.gaeLocation)}"`));
+                    exec(`gcloud app create --region="${this.gaeLocation}" --project="${this.gcpProjectId}"`, (err, stdout) => {
                         if (err) {
                             this.log.error(err);
                             this.abort = true;
@@ -555,8 +561,13 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nCreating New Cloud SQL Instance'));
 
                 const name = this.gcpCloudSqlInstanceName;
+                // for mysql keep default options, set specific option for pg
+                const dbVersionFlag =
+                    this.prodDatabaseType === 'postgresql' ? ' --database-version="POSTGRES_9_6" --tier="db-g1-small"' : '';
 
-                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${this.gcpProjectId}`;
+                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${
+                    this.gcpProjectId
+                }${dbVersionFlag}`;
                 this.log(chalk.bold(`\n... Running: ${cmd}`));
 
                 exec(cmd, (err, stdout, stderr) => {
@@ -566,7 +577,7 @@ module.exports = class extends BaseGenerator {
                     }
 
                     this.gcpCloudSqlInstanceName = execSync(
-                        `gcloud sql instances describe jhipster --format="value(connectionName)" --project="${this.gcpProjectId}"`,
+                        `gcloud sql instances describe ${name} --format="value(connectionName)" --project="${this.gcpProjectId}"`,
                         { encoding: 'utf8' }
                     );
 
@@ -585,13 +596,13 @@ module.exports = class extends BaseGenerator {
                 exec(`gcloud sql users list -i jhipster --format='value(name)' --project="${this.gcpProjectId}"`, (err, stdout) => {
                     if (_.includes(stdout, this.gcpCloudSqlUserName)) {
                         this.log(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
-                        const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" "%" --project="${
+                        const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --project="${
                             this.gcpProjectId
                         }" --password="..."`;
                         this.log(chalk.bold(`... To set its password, run: ${cmd}`));
                         done();
                     } else {
-                        const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" "%" --password="${
+                        const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --password="${
                             this.gcpCloudSqlPassword
                         }" --project="${this.gcpProjectId}"`;
                         this.log(chalk.bold(`... Running: ${cmd}`));
@@ -630,7 +641,7 @@ module.exports = class extends BaseGenerator {
                     gcpProjectId: this.gcpProjectId,
                     gcpCloudSqlInstanceName: this.gcpCloudSqlInstanceName,
                     gcpCloudSqlUserName: this.gcpCloudSqlUserName,
-                    gcpCloudSqlDatabaseName: this.gcpDatabaseName,
+                    gcpCloudSqlDatabaseName: this.gcpCloudSqlDatabaseName,
                     gaeServiceName: this.gaeServiceName,
                     gaeLocation: this.gaeLocation,
                     gaeInstanceClass: this.gaeInstanceClass,
@@ -651,14 +662,13 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
+                this.template('web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/web.xml`);
                 this.template('appengine-web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/appengine-web.xml`);
                 this.template('logging.properties.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/logging.properties`);
                 this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
-                /*
-               if (this.buildTool === 'gradle') {
+                if (this.buildTool === 'gradle') {
                     this.template('gae.gradle.ejs', 'gradle/gae.gradle');
                 }
-*/
 
                 this.conflicter.resolve(err => {
                     done();
@@ -673,17 +683,23 @@ module.exports = class extends BaseGenerator {
                         this.addGradleDependency('compile', 'com.google.cloud.sql', 'mysql-socket-factory', '1.0.8');
                     }
                 }
+                if (this.prodDatabaseType === 'postgresql') {
+                    if (this.buildTool === 'maven') {
+                        this.addMavenDependency('com.google.cloud.sql', 'postgres-socket-factory', '1.0.12');
+                    } else if (this.buildTool === 'gradle') {
+                        this.addGradleDependency('compile', 'com.google.cloud.sql', 'postgres-socket-factory', '1.0.12');
+                    }
+                }
             },
 
-            /*
             addGradlePlugin() {
-                if (this.buildTool !== 'gradle') return;
-                this.addGradlePlugin('gradle.plugin.com.gcp.sdk', 'gcp-gradle', '0.2.0');
-                this.applyFromGradleScript('gradle/gcp');
+                if (this.buildTool === 'gradle') {
+                    this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '1.3.3');
+                    this.applyFromGradleScript('gradle/gae');
+                }
             },
-*/
 
-            addMaven() {
+            addMavenPlugin() {
                 if (this.buildTool === 'maven') {
                     this.render('pom-plugin.xml.ejs', rendered => {
                         this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.2', rendered.trim());
@@ -701,8 +717,13 @@ module.exports = class extends BaseGenerator {
             productionBuild() {
                 if (this.abort) return;
 
-                this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw appengine:run -DskipTests'));
-                this.log(chalk.bold('\nDeploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod,prod-gae'));
+                if (this.buildTool === 'maven') {
+                    this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw appengine:run -DskipTests'));
+                    this.log(chalk.bold('Deploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod,prod-gae'));
+                } else if (this.buildTool === 'gradle') {
+                    this.log(chalk.bold('\nRun App Engine DevServer Locally: ./gradlew appengineRun'));
+                    this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pprod -Pprod-gae'));
+                }
                 /*
                 if (this.gcpSkipBuild || this.gcpDeployType === 'git') {
                     this.log(chalk.bold('\nSkipping build'));

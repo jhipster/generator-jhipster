@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -65,6 +65,7 @@ module.exports = class extends Generator {
      */
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
         if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
             generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
@@ -89,10 +90,10 @@ module.exports = class extends Generator {
         }
 
         // Templates
-        generator.template(`${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
-        generator.template(`${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
-        generator.template(`${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
-        generator.template(`${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
+        generator.template(`${prefix}/${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
     }
 
     /**
@@ -104,9 +105,13 @@ module.exports = class extends Generator {
      */
     installI18nServerFilesByLanguage(_this, resourceDir, lang) {
         const generator = _this || this;
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
-        generator.template(`${resourceDir}i18n/messages_${langProp}.properties.ejs`, `${resourceDir}i18n/messages_${langProp}.properties`);
+        generator.template(
+            `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
+            `${resourceDir}i18n/messages_${langProp}.properties`
+        );
     }
 
     /**
@@ -714,6 +719,9 @@ module.exports = class extends Generator {
      * @param {string} blueprint - name of the blueprint
      */
     normalizeBlueprintName(blueprint) {
+        if (blueprint && blueprint.startsWith('@')) {
+            return blueprint;
+        }
         if (blueprint && !blueprint.startsWith('generator-jhipster')) {
             return `generator-jhipster-${blueprint}`;
         }
@@ -729,8 +737,9 @@ module.exports = class extends Generator {
     composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
             blueprint = this.normalizeBlueprintName(blueprint);
-            this.checkBlueprint(blueprint, subGen);
-            this.log(`Trying to use blueprint ${blueprint}`);
+            if (options.skipChecks === undefined || !options.skipChecks) {
+                this.checkBlueprint(blueprint, subGen);
+            }
             try {
                 const finalOptions = {
                     ...options,
@@ -738,14 +747,37 @@ module.exports = class extends Generator {
                 };
                 this.useBlueprint = true;
                 this.composeExternalModule(blueprint, subGen, finalOptions);
+                this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
                 return true;
             } catch (e) {
+                this.debug(`No blueprint found for ${chalk.yellow(subGen)} subgenerator: falling back to default generator`);
                 this.debug('Error', e);
-                this.warning(`No blueprint found for ${subGen} falling back to default generator`);
                 return false;
             }
         }
         return false;
+    }
+
+    /**
+     * Try to retrieve the version of the blueprint used.
+     * @param {string} blueprintPkgName - generator name
+     * @return {string} version - retrieved version or empty string if not found
+     */
+    findBlueprintVersion(blueprintPkgName) {
+        let packageJsonPath = path.join(process.cwd(), 'node_modules', blueprintPkgName, 'package.json');
+        try {
+            if (!fs.existsSync(packageJsonPath)) {
+                this.debug('using global module as local version could not be found in node_modules');
+                packageJsonPath = path.join(blueprintPkgName, 'package.json');
+            }
+            // eslint-disable-next-line global-require,import/no-dynamic-require
+            const packagejs = require(packageJsonPath);
+            return packagejs.version;
+        } catch (err) {
+            this.debug('ERROR:', err);
+            this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
+            return '';
+        }
     }
 
     /**
@@ -787,13 +819,15 @@ module.exports = class extends Generator {
         const done = this.async();
         exec('java -version', (err, stdout, stderr) => {
             if (err) {
-                this.warning('Java 8 is not found on your computer.');
+                this.warning('Java is not found on your computer.');
             } else {
                 const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
-                if (!javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))) {
-                    this.warning(
-                        `Java ${constants.JAVA_VERSION} is not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`
-                    );
+                if (
+                    !javaVersion.match(new RegExp('12'.replace('.', '\\.'))) &&
+                    !javaVersion.match(new RegExp('11'.replace('.', '\\.'))) &&
+                    !javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))
+                ) {
+                    this.warning(`Java 8, 11, or 12 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
                 }
             }
             done();
@@ -893,16 +927,22 @@ module.exports = class extends Generator {
                 }
 
                 query = `this.${relationship.otherEntityName}Service
-            .query({${filter}})
-            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
+            .query({${filter}}).pipe(
+                filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
+                map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
+            )
+            .subscribe((res: I${relationship.otherEntityAngularName}[]) => {
                 if (${relationshipFieldNameIdCheck}) {
-                    this.${variableName} = res.body;
+                    this.${variableName} = res;
                 } else {
                     this.${relationship.otherEntityName}Service
-                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'})
-                        .subscribe((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
-                            this.${variableName} = [subRes.body].concat(res.body);
-                        }, (subRes: HttpErrorResponse) => this.onError(subRes.message));
+                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'}).pipe(
+                            filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
+                            map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
+                        )
+                        .subscribe((subRes: I${relationship.otherEntityAngularName}) =>
+                            this.${variableName} = [subRes].concat(res)
+                        , (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
             }, (res: HttpErrorResponse) => this.onError(res.message));`;
             } else if (relationship.relationshipType !== 'one-to-many') {
@@ -910,10 +950,13 @@ module.exports = class extends Generator {
                 if (variableName === entityInstance) {
                     variableName += 'Collection';
                 }
-                query = `this.${relationship.otherEntityName}Service.query()
-            .subscribe((res: HttpResponse<I${
-                relationship.otherEntityAngularName
-            }[]>) => { this.${variableName} = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));`;
+                query = `this.${relationship.otherEntityName}Service.query().pipe(
+                            filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
+                            map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
+                        )
+            .subscribe(
+                (res: I${relationship.otherEntityAngularName}[]) => this.${variableName} = res,
+                (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
                 queries.push(query);
@@ -958,7 +1001,7 @@ module.exports = class extends Generator {
      * @param {string} dto - dto
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto) {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
         const variablesWithTypes = [];
         let tsKeyType;
         if (pkType === 'String') {
@@ -975,12 +1018,12 @@ module.exports = class extends Generator {
                 tsType = fieldType;
             } else if (fieldType === 'Boolean') {
                 tsType = 'boolean';
-            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
+            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
                 tsType = 'number';
             } else if (fieldType === 'String' || fieldType === 'UUID') {
                 tsType = 'string';
             } else if (['LocalDate', 'Instant', 'ZonedDateTime'].includes(fieldType)) {
-                tsType = 'Moment';
+                tsType = customDateType;
             } else {
                 // (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate'
                 tsType = 'any';
@@ -1058,7 +1101,7 @@ module.exports = class extends Generator {
                 const importType = `I${otherEntityAngularName}`;
                 let importPath;
                 if (otherEntityAngularName === 'User') {
-                    importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : './user.model';
+                    importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : 'app/shared/model/user.model';
                 } else {
                     importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
                 }
@@ -1074,6 +1117,22 @@ module.exports = class extends Generator {
      */
     getDBTypeFromDBValue(db) {
         return jhipsterUtils.getDBTypeFromDBValue(db);
+    }
+
+    /**
+     * Get build directory used by buildTool
+     * @param {string} buildTool - buildTool
+     */
+    getBuildDirectoryForBuildTool(buildTool) {
+        return buildTool === 'maven' ? 'target/' : 'build/';
+    }
+
+    /**
+     * Get resource build directory used by buildTool
+     * @param {string} buildTool - buildTool
+     */
+    getResourceBuildDirectoryForBuildTool(buildTool) {
+        return buildTool === 'maven' ? 'target/classes/' : 'build/resources/main/';
     }
 
     /**
@@ -1148,7 +1207,7 @@ module.exports = class extends Generator {
      * @param {string} fieldType
      */
     getSpecificationBuilder(fieldType) {
-        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'ZonedDateTime', 'Instant'].includes(fieldType)) {
+        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration'].includes(fieldType)) {
             return 'buildRangeSpecification';
         }
         if (fieldType === 'String') {
@@ -1243,15 +1302,26 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Register file transforms for client side files
+     * Register prettier as transform stream for prettifying files during generation
      * @param {any} generator
      */
-    registerClientTransforms(generator = this) {
-        if (!generator.skipClient) {
-            // Prettier is clever, it uses correct rules and correct parser according to file extension.
-            const prettierFilter = filter(['src/**/*.{ts,tsx,scss,css}'], { restore: true });
-            // this pipe will pass through (restore) anything that doesn't match typescriptFilter
-            generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+    registerPrettierTransform(generator = this) {
+        // Prettier is clever, it uses correct rules and correct parser according to file extension.
+        const prettierFilter = filter(['{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        // this pipe will pass through (restore) anything that doesn't match typescriptFilter
+        generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+    }
+
+    /**
+     * Check if the subgenerator has been invoked from JHipster CLI or from Yeoman (yo jhipster:subgenerator)
+     */
+    checkInvocationFromCLI() {
+        if (!this.options['from-cli']) {
+            this.warning(
+                `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
+                    'jhipster <command>'
+                )} instead of ${chalk.red('yo jhipster:<command>')}`
+            );
         }
     }
 };

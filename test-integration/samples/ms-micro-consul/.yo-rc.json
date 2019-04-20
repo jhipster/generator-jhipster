@@ -1,0 +1,30 @@
+{
+    "generator-jhipster": {
+        "applicationType": "microservice",
+        "baseName": "travisMicroserviceConsul",
+        "packageName": "io.github.jhipster.travis",
+        "packageFolder": "io/github/jhipster/travis",
+        "authenticationType": "jwt",
+        "cacheProvider": "hazelcast",
+        "enableHibernateCache": true,
+        "databaseType": "sql",
+        "devDatabaseType": "h2Disk",
+        "prodDatabaseType": "mysql",
+        "searchEngine": false,
+        "serviceDiscoveryType": "consul",
+        "buildTool": "maven",
+        "enableTranslation": true,
+        "nativeLanguage": "en",
+        "languages": ["en", "fr"],
+        "testFrameworks": ["gatling"],
+        "skipClient": true,
+        "skipUserManagement": true,
+        "serverPort": "8081",
+        "jhiPrefix": "jhi",
+        "travis": true,
+        "websocket": false,
+        "messageBroker": false,
+        "clientFramework": "angularX",
+        "clientPackageManager": "npm"
+    }
+}

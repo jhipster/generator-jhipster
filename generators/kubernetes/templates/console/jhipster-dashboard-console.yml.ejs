@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: batch/v1
+apiVersion: <%= KUBERNETES_BATCH_API_VERSION %>
 kind: Job
 metadata:
   name: jhipster-import-dashboards
@@ -28,10 +28,15 @@ spec:
     metadata:
       labels:
         job: jhipster-import-dashboards
+      annotations:
+        "helm.sh/hook": post-install
+     <%_ if (istio) { _%>
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       initContainers:
         - name: init-dependent-service-check
-          image: busybox
+          image: busybox:latest
           command:
             - '/bin/sh'
             - '-c'
@@ -50,13 +55,4 @@ spec:
       - name: jhipster-import-dashboards
         image: <%= DOCKER_JHIPSTER_IMPORT_DASHBOARDS %>
         imagePullPolicy: IfNotPresent
-        env:
-        - name: ELASTICSEARCH_URL
-          value: http://jhipster-elasticsearch
-        - name: KIBANA_URL
-          value: http://jhipster-console
-        command:
-          - '/bin/sh'
-          - '-c'
-          - 'metricbeat setup --dashboards -E output.elasticsearch.hosts="[$ELASTICSEARCH_URL]" -E setup.kibana.host=$KIBANA_URL -E setup.dashboards.directory=/tmp'
       restartPolicy: OnFailure

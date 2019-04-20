@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -35,7 +35,6 @@ export class AuditsComponent implements OnInit, OnDestroy {
     fromDate: string;
     itemsPerPage: any;
     links: any;
-    queryCount: number;
     page: number;
     routeData: any;
     predicate: any;
@@ -133,7 +132,6 @@ export class AuditsComponent implements OnInit, OnDestroy {
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
-        this.queryCount = this.totalItems;
         this.audits = data;
     }
 

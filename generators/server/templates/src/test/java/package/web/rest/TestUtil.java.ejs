@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,7 +33,6 @@ import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 
@@ -42,38 +41,37 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Utility class for testing REST controllers.
  */
-public class TestUtil {
+public final class TestUtil {
+
+    private static final ObjectMapper mapper = createObjectMapper();
 
     /** MediaType for JSON UTF8 */
-    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
-            MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
+    public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON_UTF8;
+
+    private static ObjectMapper createObjectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+        mapper.registerModule(new JavaTimeModule());
+        return mapper;
+    }
 
     /**
      * Convert an object to JSON byte array.
      *
-     * @param object
-     *            the object to convert
-     * @return the JSON byte array
+     * @param object the object to convert.
+     * @return the JSON byte array.
      * @throws IOException
      */
-    public static byte[] convertObjectToJsonBytes(Object object)
-            throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-
-        JavaTimeModule module = new JavaTimeModule();
-        mapper.registerModule(module);
-
+    public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
         return mapper.writeValueAsBytes(object);
     }
 
     /**
      * Create a byte array with a specific size filled with specified data.
      *
-     * @param size the size of the byte array
-     * @param data the data to put in the byte array
-     * @return the JSON byte array
+     * @param size the size of the byte array.
+     * @param data the data to put in the byte array.
+     * @return the JSON byte array.
      */
     public static byte[] createByteArray(int size, String data) {
         byte[] byteArray = new byte[size];
@@ -85,7 +83,7 @@ public class TestUtil {
     <%_ if (databaseType === 'couchbase') { _%>
 
     /**
-     * Mock user authentication for Spring SpEL expression used in {@link <%=packageName%>.repository.N1qlCouchbaseRepository}
+     * Mock user authentication for Spring SpEL expression used in {@link <%=packageName%>.repository.N1qlCouchbaseRepository}.
      */
     public static void mockAuthentication() {
         TestSecurityContextHolder.getContext().setAuthentication(new TestingAuthenticationToken("user", null));
@@ -126,8 +124,8 @@ public class TestUtil {
     }
 
     /**
-     * Creates a matcher that matches when the examined string reprensents the same instant as the reference datetime
-     * @param date the reference datetime against which the examined string is checked
+     * Creates a matcher that matches when the examined string represents the same instant as the reference datetime.
+     * @param date the reference datetime against which the examined string is checked.
      */
     public static ZonedDateTimeMatcher sameInstant(ZonedDateTime date) {
         return new ZonedDateTimeMatcher(date);
@@ -155,8 +153,8 @@ public class TestUtil {
     }
 
     /**
-     * Create a FormattingConversionService which use ISO date format, instead of the localized one.
-     * @return the FormattingConversionService
+     * Create a {@link FormattingConversionService} which use ISO date format, instead of the localized one.
+     * @return the {@link FormattingConversionService}.
      */
     public static FormattingConversionService createFormattingConversionService() {
         DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService ();
@@ -165,4 +163,6 @@ public class TestUtil {
         registrar.registerFormatters(dfcs);
         return dfcs;
     }
+
+    private TestUtil() {}
 }

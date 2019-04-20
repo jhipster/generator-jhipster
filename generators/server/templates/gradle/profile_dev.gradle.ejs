@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,26 +16,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import org.gradle.internal.os.OperatingSystem
-
-apply plugin: 'org.springframework.boot'
-<%_ if (!skipClient) { _%>
-apply plugin: 'com.moowork.node'
-<%_ } _%>
-
 dependencies {
-    compile "org.springframework.boot:spring-boot-devtools"
+    runtimeOnly "org.springframework.boot:spring-boot-devtools"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-    compile "com.h2database:h2"
+    implementation "com.h2database:h2"
     <%_ } _%>
 }
 
-def profiles = 'dev'
-if (project.hasProperty('no-liquibase')) {
-    profiles += ',no-liquibase'
+def profiles = "dev"
+if (project.hasProperty("no-liquibase")) {
+    profiles += ",no-liquibase"
 }
-if (project.hasProperty('tls')) {
-    profiles += ',tls'
+if (project.hasProperty("tls")) {
+    profiles += ",tls"
+}
+
+springBoot {
+    buildInfo {
+		properties {
+			time = null
+		}
+	}
 }
 
 bootRun {
@@ -43,39 +44,41 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: '<%= clientPackageManager %>_install') {
+task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
+    <%_ if (clientPackageManager==='npm') { _%>
+    inputs.files("package-lock.json")
+    <%_ } else { _%>
+    inputs.files("yarn.lock")
+    <%_ } _%>
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
-    inputs.files(fileTree('<%= CLIENT_MAIN_SRC_DIR %>'))
+
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>/")
+    webpackDevFiles.exclude("webpack.prod.js")
+    inputs.files(webpackDevFiles)
+
     outputs.dir("<%= CLIENT_DIST_DIR %>")
-    outputs.file("<%= CLIENT_DIST_DIR %>app/main.bundle.js")
+
+    dependsOn <%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>
+
     args = ["run", "webpack:build"]
-}
-
-war {
-    webAppDirName = '<%= CLIENT_DIST_DIR %>'
-}
-
-task copyIntoStatic (type: Copy) {
-    from '<%= CLIENT_DIST_DIR %>'
-    into 'build/resources/main/static'
 }
 <%_ } _%>
 
 processResources {
-    filesMatching('**/application.yml') {
+    filesMatching("**/application.yml") {
         filter {
-            it.replace('#project.version#', version)
+            it.replace("#project.version#", version)
         }
         <%_ if (!serviceDiscoveryType) { _%>
         filter {
-            it.replace('#spring.profiles.active#', profiles)
+            it.replace("#spring.profiles.active#", profiles)
         }
         <%_ } _%>
     }
     <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-    filesMatching('**/bootstrap.yml') {
+    filesMatching("**/bootstrap.yml") {
         filter {
-            it.replace('#spring.profiles.active#', profiles)
+            it.replace("#spring.profiles.active#", profiles)
         }
     }
     <%_ } _%>
@@ -83,12 +86,5 @@ processResources {
 
 <%_ if (!skipClient) { _%>
 processResources.dependsOn webpackBuildDev
-copyIntoStatic.dependsOn processResources
-bootJar.dependsOn copyIntoStatic
-
-<%= clientPackageManager %>_install.onlyIf { shouldWebpackRun() == true }
-
-def shouldWebpackRun() {
-    project.hasProperty('webpack')
-}
+bootJar.dependsOn processResources
 <%_ } _%>

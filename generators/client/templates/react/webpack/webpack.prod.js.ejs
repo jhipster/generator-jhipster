@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,15 +18,14 @@
 -%>
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
+const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const path = require('path');
-<%_ if (useSass) { _%>
 const sass = require('sass');
-<%_ } _%>
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -40,7 +39,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     main: './<%= MAIN_SRC_DIR %>app/index'
   },
   output: {
-    path: utils.root('<%= BUILD_DIR %><% if (buildTool === 'maven') { %>classes/public<% } %><% if (buildTool === 'gradle'){ %>resources/main/public<% } %>'),
+    path: utils.root('<%= DIST_DIR %>'),
     filename: 'app/[name].[hash].bundle.js',
     chunkFilename: 'app/[name].[hash].chunk.js'
   },
@@ -51,7 +50,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         test: /\.s?css$/,
         loader: 'stripcomment-loader'
       },
-      <%_ if (useSass) { _%>
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
@@ -68,21 +66,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             options: { implementation: sass }
           }
         ]
-      },
-      <%_ } else { _%>
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: '../'
-            }
-          },
-          'css-loader'
-        ]
       }
-      <%_ } _%>
     ]
   },
   optimization: {
@@ -93,13 +77,27 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         parallel: true,
         // sourceMap: true, // Enable source maps. Please note that this will slow down the build
         terserOptions: {
+          ecma: 6,
+          toplevel: true,
+          module: true,
           beautify: false,
           comments: false,
           compress: {
-            warnings: false
+            warnings: false,
+            ecma: 6,
+            module: true,
+            toplevel: true
+          },
+          output: {
+              comments: false,
+              beautify: false,
+              indent_level: 2,
+              ecma: 6
           },
           mangle: {
-            keep_fnames: true
+            keep_fnames: true,
+            module: true,
+            toplevel: true
           }
         }
       }),
@@ -124,6 +122,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
-    })
+    }),
+    new BaseHrefWebpackPlugin({ baseHref: '/' })
   ]
 });

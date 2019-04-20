@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -32,8 +32,6 @@ const files = {
     common: [
         {
             templates: [
-                '.prettierrc', // this needs to be the first file for prettier transform to work
-                '.prettierignore',
                 'package.json',
                 'proxy.conf.json',
                 'tsconfig.json',
@@ -50,31 +48,16 @@ const files = {
         },
         {
             condition: generator => !generator.skipCommitHook,
-            templates: [{ file: '.huskyrc', method: 'copy', noEjs: true }]
-        }
-    ],
-    css: [
-        // this css file will be overwritten by the sass generated css if sass is enabled
-        // but this will avoid errors when running app without running sass task first
-        {
-            condition: generator => !generator.useSass,
-            path: MAIN_SRC_DIR,
-            templates: ['content/css/global.css', 'content/css/vendor.css', 'content/css/documentation.css']
-        },
-        {
-            condition: generator => !generator.useSass && generator.enableI18nRTL,
-            path: MAIN_SRC_DIR,
-            templates: ['content/css/rtl.css']
+            templates: ['.huskyrc']
         }
     ],
     sass: [
         {
-            condition: generator => generator.useSass,
             path: MAIN_SRC_DIR,
             templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss']
         },
         {
-            condition: generator => generator.useSass && generator.enableI18nRTL,
+            condition: generator => generator.enableI18nRTL,
             path: MAIN_SRC_DIR,
             templates: ['content/scss/rtl.scss']
         }
@@ -83,12 +66,26 @@ const files = {
         {
             path: MAIN_SRC_DIR,
             templates: [
-                { file: 'content/images/hipster.png', method: 'copy' },
-                { file: 'content/images/hipster2x.png', method: 'copy' },
-                { file: 'content/images/hipster192.png', method: 'copy' },
-                { file: 'content/images/hipster256.png', method: 'copy' },
-                { file: 'content/images/hipster384.png', method: 'copy' },
-                { file: 'content/images/hipster512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-512.png', method: 'copy' },
                 { file: 'content/images/logo-jhipster.png', method: 'copy' }
             ]
         }
@@ -102,7 +99,15 @@ const files = {
     commonWeb: [
         {
             path: MAIN_SRC_DIR,
-            templates: [{ file: 'favicon.ico', method: 'copy' }, 'robots.txt', '404.html', 'index.html', 'manifest.webapp']
+            templates: [
+                'WEB-INF/web.xml',
+                { file: 'favicon.ico', method: 'copy' },
+                'robots.txt',
+                '404.html',
+                'index.html',
+                'manifest.webapp',
+                'content/css/loading.css'
+            ]
         }
     ],
     angularApp: [
@@ -164,14 +169,8 @@ const files = {
             templates: ['layouts/navbar/active-menu.directive.ts']
         },
         {
-            condition: generator => generator.useSass,
             path: ANGULAR_DIR,
             templates: ['layouts/profiles/page-ribbon.scss', 'layouts/navbar/navbar.scss', 'home/home.scss']
-        },
-        {
-            condition: generator => !generator.useSass,
-            path: ANGULAR_DIR,
-            templates: ['layouts/profiles/page-ribbon.css', 'layouts/navbar/navbar.css', 'home/home.css']
         }
     ],
     angularAccountModule: [
@@ -220,14 +219,9 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.useSass && generator.authenticationType !== 'oauth2',
+            condition: generator => generator.authenticationType !== 'oauth2',
             path: ANGULAR_DIR,
             templates: ['account/password/password-strength-bar.scss']
-        },
-        {
-            condition: generator => !generator.useSass && generator.authenticationType !== 'oauth2',
-            path: ANGULAR_DIR,
-            templates: ['account/password/password-strength-bar.css']
         }
     ],
     angularAdminModule: [
@@ -259,8 +253,6 @@ const files = {
                 { file: 'admin/metrics/metrics.route.ts', method: 'processJs' },
                 { file: 'admin/metrics/metrics.component.ts', method: 'processJs' },
                 { file: 'admin/metrics/metrics.component.html', method: 'processHtml', template: true },
-                'admin/metrics/metrics-modal.component.ts',
-                { file: 'admin/metrics/metrics-modal.component.html', method: 'processHtml', template: true },
                 'admin/metrics/metrics.service.ts'
             ]
         },
@@ -385,7 +377,6 @@ const files = {
             templates: [
                 'core/auth/csrf.service.ts',
                 'core/auth/state-storage.service.ts',
-                'core/auth/principal.service.ts',
                 'shared/auth/has-any-authority.directive.ts',
                 'core/auth/account.service.ts',
                 'core/auth/user-route-access-service.ts'
@@ -417,10 +408,9 @@ const files = {
                 'spec/app/admin/logs/logs.service.spec.ts',
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
-                'spec/app/admin/metrics/metrics-modal.component.spec.ts',
+                'spec/app/core/user/account.service.spec.ts',
                 'spec/helpers/spyobject.ts',
                 'spec/helpers/mock-account.service.ts',
-                'spec/helpers/mock-principal.service.ts',
                 'spec/helpers/mock-route.service.ts',
                 'spec/helpers/mock-login.service.ts',
                 'spec/helpers/mock-event-manager.service.ts',
@@ -486,6 +476,11 @@ const files = {
                 'e2e/page-objects/jhi-page-objects.ts',
                 'protractor.conf.js'
             ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: ['spec/app/layouts/main/main.component.spec.ts']
         }
     ]
 };
