@@ -629,8 +629,13 @@ const serverFiles = {
     serverMicroservice: [
         {
             condition: generator =>
-                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway') &&
-                generator.authenticationType === 'uaa',
+                (
+                    generator.applicationType === 'microservice' ||
+                    (
+                        generator.applicationType === 'gateway' &&
+                        (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')
+                    )
+                ) && generator.authenticationType === 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -735,10 +740,6 @@ const serverFiles = {
                 {
                     file: 'package/config/FeignConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java`
-                },
-                {
-                    file: 'package/config/PageableSpringEncoder.java',
-                    renameTo: generator => `${generator.javaDir}config/PageableSpringEncoder.java`
                 },
                 {
                     file: 'package/client/AuthorizedFeignClient.java',
