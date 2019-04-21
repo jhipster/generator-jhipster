@@ -20,7 +20,13 @@ RUN \
     g++ \
     libpng-dev \
     build-essential \
+    software-properties-common \
     sudo && \
+  # install OpenJDK 11
+  add-apt-repository ppa:openjdk-r/ppa && \
+  apt-get update && \
+  apt-get install -y openjdk-11-jdk && \
+  update-java-alternatives -s java-1.11.0-openjdk-amd64 && \
   # install node.js
   wget https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
@@ -62,12 +68,6 @@ RUN \
 
 # expose the working directory, the Tomcat port, the BrowserSync ports
 USER jhipster
-
-# install open-jdk 11 using SDKMAN
-RUN curl -s get.sdkman.io | bash && \
-    echo sdkman_auto_answer=true > /home/jhipster/.sdkman/etc/config && \
-    /bin/bash -c "source /home/jhipster/.sdkman/bin/sdkman-init.sh ; sdk install java 11.0.2-open"
-
 ENV PATH $PATH:/usr/bin:/home/jhipster/.yarn-global/bin:/home/jhipster/.yarn/bin:/home/jhipster/.config/yarn/global/node_modules/.bin
 WORKDIR "/home/jhipster/app"
 VOLUME ["/home/jhipster/app"]

@@ -21,9 +21,8 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.config.TestSecurityConfiguration;
 import <%=packageName%>.security.AuthoritiesConstants;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -36,7 +35,6 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -53,7 +51,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link LogoutResource} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 public class LogoutResourceIT {
 
@@ -71,7 +68,7 @@ public class LogoutResourceIT {
 
     private MockMvc restLogoutMockMvc;
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         Map<String, Object> claims = new HashMap<>();
         claims.put("groups", "ROLE_USER");
