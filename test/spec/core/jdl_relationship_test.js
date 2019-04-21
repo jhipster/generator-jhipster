@@ -68,6 +68,27 @@ describe('JDLRelationship', () => {
         expect(relationship.type).to.eq(RelationshipTypes.ONE_TO_ONE);
       });
     });
+    context('when passing duplicated options', () => {
+      let relationship;
+
+      before(() => {
+        relationship = new JDLRelationship({
+          from: 'A',
+          to: 'B',
+          injectedFieldInTo: 'a',
+          type: RelationshipTypes.ONE_TO_ONE,
+          options: [JPA_DERIVED_IDENTIFIER, JPA_DERIVED_IDENTIFIER]
+        });
+      });
+
+      it('only keeps distinct ones', () => {
+        let count = 0;
+        relationship.forEachOption(option => {
+          count++;
+        });
+        expect(count).to.equal(1);
+      });
+    });
   });
   describe('::isValid', () => {
     context('when checking the validity of an invalid object', () => {
