@@ -629,13 +629,8 @@ const serverFiles = {
     serverMicroservice: [
         {
             condition: generator =>
-                (
-                    generator.applicationType === 'microservice' ||
-                    (
-                        generator.applicationType === 'gateway' &&
-                        (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')
-                    )
-                ) && generator.authenticationType === 'uaa',
+                generator.authenticationType === 'uaa' &&
+                (generator.applicationType === 'microservice' || generator.applicationType === 'gateway'),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -658,16 +653,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive &&
-                !(
-                    generator.applicationType !== 'microservice' &&
-                    !(
-                        generator.applicationType === 'gateway' &&
-                        (generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2')
-                    )
-                ) &&
-                generator.applicationType === 'microservice' &&
-                generator.authenticationType === 'uaa',
+                !generator.reactive && generator.applicationType === 'microservice' && generator.authenticationType === 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -703,10 +689,6 @@ const serverFiles = {
                 generator.authenticationType === 'jwt',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                {
-                    file: 'package/config/FeignConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java`
-                },
                 {
                     file: 'package/config/FeignConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/FeignConfiguration.java`
