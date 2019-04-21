@@ -20,7 +20,7 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const { Options, exists } = require('../../../../lib/core/jhipster/relationship_options');
+const { JPA_DERIVED_IDENTIFIER, exists } = require('../../../../lib/core/jhipster/relationship_options');
 
 describe('RelationshipOptions', () => {
   describe('exists', () => {
@@ -31,7 +31,7 @@ describe('RelationshipOptions', () => {
     });
     describe('when the option exists', () => {
       it('returns true', () => {
-        expect(exists(Options.JPA_DERIVED_IDENTIFIER)).to.be.true;
+        expect(exists(JPA_DERIVED_IDENTIFIER)).to.be.true;
       });
     });
   });

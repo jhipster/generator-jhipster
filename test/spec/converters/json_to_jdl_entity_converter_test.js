@@ -26,9 +26,7 @@ const { convertEntitiesToJDL } = require('../../../lib/converters/json_to_jdl_en
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
-const {
-  Options: { JPA_DERIVED_IDENTIFIER }
-} = require('../../../lib/core/jhipster/relationship_options');
+const { JPA_DERIVED_IDENTIFIER } = require('../../../lib/core/jhipster/relationship_options');
 const {
   Options: { DTO, SEARCH_ENGINE, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
   Values: {
