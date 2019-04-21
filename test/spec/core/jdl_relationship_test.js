@@ -249,6 +249,51 @@ describe('JDLRelationship', () => {
       );
     });
   });
+  describe('#hasOption', () => {
+    let relationship;
+
+    before(() => {
+      relationship = new JDLRelationship({
+        from: 'A',
+        to: 'B',
+        injectedFieldInTo: 'a',
+        type: RelationshipTypes.ONE_TO_ONE,
+        options: [JPA_DERIVED_IDENTIFIER]
+      });
+    });
+
+    context('when the option does not exist', () => {
+      it('returns false', () => {
+        expect(relationship.hasOption('toto')).to.be.false;
+      });
+    });
+    context('when the option exists', () => {
+      it('returns true', () => {
+        expect(relationship.hasOption(JPA_DERIVED_IDENTIFIER)).to.be.true;
+      });
+    });
+  });
+  describe('#forEachOption', () => {
+    let relationship;
+
+    before(() => {
+      relationship = new JDLRelationship({
+        from: 'A',
+        to: 'B',
+        injectedFieldInTo: 'a',
+        type: RelationshipTypes.ONE_TO_ONE,
+        options: [1, 2, 3]
+      });
+    });
+
+    it('executes the function for each element', () => {
+      let i = 1;
+      relationship.forEachOption(option => {
+        expect(option).to.equal(i);
+        i++;
+      });
+    });
+  });
   describe('#toString', () => {
     context('without any comment', () => {
       let relationship = null;

@@ -31,6 +31,7 @@ const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const FieldTypes = require('../../../lib/core/jhipster/field_types');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
+const RelationshipOptions = require('../../../lib/core/jhipster/relationship_options');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const Validations = require('../../../lib/core/jhipster/validations');
 const JDLObject = require('../../../lib/core/jdl_object');
@@ -802,6 +803,43 @@ describe('BusinessErrorChecker', () => {
         }).to.throw(
           "Entities for the ManyToMany relationship from 'B' to 'C' do not belong to the same application." +
             "\nEntities for the ManyToMany relationship from 'A' to 'C' do not belong to the same application."
+        );
+      });
+    });
+    context('when having the jpaDerivedIdentifier option with something else than a OtO relationship', () => {
+      before(() => {
+        const relationship = new JDLRelationship({
+          from: 'A',
+          to: 'B',
+          injectedFieldInTo: 'a',
+          type: RelationshipTypes.MANY_TO_ONE,
+          options: [RelationshipOptions.JPA_DERIVED_IDENTIFIER]
+        });
+        jdlObject.addRelationship(relationship);
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+
+      it('fails', () => {
+        expect(() => checker.checkForRelationshipErrors()).to.throw(
+          "Only a One to One relationship can have the 'jpaDerivedIdentifier' option."
+        );
+      });
+    });
+    context('with invalid relationship options', () => {
+      before(() => {
+        const relationship = new JDLRelationship({
+          from: 'A',
+          to: 'B',
+          injectedFieldInTo: 'a',
+          type: RelationshipTypes.ONE_TO_ONE,
+          options: ['invalid']
+        });
+        jdlObject.addRelationship(relationship);
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+      it('fails', () => {
+        expect(() => checker.checkForRelationshipErrors()).to.throw(
+          "These relationship options do not exist: 'invalid' for relationship from 'A' to 'B'."
         );
       });
     });
