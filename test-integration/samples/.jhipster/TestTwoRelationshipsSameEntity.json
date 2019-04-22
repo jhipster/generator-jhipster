@@ -5,13 +5,15 @@
             "relationshipType": "many-to-one",
             "relationshipName": "firstRelationship",
             "otherEntityName": "testEntity",
-            "otherEntityField": "id"
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "firstTestTwoRelationshipsSameEntity"
         },
         {
             "relationshipType": "many-to-one",
             "relationshipName": "secondRelationship",
             "otherEntityName": "testEntity",
-            "otherEntityField": "id"
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "secondTestTwoRelationshipsSameEntity"
         },
         {
             "relationshipName": "userOne",
@@ -30,14 +32,16 @@
             "relationshipName": "firstUniqueRequiredRelation",
             "relationshipValidateRules": "required",
             "otherEntityName": "division",
-            "otherEntityField": "id"
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "firstTestTwoRelationshipsSameEntity"
         },
         {
             "relationshipType": "many-to-one",
             "relationshipName": "secondUniqueRequiredRelation",
             "relationshipValidateRules": "required",
             "otherEntityName": "division",
-            "otherEntityField": "id"
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "secondTestTwoRelationshipsSameEntity"
         }
     ],
     "fields": [],

@@ -13,7 +13,8 @@
             "relationshipType": "many-to-one",
             "relationshipName": "owner",
             "otherEntityName": "division",
-            "otherEntityField": "name"
+            "otherEntityField": "name",
+            "otherEntityRelationshipName": "divisionsPlace"
         }
     ],
     "fields": [

@@ -521,10 +521,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             )
                         );
                     }
-                    relationship.otherEntityRelationshipNameUndefined = _.isUndefined(relationship.otherEntityRelationshipName);
 
                     if (
-                        relationship.otherEntityRelationshipNameUndefined &&
+                        _.isUndefined(relationship.otherEntityRelationshipName) &&
                         _.isUndefined(relationship.relationshipType) === false &&
                         relationship.relationshipType !== ''
                     ) {
@@ -928,10 +927,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                     }
 
-                    if (
-                        _.isUndefined(relationship.otherEntityRelationshipNamePlural) ||
-                        relationship.otherEntityRelationshipNameUndefined
-                    ) {
+                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
                         if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
                             if (otherEntityData && otherEntityData.relationships) {
                                 otherEntityData.relationships.forEach(otherRelationship => {
