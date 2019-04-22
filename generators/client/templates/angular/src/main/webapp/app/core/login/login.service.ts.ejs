@@ -78,7 +78,7 @@ export class LoginService {
         return this.authServerProvider.loginWithToken(jwt, rememberMe);
     }
     <%_ } _%>
-    <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
+    <%_ if (authenticationType === 'uaa') { _%>
 
     isAuthenticated() {
         return this.accountService.isAuthenticated();
