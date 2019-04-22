@@ -71,7 +71,7 @@
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
             "ownerSide": true,
-            "otherEntityRelationshipName": "testManyToMany"
+            "otherEntityRelationshipName": "superMegaLargeTestManyToMany"
         }
     ],
     "fields": [],
