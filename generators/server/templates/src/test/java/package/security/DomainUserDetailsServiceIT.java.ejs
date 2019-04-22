@@ -26,7 +26,6 @@ import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository.<% if (reactive) { %>reactive.<% } %>UserRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +53,7 @@ import java.util.UUID;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 /**
  * Integrations tests for {@link DomainUserDetailsService}.
@@ -164,7 +164,7 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %
     @Test
     @Transactional
     public void assertThatUserCanNotBeFoundByEmailIgnoreCase() {
-        Assertions.assertThrows(UsernameNotFoundException.class,
+        assertThatExceptionOfType(UsernameNotFoundException.class).isThrownBy(
             () -> domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH)));
     }
     <%_ } else { // MongoDB and Cassandra _%>
@@ -191,7 +191,7 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %
     @Transactional
     <%_ } _%>
     public void assertThatUserNotActivatedExceptionIsThrownForNotActivatedUsers() {
-        Assertions.assertThrows(UserNotActivatedException.class,
+        assertThatExceptionOfType(UserNotActivatedException.class).isThrownBy(
             () -> domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_THREE_LOGIN)<% if (reactive) { %>.block()<% } %>);
     }
 
