@@ -253,7 +253,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
           <AvForm model={isNew ? {} : <%= entityInstance %>Entity} onSubmit={this.saveEntity} >
             { !isNew ?
               <AvGroup>
-                <Label for="id"><Translate contentKey="global.field.id">ID</Translate></Label>
+                <Label for="<%= entityFileName %>-id"><Translate contentKey="global.field.id">ID</Translate></Label>
                 <AvInput id="<%= entityFileName %>-id" type="text" className="form-control" name="id" required readOnly/>
               </AvGroup>
               : null
@@ -272,7 +272,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                 </Translate>
               </Label>
             <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+              <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
                 </Translate>
@@ -287,7 +287,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
                 <%- include react_validators %>
               />
             <%_ } else if (fieldType === 'LocalDate') { _%>
-              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+              <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
                 </Translate>
@@ -330,7 +330,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
               <%_ } _%>
               </AvInput>
             <%_ } else if (['Integer', 'Long', 'Float', 'Double'].includes(fieldType)) { _%>
-              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+              <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
                 </Translate>
@@ -378,7 +378,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
             </AvGroup>
 
             <%_ } else { _%>
-              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+              <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
                 </Translate>
@@ -386,7 +386,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
               <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include react_validators %>/>
               <%_ } _%>
             <%_ } else { _%>
-            <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                 <%= fieldNameHumanized %>
               </Translate>
