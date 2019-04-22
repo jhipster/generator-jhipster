@@ -27,7 +27,9 @@ jib {
         entrypoint = ["sh", "-c", "chmod +x /entrypoint.sh && sync && /entrypoint.sh"]
         ports = ["<%= serverPort %>"<% if (cacheProvider === 'hazelcast') { %>, "5701/udp" <% } %>]
         environment = [
-            <%_ if (cacheProvider === 'infinispan') { _%>JAVA_OPTS: "-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true",<%_ } _%>
+            <%_ if (cacheProvider === 'infinispan') { _%>
+            JAVA_OPTS: "-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true",
+            <%_ } _%>
             SPRING_OUTPUT_ANSI_ENABLED: "ALWAYS",
             JHIPSTER_SLEEP: "0"
         ]
