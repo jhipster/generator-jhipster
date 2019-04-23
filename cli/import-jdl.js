@@ -268,8 +268,12 @@ class JDLProcessor {
     getConfig() {
         if (jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
             logger.info('Found .yo-rc.json on path. This is an existing app');
-            this.options.interactive = true;
-            this.options['skip-git'] = true;
+            if(!this.options.hasOwnProperty('interactive')) {
+                this.options.interactive = true;
+            }
+            if(!this.options.hasOwnProperty('skip-git')) {
+                this.options['skip-git'] = true;
+            }
             const configuration = jhipsterUtils.getAllJhipsterConfig(null, true);
             this.applicationType = configuration.applicationType;
             this.baseName = configuration.baseName;
