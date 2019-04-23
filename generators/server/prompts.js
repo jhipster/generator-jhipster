@@ -223,8 +223,6 @@ function askForServerSideOpts(meta) {
             default: 0
         },
         {
-            // cache is mandatory for gateway with service dsicovery and defined later to 'hazelcast' value
-            when: response => !(applicationType === 'gateway' && response.serviceDiscoveryType),
             type: 'list',
             name: 'cacheProvider',
             message: 'Do you want to use the Spring cache abstraction?',
@@ -235,7 +233,8 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'hazelcast',
-                    name: 'Yes, with the Hazelcast implementation (distributed cache, for multiple nodes)'
+                    name:
+                        'Yes, with the Hazelcast implementation (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)'
                 },
                 {
                     value: 'infinispan',
@@ -341,10 +340,6 @@ function askForServerSideOpts(meta) {
             this.devDatabaseType = 'cassandra';
             this.prodDatabaseType = 'cassandra';
             this.enableHibernateCache = false;
-        }
-        // Hazelcast is mandatory for Gateways, as it is used for rate limiting
-        if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
-            this.cacheProvider = 'hazelcast';
         }
         done();
     });

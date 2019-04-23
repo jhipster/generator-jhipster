@@ -323,7 +323,7 @@
             <artifactId>encryption</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (['ehcache', 'hazelcast', 'infinispan'].includes(cacheProvider)) { _%>
+        <%_ if (['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(cacheProvider)) { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
