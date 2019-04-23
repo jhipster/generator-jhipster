@@ -16,7 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = {
+
+let customCommands = {};
+const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
+if (indexOfBlueprintArgv > -1) {
+    /* eslint-disable import/no-dynamic-require */
+    /* eslint-disable global-require */
+    customCommands = require(`generator-jhipster-${process.argv[indexOfBlueprintArgv + 1]}/cli/commands`);
+}
+
+const defaultCommands = {
     app: {
         default: true,
         desc: 'Create a new JHipster application based on the selected options'
@@ -102,4 +111,9 @@ Example:
     upgrade: {
         desc: 'Upgrade the JHipster version, and upgrade the generated application'
     }
+};
+
+module.exports = {
+    ...defaultCommands,
+    ...customCommands
 };
