@@ -31,7 +31,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.<% if (reactive) { %>Reactive<% } %>AuthenticationManager;
+<%_ if (reactive) { _%>
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+<%_ } _%>
+<%_ if (!reactive) { _%>
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+<%_ } _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -68,7 +73,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     private TokenProvider tokenProvider;
 
     @Autowired
-    private <% if (reactive) { %>Reactive<% } %>AuthenticationManager authenticationManager;
+    private <% if (reactive) { %>Reactive<% } %>AuthenticationManager<% if (!reactive) { %>Builder<% } %> authenticationManager;
 
     @Autowired
     private UserRepository userRepository;
