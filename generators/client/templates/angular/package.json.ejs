@@ -136,6 +136,7 @@
     "tslint": "5.15.0",
     "tslint-config-prettier": "1.18.0",
     "tslint-loader": "3.5.4",
+    "typedoc": "0.14.2",
     "typescript": "3.2.4",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
@@ -180,6 +181,7 @@
     "build": "<%= clientPackageManager %> run webpack:prod",
     "test": "<%= clientPackageManager %> run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
     "test:watch": "<%= clientPackageManager %> run test <%= optionsForwarder %>--watch",
+    "typedoc": "typedoc --out target/site/typedocs src/main/webapp/app",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --env.stats=minimal",
     "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --profile --progress --env.stats=normal",
     "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --env.stats=minimal",

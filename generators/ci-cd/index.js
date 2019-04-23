@@ -134,6 +134,7 @@ module.exports = class extends BaseGenerator {
     }
 
     writing() {
+        this.template('src/main/asciidoc/cicd.adoc.ejs', 'src/main/asciidoc/cicd.adoc');
         if (this.pipeline === 'jenkins') {
             this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
             this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);

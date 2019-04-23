@@ -1,0 +1,45 @@
+=== Database
+
+Production database is *<%_ if (databaseType === 'sql') { _%><%= prodDatabaseType %>%><%_ } else { _%><%= databaseType %><%_ } _%>*.
+
+.Databases configuration
+|===
+|Environment |URL |Login |Password
+
+| Local development
+<%_ if (databaseType === 'sql') { _%>
+<%_ if (devDatabaseType === 'mysql') { _%>
+| url: jdbc:mysql://localhost:3306/jhipster?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+<%_ } else if (devDatabaseType === 'mariadb') { _%>
+| url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
+<%_ } else if (devDatabaseType === 'postgresql') { _%>
+| url: jdbc:postgresql://localhost:5432/<%= baseName %>
+<%_ } else if (devDatabaseType === 'oracle') { _%>
+| url: jdbc:oracle:thin:@localhost:1521:xe
+<%_ } else if (devDatabaseType === 'mssql') { _%>
+| url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
+<%_ } else if (devDatabaseType === 'h2Disk') {
+let lowercaseBaseName = baseName.toLowerCase();
+_%>
+| url: jdbc:h2:file:./<%= BUILD_DIR %>h2db/db/<%= baseName %>;DB_CLOSE_DELAY=-1
+<%_ } else if (devDatabaseType === 'h2Memory') {
+let lowercaseBaseName = baseName.toLowerCase();
+_%>
+| url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+<%_ } _%>
+| root
+|
+<%_ } else if (databaseType === 'mongodb') { _%>
+| uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
+|
+|
+<%_ } else if (databaseType === 'cassandra') { _%>
+| contactPoints: localhost, protocolVersion: V4, compression: LZ4, keyspaceName: <%= baseName %>
+|
+|
+<%_ } else if (databaseType === 'couchbase') { _%>
+| bootstrap-hosts: localhost, bucket.name: <%= baseName %>, bucket.password: password
+|
+|
+<%_ } _%>
+|===

@@ -1,0 +1,46 @@
+=== Continuous Integration / Deployment
+
+<%_ if (pipeline === 'jenkins') { _%>
+Continuous integration is set up using *Jenkins* pipeline.
+<%_ } else if (pipeline === 'gitlab') { _%>
+Continuous integration is set up using *Gitlab CI* pipeline.
+<%_ } else if (pipeline === 'azure') { _%>
+Continuous integration is set up using *Microsoft Azure* pipeline.
+<%_ } else if (pipeline === 'travis') { _%>
+Continuous integration is set up using *Travis CI*.
+<%_ } else if (pipeline === 'circle') { _%>
+Continuous integration is set up using *Circle-CI*.
+<%_ } _%>
+
+About deployment, many profiles can be used:
+
+.Application profiles
+|===
+| Profile | Property file | Description
+
+| dev
+| application-dev.yml
+| Development profile. Enables hot reload and connect locally to a H2 database.
+
+| prod
+| application-prod.yml
+| Production optimized profile.
+
+| tls
+| application-tls
+| Enable TLS on deployment.
+
+<%_ if (cicdIntegrations.includes('heroku')) { _%>
+| heroku
+| application-heroku
+| Heroku specific properties.
+<%_ } else if (cicdIntegrations.includes('configmap')) { _%>
+| configmap
+| application-configmap
+| Openshift specific properties.
+<%_ } else if (cicdIntegrations.includes('cloudfoundry')) { _%>
+| cloudfoundry
+| application-cloudfoundry
+| Pivotal Cloud Foundry specific properties.
+<%_ } _%>
+|===

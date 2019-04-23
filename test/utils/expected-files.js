@@ -146,7 +146,18 @@ const expectedFiles = {
 
     maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties'],
 
-    common: ['.prettierignore', '.prettierrc', 'README.md', '.gitignore', '.gitattributes', '.editorconfig'],
+    common: [
+        '.prettierignore',
+        '.prettierrc',
+        'README.md',
+        '.gitignore',
+        '.gitattributes',
+        '.editorconfig',
+        'src/main/asciidoc/index.adoc',
+        'src/main/asciidoc/auth.adoc',
+        'src/main/asciidoc/db.adoc',
+        'src/main/asciidoc/front-end.adoc'
+    ],
 
     server: [
         `${SERVER_MAIN_RES_DIR}banner.txt`,

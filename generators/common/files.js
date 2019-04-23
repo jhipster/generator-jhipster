@@ -54,6 +54,12 @@ const commonFiles = {
                 }
             ]
         }
+    ],
+    documentation: [
+        {
+            path: 'src/main/asciidoc/',
+            templates: ['index.adoc', 'auth.adoc', 'db.adoc', 'front-end.adoc']
+        }
     ]
 };
 

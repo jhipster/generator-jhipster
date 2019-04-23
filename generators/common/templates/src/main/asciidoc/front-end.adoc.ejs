@@ -1,0 +1,10 @@
+<%_ if (clientFramework) { %>
+=== Front-end technology
+
+<%_ if (clientFramework === 'react') { %>
+Front-end is built using https://reactjs.org/[React.js^] and http://webpack.org[Webpack^].
+<%_ } else { _%>
+Front-end is built using https://angular.io/[Angular.io^] and http://webpack.org[Webpack^].
+<%_ } _%>
+Production build uses tree-shaking and try to optimize at most the generated package.
+<%_ } _%>

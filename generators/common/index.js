@@ -84,6 +84,8 @@ module.exports = class extends BaseBlueprintGenerator {
     _default() {
         return {
             getSharedConfigOptions() {
+                this.baseName = this.config.get('baseName');
+                this.reactive = this.config.get('reactive');
                 this.jhipsterVersion = this.config.get('jhipsterVersion');
                 this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
                 this.enableSwaggerCodegen = this.configOptions.enableSwaggerCodegen;

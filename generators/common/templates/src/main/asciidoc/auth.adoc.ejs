@@ -1,0 +1,16 @@
+<%_ if (authenticationType !== 'uaa') { _%>
+=== Authentication
+
+<%_ if (authenticationType === 'jwt') { _%>
+The application uses *JSON Web Token (JWT)* to ensure user authentication. It is a stateless security mechanism, ideal if you want to scale your application on several different servers.
+This solution uses a secure token that holds the user’s login name and authorities. As the token is signed, it cannot be altered by a user.
+<%_ } else if (authenticationType === 'oauth2') { _%>
+This application uses *oAuth2 mechanism* as authentication.
+OAuth is a stateful security mechanism, like HTTP Session. Spring Security provides OAuth 2.0 support, and this is leveraged by JHipster with its @EnableOAuth2Sso annotation.
+<%_ } else if (authenticationType === 'session') { _%>
+The application uses *session based authentication*.
+This is the “classical” Spring Security authentication mechanism, but we have improved it quite significantly.
+It uses the HTTP Session, so it is a stateful mechanism: if you plan to scale your application on multiple servers, you need to have a load balancer with sticky sessions so that each user stays on the same server.
+<%_ } _%>
+
+<%_ } _%>
