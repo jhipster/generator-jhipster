@@ -45,7 +45,7 @@ describe('jhipster cli test', () => {
             expect(error).to.not.be.null;
             expect(error.code).to.equal(1);
             /* eslint-disable prettier/prettier */
-            expect(stderr.includes('Cannot find module \'generator-jhipster-bar/commands\'')).to.be.true;
+            expect(stderr.includes('Cannot find module \'generator-jhipster-bar/cli/commands\'')).to.be.true;
             done();
         });
     });

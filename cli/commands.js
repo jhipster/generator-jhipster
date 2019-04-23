@@ -21,7 +21,7 @@ let customCommands = {};
 if (process.argv.indexOf('--blueprint') > -1) {
     /* eslint-disable import/no-dynamic-require */
     /* eslint-disable global-require */
-    customCommands = require(`generator-jhipster-${process.argv[process.argv.indexOf('--blueprint') + 1]}/commands`);
+    customCommands = require(`generator-jhipster-${process.argv[process.argv.indexOf('--blueprint') + 1]}/cli/commands`);
 }
 
 const defaultCommands = {
