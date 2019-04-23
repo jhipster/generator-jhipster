@@ -115,11 +115,7 @@ function findJarFilename(buildFolder, callback) {
         if (err) {
             error(err, callback);
         }
-        files
-            .filter(file => file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION)
-            .forEach(file => {
-                jarFilename = file;
-            });
+        files.filter(file => file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION).forEach(file => (jarFilename = file)); // eslint-disable-line
         callback(null, jarFilename);
     });
 }
