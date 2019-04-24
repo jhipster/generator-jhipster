@@ -45,7 +45,8 @@ describe('jhipster cli test', () => {
             expect(error).to.not.be.null;
             expect(error.code).to.equal(1);
             /* eslint-disable prettier/prettier */
-            expect(stderr.includes('Cannot find module \'generator-jhipster-bar/cli/commands\'')).to.be.true;
+            expect(stdout.includes('No custom command found within blueprint')).to.be.true;
+            expect(stderr.includes('is not a known command')).to.be.true;
             done();
         });
     });
