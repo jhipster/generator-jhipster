@@ -206,7 +206,11 @@ limitations under the License.
     "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
     "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch",
+    <%_ if (buildTool === 'gradle') { _%>
+    "typedoc": "typedoc --out build/docs/html5/typedocs src/main/webapp/app",
+    <%_ } else { _%>
     "typedoc": "typedoc --out target/site/typedocs src/main/webapp/app",
+    <%_ } _%>
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
     "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
     "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --env.stats=minimal",

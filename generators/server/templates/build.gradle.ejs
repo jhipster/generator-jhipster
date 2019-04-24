@@ -53,6 +53,7 @@ plugins {
     id "org.liquibase.gradle" version "2.0.1"
     <%_ } _%>
     id "org.sonarqube" version "2.7"
+    id "org.asciidoctor.convert" version "1.5.9.2"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -542,3 +543,12 @@ if (project.hasProperty("nodeInstall")) {
 <%_ } _%>
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo
+
+asciidoctor {
+    sourceDir = file('docs')
+    outputDir = file('build/docs')
+    attributes  toc : 'left'
+                'project-name': project.name,
+                'revnumber': project.version,
+                'revdate': new Date().format('yyyy/MM/dd HH:mm:ss')
+}
