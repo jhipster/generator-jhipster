@@ -274,6 +274,17 @@
             },
             "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster openapi-cli",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "args": [
+                "openapi-cli"
+            ],
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+            "console": "integratedTerminal"
+        },
     ]
 }

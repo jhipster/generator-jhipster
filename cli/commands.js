@@ -135,6 +135,9 @@ Example:
         argument: ['name'],
         desc: 'Create a new Spring controller'
     },
+    'openapi-cli': {
+        desc: "Jhipster Open API client generation"
+    },
     upgrade: {
         desc: 'Upgrade the JHipster version, and upgrade the generated application'
     }
