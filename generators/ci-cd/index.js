@@ -23,6 +23,7 @@ const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
+const utils = require('../utils');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -134,7 +135,6 @@ module.exports = class extends BaseGenerator {
     }
 
     writing() {
-        this.template('src/main/asciidoc/cicd.adoc.ejs', 'src/main/asciidoc/cicd.adoc');
         if (this.pipeline === 'jenkins') {
             this.template('jenkins/Jenkinsfile.ejs', 'Jenkinsfile');
             this.template('jenkins/jenkins.yml.ejs', `${this.DOCKER_DIR}jenkins.yml`);
@@ -171,5 +171,15 @@ module.exports = class extends BaseGenerator {
         if (this.cicdIntegrations.includes('publishDocker')) {
             this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
         }
+
+        utils.rewriteFile(
+            {
+                file: 'src/main/asciidoc/index.adoc',
+                needle: 'jhipster-needle-add-extra-doc',
+                splicable: ['include::cicd.adoc[]']
+            },
+            this
+        );
+        this.template('src/main/asciidoc/cicd.adoc.ejs', 'src/main/asciidoc/cicd.adoc');
     }
 };

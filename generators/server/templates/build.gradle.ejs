@@ -545,9 +545,9 @@ compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo
 
 asciidoctor {
-    sourceDir = file('docs')
+    sourceDir = file('src/main/asciidoc')
     outputDir = file('build/docs')
-    attributes  toc : 'left'
+    attributes  toc : 'left',
                 'project-name': project.name,
                 'revnumber': project.version,
                 'revdate': new Date().format('yyyy/MM/dd HH:mm:ss')
