@@ -231,7 +231,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             <%_ } _%>
             .antMatchers("/api/**").authenticated()
             <%_ if (authenticationType === 'oauth2') { _%>
-            .antMatchers("/authorize").authenticated()
             .antMatchers("/api/auth-info").permitAll()
             <%_ } _%>
             <%_ if (websocket === 'spring-websocket') { _%>
