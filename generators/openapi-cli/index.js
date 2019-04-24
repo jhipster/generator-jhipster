@@ -10,17 +10,21 @@ const _ = require('underscore.string');
 
 
 module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+        // This adds support for a `--from-cli` flag
+        this.option('regen', {
+            desc: 'Regenerates all saved clients',
+            type: Boolean,
+            defaults: false
+        });
+        this.registerPrettierTransform();
+    }
+
     get initializing() {
         return {
-            init() {
-                this.option('regen', {
-                    desc: 'Regenerates all saved clients',
-                    type: Boolean,
-                    defaults: false
-                });
-            },
-            readConfig() {
-                this.jhipsterAppConfig = this.getJhipsterAppConfig();
+            getConfig() {
+                this.jhipsterAppConfig = this.config;
                 if (!this.jhipsterAppConfig) {
                     this.error('Can\'t read .yo-rc.json');
                 }
@@ -28,14 +32,7 @@ module.exports = class extends BaseGenerator {
             },
             displayLogo() {
                 // Have Yeoman greet the user.
-                this.log(`\nWelcome to the ${chalk.bold.yellow('JHipster swagger-cli')} generator! ${chalk.yellow(`v${packagejs.version}\n`)}`);
-            },
-            checkJhipster() {
-                const currentJhipsterVersion = this.jhipsterAppConfig.jhipsterVersion;
-                const minimumJhipsterVersion = packagejs.dependencies['generator-jhipster'];
-                if (!semver.satisfies(currentJhipsterVersion, minimumJhipsterVersion)) {
-                    this.warning(`\nYour generated project used an old JHipster version (${currentJhipsterVersion})... you need at least (${minimumJhipsterVersion})\n`);
-                }
+                this.log(`\nWelcome to the ${chalk.bold.yellow('JHipster openapi-cli')} sub-generator! ${chalk.yellow(`v${packagejs.version}\n`)}`);
             }
         };
     }
@@ -287,6 +284,6 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
-        this.log('End of swagger-cli generator');
+        this.log('End of openapi-cli generator');
     }
 };
