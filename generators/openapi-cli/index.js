@@ -24,10 +24,6 @@ module.exports = class extends BaseGenerator {
     get initializing() {
         return {
             getConfig() {
-                this.jhipsterAppConfig = this.config;
-                if (!this.jhipsterAppConfig) {
-                    this.error('Can\'t read .yo-rc.json');
-                }
                 this.apis = this.config.get('apis') || {};
             },
             displayLogo() {
@@ -108,7 +104,7 @@ module.exports = class extends BaseGenerator {
                 choices: availableDocs
             },
             {
-                when: response => response.action === 'new-detected' && this.jhipsterAppConfig.serviceDiscoveryType === 'eureka',
+                when: response => response.action === 'new-detected' && this.config.get('serviceDiscoveryType') === 'eureka',
                 type: 'confirm',
                 name: 'useServiceDiscovery',
                 message: 'Do you want to use Eureka service discovery ?',
@@ -202,22 +198,22 @@ module.exports = class extends BaseGenerator {
     get writing() {
         return {
             callSwaggerCodegen() {
-                this.baseName = this.jhipsterAppConfig.baseName;
-                this.authenticationType = this.jhipsterAppConfig.authenticationType;
-                this.packageName = this.jhipsterAppConfig.packageName;
-                this.packageFolder = this.jhipsterAppConfig.packageFolder;
-                this.buildTool = this.jhipsterAppConfig.buildTool;
+                this.baseName = this.config.get('baseName');
+                this.authenticationType = this.config.get('authenticationType');
+                this.packageName = this.config.get('packageName');
+                this.clientPackageManager = this.config.get('clientPackageManager');
+                this.packageFolder = this.config.get('packageFolder');
+                this.buildTool = this.config.get('buildTool');
 
                 this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
-                const jarPath = path.resolve(__dirname, '../jar/openapi-generator-cli-3.0.0-SNAPSHOT.jar');
 
                 Object.keys(this.apisToGenerate).forEach((cliName) => {
                     const inputSpec = this.apisToGenerate[cliName].spec;
                     const cliPackage = `${this.packageName}.client.${_.underscored(cliName)}`;
                     this.log(chalk.green(`Generating client code for ${cliName} (${inputSpec})`));
 
-                    let execLine = `java -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java -jar ${jarPath} generate` +
-                        ` -t ${path.resolve(__dirname, 'templates/swagger-codegen/libraries/spring-cloud')} -l spring --library spring-cloud ` +
+                    let execLine = `${this.clientPackageManager} run openapi-generator -- generate -g spring -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ` +
+                        ` -t ${path.resolve(__dirname, 'templates/swagger-codegen/libraries/spring-cloud')} --library spring-cloud ` +
                         ` -i ${inputSpec} --artifact-id ${_.camelize(cliName)} --api-package ${cliPackage}.api` +
                         ` --model-package ${cliPackage}.model` +
                         ' --type-mappings DateTime=OffsetDateTime,Date=LocalDate --import-mappings OffsetDateTime=java.time.OffsetDateTime,LocalDate=java.time.LocalDate' +

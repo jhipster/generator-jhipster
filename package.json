@@ -77,6 +77,7 @@
         "uuid": "3.3.2",
         "sync-request": "6.0.0",
         "underscore.string": "3.3.4",
+        "@openapitools/openapi-generator-cli": "0.0.9-3.3.4",
         "yeoman-environment": "2.3.4",
         "yeoman-generator": "3.2.0",
         "yo": "3.1.0"
