@@ -45,35 +45,20 @@ describe('Service Tests', () => {
 
         describe('Service methods', () => {
             it('should call correct URL', () => {
-                service.findAll().subscribe(() => {});
+                service.findAll().subscribe();
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                const resourceUrl = SERVER_API_URL + 'management/logs';
+                const resourceUrl = SERVER_API_URL + 'management/loggers';
                 expect(req.request.url).toEqual(resourceUrl);
             });
 
-            it('should return Logs', () => {
-                const log = new Log('main', 'ERROR');
-
-                service.findAll().subscribe(received => {
-                    expectedResult = received;
-                });
-
-                const req = httpMock.expectOne({ method: 'GET' });
-                req.flush([log]);
-                expect(expectedResult.body[0]).toEqual(log);
-            });
-
             it('should change log level', () => {
-                const log = new Log('main', 'ERROR');
+                service.changeLevel('main', 'ERROR').subscribe();
 
-                service.changeLevel(log).subscribe(received => {
-                    expectedResult = received;
-                });
-
-                const req = httpMock.expectOne({ method: 'PUT' });
-                req.flush([log]);
-                expect(expectedResult.body[0]).toEqual(log);
+                const req = httpMock.expectOne({ method: 'POST' });
+                const resourceUrl = SERVER_API_URL + 'management/loggers/main';
+                expect(req.request.url).toEqual(resourceUrl);
+                expect(req.request.body).toEqual({configuredLevel: 'ERROR'});
             });
         });
     });

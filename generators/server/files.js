@@ -1088,16 +1088,8 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/rest/vm/package-info.java`
                 },
                 {
-                    file: 'package/web/rest/vm/LoggerVM.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/vm/LoggerVM.java`
-                },
-                {
                     file: 'package/web/rest/package-info.java',
                     renameTo: generator => `${generator.javaDir}web/rest/package-info.java`
-                },
-                {
-                    file: 'package/web/rest/LogsResource.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/LogsResource.java`
                 }
             ]
         },
@@ -1166,10 +1158,6 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 { file: 'package/web/rest/TestUtil.java', renameTo: generator => `${generator.testDir}web/rest/TestUtil.java` },
-                {
-                    file: 'package/web/rest/LogsResourceIT.java',
-                    renameTo: generator => `${generator.testDir}web/rest/LogsResourceIT.java`
-                },
                 {
                     file: 'package/web/rest/errors/ExceptionTranslatorIT.java',
                     renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorIT.java`
