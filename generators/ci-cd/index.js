@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const fs = require('fs');
 const _ = require('lodash');
 const prompts = require('./prompts');
 const BaseGenerator = require('../generator-base');
@@ -172,14 +173,16 @@ module.exports = class extends BaseGenerator {
             this.template('docker-registry.yml.ejs', `${this.DOCKER_DIR}docker-registry.yml`);
         }
 
-        utils.rewriteFile(
-            {
-                file: 'src/main/asciidoc/index.adoc',
-                needle: 'jhipster-needle-add-extra-doc',
-                splicable: ['include::cicd.adoc[]']
-            },
-            this
-        );
+        if (fs.existsSync('./src/main/asciidoc/index.adoc')) {
+            utils.rewriteFile(
+                {
+                    file: 'src/main/asciidoc/index.adoc',
+                    needle: 'jhipster-needle-add-extra-doc',
+                    splicable: ['include::cicd.adoc[]']
+                },
+                this
+            );
+        }
         this.template('src/main/asciidoc/cicd.adoc.ejs', 'src/main/asciidoc/cicd.adoc');
     }
 };

@@ -58,7 +58,12 @@ const commonFiles = {
     documentation: [
         {
             path: 'src/main/asciidoc/',
-            templates: ['index.adoc', 'auth.adoc', 'db.adoc', 'front-end.adoc']
+            templates: ['index.adoc', 'auth.adoc', 'db.adoc']
+        },
+        {
+            condition: generator => generator.applicationType !== 'microservie',
+            path: 'src/main/asciidoc/',
+            templates: ['front-end.adoc']
         }
     ]
 };
