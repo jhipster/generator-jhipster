@@ -39,10 +39,10 @@ spec:
       - name: kafka
         image: <%= DOCKER_KAFKA %>
         env:
-        - name: KAFKA_ZOOKEEPER_CONNECT
-          value: 'jhipster-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local:2181'
         - name: KAFKA_ADVERTISED_LISTENERS
           value: 'PLAINTEXT://jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: 'jhipster-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local:2181'
         - name: KAFKA_BROKER_ID
           value: '2'
         - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
