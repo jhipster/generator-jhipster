@@ -136,7 +136,7 @@ Example:
         desc: 'Create a new Spring controller'
     },
     'openapi-cli': {
-        desc: "Jhipster Open API client generation"
+        desc: "Generates client code from an OpenAPI/Swagger definition"
     },
     upgrade: {
         desc: 'Upgrade the JHipster version, and upgrade the generated application'
