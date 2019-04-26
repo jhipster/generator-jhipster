@@ -124,6 +124,12 @@ spring:
     mvc:
         favicon:
             enabled: false
+    <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && authenticationType === 'jwt') { _%>
+    security:
+        user:
+            name: test
+            password: test
+    <%_ } _%>
     task:
         execution:
             thread-name-prefix: <%= dasherizedBaseName %>-task-

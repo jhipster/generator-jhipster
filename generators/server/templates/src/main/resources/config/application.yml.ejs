@@ -201,12 +201,12 @@ spring:
             enabled: false
     <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && !['oauth2','uaa'].includes(authenticationType)) { _%>
     security:
-      user:
-        name: admin
-        password: admin
-        roles:
-          - ADMIN
-          - USER
+        user:
+            name: admin
+            password: admin
+            roles:
+                - ADMIN
+                - USER
     <%_ } _%>
     task:
         execution:

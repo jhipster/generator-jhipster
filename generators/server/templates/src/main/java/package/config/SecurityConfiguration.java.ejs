@@ -222,10 +222,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
         <%_ } _%>
             .authorizeRequests()
+            <%_ if (authenticationType !== 'oauth2') { _%>
+            .antMatchers("/api/authenticate").permitAll()
+            <%_ } _%>
             <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
-            .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
             <%_ } _%>

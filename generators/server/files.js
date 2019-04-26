@@ -478,7 +478,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType === 'jwt',
+            condition: generator => generator.applicationType !== 'microservice' && generator.authenticationType === 'jwt',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1616,7 +1616,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.skipUserManagement && generator.authenticationType === 'jwt',
+            condition: generator => generator.applicationType !== 'microservice' && generator.authenticationType === 'jwt',
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
