@@ -54,7 +54,7 @@ spec:
         image: <%= DOCKER_POSTGRESQL %>
         env:
         - name: POSTGRES_USER
-          value: <%= app.baseName.toLowerCase() %>
+          value: <%= app.baseName %>
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:

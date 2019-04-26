@@ -125,7 +125,7 @@ spec:
         - name: SPRING_DATASOURCE_URL
           value: jdbc:postgresql://<%= app.baseName.toLowerCase() %>-postgresql.<%= kubernetesNamespace %>.svc.cluster.local:5432/<%= app.baseName %>
         - name: SPRING_DATASOURCE_USERNAME
-          value: <%= app.baseName.toLowerCase() %>
+          value: <%= app.baseName %>
         - name: SPRING_DATASOURCE_PASSWORD
           valueFrom:
             secretKeyRef:
