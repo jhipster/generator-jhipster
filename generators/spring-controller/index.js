@@ -75,6 +75,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.packageName = configuration.get('packageName');
                 this.packageFolder = configuration.get('packageFolder');
                 this.databaseType = configuration.get('databaseType');
+                this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
+                if (this.messageBroker === undefined) {
+                    this.messageBroker = false;
+                }
                 this.reactiveController = false;
                 this.applicationType = configuration.get('applicationType');
                 this.reactive = configuration.get('reactive');
