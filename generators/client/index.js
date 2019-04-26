@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const ClientGenerator = require('generator-jhipster/generators/client');
+const mainPrompts = require('generator-jhipster/generators/client/prompts');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const blueprintPackagejs = require('../../package.json');
@@ -72,19 +73,13 @@ module.exports = class extends ClientGenerator {
         // The prompting phase is being overriden so that we can ask our own questions
         return {
             askForClient: prompts.askForClient,
-            askForClientSideOpts: prompts.askForClientSideOpts,
-            askForClientTheme: prompts.askForClientTheme,
-            askForClientThemeVariant: prompts.askForClientThemeVariant,
+            askForClientTheme: mainPrompts.askForClientTheme,
+            askForClientThemeVariant: mainPrompts.askForClientThemeVariant,
 
             setSharedConfigOptions() {
-                this.configOptions.lastQuestion = this.currentQuestion;
-                this.configOptions.totalQuestions = this.totalQuestions;
                 this.configOptions.clientFramework = this.clientFramework;
-                this.configOptions.useSass = this.useSass;
                 this.configOptions.clientTheme = this.clientTheme;
                 this.configOptions.clientThemeVariant = this.clientThemeVariant;
-                this.config.set('clientTheme', this.clientTheme);
-                this.config.set('clientThemeVariant', this.clientThemeVariant);
             }
         };
     }
