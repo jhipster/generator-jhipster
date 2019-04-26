@@ -20,7 +20,6 @@ package <%=packageName%>.security.oauth2;
 
 import <%=packageName%>.config.oauth2.OAuth2Properties;
 import <%=packageName%>.web.filter.RefreshTokenFilter;
-import <%=packageName%>.web.rest.errors.InvalidPasswordException;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +29,7 @@ import org.mockito.Mock;
 import org.springframework.http.*;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.DefaultOAuth2RefreshToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -191,7 +191,7 @@ public class OAuth2AuthenticationServiceTest {
         params.put("password", "user2");
         params.put("rememberMe", "false");
         MockHttpServletResponse response = new MockHttpServletResponse();
-        Assertions.assertThrows(InvalidPasswordException.class, () -> authenticationService.authenticate(request, response, params));
+        Assertions.assertThrows(BadCredentialsException.class, () -> authenticationService.authenticate(request, response, params));
     }
 
     @Test

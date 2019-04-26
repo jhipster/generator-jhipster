@@ -784,7 +784,6 @@ const serverFiles = {
                     file: 'package/config/AsyncConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/AsyncConfiguration.java`
                 },
-                { file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` },
                 {
                     file: 'package/config/DateTimeFormatConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/DateTimeFormatConfiguration.java`
@@ -811,6 +810,11 @@ const serverFiles = {
                 },
                 { file: 'package/config/WebConfigurer.java', renameTo: generator => `${generator.javaDir}config/WebConfigurer.java` }
             ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement || ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [{ file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` }]
         },
         {
             // TODO: remove when supported by spring-data
@@ -1049,14 +1053,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/rest/errors/CustomParameterizedException.java`
                 },
                 {
-                    file: 'package/web/rest/errors/EmailAlreadyUsedException.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/errors/EmailAlreadyUsedException.java`
-                },
-                {
-                    file: 'package/web/rest/errors/EmailNotFoundException.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/errors/EmailNotFoundException.java`
-                },
-                {
                     file: 'package/web/rest/errors/ErrorConstants.java',
                     renameTo: generator => `${generator.javaDir}web/rest/errors/ErrorConstants.java`
                 },
@@ -1067,6 +1063,20 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/errors/FieldErrorVM.java',
                     renameTo: generator => `${generator.javaDir}web/rest/errors/FieldErrorVM.java`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/errors/EmailAlreadyUsedException.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/errors/EmailAlreadyUsedException.java`
+                },
+                {
+                    file: 'package/web/rest/errors/EmailNotFoundException.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/errors/EmailNotFoundException.java`
                 },
                 {
                     file: 'package/web/rest/errors/InvalidPasswordException.java',
@@ -1349,6 +1359,7 @@ const serverFiles = {
             condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
+                { file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` },
                 {
                     file: 'package/domain/User.java',
                     renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`
