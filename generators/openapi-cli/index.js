@@ -180,7 +180,7 @@ module.exports = class extends BaseGenerator {
                 } else if (['new', 'new-detected'].includes(this.props.action) || this.props.action === undefined) {
                     this.apisToGenerate[this.props.cliName] = { spec: this.props.inputSpec, useServiceDiscovery: this.props.useServiceDiscovery };
                 } else if (this.props.action === 'select') {
-                    this.props.selected.forEach(function (selection) {
+                    this.props.selected.forEach((selection) => {
                         this.apisToGenerate[selection.cliName] = selection.spec;
                     });
                 }
