@@ -176,6 +176,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         }
     }
     if (generator.isJhipsterVersionLessThan('6.0.0')) {
+        generator.removeFile(`${javaDir}web/rest/errors/CustomParameterizedException.java`);
         generator.removeFile(`${javaDir}web/rest/errors/InternalServerErrorException.java`);
         generator.removeFile(`${javaDir}web/rest/util/PaginationUtil.java`);
         generator.removeFile(`${javaDir}web/rest/util/HeaderUtil.java`);

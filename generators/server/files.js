@@ -1049,10 +1049,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/rest/errors/BadRequestAlertException.java`
                 },
                 {
-                    file: 'package/web/rest/errors/CustomParameterizedException.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/errors/CustomParameterizedException.java`
-                },
-                {
                     file: 'package/web/rest/errors/ErrorConstants.java',
                     renameTo: generator => `${generator.javaDir}web/rest/errors/ErrorConstants.java`
                 },
