@@ -28,7 +28,7 @@ import java.io.IOException;
 @Service
 public class SampleKafkaConsumer {
 
-    private final Logger logger = LoggerFactory.getLogger(SampleKafkaProducer.class);
+    private final Logger logger = LoggerFactory.getLogger(SampleKafkaConsumer.class);
 
     @KafkaListener(topics = "topic_jhipster", groupId = "group_id")
     public void consume(String message) throws IOException {
