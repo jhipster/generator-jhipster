@@ -494,37 +494,31 @@ describe('BusinessErrorChecker', () => {
     });
   });
   describe('#checkForRelationshipErrors', () => {
-    let checker = null;
-    let jdlObject = null;
-
-    before(() => {
-      jdlObject = new JDLObject();
-    });
-    afterEach(() => {
-      jdlObject = new JDLObject();
-    });
-
     context('when having User as source entity', () => {
-      context('when skipUserManagement flag is not set', () => {
-        before(() => {
-          const userEntity = new JDLEntity({
-            name: 'User'
-          });
-          const otherEntity = new JDLEntity({
-            name: 'Valid'
-          });
-          const relationship = new JDLRelationship({
-            from: userEntity.name,
-            to: otherEntity.name,
-            type: RelationshipTypes.ONE_TO_ONE,
-            injectedFieldInFrom: 'other'
-          });
-          jdlObject.addEntity(userEntity);
-          jdlObject.addEntity(otherEntity);
-          jdlObject.addRelationship(relationship);
-          checker = new BusinessErrorChecker(jdlObject);
-        });
+      let checker;
+      let jdlObject;
 
+      before(() => {
+        jdlObject = new JDLObject();
+        const userEntity = new JDLEntity({
+          name: 'User'
+        });
+        const otherEntity = new JDLEntity({
+          name: 'Valid'
+        });
+        const relationship = new JDLRelationship({
+          from: userEntity.name,
+          to: otherEntity.name,
+          type: RelationshipTypes.ONE_TO_ONE,
+          injectedFieldInFrom: 'other'
+        });
+        jdlObject.addEntity(userEntity);
+        jdlObject.addEntity(otherEntity);
+        jdlObject.addRelationship(relationship);
+        checker = new BusinessErrorChecker(jdlObject);
+      });
+
+      context('when skipUserManagement flag is not set', () => {
         it('fails', () => {
           expect(() => {
             checker.checkForRelationshipErrors();
@@ -535,21 +529,6 @@ describe('BusinessErrorChecker', () => {
       });
       context('when skipUserManagement flag is set', () => {
         before(() => {
-          const userEntity = new JDLEntity({
-            name: 'User'
-          });
-          const otherEntity = new JDLEntity({
-            name: 'Valid'
-          });
-          const relationship = new JDLRelationship({
-            from: userEntity.name,
-            to: otherEntity.name,
-            type: RelationshipTypes.ONE_TO_ONE,
-            injectedFieldInFrom: 'other'
-          });
-          jdlObject.addEntity(userEntity);
-          jdlObject.addEntity(otherEntity);
-          jdlObject.addRelationship(relationship);
           jdlObject.addOption(
             new JDLUnaryOption({
               name: UnaryOptions.SKIP_USER_MANAGEMENT
@@ -566,6 +545,8 @@ describe('BusinessErrorChecker', () => {
       });
     });
     context('when the source entity is missing', () => {
+      let checker;
+
       before(() => {
         const sourceEntity = new JDLEntity({
           name: 'Source'
@@ -579,6 +560,7 @@ describe('BusinessErrorChecker', () => {
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'other'
         });
+        const jdlObject = new JDLObject();
         jdlObject.addEntity(sourceEntity);
         jdlObject.addEntity(otherEntity);
         jdlObject.addRelationship(relationship);
@@ -595,23 +577,21 @@ describe('BusinessErrorChecker', () => {
     context('when the destination entity is missing', () => {
       context('if it is the User entity', () => {
         context('when skipUserManagement flag is not set', () => {
+          let checker;
+
           before(() => {
             const sourceEntity = new JDLEntity({
               name: 'Source'
             });
-            const otherEntity = new JDLEntity({
-              name: 'User'
-            });
             const relationship = new JDLRelationship({
               from: sourceEntity.name,
-              to: otherEntity.name,
+              to: 'User',
               type: RelationshipTypes.ONE_TO_ONE,
               injectedFieldInFrom: 'other'
             });
+            const jdlObject = new JDLObject();
             jdlObject.addEntity(sourceEntity);
-            jdlObject.addEntity(otherEntity);
             jdlObject.addRelationship(relationship);
-            delete jdlObject.entities.User;
             checker = new BusinessErrorChecker(jdlObject);
           });
 
@@ -622,6 +602,8 @@ describe('BusinessErrorChecker', () => {
           });
         });
         context('when skipUserManagement flag is set', () => {
+          let checker;
+
           before(() => {
             const sourceEntity = new JDLEntity({
               name: 'Source'
@@ -635,6 +617,7 @@ describe('BusinessErrorChecker', () => {
               type: RelationshipTypes.ONE_TO_ONE,
               injectedFieldInFrom: 'other'
             });
+            const jdlObject = new JDLObject();
             jdlObject.addEntity(sourceEntity);
             jdlObject.addEntity(otherEntity);
             jdlObject.addRelationship(relationship);
@@ -655,23 +638,21 @@ describe('BusinessErrorChecker', () => {
         });
       });
       context('if it is not the User entity', () => {
+        let checker;
+
         before(() => {
           const sourceEntity = new JDLEntity({
             name: 'Source'
           });
-          const otherEntity = new JDLEntity({
-            name: 'Other'
-          });
           const relationship = new JDLRelationship({
             from: sourceEntity.name,
-            to: otherEntity.name,
+            to: 'Other',
             type: RelationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other'
           });
+          const jdlObject = new JDLObject();
           jdlObject.addEntity(sourceEntity);
-          jdlObject.addEntity(otherEntity);
           jdlObject.addRelationship(relationship);
-          delete jdlObject.entities.Other;
           checker = new BusinessErrorChecker(jdlObject);
         });
 
@@ -684,6 +665,8 @@ describe('BusinessErrorChecker', () => {
     });
     context('when having required relationships from and to the same entity', () => {
       context('for the source entity', () => {
+        let checker;
+
         before(() => {
           const entity = new JDLEntity({
             name: 'A'
@@ -695,6 +678,7 @@ describe('BusinessErrorChecker', () => {
             injectedFieldInFrom: 'a',
             isInjectedFieldInFromRequired: true
           });
+          const jdlObject = new JDLObject();
           jdlObject.addEntity(entity);
           jdlObject.addRelationship(relationship);
           checker = new BusinessErrorChecker(jdlObject);
@@ -707,6 +691,8 @@ describe('BusinessErrorChecker', () => {
         });
       });
       context('for the source entity', () => {
+        let checker;
+
         before(() => {
           const entity = new JDLEntity({
             name: 'A'
@@ -718,6 +704,7 @@ describe('BusinessErrorChecker', () => {
             injectedFieldInFrom: 'a',
             isInjectedFieldInToRequired: true
           });
+          const jdlObject = new JDLObject();
           jdlObject.addEntity(entity);
           jdlObject.addRelationship(relationship);
           checker = new BusinessErrorChecker(jdlObject);
@@ -731,7 +718,11 @@ describe('BusinessErrorChecker', () => {
       });
     });
     context('with relationships between multiple entities', () => {
+      let checker;
+
       before(() => {
+        const jdlObject = new JDLObject();
+
         jdlObject.addApplication(
           new JDLMicroserviceApplication({
             config: {
@@ -807,6 +798,8 @@ describe('BusinessErrorChecker', () => {
       });
     });
     context('when having the jpaDerivedIdentifier option with something else than a OtO relationship', () => {
+      let checker;
+
       before(() => {
         const relationship = new JDLRelationship({
           from: 'A',
@@ -815,6 +808,8 @@ describe('BusinessErrorChecker', () => {
           type: RelationshipTypes.MANY_TO_ONE,
           options: [RelationshipOptions.JPA_DERIVED_IDENTIFIER]
         });
+        const jdlObject = new JDLObject();
+
         jdlObject.addRelationship(relationship);
         checker = new BusinessErrorChecker(jdlObject);
       });
@@ -826,20 +821,27 @@ describe('BusinessErrorChecker', () => {
       });
     });
     context('with invalid relationship options', () => {
+      let checker;
+
       before(() => {
+        const entityA = new JDLEntity({ name: 'A' });
+        const entityB = new JDLEntity({ name: 'B' });
         const relationship = new JDLRelationship({
-          from: 'A',
-          to: 'B',
+          from: entityA.name,
+          to: entityB.name,
           injectedFieldInTo: 'a',
           type: RelationshipTypes.ONE_TO_ONE,
           options: ['invalid']
         });
+        const jdlObject = new JDLObject();
+        jdlObject.addEntity(entityA);
+        jdlObject.addEntity(entityB);
         jdlObject.addRelationship(relationship);
         checker = new BusinessErrorChecker(jdlObject);
       });
       it('fails', () => {
         expect(() => checker.checkForRelationshipErrors()).to.throw(
-          "These relationship options do not exist: 'invalid' for relationship from 'A' to 'B'."
+          "This relationship option does not exist: 'invalid' for relationship from 'A' to 'B'."
         );
       });
     });
