@@ -187,10 +187,10 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.prodDatabaseType = 'cassandra';
                     this.enableHibernateCache = false;
                 } else if (this.databaseType === 'no') {
-                    // no database, only available for microservice applications
                     this.devDatabaseType = 'no';
                     this.prodDatabaseType = 'no';
                     this.enableHibernateCache = false;
+                    this.skipUserManagement = true;
                 } else {
                     // sql
                     this.devDatabaseType = configuration.get('devDatabaseType');
