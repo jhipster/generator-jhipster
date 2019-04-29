@@ -74,7 +74,8 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     }<% } %>],
     watchOptions: {
       ignored: /node_modules/
-    }
+    },
+    https: options.tls
   },
   stats: process.env.JHI_DISABLE_WEBPACK_LOGS ? 'none' : options.stats,
   plugins: [
@@ -85,10 +86,11 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         }),
     new FriendlyErrorsWebpackPlugin(),
     new BrowserSyncPlugin({
+      https: options.tls,
       host: 'localhost',
       port: 9000,
       proxy: {
-        target: 'http://localhost:9060'<% if (websocket === 'spring-websocket') { %>,
+        target: `http${options.tls ? 's' : ''}://localhost:9060`<% if (websocket === 'spring-websocket') { %>,
           ws: true<% } %>,
           proxyOptions: {
               changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
