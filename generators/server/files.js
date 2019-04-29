@@ -379,13 +379,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                !generator.reactive &&
-                (generator.applicationType === 'microservice' ||
-                    (generator.applicationType !== 'uaa' &&
-                        ((shouldSkipUserManagement(generator) && generator.authenticationType === 'jwt') ||
-                            !shouldSkipUserManagement(generator) ||
-                            generator.authenticationType === 'uaa'))),
+            condition: generator => !generator.reactive && generator.applicationType !== 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -395,13 +389,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                generator.reactive &&
-                (generator.applicationType === 'microservice' ||
-                    (generator.applicationType !== 'uaa' &&
-                        ((shouldSkipUserManagement(generator) && generator.authenticationType === 'jwt') ||
-                            !shouldSkipUserManagement(generator) ||
-                            generator.authenticationType === 'uaa'))),
+            condition: generator => generator.reactive && generator.applicationType !== 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -490,7 +478,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !shouldSkipUserManagement(generator) && generator.authenticationType === 'jwt',
+            condition: generator => generator.applicationType !== 'microservice' && generator.authenticationType === 'jwt',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1400,7 +1388,7 @@ const serverFiles = {
         {
             condition: generator =>
                 generator.skipUserManagement &&
-                generator.authenticationType === 'oauth2' &&
+                generator.authenticationType !== 'uaa' &&
                 ['monolith', 'gateway'].includes(generator.applicationType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -1431,7 +1419,7 @@ const serverFiles = {
         {
             condition: generator =>
                 generator.skipUserManagement &&
-                generator.authenticationType === 'oauth2' &&
+                generator.authenticationType !== 'uaa' &&
                 ['monolith', 'gateway'].includes(generator.applicationType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
@@ -1628,7 +1616,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.skipUserManagement && generator.authenticationType === 'jwt',
+            condition: generator => generator.applicationType !== 'microservice' && generator.authenticationType === 'jwt',
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
