@@ -164,14 +164,12 @@ import <%= packageName %>.AbstractCassandraTest;
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.web.rest.errors.ExceptionTranslator;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -181,7 +179,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link AccountResource} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -190,7 +187,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setup() {
         AccountResource accountUserMockResource = new AccountResource();
         this.mockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
