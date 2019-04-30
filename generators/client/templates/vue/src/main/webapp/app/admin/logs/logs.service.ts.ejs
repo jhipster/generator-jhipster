@@ -5,11 +5,11 @@ import Component from 'vue-class-component';
 @Component
 export default class LogsService extends Vue {
 
-  public changeLevel(log): AxiosPromise<any> {
-    return axios.put('management/logs', log);
+  public changeLevel(name: string, configuredLevel: string): AxiosPromise<any> {
+    return axios.post('management/loggers/' + name, {configuredLevel});
   }
 
   public findAll(): AxiosPromise<any> {
-    return axios.get('management/logs');
+    return axios.get('management/loggers');
   }
 }
