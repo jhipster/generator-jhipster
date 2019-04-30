@@ -40,3 +40,7 @@ fi
 if [[ "$JHI_FOLDER_UAA" == "" ]]; then
     JHI_FOLDER_UAA="$HOME"/uaa
 fi
+
+# Set Chrome Driver version
+# See http://chromedriver.chromium.org/downloads/version-selection
+CHROME_DRIVER_VERSION="74.0.3729.6"

@@ -89,6 +89,7 @@
     <%_ } _%>
     "codelyzer": "5.0.0",
     "copy-webpack-plugin": "5.0.2",
+    "cross-env": "5.2.0",
     "css-loader": "2.1.1",
     "file-loader": "3.0.1",
     "fork-ts-checker-webpack-plugin": "1.0.1",
@@ -172,7 +173,7 @@
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "webdriver-manager update --versions.chrome=73.0.3683.68 --gecko false",
+    "postinstall": "cross-env-shell webdriver-manager update --gecko false --versions.chrome $CHROME_DRIVER_VERSION",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",

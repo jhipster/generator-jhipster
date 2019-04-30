@@ -29,7 +29,7 @@ addons:
         sources:
             - google-chrome
         packages:
-            - google-chrome-stable
+            - google-chrome-stable=74.0.3729.108-1
 cache:
     directories:
         - $HOME/.m2
