@@ -176,19 +176,19 @@ function askForServerSideOpts(meta) {
                     name: 'Couchbase'
                 });
                 if (!reactive) {
+                    if (response.authenticationType !== 'oauth2') {
+                        opts.push({
+                            value: 'cassandra',
+                            name: 'Cassandra'
+                        });
+                    }
                     if (
-                        (response.authenticationType !== 'oauth2' && applicationType === 'microservice') ||
+                        response.authenticationType !== 'oauth2' ||
                         (response.authenticationType === 'uaa' && applicationType === 'gateway')
                     ) {
                         opts.push({
                             value: 'no',
                             name: 'No database'
-                        });
-                    }
-                    if (response.authenticationType !== 'oauth2') {
-                        opts.push({
-                            value: 'cassandra',
-                            name: 'Cassandra'
                         });
                     }
                 }
@@ -328,6 +328,7 @@ function askForServerSideOpts(meta) {
             this.devDatabaseType = 'no';
             this.prodDatabaseType = 'no';
             this.enableHibernateCache = false;
+            this.skipUserManagement = true;
         } else if (this.databaseType === 'mongodb') {
             this.devDatabaseType = 'mongodb';
             this.prodDatabaseType = 'mongodb';
