@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="en" dir="ltr">
+<html class="no-js" lang="<% if (enableTranslation) { %><%= nativeLanguage %><% } else { %>en<% } %>" dir="ltr">
 <head>
-    <base href="./" />
+    <base href="/" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title><%= baseName %></title>
-    <meta name="description" content="Description for <%= baseName %>">
-    <meta name="google" value="notranslate">
+    <meta name="description" content="Description for <%= baseName %>"><% if (enableTranslation) { %>
+    <meta name="google" value="notranslate"><% } %>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
     <link rel="shortcut icon" href="favicon.ico" />
