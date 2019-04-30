@@ -18,11 +18,11 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
-import <%=packageName%>.web.rest.errors.InvalidPasswordException;
 import io.github.jhipster.security.PersistentTokenCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -92,7 +92,7 @@ public class OAuth2AuthenticationService {
             return ResponseEntity.ok(accessToken);
         } catch (HttpClientErrorException ex) {
             log.error("failed to get OAuth2 tokens from UAA", ex);
-            throw new InvalidPasswordException();
+            throw new BadCredentialsException("Invalid credentials");
         }
     }
 

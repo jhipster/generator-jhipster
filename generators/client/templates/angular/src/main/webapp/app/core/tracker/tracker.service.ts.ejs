@@ -19,9 +19,9 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Observable, Observer, Subscription } from 'rxjs';
+import { Location } from '@angular/common';
 
 import { CSRFService } from '../auth/csrf.service';
-import { WindowRef } from './window.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 <%_ } _%>
@@ -45,7 +45,7 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         private authServerProvider: AuthServerProvider,
         <%_ } _%>
-        private $window: WindowRef,
+        private location: Location,
         // tslint:disable-next-line: no-unused-variable
         private csrfService: CSRFService
     ) {
@@ -58,9 +58,8 @@ export class <%=jhiPrefixCapitalized%>TrackerService {
           this.connection = this.createConnection();
         }
         // building absolute path so that websocket doesn't fail when deploying with a context path
-        const loc = this.$window.nativeWindow.location;
-        let url;
-        url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+        let url = '/websocket/tracker';
+        url = this.location.prepareExternalUrl(url);
         <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
         const authToken = this.authServerProvider.getToken();
         if (authToken) {

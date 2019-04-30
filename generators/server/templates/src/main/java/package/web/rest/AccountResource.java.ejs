@@ -21,7 +21,6 @@ package <%=packageName%>.web.rest;
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.service.dto.<%= asDto('User') %>;
-import <%=packageName%>.web.rest.errors.InternalServerErrorException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +38,12 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api")
 public class AccountResource {
+
+    private static class AccountResourceException extends RuntimeException {
+        private AccountResourceException(String message) {
+            super(message);
+        }
+    }
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
@@ -65,7 +70,7 @@ public class AccountResource {
      *
      * @param principal the current user; resolves to {@code null} if not authenticated.
      * @return the current user.
-     * @throws InternalServerErrorException {@code 500 (Internal Server Error)} if the user couldn't be returned.
+     * @throws AccountResourceException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
     @SuppressWarnings("unchecked")
@@ -77,14 +82,73 @@ public class AccountResource {
                 // Allow Spring Security Test to be used to mock users in the database
                 return userService.getUserWithAuthorities()
                     .map(<%= asDto('User') %>::new)
-                    .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
+                    .orElseThrow(() -> new AccountResourceException("User could not be found"));
             }
         } else {
-            throw new InternalServerErrorException("User could not be found");
+            throw new AccountResourceException("User could not be found");
         }
     }
 }
-<%_ } else { _%>
+<%_ } else if (skipUserManagement) { // not oauth, skipUserManagement _%>
+import <%=packageName%>.security.SecurityUtils;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api")
+public class AccountResource {
+
+    private static class AccountResourceException extends RuntimeException {
+    }
+
+    /**
+     * {@code GET  /account} : get the current user.
+     *
+     * @return the current user.
+     * @throws AccountResourceException {@code 500 (Internal Server Error)} if the user couldn't be returned.
+     */
+    @GetMapping("/account")
+    public UserVM getAccount() {
+        String login = SecurityUtils.getCurrentUserLogin()
+            .orElseThrow(AccountResourceException::new);
+        Set<String> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toSet());
+        return new UserVM(login, authorities);
+    }
+
+    private static class UserVM {
+        private String login;
+        private Set<String> authorities;
+
+        @JsonCreator
+        UserVM(String login, Set<String> authorities) {
+            this.login = login;
+            this.authorities = authorities;
+        }
+
+        public boolean isActivated() {
+            return true;
+        }
+
+        public Set<String> getAuthorities() {
+            return authorities;
+        }
+
+        public String getLogin() {
+            return login;
+        }
+    }
+}
+<%_ } else {  // not oauth, not skipUserManagement _%>
 
 <%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%=packageName%>.domain.PersistentToken;
@@ -134,6 +198,12 @@ import java.util.*;
 @RestController
 @RequestMapping("/api")
 public class AccountResource {
+
+    private static class AccountResourceException extends RuntimeException {
+        private AccountResourceException(String message) {
+            super(message);
+        }
+    }
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
@@ -192,11 +262,11 @@ public class AccountResource {
         <%_ if (!reactive) { _%>
         Optional<<%= asEntity('User') %>> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
-            throw new InternalServerErrorException("No user was found for this activation key");
+            throw new AccountResourceException("No user was found for this activation key");
         }
         <%_ } else { _%>
         return userService.activateRegistration(key)
-            .switchIfEmpty(Mono.error(new InternalServerErrorException("No user was found for this activation key")))
+            .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
             .then();
         <%_ } _%>
     }
@@ -230,9 +300,9 @@ public class AccountResource {
         return userService.getUserWithAuthorities()
             .map(<%= asDto('User') %>::new)
             <%_ if (!reactive) { _%>
-            .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
+            .orElseThrow(() -> new AccountResourceException("User could not be found"));
             <%_ } else { _%>
-            .switchIfEmpty(Mono.error(new InternalServerErrorException("User could not be found")));
+            .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")));
             <%_ } _%>
     }
 
@@ -246,21 +316,21 @@ public class AccountResource {
     @PostMapping("/account")
     <%_ if (!reactive) { _%>
     public void saveAccount(@Valid @RequestBody <%= asDto('User') %> userDTO) {
-        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
+        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<<%= asEntity('User') %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
         Optional<<%= asEntity('User') %>> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
-            throw new InternalServerErrorException("User could not be found");
+            throw new AccountResourceException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
             userDTO.getLangKey()<% if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { %>, userDTO.getImageUrl()<% } %>);
     <%_ } else { _%>
     public Mono<Void> saveAccount(@Valid @RequestBody <%= asDto('User') %> userDTO) {
         return SecurityUtils.getCurrentUserLogin()
-            .switchIfEmpty(Mono.error(new InternalServerErrorException("Current user login not found")))
+            .switchIfEmpty(Mono.error(new AccountResourceException("Current user login not found")))
             .flatMap(userLogin -> userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
                 .filter(existingUser -> !existingUser.getLogin().equalsIgnoreCase(userLogin))
                 .hasElement()
@@ -270,7 +340,7 @@ public class AccountResource {
                     }
                     return userRepository.findOneByLogin(userLogin);
                 }))
-                .switchIfEmpty(Mono.error(new InternalServerErrorException("User could not be found")))
+                .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")))
                 .flatMap(user -> userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                     userDTO.getLangKey()<% if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { %>, userDTO.getImageUrl()<% } %>));
     <%_ } _%>
@@ -300,8 +370,8 @@ public class AccountResource {
     public List<PersistentToken> getCurrentSessions() {
         return persistentTokenRepository.findByUser(
             userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()
-                .orElseThrow(() -> new InternalServerErrorException("Current user login not found")))
-                    .orElseThrow(() -> new InternalServerErrorException("User could not be found"))
+                .orElseThrow(() -> new AccountResourceException("Current user login not found")))
+                    .orElseThrow(() -> new AccountResourceException("User could not be found"))
         );
     }
 
@@ -374,11 +444,11 @@ public class AccountResource {
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
-            throw new InternalServerErrorException("No user was found for this reset key");
+            throw new AccountResourceException("No user was found for this reset key");
         }
         <%_ } else { _%>
         return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
-            .switchIfEmpty(Mono.error(new InternalServerErrorException("No user was found for this reset key")))
+            .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this reset key")))
             .then();
         <%_ } _%>
     }

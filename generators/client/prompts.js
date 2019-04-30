@@ -129,12 +129,10 @@ function askForClientTheme(meta) {
                         value: 'none',
                         name: 'Default JHipster'
                     },
-                    ...themes.map(theme => {
-                        return {
-                            value: theme.name.toLowerCase(),
-                            name: theme.name
-                        };
-                    })
+                    ...themes.map(theme => ({
+                        value: theme.name.toLowerCase(),
+                        name: theme.name
+                    }))
                 ];
 
                 if (meta) return PROMPT; // eslint-disable-line consistent-return

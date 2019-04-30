@@ -188,7 +188,12 @@ const createYeomanEnv = () => {
     Object.keys(SUB_GENERATORS)
         .filter(command => !SUB_GENERATORS[command].cliOnly)
         .forEach(generator => {
-            env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
+            if (SUB_GENERATORS[generator].blueprint) {
+                /* eslint-disable prettier/prettier */
+                env.register(require.resolve(`${SUB_GENERATORS[generator].blueprint}/generators/${generator}`), `${CLI_NAME}:${generator}`);
+            } else {
+                env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
+            }
         });
     return env;
 };

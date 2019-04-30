@@ -38,10 +38,6 @@ import org.springframework.context.annotation.Import;
 <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
 import org.springframework.http.HttpMethod;
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-<%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
@@ -53,7 +49,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
@@ -97,13 +92,7 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (authenticationType !== 'oauth2' && !skipUserManagement) { %> implements InitializingBean<% } %> {
-    <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
-
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    private final UserDetailsService userDetailsService;
-    <%_ } _%>
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (authenticationType === 'session') { _%>
 
     private final JHipsterProperties jHipsterProperties;
@@ -125,12 +114,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (authenticationType !== 'oauth2' && !skipUserManagement) { %>AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService, <% } %><% if (authenticationType === 'session') { %>
-        JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %>SecurityProblemSupport problemSupport) {
-        <%_ if (authenticationType !== 'oauth2'  && !skipUserManagement) { _%>
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.userDetailsService = userDetailsService;
-        <%_ } _%>
+    public SecurityConfiguration(<% if (authenticationType === 'session') { %>JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %>SecurityProblemSupport problemSupport) {
         <%_ if (authenticationType === 'session') { _%>
         this.jHipsterProperties = jHipsterProperties;
         this.rememberMeServices = rememberMeServices;
@@ -143,25 +127,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
         <%_ } _%>
         this.problemSupport = problemSupport;
     }
-    <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        try {
-            authenticationManagerBuilder
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
-        } catch (Exception e) {
-            throw new BeanInitializationException("Security configuration failed", e);
-        }
-    }
-
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-    <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
 
     @Bean
@@ -257,16 +222,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter<% if (au
         .and()
         <%_ } _%>
             .authorizeRequests()
+            <%_ if (authenticationType !== 'oauth2') { _%>
+            .antMatchers("/api/authenticate").permitAll()
+            <%_ } _%>
             <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
-            .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
             <%_ } _%>
             .antMatchers("/api/**").authenticated()
             <%_ if (authenticationType === 'oauth2') { _%>
-            .antMatchers("/authorize").authenticated()
             .antMatchers("/api/auth-info").permitAll()
             <%_ } _%>
             <%_ if (websocket === 'spring-websocket') { _%>

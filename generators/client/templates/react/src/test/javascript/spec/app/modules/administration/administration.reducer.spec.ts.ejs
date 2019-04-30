@@ -142,12 +142,19 @@ describe('Administration reducer tests', () => {
     });
     <%_ } _%>
     it('should update state according to a successful fetch logs request', () => {
-      const payload = { data: [{ name: 'ROOT', level: 'DEBUG' }] };
+      const payload = { data: {
+          loggers: {
+            main: {
+              effectiveLevel: 'WARN'
+            }
+          }
+        }
+      };
       const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_LOGS), payload });
 
       expect(toTest).toMatchObject({
         loading: false,
-        logs: { loggers: payload.data }
+        logs: payload.data
       });
     });
 
@@ -261,7 +268,7 @@ describe('Administration reducer tests', () => {
       const mockStore = configureStore([thunk, promiseMiddleware]);
       store = mockStore({});
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
     });
     <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
     it('dispatches FETCH_GATEWAY_ROUTE_PENDING and FETCH_GATEWAY_ROUTE_FULFILLED actions', async () => {

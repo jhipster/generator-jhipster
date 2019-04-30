@@ -228,7 +228,7 @@ Refer to [Doing API-First development][] for more details.
 
 To build the final jar and optimize the <%= baseName %> application for production, run:
 <% if (buildTool === 'maven') { %>
-    ./mvnw -Pprod clean package<% } %><% if (buildTool === 'gradle') { %>
+    ./mvnw -Pprod clean verify<% } %><% if (buildTool === 'gradle') { %>
     ./gradlew -Pprod clean bootJar<% } %>
 
 <%_ if (!skipClient) { _%>
@@ -247,14 +247,18 @@ Refer to [Using JHipster in production][] for more details.
 
 To package your application as a war in order to deploy it to an application server, run:
 <% if (buildTool === 'maven') { %>
-    ./mvnw -Pprod,war clean package<% } %><% if (buildTool === 'gradle') { %>
+    ./mvnw -Pprod,war clean verify<% } %><% if (buildTool === 'gradle') { %>
     ./gradlew -Pprod clean bootWar<% } %>
 
 ## Testing
 
 To launch your application's tests, run:
 
-    <% if (buildTool === 'maven') { %>./mvnw clean test<% } else { %>./gradlew test<% } %>
+    <%_ if (buildTool === 'maven') { _%>
+    ./mvnw verify
+    <%_ } else { _%>
+    ./gradlew test integrationTest
+    <%_ } _%>
 <% if (!skipClient) { %>
 ### Client tests
 

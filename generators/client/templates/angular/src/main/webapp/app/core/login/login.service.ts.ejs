@@ -49,7 +49,10 @@ export class LoginService {
         if (!contextPath.endsWith('/')) {
             contextPath = contextPath + '/';
         }
-        location.href = `//${location.hostname}${port}${contextPath}authorize`;
+
+        // If you have configured multiple OIDC providers, then, you can update this URL to /login.
+        // It will show a Spring Security generated login page with links to configured OIDC providers.
+        location.href = `//${location.hostname}${port}${contextPath}oauth2/authorization/oidc`;
     }
     <%_ } else { _%>
     login(credentials, callback?) {
@@ -78,7 +81,7 @@ export class LoginService {
         return this.authServerProvider.loginWithToken(jwt, rememberMe);
     }
     <%_ } _%>
-    <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
+    <%_ if (authenticationType === 'uaa') { _%>
 
     isAuthenticated() {
         return this.accountService.isAuthenticated();

@@ -180,7 +180,7 @@
             <%_ for (idx in fields) {
                 let loadColumnType = 'string';
                 let columnType = fields[idx].columnType;
-                if (columnType === 'integer' || columnType === 'bigint' || columnType === 'double' || columnType === 'decimal(10,2)' || columnType === '${floatType}') {
+                if (columnType === 'integer' || columnType === 'bigint' || columnType === 'double' || columnType === 'decimal(21,2)' || columnType === '${floatType}') {
                     loadColumnType = 'numeric';
                 } else if (columnType === 'date' || columnType === 'datetime') {
                     loadColumnType = 'date';

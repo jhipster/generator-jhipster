@@ -187,19 +187,14 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.prodDatabaseType = 'cassandra';
                     this.enableHibernateCache = false;
                 } else if (this.databaseType === 'no') {
-                    // no database, only available for microservice applications
                     this.devDatabaseType = 'no';
                     this.prodDatabaseType = 'no';
                     this.enableHibernateCache = false;
+                    this.skipUserManagement = true;
                 } else {
                     // sql
                     this.devDatabaseType = configuration.get('devDatabaseType');
                     this.prodDatabaseType = configuration.get('prodDatabaseType');
-                }
-
-                // Hazelcast is mandatory for Gateways, as it is used for rate limiting
-                if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
-                    this.cacheProvider = 'hazelcast';
                 }
 
                 this.buildTool = configuration.get('buildTool');

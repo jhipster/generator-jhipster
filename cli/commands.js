@@ -16,7 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = {
+const chalk = require('chalk');
+
+let customCommands = {};
+const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
+if (indexOfBlueprintArgv > -1) {
+    /* eslint-disable import/no-dynamic-require */
+    /* eslint-disable global-require */
+
+    const blueprint = process.argv[indexOfBlueprintArgv + 1];
+    try {
+        customCommands = require(`generator-jhipster-${blueprint}/cli/commands`);
+    } catch (e) {
+        const msg = `No custom command found within blueprint: generator-jhipster-${blueprint}`;
+        /* eslint-disable no-console */
+        console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+    }
+}
+
+const defaultCommands = {
     app: {
         default: true,
         desc: 'Create a new JHipster application based on the selected options'
@@ -102,4 +120,9 @@ Example:
     upgrade: {
         desc: 'Upgrade the JHipster version, and upgrade the generated application'
     }
+};
+
+module.exports = {
+    ...defaultCommands,
+    ...customCommands
 };

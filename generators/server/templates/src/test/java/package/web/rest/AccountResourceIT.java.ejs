@@ -16,20 +16,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest;
+package <%= packageName %>.web.rest;
 <%_ if (authenticationType === 'oauth2') { _%>
 
 <%_ if (databaseType === 'cassandra') { _%>
-import <%=packageName%>.AbstractCassandraTest;
+import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-import <%=packageName%>.<%= mainClass %>;
-import <%=packageName%>.config.TestSecurityConfiguration;
-import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.<%= asEntity('User') %>;
-import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.security.AuthoritiesConstants;
-import <%=packageName%>.service.UserService;
-import <%=packageName%>.web.rest.errors.ExceptionTranslator;
+import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.config.TestSecurityConfiguration;
+import <%= packageName %>.domain.Authority;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.repository.UserRepository;
+import <%= packageName %>.security.AuthoritiesConstants;
+import <%= packageName %>.service.UserService;
+import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -42,14 +42,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +56,6 @@ import org.springframework.web.context.WebApplicationContext;
 /**
  * Integration tests for the {@link AccountResource} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -76,7 +73,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Autowired
     private WebApplicationContext context;
 
-    @Before
+    @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
         AccountResource accountUserMockResource = new AccountResource(userService);
@@ -159,40 +156,96 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .andExpect(status().isInternalServerError());
     }
 }
-<%_ } else { _%>
+<%_ } else if (skipUserManagement) { // not oauth, skipUserManagement _%>
 
 <%_ if (databaseType === 'cassandra') { _%>
-import <%=packageName%>.AbstractCassandraTest;
+import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
-import <%=packageName%>.<%= mainClass %>;
-import <%=packageName%>.config.Constants;
+import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.security.AuthoritiesConstants;
+import <%= packageName %>.web.rest.errors.ExceptionTranslator;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+/**
+ * Integration tests for the {@link AccountResource} REST controller.
+ */
+@SpringBootTest(classes = <%= mainClass %>.class)
+public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+
+    @Autowired
+    private ExceptionTranslator exceptionTranslator;
+
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    public void setup() {
+        AccountResource accountUserMockResource = new AccountResource();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
+                .setControllerAdvice(exceptionTranslator)
+                .build();
+    }
+
+    @Test
+    @WithMockUser(username = "test", roles = "ADMIN")
+    public void testGetExistingAccount() throws Exception {
+        mockMvc.perform(get("/api/account")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.login").value("test"))
+                .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+    }
+
+    @Test
+    public void testGetUnknownAccount() throws Exception {
+        mockMvc.perform(get("/api/account")
+                .accept(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(status().isInternalServerError());
+    }
+}
+<%_ } else {  // not oauth, not skipUserManagement _%>
+
+<%_ if (databaseType === 'cassandra') { _%>
+import <%= packageName %>.AbstractCassandraTest;
+<%_ } _%>
+import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.config.Constants;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
-import <%=packageName%>.domain.Authority;
+import <%= packageName %>.domain.Authority;
 <%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
-import <%=packageName%>.domain.PersistentToken;
+import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
-import <%=packageName%>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.AuthorityRepository;
+import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.AuthorityRepository;
 <%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
-import <%=packageName%>.repository.PersistentTokenRepository;
+import <%= packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
-import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
-import <%=packageName%>.security.AuthoritiesConstants;
-import <%=packageName%>.service.MailService;
-import <%=packageName%>.service.UserService;
-import <%=packageName%>.service.dto.PasswordChangeDTO;
-import <%=packageName%>.service.dto.<%= asDto('User') %>;
-import <%=packageName%>.web.rest.errors.ExceptionTranslator;
-import <%=packageName%>.web.rest.vm.KeyAndPasswordVM;
-import <%=packageName%>.web.rest.vm.ManagedUserVM;
+import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%= packageName %>.security.AuthoritiesConstants;
+import <%= packageName %>.service.MailService;
+import <%= packageName %>.service.UserService;
+import <%= packageName %>.service.dto.PasswordChangeDTO;
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.web.rest.errors.ExceptionTranslator;
+import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
+import <%= packageName %>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,7 +262,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
 import org.springframework.security.web.server.context.SecurityContextServerWebExchangeWebFilter;
 <%_ } _%>
-import org.springframework.test.context.junit4.SpringRunner;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -243,7 +295,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link AccountResource} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -291,7 +342,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     private WebTestClient userWebTestClient;
 <%_ } _%>
 
-    @Before
+    @BeforeEach
     public void setup() {
         <%_ if (databaseType === 'mongodb') { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;

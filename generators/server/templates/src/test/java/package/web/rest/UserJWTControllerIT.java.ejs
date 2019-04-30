@@ -22,19 +22,26 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;
 <%_ } _%>
 import <%=packageName%>.<%= mainClass %>;
+<%_ if (!skipUserManagement) { _%>
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+<%_ } _%>
 import <%=packageName%>.security.jwt.TokenProvider;
 import <%=packageName%>.web.rest.errors.ExceptionTranslator;
 import <%=packageName%>.web.rest.vm.LoginVM;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.<% if (reactive) { %>Reactive<% } %>AuthenticationManager;
+<%_ if (reactive) { _%>
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+<%_ } _%>
+<%_ if (!reactive) { _%>
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
@@ -63,7 +70,6 @@ import static org.hamcrest.Matchers.not;
 /**
  * Integration tests for the {@link UserJWTController} REST controller.
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -71,14 +77,16 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     private TokenProvider tokenProvider;
 
     @Autowired
-    private <% if (reactive) { %>Reactive<% } %>AuthenticationManager authenticationManager;
+    private <% if (reactive) { %>Reactive<% } %>AuthenticationManager<% if (!reactive) { %>Builder<% } %> authenticationManager;
 
+<%_ if (!skipUserManagement) { _%>
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+<%_ }  _%>
     @Autowired
     private ExceptionTranslator exceptionTranslator;
 
@@ -88,7 +96,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     private MockMvc mockMvc;
     <%_ }  _%>
 
-    @Before
+    @BeforeEach
     public void setup() {
         UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager);
         <%_ if (!reactive) { _%>
@@ -102,6 +110,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     }
 
     @Test
+<%_ if (!skipUserManagement) { _%>
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
@@ -123,6 +132,11 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
 
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller");
+<%_ } else { _%>
+    public void testAuthorize() throws Exception {
+        LoginVM login = new LoginVM();
+        login.setUsername("test");
+<%_ } _%>
         login.setPassword("test");
         <%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
@@ -146,6 +160,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     }
 
     @Test
+<%_ if (!skipUserManagement) { _%>
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
@@ -167,6 +182,11 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
 
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller-remember-me");
+<%_ } else { _%>
+    public void testAuthorizeWithRememberMe() throws Exception {
+        LoginVM login = new LoginVM();
+        login.setUsername("test");
+<%_ } _%>
         login.setPassword("test");
         login.setRememberMe(true);
         <%_ if (!reactive) { _%>
@@ -191,9 +211,6 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
     public void testAuthorizeFails() throws Exception {
         LoginVM login = new LoginVM();
         login.setUsername("wrong-user");
