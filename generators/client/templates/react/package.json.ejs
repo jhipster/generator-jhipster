@@ -163,6 +163,9 @@ limitations under the License.
     "tslint-loader": "3.6.0",
     "tslint-react": "3.6.0",
     "typescript": "3.3.4000",
+    <%_ if (protractorTests) { _%>
+    "webdriver-manager": "12.1.4",
+    <%_ } _%>
     "webpack": "4.28.4",
     "webpack-cli": "3.3.0",
     "webpack-dev-server": "3.2.1",
@@ -196,7 +199,7 @@ limitations under the License.
     "cleanup": "rimraf <%= DIST_DIR %>",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "./node_modules/protractor/bin/webdriver-manager update --versions.standalone 3.141.59 --versions.chrome 2.45 --gecko false",
+    "postinstall": "npx webdriver-manager update --versions.standalone 3.141.59 --versions.chrome 2.45 --gecko false",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",
