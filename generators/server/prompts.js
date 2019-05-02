@@ -171,17 +171,17 @@ function askForServerSideOpts(meta) {
                     value: 'mongodb',
                     name: 'MongoDB'
                 });
+                if (response.authenticationType !== 'oauth2') {
+                    opts.push({
+                        value: 'cassandra',
+                        name: 'Cassandra'
+                    });
+                }
                 opts.push({
                     value: 'couchbase',
                     name: 'Couchbase'
                 });
                 if (!reactive) {
-                    if (response.authenticationType !== 'oauth2') {
-                        opts.push({
-                            value: 'cassandra',
-                            name: 'Cassandra'
-                        });
-                    }
                     if (
                         response.authenticationType !== 'oauth2' ||
                         (response.authenticationType === 'uaa' && applicationType === 'gateway')
