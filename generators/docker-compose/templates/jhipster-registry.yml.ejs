@@ -47,11 +47,9 @@ services:
             <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
             # For Keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
-            - SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/token
-            - SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/auth
-            - SECURITY_OAUTH2_CLIENT_CLIENT_ID=jhipster-registry
-            - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=jhipster-registry
-            - SECURITY_OAUTH2_RESOURCE_USER_INFO_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+            - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=jhipster-registry
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=jhipster-registry
             <%_ } _%>
             <%_ if (authenticationType === 'uaa') { _%>
             # change the name of UAA server here, if needed

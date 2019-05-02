@@ -135,7 +135,8 @@ describe('Authentication reducer tests', () => {
 
   describe('Other cases', () => {
     it('should properly reset the current state when a logout is requested', () => {
-      const toTest = authentication(undefined, { type: ACTION_TYPES.LOGOUT });
+      <%_ if (authenticationType === 'oauth2') { _%>const payload = { data: { idToken: 'xyz', logoutUrl: 'http://localhost:8080/logout' } };<%_ } _%>
+      const toTest = authentication(undefined, { type: <%_ if (authenticationType === 'jwt') { _%> ACTION_TYPES.LOGOUT <%_ } else if (authenticationType === 'oauth2') { _%>SUCCESS(ACTION_TYPES.LOGOUT), payload<%_ } else { _%>SUCCESS(ACTION_TYPES.LOGOUT)<%_ } _%> });
       expect(toTest).toMatchObject({
         loading: false,
         isAuthenticated: false,

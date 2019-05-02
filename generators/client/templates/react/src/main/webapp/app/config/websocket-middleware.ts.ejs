@@ -75,13 +75,14 @@ const connect = () => {
 
   // building absolute path so that websocket doesn't fail when deploying with a context path
   const loc = window.location;
+  const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
   const headers = {};
 <%_ if (authenticationType === 'session') { _%>
-  const url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+  const url = '//' + loc.host + baseHref + '/websocket/tracker';
   headers['X-XSRF-TOKEN'] = cookie.read('XSRF-TOKEN');
 <%_ } else { _%>
-  let url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+  let url = '//' + loc.host + baseHref + '/websocket/tracker';
   const authToken = Storage.local.get('jhi-authenticationToken') || Storage.session.get('jhi-authenticationToken');
   if (authToken) {
     url += '?access_token=' + authToken;

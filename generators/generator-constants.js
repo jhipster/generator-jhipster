@@ -18,18 +18,18 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v4.1.1';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v5.0.0';
 const DOCKER_JAVA_JRE = 'openjdk:11-jre-slim-stretch';
-const DOCKER_MYSQL = 'mysql:8.0.15';
-const DOCKER_MARIADB = 'mariadb:10.4.3';
+const DOCKER_MYSQL = 'mysql:8.0.16';
+const DOCKER_MARIADB = 'mariadb:10.4.4';
 const DOCKER_POSTGRESQL = 'postgres:11.2';
-const DOCKER_MONGODB = 'mongo:4.0.8';
-const DOCKER_COUCHBASE = 'couchbase/server:6.0.1';
+const DOCKER_MONGODB = 'mongo:4.0.9';
+const DOCKER_COUCHBASE = 'couchbase:6.0.1';
 const DOCKER_CASSANDRA = 'cassandra:3.11.4';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
-const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.11.3';
+const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12';
 const DOCKER_MEMCACHED = 'memcached:1.5.12-alpine';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:5.0.0';
+const DOCKER_KEYCLOAK = 'jboss/keycloak:6.0.1';
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.4.3'; // The version should be coerent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = 'wurstmeister/kafka:2.11-2.0.1';
 const DOCKER_ZOOKEEPER = 'wurstmeister/zookeeper:3.4.6';
@@ -40,12 +40,12 @@ const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v4.0.0';
 const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v4.0.0';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v4.0.0';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.0.0';
-const DOCKER_TRAEFIK = 'traefik:1.7.10';
+const DOCKER_TRAEFIK = 'traefik:1.7.11';
 const DOCKER_CONSUL = 'consul:1.4.4';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v2.8.1';
-const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.16.1';
-const DOCKER_GRAFANA = 'grafana/grafana:6.1.0';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v2.9.2';
+const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.16.2';
+const DOCKER_GRAFANA = 'grafana/grafana:6.1.4';
 const DOCKER_JENKINS = 'jenkins:latest';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';

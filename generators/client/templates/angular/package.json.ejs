@@ -79,7 +79,7 @@
     "angular2-template-loader": "0.6.2",
     "autoprefixer": "9.5.0",
     "base-href-webpack-plugin": "2.0.0",
-    "browser-sync": "2.26.3",
+    "browser-sync": "2.26.5",
     "browser-sync-webpack-plugin": "2.2.2",
     "cache-loader": "2.0.1",
     <%_ if (protractorTests) { _%>
@@ -111,7 +111,7 @@
     <%_ } _%>
     "mini-css-extract-plugin": "0.5.0",
     <%_ if (protractorTests) { _%>
-    "mocha": "6.0.2",
+    "mocha": "6.1.4",
     <%_ } _%>
     "moment-locales-webpack-plugin": "1.0.7",
     "optimize-css-assets-webpack-plugin": "5.0.1",
@@ -131,7 +131,7 @@
     "to-string-loader": "1.1.5",
     "ts-loader": "5.3.3",
     <%_ if (protractorTests) { _%>
-    "ts-node": "8.0.2",
+    "ts-node": "8.0.3",
     <%_ } _%>
     "tslint": "5.15.0",
     "tslint-config-prettier": "1.18.0",
@@ -140,6 +140,9 @@
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
+    <%_ if (protractorTests) { _%>
+    "webdriver-manager": "12.1.4",
+    <%_ } _%>
     "webpack": "4.29.6",
     "webpack-cli": "3.3.0",
     "webpack-dev-server": "3.2.1",
@@ -172,7 +175,7 @@
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "webdriver-manager update --gecko false",
+    "postinstall": "./node_modules/webdriver-manager/bin/webdriver-manager update --gecko false",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",

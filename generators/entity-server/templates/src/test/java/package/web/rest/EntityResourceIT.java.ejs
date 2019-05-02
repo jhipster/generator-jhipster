@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 package <%=packageName%>.web.rest;
+
 <%_ let isUsingMapsId = false;
     let mapsIdAssoc;
     let mapsIdEntity;
@@ -32,12 +33,13 @@ package <%=packageName%>.web.rest;
             break;
         }
     } _%>
-<% if (databaseType === 'cassandra') { %>
-import <%=packageName%>.AbstractCassandraTest;<% } %>
+<%_ if (databaseType === 'cassandra') { _%>
+import <%=packageName%>.AbstractCassandraTest;
+<%_ } _%>
 import <%=packageName%>.<%= mainClass %>;
-<% if (authenticationType === 'uaa') { %>
+<%_ if (authenticationType === 'uaa') { _%>
 import <%=packageName%>.config.SecurityBeanOverrideConfiguration;
-<% } %>
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%=packageName%>.config.TestSecurityConfiguration;
 <%_ } _%>
@@ -97,11 +99,16 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databaseType === 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<% } %><% if (fieldsContainBlob === true) { %>
-import org.springframework.util.Base64Utils;<% } %>
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
+<%_ if (fieldsContainBlob === true) { _%>
+import org.springframework.util.Base64Utils;
+<%_ } _%>
 import org.springframework.validation.Validator;
-<% if (databaseType === 'sql') { %>
+
+<%_ if (databaseType === 'sql') { _%>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob === true && databaseType === 'cassandra') { %>
 import java.nio.ByteBuffer;<% } %><% if (reactiveRepositories || fieldsContainDuration === true) { %>
@@ -119,13 +126,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 <%_ } _%>
 import java.util.List;
-<% if (databaseType === 'cassandra') { %>
-import java.util.UUID;<% } %>
+<%_ if (databaseType === 'cassandra') { _%>
+import java.util.UUID;
+<%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
     import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
-<% if (fieldsContainZonedDateTime === true) { %>
-import static <%=packageName%>.web.rest.TestUtil.sameInstant;<% } %>
+
+<%_ if (fieldsContainZonedDateTime === true) { _%>
+import static <%=packageName%>.web.rest.TestUtil.sameInstant;
+<%_ } _%>
 import static <%=packageName%>.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (searchEngine === 'elasticsearch') { _%>

@@ -112,7 +112,7 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhimetrics", "prometheus" ]
+                include: ["configprops", "env", "health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"]
     endpoint:
         health:
             show-details: when-authorized
@@ -199,6 +199,15 @@ spring:
     mvc:
         favicon:
             enabled: false
+    <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && !['oauth2','uaa'].includes(authenticationType)) { _%>
+    security:
+        user:
+            name: admin
+            password: admin
+            roles:
+                - ADMIN
+                - USER
+    <%_ } _%>
     task:
         execution:
             thread-name-prefix: <%= dasherizedBaseName %>-task-

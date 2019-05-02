@@ -41,6 +41,9 @@ springBoot {
 
 bootRun {
     args = []
+<%_ if (cacheProvider === 'infinispan') { _%>
+    jvmArgs = ["-Djgroups.tcp.address=NON_LOOPBACK", "-Djava.net.preferIPv4Stack=true"]
+<%_ } _%>
 }
 
 <%_ if (!skipClient) { _%>

@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 const webpack = require('webpack');
+const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -148,6 +149,7 @@ module.exports = options => ({
       chunksSortMode: 'dependency',
       inject: 'body'
     }),
+    new BaseHrefWebpackPlugin({ baseHref: '/' }),
     <%_ if (enableTranslation) { _%>
     new MergeJsonWebpackPlugin({
       output: {

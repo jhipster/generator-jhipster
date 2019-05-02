@@ -275,8 +275,7 @@ const files = {
                 { file: 'admin/tracker/tracker.route.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.html', method: 'processHtml' },
-                'core/tracker/tracker.service.ts',
-                'core/tracker/window.service.ts'
+                'core/tracker/tracker.service.ts'
             ]
         },
         {

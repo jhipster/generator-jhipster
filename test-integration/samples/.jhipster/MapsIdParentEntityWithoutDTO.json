@@ -7,8 +7,7 @@
             "otherEntityName": "mapsIdChildEntityWithoutDTO",
             "relationshipType": "one-to-one",
             "ownerSide": false,
-            "otherEntityRelationshipName": "mapsIdParentEntityWithoutDTO",
-            "otherEntityRelationshipNameUndefined": false
+            "otherEntityRelationshipName": "mapsIdParentEntityWithoutDTO"
         }
     ],
     "fields": [
