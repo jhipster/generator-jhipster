@@ -1,13 +1,28 @@
-const chalk = require('chalk');
-const packagejs = require('../../package.json');
-const semver = require('semver');
-const BaseGenerator = require('../generator-base');
-const jhipsterConstants = require('../generator-constants');
-const request = require('sync-request');
+/**
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const path = require('path');
 const shelljs = require('shelljs');
 const _ = require('underscore.string');
-
+const chalk = require('chalk');
+const BaseGenerator = require('../generator-base');
+const jhipsterConstants = require('../generator-constants');
+const prompts = require('./prompts');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -24,172 +39,46 @@ module.exports = class extends BaseGenerator {
     get initializing() {
         return {
             getConfig() {
-                this.apis = this.config.get('apis') || {};
+                this.openApiClients = this.config.get('openApiClients') || {};
             },
             displayLogo() {
                 // Have Yeoman greet the user.
-                this.log(`\nWelcome to the ${chalk.bold.yellow('JHipster openapi-cli')} sub-generator! ${chalk.yellow(`v${packagejs.version}\n`)}`);
+                this.log(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));
             }
         };
     }
 
-    prompting() {
-        if (this.options.regen) {
-            return;
-        }
-
-        const hasExistingApis = Object.keys(this.apis).length !== 0;
-        let actionList;
-        const availableDocs = [];
-        try {
-            const swaggerResources = request('GET', 'http://localhost:8080/swagger-resources', {
-                // This header is needed to use the custom /swagger-resources controller
-                // and not the default one that has only the gateway's swagger resource
-                headers: { Accept: 'application/json, text/javascript;' }
-            });
-
-            JSON.parse(swaggerResources.getBody()).forEach((swaggerResource) => {
-                availableDocs.push({
-                    value: { url: `http://localhost:8080${swaggerResource.location}`, name: swaggerResource.name },
-                    name: `${swaggerResource.name} (${swaggerResource.location})`
-                });
-            });
-
-            this.log('The following swagger-docs have been found at http://localhost:8080');
-            availableDocs.forEach((doc) => {
-                this.log(`* ${chalk.green(doc.name)} : ${doc.value.name}`);
-            });
-            this.log('');
-
-            actionList = [
-                {
-                    value: 'new-detected',
-                    name: 'Generate a new API client from one of these swagger-docs'
-                },
-                {
-                    value: 'new',
-                    name: 'Generate a new API client from another swagger-doc'
-                }
-            ];
-        } catch (err) {
-        // No live doc found on port 8080
-            actionList = [
-                {
-                    value: 'new',
-                    name: 'Generate a new API client'
-                }
-            ];
-        }
-
-        if (hasExistingApis) {
-            actionList.push({ value: 'all', name: 'Generate all stored API clients' });
-            actionList.push({ value: 'select', name: 'Select stored API clients to generate' });
-        }
-
-        const newClient = actionList.length === 1;
-
-        const prompts = [
-            {
-                when: !newClient,
-                type: 'list',
-                name: 'action',
-                message: 'What do you want to do ?',
-                choices: actionList
-            },
-            {
-                when: response => response.action === 'new-detected',
-                type: 'list',
-                name: 'availableDoc',
-                message: 'Select the doc for which you want to create a client',
-                choices: availableDocs
-            },
-            {
-                when: response => response.action === 'new-detected' && this.config.get('serviceDiscoveryType') === 'eureka',
-                type: 'confirm',
-                name: 'useServiceDiscovery',
-                message: 'Do you want to use Eureka service discovery ?',
-                default: true
-            },
-            {
-                when: response => response.action === 'new' || newClient,
-                type: 'input',
-                name: 'inputSpec',
-                message: 'Where is your Swagger/OpenAPI spec (URL or path) ?',
-                default: 'http://petstore.swagger.io/v2/swagger.json',
-                store: true
-            },
-            {
-                when: response => (['new', 'new-detected'].includes(response.action) || newClient) && !response.useServiceDiscovery,
-                type: 'input',
-                name: 'cliName',
-                validate: (input) => {
-                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-                        return 'Your API client name cannot contain special characters or a blank space';
-                    }
-                    if (input === '') {
-                        return 'Your API client name cannot be empty';
-                    }
-                    return true;
-                },
-                message: 'What is the unique name for your API client ?',
-                default: 'petstore',
-                store: true
-            },
-            {
-                when: response => ['new', 'new-detected'].includes(response.action) || newClient,
-                type: 'confirm',
-                name: 'saveConfig',
-                message: 'Do you want to save this config for future reuse ?',
-                default: false
-            },
-            {
-                when: response => response.action === 'select',
-                type: 'checkbox',
-                name: 'selected',
-                message: 'Select which APIs you want to generate',
-                choices: () => {
-                    const choices = [];
-                    Object.keys(this.apis).forEach((cliName) => {
-                        choices.push({
-                            name: `${cliName} (${this.apis[cliName].spec})`,
-                            value: { cliName, spec: this.apis[cliName] }
-                        });
-                    });
-                    return choices;
-                }
-            }
-        ];
-
-        const done = this.async();
-        this.prompt(prompts).then((props) => {
-            if (props.availableDoc !== undefined) {
-                props.inputSpec = props.availableDoc.url;
-                props.cliName = props.availableDoc.name;
-            }
-            this.props = props;
-            done();
-        });
+    get prompting() {
+        return {
+            askActionType: prompts.askActionType,
+            askExistingAvailableDocs: prompts.askExistingAvailableDocs,
+            askGenerationInfos: prompts.askGenerationInfos
+        };
     }
 
     get configuring() {
         return {
             determineApisToGenerate() {
-                this.apisToGenerate = {};
+                this.clientsToGenerate = {};
                 if (this.options.regen || this.props.action === 'all') {
-                    this.apisToGenerate = this.apis;
-                } else if (['new', 'new-detected'].includes(this.props.action) || this.props.action === undefined) {
-                    this.apisToGenerate[this.props.cliName] = { spec: this.props.inputSpec, useServiceDiscovery: this.props.useServiceDiscovery };
+                    this.clientsToGenerate = this.openApiClients;
+                } else if (this.props.action === 'new' || this.props.action === undefined) {
+                    this.clientsToGenerate[this.props.cliName] = {
+                        spec: this.props.inputSpec,
+                        useServiceDiscovery: this.props.useServiceDiscovery,
+                        generatorName: this.props.generatorName
+                    };
                 } else if (this.props.action === 'select') {
-                    this.props.selected.forEach((selection) => {
-                        this.apisToGenerate[selection.cliName] = selection.spec;
+                    this.props.selected.forEach(selection => {
+                        this.clientsToGenerate[selection.cliName] = selection.spec;
                     });
                 }
             },
 
             saveConfig() {
                 if (!this.options.regen && this.props.saveConfig) {
-                    this.apis[this.props.cliName] = this.apisToGenerate[this.props.cliName];
-                    this.config.set('apis', this.apis);
+                    this.openApiClients[this.props.cliName] = this.clientsToGenerate[this.props.cliName];
+                    this.config.set('openApiClients', this.openApiClients);
                 }
             }
         };
@@ -197,7 +86,7 @@ module.exports = class extends BaseGenerator {
 
     get writing() {
         return {
-            callSwaggerCodegen() {
+            callOpenApiGenerator() {
                 this.baseName = this.config.get('baseName');
                 this.authenticationType = this.config.get('authenticationType');
                 this.packageName = this.config.get('packageName');
@@ -207,19 +96,25 @@ module.exports = class extends BaseGenerator {
 
                 this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
 
-                Object.keys(this.apisToGenerate).forEach((cliName) => {
-                    const inputSpec = this.apisToGenerate[cliName].spec;
-                    const cliPackage = `${this.packageName}.client.${_.underscored(cliName)}`;
-                    this.log(chalk.green(`Generating client code for ${cliName} (${inputSpec})`));
+                Object.keys(this.clientsToGenerate).forEach(cliName => {
+                    const inputSpec = this.clientsToGenerate[cliName].spec;
+                    const generatorName = this.clientsToGenerate[cliName].generatorName;
+                    let execLine;
+                    if (generatorName === 'spring') {
+                        const cliPackage = `${this.packageName}.client.${_.underscored(cliName)}`;
+                        this.log(chalk.green(`Generating java client code for ${cliName} (${inputSpec})`));
 
-                    let execLine = `${this.clientPackageManager} run openapi-generator -- generate -g spring -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ` +
-                        ` -t ${path.resolve(__dirname, 'templates/swagger-codegen/libraries/spring-cloud')} --library spring-cloud ` +
-                        ` -i ${inputSpec} --artifact-id ${_.camelize(cliName)} --api-package ${cliPackage}.api` +
-                        ` --model-package ${cliPackage}.model` +
-                        ' --type-mappings DateTime=OffsetDateTime,Date=LocalDate --import-mappings OffsetDateTime=java.time.OffsetDateTime,LocalDate=java.time.LocalDate' +
-                        ` -DdateLibrary=custom,basePackage=${this.packageName}.client,configPackage=${cliPackage},title=${_.camelize(cliName)}`;
-                    if (this.apisToGenerate[cliName].useServiceDiscovery) {
-                        execLine += ' --additional-properties ribbon=true';
+                        execLine =
+                            `${this.clientPackageManager} run openapi-generator -- generate -g spring -Dmodels -Dapis ` +
+                            '-DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ' +
+                            ` -t ${path.resolve(__dirname, 'templates/swagger-codegen/libraries/spring-cloud')} --library spring-cloud ` +
+                            ` -i ${inputSpec} --artifact-id ${_.camelize(cliName)} --api-package ${cliPackage}.api` +
+                            ` --model-package ${cliPackage}.model` +
+                            ' --type-mappings DateTime=OffsetDateTime,Date=LocalDate --import-mappings OffsetDateTime=java.time.OffsetDateTime,LocalDate=java.time.LocalDate' +
+                            ` -DdateLibrary=custom,basePackage=${this.packageName}.client,configPackage=${cliPackage},title=${_.camelize(cliName)}`;
+                        if (this.clientsToGenerate[cliName].useServiceDiscovery) {
+                            execLine += ' --additional-properties ribbon=true';
+                        }
                     }
                     this.log(execLine);
                     shelljs.exec(execLine);
@@ -227,22 +122,17 @@ module.exports = class extends BaseGenerator {
             },
 
             writeTemplates() {
-                // function to use directly template
-                this.template = (source, destination) => this.fs.copyTpl(
-                    this.templatePath(source),
-                    this.destinationPath(destination),
-                    this
-                );
                 if (this.buildTool === 'maven') {
                     if (!['microservice', 'gateway', 'uaa'].includes(this.applicationType)) {
                         let exclusions;
                         if (this.authenticationType === 'session') {
-                            exclusions = '            <exclusions>\n' +
-                            '                <exclusion>\n' +
-                            '                    <groupId>org.springframework.cloud</groupId>\n' +
-                            '                    <artifactId>spring-cloud-starter-ribbon</artifactId>\n' +
-                            '                </exclusion>\n' +
-                            '            </exclusions>';
+                            exclusions =
+                                '            <exclusions>\n' +
+                                '                <exclusion>\n' +
+                                '                    <groupId>org.springframework.cloud</groupId>\n' +
+                                '                    <artifactId>spring-cloud-starter-ribbon</artifactId>\n' +
+                                '                </exclusion>\n' +
+                                '            </exclusions>';
                         }
                         this.addMavenDependency('org.springframework.cloud', 'spring-cloud-starter-openfeign', null, exclusions);
                     }
@@ -250,7 +140,8 @@ module.exports = class extends BaseGenerator {
                 } else if (this.buildTool === 'gradle') {
                     if (!['microservice', 'gateway', 'uaa'].includes(this.applicationType)) {
                         if (this.authenticationType === 'session') {
-                            const content = 'compile \'org.springframework.cloud:spring-cloud-starter-openfeign\', { exclude group: \'org.springframework.cloud\', module: \'spring-cloud-starter-ribbon\' }';
+                            const content =
+                                "compile 'org.springframework.cloud:spring-cloud-starter-openfeign', { exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-ribbon' }";
                             this.rewriteFile('./build.gradle', 'jhipster-needle-gradle-dependency', content);
                         } else {
                             this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-starter-openfeign');
@@ -262,19 +153,31 @@ module.exports = class extends BaseGenerator {
                 const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
                 if (this.applicationType !== 'microservice' || !['uaa', 'jwt'].includes(this.authenticationType)) {
-                    this.rewriteFile(mainClassFile, 'import org.springframework.core.env.Environment;', 'import org.springframework.cloud.openfeign.EnableFeignClients;');
+                    this.rewriteFile(
+                        mainClassFile,
+                        'import org.springframework.core.env.Environment;',
+                        'import org.springframework.cloud.openfeign.EnableFeignClients;'
+                    );
                 }
-                this.rewriteFile(mainClassFile, 'import org.springframework.core.env.Environment;', 'import org.springframework.context.annotation.ComponentScan;');
+
+                this.rewriteFile(
+                    mainClassFile,
+                    'import org.springframework.core.env.Environment;',
+                    'import org.springframework.context.annotation.ComponentScan;'
+                );
 
                 const componentScan = `${'@ComponentScan( excludeFilters = {\n' +
-          '    @ComponentScan.Filter('}${this.packageName}.client.ExcludeFromComponentScan.class)\n` +
-          '})';
+                    '    @ComponentScan.Filter('}${this.packageName}.client.ExcludeFromComponentScan.class)\n` +
+                    '})';
                 this.rewriteFile(mainClassFile, '@SpringBootApplication', componentScan);
 
                 if (this.applicationType !== 'microservice' || !['uaa', 'jwt'].includes(this.authenticationType)) {
                     this.rewriteFile(mainClassFile, '@SpringBootApplication', '@EnableFeignClients');
                 }
-                this.template('src/main/java/package/client/_ExcludeFromComponentScan.java', `${this.javaDir}/client/ExcludeFromComponentScan.java`);
+                this.template(
+                    'src/main/java/package/client/_ExcludeFromComponentScan.java',
+                    `${this.javaDir}/client/ExcludeFromComponentScan.java`
+                );
             }
         };
     }
