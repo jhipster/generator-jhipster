@@ -75,15 +75,8 @@ public class AccountResource {
     @GetMapping("/account")
     @SuppressWarnings("unchecked")
     public <%= asDto('User') %> getAccount(Principal principal) {
-        if (principal != null) {
-            if (principal instanceof OAuth2AuthenticationToken) {
-                return userService.getUserFromAuthentication((OAuth2AuthenticationToken) principal);
-            } else {
-                // Allow Spring Security Test to be used to mock users in the database
-                return userService.getUserWithAuthorities()
-                    .map(<%= asDto('User') %>::new)
-                    .orElseThrow(() -> new AccountResourceException("User could not be found"));
-            }
+        if (principal instanceof OAuth2AuthenticationToken) {
+            return userService.getUserFromAuthentication((OAuth2AuthenticationToken) principal);
         } else {
             throw new AccountResourceException("User could not be found");
         }

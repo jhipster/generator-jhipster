@@ -24,23 +24,9 @@ import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.TestSecurityConfiguration;
-import <%= packageName %>.domain.Authority;
-import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.web.rest.errors.ExceptionTranslator;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,19 +34,31 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link AccountResource} REST controller.
  */
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private ExceptionTranslator exceptionTranslator;
@@ -106,46 +104,26 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void testGetExistingAccount() throws Exception {
-        <%_ if (databaseType !== 'couchbase') { _%>
-        Set<Authority> authorities = new HashSet<>();
-        Authority authority = new Authority();
-        authority.setName(AuthoritiesConstants.ADMIN);
-        authorities.add(authority);
-        <%_ } else { _%>
-        Set<String> authorities = new HashSet<>();
-        authorities.add(AuthoritiesConstants.ADMIN);
-        <%_ } _%>
-
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
-        <%_ if (authenticationType === 'oauth2' && databaseType !== 'couchbase') { _%>
-        user.setId(RandomStringUtils.randomAlphanumeric(50));
-        <%_ } _%>
-        user.setLogin("test");
-        user.setFirstName("john");
-        user.setLastName("doe");
-        user.setEmail("john.doe@jhipster.com");
-        user.setImageUrl("http://placehold.it/50x50");
-        user.setLangKey("en");
-        user.setAuthorities(authorities);
-        userRepository.save(user);
-
         // create security-aware mockMvc
         restUserMockMvc = MockMvcBuilders
             .webAppContextSetup(context)
             .apply(springSecurity())
             .build();
 
+        Map<String, Object> userDetails = new HashMap<>();
+        userDetails.put("sub", "test");
+        userDetails.put("email", "john.doe@jhipster.com");
+        Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN));
+        OAuth2User user = new DefaultOAuth2User(authorities, userDetails, "sub");
+        OAuth2AuthenticationToken authentication = new OAuth2AuthenticationToken(user, authorities, "oidc");
+        TestSecurityContextHolder.getContext().setAuthentication(authentication);
+
         restUserMockMvc.perform(get("/api/account")
-            .with(user(user.getLogin()).roles("ADMIN"))
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.login").value("test"))
-            .andExpect(jsonPath("$.firstName").value("john"))
-            .andExpect(jsonPath("$.lastName").value("doe"))
             .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
-            .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
-            .andExpect(jsonPath("$.langKey").value("en"))
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
     }
 
