@@ -596,7 +596,11 @@ _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
+        <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         verify(mock<%= entityClass %>SearchRepository, times(2)).save(<%= asEntity(entityInstance) %>);
+<%_ } else { _%>
+        verify(mock<%= entityClass %>SearchRepository, times(1)).save(<%= asEntity(entityInstance) %>);
+<%_ } _%>
         <%_ } _%>
     }
 <%_ } _%>
