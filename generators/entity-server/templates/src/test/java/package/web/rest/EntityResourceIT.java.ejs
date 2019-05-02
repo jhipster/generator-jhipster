@@ -596,7 +596,7 @@ _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        verify(mock<%= entityClass %>SearchRepository, times(2)).save(<%= asEntity(entityInstance) %>);
         <%_ } _%>
     }
 <%_ } _%>
