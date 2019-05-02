@@ -182,15 +182,10 @@ function askForServerSideOpts(meta) {
                     name: 'Couchbase'
                 });
                 if (!reactive) {
-                    if (
-                        response.authenticationType !== 'oauth2' ||
-                        (response.authenticationType === 'uaa' && applicationType === 'gateway')
-                    ) {
-                        opts.push({
-                            value: 'no',
-                            name: 'No database'
-                        });
-                    }
+                    opts.push({
+                        value: 'no',
+                        name: 'No database'
+                    });
                 }
                 return opts;
             },
