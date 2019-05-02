@@ -135,8 +135,8 @@ Example:
         argument: ['name'],
         desc: 'Create a new Spring controller'
     },
-    'openapi-cli': {
-        desc: "Generates client code from an OpenAPI/Swagger definition"
+    'openapi-client': {
+        desc: 'Generates java client code from an OpenAPI/Swagger definition'
     },
     upgrade: {
         desc: 'Upgrade the JHipster version, and upgrade the generated application'

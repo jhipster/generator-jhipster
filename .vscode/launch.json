@@ -278,10 +278,10 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "jhipster openapi-cli",
+            "name": "jhipster openapi-client",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "args": [
-                "openapi-cli"
+                "openapi-client"
             ],
             "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"

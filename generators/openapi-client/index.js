@@ -183,6 +183,6 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
-        this.log('End of openapi-cli generator');
+        this.log('End of openapi-client generator');
     }
 };
