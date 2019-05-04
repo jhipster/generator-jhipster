@@ -24,19 +24,19 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SampleKafkaProducer {
+public class <%= upperFirstCamelCase(baseName) %>KafkaProducer {
 
-    private static final Logger logger = LoggerFactory.getLogger(SampleKafkaProducer.class);
-    private static final String TOPIC = "topic_jhipster";
+    private static final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCase(baseName) %>KafkaProducer.class);
+    private static final String TOPIC = "topic_<%= baseName.toLowerCase() %>";
 
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public SampleKafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
+    public <%= upperFirstCamelCase(baseName) %>KafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public void sendMessage(String message) {
-        logger.info(String.format("#### -> Producing message -> %s", message));
+        log.info("Producing message to {} : {}", TOPIC, message);
         this.kafkaTemplate.send(TOPIC, message);
     }
 }

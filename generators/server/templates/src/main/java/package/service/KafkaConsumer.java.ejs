@@ -26,12 +26,13 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class SampleKafkaConsumer {
+public class <%= upperFirstCamelCase(baseName) %>KafkaConsumer {
 
-    private final Logger logger = LoggerFactory.getLogger(SampleKafkaConsumer.class);
+    private final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCase(baseName) %>KafkaConsumer.class);
+    private static final String TOPIC = "topic_<%= baseName.toLowerCase() %>";
 
-    @KafkaListener(topics = "topic_jhipster", groupId = "group_id")
+    @KafkaListener(topics = "topic_<%= baseName.toLowerCase() %>", groupId = "group_id")
     public void consume(String message) throws IOException {
-        logger.info(String.format("#### -> Consumed message -> %s", message));
+        log.info("Consumed message in {} : {}", TOPIC, message);
     }
 }

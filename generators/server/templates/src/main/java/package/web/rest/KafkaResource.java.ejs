@@ -18,26 +18,26 @@
 -%>
 package <%=packageName%>.web.rest;
 
-import <%=packageName%>.service.SampleKafkaProducer;
+import <%=packageName%>.service.<%= upperFirstCamelCase(baseName) %>KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/kafka")
-public class KafkaResource {
+@RequestMapping(value = "/api/<%= dasherizedBaseName %>-kafka")
+public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
 
-    private final Logger log = LoggerFactory.getLogger(KafkaResource.class);
+    private final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCase(baseName) %>KafkaResource.class);
 
-    private SampleKafkaProducer sampleKafkaProducer;
+    private <%= upperFirstCamelCase(baseName) %>KafkaProducer kafkaProducer;
 
-    public KafkaResource(SampleKafkaProducer sampleKafkaProducer) {
-        this.sampleKafkaProducer = sampleKafkaProducer;
+    public <%= upperFirstCamelCase(baseName) %>KafkaResource(<%= upperFirstCamelCase(baseName) %>KafkaProducer kafkaProducer) {
+        this.kafkaProducer = kafkaProducer;
     }
 
     @PostMapping(value = "/publish")
     public void sendMessageToKafkaTopic(@RequestParam("message") String message) {
         log.debug("REST request to send to Kafka topic the message : {}", message);
-        this.sampleKafkaProducer.sendMessage(message);
+        this.kafkaProducer.sendMessage(message);
     }
 }
