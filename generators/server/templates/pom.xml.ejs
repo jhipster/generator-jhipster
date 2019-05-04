@@ -84,7 +84,7 @@
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.1.4.RELEASE</spring-boot.version>
-        <%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <hibernate.version>5.3.9.Final</hibernate.version>
@@ -111,7 +111,7 @@
 
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
         <!-- We can't go to 3.0.0-M2 as it has a regression. See https://issues.apache.org/jira/browse/MENFORCER-306 -->
@@ -362,13 +362,13 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
-        <%_ if (cucumberTests) { _%>
+<%_ if (cucumberTests) { _%>
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
             <scope>test</scope>
         </dependency>
-        <%_ } _%>
+<%_ } _%>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
@@ -542,7 +542,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-
             <exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
@@ -630,7 +629,6 @@
             <scope>runtime</scope>
     <%_ } _%>
         </dependency>
-
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
         <!-- DataStax driver -->
@@ -1100,6 +1098,18 @@
                                 <goal>enforce</goal>
                             </goals>
                         </execution>
+                        <execution>
+                            <id>enforce-dependencyConvergence</id>
+                            <configuration>
+                                <rules>
+                                    <DependencyConvergence />
+                                </rules>
+                                <fail>false</fail>
+                            </configuration>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
                     </executions>
                     <configuration>
                         <rules>
@@ -1170,7 +1180,9 @@
                         <excludes>
                             <exclude>**/*IT*</exclude>
                             <exclude>**/*IntTest*</exclude>
+<%_ if (cucumberTests) { _%>
                             <exclude>**/*CucumberIT*</exclude>
+<%_ } _%>
                         </excludes>
                     </configuration>
                 </plugin>
@@ -1188,15 +1200,10 @@
                         <includes>
                             <include>**/*IT*</include>
                             <include>**/*IntTest*</include>
-                    <%_ if (cucumberTests) { _%>
+<%_ if (cucumberTests) { _%>
                             <include>**/*CucumberIT*</include>
-                    <%_ } _%>
+<%_ } _%>
                         </includes>
-                    <%_ if (!cucumberTests) { _%>
-                        <excludes>
-                            <exclude>**/*CucumberIT*</exclude>
-                        </excludes>
-                    <%_ } _%>
                     </configuration>
                     <executions>
                         <execution>
@@ -1235,9 +1242,9 @@
                                 <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                                 <validateSpec>true</validateSpec>
                                 <configOptions>
-                                    <%_ if (reactive) { _%>
+    <%_ if (reactive) { _%>
                                     <reactive>true</reactive>
-                                    <%_ } _%>
+    <%_ } _%>
                                     <delegatePattern>true</delegatePattern>
                                     <title><%= dasherizedBaseName %></title>
                                 </configOptions>

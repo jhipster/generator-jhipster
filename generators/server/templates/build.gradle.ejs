@@ -123,7 +123,7 @@ springBoot {
 
 test {
     useJUnitPlatform()
-    exclude "**/*IT*", "**/*IntTest*", "**/*CucumberIT*"
+    exclude "**/*IT*", "**/*IntTest*"<%_ if (cucumberTests) { _%>, "**/*CucumberIT*"<%_ } _%>
 
     testLogging {
         events 'FAILED', 'SKIPPED'
@@ -139,7 +139,9 @@ task integrationTest(type: Test) {
     description = "Execute integration tests."
     group = "verification"
     include "**/*IT*", "**/*IntTest*"
+<%_ if (cucumberTests) { _%>
     exclude "**/*CucumberIT*"
+<%_ } _%>
 
     testLogging {
         events 'FAILED', 'SKIPPED'
