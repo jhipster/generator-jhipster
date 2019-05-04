@@ -48,7 +48,13 @@ const serverFiles = {
                     file: 'config/liquibase/changelog/added_entity.xml',
                     options: { interpolate: INTERPOLATE_REGEX },
                     renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.xml`
-                },
+                }
+            ]
+        },
+        {
+            condition: generator => generator.databaseType === 'sql' && !generator.skipFakeData && !generator.skipDbChangelog,
+            path: SERVER_MAIN_RES_DIR,
+            templates: [
                 {
                     file: 'config/liquibase/fake-data/table.csv',
                     options: {
@@ -80,6 +86,7 @@ const serverFiles = {
         {
             condition: generator =>
                 generator.databaseType === 'sql' &&
+                !generator.skipFakeData &&
                 !generator.skipDbChangelog &&
                 (generator.fieldsContainImageBlob === true || generator.fieldsContainBlob === true),
             path: SERVER_MAIN_RES_DIR,
@@ -87,7 +94,10 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.databaseType === 'sql' && !generator.skipDbChangelog && generator.fieldsContainTextBlob === true,
+                generator.databaseType === 'sql' &&
+                !generator.skipFakeData &&
+                !generator.skipDbChangelog &&
+                generator.fieldsContainTextBlob === true,
             path: SERVER_MAIN_RES_DIR,
             templates: [{ file: 'config/liquibase/fake-data/blob/hipster.txt', method: 'copy' }]
         },

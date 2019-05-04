@@ -150,6 +150,7 @@ describe('JHipster generator for entity', () => {
                     assert.file(expectedFiles.server);
                     assert.file(expectedFiles.clientNg2);
                     assert.file(expectedFiles.gatling);
+                    assert.file(expectedFiles.fakeData);
                 });
             });
 
@@ -341,6 +342,31 @@ describe('JHipster generator for entity', () => {
                     assert.file(expectedFiles.clientNg2WithRootFolderAndSuffix);
                     assert.file(expectedFiles.gatling);
                     assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'test-root' });
+                });
+            });
+        });
+
+        context('fake data', () => {
+            describe('sql database with fake data disabled', () => {
+                before(done => {
+                    helpers
+                        .run(require.resolve('../generators/entity'))
+                        .inTmpDir(dir => {
+                            fse.copySync(path.join(__dirname, '../test/templates/psql-with-no-fake-data'), dir);
+                        })
+                        .withArguments(['foo'])
+                        .withPrompts({
+                            fieldAdd: false,
+                            relationshipAdd: false,
+                            dto: 'no',
+                            service: 'no',
+                            pagination: 'no'
+                        })
+                        .on('end', done);
+                });
+
+                it('creates expected default files', () => {
+                    assert.noFile(expectedFiles.fakeData);
                 });
             });
         });
