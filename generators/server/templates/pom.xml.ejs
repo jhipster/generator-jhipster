@@ -1098,6 +1098,18 @@
                                 <goal>enforce</goal>
                             </goals>
                         </execution>
+                        <execution>
+                            <id>enforce-dependencyConvergence</id>
+                            <configuration>
+                                <rules>
+                                    <DependencyConvergence />
+                                </rules>
+                                <fail>false</fail>
+                            </configuration>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
                     </executions>
                     <configuration>
                         <rules>
