@@ -35,6 +35,7 @@ import org.springframework.security.test.context.TestSecurityContextHolder;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+<%_ if (databaseType === 'sql') { _%>
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -42,6 +43,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -171,6 +173,7 @@ public final class TestUtil {
         return dfcs;
     }
 
+<%_ if (databaseType === 'sql') { _%>
     /**
      * Makes a an executes a query to the EntityManager finding all stored objects.
      * @param <T> The type of objects to be searched
@@ -186,6 +189,7 @@ public final class TestUtil {
         TypedQuery<T> allQuery = em.createQuery(all);
         return allQuery.getResultList();
     }
+<%_ } _%>
 
     private TestUtil() {}
 }
