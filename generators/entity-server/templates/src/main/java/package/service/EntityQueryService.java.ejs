@@ -53,7 +53,7 @@ import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 
 /**
- * Service for executing complex queries for <%= entityClass %> entities in the database.
+ * Service for executing complex queries for {@link <%= asEntity(entityClass) %>} entities in the database.
  * The main input is a {@link <%= entityClass %>Criteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
  * It returns a {@link List} of {@link <%= instanceType %>} or a {@link Page} of {@link <%= instanceType %>} which fulfills the criteria.

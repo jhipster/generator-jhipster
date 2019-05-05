@@ -53,8 +53,8 @@ import {
 @NgModule({
     imports: [
         <%=angularXAppName%>SharedModule,
-        RouterModule.forChild(adminState),
         /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
+        RouterModule.forChild(adminState)
     ],
     declarations: [
         <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>

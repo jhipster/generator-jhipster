@@ -400,7 +400,7 @@ describe('JHipster generator import jdl', () => {
         beforeEach(done => {
             testInTempDir(dir => {
                 fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
-                importJdl(['deployments.jdl'], { skipInstall: true }, env, mockFork(done, 4));
+                importJdl(['deployments.jdl'], { skipInstall: true }, env, mockFork(done, 3));
             });
         });
 
@@ -408,18 +408,13 @@ describe('JHipster generator import jdl', () => {
             assert.file([
                 path.join('docker-compose', '.yo-rc.json'),
                 path.join('kubernetes', '.yo-rc.json'),
-                path.join('openshift', '.yo-rc.json'),
-                path.join('rancher-compose', '.yo-rc.json')
+                path.join('openshift', '.yo-rc.json')
             ]);
         });
         it('calls deployment generator', () => {
-            expect(subGenCallParams.count).to.equal(4);
-            expect(subGenCallParams.commands).to.eql([
-                'jhipster:docker-compose',
-                'jhipster:kubernetes',
-                'jhipster:openshift',
-                'jhipster:rancher-compose'
-            ]);
+            const invokedSubgens = ['jhipster:docker-compose', 'jhipster:kubernetes', 'jhipster:openshift'];
+            expect(subGenCallParams.commands).to.eql(invokedSubgens);
+            expect(subGenCallParams.count).to.equal(invokedSubgens.length);
             expect(subGenCallParams.options[0]).to.eql(['--skip-prompts', '--skip-install', '--force', '--from-cli']);
         });
     });

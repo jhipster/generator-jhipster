@@ -37,7 +37,7 @@ import { isRTL } from 'app/config/translation';
 <%_ } _%>
 
 import { Home, Brand } from './header-components';
-import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from './menus';
+import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from '../menus';
 
 export interface IHeaderProps {
   isAuthenticated: boolean;
@@ -101,7 +101,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
       <div id="app-header">
         {this.renderDevRibbon()}
         <LoadingBar className="loading-bar"/>
-        <Navbar dark expand="sm" fixed="top" className="jh-navbar">
+        <Navbar <% if (clientTheme === 'none' || clientThemeVariant !== 'light') { %>dark<% } else { %>light<% } %> expand="sm" fixed="top" className="<%_ if (clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
           <NavbarToggler aria-label="Menu" onClick={this.toggleMenu} />
           <Brand />
           <Collapse isOpen={this.state.menuOpen} navbar>

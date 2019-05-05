@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: <%= app.baseName.toLowerCase() %>-postgresql
@@ -25,19 +25,26 @@ metadata:
     app: <%= app.baseName.toLowerCase() %>-postgresql
 type: Opaque
 data:
-  postgres-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
+  postgresql-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
 ---
-apiVersion: extensions/v1beta1
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>-postgresql
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-postgresql
   template:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>-postgresql
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       volumes:
       - name: data
@@ -47,19 +54,19 @@ spec:
         image: <%= DOCKER_POSTGRESQL %>
         env:
         - name: POSTGRES_USER
-          value: <%= app.baseName.toLowerCase() %>
+          value: <%= app.baseName %>
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               name: <%= app.baseName.toLowerCase() %>-postgresql
-              key: postgres-password
+              key: postgresql-password
         ports:
         - containerPort: 5432
         volumeMounts:
         - name: data
           mountPath: /var/lib/postgresql/
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-postgresql

@@ -28,6 +28,7 @@ describe('Service Tests', () => {
     describe('User Service', () => {
         let service: UserService;
         let httpMock;
+        let expectedResult;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -39,6 +40,7 @@ describe('Service Tests', () => {
                 ]
             });
 
+            expectedResult = {};
             service = TestBed.get(UserService);
             httpMock = TestBed.get(HttpTestingController);
         });
@@ -58,35 +60,38 @@ describe('Service Tests', () => {
             it('should return User', () => {
 
                 service.find('user').subscribe(received => {
-                    expect(received.body.login).toEqual('user');
+                    expectedResult = received.body.login;
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
                 req.flush(new User(1, 'user'));
+                expect(expectedResult).toEqual('user');
             });
 
             <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
             it('should return Authorities', () => {
 
                 service.authorities().subscribe(_authorities => {
-                    expect(_authorities).toEqual(['ROLE_USER', 'ROLE_ADMIN']);
+                    expectedResult = _authorities;
                 });
                 const req = httpMock.expectOne({ method: 'GET' });
 
                 req.flush(['ROLE_USER', 'ROLE_ADMIN']);
+                expect(expectedResult).toEqual(['ROLE_USER', 'ROLE_ADMIN']);
             });
 
             <%_ } _%>
             it('should propagate not found response', () => {
 
                 service.find('user').subscribe(null, (_error: any) => {
-                    expect(_error.status).toEqual(404);
+                    expectedResult = _error.status;
                 });
 
                 const req  = httpMock.expectOne({ method: 'GET' });
                 req.flush('Invalid request parameters', {
                     status: 404, statusText: 'Bad Request'
                 });
+                expect(expectedResult).toEqual(404);
             });
         });
     });

@@ -26,7 +26,7 @@
 # note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
 # Though Openshift offers its own service discovery, this is been supported as jHipster relies on this.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: <%= app.baseName.toLowerCase() %>-consul-template
@@ -61,7 +61,7 @@ parameters:
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
 objects:
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Secret
     metadata:
       name: gossip-key
@@ -69,7 +69,7 @@ objects:
     data:
       gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
   -
-    apiVersion: apps/v1beta1
+    apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
     kind: StatefulSet
     metadata:
       name: ${APPLICATION_NAME}
@@ -177,7 +177,7 @@ objects:
             requests:
               storage: ${VOLUME_CAPACITY}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${APPLICATION_NAME}-consul-config-loader
@@ -207,7 +207,7 @@ objects:
             configMap:
               name: application-config
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${APPLICATION_NAME}
@@ -241,7 +241,7 @@ objects:
       selector:
         app: ${APPLICATION_NAME}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
     metadata:
       name: ${APPLICATION_NAME}

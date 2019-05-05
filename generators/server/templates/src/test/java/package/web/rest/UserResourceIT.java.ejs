@@ -22,6 +22,9 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%=packageName%>.config.TestSecurityConfiguration;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
 <%_ } _%>
@@ -44,9 +47,8 @@ import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
 <%_ } _%>
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -59,7 +61,6 @@ import org.springframework.http.MediaType;
 <%_ if (!reactive) { _%>
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 <%_ } _%>
-import org.springframework.test.context.junit4.SpringRunner;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
@@ -102,8 +103,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
-@RunWith(SpringRunner.class)
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
 public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String DEFAULT_LOGIN = "johndoe";
@@ -204,7 +208,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
     private <%= asEntity('User') %> user;
 
-    @Before
+    @BeforeEach
     public void setup() {
         <%_ if (cacheManagerIsAvailable === true) { _%>
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
@@ -251,7 +255,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         return user;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
         <%_ if (databaseType === 'couchbase') { _%>
         mockAuthentication();
@@ -492,7 +496,9 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(foundUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        <%_ if (databaseType !== 'cassandra') { _%>
         assertThat(foundUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
         <%_ } _%>
     }
@@ -535,7 +541,9 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
             .jsonPath("$.firstName").isEqualTo(DEFAULT_FIRSTNAME)
             .jsonPath("$.lastName").isEqualTo(DEFAULT_LASTNAME)
             .jsonPath("$.email").isEqualTo(DEFAULT_EMAIL)
+            <%_ if (databaseType !== 'cassandra') { _%>
             .jsonPath("$.imageUrl").isEqualTo(DEFAULT_IMAGEURL)
+            <%_ } _%>
             .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY);
         <%_ } _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>

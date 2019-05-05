@@ -46,6 +46,12 @@ eureka:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
+management:
+    metrics:
+        export:
+            prometheus:
+                enabled: false
+
 spring:
     devtools:
         restart:
@@ -172,6 +178,10 @@ spring:
     <%_ if (searchEngine === 'elasticsearch') { _%>
         jest:
             uri: http://localhost:9200
+    # see https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-nosql.html#boot-features-connecting-to-elasticsearch-jest
+    elasticsearch:
+        rest:
+            uris: http://localhost:9200
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -237,7 +247,7 @@ server:
 # ===================================================================
 
 jhipster:
-    <%_ if (applicationType === 'gateway') { _%>
+    <%_ if (applicationType === 'gateway' && cacheProvider === 'hazelcast' && serviceDiscoveryType) { _%>
     gateway:
         rate-limiting:
             enabled: false
@@ -321,7 +331,7 @@ jhipster:
                 # Refresh Token is valid for 7 days
                 token-validity-in-seconds-for-remember-me: 252000
     <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
     security:
         remember-me:
             # security key (this key should be unique for your application, and kept secret)
@@ -335,6 +345,7 @@ jhipster:
             enabled: false
             report-frequency: 60 # in seconds
     logging:
+        use-json-format: false # By default, logs are not in Json format
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false
             host: localhost

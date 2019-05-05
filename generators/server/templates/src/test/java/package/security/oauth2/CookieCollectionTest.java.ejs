@@ -18,16 +18,16 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.servlet.http.Cookie;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test the {@link CookieCollection}.
@@ -40,75 +40,71 @@ public class CookieCollectionTest {
     private Cookie cupsCookie;
     private Cookie brownieCookie;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() {
         cookie = new Cookie(COOKIE_NAME, COOKIE_VALUE);
         cupsCookie = new Cookie("cups", "delicious");
         brownieCookie = new Cookie(BROWNIE_NAME, "mmh");
     }
 
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
-    public void size() throws Exception {
+    public void size() {
         CookieCollection cookies = new CookieCollection();
-        Assert.assertEquals(0, cookies.size());
+        assertThat(cookies).hasSize(0);
         cookies.add(cookie);
-        Assert.assertEquals(1, cookies.size());
+        assertThat(cookies).hasSize(1);
     }
 
     @Test
-    public void isEmpty() throws Exception {
+    public void isEmpty() {
         CookieCollection cookies = new CookieCollection();
-        Assert.assertTrue(cookies.isEmpty());
+        assertThat(cookies).isEmpty();
         cookies.add(cookie);
-        Assert.assertFalse(cookies.isEmpty());
+        assertThat(cookies).isNotEmpty();
     }
 
     @Test
-    public void contains() throws Exception {
+    public void contains() {
         CookieCollection cookies = new CookieCollection(cookie);
-        Assert.assertTrue(cookies.contains(cookie));
-        Assert.assertTrue(cookies.contains(COOKIE_NAME));
-        Assert.assertFalse(cookies.contains("yuck"));
+        assertThat(cookies.contains(cookie)).isTrue();
+        assertThat(cookies.contains(COOKIE_NAME)).isTrue();
+        assertThat(cookies.contains("yuck")).isFalse();
     }
 
     @Test
-    public void iterator() throws Exception {
+    public void iterator() {
         CookieCollection cookies = new CookieCollection(cookie);
         Iterator<Cookie> it = cookies.iterator();
-        Assert.assertTrue(it.hasNext());
-        Assert.assertEquals(cookie, it.next());
-        Assert.assertFalse(it.hasNext());
+        assertThat(it.hasNext()).isTrue();
+        assertThat(it.next()).isEqualTo(cookie);
+        assertThat(it.hasNext()).isFalse();
     }
 
     @Test
-    public void toArray() throws Exception {
+    public void toArray() {
         CookieCollection cookies = new CookieCollection(cookie);
         Cookie[] array = cookies.toArray();
-        Assert.assertEquals(cookies.size(), array.length);
-        Assert.assertEquals(cookie, array[0]);
+        assertThat(array).hasSameSizeAs(cookies);
+        assertThat(array[0]).isEqualTo(cookie);
     }
 
     @Test
-    public void toArray1() throws Exception {
+    public void toArray1() {
         CookieCollection cookies = new CookieCollection(cookie);
         Cookie[] array = new Cookie[cookies.size()];
         cookies.toArray(array);
-        Assert.assertEquals(cookies.size(), array.length);
-        Assert.assertEquals(cookie, array[0]);
+        assertThat(array).hasSameSizeAs(cookies);
+        assertThat(array[0]).isEqualTo(cookie);
     }
 
     @Test
-    public void add() throws Exception {
+    public void add() {
         CookieCollection cookies = new CookieCollection(cookie);
         Cookie newCookie = new Cookie(BROWNIE_NAME, "mmh");
         cookies.add(newCookie);
-        Assert.assertEquals(2, cookies.size());
-        Assert.assertTrue(cookies.contains(newCookie));
-        Assert.assertTrue(cookies.contains(BROWNIE_NAME));
+        assertThat(cookies).hasSize(2);
+        assertThat(cookies.contains(newCookie)).isTrue();
+        assertThat(cookies.contains(BROWNIE_NAME)).isTrue();
     }
 
     @Test
@@ -116,92 +112,106 @@ public class CookieCollectionTest {
         CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         Cookie white = new Cookie(COOKIE_NAME, "white");
         boolean modified = cookies.add(white);
-        Assert.assertTrue(modified);
-        Assert.assertEquals(white, cookies.get(COOKIE_NAME));
-        Assert.assertTrue(cookies.contains(white));
-        Assert.assertFalse(cookies.contains(cookie));
-        Assert.assertTrue(cookies.contains(COOKIE_NAME));
+        assertThat(modified).isTrue();
+        assertThat(cookies.get(COOKIE_NAME)).isEqualTo(white);
+        assertThat(cookies.contains(white)).isTrue();
+        assertThat(cookies.contains(cookie)).isFalse();
+        assertThat(cookies.contains(COOKIE_NAME)).isTrue();
     }
 
     @Test
     public void get() {
         CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         Cookie c = cookies.get(COOKIE_NAME);
-        Assert.assertNotNull(c);
-        Assert.assertEquals(cookie, c);
+        assertThat(c).isNotNull();
+        assertThat(c).isEqualTo(cookie);
     }
 
     @Test
-    public void remove() throws Exception {
+    public void remove() {
         CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         cookies.remove(cookie);
-        Assert.assertEquals(2, cookies.size());
-        Assert.assertFalse(cookies.contains(cookie));
-        Assert.assertFalse(cookies.contains(COOKIE_NAME));
-        Assert.assertTrue(cookies.contains(brownieCookie));
-        Assert.assertTrue(cookies.contains(BROWNIE_NAME));
+        assertThat(cookies).hasSize(2);
+        assertThat(cookies.contains(cookie)).isFalse();
+        assertThat(cookies.contains(COOKIE_NAME)).isFalse();
+        assertThat(cookies.contains(brownieCookie)).isTrue();
+        assertThat(cookies.contains(BROWNIE_NAME)).isTrue();
     }
 
     @Test
-    public void containsAll() throws Exception {
+    public void containsAll() {
         List<Cookie> content = Arrays.asList(cookie, brownieCookie);
         CookieCollection cookies = new CookieCollection(content);
-        Assert.assertTrue(cookies.containsAll(content));
-        Assert.assertTrue(cookies.containsAll(Collections.singletonList(cookie)));
-        Assert.assertFalse(cookies.containsAll(Arrays.asList(cookie, brownieCookie, cupsCookie)));
-        Assert.assertTrue(cookies.containsAll(Arrays.asList(COOKIE_NAME, BROWNIE_NAME)));
+        assertThat(cookies.containsAll(content)).isTrue();
+        assertThat(cookies.containsAll(Collections.singletonList(cookie))).isTrue();
+        assertThat(cookies.containsAll(Arrays.asList(cookie, brownieCookie, cupsCookie))).isFalse();
+        assertThat(cookies.containsAll(Arrays.asList(COOKIE_NAME, BROWNIE_NAME))).isTrue();
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void addAll() throws Exception {
+    public void addAll() {
         CookieCollection cookies = new CookieCollection();
         List<Cookie> content = Arrays.asList(cookie, brownieCookie, cupsCookie);
         boolean modified = cookies.addAll(content);
-        Assert.assertTrue(modified);
-        Assert.assertEquals(3, cookies.size());
-        Assert.assertTrue(cookies.containsAll(content));
-        Assert.assertFalse(cookies.addAll(Collections.EMPTY_LIST));
+        assertThat(modified).isTrue();
+        assertThat(cookies).hasSize(3);
+        assertThat(cookies).containsAll(content);
+        modified = cookies.addAll(Collections.EMPTY_LIST);
+        assertThat(modified).isFalse();
     }
 
     @Test
-    public void removeAll() throws Exception {
+    public void addAllEmpty() {
+        CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
+        boolean modified = cookies.addAll(Collections.EMPTY_LIST);
+        assertThat(modified).isFalse();
+        assertThat(cookies).contains(cookie, brownieCookie, cupsCookie);
+    }
+
+    @Test
+    public void removeAll() {
         CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         boolean modified = cookies.removeAll(Arrays.asList(brownieCookie, cupsCookie));
-        Assert.assertTrue(modified);
-        Assert.assertEquals(1, cookies.size());
-        Assert.assertFalse(cookies.contains(brownieCookie));
-        Assert.assertFalse(cookies.contains(cupsCookie));
-        Assert.assertFalse(cookies.removeAll(Collections.EMPTY_LIST));
+        assertThat(modified).isTrue();
+        assertThat(cookies).hasSize(1);
+        assertThat(cookies).doesNotContain(brownieCookie, cupsCookie);
     }
 
     @Test
-    public void removeAllByName() throws Exception {
+    public void removeAllEmpty() {
+        CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
+        boolean modified = cookies.removeAll(Collections.EMPTY_LIST);
+        assertThat(modified).isFalse();
+        assertThat(cookies).contains(cookie, brownieCookie, cupsCookie);
+    }
+
+    @Test
+    public void removeAllByName() {
         CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         boolean modified = cookies.removeAll(Arrays.asList(COOKIE_NAME, BROWNIE_NAME));
-        Assert.assertTrue(modified);
-        Assert.assertEquals(1, cookies.size());
-        Assert.assertFalse(cookies.contains(brownieCookie));
-        Assert.assertFalse(cookies.contains(cookie));
-        Assert.assertFalse(cookies.removeAll(Collections.EMPTY_LIST));
+        assertThat(modified).isTrue();
+        assertThat(cookies).hasSize(1);
+        assertThat(cookies).doesNotContain(brownieCookie, cookie);
     }
 
     @Test
-    public void retainAll() throws Exception {
+    public void retainAll() {
         CookieCollection cookies = new CookieCollection(cookie, brownieCookie, cupsCookie);
         List<Cookie> content = Arrays.asList(cookie, brownieCookie);
         boolean modified = cookies.retainAll(content);
-        Assert.assertTrue(modified);
-        Assert.assertEquals(2, cookies.size());
-        Assert.assertTrue(cookies.containsAll(content));
-        Assert.assertFalse(cookies.contains(cupsCookie));
-        Assert.assertFalse(cookies.retainAll(content));
+        assertThat(modified).isTrue();
+        assertThat(cookies).hasSize(2);
+        assertThat(cookies).containsAll(content);
+        assertThat(cookies).doesNotContain(cupsCookie);
+        modified = cookies.retainAll(content);
+        assertThat(modified).isFalse();
     }
 
     @Test
-    public void clear() throws Exception {
+    public void clear() {
         CookieCollection cookies = new CookieCollection(cookie);
         cookies.clear();
-        Assert.assertTrue(cookies.isEmpty());
+        assertThat(cookies).isEmpty();
     }
 }

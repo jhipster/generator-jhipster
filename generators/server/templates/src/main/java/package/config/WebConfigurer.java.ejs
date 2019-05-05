@@ -32,7 +32,9 @@ import io.github.jhipster.config.h2.H2ConfigurationHelper;
     <%_ if (!skipClient) { _%>
 import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
     <%_ } _%>
-import io.undertow.UndertowOptions;
+<%_ } _%>
+<%_ if (reactive) { _%>
+import io.github.jhipster.web.filter.reactive.CachingHttpHeadersFilter;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,11 +57,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.http.MediaType;
 <%_ } _%>
-<%_ if (reactive) { _%>
-import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
-<%_ } _%>
 import org.springframework.web.cors.CorsConfiguration;
 <%_ if (!reactive) { _%>
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -72,13 +69,9 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
-import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebExceptionHandler;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
 import org.zalando.problem.spring.webflux.advice.ProblemExceptionHandler;
 import org.zalando.problem.spring.webflux.advice.ProblemHandling;
-import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 
@@ -277,33 +270,6 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     public CachingHttpHeadersFilter cachingHttpHeadersFilter() {
         // Use a cache filter that only match selected paths
         return new CachingHttpHeadersFilter(TimeUnit.DAYS.toMillis(jHipsterProperties.getHttp().getCache().getTimeToLiveInDays()));
-    }
-
-    /**
-     * This filter is used in production, to put HTTP cache headers with a long expiration time.
-     */
-    public static class CachingHttpHeadersFilter implements WebFilter {
-
-        private final long cacheTimeToLive;
-
-        public CachingHttpHeadersFilter(Long cacheTimeToLive) {
-            this.cacheTimeToLive = cacheTimeToLive;
-        }
-
-        @Override
-        public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-            return ServerWebExchangeMatchers.pathMatchers("/i18n/**", "/content/**", "/app/**")
-                .matches(exchange)
-                .filter(ServerWebExchangeMatcher.MatchResult::isMatch)
-                .doOnNext(matchResult -> {
-                    ServerHttpResponse response = exchange.getResponse();
-                    response.getHeaders().setCacheControl("max-age=" + cacheTimeToLive + ", public");
-                    response.getHeaders().setPragma("cache");
-                    response.getHeaders().setExpires(cacheTimeToLive + System.currentTimeMillis());
-
-                })
-                .then(chain.filter(exchange));
-        }
     }
         <%_ } _%>
     <%_ } _%>

@@ -41,14 +41,9 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
             addAppCssStep() {
-                if (this.useSass) {
-                    // please change this to public API when it will be available see https://github.com/jhipster/generator-jhipster/issues/9234
-                    this.needleApi.clientReact.addAppSCSSStyle('@import without-comment');
-                    this.needleApi.clientReact.addAppSCSSStyle('@import with-comment', 'my comment');
-                } else {
-                    this.needleApi.clientReact.addAppCSSStyle('without-comment { color:red; }');
-                    this.needleApi.clientReact.addAppCSSStyle('with-comment { color:red; }', 'my comment');
-                }
+                // please change this to public API when it will be available see https://github.com/jhipster/generator-jhipster/issues/9234
+                this.addAppSCSSStyle('@import without-comment');
+                this.addAppSCSSStyle('@import with-comment', 'my comment');
             },
             addEntityToMenuStep() {
                 this.addEntityToMenu('routerName', false, 'react', false);
@@ -91,7 +86,6 @@ describe('needle API React: JHipster client generator with blueprint', () => {
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: 'react',
-                        useSass: false,
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['en', 'fr']
@@ -99,23 +93,10 @@ describe('needle API React: JHipster client generator with blueprint', () => {
                     .on('end', done);
             });
 
-            it('Assert app.css is updated', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.css`, 'without-comment { color:red; }');
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.css`, 'with-comment { color:red; }');
-                assert.fileContent(
-                    `${CLIENT_MAIN_SRC_DIR}app/app.css`,
-                    '* ==========================================================================\n' +
-                        'my comment\n' +
-                        '========================================================================== */\n'
-                );
-            });
-
             it('Assert entity is added to menu', () => {
                 assert.fileContent(
-                    `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/entities.tsx`,
-                    '<DropdownItem tag={Link} to="/entity/routerName">\n' +
-                        '      <FontAwesomeIcon icon="asterisk" fixedWidth />&nbsp;Router Name\n' +
-                        '    </DropdownItem>'
+                    `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/entities.tsx`,
+                    '<MenuItem icon="asterisk" to="/entity/routerName">\n      Router Name\n    </MenuItem>'
                 );
             });
 
@@ -161,7 +142,6 @@ describe('needle API React: JHipster client generator with blueprint', () => {
                     .withPrompts({
                         baseName: 'jhipster',
                         clientFramework: 'react',
-                        useSass: true,
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['en', 'fr']

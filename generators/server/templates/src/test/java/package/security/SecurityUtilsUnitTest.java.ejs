@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -108,6 +108,7 @@ public class SecurityUtilsUnitTest {
             .block();
         assertThat(login).isEqualTo("admin");
     }
+    <%_ if (authenticationType === 'jwt') { _%>
 
     @Test
     public void testgetCurrentUserJWT() {
@@ -120,6 +121,7 @@ public class SecurityUtilsUnitTest {
             .block();
         assertThat(jwt).isEqualTo("token");
     }
+    <%_ } _%>
 
     @Test
     public void testIsAuthenticated() {

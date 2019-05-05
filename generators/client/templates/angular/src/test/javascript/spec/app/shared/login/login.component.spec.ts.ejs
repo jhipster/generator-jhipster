@@ -87,7 +87,7 @@ describe('Component Tests', () => {
                         rememberMe: true
                     });
                     mockLoginService.setResponse({});
-                    mockStateStorageService.setResponse({redirect: 'dummy'});
+                    mockStateStorageService.setResponse('admin/users?page=0');
 
                     // WHEN/
                     comp.login();
@@ -100,7 +100,7 @@ describe('Component Tests', () => {
                     expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
                     expect(mockStateStorageService.getUrlSpy).toHaveBeenCalledTimes(1);
                     expect(mockStateStorageService.storeUrlSpy).toHaveBeenCalledWith(null);
-                    expect(mockRouter.navigateSpy).toHaveBeenCalledWith([{redirect: 'dummy'}]);
+                    expect(mockRouter.navigateByUrlSpy).toHaveBeenCalledWith('admin/users?page=0');
                 })
             )
         );

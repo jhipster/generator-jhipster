@@ -20,8 +20,9 @@ package <%=packageName%>.cucumber;
 
 import org.junit.runner.RunWith;
 
-<% if (databaseType === 'cassandra') { %>
-import <%=packageName%>.AbstractCassandraTest;<% } %>
+<%_ if (databaseType === 'cassandra') { _%>
+import <%=packageName%>.AbstractCassandraTest;
+<%_ } _%>
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 

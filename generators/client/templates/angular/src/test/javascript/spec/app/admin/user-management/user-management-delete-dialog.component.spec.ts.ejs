@@ -64,7 +64,7 @@ describe('Component Tests', () => {
 
                         // THEN
                         expect(service.delete).toHaveBeenCalledWith('user');
-                        expect(mockActiveModal.dismissSpy).toHaveBeenCalled();
+                        expect(mockActiveModal.closeSpy).toHaveBeenCalled();
                         expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
                     })
                 )

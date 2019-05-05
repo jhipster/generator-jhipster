@@ -39,6 +39,10 @@
             "fieldType": "Double"
         },
         {
+            "fieldName": "meanQueueDuration",
+            "fieldType": "Duration"
+        },
+        {
             "fieldName": "balance",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [

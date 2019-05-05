@@ -35,9 +35,21 @@ for (idx in relationships) {
 }
 table.push(header);
 
+// Set number of rows to be generated
+let numberOfRows = 10;
+for (idx in relationships) {
+    if ( relationships[idx].useJPADerivedIdentifier === true ) {
+        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        if (otherEntityNameCapitalized === 'User') {
+            // there are only 4 user records by default
+            numberOfRows = 4;
+        }
+        break;
+    }
+}
 // Generate CSV rows
 
-for (lineNb = 1; lineNb <= 10; lineNb++) {
+for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
     let line = [ lineNb ];
     for (idx in fields) {
         let data = '';
@@ -123,7 +135,11 @@ for (lineNb = 1; lineNb <= 10; lineNb++) {
     }
     for (idx in relationships) {
         if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
-            line.push(this.faker.random.number({min: 1, max: 10}));
+            if (relationships[idx].otherEntityNameCapitalized === 'User') {
+                line.push(this.faker.random.number({min: 1, max: 2}));
+            } else {
+                line.push(this.faker.random.number({min: 1, max: 10}));
+            }
         }
     }
     table.push(line);

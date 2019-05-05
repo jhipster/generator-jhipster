@@ -18,16 +18,13 @@
 -%>
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
-const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 const path = require('path');
-<%_ if (useSass) { _%>
 const sass = require('sass');
-<%_ } _%>
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -52,7 +49,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         test: /\.s?css$/,
         loader: 'stripcomment-loader'
       },
-      <%_ if (useSass) { _%>
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
@@ -69,21 +65,7 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
             options: { implementation: sass }
           }
         ]
-      },
-      <%_ } else { _%>
-      {
-        test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: '../'
-            }
-          },
-          'css-loader'
-        ]
       }
-      <%_ } _%>
     ]
   },
   optimization: {
@@ -94,13 +76,27 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
         parallel: true,
         // sourceMap: true, // Enable source maps. Please note that this will slow down the build
         terserOptions: {
+          ecma: 6,
+          toplevel: true,
+          module: true,
           beautify: false,
           comments: false,
           compress: {
-            warnings: false
+            warnings: false,
+            ecma: 6,
+            module: true,
+            toplevel: true
+          },
+          output: {
+              comments: false,
+              beautify: false,
+              indent_level: 2,
+              ecma: 6
           },
           mangle: {
-            keep_fnames: true
+            keep_fnames: true,
+            module: true,
+            toplevel: true
           }
         }
       }),
@@ -125,7 +121,6 @@ module.exports = webpackMerge(commonConfig({ env: ENV }), {
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
-    }),
-    new BaseHrefWebpackPlugin({ baseHref: '/' })
+    })
   ]
 });

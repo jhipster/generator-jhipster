@@ -17,22 +17,26 @@
  limitations under the License.
 -%>
 package <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>;
-<%_ if (databaseType === 'cassandra') { _%>
-
-import com.datastax.driver.core.*;
-import com.datastax.driver.mapping.Mapper;
-import com.datastax.driver.mapping.MappingManager;
-<%_ } _%>
 
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 
+<%_ if (databaseType === 'cassandra') { _%>
+import com.datastax.driver.core.*;
+    <%_ if (!reactive) { _%>
+import com.datastax.driver.mapping.Mapper;
+import com.datastax.driver.mapping.MappingManager;
+    <%_ } else { _%>
+import com.datastax.driver.core.querybuilder.Insert;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
+    <%_ } _%>
+<%_ } _%>
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-<%_ if (!reactive) { _%>
+    <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
-<%_ } %>
+    <%_ } %>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
@@ -42,23 +46,37 @@ import org.springframework.data.jpa.repository.JpaRepository;
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
 <%_ } _%>
+<%_ if (reactive && databaseType === 'cassandra') { _%>
+import org.springframework.data.cassandra.ReactiveResultSet;
+import org.springframework.data.cassandra.ReactiveSession;
+import org.springframework.data.cassandra.core.ReactiveCassandraTemplate;
+import org.springframework.data.cassandra.core.convert.CassandraConverter;
+import org.springframework.data.cassandra.core.mapping.CassandraPersistentEntity;
+<%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.util.StringUtils;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+<%_ } _%>
 
-<%_ } else { _%>
+<%_ if (databaseType === 'cassandra') { _%>
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+<%_ } _%>
+<%_ if (!reactive) { _%>
 import java.util.List;
 import java.util.Optional;
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
+    <%_ if (reactive) { _%>
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+    <%_ } _%>
 import java.util.Set;
 <%_ } _%>
 <%_ if (databaseType !== 'cassandra') { _%>
@@ -87,6 +105,12 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
  * Cassandra repository for the {@link <%= asEntity('User') %>} entity.
  */
 <%_ } _%>
+<%_
+    let optionalOrMono = 'Optional';
+    if (reactive) {
+        optionalOrMono = 'Mono';
+    }
+_%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 @Repository
 public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><% } %> {
@@ -98,13 +122,13 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
 
-    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey);
+    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey);
     <%_ } _%>
 
     <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
     <%_ if (authenticationType !== 'oauth2') { _%>
 
-    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> findOneByResetKey(String resetKey);
+    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey);
     <%_ } _%>
 
     <%_ if (databaseType === 'couchbase' || databaseType === 'mongodb') { _%>
@@ -112,7 +136,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
         <%_ } _%>
     <%_ } _%>
-    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email);
+    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email);
 
     <%_ if (databaseType === 'couchbase') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -125,7 +149,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
-    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> findOneByLogin(String login);
+    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login);
     <%_ } else { _%>
     Optional<<%= asEntity('User') %>> findOneByLogin(String login);
     <%_ } _%>
@@ -163,12 +187,17 @@ public class UserRepository {
     public static final String USERS_BY_EMAIL_CACHE = "usersByEmail";
     <%_ } _%>
 
-    private final Session session;
+    private final <% if(reactive) { %>Reactive<% } %>Session session;
 
     private final Validator validator;
 
+    <%_ if(!reactive) { _%>
     private Mapper<<%= asEntity('User') %>> mapper;
 
+    <%_ } else { _%>
+    private final ReactiveCassandraTemplate cqlTemplate;
+
+    <%_ } _%>
     private PreparedStatement findAllStmt;
 
     private PreparedStatement findOneByActivationKeyStmt;
@@ -179,6 +208,10 @@ public class UserRepository {
 
     private PreparedStatement insertByResetKeyStmt;
 
+    <%_ if(reactive) { _%>
+    private PreparedStatement deleteByIdStmt;
+
+    <%_ } _%>
     private PreparedStatement deleteByActivationKeyStmt;
 
     private PreparedStatement deleteByResetKeyStmt;
@@ -203,85 +236,105 @@ public class UserRepository {
 
     private PreparedStatement truncateByEmailStmt;
 
-    public UserRepository(Session session, Validator validator) {
+    public UserRepository(<% if(reactive) { %>ReactiveCassandraTemplate cqlTemplate, Reactive<% } %>Session session, Validator validator) {
         this.session = session;
         this.validator = validator;
+        <%_ if(!reactive) { _%>
         mapper = new MappingManager(session).mapper(<%= asEntity('User') %>.class);
+        <%_ } else { _%>
+        this.cqlTemplate = cqlTemplate;
+        <%_ } _%>
 
-        findAllStmt = session.prepare("SELECT * FROM user");
+        findAllStmt = session.prepare("SELECT * FROM user")<% if(reactive) { %>.block()<% } %>;
 
         findOneByActivationKeyStmt = session.prepare(
             "SELECT id " +
                 "FROM user_by_activation_key " +
-                "WHERE activation_key = :activation_key");
+                "WHERE activation_key = :activation_key")<% if(reactive) { %>.block()<% } %>;
 
         findOneByResetKeyStmt = session.prepare(
             "SELECT id " +
                 "FROM user_by_reset_key " +
-                "WHERE reset_key = :reset_key");
+                "WHERE reset_key = :reset_key")<% if(reactive) { %>.block()<% } %>;
 
         insertByActivationKeyStmt = session.prepare(
             "INSERT INTO user_by_activation_key (activation_key, id) " +
-                "VALUES (:activation_key, :id)");
+                "VALUES (:activation_key, :id)")<% if(reactive) { %>.block()<% } %>;
 
         insertByResetKeyStmt = session.prepare(
             "INSERT INTO user_by_reset_key (reset_key, id) " +
-                "VALUES (:reset_key, :id)");
+                "VALUES (:reset_key, :id)")<% if(reactive) { %>.block()<% } %>;
 
+        <%_ if(reactive) { _%>
+        deleteByIdStmt = session.prepare(
+            "DELETE FROM user " +
+                "WHERE id = :id").block();
+
+        <%_ } _%>
         deleteByActivationKeyStmt = session.prepare(
             "DELETE FROM user_by_activation_key " +
-                "WHERE activation_key = :activation_key");
+                "WHERE activation_key = :activation_key")<% if(reactive) { %>.block()<% } %>;
 
         deleteByResetKeyStmt = session.prepare(
             "DELETE FROM user_by_reset_key " +
-                "WHERE reset_key = :reset_key");
+                "WHERE reset_key = :reset_key")<% if(reactive) { %>.block()<% } %>;
 
         findOneByLoginStmt = session.prepare(
             "SELECT id " +
                 "FROM user_by_login " +
-                "WHERE login = :login");
+                "WHERE login = :login")<% if(reactive) { %>.block()<% } %>;
 
         insertByLoginStmt = session.prepare(
             "INSERT INTO user_by_login (login, id) " +
-                "VALUES (:login, :id)");
+                "VALUES (:login, :id)")<% if(reactive) { %>.block()<% } %>;
 
         deleteByLoginStmt = session.prepare(
             "DELETE FROM user_by_login " +
-                "WHERE login = :login");
+                "WHERE login = :login")<% if(reactive) { %>.block()<% } %>;
 
         findOneByEmailStmt = session.prepare(
             "SELECT id " +
                 "FROM user_by_email " +
-                "WHERE email     = :email");
+                "WHERE email     = :email")<% if(reactive) { %>.block()<% } %>;
 
         insertByEmailStmt = session.prepare(
             "INSERT INTO user_by_email (email, id) " +
-                "VALUES (:email, :id)");
+                "VALUES (:email, :id)")<% if(reactive) { %>.block()<% } %>;
 
         deleteByEmailStmt = session.prepare(
             "DELETE FROM user_by_email " +
-                "WHERE email = :email");
+                "WHERE email = :email")<% if(reactive) { %>.block()<% } %>;
 
-        truncateStmt = session.prepare("TRUNCATE user");
+        truncateStmt = session.prepare("TRUNCATE user")<% if(reactive) { %>.block()<% } %>;
 
-        truncateByResetKeyStmt = session.prepare("TRUNCATE user_by_reset_key");
+        truncateByResetKeyStmt = session.prepare("TRUNCATE user_by_reset_key")<% if(reactive) { %>.block()<% } %>;
 
-        truncateByLoginStmt = session.prepare("TRUNCATE user_by_login");
+        truncateByLoginStmt = session.prepare("TRUNCATE user_by_login")<% if(reactive) { %>.block()<% } %>;
 
-        truncateByEmailStmt = session.prepare("TRUNCATE user_by_email");
+        truncateByEmailStmt = session.prepare("TRUNCATE user_by_email")<% if(reactive) { %>.block()<% } %>;
     }
 
-    public Optional<<%= asEntity('User') %>> findById(String id) {
+    public <%= optionalOrMono %><<%= asEntity('User') %>> findById(String id) {
+        <%_ if(!reactive) { _%>
         return Optional.ofNullable(mapper.get(id));
+        <%_ } else { _%>
+        return cqlTemplate.selectOneById(id, User.class)
+            .map(user -> {
+                if(user.getAuthorities() == null) {
+                    user.setAuthorities(new HashSet<>());
+                }
+                return user;
+            });
+        <%_ } _%>
     }
 
-    public Optional<<%= asEntity('User') %>> findOneByActivationKey(String activationKey) {
+    public <%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey) {
         BoundStatement stmt = findOneByActivationKeyStmt.bind();
         stmt.setString("activation_key", activationKey);
         return findOneFromIndex(stmt);
     }
 
-    public Optional<<%= asEntity('User') %>> findOneByResetKey(String resetKey) {
+    public <%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey) {
         BoundStatement stmt = findOneByResetKeyStmt.bind();
         stmt.setString("reset_key", resetKey);
         return findOneFromIndex(stmt);
@@ -290,7 +343,7 @@ public class UserRepository {
     <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     <%_ } _%>
-    public Optional<<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email) {
+    public <%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email) {
         BoundStatement stmt = findOneByEmailStmt.bind();
         stmt.setString("email", email.toLowerCase());
         return findOneFromIndex(stmt);
@@ -299,21 +352,34 @@ public class UserRepository {
     <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
     <%_ } _%>
-    public Optional<<%= asEntity('User') %>> findOneByLogin(String login) {
+    public <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login) {
         BoundStatement stmt = findOneByLoginStmt.bind();
         stmt.setString("login", login);
         return findOneFromIndex(stmt);
     }
 
+    <%_ if(!reactive) { _%>
     public List<<%= asEntity('User') %>> findAll() {
         return mapper.map(session.execute(findAllStmt.bind())).all();
     }
+    <%_ } else { _%>
+    public Flux<<%= asEntity('User') %>> findAll() {
+        return cqlTemplate.select(findAllStmt.bind(), User.class)
+            .map(user -> {
+                if(user.getAuthorities() == null) {
+                    user.setAuthorities(new HashSet<>());
+                }
+                return user;
+            });
+    }
 
-    public <%= asEntity('User') %> save(<%= asEntity('User') %> user) {
+    <%_ } _%>
+    public <% if(reactive) { %>Mono<<% } %><%= asEntity('User') %><% if(reactive) { %>><% } %> save(<%= asEntity('User') %> user) {
         Set<ConstraintViolation<<%= asEntity('User') %>>> violations = validator.validate(user);
         if (violations != null && !violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
+        <%_ if(!reactive) { _%>
         <%= asEntity('User') %> oldUser = mapper.get(user.getId());
         if (oldUser != null) {
             if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {
@@ -349,11 +415,65 @@ public class UserRepository {
             .setString("id", user.getId()));
         session.execute(batch);
         return user;
+        <%_ } else { // reactive _%>
+        return this.findById(user.getId())
+            .flatMapMany(oldUser -> {
+                Flux<ReactiveResultSet> deleteOps = Flux.empty();
+                if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {
+                    deleteOps.mergeWith(session.execute(deleteByActivationKeyStmt.bind().setString("activation_key", oldUser.getActivationKey())));
+                }
+                if (!StringUtils.isEmpty(oldUser.getResetKey()) && !oldUser.getResetKey().equals(user.getResetKey())) {
+                    deleteOps.mergeWith(session.execute(deleteByResetKeyStmt.bind().setString("reset_key", oldUser.getResetKey())));
+                }
+                if (!StringUtils.isEmpty(oldUser.getLogin()) && !oldUser.getLogin().equals(user.getLogin())) {
+                    deleteOps.mergeWith(session.execute(deleteByLoginStmt.bind().setString("login", oldUser.getLogin())));
+                }
+                if (!StringUtils.isEmpty(oldUser.getEmail()) && !oldUser.getEmail().equalsIgnoreCase(user.getEmail())) {
+                    deleteOps.mergeWith(session.execute(deleteByEmailStmt.bind().setString("email", oldUser.getEmail().toLowerCase())));
+                }
+                return deleteOps;
+            })
+            .then(Mono.defer(() -> {
+                BatchStatement batch = new BatchStatement();
+                batch.add(getInsertStatement(user));
+                if (!StringUtils.isEmpty(user.getActivationKey())) {
+                    batch.add(insertByActivationKeyStmt.bind()
+                        .setString("activation_key", user.getActivationKey())
+                        .setString("id", user.getId()));
+                }
+                if (!StringUtils.isEmpty(user.getResetKey())) {
+                    batch.add(insertByResetKeyStmt.bind()
+                        .setString("reset_key", user.getResetKey())
+                        .setString("id", user.getId()));
+                }
+                batch.add(insertByLoginStmt.bind()
+                    .setString("login", user.getLogin())
+                    .setString("id", user.getId()));
+                batch.add(insertByEmailStmt.bind()
+                    .setString("email", user.getEmail().toLowerCase())
+                    .setString("id", user.getId()));
+                return session.execute(batch);
+            }))
+            .thenReturn(user);
     }
 
-    public void delete(<%= asEntity('User') %> user) {
+    private Insert getInsertStatement(User user) {
+        CassandraConverter converter = cqlTemplate.getConverter();
+        CassandraPersistentEntity<?> persistentEntity = converter.getMappingContext()
+            .getRequiredPersistentEntity(user.getClass());
+        Map<String, Object> toInsert = new LinkedHashMap<>();
+        converter.write(user, toInsert, persistentEntity);
+        Insert insert = QueryBuilder.insertInto(persistentEntity.getTableName().toCql());
+        for (Map.Entry<String, Object> entry : toInsert.entrySet()) {
+            insert.value(entry.getKey(), entry.getValue());
+        }
+        return insert;
+        <%_ } _%>
+    }
+
+    public <% if(reactive) { %>Mono<Void><% } else { %>void<% } %> delete(<%= asEntity('User') %> user) {
         BatchStatement batch = new BatchStatement();
-        batch.add(mapper.deleteQuery(user));
+        batch.add(<% if(!reactive) { %>mapper.deleteQuery(user)<% } else { %>deleteByIdStmt.bind().setString("id", user.getId())<% } %>);
         if (!StringUtils.isEmpty(user.getActivationKey())) {
             batch.add(deleteByActivationKeyStmt.bind().setString("activation_key", user.getActivationKey()));
         }
@@ -362,9 +482,14 @@ public class UserRepository {
         }
         batch.add(deleteByLoginStmt.bind().setString("login", user.getLogin()));
         batch.add(deleteByEmailStmt.bind().setString("email", user.getEmail().toLowerCase()));
+        <%_ if(!reactive) { _%>
         session.execute(batch);
+        <%_ } else { _%>
+        return session.execute(batch).then();
+        <%_ } _%>
     }
 
+    <%_ if(!reactive) { _%>
     private Optional<<%= asEntity('User') %>> findOneFromIndex(BoundStatement stmt) {
         ResultSet rs = session.execute(stmt);
         if (rs.isExhausted()) {
@@ -388,5 +513,19 @@ public class UserRepository {
         BoundStatement truncateByResetKey = truncateByResetKeyStmt.bind();
         session.execute(truncateByResetKey);
     }
+    <%_ } else { _%>
+    private Mono<<%= asEntity('User') %>> findOneFromIndex(BoundStatement stmt) {
+        return session.execute(stmt).flatMap(rs -> rs.rows().next())
+            .map(row -> row.getString("id"))
+            .flatMap(this::findById);
+    }
+
+    public Mono<Void> deleteAll() {
+        return Flux.just(truncateStmt, truncateByEmailStmt, truncateByLoginStmt, truncateByResetKeyStmt)
+            .map(PreparedStatement::bind)
+            .flatMap(session::execute)
+            .then();
+    }
+    <%_ } _%>
 }
 <%_ } _%>

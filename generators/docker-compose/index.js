@@ -24,6 +24,11 @@ const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
 
 module.exports = class extends BaseDockerGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+        this.registerPrettierTransform();
+    }
+
     get initializing() {
         return {
             ...super.initializing,
@@ -103,11 +108,6 @@ module.exports = class extends BaseDockerGenerator {
                         yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
-                    }
-
-                    if (this.monitoring === 'prometheus') {
-                        yamlConfig.environment.push('JHIPSTER_METRICS_PROMETHEUS_ENABLED=true');
-                        yamlConfig.environment.push('JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics');
                     }
 
                     if (this.serviceDiscoveryType === 'eureka') {

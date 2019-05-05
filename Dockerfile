@@ -6,9 +6,7 @@ RUN \
   useradd jhipster -s /bin/bash -m -g jhipster -G sudo && \
   echo 'jhipster:jhipster' |chpasswd && \
   mkdir /home/jhipster/app && \
-  # install open-jdk 8
   apt-get update && \
-  apt-get install -y openjdk-8-jdk && \
   # install utilities
   apt-get install -y \
     wget \
@@ -21,9 +19,16 @@ RUN \
     python \
     g++ \
     libpng-dev \
-    build-essential && \
+    build-essential \
+    software-properties-common \
+    sudo && \
+  # install OpenJDK 11
+  add-apt-repository ppa:openjdk-r/ppa && \
+  apt-get update && \
+  apt-get install -y openjdk-11-jdk && \
+  update-java-alternatives -s java-1.11.0-openjdk-amd64 && \
   # install node.js
-  wget https://nodejs.org/dist/v10.15.0/node-v10.15.0-linux-x64.tar.gz -O /tmp/node.tar.gz && \
+  wget https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \

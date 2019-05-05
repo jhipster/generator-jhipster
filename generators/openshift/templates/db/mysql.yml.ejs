@@ -22,7 +22,7 @@
 # saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
 # displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mysqldb-template
@@ -31,10 +31,11 @@ metadata:
     description: This template defines objects that are required to spin up a mysqldb pod
     tags: db, <%= app.baseName.toLowerCase() %>-mysqldb<% if (storageType === 'persistent') { %> ,persistent <% } %> <% if (storageType === 'ephemeral') { %> ,ephemeral <% } %>
     openshift.io/display-name: <%= app.baseName.toLowerCase() %>-mysqldb-template
-    openshift.io/long-description: "This template provides objects that are required to spin up a mysqldb pod. <% if (storageType ==
-    'persistent') { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
-     Please make sure you have provisioned PVs (Persistent Volumes) before using this template. <% } %><% if (storageType === 'ephemeral') {
-     %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>"
+    openshift.io/long-description: >-
+        This template provides objects that are required to spin up a mysqldb pod. <% if (storageType ==
+        'persistent') { %>The database is stored on persistent storage, so any restart of the service will not cause any impact to the data.
+        Please make sure you have provisioned PVs (Persistent Volumes) before using this template. <% } %>
+        <% if (storageType === 'ephemeral') { %>The database is not stored on persistent storage, so any restart of the service will result in all data being lost.<% } %>
     openshift.io/provider-display-name: JHipster-OpenShift
 labels:
   app: <%= app.baseName.toLowerCase() %>-mysqldb
@@ -87,7 +88,7 @@ parameters:
     required: true
 objects:
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Secret
     metadata:
       name: ${SECRET_REF}
@@ -97,7 +98,7 @@ objects:
       database-root-password: "${MYSQL_ROOT_PASSWORD}"
 <%_ if (storageType === 'persistent') { _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
     metadata:
       name: ${APPLICATION_NAME}
@@ -109,7 +110,7 @@ objects:
           storage: "${VOLUME_CAPACITY}"
 <%_ } _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${APPLICATION_NAME}
@@ -203,7 +204,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${APPLICATION_NAME}

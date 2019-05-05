@@ -89,6 +89,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 <%_ } if (fieldsContainZonedDateTime === true) { _%>
 import java.time.ZonedDateTime;
+<%_ } if (fieldsContainDuration === true) { _%>
+import java.time.Duration;
 <%_ } if (importSet === true) { _%>
 import java.util.HashSet;
 import java.util.Set;
@@ -149,7 +151,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @IdPrefix
     private String prefix = PREFIX;
     <%_ } _%>
-    
+
     @Id
     <%_ if (databaseType === 'sql' && isUsingMapsId === false) { _%>
         <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
@@ -200,10 +202,10 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (fieldType === 'byte[]') { _%>
     @Lob
         <%_ }
-        if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) { _%>
+        if (['Instant', 'ZonedDateTime', 'LocalDate', 'Duration'].includes(fieldType)) { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else if (fieldType === 'BigDecimal') { _%>
-    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 10, scale = 2<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
+    @Column(name = "<%-fieldNameAsDatabaseColumn %>", precision = 21, scale = 2<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (fieldValidate === true) { %><% if (fieldValidateRules.includes('maxlength')) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %><% } %>)
         <%_ }
@@ -244,7 +246,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const relationshipRequired = relationships[idx].relationshipRequired;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const ownerSide = relationships[idx].ownerSide;
-        const useJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
+        const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
         if (otherEntityRelationshipName) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
@@ -277,6 +279,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         <%_ } _%>
     <%_ } _%>
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
+
     <%_ } else if (relationshipType === 'many-to-one') {
             if (databaseType === 'sql') {
     _%>
@@ -340,7 +343,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
             <%_ }_%>
-            <%_ if (useJPADerivedIdentifier === true) { %>
+            <%_ if (isUsingMapsId === true) { %>
     @MapsId
     @JoinColumn(name = "id")
             <%_ } else { %>
@@ -524,19 +527,15 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof <%= asEntity(entityClass) %>)) {
             return false;
         }
-        <%= asEntity(entityClass) %> <%= entityInstance %> = (<%= asEntity(entityClass) %>) o;
-        if (<%= entityInstance %>.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), <%= entityInstance %>.getId());
+        return id != null && id.equals(((<%= asEntity(entityClass) %>) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
     @Override

@@ -21,7 +21,7 @@
 # This is centralized/externalized configuration service from OpenShift. Pls note wherever displayName says
 # *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: application-config-template
@@ -44,7 +44,7 @@ parameters:
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
 objects:
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: ConfigMap
     metadata:
       name: ${APPLICATION_NAME}

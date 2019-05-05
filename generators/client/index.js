@@ -106,7 +106,13 @@ module.exports = class extends BaseBlueprintGenerator {
                     /* for backward compatibility */
                     this.clientFramework = 'angularX';
                 }
-                this.useSass = configuration.get('useSass');
+
+                this.clientTheme = configuration.get('clientTheme');
+                if (!this.clientTheme) {
+                    this.clientTheme = 'none';
+                }
+                this.clientThemeVariant = configuration.get('clientThemeVariant');
+
                 this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
@@ -126,7 +132,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.serviceDiscoveryType = false;
                 }
 
-                const clientConfigFound = this.useSass !== undefined;
+                const clientConfigFound = this.enableTranslation !== undefined;
                 if (clientConfigFound) {
                     // If translation is not defined, it is enabled by default
                     if (this.enableTranslation === undefined) {
@@ -181,12 +187,14 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
-            askForClientSideOpts: prompts.askForClientSideOpts,
             askFori18n: prompts.askFori18n,
+            askForClientTheme: prompts.askForClientTheme,
+            askForClientThemeVariant: prompts.askForClientThemeVariant,
 
             setSharedConfigOptions() {
                 this.configOptions.clientFramework = this.clientFramework;
-                this.configOptions.useSass = this.useSass;
+                this.configOptions.clientTheme = this.clientTheme;
+                this.configOptions.clientThemeVariant = this.clientThemeVariant;
             }
         };
     }
@@ -203,7 +211,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 statistics.sendSubGenEvent('generator', 'client', {
                     app: {
                         clientFramework: this.clientFramework,
-                        useSass: this.useSass,
                         enableTranslation: this.enableTranslation,
                         nativeLanguage: this.nativeLanguage,
                         languages: this.languages
@@ -232,7 +239,9 @@ module.exports = class extends BaseBlueprintGenerator {
                     applicationType: this.applicationType,
                     baseName: this.baseName,
                     clientFramework: this.clientFramework,
-                    useSass: this.useSass,
+                    clientTheme: this.clientTheme,
+                    clientThemeVariant: this.clientThemeVariant,
+                    useSass: true,
                     enableTranslation: this.enableTranslation,
                     skipCommitHook: this.skipCommitHook,
                     clientPackageManager: this.clientPackageManager
@@ -326,7 +335,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.configOptions.buildTool);
 
-                this.styleSheetExt = this.useSass ? 'scss' : 'css';
+                this.styleSheetExt = 'scss';
                 this.pkType = this.getPkType(this.databaseType);
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;

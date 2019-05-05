@@ -11,7 +11,13 @@ youmay not use this file except in compliance with the License.
     software distributed under the License is distributed on an "AS IS" BASIS,
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
     either express or implied. See the License for the specific language
-        governing permissions and limitations under the License. -%> @import "bootstrap-variables";
+        governing permissions and limitations under the License. -%>
+@import "bootstrap-variables";
+@import '~bootstrap/scss/functions';
+<%_ if (clientTheme !== 'none') { _%>
+@import "~bootswatch/dist/<%= clientTheme %>/variables";
+<%_ } _%>
+@import '~bootstrap/scss/variables';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -37,6 +43,10 @@ a:hover {
     cursor: pointer;
 }
 
+.dropdown-item:hover {
+    color: $dropdown-link-hover-color;
+}
+
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */
@@ -51,6 +61,7 @@ Browser Upgrade Prompt
 Generic styles
 ========================================================================== */
 
+<%_ if (clientTheme === 'none') { _%>
 /* Error highlight on input fields */
 .ng-valid[required],
 .ng-valid.required {
@@ -60,6 +71,7 @@ Generic styles
 .ng-invalid:not(form) {
     border-left: 5px solid red;
 }
+<%_ } _%>
 
 /* other generic styles */
 
@@ -148,46 +160,6 @@ Custom alerts for notification
 }
 
 /* ==========================================================================
-entity tables helpers
-========================================================================== */
-
-/* Remove Bootstrap padding from the element
-http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
-@mixin no-padding($side) {
-    @if $side == "all" {
-        .no-padding {
-            padding: 0 !important;
-        }
-    } @else {
-        .no-padding-#{$side} {
-            padding-#{$side}: 0 !important;
-        }
-    }
-}
-@include no-padding("left");
-@include no-padding("right");
-@include no-padding("top");
-@include no-padding("bottom");
-@include no-padding("all");
-
-/* bootstrap 3 input-group 100% width
-http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
-.width-min {
-    width: 1% !important;
-}
-
-/* Makes toolbar not wrap on smaller screens
-http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
-.flex-btn-group-container {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-justify-content: flex-end;
-    justify-content: flex-end;
-}
-
-/* ==========================================================================
 entity detail page css
 ========================================================================== */
 .row.jh-entity-details > {
@@ -217,16 +189,6 @@ ui bootstrap tweaks
 .carousel,
 .panel-title a {
     cursor: pointer;
-}
-
-.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default,
-.uib-datepicker-popup > li > div.uib-datepicker > table .btn-default {
-    border: 0;
-}
-
-.datetime-picker-dropdown > li.date-picker-menu div > table:focus,
-.uib-datepicker-popup > li > div.uib-datepicker > table:focus {
-    outline: none;
 }
 
 .thread-dump-modal-lock {

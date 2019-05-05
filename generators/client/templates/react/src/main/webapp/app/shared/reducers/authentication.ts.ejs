@@ -98,10 +98,10 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         loginSuccess: true
       };
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2') { _%>
-    case SUCCESS(ACTION_TYPES.LOGOUT):
-    <%_ } else { _%>
+    <%_ if (authenticationType === 'jwt') { _%>
     case ACTION_TYPES.LOGOUT:
+    <%_ } else { _%>
+    case SUCCESS(ACTION_TYPES.LOGOUT):
     <%_ } _%>
       return {
         ...initialState,
@@ -219,20 +219,14 @@ export const logout = () => dispatch => {
     type: ACTION_TYPES.LOGOUT
   });
 };
-<%_ } else if (authenticationType === 'uaa') { _%>
-export const logout = () => async dispatch => {
-  await dispatch({
-    type: ACTION_TYPES.LOGOUT,
-    payload: axios.post('auth/logout', {})
-  });
-  dispatch(getSession());
-};
 <%_ } else { _%>
 export const logout = () => async dispatch => {
   await dispatch({
     type: ACTION_TYPES.LOGOUT,
-    payload: axios.post('api/logout', {})
+    payload: axios.post(<%_ if (authenticationType === 'uaa') { _%>'auth/logout'<%_ } else { _%>'api/logout'<%_ } _%>, {})
   });
+
+  // fetch new csrf token
   dispatch(getSession());
 };
 <%_ } _%>

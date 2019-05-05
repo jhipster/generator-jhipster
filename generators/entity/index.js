@@ -521,10 +521,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             )
                         );
                     }
-                    relationship.otherEntityRelationshipNameUndefined = _.isUndefined(relationship.otherEntityRelationshipName);
 
                     if (
-                        relationship.otherEntityRelationshipNameUndefined &&
+                        _.isUndefined(relationship.otherEntityRelationshipName) &&
                         _.isUndefined(relationship.relationshipType) === false &&
                         relationship.relationshipType !== ''
                     ) {
@@ -687,6 +686,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;
                 context.fieldsContainZonedDateTime = false;
+                context.fieldsContainDuration = false;
                 context.fieldsContainLocalDate = false;
                 context.fieldsContainBigDecimal = false;
                 context.fieldsContainBlob = false;
@@ -730,6 +730,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'LocalDate',
                         'Instant',
                         'ZonedDateTime',
+                        'Duration',
                         'Boolean',
                         'byte[]',
                         'ByteBuffer'
@@ -808,6 +809,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     } else if (fieldType === 'Instant') {
                         context.fieldsContainInstant = true;
                         context.fieldsContainDate = true;
+                    } else if (fieldType === 'Duration') {
+                        context.fieldsContainDuration = true;
                     } else if (fieldType === 'LocalDate') {
                         context.fieldsContainLocalDate = true;
                         context.fieldsContainDate = true;
@@ -924,10 +927,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                     }
 
-                    if (
-                        _.isUndefined(relationship.otherEntityRelationshipNamePlural) ||
-                        relationship.otherEntityRelationshipNameUndefined
-                    ) {
+                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
                         if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
                             if (otherEntityData && otherEntityData.relationships) {
                                 otherEntityData.relationships.forEach(otherRelationship => {

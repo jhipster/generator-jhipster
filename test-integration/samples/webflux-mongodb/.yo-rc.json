@@ -13,7 +13,6 @@
         "devDatabaseType": "mongodb",
         "prodDatabaseType": "mongodb",
         "searchEngine": false,
-        "useSass": false,
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",

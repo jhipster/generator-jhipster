@@ -16,7 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = {
+const chalk = require('chalk');
+
+let customCommands = {};
+const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
+if (indexOfBlueprintArgv > -1) {
+    /* eslint-disable import/no-dynamic-require */
+    /* eslint-disable global-require */
+
+    const blueprint = process.argv[indexOfBlueprintArgv + 1];
+    try {
+        customCommands = require(`generator-jhipster-${blueprint}/cli/commands`);
+    } catch (e) {
+        const msg = `No custom command found within blueprint: generator-jhipster-${blueprint}`;
+        /* eslint-disable no-console */
+        console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+    }
+}
+
+const defaultCommands = {
     app: {
         default: true,
         desc: 'Create a new JHipster application based on the selected options'
@@ -29,10 +47,6 @@ module.exports = {
     },
     'ci-cd': {
         desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools'
-    },
-    client: {
-        desc:
-            'DEPRECATED: Create a new JHipster client-side application based on the selected options -  Use jhipster --skip-server instead'
     },
     cloudfoundry: {
         desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry'
@@ -91,20 +105,8 @@ Example:
         argument: ['languages...'],
         desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
     },
-    // login: {
-    //     desc: 'Link the installed JHipster CLI to your JHipster Online account'
-    // },
-    // logout: {
-    //     desc: 'Unlink the installed JHipster CLI from your JHipster Online account'
-    // },
     openshift: {
         desc: 'Deploy the current application to OpenShift'
-    },
-    'rancher-compose': {
-        desc: 'Deploy the current application to Rancher'
-    },
-    server: {
-        desc: 'DEPRECATED: Create a new JHipster server-side application - Use jhipster --skip-client instead'
     },
     'spring-service': {
         alias: 'service',
@@ -118,4 +120,9 @@ Example:
     upgrade: {
         desc: 'Upgrade the JHipster version, and upgrade the generated application'
     }
+};
+
+module.exports = {
+    ...defaultCommands,
+    ...customCommands
 };

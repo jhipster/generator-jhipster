@@ -313,12 +313,12 @@ jhipster:
     # CORS is disabled by default on microservices, as you should access them through a gateway.
     # If you want to enable it, please uncomment the configuration below.
     # cors:
-        # allowed-origins: "*"
-        # allowed-methods: "*"
-        # allowed-headers: "*"
-        # exposed-headers: "Authorization,Link,X-Total-Count"
-        # allow-credentials: true
-        # max-age: 1800
+    #     allowed-origins: "*"
+    #     allowed-methods: "*"
+    #     allowed-headers: "*"
+    #     exposed-headers: "Authorization,Link,X-Total-Count"
+    #     allow-credentials: true
+    #     max-age: 1800
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     security:
@@ -340,7 +340,7 @@ jhipster:
             client-id: internal
             client-secret: internal
     <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
     security:
         remember-me:
             # security key (this key should be unique for your application, and kept secret)
@@ -354,6 +354,7 @@ jhipster:
             enabled: false
             report-frequency: 60 # in seconds
     logging:
+        use-json-format: false # By default, logs are not in Json format
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false
             host: localhost

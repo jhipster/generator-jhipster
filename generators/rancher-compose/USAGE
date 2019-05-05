@@ -1,9 +1,0 @@
-Description:
-    Creates all required rancher-compose deployment configuration for the selected applications.
-
-Example:
-    jhipster rancher-compose
-
-    This will create:
-        [application]/docker-compose.yml
-        [application]/rancher-compose.yml

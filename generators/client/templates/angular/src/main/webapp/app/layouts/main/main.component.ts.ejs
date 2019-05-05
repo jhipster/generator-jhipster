@@ -16,12 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component,<%_ if (authenticationType === 'oauth2') { _%> OnDestroy,<%_ } _%> OnInit } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+<%_ } _%>
 
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from 'app/core';
+import { JhiLanguageHelper<%_ if (authenticationType === 'oauth2') { _%>, Account, AccountService, StateStorageService<%_ } _%> } from 'app/core';
 <%_ } else { _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import { Account, AccountService, StateStorageService } from 'app/core';
+<%_ } _%>
 import { Title } from '@angular/platform-browser';
 <%_ } _%>
 
@@ -29,9 +36,16 @@ import { Title } from '@angular/platform-browser';
     selector: '<%= jhiPrefixDashed %>-main',
     templateUrl: './main.component.html'
 })
-export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
+export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit<%_ if (authenticationType === 'oauth2') { _%>, OnDestroy<%_ } _%> {
+    <%_ if (authenticationType === 'oauth2') { _%>
+    _cleanup: Subject<any> = new Subject<any>();
+    <%_ } _%>
 
     constructor(
+        <%_ if (authenticationType === 'oauth2') { _%>
+        private accountService: AccountService,
+        private stateStorageService: StateStorageService,
+        <%_ } _%>
         <%_ if (enableTranslation) { _%>
         private jhiLanguageHelper: JhiLanguageHelper,
         <%_ } else { _%>
@@ -61,5 +75,34 @@ export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit {
                 this.router.navigate(['/404']);
             }
         });
+        <%_ if (authenticationType === 'oauth2') { _%>
+        this.subscribeToLoginEvents();
+        <%_ } _%>
     }
+    <%_ if (authenticationType === 'oauth2') { _%>
+
+    ngOnDestroy() {
+        this._cleanup.next();
+        this._cleanup.complete();
+      }
+
+    private subscribeToLoginEvents() {
+        this.accountService
+            .getAuthenticationState()
+            .pipe(takeUntil(this._cleanup))
+            .subscribe((account: Account) => {
+                if (account) {
+                    this.navigateToStoredUrl();
+                }
+            });
+      }
+
+    private navigateToStoredUrl() {
+        const previousUrl = this.stateStorageService.getUrl();
+        if (previousUrl) {
+            this.stateStorageService.storeUrl(null);
+            this.router.navigateByUrl(previousUrl);
+        }
+    }
+    <%_ } _%>
 }

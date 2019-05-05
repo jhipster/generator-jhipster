@@ -18,6 +18,9 @@
 -%>
 
 @import '~bootstrap/scss/functions';
+<%_ if (clientTheme !== 'none') { _%>
+@import "~bootswatch/dist/<%= clientTheme %>/variables";
+<%_ } _%>
 @import '~bootstrap/scss/variables';
 
 /* ==========================================================================
@@ -36,27 +39,31 @@ Navbar
 
 .navbar {
     padding: 0.2rem 1rem;
+    <%_ if (clientTheme !== 'none') {_%>
     .dropdown-item.active,
     .dropdown-item.active:focus,
     .dropdown-item.active:hover {
         background-color: $dark;
     }
+    <%_ } _%>
 
     ul.navbar-nav {
         .nav-item {
             margin-left: 0.5em;
         }
     }
-    
+
     a.nav-link {
         font-weight: 400;
     }
-    
+
+    <%_ if (clientTheme !== 'none') {_%>
     .navbar-toggler {
         &:hover {
             color: $navbar-dark-hover-color;
         }
-    }    
+    }
+    <%_ } _%>
 }
 
 /* ==========================================================================

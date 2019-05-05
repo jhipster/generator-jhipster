@@ -522,6 +522,10 @@ function askForField(done) {
                     name: 'ZonedDateTime'
                 },
                 {
+                    value: 'Duration',
+                    name: 'Duration'
+                },
+                {
                     value: 'Boolean',
                     name: 'Boolean'
                 },
@@ -713,7 +717,7 @@ function askForField(done) {
             message: 'Which validation rules do you want to add?',
             choices: response => {
                 // Default rules applicable for fieldType 'LocalDate', 'Instant',
-                // 'ZonedDateTime', 'UUID', 'Boolean', 'ByteBuffer' and 'Enum'
+                // 'ZonedDateTime', 'Duration', 'UUID', 'Boolean', 'ByteBuffer' and 'Enum'
                 const opts = [
                     {
                         name: 'Required',
