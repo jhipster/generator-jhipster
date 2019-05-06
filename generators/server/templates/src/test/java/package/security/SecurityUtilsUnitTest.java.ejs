@@ -28,15 +28,29 @@ import reactor.util.context.Context;
 <%_ } else { _%>
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+    <%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+    <%_ } _%>
 <%_ } _%>
 
+<%_ if (authenticationType === 'oauth2') { _%>
+import java.time.Instant;
+import java.util.*;
+<%_ } else { _%>
 import java.util.ArrayList;
 import java.util.Collection;
 <%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
+<%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (authenticationType === 'oauth2') { _%>
+import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames.ID_TOKEN;
+<%_ } _%>
 
 /**
  * Test class for the {@link SecurityUtils} utility class.
@@ -52,6 +66,29 @@ public class SecurityUtilsUnitTest {
         Optional<String> login = SecurityUtils.getCurrentUserLogin();
         assertThat(login).contains("admin");
     }
+    <%_ if (authenticationType === 'oauth2') { _%>
+
+    @Test
+    public void testGetCurrentUserLoginForOAuth2() {
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("groups", "ROLE_USER");
+        claims.put("sub", 123);
+        claims.put("preferred_username", "admin");
+        OidcIdToken idToken = new OidcIdToken(ID_TOKEN, Instant.now(),
+            Instant.now().plusSeconds(60), claims);
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        OidcUser user = new DefaultOidcUser(authorities, idToken);
+        OAuth2AuthenticationToken bla = new OAuth2AuthenticationToken(user, authorities, "oidc");
+        securityContext.setAuthentication(bla);
+        SecurityContextHolder.setContext(securityContext);
+
+        Optional<String> login = SecurityUtils.getCurrentUserLogin();
+
+        assertThat(login).contains("admin");
+    }
+    <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
 
     @Test
