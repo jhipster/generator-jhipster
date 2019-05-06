@@ -411,16 +411,6 @@ function writeFiles() {
             'app/core/jhi-navbar/jhi-navbar.vue',
             'app/core/ribbon/ribbon.vue',
             'app/shared/jhi-item-count.vue',
-            'app/account/change-password/change-password.vue',
-            'app/account/activate/activate.vue',
-            'app/account/login-form/login-form.vue',
-            'app/account/register/register.vue',
-            'app/account/reset-password/init/reset-password-init.vue',
-            'app/account/reset-password/finish/reset-password-finish.vue',
-            'app/account/settings/settings.vue',
-            'app/admin/user-management/user-management.vue',
-            'app/admin/user-management/user-management-view.vue',
-            'app/admin/user-management/user-management-edit.vue',
             'app/admin/configuration/configuration.vue',
             'app/admin/health/health.vue',
             'app/admin/health/health-modal.vue',
@@ -429,6 +419,19 @@ function writeFiles() {
             'app/admin/metrics/metrics-modal.vue',
             'app/admin/audits/audits.vue'
         ]);
+        if (this.authenticationType !== 'oauth2') {
+            utils.replaceTranslation(this, ['app/account/change-password/change-password.vue',
+                'app/account/activate/activate.vue',
+                'app/account/login-form/login-form.vue',
+                'app/account/register/register.vue',
+                'app/account/reset-password/init/reset-password-init.vue',
+                'app/account/reset-password/finish/reset-password-finish.vue',
+                'app/account/settings/settings.vue',
+                'app/admin/user-management/user-management.vue',
+                'app/admin/user-management/user-management-view.vue',
+                'app/admin/user-management/user-management-edit.vue'
+            ]);
+        }
         if (this.authenticationType === 'session') {
             utils.replaceTranslation(this, ['app/account/sessions/sessions.vue']);
         }
