@@ -12,7 +12,15 @@ export default class LoginService {
   <%_ } else { _%>
   public login(loc = window.location) {
     const port = (loc.port ? ':' + loc.port : '');
-    loc.href = '//' + loc.hostname + port + loc.pathname + 'authorize';
+    let contextPath = location.pathname;
+    if (contextPath.endsWith('accessdenied')) {
+      contextPath = contextPath.substring(0, contextPath.indexOf('accessdenied'));
+    }
+    if (!contextPath.endsWith('/')) {
+      contextPath = contextPath + '/';
+    }
+
+    loc.href = `//${loc.hostname}${port}${contextPath}oauth2/authorization/oidc`;
   }
   <%_ } _%>
 
