@@ -230,7 +230,9 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                           threshold={0}
                           initialLoad={false}>
           <%_ } _%>
-          <Table responsive>
+          {
+            <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ?
+          (<Table responsive>
             <thead>
               <tr>
                 <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
@@ -370,7 +372,13 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
                 ))
               }
             </tbody>
-          </Table>
+          </Table>) :
+            (
+              <div className="alert alert-warning">
+                No <%= entityClassPluralHumanized %> found
+              </div>
+            )
+          }
           <%_ if (pagination === 'infinite-scroll') { _%>
           </InfiniteScroll>
           <%_ } _%>
