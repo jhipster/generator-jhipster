@@ -34,5 +34,5 @@ ENTRYPOINT ["./entrypoint.sh"]
 
 EXPOSE <%= serverPort %><% if (cacheProvider === 'hazelcast') { %> 5701/udp<% } %>
 
-ADD *.war app.war
+ADD *.jar app.jar
 
