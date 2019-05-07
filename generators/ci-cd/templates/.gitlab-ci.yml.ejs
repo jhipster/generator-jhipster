@@ -120,24 +120,14 @@ gradle-package:
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
-#    image: docker:latest
-#    services:
-#        - docker:dind
+#    stage: release
 #    variables:
 #        REGISTRY_URL: registry.gitlab.com
-#        DOCKER_HOST: tcp://docker:2375
-#        DOCKER_DRIVER: overlay2
 #        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-#    stage: release
 #    dependencies:
 #        - gradle-package
-#    before_script:
-#        - docker info
-#        - cp build/libs/*.jar src/main/docker
 #    script:
-#        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $REGISTRY_URL
-#        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker
-#        - docker push $IMAGE_TAG
+#        - ./gradlew jib -Djib.to.image="$IMAGE_TAG" -Djib.to.auth.username="gitlab-ci-token"  -Djib.to.auth.password="$CI_BUILD_TOKEN"
 
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
@@ -222,24 +212,15 @@ maven-package:
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
-#    image: docker:latest
-#    services:
-#        - docker:dind
+#    stage: release
 #    variables:
 #        REGISTRY_URL: registry.gitlab.com
-#        DOCKER_HOST: tcp://docker:2375
-#        DOCKER_DRIVER: overlay2
 #        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-#    stage: release
 #    dependencies:
 #        - maven-package
-#    before_script:
-#        - docker info
-#        - cp target/*.jar src/main/docker
 #    script:
-#        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $REGISTRY_URL
-#        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker
-#        - docker push $IMAGE_TAG
+#        - ./mvnw jib:build -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN
+
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
     stage: deploy
