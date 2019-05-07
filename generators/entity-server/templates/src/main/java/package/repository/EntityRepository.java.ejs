@@ -16,8 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
-
+package <%=packageName%>.repository;<%
+let primaryKeyType = pkType;
+for (idx in relationships) {
+    if ( relationships[idx].useJPADerivedIdentifier === true) {
+        primaryKeyType = (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : pkType;
+        break;
+    }
+}
+%>
 import <%=packageName%>.domain.<%=asEntity(entityClass)%>;
 <%_ if (fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.Page;
@@ -64,7 +71,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 <%_ } _%>
 @Repository
-public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'cassandra') { %>CassandraRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><<%=asEntity(entityClass)%>, <%= pkType %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%=asEntity(entityClass)%>><% } %> {
+public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'cassandra') { %>CassandraRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><<%=asEntity(entityClass)%>, <%= primaryKeyType %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%=asEntity(entityClass)%>><% } %> {
     <%_ for (idx in relationships) {
         if (relationships[idx].relationshipType === 'many-to-one' && relationships[idx].otherEntityName === 'user' && databaseType === 'sql') { _%>
 
@@ -85,7 +92,7 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
 
     @Query("select <%= entityInstance %> from <%= asEntity(entityClass) %> <%= entityInstance %><% for (idx in relationships) {
     if (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { %> left join fetch <%=entityInstance%>.<%=relationships[idx].relationshipFieldNamePlural%><%} }%> where <%=entityInstance%>.id =:id")
-    Optional<<%=asEntity(entityClass)%>> findOneWithEagerRelationships(@Param("id") <%= pkType %> id);
+    Optional<<%=asEntity(entityClass)%>> findOneWithEagerRelationships(@Param("id") <%= primaryKeyType %> id);
     <%_
         } else if (databaseType === 'mongodb')  { _%>
     @Query("{}")
@@ -95,7 +102,7 @@ public interface <%=entityClass%>Repository extends <% if (databaseType === 'sql
     List<<%=asEntity(entityClass)%>> findAllWithEagerRelationships();
 
     @Query("{'id': ?0}")
-    Optional<<%=asEntity(entityClass)%>> findOneWithEagerRelationships(<%= pkType %> id);
+    Optional<<%=asEntity(entityClass)%>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
     <%_ }
     } _%>
 

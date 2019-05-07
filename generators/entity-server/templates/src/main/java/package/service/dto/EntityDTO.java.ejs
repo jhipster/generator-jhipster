@@ -25,7 +25,7 @@ const uniqueEnums = {};
 let primaryKeyType = pkType;
 for (idx in relationships) {
     if ( relationships[idx].useJPADerivedIdentifier === true) {
-        primaryKeyType = (relationships[idx].otherEntityName === 'user') ? 'String' : pkType;
+        primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
         break;
     }
 }

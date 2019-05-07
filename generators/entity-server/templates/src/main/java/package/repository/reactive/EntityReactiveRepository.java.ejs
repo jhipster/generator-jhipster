@@ -16,8 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository.reactive;
-
+package <%= packageName %>.repository.reactive;<%
+let primaryKeyType = pkType;
+for (idx in relationships) {
+    if ( relationships[idx].useJPADerivedIdentifier === true) {
+        primaryKeyType = (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : pkType;
+        break;
+    }
+}
+%>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
@@ -43,7 +50,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>ReactiveRepository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>CouchbaseSorting<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= pkType %>> {
+public interface <%= entityClass %>ReactiveRepository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>CouchbaseSorting<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>> {
     <%_ if (databaseType === 'couchbase') { _%>
 
     @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}")

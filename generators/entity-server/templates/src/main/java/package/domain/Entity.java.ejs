@@ -29,7 +29,7 @@ const uniqueEnums = {}; %><%- include imports -%>
 <%_ for (idx in relationships) {
         isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
         if ( isUsingMapsId === true) {
-            primaryKeyType = (relationships[idx].otherEntityName === 'user') ? 'String' : pkType;
+            primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
             break;
         }
         isUsingMapsId = false;
