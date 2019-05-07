@@ -209,7 +209,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'session',
+            condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: REACT_DIR,
             templates: [
                 { file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' },

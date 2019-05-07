@@ -171,7 +171,7 @@
                         </a>
                     </li>
                     <%_ } _%>
-                    <%_ if (authenticationType === 'session') { _%>
+                    <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
                     <li *ngSwitchCase="true">
                         <a class="dropdown-item" routerLink="sessions" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="cloud" fixedWidth="true"></fa-icon>

@@ -208,7 +208,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'session',
+            condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: ANGULAR_DIR,
             templates: [
                 { file: 'account/sessions/sessions.route.ts', method: 'processJs' },
@@ -454,7 +454,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'session',
+            condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: ['spec/app/account/sessions/sessions.component.spec.ts']
         },
