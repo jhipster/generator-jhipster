@@ -45,10 +45,10 @@
     </div>
     <%_ } _%>
     <br/>
-    <div class="alert alert-warning" *ngIf="<%=entityInstancePlural %>.length === 0">
+    <div class="alert alert-warning" *ngIf="<%=entityInstancePlural %>?.length === 0">
         No <%=entityInstancePlural %> found
     </div>
-    <div class="table-responsive" *ngIf="<%=entityInstancePlural %>.length > 0">
+    <div class="table-responsive" *ngIf="<%=entityInstancePlural %>?.length > 0">
         <table class="table table-striped">
             <thead>
             <tr<% if (pagination !== 'no') { %> jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="<%=pagination !== 'infinite-scroll' ? 'transition.bind(this)' : 'reset.bind(this)'%>"<% } %>>
