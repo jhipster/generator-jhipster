@@ -32,7 +32,7 @@ import { NavDropdown } from './menu-components';
 
 const accountMenuItemsAuthenticated = (
   <>
-  <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!skipUserManagement) { _%>
     <MenuItem icon="wrench" to="/account/settings"><Translate contentKey="global.menu.account.settings">Settings</Translate></MenuItem>
     <MenuItem icon="clock" to="/account/password"><Translate contentKey="global.menu.account.password">Password</Translate></MenuItem>
   <%_ } _%>
@@ -45,7 +45,7 @@ const accountMenuItemsAuthenticated = (
 
 const accountMenuItems = (
   <>
-  <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!skipUserManagement) { _%>
     <MenuItem id="login-item" icon="sign-in-alt" to="/login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
     <MenuItem icon="sign-in-alt" to="/register"><Translate contentKey="global.menu.account.register">Register</Translate></MenuItem>
   <%_ } else { _%>
