@@ -155,12 +155,12 @@ node {
 
 <%= gitLabIndent %>    def dockerImage
 <%= gitLabIndent %>    stage('publish docker') {
-<%= gitLabIndent %>        # A pre-requisite to this step is to setup authentication to the docker registry
+<%= gitLabIndent %>        // A pre-requisite to this step is to setup authentication to the docker registry
     <%_ if (buildTool === 'maven') { _%>
-<%= gitLabIndent %>        # https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
+<%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
 <%= gitLabIndent %>        sh "./mvnw jib:build"
     <%_ } else if (buildTool === 'gradle' ) { _%>
-<%= gitLabIndent %>        # https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin#authentication-methods
+<%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin#authentication-methods
 <%= gitLabIndent %>        sh "./gradlew jib"
     <%_ } _%>
 <%= gitLabIndent %>    }
