@@ -197,6 +197,16 @@
             <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>_content_type" type="string"/>
                 <%_ } _%>
             <%_ } _%>
+            <%_ for (idx in relationships) {
+                    let loadColumnType = 'numeric';
+                    if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
+                        let baseColumnName = getColumnName(relationships[idx].relationshipName) + '_id';
+                        if (relationships[idx].otherEntityNameCapitalized === 'User' && authenticationType === 'oauth2') {
+                            loadColumnType = 'varchar(100)';
+                        } _%>
+            <column name="<%=baseColumnName%>" type="<%=loadColumnType%>"/>
+                <%_ } _%>
+            <%_  } _%>
         </loadData>
     </changeSet>
 

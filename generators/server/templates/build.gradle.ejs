@@ -122,8 +122,12 @@ springBoot {
 }
 
 test {
-    exclude "**/*IT*", "**/*IntTest*", "**/*CucumberIT*"
+    useJUnitPlatform()
+    exclude "**/*IT*", "**/*IntTest*"<%_ if (cucumberTests) { _%>, "**/*CucumberIT*"<%_ } _%>
 
+    testLogging {
+        events 'FAILED', 'SKIPPED'
+    }
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
@@ -131,11 +135,17 @@ test {
 }
 
 task integrationTest(type: Test) {
+    useJUnitPlatform()
     description = "Execute integration tests."
     group = "verification"
     include "**/*IT*", "**/*IntTest*"
+<%_ if (cucumberTests) { _%>
     exclude "**/*CucumberIT*"
+<%_ } _%>
 
+    testLogging {
+        events 'FAILED', 'SKIPPED'
+    }
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
@@ -234,8 +244,6 @@ repositories {
         }
     }
     <%_ } _%>
-    // TODO To remove after final JHipster release
-    maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -508,7 +516,7 @@ task cleanResources(type: Delete) {
 }
 
 wrapper {
-    gradleVersion = "5.4"
+    gradleVersion = "5.4.1"
 }
 <%_ if (!skipClient) { _%>
 
