@@ -23,7 +23,7 @@ let importJsonIgnoreProperties = false;
 let importSet = false;
 let hasDto = dto === 'mapstruct';
 let isUsingMapsId = false;
-let hasRelationship = relationships.length != 0;
+let hasRelationship = relationships.length !== 0;
 const uniqueEnums = {}; %><%- include imports -%>
 
 <%_ for (idx in relationships) {
