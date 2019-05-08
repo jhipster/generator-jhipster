@@ -74,4 +74,18 @@ describe('JHipster Utils', () => {
             });
         });
     });
+    describe('::normalizeBlueprintName', () => {
+        it('adds generator-jhipster prefix if it is absent', () => {
+            const generatorName = utils.normalizeBlueprintName('foo');
+            assert.textEqual(generatorName, 'generator-jhipster-foo');
+        });
+        it('keeps generator-jhipster prefix if it is present', () => {
+            const generatorName = utils.normalizeBlueprintName('generator-jhipster-foo');
+            assert.textEqual(generatorName, 'generator-jhipster-foo');
+        });
+        it("doesn't  do anything for scoped package", () => {
+            const generatorName = utils.normalizeBlueprintName('@corp/foo');
+            assert.textEqual(generatorName, '@corp/foo');
+        });
+    });
 });

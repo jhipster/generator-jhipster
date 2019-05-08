@@ -23,6 +23,7 @@ const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
+const jhipsterUtils = require('../utils');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -188,7 +189,7 @@ module.exports = class extends BaseGenerator {
 
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        const blueprint = this.normalizeBlueprintName(this.options.blueprint || this.config.get('blueprint'));
+        const blueprint = jhipsterUtils.normalizeBlueprintName(this.options.blueprint || this.config.get('blueprint'));
         this.blueprint = this.configOptions.blueprint = blueprint;
         this.useNpm = this.configOptions.useNpm = !this.options.yarn;
         this.useYarn = !this.useNpm;

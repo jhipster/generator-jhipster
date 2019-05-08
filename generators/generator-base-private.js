@@ -715,20 +715,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Normalize blueprint name: prepend 'generator-jhipster-' if needed
-     * @param {string} blueprint - name of the blueprint
-     */
-    normalizeBlueprintName(blueprint) {
-        if (blueprint && blueprint.startsWith('@')) {
-            return blueprint;
-        }
-        if (blueprint && !blueprint.startsWith('generator-jhipster')) {
-            return `generator-jhipster-${blueprint}`;
-        }
-        return blueprint;
-    }
-
-    /**
      * Compose external blueprint module
      * @param {string} blueprint - name of the blueprint
      * @param {string} subGen - sub generator
@@ -736,7 +722,7 @@ module.exports = class extends Generator {
      */
     composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
-            blueprint = this.normalizeBlueprintName(blueprint);
+            blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
             if (options.skipChecks === undefined || !options.skipChecks) {
                 this.checkBlueprint(blueprint, subGen);
             }
