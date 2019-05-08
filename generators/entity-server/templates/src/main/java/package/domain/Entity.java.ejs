@@ -296,12 +296,12 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private String <%= relationshipFieldName %>Id;
 
     @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-    <%_ } _%>
-    <%_ if (otherEntityRelationshipNamePlural !== undefined && otherEntityRelationshipNamePlural !== '') { _%>
-    @JsonIgnoreProperties("<%= otherEntityRelationshipNamePlural %>")
     <%_ }
     }
     _%>
+    <%_ if (otherEntityRelationshipNamePlural !== undefined && otherEntityRelationshipNamePlural !== '') { _%>
+    @JsonIgnoreProperties("<%= otherEntityRelationshipNamePlural %>")
+    <%_ } _%>
     private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType === 'many-to-many') {
