@@ -31,7 +31,7 @@ import userManagement, { UserManagementState } from 'app/modules/administration/
 <%_ } else if (authenticationType === 'oauth2') { _%>
 import userManagement, { UserManagementState } from './user-management';
 <%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
 import register, { RegisterState } from 'app/modules/account/register/register.reducer';
 import activate, { ActivateState } from 'app/modules/account/activate/activate.reducer';
 import password, { PasswordState } from 'app/modules/account/password/password.reducer';
@@ -53,7 +53,7 @@ export interface IRootState {
   <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
   readonly userManagement: UserManagementState;
   <%_ } _%>
-  <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!skipUserManagement) { _%>
   readonly register: RegisterState;
   readonly activate: ActivateState;
   readonly passwordReset: PasswordResetState;
@@ -77,7 +77,7 @@ const rootReducer = combineReducers<IRootState>({
   <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
   userManagement,
   <%_ } _%>
-  <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!skipUserManagement) { _%>
   register,
   activate,
   passwordReset,

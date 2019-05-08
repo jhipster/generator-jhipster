@@ -1886,9 +1886,6 @@ module.exports = class extends PrivateBase {
         dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         dest.authenticationType =
             context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
-        if (dest.authenticationType === 'oauth2') {
-            dest.skipUserManagement = true;
-        }
         dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
 
         dest.buildTool = context.configOptions.buildTool;
@@ -1899,6 +1896,9 @@ module.exports = class extends PrivateBase {
             generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
             context.configOptions.databaseType ||
             context.config.get('databaseType');
+        if (dest.authenticationType === 'oauth2' || dest.databaseType === 'no') {
+            dest.skipUserManagement = true;
+        }
         dest.searchEngine = context.config.get('searchEngine');
         dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
         dest.enableHibernateCache =

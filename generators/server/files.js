@@ -52,9 +52,6 @@ const serverFiles = {
         {
             path: DOCKER_DIR,
             templates: [
-                'Dockerfile',
-                'entrypoint.sh',
-                '.dockerignore',
                 'app.yml',
                 'sonar.yml',
                 'monitoring.yml',
@@ -248,7 +245,7 @@ const serverFiles = {
                     renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
                     options: { interpolate: INTERPOLATE_REGEX }
                 },
-                { file: 'config/liquibase/master.xml', method: 'copy' }
+                'config/liquibase/master.xml'
             ]
         },
         {

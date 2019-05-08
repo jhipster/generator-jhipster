@@ -157,7 +157,7 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--blueprint` flag which can be used to specify a blueprint to use for generation
         this.option('blueprint', {
-            desc: '[BETA] Specify a generator blueprint to use for the sub generators',
+            desc: 'Specify a generator blueprint to use for the sub generators',
             type: String
         });
 

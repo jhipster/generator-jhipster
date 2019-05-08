@@ -154,22 +154,15 @@ node {
 <%_ if (cicdIntegrations.includes('publishDocker')) { _%>
 
 <%= gitLabIndent %>    def dockerImage
-<%= gitLabIndent %>    stage('build docker') {
-    <%_ if (buildTool === 'maven') { _%>
-<%= gitLabIndent %>        sh "cp -R src/main/docker target/"
-<%= gitLabIndent %>        sh "cp target/*.jar target/docker/"
-<%= gitLabIndent %>        dockerImage = docker.build('<%= dockerRegistryOrganizationName %>/<%= baseName.toLowerCase() %>', 'target/docker')
-    <%_ } else if (buildTool === 'gradle' ) { _%>
-<%= gitLabIndent %>        sh "cp -R src/main/docker build/"
-<%= gitLabIndent %>        sh "cp build/libs/*.jar build/docker/"
-<%= gitLabIndent %>        dockerImage = docker.build('<%= dockerRegistryOrganizationName %>/<%= baseName.toLowerCase() %>', 'build/docker')
-    <%_ } _%>
-<%= gitLabIndent %>    }
-
 <%= gitLabIndent %>    stage('publish docker') {
-<%= gitLabIndent %>        docker.withRegistry('<%= dockerRegistryURL %>', '<%= dockerRegistryCredentialsId %>') {
-<%= gitLabIndent %>            dockerImage.push 'latest'
-<%= gitLabIndent %>        }
+<%= gitLabIndent %>        // A pre-requisite to this step is to setup authentication to the docker registry
+    <%_ if (buildTool === 'maven') { _%>
+<%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
+<%= gitLabIndent %>        sh "./mvnw jib:build"
+    <%_ } else if (buildTool === 'gradle' ) { _%>
+<%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin#authentication-methods
+<%= gitLabIndent %>        sh "./gradlew jib"
+    <%_ } _%>
 <%= gitLabIndent %>    }
 <%_ } _%>
 <%_ if (sendBuildToGitlab) { _%>

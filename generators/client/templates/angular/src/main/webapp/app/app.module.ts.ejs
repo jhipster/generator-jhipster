@@ -35,7 +35,7 @@ import { <%=angularXAppName%>SharedModule } from 'app/shared';
 import { <%=angularXAppName%>CoreModule } from 'app/core';
 import { <%=angularXAppName%>AppRoutingModule} from './app-routing.module';
 import { <%=angularXAppName%>HomeModule } from './home/home.module';
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
 import { <%=angularXAppName%>AccountModule } from './account/account.module';
 <%_ } _%>
 import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
@@ -68,7 +68,7 @@ import {
         <%=angularXAppName%>SharedModule.forRoot(),
         <%=angularXAppName%>CoreModule,
         <%=angularXAppName%>HomeModule,
-        <%_ if (authenticationType !== 'oauth2') { _%>
+        <%_ if (!skipUserManagement) { _%>
         <%=angularXAppName%>AccountModule,
         <%_ } _%>
         // jhipster-needle-angular-add-module JHipster will add new module here

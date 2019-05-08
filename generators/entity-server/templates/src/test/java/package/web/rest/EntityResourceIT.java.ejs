@@ -409,23 +409,24 @@ _%>
             .setValidator(validator).build();
     }
 
+<%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
     /**
-     * Create an entity for this test.
+     * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
      *
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%= asEntity(entityClass) %> createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
+    public static <%= asEntity(entityClass) %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
         <%_ if (fluentMethods) { _%>
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = new <%= asEntity(entityClass) %>()<% for (idx in fields) { %>
-            .<%= fields[idx].fieldName %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
-            .<%= fields[idx].fieldName %>ContentType(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)<% } %><% } %>;
+            .<%= fields[idx].fieldName %>(<%=fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase()%>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
+            .<%= fields[idx].fieldName %>ContentType(<%=fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)<% } %><% } %>;
         <%_ } else { _%>
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = new <%= asEntity(entityClass) %>();
             <%_ for (idx in fields) { _%>
-        <%= asEntity(entityInstance) %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
+        <%= asEntity(entityInstance) %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%=fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase() %>);
                 <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-        <%= asEntity(entityInstance) %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        <%= asEntity(entityInstance) %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%=fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
                 <%_ } _%>
             <%_ } _%>
         <%_ } _%>
@@ -442,6 +443,7 @@ _%>
             if ((relationshipValidate !== null && relationshipValidate === true) || mapsIdUse === true) { _%>
         // Add required entity
             <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
+    <%_ if (otherEntityName === 'user') { // TODO or other entity has no unique fields _%>
         <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
                 <%_ if (databaseType === 'sql') { _%>
         em.persist(<%= otherEntityName %>);
@@ -450,6 +452,21 @@ _%>
                 <%_ if (databaseType === 'mongodb') { _%>
         <%= otherEntityName %>.setId("fixed-id-for-tests");
                 <%_ } _%>
+    <%_ } else { _%>
+        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>;
+        if (TestUtil.findAll(em, <%= otherEntityNameCapitalized %>.class).isEmpty()) {
+            <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql') { %>em<% } %>);
+                <%_ if (databaseType === 'sql') { _%>
+            em.persist(<%= otherEntityName %>);
+            em.flush();
+                <%_ } _%>
+                <%_ if (databaseType === 'mongodb') { _%>
+            <%= otherEntityName %>.setId("fixed-id-for-tests");
+                <%_ } _%>
+        } else {
+            <%= otherEntityName %> = TestUtil.findAll(em, <%= otherEntityNameCapitalized %>.class).get(0);
+        }
+    <%_ } _%>
             <%_ } _%>
             <%_ if (relationshipType === 'many-to-many' || relationshipType === 'one-to-many') { _%>
         <%= asEntity(entityInstance) %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= otherEntityName %>);
@@ -460,6 +477,7 @@ _%>
         <%_ } } _%>
         return <%= asEntity(entityInstance) %>;
     }
+<%_ }); _%>
 
     @BeforeEach
     public void initTest() {
@@ -560,7 +578,7 @@ _%>
             if (mapsIdUse === true) { _%>
         // Add a new parent entity
                 <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
-        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.createEntity(em);
+        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (otherEntityName !== 'user') { _%>Updated<%_ } %>Entity(em);
         em.persist(<%= otherEntityName %>);
         em.flush();
                 <%_ } _%>
@@ -813,6 +831,10 @@ _%>
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() throws Exception {
+        <%_ if (relationship.relationshipValidate === true || relationship.useJPADerivedIdentifier === true) { _%>
+        // Get already existing entity
+        <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= asEntity(entityInstance) %>.get<%= relationship.relationshipNameCapitalized %>();
+        <%_ } else { _%>
         // Initialize the database
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
         em.persist(<%= relationship.relationshipFieldName %>);
@@ -825,6 +847,7 @@ _%>
         <%= relationship.relationshipFieldName %>.set<%= relationship.otherEntityRelationshipNameCapitalized %>(<%= asEntity(entityInstance) %>);
 <%_     } _%>
 <%_ } _%>
+        <%_ } _%>
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
         <% if (authenticationType === 'oauth2' && relationship.relationshipFieldName === 'user') { _%>String<%_ } else { _%>Long<% } %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.getId();
 
