@@ -125,8 +125,10 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
                 data = '';
             }
         }
-        if (fieldType === 'byte[]') {
-            data = Buffer.from(this.faker.random.words(), 'utf8').toString('hex');
+        if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
+            data = '../data/blob/hipster.png'
+        } else {
+            data = '../data/blob/hipster.txt'
         }
         line.push(data);
         if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {

@@ -123,8 +123,9 @@
                 <%_ } _%>
             </column>
                 <%_ if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
-                    columnType = "varchar(255)"; _%>
-            <column name="<%=columnName %>_content_type" type="<%=columnType %>">
+                    let contentTypeColumnType = columnType;
+                    contentTypeColumnType = "varchar(255)"; _%>
+            <column name="<%=columnName %>_content_type" type="<%=contentTypeColumnType%>">
                 <constraints nullable="<%= nullable %>" />
             </column>
                 <%_ } _%>
@@ -188,8 +189,10 @@
                     loadColumnType = 'boolean';
                 } else if (fields[idx].fieldIsEnum) {
                     loadColumnType = 'string';
-                } else if (columnType === 'clob' || columnType === 'blob' || columnType === 'longblob') {
-                    loadColumnType = 'string';
+                } else if (columnType === 'blob' || columnType === 'longblob') {
+                    loadColumnType = 'blob';
+                } else if (columnType === 'clob') {
+                    loadColumnType = 'clob';
                 }
                 _%>
             <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>" type="<%=loadColumnType%>"/>

@@ -23,16 +23,21 @@ let importJsonIgnoreProperties = false;
 let importSet = false;
 let hasDto = dto === 'mapstruct';
 let isUsingMapsId = false;
+let hasTextBlob = false;
 const uniqueEnums = {}; %><%- include imports -%>
-
 <%_ for (idx in relationships) {
         isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
         if ( isUsingMapsId === true) {
             break;
         }
         isUsingMapsId = false;
+    } 
+    for (idx in fields) {
+        if ((prodDatabaseType === 'postgresql' || devDatabaseType === 'postgresql') && fields[idx].fieldTypeBlobContent === 'text') {
+            hasTextBlob = true;
+            break;
+        }
     } _%>
-
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.annotation.Id;
     <%_ if (fieldsContainBlob) { _%>
@@ -50,6 +55,8 @@ import io.swagger.annotations.ApiModelProperty;
 <%_ } if (enableHibernateCache) { _%>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+<%_ } if (hasTextBlob === true) { _%>
+import org.hibernate.annotations.Type;
 <%_ } if (databaseType === 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
