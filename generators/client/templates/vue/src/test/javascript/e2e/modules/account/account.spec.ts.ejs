@@ -105,7 +105,6 @@ describe('Account', () => {
 <%_ if (authenticationType !== 'oauth2') { _%>
   it('should be able to sign up', async () => {
     await browser.get('/');
-    await waitUntilDisplayed(navBarPage.accountMenu);
 
     registerPage = await navBarPage.getRegisterPage();
     await registerPage.waitUntilDisplayed();
@@ -161,7 +160,8 @@ describe('Account', () => {
 
   it('should not be able to sign up if login already taken', async () => {
     await browser.get('/');
-    await registerPage.get();
+    registerPage = await navBarPage.getRegisterPage();
+    await registerPage.waitUntilDisplayed();
     expect(await registerPage.getTitle()).to.eq(registerPageTitle);
 
     await registerPage.autoSignUpUsing('user_test', 'admin@localhost.jh', 'user_test');
@@ -339,7 +339,7 @@ describe('Account', () => {
   });
 
   it('should preview details from previously created fake user', async () => {
-    await browser.get('#/admin/user-management');
+    await browser.get('/admin/user-management');
     const detailsBtn = getUserDetailsButtonByLogin('user_test');
     await waitUntilDisplayed(detailsBtn);
     await detailsBtn.click();
@@ -351,7 +351,7 @@ describe('Account', () => {
   });
 
   it('should edit details from previously created fake user', async () => {
-    await browser.get('#/admin/user-management');
+    await browser.get('/admin/user-management');
     const editBtn = getUserEditButtonByLogin('user_test');
     await waitUntilDisplayed(editBtn);
     await editBtn.click();
@@ -371,7 +371,7 @@ describe('Account', () => {
   });
 
   it('should delete previously created fake user', async () => {
-    await browser.get('#/admin/user-management');
+    await browser.get('/admin/user-management');
     const deleteBtn = getUserDeleteButtonByLogin('user_test');
     await waitUntilDisplayed(deleteBtn);
     await deleteBtn.click();
