@@ -191,7 +191,10 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         <%_ }
         if (fieldType === 'byte[]') { _%>
     @Lob
+        <%_ if ((prodDatabaseType === 'postgresql' || devDatabaseType === 'postgresql') && fieldTypeBlobContent === 'text' ) { _%>
+    @Type(type = "org.hibernate.type.TextType")
         <%_ }
+        }
         if (['Instant', 'ZonedDateTime', 'LocalDate', 'Duration'].includes(fieldType)) { _%>
     @Column(name = "<%-fieldNameAsDatabaseColumn %>"<% if (required) { %>, nullable = false<% } %><% if (unique) { %>, unique = true<% } %>)
         <%_ } else if (fieldType === 'BigDecimal') { _%>
