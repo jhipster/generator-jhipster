@@ -289,8 +289,6 @@ module.exports = class extends BaseGenerator {
     get prompting() {
         return {
             askForInsightOptIn: prompts.askForInsightOptIn,
-            // TODO : enable this. It's a bit messy for now, it need better sync.
-            // askForAccountLinking: prompts.askForAccountLinking,
             askForApplicationType: prompts.askForApplicationType,
             askForModuleName: prompts.askForModuleName
         };
@@ -334,12 +332,6 @@ module.exports = class extends BaseGenerator {
                 }
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
-
-            // composeAccountLinking() {
-            //     if (!this.linkAccount) return;
-
-            //     this.composeWith(require.resolve('../link-account'));
-            // },
 
             composeServer() {
                 if (this.skipServer) return;
