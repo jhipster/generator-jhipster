@@ -127,7 +127,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         }
         if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
             data = '../data/blob/hipster.png'
-        } else {
+        } else if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent === 'text'){
             data = '../data/blob/hipster.txt'
         }
         line.push(data);
