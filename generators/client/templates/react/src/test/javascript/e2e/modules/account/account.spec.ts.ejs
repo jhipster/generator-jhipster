@@ -119,7 +119,7 @@ describe('Account', () => {
     <%_ } _%>
   });
 
-  <%_ if (! skipUserManagement) { _%>
+  <%_ if (!skipUserManagement) { _%>
   it('should be able to sign up', async () => {
     await waitUntilDisplayed(navBarPage.accountMenu);
 
