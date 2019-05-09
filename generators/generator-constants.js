@@ -69,6 +69,9 @@ const NODE_VERSION = '10.15.3';
 const YARN_VERSION = '1.15.2';
 const NPM_VERSION = '6.9.0';
 
+// Libraries version
+const JIB_VERSION = '1.2.0';
+
 // all constants used throughout all generators
 
 const MAIN_DIR = 'src/main/';
@@ -282,6 +285,10 @@ const constants = {
     NODE_VERSION,
     YARN_VERSION,
     NPM_VERSION,
+
+    // Libraries
+    JIB_VERSION,
+
     DOCKER_JENKINS,
     DOCKER_SWAGGER_EDITOR,
     SQL_DB_OPTIONS,

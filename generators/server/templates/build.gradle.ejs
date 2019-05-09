@@ -39,7 +39,7 @@ plugins {
     id "war"
     id "idea"
     id "jacoco"
-    id "com.google.cloud.tools.jib" version "0.9.11"
+    id "com.google.cloud.tools.jib" version "<%= JIB_VERSION %>"
     id "com.gorylenko.gradle-git-properties" version "2.0.0"
     <%_ if (!skipClient) { _%>
     id "com.github.node-gradle.node" version "1.3.0"
