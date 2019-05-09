@@ -439,6 +439,9 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
+                if (this.configOptions.skipClient) {
+                    this.skipClient = this.configOptions.skipClient;
+                }
                 if (this.configOptions.uaaBaseName !== undefined) {
                     this.uaaBaseName = this.configOptions.uaaBaseName;
                 }
