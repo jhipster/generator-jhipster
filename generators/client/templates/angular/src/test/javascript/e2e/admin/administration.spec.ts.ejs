@@ -36,7 +36,7 @@ describe('administration', () => {
         await browser.get('/');
         navBarPage = new NavBarPage(true);
         signInPage = await navBarPage.getSignInPage();
-        <%_ if (!skipUserManagement) { _%>
+        <%_ if (authenticationType !== 'oauth2') { _%>
         await signInPage.autoSignInUsing('admin', 'admin');
         <%_ } else { _%>
         await signInPage.loginWithOAuth('admin', 'admin');
