@@ -37,7 +37,10 @@
         </div>
         <%_ } _%>
         <br/>
-        <div class="table-responsive" v-if="<%= entityInstancePlural %>">
+        <div class="alert alert-warning" v-if="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length === 0">
+            No <%= entityInstancePlural %> found
+        </div>
+        <div class="table-responsive" v-if="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
             <table class="table table-striped">
                 <thead>
                 <tr>
