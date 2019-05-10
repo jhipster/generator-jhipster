@@ -39,7 +39,7 @@ import {
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-  , getPaginationItemsNumber, JhiPagination
+  , getPaginationItemsNumber, JhiPagination, JhiItemCount
   <%_ }} _%>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -384,6 +384,14 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <%_ } _%>
         </div>
         <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+        <Row className="justify-content-center">
+          <JhiItemCount
+            page={this.state.activePage}
+            total={totalItems}
+            itemsPerPage={this.state.itemsPerPage}
+            <%{ if (enableTranslation) { %>i18nEnabled<% }}%>
+          />
+        </Row>
         <Row className="justify-content-center">
           <JhiPagination
             items={getPaginationItemsNumber(totalItems, this.state.itemsPerPage)}
