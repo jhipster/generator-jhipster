@@ -36,7 +36,6 @@ buildscript {
 plugins {
     id "java"
     id "maven"
-    id "war"
     id "idea"
     id "jacoco"
     id "com.google.cloud.tools.jib" version "<%= JIB_VERSION %>"
@@ -74,6 +73,10 @@ if (project.hasProperty("prod")) {
     apply from: "gradle/profile_dev.gradle"
 }
 
+if (project.hasProperty("war")) {
+    apply from: "gradle/war.gradle"
+}
+
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
 if (project.hasProperty("zipkin")) {
     apply from: "gradle/zipkin.gradle"
@@ -102,20 +105,6 @@ group = "<%= packageName %>"
 version = "0.0.1-SNAPSHOT"
 
 description = ""
-
-bootWar {
-    mainClassName = "<%= packageName %>.<%= mainClass %>"
-    includes = ["WEB-INF/**", "META-INF/**"]
-}
-
-war {
-    <%_ if (!skipClient) { _%>
-    webAppDirName = "<%= CLIENT_DIST_DIR %>"
-    <%_ } _%>
-    enabled = true
-    extension = "war.original"
-    includes = ["WEB-INF/**", "META-INF/**"]
-}
 
 springBoot {
     mainClassName = "<%= packageName %>.<%= mainClass %>"
