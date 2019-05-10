@@ -223,7 +223,6 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
     }
 
-
     @Test
     public void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
         User user = new User();
@@ -238,7 +237,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
             String propertyFilePath = "i18n/messages_" + getJavaLocale(langKey) + ".properties";
             URL resource = this.getClass().getClassLoader().getResource(propertyFilePath);
             File file = new File(new URI(resource.getFile()).getPath());
-            Properties properties= new Properties();
+            Properties properties = new Properties();
             properties.load(new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8")));
 
             String emailTitle = (String) properties.get("email.test.title");
