@@ -227,8 +227,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
                     }
                     if (!this.skipServer) {
-                        this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language);
-                        this.updateLanguagesInLanguageMailServiceIT(`${constants.SERVER_TEST_SRC_DIR}${this.packageFolder}`, this.languages);
+                        this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language, constants.SERVER_TEST_RES_DIR);
                     }
                     statistics.sendSubGenEvent('languages/language', language);
                 });
@@ -245,7 +244,9 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
                     }
                 }
-
+                if (!this.skipServer) {
+                    this.updateLanguagesInLanguageMailServiceIT(`${constants.SERVER_TEST_SRC_DIR}${this.packageFolder}`, this.languages);
+                }
             }
         };
     }

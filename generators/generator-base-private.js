@@ -107,7 +107,7 @@ module.exports = class extends Generator {
      * @param {string} resourceDir - resource directory
      * @param {string} lang - language code
      */
-    installI18nServerFilesByLanguage(_this, resourceDir, lang) {
+    installI18nServerFilesByLanguage(_this, resourceDir, lang, testResourceDir) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
         // Template the message server side properties
@@ -117,6 +117,14 @@ module.exports = class extends Generator {
         generator.template(
             `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
             `${resourceDir}i18n/messages_${langJavaProp}.properties`
+        );
+        generator.template(
+            `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
+            `${resourceDir}i18n/messages_${langJavaProp}.properties`
+        );
+        generator.template(
+            `${prefix}/${testResourceDir}i18n/messages_${langProp}.properties.ejs`,
+            `${testResourceDir}i18n/messages_${langJavaProp}.properties`
         );
     }
 
@@ -235,7 +243,6 @@ module.exports = class extends Generator {
             this.debug('Error:', e);
         }
     }
-
 
     /**
      * Update Languages In MailServiceIT
