@@ -40,7 +40,7 @@ const adminMenuItems = (
     <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>
     <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>
     <MenuItem icon="list" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>
-    <%_ if (databaseType !== 'cassandra') { _%>
+    <%_ if (!['no', 'cassandra'].includes(databaseType)) { _%>
     <MenuItem icon="bell" to="/admin/audits"><Translate contentKey="global.menu.admin.audits">Audits</Translate></MenuItem>
     <%_ } _%>
   {/* jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here */}
