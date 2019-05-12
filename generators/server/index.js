@@ -130,6 +130,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
 
+                this.JIB_VERSION = constants.JIB_VERSION;
+
                 this.packagejs = packagejs;
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;

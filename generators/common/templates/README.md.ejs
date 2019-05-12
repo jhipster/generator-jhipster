@@ -248,7 +248,7 @@ Refer to [Using JHipster in production][] for more details.
 To package your application as a war in order to deploy it to an application server, run:
 <% if (buildTool === 'maven') { %>
     ./mvnw -Pprod,war clean verify<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew -Pprod clean bootWar<% } %>
+    ./gradlew -Pprod -Pwar clean bootWar<% } %>
 
 ## Testing
 
