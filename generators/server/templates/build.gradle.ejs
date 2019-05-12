@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import org.gradle.internal.os.OperatingSystem
+
 buildscript {
     repositories {
         mavenLocal()
@@ -93,6 +95,26 @@ eclipse {
                 srcDirs += ["build/generated/source/apt/main"]
             }
         }
+    }
+}
+
+// See https://virgo47.wordpress.com/2018/09/14/classpath-too-long-with-spring-boot-and-gradle/ for details
+// https://github.com/jhipster/generator-jhipster/issues/9713
+if (OperatingSystem.current().isWindows()) {
+    task classpathJar(type: Jar) {
+        inputs.files sourceSets.main.runtimeClasspath
+
+        archiveName = "runboot-classpath.jar"
+        doFirst {
+            manifest {
+                def classpath = sourceSets.test.runtimeClasspath.files
+                attributes "Class-Path": classpath.collect {f -> f.toURI().toString()}.join(" ")
+            }
+        }
+    }
+
+    bootRun {
+        classpath = classpathJar.outputs.files
     }
 }
 
