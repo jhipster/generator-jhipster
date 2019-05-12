@@ -322,7 +322,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
               _%>
                 <option value="<%= value %>">
                 <%_ if (enableTranslation) { _%>
-                  <Translate contentKey="<%= enumPrefix %>.<%= value %>" />
+                  {translate("<%= enumPrefix %>.<%= value %>")}
                 <%_ } else { _%>
                   <%= value %>
                 <%_ } _%>
