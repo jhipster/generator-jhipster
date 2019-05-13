@@ -59,9 +59,15 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             || columnType === 'bigint'
             || columnType === 'double'
             || columnType.startsWith('decimal')) {
-            data = this.faker.random.number();
+            data = this.faker.random.number({
+                max: fields[idx].fieldValidateRulesMax ? parseInt(fields[idx].fieldValidateRulesMax) : undefined,
+                min: fields[idx].fieldValidateRulesMin ? parseInt(fields[idx].fieldValidateRulesMin) : undefined
+            });
         } else if (columnType === '${floatType}') {
-            data = this.faker.random.number();
+            data = this.faker.random.number({
+                max: fields[idx].fieldValidateRulesMax ? parseFloat(fields[idx].fieldValidateRulesMax) : undefined,
+                min: fields[idx].fieldValidateRulesMin ? parseFloat(fields[idx].fieldValidateRulesMin) : undefined
+            });
         } else if (columnType === 'boolean') {
             data = this.faker.random.boolean();
         } else if (columnType === 'date' || columnType === 'datetime') {
@@ -111,11 +117,21 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             } else {
                 data = this.faker.random.words();
             }
-            // manage String max length
-            if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('maxlength')) {
-                let maxlength = fields[idx].fieldValidateRulesMaxlength;
-                data = data.substring(0, maxlength);
+
+            if (fields[idx].fieldValidate === true) {
+                // manage String max length
+                if (fields[idx].fieldValidateRules.includes('maxlength')) {
+                    let maxlength = fields[idx].fieldValidateRulesMaxlength;
+                    data = data.substring(0, maxlength);
+                }
+
+                // manage String min length
+                if (fields[idx].fieldValidateRules.includes('minlength')) {
+                    let minlength = fields[idx].fieldValidateRulesMinlength;
+                    data = data.length > minlength ? data : data + "X".repeat(minlength - data.length);
+                }
             }
+
         }
         if (fields[idx].fieldIsEnum) {
             if (fields[idx].fieldValues.length !== 0) {
