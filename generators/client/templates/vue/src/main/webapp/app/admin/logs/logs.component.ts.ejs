@@ -15,10 +15,11 @@ export default class <%=jhiPrefixCapitalized%>Logs extends Vue {
   }
 
   public init(): void {
-    this.logsService().findAll().then((response) => {
-      console.log(response);
-      this.loggers = response.data;
-    });
+    this.logsService()
+      .findAll()
+      .then((response) => {
+        this.extractLoggers(response);
+      });
   }
 
   public updateLevel(name, level): void {
@@ -32,5 +33,15 @@ export default class <%=jhiPrefixCapitalized%>Logs extends Vue {
   public changeOrder(orderProp): void {
     this.orderProp = orderProp;
     this.reverse = !this.reverse;
+  }
+
+  private extractLoggers(response) {
+    this.loggers = [];
+    if (response.data) {
+      for (const key of Object.keys(response.data.loggers)) {
+        const logger = response.data.loggers[key];
+        this.loggers.push({name: key, level: logger.effectiveLevel});
+      }
+    }
   }
 }
