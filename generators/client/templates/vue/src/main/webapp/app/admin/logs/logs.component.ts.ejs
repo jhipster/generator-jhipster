@@ -15,19 +15,33 @@ export default class <%=jhiPrefixCapitalized%>Logs extends Vue {
   }
 
   public init(): void {
-    this.logsService().findAll().then((response) => {
-      this.loggers = response.data;
-    });
+    this.logsService()
+      .findAll()
+      .then((response) => {
+        this.extractLoggers(response);
+      });
   }
 
-  public updateLevel(_name, _level): void {
-    this.logsService().changeLevel({ name: _name, level: _level }).then(() => {
-      this.init();
-    });
+  public updateLevel(name, level): void {
+    this.logsService()
+      .changeLevel(name, level)
+      .then(() => {
+        this.init();
+      });
   }
 
   public changeOrder(orderProp): void {
     this.orderProp = orderProp;
     this.reverse = !this.reverse;
+  }
+
+  private extractLoggers(response) {
+    this.loggers = [];
+    if (response.data) {
+      for (const key of Object.keys(response.data.loggers)) {
+        const logger = response.data.loggers[key];
+        this.loggers.push({name: key, level: logger.effectiveLevel});
+      }
+    }
   }
 }

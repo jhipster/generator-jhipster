@@ -17,7 +17,7 @@ const store = config.initVueXStore(localVue);
 
 jest.mock('axios', () => ({
   get: jest.fn(),
-  put: jest.fn()
+  post: jest.fn()
 }));
 
 describe('Logs Component', () => {
@@ -47,21 +47,21 @@ describe('Logs Component', () => {
       await logs.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalledWith('management/logs');
+      expect(mockedAxios.get).toHaveBeenCalledWith('management/loggers');
     });
   });
 
   describe('change log level', () => {
     it('should change log level correctly', async () => {
-      mockedAxios.put.mockReturnValue(Promise.resolve({}));
+      mockedAxios.post.mockReturnValue(Promise.resolve({}));
 
       // WHEN
       logs.updateLevel('main', 'ERROR');
       await logs.$nextTick();
 
       // THEN
-      expect(mockedAxios.put).toHaveBeenCalledWith('management/logs', { level: 'ERROR', name: 'main' });
-      expect(mockedAxios.get).toHaveBeenCalledWith('management/logs');
+      expect(mockedAxios.post).toHaveBeenCalledWith('management/loggers/main', {configuredLevel: 'ERROR'});
+      expect(mockedAxios.get).toHaveBeenCalledWith('management/loggers');
     });
 
   });
