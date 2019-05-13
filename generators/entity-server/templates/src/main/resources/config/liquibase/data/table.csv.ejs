@@ -151,8 +151,8 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             if (fields[idx].fieldValidateRules.includes('minlength')) {
                 let minlength = fields[idx].fieldValidateRulesMinlength;
                 data = data.length > minlength ? data : data + "X".repeat(minlength - data.length);
-                }
             }
+
 
             // manage uniqueness
             if (fields[idx].fieldValidateRules.includes('unique')) {
@@ -161,7 +161,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
                         line = [];
                         break;
                     } else {
-                        data = "";
+                        data = '';
                     }
                 } else {
                     uniqueValues[idx].push(data);
