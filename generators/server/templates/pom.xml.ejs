@@ -85,9 +85,6 @@
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
 <%_ if (databaseType === 'sql') { _%>
-        <!-- The spring framework version should match the one managed by
-        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <spring.version>5.1.7.RELEASE</spring.version>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <hibernate.version>5.3.10.Final</hibernate.version>
@@ -98,11 +95,6 @@
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
         <liquibase.version>3.6.3</liquibase.version>
         <liquibase-hibernate5.version>3.7</liquibase-hibernate5.version>
-        <!-- The hibernate version to be used to override default version of liquibase maven plugin -->
-        <hibernate-core.version>5.3.8.Final</hibernate-core.version>
-    <%_ if (devDatabaseType === 'h2Disk') { _%>
-        <h2.version>1.4.199</h2.version>
-    <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
@@ -1034,16 +1026,6 @@
                     </configuration>
                     <dependencies>
                         <dependency>
-                            <groupId>org.hibernate</groupId>
-                            <artifactId>hibernate-core</artifactId>
-                            <version>${hibernate-core.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.javassist</groupId>
-                            <artifactId>javassist</artifactId>
-                            <version>${javassist.version}</version>
-                        </dependency>
-                        <dependency>
                             <groupId>org.liquibase.ext</groupId>
                             <artifactId>liquibase-hibernate5</artifactId>
                             <version>${liquibase-hibernate5.version}</version>
@@ -1058,27 +1040,10 @@
                             <artifactId>validation-api</artifactId>
                             <version>${validation-api.version}</version>
                         </dependency>
-    <%_ if (devDatabaseType === 'h2Disk') { _%>
                         <dependency>
-                            <groupId>com.h2database</groupId>
-                            <artifactId>h2</artifactId>
-                            <version>${h2.version}</version>
-                        </dependency>
-    <%_ } _%>
-                        <dependency>
-                            <groupId>org.springframework</groupId>
-                            <artifactId>spring-core</artifactId>
-                            <version>${spring.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.springframework</groupId>
-                            <artifactId>spring-context</artifactId>
-                            <version>${spring.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.springframework</groupId>
-                            <artifactId>spring-beans</artifactId>
-                            <version>${spring.version}</version>
+                            <groupId>org.javassist</groupId>
+                            <artifactId>javassist</artifactId>
+                            <version>${javassist.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
