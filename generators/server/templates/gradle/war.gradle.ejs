@@ -16,25 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jacoco {
-    toolVersion = "0.8.4"
+apply plugin: "war"
+
+bootWar {
+    mainClassName = "<%= packageName %>.<%= mainClass %>"
+    includes = ["WEB-INF/**", "META-INF/**"]
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}
-
-file("sonar-project.properties").withReader {
-    Properties sonarProperties = new Properties()
-    sonarProperties.load(it)
-
-    sonarProperties.each { key, value ->
-        sonarqube {
-            properties {
-                property key, value
-            }
-        }
-    }
+war {
+    <%_ if (!skipClient) { _%>
+    webAppDirName = "<%= CLIENT_DIST_DIR %>"
+    <%_ } _%>
+    enabled = true
+    extension = "war.original"
+    includes = ["WEB-INF/**", "META-INF/**"]
 }

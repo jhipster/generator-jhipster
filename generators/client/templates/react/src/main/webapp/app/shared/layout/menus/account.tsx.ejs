@@ -34,7 +34,7 @@ const accountMenuItemsAuthenticated = (
   <>
   <%_ if (!skipUserManagement) { _%>
     <MenuItem icon="wrench" to="/account/settings"><Translate contentKey="global.menu.account.settings">Settings</Translate></MenuItem>
-    <MenuItem icon="clock" to="/account/password"><Translate contentKey="global.menu.account.password">Password</Translate></MenuItem>
+    <MenuItem icon="lock" to="/account/password"><Translate contentKey="global.menu.account.password">Password</Translate></MenuItem>
     <%_ if (authenticationType === 'session') { _%>
     <MenuItem icon="cloud" to="/account/sessions"><Translate contentKey="global.menu.account.sessions">Sessions</Translate></MenuItem>
     <%_ } _%>
@@ -45,11 +45,13 @@ const accountMenuItemsAuthenticated = (
 
 const accountMenuItems = (
   <>
-  <%_ if (!skipUserManagement) { _%>
+  <%_ if (authenticationType !== 'oauth2') { _%>
     <MenuItem id="login-item" icon="sign-in-alt" to="/login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
-    <MenuItem icon="sign-in-alt" to="/register"><Translate contentKey="global.menu.account.register">Register</Translate></MenuItem>
   <%_ } else { _%>
     <DropdownItem id="login-item" tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
+  <%_ } _%>
+  <%_ if (!skipUserManagement) { _%>
+    <MenuItem icon="sign-in-alt" to="/register"><Translate contentKey="global.menu.account.register">Register</Translate></MenuItem>
   <%_ } _%>
   </>
 );

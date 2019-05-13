@@ -107,7 +107,9 @@ describe('Account', () => {
 
     // Login page should close when login success
     expect(await signInPage.isHidden()()).to.be.true;
+      <%_ if (!skipUserManagement) { _%>
     await navBarPage.autoSignOut();
+      <%_ } _%>
     <%_ } else { _%>
     // Keycloak credentials by default, change them to be able to use oauth2 with Okta
     await signInPage.loginWithOAuth('admin', 'admin');
@@ -119,7 +121,7 @@ describe('Account', () => {
     <%_ } _%>
   });
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!skipUserManagement) { _%>
   it('should be able to sign up', async () => {
     await waitUntilDisplayed(navBarPage.accountMenu);
 

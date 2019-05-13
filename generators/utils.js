@@ -46,7 +46,8 @@ module.exports = {
     getDBTypeFromDBValue,
     getBase64Secret,
     getRandomHex,
-    checkStringInFile
+    checkStringInFile,
+    normalizeBlueprintName
 };
 
 /**
@@ -467,4 +468,18 @@ function getBase64Secret(value, len = 50) {
 function checkStringInFile(path, search, generator) {
     const fileContent = generator.fs.read(path);
     return fileContent.includes(search);
+}
+
+/**
+ * Normalize blueprint name: prepend 'generator-jhipster-' if needed
+ * @param {string} blueprint - name of the blueprint
+ */
+function normalizeBlueprintName(blueprint) {
+    if (blueprint && blueprint.startsWith('@')) {
+        return blueprint;
+    }
+    if (blueprint && !blueprint.startsWith('generator-jhipster')) {
+        return `generator-jhipster-${blueprint}`;
+    }
+    return blueprint;
 }

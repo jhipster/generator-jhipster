@@ -223,7 +223,6 @@ const files = {
             templates: [
                 // admin modules
                 { file: 'modules/administration/index.tsx', method: 'processJsx' },
-                { file: 'modules/administration/audits/audits.tsx', method: 'processJsx' },
                 { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
                 { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
@@ -232,6 +231,11 @@ const files = {
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
                 'modules/administration/administration.reducer.ts'
             ]
+        },
+        {
+            condition: generator => !['no', 'cassandra'].includes(generator.databaseType),
+            path: REACT_DIR,
+            templates: [{ file: 'modules/administration/audits/audits.tsx', method: 'processJsx' }]
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',

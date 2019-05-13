@@ -22,7 +22,6 @@ const statistics = require('../statistics');
 module.exports = {
     askForInsightOptIn,
     askForApplicationType,
-    askForAccountLinking,
     askForModuleName,
     askFori18n,
     askForTestOpts,
@@ -42,21 +41,6 @@ function askForInsightOptIn() {
         if (prompt.insight !== undefined) {
             statistics.setOptoutStatus(!prompt.insight);
         }
-        done();
-    });
-}
-
-function askForAccountLinking() {
-    const done = this.async();
-
-    this.prompt({
-        when: () => !statistics.isLinked && !statistics.optOut,
-        type: 'confirm',
-        name: 'linkAccount',
-        message: `Would you like to link your ${chalk.cyan('JHipster Online')} account, to get access to and manage your own stats?`,
-        default: false
-    }).then(prompt => {
-        this.linkAccount = true;
         done();
     });
 }

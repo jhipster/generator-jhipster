@@ -58,6 +58,7 @@
             "th",
             "ua",
             "uz-lat",
+            "uz-cyr",
             "vi"
         ],
         "travis": true,
