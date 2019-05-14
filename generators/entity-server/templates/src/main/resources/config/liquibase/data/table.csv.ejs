@@ -183,7 +183,8 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             }
         }
     }
-    if (line.length > 0) {
+
+    if (line.length === (1 + fields.length + relationships.length)) {
         table.push(line);
     }
 }
