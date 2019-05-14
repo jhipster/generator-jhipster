@@ -91,7 +91,7 @@
                     columnType="blob";
                 }
             } else if (fieldTypeBlobContent === 'text') {
-                columnType="clob";
+                columnType="${clobType}";
             } else if (fieldType === 'Boolean') {
                 columnType="boolean";
             }
