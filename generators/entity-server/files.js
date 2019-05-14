@@ -20,7 +20,6 @@ const _ = require('lodash');
 const randexp = require('randexp');
 const chalk = require('chalk');
 const faker = require('faker');
-const RandExp = require('randexp');
 const fs = require('fs');
 const utils = require('../utils');
 const constants = require('../generator-constants');
@@ -56,7 +55,7 @@ const serverFiles = {
                         interpolate: INTERPOLATE_REGEX,
                         context: {
                             faker,
-                            RandExp
+                            randexp
                         }
                     },
                     renameTo: generator => `config/liquibase/data/${generator.entityTableName}.csv`

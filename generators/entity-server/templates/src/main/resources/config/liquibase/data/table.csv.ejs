@@ -142,7 +142,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         // Validation rules
         if (fields[idx].fieldValidate === true) {
             if (fields[idx].fieldValidateRules.includes('pattern')) {
-                data = new this.RandExp(fields[idx].fieldValidateRulesPattern).gen();
+                data = new this.randexp(fields[idx].fieldValidateRulesPattern).gen();
             }
 
             // manage String max length
