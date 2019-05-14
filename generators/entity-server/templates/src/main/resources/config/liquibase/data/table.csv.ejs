@@ -141,6 +141,10 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
 
         // Validation rules
         if (fields[idx].fieldValidate === true) {
+            if (fields[idx].fieldValidateRules.includes('pattern')) {
+                data = new this.RandExp(fields[idx].fieldValidateRulesPattern).gen();
+            }
+
             // manage String max length
             if (fields[idx].fieldValidateRules.includes('maxlength')) {
                 let maxlength = fields[idx].fieldValidateRulesMaxlength;
@@ -153,19 +157,27 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
                 data = data.length > minlength ? data : data + "X".repeat(minlength - data.length);
             }
 
+            // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
+            if (
+                fields[idx].fieldValidateRules.includes("pattern") &&
+                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data)
+            ) {
+                data = "";
+            }
 
             // manage uniqueness
             if (fields[idx].fieldValidateRules.includes('unique')) {
                 if (uniqueValues[idx].indexOf(data) !== -1) {
-                    if (fields[idx].fieldValidateRules.includes('required')) {
-                        line = [];
-                        break;
-                    } else {
-                        data = '';
-                    }
+                    data = '';
                 } else {
                     uniqueValues[idx].push(data);
                 }
+            }
+
+            // manage required
+            if (fields[idx].fieldValidateRules.includes('required') && data === '') {
+                line = [];
+                break;
             }
         }
 
@@ -174,6 +186,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             line.push('image/png');
         }
     }
+
     for (idx in relationships) {
         if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
             if (relationships[idx].otherEntityNameCapitalized === 'User') {
