@@ -64,16 +64,22 @@ public class ElasticsearchConfiguration {
     @Primary
     public ElasticsearchOperations elasticsearchTemplate(final JestClient jestClient,
                                                          final ElasticsearchConverter elasticsearchConverter,
+        <%_ if (databaseType !== 'mongodb') { _%>
                                                          final SimpleElasticsearchMappingContext simpleElasticsearchMappingContext,
+        <%_ } _%>
                                                          EntityMapper mapper) {
+        <%_ if (databaseType === 'mongodb') { _%>
+        CustomElasticsearchMappingContext mappingContext = new CustomElasticsearchMappingContext();
+        <%_ } _%>
         return new JestElasticsearchTemplate(
             jestClient,
             <%_ if (databaseType === 'mongodb') { _%>
-            new MappingElasticsearchConverter(new CustomElasticsearchMappingContext()),
+            new MappingElasticsearchConverter(mappingContext),
+            new DefaultJestResultsMapper(mappingContext, mapper));
             <%_ } else { _%>
             elasticsearchConverter,
-            <%_ } _%>
             new DefaultJestResultsMapper(simpleElasticsearchMappingContext, mapper));
+            <%_ } _%>
     }
 
     public class CustomEntityMapper implements EntityMapper {
