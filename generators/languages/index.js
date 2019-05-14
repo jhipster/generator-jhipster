@@ -245,7 +245,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                 }
                 if (!this.skipServer) {
-                    this.updateLanguagesInLanguageMailServiceIT(`${constants.SERVER_TEST_SRC_DIR}${this.packageFolder}`, this.languages);
+                    this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
                 }
             }
         };

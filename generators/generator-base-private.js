@@ -35,6 +35,7 @@ const constants = require('./generator-constants');
 const { prettierTransform, prettierOptions } = require('./generator-transforms');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 /**
  * This is the Generator base private class.
@@ -96,10 +97,6 @@ module.exports = class extends Generator {
         generator.template(`${prefix}/${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
     }
 
-    replaceLowerToUpper(match) {
-        return match.toUpperCase();
-    }
-
     /**
      * Install I18N Server Files By Language
      *
@@ -113,7 +110,7 @@ module.exports = class extends Generator {
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
         // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-        const langJavaProp = langProp.replace(/_[a-z]+$/g, this.replaceLowerToUpper);
+        const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
         generator.template(
             `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
             `${resourceDir}i18n/messages_${langJavaProp}.properties`
@@ -249,19 +246,19 @@ module.exports = class extends Generator {
      *
      * @param languages
      */
-    updateLanguagesInLanguageMailServiceIT(testDir, languages) {
-        const fullPath = `${testDir}/service/MailServiceIT.java`;
+    updateLanguagesInLanguageMailServiceIT(languages, packageFolder) {
+        const fullPath = `${SERVER_TEST_SRC_DIR}${packageFolder}/service/MailServiceIT.java`;
         try {
-            let content = 'String[] languages = {\n';
+            let content = 'private static String languages[] = {\n';
             languages.forEach((language, i) => {
                 content += `    "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
             });
-            content += '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n};';
+            content += '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
 
             jhipsterUtils.replaceContent(
                 {
                     file: fullPath,
-                    pattern: /String.*languages.*\{([^\}]*jhipster-needle-i18n-language-constant[^\}]*)\};/g,
+                    pattern: /private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g,
                     content
                 },
                 this
