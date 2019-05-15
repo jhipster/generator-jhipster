@@ -22,42 +22,47 @@ import <%=packageName%>.config.Constants;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import <%=packageName%>.domain.Authority;
 <%_ } _%>
+<%_ if (databaseType !== 'no') { _%>
 import <%=packageName%>.domain.<%= asEntity('User') %>;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.AuthorityRepository;
-    <%_ if (authenticationType === 'session' && !reactive) { _%>
+        <%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%=packageName%>.repository.PersistentTokenRepository;
+        <%_ } _%>
     <%_ } _%>
-<%_ } _%>
 import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.repository.search.UserSearchRepository;
-<%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
-<%_ } _%>
+    <%_ } _%>
 import <%=packageName%>.security.SecurityUtils;
+<%_ } _%>
 import <%=packageName%>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.service.util.RandomUtil;
 import <%=packageName%>.web.rest.errors.*;
 <%_ } _%>
 
+<%_ if (databaseType !== 'no') { _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<%_ } _%>
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-<%_ if (!reactive) { _%>
+    <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
-<%_ } _%>
+    <%_ } _%>
 import org.springframework.data.domain.Pageable;
     <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.scheduling.annotation.Scheduled;
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -75,7 +80,9 @@ import reactor.core.publisher.Mono;
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session'  && !reactive) { _%>
 import java.time.LocalDate;
 <%_ } _%>
+<%_ if (databaseType !== 'no') { _%>
 import java.time.Instant;
+<%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
@@ -83,7 +90,7 @@ import java.util.*;
 <%_ if (!reactive) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'oauth2' && databaseType !== 'no') { _%>
 import java.util.stream.Stream;
 <%_ } _%>
 
@@ -93,6 +100,7 @@ import java.util.stream.Stream;
 @Service<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
 public class UserService {
+<%_ if (databaseType !== 'no') { _%>
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
@@ -399,7 +407,7 @@ public class UserService {
             .doOnNext(user1 -> log.debug("Created Information for User: {}", user1));
     <%_ } _%>
     }
-<%_ } _%>
+<%_ } // authenticationType !== 'oauth2' _%>
 
     /**
      * Update basic information (first name, last name, email, language) for the current user.
@@ -721,24 +729,6 @@ public class UserService {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 
-    /**
-     * Returns the user from an OAuth 2.0 login.
-     * Synchronizes the user in the local repository.
-     *
-     * @param authToken OAuth2 authentication.
-     * @return the user from the authentication.
-     */
-    public <%= asDto('User') %> getUserFromAuthentication(OAuth2AuthenticationToken authToken) {
-        Map<String, Object> attributes = authToken.getPrincipal().getAttributes();
-        <%= asEntity('User') %> user = getUser(attributes);
-        user.setAuthorities(authToken.getAuthorities().stream().map(authority -> {
-                Authority auth = new Authority();
-                auth.setName((authority).getAuthority());
-                return auth;
-            }).collect(Collectors.toSet()));
-        return new <%= asDto('User') %>(syncUserWithIdP(attributes, user));
-    }
-
     private <%= asEntity('User') %> syncUserWithIdP(Map<String, Object> details, <%= asEntity('User') %> user) {
         // save authorities in to sync user roles/groups between IdP and JHipster's local database
         Collection<String> dbAuthorities = getAuthorities();
@@ -783,9 +773,36 @@ public class UserService {
         }
         return user;
     }
+    <%_ } _%>
+<%_ } // databaseType !== 'no' _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
+    /**
+     * Returns the user from an OAuth 2.0 login.
+        <%_ if (databaseType !== 'no') { _%>
+     * Synchronizes the user in the local repository.
+        <%_ } _%>
+     *
+     * @param authToken OAuth2 authentication.
+     * @return the user from the authentication.
+     */
+    public UserDTO getUserFromAuthentication(OAuth2AuthenticationToken authToken) {
+        Map<String, Object> attributes = authToken.getPrincipal().getAttributes();
+        <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> user = getUser(attributes);
+        user.setAuthorities(authToken.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            <%_ if (databaseType !== 'no') { _%>
+            .map(authority -> {
+                Authority auth = new Authority();
+                auth.setName(authority);
+                return auth;
+            })
+            <%_ } _%>
+            .collect(Collectors.toSet()));
+        return <% if (databaseType !== 'no') { %>new UserDTO(syncUserWithIdP(attributes, user))<% } else { %>user<% } %>;
+    }
 
-    private static <%= asEntity('User') %> getUser(Map<String, Object> details) {
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
+    private static <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> getUser(Map<String, Object> details) {
+        <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> user = new <%= databaseType === 'no' ? asDto('User') : asEntity('User') %>();
         user.setId((String) details.get("sub"));
         if (details.get("preferred_username") != null) {
             user.setLogin(((String) details.get("preferred_username")).toLowerCase());
@@ -829,7 +846,7 @@ public class UserService {
         return user;
     }
     <%_ } _%>
-    <%_ if (cacheManagerIsAvailable === true) { _%>
+    <%_ if (cacheManagerIsAvailable === true && databaseType !== 'no') { _%>
 
     private void clearUserCaches(<%= asEntity('User') %> user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
