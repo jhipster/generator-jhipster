@@ -20,7 +20,12 @@
 
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
     <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
+    <%_ if (prodDatabaseType === 'postgresql' || devDatabaseType === 'postgresql') { _%>
     <property name="clobType" value="longvarchar" dbms="h2"/>
+    <%_ } else { _%>
+    <property name="clobType" value="clob" dbms="h2"/>
+    <%_ } _%>
+    
     <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
