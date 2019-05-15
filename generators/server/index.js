@@ -243,7 +243,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
 
                 if (this.entitySuffix === this.dtoSuffix) {
-                    this.error(chalk.red('Entities cannot be generated as the entity suffix and DTO suffix are equals !'));
+                    this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
                 }
 
                 const serverConfigFound =

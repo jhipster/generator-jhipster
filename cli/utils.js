@@ -42,7 +42,7 @@ const log = function(msg) {
 };
 
 const error = function(msg, trace) {
-    console.error(`${chalk.red.bold('ERROR!')} ${chalk.red(msg)}`);
+    console.error(`${chalk.red(msg)}`);
     if (trace) {
         console.log(trace);
     }
@@ -178,8 +178,12 @@ const getCommandOptions = (pkg, argv) => {
     return { 'from-cli': true };
 };
 
-const done = () => {
-    logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+const done = errorMsg => {
+    if (errorMsg) {
+        logger.error(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
+    } else {
+        logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+    }
 };
 
 const createYeomanEnv = () => {
