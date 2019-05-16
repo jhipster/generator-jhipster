@@ -251,9 +251,9 @@ module.exports = class extends Generator {
         try {
             let content = 'private static String languages[] = {\n';
             languages.forEach((language, i) => {
-                content += `    "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
+                content += `        "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
             });
-            content += '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
+            content += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
 
             jhipsterUtils.replaceContent(
                 {
