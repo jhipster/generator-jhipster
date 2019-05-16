@@ -35,6 +35,7 @@ const constants = require('./generator-constants');
 const { prettierTransform, prettierOptions } = require('./generator-transforms');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 /**
  * This is the Generator base private class.
@@ -103,14 +104,24 @@ module.exports = class extends Generator {
      * @param {string} resourceDir - resource directory
      * @param {string} lang - language code
      */
-    installI18nServerFilesByLanguage(_this, resourceDir, lang) {
+    installI18nServerFilesByLanguage(_this, resourceDir, lang, testResourceDir) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
+        // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+        const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
         generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
-            `${resourceDir}i18n/messages_${langProp}.properties`
+            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
+            `${resourceDir}i18n/messages_${langJavaProp}.properties`
+        );
+        generator.template(
+            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
+            `${resourceDir}i18n/messages_${langJavaProp}.properties`
+        );
+        generator.template(
+            `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
+            `${testResourceDir}i18n/messages_${langJavaProp}.properties`
         );
     }
 
@@ -214,6 +225,40 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
+                    content
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Update Languages In MailServiceIT
+     *
+     * @param languages
+     */
+    updateLanguagesInLanguageMailServiceIT(languages, packageFolder) {
+        const fullPath = `${SERVER_TEST_SRC_DIR}${packageFolder}/service/MailServiceIT.java`;
+        try {
+            let content = 'private static String languages[] = {\n';
+            languages.forEach((language, i) => {
+                content += `        "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
+            });
+            content += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g,
                     content
                 },
                 this

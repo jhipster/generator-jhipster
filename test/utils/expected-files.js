@@ -533,7 +533,7 @@ const expectedFiles = {
 
     i18nRtl: [
         `${SERVER_MAIN_RES_DIR}i18n/messages_en.properties`,
-        `${SERVER_MAIN_RES_DIR}i18n/messages_ar_ly.properties`,
+        `${SERVER_MAIN_RES_DIR}i18n/messages_ar_LY.properties`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/ar-ly/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
