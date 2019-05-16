@@ -54,7 +54,8 @@ const serverFiles = {
                     options: {
                         interpolate: INTERPOLATE_REGEX,
                         context: {
-                            faker
+                            faker,
+                            randexp
                         }
                     },
                     renameTo: generator => `config/liquibase/data/${generator.entityTableName}.csv`
