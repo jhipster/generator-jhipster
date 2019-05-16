@@ -1003,7 +1003,7 @@ describe('JDLImporter', () => {
         expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes("\\'")).to.be.true;
       });
     });
-    context('when parseing a JDL with underscores contained in the application name', () => {
+    context('when parsing a JDL with underscores contained in the application name', () => {
       let returned = null;
 
       before(() => {
