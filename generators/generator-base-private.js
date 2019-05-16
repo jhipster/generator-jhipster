@@ -112,15 +112,15 @@ module.exports = class extends Generator {
         // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
         const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
         generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
+            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
             `${resourceDir}i18n/messages_${langJavaProp}.properties`
         );
         generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
+            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
             `${resourceDir}i18n/messages_${langJavaProp}.properties`
         );
         generator.template(
-            `${prefix}/${testResourceDir}i18n/messages_${langProp}.properties.ejs`,
+            `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
             `${testResourceDir}i18n/messages_${langJavaProp}.properties`
         );
     }
