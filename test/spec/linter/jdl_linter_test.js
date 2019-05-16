@@ -140,5 +140,23 @@ describe('JDLLinter', () => {
         });
       });
     });
+    context('when checking for unused enums', () => {
+      let linter = null;
+      let issues = null;
+
+      before(() => {
+        linter = new JDLLinter({
+          filePath: path.join('test', 'test_files', 'lint', 'unused_enums.jdl')
+        });
+        issues = linter.check();
+      });
+
+      it('reports the issues', () => {
+        expect(issues.getEnumIssuesForEnumName('MyEnum2')).to.have.lengthOf(1);
+        expect(issues.getEnumIssuesForEnumName('MyEnum2')[0].ruleName).to.equal('ENUM_UNUSED');
+        expect(issues.getEnumIssuesForEnumName('MyEnum3')).to.have.lengthOf(1);
+        expect(issues.getEnumIssuesForEnumName('MyEnum3')[0].ruleName).to.equal('ENUM_UNUSED');
+      });
+    });
   });
 });

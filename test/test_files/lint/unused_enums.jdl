@@ -1,0 +1,15 @@
+entity A {
+  thing MyEnum
+}
+
+enum MyEnum {
+  A, B
+}
+
+enum MyEnum2 {
+  A, B
+}
+
+enum MyEnum3 {
+  A, B
+}
