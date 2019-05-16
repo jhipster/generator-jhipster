@@ -185,8 +185,8 @@ const LANGUAGES = [
            And https://github.com/jhipster/generator-jhipster/issues/9494
         */
         value: 'in',
-        localeId: 'in',
-        momentLocaleId: 'in'
+        localeId: 'id',
+        momentLocaleId: 'id'
     },
     { name: 'Italian', dispName: 'Italiano', value: 'it' },
     { name: 'Japanese', dispName: '日本語', value: 'ja' },
