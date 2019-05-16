@@ -77,6 +77,17 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator =>
+                generator.databaseType === 'sql' && (generator.fieldsContainImageBlob === true || generator.fieldsContainBlob === true),
+            path: SERVER_MAIN_RES_DIR,
+            templates: [{ file: 'config/liquibase/data/blob/hipster.png', method: 'copy', noEjs: true }]
+        },
+        {
+            condition: generator => generator.databaseType === 'sql' && generator.fieldsContainBlobOrImage === true,
+            path: SERVER_MAIN_RES_DIR,
+            templates: [{ file: 'config/liquibase/data/blob/hipster.txt', method: 'copy' }]
+        },
+        {
             condition: generator => generator.databaseType === 'cassandra',
             path: SERVER_MAIN_RES_DIR,
             templates: [
