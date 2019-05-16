@@ -239,9 +239,7 @@ module.exports = class extends BaseGenerator {
 
             validate() {
                 if (this.skipServer && this.skipClient) {
-                    this.error(
-                        chalk.red(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`)
-                    );
+                    this.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
                 }
             },
 
