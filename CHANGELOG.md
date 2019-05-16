@@ -1,10 +1,14 @@
 # To be released
 
 ## What's new
-  - Added new option memcached to cache providers (thanks to @Hawkurane) 
+  - Added new option `memcached` to cache providers (thanks to @Hawkurane),
+  - Added `RelationshipOptions` to the API,
+  - Linting: added the 'unused enums' rule
 
 ## Bug fixes
-  - Relationship options are now correctly exported (notably: the jpaDerivedIdentifier option)~~~~ 
+  - Relationship options are now correctly exported (notably: the `jpaDerivedIdentifier` option)~~~~ 
+  - Application base names can now have underscores (thanks to @Shaolans)
+
 
 ---
 
