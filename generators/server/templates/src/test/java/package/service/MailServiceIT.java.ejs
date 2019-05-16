@@ -225,7 +225,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
 
     @Test
     public void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
-        User user = new User();
+        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         for (String langKey : languages) {
