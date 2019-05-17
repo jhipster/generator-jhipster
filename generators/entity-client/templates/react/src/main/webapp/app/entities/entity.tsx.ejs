@@ -375,7 +375,9 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
               </Table>
             ) : (
               <div className="alert alert-warning">
-                No <%= entityClassPluralHumanized %> found
+                <Translate contentKey="<%= i18nKeyPrefix %>.home.notFound">
+                  No <%= entityClassPluralHumanized %> found
+                </Translate>
               </div>
             )
           }
