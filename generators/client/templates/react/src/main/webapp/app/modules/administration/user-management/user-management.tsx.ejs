@@ -26,6 +26,7 @@ import {
   ICrudPutAction,
   TextFormat,
   JhiPagination,
+  JhiItemCount,
   getPaginationItemsNumber,
   getSortState,
   IPaginationBaseState
@@ -177,14 +178,21 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
           }
           </tbody>
         </Table>
-        <Row className="justify-content-center">
-          <JhiPagination
-            items={getPaginationItemsNumber(totalItems, this.state.itemsPerPage)}
-            activePage={this.state.activePage}
-            onSelect={this.handlePagination}
-            maxButtons={5}
-          />
-        </Row>
+        {users && users.length > 0 ? (
+          <div>
+            <Row className="justify-content-center">
+              <JhiItemCount page={this.state.activePage} total={totalItems} itemsPerPage={this.state.itemsPerPage} i18nEnabled />
+            </Row>
+            <Row className="justify-content-center">
+              <JhiPagination
+                items={getPaginationItemsNumber(totalItems, this.state.itemsPerPage)}
+                activePage={this.state.activePage}
+                onSelect={this.handlePagination}
+                maxButtons={5}
+              />
+            </Row>
+          </div>
+        ) : null}
       </div>
     );
   }
