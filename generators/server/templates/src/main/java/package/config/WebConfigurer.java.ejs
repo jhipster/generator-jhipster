@@ -84,8 +84,8 @@ import java.nio.charset.StandardCharsets;
     <%_ if (!skipClient) { _%>
 import java.nio.file.Paths;
     <%_ } _%>
-import java.util.*;
     <%_ if (!skipClient) { _%>
+import java.util.*;
 
 import static java.net.URLDecoder.decode;
     <%_ } _%>
@@ -126,8 +126,8 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         if (env.getActiveProfiles().length != 0) {
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
-        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
         <%_ if (!skipClient) { _%>
+        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_PRODUCTION))) {
             initCachingHttpHeadersFilter(servletContext, disps);
         }

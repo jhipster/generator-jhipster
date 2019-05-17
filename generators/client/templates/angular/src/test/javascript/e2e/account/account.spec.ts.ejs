@@ -18,7 +18,7 @@
 -%>
 import { browser, element, by, ExpectedConditions as ec } from 'protractor';
 
-import { NavBarPage, SignInPage<%_ if (authenticationType !== 'oauth2') { _%>, PasswordPage, SettingsPage<%_ } _%> } from '../page-objects/jhi-page-objects';
+import { NavBarPage, SignInPage<%_ if (!skipUserManagement) { _%>, PasswordPage, SettingsPage<%_ } _%> } from '../page-objects/jhi-page-objects';
 <%_
 let elementGetter = `getText()`;
 if (enableTranslation) {
@@ -31,7 +31,7 @@ describe('account', () => {
 
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
-    <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (!skipUserManagement) { _%>
     let passwordPage: PasswordPage;
     let settingsPage: SettingsPage;
     <%_ } _%>
@@ -103,7 +103,7 @@ describe('account', () => {
         expect(value2).to.eq(expect2);
     });
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
     it('should be able to update settings', async () => {
         settingsPage = await navBarPage.getSettingsPage();
 

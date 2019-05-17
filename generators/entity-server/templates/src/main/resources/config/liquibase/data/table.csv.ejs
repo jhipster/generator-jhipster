@@ -47,6 +47,15 @@ for (idx in relationships) {
         break;
     }
 }
+
+// store unique values
+const uniqueValues = {};
+for (idx in fields) {
+    if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('unique')) {
+        uniqueValues[idx] = [];
+    }
+}
+
 // Generate CSV rows
 
 for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
@@ -59,9 +68,15 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             || columnType === 'bigint'
             || columnType === 'double'
             || columnType.startsWith('decimal')) {
-            data = this.faker.random.number();
+            data = this.faker.random.number({
+                max: fields[idx].fieldValidateRulesMax ? parseInt(fields[idx].fieldValidateRulesMax) : undefined,
+                min: fields[idx].fieldValidateRulesMin ? parseInt(fields[idx].fieldValidateRulesMin) : undefined
+            });
         } else if (columnType === '${floatType}') {
-            data = this.faker.random.number();
+            data = this.faker.random.number({
+                max: fields[idx].fieldValidateRulesMax ? parseFloat(fields[idx].fieldValidateRulesMax) : undefined,
+                min: fields[idx].fieldValidateRulesMin ? parseFloat(fields[idx].fieldValidateRulesMin) : undefined
+            });
         } else if (columnType === 'boolean') {
             data = this.faker.random.boolean();
         } else if (columnType === 'date' || columnType === 'datetime') {
@@ -111,28 +126,69 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             } else {
                 data = this.faker.random.words();
             }
-            // manage String max length
-            if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('maxlength')) {
-                let maxlength = fields[idx].fieldValidateRulesMaxlength;
-                data = data.substring(0, maxlength);
-            }
         }
         if (fields[idx].fieldIsEnum) {
             if (fields[idx].fieldValues.length !== 0) {
                 const enums = fields[idx].fieldValues.split(',');
-                data = enums[0];
+                data = enums[Math.floor(Math.random() * Math.floor(enums.length))];
             } else {
                 data = '';
             }
         }
-        if (fieldType === 'byte[]') {
-            data = Buffer.from(this.faker.random.words(), 'utf8').toString('hex');
+        if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
+            data = '../data/blob/hipster.png'
+        } else if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent === 'text'){
+            data = '../data/blob/hipster.txt'
         }
+
+        // Validation rules
+        if (fields[idx].fieldValidate === true) {
+            if (fields[idx].fieldValidateRules.includes('pattern')) {
+                data = new this.randexp(fields[idx].fieldValidateRulesPattern).gen();
+            }
+
+            // manage String max length
+            if (fields[idx].fieldValidateRules.includes('maxlength')) {
+                let maxlength = fields[idx].fieldValidateRulesMaxlength;
+                data = data.substring(0, maxlength);
+            }
+
+            // manage String min length
+            if (fields[idx].fieldValidateRules.includes('minlength')) {
+                let minlength = fields[idx].fieldValidateRulesMinlength;
+                data = data.length > minlength ? data : data + "X".repeat(minlength - data.length);
+            }
+
+            // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
+            if (
+                fields[idx].fieldValidateRules.includes("pattern") &&
+                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data)
+            ) {
+                data = "";
+            }
+
+            // manage uniqueness
+            if (fields[idx].fieldValidateRules.includes('unique')) {
+                if (uniqueValues[idx].indexOf(data) !== -1) {
+                    data = '';
+                } else {
+                    uniqueValues[idx].push(data);
+                }
+            }
+
+            // manage required
+            if (fields[idx].fieldValidateRules.includes('required') && data === '') {
+                line = [];
+                break;
+            }
+        }
+
         line.push(data);
         if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
             line.push('image/png');
         }
     }
+
     for (idx in relationships) {
         if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
             if (relationships[idx].otherEntityNameCapitalized === 'User') {
@@ -142,7 +198,10 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             }
         }
     }
-    table.push(line);
+
+    if (line.length === (1 + fields.length + relationships.length)) {
+        table.push(line);
+    }
 }
 
 let result = table

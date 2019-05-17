@@ -191,7 +191,7 @@ const files = {
     ],
     accountModule: [
         {
-            condition: generator => generator.authenticationType !== 'oauth2',
+            condition: generator => !generator.skipUserManagement,
             path: REACT_DIR,
             templates: [
                 { file: 'modules/account/index.tsx', method: 'processJsx' },
@@ -209,7 +209,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'session',
+            condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: REACT_DIR,
             templates: [
                 { file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' },
@@ -223,7 +223,6 @@ const files = {
             templates: [
                 // admin modules
                 { file: 'modules/administration/index.tsx', method: 'processJsx' },
-                { file: 'modules/administration/audits/audits.tsx', method: 'processJsx' },
                 { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
                 { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
@@ -232,6 +231,11 @@ const files = {
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
                 'modules/administration/administration.reducer.ts'
             ]
+        },
+        {
+            condition: generator => !['no', 'cassandra'].includes(generator.databaseType),
+            path: REACT_DIR,
+            templates: [{ file: 'modules/administration/audits/audits.tsx', method: 'processJsx' }]
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
@@ -342,7 +346,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType !== 'oauth2',
+            condition: generator => !generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: [
                 // 'spec/app/modules/account/register/register.spec.tsx',
@@ -388,7 +392,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.protractorTests && generator.authenticationType !== 'oauth2',
+            condition: generator => generator.protractorTests && !generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: ['e2e/page-objects/password-page.ts', 'e2e/page-objects/settings-page.ts', 'e2e/page-objects/register-page.ts']
         }

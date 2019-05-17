@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const jhipsterUtils = require('../generators/utils');
 
 let customCommands = {};
 const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
@@ -24,11 +25,11 @@ if (indexOfBlueprintArgv > -1) {
     /* eslint-disable import/no-dynamic-require */
     /* eslint-disable global-require */
 
-    const blueprint = process.argv[indexOfBlueprintArgv + 1];
+    const blueprint = jhipsterUtils.normalizeBlueprintName(process.argv[indexOfBlueprintArgv + 1]);
     try {
-        customCommands = require(`generator-jhipster-${blueprint}/cli/commands`);
+        customCommands = require(`${blueprint}/cli/commands`);
     } catch (e) {
-        const msg = `No custom command found within blueprint: generator-jhipster-${blueprint}`;
+        const msg = `No custom command found within blueprint: ${blueprint}`;
         /* eslint-disable no-console */
         console.info(`${chalk.green.bold('INFO!')} ${msg}`);
     }

@@ -19,7 +19,7 @@
 
 // version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v5.0.0';
-const DOCKER_JAVA_JRE = 'openjdk:11-jre-slim-stretch';
+const DOCKER_JAVA_JRE = 'adoptopenjdk/openjdk11:alpine-jre';
 const DOCKER_MYSQL = 'mysql:8.0.16';
 const DOCKER_MARIADB = 'mariadb:10.4.4';
 const DOCKER_POSTGRESQL = 'postgres:11.2';
@@ -41,7 +41,7 @@ const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v4.0.0';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v4.0.0';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.0.0';
 const DOCKER_TRAEFIK = 'traefik:1.7.11';
-const DOCKER_CONSUL = 'consul:1.4.4';
+const DOCKER_CONSUL = 'consul:1.5.0';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v2.9.2';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.16.2';
@@ -68,6 +68,9 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 const NODE_VERSION = '10.15.3';
 const YARN_VERSION = '1.15.2';
 const NPM_VERSION = '6.9.0';
+
+// Libraries version
+const JIB_VERSION = '1.2.0';
 
 // all constants used throughout all generators
 
@@ -172,7 +175,19 @@ const LANGUAGES = [
     { name: 'Greek', dispName: 'Ελληνικά', value: 'el' },
     { name: 'Hindi', dispName: 'हिंदी', value: 'hi' },
     { name: 'Hungarian', dispName: 'Magyar', value: 'hu' },
-    { name: 'Indonesian', dispName: 'Bahasa Indonesia', value: 'id' },
+    {
+        name: 'Indonesian',
+        dispName: 'Bahasa Indonesia',
+        /*
+           To fix a nasty bug in the JDK ("Indonesian Locale does not comply with ISO 639")
+           The locale is set to "in" for Indonesia
+           See https://bugs.openjdk.java.net/browse/JDK-6457127
+           And https://github.com/jhipster/generator-jhipster/issues/9494
+        */
+        value: 'in',
+        localeId: 'id',
+        momentLocaleId: 'id'
+    },
     { name: 'Italian', dispName: 'Italiano', value: 'it' },
     { name: 'Japanese', dispName: '日本語', value: 'ja' },
     { name: 'Korean', dispName: '한국어', value: 'ko' },
@@ -211,14 +226,14 @@ const LANGUAGES = [
     {
         name: 'Uzbek (Cyrillic)',
         dispName: 'Ўзбекча',
-        value: 'uz-cyr',
-        localeId: 'uz-Cyr'
+        value: 'uz-Cyrl-uz',
+        localeId: 'uz-Cyrl'
     },
     {
         name: 'Uzbek (Latin)',
         dispName: 'O`zbekcha',
-        value: 'uz-lat',
-        localeId: 'uz-Lat'
+        value: 'uz-Latn-uz',
+        localeId: 'uz-Latn'
     },
     { name: 'Vietnamese', dispName: 'Tiếng Việt', value: 'vi' }
 ];
@@ -282,6 +297,10 @@ const constants = {
     NODE_VERSION,
     YARN_VERSION,
     NPM_VERSION,
+
+    // Libraries
+    JIB_VERSION,
+
     DOCKER_JENKINS,
     DOCKER_SWAGGER_EDITOR,
     SQL_DB_OPTIONS,

@@ -26,11 +26,17 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.core.userdetails.UserDetails;
+<%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 
+<%_ if (authenticationType === 'oauth2') { _%>
+import java.util.Map;
+<%_ } _%>
 import java.util.Optional;
 <%_ } _%>
 
@@ -59,6 +65,13 @@ public final class SecurityUtils {
                 if (authentication.getPrincipal() instanceof UserDetails) {
                     UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
                     return springSecurityUser.getUsername();
+                <%_ if (authenticationType === 'oauth2') { _%>
+                } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
+                    Map<String, Object> attributes = ((DefaultOidcUser) authentication.getPrincipal()).getAttributes();
+                    if (attributes.containsKey("preferred_username")) {
+                        return (String) attributes.get("preferred_username");
+                    }
+                <%_ } _%>
                 } else if (authentication.getPrincipal() instanceof String) {
                     return (String) authentication.getPrincipal();
                 }

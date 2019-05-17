@@ -58,7 +58,9 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 <%_ if (cacheProvider === 'memcached') { _%>
+    <%_ if (databaseType !== 'no') { _%>
 import <%=packageName%>.repository.UserRepository;
+    <%_ } _%>
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,7 +169,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
             <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
             createCache(cm, "oAuth2Authentication");
             <%_ } _%>
-            <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
             createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE);
                 <%_ if (enableHibernateCache) { _%>
@@ -537,7 +539,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                 cacheManager.getCache("oAuth2Authentication").getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
             <%_ } _%>
-            <%_ if (!skipUserManagement || (authenticationType === 'oauth2')) { _%>
+            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
             registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, new JCache<Object, Object>(
                 cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE).getAdvancedCache(), this,
                 ConfigurationAdapter.create()));
@@ -668,6 +670,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
         cacheManager.setCaches(ssmCaches);
         return cacheManager;
     }
+    <%_ if (databaseType !== 'no') { _%>
 
     @Bean
     public CacheFactory usersByLoginCache(JHipsterProperties jHipsterProperties) {
@@ -678,6 +681,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     public CacheFactory usersByEmailCache(JHipsterProperties jHipsterProperties) {
         return this.createCache(UserRepository.USERS_BY_EMAIL_CACHE, jHipsterProperties);
     }
+    <%_ } _%>
 
     private CacheFactory createCache(String cacheName, JHipsterProperties jHipsterProperties) {
         if (!jHipsterProperties.getCache().getMemcached().isEnabled()) {

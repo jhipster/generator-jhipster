@@ -16,21 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-# https://docs.docker.com/engine/reference/builder/#dockerignore-file
-classes/
-generated-sources/
-generated-test-sources/
-h2db/
-maven-archiver/
-maven-status/
-reports/
-test-classes/
-test-results/
-!*.jar
-!*.war
-<%_ if (prodDatabaseType === 'cassandra') { _%>
-!cassandra/
-<%_ } _%>
-<%_ if (prodDatabaseType === 'couchbase') { _%>
-!couchbase/scripts/configure-node.sh
-<%_ } _%>
+apply plugin: "war"
+
+bootWar {
+    mainClassName = "<%= packageName %>.<%= mainClass %>"
+    includes = ["WEB-INF/**", "META-INF/**"]
+}
+
+war {
+    <%_ if (!skipClient) { _%>
+    webAppDirName = "<%= CLIENT_DIST_DIR %>"
+    <%_ } _%>
+    enabled = true
+    extension = "war.original"
+    includes = ["WEB-INF/**", "META-INF/**"]
+}

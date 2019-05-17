@@ -52,9 +52,6 @@ const serverFiles = {
         {
             path: DOCKER_DIR,
             templates: [
-                'Dockerfile',
-                'entrypoint.sh',
-                '.dockerignore',
                 'app.yml',
                 'sonar.yml',
                 'monitoring.yml',
@@ -175,6 +172,7 @@ const serverFiles = {
                 'gradle/docker.gradle',
                 { file: 'gradle/profile_dev.gradle', options: { interpolate: INTERPOLATE_REGEX } },
                 { file: 'gradle/profile_prod.gradle', options: { interpolate: INTERPOLATE_REGEX } },
+                'gradle/war.gradle',
                 'gradle/zipkin.gradle',
                 { file: 'gradlew', method: 'copy', noEjs: true },
                 { file: 'gradlew.bat', method: 'copy', noEjs: true },
@@ -248,7 +246,7 @@ const serverFiles = {
                     renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
                     options: { interpolate: INTERPOLATE_REGEX }
                 },
-                { file: 'config/liquibase/master.xml', method: 'copy' }
+                'config/liquibase/master.xml'
             ]
         },
         {
@@ -1322,17 +1320,14 @@ const serverFiles = {
     serverJavaUserManagement: [
         {
             condition: generator =>
-                (generator.skipUserManagement &&
-                    generator.authenticationType === 'oauth2' &&
-                    generator.applicationType !== 'microservice') ||
+                (generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice') ||
                 (!generator.skipUserManagement && generator.databaseType === 'sql'),
             path: SERVER_MAIN_RES_DIR,
             templates: ['config/liquibase/data/user.csv']
         },
         {
             condition: generator =>
-                (generator.skipUserManagement &&
-                    generator.authenticationType === 'oauth2' &&
+                (generator.authenticationType === 'oauth2' &&
                     generator.applicationType !== 'microservice' &&
                     generator.databaseType === 'sql') ||
                 (!generator.skipUserManagement && generator.databaseType === 'sql'),
@@ -1340,15 +1335,10 @@ const serverFiles = {
             templates: ['config/liquibase/data/authority.csv', 'config/liquibase/data/user_authority.csv']
         },
         {
-            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
+            condition: generator => generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` },
-                {
-                    file: 'package/domain/User.java',
-                    renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`
-                },
-                { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
                 { file: 'package/service/UserService.java', renameTo: generator => `${generator.javaDir}service/UserService.java` },
                 {
                     file: 'package/service/dto/package-info.java',
@@ -1357,7 +1347,18 @@ const serverFiles = {
                 {
                     file: 'package/service/dto/UserDTO.java',
                     renameTo: generator => `${generator.javaDir}service/dto/${generator.asDto('User')}.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2' && generator.databaseType !== 'no',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/domain/User.java',
+                    renameTo: generator => `${generator.javaDir}domain/${generator.asEntity('User')}.java`
                 },
+                { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
                 {
                     file: 'package/service/mapper/package-info.java',
                     renameTo: generator => `${generator.javaDir}service/mapper/package-info.java`
@@ -1395,13 +1396,19 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.skipUserManagement && generator.authenticationType === 'oauth2',
+            condition: generator => generator.authenticationType === 'oauth2',
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
                     file: 'package/service/UserServiceIT.java',
                     renameTo: generator => `${generator.testDir}service/UserServiceIT.java`
-                },
+                }
+            ]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2' && generator.databaseType !== 'no',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
                 {
                     file: 'package/service/mapper/UserMapperIT.java',
                     renameTo: generator => `${generator.testDir}service/mapper/UserMapperIT.java`
@@ -1426,8 +1433,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.searchEngine === 'elasticsearch',
+            condition: generator => generator.authenticationType === 'oauth2' && generator.searchEngine === 'elasticsearch',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1437,8 +1443,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                generator.skipUserManagement && generator.authenticationType === 'oauth2' && generator.searchEngine === 'elasticsearch',
+            condition: generator => generator.authenticationType === 'oauth2' && generator.searchEngine === 'elasticsearch',
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -1448,10 +1453,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                generator.skipUserManagement &&
-                generator.authenticationType === 'oauth2' &&
-                ['sql', 'mongodb'].includes(generator.databaseType),
+            condition: generator => generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1474,10 +1476,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                generator.skipUserManagement &&
-                generator.authenticationType === 'oauth2' &&
-                ['sql', 'mongodb'].includes(generator.databaseType),
+            condition: generator => generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

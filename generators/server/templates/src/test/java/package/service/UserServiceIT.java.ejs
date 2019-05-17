@@ -29,14 +29,18 @@ import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
+<%_ if (databaseType !== 'no') { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
+<%_ } _%>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
+<%_ if (databaseType !== 'no') { _%>
 import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 <%_ } _%>
@@ -143,16 +147,18 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
 
     <%_ } _%>
-    private static final String DEFAULT_LANGKEY = "en";
+    private static final String DEFAULT_LANGKEY = "dummy";
 
     <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
 
     <%_ } _%>
+    <%_ if (databaseType !== 'no') { _%>
     @Autowired
     private UserRepository userRepository;
 
+    <%_ } _%>
     @Autowired
     private UserService userService;
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -173,8 +179,10 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     @Mock
     private DateTimeProvider dateTimeProvider;
     <%_ } _%>
+    <%_ if (databaseType !== 'no') { _%>
 
     private <%= asEntity('User') %> user;
+    <%_ } _%>
 
     <%_ if (authenticationType === 'oauth2' ) { _%>
     private Map<String, Object> userDetails;
@@ -188,25 +196,27 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
         persistentTokenRepository.deleteAll();
         <%_ } _%>
-        <%_ if (databaseType !== 'sql') { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         <%_ } _%>
+        <%_ if (databaseType !== 'no') { _%>
         user = new <%= asEntity('User') %>();
-        <%_ if (databaseType === 'cassandra') { _%>
+            <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
-        <%_ } _%>
+            <%_ } _%>
         user.setLogin(DEFAULT_LOGIN);
-        <%_ if (authenticationType !== 'oauth2') { _%>
+            <%_ if (authenticationType !== 'oauth2') { _%>
         user.setPassword(RandomStringUtils.random(60));
-        <%_ } _%>
+            <%_ } _%>
         user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
         user.setFirstName(DEFAULT_FIRSTNAME);
         user.setLastName(DEFAULT_LASTNAME);
-        <%_ if (databaseType !== 'cassandra') { _%>
+            <%_ if (databaseType !== 'cassandra') { _%>
         user.setImageUrl(DEFAULT_IMAGEURL);
-        <%_ } _%>
+            <%_ } _%>
         user.setLangKey(DEFAULT_LANGKEY);
+        <%_ } _%>
         <%_ if (authenticationType === 'oauth2' ) { _%>
 
         userDetails = new HashMap<>();
@@ -368,6 +378,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         persistentTokenRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(token);
     }
     <%_ } _%>
+    <%_ if (databaseType !== 'no') { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -393,6 +404,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
     }
+    <%_ } _%>
 
     <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 
@@ -462,13 +474,13 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     @Transactional
     <%_ } _%>
     public void testUserDetailsWithLangKey() {
-        userDetails.put("langKey", "fr");
+        userDetails.put("langKey", "DEFAULT_LANGKEY");
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertThat(userDTO.getLangKey()).isEqualTo("fr");
+        assertThat(userDTO.getLangKey()).isEqualTo("DEFAULT_LANGKEY");
     }
 
     @Test
