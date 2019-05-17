@@ -63,7 +63,6 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
     for (idx in fields) {
         let data = '';
         let columnType = fields[idx].columnType;
-        let fieldType = fields[idx].fieldType;
         if (columnType === 'integer'
             || columnType === 'bigint'
             || columnType === 'double'
@@ -135,9 +134,9 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
                 data = '';
             }
         }
-        if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
+        if (columnType === 'blob' || columnType === 'longblob') {
             data = '../data/blob/hipster.png'
-        } else if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent === 'text'){
+        } else if (columnType === '${clobType}'){
             data = '../data/blob/hipster.txt'
         }
 
@@ -184,7 +183,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         }
 
         line.push(data);
-        if (fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
+        if (columnType === 'blob' || columnType === 'longblob') {
             line.push('image/png');
         }
     }
