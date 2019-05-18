@@ -116,6 +116,7 @@ gradle-package:
     artifacts:
         paths:
             - build/libs/*.jar
+            - build/classes
         expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
@@ -208,6 +209,7 @@ maven-package:
     artifacts:
         paths:
             - target/*.jar
+            - target/classes
         expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
