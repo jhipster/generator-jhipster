@@ -22,6 +22,11 @@ openapi: "3.0.1"
 info:
     title: "<%= baseName %>"
     version: 0.0.1
+servers:
+    - url: http://localhost:<%= serverPort %>
+      description: Developpement server
+    - url: https://localhost:<%= serverPort %>
+      description: Developpement server with TLS Profile
 paths: {}
 <% if(authenticationType === 'jwt') { %>
 components:
