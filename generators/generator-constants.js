@@ -18,7 +18,7 @@
  */
 
 // version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v5.0.0';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v5.0.1';
 const DOCKER_JAVA_JRE = 'adoptopenjdk/openjdk11:alpine-jre';
 const DOCKER_MYSQL = 'mysql:8.0.16';
 const DOCKER_MARIADB = 'mariadb:10.4.4';
