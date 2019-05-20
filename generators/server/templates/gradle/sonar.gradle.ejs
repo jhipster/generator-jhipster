@@ -21,6 +21,9 @@ jacoco {
 }
 
 jacocoTestReport {
+    executionData tasks.withType(Test)
+    classDirectories = files(sourceSets.main.output.classesDirs)
+    sourceDirectories = files(sourceSets.main.java.srcDirs)
     reports {
         xml.enabled true
     }
