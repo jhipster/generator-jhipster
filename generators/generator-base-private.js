@@ -948,9 +948,11 @@ module.exports = class extends Generator {
                 if (variableName === entityInstance) {
                     variableName += 'Collection';
                 }
-                const relationshipFieldName = `this.${entityInstance}.${relationship.relationshipFieldName}`;
+                const relationshipFieldName = `${relationship.relationshipFieldName}`;
                 const relationshipFieldNameIdCheck =
-                    dto === 'no' ? `!${relationshipFieldName} || !${relationshipFieldName}.id` : `!${relationshipFieldName}Id`;
+                    dto === 'no'
+                        ? `!this.editForm.get('${relationshipFieldName}').value || !this.editForm.get('${relationshipFieldName}').value.id`
+                        : `!!this.editForm.get('${relationshipFieldName}Id').value`;
 
                 filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
                 if (this.jpaMetamodelFiltering) {
@@ -967,7 +969,9 @@ module.exports = class extends Generator {
                     this.${variableName} = res;
                 } else {
                     this.${relationship.otherEntityName}Service
-                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'}).pipe(
+                        .find(this.editForm.get('${relationshipFieldName}${dto !== 'no' ? 'Id' : ''}').value${
+                    dto === 'no' ? '.id' : ''
+                }).pipe(
                             filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
                             map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
                         )
