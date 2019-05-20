@@ -33,8 +33,15 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 <%_ } _%>
 
 <%_
-  const referenceFilterType = '' + pkType + 'Filter';
-  var filterVariables = [{name:'id', type: pkType, filterType:referenceFilterType,fieldInJavaBeanMethod:'Id' } ];
+    let primaryKeyType = pkType;
+    for (idx in relationships) {
+        if ( relationships[idx].useJPADerivedIdentifier === true) {
+            primaryKeyType = (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : pkType;
+            break;
+        }
+    }
+  const referenceFilterType = '' + primaryKeyType + 'Filter';
+  var filterVariables = [{name:'id', type: primaryKeyType, filterType:referenceFilterType,fieldInJavaBeanMethod:'Id' } ];
   var extraFilters = {};
   fields.forEach((field) => {
     const fieldType = field.fieldType;
