@@ -1,3 +1,10 @@
+# Next release
+
+## What's new
+  - Having `no` as DB type is now allowed for any app (thanks to @jsm174 for notifying, and @ruddell & @cbornet for the help).
+
+---
+
 # Latest: v3.6.14
 
 ## What's new
@@ -6,7 +13,7 @@
   - Linting: added the 'unused enums' rule
 
 ## Bug fixes
-  - Relationship options are now correctly exported (notably: the `jpaDerivedIdentifier` option)~~~~ 
+  - Relationship options are now correctly exported (notably: the `jpaDerivedIdentifier` option)
   - Application base names can now have underscores (thanks to @Shaolans)
 
 ---
