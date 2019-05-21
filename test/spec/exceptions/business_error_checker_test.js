@@ -35,7 +35,6 @@ const RelationshipOptions = require('../../../lib/core/jhipster/relationship_opt
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const Validations = require('../../../lib/core/jhipster/validations');
 const JDLObject = require('../../../lib/core/jdl_object');
-const JDLGatewayApplication = require('../../../lib/core/jdl_gateway_application');
 const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 const JDLMicroserviceApplication = require('../../../lib/core/jdl_microservice_application');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
@@ -136,77 +135,6 @@ describe('BusinessErrorChecker', () => {
         expect(relationshipCheckSpy).to.have.been.called;
         expect(enumCheckSpy).to.have.been.called;
         expect(optionCheckSpy).to.have.been.called;
-      });
-    });
-  });
-  describe('#checkForApplicationErrors', () => {
-    let checker = null;
-    let jdlObject = null;
-
-    before(() => {
-      jdlObject = new JDLObject();
-    });
-
-    context('when having no database type', () => {
-      context('for a microservice without oauth2', () => {
-        before(() => {
-          jdlObject.addApplication(
-            new JDLMicroserviceApplication({
-              config: {
-                authenticationType: 'jwt',
-                databaseType: DatabaseTypes.NO
-              }
-            })
-          );
-          checker = new BusinessErrorChecker(jdlObject);
-
-          it('does not fail', () => {
-            expect(() => {
-              checker.checkForApplicationErrors();
-            }).not.to.throw();
-          });
-        });
-      });
-      context('for a gateway with uaa', () => {
-        before(() => {
-          jdlObject.addApplication(
-            new JDLGatewayApplication({
-              config: {
-                authenticationType: 'uaa',
-                databaseType: DatabaseTypes.NO,
-                devDatabaseType: DatabaseTypes.NO,
-                prodDatabaseType: DatabaseTypes.NO
-              }
-            })
-          );
-          checker = new BusinessErrorChecker(jdlObject);
-        });
-        it('does not fail', () => {
-          expect(() => {
-            checker.checkForApplicationErrors();
-          }).not.to.throw();
-        });
-      });
-      context('for any other case', () => {
-        before(() => {
-          jdlObject.addApplication(
-            new JDLMonolithApplication({
-              config: {
-                authenticationType: 'jwt',
-                databaseType: DatabaseTypes.NO
-              }
-            })
-          );
-          checker = new BusinessErrorChecker(jdlObject);
-        });
-        it('fails', () => {
-          expect(() => {
-            checker.checkForApplicationErrors();
-          }).to.throw(
-            'Having no database type is only allowed for microservices without oauth2 authentication ' +
-              'type and gateways with UAA authentication type.'
-          );
-        });
       });
     });
   });

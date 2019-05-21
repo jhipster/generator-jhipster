@@ -20,16 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
-const { MONOLITH, MICROSERVICE, GATEWAY } = require('../../../lib/core/jhipster/application_types');
-const {
-  NO,
-  SQL,
-  MYSQL,
-  POSTGRESQL,
-  MONGODB,
-  CASSANDRA,
-  COUCHBASE
-} = require('../../../lib/core/jhipster/database_types');
+const { MONOLITH } = require('../../../lib/core/jhipster/application_types');
+const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE } = require('../../../lib/core/jhipster/database_types');
 const { checkApplication } = require('../../../lib/exceptions/application_validator');
 
 describe('ApplicationValidator', () => {
@@ -64,54 +56,6 @@ describe('ApplicationValidator', () => {
           expect(() => {
             checkApplication({ config: { testFrameworks: ['nothing'] } });
           }).to.throw("Unknown value 'nothing' for option 'testFrameworks'.");
-        });
-      });
-      context("when having 'no' as database type value", () => {
-        context('in a microservice without oauth2 authentication type', () => {
-          it('does not fail', () => {
-            expect(() => {
-              checkApplication({
-                config: {
-                  databaseType: NO,
-                  devDatabaseType: NO,
-                  prodDatabaseType: NO,
-                  applicationType: MICROSERVICE,
-                  authenticationType: ApplicationOptions.authenticationType.jwt
-                }
-              });
-            }).not.to.throw();
-          });
-        });
-        context('in a gateway with UAA authentication type', () => {
-          it('does not fail', () => {
-            expect(() => {
-              checkApplication({
-                config: {
-                  databaseType: NO,
-                  devDatabaseType: NO,
-                  prodDatabaseType: NO,
-                  applicationType: GATEWAY,
-                  authenticationType: ApplicationOptions.authenticationType.uaa
-                }
-              });
-            }).not.to.throw();
-          });
-        });
-        context('in an invalid case', () => {
-          it('fails', () => {
-            expect(() => {
-              checkApplication({
-                config: {
-                  databaseType: NO,
-                  applicationType: MICROSERVICE,
-                  authenticationType: ApplicationOptions.authenticationType.oauth2
-                }
-              });
-            }).to.throw(
-              'Having no database type is only allowed for microservices without oauth2 authentication type ' +
-                'and gateways with UAA authentication type.'
-            );
-          });
         });
       });
       context('with different options for databaseType, devDatabaseType and prodDatabaseType', () => {
@@ -218,24 +162,6 @@ describe('ApplicationValidator', () => {
         });
       });
       context('with an invalid combination for databaseType, devDatabaseType and prodDatabaseType', () => {
-        context("for 'no' as databaseType", () => {
-          context("when devDatabaseType or prodDatabaseType isn't 'no'", () => {
-            it('fails', () => {
-              expect(() => {
-                checkApplication({
-                  config: {
-                    databaseType: NO,
-                    devDatabaseType: ApplicationOptions.devDatabaseType.h2Memory,
-                    prodDatabaseType: MONGODB
-                  }
-                });
-              }).to.throw(
-                'Having no database type is only allowed for microservices without oauth2 authentication type and ' +
-                  'gateways with UAA authentication type.'
-              );
-            });
-          });
-        });
         context("for 'sql' as databaseType", () => {
           context('with an invalid prodDatabaseType', () => {
             it('fails', () => {
