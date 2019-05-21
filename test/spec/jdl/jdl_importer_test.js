@@ -1013,6 +1013,7 @@ describe('JDLImporter', () => {
 
       after(() => {
         fse.removeSync('.jhipster');
+        fse.removeSync('.yo-rc.json');
       });
 
       it('accept underscore application name', () => {
