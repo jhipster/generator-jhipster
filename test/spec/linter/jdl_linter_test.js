@@ -158,5 +158,38 @@ describe('JDLLinter', () => {
         expect(issues.getEnumIssuesForEnumName('MyEnum3')[0].ruleName).to.equal('ENUM_UNUSED');
       });
     });
+    context('when checking for collapsible relationships', () => {
+      let linter;
+      let issues;
+
+      before(() => {
+        linter = new JDLLinter({
+          filePath: path.join('test', 'test_files', 'lint', 'ungrouped_relationships.jdl')
+        });
+        issues = linter.check();
+      });
+
+      it('reports the issues', () => {
+        expect(issues.relationshipIssues).to.have.lengthOf(3);
+        expect(issues.relationshipIssues[0]).to.deep.equal({
+          from: 'A',
+          ruleName: 'REL_INDIVIDUAL_DECL',
+          to: 'B',
+          type: 'OneToMany'
+        });
+        expect(issues.relationshipIssues[1]).to.deep.equal({
+          from: 'B',
+          ruleName: 'REL_INDIVIDUAL_DECL',
+          to: 'C',
+          type: 'OneToMany'
+        });
+        expect(issues.relationshipIssues[2]).to.deep.equal({
+          from: 'A',
+          ruleName: 'REL_INDIVIDUAL_DECL',
+          to: 'C',
+          type: 'OneToMany'
+        });
+      });
+    });
   });
 });
