@@ -176,7 +176,7 @@ const files = {
     angularAccountModule: [
         {
             path: ANGULAR_DIR,
-            condition: generator => generator.authenticationType !== 'oauth2',
+            condition: generator => !generator.skipUserManagement,
             templates: [
                 'account/index.ts',
                 { file: 'account/account.route.ts', method: 'processJs' },
@@ -208,7 +208,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'session',
+            condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: ANGULAR_DIR,
             templates: [
                 { file: 'account/sessions/sessions.route.ts', method: 'processJs' },
@@ -219,7 +219,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType !== 'oauth2',
+            condition: generator => !generator.skipUserManagement,
             path: ANGULAR_DIR,
             templates: ['account/password/password-strength-bar.scss']
         }
@@ -419,7 +419,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType !== 'oauth2',
+            condition: generator => !generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: [
                 'spec/app/account/activate/activate.component.spec.ts',
@@ -428,11 +428,13 @@ const files = {
                 'spec/app/account/password-reset/init/password-reset-init.component.spec.ts',
                 'spec/app/account/password-reset/finish/password-reset-finish.component.spec.ts',
                 'spec/app/account/register/register.component.spec.ts',
-                'spec/app/account/settings/settings.component.spec.ts',
-                // login component tests
-                'spec/app/shared/login/login.component.spec.ts',
-                'spec/app/shared/alert/alert-error.component.spec.ts'
+                'spec/app/account/settings/settings.component.spec.ts'
             ]
+        },
+        {
+            condition: generator => generator.authenticationType !== 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: ['spec/app/shared/login/login.component.spec.ts', 'spec/app/shared/alert/alert-error.component.spec.ts']
         },
         {
             condition: generator => generator.databaseType !== 'no' && generator.databaseType !== 'cassandra',
@@ -452,7 +454,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'session',
+            condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: ['spec/app/account/sessions/sessions.component.spec.ts']
         },

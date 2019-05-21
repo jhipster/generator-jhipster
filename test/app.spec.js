@@ -1466,7 +1466,6 @@ describe('JHipster generator', () => {
                         ['package.json']
                     )
                 );
-                assert.noFile(['gradle/yeoman.gradle']);
             });
             it('generates README with instructions for Gradle', () => {
                 assert.fileContent('README.md', './gradlew');

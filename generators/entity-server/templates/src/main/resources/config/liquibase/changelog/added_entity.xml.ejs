@@ -33,23 +33,11 @@
                 autoIncrementValue = false;
                 break;
             }
-        }%>
+        }
+    _%>
     <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-    <property name="now" value="now()" dbms="mysql"/>
     <property name="autoIncrement" value="<%- autoIncrementValue %>"/>
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql') { _%>
-    <property name="now" value="current_timestamp" dbms="postgresql"/>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'oracle') { _%>
-    <property name="now" value="sysdate" dbms="oracle"/>
-    <%_ } _%>
-    <%_ if (prodDatabaseType === 'mssql') { _%>
-    <property name="now" value="GETDATE()" dbms="mssql"/>
-    <%_ } _%>
-
-    <property name="floatType" value="float4" dbms="postgresql, h2"/>
-    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
 
     <!--
         Added the entity <%= entityClass %>.
@@ -106,7 +94,7 @@
                     columnType="blob";
                 }
             } else if (fieldTypeBlobContent === 'text') {
-                columnType="clob";
+                columnType="${clobType}";
             } else if (fieldType === 'Boolean') {
                 columnType="boolean";
             }
@@ -125,8 +113,9 @@
                 <%_ } _%>
             </column>
                 <%_ if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
-                    columnType = "varchar(255)"; _%>
-            <column name="<%=columnName %>_content_type" type="<%=columnType %>">
+                    let contentTypeColumnType = columnType;
+                    contentTypeColumnType = "varchar(255)"; _%>
+            <column name="<%=columnName %>_content_type" type="<%=contentTypeColumnType%>">
                 <constraints nullable="<%= nullable %>" />
             </column>
                 <%_ } _%>
@@ -190,8 +179,10 @@
                     loadColumnType = 'boolean';
                 } else if (fields[idx].fieldIsEnum) {
                     loadColumnType = 'string';
-                } else if (columnType === 'clob' || columnType === 'blob' || columnType === 'longblob') {
-                    loadColumnType = 'string';
+                } else if (columnType === 'blob' || columnType === 'longblob') {
+                    loadColumnType = 'blob';
+                } else if (columnType === '${clobType}') {
+                    loadColumnType = 'clob';
                 }
                 _%>
             <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>" type="<%=loadColumnType%>"/>

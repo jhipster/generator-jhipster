@@ -23,6 +23,7 @@ const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
+const jhipsterUtils = require('../utils');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -157,7 +158,7 @@ module.exports = class extends BaseGenerator {
 
         // This adds support for a `--blueprint` flag which can be used to specify a blueprint to use for generation
         this.option('blueprint', {
-            desc: '[BETA] Specify a generator blueprint to use for the sub generators',
+            desc: 'Specify a generator blueprint to use for the sub generators',
             type: String
         });
 
@@ -188,7 +189,7 @@ module.exports = class extends BaseGenerator {
 
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        const blueprint = this.normalizeBlueprintName(this.options.blueprint || this.config.get('blueprint'));
+        const blueprint = jhipsterUtils.normalizeBlueprintName(this.options.blueprint || this.config.get('blueprint'));
         this.blueprint = this.configOptions.blueprint = blueprint;
         this.useNpm = this.configOptions.useNpm = !this.options.yarn;
         this.useYarn = !this.useNpm;
@@ -238,9 +239,7 @@ module.exports = class extends BaseGenerator {
 
             validate() {
                 if (this.skipServer && this.skipClient) {
-                    this.error(
-                        chalk.red(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`)
-                    );
+                    this.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
                 }
             },
 
@@ -288,8 +287,6 @@ module.exports = class extends BaseGenerator {
     get prompting() {
         return {
             askForInsightOptIn: prompts.askForInsightOptIn,
-            // TODO : enable this. It's a bit messy for now, it need better sync.
-            // askForAccountLinking: prompts.askForAccountLinking,
             askForApplicationType: prompts.askForApplicationType,
             askForModuleName: prompts.askForModuleName
         };
@@ -333,12 +330,6 @@ module.exports = class extends BaseGenerator {
                 }
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
-
-            // composeAccountLinking() {
-            //     if (!this.linkAccount) return;
-
-            //     this.composeWith(require.resolve('../link-account'));
-            // },
 
             composeServer() {
                 if (this.skipServer) return;

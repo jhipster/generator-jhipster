@@ -48,7 +48,7 @@ describe('administration', () => {
         await navBarPage.clickOnAdminMenu();
     });
 
-    <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (!skipUserManagement) { _%>
     it('should load user management', async () => {
         await navBarPage.clickOnAdmin('user-management');
         <%_ if (enableTranslation) { _%>

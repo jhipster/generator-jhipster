@@ -45,6 +45,10 @@ function askForClient(meta) {
         {
             value: 'react',
             name: 'React'
+        },
+        {
+            value: 'no',
+            name: 'No client'
         }
     ];
 
@@ -63,6 +67,9 @@ function askForClient(meta) {
 
     this.prompt(PROMPT).then(prompt => {
         this.clientFramework = prompt.clientFramework;
+        if (this.clientFramework === 'no') {
+            this.skipClient = true;
+        }
         done();
     });
 }
@@ -78,7 +85,7 @@ function askForClientTheme(meta) {
         return;
     }
 
-    const applicationType = this.applicationType;
+    const skipClient = this.skipClient;
     const done = this.async();
     const defaultChoices = [
         {
@@ -111,7 +118,7 @@ function askForClientTheme(meta) {
     const PROMPT = {
         type: 'list',
         name: 'clientTheme',
-        when: () => applicationType !== 'microservice' && applicationType !== 'uaa',
+        when: () => !skipClient,
         message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
         choices: defaultChoices,
         default: 'none'
@@ -165,14 +172,14 @@ function askForClientThemeVariant(meta) {
         return;
     }
 
-    const applicationType = this.applicationType;
+    const skipClient = this.skipClient;
 
     const choices = [{ value: 'primary', name: 'Primary' }, { value: 'dark', name: 'Dark' }, { value: 'light', name: 'Light' }];
 
     const PROMPT = {
         type: 'list',
         name: 'clientThemeVariant',
-        when: () => applicationType !== 'microservice' && applicationType !== 'uaa',
+        when: () => !skipClient,
         message: 'Choose a Bootswatch variant navbar theme (https://bootswatch.com/)?',
         choices,
         default: 'primary'

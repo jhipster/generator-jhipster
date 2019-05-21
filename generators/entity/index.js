@@ -230,7 +230,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
 
                 if (context.entitySuffix === context.dtoSuffix) {
-                    this.error(chalk.red('The entity cannot be generated as the entity suffix and DTO suffix are equals !'));
+                    this.error('The entity cannot be generated as the entity suffix and DTO suffix are equals !');
                 }
 
                 context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
@@ -253,7 +253,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             )
                         );
                     } else {
-                        this.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
+                        this.error('The entity cannot be generated as the application does not have a database configured!');
                     }
                 }
             },
@@ -261,15 +261,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
             validateEntityName() {
                 const entityName = this.context.name;
                 if (!/^([a-zA-Z0-9_]*)$/.test(entityName)) {
-                    this.error(chalk.red('The entity name cannot contain special characters'));
+                    this.error('The entity name cannot contain special characters');
                 } else if (/^[0-9].*$/.test(entityName)) {
-                    this.error(chalk.red('The entity name cannot start with a number'));
+                    this.error('The entity name cannot start with a number');
                 } else if (entityName === '') {
-                    this.error(chalk.red('The entity name cannot be empty'));
+                    this.error('The entity name cannot be empty');
                 } else if (entityName.indexOf('Detail', entityName.length - 'Detail'.length) !== -1) {
-                    this.error(chalk.red("The entity name cannot end with 'Detail'"));
+                    this.error("The entity name cannot end with 'Detail'");
                 } else if (!this.context.skipServer && jhiCore.isReservedClassName(entityName)) {
-                    this.error(chalk.red('The entity name cannot contain a Java or JHipster reserved keyword'));
+                    this.error('The entity name cannot contain a Java or JHipster reserved keyword');
                 }
             },
 
@@ -306,9 +306,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }.json file and then run again 'jhipster entity ${context.name}.'`;
 
                 if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
-                    this.error(chalk.red(`The table name cannot contain special characters.\n${instructions}`));
+                    this.error(`The table name cannot contain special characters.\n${instructions}`);
                 } else if (entityTableName === '') {
-                    this.error(chalk.red('The table name cannot be empty'));
+                    this.error('The table name cannot be empty');
                 } else if (jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
                     this.warning(
                         chalk.red(
@@ -317,7 +317,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     );
                     context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
                 } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26 && !skipCheckLengthOfIdentifier) {
-                    this.error(chalk.red(`The table name is too long for Oracle, try a shorter name.\n${instructions}`));
+                    this.error(`The table name is too long for Oracle, try a shorter name.\n${instructions}`);
                 } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14 && !skipCheckLengthOfIdentifier) {
                     this.warning(
                         `The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names.\n${instructions}`

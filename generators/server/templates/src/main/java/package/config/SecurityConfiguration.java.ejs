@@ -254,6 +254,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/management/prometheus").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)<%_ if (authenticationType === 'session') { %>;<% } %>
         <%_ if (authenticationType === 'jwt') { _%>
+            <%_ if (applicationType === 'monolith') { _%>
+        .and()
+            .httpBasic()
+            <%_ } _%>
         .and()
             .apply(securityConfigurerAdapter());
         <%_ } else if (authenticationType === 'oauth2') { _%>

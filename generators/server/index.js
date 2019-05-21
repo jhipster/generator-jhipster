@@ -130,6 +130,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
 
+                this.JIB_VERSION = constants.JIB_VERSION;
+
                 this.packagejs = packagejs;
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
@@ -241,7 +243,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
 
                 if (this.entitySuffix === this.dtoSuffix) {
-                    this.error(chalk.red('Entities cannot be generated as the entity suffix and DTO suffix are equals !'));
+                    this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
                 }
 
                 const serverConfigFound =
@@ -438,6 +440,9 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
+                }
+                if (this.configOptions.skipClient) {
+                    this.skipClient = this.configOptions.skipClient;
                 }
                 if (this.configOptions.uaaBaseName !== undefined) {
                     this.uaaBaseName = this.configOptions.uaaBaseName;

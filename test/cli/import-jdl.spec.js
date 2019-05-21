@@ -35,6 +35,39 @@ const mockFork = (done, tries) => (runYeomanProcess, argv, opts) => {
     };
 };
 
+function testDocumentsRelationships() {
+    it('creates entity json files', () => {
+        assert.file([
+            '.jhipster/Customer.json',
+            '.jhipster/CustomerOrder.json',
+            '.jhipster/OrderedItem.json',
+            '.jhipster/PaymentDetails.json',
+            '.jhipster/ShippingDetails.json'
+        ]);
+    });
+    it('calls entity subgenerator', () => {
+        expect(subGenCallParams.count).to.equal(5);
+        expect(subGenCallParams.commands).to.eql([
+            'jhipster:entity Customer',
+            'jhipster:entity CustomerOrder',
+            'jhipster:entity OrderedItem',
+            'jhipster:entity PaymentDetails',
+            'jhipster:entity ShippingDetails'
+        ]);
+        expect(subGenCallParams.options[0]).to.eql({
+            regenerate: true,
+            force: true,
+            'from-cli': true,
+            'no-fluent-methods': undefined,
+            'skip-client': undefined,
+            'skip-install': true,
+            'skip-server': undefined,
+            'skip-ui-grouping': undefined,
+            'skip-user-management': undefined
+        });
+    });
+}
+
 describe('JHipster generator import jdl', () => {
     beforeEach(() => {
         subGenCallParams = {
@@ -78,42 +111,26 @@ describe('JHipster generator import jdl', () => {
     describe('imports a JDL entity model with relations for mongodb', () => {
         beforeEach(done => {
             testInTempDir(dir => {
+                fse.copySync(path.join(__dirname, '../templates/documents-with-relations'), dir);
                 fse.copySync(path.join(__dirname, '../templates/mongodb-with-relations'), dir);
                 importJdl(['orders-model.jdl'], {}, env);
                 done();
             });
         });
 
-        it('creates entity json files', () => {
-            assert.file([
-                '.jhipster/Customer.json',
-                '.jhipster/CustomerOrder.json',
-                '.jhipster/OrderedItem.json',
-                '.jhipster/PaymentDetails.json',
-                '.jhipster/ShippingDetails.json'
-            ]);
-        });
-        it('calls entity subgenerator', () => {
-            expect(subGenCallParams.count).to.equal(5);
-            expect(subGenCallParams.commands).to.eql([
-                'jhipster:entity Customer',
-                'jhipster:entity CustomerOrder',
-                'jhipster:entity OrderedItem',
-                'jhipster:entity PaymentDetails',
-                'jhipster:entity ShippingDetails'
-            ]);
-            expect(subGenCallParams.options[0]).to.eql({
-                regenerate: true,
-                force: true,
-                'from-cli': true,
-                'no-fluent-methods': undefined,
-                'skip-client': undefined,
-                'skip-install': true,
-                'skip-server': undefined,
-                'skip-ui-grouping': undefined,
-                'skip-user-management': undefined
+        testDocumentsRelationships();
+    });
+    describe('imports a JDL entity model with relations for couchbase', () => {
+        beforeEach(done => {
+            testInTempDir(dir => {
+                fse.copySync(path.join(__dirname, '../templates/documents-with-relations'), dir);
+                fse.copySync(path.join(__dirname, '../templates/couchbase-with-relations'), dir);
+                importJdl(['orders-model.jdl'], {}, env);
+                done();
             });
         });
+
+        testDocumentsRelationships();
     });
     describe('imports a JDL entity model from single file with --json-only flag', () => {
         beforeEach(done => {

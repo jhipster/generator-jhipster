@@ -105,6 +105,18 @@ entity Task {
   description String
 }
 
+entity GoldenBadge {
+  name String
+}
+
+entity SilverBadge {
+  name String
+}
+
+entity Identifier {
+  name String required unique
+}
+
 entity Country {
   name String
 }
@@ -114,7 +126,8 @@ entity Region {
 }
 
 relationship OneToOne {
-  Department{location} to Location
+  Department{location} to Location,
+  Employee{user(login)} to User with jpaDerivedIdentifier
 }
 
 relationship OneToMany {
@@ -138,25 +151,28 @@ relationship OneToMany {
   Employee{department},
   Employee{job} to Job{emp(lastName)},
   Location{country} to Country,
-  Country{area(region)} to Region
+  Country{area(name)} to Region
 }
 
 relationship ManyToOne {
-  Employee{user(login)} to User{employee},
-  Employee{manager(lastName)} to Employee
+  Employee{manager(lastName)} to Employee,
+  Employee{sibag(name) required} to SilverBadge,
+  Employee{gobag(name) required} to GoldenBadge,
+  SilverBadge{iden(name) required} to Identifier,
+  GoldenBadge{iden(name) required} to Identifier
 }
 
 relationship ManyToMany {
   JobHistory to Department,
   JobHistory to Job{history},
-  JobHistory{emp(employee)} to Employee{history},
-  Job{chore(title)} to Task{linkedJob(JobTitle)}
+  JobHistory{emp(firstName)} to Employee{history},
+  Job{chore(title)} to Task{linkedJob(title)}
 }
 
-dto BankAccount, Employee, Department, Location, Country, Region with mapstruct
+dto BankAccount, Employee, Department, Location, Country, Region, SilverBadge, GoldenBadge, Identifier with mapstruct
 
 angularSuffix BankAccount with mySuffix
-filter BankAccount
+filter BankAccount, Employee
 clientRootFolder BankAccount, TheLabel, Operation with test-root
 
 paginate TheLabel, Job with pagination

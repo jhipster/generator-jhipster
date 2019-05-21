@@ -64,7 +64,7 @@
             <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
-            <column name="lang_key" type="varchar(6)"/>
+            <column name="lang_key" type="varchar(10)"/>
             <%_ if (authenticationType !== 'oauth2') { _%>
             <column name="activation_key" type="varchar(20)"/>
             <column name="reset_key" type="varchar(20)"/>

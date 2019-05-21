@@ -69,13 +69,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (!this.isSupportedLanguage(language)) {
                     this.log('\n');
                     this.error(
-                        chalk.red(
-                            `Unsupported language "${language}" passed as argument to language generator.` +
-                                `\nSupported languages: ${_.map(
-                                    this.getAllSupportedLanguageOptions(),
-                                    o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`
-                                ).join('')}`
-                        )
+                        `Unsupported language "${language}" passed as argument to language generator.` +
+                            `\nSupported languages: ${_.map(
+                                this.getAllSupportedLanguageOptions(),
+                                o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`
+                            ).join('')}`
                     );
                 }
             });
@@ -117,6 +115,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 this.applicationType = configuration.get('applicationType');
                 this.baseName = configuration.get('baseName');
+                this.packageFolder = configuration.get('packageFolder');
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
                 this.databaseType = configuration.get('databaseType');
@@ -226,7 +225,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
                     }
                     if (!this.skipServer) {
-                        this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language);
+                        this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language, constants.SERVER_TEST_RES_DIR);
                     }
                     statistics.sendSubGenEvent('languages/language', language);
                 });
@@ -242,6 +241,9 @@ module.exports = class extends BaseBlueprintGenerator {
                     if (this.clientFramework === 'react') {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
                     }
+                }
+                if (!this.skipServer) {
+                    this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
                 }
             }
         };

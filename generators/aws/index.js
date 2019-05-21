@@ -74,7 +74,7 @@ module.exports = class extends BaseGenerator {
                         this.dbEngine = 'postgres';
                         break;
                     default:
-                        this.error(chalk.red('Sorry deployment for this database is not possible'));
+                        this.error('Sorry deployment for this database is not possible');
                 }
             }
         };
@@ -116,7 +116,7 @@ module.exports = class extends BaseGenerator {
 
                 const child = this.buildApplication(this.buildTool, 'prod', err => {
                     if (err) {
-                        this.error(chalk.red(err));
+                        this.error(err);
                     } else {
                         cb();
                     }
@@ -136,9 +136,9 @@ module.exports = class extends BaseGenerator {
                 s3.createBucket({ bucket: this.bucketName }, (err, data) => {
                     if (err) {
                         if (err.message == null) {
-                            this.error(chalk.red('The S3 bucket could not be created. Are you sure its name is not already used?'));
+                            this.error('The S3 bucket could not be created. Are you sure its name is not already used?');
                         } else {
-                            this.error(chalk.red(err.message));
+                            this.error(err.message);
                         }
                     } else {
                         this.log(data.message);
@@ -160,7 +160,7 @@ module.exports = class extends BaseGenerator {
 
                 s3.uploadJar(params, (err, data) => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        this.error(err.message);
                     } else {
                         this.jarKey = data.jarKey;
                         this.log(data.message);
@@ -185,7 +185,7 @@ module.exports = class extends BaseGenerator {
 
                 rds.createDatabase(params, (err, data) => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        this.error(err.message);
                     } else {
                         this.log(data.message);
                         cb();
@@ -210,7 +210,7 @@ module.exports = class extends BaseGenerator {
 
                 rds.createDatabaseUrl(params, (err, data) => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        this.error(err.message);
                     } else {
                         this.dbUrl = data.dbUrl;
                         this.log(data.message);
@@ -225,7 +225,7 @@ module.exports = class extends BaseGenerator {
                 const iam = this.awsFactory.getIam();
                 iam.verifyRoles({}, err => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        this.error(err.message);
                     } else {
                         cb();
                     }
@@ -251,7 +251,7 @@ module.exports = class extends BaseGenerator {
 
                 eb.createApplication(params, (err, data) => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        this.error(err.message);
                     } else {
                         this.log(data.message);
                         cb();

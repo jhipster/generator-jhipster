@@ -54,7 +54,8 @@ const serverFiles = {
                     options: {
                         interpolate: INTERPOLATE_REGEX,
                         context: {
-                            faker
+                            faker,
+                            randexp
                         }
                     },
                     renameTo: generator => `config/liquibase/data/${generator.entityTableName}.csv`
@@ -74,6 +75,17 @@ const serverFiles = {
                         `config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entityClass}.xml`
                 }
             ]
+        },
+        {
+            condition: generator =>
+                generator.databaseType === 'sql' && (generator.fieldsContainImageBlob === true || generator.fieldsContainBlob === true),
+            path: SERVER_MAIN_RES_DIR,
+            templates: [{ file: 'config/liquibase/data/blob/hipster.png', method: 'copy', noEjs: true }]
+        },
+        {
+            condition: generator => generator.databaseType === 'sql' && generator.fieldsContainBlobOrImage === true,
+            path: SERVER_MAIN_RES_DIR,
+            templates: [{ file: 'config/liquibase/data/blob/hipster.txt', method: 'copy' }]
         },
         {
             condition: generator => generator.databaseType === 'cassandra',

@@ -178,8 +178,8 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
 <%_ } _%>
     private boolean activated = false;
 
-    @Size(min = 2, max = 6)<% if (databaseType === 'sql') { %>
-    @Column(name = "lang_key", length = 6)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+    @Size(min = 2, max = 10)<% if (databaseType === 'sql') { %>
+    @Column(name = "lang_key", length = 10)<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
     @Field("lang_key")<% } %><% if (databaseType === 'cassandra') { %>
     @Column(<% if(!reactive) { %>name = <% } %>"lang_key")<% } %>
     private String langKey;
