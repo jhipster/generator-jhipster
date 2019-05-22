@@ -1144,9 +1144,13 @@ _%>
     @Test
     @Transactional
     public void testEntityFromId() {
+            <%_ if (databaseType === 'sql' && hasOauthUser === true) { _%>
+        assertThat(<%= entityInstance %>Mapper.fromId('42L').getId()).isEqualTo('42L');
+        assertThat(<%= entityInstance %>Mapper.fromId(null)).isNull();
+             <%_ } else if (databaseType === 'sql') { _%>
         assertThat(<%= entityInstance %>Mapper.fromId(42L).getId()).isEqualTo(42);
         assertThat(<%= entityInstance %>Mapper.fromId(null)).isNull();
-    }
+             <%_ } _%>
          <%_ } _%>
     <%_ } _%>
 }
