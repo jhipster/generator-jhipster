@@ -16,6 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+let primaryKeyType = pkType;
+for (idx in relationships) {
+    if ( relationships[idx].useJPADerivedIdentifier === true) {
+        primaryKeyType = (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : pkType;
+        break;
+    }
+}
+_%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -44,7 +53,7 @@ export class <%= entityAngularName %>DeleteDialogComponent {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>) {
+    confirmDelete(id: <% if (primaryKeyType === 'String') { %>string<% } else { %>number<% } %>) {
         this.<%= entityInstance %>Service.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: '<%= entityInstance %>ListModification',

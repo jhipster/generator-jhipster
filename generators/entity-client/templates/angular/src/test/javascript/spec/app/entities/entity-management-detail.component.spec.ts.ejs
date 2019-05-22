@@ -17,7 +17,14 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
+let primaryKeyType = pkType;
+for (idx in relationships) {
+    if ( relationships[idx].useJPADerivedIdentifier === true) {
+        primaryKeyType = (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : pkType;
+        break;
+    }
+}
+const tsKeyId = generateTestEntityId(primaryKeyType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
