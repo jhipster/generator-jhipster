@@ -178,7 +178,7 @@
                     loadColumnType = 'string';
                 } else if (columnType === 'blob' || columnType === 'longblob') {
                     loadColumnType = 'blob';
-                } else if (columnType === 'clob') {
+                } else if (columnType === '${clobType}') {
                     loadColumnType = 'clob';
                 }
                 _%>
