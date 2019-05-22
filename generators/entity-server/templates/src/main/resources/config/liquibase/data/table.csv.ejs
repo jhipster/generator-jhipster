@@ -197,8 +197,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             }
         }
     }
-
-    if (line.length === (1 + fields.length + relationships.length)) {
+    if (line.length === header.length) {
         table.push(line);
     }
 }
