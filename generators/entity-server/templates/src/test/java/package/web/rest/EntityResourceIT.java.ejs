@@ -1141,8 +1141,8 @@ _%>
     }
         <%_ if (databaseType === 'sql') { _%>
 
-    @Test
-    @Transactional
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
     public void testEntityFromId() {
             <%_ if (databaseType === 'sql' && hasOauthUser === true) { _%>
         assertThat(<%= entityInstance %>Mapper.fromId('42L').getId()).isEqualTo('42L');
@@ -1151,7 +1151,7 @@ _%>
         assertThat(<%= entityInstance %>Mapper.fromId(42L).getId()).isEqualTo(42);
         assertThat(<%= entityInstance %>Mapper.fromId(null)).isNull();
              <%_ } _%>
-         <%_ } _%>
-    <%_ } _%>
     }
+    <%_ } _%>
+    <%_ } _%>
 }
