@@ -88,15 +88,17 @@ const initHelp = (program, cliName) => {
     });
 
     program.on('command:*', name => {
-        logger.error(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`);
+        logger.info(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`);
 
-        const d = didYouMean(name.toString(), program.commands, '_name');
+        const cmd = Object.values(name).join('');
+        const availableCommands = program.commands.map(cmd => {
+            return cmd._name;
+        });
 
-        if (d) {
-            logger.info(`Did you mean: ${chalk.yellow(d)}?`);
+        const suggestion = didYouMean(cmd, availableCommands);
+        if (suggestion) {
+            logger.log(`  ${chalk.red(`Did you mean ${chalk.yellow(suggestion)}?`)}`);
         }
-
-        process.exit(1);
     });
 };
 
