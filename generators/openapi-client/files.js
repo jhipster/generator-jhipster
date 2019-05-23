@@ -62,12 +62,22 @@ function writeFiles() {
                     }
                 }
                 this.log(execLine);
-                shelljs.exec(execLine);
+
+                const done = this.async();
+                shelljs.exec(execLine, { silent: this.silent }, (code, msg, err) => {
+                    if (code === 0) {
+                        this.success(`Succesfully generated ${cliName} ${generatorName} client`);
+                        done();
+                    } else {
+                        this.error(`Something went wrong while generating ${cliName} ${generatorName} client: ${msg} ${err}`);
+                        done();
+                    }
+                });
             });
         },
 
         addBackendDependencies() {
-            if (!['spring'].includes(_.map(this.clientsToGenerate, 'generatorName'))) {
+            if (!_.map(this.clientsToGenerate, 'generatorName').includes('spring')) {
                 return;
             }
 
@@ -101,7 +111,7 @@ function writeFiles() {
         },
 
         enableFeignClients() {
-            if (!['spring'].includes(_.map(this.clientsToGenerate, 'generatorName'))) {
+            if (!_.map(this.clientsToGenerate, 'generatorName').includes('spring')) {
                 return;
             }
 
@@ -118,7 +128,7 @@ function writeFiles() {
         },
 
         handleComponentScanExclusion() {
-            if (!['spring'].includes(_.map(this.clientsToGenerate, 'generatorName'))) {
+            if (!_.map(this.clientsToGenerate, 'generatorName').includes('spring')) {
                 return;
             }
 

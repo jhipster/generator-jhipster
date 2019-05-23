@@ -25,7 +25,6 @@ const writeFiles = require('./files').writeFiles;
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
-        // This adds support for a `--from-cli` flag
         this.option('regen', {
             desc: 'Regenerates all saved clients',
             type: Boolean,
@@ -36,12 +35,15 @@ module.exports = class extends BaseGenerator {
 
     get initializing() {
         return {
-            getConfig() {
-                this.openApiClients = this.config.get('openApiClients') || {};
+            validateFromCli() {
+                this.checkInvocationFromCLI();
             },
-            displayLogo() {
+            sayHello() {
                 // Have Yeoman greet the user.
                 this.log(chalk.white('Welcome to the JHipster OpenApi client Sub-Generator'));
+            },
+            getConfig() {
+                this.openApiClients = this.config.get('openApiClients') || {};
             }
         };
     }
