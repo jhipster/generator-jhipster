@@ -64,6 +64,7 @@ for (idx in relationships) {
     const relationshipName = relationships[idx].relationshipName;
     // hasOAuthUser = (relationshipName === 'user' && authenticationType === 'oauth2');
     const relationshipNamePlural = relationships[idx].relationshipNamePlural;
+    const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
     const ownerSide = relationships[idx].ownerSide;
     if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
         renMapAnotDto = true;
@@ -75,8 +76,11 @@ _%>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)
             <%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) { renMapAnotDto = true; _%>
     @Mapping(target = "<%= relationshipName %>", ignore = true)
-            <%_ } _%>
-        <%_ } _%>
+            <%_ }
+    if ((relationshipType === 'one-to-many' || relationshipType === 'many-to-many') && fluentMethods) {_%>
+    @Mapping(target = "remove<%= relationshipNameCapitalized %>", ignore = true)
+    <%_ } _%>
+    <%_ } _%>
     <%_ if (renMapAnotDto === true) { _%>
     <%= asEntity(entityClass) %> toEntity(<%= asDto(entityClass)%> <%= asDto(entityInstance) %>);
     <%_ } _%>
