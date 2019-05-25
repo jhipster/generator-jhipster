@@ -48,7 +48,7 @@
         <%_ } else { _%>
         <createTable tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
         <%_ } _%>
-            <column name="id" type="<%= primaryKeyType %>" autoIncrement="${autoIncrement}">
+            <column name="id" type="<%= primaryKeyType %>" <%_ if (primaryKeyType === 'varchar(100)' ) { _%> > <% } else { %> autoIncrement="${autoIncrement}"> <%_ } %>
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (idx in fields) {
             let nullable = true;
