@@ -2,6 +2,10 @@
 
 ## What's new
   - Having `no` as DB type is now allowed for any app (thanks to @jsm174 for notifying, and @ruddell & @cbornet for the help).
+  - Linting: added the 'collapsible relationships" check
+
+## Bug fixes
+  - Parsing regexp with slashes involved now works again (https://github.com/jhipster/generator-jhipster/issues/9750)
 
 ---
 
