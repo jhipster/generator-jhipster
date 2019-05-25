@@ -40,7 +40,7 @@
 
 <!--
     You have to add it, we can't help you otherwise.
-    If you can't pass it, send it via mail at mathieu.aa@free.fr
+    If you can't pass it, send it via mail at mathieu.aa@protonmail.com
 -->
 
 ---
