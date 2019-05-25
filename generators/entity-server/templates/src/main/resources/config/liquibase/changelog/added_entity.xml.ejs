@@ -165,8 +165,7 @@
                   file="config/liquibase/data/<%= entityTableName %>.csv"
                   separator=";"
                   tableName="<%= entityTableName %>"
-                  primaryKey="id"
-                  context="dev">
+                  primaryKey="id">
             <column name="id" type="numeric"/>
             <%_ for (idx in fields) {
                 let loadColumnType = 'string';
