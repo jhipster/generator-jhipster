@@ -40,3 +40,8 @@ fi
 if [[ "$JHI_FOLDER_UAA" == "" ]]; then
     JHI_FOLDER_UAA="$HOME"/uaa
 fi
+
+# set correct OpenJDK version
+if [[ "$JHI_JDK" == "11" ]]; then
+    JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
+fi
