@@ -84,6 +84,9 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             });
         } else if (columnType === 'uuid') {
             data = this.faker.random.uuid();
+            if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb') {
+                data = `UUID_TO_BIN('${data}')`;
+            }
         } else if (columnType === 'boolean') {
             data = this.faker.random.boolean();
         } else if (columnType === 'date' || columnType === 'datetime') {

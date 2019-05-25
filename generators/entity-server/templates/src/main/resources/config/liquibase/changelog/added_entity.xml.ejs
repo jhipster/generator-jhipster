@@ -85,7 +85,7 @@
             } else if (fieldType === 'Duration') {
                 columnType="bigint";
             } else if (fieldType === 'UUID') {
-                columnType="uuid";
+                columnType="${uuidType}";
             } else if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
                 if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql' || prodDatabaseType === 'mariadb') {
                     columnType="longblob";
@@ -161,10 +161,11 @@
           Spring Boot configuration key.
     -->
     <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="faker">
-        <loadData
+        <loadUpdateData
                   file="config/liquibase/data/<%= entityTableName %>.csv"
                   separator=";"
                   tableName="<%= entityTableName %>"
+                  primaryKey="id"
                   context="dev">
             <column name="id" type="numeric"/>
             <%_ for (idx in fields) {
@@ -182,6 +183,8 @@
                     loadColumnType = 'blob';
                 } else if (columnType === '${clobType}') {
                     loadColumnType = 'clob';
+                } else if (columnType === '${uuidType}' && ['mysql', 'mariadb'].includes(devDatabaseType)) {
+                    loadColumnType = 'computed';
                 }
                 _%>
             <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>" type="<%=loadColumnType%>"/>
@@ -199,7 +202,7 @@
             <column name="<%=baseColumnName%>" type="<%=loadColumnType%>"/>
                 <%_ } _%>
             <%_  } _%>
-        </loadData>
+        </loadUpdateData>
     </changeSet>
 
     <changeSet id="<%= changelogDate %>-1-relations" author="jhipster">
