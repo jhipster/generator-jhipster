@@ -199,6 +199,17 @@
             ]
         },
         {
+            "fieldName": "durationAlice",
+            "fieldType": "Duration"
+        },
+        {
+            "fieldName": "durationRequiredAlice",
+            "fieldType": "Duration",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "booleanAlice",
             "fieldType": "Boolean"
         },
@@ -218,6 +229,17 @@
             "fieldName": "enumRequiredAlice",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uuidAlice",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "uuidRequiredAlice",
+            "fieldType": "UUID",
             "fieldValidateRules": [
                 "required"
             ]

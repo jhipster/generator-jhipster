@@ -199,6 +199,17 @@
             ]
         },
         {
+            "fieldName": "durationEva",
+            "fieldType": "Duration"
+        },
+        {
+            "fieldName": "durationRequiredEva",
+            "fieldType": "Duration",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "booleanEva",
             "fieldType": "Boolean"
         },
@@ -218,6 +229,17 @@
             "fieldName": "enumRequiredEva",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uuidEva",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "uuidRequiredEva",
+            "fieldType": "UUID",
             "fieldValidateRules": [
                 "required"
             ]

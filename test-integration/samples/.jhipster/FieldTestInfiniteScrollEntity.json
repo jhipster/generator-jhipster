@@ -199,6 +199,17 @@
             ]
         },
         {
+            "fieldName": "durationHugo",
+            "fieldType": "Duration"
+        },
+        {
+            "fieldName": "durationRequiredHugo",
+            "fieldType": "Duration",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "booleanHugo",
             "fieldType": "Boolean"
         },
@@ -218,6 +229,17 @@
             "fieldName": "enumRequiredHugo",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uuidHugo",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "uuidRequiredHugo",
+            "fieldType": "UUID",
             "fieldValidateRules": [
                 "required"
             ]
