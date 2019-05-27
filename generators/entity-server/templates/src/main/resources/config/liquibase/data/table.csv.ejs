@@ -89,7 +89,9 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             }
         } else if (columnType === 'boolean') {
             data = this.faker.random.boolean();
-        } else if (columnType === 'date' || columnType === 'datetime') {
+        } else if (columnType === 'date') {
+            data = this.faker.date.recent().toISOString().split('T')[0];
+        } else if (columnType === 'datetime') {
             // Write the date without milliseconds so Java can parse it
             // See https://stackoverflow.com/a/34053802/150868
             data = this.faker.date.recent().toISOString().split('.')[0];
