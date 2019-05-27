@@ -71,7 +71,6 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= 
 })
 export class <%= entityAngularName %>UpdateComponent implements OnInit {
 
-    <%= entityInstance %>: I<%= entityAngularName %>;
     isSaving: boolean;
 <%_
 for ( const idx in variables ) { %>
@@ -152,7 +151,6 @@ for ( const idx in variables ) { %>
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
             this.updateForm(<%= entityInstance %>);
-            this.<%= entityInstance %> = <%= entityInstance %>;
         });
 <%_ for (idx in queries) { _%>
         <%- queries[idx] %>
