@@ -172,8 +172,10 @@
                 let columnType = fields[idx].columnType;
                 if (columnType === 'integer' || columnType === 'bigint' || columnType === 'double' || columnType === 'decimal(21,2)' || columnType === '${floatType}') {
                     loadColumnType = 'numeric';
-                } else if (columnType === 'date' || columnType === 'datetime') {
+                } else if (columnType === 'date') {
                     loadColumnType = 'date';
+                } else if (columnType === 'datetime') {
+                    loadColumnType = 'datetime';
                 } else if (columnType === 'boolean') {
                     loadColumnType = 'boolean';
                 } else if (fields[idx].fieldIsEnum) {
