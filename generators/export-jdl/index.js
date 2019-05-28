@@ -19,6 +19,8 @@
 const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
+const jhipsterUtils = require('../../generators/utils');
+const jhCore = require('jhipster-core');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -47,6 +49,8 @@ module.exports = class extends BaseGenerator {
             parseJson() {
                 this.log('Parsing entities from .jhipster dir...');
                 this.jdl = this.generateJDLFromEntities();
+                //console.log(JSON.stringify(this.jdl, 2, 2));
+                this.configuration = jhipsterUtils.getAllJhipsterConfig(null, true);
             }
         };
     }
@@ -54,7 +58,7 @@ module.exports = class extends BaseGenerator {
     writing() {
         const content = `// JDL definition for application '${
             this.baseName
-        }' generated with command 'jhipster export-jdl'\n\n${this.jdl.toString()}`;
+        }' generated with command 'jhipster export-jdl'\n\n${jhCore.JDLExporter.convertApplicationToString(this.configuration)}\n\n${this.jdl.toString()}`;
         this.fs.write(this.jdlFile, content);
     }
 
