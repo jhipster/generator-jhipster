@@ -288,13 +288,11 @@ dependencies {
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
     implementation "com.hazelcast:hazelcast"
-    <%_ if (enableHibernateCache) { _%>
+    <%_ } _%>
+    <%_ if (cacheProvider === 'hazelcast' && enableHibernateCache) { _%>
     implementation "com.hazelcast:hazelcast-hibernate53"
     <%_ } _%>
-    implementation "com.hazelcast:hazelcast-spring"
-    <%_ } _%>
-    <%_ if ((applicationType === 'gateway') && cacheProvider !== 'hazelcast') { _%>
-    implementation "com.hazelcast:hazelcast"
+    <%_ if (cacheProvider === 'hazelcast') { _%>
     implementation "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') { _%>
