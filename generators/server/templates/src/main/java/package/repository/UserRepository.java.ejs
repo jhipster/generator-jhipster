@@ -125,7 +125,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey);
     <%_ } _%>
 
-    <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
     <%_ if (authenticationType !== 'oauth2') { _%>
 
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey);
