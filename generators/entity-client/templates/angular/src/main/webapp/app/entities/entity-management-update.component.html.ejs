@@ -205,7 +205,7 @@ const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
             <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
             <%_ } else { _%>
-                        <option *ngIf="!editForm.get('<%= relationshipName %>').value" [ngValue]="null" selected></option>
+                        <option *ngIf="!editForm.get('<%= relationshipName %>Id').value" [ngValue]="null" selected></option>
             <%_ } _%>
                         <option [ngValue]="<%=otherEntityName %>Option.id" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: track<%=otherEntityNameCapitalized %>ById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                     </select>
