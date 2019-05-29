@@ -34,7 +34,9 @@ import {
   getModifiedDateSortButton,
 <%_ } _%>
   waitUntilDisplayed,
+<%_ if (!skipUserManagement) { _%>
   waitUntilClickable,
+<%_ } _%>
   waitUntilHidden
 } from '../../util/utils';
 <%_ } else { _%>
