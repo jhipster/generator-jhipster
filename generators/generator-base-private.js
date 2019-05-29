@@ -1359,4 +1359,14 @@ module.exports = class extends Generator {
             );
         }
     }
+
+    /**
+     * Get distinct relationships based on their otherEntityName property.
+     * @param {Array|Object} relationships - array of relationships
+     */
+    getDistinctRelationships(relationships) {
+        return relationships.filter(
+            (relationship, pos, array) => array.map(mapObj => mapObj.otherEntityName).indexOf(relationship.otherEntityName) === pos
+        );
+    }
 };

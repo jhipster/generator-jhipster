@@ -18,6 +18,9 @@
 -%>
 package <%=packageName%>.web.rest;
 
+<%
+const distinctRelationships = getDistinctRelationships(relationships);
+%>
 <%_ let isUsingMapsId = false;
     let mapsIdAssoc;
     let mapsIdEntity;
@@ -45,16 +48,13 @@ import <%=packageName%>.config.TestSecurityConfiguration;
 <%_ } _%>
 import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
 <%_
-    var imported = [];
-    for (idx in relationships) { // import entities in required relationships
-        const relationshipValidate = relationships[idx].relationshipValidate;
-        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-        const isUsingMapsIdL1 = relationships[idx].useJPADerivedIdentifier;
-        if(imported.indexOf(otherEntityNameCapitalized) === -1) {
-            if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
-import <%=packageName%>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
-<%_         imported.push(otherEntityNameCapitalized);
-        } } } _%>
+    // import entities in required relationships
+    distinctRelationships
+        .filter(relationship => jpaMetamodelFiltering || relationship.relationshipValidate || relationship.useJPADerivedIdentifier)
+        .forEach(requiredRelationship => { _%>
+import <%=packageName%>.domain.<%= asEntity(requiredRelationship.otherEntityNameCapitalized) %>;
+<%_     });
+_%>
 <%_ if (saveUserSnapshot) { _%>
 import <%=packageName%>.repository.UserRepository;
 <%_ } _%>

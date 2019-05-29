@@ -268,5 +268,35 @@ export * from './entityFolderName/entityFileName.state';`;
                 });
             });
         });
+        describe('getDistinctsRelationships', () => {
+            describe('when having no relationships', () => {
+                it('get empty array', () => {
+                    // GIVEN
+                    const relationships = [];
+
+                    // WHEN
+                    const distinctRelationships = BaseGenerator.getDistinctRelationships(relationships);
+
+                    // THEN
+                    expect(distinctRelationships).to.eql([]);
+                });
+            });
+            describe('when having some duplicated relationships', () => {
+                it('get only distinct relationships', () => {
+                    // GIVEN
+                    const relation1 = { otherEntityName: 'relation1' };
+                    const relation2 = { otherEntityName: 'relation2' };
+                    const relation3 = { otherEntityName: 'relation3' };
+                    const relation2bis = { otherEntityName: 'relation2' };
+                    const relationships = [relation1, relation2, relation3, relation2bis];
+
+                    // WHEN
+                    const distinctRelationships = BaseGenerator.getDistinctRelationships(relationships);
+
+                    // THEN
+                    expect(distinctRelationships).to.eql([relation1, relation2, relation3]);
+                });
+            });
+        });
     });
 });
