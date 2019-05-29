@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const jhCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
-const jhipsterUtils = require('../../generators/utils');
-const jhCore = require('jhipster-core');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -46,8 +45,7 @@ module.exports = class extends BaseGenerator {
                 statistics.sendSubGenEvent('generator', 'export-jdl');
             },
 
-            parseJson() {
-                this.log('Parsing entities from .jhipster dir...');
+            loadConfig() {
                 this.jdl = jhCore.JDLExporter.loadJhipsterConfigAndEntities();
             }
         };
