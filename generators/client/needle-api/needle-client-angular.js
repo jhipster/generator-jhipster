@@ -188,14 +188,18 @@ module.exports = class extends needleClientBase {
 
             if (!isSpecificEntityAlreadyGenerated) {
                 const appName = this.generator.getAngularXAppName();
-                const isEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, 'loadChildren', this.generator);
+                const isAnyEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
+                    entityModulePath,
+                    'loadChildren',
+                    this.generator
+                );
 
                 const modulePath = `./${entityFolderName}/${entityFileName}.module`;
                 const moduleName = microServiceName
                     ? `${this.generator.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
                     : `${appName}${entityAngularName}Module`;
 
-                const splicable = isEntityAlreadyGenerated
+                const splicable = isAnyEntityAlreadyGenerated
                     ? `|,{
                             |                path: '${entityUrl}',
                             |                loadChildren: '${modulePath}#${moduleName}'
