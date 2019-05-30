@@ -49,7 +49,7 @@
         "jsdoc": "jsdoc --configure jsdoc-conf.json"
     },
     "dependencies": {
-        "axios": "0.18.0",
+        "axios": "0.19.0",
         "chalk": "2.4.2",
         "commander": "2.19.0",
         "conf": "2.2.0",
