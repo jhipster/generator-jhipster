@@ -28,7 +28,7 @@ import { JhiSortDirective } from './sort.directive';
 })
 export class JhiSortByDirective implements AfterContentInit {
     @Input() jhiSortBy: string;
-    @ContentChild(FaIconComponent) iconComponent: FaIconComponent;
+    @ContentChild(FaIconComponent, { static: true }) iconComponent: FaIconComponent;
 
     sortIcon: IconDefinition;
     sortAscIcon: IconDefinition;
