@@ -64,6 +64,13 @@ describe('DocumentParser', () => {
               name: 'Department',
               tableName: 'Department',
               fields: {
+                guid: new JDLField({
+                  name: 'guid',
+                  type: FieldTypes.UUID,
+                  validations: {
+                    required: new JDLValidation({ name: Validations.REQUIRED })
+                  }
+                }),
                 name: new JDLField({
                   name: 'name',
                   type: FieldTypes.STRING,

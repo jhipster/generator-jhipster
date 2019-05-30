@@ -1,4 +1,5 @@
 entity Department {
+  guid UUID required,
   name String required unique,
   description TextBlob,
   advertisement Blob,
