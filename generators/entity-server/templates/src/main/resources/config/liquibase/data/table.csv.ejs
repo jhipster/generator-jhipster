@@ -29,8 +29,14 @@ for (idx in fields) {
     }
 }
 for (idx in relationships) {
-    if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
-        header.push(getColumnName(relationships[idx].relationshipName) + '_id');
+    const relationshipType = relationships[idx].relationshipType
+    if (
+        (relationshipType === "many-to-one"
+            || (relationshipType === "one-to-one" && relationships[idx].ownerSide === true
+               && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false))
+        ) && (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired)
+    ) {
+        header.push(getColumnName(relationships[idx].relationshipName) + "_id");
     }
 }
 table.push(header);
@@ -189,7 +195,13 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
     }
 
     for (idx in relationships) {
-        if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
+        const relationshipType = relationships[idx].relationshipType;
+        if (
+            (relationshipType === "many-to-one"
+                || (relationshipType === "one-to-one" && relationships[idx].ownerSide === true
+                   && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false))
+            ) && (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired)
+        ) {
             if (relationships[idx].otherEntityNameCapitalized === 'User') {
                 line.push(this.faker.random.number({min: 1, max: 2}));
             } else {
