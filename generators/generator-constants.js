@@ -169,6 +169,7 @@ const LANGUAGES = [
         value: 'fa',
         rtl: true
     },
+    { name: 'Finnish', dispName: 'Suomi', value: 'fi' },
     { name: 'French', dispName: 'Français', value: 'fr' },
     { name: 'Galician', dispName: 'Galego', value: 'gl' },
     { name: 'German', dispName: 'Deutsch', value: 'de' },
