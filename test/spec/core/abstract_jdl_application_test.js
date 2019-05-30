@@ -20,7 +20,7 @@
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 const AbstractJDLApplication = require('../../../lib/core/abstract_jdl_application');
-const { MONGODB, COUCHBASE, CASSANDRA } = require('../../../lib/core/jhipster/database_types');
+const { MONGODB, COUCHBASE, CASSANDRA, NO } = require('../../../lib/core/jhipster/database_types');
 
 describe('AbstractJDLApplication', () => {
   describe('::new', () => {
@@ -88,7 +88,7 @@ describe('AbstractJDLApplication', () => {
         expect(jdlApplicationConfig.entitySuffix).to.equal('');
       });
     });
-    [MONGODB, COUCHBASE, CASSANDRA].forEach(databaseType => {
+    [MONGODB, COUCHBASE, CASSANDRA, NO].forEach(databaseType => {
       context(`when the DB type is either ${databaseType}`, () => {
         before(() => {
           const jdlApplication = new AbstractJDLApplication({
