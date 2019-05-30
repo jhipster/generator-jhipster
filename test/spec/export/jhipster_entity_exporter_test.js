@@ -623,6 +623,61 @@ describe('JHipsterEntityExporter', () => {
           });
         });
       });
+      context('when exporting updated entities', () => {
+        let originalContent;
+        let newContent;
+
+        before(() => {
+          originalContent = {
+            fields: [
+              {
+                fieldName: 'myEnum',
+                fieldType: 'MyEnum',
+                fieldValues: 'FRENCH,ENGLISH'
+              }
+            ],
+            relationships: [],
+            changelogDate: '42',
+            javadoc: '',
+            entityTableName: 'a',
+            dto: 'no',
+            pagination: 'no',
+            service: 'no',
+            fluentMethods: true,
+            jpaMetamodelFiltering: false,
+            clientRootFolder: '',
+            applications: []
+          };
+          FileUtils.createDirectory('.jhipster');
+          fs.writeFileSync(
+            path.join('.jhipster', 'A.json'),
+            JSON.stringify({ ...originalContent, customAttribute: '42' })
+          );
+          const entities = {
+            A: originalContent
+          };
+          JHipsterEntityExporter.exportEntities({
+            entities,
+            application: {
+              name: 'MyApp',
+              type: ApplicationTypes.MONOLITH
+            }
+          });
+          newContent = JSON.parse(fs.readFileSync(path.join('.jhipster', 'A.json'), { encoding: 'utf-8' }));
+        });
+
+        after(() => {
+          fs.unlinkSync('.jhipster/A.json');
+          fs.rmdirSync('.jhipster');
+        });
+
+        it('merges the existing content with the new one', () => {
+          expect(newContent).to.deep.equal({
+            ...originalContent,
+            customAttribute: '42'
+          });
+        });
+      });
     });
   });
   describe('::exportEntitiesInApplications', () => {

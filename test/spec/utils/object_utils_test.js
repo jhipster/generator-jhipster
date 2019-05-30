@@ -534,13 +534,13 @@ describe('ObjectUtils', () => {
             expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
-        context('when not having the same jpaMetaModelFiltering option value', () => {
+        context('when not having the same jpaMetamodelFiltering option value', () => {
           context("when one entity has 'no' and the other has 'false'", () => {
             before(() => {
-              secondObject.jpaMetaModelFiltering = false;
+              secondObject.jpaMetamodelFiltering = false;
             });
             after(() => {
-              secondObject.jpaMetaModelFiltering = 'no';
+              secondObject.jpaMetamodelFiltering = 'no';
             });
 
             it('returns true', () => {
@@ -549,14 +549,14 @@ describe('ObjectUtils', () => {
           });
           context('when they have opposite values', () => {
             before(() => {
-              secondObject.jpaMetaModelFiltering = true;
+              secondObject.jpaMetamodelFiltering = true;
             });
             after(() => {
-              secondObject.jpaMetaModelFiltering = false;
+              secondObject.jpaMetamodelFiltering = false;
             });
 
             it('returns false', () => {
-              expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
+              expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
             });
           });
         });
@@ -672,6 +672,70 @@ describe('ObjectUtils', () => {
             pagination: 'no',
             service: 'no'
           };
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+        });
+      });
+      context('as they do not have the same number of attributes', () => {
+        let firstObject;
+        let secondObject;
+
+        before(() => {
+          firstObject = {
+            javadoc: 'My first comment',
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              },
+              {
+                id: 2,
+                anotherField: 44
+              }
+            ],
+            dto: 'mapstruct',
+            pagination: 'pager',
+            service: 'no'
+          };
+          secondObject = {
+            javadoc: 'My first comment',
+            fields: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ],
+            relationships: [
+              {
+                id: 1,
+                anotherField: 44
+              },
+              {
+                id: 2,
+                anotherField: 44
+              }
+            ],
+            dto: 'mapstruct',
+            pagination: 'no',
+            service: 'no',
+            custom: true
+          };
+        });
+
+        it('returns false', () => {
           expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
       });
