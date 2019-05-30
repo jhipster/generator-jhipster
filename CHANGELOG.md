@@ -4,6 +4,7 @@
   - Having `no` as DB type is now allowed for any app (thanks to @jsm174 for notifying, and @ruddell & @cbornet for the help).
   - Additionally, having `no` as DB type automatically sets the `devDatabaseType` & `prodDatabaseType` values to `no` (thanks @jsm174 from reporting it).
   - Linting: added the 'collapsible relationships" check
+  - For blueprints: when a JSON entity file has custom attributes, the JDL import subgen now just merges the old content with the new one
 
 ## Bug fixes
   - Parsing regexp with slashes involved now works again (https://github.com/jhipster/generator-jhipster/issues/9750)
