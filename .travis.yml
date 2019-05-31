@@ -23,7 +23,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "10.15.3"
+  - "10.16.0"
 jdk:
   - oraclejdk8
 addons:
