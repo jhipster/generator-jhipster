@@ -126,7 +126,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         <%_ } _%>
         loading: false,
         <%_ if (pagination !== 'no') { _%>
-        totalItems: action.payload.headers['x-total-count'],
+        totalItems: parseInt(action.payload.headers['x-total-count'], 10),
         <%_ } _%>
         <%_ if (pagination === 'infinite-scroll') { _%>
         entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links)
