@@ -55,7 +55,9 @@ describe('Subgenerator languages of Vue.js JHipster blueprint', () => {
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/user-management.json`,
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/health.json`,
-                        `${SERVER_MAIN_RES_DIR}i18n/messages_${language.value.replace('-', '_')}.properties`
+                        `${SERVER_MAIN_RES_DIR}i18n/messages_${language.value
+                            .replace(/-/g, '_')
+                            .replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`
                     ]);
                     assert.noFile([`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/gateway.json`]);
                 });

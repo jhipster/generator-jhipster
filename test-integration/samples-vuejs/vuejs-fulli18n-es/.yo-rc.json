@@ -44,7 +44,7 @@
             "el",
             "hi",
             "hu",
-            "id",
+            "in",
             "it",
             "ja",
             "ko",
@@ -63,7 +63,8 @@
             "ta",
             "th",
             "ua",
-            "uz-lat",
+            "uz-Cyrl-uz",
+            "uz-Latn-uz",
             "vi"
         ],
         "testFrameworks": ["protractor"],
