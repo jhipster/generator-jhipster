@@ -88,6 +88,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 <%_ } _%>
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 <%_ if (applicationType !== 'microservice') { _%>
 import org.springframework.web.filter.CorsFilter;
 <%_ } _%>
@@ -223,8 +224,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             <%_ } _%>
         .and()
             .headers()
+            .contentSecurityPolicy("default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'")
+        .and()
+            .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+        .and()
+            .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'")
+        .and()
             .frameOptions()
-            .disable()
+            .deny()
         .and()
         <%_ if (authenticationType === 'jwt' || (authenticationType === 'oauth2' && applicationType === 'microservice')) { _%>
             .sessionManagement()
