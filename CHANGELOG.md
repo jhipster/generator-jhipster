@@ -1,5 +1,9 @@
 # Next release
 
+## Breaking changes
+  - Removed methods `#addEntity` and `#excludeEntity` from JDLUnaryOption & JDLBinaryOption classes.
+    - In favor of the `#addEntityName` and `#excludeEntityName` methods that take strings instead of entities.
+
 ## What's new
   - Having `no` as DB type is now allowed for any app (thanks to @jsm174 for notifying, and @ruddell & @cbornet for the help).
   - Additionally, having `no` as DB type automatically sets the `devDatabaseType` & `prodDatabaseType` values to `no` (thanks @jsm174 from reporting it).
