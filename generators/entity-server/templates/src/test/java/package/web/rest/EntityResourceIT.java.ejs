@@ -454,18 +454,20 @@ _%>
                 <%_ } _%>
     <%_ } else { _%>
         <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>;
+        <%_ if (databaseType === 'sql') { _%>
         if (TestUtil.findAll(em, <%= otherEntityNameCapitalized %>.class).isEmpty()) {
-            <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql') { %>em<% } %>);
-                <%_ if (databaseType === 'sql') { _%>
+            <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(em);
             em.persist(<%= otherEntityName %>);
             em.flush();
-                <%_ } _%>
-                <%_ if (databaseType === 'mongodb') { _%>
-            <%= otherEntityName %>.setId("fixed-id-for-tests");
-                <%_ } _%>
         } else {
             <%= otherEntityName %> = TestUtil.findAll(em, <%= otherEntityNameCapitalized %>.class).get(0);
         }
+        <%_ } else { _%>
+        <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql') { %>em<% } %>);
+        <%_ } _%>
+        <%_ if (databaseType === 'mongodb') { _%>
+        <%= otherEntityName %>.setId("fixed-id-for-tests");
+        <%_ } _%>
     <%_ } _%>
             <%_ } _%>
             <%_ if (relationshipType === 'many-to-many' || relationshipType === 'one-to-many') { _%>
