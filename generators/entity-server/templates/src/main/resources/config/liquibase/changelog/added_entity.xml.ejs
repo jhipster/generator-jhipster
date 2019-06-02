@@ -161,11 +161,10 @@
           Spring Boot configuration key.
     -->
     <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="faker">
-        <loadUpdateData
+        <loadData
                   file="config/liquibase/data/<%= entityTableName %>.csv"
                   separator=";"
-                  tableName="<%= entityTableName %>"
-                  primaryKey="id">
+                  tableName="<%= entityTableName %>">
             <column name="id" type="numeric"/>
             <%_ for (idx in fields) {
                 let loadColumnType = 'string';
@@ -184,8 +183,6 @@
                     loadColumnType = 'blob';
                 } else if (columnType === '${clobType}') {
                     loadColumnType = 'clob';
-                } else if (columnType === '${uuidType}' && ['mysql', 'mariadb'].includes(devDatabaseType)) {
-                    loadColumnType = 'computed';
                 }
                 _%>
             <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>" type="<%=loadColumnType%>"/>
@@ -203,7 +200,7 @@
             <column name="<%=baseColumnName%>" type="<%=loadColumnType%>"/>
                 <%_ } _%>
             <%_  } _%>
-        </loadUpdateData>
+        </loadData>
     </changeSet>
 
     <changeSet id="<%= changelogDate %>-1-relations" author="jhipster">

@@ -82,11 +82,8 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
                 max: fields[idx].fieldValidateRulesMax ? parseFloat(fields[idx].fieldValidateRulesMax) : undefined,
                 min: fields[idx].fieldValidateRulesMin ? parseFloat(fields[idx].fieldValidateRulesMin) : undefined
             });
-        } else if (columnType === 'uuid') {
+        } else if (columnType === '${uuidType}') {
             data = this.faker.random.uuid();
-            if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb') {
-                data = `UUID_TO_BIN('${data}')`;
-            }
         } else if (columnType === 'boolean') {
             data = this.faker.random.boolean();
         } else if (columnType === 'date') {
