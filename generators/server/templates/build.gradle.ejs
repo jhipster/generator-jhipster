@@ -468,9 +468,7 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernate_version}"
-        <%_ if (authenticationType !== 'uaa') { _%>
     annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
-        <%_ } _%>
     <%_ } _%>
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}") {
         exclude group: "com.vaadin.external.google", module: "android-json"
