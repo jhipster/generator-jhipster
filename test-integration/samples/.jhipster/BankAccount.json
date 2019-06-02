@@ -23,6 +23,10 @@
             ]
         },
         {
+            "fieldName": "guid",
+            "fieldType": "UUID"
+        },
+        {
             "fieldName": "bankNumber",
             "fieldType": "Integer"
         },
