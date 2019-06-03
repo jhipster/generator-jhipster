@@ -188,11 +188,7 @@ module.exports = class extends needleClientBase {
 
             if (!isSpecificEntityAlreadyGenerated) {
                 const appName = this.generator.getAngularXAppName();
-                const isAnyEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
-                    entityModulePath,
-                    'loadChildren',
-                    this.generator
-                );
+                const isAnyEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, 'loadChildren', this.generator);
 
                 const modulePath = `./${entityFolderName}/${entityFileName}.module`;
                 const moduleName = microServiceName
