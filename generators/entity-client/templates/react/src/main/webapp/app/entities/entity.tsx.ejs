@@ -39,7 +39,7 @@ import {
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-  , getPaginationItemsNumber, JhiPagination, JhiItemCount
+  , JhiPagination, JhiItemCount
   <%_ }} _%>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -386,28 +386,25 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <%_ } _%>
         </div>
         <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-        {
-          <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? (
-            <div>
-              <Row className="justify-content-center">
-                <JhiItemCount
-                  page={this.state.activePage}
-                  total={totalItems}
-                  itemsPerPage={this.state.itemsPerPage}
-                  <%{ if (enableTranslation) { %>i18nEnabled<% }}%>
-                />
-              </Row>
-              <Row className="justify-content-center">
-                <JhiPagination
-                  items={getPaginationItemsNumber(totalItems, this.state.itemsPerPage)}
-                  activePage={this.state.activePage}
-                  onSelect={this.handlePagination}
-                  maxButtons={5}
-                />
-              </Row>
-            </div>
-          ) : null
-        }
+        <div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
+          <Row className="justify-content-center">
+            <JhiItemCount
+              page={this.state.activePage}
+              total={totalItems}
+              itemsPerPage={this.state.itemsPerPage}
+              <%{ if (enableTranslation) { %>i18nEnabled<% }}%>
+            />
+          </Row>
+          <Row className="justify-content-center">
+            <JhiPagination
+              activePage={this.state.activePage}
+              onSelect={this.handlePagination}
+              maxButtons={5}
+              itemsPerPage={this.state.itemsPerPage}
+              totalItems={this.props.totalItems}
+            />
+          </Row>
+        </div>
         <% } _%>
       </div>
     );
