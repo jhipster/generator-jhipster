@@ -218,15 +218,33 @@ export const getEntity: ICrudGetAction<I<%= entityReactName %>> = id => {
   };
 };
 
-export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
-  const result = await dispatch({
-    type: ACTION_TYPES.CREATE_<%= entityActionName %>,
-    payload: axios.post(apiUrl, cleanEntity(entity))
-  });
-  <%_ if (pagination !== 'infinite-scroll') { _%>
-  dispatch(getEntities());
-  <%_ } _%>
-  return result;
+<%
+  isEntityInMicroserviceSavingUserSnapshot =
+    applicationType === 'gateway' &&
+    locals.microserviceName &&
+    authenticationType === 'oauth2' &&
+    hasUserField &&
+    dto === 'no';
+%>
+export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => <% if (isEntityInMicroserviceSavingUserSnapshot) { %>async (dispatch, getState) => {
+    const entityWithFullUser = {
+      ...entity,
+      user: getState().userManagement.users.filter(user => user.id === entity.user.id)[0]
+    };
+
+    const result = await dispatch({
+      type: ACTION_TYPES.CREATE_<%= entityActionName %>,
+      payload: axios.post(apiUrl, cleanEntity(entityWithFullUser))
+    });
+    <% } else { %>async dispatch => {
+    const result = await dispatch({
+        type: ACTION_TYPES.CREATE_<%= entityActionName %>,
+        payload: axios.post(apiUrl, cleanEntity(entity))
+    });<% } %>
+    <%_ if (pagination !== 'infinite-scroll') { _%>
+    dispatch(getEntities());
+    <%_ } _%>
+    return result;
 };
 
 export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
