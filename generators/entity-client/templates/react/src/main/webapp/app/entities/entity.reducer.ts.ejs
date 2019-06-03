@@ -247,11 +247,21 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => <
     return result;
 };
 
-export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
+export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => <% if (isEntityInMicroserviceSavingUserSnapshot) { %>async (dispatch, getState) => {
+  const entityWithFullUser = {
+    ...entity,
+    user: getState().userManagement.users.filter(user => user.id === entity.user.id)[0]
+  };
+
+  const result = await dispatch({
+    type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
+    payload: axios.put(apiUrl, cleanEntity(entityWithFullUser))
+  });
+  <% } else { %>async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))
-  });
+  });<% } %>
   <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
   <%_ } _%>
