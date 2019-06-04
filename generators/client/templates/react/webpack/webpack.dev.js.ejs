@@ -60,7 +60,15 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     contentBase: './<%= DIST_DIR %>',
     proxy: [{
       context: [
-        '/'
+        '/api',
+        '/services',
+        '/management',
+        '/swagger-resources',
+        '/v2/api-docs',
+        '/h2-console',<% if (authenticationType === 'oauth2') { %>
+        '/oauth2',
+        '/login',<% } %>
+        '/auth'
       ],
       target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
       secure: false,
@@ -75,7 +83,8 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     watchOptions: {
       ignored: /node_modules/
     },
-    https: options.tls
+    https: options.tls,
+    historyApiFallback: true
   },
   stats: process.env.JHI_DISABLE_WEBPACK_LOGS ? 'none' : options.stats,
   plugins: [
