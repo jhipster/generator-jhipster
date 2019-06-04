@@ -499,7 +499,7 @@ dependencies {
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
-    testImplementation "com.github.differentway:couchbase-testcontainer"
+    testImplementation "org.testcontainers:couchbase"
     <%_ } _%>
     testImplementation "org.hamcrest:hamcrest-library"
     <%_ if (databaseType === 'sql') { _%>
