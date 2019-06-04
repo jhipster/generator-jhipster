@@ -35,7 +35,15 @@ module.exports = merge(baseWebpackConfig, {
     proxy: [
       {
         context: [
-          '/'
+          '/api',
+          '/services',
+          '/management',
+          '/swagger-resources',
+          '/v2/api-docs',
+          '/h2-console',<% if (authenticationType === 'oauth2') { %>
+          '/oauth2',
+          '/login',<% } %>
+          '/auth'
         ],
         target: 'http://127.0.0.1:8080',
         secure: false,
@@ -44,7 +52,8 @@ module.exports = merge(baseWebpackConfig, {
     ],
     watchOptions: {
       ignored: /node_modules/
-    }
+    },
+    historyApiFallback: true
   },
   plugins: [
     new webpack.DefinePlugin({
