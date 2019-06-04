@@ -16,20 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
-services:
-    zookeeper:
-        image: <%= DOCKER_ZOOKEEPER %>
-        environment:
-            ZOOKEEPER_CLIENT_PORT: 2181
-            ZOOKEEPER_TICK_TIME: 2000
-            ZOOKEEPER_SYNC_LIMIT: 2
-    kafka:
-        image: <%= DOCKER_KAFKA %>
-        environment:
-            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-            KAFKA_BROKER_ID: 2
-            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-        #ports:
-        #    - 9092:9092  # Uncomment to make Kafka available externally
+package <%=packageName%>.service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+
+@Service
+public class <%= upperFirstCamelCase(baseName) %>KafkaConsumer {
+
+    private final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCase(baseName) %>KafkaConsumer.class);
+    private static final String TOPIC = "topic_<%= baseName.toLowerCase() %>";
+
+    @KafkaListener(topics = "topic_<%= baseName.toLowerCase() %>", groupId = "group_id")
+    public void consume(String message) throws IOException {
+        log.info("Consumed message in {} : {}", TOPIC, message);
+    }
+}

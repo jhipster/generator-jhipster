@@ -73,23 +73,16 @@ services:
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
                 <%_ if (authenticationType === 'uaa') { _%>
             - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
-                <%_ } else { _%>
-            - JHIPSTER_SLEEP=30 # gives time for the Cassandra cluster to start and execute the migration scripts
-                <%_ } _%>
-            <%_ } else { _%>
-                <%_ if (serviceDiscoveryType === 'eureka') { _%>
-            - JHIPSTER_SLEEP=30 # gives time for the JHipster Registry to boot before the application
-                <%_ } else { _%>
-            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
                 <%_ } _%>
             <%_ } _%>
+            - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
             <%_ if (searchEngine === 'elasticsearch') { _%>
             - SPRING_DATA_JEST_URI=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
-            - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
-            - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=zookeeper
+            - SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9092
+            - SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9092
             <%_ } _%>
             <%_ if (cacheProvider === 'infinispan') { _%>
             - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
