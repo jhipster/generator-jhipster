@@ -385,27 +385,29 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           </InfiniteScroll>
           <%_ } _%>
         </div>
-        <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
-        <div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
-          <Row className="justify-content-center">
-            <JhiItemCount
-              page={this.state.activePage}
-              total={totalItems}
-              itemsPerPage={this.state.itemsPerPage}
-              <%{ if (enableTranslation) { %>i18nEnabled<% }}%>
-            />
-          </Row>
-          <Row className="justify-content-center">
-            <JhiPagination
-              activePage={this.state.activePage}
-              onSelect={this.handlePagination}
-              maxButtons={5}
-              itemsPerPage={this.state.itemsPerPage}
-              totalItems={this.props.totalItems}
-            />
-          </Row>
-        </div>
-        <% } _%>
+        <%_ if (databaseType !== 'cassandra') { _%>
+          <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+          <div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
+            <Row className="justify-content-center">
+              <JhiItemCount
+                page={this.state.activePage}
+                total={totalItems}
+                itemsPerPage={this.state.itemsPerPage}
+                <%{ if (enableTranslation) { %>i18nEnabled<% }}%>
+              />
+            </Row>
+            <Row className="justify-content-center">
+              <JhiPagination
+                activePage={this.state.activePage}
+                onSelect={this.handlePagination}
+                maxButtons={5}
+                itemsPerPage={this.state.itemsPerPage}
+                totalItems={this.props.totalItems}
+              />
+            </Row>
+          </div>
+          <% } _%>
+        <%_ } _%>
       </div>
     );
   }
