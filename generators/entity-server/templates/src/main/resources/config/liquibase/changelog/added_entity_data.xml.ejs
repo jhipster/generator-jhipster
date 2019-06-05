@@ -1,0 +1,75 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="faker">
+        <loadData
+            file="config/liquibase/data/<%= entityTableName %>.csv"
+            separator=";"
+            tableName="<%= entityTableName %>"
+            context="dev">
+            <column name="id" type="numeric"/>
+            <%_ for (idx in fields) {
+                let loadColumnType = 'string';
+                let columnType = fields[idx].columnType;
+                if (columnType === 'integer' || columnType === 'bigint' || columnType === 'double' || columnType === 'decimal(21,2)' || columnType === '${floatType}') {
+                    loadColumnType = 'numeric';
+                } else if (columnType === 'date' || columnType === 'datetime') {
+                    loadColumnType = 'date';
+                } else if (columnType === 'boolean') {
+                    loadColumnType = 'boolean';
+                } else if (fields[idx].fieldIsEnum) {
+                    loadColumnType = 'string';
+                } else if (columnType === 'blob' || columnType === 'longblob') {
+                    loadColumnType = 'blob';
+                } else if (columnType === '${clobType}') {
+                    loadColumnType = 'clob';
+                }
+            _%>
+            <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>" type="<%=loadColumnType%>"/>
+            <%_ if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') { _%>
+            <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>_content_type" type="string"/>
+            <%_ } _%>
+            <%_ } _%>
+            <%_ for (idx in relationships) {
+                let loadColumnType = 'numeric';
+            if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
+                let baseColumnName = getColumnName(relationships[idx].relationshipName) + '_id';
+                if (relationships[idx].otherEntityNameCapitalized === 'User' && authenticationType === 'oauth2') {
+                    loadColumnType = 'varchar(100)';
+                } _%>
+            <column name="<%=baseColumnName%>" type="<%=loadColumnType%>"/>
+            <%_ } _%>
+            <%_  } _%>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

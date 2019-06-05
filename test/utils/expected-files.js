@@ -669,6 +669,7 @@ const expectedFiles = {
 
     liquibase: [
         `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
+        `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/import_data.xml`,
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`
     ],

@@ -482,6 +482,15 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a new changelog to the Liquibase import_data.xml file.
+     *
+     * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+     */
+    addDataImportChangelogToLiquibase(changelogName) {
+        this.needleApi.serverLiquibase.addDataImportChangelog(changelogName);
+    }
+
+    /**
      * Add a new changelog to the Liquibase master.xml file.
      *
      * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).

@@ -54,4 +54,18 @@ module.exports = class extends needleServer {
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
+
+    addDataImportChangelog(changelogName) {
+        this.addChangelogToImportData(changelogName, 'jhipster-needle-liquibase-add-import-data-changelog');
+    }
+
+    addChangelogToImportData(changelogName, needle) {
+        const errorMessage = `${chalk.yellow('Reference to ') + changelogName}.xml ${chalk.yellow('not added.\n')}`;
+        const fullPath = `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/import_data.xml`;
+        const content = `<include file="config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`;
+
+        const rewriteFileModel = this.generateFileModel(fullPath, needle, content);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
 };

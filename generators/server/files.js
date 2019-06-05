@@ -246,7 +246,8 @@ const serverFiles = {
                     renameTo: () => 'config/liquibase/changelog/00000000000000_initial_schema.xml',
                     options: { interpolate: INTERPOLATE_REGEX }
                 },
-                'config/liquibase/master.xml'
+                'config/liquibase/master.xml',
+                'config/liquibase/changelog/import_data.xml'
             ]
         },
         {

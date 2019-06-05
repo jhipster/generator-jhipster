@@ -25,10 +25,11 @@
     <%_ } else { _%>
     <property name="clobType" value="clob" dbms="h2"/>
     <%_ } _%>
-    
+
     <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/import_data.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

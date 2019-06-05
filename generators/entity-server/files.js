@@ -59,6 +59,17 @@ const serverFiles = {
                         }
                     },
                     renameTo: generator => `config/liquibase/data/${generator.entityTableName}.csv`
+                },
+                {
+                    file: 'config/liquibase/changelog/added_entity_data.xml',
+                    options: {
+                        interpolate: INTERPOLATE_REGEX,
+                        context: {
+                            faker,
+                            randexp
+                        }
+                    },
+                    renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_import_data_${generator.entityClass}.xml`
                 }
             ]
         },
@@ -267,6 +278,7 @@ function writeFiles() {
                     this.addConstraintsChangelogToLiquibase(`${this.changelogDate}_added_entity_constraints_${this.entityClass}`);
                 }
                 this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
+                this.addDataImportChangelogToLiquibase(`${this.changelogDate}_import_data_${this.entityClass}`);
 
                 if (['ehcache', 'infinispan'].includes(this.cacheProvider) && this.enableHibernateCache) {
                     this.addEntityToCache(
