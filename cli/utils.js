@@ -88,7 +88,7 @@ const initHelp = (program, cliName) => {
     });
 
     program.on('command:*', name => {
-        console.error(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`);
+        console.error(chalk.red(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`));
 
         const cmd = Object.values(name).join('');
         const availableCommands = program.commands.map(c => c._name);
