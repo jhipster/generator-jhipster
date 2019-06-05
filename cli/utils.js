@@ -46,7 +46,7 @@ const error = function(msg, trace) {
     if (trace) {
         console.log(trace);
     }
-    return; // eslint-disable-line
+    process.exit(1);
 };
 
 const init = function(program) {
@@ -88,12 +88,10 @@ const initHelp = (program, cliName) => {
     });
 
     program.on('command:*', name => {
-        logger.error(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`);
+        console.error(chalk.red(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`));
 
         const cmd = Object.values(name).join('');
-        const availableCommands = program.commands.map(cmd => {
-            return cmd._name;
-        });
+        const availableCommands = program.commands.map(c => c._name);
 
         const suggestion = didYouMean(cmd, availableCommands);
         if (suggestion) {
