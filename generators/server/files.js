@@ -504,10 +504,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}config/apidoc/GatewaySwaggerResourcesProvider.java`
                 },
                 {
-                    file: 'package/gateway/ratelimiting/RateLimitingFilter.java',
-                    renameTo: generator => `${generator.javaDir}gateway/ratelimiting/RateLimitingFilter.java`
-                },
-                {
                     file: 'package/gateway/accesscontrol/AccessControlFilter.java',
                     renameTo: generator => `${generator.javaDir}gateway/accesscontrol/AccessControlFilter.java`
                 },
@@ -519,6 +515,16 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/GatewayResource.java',
                     renameTo: generator => `${generator.javaDir}web/rest/GatewayResource.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.cacheProvider === 'hazelcast',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/gateway/ratelimiting/RateLimitingFilter.java',
+                    renameTo: generator => `${generator.javaDir}gateway/ratelimiting/RateLimitingFilter.java`
                 }
             ]
         },
