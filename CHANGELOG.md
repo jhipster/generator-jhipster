@@ -1,4 +1,4 @@
-# Next release
+# Latest v4.0.0
 
 ## Breaking changes
   - Removed methods `#addEntity` and `#excludeEntity` from JDLUnaryOption & JDLBinaryOption classes.
@@ -9,13 +9,14 @@
   - Additionally, having `no` as DB type automatically sets the `devDatabaseType` & `prodDatabaseType` values to `no` (thanks @jsm174 from reporting it).
   - Linting: added the 'collapsible relationships" check
   - For blueprints: when a JSON entity file has custom attributes, the JDL import subgen now just merges the old content with the new one
+  - The `UUID` type is now available for all the DB types! (thanks to @murdos)
 
 ## Bug fixes
   - Parsing regexp with slashes involved now works again (https://github.com/jhipster/generator-jhipster/issues/9750)
 
 ---
 
-# Latest: v3.6.14
+# v3.6.14
 
 ## What's new
   - Added new option `memcached` to cache providers (thanks to @Hawkurane),
@@ -28,7 +29,7 @@
 
 ---
 
-# Latest: v3.6.13
+# v3.6.13
 
 ## What's new
   - This changelog file :)
