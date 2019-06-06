@@ -519,7 +519,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.cacheProvider === 'hazelcast',
+            condition: generator =>
+                generator.applicationType === 'gateway' && generator.serviceDiscoveryType && generator.cacheProvider === 'hazelcast',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
