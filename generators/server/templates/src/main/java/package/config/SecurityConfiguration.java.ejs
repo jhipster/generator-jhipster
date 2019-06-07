@@ -291,11 +291,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     <%_ if (applicationType !== 'microservice') { _%>
     /**
-    * Map authorities from "groups" or "roles" claim in ID Token.
-    *
-    * @return a {@link GrantedAuthoritiesMapper} that maps groups from
-    * the IdP to Spring Security Authorities.
-    */
+     * Map authorities from "groups" or "roles" claim in ID Token.
+     *
+     * @return a {@link GrantedAuthoritiesMapper} that maps groups from
+     * the IdP to Spring Security Authorities.
+     */
     @Bean
     public GrantedAuthoritiesMapper userAuthoritiesMapper() {
         return (authorities) -> {
@@ -325,13 +325,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @SuppressWarnings("unchecked")
     private Collection<String> getRolesFromClaims(Map<String, Object> claims) {
-        return (Collection<String>) claims.getOrDefault(
-            "groups",
-            claims.getOrDefault(
-                "roles",
-                new ArrayList<>()
-            )
-        );
+        return (Collection<String>) claims.getOrDefault("groups",
+            claims.getOrDefault("roles", new ArrayList<>()));
     }
 
     private List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
