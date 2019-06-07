@@ -55,10 +55,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import <%= packageName %>.security.oauth2.AudienceValidator;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
     <%_ if (applicationType === 'gateway') { _%>
 import <%=packageName%>.security.oauth2.AuthorizationHeaderFilter;
 import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
@@ -66,12 +69,11 @@ import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+<%_ if (applicationType !== 'microservice') { _%>
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+<%_ } _%>
+import java.util.*;
 import java.util.stream.Collectors;
 <%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
@@ -273,7 +275,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .oauth2Login()
             <%_ } _%>
         .and()
-            .oauth2ResourceServer().jwt();
+            .oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(mapGroupOrRolesClaimToGrantedAuthorities());
         <%_ } _%>
         // @formatter:on
     }
@@ -285,32 +289,55 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 
+    <%_ if (applicationType !== 'microservice') { _%>
     /**
-     * Map authorities from "groups" or "roles" claim in ID Token.
-     *
-     * @return a {@link GrantedAuthoritiesMapper} that maps groups from
-     * the IdP to Spring Security Authorities.
-     */
+    * Map authorities from "groups" or "roles" claim in ID Token.
+    *
+    * @return a {@link GrantedAuthoritiesMapper} that maps groups from
+    * the IdP to Spring Security Authorities.
+    */
     @Bean
-    @SuppressWarnings("unchecked")
     public GrantedAuthoritiesMapper userAuthoritiesMapper() {
         return (authorities) -> {
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
             authorities.forEach(authority -> {
                 OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                OidcUserInfo userInfo = oidcUserAuthority.getUserInfo();
-                Collection<String> groups = (Collection<String>) userInfo.getClaims().get("groups");
-                if (groups == null) {
-                    groups = (Collection<String>) userInfo.getClaims().get("roles");
-                }
-                mappedAuthorities.addAll(groups.stream()
-                    .filter(group -> group.startsWith("ROLE_"))
-                    .map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+                mappedAuthorities.addAll(mapRolesToGrantedAuthorities(
+                    getRolesFromClaims(oidcUserAuthority.getUserInfo().getClaims())));
             });
 
             return mappedAuthorities;
         };
+    }
+
+    <%_ } _%>
+    private Converter<Jwt, AbstractAuthenticationToken> mapGroupOrRolesClaimToGrantedAuthorities() {
+        return new JwtAuthenticationConverter() {
+            @Override
+            protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
+                return mapRolesToGrantedAuthorities(
+                    getRolesFromClaims(jwt.getClaims())
+                );
+            }
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    private Collection<String> getRolesFromClaims(Map<String, Object> claims) {
+        return (Collection<String>) claims.getOrDefault(
+            "groups",
+            claims.getOrDefault(
+                "roles",
+                new ArrayList<>()
+            )
+        );
+    }
+
+    private List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
+        return roles.stream()
+            .filter(role -> role.startsWith("ROLE_"))
+            .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     @Bean
