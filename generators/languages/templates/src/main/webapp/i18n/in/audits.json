@@ -22,6 +22,7 @@
             "data": {
                 "remoteAddress": "Alamat Remote:"
             }
-        }
+        },
+        "notFound": "No audit found"
     }
 }
