@@ -80,6 +80,12 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         '        </createTable>\n' +
                         '    </changeSet>'
                 );
+            },
+            addLoadColumnStep() {
+                this.addLoadColumnToLiquibaseEntityChangeSet(
+                    `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
+                    '            <column name="test" type="string" />'
+                );
             }
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
