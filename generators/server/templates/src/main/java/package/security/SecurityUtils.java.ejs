@@ -124,13 +124,17 @@ public final class SecurityUtils {
 <%_ } _%>
             .map(authentication -> {
                 List<GrantedAuthority> authorities = new ArrayList<>();
+<%_ if (authenticationType === 'oauth2') { _%>
                 if (authentication instanceof JwtAuthenticationToken) {
                     authorities.addAll(
                         extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken()
                             .getClaims()));
                 } else {
+<%_ } _%>
                     authorities.addAll(authentication.getAuthorities());
+<%_ if (authenticationType === 'oauth2') { _%>
                 }
+<%_ } _%>
                 return authorities.stream()
                     .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS));
             })<% if (!reactive) { %>
@@ -155,23 +159,28 @@ public final class SecurityUtils {
 <%_ } _%>
             .map(authentication -> {
                 List<GrantedAuthority> authorities = new ArrayList<>();
+<%_ if (authenticationType === 'oauth2') { _%>
                 if (authentication instanceof JwtAuthenticationToken) {
                     authorities.addAll(
                         extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken()
                             .getClaims()));
                 } else {
+<%_ } _%>
                     authorities.addAll(authentication.getAuthorities());
+<%_ if (authenticationType === 'oauth2') { _%>
                 }
+<%_ } _%>
                 return authorities.stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authority));
             })<% if (!reactive) { %>
             .orElse(false)<% } %>;
     }
-
+<%_ if (authenticationType === 'oauth2') { _%>
     public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
         return ((JSONArray)((JSONObject)claims.get("realm_access")).get("roles")).stream()
             .map(group -> ((String) group))
             .filter(group -> group.startsWith("ROLE_"))
             .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
+<%_ } _%>
 }
