@@ -60,7 +60,6 @@ function testDocumentsRelationships() {
             interactive: true,
             'from-cli': true,
             'no-fluent-methods': undefined,
-            'skip-git': true,
             'skip-client': undefined,
             'skip-install': true,
             'skip-server': undefined,
@@ -104,18 +103,10 @@ describe('JHipster generator import jdl', () => {
                 '--skip-install',
                 '--no-insight',
                 '--interactive',
-                '--skip-git',
                 '--with-entities',
                 '--from-cli'
             ]);
-            expect(subGenCallParams.options[3]).to.eql([
-                '--skip-prompts',
-                '--skip-install',
-                '--no-insight',
-                '--interactive',
-                '--skip-git',
-                '--from-cli'
-            ]);
+            expect(subGenCallParams.options[3]).to.eql(['--skip-prompts', '--skip-install', '--no-insight', '--interactive', '--from-cli']);
         });
     });
     describe('imports a JDL entity model with relations for mongodb', () => {
@@ -208,7 +199,6 @@ describe('JHipster generator import jdl', () => {
                 interactive: true,
                 'no-fluent-methods': undefined,
                 'skip-client': undefined,
-                'skip-git': true,
                 'skip-install': true,
                 'skip-server': undefined,
                 'skip-ui-grouping': undefined,
@@ -267,7 +257,6 @@ describe('JHipster generator import jdl', () => {
                 interactive: true,
                 'no-fluent-methods': undefined,
                 'skip-client': undefined,
-                'skip-git': true,
                 'skip-install': true,
                 'skip-server': undefined,
                 'skip-ui-grouping': undefined,
@@ -299,7 +288,6 @@ describe('JHipster generator import jdl', () => {
                 interactive: true,
                 'no-fluent-methods': undefined,
                 'skip-client': undefined,
-                'skip-git': true,
                 'skip-install': true,
                 'skip-server': undefined,
                 'skip-ui-grouping': undefined,

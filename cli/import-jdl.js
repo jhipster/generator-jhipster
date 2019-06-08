@@ -268,12 +268,6 @@ class JDLProcessor {
     getConfig() {
         if (jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
             logger.info('Found .yo-rc.json on path. This is an existing app');
-            if (!Object.prototype.hasOwnProperty.call(this.options, 'interactive')) {
-                this.options.interactive = true;
-            }
-            if (!Object.prototype.hasOwnProperty.call(this.options, 'skip-git')) {
-                this.options['skip-git'] = true;
-            }
             const configuration = jhipsterUtils.getAllJhipsterConfig(null, true);
             this.applicationType = configuration.applicationType;
             this.baseName = configuration.baseName;
@@ -410,6 +404,9 @@ class JDLProcessor {
         if (this.options['json-only']) {
             logger.info('Entity JSON files created. Entity generation skipped.');
             return;
+        }
+        if (_.isUndefined(this.options.interactive)) {
+            this.options.interactive = true;
         }
         try {
             logger.info(
