@@ -92,9 +92,6 @@ import java.util.*;
 <%_ if (!reactive) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2' && databaseType !== 'no') { _%>
-import java.util.stream.Stream;
-<%_ } _%>
 
 /**
  * Service class for managing users.
