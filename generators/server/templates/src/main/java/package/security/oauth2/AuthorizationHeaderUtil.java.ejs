@@ -18,12 +18,14 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+import <%=packageName%>.security.oauth2.OAuthIdpTokenResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -41,21 +43,28 @@ import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 @Component
 public class AuthorizationHeaderUtil {
 
     private final OAuth2AuthorizedClientService clientService;
-
+    private final RestTemplateBuilder restTemplateBuilder;
+    private final JwtDecoder jwtDecoder;
     private final Logger log = LoggerFactory.getLogger(AuthorizationHeaderUtil.class);
 
-    public AuthorizationHeaderUtil(OAuth2AuthorizedClientService clientService) {
+    public AuthorizationHeaderUtil(OAuth2AuthorizedClientService clientService, RestTemplateBuilder restTemplateBuilder, JwtDecoder jwtDecoder) {
         this.clientService = clientService;
+        this.restTemplateBuilder = restTemplateBuilder;
+        this.jwtDecoder = jwtDecoder;
     }
 
     public Optional<String> getAuthorizationHeader() {
@@ -65,12 +74,11 @@ public class AuthorizationHeaderUtil {
             String name =  oauthToken.getName();
             String registrationId = oauthToken.getAuthorizedClientRegistrationId();
             OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(
-                registrationId,
-                name);
+            registrationId,
+            name);
 
             if (null == client) {
                 throw new OAuth2AuthorizationException(new OAuth2Error("access_denied", "The token is expired", null));
-                // resolves some refresh cases, but not all
             }
             OAuth2AccessToken accessToken = client.getAccessToken();
 
@@ -88,7 +96,8 @@ public class AuthorizationHeaderUtil {
                 String authorizationHeaderValue = String.format("%s %s", tokenType, accessTokenValue);
                 return Optional.of(authorizationHeaderValue);
             }
-        } else if (authentication instanceof JwtAuthenticationToken) { // Service to service
+
+        } else if (authentication instanceof JwtAuthenticationToken) {
             JwtAuthenticationToken accessToken = (JwtAuthenticationToken) authentication;
             String tokenType = (String) accessToken.getToken().getClaims().get("typ");
             String tokenValue = accessToken.getToken().getTokenValue();

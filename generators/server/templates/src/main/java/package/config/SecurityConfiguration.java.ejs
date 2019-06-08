@@ -306,11 +306,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 mappedAuthorities.addAll(mapRolesToGrantedAuthorities(
                     getRolesFromClaims(oidcUserAuthority.getUserInfo().getClaims())));
             });
-
             return mappedAuthorities;
         };
     }
         <%_ } _%>
+    private Converter<Jwt, AbstractAuthenticationToken> mapGroupOrRolesClaimToGrantedAuthorities() {
+        return new JwtAuthenticationConverter() {
+            @Override
+            protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
+                return mapRolesToGrantedAuthorities(
+                    getRolesFromClaims(jwt.getClaims())
+                );
+            }
+        };
+    }
+
     @SuppressWarnings("unchecked")
     private Collection<String> getRolesFromClaims(Map<String, Object> claims) {
         return (Collection<String>) claims.getOrDefault("groups",

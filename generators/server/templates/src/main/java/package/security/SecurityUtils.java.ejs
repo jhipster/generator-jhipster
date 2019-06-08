@@ -22,7 +22,10 @@ package <%=packageName%>.security;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+<%_ } _%>
 import org.springframework.security.core.GrantedAuthority;
+<%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -40,9 +43,12 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
-<%_ if (authenticationType === 'oauth2') { _%>
 import java.util.ArrayList;
+<%_ if (authenticationType === 'oauth2') { _%>
+import java.util.stream.Collectors;
+<%_ } _%>
 import java.util.List;
+<%_ if (authenticationType === 'oauth2') { _%>
 import java.util.Map;
 <%_ } _%>
 <%_ if (!reactive) { _%>
