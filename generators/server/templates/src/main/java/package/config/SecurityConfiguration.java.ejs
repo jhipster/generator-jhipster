@@ -69,10 +69,10 @@ import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-<%_ if (applicationType !== 'microservice') { _%>
+        <%_ if (applicationType !== 'microservice') { _%>
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
-<%_ } _%>
+        <%_ } _%>
 import java.util.*;
 import java.util.stream.Collectors;
     <%_ } _%>
@@ -122,7 +122,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (authenticationType === 'session' && !skipUserManagement) { %>JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %><% if (authenticationType === 'oauth2') { %>JwtAuthorityExtractor jwtAuthorityExtractor<% } %>SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (authenticationType === 'session' && !skipUserManagement) { %>JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %><% if (authenticationType === 'oauth2') { %>JwtAuthorityExtractor jwtAuthorityExtractor, <% } %>SecurityProblemSupport problemSupport) {
     <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
         this.jHipsterProperties = jHipsterProperties;
         this.rememberMeServices = rememberMeServices;
@@ -186,7 +186,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .and()
-    <%_ } else{ _%>
+    <%_ } else { _%>
             .disable()
     <%_ } _%>
     <%_ if (applicationType !== 'microservice') { _%>
@@ -215,8 +215,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .successHandler(ajaxAuthenticationSuccessHandler())
             .failureHandler(ajaxAuthenticationFailureHandler())
             .permitAll()
-    <%_ } _%>
-    <%_ if (authenticationType === 'session') { _%>
         .and()
             .logout()
             .logoutUrl("/api/logout")
@@ -278,8 +276,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .jwt()
                 .jwtAuthenticationConverter(jwtAuthorityExtractor)
                 .and()
-        .and()
-            .oauth2Client();
+            .and()
+                .oauth2Client();
     <%_ } _%>
         // @formatter:on
     }
@@ -291,7 +289,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 
-    <%_ if (applicationType !== 'microservice') { _%>
+        <%_ if (applicationType !== 'microservice') { _%>
     /**
      * Map authorities from "groups" or "roles" claim in ID Token.
      *
@@ -312,19 +310,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             return mappedAuthorities;
         };
     }
-
-    <%_ } _%>
-    private Converter<Jwt, AbstractAuthenticationToken> mapGroupOrRolesClaimToGrantedAuthorities() {
-        return new JwtAuthenticationConverter() {
-            @Override
-            protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
-                return mapRolesToGrantedAuthorities(
-                    getRolesFromClaims(jwt.getClaims())
-                );
-            }
-        };
-    }
-
+        <%_ } _%>
     @SuppressWarnings("unchecked")
     private Collection<String> getRolesFromClaims(Map<String, Object> claims) {
         return (Collection<String>) claims.getOrDefault("groups",
