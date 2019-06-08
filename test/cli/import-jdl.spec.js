@@ -109,30 +109,6 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.options[3]).to.eql(['--skip-prompts', '--skip-install', '--no-insight', '--interactive', '--from-cli']);
         });
     });
-    describe('imports a JDL entity model with relations for mongodb', () => {
-        beforeEach(done => {
-            testInTempDir(dir => {
-                fse.copySync(path.join(__dirname, '../templates/documents-with-relations'), dir);
-                fse.copySync(path.join(__dirname, '../templates/mongodb-with-relations'), dir);
-                importJdl(['orders-model.jdl'], {}, env);
-                done();
-            });
-        });
-
-        testDocumentsRelationships();
-    });
-    describe('imports a JDL entity model with relations for couchbase', () => {
-        beforeEach(done => {
-            testInTempDir(dir => {
-                fse.copySync(path.join(__dirname, '../templates/documents-with-relations'), dir);
-                fse.copySync(path.join(__dirname, '../templates/couchbase-with-relations'), dir);
-                importJdl(['orders-model.jdl'], {}, env);
-                done();
-            });
-        });
-
-        testDocumentsRelationships();
-    });
 
     describe('imports a JDL entity model from single file with --json-only flag', () => {
         beforeEach(done => {
@@ -159,6 +135,7 @@ describe('JHipster generator import jdl', () => {
             expect(subGenCallParams.count).to.equal(0);
         });
     });
+
     describe('imports a JDL entity model from single file', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -206,6 +183,7 @@ describe('JHipster generator import jdl', () => {
             });
         });
     });
+
     describe('imports a JDL entity model from multiple files', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -264,6 +242,7 @@ describe('JHipster generator import jdl', () => {
             });
         });
     });
+
     describe('imports a JDL entity model which excludes Elasticsearch for a class', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -295,6 +274,7 @@ describe('JHipster generator import jdl', () => {
             });
         });
     });
+
     describe('imports single app and entities', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -328,6 +308,7 @@ describe('JHipster generator import jdl', () => {
             ]);
         });
     });
+
     describe('imports single app only', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -357,6 +338,7 @@ describe('JHipster generator import jdl', () => {
             ]);
         });
     });
+
     describe('imports multiple JDL apps and entities', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -401,6 +383,7 @@ describe('JHipster generator import jdl', () => {
             ]);
         });
     });
+
     describe('skips JDL apps with --ignore-application', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -452,6 +435,7 @@ describe('JHipster generator import jdl', () => {
             ]);
         });
     });
+
     describe('imports JDL deployments only', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -481,6 +465,7 @@ describe('JHipster generator import jdl', () => {
             ]);
         });
     });
+
     describe('imports multiple JDL apps, deployments and entities', () => {
         describe('calls generators', () => {
             beforeEach(done => {
@@ -553,6 +538,7 @@ describe('JHipster generator import jdl', () => {
             });
         });
     });
+
     describe('skips JDL deployments with --skip-deployments flag', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -579,5 +565,31 @@ describe('JHipster generator import jdl', () => {
                 '--from-cli'
             ]);
         });
+    });
+
+    describe('imports a JDL entity model with relations for mongodb', () => {
+        beforeEach(done => {
+            testInTempDir(dir => {
+                fse.copySync(path.join(__dirname, '../templates/documents-with-relations'), dir);
+                fse.copySync(path.join(__dirname, '../templates/mongodb-with-relations'), dir);
+                importJdl(['orders-model.jdl'], {}, env);
+                done();
+            });
+        });
+
+        testDocumentsRelationships();
+    });
+
+    describe('imports a JDL entity model with relations for couchbase', () => {
+        beforeEach(done => {
+            testInTempDir(dir => {
+                fse.copySync(path.join(__dirname, '../templates/documents-with-relations'), dir);
+                fse.copySync(path.join(__dirname, '../templates/couchbase-with-relations'), dir);
+                importJdl(['orders-model.jdl'], {}, env);
+                done();
+            });
+        });
+
+        testDocumentsRelationships();
     });
 });
