@@ -51,7 +51,7 @@ module.exports = class extends needleServer {
     addLoadColumnToEntityChangeSet(filePath, content) {
         const errorMessage = 'LoadColumn not added.';
         const rewriteFileModel = this.generateFileModel(filePath, 'jhipster-needle-liquibase-add-loadcolumn', content);
-        
+
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 

@@ -503,7 +503,7 @@ module.exports = class extends PrivateBase {
 
     /**
      * Add a new load column to a Liquibase changelog file for entity.
-     * 
+     *
      * @param {string} filePath - The full path of the changelog file.
      * @param {string} content - The content to be added as column, can have multiple columns as well
      */
