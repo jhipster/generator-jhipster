@@ -766,7 +766,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
                         const fieldNameUnderscored = _.snakeCase(field.fieldName);
                         const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
-                        if (jhiCore.isReservedTableName(fieldNameUnderscored, context.databaseType)) {
+                        if (jhiCore.isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
                             if (!jhiFieldNamePrefix) {
                                 this.warning(
                                     chalk.red(
