@@ -250,10 +250,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
             <%_ } _%>
-            .antMatchers("/api/**").authenticated()
             <%_ if (authenticationType === 'oauth2') { _%>
             .antMatchers("/api/auth-info").permitAll()
             <%_ } _%>
+            .antMatchers("/api/**").authenticated()
             <%_ if (websocket === 'spring-websocket') { _%>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()
