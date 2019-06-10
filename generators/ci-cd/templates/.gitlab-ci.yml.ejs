@@ -42,6 +42,7 @@ stages:
 
 <%_ if (buildTool === 'gradle') { _%>
 before_script:
+    - export NG_CLI_ANALYTICS="false"
     - export GRADLE_USER_HOME=`pwd`/.gradle
     <%_ if (!skipClient) { _%>
     - ./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon
@@ -143,6 +144,7 @@ deploy-to-production:
 
 <%_ if (buildTool === 'maven') { _%>
 before_script:
+    - export NG_CLI_ANALYTICS="false"
     - export MAVEN_USER_HOME=`pwd`/.maven
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
