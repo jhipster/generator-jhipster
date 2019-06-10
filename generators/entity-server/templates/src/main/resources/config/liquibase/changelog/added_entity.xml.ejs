@@ -84,6 +84,8 @@
                 columnType="datetime";
             } else if (fieldType === 'Duration') {
                 columnType="bigint";
+            } else if (fieldType === 'UUID') {
+                columnType="${uuidType}";
             } else if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
                 if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql' || prodDatabaseType === 'mariadb') {
                     columnType="longblob";
@@ -162,16 +164,17 @@
         <loadData
                   file="config/liquibase/data/<%= entityTableName %>.csv"
                   separator=";"
-                  tableName="<%= entityTableName %>"
-                  context="dev">
+                  tableName="<%= entityTableName %>">
             <column name="id" type="numeric"/>
             <%_ for (idx in fields) {
                 let loadColumnType = 'string';
                 let columnType = fields[idx].columnType;
                 if (columnType === 'integer' || columnType === 'bigint' || columnType === 'double' || columnType === 'decimal(21,2)' || columnType === '${floatType}') {
                     loadColumnType = 'numeric';
-                } else if (columnType === 'date' || columnType === 'datetime') {
+                } else if (columnType === 'date') {
                     loadColumnType = 'date';
+                } else if (columnType === 'datetime') {
+                    loadColumnType = 'datetime';
                 } else if (columnType === 'boolean') {
                     loadColumnType = 'boolean';
                 } else if (fields[idx].fieldIsEnum) {

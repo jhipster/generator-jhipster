@@ -199,6 +199,17 @@
             ]
         },
         {
+            "fieldName": "durationBob",
+            "fieldType": "Duration"
+        },
+        {
+            "fieldName": "durationRequiredBob",
+            "fieldType": "Duration",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "booleanBob",
             "fieldType": "Boolean"
         },
@@ -218,6 +229,17 @@
             "fieldName": "enumRequiredBob",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uuidBob",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "uuidRequiredBob",
+            "fieldType": "UUID",
             "fieldValidateRules": [
                 "required"
             ]

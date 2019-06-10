@@ -199,6 +199,17 @@
             ]
         },
         {
+            "fieldName": "durationMika",
+            "fieldType": "Duration"
+        },
+        {
+            "fieldName": "durationRequiredMika",
+            "fieldType": "Duration",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "booleanMika",
             "fieldType": "Boolean"
         },
@@ -218,6 +229,17 @@
             "fieldName": "enumRequiredMika",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uuidMika",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "uuidRequiredMika",
+            "fieldType": "UUID",
             "fieldValidateRules": [
                 "required"
             ]
