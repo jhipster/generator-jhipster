@@ -595,6 +595,10 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
+                    file: 'package/web/rest/AuthInfoResource.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/AuthInfoResource.java`
+                },
+                {
                     file: 'package/web/rest/LogoutResource.java',
                     renameTo: generator => `${generator.javaDir}web/rest/LogoutResource.java`
                 }
