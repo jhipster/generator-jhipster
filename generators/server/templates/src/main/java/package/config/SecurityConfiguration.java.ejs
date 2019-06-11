@@ -60,7 +60,7 @@ import <%=packageName%>.security.SecurityUtils;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
-        <%_ if (applicationType === 'gateway') { _%>
+        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
 import <%=packageName%>.security.oauth2.AuthorizationHeaderFilter;
 import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
         <%_ } _%>
@@ -330,7 +330,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         return jwtDecoder;
     }
-        <%_ if (applicationType === 'gateway') { _%>
+        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
 
     @Bean
     public AuthorizationHeaderFilter authHeaderFilter(AuthorizationHeaderUtil headerUtil) {
