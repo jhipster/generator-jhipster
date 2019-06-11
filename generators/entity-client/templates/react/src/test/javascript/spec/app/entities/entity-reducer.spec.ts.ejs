@@ -253,7 +253,7 @@ describe('Entities reducer tests', () => {
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
       const mockStore = configureStore([thunk, promiseMiddleware]);
-      store = mockStore({});
+      store = mockStore({<% if (isEntityInMicroserviceSavingUserSnapshot) { %>userManagement: { users: [{id: 1, login: 'admin'}]}<% } %>});
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
@@ -318,7 +318,7 @@ describe('Entities reducer tests', () => {
         }
         <%_ } _%>
       ];
-      await store.dispatch(createEntity({ id: <% if (pkType === 'Long') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(createEntity({ id: <% if (pkType === 'Long') { %>1<%} else {%>'1'<%}%><% if (isEntityInMicroserviceSavingUserSnapshot) { %>, user: { id: 1 } <% } %> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.UPDATE_<%= entityActionName %> actions', async () => {
@@ -339,7 +339,7 @@ describe('Entities reducer tests', () => {
         }
         <%_ } _%>
       ];
-      await store.dispatch(updateEntity({ id: <% if (pkType === 'Long') { %>1<%} else {%>'1'<%}%> })).then(() => expect(store.getActions()).toEqual(expectedActions));
+      await store.dispatch(updateEntity({ id: <% if (pkType === 'Long') { %>1<%} else {%>'1'<%}%><% if (isEntityInMicroserviceSavingUserSnapshot) { %>, user: { id: 1 } <% } %> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
     it('dispatches ACTION_TYPES.DELETE_<%= entityActionName %> actions', async () => {
