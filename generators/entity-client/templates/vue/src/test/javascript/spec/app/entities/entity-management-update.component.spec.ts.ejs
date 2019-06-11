@@ -21,7 +21,7 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
-import axios from 'axios';
+import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
 
 import AlertService from '@/shared/alert/alert.service';
@@ -47,7 +47,6 @@ import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClie
 <%_ importEntitiesSeen.push(otherEntityAngularName); } _%>
 
 const localVue = createLocalVue();
-const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
@@ -58,20 +57,15 @@ const router = new Router();
 localVue.use(Router);
 localVue.component('font-awesome-icon', {});
 
-jest.mock('axios', () => ({
-    post: jest.fn(),
-    put: jest.fn()
-}));
-
 describe('Component Tests', () => {
 
   describe('<%= entityAngularName %> Management Update Component', () => {
     let wrapper: Wrapper<<%= entityAngularName %>Class>;
     let comp: <%= entityAngularName %>Class;
+    let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
 
     beforeEach(() => {
-      mockedAxios.post.mockReturnValue(Promise.resolve());
-      mockedAxios.put.mockReturnValue(Promise.resolve());
+      <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
 
       wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>UpdateComponent, {
         store,
@@ -82,7 +76,7 @@ describe('Component Tests', () => {
         router,
         provide: {
           alertService: () => new AlertService(store),
-          <%= entityInstance %>Service: () => new <%= entityAngularName %>Service(),
+          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
           <%_
             const entitiesSeen = [entityAngularName];
             for (idx in relationships) {
@@ -106,14 +100,14 @@ describe('Component Tests', () => {
         // GIVEN
         const entity = {id:<%- tsKeyId %>};
         comp.<%= entityInstance %> = entity;
-        mockedAxios.put.mockReturnValue(Promise.resolve({data: {}}));
+        <%= entityInstance %>ServiceStub.update.resolves(entity);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(mockedAxios.put).toHaveBeenCalledWith('api/<%= entityApiUrl %>', entity);
+        expect(<%= entityInstance %>ServiceStub.update.calledWith(entity)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
@@ -121,14 +115,14 @@ describe('Component Tests', () => {
         // GIVEN
         const entity = {};
         comp.<%= entityInstance %> = entity;
-        mockedAxios.post.mockReturnValue(Promise.resolve({data: {}}));
+        <%= entityInstance %>ServiceStub.create.resolves(entity);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(mockedAxios.post).toHaveBeenCalledWith('api/<%= entityApiUrl %>', entity);
+        expect(<%= entityInstance %>ServiceStub.create.calledWith(entity)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
     });
