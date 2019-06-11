@@ -310,12 +310,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 } else if (entityTableName === '') {
                     this.error('The table name cannot be empty');
                 } else if (jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
-                    this.warning(
-                        chalk.red(
-                            `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
-                        )
-                    );
-                    context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
+                    if (jhiTablePrefix) {
+                        this.warning(
+                            chalk.red(
+                                `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
+                            )
+                        );
+                        context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
+                    } else {
+                        this.warning(
+                            chalk.red(
+                                `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
+                            )
+                        );
+                    }
                 } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26 && !skipCheckLengthOfIdentifier) {
                     this.error(`The table name is too long for Oracle, try a shorter name.\n${instructions}`);
                 } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14 && !skipCheckLengthOfIdentifier) {
@@ -759,7 +767,16 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         const fieldNameUnderscored = _.snakeCase(field.fieldName);
                         const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
                         if (jhiCore.isReservedTableName(fieldNameUnderscored, context.databaseType)) {
-                            field.fieldNameAsDatabaseColumn = `${jhiFieldNamePrefix}_${fieldNameUnderscored}`;
+                            if (!jhiFieldNamePrefix) {
+                                this.warning(
+                                    chalk.red(
+                                        `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
+                                    )
+                                );
+                                field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
+                            } else {
+                                field.fieldNameAsDatabaseColumn = `${jhiFieldNamePrefix}_${fieldNameUnderscored}`;
+                            }
                         } else {
                             field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
                         }
@@ -912,7 +929,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         if (!relationship.otherEntityTableName) {
                             relationship.otherEntityTableName = this.getTableName(otherEntityName);
                         }
-                        if (jhiCore.isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType)) {
+                        if (jhiCore.isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
                             const otherEntityTableName = relationship.otherEntityTableName;
                             relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
                         }
