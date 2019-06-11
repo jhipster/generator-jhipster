@@ -119,6 +119,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
+
+    private final JwtAuthorityExtractor jwtAuthorityExtractor;
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
@@ -134,6 +136,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.corsFilter = corsFilter;
     <%_ } _%>
         this.problemSupport = problemSupport;
+    <%_ if (authenticationType === 'oauth2') { _%>
+        this.jwtAuthorityExtractor = jwtAuthorityExtractor;
+    <%_ } _%>
     }
     <%_ if (authenticationType === 'session') { _%>
 
