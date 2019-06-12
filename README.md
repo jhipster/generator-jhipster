@@ -17,7 +17,10 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 **Gold sponsors**
 
 [![Okta][okta-image]][okta-url]
+[Okta][okta-url]
+
 [![Octo Consulting Group][octoconsulting-image]][octoconsulting-url]
+[Octo Consulting Group][octoconsulting-url]
 
 **Bronze sponsors**
 
