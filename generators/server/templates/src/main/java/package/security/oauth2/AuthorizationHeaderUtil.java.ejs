@@ -18,14 +18,13 @@
 -%>
 package <%=packageName%>.security.oauth2;
 
-import java.util.Optional;
-
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -41,18 +40,23 @@ public class AuthorizationHeaderUtil {
 
     public Optional<String> getAuthorizationHeader() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-        OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(
-            oauthToken.getAuthorizedClientRegistrationId(),
-            oauthToken.getName());
-
-        OAuth2AccessToken accessToken = client.getAccessToken();
+        String accessToken = null;
+        AbstractAuthenticationToken authToken = (AbstractAuthenticationToken) authentication;
+        if (authToken instanceof OAuth2AuthenticationToken) {
+            OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authToken;
+            OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(
+                oauthToken.getAuthorizedClientRegistrationId(),
+                oauthToken.getName());
+            accessToken = client.getAccessToken().getTokenValue();
+        } else if (authToken instanceof JwtAuthenticationToken) {
+            accessToken = ((JwtAuthenticationToken) authToken).getToken().getTokenValue();
+        }
 
         if (accessToken == null) {
             return Optional.empty();
         } else {
-            String tokenType = accessToken.getTokenType().getValue();
-            String authorizationHeaderValue = String.format("%s %s", tokenType, accessToken.getTokenValue());
+            String tokenType = "Bearer";
+            String authorizationHeaderValue = String.format("%s %s", tokenType, accessToken);
             return Optional.of(authorizationHeaderValue);
         }
     }
