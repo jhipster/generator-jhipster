@@ -695,7 +695,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway' && generator.serviceDiscoveryTypes,
+                generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
