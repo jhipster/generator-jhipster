@@ -42,12 +42,13 @@
         "@schematics/angular:service": {
           "skipTests": true
         }
+      },
+      "prefix": "<%= jhiPrefixDashed %>",
+      "architect": {}
     },
-    "prefix": "<%= jhiPrefixDashed %>",
-    "architect": {}
-  },
-  "defaultProject": "<%= dasherizedBaseName %>",
-  "cli": {
-    "packageManager": "<%= clientPackageManager %>"
+   "defaultProject": "<%= dasherizedBaseName %>",
+    "cli": {
+      "packageManager": "<%= clientPackageManager %>"
+    }
   }
 }
