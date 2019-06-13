@@ -62,8 +62,10 @@ import org.springframework.scheduling.annotation.Scheduled;
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -774,19 +776,27 @@ public class UserService {
         return user;
     }
     <%_ } _%>
+
 <%_ } // databaseType !== 'no' _%>
     <%_ if (authenticationType === 'oauth2') { _%>
     /**
-     * Returns the user from an OAuth 2.0 login.
+     * Returns the user from an OAuth 2.0 login or resource server with JWT.
         <%_ if (databaseType !== 'no') { _%>
      * Synchronizes the user in the local repository.
         <%_ } _%>
      *
-     * @param authToken OAuth2 authentication.
+     * @param authToken the authentication token.
      * @return the user from the authentication.
      */
-    public UserDTO getUserFromAuthentication(OAuth2AuthenticationToken authToken) {
-        Map<String, Object> attributes = authToken.getPrincipal().getAttributes();
+    public UserDTO getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+        Map<String, Object> attributes;
+        if (authToken instanceof OAuth2AuthenticationToken) {
+            attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
+        } else if (authToken instanceof JwtAuthenticationToken) {
+            attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
+        } else {
+            throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
+        }
         <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> user = getUser(attributes);
         user.setAuthorities(authToken.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
