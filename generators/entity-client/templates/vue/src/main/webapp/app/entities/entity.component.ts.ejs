@@ -14,7 +14,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
   <%_ if (searchEngine === 'elasticsearch') { _%>
   public currentSearch = '';
   <%_ } _%>
-  private removeId: string = null;
+  private removeId: <% if (pkType === 'String') { %>string<% } else { %>number<% } %> = null;
   <%_ if (pagination !== 'no') { _%>
   public itemsPerPage = 20;
   public queryCount: number = null;
@@ -95,7 +95,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
     });
   }
 
-  public prepareRemove(instance) : void {
+  public prepareRemove(instance: I<%= entityAngularName %>) : void {
     this.removeId = instance.id;
   }
 

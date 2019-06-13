@@ -84,14 +84,14 @@ describe('<%= entityClass %> e2e test', () => {
 
     const footer = await <%= entityInstance %>ComponentsPage.getFooter();
     await waitUntilDisplayed(footer);
-    
+
     expect(await heading.getText()).not.to.be.empty;
-    nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
-    
+    nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.count<%= entityClass %>();
+
     // Bug-fix with Protractor.
     // force to recalculate in case of value is still 0
     if (nbButtonsBeforeCreate === 0) {
-      nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
+      nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.count<%= entityClass %>();
     }
   });
 
@@ -190,9 +190,9 @@ describe('<%= entityClass %> e2e test', () => {
     await waitUntilDisplayed(toast);
     // Success toast should appear
     expect(await toast.isPresent()).to.be.true;
-    
-    await <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeCreate + 1);
-    expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
+
+    await <%= entityInstance %>ComponentsPage.waitUntil<%= entityClass %>CountIs(nbButtonsBeforeCreate + 1);
+    expect(await <%= entityInstance %>ComponentsPage.count<%= entityClass %>()).to.eq(nbButtonsBeforeCreate + 1);
   });<%= closeBlockComment %>
 
   it('should load details <%= entityClass %> page and fetch data', async () => {
@@ -204,7 +204,7 @@ describe('<%= entityClass %> e2e test', () => {
 
     const footer = await <%= entityInstance %>UpdatePage.getFooter();
     await waitUntilDisplayed(footer);
-    
+
     await waitUntilDisplayed(await <%= entityInstance %>DetailsPage.getBackButton());
     expect(await heading.getText()).not.to.be.empty;
 
@@ -212,7 +212,7 @@ describe('<%= entityClass %> e2e test', () => {
     expect(await firstDetail.getText()).not.to.be.empty;
 
     await <%= entityInstance %>DetailsPage.getBackButton().click();
-    await <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeCreate + 1);
+    await <%= entityInstance %>ComponentsPage.waitUntil<%= entityClass %>CountIs(nbButtonsBeforeCreate + 1);
   });
 
   it('should load edit <%= entityClass %> page and fetch data', async () => {
@@ -296,7 +296,7 @@ describe('<%= entityClass %> e2e test', () => {
 
   <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
     await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
-    const nbButtonsBeforeDelete = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
+    const nb<%= entityClass %>BeforeDelete = await <%= entityInstance %>ComponentsPage.count<%= entityClass %>();
     await <%= entityInstance %>ComponentsPage.clickOnLastDeleteButton();
 
     const deleteModal = element(by.className('modal'));
@@ -309,7 +309,7 @@ describe('<%= entityClass %> e2e test', () => {
 
     // Delete modal should disappear
     expect(await deleteModal.isDisplayed()).to.be.false;
-    expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+    expect(await <%= entityInstance %>ComponentsPage.count<%= entityClass %>()).to.eq(nb<%= entityClass %>BeforeDelete - 1);
 
     const toast = getDangerToast();
 

@@ -68,7 +68,7 @@ export default class <%= entityClass %>ComponentsPage {
     await element.all(by.css('div table .btn-danger')).last().click();
   }
 
-  async countDeleteButtons() {
+  async count<%= entityClass %>() {
     const deleteButtons = await element.all(by.css('div table .btn-danger'));
     return deleteButtons.length;
   }
@@ -85,7 +85,7 @@ export default class <%= entityClass %>ComponentsPage {
     await waitUntilDisplayed(element.all(by.css('div table .btn-danger')).first());
   }
 
-  async waitUntilDeleteButtonsLength(length) {
+  async waitUntil<%= entityClass %>CountIs(length) {
     await waitUntilCount(element.all(by.css('div table .btn-danger')), length);
   }
 }

@@ -24,7 +24,7 @@ export default class <%= entityAngularName %>Service {
   }
   <%_ } _%>
 
-  public find(id) : Promise<I<%= entityAngularName %>> {
+  public find(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>(resolve => {
       axios.get(`${baseApiUrl}/${id}`).then(function (res) {
         resolve(res.data);
@@ -32,7 +32,7 @@ export default class <%= entityAngularName %>Service {
     });
   }
 
-  public retrieve(paginationQuery?: any) : Promise<any> {
+  public retrieve(<% if (pagination !== 'no') { %>paginationQuery?: any<% } %>) : Promise<any> {
     return new Promise<any>(resolve => {
       axios.get(baseApiUrl<% if (pagination !== 'no') { %> + `?${buildPaginationQueryOpts(paginationQuery)}` <% } %>).then(function (res) {
         resolve(res);
@@ -40,7 +40,7 @@ export default class <%= entityAngularName %>Service {
     });
   }
 
-  public delete(id) : Promise<any> {
+  public delete(id: <% if (pkType === 'String') { %>string<% } else { %>number<% } %>) : Promise<any> {
     return new Promise<any>(resolve => {
       axios.delete(`${baseApiUrl}/${id}`).then(function (res) {
         resolve(res);
@@ -48,7 +48,7 @@ export default class <%= entityAngularName %>Service {
     });
   }
 
-  public create(entity) : Promise<I<%= entityAngularName %>> {
+  public create(entity: I<%= entityAngularName %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>(resolve => {
       axios.post(`${baseApiUrl}`, entity).then(function (res) {
         resolve(res.data);
@@ -56,7 +56,7 @@ export default class <%= entityAngularName %>Service {
     });
   }
 
-  public update(entity) : Promise<I<%= entityAngularName %>> {
+  public update(entity: I<%= entityAngularName %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>(resolve => {
       axios.put(`${baseApiUrl}`, entity).then(function (res) {
         resolve(res.data);
