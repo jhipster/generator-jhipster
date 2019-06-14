@@ -1,6 +1,6 @@
 module.exports = {
   coverageDirectory: '<rootDir>/<%= BUILD_DIR %>test-results/',
-  coveragePathIgnorePatterns: ['<rootDir>/src/test/javascript', '<rootDir>/src/main/webapp/app/router'],
+  coveragePathIgnorePatterns: ['<rootDir>/src/test/javascript', '<rootDir>/src/main/webapp/app/router', '.*.json'],
   moduleFileExtensions: ['js', 'json', 'ts', 'vue'],
   transform: {
     '.*\\.(vue)$': 'vue-jest',

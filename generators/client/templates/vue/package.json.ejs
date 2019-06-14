@@ -180,7 +180,7 @@ limitations under the License.
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
     "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
-    "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch"
+    "test:watch": "<%= clientPackageManager %> run jest <%= optionsForwarder %>--watch"
   },
   "jestSonar": {
     "reportPath": "<%= BUILD_DIR %>test-results/jest",
