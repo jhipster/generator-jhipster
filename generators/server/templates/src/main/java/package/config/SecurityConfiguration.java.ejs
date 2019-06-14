@@ -55,26 +55,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import <%= packageName %>.security.oauth2.AudienceValidator;
+import <%=packageName%>.security.SecurityUtils;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
         <%_ if (applicationType === 'gateway') { _%>
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import <%=packageName%>.security.oauth2.AuthorizationHeaderFilter;
 import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
         <%_ } _%>
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
         <%_ if (applicationType !== 'microservice') { _%>
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
         <%_ } _%>
 import java.util.*;
-import java.util.stream.Collectors;
     <%_ } _%>
     <%_ if (authenticationType === 'session') { _%>
         <%_ if (!skipUserManagement) { _%>
@@ -91,8 +87,8 @@ import <%=packageName%>.security.oauth2.JwtAuthorityExtractor;
     <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
     <%_ } _%>
-    <%_ if (applicationType !== 'microservice') { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+    <%_ if (applicationType !== 'microservice') { _%>
 import org.springframework.web.filter.CorsFilter;
     <%_ } _%>
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
@@ -167,7 +163,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (authenticationType !== 'uaa' && applicationType !== 'microservice') { _%>
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring()
             .antMatchers(HttpMethod.OPTIONS, "/**")
         <%_ if (!skipClient) { _%>
@@ -308,35 +304,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             authorities.forEach(authority -> {
                 OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                mappedAuthorities.addAll(mapRolesToGrantedAuthorities(
-                    getRolesFromClaims(oidcUserAuthority.getUserInfo().getClaims())));
+                mappedAuthorities.addAll(SecurityUtils.mapRolesToGrantedAuthorities(
+                    SecurityUtils.getRolesFromClaims(oidcUserAuthority.getUserInfo().getClaims())));
             });
             return mappedAuthorities;
         };
     }
         <%_ } _%>
-    private Converter<Jwt, AbstractAuthenticationToken> mapGroupOrRolesClaimToGrantedAuthorities() {
-        return new JwtAuthenticationConverter() {
-            @Override
-            protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
-                return mapRolesToGrantedAuthorities(
-                    getRolesFromClaims(jwt.getClaims())
-                );
-            }
-        };
-    }
-
-    @SuppressWarnings("unchecked")
-    private Collection<String> getRolesFromClaims(Map<String, Object> claims) {
-        return (Collection<String>) claims.getOrDefault("groups",
-            claims.getOrDefault("roles", new ArrayList<>()));
-    }
-
-    private List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
-        return roles.stream()
-            .filter(role -> role.startsWith("ROLE_"))
-            .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-    }
 
     @Bean
     JwtDecoder jwtDecoder() {

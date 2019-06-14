@@ -18,11 +18,6 @@
 -%>
 package <%=packageName%>.security;
 
-<%_ if (authenticationType === 'oauth2') { _%>
-
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
-<%_ } _%>
 import org.springframework.security.core.GrantedAuthority;
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -46,6 +41,7 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 <%_ if (authenticationType === 'oauth2') { _%>
 import java.util.stream.Collectors;
+import java.util.Collection;
 <%_ } _%>
 import java.util.List;
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -183,9 +179,19 @@ public final class SecurityUtils {
     }
 <%_ if (authenticationType === 'oauth2') { _%>
     public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
-        return ((JSONArray)((JSONObject)claims.get("realm_access")).get("roles")).stream()
-            .map(group -> ((String) group))
-            .filter(group -> group.startsWith("ROLE_"))
+        return mapRolesToGrantedAuthorities(
+            getRolesFromClaims(claims));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Collection<String> getRolesFromClaims(Map<String, Object> claims) {
+        return (Collection<String>) claims.getOrDefault("groups",
+            claims.getOrDefault("roles", new ArrayList<>()));
+    }
+
+    public static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
+        return roles.stream()
+        .filter(role -> role.startsWith("ROLE_"))
             .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 <%_ } _%>
