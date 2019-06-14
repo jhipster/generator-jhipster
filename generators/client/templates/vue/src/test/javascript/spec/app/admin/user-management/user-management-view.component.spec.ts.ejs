@@ -1,3 +1,6 @@
+<%_
+const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
+_%>
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -58,11 +61,11 @@ describe('UserManagementView Component', () => {
       mockedAxios.get.mockReturnValue(Promise.resolve({ data: userData }));
 
       // WHEN
-      userManagementView.init(1);
+      userManagementView.init(<%- tsKeyId %>);
       await userManagementView.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users/1`);
+      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users/<%- tsKeyId %>`);
       expect(userManagementView.user).toEqual(userData);
     });
   });

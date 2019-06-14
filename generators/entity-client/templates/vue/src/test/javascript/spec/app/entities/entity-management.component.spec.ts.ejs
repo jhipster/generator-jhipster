@@ -190,7 +190,7 @@ describe('Component Tests', () => {
       mockedAxios.get.mockReturnValue(Promise.resolve({}));
 
       // WHEN
-      comp.prepareRemove({id:'test'});
+      comp.prepareRemove({id: <%- tsKeyId %>});
       comp.remove<%= entityAngularName %>();
       await comp.$nextTick();
 

@@ -1,3 +1,6 @@
+<%_
+const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
+_%>
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -83,11 +86,11 @@ describe('UserManagement Component', () => {
       mockedAxios.put.mockReturnValue(Promise.resolve({}));
 
       // WHEN
-      userManagement.setActive({ id: 'test' }, true);
+      userManagement.setActive({ id: <%- tsKeyId %> }, true);
       await userManagement.$nextTick();
 
       // THEN
-      expect(mockedAxios.put).toHaveBeenCalledWith(`api/users`, { id: 'test', activated: true });
+      expect(mockedAxios.put).toHaveBeenCalledWith(`api/users`, { id: <%- tsKeyId %>, activated: true });
       expect(mockedAxios.get).toHaveBeenCalledWith(`api/users?sort=id,desc&page=0&size=20`);
     });
   });
@@ -98,12 +101,12 @@ describe('UserManagement Component', () => {
       mockedAxios.delete.mockReturnValue(Promise.resolve({ headers: {} }));
 
       // WHEN
-      userManagement.prepareRemove({ login: 'test' });
+      userManagement.prepareRemove({ login: <%- tsKeyId %> });
       userManagement.deleteUser();
       await userManagement.$nextTick();
 
       // THEN
-      expect(mockedAxios.delete).toHaveBeenCalledWith(`api/users/test`);
+      expect(mockedAxios.delete).toHaveBeenCalledWith(`api/users/<%- tsKeyId %>`);
       expect(mockedAxios.get).toHaveBeenCalledWith(`api/users?sort=id,desc&page=0&size=20`);
     });
   });
