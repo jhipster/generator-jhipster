@@ -685,6 +685,17 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a new annotation processor path to Maven compiler configuration.
+     *
+     * @param {string} groupId - plugin groupId
+     * @param {string} artifactId - plugin artifactId
+     * @param {string} version - explicit plugin version number
+     */
+    addMavenAnnotationProcessor(groupId, artifactId, version) {
+        this.needleApi.serverMaven.addAnnotationProcessor(groupId, artifactId, version);
+    }
+
+    /**
      * Add a new Maven profile.
      *
      * @param {string} profileId - profile ID
