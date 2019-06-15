@@ -59,7 +59,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('foo');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
 
     // Login page should stay open when login fails
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
@@ -86,7 +86,7 @@ describe('Account', () => {
     await signInPage.username.sendKeys('admin');
     await signInPage.password.clear();
     await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     // Login page should close when login success
@@ -128,7 +128,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     await waitUntilDisplayed(navBarPage.adminMenu);
@@ -193,7 +193,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('user_test');
     await signInPage.password.sendKeys('user_test');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     // Login page should close when login success
@@ -209,7 +209,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     expect(await signInPage.isHidden()()).to.be.true;
@@ -237,7 +237,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     expect(await signInPage.isHidden()()).to.be.true;
@@ -265,7 +265,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('new_password');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
     expect(await signInPage.isHidden()()).to.be.true;
 
@@ -286,7 +286,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('user_test');
     await signInPage.password.sendKeys('user_test');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     expect(await signInPage.isHidden()()).to.be.true;
@@ -318,7 +318,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     expect(await signInPage.isHidden()()).to.be.true;
