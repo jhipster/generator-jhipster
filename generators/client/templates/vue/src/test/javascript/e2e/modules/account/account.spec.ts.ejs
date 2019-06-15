@@ -20,7 +20,8 @@ import {
   getUserEmailByLogin,
   getSuccessToast,
   getInfoToast,
-  getDangerToast
+  getDangerToast,
+  clickElement
 } from '../../util/utils';
 <%_ } else { _%>
 import { waitUntilDisplayed } from '../../util/utils';
@@ -353,8 +354,7 @@ describe('Account', () => {
   it('should edit details from previously created fake user', async () => {
     await browser.get('/admin/user-management');
     const editBtn = getUserEditButtonByLogin('user_test');
-    await waitUntilDisplayed(editBtn);
-    await editBtn.click();
+    await clickElement(editBtn);
 
     const editHeading = element(by.css('h2#myUserLabel'));
     await waitUntilDisplayed(editHeading);
