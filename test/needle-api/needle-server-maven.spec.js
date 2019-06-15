@@ -90,6 +90,11 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         '                </exclusion>\n' +
                         '            </exclusions>'
                 );
+                this.addMavenAnnotationProcessor(
+                    'annotationProcessorGroupId',
+                    'annotationProcessorArtifactId',
+                    'annotationProcessorVersion'
+                );
                 this.addMavenProfile('profileId', '            <other>other</other>');
             }
         };
@@ -218,6 +223,17 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
                         '                </exclusion>\n' +
                         '            </exclusions>\n' +
                         '        </dependency>'
+                );
+            });
+
+            it('Assert pom.xml has the annotation processor added', () => {
+                assert.fileContent(
+                    'pom.xml',
+                    '        <path>\n' +
+                        '            <groupId>annotationProcessorGroupId</groupId>\n' +
+                        '            <artifactId>annotationProcessorArtifactId</artifactId>\n' +
+                        '            <version>annotationProcessorVersion</version>\n' +
+                        '        </path>'
                 );
             });
 
