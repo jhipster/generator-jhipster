@@ -54,6 +54,8 @@ program
     .usage('[command] [options]')
     .allowUnknownOption();
 
+const options = getCommandOptions(packageJson, process.argv.slice(2));
+
 /* create commands */
 Object.keys(SUB_GENERATORS).forEach(key => {
     const opts = SUB_GENERATORS[key];
@@ -65,7 +67,6 @@ Object.keys(SUB_GENERATORS).forEach(key => {
         .allowUnknownOption()
         .description(opts.desc)
         .action(args => {
-            const options = getCommandOptions(packageJson, process.argv.slice(2));
             if (opts.cliOnly) {
                 logger.debug('Executing CLI only script');
                 /* eslint-disable global-require, import/no-dynamic-require */
