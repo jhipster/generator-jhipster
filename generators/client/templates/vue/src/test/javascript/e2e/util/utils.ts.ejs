@@ -58,7 +58,7 @@ export const waitUntilHidden = async (selector: ElementFinder, classname = '', t
   );
 };
 
-export const waitForCount = async (elementArrayFinder: ElementArrayFinder, expectedCount: number) => () => {
+export const waitForCount = (elementArrayFinder: ElementArrayFinder, expectedCount: number) => {
   return elementArrayFinder.count().then(actualCount => expectedCount === actualCount);
 };
 
@@ -68,7 +68,7 @@ export const waitUntilCount = async (
   timeout = waitUntilDisplayedTimeout
 ) => {
   await browser.wait(
-    await waitForCount(elementArrayFinder, expectedCount),
+    waitForCount(elementArrayFinder, expectedCount),
     timeout,
     `Failed while waiting for "${elementArrayFinder.locator()}" to have ${expectedCount} elements.`
   );
