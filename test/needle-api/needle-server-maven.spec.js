@@ -160,7 +160,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
     it('Assert pom.xml has the plugin repository added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <pluginRepository>\n' + '            <id>id</id>\n' + '            <url>url</url>\n' + '        </pluginRepository>'
+            '        <pluginRepository>\n            <id>id</id>\n            <url>url</url>\n        </pluginRepository>'
         );
     });
 
