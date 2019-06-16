@@ -133,7 +133,7 @@
         <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
 <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>3.3.4</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>4.0.1</openapi-generator-maven-plugin.version>
 <%_ } _%>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
@@ -294,6 +294,13 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+<%_ if (enableSwaggerCodegen) { _%>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+<%_ } _%>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -1243,6 +1250,7 @@
                                 <apiPackage><%= packageName %>.web.api</apiPackage>
                                 <modelPackage><%= packageName %>.web.api.model</modelPackage>
                                 <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+                                <importMappings>Problem=org.zalando.problem.Problem</importMappings>
                                 <validateSpec>true</validateSpec>
                                 <configOptions>
     <%_ if (reactive) { _%>
