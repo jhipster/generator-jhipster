@@ -80,7 +80,7 @@ describe('<%= entityClass %> e2e test', () => {
     await navBarPage.getEntityPage('<%= entityStateName %>');
     <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
 
-    await waitSilentlyUntilDisplayed(fieldTestEntityComponentsPage.getDeleteButtons().last());
+    await waitSilentlyUntilDisplayed(<%= entityInstance %>ComponentsPage.getDeleteButtons().last());
     const heading = <%= entityInstance %>ComponentsPage.getTitle();
     await waitUntilDisplayed(heading);
 
