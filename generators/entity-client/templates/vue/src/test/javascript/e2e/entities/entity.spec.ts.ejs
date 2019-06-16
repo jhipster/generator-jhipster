@@ -196,6 +196,7 @@ describe('<%= entityClass %> e2e test', () => {
   });<%= closeBlockComment %>
 
   it('should load details <%= entityClass %> page and fetch data', async () => {
+    await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
     await <%= entityInstance %>ComponentsPage.clickOnLastDetailsButton();
     <%= entityInstance %>DetailsPage = new <%= entityClass %>DetailsPage();
 
@@ -216,6 +217,7 @@ describe('<%= entityClass %> e2e test', () => {
   });
 
   it('should load edit <%= entityClass %> page and fetch data', async () => {
+    await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
     await <%= entityInstance %>ComponentsPage.clickOnLastEditButton();
     const heading = <%= entityInstance %>UpdatePage.getPageTitle();
     await waitUntilDisplayed(heading);
