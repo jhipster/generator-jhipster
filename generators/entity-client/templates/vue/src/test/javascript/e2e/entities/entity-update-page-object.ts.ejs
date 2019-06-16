@@ -47,11 +47,11 @@ export default class <%= entityClass %>UpdatePage {
     }
 
     async isSaveButtonPresent() {
-        return await getSaveButton().isPresent();
+        return await this.getSaveButton().isPresent();
     }
 
     async save() {
-        await getSaveButton().click();
+        await this.getSaveButton().click();
     }
 
     async cancel() {
