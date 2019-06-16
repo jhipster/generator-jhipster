@@ -25,7 +25,7 @@ import <%= entityClass %>ComponentsPage from './<%= entityFileName %>.page-objec
 import { <%= entityClass %>DeleteDialog } from './<%= entityFileName %>.page-object';
 import <%= entityClass %>UpdatePage from './<%= entityFileName%>-update.page-object';
 import <%= entityClass %>DetailsPage from './<%= entityFileName%>-details.page-object';
-import { waitUntilDisplayed, waitUntilHidden, getDangerToast, getInfoToast, getSuccessToast } from '../../<%= entityParentPathAddition %>util/utils';
+import { waitUntilDisplayed, waitUntilHidden, getDangerToast, getInfoToast, getSuccessToast, waitSilentlyUntilDisplayed } from '../../<%= entityParentPathAddition %>util/utils';
 <%_ if (fieldsContainBlobOrImage) { _%>
 import path from 'path';
 <%_ } _%>
@@ -79,6 +79,8 @@ describe('<%= entityClass %> e2e test', () => {
   it('should load <%= entityClassPlural %>', async () => {
     await navBarPage.getEntityPage('<%= entityStateName %>');
     <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
+
+    await waitSilentlyUntilDisplayed(fieldTestEntityComponentsPage.getDeleteButtons().last());
     const heading = <%= entityInstance %>ComponentsPage.getTitle();
     await waitUntilDisplayed(heading);
 
@@ -87,12 +89,6 @@ describe('<%= entityClass %> e2e test', () => {
 
     expect(await heading.getText()).not.to.be.empty;
     nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.count<%= entityClass %>();
-
-    // Bug-fix with Protractor.
-    // force to recalculate in case of value is still 0
-    if (nbButtonsBeforeCreate === 0) {
-      nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.count<%= entityClass %>();
-    }
   });
 
   it('should load create <%= entityClass %> page', async () => {

@@ -31,6 +31,20 @@ export const waitUntilDisplayed = async (selector: ElementFinder, classname = ''
 };
 
 /**
+ * Silently wait for an element to be displayed. It doesn't throw an error if
+ * the element is not visible after wait threshold.
+ */
+export const waitSilentlyUntilDisplayed = async (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
+  if (!checkSelectorExist(selector)) return;
+
+  await browser.wait(
+      isDisplayed(selector),
+      timeout,
+      `"${selector.locator()}" not found in the Page Object class '${classname}'`
+  ).catch(e =>  console.error(e));
+};
+
+/**
  * Wait until element is clickable
  */
 export const waitUntilClickable = async (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
