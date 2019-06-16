@@ -38,7 +38,7 @@ export default class <%= entityClass %>ComponentsPage {
   }
 
   async clickOnCreateButton() {
-    await getCreateButton().click();
+    await this.getCreateButton().click();
   }
 
   getDetailButtons() {
@@ -46,7 +46,7 @@ export default class <%= entityClass %>ComponentsPage {
   }
 
   async clickOnLastDetailsButton() {
-    await getDetailButtons().last().click();
+    await this.getDetailButtons().last().click();
   }
 
   getEditButtons() {
@@ -54,7 +54,7 @@ export default class <%= entityClass %>ComponentsPage {
   }
 
   async clickOnLastEditButton() {
-    await getEditButtons().last().click();
+    await this.getEditButtons().last().click();
   }
 
   getDeleteButtons() {
@@ -62,7 +62,7 @@ export default class <%= entityClass %>ComponentsPage {
   }
 
   async clickOnLastDeleteButton() {
-    await getDeleteButtons().last().click();
+    await this.getDeleteButtons().last().click();
   }
 
   async count<%= entityClass %>() {

@@ -76,11 +76,11 @@ export default class <%= entityClass %>UpdatePage {
     }
 
     async click<%= fieldNameCapitalized %>Input() {
-        await get<%= fieldNameCapitalized %>Input().click();
+        await this.get<%= fieldNameCapitalized %>Input().click();
     }
 
     async isSelected<%= fieldNameCapitalized %>Input() {
-        return await get<%= fieldNameCapitalized %>Input().isSelected();
+        return await this.get<%= fieldNameCapitalized %>Input().isSelected();
     }
 
     <%_ } else if (fieldIsEnum) { _%>
