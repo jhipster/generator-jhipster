@@ -79,10 +79,10 @@ describe('<%= entityClass %> e2e test', () => {
   it('should load <%= entityClassPlural %>', async () => {
     await navBarPage.getEntityPage('<%= entityStateName %>');
     <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
-    const heading = await <%= entityInstance %>ComponentsPage.getTitle();
+    const heading = <%= entityInstance %>ComponentsPage.getTitle();
     await waitUntilDisplayed(heading);
 
-    const footer = await <%= entityInstance %>ComponentsPage.getFooter();
+    const footer = <%= entityInstance %>ComponentsPage.getFooter();
     await waitUntilDisplayed(footer);
 
     expect(await heading.getText()).not.to.be.empty;
@@ -99,13 +99,13 @@ describe('<%= entityClass %> e2e test', () => {
     await <%= entityInstance %>ComponentsPage.clickOnCreateButton();
     <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
 
-    const heading = await <%= entityInstance %>UpdatePage.getPageTitle();
+    const heading = <%= entityInstance %>UpdatePage.getPageTitle();
     await waitUntilDisplayed(heading);
 
-    const footer = await <%= entityInstance %>UpdatePage.getFooter();
+    const footer = <%= entityInstance %>UpdatePage.getFooter();
     await waitUntilDisplayed(footer);
 
-    await waitUntilDisplayed(await <%= entityInstance %>UpdatePage.getSaveButton());
+    await waitUntilDisplayed(<%= entityInstance %>UpdatePage.getSaveButton());
 
     <%_ if (enableTranslation) { _%>
     expect(await heading.getAttribute('id'))
@@ -183,7 +183,7 @@ describe('<%= entityClass %> e2e test', () => {
     <%_ }); _%>
 
     await <%= entityInstance %>UpdatePage.save();
-    await waitUntilHidden(await <%= entityInstance %>UpdatePage.getSaveButton());
+    await waitUntilHidden(<%= entityInstance %>UpdatePage.getSaveButton());
     expect(await <%= entityInstance %>UpdatePage.isSaveButtonPresent()).to.be.false;
 
     const toast = getSuccessToast();
@@ -199,10 +199,10 @@ describe('<%= entityClass %> e2e test', () => {
     await <%= entityInstance %>ComponentsPage.clickOnLastDetailsButton();
     <%= entityInstance %>DetailsPage = new <%= entityClass %>DetailsPage();
 
-    const heading = await <%= entityInstance %>DetailsPage.getPageTitle();
+    const heading = <%= entityInstance %>DetailsPage.getPageTitle();
     await waitUntilDisplayed(heading);
 
-    const footer = await <%= entityInstance %>UpdatePage.getFooter();
+    const footer = <%= entityInstance %>UpdatePage.getFooter();
     await waitUntilDisplayed(footer);
 
     await waitUntilDisplayed(await <%= entityInstance %>DetailsPage.getBackButton());
@@ -217,13 +217,13 @@ describe('<%= entityClass %> e2e test', () => {
 
   it('should load edit <%= entityClass %> page and fetch data', async () => {
     await <%= entityInstance %>ComponentsPage.clickOnLastEditButton();
-    const heading = await <%= entityInstance %>UpdatePage.getPageTitle();
+    const heading = <%= entityInstance %>UpdatePage.getPageTitle();
     await waitUntilDisplayed(heading);
 
-    const footer = await <%= entityInstance %>UpdatePage.getFooter();
+    const footer = <%= entityInstance %>UpdatePage.getFooter();
     await waitUntilDisplayed(footer);
 
-    await waitUntilDisplayed(await <%= entityInstance %>UpdatePage.getSaveButton());
+    await waitUntilDisplayed(<%= entityInstance %>UpdatePage.getSaveButton());
 
     expect(await heading.getText()).not.to.be.empty;
 
@@ -284,7 +284,7 @@ describe('<%= entityClass %> e2e test', () => {
 
     await <%= entityInstance %>UpdatePage.save();
 
-    await waitUntilHidden(await <%= entityInstance %>UpdatePage.getSaveButton());
+    await waitUntilHidden(<%= entityInstance %>UpdatePage.getSaveButton());
 
     expect(await <%= entityInstance %>UpdatePage.isSaveButtonPresent()).to.be.false;
 
