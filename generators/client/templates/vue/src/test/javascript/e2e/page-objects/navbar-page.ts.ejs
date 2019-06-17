@@ -57,21 +57,21 @@ export default class NavBarPage extends BasePage {
   }
 
   async clickOnAccountMenu() {
-    await this.accountMenu.click();
+    await clickElement(this.accountMenu);
   }
 
   async clickOnAccountMenuItem(item: string) {
-    await this.accountMenu.click();
+    await this.clickOnAccountMenu();
     await clickElement(this.selector.$(`.dropdown-item[href="/account/${item}"`));
   }
 
   async clickOnAdminMenuItem(item: string) {
-    await this.adminMenu.click();
+    await clickElement(this.adminMenu);
     await clickElement(this.selector.$(`.dropdown-item[href="/admin/${item}"]`));
   }
 
   async clickOnEntityMenu() {
-    await this.entityMenu.click();
+    await clickElement(this.entityMenu);
   }
 
   async clickOnEntity(entityName: string) {

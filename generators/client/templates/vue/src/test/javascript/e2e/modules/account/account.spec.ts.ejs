@@ -373,8 +373,7 @@ describe('Account', () => {
   it('should delete previously created fake user', async () => {
     await browser.get('/admin/user-management');
     const deleteBtn = getUserDeleteButtonByLogin('user_test');
-    await waitUntilDisplayed(deleteBtn);
-    await deleteBtn.click();
+    await clickElement(deleteBtn);
 
     const deleteModal = element(by.className('modal'));
     await waitUntilDisplayed(deleteModal);
