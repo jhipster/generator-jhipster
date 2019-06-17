@@ -41,6 +41,17 @@
             </releases>
         </repository>
 <%_ } _%>
+        <!-- TODO To remove after final JHipster release -->
+        <repository>
+            <id>oss.sonatype.org-snapshot</id>
+            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
@@ -80,7 +91,7 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>3.0.2</jhipster-dependencies.version>
+        <jhipster-dependencies.version>3.0.3-SNAPSHOT</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
