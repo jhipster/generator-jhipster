@@ -173,10 +173,10 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
             '    <changeSet id="20180328000000-2" author="jhipster">\n' +
             '        <createTable tableName="test">\n' +
             '            <column name="id" type="bigint" autoIncrement="${autoIncrement}">\n' + // eslint-disable-line
-        '                <constraints primaryKey="true" nullable="false"/>\n' +
-        '            </column>\n' +
-        '        </createTable>\n' +
-        '    </changeSet>'
+                '                <constraints primaryKey="true" nullable="false"/>\n' +
+                '            </column>\n' +
+                '        </createTable>\n' +
+                '    </changeSet>'
         );
     });
 });
