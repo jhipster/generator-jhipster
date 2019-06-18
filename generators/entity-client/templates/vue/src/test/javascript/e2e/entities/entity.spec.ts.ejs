@@ -307,6 +307,8 @@ describe('<%= entityClass %> e2e test', () => {
 
     // Delete modal should disappear
     expect(await deleteModal.isDisplayed()).to.be.false;
+
+    await waitSilentlyUntilDisplayed(<%= entityInstance %>ComponentsPage.getDeleteButtons().last());
     expect(await <%= entityInstance %>ComponentsPage.count<%= entityClass %>()).to.eq(nb<%= entityClass %>BeforeDelete - 1);
 
     const toast = getDangerToast();
