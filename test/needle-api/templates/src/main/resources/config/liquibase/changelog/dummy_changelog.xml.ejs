@@ -49,4 +49,16 @@
         </createTable>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+
+    <changeSet id="20180328000000-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/data/test.csv"
+                  separator=";"
+                  tableName="test"
+                  context="dev">
+            <column name="id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
+        </loadData>
+    </changeSet>
+
 </databaseChangeLog>

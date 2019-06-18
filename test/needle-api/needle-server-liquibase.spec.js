@@ -80,6 +80,12 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         '        </createTable>\n' +
                         '    </changeSet>'
                 );
+            },
+            addLoadColumnStep() {
+                this.addLoadColumnToLiquibaseEntityChangeSet(
+                    `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
+                    '            <column name="loadColumn" type="string" />'
+                );
             }
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
@@ -154,12 +160,19 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
         );
     });
 
+    it('Assert that load column is added to an existing changelog', () => {
+        assert.fileContent(
+            `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
+            '            <column name="loadColumn" type="string" />'
+        );
+    });
+
     it('Assert that changeSet is added to an existing changelog', () => {
         assert.fileContent(
             `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
             '    <changeSet id="20180328000000-2" author="jhipster">\n' +
             '        <createTable tableName="test">\n' +
-                    '            <column name="id" type="bigint" autoIncrement="${autoIncrement}">\n' + // eslint-disable-line
+            '            <column name="id" type="bigint" autoIncrement="${autoIncrement}">\n' + // eslint-disable-line
                 '                <constraints primaryKey="true" nullable="false"/>\n' +
                 '            </column>\n' +
                 '        </createTable>\n' +
