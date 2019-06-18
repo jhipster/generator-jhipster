@@ -75,6 +75,37 @@ describe('JHipster Utils', () => {
             });
         });
     });
+    describe('::parseBluePrints', () => {
+        it('does nothing if an array', () => {
+            const expected = [{ name: 'generator-jhipster-foo', version: 'latest' }];
+            const actual = utils.parseBluePrints(expected);
+            assert.deepStrictEqual(actual, expected);
+        });
+        it('adds generator-jhipster prefix if it is absent', () => {
+            const expected = [{ name: 'generator-jhipster-foo', version: 'latest' }];
+            const actual = utils.parseBluePrints('foo');
+            assert.deepStrictEqual(actual, expected);
+        });
+        it('keeps generator-jhipster prefix if it is present', () => {
+            const expected = [{ name: 'generator-jhipster-foo', version: '1.0.1' }];
+            const actual = utils.parseBluePrints('generator-jhipster-foo@1.0.1');
+            assert.deepStrictEqual(actual, expected);
+        });
+        it("doesn't modify scoped package and extracts version", () => {
+            const expected = [{ name: '@corp/foo', version: '1.0.1' }];
+            const actual = utils.parseBluePrints('@corp/foo@1.0.1');
+            assert.deepStrictEqual(actual, expected);
+        });
+        it('parses comma separated list', () => {
+            const expected = [
+                { name: 'generator-jhipster-foo', version: 'latest' },
+                { name: 'generator-jhipster-bar', version: '1.0.1' },
+                { name: '@corp/foo', version: 'latest' }
+            ];
+            const actual = utils.parseBluePrints('foo,bar@1.0.1,@corp/foo');
+            assert.deepStrictEqual(actual, expected);
+        });
+    });
     describe('::normalizeBlueprintName', () => {
         it('adds generator-jhipster prefix if it is absent', () => {
             const generatorName = utils.normalizeBlueprintName('foo');
