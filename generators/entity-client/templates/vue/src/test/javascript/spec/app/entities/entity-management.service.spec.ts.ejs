@@ -207,7 +207,7 @@ describe('Service Tests', () => {
     <%_ }) _%>
         }, returnedFromService);
         mockedAxios.get.mockReturnValue(Promise.resolve([returnedFromService]));
-        return service.retrieve(<% if (pagination !== 'no') { %>expected<% } %>).then((res) => {
+        return service.retrieve(<% if (pagination !== 'no') { %>{ sort: {}, page: 0, size: 10 }<% } %>).then((res) => {
           expect(res).toContainEqual(expected);
         });
       });
