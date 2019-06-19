@@ -87,7 +87,7 @@ describe('Service Tests', () => {
       );
     });
 
-    describe('Service methods', async () => {
+    describe('Service methods', () => {
       it('should find an element', async () => {
         const returnedFromService = Object.assign({
 <%_ fields.forEach((field) => {
@@ -101,7 +101,7 @@ describe('Service Tests', () => {
         }, elemDefault);
         mockedAxios.get.mockReturnValue(Promise.resolve({ data: returnedFromService }));
 
-        service
+        return service
           .find(<%- tsKeyId %>).then((res) => {
             expect(res).toMatchObject(elemDefault);
         });
@@ -135,7 +135,7 @@ describe('Service Tests', () => {
           }, returnedFromService);
 
           mockedAxios.post.mockReturnValue(Promise.resolve({ data: returnedFromService }));
-          service.create({}).then((res) => {
+          return service.create({}).then((res) => {
             expect(res).toMatchObject(expected);
         });
       });
@@ -172,7 +172,7 @@ describe('Service Tests', () => {
           }, returnedFromService);
           mockedAxios.put.mockReturnValue(Promise.resolve({ data: returnedFromService }));
 
-          service.update(expected).then((res) => {
+          return service.update(expected).then((res) => {
             expect(res).toMatchObject(expected);
         });
       });
@@ -207,15 +207,15 @@ describe('Service Tests', () => {
     <%_ }) _%>
         }, returnedFromService);
         mockedAxios.get.mockReturnValue(Promise.resolve([returnedFromService]));
-        service.retrieve(<% if (pagination !== 'no') { %>expected<% } %>).then((res) => {
+        return service.retrieve(<% if (pagination !== 'no') { %>expected<% } %>).then((res) => {
           expect(res).toContainEqual(expected);
         });
       });
 
       it('should delete a <%= entityAngularName %>', async () => {
           mockedAxios.delete.mockReturnValue(Promise.resolve({ok: true}));
-          service.delete(<%- tsKeyId %>).then((res) => {
-              expect(res.ok);
+          return service.delete(<%- tsKeyId %>).then((res) => {
+              expect(res.ok).toBeTruthy();
           });
       });
     });

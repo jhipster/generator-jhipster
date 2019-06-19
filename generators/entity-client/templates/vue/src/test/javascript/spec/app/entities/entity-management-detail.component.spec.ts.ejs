@@ -57,7 +57,7 @@ describe('Component Tests', () => {
       comp = wrapper.vm;
     });
 
-    describe('OnInit', async () => {
+    describe('OnInit', () => {
       it('Should call load all on init', async () => {
         // GIVEN
         mockedAxios.get.mockReturnValue(Promise.resolve({data: {id: <%- tsKeyId %>}}));
