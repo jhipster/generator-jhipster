@@ -176,6 +176,7 @@ _%>
     <%_ for (idx in fields) {
     const defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     const updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
+    const smallerValueName = 'SMALLER_' + fields[idx].fieldNameUnderscored.toUpperCase();
 
     let defaultValue = 1;
     let updatedValue = 2;
@@ -271,22 +272,27 @@ _%>
 
     private static final Integer <%=defaultValueName %> = <%= defaultValue %>;
     private static final Integer <%=updatedValueName %> = <%= updatedValue %>;
+    private static final Integer <%=smallerValueName %> = <%= defaultValue %> - 1;
     <%_ } else if (fieldType === 'Long') { _%>
 
     private static final Long <%=defaultValueName %> = <%= defaultValue %>L;
     private static final Long <%=updatedValueName %> = <%= updatedValue %>L;
+    private static final Long <%=smallerValueName %> = <%= defaultValue %>L - 1L;
     <%_ } else if (fieldType === 'Float') { _%>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%= defaultValue %>F;
     private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>F;
+    private static final <%=fieldType %> <%=smallerValueName %> = <%= defaultValue %>F - 1F;
     <%_ } else if (fieldType === 'Double') { _%>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%= defaultValue %>D;
     private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>D;
+    private static final <%=fieldType %> <%=smallerValueName %> = <%= defaultValue %>D - 1D;
     <%_ } else if (fieldType === 'BigDecimal') { _%>
 
     private static final BigDecimal <%=defaultValueName %> = new BigDecimal(<%= defaultValue %>);
     private static final BigDecimal <%=updatedValueName %> = new BigDecimal(<%= updatedValue %>);
+    private static final BigDecimal <%=smallerValueName %> = new BigDecimal(<%= defaultValue %> - 1);
     <%_ } else if (fieldType === 'UUID') { _%>
 
     private static final UUID <%=defaultValueName %> = UUID.randomUUID();
@@ -295,18 +301,22 @@ _%>
 
     private static final LocalDate <%=defaultValueName %> = LocalDate.ofEpochDay(0L);
     private static final LocalDate <%=updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate <%=smallerValueName %> = LocalDate.ofEpochDay(-1L);
     <%_ } else if (fieldType === 'Instant') { _%>
 
     private static final Instant <%=defaultValueName %> = Instant.ofEpochMilli(0L);
     private static final Instant <%=updatedValueName %> = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant <%=smallerValueName %> = Instant.ofEpochMilli(-1L);
     <%_ } else if (fieldType === 'ZonedDateTime') { _%>
 
     private static final ZonedDateTime <%=defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime <%=updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime <%=smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
     <%_ } else if (fieldType === 'Duration') { _%>
 
     private static final Duration <%=defaultValueName %> = Duration.ofHours(6);
     private static final Duration <%=updatedValueName %> = Duration.ofHours(12);
+    private static final Duration <%=smallerValueName %> = Duration.ofHours(5);
     <%_ } else if (fieldType === 'Boolean') { _%>
 
     private static final Boolean <%=defaultValueName %> = false;
@@ -797,12 +807,20 @@ _%>
 <%_
             }
             // the range criteria
-            if (['Byte', 'Short', 'Integer', 'Long', 'LocalDate', 'ZonedDateTime'].includes(searchBy.fieldType)) {
+            if (['BigDecimal', 'Byte', 'Double', 'Duration', 'Float', 'Short', 
+                 'Integer', 'Long', 'LocalDate', 'ZonedDateTime'].includes(searchBy.fieldType)) {
               var defaultValue = 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase();
               var biggerValue = 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase();
+              var smallerValue = 'SMALLER_' + searchBy.fieldNameUnderscored.toUpperCase();
               if (searchBy.fieldValidate === true && searchBy.fieldValidateRules.includes('max')) {
                   // if maximum is specified the updated variable is smaller than the default one!
-                  biggerValue = '(' + defaultValue + ' + 1)';
+                  if (searchBy.fieldType === 'BigDecimal') {
+                      biggerValue = '(' + defaultValue + '.add(BigDecimal.ONE))';
+                  } else if (['Duration', 'LocalDate', 'ZonedDateTime'].includes(searchBy.fieldType)) {
+                      biggerValue = '(' + defaultValue + '.plus(1, ChronoUnit.DAYS))';
+                  } else {
+                      biggerValue = '(' + defaultValue + ' + 1)';
+                  }
               }
             _%>
 
@@ -812,11 +830,24 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> greater than or equals to <%= defaultValue %>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.greaterOrEqualThan=" + <%= defaultValue %>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than or equal to <%= defaultValue %>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.greaterThanOrEqual=" + <%= defaultValue %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> greater than or equals to <%= biggerValue %>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.greaterOrEqualThan=" + <%= biggerValue %>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than or equal to <%= biggerValue %>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.greaterThanOrEqual=" + <%= biggerValue %>);
+    }
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than or equal to <%= defaultValue %>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.lessThanOrEqual=" + <%= defaultValue %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than or equal to <%= smallerValue %>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.lessThanOrEqual=" + <%= smallerValue %>);
     }
 
     @Test<% if (databaseType === 'sql') { %>
@@ -825,11 +856,24 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> less than or equals to <%= defaultValue %>
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than <%= defaultValue %>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.lessThan=" + <%= defaultValue %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> less than or equals to <%= biggerValue %>
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than <%= biggerValue %>
         default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.lessThan=" + <%= biggerValue %>);
+    }
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than <%= defaultValue %>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.greaterThan=" + <%= defaultValue %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than <%= smallerValue %>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.greaterThan=" + <%= smallerValue %>);
     }
 
 <%_         } _%>
