@@ -20,7 +20,8 @@ import {
   getUserEmailByLogin,
   getSuccessToast,
   getInfoToast,
-  getDangerToast
+  getDangerToast,
+  clickElement
 } from '../../util/utils';
 <%_ } else { _%>
 import { waitUntilDisplayed } from '../../util/utils';
@@ -58,7 +59,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('foo');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
 
     // Login page should stay open when login fails
     expect(await signInPage.getTitle()).to.eq(loginPageTitle);
@@ -85,7 +86,7 @@ describe('Account', () => {
     await signInPage.username.sendKeys('admin');
     await signInPage.password.clear();
     await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     // Login page should close when login success
@@ -127,7 +128,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     await waitUntilDisplayed(navBarPage.adminMenu);
@@ -143,14 +144,11 @@ describe('Account', () => {
     expect(await element(by.id('user-management-page-heading')).isPresent()).to.be.true;
 <%_ if (databaseType !== 'cassandra') { _%>
 
-    const modifiedDateSortButton = getModifiedDateSortButton();
-    await waitUntilDisplayed(modifiedDateSortButton);
-    await modifiedDateSortButton.click();
+    await clickElement(getModifiedDateSortButton());
 <%_ } _%>
 
     const deactivatedButton = getUserDeactivatedButtonByLogin('user_test');
-    await waitUntilDisplayed(deactivatedButton);
-    await deactivatedButton.click();
+    await clickElement(deactivatedButton);
     await waitUntilHidden(deactivatedButton);
 
     // Deactivated button should disappear
@@ -176,7 +174,7 @@ describe('Account', () => {
     expect(await registerPage.getTitle()).to.eq(registerPageTitle);
 
     await registerPage.username.sendKeys('_jhi');
-    await registerPage.saveButton.click();
+    await clickElement(registerPage.saveButton);
     const toast = getDangerToast();
     await waitUntilDisplayed(toast);
 
@@ -192,7 +190,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('user_test');
     await signInPage.password.sendKeys('user_test');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     // Login page should close when login success
@@ -208,7 +206,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     expect(await signInPage.isHidden()()).to.be.true;
@@ -236,7 +234,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     expect(await signInPage.isHidden()()).to.be.true;
@@ -264,7 +262,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('new_password');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
     expect(await signInPage.isHidden()()).to.be.true;
 
@@ -285,7 +283,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('user_test');
     await signInPage.password.sendKeys('user_test');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     expect(await signInPage.isHidden()()).to.be.true;
@@ -299,7 +297,7 @@ describe('Account', () => {
 
     await settingsPage.firstName.sendKeys('jhipster');
     await settingsPage.lastName.sendKeys('retspihj');
-    await settingsPage.saveButton.click();
+    await clickElement(settingsPage.saveButton);
 
     const toast = getSuccessToast();
     await waitUntilDisplayed(toast);
@@ -317,7 +315,7 @@ describe('Account', () => {
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
+    await clickElement(signInPage.loginButton);
     await signInPage.waitUntilHidden();
 
     expect(await signInPage.isHidden()()).to.be.true;
@@ -341,8 +339,7 @@ describe('Account', () => {
   it('should preview details from previously created fake user', async () => {
     await browser.get('/admin/user-management');
     const detailsBtn = getUserDetailsButtonByLogin('user_test');
-    await waitUntilDisplayed(detailsBtn);
-    await detailsBtn.click();
+    await clickElement(detailsBtn);
 
     const detailsHeading = element(by.css('h2.jh-entity-heading'));
     await waitUntilDisplayed(detailsHeading);
@@ -353,14 +350,14 @@ describe('Account', () => {
   it('should edit details from previously created fake user', async () => {
     await browser.get('/admin/user-management');
     const editBtn = getUserEditButtonByLogin('user_test');
-    await waitUntilDisplayed(editBtn);
-    await editBtn.click();
+    await clickElement(editBtn);
 
     const editHeading = element(by.css('h2#myUserLabel'));
     await waitUntilDisplayed(editHeading);
     await $('input#email').sendKeys('ipster');
     const saveBtn = element(by.css('.btn-primary'));
-    await saveBtn.click();
+    await clickElement(saveBtn);
+
     const toast = getInfoToast();
     await waitUntilDisplayed(toast);
     // Info toast should appear
@@ -373,13 +370,12 @@ describe('Account', () => {
   it('should delete previously created fake user', async () => {
     await browser.get('/admin/user-management');
     const deleteBtn = getUserDeleteButtonByLogin('user_test');
-    await waitUntilDisplayed(deleteBtn);
-    await deleteBtn.click();
+    await clickElement(deleteBtn);
 
     const deleteModal = element(by.className('modal'));
     await waitUntilDisplayed(deleteModal);
 
-    await element(by.buttonText('OK')).click();
+    await clickElement(element(by.buttonText('OK')));
     await waitUntilHidden(deleteModal);
 
     // Delete modal should disappear

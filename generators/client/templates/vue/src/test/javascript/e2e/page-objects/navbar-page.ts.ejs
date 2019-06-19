@@ -7,6 +7,7 @@ import RegisterPage from './register-page';
 import PasswordPage from './password-page';
 import SettingsPage from './settings-page';
 <%_ } _%>
+import { clickElement } from '../util/utils';
 
 const selector: ElementFinder = $('#app-header');
 export default class NavBarPage extends BasePage {
@@ -52,32 +53,29 @@ export default class NavBarPage extends BasePage {
   }
 
   async clickOnTabMenu(item: string) {
-    await this.selector
-      .$('#header-tabs')
-      .$(`.dropdown-menu ${item}`)
-      .click();
+    await clickElement(this.selector.$('#header-tabs').$(`.dropdown-menu ${item}`));
   }
 
   async clickOnAccountMenu() {
-    await this.accountMenu.click();
+    await clickElement(this.accountMenu);
   }
 
   async clickOnAccountMenuItem(item: string) {
-    await this.accountMenu.click();
-    await this.selector.$(`.dropdown-item[href="/account/${item}"`).click();
+    await this.clickOnAccountMenu();
+    await clickElement(this.selector.$(`.dropdown-item[href="/account/${item}"`));
   }
 
   async clickOnAdminMenuItem(item: string) {
-    await this.adminMenu.click();
-    await this.selector.$(`.dropdown-item[href="/admin/${item}"]`).click();
+    await clickElement(this.adminMenu);
+    await clickElement(this.selector.$(`.dropdown-item[href="/admin/${item}"]`));
   }
 
   async clickOnEntityMenu() {
-    await this.entityMenu.click();
+    await clickElement(this.entityMenu);
   }
 
   async clickOnEntity(entityName: string) {
-    await this.selector.$(`.dropdown-item[href="/entity/${entityName}"]`).click();
+    await clickElement(this.selector.$(`.dropdown-item[href="/entity/${entityName}"]`));
   }
 
   async autoSignIn() {

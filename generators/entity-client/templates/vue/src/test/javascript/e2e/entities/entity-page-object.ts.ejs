@@ -22,63 +22,59 @@ import { waitUntilCount, waitUntilDisplayed } from '<% if (clientRootFolder && !
 
 export default class <%= entityClass %>ComponentsPage {
   async isSaveButtonPresent() {
-    const saveButton = await element(by.id('save-entity'));
-    return await saveButton.isPresent();
+    return await element(by.id('save-entity')).isPresent();
   }
 
   async save() {
-    const saveButton = await element(by.id('save-entity'));
-    await saveButton.click();
+    await element(by.id('save-entity')).click();
   }
 
   async cancel() {
-    const cancelButton = await element(by.id('cancel-save'));
-    await cancelButton.click();
+    await element(by.id('cancel-save')).click();
   }
 
-  async getCreateButton() {
-    return await element(by.id('jh-create-entity'));
+  getCreateButton() {
+    return element(by.id('jh-create-entity'));
   }
 
   async clickOnCreateButton() {
-    await element(by.id('jh-create-entity')).click();
+    await this.getCreateButton().click();
   }
 
-  async getDetailButtons() {
-    return await element.all(by.css('.btn-info.details'));
+  getDetailButtons() {
+    return element.all(by.css('.btn-info.details'));
   }
 
   async clickOnLastDetailsButton() {
-    await element.all(by.css('.btn-info.details')).last().click();
+    await this.getDetailButtons().last().click();
   }
 
-  async getEditButtons() {
-    return await element.all(by.css('.btn-primary.edit'));
+  getEditButtons() {
+    return element.all(by.css('.btn-primary.edit'));
   }
 
   async clickOnLastEditButton() {
-    await element.all(by.css('.btn-primary.edit')).last().click();
+    await this.getEditButtons().last().click();
   }
 
-  async getDeleteButtons() {
-    return await element.all(by.css('div table .btn-danger'));
+  getDeleteButtons() {
+    return element.all(by.css('div table .btn-danger'));
   }
 
   async clickOnLastDeleteButton() {
-    await element.all(by.css('div table .btn-danger')).last().click();
+    await this.getDeleteButtons().last().click();
   }
 
   async count<%= entityClass %>() {
-    const deleteButtons = await element.all(by.css('div table .btn-danger'));
-    return deleteButtons.length;
+    return await element.all(by.css('div table .btn-danger')).count();
   }
 
-  async getTitle() {
-    return await element(by.id('<%= entityFileName %>-heading'));
+  getTitle() {
+    return element(by.id('<%= entityFileName %>-heading'));
   }
 
-  async getFooter() {
-    return await element(by.id('footer'));
+  getFooter() {
+    return element(by.id('footer'));
   }
 
   async waitUntilLoaded() {

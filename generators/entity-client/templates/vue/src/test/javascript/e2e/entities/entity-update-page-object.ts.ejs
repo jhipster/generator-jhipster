@@ -34,31 +34,28 @@ for (let relationship of relationships) {
     }
 } _%>
 export default class <%= entityClass %>UpdatePage {
-    async getPageTitle() {
-        return await element(by.id('<%= i18nKeyPrefix %>.home.createOrEditLabel'));
+    getPageTitle() {
+        return element(by.id('<%= i18nKeyPrefix %>.home.createOrEditLabel'));
     }
 
-    async getFooter() {
-        return await element(by.id('footer'));
+    getFooter() {
+        return element(by.id('footer'));
     }
 
-    async getSaveButton() {
-        return await element(by.id('save-entity'));
+    getSaveButton() {
+        return element(by.id('save-entity'));
     }
 
     async isSaveButtonPresent() {
-        const saveButton = await element(by.id('save-entity'));
-        return await saveButton.isPresent();
+        return await this.getSaveButton().isPresent();
     }
-    
+
     async save() {
-        const saveButton = await element(by.id('save-entity'));
-        await saveButton.click();
+        await this.getSaveButton().click();
     }
 
     async cancel() {
-        const cancelButton = await element(by.id('cancel-save'));
-        await cancelButton.click();
+        await element(by.id('cancel-save')).click();
     }
 
     <%_ fields.forEach((field) => {
@@ -74,62 +71,59 @@ export default class <%= entityClass %>UpdatePage {
     //--------------------------------------------------
 
     <%_ if (fieldType === 'Boolean') { _%>
-    async click<%= fieldNameCapitalized %>Input() {
-        const elementInput = await element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
-        await elementInput.click();
+    get<%= fieldNameCapitalized %>Input() {
+        return element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
     }
 
-    async get<%= fieldNameCapitalized %>Input() {
-        const elementInput = await element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
-        return elementInput;
+    async click<%= fieldNameCapitalized %>Input() {
+        await this.get<%= fieldNameCapitalized %>Input().click();
     }
 
     async isSelected<%= fieldNameCapitalized %>Input() {
-        const elementInput = await element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
-        return await elementInput.isSelected();
+        return await this.get<%= fieldNameCapitalized %>Input().isSelected();
     }
 
     <%_ } else if (fieldIsEnum) { _%>
     async set<%= fieldNameCapitalized %>Select(<%= fieldName %>) {
-        const elem = await element(by.css('select#<%= entityFileName %>-<%= fieldName %>'))
+        const elem = element(by.css('select#<%= entityFileName %>-<%= fieldName %>'))
         await elem.sendKeys(<%= fieldName %>);
     }
 
     async get<%= fieldNameCapitalized %>Select() {
-        const elem = await element(by.css('select#<%= entityFileName %>-<%= fieldName %>'))
-        const elemChecked = await elem.element(by.css('option:checked'));
-        return elemChecked.getText();
+        const elem = element(by.css('select#<%= entityFileName %>-<%= fieldName %>'))
+        const elemChecked = elem.element(by.css('option:checked'));
+        return await elemChecked.getText();
     }
 
     async <%=fieldName %>SelectLastOption() {
-        const elem = await element(by.css('select#<%= entityFileName %>-<%= fieldName %>'))
+        const elem = element(by.css('select#<%= entityFileName %>-<%= fieldName %>'))
         await elem.all(by.tagName('option')).last().click();
     }
 
     <%_ } else { _%>
-    async find<%= fieldNameCapitalized %>Input() {
+    find<%= fieldNameCapitalized %>Input() {
         <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
-        return await element(by.css('textarea#<%= entityFileName %>-<%= fieldName %>'));
+        return element(by.css('textarea#<%= entityFileName %>-<%= fieldName %>'));
         <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
-        return await element(by.css('input#file_<%= fieldName %>'));
+        return element(by.css('input#file_<%= fieldName %>'));
         <%_ } else { _%>
-        return await element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
+        return element(by.css('input#<%= entityFileName %>-<%= fieldName %>'));
         <%_ } _%>
     }
 
     async set<%= fieldNameCapitalized %>Input(<%= fieldName %>) {
-        const elementInput = await this.find<%= fieldNameCapitalized %>Input();
+        const elementInput = this.find<%= fieldNameCapitalized %>Input();
         await waitUntilDisplayed(elementInput);
         await elementInput.sendKeys(<%= fieldName %>);
     }
 
     async get<%= fieldNameCapitalized %>Input() {
-        const elementInput = await this.find<%= fieldNameCapitalized %>Input();
-        return elementInput.getAttribute('value');
+        const elementInput = this.find<%= fieldNameCapitalized %>Input();
+        return await elementInput.getAttribute('value');
     }
 
     async clear<%= fieldNameCapitalized %>Input() {
-        const elementInput = await this.find<%= fieldNameCapitalized %>Input();
+        const elementInput = this.find<%= fieldNameCapitalized %>Input();
         await clearElement(elementInput, 100);
     }
 
@@ -144,23 +138,23 @@ export default class <%= entityClass %>UpdatePage {
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
     //--------------------------------------------------
 
-    async get<%=relationshipNameCapitalized %>Select() {
-        return await element(by.css('select#<%= entityFileName %>-<%= relationshipName %>'));
+    get<%=relationshipNameCapitalized %>Select() {
+        return element(by.css('select#<%= entityFileName %>-<%= relationshipName %>'));
     }
 
     async get<%=relationshipNameCapitalized %>SelectLastOption() {
-        const elem = await this.get<%=relationshipNameCapitalized %>Select();
+        const elem = this.get<%=relationshipNameCapitalized %>Select();
         await elem.all(by.tagName('option')).last().click();
     }
 
     async get<%=relationshipNameCapitalized %>SelectOption(option) {
-        const elem = await this.get<%=relationshipNameCapitalized %>Select();
+        const elem = this.get<%=relationshipNameCapitalized %>Select();
         await elem.sendKeys(option);
     }
 
     async get<%=relationshipNameCapitalized %>SelectedOption() {
-        const elem = await this.get<%=relationshipNameCapitalized %>Select();
-        return elem.element(by.css('option:checked')).getText();
+        const elem = this.get<%=relationshipNameCapitalized %>Select();
+        return await elem.element(by.css('option:checked')).getText();
     }
 
     <%_ } _%>
