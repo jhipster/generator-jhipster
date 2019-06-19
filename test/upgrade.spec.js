@@ -5,6 +5,7 @@ const shelljs = require('shelljs');
 const fse = require('fs-extra');
 const expect = require('chai').expect;
 const expectedFiles = require('./utils/expected-files');
+const packageJson = require('../package.json');
 
 describe('JHipster upgrade generator', function() {
     this.timeout(200000);
@@ -44,7 +45,12 @@ describe('JHipster upgrade generator', function() {
                 .on('end', () => {
                     helpers
                         .run(path.join(__dirname, '../generators/upgrade'))
-                        .withOptions({ 'from-cli': true, force: true, silent: false })
+                        .withOptions({
+                            'from-cli': true,
+                            force: true,
+                            silent: false,
+                            'target-version': packageJson.version
+                        })
                         .inTmpDir(() => {
                             /* eslint-disable-next-line no-console */
                             console.log('Upgrading the JHipster application');
@@ -118,7 +124,12 @@ describe('JHipster upgrade generator', function() {
                 .on('end', () => {
                     helpers
                         .run(path.join(__dirname, '../generators/upgrade'))
-                        .withOptions({ 'from-cli': true, force: true, silent: false })
+                        .withOptions({
+                            'from-cli': true,
+                            force: true,
+                            silent: false,
+                            'target-version': packageJson.version
+                        })
                         .inTmpDir(() => {
                             /* eslint-disable-next-line no-console */
                             console.log('Upgrading the JHipster application');
