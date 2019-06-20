@@ -53,25 +53,32 @@ function writeFiles() {
                     'bin',
                     'openapi-generator.jar'
                 );
-                const JAVA_OPTS = process.env.JAVA_OPTS || '';
-                let command = `java ${JAVA_OPTS} -jar "${jarPath}"`;
-
+                let JAVA_OPTS = process.env.JAVA_OPTS || '';
+                let command;
                 if (generatorName === 'spring') {
                     const cliPackage = `${this.packageName}.client.${s.underscored(cliName)}`;
                     this.log(chalk.green(`Generating java client code for ${cliName} (${inputSpec})`));
 
-                    command +=
-                        ' generate -g spring -Dmodels -Dapis ' +
-                        '-DsupportingFiles ' +
-                        ` -t ${path.resolve(__dirname, 'templates/swagger-codegen/libraries/spring-cloud')} --library spring-cloud ` +
+                    JAVA_OPTS +=
+                        ' -Dmodels -Dapis ' +
+                        '-DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ';
+
+                    let params =
+                        '  generate -g spring ' +
+                        ` -t ${path.resolve(__dirname, 'templates/swagger-codegen/libraries/spring-cloud')} ` +
+                        ' --library spring-cloud ' +
                         ` -i ${inputSpec} --artifact-id ${s.camelize(cliName)} --api-package ${cliPackage}.api` +
                         ` --model-package ${cliPackage}.model` +
-                        ' --type-mappings DateTime=OffsetDateTime,Date=LocalDate --import-mappings OffsetDateTime=java.time.OffsetDateTime,LocalDate=java.time.LocalDate' +
+                        ' --type-mappings DateTime=OffsetDateTime,Date=LocalDate ' +
+                        ' --import-mappings OffsetDateTime=java.time.OffsetDateTime,LocalDate=java.time.LocalDate' +
                         ` -DdateLibrary=custom,basePackage=${this.packageName}.client,configPackage=${cliPackage},` +
                         `title=${s.camelize(cliName)}`;
+
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {
-                        command += ' --additional-properties ribbon=true';
+                        params += ' --additional-properties ribbon=true';
                     }
+
+                    command = `java ${JAVA_OPTS} -jar ${jarPath} ${params}`;
                 }
                 this.log(command);
 
