@@ -15,7 +15,7 @@ export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
   public reverse = false;
   public toDate: any = null;
   public totalItems = 0;
-  public isFetching: boolean = false;
+  public isFetching = false;
   @Inject('auditsService') private auditsService: () => AuditsService;
 
   public mounted(): void {
