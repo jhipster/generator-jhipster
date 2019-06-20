@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="alert alert-warning" v-if="audits && audits.length === 0">
+        <div class="alert alert-warning" v-if="!isFetching && audits && audits.length === 0">
             <span v-text="$t('audits.notFound')">No audit found</span>
         </div>
         <div class="table-responsive" v-if="audits && audits.length > 0">
