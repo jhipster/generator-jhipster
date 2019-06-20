@@ -40,6 +40,11 @@ function writeFiles() {
 
             this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
 
+            if (Object.keys(this.clientsToGenerate).length === 0) {
+                this.log('No openapi client configured. Please run "jhipster openapi-client" to generate your first OpenAPI client.');
+                return;
+            }
+
             Object.keys(this.clientsToGenerate).forEach(cliName => {
                 const inputSpec = this.clientsToGenerate[cliName].spec;
                 const generatorName = this.clientsToGenerate[cliName].generatorName;

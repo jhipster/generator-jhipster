@@ -48,11 +48,11 @@ function fetchSwaggerResources(input) {
 }
 
 function askActionType() {
-    const done = this.async();
-
     if (this.options.regen) {
         return;
     }
+
+    const done = this.async();
 
     const hasExistingApis = Object.keys(this.openApiClients).length !== 0;
 
@@ -170,11 +170,14 @@ function askActionType() {
 }
 
 function askExistingAvailableDocs() {
+    if (this.options.regen) {
+        return;
+    }
     const done = this.async();
 
     const prompts = [
         {
-            when: this.props.availableDocs !== undefined,
+            when: !this.options.regen && this.props.availableDocs !== undefined,
             type: 'list',
             name: 'availableDoc',
             message: 'Select the doc for which you want to create a client',
@@ -192,6 +195,10 @@ function askExistingAvailableDocs() {
 }
 
 function askGenerationInfos() {
+    if (this.options.regen) {
+        return;
+    }
+
     const done = this.async();
     const prompts = [
         {
