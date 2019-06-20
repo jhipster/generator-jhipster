@@ -44,24 +44,15 @@ function writeFiles() {
                 const inputSpec = this.clientsToGenerate[cliName].spec;
                 const generatorName = this.clientsToGenerate[cliName].generatorName;
 
-                const jarPath = path.resolve(
-                    __dirname,
-                    '../../',
-                    'node_modules',
-                    '@openapitools',
-                    'openapi-generator-cli',
-                    'bin',
-                    'openapi-generator.jar'
-                );
-                let JAVA_OPTS = process.env.JAVA_OPTS || '';
+                // using openapi jar file since so this section can be tested
+                const jarPath = path.resolve('node_modules', '@openapitools', 'openapi-generator-cli', 'bin', 'openapi-generator.jar');
+                let JAVA_OPTS;
                 let command;
                 if (generatorName === 'spring') {
                     const cliPackage = `${this.packageName}.client.${s.underscored(cliName)}`;
                     this.log(chalk.green(`Generating java client code for ${cliName} (${inputSpec})`));
 
-                    JAVA_OPTS +=
-                        ' -Dmodels -Dapis ' +
-                        '-DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ';
+                    JAVA_OPTS = ' -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ';
 
                     let params =
                         '  generate -g spring ' +

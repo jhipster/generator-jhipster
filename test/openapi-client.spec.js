@@ -26,6 +26,7 @@ describe('JHipster OpenAPI Client Sub Generator', () => {
                 .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, './templates/openapi-client/microservice-simple'), dir);
                     fse.copySync(path.join(__dirname, './templates/openapi-client'), dir);
+                    fse.copySync(path.join(__dirname, '../node_modules/@openapitools'), `${dir}/node_modules/@openapitools`);
                 })
                 .withOptions({ skipChecks: true })
                 .withPrompts({
