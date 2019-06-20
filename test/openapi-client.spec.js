@@ -19,7 +19,7 @@ describe('JHipster OpenAPI Client Sub Generator', () => {
     //--------------------------------------------------
     // Spring Cloud Client tests
     //--------------------------------------------------
-    describe('Spring: microservice petstore openapi 3 ', () => {
+    describe('Spring: microservice petstore custom endpoint ', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/openapi-client'))
@@ -40,9 +40,46 @@ describe('JHipster OpenAPI Client Sub Generator', () => {
         it('creates java client files', () => {
             assert.file(expectedFiles.petstoreClientFiles);
         });
+        it('generates file for component scan exclusion', () => {
+            assert.file(`${basePackage}/client/ExcludeFromComponentScan.java`);
+        });
         it('does not override Jhipster files ', () => {
             assert.noFile('README.md');
             assert.noFile('pom.xml');
+        });
+    });
+
+    describe('Spring: microservice petstore regenerate ', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/openapi-client'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/openapi-client/microservice-with-client'), dir);
+                    fse.copySync(path.join(__dirname, './templates/openapi-client'), dir);
+                    fse.copySync(path.join(__dirname, '../node_modules/@openapitools'), `${dir}/node_modules/@openapitools`);
+                })
+                .withOptions({ skipChecks: true, regen: true })
+                .on('end', done);
+        });
+        it('regenerates java client files', () => {
+            assert.file(expectedFiles.petstoreClientFiles);
+        });
+    });
+
+    describe('Spring: microservice regenerate no clients ', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/openapi-client'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/openapi-client/microservice-simple'), dir);
+                    fse.copySync(path.join(__dirname, './templates/openapi-client'), dir);
+                    fse.copySync(path.join(__dirname, '../node_modules/@openapitools'), `${dir}/node_modules/@openapitools`);
+                })
+                .withOptions({ skipChecks: true, regen: true })
+                .on('end', done);
+        });
+        it('does not generate java client if no client configured', () => {
+            assert.noFile(expectedFiles.petstoreClientFiles);
         });
     });
 });
