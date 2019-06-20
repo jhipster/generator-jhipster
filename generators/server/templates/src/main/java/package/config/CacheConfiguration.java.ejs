@@ -28,6 +28,9 @@ import org.ehcache.jsr107.Eh107Configuration;
 import org.hibernate.cache.jcache.ConfigSettings;
     <%_ } _%>
 import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.config.cache.CacheEntryListenerLogger;
+import javax.cache.configuration.FactoryBuilder;
+import javax.cache.configuration.MutableCacheEntryListenerConfiguration;
 
 <%_ } _%>
 <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -145,6 +148,8 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
+    private final javax.cache.configuration.CacheEntryListenerConfiguration<Object, Object> jcacheEntryListenerConfiguration;
+
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
         JHipsterProperties.Cache.Ehcache ehcache =
             jHipsterProperties.getCache().getEhcache();
@@ -154,6 +159,12 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                 ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
                 .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
                 .build());
+
+        jcacheEntryListenerConfiguration = new MutableCacheEntryListenerConfiguration<>(
+                FactoryBuilder.factoryOf(CacheEntryListenerLogger.class),
+                null,
+                false,
+                false);
     }
 
         <%_ if (enableHibernateCache) { _%>
@@ -191,7 +202,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
         if (cache != null) {
             cm.destroyCache(cacheName);
         }
-        cm.createCache(cacheName, jcacheConfiguration);
+        cm.createCache(cacheName, jcacheConfiguration).registerCacheEntryListener(jcacheEntryListenerConfiguration);
     }
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
