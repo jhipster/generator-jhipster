@@ -29,10 +29,8 @@
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
-    "generator-jhipster": "<%= jhipsterVersion %>"
-  },
-  scripts: {
-    "openapi-generator": "openapi-generator"
+    "generator-jhipster": "<%= jhipsterVersion %>",
+    "@openapitools/openapi-generator-cli": "0.0.9-3.3.4"
   },
   "engines": {
     "node": ">=8.9.0"

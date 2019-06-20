@@ -164,6 +164,7 @@ limitations under the License.
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.5",
     <%_ } _%>
+    "@openapitools/openapi-generator-cli": "0.0.9-3.3.4",
     "webpack": "4.28.4",
     "webpack-cli": "3.3.0",
     "webpack-dev-server": "3.2.1",
@@ -197,7 +198,6 @@ limitations under the License.
     "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
     "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
     "test:watch": "<%= clientPackageManager %> test <%= optionsForwarder %>--watch",
-    "openapi-generator": "openapi-generator",
     "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --env.stats=minimal",
     "webpack:dev-verbose": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --inline --port=9060 --profile --progress --env.stats=normal",
     "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --env.stats=minimal",

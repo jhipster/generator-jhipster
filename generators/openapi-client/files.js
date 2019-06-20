@@ -43,14 +43,26 @@ function writeFiles() {
             Object.keys(this.clientsToGenerate).forEach(cliName => {
                 const inputSpec = this.clientsToGenerate[cliName].spec;
                 const generatorName = this.clientsToGenerate[cliName].generatorName;
-                let execLine;
+
+                const jarPath = path.resolve(
+                    __dirname,
+                    '../../',
+                    'node_modules',
+                    '@openapitools',
+                    'openapi-generator-cli',
+                    'bin',
+                    'openapi-generator.jar'
+                );
+                const JAVA_OPTS = process.env.JAVA_OPTS || '';
+                let command = `java ${JAVA_OPTS} -jar "${jarPath}"`;
+
                 if (generatorName === 'spring') {
                     const cliPackage = `${this.packageName}.client.${s.underscored(cliName)}`;
                     this.log(chalk.green(`Generating java client code for ${cliName} (${inputSpec})`));
 
-                    execLine =
-                        `${this.clientPackageManager} run openapi-generator -- generate -g spring -Dmodels -Dapis ` +
-                        '-DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ' +
+                    command +=
+                        ' generate -g spring -Dmodels -Dapis ' +
+                        '-DsupportingFiles ' +
                         ` -t ${path.resolve(__dirname, 'templates/swagger-codegen/libraries/spring-cloud')} --library spring-cloud ` +
                         ` -i ${inputSpec} --artifact-id ${s.camelize(cliName)} --api-package ${cliPackage}.api` +
                         ` --model-package ${cliPackage}.model` +
@@ -58,13 +70,13 @@ function writeFiles() {
                         ` -DdateLibrary=custom,basePackage=${this.packageName}.client,configPackage=${cliPackage},` +
                         `title=${s.camelize(cliName)}`;
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {
-                        execLine += ' --additional-properties ribbon=true';
+                        command += ' --additional-properties ribbon=true';
                     }
                 }
-                this.log(execLine);
+                this.log(command);
 
                 const done = this.async();
-                shelljs.exec(execLine, { silent: this.silent }, (code, msg, err) => {
+                shelljs.exec(command, { silent: this.silent }, (code, msg, err) => {
                     if (code === 0) {
                         this.success(`Succesfully generated ${cliName} ${generatorName} client`);
                         done();
