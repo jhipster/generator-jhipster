@@ -1,5 +1,7 @@
+<% if (fieldsContainBlob) { %>
 import { mixins } from 'vue-class-component';
-import { Component, Inject, Vue } from 'vue-property-decorator';
+<% } %>
+import { Component, Inject<% if (!fieldsContainBlob) { %>, Vue<% } %> } from 'vue-property-decorator';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import AlertService from '@/shared/alert/alert.service';
 <% if (fieldsContainBlob) { %>
