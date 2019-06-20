@@ -36,8 +36,10 @@ function fetchSwaggerResources(input) {
     });
 
     JSON.parse(swaggerResources.getBody()).forEach(swaggerResource => {
+        const baseUrl = input.replace(/\/$/, '');
+        const specPath = swaggerResource.location.replace(/^\/+/g, '');
         availableDocs.push({
-            value: { url: `${input}/${swaggerResource.location}`, name: swaggerResource.name },
+            value: { url: `${baseUrl}/${specPath}`, name: swaggerResource.name },
             name: `${swaggerResource.name} (${swaggerResource.location})`
         });
     });
