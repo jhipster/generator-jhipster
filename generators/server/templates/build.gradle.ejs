@@ -40,7 +40,7 @@ plugins {
     id "com.google.cloud.tools.jib" version "<%= JIB_VERSION %>"
     id "com.gorylenko.gradle-git-properties" version "2.0.0"
     <%_ if (enableSwaggerCodegen) { _%>
-    id "org.openapi.generator" version "4.0.1"
+    id "org.openapi.generator" version "4.0.2"
     <%_ } _%>
     <%_ if (!skipClient) { _%>
     id "com.github.node-gradle.node" version "1.3.0"
