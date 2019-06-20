@@ -21,7 +21,7 @@ const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 _%>
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
-import axios from 'axios';
+import sinon, { SinonStubbedInstance } from 'sinon';
 
 import AlertService from '@/shared/alert/alert.service';
 import * as config from '@/shared/config/config';
@@ -30,7 +30,6 @@ import <%= entityAngularName %>Class from '@/entities/<%= entityFolderName %>/<%
 import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
 
 const localVue = createLocalVue();
-const mockedAxios: any = axios;
 
 config.initVueApp(localVue);
 <%_ if (enableTranslation) { _%>
@@ -44,11 +43,6 @@ localVue.directive('b-modal', {});
 localVue.component('b-button', {});
 localVue.component('router-link', {});
 
-jest.mock('axios', () => ({
-  get: jest.fn(),
-  delete: jest.fn()
-}));
-
 const bModalStub = {
   render: () => { },
   methods: {
@@ -60,10 +54,11 @@ describe('Component Tests', () => {
   describe('<%= entityAngularName %> Management Component', () => {
     let wrapper: Wrapper<<%= entityAngularName %>Class>;
     let comp: <%= entityAngularName %>Class;
+    let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
 
     beforeEach(() => {
-      mockedAxios.get.mockReset();
-      mockedAxios.get.mockReturnValue(Promise.resolve({ headers: {}}));
+      <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
+      <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {} });
 
       wrapper = shallowMount<<%= entityAngularName %>Class>(<%= entityAngularName %>Component, {
         store,
@@ -74,7 +69,7 @@ describe('Component Tests', () => {
         stubs: {<%_ if (pagination !== 'no') { _%>jhiItemCount:true, bPagination:true,<%_ } _%> bModal: bModalStub as any},
         provide: {
           alertService: () => new AlertService(store),
-          <%= entityInstance %>Service: () => new <%= entityAngularName %>Service()
+          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub
         }
       });
       comp = wrapper.vm;
@@ -86,49 +81,49 @@ describe('Component Tests', () => {
 
     it('Should call load all on init', async () => {
       // GIVEN
-      mockedAxios.get.mockReturnValue(Promise.resolve({headers: {}, data: [{id: <%- tsKeyId %>}]}));
+      <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ id: <%- tsKeyId %> }] });
 
       // WHEN
       comp.retrieveAll<%= entityAngularName %>s();
       await comp.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalled();
+      expect(<%= entityInstance %>ServiceStub.retrieve.called).toBeTruthy();
       expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
     });
 <%_ if (pagination !== 'no') { _%>
 
     it('should load a page', async () => {
       // GIVEN
-      mockedAxios.get.mockReturnValue(Promise.resolve({headers: {}, data: [{id: <%- tsKeyId %>}]}));
+      <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ id: <%- tsKeyId %> }] });
 
       // WHEN
       comp.loadPage(1);
       await comp.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalled();
+      expect(<%= entityInstance %>ServiceStub.retrieve.called).toBeTruthy();
       expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
     });
     <%_ if (pagination !== 'infinite-scroll') { _%>
 
     it('should not load a page if the page is the same as the previous page', () => {
       // GIVEN
-      mockedAxios.get.mockReset();
+      <%= entityInstance %>ServiceStub.retrieve.reset();
       comp.previousPage = 1;
 
       // WHEN
       comp.loadPage(1);
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalledTimes(0);
+      expect(<%= entityInstance %>ServiceStub.retrieve.called).toBeFalsy();
     });
     <%_ } _%>
 
     it('should re-initialize the page', async () => {
       // GIVEN
-      mockedAxios.get.mockReset();
-      mockedAxios.get.mockReturnValue(Promise.resolve({headers: {}, data: [{id: <%- tsKeyId %>}]}));
+      <%= entityInstance %>ServiceStub.retrieve.reset();
+      <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ id: <%- tsKeyId %> }] });
 
       // WHEN
       comp.loadPage(2);
@@ -137,7 +132,7 @@ describe('Component Tests', () => {
       await comp.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalledTimes(<%_ if (pagination === 'pagination' || pagination === 'pager' ) { _%>3<%_ } else { _%>2<%_ } _%>);
+      expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(<%_ if (pagination === 'pagination' || pagination === 'pager' ) { _%>3<%_ } else { _%>2<%_ } _%>);
       expect(comp.page).toEqual(1);
       expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
     });
@@ -186,8 +181,7 @@ describe('Component Tests', () => {
 
     it('Should call delete service on confirmDelete', async () => {
       // GIVEN
-      mockedAxios.delete.mockReturnValue(Promise.resolve({}));
-      mockedAxios.get.mockReturnValue(Promise.resolve({}));
+      <%= entityInstance %>ServiceStub.delete.resolves({});
 
       // WHEN
       comp.prepareRemove({id: <%- tsKeyId %>});
@@ -195,8 +189,8 @@ describe('Component Tests', () => {
       await comp.$nextTick();
 
       // THEN
-      expect(mockedAxios.delete).toHaveBeenCalled();
-      expect(mockedAxios.get).toHaveBeenCalled();
+      expect(<%= entityInstance %>ServiceStub.delete.called).toBeTruthy();
+      expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(2);
     });
   });
 });
