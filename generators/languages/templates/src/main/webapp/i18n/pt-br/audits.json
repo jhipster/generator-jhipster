@@ -23,6 +23,6 @@
                 "remoteAddress": "Endereço remoto:"
             }
         },
-        "notFound": "No audit found"
+        "notFound": "Nenhuma auditoria encontrada"
     }
 }
