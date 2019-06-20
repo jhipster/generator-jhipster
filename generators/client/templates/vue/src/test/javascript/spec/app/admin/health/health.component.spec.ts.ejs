@@ -94,7 +94,7 @@ describe('Health Component', () => {
 
       // WHEN
       health.refresh();
-      await health.$nextTick().then();
+      await health.$nextTick();
 
       // THEN
       expect(mockedAxios.get).toHaveBeenCalledWith('management/health');
