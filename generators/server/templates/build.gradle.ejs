@@ -28,9 +28,6 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "io.spring.gradle:propdeps-plugin:0.0.10.RELEASE"
-        <%_ if (enableSwaggerCodegen) { _%>
-        classpath "org.openapitools:openapi-generator-gradle-plugin:3.3.4"
-        <%_ } _%>
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -42,6 +39,9 @@ plugins {
     id "jacoco"
     id "com.google.cloud.tools.jib" version "<%= JIB_VERSION %>"
     id "com.gorylenko.gradle-git-properties" version "2.0.0"
+    <%_ if (enableSwaggerCodegen) { _%>
+    id "org.openapi.generator" version "4.0.2"
+    <%_ } _%>
     <%_ if (!skipClient) { _%>
     id "com.github.node-gradle.node" version "1.3.0"
     <%_ } _%>
@@ -318,6 +318,9 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
     implementation "commons-codec:commons-codec"
+    <%_ } _%>
+    <%_ if (enableSwaggerCodegen) { _%>
+    implementation "org.openapitools:jackson-databind-nullable:0.1.0"
     <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
     implementation "commons-io:commons-io"
