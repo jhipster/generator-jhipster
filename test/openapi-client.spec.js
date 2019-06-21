@@ -64,6 +64,10 @@ describe('JHipster OpenAPI Client Sub Generator', () => {
         it('regenerates java client files', () => {
             assert.file(expectedFiles.petstoreClientFiles);
         });
+
+        it('has removed old client file', () => {
+            assert.noFile(`${basePackage}/client/petstore/api/PetsApiClientOld.java`);
+        });
     });
 
     describe('Spring: microservice regenerate no clients ', () => {

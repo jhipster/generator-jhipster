@@ -22,6 +22,7 @@ const shelljs = require('shelljs');
 const s = require('underscore.string');
 const _ = require('lodash');
 const chalk = require('chalk');
+const fs = require('fs-extra');
 const jhipsterConstants = require('../generator-constants');
 
 module.exports = {
@@ -54,8 +55,13 @@ function writeFiles() {
                 let JAVA_OPTS;
                 let command;
                 if (generatorName === 'spring') {
+                    this.log(chalk.green(`\n\nGenerating java client code for client ${cliName} (${inputSpec})`));
                     const cliPackage = `${this.packageName}.client.${s.underscored(cliName)}`;
-                    this.log(chalk.green(`Generating java client code for ${cliName} (${inputSpec})`));
+                    const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
+                    if (fs.pathExistsSync(clientPackageLocation)) {
+                        this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
+                        fs.removeSync(clientPackageLocation);
+                    }
 
                     JAVA_OPTS = ' -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ';
 
@@ -76,7 +82,7 @@ function writeFiles() {
 
                     command = `java ${JAVA_OPTS} -jar ${jarPath} ${params}`;
                 }
-                this.log(command);
+                this.log(`\n${command}`);
 
                 const done = this.async();
                 shelljs.exec(command, { silent: this.silent }, (code, msg, err) => {
