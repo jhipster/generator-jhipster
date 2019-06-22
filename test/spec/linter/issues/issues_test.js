@@ -18,87 +18,230 @@
 
 const expect = require('chai').expect;
 const Issues = require('../../../../lib/linter/issues/issues');
+const Rules = require('../../../../lib/linter/rules');
+const RelationshipTypes = require('../../../../lib/core/jhipster/relationship_types');
 const EntityIssue = require('../../../../lib/linter/issues/entity_issue');
 const FieldIssue = require('../../../../lib/linter/issues/field_issue');
 const EnumIssue = require('../../../../lib/linter/issues/enum_issue');
+const RelationshipIssue = require('../../../../lib/linter/issues/relationship_issue');
 
 describe('Issues', () => {
-  describe('getEntityIssuesForEntityName', () => {
-    context('when not having any issue', () => {
-      it('returns an empty array', () => {
-        expect(new Issues().getEntityIssuesForEntityName('A')).to.have.lengthOf(0);
+  describe('getNumberOfIssues', () => {
+    let issues;
+
+    beforeEach(() => {
+      issues = new Issues();
+    });
+
+    describe('when there is no issue', () => {
+      it('returns 0', () => {
+        expect(issues.getNumberOfIssues()).to.equal(0);
       });
     });
-    context('when having issues', () => {
-      let issues = null;
-
-      before(() => {
-        issues = new Issues();
-        issues.addEntityIssue(new EntityIssue({ ruleName: 'Toto', entityName: 'A' }));
-        issues.addEntityIssue(new EntityIssue({ ruleName: 'Titi', entityName: 'A' }));
-        issues.addEntityIssue(new EntityIssue({ ruleName: 'Titi', entityName: 'B' }));
+    describe('when there are issues', () => {
+      beforeEach(() => {
+        issues.addEntityIssue(
+          new EntityIssue({
+            ruleName: Rules.RuleNames.ENT_SHORTER_DECL,
+            entityName: 'A'
+          })
+        );
+        issues.addEnumIssue(
+          new EnumIssue({
+            ruleName: Rules.RuleNames.ENUM_DUPLICATED,
+            enumName: 'SuperEnum'
+          })
+        );
+        issues.addFieldIssue(
+          new FieldIssue({
+            ruleName: Rules.RuleNames.FLD_DUPLICATED,
+            fieldName: 'a',
+            entityName: 'A'
+          })
+        );
+        issues.addRelationshipIssue(
+          new RelationshipIssue({
+            ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
+            from: 'A',
+            to: 'A',
+            type: RelationshipTypes.ONE_TO_ONE
+          })
+        );
       });
 
-      it('returns them', () => {
-        expect(issues.getEntityIssuesForEntityName('A')).to.have.lengthOf(2);
-        expect(
-          issues
-            .getEntityIssuesForEntityName('A')
-            .map(issue => issue.ruleName)
-            .join(', ')
-        ).to.equal('Toto, Titi');
-      });
-    });
-  });
-  describe('getFieldIssuesForFieldName', () => {
-    context('when not having any issue', () => {
-      it('returns an empty array', () => {
-        expect(new Issues().getFieldIssuesForFieldName('A')).to.have.lengthOf(0);
-      });
-    });
-    context('when having issues', () => {
-      let issues = null;
-
-      before(() => {
-        issues = new Issues();
-        issues.addFieldIssue(new FieldIssue({ ruleName: 'Toto', fieldName: 'a', entityName: 'A' }));
-        issues.addFieldIssue(new FieldIssue({ ruleName: 'Titi', fieldName: 'a', entityName: 'A' }));
-      });
-
-      it('returns them', () => {
-        expect(issues.getFieldIssuesForFieldName('a')).to.have.lengthOf(2);
-        expect(
-          issues
-            .getFieldIssuesForFieldName('a')
-            .map(issue => issue.ruleName)
-            .join(', ')
-        ).to.equal('Toto, Titi');
+      it('returns the total amount', () => {
+        expect(issues.getNumberOfIssues()).to.equal(4);
       });
     });
   });
-  describe('getEnumIssuesForEnumName', () => {
-    context('when not having any issue', () => {
-      it('returns an empty array', () => {
-        expect(new Issues().getEnumIssuesForEnumName('A')).to.have.lengthOf(0);
+  describe('getNumberOfEntityIssues', () => {
+    let issues;
+
+    beforeEach(() => {
+      issues = new Issues();
+    });
+
+    describe('when there is no issue', () => {
+      it('returns 0', () => {
+        expect(issues.getNumberOfEntityIssues()).to.equal(0);
       });
     });
-    context('when having issues', () => {
-      let issues = null;
-
-      before(() => {
-        issues = new Issues();
-        issues.addEnumIssue(new EnumIssue({ ruleName: 'Toto', enumName: 'A' }));
-        issues.addEnumIssue(new EnumIssue({ ruleName: 'Titi', enumName: 'A' }));
+    describe('when there are issues', () => {
+      beforeEach(() => {
+        issues.addEntityIssue(
+          new EntityIssue({
+            ruleName: Rules.RuleNames.ENT_SHORTER_DECL,
+            entityName: 'A'
+          })
+        );
       });
 
-      it('returns them', () => {
-        expect(issues.getEnumIssuesForEnumName('A')).to.have.lengthOf(2);
-        expect(
-          issues
-            .getEnumIssuesForEnumName('A')
-            .map(issue => issue.ruleName)
-            .join(', ')
-        ).to.equal('Toto, Titi');
+      it('returns the total amount', () => {
+        expect(issues.getNumberOfEntityIssues()).to.equal(1);
+      });
+    });
+  });
+  describe('getNumberOfEnumIssues', () => {
+    let issues;
+
+    beforeEach(() => {
+      issues = new Issues();
+    });
+
+    describe('when there is no issue', () => {
+      it('returns 0', () => {
+        expect(issues.getNumberOfEnumIssues()).to.equal(0);
+      });
+    });
+    describe('when there are issues', () => {
+      beforeEach(() => {
+        issues.addEnumIssue(
+          new EnumIssue({
+            ruleName: Rules.RuleNames.ENUM_DUPLICATED,
+            enumName: 'SuperEnum'
+          })
+        );
+      });
+
+      it('returns the total amount', () => {
+        expect(issues.getNumberOfEnumIssues()).to.equal(1);
+      });
+    });
+  });
+  describe('getNumberOfFieldIssues', () => {
+    let issues;
+
+    beforeEach(() => {
+      issues = new Issues();
+    });
+
+    describe('when there is no issue', () => {
+      it('returns 0', () => {
+        expect(issues.getNumberOfFieldIssues()).to.equal(0);
+      });
+    });
+    describe('when there are issues', () => {
+      beforeEach(() => {
+        issues.addFieldIssue(
+          new FieldIssue({
+            ruleName: Rules.RuleNames.FLD_DUPLICATED,
+            fieldName: 'a',
+            entityName: 'A'
+          })
+        );
+      });
+
+      it('returns the total amount', () => {
+        expect(issues.getNumberOfFieldIssues()).to.equal(1);
+      });
+    });
+  });
+  describe('getNumberOfRelationshipIssues', () => {
+    let issues;
+
+    beforeEach(() => {
+      issues = new Issues();
+    });
+
+    describe('when there is no issue', () => {
+      it('returns 0', () => {
+        expect(issues.getNumberOfRelationshipIssues()).to.equal(0);
+      });
+    });
+    describe('when there are issues', () => {
+      beforeEach(() => {
+        issues.addRelationshipIssue(
+          new RelationshipIssue({
+            ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
+            from: 'A',
+            to: 'A',
+            type: RelationshipTypes.ONE_TO_ONE
+          })
+        );
+      });
+
+      it('returns the total amount', () => {
+        expect(issues.getNumberOfRelationshipIssues()).to.equal(1);
+      });
+    });
+  });
+  describe('getIssues', () => {
+    let issues;
+
+    beforeEach(() => {
+      issues = new Issues();
+    });
+
+    describe('when there is no issue', () => {
+      it('returns an empty object', () => {
+        expect(issues.getIssues()).to.deep.equal({
+          entities: [],
+          enums: [],
+          fields: [],
+          relationships: []
+        });
+      });
+    });
+    describe('when there are issues', () => {
+      let entityIssue;
+      let enumIssue;
+      let fieldIssue;
+      let relationshipIssue;
+
+      beforeEach(() => {
+        entityIssue = new EntityIssue({
+          ruleName: Rules.RuleNames.ENT_SHORTER_DECL,
+          entityName: 'A'
+        });
+        enumIssue = new EnumIssue({
+          ruleName: Rules.RuleNames.ENUM_DUPLICATED,
+          enumName: 'SuperEnum'
+        });
+        fieldIssue = new FieldIssue({
+          ruleName: Rules.RuleNames.FLD_DUPLICATED,
+          fieldName: 'a',
+          entityName: 'A'
+        });
+        relationshipIssue = new RelationshipIssue({
+          ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
+          from: 'A',
+          to: 'A',
+          type: RelationshipTypes.ONE_TO_ONE
+        });
+
+        issues.addEntityIssue(entityIssue);
+        issues.addEnumIssue(enumIssue);
+        issues.addFieldIssue(fieldIssue);
+        issues.addRelationshipIssue(relationshipIssue);
+      });
+
+      it('returns the object containing the issues', () => {
+        expect(issues.getIssues()).to.deep.equal({
+          entities: [entityIssue],
+          enums: [enumIssue],
+          fields: [fieldIssue],
+          relationships: [relationshipIssue]
+        });
       });
     });
   });

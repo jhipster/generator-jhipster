@@ -48,142 +48,169 @@ describe('JDLLinter', () => {
   });
   describe('#check', () => {
     context('when checking for useless entity braces', () => {
-      let linter = null;
-      let issues = null;
+      let linter;
+      let issue;
+      let reportedIssues;
 
       before(() => {
         linter = new JDLLinter({
           filePath: path.join('test', 'test_files', 'lint', 'useless_entity_curly_braces.jdl')
         });
-        issues = linter.check();
+        reportedIssues = linter.check();
+        const issues = reportedIssues.getIssues();
+        issue = issues.entities[0];
       });
 
       it('reports the issue', () => {
-        expect(issues.getEntityIssuesForEntityName('B')).to.have.lengthOf(1);
-        expect(issues.getEntityIssuesForEntityName('B')[0].ruleName).to.equal('ENT_SHORTER_DECL');
+        expect(reportedIssues.getNumberOfIssues()).to.equal(1);
+        expect(issue.ruleName).to.equal('ENT_SHORTER_DECL');
       });
     });
     context('when checking for useless table names', () => {
-      let linter = null;
-      let issues = null;
+      let linter;
+      let issueForB;
+      let issueForToto;
+      let issueForSuperToto;
+      let reportedIssues;
 
       before(() => {
         linter = new JDLLinter({
           filePath: path.join('test', 'test_files', 'lint', 'useless_table_names.jdl')
         });
-        issues = linter.check();
+        reportedIssues = linter.check();
+        const issues = reportedIssues.getIssues();
+        issueForB = issues.entities[0];
+        issueForToto = issues.entities[1];
+        issueForSuperToto = issues.entities[2];
       });
 
       it('reports the issues', () => {
-        expect(issues.getEntityIssuesForEntityName('B')).to.have.lengthOf(1);
-        expect(issues.getEntityIssuesForEntityName('B')[0].ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
-        expect(issues.getEntityIssuesForEntityName('Toto')).to.have.lengthOf(1);
-        expect(issues.getEntityIssuesForEntityName('Toto')[0].ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
-        expect(issues.getEntityIssuesForEntityName('SuperToto')).to.have.lengthOf(1);
-        expect(issues.getEntityIssuesForEntityName('SuperToto')[0].ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
+        expect(reportedIssues.getNumberOfIssues()).to.equal(3);
+        expect(issueForB.ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
+        expect(issueForToto.ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
+        expect(issueForSuperToto.ruleName).to.equal('ENT_OPTIONAL_TABLE_NAME');
       });
     });
     context('when checking for duplicated', () => {
       context('entities', () => {
-        let linter = null;
-        let issues = null;
+        let linter;
+        let reportedIssues;
+        let issueForA;
+        let issueForB;
 
         before(() => {
           linter = new JDLLinter({
             filePath: path.join('test', 'test_files', 'lint', 'duplicate_entities.jdl')
           });
-          issues = linter.check();
+          reportedIssues = linter.check();
+          const issues = reportedIssues.getIssues();
+          issueForA = issues.entities[0];
+          issueForB = issues.entities[1];
         });
 
         it('reports the issues', () => {
-          expect(issues.getEntityIssuesForEntityName('C')).to.have.lengthOf(0);
-          expect(issues.getEntityIssuesForEntityName('A')).to.have.lengthOf(1);
-          expect(issues.getEntityIssuesForEntityName('A')[0].ruleName).to.equal('ENT_DUPLICATED');
-          expect(issues.getEntityIssuesForEntityName('B')).to.have.lengthOf(1);
-          expect(issues.getEntityIssuesForEntityName('B')[0].ruleName).to.equal('ENT_DUPLICATED');
+          expect(reportedIssues.getNumberOfIssues()).to.equal(2);
+          expect(issueForA.ruleName).to.equal('ENT_DUPLICATED');
+          expect(issueForB.ruleName).to.equal('ENT_DUPLICATED');
         });
       });
       context('fields', () => {
-        let linter = null;
-        let issues = null;
+        let linter;
+        let reportedIssues;
+        let issueForAa;
+        let issueForBb;
 
         before(() => {
           linter = new JDLLinter({
             filePath: path.join('test', 'test_files', 'lint', 'duplicate_fields.jdl')
           });
-          issues = linter.check();
+          reportedIssues = linter.check();
+          const issues = reportedIssues.getIssues();
+          issueForAa = issues.fields[0];
+          issueForBb = issues.fields[1];
         });
 
         it('reports the issues', () => {
-          expect(issues.getFieldIssuesForFieldName('bb')).to.have.lengthOf(0);
-          expect(issues.getFieldIssuesForFieldName('aa')).to.have.lengthOf(1);
-          expect(issues.getFieldIssuesForFieldName('aa')[0].ruleName).to.equal('FLD_DUPLICATED');
-          expect(issues.getFieldIssuesForFieldName('cc')).to.have.lengthOf(1);
-          expect(issues.getFieldIssuesForFieldName('cc')[0].ruleName).to.equal('FLD_DUPLICATED');
+          expect(reportedIssues.getNumberOfIssues()).to.equal(2);
+          expect(issueForAa.ruleName).to.equal('FLD_DUPLICATED');
+          expect(issueForBb.ruleName).to.equal('FLD_DUPLICATED');
         });
       });
       context('enums', () => {
         let linter;
-        let issues;
+        let reportedIssues;
+        let issueForA;
 
         before(() => {
           linter = new JDLLinter({
             filePath: path.join('test', 'test_files', 'lint', 'duplicate_enums.jdl')
           });
-          issues = linter.check();
+          reportedIssues = linter.check();
+          const issues = reportedIssues.getIssues();
+          issueForA = issues.enums[0];
         });
 
         it('reports the issues', () => {
-          expect(issues.getEnumIssuesForEnumName('B')).to.have.lengthOf(0);
-          expect(issues.getEnumIssuesForEnumName('A')).to.have.lengthOf(1);
-          expect(issues.getEnumIssuesForEnumName('A')[0].ruleName).to.equal('ENUM_DUPLICATED');
+          expect(reportedIssues.getNumberOfIssues()).to.equal(1);
+          expect(issueForA.ruleName).to.equal('ENUM_DUPLICATED');
         });
       });
     });
     context('when checking for unused enums', () => {
-      let linter = null;
-      let issues = null;
+      let linter;
+      let reportedIssues;
+      let issueFor2;
+      let issueFor3;
 
       before(() => {
         linter = new JDLLinter({
           filePath: path.join('test', 'test_files', 'lint', 'unused_enums.jdl')
         });
-        issues = linter.check();
+        reportedIssues = linter.check();
+        const issues = reportedIssues.getIssues();
+        issueFor2 = issues.enums[0];
+        issueFor3 = issues.enums[1];
       });
 
       it('reports the issues', () => {
-        expect(issues.getEnumIssuesForEnumName('MyEnum2')).to.have.lengthOf(1);
-        expect(issues.getEnumIssuesForEnumName('MyEnum2')[0].ruleName).to.equal('ENUM_UNUSED');
-        expect(issues.getEnumIssuesForEnumName('MyEnum3')).to.have.lengthOf(1);
-        expect(issues.getEnumIssuesForEnumName('MyEnum3')[0].ruleName).to.equal('ENUM_UNUSED');
+        expect(reportedIssues.getNumberOfIssues()).to.equal(2);
+        expect(issueFor2.ruleName).to.equal('ENUM_UNUSED');
+        expect(issueFor3.ruleName).to.equal('ENUM_UNUSED');
       });
     });
     context('when checking for collapsible relationships', () => {
       let linter;
-      let issues;
+      let reportedIssues;
+      let issueForAToB;
+      let issueForBToC;
+      let issueForAToC;
 
       before(() => {
         linter = new JDLLinter({
           filePath: path.join('test', 'test_files', 'lint', 'ungrouped_relationships.jdl')
         });
-        issues = linter.check();
+        reportedIssues = linter.check();
+        const issues = reportedIssues.getIssues();
+        issueForAToB = issues.relationships[0];
+        issueForBToC = issues.relationships[1];
+        issueForAToC = issues.relationships[2];
       });
 
       it('reports the issues', () => {
-        expect(issues.relationshipIssues).to.have.lengthOf(3);
-        expect(issues.relationshipIssues[0]).to.deep.equal({
+        expect(reportedIssues.getNumberOfIssues()).to.equal(3);
+        expect(issueForAToB).to.deep.equal({
           from: 'A',
           ruleName: 'REL_INDIVIDUAL_DECL',
           to: 'B',
           type: 'OneToMany'
         });
-        expect(issues.relationshipIssues[1]).to.deep.equal({
+        expect(issueForBToC).to.deep.equal({
           from: 'B',
           ruleName: 'REL_INDIVIDUAL_DECL',
           to: 'C',
           type: 'OneToMany'
         });
-        expect(issues.relationshipIssues[2]).to.deep.equal({
+        expect(issueForAToC).to.deep.equal({
           from: 'A',
           ruleName: 'REL_INDIVIDUAL_DECL',
           to: 'C',
