@@ -42,6 +42,7 @@ const JDLBinaryOption = require('../lib/core/jdl_binary_option');
 const JDLOptions = require('../lib/core/jdl_options');
 
 const JDLImporter = require('../lib/jdl/jdl_importer');
+const JDLLinter = require('../lib/linter/jdl_linter');
 const JDLReader = require('../lib/reader/jdl_reader');
 const JsonReader = require('../lib/reader/json_reader');
 const DocumentParser = require('../lib/parser/document_parser');
@@ -90,6 +91,8 @@ module.exports = {
   JDLOptions,
   /* JDL Importer */
   JDLImporter,
+  /* JDL Linting */
+  JDLLinter,
   /* JDL reading */
   parseFromFiles: JDLReader.parseFromFiles,
   /* JSON reading */
