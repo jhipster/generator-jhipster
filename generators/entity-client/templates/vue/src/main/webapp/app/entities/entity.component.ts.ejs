@@ -28,6 +28,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
   <%_ } _%>
   public <%= entityInstancePlural %>: I<%= entityAngularName %>[] = [];
 
+  public isFetching = false;
   public dismissCountDown: number = this.$store.getters.dismissCountDown;
   public dismissSecs: number = this.$store.getters.dismissSecs;
   public alertType: string = this.$store.getters.alertType;
@@ -70,6 +71,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
   }
 
   public retrieveAll<%= entityAngularName %>s() :void {
+    this.isFetching = true;
     <% if (pagination !== 'no') { %>
     const paginationQuery = {
       page: this.page - 1,
@@ -78,22 +80,28 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
     };<% } %>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     if (this.currentSearch) {
-      this.<%= entityInstance %>Service().search(this.currentSearch<%_ if (pagination !== 'no') { _%>, paginationQuery<%_ } _%>).then((res) => {
+      this.<%= entityInstance %>Service().search(this.currentSearch<%_ if (pagination !== 'no') { _%>, paginationQuery<%_ } _%>).then(res => {
         this.<%= entityInstancePlural %> = <%_ if (pagination !== 'no') { _%>res.data<%_ } else { _%>res<%_ } _%>;
         <%_ if (pagination !== 'no') { _%>
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
         <%_ } _%>
+        this.isFetching = false;
+      }, err => {
+        this.isFetching = false;
       });
       return;
     }
     <%_ } _%>
-    this.<%= entityInstance %>Service().retrieve(<%_ if (pagination !== 'no') { _%>paginationQuery<%_ } _%>).then((res) => {
+    this.<%= entityInstance %>Service().retrieve(<%_ if (pagination !== 'no') { _%>paginationQuery<%_ } _%>).then(res => {
       this.<%= entityInstancePlural %> = res.data;
       <%_ if (pagination !== 'no') { _%>
       this.totalItems = Number(res.headers['x-total-count']);
       this.queryCount = this.totalItems;
       <%_ } _%>
+      this.isFetching = false;
+    }, err => {
+      this.isFetching = false;
     });
   }
 

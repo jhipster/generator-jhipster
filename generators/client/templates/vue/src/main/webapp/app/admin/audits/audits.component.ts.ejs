@@ -15,6 +15,7 @@ export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
   public reverse = false;
   public toDate: any = null;
   public totalItems = 0;
+  public isFetching = false;
   @Inject('auditsService') private auditsService: () => AuditsService;
 
   public mounted(): void {
@@ -51,6 +52,7 @@ export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
   }
 
   public loadAll(): void {
+    this.isFetching = true;
     if (this.fromDate && this.toDate) {
       this.auditsService().query({
         page: this.page - 1,
@@ -62,6 +64,9 @@ export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
         this.audits = res.data;
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
+        this.isFetching = false;
+      }, err => {
+        this.isFetching = false;
       });
     }
   }
