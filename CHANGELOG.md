@@ -1,4 +1,19 @@
-# Latest v4.0.0
+# Latest: v4.1.0
+
+## What's new
+  - Made the JDL linter available in the API
+
+---
+
+# v4.0.2
+_note: v4.0.1 is the same_
+
+## What's new
+  - `vuejs` has been added as a valid client option
+
+---
+
+# v4.0.0
 
 ## Breaking changes
   - Removed methods `#addEntity` and `#excludeEntity` from JDLUnaryOption & JDLBinaryOption classes.
