@@ -24,6 +24,7 @@ const RelationshipTypes = require('../lib/core/jhipster/relationship_types');
 const FieldTypes = require('../lib/core/jhipster/field_types');
 const Validations = require('../lib/core/jhipster/validations');
 const DatabaseTypes = require('../lib/core/jhipster/database_types');
+const LintRules = require('../lib/linter/rules');
 
 const JDLObject = require('../lib/core/jdl_object');
 const JDLMonolithApplication = require('../lib/core/jdl_monolith_application');
@@ -93,6 +94,7 @@ module.exports = {
   JDLImporter,
   /* JDL Linting */
   JDLLinter,
+  LintRules,
   /* JDL reading */
   parseFromFiles: JDLReader.parseFromFiles,
   /* JSON reading */
