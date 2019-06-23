@@ -183,7 +183,9 @@ public class <%= entityClass %>Resource {
     /**
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information.<% } if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { %>
+     * @param pageable the pagination information.
+     * @param queryParams a {@link MultiValueMap} query parameters.
+     * @param uriBuilder a {@link UriComponentsBuilder} URI builder.<% } if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { %>
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).<% } if (jpaMetamodelFiltering) { %>
      * @param criteria the criteria which the requested entities should match.<% } else if (fieldsContainNoOwnerOneToOne) { %>
      * @param filter the filter of the request.<% } %>
@@ -244,7 +246,9 @@ public class <%= entityClass %>Resource {
      * to the query.
      *
      * @param query the query of the <%= entityInstance %> search.<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information.<% } %>
+     * @param pageable the pagination information.
+     * @param queryParams a {@link MultiValueMap} query parameters.
+     * @param uriBuilder a {@link UriComponentsBuilder} URI builder.<% } %>
      * @return the result of the search.
      */
     @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {asEntity, asDto, viaService}); -%><% } %>

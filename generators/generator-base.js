@@ -502,6 +502,16 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a new load column to a Liquibase changelog file for entity.
+     *
+     * @param {string} filePath - The full path of the changelog file.
+     * @param {string} content - The content to be added as column, can have multiple columns as well
+     */
+    addLoadColumnToLiquibaseEntityChangeSet(filePath, content) {
+        this.needleApi.serverLiquibase.addLoadColumnToEntityChangeSet(filePath, content);
+    }
+
+    /**
      * Add a new changeset to a Liquibase changelog file for entity.
      *
      * @param {string} filePath - The full path of the changelog file.
@@ -682,6 +692,17 @@ module.exports = class extends PrivateBase {
      */
     addMavenPlugin(groupId, artifactId, version, other) {
         this.needleApi.serverMaven.addPlugin(groupId, artifactId, version, other);
+    }
+
+    /**
+     * Add a new annotation processor path to Maven compiler configuration.
+     *
+     * @param {string} groupId - plugin groupId
+     * @param {string} artifactId - plugin artifactId
+     * @param {string} version - explicit plugin version number
+     */
+    addMavenAnnotationProcessor(groupId, artifactId, version) {
+        this.needleApi.serverMaven.addAnnotationProcessor(groupId, artifactId, version);
     }
 
     /**

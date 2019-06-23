@@ -262,7 +262,7 @@ _%>
     }
 
     private createFromForm(): I<%= entityAngularName %> {
-        const entity = {
+        return {
                        ...new <%= entityAngularName %>(),
             id: this.editForm.get(['id']).value,
     <%_ for (idx in fields) {
@@ -303,13 +303,12 @@ _%>
             <%= relationshipFieldNamePlural %>: this.editForm.get(['<%= relationshipFieldNamePlural %>']).value,
         <%_ } _%>
 <%_ } _%>
-        }
-        return entity;
+        };
     }
 
     protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>) {
-        result.subscribe((res: HttpResponse<I<%= entityAngularName %>>) =>
-            this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+        result.subscribe(() =>
+            this.onSaveSuccess(), () => this.onSaveError());
     }
 
     protected onSaveSuccess() {

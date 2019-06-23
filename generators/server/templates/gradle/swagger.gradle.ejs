@@ -33,6 +33,7 @@ openApiGenerate {
     supportingFilesConstrainedTo = ["ApiUtil.java"]
     configOptions = [delegatePattern: "true", title: "<%= dasherizedBaseName %>"]
     validateSpec = true
+    importMappings = [Problem:"org.zalando.problem.Problem"]
 }
 
 sourceSets {

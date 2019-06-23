@@ -573,7 +573,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async;
 
                 const promises = this.aws.apps.map(app => {
-                    const from = `${app.baseName}:latest`;
+                    const from = `${app.baseName.toLowerCase()}:latest`;
                     const to = `${app.EcrRepositoryUri}:latest`;
                     return dockerCli
                         .tagImage(from, to)

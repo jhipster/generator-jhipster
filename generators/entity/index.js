@@ -700,6 +700,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.fieldsContainBigDecimal = false;
                 context.fieldsContainBlob = false;
                 context.fieldsContainImageBlob = false;
+                context.fieldsContainTextBlob = false;
                 context.fieldsContainBlobOrImage = false;
                 context.validation = false;
                 context.fieldsContainOwnerManyToMany = false;
@@ -845,6 +846,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                         if (field.fieldTypeBlobContent !== 'text') {
                             context.fieldsContainBlobOrImage = true;
+                        } else {
+                            context.fieldsContainTextBlob = true;
                         }
                     }
 

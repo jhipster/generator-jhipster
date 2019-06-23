@@ -318,24 +318,6 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "byteTextMinbytesAlice",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "minbytes"
-            ],
-            "fieldValidateRulesMinbytes": 0
-        },
-        {
-            "fieldName": "byteTextMaxbytesAlice",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "maxbytes"
-            ],
-            "fieldValidateRulesMaxbytes": 10000
         }
     ],
     "changelogDate": "20160208184031",

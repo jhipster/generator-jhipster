@@ -54,6 +54,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
+<%_ if (cacheProvider === 'memcached' ) { _%>
+import org.springframework.cache.support.NoOpCacheManager;
+<%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 <%_ } _%>
@@ -552,8 +555,12 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
             <%_ } _%>
             .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY);
         <%_ } _%>
-        <%_ if (cacheManagerIsAvailable === true) { _%>
 
+        <%_ if (cacheProvider === 'memcached') { _%>
+        if (!(cacheManager instanceof NoOpCacheManager)) {
+            assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
+        }
+        <%_ } else if (cacheManagerIsAvailable === true) { _%>
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
         <%_ } _%>
     }
