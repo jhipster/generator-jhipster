@@ -184,12 +184,12 @@ public final class SecurityUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static Collection<String> getRolesFromClaims(Map<String, Object> claims) {
+    private static Collection<String> getRolesFromClaims(Map<String, Object> claims) {
         return (Collection<String>) claims.getOrDefault("groups",
             claims.getOrDefault("roles", new ArrayList<>()));
     }
 
-    public static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
+    private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
         return roles.stream()
         .filter(role -> role.startsWith("ROLE_"))
             .map(SimpleGrantedAuthority::new).collect(Collectors.toList());

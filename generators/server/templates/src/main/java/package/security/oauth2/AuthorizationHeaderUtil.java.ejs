@@ -43,7 +43,6 @@ import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -58,13 +57,11 @@ public class AuthorizationHeaderUtil {
 
     private final OAuth2AuthorizedClientService clientService;
     private final RestTemplateBuilder restTemplateBuilder;
-    private final JwtDecoder jwtDecoder;
     private final Logger log = LoggerFactory.getLogger(AuthorizationHeaderUtil.class);
 
-    public AuthorizationHeaderUtil(OAuth2AuthorizedClientService clientService, RestTemplateBuilder restTemplateBuilder, JwtDecoder jwtDecoder) {
+    public AuthorizationHeaderUtil(OAuth2AuthorizedClientService clientService, RestTemplateBuilder restTemplateBuilder) {
         this.clientService = clientService;
         this.restTemplateBuilder = restTemplateBuilder;
-        this.jwtDecoder = jwtDecoder;
     }
 
     public Optional<String> getAuthorizationHeader() {
@@ -99,9 +96,8 @@ public class AuthorizationHeaderUtil {
 
         } else if (authentication instanceof JwtAuthenticationToken) {
             JwtAuthenticationToken accessToken = (JwtAuthenticationToken) authentication;
-            String tokenType = (String) accessToken.getToken().getClaims().get("typ");
             String tokenValue = accessToken.getToken().getTokenValue();
-            String authorizationHeaderValue = String.format("%s %s", tokenType, tokenValue);
+            String authorizationHeaderValue = String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), tokenValue);
             return Optional.of(authorizationHeaderValue);
         }
         return Optional.empty();
@@ -110,7 +106,7 @@ public class AuthorizationHeaderUtil {
     private String refreshToken(OAuth2AuthorizedClient client, OAuth2AuthenticationToken oauthToken) {
         OAuth2AccessTokenResponse atr = refreshTokenClient(client);
         if (atr == null || atr.getAccessToken() == null) {
-            log.info("Failed to refresh token for ${currentUser.name}");
+            log.info("Failed to refresh token for user");
             return null;
         }
 
@@ -141,7 +137,7 @@ public class AuthorizationHeaderUtil {
             ResponseEntity<OAuthIdpTokenResponseDTO> responseEntity = r.exchange(requestEntity, OAuthIdpTokenResponseDTO.class);
             return toOAuth2AccessTokenResponse(responseEntity.getBody());
         } catch (OAuth2AuthorizationException e) {
-            log.error("Unable to refresh token ${e.error.errorCode}");
+            log.error("Unable to refresh token ${e.getError().getErrorCode()}");
             throw new OAuth2AuthenticationException(e.getError(), e);
         }
     }
