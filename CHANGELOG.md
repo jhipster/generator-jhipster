@@ -1,7 +1,14 @@
-# Latest: v4.1.0
+# Latest: v4.1.1
 
 ## What's new
-  - Made the JDL linter available in the API
+  - Added the JDL linter rules to the API
+
+---
+
+# v4.1.0
+
+## What's new
+  - Added the JDL linter available to the API
 
 ---
 
