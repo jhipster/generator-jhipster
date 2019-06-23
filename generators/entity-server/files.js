@@ -83,7 +83,7 @@ const serverFiles = {
             templates: [{ file: 'config/liquibase/data/blob/hipster.png', method: 'copy', noEjs: true }]
         },
         {
-            condition: generator => generator.databaseType === 'sql' && generator.fieldsContainBlobOrImage === true,
+            condition: generator => generator.databaseType === 'sql' && generator.fieldsContainTextBlob === true,
             path: SERVER_MAIN_RES_DIR,
             templates: [{ file: 'config/liquibase/data/blob/hipster.txt', method: 'copy' }]
         },
