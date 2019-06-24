@@ -231,10 +231,10 @@ module.exports = class extends BaseDockerGenerator {
             this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
         if (this.gatewayType === 'traefik' && this.authenticationType === 'oauth2') {
-            this.log(`\n${chalk.yellow.bold('WARNING!')} The complete generation of the stack with traefik and oauth2 is not possible.`)
-            this.log(`Please refer to the documentation to finish the configuration of your stack.`)
-            this.log('Visit https://www.jhipster.tech/traefik/#configure-for-oauth2')
-        } else{
+            this.log(`\n${chalk.yellow.bold('WARNING!')} The complete generation of the stack with Traefik and OAuth 2.0 is not complete.`);
+            this.log('Please refer to the documentation to finish the configuration of your stack.');
+            this.log('Visit https://www.jhipster.tech/traefik/#configure-for-oauth2');
+        } else {
             this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker-compose up -d')}`);
         }
         if (this.gatewayNb + this.monolithicNb > 1) {
