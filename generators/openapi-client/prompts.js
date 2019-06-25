@@ -137,13 +137,16 @@ function askActionType() {
             store: true,
             validate: input => {
                 try {
-                    request('GET', `${input}`, {
-                        // headers: { Accept: 'application/json, text/javascript;' }
-                    });
-
+                    if (/^((http|https):\/\/)/.test(input)) {
+                        request('GET', `${input}`, {
+                            // headers: { Accept: 'application/json, text/javascript;' }
+                        });
+                    } else if (!shelljs.test('-f', input)) {
+                        return `file '${input}' not found`;
+                    }
                     return true;
                 } catch (err) {
-                    return `Cannot read from ${input}`;
+                    return `Cannot read from ${input}. ${err.message}`;
                 }
             }
         }
