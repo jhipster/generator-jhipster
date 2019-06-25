@@ -29,14 +29,14 @@ module.exports = {
 function fetchSwaggerResources(input) {
     const availableDocs = [];
 
-    const swaggerResources = request('GET', `${input}/swagger-resources`, {
+    const baseUrl = input.replace(/\/$/, '');
+    const swaggerResources = request('GET', `${baseUrl}/swagger-resources`, {
         // This header is needed to use the custom /swagger-resources controller
         // and not the default one that has only the gateway's swagger resource
         headers: { Accept: 'application/json, text/javascript;' }
     });
 
     JSON.parse(swaggerResources.getBody()).forEach(swaggerResource => {
-        const baseUrl = input.replace(/\/$/, '');
         const specPath = swaggerResource.location.replace(/^\/+/g, '');
         availableDocs.push({
             value: { url: `${baseUrl}/${specPath}`, name: swaggerResource.name },
