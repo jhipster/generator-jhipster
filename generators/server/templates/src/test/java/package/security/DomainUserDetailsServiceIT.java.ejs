@@ -169,9 +169,10 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %
     <%_ if (databaseType === 'sql') { _%>
     @Test
     @Transactional
-    public void assertThatUserCanNotBeFoundByEmailIgnoreCase() {
-        assertThatExceptionOfType(UsernameNotFoundException.class).isThrownBy(
-            () -> domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH)));
+    public void assertThatUserCanBeFoundByEmailIgnoreCase() {
+        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH))<% if (reactive) { %>.block()<% } %>;
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
     <%_ } else { // MongoDB and Cassandra _%>
     @Test

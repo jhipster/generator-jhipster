@@ -55,6 +55,11 @@ plugins {
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
+group = "<%= packageName %>"
+version = "0.0.1-SNAPSHOT"
+
+description = ""
+
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
 assert System.properties["java.specification.version"] == "1.8" || "11" || "12"
@@ -122,11 +127,6 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 defaultTasks "bootRun"
-
-group = "<%= packageName %>"
-version = "0.0.1-SNAPSHOT"
-
-description = ""
 
 springBoot {
     mainClassName = "<%= packageName %>.<%= mainClass %>"

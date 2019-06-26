@@ -27,8 +27,9 @@ let useBlueprint;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        utils.copyObjectProps(this, this.options.context);
-        this.configOptions = this.options.configOptions || {};
+        utils.copyObjectProps(this, opts.context);
+        this.jhipsterContext = opts.jhipsterContext || opts.context;
+        this.configOptions = opts.configOptions || {};
         const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
         if (!opts.fromBlueprint) {
             // use global variable since getters dont have access to instance property
