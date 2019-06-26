@@ -36,9 +36,10 @@ jhipster:
             enabled: true
             report-frequency: 60 # in seconds
 <%_ } _%>
-<%_ if (consoleOptions.includes('zipkin') || !skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
+
+<%_ if (consoleOptions && consoleOptions.includes('zipkin') || skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
 spring:
-    <%_ if (consoleOptions.includes('zipkin')) {_%>
+    <%_ if (consoleOptions && consoleOptions.includes('zipkin')) {_%>
     zipkin:
         base-url: http://jhipster-zipkin:9411
         enabled: true
@@ -46,7 +47,7 @@ spring:
         sampler:
             probability: 1 # report 100% of traces to Zipkin
     <%_ } _%>
-    <%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
+    <%_ if (skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
     cloud:
         consul:
             discovery:

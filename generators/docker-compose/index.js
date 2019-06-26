@@ -208,6 +208,9 @@ module.exports = class extends BaseDockerGenerator {
             },
 
             saveConfig() {
+                if (this.monitoring === 'no') {
+                    this.consoleOptions = [];
+                }
                 this.config.set({
                     appsFolders: this.appsFolders,
                     directoryPath: this.directoryPath,
