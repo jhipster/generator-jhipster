@@ -78,7 +78,13 @@ module.exports = (options) => ({
             'process.env': {
                 NODE_ENV: `'${options.env}'`,
                 BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
-                VERSION: `'${utils.parseVersion()}'`,
+<%_ if (buildTool === 'gradle' || buildTool === 'maven') { _%>
+                // If webpack is run through Gradle 'webpack'/'webpackBuildDev' NpmTasks / Maven 'frontend-maven-plugin', then APP_VERSION is set.
+                VERSION: `'${process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'UNKNOWN'}'`,
+<%_ } else { _%>
+                // Server generation is skipped, so there is no way to determine the application version from server.
+                VERSION: `'0.0.1-SNAPSHOT'`,
+<%_ } _%>
                 DEBUG_INFO_ENABLED: options.env === 'development',
                 // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
                 // If this URL is left empty (""), then it will be relative to the current context.
