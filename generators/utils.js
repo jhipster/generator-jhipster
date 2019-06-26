@@ -414,11 +414,13 @@ function decodeBase64(string, encoding = 'utf-8') {
  * Get all the generator configuration from the .yo-rc.json file
  * @param {Generator} generator the generator instance to use
  * @param {boolean} force force getting direct from file
+ * @param {String} base path where the .yo-rc.json file is located. Default is cwd.
  */
-function getAllJhipsterConfig(generator, force) {
+function getAllJhipsterConfig(generator, force, basePath = '') {
     let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
-    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
-        const yoRc = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
+    const filePath = path.join(basePath, '.yo-rc.json');
+    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist(filePath)) {
+        const yoRc = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
         configuration = yoRc['generator-jhipster'];
         // merge the blueprint config if available
         if (configuration.blueprint) {
