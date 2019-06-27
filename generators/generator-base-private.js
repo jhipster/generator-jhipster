@@ -830,7 +830,15 @@ module.exports = class extends Generator {
             done();
             return;
         }
+
         shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
+            if (stderr.includes('yo:')) {
+                this.error(
+                    `The ${chalk.yellow('yo generator')} is not installed. Please install it using command ${chalk.yellow(
+                        `npm install -g yo`
+                    )}.`
+                );
+            }
             if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
                 this.error(
                     `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
