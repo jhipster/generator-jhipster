@@ -830,7 +830,11 @@ module.exports = class extends Generator {
             done();
             return;
         }
-        shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
+
+        // Path to the yo cli script in generator-jhipster's node_modules
+        const yoInternalCliPath = `${__dirname}/../node_modules/yo/lib/cli.js`;
+
+        shelljs.exec(`${yoInternalCliPath} --generators`, { silent: true }, (err, stdout, stderr) => {
             if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
                 this.error(
                     `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
@@ -1355,7 +1359,7 @@ module.exports = class extends Generator {
             this.warning(
                 `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
                     'jhipster <command>'
-                )} instead of ${chalk.red('yo jhipster:<command>')}`
+                )} instead of ${chalk.red(`yo jhipster:<command>`)}`
             );
         }
     }
