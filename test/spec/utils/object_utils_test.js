@@ -191,6 +191,22 @@ describe('ObjectUtils', () => {
           expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
         });
       });
+      context('one object has key with undefined value, second object does not have this key', () => {
+        it('returns true', () => {
+          const firstObject = {
+            name: 'MyEntity',
+            fields: [],
+            relationships: [],
+            javadoc: undefined
+          };
+          const secondObject = {
+            name: 'MyEntity',
+            fields: [],
+            relationships: []
+          };
+          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
+        });
+      });
     });
     context('when comparing two unequal objects', () => {
       context('as one of them is not empty, the other is', () => {
