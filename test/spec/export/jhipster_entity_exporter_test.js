@@ -653,8 +653,10 @@ describe('JHipsterEntityExporter', () => {
             path.join('.jhipster', 'A.json'),
             JSON.stringify({ ...originalContent, customAttribute: '42' })
           );
+          const changedContent = JSON.parse(JSON.stringify(originalContent));
+          changedContent.changelogDate = '43';
           const entities = {
-            A: originalContent
+            A: changedContent
           };
           JHipsterEntityExporter.exportEntities({
             entities,
@@ -671,7 +673,7 @@ describe('JHipsterEntityExporter', () => {
           fs.rmdirSync('.jhipster');
         });
 
-        it('merges the existing content with the new one', () => {
+        it('merges the existing content with the new one and preserves changelogDate original value', () => {
           expect(newContent).to.deep.equal({
             ...originalContent,
             customAttribute: '42'
