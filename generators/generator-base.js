@@ -1685,9 +1685,6 @@ module.exports = class extends PrivateBase {
                     if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
                         return 'Your base name cannot contain special characters or a blank space';
                     }
-                    if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
-                        return 'Your base name cannot contain underscores as this does not meet the URI spec';
-                    }
                     if (generator.applicationType === 'uaa' && input === 'auth') {
                         return "Your UAA base name cannot be named 'auth' as it conflicts with the gateway login routes";
                     }
