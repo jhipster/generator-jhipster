@@ -418,7 +418,7 @@ function decodeBase64(string, encoding = 'utf-8') {
  */
 function getAllJhipsterConfig(generator, force, basePath = '') {
     let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
-    const filePath = path.join(basePath, '.yo-rc.json');
+    const filePath = path.join(basePath || '', '.yo-rc.json');
     if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist(filePath)) {
         const yoRc = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
         configuration = yoRc['generator-jhipster'];

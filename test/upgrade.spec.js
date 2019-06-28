@@ -10,6 +10,7 @@ const packageJson = require('../package.json');
 describe('JHipster upgrade generator', function() {
     this.timeout(200000);
     describe('default application', () => {
+        const cwd = process.cwd();
         before(done => {
             let workingDirectory;
             helpers
@@ -77,8 +78,13 @@ describe('JHipster upgrade generator', function() {
             //   - master: merge commit of jhipster_upgrade
             expect(commitsCount).to.equal('5');
         });
+
+        after(() => {
+            process.chdir(cwd);
+        });
     });
     describe('blueprint application', () => {
+        const cwd = process.cwd();
         const blueprintName = 'generator-jhipster-sample-blueprint';
         const blueprintVersion = '0.1.1';
         before(done => {
@@ -161,6 +167,10 @@ describe('JHipster upgrade generator', function() {
             assert.fileContent('.yo-rc.json', new RegExp(`"blueprint": "${blueprintName}"`));
             assert.fileContent('.yo-rc.json', new RegExp(`"blueprintVersion": "${blueprintVersion}"`));
             assert.fileContent('package.json', new RegExp(`"${blueprintName}": "${blueprintVersion}"`));
+        });
+
+        after(() => {
+            process.chdir(cwd);
         });
     });
 });
