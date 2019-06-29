@@ -158,6 +158,12 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   };
   <%_ } _%>
 
+  useEffect(() => {
+    if (props.updateSuccess) {
+      handleClose();
+    }
+  }, [props.updateSuccess]);
+
   const saveEntity = (event, errors, values) => {
     <%_ for (idx in fields) {
         const fieldType = fields[idx].fieldType;
@@ -182,7 +188,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
       } else {
         props.updateEntity(entity);
       }
-      handleClose();
     }
   }
 
