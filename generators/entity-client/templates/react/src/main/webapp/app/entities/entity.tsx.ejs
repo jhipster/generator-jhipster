@@ -86,7 +86,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ if (pagination === 'infinite-scroll') { _%>
   useEffect(() => {
     if (props.updateSuccess) {
-      resetAll();
+      getAllEntities();
     }
   });
   <%_ } _%>
@@ -164,7 +164,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <% } else { %>
     sortEntities();
     <% } %>
-  }, [paginationState.activePage, paginationState.order, paginationState.sort]);
+  }, [<% if (pagination !== 'infinite-scroll') { %>paginationState.activePage, <% } %>paginationState.order, paginationState.sort]);
 
   const sort = p => () => {
     setPaginationState({
