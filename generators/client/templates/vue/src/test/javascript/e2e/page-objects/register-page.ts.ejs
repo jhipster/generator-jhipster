@@ -1,56 +1,25 @@
-import { ElementFinder, browser, $ } from 'protractor';
+import { ElementFinder, $ } from 'protractor';
+import AlertPage from './alert-page';
 
-import BasePage from './base-component';
+export default class RegisterPage extends AlertPage {
 
-const selector: ElementFinder = $('#register-form');
-export default class RegisterPage extends BasePage {
-  selector: ElementFinder;
-  username: ElementFinder = this.selector.$('#username');
-  email: ElementFinder = this.selector.$('#email');
-  firstPassword: ElementFinder = this.selector.$('#firstPassword');
-  secondPassword: ElementFinder = this.selector.$('#secondPassword');
-  saveButton: ElementFinder = this.selector.$('button[type=submit]');
+  registerForm: ElementFinder = $('#register-form');
+  username: ElementFinder = this.registerForm.$('#username');
+  email: ElementFinder = this.registerForm.$('#email');
+  firstPassword: ElementFinder = this.registerForm.$('#firstPassword');
+  secondPassword: ElementFinder = this.registerForm.$('#secondPassword');
+  saveButton: ElementFinder = this.registerForm.$('button[type=submit]');
   title: ElementFinder = $('#register-title');
 
-  constructor() {
-    super(selector);
-    this.selector = selector;
-  }
-
-  async get() {
-    await browser.get('/register');
-    await this.waitUntilDisplayed();
-  }
-
   async getTitle() {
-    return this.title.getAttribute('id');
-  }
-
-  async setUserName(username: string) {
-    await this.username.sendKeys(username);
-  }
-
-  async setEmail(email: string) {
-    await this.email.sendKeys(email);
-  }
-
-  async setFirstPassword(password: string) {
-    await this.firstPassword.sendKeys(password);
-  }
-
-  async setSecondPassword(password: string) {
-    await this.secondPassword.sendKeys(password);
+    return await this.title.getAttribute('id');
   }
 
   async autoSignUpUsing(username: string, email: string, password: string) {
-    await this.setUserName(username);
-    await this.setEmail(email);
-    await this.setFirstPassword(password);
-    await this.setSecondPassword(password);
-    await this.save();
-  }
-
-  async save() {
+    await this.username.sendKeys(username);
+    await this.email.sendKeys(email);
+    await this.firstPassword.sendKeys(password);
+    await this.secondPassword.sendKeys(password);
     await this.saveButton.click();
   }
 }

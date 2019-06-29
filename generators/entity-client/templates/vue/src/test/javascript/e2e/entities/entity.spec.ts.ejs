@@ -25,7 +25,7 @@ import <%= entityClass %>ComponentsPage from './<%= entityFileName %>.page-objec
 import { <%= entityClass %>DeleteDialog } from './<%= entityFileName %>.page-object';
 import <%= entityClass %>UpdatePage from './<%= entityFileName%>-update.page-object';
 import <%= entityClass %>DetailsPage from './<%= entityFileName%>-details.page-object';
-import { waitUntilDisplayed, waitUntilHidden, getDangerToast, getInfoToast, getSuccessToast, waitSilentlyUntilDisplayed } from '../../<%= entityParentPathAddition %>util/utils';
+import { waitUntilDisplayed, waitUntilHidden, getDangerToast, getInfoToast, getSuccessToast, waitUntilDisplayedAndContinue } from '../../<%= entityParentPathAddition %>util/utils';
 <%_ if (fieldsContainBlobOrImage) { _%>
 import path from 'path';
 <%_ } _%>
@@ -64,12 +64,11 @@ describe('<%= entityClass %> e2e test', () => {
     navBarPage = new NavBarPage();
     signInPage = await navBarPage.getSignInPage();
     <%_ if (authenticationType !== 'oauth2') { _%>
-    await signInPage.waitUntilDisplayed();
 
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
     await signInPage.loginButton.click();
-    await signInPage.waitUntilHidden();
+    await waitUntilHidden(signInPage.loginForm);
     <%_ } else if (authenticationType === 'oauth2') { _%>
     await signInPage.loginWithOAuth('admin', 'admin');
     <%_ } _%>
@@ -80,7 +79,7 @@ describe('<%= entityClass %> e2e test', () => {
     await navBarPage.getEntityPage('<%= entityStateName %>');
     <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
 
-    await waitSilentlyUntilDisplayed(<%= entityInstance %>ComponentsPage.getDeleteButtons().last());
+    await waitUntilDisplayedAndContinue(<%= entityInstance %>ComponentsPage.getDeleteButtons().last());
     const heading = <%= entityInstance %>ComponentsPage.getTitle();
     await waitUntilDisplayed(heading);
 

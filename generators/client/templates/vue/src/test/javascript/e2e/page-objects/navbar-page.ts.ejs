@@ -1,50 +1,93 @@
 import { $, ElementFinder } from 'protractor';
 
-import BasePage from './base-component';
 import SignInPage from './signin-page';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import RegisterPage from './register-page';
 import PasswordPage from './password-page';
 import SettingsPage from './settings-page';
 <%_ } _%>
-import { clickElement } from '../util/utils';
+import {
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+  AuditsPage,
+<%_ } _%>
+  ConfigurationsPage,
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+  GatewayPage,
+<%_ } _%>
+  HealthPage,
+  LogsPage,
+  MetricsPage
+<%_ if (authenticationType !== 'oauth2') { _%>,
+  UserManagementPage
+<%_ } _%>
+} from './administration-page';
+import {click, waitUntilDisplayed, waitUntilHidden} from '../util/utils';
 
-const selector: ElementFinder = $('#app-header');
-export default class NavBarPage extends BasePage {
-  selector: ElementFinder;
-  signInPage: SignInPage;
+export default class NavBarPage {
+  selector: ElementFinder = $('#app-header');
   adminMenu: ElementFinder = this.selector.$('#admin-menu');
   accountMenu: ElementFinder = this.selector.$('#account-menu');
   entityMenu: ElementFinder = this.selector.$('#entity-menu');
 
-  constructor() {
-    super(selector);
-    this.selector = selector;
-    this.signInPage = new SignInPage();
+  signInPage: SignInPage = new SignInPage();
+
+  async clickOnTabMenu(item: string) {
+    await click(this.selector.$('#header-tabs').$(`.dropdown-menu ${item}`));
+  }
+
+  async clickOnAccountMenu() {
+    await click(this.accountMenu);
+  }
+
+  async clickOnAccountMenuItem(item: string) {
+    await this.clickOnAccountMenu();
+    await click(this.selector.$(`.dropdown-item[href="/account/${item}"`));
   }
 
 <%_ if (authenticationType !== 'oauth2') { _%>
   async getPasswordPage() {
     await this.clickOnAccountMenuItem('password');
-    return new PasswordPage();
+
+    const passwordPage = new PasswordPage();
+    await waitUntilDisplayed(passwordPage.title);
+    return passwordPage;
   }
 
   async getSettingsPage() {
     await this.clickOnAccountMenuItem('settings');
-    return new SettingsPage();
+
+    const settingsPage = new SettingsPage();
+    await waitUntilDisplayed(settingsPage.title);
+    return settingsPage;
   }
 
-  async getRegisterPage() {
+async getRegisterPage() {
     await this.clickOnAccountMenu();
     await this.clickOnTabMenu('#register');
-    return new RegisterPage();
+    const registerPage = new RegisterPage();
+    await waitUntilDisplayed(registerPage.title);
+    return registerPage;
   }
 
 <%_ } _%>
   async getSignInPage() {
     await this.clickOnAccountMenu();
     await this.clickOnTabMenu('#login');
+    await waitUntilDisplayed(this.signInPage.title);
     return this.signInPage;
+  }
+
+  async clickOnAdminMenuItem(item: string) {
+    await click(this.adminMenu);
+    await click(this.selector.$(`.dropdown-item[href="/admin/${item}"]`));
+  }
+
+  async clickOnEntityMenu() {
+    await click(this.entityMenu);
+  }
+
+  async clickOnEntity(entityName: string) {
+    await click(this.selector.$(`.dropdown-item[href="/entity/${entityName}"]`));
   }
 
   async getEntityPage(entityName: string) {
@@ -52,34 +95,8 @@ export default class NavBarPage extends BasePage {
     await this.clickOnEntity(entityName);
   }
 
-  async clickOnTabMenu(item: string) {
-    await clickElement(this.selector.$('#header-tabs').$(`.dropdown-menu ${item}`));
-  }
-
-  async clickOnAccountMenu() {
-    await clickElement(this.accountMenu);
-  }
-
-  async clickOnAccountMenuItem(item: string) {
-    await this.clickOnAccountMenu();
-    await clickElement(this.selector.$(`.dropdown-item[href="/account/${item}"`));
-  }
-
-  async clickOnAdminMenuItem(item: string) {
-    await clickElement(this.adminMenu);
-    await clickElement(this.selector.$(`.dropdown-item[href="/admin/${item}"]`));
-  }
-
-  async clickOnEntityMenu() {
-    await clickElement(this.entityMenu);
-  }
-
-  async clickOnEntity(entityName: string) {
-    await clickElement(this.selector.$(`.dropdown-item[href="/entity/${entityName}"]`));
-  }
-
   async autoSignIn() {
-    await this.signInPage.get();
+    await this.getSignInPage();
     <%_ if (authenticationType !== 'oauth2') { _%>
     await this.signInPage.autoSignInUsing('admin', 'admin');
     <%_ } else { _%>
@@ -88,7 +105,63 @@ export default class NavBarPage extends BasePage {
   }
 
   async autoSignOut() {
-      await this.clickOnAccountMenu();
-      await this.clickOnTabMenu('#logout');
+    await this.clickOnAccountMenu();
+    await this.clickOnTabMenu('#logout');
+    await waitUntilHidden(this.entityMenu);
   }
+
+<%_ if (authenticationType !== 'oauth2') { _%>
+  async getUserManagementPage() {
+    await this.clickOnAdminMenuItem('user-management');
+    const userManagementPage = new UserManagementPage();
+    await waitUntilDisplayed(userManagementPage.title);
+    return userManagementPage;
+  }
+
+<%_ } _%>
+  async getMetricsPage() {
+    await this.clickOnAdminMenuItem('jhi-metrics');
+    const metricsPage = new MetricsPage();
+    await waitUntilDisplayed(metricsPage.title);
+    return metricsPage;
+  }
+
+  async getHealthPage() {
+    await this.clickOnAdminMenuItem('jhi-health');
+    const healthPage = new HealthPage();
+    await waitUntilDisplayed(healthPage.title);
+    return healthPage;
+  }
+
+  async getConfigurationsPage() {
+    await this.clickOnAdminMenuItem('jhi-configuration');
+    const configurationsPage = new ConfigurationsPage();
+    await waitUntilDisplayed(configurationsPage.title);
+    return configurationsPage;
+  }
+
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+  async getAuditsPage() {
+    await this.clickOnAdminMenuItem('audits');
+    const auditsPage = new AuditsPage();
+    await waitUntilDisplayed(auditsPage.title);
+    return auditsPage;
+  }
+
+<%_ } _%>
+  async getLogsPage() {
+    await this.clickOnAdminMenuItem('logs');
+    const logsPage = new LogsPage();
+    await waitUntilDisplayed(logsPage.title);
+    return logsPage;
+  }
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+
+  async getGatewayPage() {
+    await this.clickOnAdminMenuItem('gateway');
+    const gatewayPage = new GatewayPage();
+    await waitUntilDisplayed(gatewayPage.title);
+    return gatewayPage;
+  }
+<%_ } _%>
 }
