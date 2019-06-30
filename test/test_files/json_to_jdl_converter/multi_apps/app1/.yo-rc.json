@@ -5,7 +5,7 @@
     },
     "jhipsterVersion": "6.0.1",
     "applicationType": "microservice",
-    "baseName": "truc",
+    "baseName": "app1",
     "packageName": "com.mycompany.app1",
     "packageFolder": "com/mycompany/app1",
     "serverPort": "8081",

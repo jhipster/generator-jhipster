@@ -74,7 +74,9 @@ describe('JSONToJDLConverter', () => {
     clientPackageManager npm
     skipUserManagement true
   }
-}`);
+}
+
+`);
         });
       });
       context('with entities', () => {
@@ -206,23 +208,21 @@ noFluentMethod Country, Department, Employee, Job, JobHistory, Location, Region,
       });
       context('with several JHipster apps', () => {
         let rootDir;
-        let dirs;
         let jdlFilename;
-        let jdlFileContents;
+        let jdlFileContent;
 
         beforeEach(() => {
           rootDir = path.join('test', 'test_files', 'json_to_jdl_converter', 'multi_apps');
-          dirs = [path.join(rootDir, 'app1'), path.join(rootDir, 'app2'), path.join(rootDir, 'app3')];
           jdlFilename = 'app.jdl';
           convertToJDL(rootDir);
-          jdlFileContents = dirs.map(dir => fs.readFileSync(path.join(dir, jdlFilename), 'utf-8'));
+          jdlFileContent = fs.readFileSync(path.join(rootDir, jdlFilename), 'utf-8');
         });
         afterEach(() => {
-          dirs.forEach(dir => fs.unlinkSync(path.join(dir, jdlFilename)));
+          fs.unlinkSync(path.join(rootDir, jdlFilename));
         });
 
         it('exports each app', () => {
-          expect(jdlFileContents[0]).to.equal(`application {
+          expect(jdlFileContent).to.equal(`application {
   config {
     databaseType sql
     devDatabaseType h2Disk
@@ -244,7 +244,7 @@ noFluentMethod Country, Department, Employee, Job, JobHistory, Location, Region,
     promptValues [object Object]
     jhipsterVersion 6.0.1
     applicationType microservice
-    baseName truc
+    baseName app1
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
@@ -259,14 +259,7 @@ noFluentMethod Country, Department, Employee, Job, JobHistory, Location, Region,
 
   entities Region
 }
-
-entity Region {
-  regionName String
-}
-noFluentMethod Region
-`);
-
-          expect(jdlFileContents[1]).to.equal(`application {
+application {
   config {
     databaseType sql
     devDatabaseType h2Disk
@@ -288,7 +281,7 @@ noFluentMethod Region
     promptValues [object Object]
     jhipsterVersion 6.0.1
     applicationType microservice
-    baseName truc
+    baseName app2
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
@@ -303,24 +296,7 @@ noFluentMethod Region
 
   entities Country, Location
 }
-
-entity Country {
-  countryName String
-}
-entity Location {
-  streetAddress String,
-  postalCode String,
-  city String,
-  stateProvince String
-}
-relationship OneToOne {
-  Location{country required} to Country
-}
-
-noFluentMethod Country, Location
-`);
-
-          expect(jdlFileContents[2]).to.equal(`application {
+application {
   config {
     databaseType sql
     devDatabaseType h2Disk
@@ -342,7 +318,7 @@ noFluentMethod Country, Location
     promptValues [object Object]
     jhipsterVersion 6.0.1
     applicationType microservice
-    baseName truc
+    baseName app3
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
@@ -354,7 +330,26 @@ noFluentMethod Country, Location
     clientPackageManager npm
     skipUserManagement true
   }
-}`);
+}
+
+entity Region {
+  regionName String
+}
+entity Country {
+  countryName String
+}
+entity Location {
+  streetAddress String,
+  postalCode String,
+  city String,
+  stateProvince String
+}
+relationship OneToOne {
+  Location{country required} to Country
+}
+
+noFluentMethod Region, Country, Location
+`);
         });
       });
     });
