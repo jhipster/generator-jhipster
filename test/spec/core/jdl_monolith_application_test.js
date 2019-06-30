@@ -57,6 +57,12 @@ describe('JDLMonolithApplication', () => {
       it('uses sass', () => {
         expect(jdlApplicationConfig.useSass).to.be.true;
       });
+      it(`sets the clientTheme to ${ApplicationOptions.clientTheme}`, () => {
+        expect(jdlApplicationConfig.clientTheme).to.equal(ApplicationOptions.clientTheme);
+      });
+      it(`sets the clientThemeVariant to ${ApplicationOptions.clientThemeVariant.none}`, () => {
+        expect(jdlApplicationConfig.clientThemeVariant).to.equal(ApplicationOptions.clientThemeVariant.none);
+      });
     });
     context(`when the authentication type is ${ApplicationOptions.authenticationType.oauth2}`, () => {
       let jdlApplicationConfig = null;
@@ -70,6 +76,20 @@ describe('JDLMonolithApplication', () => {
 
       it('sets the skipUserManagement flag to true', () => {
         expect(jdlApplicationConfig.skipUserManagement).to.be.true;
+      });
+    });
+    context(`when the clientTheme isn't ${ApplicationOptions.clientTheme} and the clientThemeVariant isn't set`, () => {
+      let jdlApplicationConfig;
+
+      before(() => {
+        const jdlApplication = new JDLMonolithApplication({
+          config: { clientTheme: 'yeti', jhipsterVersion: '4.9.0' }
+        });
+        jdlApplicationConfig = jdlApplication.config;
+      });
+
+      it(`sets it to ${ApplicationOptions.clientThemeVariant.default}`, () => {
+        expect(jdlApplicationConfig.clientThemeVariant).to.equal(ApplicationOptions.clientThemeVariant.default);
       });
     });
   });
