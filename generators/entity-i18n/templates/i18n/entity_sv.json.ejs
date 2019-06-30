@@ -25,7 +25,7 @@ let helpBlocks = 0; %>
                 "createLabel": "Skapa en ny <%= entityClassHumanized %>",
                 "createOrEditLabel": "Skapa eller ändra en <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
                 "search": "Sök efter <%= entityClassHumanized %>"<% } %>,
-                "notFound": "No <%= entityClassHumanized %> found"
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "En ny <%= entityClassHumanized %> är skapad med id {{ param }}",
             "updated": "En <%= entityClassHumanized %> är uppdaterad med id  {{ param }}",
