@@ -137,7 +137,7 @@ public class AuthorizationHeaderUtil {
             ResponseEntity<OAuthIdpTokenResponseDTO> responseEntity = r.exchange(requestEntity, OAuthIdpTokenResponseDTO.class);
             return toOAuth2AccessTokenResponse(responseEntity.getBody());
         } catch (OAuth2AuthorizationException e) {
-            log.error("Unable to refresh token ${e.getError().getErrorCode()}");
+            log.error("Unable to refresh token", e);
             throw new OAuth2AuthenticationException(e.getError(), e);
         }
     }
