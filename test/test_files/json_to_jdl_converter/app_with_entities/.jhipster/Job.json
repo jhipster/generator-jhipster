@@ -1,0 +1,40 @@
+{
+  "fluentMethods": false,
+  "jpaMetamodelFiltering": false,
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityRelationshipName": "job",
+      "relationshipName": "task",
+      "otherEntityName": "task",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipName": "employee",
+      "otherEntityName": "employee",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "jobTitle",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "minSalary",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "maxSalary",
+      "fieldType": "Long"
+    }
+  ],
+  "changelogDate": "20190524215042",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "javadoc": "",
+  "entityTableName": "job"
+}

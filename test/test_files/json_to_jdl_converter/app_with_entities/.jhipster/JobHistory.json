@@ -1,0 +1,49 @@
+{
+  "fluentMethods": false,
+  "jpaMetamodelFiltering": false,
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipName": "department",
+      "otherEntityName": "department",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "jobHistory"
+    },
+    {
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipName": "job",
+      "otherEntityName": "job",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "jobHistory"
+    },
+    {
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipName": "employee",
+      "otherEntityName": "employee",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "jobHistory"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "startDate",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "ZonedDateTime"
+    }
+  ],
+  "changelogDate": "20190524215040",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "javadoc": "",
+  "entityTableName": "job_history"
+}

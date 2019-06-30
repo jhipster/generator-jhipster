@@ -1,0 +1,33 @@
+{
+  "fluentMethods": false,
+  "jpaMetamodelFiltering": false,
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "relationshipName": "employee",
+      "otherEntityName": "employee",
+      "otherEntityRelationshipName": "department"
+    },
+    {
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipName": "location",
+      "otherEntityName": "location",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "department"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "departmentName",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20190524215041",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "javadoc": "",
+  "entityTableName": "department"
+}

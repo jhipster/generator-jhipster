@@ -55,6 +55,7 @@ const JHipsterApplicationExporter = require('../lib/exporters/jhipster_applicati
 const JHipsterEntityExporter = require('../lib/exporters/jhipster_entity_exporter');
 const JDLExporter = require('../lib/exporters/jdl_exporter');
 const JSONFileReader = require('../lib/readers/json_file_reader');
+const { convertToJDL } = require('../lib/converters/json_to_jdl_converter');
 const ReservedKeywords = require('../lib/core/jhipster/reserved_keywords');
 const FileUtils = require('../lib/utils/file_utils');
 const ObjectUtils = require('../lib/utils/object_utils');
@@ -114,6 +115,7 @@ module.exports = {
   exportApplication: JHipsterApplicationExporter.exportApplication,
   /* JDL exporting */
   exportToJDL: JDLExporter.exportToJDL,
+  convertToJDL,
   /* JDL utils */
   isJDLFile: JDLReader.checkFileIsJDLFile,
   /* JSON utils */

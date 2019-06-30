@@ -1,0 +1,17 @@
+{
+  "fluentMethods": false,
+  "jpaMetamodelFiltering": false,
+  "relationships": [],
+  "fields": [
+    {
+      "fieldName": "countryName",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20190524215046",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "javadoc": "",
+  "entityTableName": "country"
+}
