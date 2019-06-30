@@ -24,7 +24,7 @@ const path = require('path');
 
 const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
-const JHipsterEntityExporter = require('../../../lib/export/jhipster_entity_exporter');
+const JHipsterEntityExporter = require('../../../lib/exporters/jhipster_entity_exporter');
 const FileUtils = require('../../../lib/utils/file_utils');
 
 describe('JHipsterEntityExporter', () => {

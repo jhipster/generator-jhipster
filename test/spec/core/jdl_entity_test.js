@@ -190,7 +190,7 @@ describe('JDLEntity', () => {
         entity = new JDLEntity(args);
       });
 
-      it('does not export it', () => {
+      it('does not exporters it', () => {
         expect(entity.toString()).to.equal(`entity ${args.name}`);
       });
     });

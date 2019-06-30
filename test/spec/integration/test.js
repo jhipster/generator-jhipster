@@ -25,7 +25,7 @@ const { expect } = require('chai');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const JDLReader = require('../../../lib/reader/jdl_reader');
 const DocumentParser = require('../../../lib/parser/document_parser');
-const JDLExporter = require('../../../lib/export/jdl_exporter');
+const JDLExporter = require('../../../lib/exporters/jdl_exporter');
 
 describe('integration tests', () => {
   context('when parsing and exporting a JDL', () => {

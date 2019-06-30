@@ -23,7 +23,7 @@ const { expect } = require('chai');
 const fs = require('fs');
 const JDLObject = require('../../../lib/core/jdl_object');
 const JDLEntity = require('../../../lib/core/jdl_entity');
-const JDLExporter = require('../../../lib/export/jdl_exporter');
+const JDLExporter = require('../../../lib/exporters/jdl_exporter');
 
 describe('JDLExporter', () => {
   describe('::exportToJDL', () => {

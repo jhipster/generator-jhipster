@@ -22,7 +22,7 @@
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
-const JHipsterDeploymentExporter = require('../../../lib/export/jhipster_deployment_exporter');
+const JHipsterDeploymentExporter = require('../../../lib/exporters/jhipster_deployment_exporter');
 const JDLDeployment = require('../../../lib/core/jdl_deployment');
 
 describe('JHipsterDeploymentExporter', () => {
