@@ -21,7 +21,7 @@
 const { expect } = require('chai');
 const path = require('path');
 
-const JSONFileReader = require('../../../lib/reader/json_file_reader');
+const JSONFileReader = require('../../../lib/readers/json_file_reader');
 
 describe('JSONFileReader', () => {
   describe('::readEntityJSON', () => {

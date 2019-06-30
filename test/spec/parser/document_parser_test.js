@@ -20,8 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const JDLReader = require('../../../lib/reader/jdl_reader');
-const DocumentParser = require('../../../lib/parser/document_parser');
+const JDLReader = require('../../../lib/readers/jdl_reader');
+const DocumentParser = require('../../../lib/parsers/document_parser');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLEnum = require('../../../lib/core/jdl_enum');
 const JDLField = require('../../../lib/core/jdl_field');

@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const EntityParser = require('../../../lib/parser/entity_parser');
+const EntityParser = require('../../../lib/parsers/entity_parser');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const JDLObject = require('../../../lib/core/jdl_object');

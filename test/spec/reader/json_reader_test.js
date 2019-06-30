@@ -22,7 +22,7 @@ const { renameSync } = require('fs');
 const { join } = require('path');
 const { expect } = require('chai');
 
-const JSONReader = require('../../../lib/reader/json_reader');
+const JSONReader = require('../../../lib/readers/json_reader');
 const { SKIP_CLIENT, SKIP_SERVER } = require('../../../lib/core/jhipster/unary_options');
 
 describe('JSONReader', () => {

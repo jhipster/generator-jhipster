@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 const fs = require('fs');
-const JDLReader = require('../../../lib/reader/jdl_reader');
+const JDLReader = require('../../../lib/readers/jdl_reader');
 
 describe('JDLReader', () => {
   describe('::parseFromFiles', () => {
