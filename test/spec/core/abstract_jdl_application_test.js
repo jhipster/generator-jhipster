@@ -207,7 +207,36 @@ describe('AbstractJDLApplication', () => {
       });
 
       it('exports the entity names', () => {
-        expect(jdlApplication.toString().includes('entities A, B, C')).to.be.true;
+        expect(jdlApplication.toString()).to.equal(
+          `application {
+  config {
+    databaseType sql
+    devDatabaseType h2Disk
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation true
+    jhiPrefix jhi
+    languages [en, fr]
+    messageBroker false
+    nativeLanguage en
+    packageName com.mycompany.myapp
+    packageFolder com/mycompany/myapp
+    prodDatabaseType mysql
+    searchEngine false
+    serviceDiscoveryType false
+    skipClient false
+    skipServer false
+    testFrameworks []
+    websocket false
+    baseName jhipster
+    buildTool maven
+    skipUserManagement false
+    clientPackageManager npm
+  }
+
+  entities A, B, C
+}`
+        );
       });
     });
   });
