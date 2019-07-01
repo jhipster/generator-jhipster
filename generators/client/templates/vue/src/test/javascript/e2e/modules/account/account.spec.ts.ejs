@@ -75,8 +75,8 @@ describe('Account', () => {
     });
 
     it('should login with admin account', async () => {
-  <%_ if (authenticationType !== 'oauth2') { _%>
       signInPage = await navBarPage.getSignInPage();
+  <%_ if (authenticationType !== 'oauth2') { _%>
       expect(await signInPage.getTitle()).to.eq(loginPageTitle);
       expect(await signInPage.dangerAlert.isPresent()).to.be.false;
 

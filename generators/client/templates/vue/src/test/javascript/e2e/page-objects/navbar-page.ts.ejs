@@ -73,8 +73,10 @@ async getRegisterPage() {
   async getSignInPage() {
     await this.clickOnAccountMenu();
     await this.clickOnTabMenu('#login');
+<%_ if (authenticationType !== 'oauth2') { _%>
     await waitUntilDisplayed(this.signInPage.title);
-    return this.signInPage;
+<%_ } _%>
+  return this.signInPage;
   }
 
   async clickOnAdminMenuItem(item: string) {
