@@ -42,7 +42,9 @@ stages:
 
 <%_ if (buildTool === 'gradle') { _%>
 before_script:
+    <%_ if (clientFramework === 'angularX') { _%>
     - export NG_CLI_ANALYTICS="false"
+    <%_ } _%>
     - export GRADLE_USER_HOME=`pwd`/.gradle
     <%_ if (!skipClient) { _%>
     - ./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon
@@ -141,10 +143,11 @@ deploy-to-production:
     when: manual
 <%_ } _%>
 <%_ } _%>
-
 <%_ if (buildTool === 'maven') { _%>
 before_script:
+    <%_ if (clientFramework === 'angularX') { _%>
     - export NG_CLI_ANALYTICS="false"
+    <%_ } _%>
     - export MAVEN_USER_HOME=`pwd`/.maven
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
