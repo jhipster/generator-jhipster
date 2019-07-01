@@ -32,7 +32,7 @@ export default class NavBarPage {
   signInPage: SignInPage = new SignInPage();
 
   async clickOnTabMenu(item: string) {
-    await click(this.selector.$('#header-tabs').$(`.dropdown-menu ${item}`));
+    await click(this.selector.$(`.dropdown-menu ${item}`));
   }
 
   async clickOnAccountMenu() {
@@ -41,7 +41,7 @@ export default class NavBarPage {
 
   async clickOnAccountMenuItem(item: string) {
     await this.clickOnAccountMenu();
-    await click(this.selector.$(`.dropdown-item[href="/account/${item}"`));
+    await click(this.selector.$(`.dropdown-item[href="/account/${item}"]`));
   }
 
 <%_ if (authenticationType !== 'oauth2') { _%>

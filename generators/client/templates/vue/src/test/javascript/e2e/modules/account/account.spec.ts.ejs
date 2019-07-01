@@ -1,5 +1,5 @@
 /* tslint:disable no-unused-expression */
-import {browser} from 'protractor';
+import {browser<%_ if (authenticationType === 'oauth2') { _%>, element, by<%_ } _%>} from 'protractor';
 
 import SignInPage from '../../page-objects/signin-page';
 import NavBarPage from '../../page-objects/navbar-page';
@@ -56,6 +56,7 @@ describe('Account', () => {
       expect(await signInPage.dangerAlert.isDisplayed()).to.be.true;
 
       await signInPage.closeButton.click();
+      await waitUntilHidden(signInPage.loginForm);
 <%_ } else { _%>
       await signInPage.loginWithOAuth('admin', 'foo');
       const alert = element(by.css('.alert-error'));
