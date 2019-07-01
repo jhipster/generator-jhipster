@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const _ = require('lodash');
+const utils = require('../utils');
 const constants = require('../generator-constants');
 
 /* Constants use throughout */
@@ -247,6 +249,24 @@ function writeFiles() {
                     this.clientFramework,
                     this.microserviceName
                 );
+
+                this.fields.forEach(field => {
+                    if (field.fieldIsEnum === true) {
+                        const enumFileName = _.kebabCase(field.fieldType);
+                        const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
+                        if (!this.skipClient) {
+                            this.template(
+                                `${this.fetchFromInstalledJHipster(
+                                    `entity-client/templates/${CLIENT_NG2_TEMPLATES_DIR}`
+                                )}/${ANGULAR_DIR}entities/enumerations/enum.model.ts.ejs`,
+                                `${ANGULAR_DIR}shared/model/enumerations/${enumFileName}.model.ts`,
+                                this,
+                                {},
+                                enumInfo
+                            );
+                        }
+                    }
+                });
             } else if (this.clientFramework === 'react') {
                 // write client side files for react
                 this.writeFilesToDisk(
@@ -264,6 +284,24 @@ function writeFiles() {
                     this.entityUrl,
                     this.clientFramework
                 );
+
+                this.fields.forEach(field => {
+                    if (field.fieldIsEnum === true) {
+                        const enumFileName = _.kebabCase(field.fieldType);
+                        const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
+                        if (!this.skipClient) {
+                            this.template(
+                                `${this.fetchFromInstalledJHipster(
+                                    `entity-client/templates/${CLIENT_REACT_TEMPLATES_DIR}`
+                                )}/${REACT_DIR}entities/enumerations/enum.model.ts.ejs`,
+                                `${REACT_DIR}shared/model/enumerations/${enumFileName}.model.ts`,
+                                this,
+                                {},
+                                enumInfo
+                            );
+                        }
+                    }
+                });
             }
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }
