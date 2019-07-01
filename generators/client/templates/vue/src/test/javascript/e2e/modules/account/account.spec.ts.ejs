@@ -75,8 +75,8 @@ describe('Account', () => {
     });
 
     it('should login with admin account', async () => {
-      signInPage = await navBarPage.getSignInPage();
   <%_ if (authenticationType !== 'oauth2') { _%>
+      signInPage = await navBarPage.getSignInPage();
       expect(await signInPage.getTitle()).to.eq(loginPageTitle);
       expect(await signInPage.dangerAlert.isPresent()).to.be.false;
 
@@ -91,6 +91,8 @@ describe('Account', () => {
 
       expect(await navBarPage.entityMenu.isDisplayed()).to.be.true;
   <%_ } else { _%>
+      await browser.get('/');
+      signInPage = await navBarPage.getSignInPage();
       // Keycloak credentials by default, change them to be able to use oauth2 with Okta
       await signInPage.loginWithOAuth('admin', 'admin');
       const success = element(by.className('alert-success'));
