@@ -192,7 +192,9 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.devDatabaseType = 'no';
                     this.prodDatabaseType = 'no';
                     this.enableHibernateCache = false;
-                    this.skipUserManagement = true;
+                    if (this.authenticationType !== 'uaa') {
+                        this.skipUserManagement = true;
+                    }
                 } else {
                     // sql
                     this.devDatabaseType = configuration.get('devDatabaseType');

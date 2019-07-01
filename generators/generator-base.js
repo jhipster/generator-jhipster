@@ -1917,7 +1917,7 @@ module.exports = class extends PrivateBase {
             generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
             context.configOptions.databaseType ||
             context.config.get('databaseType');
-        if (dest.authenticationType === 'oauth2' || dest.databaseType === 'no') {
+        if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
             dest.skipUserManagement = true;
         }
         dest.searchEngine = context.config.get('searchEngine');

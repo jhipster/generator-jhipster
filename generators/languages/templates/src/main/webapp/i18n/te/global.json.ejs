@@ -47,7 +47,7 @@
                 "health": "పరిస్థితి",
                 "configuration": "ఆకృతీకరణ",
                 "logs": "లాగ్స్",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' ? true : authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "తనిఖీలు",
                 <%_ } _%>
                 "apidocs": "API",

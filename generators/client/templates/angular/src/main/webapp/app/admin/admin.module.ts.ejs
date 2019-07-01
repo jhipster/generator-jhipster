@@ -27,7 +27,7 @@ import { <%=angularXAppName%>SharedModule } from 'app/shared';
 
 import {
     adminState,
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+    <%_ if ((databaseType !== 'no' ? true : authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     AuditsComponent,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
@@ -57,7 +57,7 @@ import {
         RouterModule.forChild(adminState)
     ],
     declarations: [
-        <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+        <%_ if ((databaseType !== 'no' ? true : authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
         AuditsComponent,
         <%_ } _%>
         <%_ if (!skipUserManagement) { _%>
