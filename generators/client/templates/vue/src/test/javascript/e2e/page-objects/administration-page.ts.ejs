@@ -1,7 +1,7 @@
 import {ElementFinder, by, element, $} from 'protractor';
 
 import AlertPage from './alert-page';
-import {waitUntilClickable, waitUntilDisplayed, waitUntilHidden} from '../util/utils';
+import {click, waitUntilClickable, waitUntilDisplayed, waitUntilHidden} from '../util/utils';
 
 export class UserManagementPage extends AlertPage {
 
@@ -27,9 +27,10 @@ export class UserManagementPage extends AlertPage {
 
   async getDetailsPage(login: string) {
     const detailsButton = element(by.css('table > tbody'))
-    .element(by.id(login))
-    .element(by.css('.btn-info.details'));
-    await detailsButton.click();
+      .element(by.id(login))
+      .element(by.css('.btn-info.details'));
+
+    await click(detailsButton);
 
     const detailsPage = new UserManagementDetailsPage();
     await waitUntilDisplayed(detailsPage.title);
@@ -38,10 +39,10 @@ export class UserManagementPage extends AlertPage {
 
   async getEditPage(login: string) {
     const editButton = element(by.css('table > tbody'))
-    .element(by.id(login))
-    .element(by.css('.btn-primary.edit'));
+      .element(by.id(login))
+      .element(by.css('.btn-primary.edit'));
 
-    await editButton.click();
+    await click(editButton);
 
     const detailsPage = new UserManagementDetailsPage();
     await waitUntilDisplayed(detailsPage.editTitle);
@@ -51,9 +52,10 @@ export class UserManagementPage extends AlertPage {
   async getDeletePage(login: string) {
 
     const deleteButton = element(by.css('table > tbody'))
-    .element(by.id(login))
-    .element(by.css('.btn-danger.delete'));
-    await deleteButton.click();
+      .element(by.id(login))
+      .element(by.css('.btn-danger.delete'));
+
+    await click(deleteButton);
 
     const deletePage = new UserManagementDeletePage();
     await waitUntilClickable(deletePage.okButton);
@@ -62,8 +64,10 @@ export class UserManagementPage extends AlertPage {
 
   async getEmailColumnText(login: string) {
      const emailControl = element(by.css('table > tbody'))
-    .element(by.id(login))
-    .element(by.css('.jhi-user-email'));
+      .element(by.id(login))
+      .element(by.css('.jhi-user-email'));
+
+    await waitUntilDisplayed(emailControl);
     return await emailControl.getText();
   }
 

@@ -69,8 +69,8 @@ describe('Account', () => {
         await waitUntilDisplayed(error);
         expect(await error.getText()).to.eq('Sign in failed!');
       }
-      await signInPage.clearUserName();
-      await signInPage.clearPassword();
+      await signInPage.username.clear();
+      await signInPage.password.clear();
 <%_ } _%>
     });
 
@@ -87,6 +87,8 @@ describe('Account', () => {
       await signInPage.loginButton.click();
 
       await waitUntilHidden(signInPage.loginForm);
+      await waitUntilDisplayed(navBarPage.entityMenu);
+
       expect(await navBarPage.entityMenu.isDisplayed()).to.be.true;
   <%_ } else { _%>
       // Keycloak credentials by default, change them to be able to use oauth2 with Okta
