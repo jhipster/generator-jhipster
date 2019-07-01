@@ -44,7 +44,7 @@
                 "health": "Ҳолат",
                 "configuration": "Созламалар",
                 "logs": "Логлар",
-                <%_ if ((databaseType !== 'no' ? true : authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Аудит",
                 <%_ } _%>
                 "apidocs": "API",

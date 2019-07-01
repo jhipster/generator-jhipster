@@ -258,7 +258,7 @@ const files = {
         },
         {
             condition: generator =>
-                (generator.databaseType !== 'no' ? true : generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
+                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/audits/audits.route.ts', method: 'processJs' },
@@ -439,7 +439,7 @@ const files = {
         },
         {
             condition: generator =>
-                (generator.databaseType !== 'no' ? true : generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
+                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
             path: TEST_SRC_DIR,
             templates: ['spec/app/admin/audits/audits.component.spec.ts', 'spec/app/admin/audits/audits.service.spec.ts']
         },
