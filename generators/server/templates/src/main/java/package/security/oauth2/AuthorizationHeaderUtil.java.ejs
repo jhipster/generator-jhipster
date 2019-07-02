@@ -68,11 +68,11 @@ public class AuthorizationHeaderUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof OAuth2AuthenticationToken) {
             OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-            String name =  oauthToken.getName();
+            String name = oauthToken.getName();
             String registrationId = oauthToken.getAuthorizedClientRegistrationId();
             OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(
-            registrationId,
-            name);
+                registrationId,
+                name);
 
             if (null == client) {
                 throw new OAuth2AuthorizationException(new OAuth2Error("access_denied", "The token is expired", null));
@@ -110,7 +110,7 @@ public class AuthorizationHeaderUtil {
             return null;
         }
 
-        OAuth2RefreshToken refreshToken = atr.getRefreshToken() != null? atr.getRefreshToken(): client.getRefreshToken();
+        OAuth2RefreshToken refreshToken = atr.getRefreshToken() != null ? atr.getRefreshToken(): client.getRefreshToken();
         OAuth2AuthorizedClient updatedClient = new OAuth2AuthorizedClient(
             client.getClientRegistration(),
             client.getPrincipalName(),
@@ -122,7 +122,7 @@ public class AuthorizationHeaderUtil {
         return atr.getAccessToken().getTokenValue();
     }
 
-    private OAuth2AccessTokenResponse refreshTokenClient(OAuth2AuthorizedClient currentClient ) {
+    private OAuth2AccessTokenResponse refreshTokenClient(OAuth2AuthorizedClient currentClient) {
 
         MultiValueMap<String, String> formParameters = new LinkedMultiValueMap<>();
         formParameters.add(OAuth2ParameterNames.GRANT_TYPE, AuthorizationGrantType.REFRESH_TOKEN.getValue());
