@@ -1,0 +1,29 @@
+{
+  "fluentMethods": false,
+  "jpaMetamodelFiltering": false,
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "relationshipName": "job",
+      "otherEntityName": "job",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "task"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20190524215043",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "javadoc": "",
+  "entityTableName": "task"
+}

@@ -1,0 +1,35 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.mycompany.app2"
+    },
+    "jhipsterVersion": "6.0.1",
+    "applicationType": "microservice",
+    "baseName": "app2",
+    "packageName": "com.mycompany.app2",
+    "packageFolder": "com/mycompany/app2",
+    "serverPort": "8081",
+    "authenticationType": "jwt",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "HIDDEN",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": false,
+    "clientPackageManager": "npm",
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}
