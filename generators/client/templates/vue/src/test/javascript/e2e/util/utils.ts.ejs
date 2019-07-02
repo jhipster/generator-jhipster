@@ -1,6 +1,15 @@
-import { ExpectedConditions, ElementArrayFinder, ElementFinder, browser, by, element, protractor } from 'protractor';
+import {
+browser,
+by,
+element,
+ElementArrayFinder,
+ElementFinder,
+ExpectedConditions as EC,
+protractor
+} from 'protractor';
 
-const waitUntilDisplayedTimeout = 30000;
+const waitTimeoutInMillis = browser.params.waitTimeoutInMillis || 30000;
+const logWaitErrors = browser.params.logWaitErrors || false;
 
 export const checkSelectorExist = (selector: ElementFinder) => selector !== undefined;
 
@@ -9,66 +18,78 @@ export const checkSelectorExist = (selector: ElementFinder) => selector !== unde
  */
 export const isDisplayed = (selector: ElementFinder) => {
   if (!checkSelectorExist(selector)) return;
-  return ExpectedConditions.visibilityOf(selector);
+  return EC.visibilityOf(selector);
 };
 
 export const isHidden = (selector: ElementFinder) => {
   if (!checkSelectorExist(selector)) return;
-  return ExpectedConditions.invisibilityOf(selector);
+  return EC.invisibilityOf(selector);
 };
 
 /**
- * Wait until this page is displayed.
+ * Returns a promise for an element to be visible. If an element is not visible
+ * within threshold time, promise will be rejected.
  */
-export const waitUntilDisplayed = async (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
-  if (!checkSelectorExist(selector)) return;
-
+export const waitUntilDisplayed = async (selector: ElementFinder, classname = '', timeout = waitTimeoutInMillis) => {
   await browser.wait(
-    isDisplayed(selector),
+    EC.visibilityOf(selector),
     timeout,
-    `Failed while waiting for "${selector.locator()}" of Page Object Class '${classname}' to display.`
+    classname === '' ? `"${selector.locator()}" is not visible.`
+      : `"${selector.locator()}" of Page Object class '${classname}' is not visible.`
   );
 };
 
 /**
- * Silently wait for an element to be displayed. It doesn't throw an error if
- * the element is not visible after wait threshold.
+ * Returns a promise for an element to be visible. If an element is not visible
+ * within threshold time, it will catch promise rejection and continue test
+ * execution
  */
-export const waitSilentlyUntilDisplayed = async (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
-  if (!checkSelectorExist(selector)) return;
+export const waitUntilDisplayedAndContinue = async (selector: ElementFinder, classname = '', timeout = waitTimeoutInMillis) => {
 
   await browser.wait(
-      isDisplayed(selector),
-      timeout,
-      `"${selector.locator()}" not found in the Page Object class '${classname}'`
-  ).catch(e =>  console.error(e));
+    EC.visibilityOf(selector),
+    timeout,
+    classname === '' ? `"${selector.locator()}" is not visible.`
+      : `"${selector.locator()}" of Page Object class '${classname}' is not visible.`
+  ).catch(e => logWaitErrors ? console.error(e.message) : undefined);
 };
 
 /**
- * Wait until element is clickable
+ * Returns a promise for an element to be clickable. If an element is not clickable
+ * within threshold time, promise will be rejected.
  */
-export const waitUntilClickable = async (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
-  if (!checkSelectorExist(selector)) return;
+export const waitUntilClickable = async (selector: ElementFinder, classname = '', timeout = waitTimeoutInMillis) => {
 
   await browser.wait(
-    ExpectedConditions.elementToBeClickable(selector),
+    EC.elementToBeClickable(selector),
     timeout,
-    `Failed while waiting for "${selector.locator()}" of Page Object Class '${classname}' to be clickable.`
+    classname === '' ? `"${selector.locator()}" is not clickable.`
+      : `"${selector.locator()}" of Page Object class '${classname}' is not clickable.`
   );
 };
 
-export const clickElement = async (selector: ElementFinder) => {
+/**
+ * Waits for an element to be clickable and trigger click event.
+ *
+ * @param selector
+ */
+export const click = async (selector: ElementFinder) => {
+
   await waitUntilClickable(selector);
   await selector.click();
 };
 
-export const waitUntilHidden = async (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
-  if (!checkSelectorExist(selector)) return;
+/**
+ * Returns a promise for an element to be hidden. If an element is visible
+ * after threshold time, promise will be rejected.
+ */
+export const waitUntilHidden = async (selector: ElementFinder, classname = '', timeout = waitTimeoutInMillis) => {
 
   await browser.wait(
-    isHidden(selector),
+    EC.invisibilityOf(selector),
     timeout,
-    `Failed while waiting for "${selector.locator()}" of Page Object Class '${classname}' to be hidden.`
+    classname === '' ? `"${selector.locator()}" is not hidden.`
+      : `"${selector.locator()}" of Page Object class '${classname}' is not hidden.`
   );
 };
 
@@ -79,7 +100,7 @@ export const waitForCount = async (elementArrayFinder: ElementArrayFinder, expec
 export const waitUntilCount = async (
   elementArrayFinder: ElementArrayFinder,
   expectedCount: number,
-  timeout = waitUntilDisplayedTimeout
+  timeout = waitTimeoutInMillis
 ) => {
   await browser.wait(
     await waitForCount(elementArrayFinder, expectedCount),
@@ -88,37 +109,7 @@ export const waitUntilCount = async (
   );
 };
 
-<%_ if (authenticationType !== 'oauth2') { _%>
-    <%_ if (databaseType !== 'cassandra') { _%>
 
-export const getModifiedDateSortButton = (): ElementFinder => element(by.id('modified-date-sort'));
-    <%_ } _%>
-export const getUserDeactivatedButtonByLogin = (login: string): ElementFinder =>
-  element(by.css('table > tbody'))
-    .element(by.id(login))
-    .element(by.css('.btn-danger.deactivated'));
-
-export const getUserDeleteButtonByLogin = (login: string): ElementFinder =>
-  element(by.css('table > tbody'))
-    .element(by.id(login))
-    .element(by.css('.btn-danger.delete'));
-
-export const getUserDetailsButtonByLogin = (login: string): ElementFinder =>
-  element(by.css('table > tbody'))
-    .element(by.id(login))
-    .element(by.css('.btn-info.details'));
-
-export const getUserEditButtonByLogin = (login: string): ElementFinder =>
-  element(by.css('table > tbody'))
-    .element(by.id(login))
-    .element(by.css('.btn-primary.edit'));
-
-export const getUserEmailByLogin = (login: string): ElementFinder =>
-  element(by.css('table > tbody'))
-    .element(by.id(login))
-    .element(by.css('.jhi-user-email'));
-
-<%_ } _%>
 export const getSuccessToast = (): ElementFinder =>
   element(by.css('div[role=alert].alert.alert-success'));
 

@@ -1,9 +1,10 @@
 /* tslint:disable no-unused-expression */
-import { element, by, browser } from 'protractor';
+import { browser } from 'protractor';
 
 import NavBarPage from '../../page-objects/navbar-page';
 import SignInPage from '../../page-objects/signin-page';
-import { waitUntilDisplayed } from '../../util/utils';
+
+import {waitUntilDisplayed, waitUntilHidden} from '../../util/utils';
 
 const expect = chai.expect;
 
@@ -16,75 +17,64 @@ describe('Administration', () => {
     navBarPage = new NavBarPage();
     signInPage = await navBarPage.getSignInPage();
 <%_ if (authenticationType !== 'oauth2') { _%>
-    await signInPage.waitUntilDisplayed();
     await signInPage.username.sendKeys('admin');
     await signInPage.password.sendKeys('admin');
     await signInPage.loginButton.click();
-    await signInPage.waitUntilHidden();
-
+    await waitUntilHidden(signInPage.loginForm);
 <%_ } else if (authenticationType === 'oauth2') {_%>
     await signInPage.loginWithOAuth('admin', 'admin');
 <%_ } _%>
     await waitUntilDisplayed(navBarPage.adminMenu);
   });
 
+  after(async () => {
+    await navBarPage.autoSignOut();
+  });
+
 <%_ if (authenticationType !== 'oauth2') { _%>
   it('should load user management', async () => {
-    await navBarPage.clickOnAdminMenuItem('user-management');
-    const heading = element(by.id('user-management-page-heading'));
-    await waitUntilDisplayed(heading);
-    // Title should be equal to 'Users'
-    expect(await heading.isPresent()).to.be.true;
+    const userManagementPage = await navBarPage.getUserManagementPage();
+    expect(await userManagementPage.title.isDisplayed()).to.be.true;
   });
 <%_ } _%>
 
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
   it('should load gateway', async () => {
-    await navBarPage.clickOnAdminMenuItem('gateway');
-    const heading = element(by.id('gateway-page-heading'));
-    await waitUntilDisplayed(heading);
-    expect(await heading.getText()).not.to.be.empty;
+    const gatewayPage = await navBarPage.getGatewayPage();
+    expect(await gatewayPage.title.isDisplayed()).to.be.true;
+    expect(await gatewayPage.title.getText()).not.to.be.empty;
   });
 <%_ } _%>
 
   it('should load metrics', async () => {
-    await navBarPage.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-metrics');
-    const heading = element(by.id('metrics-page-heading'));
-    await waitUntilDisplayed(heading);
-    expect(await heading.getText()).not.to.be.empty;
+    const metricsPage = await navBarPage.getMetricsPage();
+    expect(await metricsPage.title.isDisplayed()).to.be.true;
+    expect(await metricsPage.title.getText()).not.to.be.empty;
   });
 
   it('should load health', async () => {
-    await navBarPage.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-health');
-    const heading = element(by.id('health-page-heading'));
-    await waitUntilDisplayed(heading);
-    expect(await heading.getText()).not.to.be.empty;
+    const healthPage = await navBarPage.getHealthPage();
+    expect(await healthPage.title.isDisplayed()).to.be.true;
+    expect(await healthPage.title.getText()).not.to.be.empty;
   });
 
   it('should load configuration', async () => {
-    await navBarPage.clickOnAdminMenuItem('<%= jhiPrefixDashed %>-configuration');
-    const heading = element(by.id('configuration-page-heading'));
-    await waitUntilDisplayed(heading);
-    expect(await heading.getText()).not.to.be.empty;
+    const configurationsPage = await navBarPage.getConfigurationsPage();
+    expect(await configurationsPage.title.isDisplayed()).to.be.true;
+    expect(await configurationsPage.title.getText()).not.to.be.empty;
   });
 
 <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
   it('should load audits', async () => {
-    await navBarPage.clickOnAdminMenuItem('audits');
-    const heading = element(by.id('audits-page-heading'));
-    await waitUntilDisplayed(heading);
-    expect(await heading.getText()).not.to.be.empty;
+    const auditsPage = await navBarPage.getAuditsPage();
+    expect(await auditsPage.title.isDisplayed()).to.be.true;
+    expect(await auditsPage.title.getText()).not.to.be.empty;
   });
 
 <%_ } _%>
   it('should load logs', async () => {
-    await navBarPage.clickOnAdminMenuItem('logs');
-    const heading = element(by.id('logs-page-heading'));
-    await waitUntilDisplayed(heading);
-    expect(await heading.getText()).not.to.be.empty;
-  });
-
-  after(async () => {
-    await navBarPage.autoSignOut();
+    const logsPage = await navBarPage.getLogsPage();
+    expect(await logsPage.title.isDisplayed()).to.be.true;
+    expect(await logsPage.title.getText()).not.to.be.empty;
   });
 });

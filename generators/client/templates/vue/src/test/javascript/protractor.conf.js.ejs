@@ -54,5 +54,10 @@ exports.config = {
     chai.use(chaiAsPromised);
     // @ts-ignore
     global.chai = chai;
+  },
+
+  params: {
+    waitTimeoutInMillis: 30000,
+    logWaitErrors: true
   }
 };
