@@ -760,42 +760,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Instantiates the blueprint generators, if any.
-     * @param {string} subGen - sub generator
-     * @param {any} extraOptions - extra options to pass to blueprint generator
-     * @return {true} useBlueprints - true if one or more blueprints generators have been constructed; false otherwise
-     */
-    instantiateBlueprints(subGen, extraOptions) {
-        let useBlueprints = false;
-
-        const blueprints = jhipsterUtils.parseBluePrints(
-            this.options.blueprints ||
-                this.configOptions.blueprints ||
-                this.config.get('blueprints') ||
-                this.options.blueprint ||
-                this.configOptions.blueprint ||
-                this.config.get('blueprint')
-        );
-        if (blueprints && blueprints.length > 0) {
-            blueprints.forEach(blueprint => {
-                let bpOptions = {
-                    ...this.options,
-                    configOptions: this.configOptions
-                };
-                if (extraOptions) {
-                    bpOptions = { ...bpOptions, ...extraOptions };
-                }
-                const useBP = this.composeBlueprint(blueprint.name, subGen, bpOptions);
-                // use global variable since getters dont have access to instance property
-                if (!useBlueprints && useBP) {
-                    useBlueprints = true;
-                }
-            });
-        }
-        return useBlueprints;
-    }
-
-    /**
      * Compose external blueprint module
      * @param {string} blueprint - name of the blueprint
      * @param {string} subGen - sub generator

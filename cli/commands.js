@@ -41,7 +41,7 @@ function loadBlueprintCommands() {
                 /* eslint-disable global-require */
                 try {
                     const blueprintCommands = require(`${blueprint}/cli/commands`);
-                    result = { ...customCommands, ...blueprintCommands };
+                    result = { ...result, ...blueprintCommands };
                 } catch (e) {
                     const msg = `No custom commands found within blueprint: ${blueprint}`;
                     /* eslint-disable no-console */

@@ -496,7 +496,7 @@ function loadBlueprintsFromConfiguration(generator) {
     const blueprints = generator.config.get('blueprints') || [];
 
     const oldBlueprintName = generator.config.get('blueprint');
-    if (oldBlueprintName) {
+    if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
         const version = generator.config.get('blueprintVersion') || 'latest';
         blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
     }

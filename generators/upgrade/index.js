@@ -51,7 +51,7 @@ module.exports = class extends BaseGenerator {
         });
         // This adds support for a `--target-blueprint-versions` flag
         this.option('target-blueprint-versions', {
-            desc: 'Upgrade to specific blueprint versions instead of the latest',
+            desc: 'Upgrade to specific blueprint versions instead of the latest, e.g. --target-blueprint-versions foo@0.0.1,bar@1.0.2',
             type: String
         });
 
@@ -260,7 +260,7 @@ module.exports = class extends BaseGenerator {
                             });
                         })
                 ).then(() => {
-                    this.success('Done checking for new blueprint versions');
+                    this.success('Done checking for new version of blueprints');
                     done();
                 });
             },

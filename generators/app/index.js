@@ -158,7 +158,7 @@ module.exports = class extends BaseGenerator {
 
         // NOTE: Deprecated!!! Use --blueprints instead
         this.option('blueprint', {
-            desc: 'Specify one or more generator blueprints to use for the sub generators',
+            desc: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
             type: String
         });
         // This adds support for a `--blueprints` flag which can be used to specify one or more blueprints to use for generation
