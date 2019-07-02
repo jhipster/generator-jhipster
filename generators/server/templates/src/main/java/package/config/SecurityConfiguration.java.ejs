@@ -82,6 +82,8 @@ import org.springframework.security.web.csrf.CsrfFilter;
     <%_ if (authenticationType === 'oauth2' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
 import <%=packageName%>.security.oauth2.JwtAuthorityExtractor;
     <%_ } _%>
     <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
