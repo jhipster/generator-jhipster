@@ -42,7 +42,7 @@ export default class NavBarPage {
     await click(this.selector.$(`.dropdown-item[href="/account/${item}"]`));
   }
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
   async getPasswordPage() {
     await this.clickOnAccountMenuItem('password');
 

@@ -3,7 +3,7 @@ import {browser<%_ if (authenticationType === 'oauth2') { _%>, element, by<%_ } 
 
 import SignInPage from '../../page-objects/signin-page';
 import NavBarPage from '../../page-objects/navbar-page';
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
 import RegisterPage from '../../page-objects/register-page';
 import PasswordPage from '../../page-objects/password-page';
 import SettingsPage from '../../page-objects/settings-page';
@@ -21,7 +21,7 @@ describe('Account', () => {
 
   let navBarPage: NavBarPage = new NavBarPage();
   let signInPage: SignInPage;
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
   let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
   let registerPage: RegisterPage;
@@ -104,7 +104,7 @@ describe('Account', () => {
     });
   });
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
   describe('User Registration Flow', () => {
 
     before(async () => {

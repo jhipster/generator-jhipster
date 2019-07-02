@@ -39,7 +39,7 @@ import <%= entityAngularName %>Service from '@/entities/<%= entityFolderName %>/
     const otherEntityClientRootFolder = relationships[idx].otherEntityClientRootFolder;
     const otherEntityModelName = relationships[idx].otherEntityModelName;
 _%>
-  <% if (otherEntityAngularName === 'User' && authenticationType !== "oauth2") { %>
+  <% if (otherEntityAngularName === 'User' && !skipUserManagement) { %>
 import UserService from '@/admin/user-management/user-management.service';
   <% } else if (otherEntityAngularName !== 'User' && !importEntitiesSeen.includes(otherEntityAngularName)) { %>
 import <%= otherEntityAngularName %>Service from '@/entities/<%= otherEntityClientRootFolder %><%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';

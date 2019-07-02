@@ -21,7 +21,7 @@ describe('Administration', () => {
     await navBarPage.autoSignOut();
   });
 
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
   it('should load user management', async () => {
     const userManagementPage = await navBarPage.getUserManagementPage();
     expect(await userManagementPage.title.isDisplayed()).to.be.true;
@@ -54,7 +54,7 @@ describe('Administration', () => {
     expect(await configurationsPage.title.getText()).not.to.be.empty;
   });
 
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
   it('should load audits', async () => {
     const auditsPage = await navBarPage.getAuditsPage();
     expect(await auditsPage.title.isDisplayed()).to.be.true;

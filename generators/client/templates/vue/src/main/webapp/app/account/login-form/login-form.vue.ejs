@@ -16,7 +16,7 @@
                         <b-form-input id="password" type="password" name="password" v-model.trim="name" v-bind:placeholder="$t('login.form[\'password.placeholder\']')" <% if (!enableTranslation) { %>placeholder="Your password" <% } %>v-model="password">
                         </b-form-input>
                     </b-form-group>
-                    <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked>
+                    <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked <% if (authenticationType === 'session' && databaseType === 'no') { %> hidden<% } %>>
                       <span v-text="$t('login.form.rememberme')">Remember me</span>
                     </b-form-checkbox>
                     <div>
@@ -24,6 +24,7 @@
                     </div>
                 </b-form>
                 <p></p>
+                <%_ if (!skipUserManagement) { _%>
                 <div>
                     <b-alert show variant="warning">
                         <b-link :to="'/reset/request'" class="alert-link" v-text="$t('login.password.forgot')">Did you forget your password?</b-link>
@@ -35,6 +36,7 @@
                       <b-link :to="'/register'" class="alert-link" v-text="$t('global.messages.info.register.link')">Register a new account</b-link>
                     </b-alert>
                 </div>
+                <%_ } _%>
             </div>
         </div>
     </div>
