@@ -155,7 +155,7 @@ describe('Account', () => {
     });
 
     it('should not be able to sign up if login already taken', async () => {
-
+      await browser.get('/');
       registerPage = await navBarPage.getRegisterPage();
       expect(await registerPage.getTitle()).to.eq(registerPageTitle);
 
@@ -231,7 +231,7 @@ describe('Account', () => {
       });
 
       it('should login with admin account', async () => {
-
+        await browser.get('/');
         signInPage = await navBarPage.getSignInPage();
         expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
@@ -258,6 +258,7 @@ describe('Account', () => {
       });
 
       it('should be able to log in with new password', async () => {
+        await browser.get('/');
         signInPage = await navBarPage.getSignInPage();
         expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
@@ -321,6 +322,7 @@ describe('Account', () => {
       });
 
       it('should login with admin account', async () => {
+        await browser.get('/');
         signInPage = await navBarPage.getSignInPage();
         expect(await signInPage.getTitle()).to.eq(loginPageTitle);
 
