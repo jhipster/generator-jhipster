@@ -60,7 +60,9 @@ describe('JHipster application generator with scoped blueprint', () => {
         });
 
         it('blueprint version is saved in .yo-rc.json', () => {
-            assert.fileContent('.yo-rc.json', /"blueprintVersion": "9.9.9"/);
+            assert.JSONFileContent('.yo-rc.json', {
+                'generator-jhipster': { blueprints: [{ name: '@jhipster/generator-jhipster-scoped-blueprint', version: '9.9.9' }] }
+            });
         });
         it('blueprint module and version are in package.json', () => {
             assert.fileContent('package.json', /"@jhipster\/generator-jhipster-scoped-blueprint": "9.9.9"/);
