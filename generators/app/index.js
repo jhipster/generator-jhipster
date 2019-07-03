@@ -233,7 +233,7 @@ module.exports = class extends BaseGenerator {
 
             validateBlueprint() {
                 if (this.blueprints && !this.skipChecks) {
-                    this.blueprints.forEach(e => this.checkBlueprint(e));
+                    this.blueprints.forEach(e => this.checkBlueprint(e.name));
                 }
             },
 
