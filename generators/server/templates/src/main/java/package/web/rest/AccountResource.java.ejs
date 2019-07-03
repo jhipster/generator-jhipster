@@ -150,7 +150,6 @@ import <%=packageName%>.repository.PersistentTokenRepository;
 <%_ if (!reactive) { _%>
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 <%_ } _%>
-import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
@@ -200,8 +199,6 @@ public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
-    private final UserRepository userRepository;
-
     private final UserService userService;
 
     private final MailService mailService;
@@ -210,9 +207,7 @@ public class AccountResource {
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService<% if (authenticationType === 'session' && !reactive) { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
-
-        this.userRepository = userRepository;
+    public AccountResource(UserService userService, MailService mailService<% if (authenticationType === 'session' && !reactive) { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
         this.userService = userService;
         this.mailService = mailService;
         <%_ if (authenticationType === 'session' && !reactive) { _%>
@@ -310,11 +305,11 @@ public class AccountResource {
     <%_ if (!reactive) { _%>
     public void saveAccount(@Valid @RequestBody <%= asDto('User') %> userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
-        Optional<<%= asEntity('User') %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<<%= asEntity('User') %>> existingUser = userService.getUserByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
-        Optional<<%= asEntity('User') %>> user = userRepository.findOneByLogin(userLogin);
+        Optional<<%= asEntity('User') %>> user = userService.getUserByLogin(userLogin);
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
@@ -324,14 +319,14 @@ public class AccountResource {
     public Mono<Void> saveAccount(@Valid @RequestBody <%= asDto('User') %> userDTO) {
         return SecurityUtils.getCurrentUserLogin()
             .switchIfEmpty(Mono.error(new AccountResourceException("Current user login not found")))
-            .flatMap(userLogin -> userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
+            .flatMap(userLogin -> userService.getUserByEmailIgnoreCase(userDTO.getEmail())
                 .filter(existingUser -> !existingUser.getLogin().equalsIgnoreCase(userLogin))
                 .hasElement()
                 .flatMap(emailExists -> {
                     if (emailExists) {
                         throw new EmailAlreadyUsedException();
                     }
-                    return userRepository.findOneByLogin(userLogin);
+                    return userService.getUserByLogin(userLogin);
                 }))
                 .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")))
                 .flatMap(user -> userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
@@ -362,7 +357,7 @@ public class AccountResource {
     @GetMapping("/account/sessions")
     public List<PersistentToken> getCurrentSessions() {
         return persistentTokenRepository.findByUser(
-            userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()
+            userService.getUserByLogin(SecurityUtils.getCurrentUserLogin()
                 .orElseThrow(() -> new AccountResourceException("Current user login not found")))
                     .orElseThrow(() -> new AccountResourceException("User could not be found"))
         );
@@ -388,7 +383,7 @@ public class AccountResource {
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
         SecurityUtils.getCurrentUserLogin()
-            .flatMap(userRepository::findOneByLogin)
+            .flatMap(userService::getUserByLogin)
             .ifPresent(u ->
                 persistentTokenRepository.findByUser(u).stream()
                     .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
