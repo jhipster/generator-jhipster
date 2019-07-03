@@ -22,6 +22,14 @@ import <%=packageName%>.domain.Authority;
 <%_ if (databaseType === 'sql') { _%>
 
 import org.springframework.data.jpa.repository.JpaRepository;
+    <%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.QueryHints;
+
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
+import java.util.List;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
@@ -43,4 +51,11 @@ import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive
  */
 <%_ } _%>
 public interface AuthorityRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><Authority, String> {
+    <%_ if (databaseType === 'sql' && authenticationType === 'oauth2') { _%>
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="5000")})
+    @Override
+    List<Authority> findAll();
+    <%_ } _%>
 }

@@ -729,23 +729,19 @@ public class UserService {
     <%_ if (authenticationType === 'oauth2') { _%>
 
     private <%= asEntity('User') %> syncUserWithIdP(Map<String, Object> details, <%= asEntity('User') %> user) {
-        // save authorities in to sync user roles/groups between IdP and JHipster's local database
+        // save authorities in order to sync user roles/groups between IdP and JHipster's local database
         Collection<String> dbAuthorities = getAuthorities();
-        <%_ if (databaseType !== 'couchbase') { _%>
-        Collection<String> userAuthorities =
-            user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
-        <%_ } else { _%>
-        Collection<String> userAuthorities = user.getAuthorities();
-        <%_ } _%>
-        for (String authority : userAuthorities) {
-            if (!dbAuthorities.contains(authority)) {
-                log.debug("Saving authority '{}' in local database", authority);
-                Authority authorityToSave = new Authority();
-                authorityToSave.setName(authority);
-                authorityRepository.save(authorityToSave);
-            }
+        Collection<Authority> missingAuthorities =
+            user.getAuthorities()
+                .stream()
+                .filter(auth -> !dbAuthorities.contains(auth<% if (databaseType !== 'couchbase') { %>.getName()<% } %>))
+                .collect(Collectors.toList());
+        if (!missingAuthorities.isEmpty()) {
+            log.debug("Saving authorities '{}' in local database", missingAuthorities);
+            authorityRepository.saveAll(missingAuthorities);
         }
-        // save account in to sync users between IdP and JHipster's local database
+
+        // save account in order to sync users between IdP and JHipster's local database
         Optional<<%= asEntity('User') %>> existingUser = userRepository.findOneByLogin(user.getLogin());
         if (existingUser.isPresent()) {
             // if IdP sends last updated information, use it to determine if an update should happen

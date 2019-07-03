@@ -42,6 +42,9 @@ import org.springframework.data.domain.Pageable;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+    <%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.data.jpa.repository.Lock;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
@@ -62,6 +65,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
 
+<%_ if (databaseType === 'sql' && authenticationType === 'oauth2') { _%>
+import javax.persistence.LockModeType;
+<%_ } _%>
+<%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -142,6 +149,9 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ } _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email);
 
+    <%_ if (databaseType === 'sql' && authenticationType === 'oauth2') { _%>
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
