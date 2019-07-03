@@ -29,7 +29,7 @@ import { DATE_TIME_LONG_FORMAT, INSTANT_FORMAT, ZONED_DATE_TIME_FORMAT } from '@
       hasManyToMany = true;
     }
 _%>
-  <% if (otherEntityAngularName === 'User' && !skipUserManagement) { %>
+  <% if (otherEntityAngularName === 'User' && authenticationType !== 'oauth2') { %>
 import UserService from '@/admin/user-management/user-management.service';
   <% } else if (otherEntityAngularName !== 'User' && !importEntitiesSeen.includes(otherEntityAngularName)) { %>
 import <%= otherEntityAngularName %>Service from '../<%= otherEntityFolderName %>/<%= otherEntityFileName %>.service';
