@@ -952,7 +952,7 @@ module.exports = class extends Generator {
                 const relationshipFieldNameIdCheck =
                     dto === 'no'
                         ? `!this.editForm.get('${relationshipFieldName}').value || !this.editForm.get('${relationshipFieldName}').value.id`
-                        : `!!this.editForm.get('${relationshipFieldName}Id').value`;
+                        : `!this.editForm.get('${relationshipFieldName}Id').value`;
 
                 filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
                 if (this.jpaMetamodelFiltering) {
