@@ -30,7 +30,7 @@
         return ResponseEntity.ok().body(entityList);
     <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>QueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.path("/api/<%= entityApiUrl %>").queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     <%_ } _%>
     }
@@ -65,10 +65,10 @@
         } else {
             page = <%= entityInstance %>Service.findAll(pageable);
         }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.path("/api/<%= entityApiUrl %>").queryParams(queryParams), page);
         <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.path("/api/<%= entityApiUrl %>").queryParams(queryParams), page);
         <%_ } _%>
     <%_ } else { _%>
         <%_ if (fieldsContainOwnerManyToMany) { _%>
@@ -78,10 +78,10 @@
         } else {
             page = <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
         }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.path("/api/<%= entityApiUrl %>").queryParams(queryParams), page);
         <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.path("/api/<%= entityApiUrl %>").queryParams(queryParams), page);
         <%_ } _%>
     <%_ } _%>
         return ResponseEntity.ok().headers(headers).body(page.getContent());

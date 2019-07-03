@@ -30,7 +30,7 @@
         log.debug("REST request to search for a page of <%= entityClassPlural %> for query {}", query);<% if (viaService) { %>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.search(query, pageable);<% } else { %>
         Page<<%= asEntity(entityClass) %>> page = <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);<% } %>
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.path("/api/<%= entityApiUrl %>").queryParams(queryParams), page);
         return ResponseEntity.ok().headers(headers).body(<% if (!viaService && dto === 'mapstruct') { %><%= entityListToDtoListReference %>(<% } %>page.getContent()<% if (!viaService && dto === 'mapstruct') { %>)<% } %>);
     <% } -%>
 }

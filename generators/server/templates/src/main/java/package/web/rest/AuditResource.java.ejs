@@ -58,7 +58,7 @@ public class AuditResource {
     @GetMapping
     public ResponseEntity<List<AuditEvent>> getAll(@RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, Pageable pageable) {
         Page<AuditEvent> page = auditEventService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.path("/management/audits").queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
@@ -81,7 +81,7 @@ public class AuditResource {
             fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant(),
             toDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1).toInstant(),
             pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.path("/management/audits").queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 

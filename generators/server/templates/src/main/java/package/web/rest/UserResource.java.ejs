@@ -280,13 +280,13 @@ public class UserResource {
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, Pageable pageable) {
         final Page<<%= asDto('User') %>> page = userService.getAllManagedUsers(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.path("/api/users").queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         <%_ } else { _%>
     public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, Pageable pageable) {
         return userService.countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(page -> PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page))
+            .map(page -> PaginationUtil.generatePaginationHttpHeaders(uriBuilder.path("/api/users").queryParams(queryParams), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
         <%_ } _%>
     }
