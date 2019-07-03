@@ -479,6 +479,10 @@ const files = {
             ]
         },
         {
+            condition: generator => generator.protractorTests,
+            templates: ['tsconfig.e2e.json']
+        },
+        {
             condition: generator => generator.authenticationType === 'oauth2',
             path: TEST_SRC_DIR,
             templates: ['spec/app/layouts/main/main.component.spec.ts']
