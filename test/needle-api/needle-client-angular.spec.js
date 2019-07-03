@@ -169,7 +169,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
             '            {\n' +
                 "                path: 'entityUrl',\n" +
-                "                loadChildren: './entityFolderName/entityFileName.module#MicroServiceNameentityNameModule'\n" +
+                "                loadChildren: () => import('./entityFolderName/entityFileName.module').then(m => m.MicroServiceNameentityNameModule)\n" +
                 '            }'
         );
     });
