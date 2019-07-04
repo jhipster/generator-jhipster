@@ -1265,29 +1265,15 @@ module.exports = class extends PrivateBase {
 
     /**
      * executes a Git command using shellJS
-     * gitExec(args [, options ], callback)
+     * gitExec(args [, options , callback])
      *
      * @param {string|array} args - can be an array of arguments or a string command
      * @param {object} options[optional] - takes any of child process options
-     * @param {function} callback - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+     * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+     * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
      */
     gitExec(args, options, callback) {
-        callback = arguments[arguments.length - 1]; // eslint-disable-line prefer-rest-params
-        if (arguments.length < 3) {
-            options = {};
-        }
-        if (options.async === undefined) options.async = true;
-        if (options.silent === undefined) options.silent = true;
-        if (options.trace === undefined) options.trace = true;
-
-        if (!Array.isArray(args)) {
-            args = [args];
-        }
-        const command = `git ${args.join(' ')}`;
-        if (options.trace) {
-            this.info(command);
-        }
-        shelljs.exec(command, options, callback);
+        return jhipsterUtils.gitExec(args, options, callback);
     }
 
     /**

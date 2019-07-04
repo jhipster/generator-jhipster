@@ -16,9 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable no-console */
 
 const path = require('path');
 const shelljs = require('shelljs');
+const chalk = require('chalk');
 const ejs = require('ejs');
 const _ = require('lodash');
 const jhiCore = require('jhipster-core');
@@ -49,7 +51,9 @@ module.exports = {
     checkStringInFile,
     loadBlueprintsFromConfiguration,
     parseBluePrints,
-    normalizeBlueprintName
+    normalizeBlueprintName,
+    gitExec,
+    isGitInstalled
 };
 
 /**
@@ -415,10 +419,10 @@ function decodeBase64(string, encoding = 'utf-8') {
 /**
  * Get all the generator configuration from the .yo-rc.json file
  * @param {Generator} generator the generator instance to use
- * @param {boolean} force force getting direct from file
+ * @param {boolean} force force getting direct from file. Default is true.
  * @param {String} base path where the .yo-rc.json file is located. Default is cwd.
  */
-function getAllJhipsterConfig(generator, force, basePath = '') {
+function getAllJhipsterConfig(generator, force = true, basePath = '') {
     let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
     const filePath = path.join(basePath || '', '.yo-rc.json');
     if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist(filePath)) {
@@ -491,13 +495,13 @@ function checkStringInFile(path, search, generator) {
  * @param config - the generator's configuration object.
  * @returns {Array} an array that contains the info for each blueprint
  */
-function loadBlueprintsFromConfiguration(generator) {
+function loadBlueprintsFromConfiguration(config) {
     // load blueprints from config file
-    const blueprints = generator.config.get('blueprints') || [];
+    const blueprints = config.blueprints || [];
 
-    const oldBlueprintName = generator.config.get('blueprint');
+    const oldBlueprintName = config.blueprint;
     if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
-        const version = generator.config.get('blueprintVersion') || 'latest';
+        const version = config.blueprintVersion || 'latest';
         blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
     }
     return blueprints;
@@ -552,4 +556,47 @@ function normalizeBlueprintName(blueprint) {
         return `generator-jhipster-${blueprint}`;
     }
     return blueprint;
+}
+
+/**
+ * executes a Git command using shellJS
+ * gitExec(args [, options, callback])
+ *
+ * @param {string|array} args - can be an array of arguments or a string command
+ * @param {object} options[optional] - takes any of child process options
+ * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+ * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
+ */
+function gitExec(args, options = {}, callback) {
+    if (options.async === undefined) options.async = callback !== undefined;
+    if (options.silent === undefined) options.silent = true;
+    if (options.trace === undefined) options.trace = true;
+
+    if (!Array.isArray(args)) {
+        args = [args];
+    }
+    const command = `git ${args.join(' ')}`;
+    if (options.trace) {
+        console.info(command);
+    }
+    if (callback) {
+        return shelljs.exec(command, options, callback);
+    }
+    return shelljs.exec(command, options);
+}
+
+/**
+ * Checks if git is installed.
+ *
+ * @return {boolean} true if installed; false otherwise..
+ */
+function isGitInstalled() {
+    const code = gitExec('--version', { trace: false }).code;
+    if (code !== 0) {
+        console.warn(
+            `${chalk.yellow.bold('WARNING!')} git is not found on your computer.\n`,
+            ` Install git: ${chalk.yellow('https://git-scm.com/')}`
+        );
+    }
+    return code === 0;
 }

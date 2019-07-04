@@ -4,8 +4,9 @@ const helpers = require('yeoman-test');
 const shelljs = require('shelljs');
 const fse = require('fs-extra');
 const expect = require('chai').expect;
-const expectedFiles = require('./utils/expected-files');
-const packageJson = require('../package.json');
+const expectedFiles = require('../utils/expected-files');
+const packageJson = require('../../package.json');
+const upgrade = require('../../cli/upgrade');
 
 describe('JHipster upgrade generator', function() {
     this.timeout(200000);
@@ -14,7 +15,7 @@ describe('JHipster upgrade generator', function() {
         before(done => {
             let workingDirectory;
             helpers
-                .run(path.join(__dirname, '../generators/app'))
+                .run(path.join(__dirname, '../../generators/app'))
                 .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true })
                 .inTmpDir(dir => {
                     /* eslint-disable-next-line no-console */
@@ -44,20 +45,19 @@ describe('JHipster upgrade generator', function() {
                     serverSideOptions: []
                 })
                 .on('end', () => {
-                    helpers
-                        .run(path.join(__dirname, '../generators/upgrade'))
-                        .withOptions({
-                            'from-cli': true,
+                    /* eslint-disable-next-line no-console */
+                    console.log('Upgrading the JHipster application');
+                    process.chdir(workingDirectory);
+                    upgrade(
+                        {},
+                        {
                             force: true,
                             silent: false,
                             'target-version': packageJson.version
-                        })
-                        .inTmpDir(() => {
-                            /* eslint-disable-next-line no-console */
-                            console.log('Upgrading the JHipster application');
-                            process.chdir(workingDirectory);
-                        })
-                        .on('end', done);
+                        },
+                        {}
+                    );
+                    done();
                 });
         });
 
@@ -90,7 +90,7 @@ describe('JHipster upgrade generator', function() {
         before(done => {
             let workingDirectory;
             helpers
-                .run(path.join(__dirname, '../generators/app'))
+                .run(path.join(__dirname, '../../generators/app'))
                 .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true, blueprint: blueprintName })
                 .inTmpDir(dir => {
                     /* eslint-disable-next-line no-console */
@@ -128,22 +128,21 @@ describe('JHipster upgrade generator', function() {
                     serverSideOptions: []
                 })
                 .on('end', () => {
-                    helpers
-                        .run(path.join(__dirname, '../generators/upgrade'))
-                        .withOptions({
-                            'from-cli': true,
+                    /* eslint-disable-next-line no-console */
+                    console.log('Upgrading the JHipster application');
+                    process.chdir(workingDirectory);
+                    upgrade(
+                        {},
+                        {
                             force: true,
                             silent: false,
                             'target-version': packageJson.version,
                             'target-blueprint-versions': `${blueprintName}@${blueprintVersion}`,
                             skipInstall: true
-                        })
-                        .inTmpDir(() => {
-                            /* eslint-disable-next-line no-console */
-                            console.log('Upgrading the JHipster application');
-                            process.chdir(workingDirectory);
-                        })
-                        .on('end', done);
+                        },
+                        {}
+                    );
+                    done();
                 });
         });
 

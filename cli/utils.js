@@ -41,6 +41,10 @@ const log = function(msg) {
     console.log(msg);
 };
 
+const warn = function(msg) {
+    console.warn(`${chalk.yellow.bold('WARNING!')} ${msg}`);
+};
+
 const error = function(msg, trace) {
     console.error(`${chalk.red(msg)}`);
     if (trace) {
@@ -65,7 +69,8 @@ const logger = {
     debug,
     info,
     log,
-    error
+    error,
+    warn
 };
 
 const toString = item => {

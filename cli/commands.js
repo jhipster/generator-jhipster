@@ -136,7 +136,30 @@ Example:
         desc: 'Create a new Spring controller'
     },
     upgrade: {
-        desc: 'Upgrade the JHipster version, and upgrade the generated application'
+        cliOnly: true,
+        desc: 'Updates JHipster version, and upgrades generated application.',
+        help: `
+Example:
+
+    jhipster upgrade
+
+    Assuming you have Git installed, and you run this command in the Git branch you are using for development, JHipster Upgrade will :
+    - checkout a "jhipster_upgrade" branch
+    - update generator-jhipster via npm
+    - regenerate your whole application
+    - switch back to your development branch, and start the merge
+
+
+    --target-version             # Upgrade to a specific version instead of the latest
+    --target-blueprint-versions  # Upgrade to specific blueprint versions instead of the latest
+    --skip-install               # Skips installing dependencies during the upgrade process       Default: false
+    --silent                     # Hides output of the generation process                         Default: false
+
+Example:
+    jhipster upgrade
+    jhipster upgrade --target-version 6.1.1
+    jhipster upgrade --target-version 6.1.1 --target-blueprint-versions foo@0.0.1,bar@1.0.2
+    `
     }
 };
 

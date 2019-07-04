@@ -594,17 +594,12 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Execute callback if git is installed
+     * Checks if git is installed.
      *
-     * @param {function} callback - function to be called if git is installed
+     * @return {boolean} true if installed; false otherwise..
      */
-    isGitInstalled(callback) {
-        this.gitExec('--version', { trace: false }, code => {
-            if (code !== 0) {
-                this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
-            }
-            if (callback) callback(code);
-        });
+    isGitInstalled() {
+        return jhipsterUtils.isGitInstalled();
     }
 
     /**
@@ -901,11 +896,7 @@ module.exports = class extends Generator {
      */
     checkGit() {
         if (this.skipChecks || this.skipClient) return;
-        const done = this.async();
-        this.isGitInstalled(code => {
-            this.gitInstalled = code === 0;
-            done();
-        });
+        this.gitInstalled = this.isGitInstalled();
     }
 
     /**
