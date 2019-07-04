@@ -73,8 +73,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+    <%_ if (reactive) { _%>
+import org.springframework.http.server.reactive.ServerHttpRequest;
+    <%_ } _%>
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.util.UriComponentsBuilder;
+    <%_ if (!reactive) { _%>
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (reactiveRepositories) { _%>
 import org.springframework.http.MediaType;
