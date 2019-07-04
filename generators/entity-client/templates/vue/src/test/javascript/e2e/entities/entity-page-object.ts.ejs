@@ -87,6 +87,7 @@ export default class <%= entityClass %>ComponentsPage {
 }
 
 export class <%= entityClass %>DeleteDialog {
+  dialog: ElementFinder = element(by.id('removeEntity'));
   private dialogTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.delete.question'));
   private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
 

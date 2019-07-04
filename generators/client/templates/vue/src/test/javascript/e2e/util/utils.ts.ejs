@@ -40,6 +40,22 @@ export const waitUntilDisplayed = async (selector: ElementFinder, classname = ''
 };
 
 /**
+ * Returns a boolean if an element is visible on screen. It's a wrapper on
+ * isDisplayed() to gracefully handle the scenario when an element is not
+ * present in the DOM.
+*/
+export const isVisible = async (selector: ElementFinder) => {
+  try {
+    return await selector.isDisplayed();
+  }  catch(e) {
+    if (logWaitErrors) {
+      console.warn(e.message)
+    }
+  }
+  return false;
+};
+
+/**
  * Returns a promise for an element to be visible. If an element is not visible
  * within threshold time, it will catch promise rejection and continue test
  * execution
