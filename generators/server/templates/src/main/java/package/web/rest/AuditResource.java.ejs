@@ -35,6 +35,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 <%_ if (!reactive) { _%>
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+<%_ } else { _%>
+import org.springframework.web.util.UriComponentsBuilder;
 <%_ } _%>
 
 import java.time.LocalDate;

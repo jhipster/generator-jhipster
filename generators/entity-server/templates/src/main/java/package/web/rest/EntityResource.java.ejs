@@ -79,6 +79,8 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.MultiValueMap;
     <%_ if (!reactive) { _%>
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+    <%_ } else { _%>
+import org.springframework.web.util.UriComponentsBuilder;
     <%_ } _%>
 <%_ } _%>
 <%_ if (reactiveRepositories) { _%>
