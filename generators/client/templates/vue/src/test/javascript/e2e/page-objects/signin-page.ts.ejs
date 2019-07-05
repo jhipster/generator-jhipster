@@ -22,13 +22,13 @@ export default class SignInPage extends AlertPage {
   }
 
 <%_ if (authenticationType !== 'oauth2') { _%>
-  async autoSignInUsing(username: string, password: string) {
+  async login(username: string, password: string) {
     await this.username.sendKeys(username);
     await this.password.sendKeys(password);
     await this.loginButton.click();
   }
 <%_ } else { _%>
-  async loginWithOAuth(username: string, password: string) {
+  async login(username: string, password: string) {
     if (await this.username.isPresent()) {
       await this.username.sendKeys(username);
       await this.password.sendKeys(password);

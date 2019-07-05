@@ -2,7 +2,6 @@
 import { browser } from 'protractor';
 
 import NavBarPage from '../../page-objects/navbar-page';
-import SignInPage from '../../page-objects/signin-page';
 
 import {waitUntilDisplayed, waitUntilHidden} from '../../util/utils';
 
@@ -10,20 +9,11 @@ const expect = chai.expect;
 
 describe('Administration', () => {
   let navBarPage: NavBarPage;
-  let signInPage: SignInPage;
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
-    signInPage = await navBarPage.getSignInPage();
-<%_ if (authenticationType !== 'oauth2') { _%>
-    await signInPage.username.sendKeys('admin');
-    await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
-    await waitUntilHidden(signInPage.loginForm);
-<%_ } else if (authenticationType === 'oauth2') {_%>
-    await signInPage.loginWithOAuth('admin', 'admin');
-<%_ } _%>
+    await navBarPage.login('admin', 'admin');
     await waitUntilDisplayed(navBarPage.adminMenu);
   });
 

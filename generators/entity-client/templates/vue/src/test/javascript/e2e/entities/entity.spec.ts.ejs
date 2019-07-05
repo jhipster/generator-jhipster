@@ -20,12 +20,11 @@
 import { browser<% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>, protractor<% } %>, element, by } from 'protractor';
 
 import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
-import SignInPage from './../../<%= entityParentPathAddition %>page-objects/signin-page';
 import <%= entityClass %>ComponentsPage from './<%= entityFileName %>.page-object';
 import { <%= entityClass %>DeleteDialog } from './<%= entityFileName %>.page-object';
 import <%= entityClass %>UpdatePage from './<%= entityFileName%>-update.page-object';
 import <%= entityClass %>DetailsPage from './<%= entityFileName%>-details.page-object';
-import { waitUntilDisplayed, waitUntilHidden, getDangerToast, getInfoToast, getSuccessToast, waitUntilDisplayedAndContinue } from '../../<%= entityParentPathAddition %>util/utils';
+import { isVisible, waitUntilDisplayed, waitUntilHidden, getDangerToast, getInfoToast, getSuccessToast, waitUntilDisplayedAndContinue } from '../../<%= entityParentPathAddition %>util/utils';
 <%_ if (fieldsContainBlobOrImage) { _%>
 import path from 'path';
 <%_ } _%>
@@ -48,7 +47,6 @@ const expect = chai.expect;
 
 describe('<%= entityClass %> e2e test', () => {
   let navBarPage: NavBarPage;
-  let signInPage: SignInPage;
   let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
   let <%= entityInstance %>DetailsPage: <%= entityClass %>DetailsPage;
   let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
@@ -62,17 +60,7 @@ describe('<%= entityClass %> e2e test', () => {
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
-    signInPage = await navBarPage.getSignInPage();
-    <%_ if (authenticationType !== 'oauth2') { _%>
-
-    await signInPage.username.sendKeys('admin');
-    await signInPage.password.sendKeys('admin');
-    await signInPage.loginButton.click();
-    await waitUntilHidden(signInPage.loginForm);
-    <%_ } else if (authenticationType === 'oauth2') { _%>
-    await signInPage.loginWithOAuth('admin', 'admin');
-    <%_ } _%>
-    await waitUntilDisplayed(navBarPage.entityMenu);
+    await navBarPage.login('admin', 'admin');
   });
 
   it('should load <%= entityClassPlural %>', async () => {
@@ -296,22 +284,23 @@ describe('<%= entityClass %> e2e test', () => {
     const nb<%= entityClass %>BeforeDelete = await <%= entityInstance %>ComponentsPage.count<%= entityClass %>();
     await <%= entityInstance %>ComponentsPage.clickOnLastDeleteButton();
 
-    const deleteModal = element(by.className('modal'));
-    await waitUntilDisplayed(deleteModal);
     <%= entityInstance %>DeleteDialog = new <%= entityClass %>DeleteDialog();
+    await waitUntilDisplayed(<%= entityInstance %>DeleteDialog.dialog);
+
     expect(await <%= entityInstance %>DeleteDialog.getDialogTitle().getAttribute('id')).to.match(/<%= i18nKeyPrefix %>.delete.question/);
 
     await <%= entityInstance %>DeleteDialog.clickOnConfirmButton();
-    await waitUntilHidden(deleteModal);
+    await waitUntilHidden(<%= entityInstance %>DeleteDialog.dialog);
 
     // Delete modal should disappear
-    expect(await deleteModal.isDisplayed()).to.be.false;
+    expect(await isVisible(<%= entityInstance %>DeleteDialog.dialog)).to.be.false;
 
     const toast = getDangerToast();
 
     // Danger toast should appear
-    expect(await toast.isPresent()).to.be.true;
+    expect(await toast.isDisplayed()).to.be.true;
 
+    await <%= entityInstance %>ComponentsPage.waitUntil<%= entityClass %>CountIs(nb<%= entityClass %>BeforeDelete - 1);
     expect(await <%= entityInstance %>ComponentsPage.count<%= entityClass %>()).to.eq(nb<%= entityClass %>BeforeDelete - 1);
 
   });<%= closeBlockComment %>

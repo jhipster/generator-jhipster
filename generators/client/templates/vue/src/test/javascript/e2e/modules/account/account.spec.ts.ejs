@@ -13,7 +13,7 @@ UserManagementDetailsPage,
 UserManagementPage
 } from '../../page-objects/administration-page';
 <%_ } _%>
-import {waitUntilDisplayed, waitUntilHidden,} from '../../util/utils';
+import {isVisible, waitUntilDisplayed, waitUntilHidden,} from '../../util/utils';
 
 const expect = chai.expect;
 
@@ -48,9 +48,9 @@ describe('Account', () => {
       signInPage = await navBarPage.getSignInPage();
 <%_ if (authenticationType !== 'oauth2') { _%>
       expect(await signInPage.getTitle()).to.eq(loginPageTitle);
-      // expect(await signInPage.dangerAlert.isDisplayed()).to.be.false;
+      expect(await isVisible(signInPage.dangerAlert)).to.be.false;
 
-      await signInPage.autoSignInUsing('admin', 'foo');
+      await signInPage.login('admin', 'foo');
 
       await waitUntilDisplayed(signInPage.dangerAlert);
       expect(await signInPage.dangerAlert.isDisplayed()).to.be.true;
@@ -58,7 +58,7 @@ describe('Account', () => {
       await signInPage.closeButton.click();
       await waitUntilHidden(signInPage.loginForm);
 <%_ } else { _%>
-      await signInPage.loginWithOAuth('admin', 'foo');
+      await signInPage.login('admin', 'foo');
       const alert = element(by.css('.alert-error'));
       if (await alert.isPresent()) {
         // Keycloak
@@ -78,7 +78,7 @@ describe('Account', () => {
   <%_ if (authenticationType !== 'oauth2') { _%>
       signInPage = await navBarPage.getSignInPage();
       expect(await signInPage.getTitle()).to.eq(loginPageTitle);
-      expect(await signInPage.dangerAlert.isPresent()).to.be.false;
+      expect(await isVisible(signInPage.dangerAlert)).to.be.false;
 
       await signInPage.username.clear();
       await signInPage.username.sendKeys('admin');
@@ -94,12 +94,12 @@ describe('Account', () => {
       await browser.get('/');
       signInPage = await navBarPage.getSignInPage();
       // Keycloak credentials by default, change them to be able to use oauth2 with Okta
-      await signInPage.loginWithOAuth('admin', 'admin');
+      await signInPage.login('admin', 'admin');
       const success = element(by.className('alert-success'));
       await waitUntilDisplayed(success);
 
       // Success alert should appear in home page
-      expect(await success.isPresent()).to.be.true;
+      expect(await isVisible(success)).to.be.true;
   <%_ } _%>
     });
   });
@@ -150,7 +150,7 @@ describe('Account', () => {
 
       await userManagementPage.activateUser('user_test');
 
-      expect(await userManagementPage.activatedButton('user_test').isPresent()).to.be.true;
+      expect(await userManagementPage.activatedButton('user_test').isDisplayed()).to.be.true;
       await navBarPage.autoSignOut();
     });
 
@@ -189,7 +189,7 @@ describe('Account', () => {
       await waitUntilDisplayed(navBarPage.entityMenu);
 
       // Login page should close when login success
-      expect(await signInPage.loginForm.isPresent()).to.be.false;
+      expect(await isVisible(signInPage.loginForm)).to.be.false;
       await navBarPage.autoSignOut();
     });
 
@@ -215,7 +215,7 @@ describe('Account', () => {
         await waitUntilHidden(signInPage.loginForm);
         await waitUntilDisplayed(navBarPage.adminMenu);
 
-        expect(await signInPage.loginForm.isPresent()).to.be.false;
+        expect(await isVisible(signInPage.loginForm)).to.be.false;
       });
 
       it('should fail to update password when using incorrect current password', async () => {
@@ -242,7 +242,7 @@ describe('Account', () => {
         await waitUntilHidden(signInPage.loginForm);
         await waitUntilDisplayed(navBarPage.adminMenu);
 
-        expect(await signInPage.loginForm.isPresent()).to.be.false;
+        expect(await isVisible(signInPage.loginForm)).to.be.false;
       });
 
       it('should be able to update password', async () => {
@@ -269,7 +269,7 @@ describe('Account', () => {
         await waitUntilHidden(signInPage.loginForm);
         await waitUntilDisplayed(navBarPage.adminMenu);
 
-        expect(await signInPage.loginForm.isPresent()).to.be.false;
+        expect(await isVisible(signInPage.loginForm)).to.be.false;
 
         // change back to default
         passwordPage = await navBarPage.getPasswordPage();
@@ -304,7 +304,7 @@ describe('Account', () => {
         await waitUntilHidden(signInPage.loginForm);
         await waitUntilDisplayed(navBarPage.entityMenu);
 
-        expect(await signInPage.loginForm.isPresent()).to.be.false;
+        expect(await isVisible(signInPage.loginForm)).to.be.false;
       });
 
       it('should be able to change user_test settings', async () => {
@@ -333,7 +333,7 @@ describe('Account', () => {
         await waitUntilHidden(signInPage.loginForm);
         await waitUntilDisplayed(navBarPage.adminMenu);
 
-        expect(await signInPage.loginForm.isPresent()).to.be.false;
+        expect(await isVisible(signInPage.loginForm)).to.be.false;
       });
 
       it('should not be able to change admin settings if email already exists', async () => {
@@ -366,7 +366,7 @@ describe('Account', () => {
         await waitUntilHidden(signInPage.loginForm);
         await waitUntilDisplayed(navBarPage.adminMenu);
 
-        expect(await signInPage.loginForm.isPresent()).to.be.false;
+        expect(await isVisible(signInPage.loginForm)).to.be.false;
       });
 
       it('should preview details from previously created fake user', async () => {
