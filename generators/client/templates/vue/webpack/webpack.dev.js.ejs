@@ -5,7 +5,6 @@ const config = require('../config');
 const merge = require('webpack-merge');
 const path = require('path');
 const baseWebpackConfig = require('./webpack.common');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const portfinder = require('portfinder');
 const jhiUtils = require('./utils.js');
@@ -78,13 +77,6 @@ module.exports = merge(baseWebpackConfig, {
       {
         reload: false
       }
-    ),
-    // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      template: 'src/main/webapp/index.html',
-      chunks: ['vendors', 'main', 'global'],
-      chunksSortMode: 'manual',
-      inject: true
-    })
+    )
   ]
 });
