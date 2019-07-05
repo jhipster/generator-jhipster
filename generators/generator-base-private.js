@@ -67,7 +67,7 @@ module.exports = class extends Generator {
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
+        if ((generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra') {
             generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
         if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {

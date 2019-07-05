@@ -19,7 +19,7 @@
 import { Routes } from '@angular/router';
 
 import {
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     auditsRoute,
     <%_ } _%>
     configurationRoute,
@@ -41,7 +41,7 @@ import {
 import { UserRouteAccessService } from 'app/core';
 
 const ADMIN_ROUTES = [
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     auditsRoute,
     <%_ } _%>
     configurationRoute,

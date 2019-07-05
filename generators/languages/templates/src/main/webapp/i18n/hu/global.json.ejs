@@ -47,7 +47,7 @@
                 "health": "Akalmazás állapota",
                 "configuration": "Konfiguráció",
                 "logs": "Naplók",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Nyomkövetés",
                 <%_ } _%>
                 "apidocs": "API dokumentáció",
