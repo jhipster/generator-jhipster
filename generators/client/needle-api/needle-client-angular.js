@@ -198,11 +198,11 @@ module.exports = class extends needleClientBase {
                 const splicable = isAnyEntityAlreadyGenerated
                     ? `|,{
                             |                path: '${entityUrl}',
-                            |                loadChildren: '${modulePath}#${moduleName}'
+                            |                loadChildren: () => import('${modulePath}').then(m => m.${moduleName})
                             |            }`
                     : `|{
                                 |                path: '${entityUrl}',
-                                |                loadChildren: '${modulePath}#${moduleName}'
+                                |                loadChildren: () => import('${modulePath}').then(m => m.${moduleName})
                                 |            }`;
                 const rewriteFileModel = this.generateFileModel(
                     entityModulePath,

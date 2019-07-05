@@ -172,7 +172,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     <%_ } _%>
-    Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByEmail(String email);
+    Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
     <%_ } _%>
 
     <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asEntity('User') %>> findAllByLoginNot(Pageable pageable, String login);

@@ -95,7 +95,7 @@ describe('administration', () => {
         expect(value1).to.eq(expect1);
     });
 
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     it('should load audits', async () => {
         await navBarPage.clickOnAdmin('audits');
         await browser.sleep(500);

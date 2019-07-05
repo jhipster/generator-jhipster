@@ -1779,13 +1779,22 @@ module.exports = class extends PrivateBase {
      *
      * @param {String} buildTool - maven | gradle
      * @param {String} profile - dev | prod
+     * @param {Boolean} buildWar - build a war instead of a jar
      * @param {Function} cb - callback when build is complete
      */
-    buildApplication(buildTool, profile, cb) {
+    buildApplication(buildTool, profile, buildWar, cb) {
         let buildCmd = 'mvnw verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew bootJar -x test';
+            buildCmd = 'gradlew -x test';
+            if (buildWar) {
+                buildCmd += ' bootWar';
+            } else {
+                buildCmd += ' bootJar';
+            }
+        }
+        if (buildWar) {
+            buildCmd += ' -Pwar';
         }
 
         if (os.platform() !== 'win32') {
@@ -1917,7 +1926,7 @@ module.exports = class extends PrivateBase {
             generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
             context.configOptions.databaseType ||
             context.config.get('databaseType');
-        if (dest.authenticationType === 'oauth2' || dest.databaseType === 'no') {
+        if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
             dest.skipUserManagement = true;
         }
         dest.searchEngine = context.config.get('searchEngine');
@@ -1995,7 +2004,12 @@ module.exports = class extends PrivateBase {
      * @param {boolean} force force getting direct from file
      */
     getAllJhipsterConfig(generator = this, force) {
-        return jhipsterUtils.getAllJhipsterConfig(generator, force);
+        const configRootPath =
+            generator.configRootPath ||
+            (generator.options && generator.options.configRootPath) ||
+            (generator.configOptions && generator.configOptions.configRootPath) ||
+            '';
+        return jhipsterUtils.getAllJhipsterConfig(generator, force, configRootPath);
     }
 
     /**

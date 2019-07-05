@@ -178,25 +178,14 @@ services:
     <%_ } _%>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     consul:
-        image: <%= DOCKER_CONSUL %>
-        command: consul agent -dev -ui -client 0.0.0.0
-        ports:
-            - 8300:8300
-            - 8500:8500
-            - 8600:8600
+        extends:
+            file: consul.yml
+            service: consul
 
     consul-config-loader:
-        image: <%= DOCKER_CONSUL_CONFIG_LOADER %>
-        volumes:
-            - ./central-server-config:/config
-        environment:
-            - INIT_SLEEP_SECONDS=5
-            - CONSUL_URL=consul
-            - CONSUL_PORT=8500
-            # Uncomment to load configuration into Consul from a Git repository
-            # as configured in central-server-config/git2consul.json
-            # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
-            # - CONFIG_MODE=git
+        extends:
+            file: consul.yml
+            service: consul-config-loader
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2' && applicationType !== 'microservice') { _%>
     keycloak:

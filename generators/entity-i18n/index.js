@@ -22,25 +22,17 @@ const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 /* constants used throughout */
-let useBlueprint;
+let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        utils.copyObjectProps(this, this.options.context);
-        this.configOptions = this.options.configOptions || {};
-        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        if (!opts.fromBlueprint) {
-            // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(blueprint, 'entity-i18n', {
-                ...this.options,
-                context: opts.context,
-                debug: opts.context.isDebugEnabled,
-                configOptions: this.configOptions
-            });
-        } else {
-            useBlueprint = false;
-        }
+        utils.copyObjectProps(this, opts.context);
+        this.jhipsterContext = opts.jhipsterContext || opts.context;
+        this.configOptions = opts.configOptions || {};
+
+        useBlueprints =
+            !opts.fromBlueprint && this.instantiateBlueprints('entity-i18n', { context: opts.context, debug: opts.context.isDebugEnabled });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -49,7 +41,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 };

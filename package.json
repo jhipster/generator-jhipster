@@ -1,6 +1,6 @@
 {
     "name": "generator-jhipster",
-    "version": "6.1.1",
+    "version": "6.1.2",
     "description": "Spring Boot + Angular/React in one handy generator",
     "files": [
         "cli",
@@ -76,7 +76,8 @@
         "through2": "3.0.1",
         "uuid": "3.3.2",
         "yeoman-environment": "2.3.4",
-        "yeoman-generator": "3.2.0"
+        "yeoman-generator": "3.2.0",
+        "yo": "2.0.6"
     },
     "devDependencies": {
         "chai": "4.2.0",

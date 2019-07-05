@@ -29,7 +29,7 @@ const statistics = require('../statistics');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
-let useBlueprint;
+let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -124,17 +124,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         this.setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
-        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        if (!opts.fromBlueprint) {
-            // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(blueprint, 'entity', {
-                ...this.options,
-                configOptions: this.configOptions,
-                arguments: [this.context.name]
-            });
-        } else {
-            useBlueprint = false;
-        }
+
+        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('entity', { arguments: [this.context.name] });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -336,7 +327,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     get initializing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._initializing();
     }
 
@@ -360,7 +351,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     get prompting() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._prompting();
     }
 
@@ -700,6 +691,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.fieldsContainBigDecimal = false;
                 context.fieldsContainBlob = false;
                 context.fieldsContainImageBlob = false;
+                context.fieldsContainTextBlob = false;
                 context.fieldsContainBlobOrImage = false;
                 context.validation = false;
                 context.fieldsContainOwnerManyToMany = false;
@@ -845,6 +837,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                         if (field.fieldTypeBlobContent !== 'text') {
                             context.fieldsContainBlobOrImage = true;
+                        } else {
+                            context.fieldsContainTextBlob = true;
                         }
                     }
 
@@ -1085,7 +1079,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     get configuring() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._configuring();
     }
 
@@ -1143,7 +1137,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 
@@ -1182,7 +1176,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     get install() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._install();
     }
 }

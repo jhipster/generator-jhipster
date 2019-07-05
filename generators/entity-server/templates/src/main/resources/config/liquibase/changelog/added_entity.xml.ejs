@@ -186,7 +186,7 @@
     -->
     <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/data/<%= entityTableName %>.csv"
+                  file="config/liquibase/fake-data/<%= entityTableName %>.csv"
                   separator=";"
                   tableName="<%= entityTableName %>">
             <column name="id" type="numeric"/>

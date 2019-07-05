@@ -19,20 +19,37 @@
 const chalk = require('chalk');
 const jhipsterUtils = require('../generators/utils');
 
-let customCommands = {};
-const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
-if (indexOfBlueprintArgv > -1) {
-    /* eslint-disable import/no-dynamic-require */
-    /* eslint-disable global-require */
+const customCommands = loadBlueprintCommands();
 
-    const blueprint = jhipsterUtils.normalizeBlueprintName(process.argv[indexOfBlueprintArgv + 1]);
-    try {
-        customCommands = require(`${blueprint}/cli/commands`);
-    } catch (e) {
-        const msg = `No custom command found within blueprint: ${blueprint}`;
-        /* eslint-disable no-console */
-        console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+function loadBlueprintCommands() {
+    const blueprintNames = [];
+    const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
+    if (indexOfBlueprintArgv > -1) {
+        blueprintNames.push(process.argv[indexOfBlueprintArgv + 1]);
     }
+    const indexOfBlueprintsArgv = process.argv.indexOf('--blueprints');
+    if (indexOfBlueprintsArgv > -1) {
+        blueprintNames.push(...process.argv[indexOfBlueprintsArgv + 1].split(','));
+    }
+    let result = {};
+    if (blueprintNames.length > 0) {
+        blueprintNames
+            .filter((v, i, a) => a.indexOf(v) === i)
+            .map(v => jhipsterUtils.normalizeBlueprintName(v))
+            .forEach(blueprint => {
+                /* eslint-disable import/no-dynamic-require */
+                /* eslint-disable global-require */
+                try {
+                    const blueprintCommands = require(`${blueprint}/cli/commands`);
+                    result = { ...result, ...blueprintCommands };
+                } catch (e) {
+                    const msg = `No custom commands found within blueprint: ${blueprint}`;
+                    /* eslint-disable no-console */
+                    console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+                }
+            });
+    }
+    return result;
 }
 
 const defaultCommands = {

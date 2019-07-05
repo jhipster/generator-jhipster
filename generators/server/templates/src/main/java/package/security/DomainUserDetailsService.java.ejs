@@ -66,7 +66,7 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
         log.debug("Authenticating {}", login);
 
         if (new EmailValidator().isValid(login, null)) {
-            return userRepository.<% if (databaseType === 'sql') { %>findOneWithAuthoritiesByEmail<% } else { %>findOneByEmailIgnoreCase<% } %>(login)
+            return userRepository.<% if (databaseType === 'sql') { %>findOneWithAuthoritiesByEmailIgnoreCase<% } else { %>findOneByEmailIgnoreCase<% } %>(login)
                 <%_ if (reactive) { _%>
                 .switchIfEmpty(Mono.error(new UsernameNotFoundException("User with email " + login + " was not found in the database")))
                 <%_ } _%>

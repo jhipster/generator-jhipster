@@ -24,7 +24,7 @@ const statistics = require('../statistics');
 
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
-let useBlueprint;
+let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
@@ -44,17 +44,7 @@ module.exports = class extends BaseBlueprintGenerator {
         });
         this.defaultOption = this.options.default;
 
-        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        if (!opts.fromBlueprint) {
-            // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(blueprint, 'spring-service', {
-                ...this.options,
-                arguments: [this.name],
-                configOptions: this.configOptions
-            });
-        } else {
-            useBlueprint = false;
-        }
+        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('spring-service', { arguments: [this.name] });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -76,7 +66,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get initializing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._initializing();
     }
 
@@ -106,7 +96,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get prompting() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._prompting();
     }
 
@@ -120,7 +110,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get default() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._default();
     }
 
@@ -149,7 +139,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 };

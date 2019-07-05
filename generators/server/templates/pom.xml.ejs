@@ -91,7 +91,7 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>3.0.3</jhipster-dependencies.version>
+        <jhipster-dependencies.version>3.0.4-SNAPSHOT</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
@@ -933,6 +933,7 @@
                     </executions>
                     <configuration>
                         <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                        <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
                         <generateGitPropertiesFile>true</generateGitPropertiesFile>
                         <includeOnlyProperties>
                             <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
@@ -1393,6 +1394,9 @@
                                 <phase>generate-resources</phase>
                                 <configuration>
                                     <arguments>run webpack:build</arguments>
+                                    <environmentVariables>
+                                        <APP_VERSION>${project.version}</APP_VERSION>
+                                    </environmentVariables>
     <%_ if (clientPackageManager === 'yarn') { _%>
                                     <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
     <%_ } else if (clientPackageManager === 'npm') { _%>
@@ -1545,6 +1549,9 @@
                                 <phase>generate-resources</phase>
                                 <configuration>
                                     <arguments>run webpack:prod</arguments>
+                                    <environmentVariables>
+                                        <APP_VERSION>${project.version}</APP_VERSION>
+                                    </environmentVariables>
     <%_ if (clientPackageManager === 'yarn') { _%>
                                     <yarnInheritsProxyConfigFromMaven>false</yarnInheritsProxyConfigFromMaven>
     <%_ } else if (clientPackageManager === 'npm') { _%>

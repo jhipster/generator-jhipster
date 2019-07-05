@@ -47,7 +47,7 @@
                 "health": "आरोग्य",
                 "configuration": "संरचना",
                 "logs": "नोंदी",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "ऑडिट",
                 <%_ } _%>
                 "apidocs": "API",
