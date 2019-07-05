@@ -99,8 +99,7 @@ export class LoginService {
         this.authServerProvider.logout().subscribe(response => {
             const data = response.body;
             let logoutUrl = data.logoutUrl;
-            // Add here, the custom path if traefik is used
-            const redirectUri = window.location.origin;
+            const redirectUri = `${location.origin}${this.location.prepareExternalUrl('/')}`;
 
             // if Keycloak, uri has protocol/openid-connect/token
             if (logoutUrl.indexOf('/protocol') > -1) {
