@@ -73,8 +73,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.MultiValueMap;
+    <%_ if (reactive) { _%>
+import org.springframework.http.server.reactive.ServerHttpRequest;
+    <%_ } _%>
+    <%_ if (!reactive) { _%>
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+    <%_ } else { _%>
 import org.springframework.web.util.UriComponentsBuilder;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (reactiveRepositories) { _%>
 import org.springframework.http.MediaType;
@@ -182,10 +188,14 @@ public class <%= entityClass %>Resource {
 
     /**
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %>.
-     *<% if (pagination !== 'no') { %>
+     *
+    <%_ if (pagination !== 'no') { %>
      * @param pageable the pagination information.
-     * @param queryParams a {@link MultiValueMap} query parameters.
-     * @param uriBuilder a {@link UriComponentsBuilder} URI builder.<% } if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { %>
+        <%_ if (reactive) { _%>
+     * @param request a {@link ServerHttpRequest} request.
+        <%_ } _%>
+    <%_ } _%>
+    <%_ if (!jpaMetamodelFiltering && fieldsContainOwnerManyToMany) { _%>
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).<% } if (jpaMetamodelFiltering) { %>
      * @param criteria the criteria which the requested entities should match.<% } else if (fieldsContainNoOwnerOneToOne) { %>
      * @param filter the filter of the request.<% } %>
@@ -245,10 +255,13 @@ public class <%= entityClass %>Resource {
      * {@code SEARCH  /_search/<%= entityApiUrl %>?query=:query} : search for the <%= entityInstance %> corresponding
      * to the query.
      *
-     * @param query the query of the <%= entityInstance %> search.<% if (pagination !== 'no') { %>
+     * @param query the query of the <%= entityInstance %> search.
+    <%_ if (pagination !== 'no') { _%>
      * @param pageable the pagination information.
-     * @param queryParams a {@link MultiValueMap} query parameters.
-     * @param uriBuilder a {@link UriComponentsBuilder} URI builder.<% } %>
+       <%_ if (reactive) { _%>
+     * @param request a {@link ServerHttpRequest} request.
+        <%_ } _%>
+    <%_ } _%>
      * @return the result of the search.
      */
     @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {asEntity, asDto, viaService}); -%><% } %>
