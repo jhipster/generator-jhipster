@@ -114,7 +114,7 @@ module.exports = class extends BaseGenerator {
                 const cb = this.async();
                 this.log(chalk.bold('Building application'));
 
-                const child = this.buildApplication(this.buildTool, 'prod', err => {
+                const child = this.buildApplication(this.buildTool, 'prod', true, err => {
                     if (err) {
                         this.error(err);
                     } else {
@@ -123,7 +123,7 @@ module.exports = class extends BaseGenerator {
                 });
 
                 child.stdout.on('data', data => {
-                    this.log(data.toString());
+                    process.stdout.write(data.toString());
                 });
             },
             createBucket() {
@@ -146,10 +146,10 @@ module.exports = class extends BaseGenerator {
                     }
                 });
             },
-            uploadJar() {
+            uploadWar() {
                 const cb = this.async();
                 this.log();
-                this.log(chalk.bold('Upload JAR to S3'));
+                this.log(chalk.bold('Upload WAR to S3'));
 
                 const s3 = this.awsFactory.getS3();
 
@@ -158,11 +158,11 @@ module.exports = class extends BaseGenerator {
                     buildTool: this.buildTool
                 };
 
-                s3.uploadJar(params, (err, data) => {
+                s3.uploadWar(params, (err, data) => {
                     if (err) {
                         this.error(err.message);
                     } else {
-                        this.jarKey = data.jarKey;
+                        this.warKey = data.warKey;
                         this.log(data.message);
                         cb();
                     }
@@ -241,7 +241,7 @@ module.exports = class extends BaseGenerator {
                 const params = {
                     applicationName: this.applicationName,
                     bucketName: this.bucketName,
-                    jarKey: this.jarKey,
+                    warKey: this.warKey,
                     environmentName: this.environmentName,
                     dbUrl: this.dbUrl,
                     dbUsername: this.dbUsername,
