@@ -12,6 +12,7 @@ describe('JHipster upgrade generator', function() {
     this.timeout(200000);
     describe('default application', () => {
         const cwd = process.cwd();
+        // console.log(`Test Upgrade cwd: ${cwd}`);
         before(done => {
             let workingDirectory;
             helpers
@@ -55,10 +56,15 @@ describe('JHipster upgrade generator', function() {
                             silent: false,
                             'target-version': packageJson.version
                         },
-                        {}
+                        {},
+                        done
                     );
-                    done();
                 });
+        });
+
+        after(() => {
+            // console.log(`Changing cwd back to: ${cwd}`);
+            process.chdir(cwd);
         });
 
         it('creates expected files for default configuration', () => {
@@ -78,15 +84,14 @@ describe('JHipster upgrade generator', function() {
             //   - master: merge commit of jhipster_upgrade
             expect(commitsCount).to.equal('5');
         });
-
-        after(() => {
-            process.chdir(cwd);
-        });
     });
     describe('blueprint application', () => {
         const cwd = process.cwd();
+        // console.log(`Test Upgrade cwd: ${cwd}`);
+
         const blueprintName = 'generator-jhipster-sample-blueprint';
         const blueprintVersion = '0.1.1';
+
         before(done => {
             let workingDirectory;
             helpers
@@ -140,10 +145,15 @@ describe('JHipster upgrade generator', function() {
                             'target-blueprint-versions': `${blueprintName}@${blueprintVersion}`,
                             skipInstall: true
                         },
-                        {}
+                        {},
+                        done
                     );
-                    done();
                 });
+        });
+
+        after(() => {
+            // console.log(`Changing cwd back to: ${cwd}`);
+            process.chdir(cwd);
         });
 
         it('creates expected files for default configuration', () => {
@@ -169,10 +179,6 @@ describe('JHipster upgrade generator', function() {
                 'generator-jhipster': { blueprints: [{ name: blueprintName, version: blueprintVersion }] }
             });
             assert.fileContent('package.json', new RegExp(`"${blueprintName}": "${blueprintVersion}"`));
-        });
-
-        after(() => {
-            process.chdir(cwd);
         });
     });
 });

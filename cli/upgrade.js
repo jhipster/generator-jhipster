@@ -517,8 +517,9 @@ class Upgrader {
  * @param {any} args arguments passed for upgrade
  * @param {any} options options passed from CLI
  * @param {any} env the yeoman environment
+ * @param {function} optional callback to execute once the upgrade is done
  */
-module.exports = (args, options, env) => {
+module.exports = (args, options, env, callback) => {
     logger.debug('cmd: upgrade');
     logger.debug(`args: ${toString(args)}`);
     logger.info(chalk.yellow('Executing upgrade'));
@@ -527,5 +528,10 @@ module.exports = (args, options, env) => {
     const upgrader = new Upgrader(options);
     upgrader.init();
     upgrader.validate();
-    upgrader.upgrade().catch(reason => logger.error(`Error during upgrade: ${reason.message}`, reason));
+    upgrader
+        .upgrade()
+        .then(() => {
+            if (callback) callback();
+        })
+        .catch(reason => logger.error(`Error during upgrade: ${reason.message}`, reason));
 };

@@ -122,6 +122,19 @@ describe('JHipster Utils', () => {
     });
     describe('::getAllJhipsterConfig', () => {
         const cwd = process.cwd();
+        // console.log(`Expected cwd: ${cwd}. Actual: ${process.cwd()}`);
+
+        before(() => {
+            if (process.cwd() !== cwd) {
+                // console.log(`Before: Expected cwd: ${cwd}. Actual: ${process.cwd()}`);
+                process.chdir(cwd);
+            }
+        });
+        after(() => {
+            // console.log(`After: Expected cwd: ${cwd}. Actual: ${process.cwd()}`);
+            process.chdir(cwd);
+        });
+
         const configRootDir = './test/templates/default';
         const expectedConfig = {
             applicationType: 'monolith',
@@ -143,17 +156,14 @@ describe('JHipster Utils', () => {
             testFrameworks: ['gatling']
         };
 
-        it('load config from alternate directory', () => {
+        it('load config from current working directory', () => {
             const loadedConfig = utils.getAllJhipsterConfig(helpers.createDummyGenerator(), true, configRootDir);
             assert.objectContent(loadedConfig, expectedConfig);
         });
-        it('load config from current working directory', () => {
+        it('load config from alternate directory', () => {
             process.chdir(configRootDir);
             const loadedConfig = utils.getAllJhipsterConfig(helpers.createDummyGenerator(), true);
             assert.objectContent(loadedConfig, expectedConfig);
-        });
-        after(() => {
-            process.chdir(cwd);
         });
     });
 });
