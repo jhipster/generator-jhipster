@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
+const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir);
@@ -97,7 +98,8 @@ module.exports = {
       },
       // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
       { from: './src/main/webapp/robots.txt', to: 'robots.txt' }
-    ])<% if (enableTranslation) { %>,
+    ]),
+    new BaseHrefWebpackPlugin({ baseHref: '/' })<% if (enableTranslation) { %>,
     new MergeJsonWebpackPlugin({
       output: {
         groupBy: [
