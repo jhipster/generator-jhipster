@@ -259,12 +259,61 @@ class Upgrader {
     // region Pre-upgrade steps
 
     _preUpgrade() {
-        // TODO: Do we still need this?
-        statistics.sendSubGenEvent('generator', 'upgrade');
+        this._sendInsight();
 
         this._gitCheckout(UPGRADE_BRANCH);
 
-        // TODO: Add pre-upgrade tasks here
+        this._fixConfigFile();
+    }
+
+    _sendInsight() {
+        statistics.sendSubGenEvent('generator', 'upgrade');
+    }
+
+    _fixConfigFile() {
+        const filePath = '.yo-rc.json';
+        const yoRc = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
+
+        const modified = this._fixLanguages(yoRc);
+        if (modified) {
+            logger.debug(`Updating ${filePath} to:\n${JSON.stringify(yoRc)}`);
+            fs.writeFileSync(filePath, JSON.stringify(yoRc));
+            logger.info(`Updated ${filePath} successfully`);
+        }
+    }
+
+    _fixLanguages(yoRc) {
+        function fixLanguageKeys(configuration) {
+            const languages = configuration.languages;
+            let modified = false;
+            if (languages && languages.length > 0) {
+                const langConversions = {
+                    id: 'in',
+                    'uz-lat': 'uz-Latn-uz',
+                    'uz-cyr': 'uz-Cyrl-uz'
+                };
+                const langKeys = Object.keys(langConversions);
+                langKeys.forEach(key => {
+                    const idx = languages.findIndex(elem => elem === key);
+                    if (idx !== -1) {
+                        languages[idx] = langConversions[key];
+                        modified = true;
+                    }
+                });
+            }
+            return modified;
+        }
+
+        const configKeys = Object.keys(yoRc);
+        let modified = false;
+        configKeys.forEach(configKey => {
+            if (configKey.startsWith('generator-')) {
+                if (fixLanguageKeys(yoRc[configKey])) {
+                    modified = true;
+                }
+            }
+        });
+        return modified;
     }
 
     // endregion
