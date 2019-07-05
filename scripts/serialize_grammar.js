@@ -1,4 +1,4 @@
-/** Copyright 2013-2018 the original author or authors from the JHipster project.
+/** Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -31,7 +31,7 @@ parser.parse();
 
 const serializedGrammarText = JSON.stringify(parser.getSerializedGastProductions(), null, '\t');
 
-const copyright = `/** Copyright 2013-2018 the original author or authors from the JHipster project.
+const copyright = `/** Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
