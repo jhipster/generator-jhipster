@@ -1,4 +1,16 @@
-# Latest: v4.1.1
+# Latest v4.2.0
+
+## What's new
+  - Improved and fixed the JDL export, which now exports single & multi apps with their entities (thanks to @Shaolans)
+
+
+## Fixed
+  - The entity's `changelogDate` is now preserved when re-generating the same entity, which doesn't result in an entity
+    rewrite when reimporting (thanks to @kaidohallik)
+
+---
+
+# v4.1.1
 
 ## What's new
   - Added the JDL linter rules to the API
