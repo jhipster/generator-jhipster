@@ -51,6 +51,12 @@ function prompting() {
         {
             type: 'input',
             name: 'dbName',
+            validate: input => {
+                if (!/^[a-zA-Z][a-zA-Z0-9]*$/g.test(input)) {
+                    return 'Your database name must begin with a letter and contain only alphanumeric characters';
+                }
+                return true;
+            },
             message: 'Database name:',
             default: this.baseName
         },
@@ -81,22 +87,22 @@ function prompting() {
                 't2.micro',
                 't2.small',
                 't2.medium',
-                'm3.large',
-                'm3.xlarge',
-                'm3.2xlarge',
-                'c3.large',
-                'c3.xlarge',
-                'c3.2xlarge',
-                'c3.4xlarge',
-                'c3.8xlarge',
-                'hs1.8xlarge',
-                'i2.xlarge',
-                'i2.2xlarge',
-                'i2.4xlarge',
-                'i2.8xlarge',
-                'r3.large',
-                'r3.xlarge',
-                'r3.2xlarge'
+                't2.large',
+                'm5.large',
+                'm5.xlarge',
+                'm5.2xlarge',
+                'c5.large',
+                'c5.xlarge',
+                'c5.2xlarge',
+                'c5.4xlarge',
+                'c5.8xlarge',
+                'i3.xlarge',
+                'i3.2xlarge',
+                'i3.4xlarge',
+                'i3.8xlarge',
+                'r5.large',
+                'r5.xlarge',
+                'r5.2xlarge'
             ],
             default: 0
         },
@@ -105,14 +111,6 @@ function prompting() {
             name: 'dbInstanceClass',
             message: 'On which RDS instance class do you want to deploy?',
             choices: [
-                'db.t1.micro',
-                'db.m1.small',
-                'db.m1.medium',
-                'db.m1.large',
-                'db.m1.xlarge',
-                'db.m2.xlarge ',
-                'db.m2.2xlarge',
-                'db.m2.4xlarge',
                 'db.m3.medium',
                 'db.m3.large',
                 'db.m3.xlarge',
@@ -126,7 +124,7 @@ function prompting() {
                 'db.t2.small',
                 'db.t2.medium'
             ],
-            default: 17
+            default: 9
         },
         {
             type: 'list',
@@ -134,17 +132,23 @@ function prompting() {
             message: 'On which region do you want to deploy?',
             choices: [
                 'ap-northeast-1',
+                'ap-northeast-2',
+                'ap-south-1',
                 'ap-southeast-1',
                 'ap-southeast-2',
+                'ca-central-1',
                 'eu-central-1',
+                'eu-north-1',
                 'eu-west-1',
                 'eu-west-2',
+                'eu-west-3',
                 'sa-east-1',
                 'us-east-1',
+                'us-east-2',
                 'us-west-1',
                 'us-west-2'
             ],
-            default: 3
+            default: 6
         }
     ];
 

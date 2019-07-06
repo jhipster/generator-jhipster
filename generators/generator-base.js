@@ -1779,13 +1779,22 @@ module.exports = class extends PrivateBase {
      *
      * @param {String} buildTool - maven | gradle
      * @param {String} profile - dev | prod
+     * @param {Boolean} buildWar - build a war instead of a jar
      * @param {Function} cb - callback when build is complete
      */
-    buildApplication(buildTool, profile, cb) {
+    buildApplication(buildTool, profile, buildWar, cb) {
         let buildCmd = 'mvnw verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew bootJar -x test';
+            buildCmd = 'gradlew -x test';
+            if (buildWar) {
+                buildCmd += ' bootWar';
+            } else {
+                buildCmd += ' bootJar';
+            }
+        }
+        if (buildWar) {
+            buildCmd += ' -Pwar';
         }
 
         if (os.platform() !== 'win32') {
