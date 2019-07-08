@@ -281,6 +281,18 @@
             <scope>test</scope>
             <!-- parent POM declares this dependency in default (compile) scope -->
         </dependency>
+<%_ if (cacheProvider === 'redis' && enableHibernateCache) { _%>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+        </dependency>
+<%_ } _%>
 <%_ if (!reactive) { _%>
         <dependency>
             <groupId>io.springfox</groupId>

@@ -58,6 +58,9 @@ services:
             <%_ if (cacheProvider === 'memcached') { _%>
             - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
             <%_ } _%>
+            <%_ if (cacheProvider === 'redis') { _%>
+            - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+            <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
             - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
             <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
@@ -148,6 +151,12 @@ services:
         extends:
             file: memcached.yml
             service: <%= baseName.toLowerCase() %>-memcached
+    <%_ } _%>
+    <%_ if (cacheProvider === 'redis') { _%>
+    <%= baseName.toLowerCase() %>-redis:
+        extends:
+            file: redis.yml
+            service: <%= baseName.toLowerCase() %>-redis
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     <%= baseName.toLowerCase() %>-elasticsearch:

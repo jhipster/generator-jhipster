@@ -100,6 +100,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
                 this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
                 this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
+                this.DOCKER_REDIS = constants.DOCKER_REDIS;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
                 this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
@@ -366,7 +367,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
-                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(this.cacheProvider);
+                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(this.cacheProvider);
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');

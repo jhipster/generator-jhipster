@@ -106,6 +106,11 @@ const serverFiles = {
             templates: ['memcached.yml']
         },
         {
+            condition: generator => generator.cacheProvider === 'redis',
+            path: DOCKER_DIR,
+            templates: ['redis.yml']
+        },
+        {
             condition: generator => generator.searchEngine === 'elasticsearch',
             path: DOCKER_DIR,
             templates: ['elasticsearch.yml']
@@ -831,7 +836,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(generator.cacheProvider) ||
+                ['ehcache', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(generator.cacheProvider) ||
                 generator.applicationType === 'gateway',
             path: SERVER_MAIN_SRC_DIR,
             templates: [

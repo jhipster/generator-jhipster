@@ -303,6 +303,10 @@ jhipster:
             # If you want to use Memcached, you must also enable it in CacheConfiguration
             enabled: false
         <%_ } _%>
+        <%_ if (cacheProvider === 'redis') { _%>
+        redis: # Redis configuration
+            expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+        <%_ } _%>
     <%_ } _%>
     <%_ if (applicationType !== 'microservice') { _%>
     # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API

@@ -245,6 +245,8 @@ const expectedFiles = {
 
     memcached: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`, `${DOCKER_DIR}memcached.yml`],
 
+    redis: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`, `${DOCKER_DIR}redis.yml`],
+
     gatling: [`${TEST_DIR}gatling/conf/gatling.conf`],
 
     i18nJson: [

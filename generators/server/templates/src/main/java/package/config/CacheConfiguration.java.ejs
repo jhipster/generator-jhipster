@@ -134,6 +134,27 @@ import com.google.code.ssm.spring.SSMCacheManager;
 
 import io.github.jhipster.config.JHipsterProperties;
 <%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+import org.redisson.Redisson;
+import org.redisson.config.Config;
+import org.redisson.config.SslProvider;
+import org.redisson.jcache.configuration.RedissonConfiguration;
+import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+    <%_ if (enableHibernateCache) { _%>
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.hibernate.cache.jcache.ConfigSettings;
+    <%_ } _%>
+
+import java.util.concurrent.TimeUnit;
+
+import javax.cache.configuration.MutableConfiguration;
+import javax.cache.expiry.CreatedExpiryPolicy;
+import javax.cache.expiry.Duration;
+
+import io.github.jhipster.config.JHipsterProperties;
+<%_ } _%>
 
 @Configuration
 @EnableCaching
@@ -705,5 +726,78 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
 
         return defaultCache;
     }
+    <%_ } _%>
+
+    <%_ if (cacheProvider === 'redis') { _%>
+    private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
+
+        public CacheConfiguration(JHipsterProperties jHipsterProperties) {
+            MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
+            Config config = new Config();
+            config.useSingleServer()
+                .setAddress(jHipsterProperties.getCache().getRedis().getServer())
+                .setSubscriptionConnectionMinimumIdleSize(1)
+                .setSubscriptionConnectionPoolSize(50)
+                .setConnectionMinimumIdleSize(24)
+                .setConnectionPoolSize(64)
+                .setDnsMonitoringInterval(5000)
+                .setIdleConnectionTimeout(10000)
+                .setConnectTimeout(10000)
+                .setTimeout(3000)
+                .setRetryAttempts(3)
+                .setRetryInterval(1500)
+                .setDatabase(0)
+                .setPassword(null)
+                .setSubscriptionsPerConnection(5)
+                .setClientName(null)
+                .setSslEnableEndpointIdentification(true)
+                .setSslProvider(SslProvider.JDK)
+                .setSslTruststore(null)
+                .setSslTruststorePassword(null)
+                .setSslKeystore(null)
+                .setSslKeystorePassword(null)
+                .setPingConnectionInterval(0)
+                .setKeepAlive(false)
+                .setTcpNoDelay(false);
+            jcacheConfig.setStatisticsEnabled(true);
+            jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
+            jcacheConfiguration = RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
+        }
+    
+    
+        <%_ if (enableHibernateCache) { _%>
+        @Bean
+        public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cm) {
+            return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cm);
+        }
+        <%_ } _%>
+    
+        @Bean
+        public JCacheManagerCustomizer cacheManagerCustomizer() {
+            return cm -> {
+                <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
+                createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE);
+                createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE);
+                    <%_ if (enableHibernateCache) { _%>
+                createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName());
+                createCache(cm, <%=packageName%>.domain.Authority.class.getName());
+                createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities");
+                        <%_ if (authenticationType === 'session') { _%>
+                createCache(cm, <%=packageName%>.domain.PersistentToken.class.getName());
+                createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens");
+                        <%_ } _%>
+                    <%_ } _%>
+                <%_ } _%>
+                // jhipster-needle-redis-add-entry
+            };
+        }
+    
+        private void createCache(javax.cache.CacheManager cm, String cacheName) {
+            javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
+            if (cache != null) {
+                cm.destroyCache(cacheName);
+            }
+            cm.createCache(cacheName, jcacheConfiguration);
+        }
     <%_ } _%>
 }
