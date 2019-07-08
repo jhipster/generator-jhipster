@@ -16,6 +16,7 @@ Integrating with Kubernetes requires more than just the Kubernetes Manifest to g
 Related to my presentation in JHipster Conf 2: https://salaboy.com/2019/07/03/jhipster-conf-rocks/
 Source code(first stab at it): https://github.com/salaboy/jhipster-operator
 Slides: https://www.slideshare.net/salaboy/do-we-need-a-jhipster-kubernetes-operator
+Video: https://www.youtube.com/watch?v=9iqTtwptTT8&feature=youtu.be&list=PL6IFaLdAcgE3aSgmRyhi6eULdlrwjA5sm
 
 Main objectives: 
 - Understand JHipster Applications (root resource)
