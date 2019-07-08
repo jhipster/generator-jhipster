@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Reaaliaikaiset käyttäjätoiminnot",
+        "table": {
+            "userlogin": "Käyttäjä",
+            "ipaddress": "IP osoite",
+            "userAgent": "Agentti",
+            "page": "Nykyinen sivu",
+            "time": "Aika"
+        }
+    }
+}

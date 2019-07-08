@@ -134,7 +134,7 @@ module.exports = class extends BaseGenerator {
 
                 this.log(chalk.bold(`\nBuilding the application with the ${this.cloudfoundryProfile} profile`));
 
-                const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, err => {
+                const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, false, err => {
                     if (err) {
                         this.log.error(err);
                     }

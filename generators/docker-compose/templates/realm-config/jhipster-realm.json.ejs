@@ -823,7 +823,8 @@
         <%- keycloakRedirectUris %>
         "http://localhost:8100/*",
         "http://127.0.0.1:8761/*",
-        "http://localhost:9000/*"
+        "http://localhost:9000/*",
+        "dev.localhost.ionic:*"
       ],
       "webOrigins": [
         <%- keycloakRedirectUris %>
@@ -989,6 +990,7 @@
           "protocolMapper": "oidc-usermodel-realm-role-mapper",
           "consentRequired": false,
           "config": {
+            "access.token.claim": "true",
             "claim.name": "roles",
             "jsonType.label": "String",
             "multivalued": "true",

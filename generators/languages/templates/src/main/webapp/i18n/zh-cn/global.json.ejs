@@ -47,7 +47,7 @@
                 "health": "服务状态",
                 "configuration": "配置",
                 "logs": "日志",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "审核",
                 <%_ } _%>
                 "apidocs": "API",

@@ -25,18 +25,13 @@ import { connect } from 'react-redux';
 import { Row, Col, Alert } from 'reactstrap';
 
 import { IRootState } from 'app/shared/reducers';
-import { getSession } from 'app/shared/reducers/authentication';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';
 <%_ } _%>
 
-export interface IHomeProp extends StateProps, DispatchProps {}
+export type IHomeProp = StateProps;
 
 export class Home extends React.Component<IHomeProp> {
-  componentDidMount() {
-    this.props.getSession();
-  }
-
   render() {
     const { account } = this.props;
     return (
@@ -128,9 +123,6 @@ const mapStateToProps = storeState => ({
   isAuthenticated: storeState.authentication.isAuthenticated
 });
 
-const mapDispatchToProps = { getSession };
-
 type StateProps = ReturnType<typeof mapStateToProps>;
-type DispatchProps = typeof mapDispatchToProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Home);

@@ -444,6 +444,14 @@ const serverFiles = {
                 {
                     file: 'package/security/oauth2/AudienceValidator.java',
                     renameTo: generator => `${generator.javaDir}security/oauth2/AudienceValidator.java`
+                },
+                {
+                    file: 'package/security/oauth2/JwtAuthorityExtractor.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/JwtAuthorityExtractor.java`
+                },
+                {
+                    file: 'package/security/oauth2/OAuthIdpTokenResponseDTO.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/OAuthIdpTokenResponseDTO.java`
                 }
             ]
         },
@@ -601,6 +609,10 @@ const serverFiles = {
                 (generator.applicationType === 'monolith' || generator.applicationType === 'gateway'),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
+                {
+                    file: 'package/web/rest/AuthInfoResource.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/AuthInfoResource.java`
+                },
                 {
                     file: 'package/web/rest/LogoutResource.java',
                     renameTo: generator => `${generator.javaDir}web/rest/LogoutResource.java`

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
 export * from './audits/audits.component';
 export * from './audits/audits.service';
 export * from './audits/audits.route';

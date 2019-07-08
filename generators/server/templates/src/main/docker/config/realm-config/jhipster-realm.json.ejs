@@ -823,7 +823,8 @@
         "http://localhost:*",
         "https://localhost:*",
         "http://127.0.0.1:*",
-        "https://127.0.0.1:*"
+        "https://127.0.0.1:*",
+        "dev.localhost.ionic:*"
       ],
       "webOrigins": ["*"],
       "notBefore": 0,
@@ -984,6 +985,7 @@
           "protocolMapper": "oidc-usermodel-realm-role-mapper",
           "consentRequired": false,
           "config": {
+            "access.token.claim": "true",
             "claim.name": "roles",
             "jsonType.label": "String",
             "multivalued": "true",

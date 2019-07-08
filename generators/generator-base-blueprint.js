@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const jhipsterUtils = require('./utils');
 const BaseGenerator = require('./generator-base');
 
 /**
@@ -58,5 +59,40 @@ module.exports = class extends BaseGenerator {
     // Public API method used by the getter and also by Blueprints
     _end() {
         return {};
+    }
+
+    /**
+     * Instantiates the blueprint generators, if any.
+     * @param {string} subGen - sub generator
+     * @param {any} extraOptions - extra options to pass to blueprint generator
+     * @return {true} useBlueprints - true if one or more blueprints generators have been constructed; false otherwise
+     */
+    instantiateBlueprints(subGen, extraOptions) {
+        let useBlueprints = false;
+
+        const blueprints = jhipsterUtils.parseBluePrints(
+            this.options.blueprints ||
+                this.configOptions.blueprints ||
+                this.config.get('blueprints') ||
+                this.options.blueprint ||
+                this.configOptions.blueprint ||
+                this.config.get('blueprint')
+        );
+        if (blueprints && blueprints.length > 0) {
+            blueprints.forEach(blueprint => {
+                let bpOptions = {
+                    ...this.options,
+                    configOptions: this.configOptions
+                };
+                if (extraOptions) {
+                    bpOptions = { ...bpOptions, ...extraOptions };
+                }
+                const useBP = this.composeBlueprint(blueprint.name, subGen, bpOptions);
+                if (!useBlueprints && useBP) {
+                    useBlueprints = true;
+                }
+            });
+        }
+        return useBlueprints;
     }
 };
