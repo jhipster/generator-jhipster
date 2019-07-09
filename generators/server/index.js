@@ -161,11 +161,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
 
                 this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
-                this.enableHibernateCache =
-                    configuration.get('enableHibernateCache') ||
-                    (configuration.get('hibernateCache') !== undefined &&
-                        configuration.get('hibernateCache') !== 'no' &&
-                        configuration.get('hibernateCache') !== 'memcached');
+                this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
 
                 this.databaseType = configuration.get('databaseType');
                 if (this.databaseType === 'mongodb') {
