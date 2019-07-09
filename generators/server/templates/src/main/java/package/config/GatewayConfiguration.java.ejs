@@ -20,13 +20,12 @@ package <%=packageName%>.config;
 
 import io.github.jhipster.config.JHipsterProperties;
 
-<%_ if (cacheProvider === 'hazelcast') { _%>
-import <%=packageName%>.gateway.ratelimiting.RateLimitingFilter;
-<%_ } _%>
 import <%=packageName%>.gateway.accesscontrol.AccessControlFilter;
 import <%=packageName%>.gateway.responserewriting.SwaggerBasePathRewritingFilter;
-
+<%_ if (cacheProvider === 'hazelcast') { _%>
+import <%=packageName%>.gateway.ratelimiting.RateLimitingFilter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+<%_ } _%>
 import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
